@@ -6,10 +6,14 @@ open import Algebra.Structures
 
 open import Data.Unit
 open import Data.Bool
-open import Data.Fin
+open import Data.Nat hiding (_⊔_)
+open import Data.Fin hiding (_+_)
 open import Data.Product
 open import Function
 open import Relation.Binary.PropositionalEquality
+
+open import Pi
+open import Pi1
 
 ------------------------------------------------------------------------------
 -- Define the unique group of 2 elements: the cyclic group ℤ₂
@@ -128,8 +132,39 @@ not₂ (suc (suc ()))
 --              <---------------
 --                  true
 --
--- So it has cardinarlity 1 * 1/2 = 1/2
-
-
+-- This also has cardinarlity 1
 
 ------------------------------------------------------------------------------
+-- Now repeat with our universe of types
+
+BOOL : U
+BOOL = PLUS ONE ONE
+
+-- cyclic group of BOOL
+
+-- prove the following in Pi1
+postulate
+  xxx : {a b : BOOL ⟷ BOOL} → (a ⇔ b) → (! a ⇔ ! b)
+
+ℤ₁₊₁ : Group lzero lzero
+ℤ₁₊₁ = record {
+       Carrier = BOOL ⟷ BOOL
+     ; _≈_ = _⇔_ 
+     ; _∙_  = _◎_
+     ; ε = id⟷
+     ; _⁻¹ = ! 
+     ; isGroup = record {
+         isMonoid = record {
+           isSemigroup = record {
+             isEquivalence = ⇔Equiv 
+           ; assoc = λ c₁ c₂ c₃ → assoc◎r  
+           ; ∙-cong = _⊡_ 
+           }
+         ; identity = ((λ c → idl◎l) , (λ c → idr◎l))  
+         }
+       ; inverse = ((λ c → rinv◎l) , (λ c → linv◎l)) 
+       ; ⁻¹-cong = λ {a} {b} c → xxx c 
+       }
+     } 
+
+
