@@ -270,6 +270,15 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
        ((id⟷ ⊕ swap₊) ⊕ id⟷)) ◎ (assocl₊ ⊕ id⟷) ⇔
     (distl ◎ (dist {t₁} {t₂} {t₃} ⊕ dist {t₁} {t₂} {t₄})) ◎ assocl₊
 
+infix  2  _▤
+infixr 2  _⇔⟨_⟩_   
+
+_⇔⟨_⟩_ : {t₁ t₂ : U} (c₁ : t₁ ⟷ t₂) {c₂ : t₁ ⟷ t₂} {c₃ : t₁ ⟷ t₂} → 
+         (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+_ ⇔⟨ α ⟩ β = trans⇔ α β
+
+_▤ : {t₁ t₂ : U} → (c : t₁ ⟷ t₂) → (c ⇔ c)
+_▤ c = id⇔
 
 !-cong : {t₁ t₂ : U} {a b : t₁ ⟷ t₂} → (a ⇔ b) → (! a ⇔ ! b)
 !-cong assoc◎l = assoc◎r
@@ -319,19 +328,22 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !-cong swapl⋆⇔ = swapr⋆⇔
 !-cong swapr⋆⇔ = swapl⋆⇔
 !-cong id⇔ = id⇔
-!-cong (trans⇔ α α₁) = {!!}
-!-cong (α ⊡ α₁) = {!!}
-!-cong (resp⊕⇔ α α₁) = {!!}
-!-cong (resp⊗⇔ α α₁) = {!!}
-!-cong id⟷⊕id⟷⇔ = {!!}
-!-cong split⊕-id⟷ = {!!}
-!-cong hom⊕◎⇔ = {!!}
-!-cong hom◎⊕⇔ = {!!}
-!-cong id⟷⊗id⟷⇔ = {!!}
-!-cong split⊗-id⟷ = {!!}
-!-cong hom⊗◎⇔ = {!!}
-!-cong hom◎⊗⇔ = {!!}
-!-cong triangle⊕l = {!!}
+!-cong (trans⇔ α β) = trans⇔ (!-cong α) (!-cong β)
+!-cong (α ⊡ β) = (!-cong β) ⊡ (!-cong α)
+!-cong (resp⊕⇔ α β) = resp⊕⇔ (!-cong α) (!-cong β)
+!-cong (resp⊗⇔ α β) = resp⊗⇔ (!-cong α) (!-cong β)
+!-cong id⟷⊕id⟷⇔ = id⟷⊕id⟷⇔
+!-cong split⊕-id⟷ = split⊕-id⟷
+!-cong hom⊕◎⇔ = hom⊕◎⇔
+!-cong hom◎⊕⇔ = hom◎⊕⇔
+!-cong id⟷⊗id⟷⇔ = id⟷⊗id⟷⇔
+!-cong split⊗-id⟷ = split⊗-id⟷
+!-cong hom⊗◎⇔ = hom⊗◎⇔
+!-cong hom◎⊗⇔ = hom◎⊗⇔
+!-cong triangle⊕l = 
+  uniti₊r ⊕ id⟷
+    ⇔⟨ {!!} ⟩
+  (id⟷ ⊕ uniti₊l) ◎ assocl₊ ▤
 !-cong triangle⊕r = {!!}
 !-cong triangle⊗l = {!!}
 !-cong triangle⊗r = {!!}
