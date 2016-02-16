@@ -9,8 +9,8 @@ open import Relation.Binary
 open import Relation.Binary.PropositionalEquality
 import Relation.Binary.EqReasoning as EqR
 
-record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ) where
-  open Group G′ renaming (Carrier to G ; refl to ≈-refl ; sym to ≈-sym ; trans to ≈-trans)
+record Action {c ℓ s} (Gr : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ) where
+  open Group Gr renaming (Carrier to G ; refl to ≈-refl ; sym to ≈-sym ; trans to ≈-trans)
 
   field
     ρ : G × S → S
@@ -20,7 +20,7 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
 
   infix 4 _≋_
   data _≋_ {A B} (x y : Σ[ g ∈ G ] ρ (g , A) ≡ B) : Set ℓ where
-    ≋> : .(proj₁ x ≈ proj₁ y) → x ≋ y
+    ≋> : proj₁ x ≈ proj₁ y → x ≋ y
 
   ≋-isEquivalence : ∀ {A B} → IsEquivalence {A = Σ[ g ∈ G ] ρ (g , A) ≡ B} _≋_
   ≋-isEquivalence = record { refl = ≋> ≈-refl
@@ -28,7 +28,7 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
                            ; trans = λ { (≋> p) (≋> p′) → ≋> (≈-trans p p′) }
                            }
 
-  ≋-setoid : ∀ {A B} → Setoid _ _
+  ≋-setoid : ∀ {A B} → Setoid (s ⊔ c) ℓ
   ≋-setoid {A} {B} = record { Carrier = Σ[ g ∈ G ] ρ (g , A) ≡ B
                             ; _≈_ = _≋_
                             ; isEquivalence = ≋-isEquivalence
@@ -39,20 +39,19 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
          → (g , p) ≋ (g′ , p′)
   ≋-cong p = ≋> p
 
-  C : Category _ _ _
+  C : Category s (s ⊔ c) ℓ
   C = record { Obj = S
              ; _⇒_ = λ s s′ → Σ[ g ∈ G ] ρ (g , s) ≡ s′
              ; _≡_ = _≋_
              ; id = ε , identityA
              ; _∘_ = _∘_
-             ; assoc = {!!}
+             ; assoc = λ { {f = f} {g = g} {h = h} → ≋-assoc f g h }
              ; identityˡ = identityˡ
              ; identityʳ = identityʳ
              ; equiv = ≋-isEquivalence
-             ; ∘-resp-≡ = {!!}
+             ; ∘-resp-≡ = ∘-resp-≋
              }
-    where open Category C using (module HomReasoning)
-          _∘_ : ∀ {A B C}
+    where _∘_ : ∀ {A B C}
               → Σ[ g ∈ G ] ρ (g , B) ≡ C → Σ[ g ∈ G ] ρ (g , A) ≡ B
               → Σ[ g ∈ G ] ρ (g , A) ≡ C
           _∘_ {A} {B} {C} (g′ , ρB≡C) (g , ρA≡B) = g′ ∙ g , let open ≡-Reasoning in
@@ -64,6 +63,21 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
               ρ (g′ , B)
             ≡⟨ ρB≡C ⟩
               C
+            ∎
+          ≋-assoc : ∀ {A B C D}
+                  → (f : Σ[ g ∈ G ] ρ (g , A) ≡ B)
+                  → (g : Σ[ g ∈ G ] ρ (g , B) ≡ C)
+                  → (h : Σ[ g ∈ G ] ρ (g , C) ≡ D)
+                  → (h ∘ g) ∘ f ≋ h ∘ (g ∘ f)
+          ≋-assoc (g , ρA≡B) (g′ , ρB≡C) (g″ , ρC≡D) = let open EqR (≋-setoid) in
+            begin
+              ((g″ , ρC≡D) ∘ (g′ , ρB≡C)) ∘ (g , ρA≡B)
+            ≡⟨ refl ⟩
+              (g″ ∙ g′) ∙ g , _
+            ≈⟨ ≋-cong (assoc g″ g′ g) ⟩
+              g″ ∙ (g′ ∙ g) , _
+            ≡⟨ refl ⟩
+              (g″ , ρC≡D) ∘ ((g′ , ρB≡C) ∘ (g , ρA≡B))
             ∎
           identityˡ : ∀ {A B}
                     → {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
@@ -88,18 +102,27 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
               (g , ρA≡B)
             ∎
           .∘-resp-≋ : ∀ {A B C}
-                   → {f h : Σ[ g ∈ G ] ρ (g , B) ≡ C}
-                   → {g i : Σ[ g ∈ G ] ρ (g , A) ≡ B}
-                   → f ≋ h → g ≋ i → f ∘ g ≋ h ∘ i
-          ∘-resp-≋ {A} {B} {C} {f} {h} {g} {i} = let open HomReasoning in
-            {!!}
+                    → {f h : Σ[ g ∈ G ] ρ (g , B) ≡ C}
+                    → {g i : Σ[ g ∈ G ] ρ (g , A) ≡ B}
+                    → f ≋ h → g ≋ i → f ∘ g ≋ h ∘ i
+          ∘-resp-≋ {f = g , ρB≡C} {h = g′ , ρB≡C′} {g = g″ , ρA≡B} {i = g‴ , ρA≡B′}
+                   (≋> g≈g′) (≋> g″≈g‴) = let open EqR (≋-setoid) in
+            begin
+              (g , ρB≡C) ∘ (g″ , ρA≡B)
+            ≡⟨ refl ⟩
+              g ∙ g″ , _
+            ≈⟨ ≋-cong (∙-cong g≈g′ g″≈g‴) ⟩
+              g′ ∙ g‴ , _
+            ≡⟨ refl ⟩
+              (g′ , ρB≡C′) ∘ (g‴ , ρA≡B′)
+            ∎
 
   isGroupoid : Groupoid C
   isGroupoid = record { _⁻¹ = inv
                       ; iso = iso
                       }
     where open Category C using (_∘_ ; id)
-          open import Categories.Morphisms C
+          open import Categories.Morphisms C using (Iso)
           inv : ∀ {A B}
               → Σ[ g ∈ G ] ρ (g , A) ≡ B
               → Σ[ g ∈ G ] ρ (g , B) ≡ A
