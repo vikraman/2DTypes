@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage{fullpage}
+\usepackage{bbold}
+\usepackage{url}
+
+\newcommand{\inl}[1]{\textsf{inl}(#1)}
+\newcommand{\inr}[1]{\textsf{inr}(#1)}
+\newcommand{\zt}{\mathbb{0}}
+\newcommand{\ot}{\mathbb{1}}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\fv}[2]{\langle #1 ~|~ #2 \rangle}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Zn}{\mathbb{Z}_n}
+\newcommand{\Zvn}{\mathbb{Z}^v_n}
+\newcommand{\pt}[2]{#1_{\bullet}^{#2}}
+\newcommand{\cycle}{\textsf{cycle}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title{Action Groupoids and Fractional Types}
+\author{Everyone}
+\begin{document}
+\maketitle 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Background}
+ 
+Our starting point is $\Pi$:
+\begin{itemize}
+\item We have finite types $\zt$, $\ot$, $\tau_1\oplus\tau_2$, and $\tau_1\otimes\tau_2$
+\item The types have points $()$, $\inl{v}$, $\inr{v}$, and $(v_1,v_2)$
+\item A type $\tau$ has $|\tau|$ points
+\item We have combinators $c : \tau_1\leftrightarrow\tau_2$ between the types which witness type isomorphisms and which correspond to the axioms of commutative rigs
+\item If we have combinators $c_1, c_2 : \tau_1\leftrightarrow\tau_2$, we have level-2 combinators
+$\alpha : c_1 \Leftrightarrow c_2$ which look quite messy but they are essentially witnesses of
+the coherence conditions for rig groupoids.
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Generalization}
+ 
+Now we do the following:
+\begin{itemize}
+\item We generalize the syntax of types to include fractional types $\tau_1/\tau_2$ 
+\item The elements of $\tau_1/\tau_2$ will be denoted $\fv{v}{\G}$ where $v : \tau_1$ and $\G$ is essentially the cyclic group $\Z_n$ of order $n=|\tau_2|$. More precisely, we will think of $\G$ as a particular enumeration of the elements of $\tau_2$ in some canonical order allowing us to cycle through the elements
+\item \textbf{Note:} The types $\zt/\tau$ (including $\zt/\zt$) are all empty
+\item Each type $\ot/\tau$ has one value $\fv{()}{\G_\tau}$. This group allows us to cycle through the elements of $\tau$.
+\item \textbf{Note:} If the group happens to be isomorphic to $\Z_1$ it has no effect and we recover the plain types from before; the types $\tau/\ot$ are essentially identical to $\tau$
+\item \textbf{Note:} According to our convention, the type $\ot/\zt$ would have one value $\fv{()}{\G_\zt}$ where $\G_\zt$ is isomorphic to $\Z_0$; the latter is, by convention, the infinite cyclic group $\Z$. There is probably no harm in this.
+\item The semantic justification for using division is the cardinality of $\tau_1/\tau_2$ is $|\tau_1|/|\tau_2|$. The reason is that if the elements of $\tau_1$ are $\{v_1,\ldots,v_{|\tau_1|}\}$, the elements of $\tau_1/\tau_2$ are $\{ \fv{v_1}{\G_{\tau_2}}, \ldots, \fv{v_{|\tau_1|}}{\G_{\tau_2}} \}$. This type isomorphic to $\bigoplus_{|\tau_1|} 1/\tau_2$
+\item We can combine types using $\oplus$ and $\otimes$ in ways that satisfy the familiar algebraic identities
+for the rational numbers
+\item We now introduce the idea of a \emph{pointed type} $\pt{\tau}{v}$ which is a non-empty type $\tau$ with one value $v : \tau$ in focus
+\item A pointed type $\pt{\tau}{v}$ can be used anywhere $\tau$ can be used but we must keep track of what happens to $v$; a transformation $\tau \rightarrow \tau'$ when acting on the pointed type $\pt{\tau}{v}$ will map $v$ to some element $v' : \tau'$ and we must keep track of that in the type.
+\item Semantically when we have a type $1/\pt{\tau}{v}$, we have the group $\G_\tau$ which cycles through the elements of $\tau$ with one particular value $v$ in focus. We will denote this as $\G_\tau^v$
+\item We can ``create'' and ``cancel'' fractional pointed types using $\eta_{\pt{\tau}{v}}$ and $\epsilon_{\pt{\tau}{v}}$ as follows: 
+\[\begin{array}{rcl}
+\eta_{\pt{\tau}{v}} &:& \ot \rightarrow \pt{\tau}{v} \otimes 1/\pt{\tau}{v} \\
+\eta_{\pt{\tau}{v}}~() &=& (v , \fv{()}{\G^v_{|\tau|}}) \\
+\\
+\epsilon_{\pt{\tau}{v}} &:& \pt{\tau}{v} \otimes 1/\pt{\tau}{v} \rightarrow \ot \\
+\epsilon_{\pt{\tau}{v}}~(v , \fv{()}{\G^v_{|\tau|}}) &=& () 
+\end{array}\]
+\item Another crucial operation we can do is to use the group to cycle through the values:
+\[\begin{array}{rcl}
+\cycle &:& \pt{\tau}{v} \otimes 1/\pt{\tau}{v} \rightarrow \pt{\tau}{v'} \otimes 1/\pt{\tau}{v'} \\
+\cycle~(v, \fv{()}{\G^v_{|\tau|}}) &=& (v', \fv{()}{\G^{v'}_{|\tau|}})
+  \quad \mbox{if~$v'$~is~the~next~value~after~$v$~in~the~cycle~order~of~the~group}
+\end{array}\]
+\item Let's consider the following algebraic identity and how it would execute in our setting. For $a \neq 0$:
+\[\begin{array}{rcl}
+a &=& a * 1 \\
+&=& a * (1/a * a) \\
+&=& (a * 1/a) * a \\
+&=& 1 * a \\
+&=& a
+\end{array}\]
+We want to correspond to some transformation $a \rightarrow a$. If $a$ is the empty type, we can't apply this transformation to anything. Otherwise, we start with a value $v : a$, convert it to the pair $(v, ())$, then use $\eta$ to produce $(v , (v' , \fv{()}{\G_a^{v'}}))$ for some value $v' : a$. We know nothing about $v'$; it may be the identical to $v$ or not. Then we reassociate to get $((v , \fv{()}{\G_a^{v'}}), v')$. If $v$ is identical to $v'$ we can use $\epsilon$ to cancel the first pair; if not, we have to re-reassociate, cycle to choose another value and until $v'$ becomes identical to $v$ and then cancel. To summarize:
+\[\begin{array}{rcl}
+v &\mapsto& (v , ()) \\
+&\mapsto& (v , (v' , \fv{()}{\G_a^{v'}})) \\
+&\mapsto& ((v , \fv{()}{\G_a^{v'}}), v')  \quad \mbox{stuck~because~} v \neq v' \\
+&\mapsto& (v , (v' , \fv{()}{\G_a^{v'}})) \\
+&\mapsto& (v , (v , \fv{()}{\G_a^{v}})) \quad \mbox{using~cycle} \\
+&\mapsto& ((v , \fv{()}{\G_a^{v}}), v)  \\
+&\mapsto& ((), v) \\
+&\mapsto& v
+\end{array}\]
+To make sense of this story, consider that there are two sites; one site has a value $v$ that it wants to communicate to another site. In a conventional situation, the two sites must synchronize but here we have an alternative idea. The second site can speculatively proceed with a guess $v'$ and produce some constraint that can propagate independently that recalls the guess. The second site can in principle proceed further with its guessed value. Meanwhile the constraint reaches the first site and we discover that there is a mismatch. The only
+course of action is for the constraint to travel back to the second site, adjust the guess, and continue after the guessed value matches the original value. This idea is reminiscent of our ``reversible concurrency'' paper which discusses much related work. 
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Further Thoughts}
+
+\begin{itemize}
+\item If one thinks of 2D types, i.e., types with equivalence
+  relations on them, there are many possible equivalence relations one
+  can think of. Cyclic groups are a special case: a nice one.
+
+\item This special case leads to action groupoids which we interpret
+  as fractional types. 
+
+\item An important question arises: what other kinds of finite
+  groupoids are out there; this almost calls for a classification of
+  finite groupoids which is probably just as bad as classifying finite
+  groups. However there are some interesting perspectives from the
+  point of complexity theory
+  \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.68.7980&rep=rep1&type=pdf}
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
