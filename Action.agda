@@ -2,17 +2,16 @@ module _ where
 
 open import Agda.Primitive
 open import Algebra
-open import Algebra.Structures
 open import Categories.Category
 open import Categories.Groupoid
 open import Data.Product
-open import Data.Sum
 open import Relation.Binary.PropositionalEquality
 
-record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c) where
+record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ) where
   open Group G′ renaming (Carrier to G) hiding (isEquivalence ; sym)
   field
     ρ : G × S → S
+    ρ-resp-≈ : ∀ {g g′ s} → g ≈ g′ → ρ (g , s) ≡ ρ (g′ , s)
     identityA : ∀ {x} → ρ (ε , x) ≡ x
     compatibility : ∀ {g h x} → ρ (g ∙ h , x) ≡ ρ (g , ρ (h , x))
 
@@ -42,14 +41,6 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c) where
               C
             ∎
 
-  postulate
-    -- my equality is wrong
-    left-inv-≡ : ∀ g → g ⁻¹ ∙ g ≡ ε
-
-  -- this is the correct equality
-  left-inv : ∀ g → g ⁻¹ ∙ g ≈ ε
-  left-inv = proj₁ inverse
-
   isGroupoid : Groupoid C
   isGroupoid = record { _⁻¹ = inv
                       ; iso = {!!}
@@ -64,7 +55,7 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c) where
               ρ (g ⁻¹ , ρ (g , A))
             ≡⟨ sym compatibility ⟩
               ρ (g ⁻¹ ∙ g , A)
-            ≡⟨ cong (λ g → ρ (g , A)) (left-inv-≡ g) ⟩
+            ≡⟨ ρ-resp-≈ (proj₁ inverse g) ⟩
               ρ (ε , A)
             ≡⟨ identityA ⟩
               A
