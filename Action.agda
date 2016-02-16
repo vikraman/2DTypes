@@ -11,7 +11,7 @@ import Relation.Binary.EqReasoning as EqR
 
 record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ) where
   open Group G′ renaming (Carrier to G ; refl to ≈-refl ; sym to ≈-sym ; trans to ≈-trans)
-                hiding (isEquivalence)
+
   field
     ρ : G × S → S
     ρ-resp-≈ : ∀ {g g′ s} → g ≈ g′ → ρ (g , s) ≡ ρ (g′ , s)
@@ -19,11 +19,14 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
     compatibility : ∀ {g h x} → ρ (g ∙ h , x) ≡ ρ (g , ρ (h , x))
 
   infix 4 _≋_
-  _≋_ : ∀ {A B} → Rel (Σ[ g ∈ G ] ρ (g , A) ≡ B) ℓ
-  (g , _) ≋ (g′ , _) = g ≈ g′
+  data _≋_ {A B} (x y : Σ[ g ∈ G ] ρ (g , A) ≡ B) : Set ℓ where
+    ≋> : .(proj₁ x ≈ proj₁ y) → x ≋ y
 
   ≋-isEquivalence : ∀ {A B} → IsEquivalence {A = Σ[ g ∈ G ] ρ (g , A) ≡ B} _≋_
-  ≋-isEquivalence = record { refl = ≈-refl ; sym = ≈-sym ; trans = ≈-trans }
+  ≋-isEquivalence = record { refl = ≋> ≈-refl
+                           ; sym = λ { (≋> p) → ≋> (≈-sym p) }
+                           ; trans = λ { (≋> p) (≋> p′) → ≋> (≈-trans p p′) }
+                           }
 
   ≋-setoid : ∀ {A B} → Setoid _ _
   ≋-setoid {A} {B} = record { Carrier = Σ[ g ∈ G ] ρ (g , A) ≡ B
@@ -31,11 +34,10 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
                             ; isEquivalence = ≋-isEquivalence
                             }
 
-  ≋-cong : ∀ {A B} (f : Σ[ g ∈ G ] ρ (g , A) ≡ B → Σ[ g ∈ G ] ρ (g , A) ≡ B)
-         → {x y : Σ[ g ∈ G ] ρ (g , A) ≡ B}
-         → x ≋ y
-         → f x ≋ f y
-  ≋-cong {A} {B} f {(g , ρA≡B)} {(g′ , ρA≡B′)} p = {!!}
+  ≋-cong : ∀ {A B} → {g g′ : G} → g ≈ g′
+         → {p : ρ (g , A) ≡ B} → {p′ : ρ (g′ , A) ≡ B}
+         → (g , p) ≋ (g′ , p′)
+  ≋-cong p = ≋> p
 
   C : Category _ _ _
   C = record { Obj = S
@@ -71,18 +73,18 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
               (ε , identityA) ∘ (g , ρA≡B)
             ≡⟨ refl ⟩
               ε ∙ g , _
-            ≡⟨ {!!} ⟩
+            ≈⟨ ≋-cong (proj₁ identity g) ⟩
               (g , ρA≡B)
             ∎
           identityʳ : ∀ {A B}
                     → {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
                     → f ∘ (ε , identityA) ≋ f
-          identityʳ {A} {B} {(g , ρA≡B)} = let open EqR (≋-setoid {A} {B}) in
+          identityʳ {A} {B} {(g , ρA≡B)} = let open EqR (≋-setoid) in
             begin
               (g , ρA≡B) ∘ (ε , identityA)
             ≡⟨ refl ⟩
               g ∙ ε , _
-            ≡⟨ {!!} ⟩
+            ≈⟨ ≋-cong (proj₂ identity g) ⟩
               (g , ρA≡B)
             ∎
           .∘-resp-≋ : ∀ {A B C}
@@ -94,7 +96,7 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
 
   isGroupoid : Groupoid C
   isGroupoid = record { _⁻¹ = inv
-                      ; iso = record { isoˡ = {!!} ; isoʳ = {!!} }
+                      ; iso = iso
                       }
     where open Category C using (_∘_ ; id)
           open import Categories.Morphisms C
@@ -113,25 +115,26 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
             ≡⟨ identityA ⟩
               A
             ∎
-          isoˡ : ∀ {A B}
-               → {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
+          isoˡ : ∀ {A B} {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
                → inv f ∘ f ≋ id
-          isoˡ {A} {B} {g , ρA≡B} = let open EqR (≋-setoid) in
+          isoˡ {f = g , ρA≡B} = let open EqR (≋-setoid) in
             begin
               inv (g , ρA≡B) ∘ (g , ρA≡B)
             ≡⟨ refl ⟩
               g ⁻¹ ∙ g , _
-            ≡⟨ {!!} ⟩
+            ≈⟨ ≋-cong (proj₁ inverse g) ⟩
               ε , identityA
             ∎
-          isoʳ : ∀ {A B}
-               → {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
+          isoʳ : ∀ {A B} {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
                → f ∘ inv f ≋ id
-          isoʳ {A} {B} {g , ρA≡B} = let open EqR (≋-setoid) in
+          isoʳ {f = g , ρA≡B} = let open EqR (≋-setoid) in
             begin
               (g , ρA≡B) ∘ inv (g , ρA≡B)
             ≡⟨ refl ⟩
               g ∙ g ⁻¹ , _
-            ≡⟨ {!!} ⟩
+            ≈⟨ ≋-cong (proj₂ inverse g) ⟩
               ε , identityA
             ∎
+          iso : ∀ {A B} {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
+              → Iso f (inv f)
+          iso {f = f} = record { isoˡ = isoˡ {f = f} ; isoʳ = isoʳ {f = f} }
