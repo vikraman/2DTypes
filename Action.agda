@@ -46,8 +46,8 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
              ; id = ε , identityA
              ; _∘_ = _∘_
              ; assoc = {!!}
-             ; identityˡ = {!!}
-             ; identityʳ = {!!}
+             ; identityˡ = identityˡ
+             ; identityʳ = identityʳ
              ; equiv = ≋-isEquivalence
              ; ∘-resp-≡ = {!!}
              }
@@ -68,7 +68,7 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
           identityˡ : ∀ {A B}
                     → {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
                     → (ε , identityA) ∘ f ≋ f
-          identityˡ {A} {B} {(g , ρA≡B)} = let open EqR (≋-setoid {A} {B}) in
+          identityˡ {f = (g , ρA≡B)} = let open EqR (≋-setoid) in
             begin
               (ε , identityA) ∘ (g , ρA≡B)
             ≡⟨ refl ⟩
@@ -79,7 +79,7 @@ record Action {c ℓ s} (G′ : Group c ℓ) (S : Set s) : Set (s ⊔ c ⊔ ℓ)
           identityʳ : ∀ {A B}
                     → {f : Σ[ g ∈ G ] ρ (g , A) ≡ B}
                     → f ∘ (ε , identityA) ≋ f
-          identityʳ {A} {B} {(g , ρA≡B)} = let open EqR (≋-setoid) in
+          identityʳ {f = (g , ρA≡B)} = let open EqR (≋-setoid) in
             begin
               (g , ρA≡B) ∘ (ε , identityA)
             ≡⟨ refl ⟩
