@@ -338,6 +338,13 @@ course of action is for the constraint to travel back to the second site, adjust
 \item If one thinks of 2D types, i.e., types with equivalence
   relations on them, there are many possible equivalence relations one
   can think of. Cyclic groups are a special case: a nice one.
+  (Since we are dealing with finite group, so there must exists a bijection
+  $f$ from the underlying set of $\G$ to $\{ 1, … | \G | \}$, we can define our
+  cycle function $cycle(g) = f^{-1}((f(g)+1) \% | \G |)$. 
+  And for any group $\G$ and set $S$ we always have the action for all 
+  $g ∈ \G $, $g(s) = s$ which will give us an action groupoid with 
+  cardinality $|S|/|\G|$. So actually we can just pick any group with 
+  the correct order)
 
 \item This special case leads to action groupoids which we interpret
   as fractional types. 
