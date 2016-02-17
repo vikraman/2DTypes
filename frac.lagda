@@ -20,13 +20,14 @@
 \newcommand{\zt}{\mathbb{0}}
 \newcommand{\ot}{\mathbb{1}}
 \newcommand{\G}{\mathcal{G}}
-\newcommand{\fv}[2]{\langle #1 ~|~ #2 \rangle}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Zn}{\mathbb{Z}_n}
 \newcommand{\Zvn}{\mathbb{Z}^v_n}
 \newcommand{\cycle}{\textsf{cycle}}
 \newcommand{\twod}{\mathbb{T}}
-\newcommand{\fract}[2]{\fcolorbox{black}{white}{$#1$}\fcolorbox{black}{gray!20}{$#2$}}
+\newcommand{\fract}[2]{#1/#2}
+%% \newcommand{\mystrut}{\rule[-0.01\baselineskip]{0pt}{2.2\baselineskip}}
+\newcommand{\fv}[2]{\fcolorbox{black}{white}{\strut $#1$}\fcolorbox{black}{gray!20}{$\strut #2$}}
 \newcommand{\pt}[2]{\bullet[#1,#2]}
 
 \renewcommand{\AgdaCodeStyle}{\small}
@@ -98,9 +99,9 @@ data U : Set where
 \smallskip
 \begin{code} 
 ∣_∣ : U → ℕ
-∣ ZERO ∣ = 0
-∣ ONE ∣ = 1
-∣ PLUS t₁ t₂ ∣ = ∣ t₁ ∣ + ∣ t₂ ∣
+∣ ZERO ∣         = 0
+∣ ONE ∣          = 1
+∣ PLUS t₁ t₂ ∣   = ∣ t₁ ∣ + ∣ t₂ ∣
 ∣ TIMES t₁ t₂ ∣  = ∣ t₁ ∣ * ∣ t₂ ∣
 \end{code}
 }}
@@ -249,11 +250,9 @@ the next section we will combine the pointed types with the additional
 level.
 
 \item We generalize the syntax of types to include fractional types
-  $\tau_1/\tau_2$ which we will write as $\fract{\tau_1}{\tau_2}$ with
-  the numerator in white and the denominator in grey. The idea will be
-  that $\tau_1$ denotes a set $S$ and $\tau_2$ denotes a group $\G$
-  and that $\fract{\tau_1}{\tau_2}$ denotes the action groupoid
-  $S \rtimes \G$.
+  $\tau_1/\tau_2$. The idea will be that $\tau_1$ denotes a set $S$
+  and $\tau_2$ denotes a group $\G$ and that $\fract{\tau_1}{\tau_2}$
+  denotes the action groupoid $S \rtimes \G$.
 
 \item We actually have two levels of types:
 \[\begin{array}{rcl} 
@@ -263,16 +262,18 @@ level.
 \end{array}\]
 The $\tau$ level describes plain sets. The $\twod$ level describes
 ``two-dimensional types'' which denote action groupoids. 
+
 \item Note that 2D types are closed under sums and products but
   \emph{not} under ``division.'' In other words, we cannot form types
-  $\fract{\fract{\tau_1}{\tau_2}}{\fract{\tau_3}{\tau_4}}$. This is
+  $\fract{(\fract{\tau_1}{\tau_2})}{(\fract{\tau_3}{\tau_4})}$. This is
   why we call our types 2D as we are restricted to two levels.
 
-\item The values of type $\fract{\tau_1}{\tau_2}$ will be denoted $\fv{v}{\G}$
-where $v : \tau_1$ and $\G$ is essentially the cyclic group $\Z_n$ of
-order $n=|\tau_2|$. More precisely, we will think of $\G$ as a
-particular enumeration of the elements of $\tau_2$ in some canonical
-order allowing us to cycle through the elements.
+\item The values of type $\fract{\tau_1}{\tau_2}$ will be denoted
+$\fv{v}{\G}$ where $v : \tau_1$ is in white and $\G$ in grey is
+essentially the cyclic group $\Z_n$ of order $n=|\tau_2|$. More
+precisely, we will think of $\G$ as a particular enumeration of the
+elements of $\tau_2$ in some canonical order allowing us to cycle
+through the elements.
 
 \item \textbf{Note:} Since we are dealing with finite groups, there
   must exist a bijection $f$ from the carrier of $\G$ to $\{ 1, \ldots
