@@ -283,7 +283,21 @@ through the elements.
   us an action groupoid with cardinality $|S|/|\G|$. So actually we
   can just pick any group with the correct order
 
-\item \textbf{Note:} The types $\fract{\zt}{\tau}$ (including $\fract{\zt}{\zt}$) are all empty
+\item \textbf{Question:} Ok so a value of type $\tau_1/\tau_2$ can be
+$\fv{v}{\G}$ for any $v : \tau_1$ and any $\G$ of order
+$|\tau_2|$. Wikipedia explains that the number of groups of a given
+order is quite a complicated issue and gives the following number of
+groups of orders 1 to 30: 1, 1, 1, 2, 1, 2, 1, 5, 2, 2, 1, 5, 1, 2, 1,
+14, 1, 5, 1, 5, 2, 2, 1, 15, 2, 2, 5, 4, 1, 4. The fact that the
+number of groups is difficult to calculate is one thing: the other is
+that we need to be able to write down the values of a given type, so
+we would need to generate the groups of each order. Moreover it seems
+that we have to pick one canonical group as \emph{the} relevant group
+of a given order when we create a value of a fractional type using
+$\eta$.
+
+\item \textbf{Note:} The types $\fract{\zt}{\tau}$ (including
+$\fract{\zt}{\zt}$) are all empty
 
 \item Each type $\fract{\ot}{\tau}$ has one value
 $\fv{()}{\G_\tau}$. This group allows us to cycle through the elements
