@@ -24,11 +24,10 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Zn}{\mathbb{Z}_n}
 \newcommand{\Zvn}{\mathbb{Z}^v_n}
-\newcommand{\pt}[2]{#1_{\bullet}^{#2}}
 \newcommand{\cycle}{\textsf{cycle}}
 \newcommand{\twod}{\mathbb{T}}
 \newcommand{\fract}[2]{\fcolorbox{black}{white}{$#1$}\fcolorbox{black}{gray!20}{$#2$}}
-\newcommand{\pointed}[2]{\bullet[#1,#2]}
+\newcommand{\pt}[2]{\bullet[#1,#2]}
 
 \renewcommand{\AgdaCodeStyle}{\small}
 %% shorten the longarrow
@@ -218,7 +217,7 @@ data _⟷_ : U• → U• → Set where
 
 \begin{itemize}
 \item Our first generalization is to introduce \emph{pointed types}. A
-  pointed type $\pointed{\tau}{v}$ is a non-empty type $\tau$ along
+  pointed type $\pt{\tau}{v}$ is a non-empty type $\tau$ along
   with one specific value $v : \tau$ that is considered ``in focus.''
   Examples.
 
@@ -250,17 +249,51 @@ The $\tau$ level describes plain sets. The $\twod$ level describes
   $\fract{\fract{\tau_1}{\tau_2}}{\fract{\tau_3}{\tau_4}}$. This is
   why we call our types 2D as we are restricted to two levels.
 
-\item The elements of $\tau_1/\tau_2$ will be denoted $\fv{v}{\G}$ where $v : \tau_1$ and $\G$ is essentially the cyclic group $\Z_n$ of order $n=|\tau_2|$. More precisely, we will think of $\G$ as a particular enumeration of the elements of $\tau_2$ in some canonical order allowing us to cycle through the elements
-\item \textbf{Note:} The types $\zt/\tau$ (including $\zt/\zt$) are all empty
-\item Each type $\ot/\tau$ has one value $\fv{()}{\G_\tau}$. This group allows us to cycle through the elements of $\tau$.
-\item \textbf{Note:} If the group happens to be isomorphic to $\Z_1$ it has no effect and we recover the plain types from before; the types $\tau/\ot$ are essentially identical to $\tau$
-\item \textbf{Note:} According to our convention, the type $\ot/\zt$ would have one value $\fv{()}{\G_\zt}$ where $\G_\zt$ is isomorphic to $\Z_0$; the latter is, by convention, the infinite cyclic group $\Z$. There is probably no harm in this.
-\item The semantic justification for using division is the cardinality of $\tau_1/\tau_2$ is $|\tau_1|/|\tau_2|$. The reason is that if the elements of $\tau_1$ are $\{v_1,\ldots,v_{|\tau_1|}\}$, the elements of $\tau_1/\tau_2$ are $\{ \fv{v_1}{\G_{\tau_2}}, \ldots, \fv{v_{|\tau_1|}}{\G_{\tau_2}} \}$. This type isomorphic to $\bigoplus_{|\tau_1|} 1/\tau_2$
-\item We can combine types using $\oplus$ and $\otimes$ in ways that satisfy the familiar algebraic identities
-for the rational numbers
-\item We now introduce the idea of a \emph{pointed type} $\pt{\tau}{v}$ which is a non-empty type $\tau$ with one value $v : \tau$ in focus
-\item A pointed type $\pt{\tau}{v}$ can be used anywhere $\tau$ can be used but we must keep track of what happens to $v$; a transformation $\tau \rightarrow \tau'$ when acting on the pointed type $\pt{\tau}{v}$ will map $v$ to some element $v' : \tau'$ and we must keep track of that in the type.
-\item Semantically when we have a type $1/\pt{\tau}{v}$, we have the group $\G_\tau$ which cycles through the elements of $\tau$ with one particular value $v$ in focus. We will denote this as $\G_\tau^v$
+\item The values of type $\fract{\tau_1}{\tau_2}$ will be denoted $\fv{v}{\G}$
+where $v : \tau_1$ and $\G$ is essentially the cyclic group $\Z_n$ of
+order $n=|\tau_2|$. More precisely, we will think of $\G$ as a
+particular enumeration of the elements of $\tau_2$ in some canonical
+order allowing us to cycle through the elements.
+
+\item \textbf{Note:} The types $\fract{\zt}{\tau}$ (including $\fract{\zt}{\zt}$) are all empty
+
+\item Each type $\fract{\ot}{\tau}$ has one value
+$\fv{()}{\G_\tau}$. This group allows us to cycle through the elements
+of $\tau$.
+
+\item \textbf{Note:} If the group happens to be isomorphic to $\Z_1$
+it has no effect and we recover the plain types from before; the types
+$\fract{\tau}{\ot}$ are essentially identical to $\tau$
+
+\item \textbf{Note:} According to our convention, the type
+$\fract{\ot}{\zt}$ would have one value $\fv{()}{\G_\zt}$ where
+$\G_\zt$ is isomorphic to $\Z_0$; the latter is, by convention, the
+infinite cyclic group $\Z$. There is probably no harm in this.
+
+\item The semantic justification for using division is the cardinality
+of $\fract{\tau_1}{\tau_2}$ is $|\tau_1|/|\tau_2|$. The reason is that if the
+elements of $\tau_1$ are $\{v_1,\ldots,v_{|\tau_1|}\}$, the elements
+of $\fract{\tau_1}{\tau_2}$ are $\{ \fv{v_1}{\G_{\tau_2}}, \ldots,
+\fv{v_{|\tau_1|}}{\G_{\tau_2}} \}$. This type isomorphic to
+$\bigoplus_{|\tau_1|} \fract{\ot}{\tau_2}$
+
+\item We can combine types using $\oplus$ and $\otimes$ in ways that
+satisfy the familiar algebraic identities for the rational numbers
+
+\item We now introduce the idea of a \emph{pointed type}
+$\pt{\tau}{v}$ which is a non-empty type $\tau$ with one value $v :
+\tau$ in focus
+
+\item A pointed type $\pt{\tau}{v}$ can be used anywhere $\tau$ can be
+used but we must keep track of what happens to $v$; a transformation
+$\tau \rightarrow \tau'$ when acting on the pointed type
+$\pt{\tau}{v}$ will map $v$ to some element $v' : \tau'$ and we must
+keep track of that in the type.
+
+\item Semantically when we have a type $\fract{1}{\pt{\tau}{v}}$, we have the
+group $\G_\tau$ which cycles through the elements of $\tau$ with one
+particular value $v$ in focus. We will denote this as $\G_\tau^v$
+
 \item We can ``create'' and ``cancel'' fractional pointed types using $\eta_{\pt{\tau}{v}}$ and $\epsilon_{\pt{\tau}{v}}$ as follows: 
 \[\begin{array}{rcl}
 \eta_{\pt{\tau}{v}} &:& \ot \rightarrow \pt{\tau}{v} \otimes 1/\pt{\tau}{v} \\
