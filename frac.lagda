@@ -274,6 +274,14 @@ order $n=|\tau_2|$. More precisely, we will think of $\G$ as a
 particular enumeration of the elements of $\tau_2$ in some canonical
 order allowing us to cycle through the elements.
 
+\item \textbf{Note:} Since we are dealing with finite groups, there
+  must exist a bijection $f$ from the carrier of $\G$ to $\{ 1, \ldots
+  |\G| \}$, we can define our cycle function $cycle(g) =
+  f^{-1}((f(g)+1) \% | \G |)$.  And for any group $\G$ and set $S$ we
+  always have the action for all $g ∈ \G $, $g(s) = s$ which will give
+  us an action groupoid with cardinality $|S|/|\G|$. So actually we
+  can just pick any group with the correct order
+
 \item \textbf{Note:} The types $\fract{\zt}{\tau}$ (including $\fract{\zt}{\zt}$) are all empty
 
 \item Each type $\fract{\ot}{\tau}$ has one value
