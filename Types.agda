@@ -4,47 +4,69 @@ open import Data.Empty
 open import Data.Unit
 open import Data.Sum
 open import Data.Product
-open import Universe
-
-data U : Set where
-  𝟘 : U
-  𝟙 : U
-  _⊕_ : U → U → U
-  _⊗_ : U → U → U
-
-⟦_⟧ : U → Set
-⟦ 𝟘 ⟧ = ⊥
-⟦ 𝟙 ⟧ = ⊤
-⟦ t₁ ⊕ t₂ ⟧ = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
-⟦ t₁ ⊗ t₂ ⟧ = ⟦ t₁ ⟧ × ⟦ t₂ ⟧
-
-U-univ : Universe _ _
-U-univ = record { U = U ; El = ⟦_⟧ }
-
 open import Data.Nat
+open import Universe
+open import Rational
 
-∣_∣ : U → ℕ
-∣ 𝟘 ∣ = 0
-∣ 𝟙 ∣ = 1
-∣ t₁ ⊕ t₂ ∣ = ∣ t₁ ∣ + ∣ t₂ ∣
-∣ t₁ ⊗ t₂ ∣ = ∣ t₁ ∣ * ∣ t₂ ∣
+data τ : ℕ → Set where
+  𝟘 : τ 0
+  𝟙 : τ 1
+  _⊕_ : ∀ {m n : ℕ} → τ m → τ n → τ (m + n)
+  _⊗_ : ∀ {m n} → τ m → τ n → τ (m * n)
+
+τ-univ : Indexed-universe _ _ _
+τ-univ = record { I = ℕ ; U = τ ; El = ⟦_⟧ }
+  where ⟦_⟧ : ∀ {n} → τ n → Set
+        ⟦ 𝟘 ⟧ = ⊥
+        ⟦ 𝟙 ⟧ = ⊤
+        ⟦ t₁ ⊕ t₂ ⟧ = {!!}
+        ⟦ t₁ ⊗ t₂ ⟧ = {!!}
+
+data T : ℚ → Set where
+  _/_ : ∀ {m n} → τ m → τ n → T (m / n)
+  _⊞_ _⊠_ : ∀ {p q} → T p → T q → T (p ++ q)
+
+T-univ : Indexed-universe _ _ _
+T-univ = record { I = ℚ ; U = T ; El = ⟦_⟧ }
+  where ⟦_⟧ : ∀ {q} → T q → Set
+        ⟦ t₁ / t₂ ⟧ = {!!}
+        ⟦ t₁ ⊞ t₂ ⟧ = {!!}
+        ⟦ t₁ ⊠ t₂ ⟧ = {!!}
 
 open import Function
 open import Categories.Category
 open import Relation.Binary.PropositionalEquality
 
-∘-resp-≡ : {A B C : Set} {f h : B → C} {g i : A → B} → f ≡ h → g ≡ i → f ∘ g ≡ h ∘ i
-∘-resp-≡ refl refl = refl
+τ-cat : ℕ → Category _ _ _
+τ-cat n = record { Obj = τ n
+                 ; _⇒_ = λ a b → El a → El b
+                 ; _≡_ = _≡_
+                 ; id = id
+                 ; _∘_ = λ g f → g ∘ f
+                 ; assoc = refl
+                 ; identityˡ = refl
+                 ; identityʳ = refl
+                 ; equiv = isEquivalence
+                 ; ∘-resp-≡ = ∘-resp-≡
+                 }
+      where open Indexed-universe τ-univ
+            ∘-resp-≡ : {A B C : Set} {f h : B → C} {g i : A → B}
+                     → f ≡ h → g ≡ i → f ∘ g ≡ h ∘ i
+            ∘-resp-≡ refl refl = refl
 
-U-cat : Category _ _ _
-U-cat = record { Obj = U
-               ; _⇒_ = λ a b → ⟦ a ⟧ → ⟦ b ⟧
-               ; _≡_ = _≡_
-               ; id = id
-               ; _∘_ = λ g f → g ∘ f
-               ; assoc = refl
-               ; identityˡ = refl
-               ; identityʳ = refl
-               ; equiv = isEquivalence
-               ; ∘-resp-≡ = ∘-resp-≡
-               }
+T-cat : ℚ → Category _ _ _
+T-cat q = record { Obj = T q
+                 ; _⇒_ = λ a b → El a → El b
+                 ; _≡_ = _≡_
+                 ; id = id
+                 ; _∘_ = λ g f → g ∘ f
+                 ; assoc = refl
+                 ; identityˡ = refl
+                 ; identityʳ = refl
+                 ; equiv = isEquivalence
+                 ; ∘-resp-≡ = ∘-resp-≡
+                 }
+      where open Indexed-universe T-univ
+            ∘-resp-≡ : {A B C : Set} {f h : B → C} {g i : A → B}
+                     → f ≡ h → g ≡ i → f ∘ g ≡ h ∘ i
+            ∘-resp-≡ refl refl = refl
