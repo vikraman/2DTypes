@@ -1,7 +1,7 @@
 module Action where
 
 open import Agda.Primitive
-open import Algebra
+open import Algebra public
 open import Categories.Category
 open import Categories.Groupoid
 open import Data.Product
