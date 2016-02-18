@@ -70,3 +70,9 @@ T-cat q = record { Obj = T q
             ∘-resp-≡ : {A B C : Set} {f h : B → C} {g i : A → B}
                      → f ≡ h → g ≡ i → f ∘ g ≡ h ∘ i
             ∘-resp-≡ refl refl = refl
+open import Action
+
+El : ∀ q → T q → Σ[ G ∈ Group _ _ ] Σ[ S ∈ Set _ ] Action G S
+El (p / q) (T₁ / T₂) = {!!} , τ q , {!!}
+El (._ / ._) (T₁ ⊞ T₂) = {!!}
+El (._ / ._) (T₁ ⊠ T₂) = {!!}
