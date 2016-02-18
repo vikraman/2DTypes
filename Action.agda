@@ -1,4 +1,4 @@
-module _ where
+module Action where
 
 open import Agda.Primitive
 open import Algebra
