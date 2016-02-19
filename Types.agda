@@ -24,8 +24,8 @@ data τ : ℕ → Set where
   where ⟦_⟧ : ∀ {n} → τ n → Set
         ⟦ 𝟘 ⟧ = ⊥
         ⟦ 𝟙 ⟧ = ⊤
-        ⟦ t₁ ⊕ t₂ ⟧ = {!!}
-        ⟦ t₁ ⊗ t₂ ⟧ = {!!}
+        ⟦ t₁ ⊕ t₂ ⟧ = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
+        ⟦ t₁ ⊗ t₂ ⟧ = ⟦ t₁ ⟧ × ⟦ t₂ ⟧
 
 data T : ℚ → Set where
   _/_ : ∀ {m n} → τ m → τ n → T (m / n)
@@ -134,12 +134,76 @@ data _⟷_ : ∀ {n} → τ n → τ n → Set where
   factorl : ∀ {n} {t₁ t₂ t₃ : τ n } → (t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃) ⟷ t₁ ⊗ (t₂ ⊕ t₃)
   id⟷ : ∀ {n} {t : τ n} → t ⟷ t
   _◎_ : ∀ {n} {t₁ t₂ t₃ : τ n} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
-  _⊕_ : ∀ {n} {t₁ t₂ t₃ t₄ : τ n} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₂ ⊕ t₄)
+  _⊕_ : ∀ {n} {t₁ t₂ t₃ t₄ : τ n} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
   _⊗_ : ∀ {n} {t₁ t₂ t₃ t₄ : τ n} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
+
+infix 90 !_
+
+!_ : ∀ {n} {t₁ t₂ : τ n} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
+! unite₊l   = uniti₊l
+! uniti₊l   = unite₊l
+! unite₊r   = uniti₊r
+! uniti₊r   = unite₊r
+! swap₊     = swap₊
+! assocl₊   = assocr₊
+! assocr₊   = assocl₊
+! unite⋆l   = uniti⋆l
+! uniti⋆l   = unite⋆l
+! unite⋆r   = uniti⋆r
+! uniti⋆r   = unite⋆r
+! swap⋆     = swap⋆
+! assocl⋆   = assocr⋆
+! assocr⋆   = assocl⋆
+! absorbl   = factorzr
+! absorbr   = factorzl
+! factorzl  = absorbr
+! factorzr  = absorbl
+! dist      = factor
+! factor    = dist
+! distl     = factorl
+! factorl   = distl
+! id⟷       = id⟷
+! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
+! (c₁ ⊕ c₂) = ! c₁ ⊕ ! c₂
+! (c₁ ⊗ c₂) = ! c₁ ⊗ ! c₂
 
 open import Action
 
-El : ∀ q → T q → Σ[ G ∈ Group _ _ ] Σ[ S ∈ Set _ ] Action G S
-El (p / q) (T₁ / T₂) = {!!} , τ q , {!!}
-El (._ / ._) (T₁ ⊞ T₂) = {!!}
-El (._ / ._) (T₁ ⊠ T₂) = {!!}
+ElT : ∀ q → T q → Σ[ G ∈ Group _ _ ] Σ[ S ∈ Set _ ] Action G S
+ElT (p / q) (T₁ / T₂) = {!!} , τ q , {!!}
+ElT (._ / ._) (T₁ ⊞ T₂) = {!!}
+ElT (._ / ._) (T₁ ⊠ T₂) = {!!}
+
+private
+  C₂ : Group _ _
+  C₂ = record { Carrier = 𝟙 ⊕ 𝟙 ⟷ 𝟙 ⊕ 𝟙
+              ; _≈_ = _≡_
+              ; _∙_ = _◎_
+              ; ε = id⟷
+              ; _⁻¹ = !_
+              ; isGroup = record {
+                  isMonoid = record {
+                    isSemigroup = record {
+                      isEquivalence = isEquivalence
+                    -- need Pi1 for the holes
+                    ; assoc = {!!}
+                    ; ∙-cong = {!!}
+                    }
+                  ; identity = {!!}
+                  }
+                ; inverse = {!!}
+                ; ⁻¹-cong = {!!}
+                }
+              }
+
+  El1/2 : Σ[ G ∈ Group _ _ ] Σ[ S ∈ Set _ ] Action G S
+  El1/2 = C₂ , El (𝟙 ⊕ 𝟙) , record { ρ = λ { (swap₊ , inj₁ tt) → inj₂ tt ; (swap₊ , inj₂ tt) → inj₁ tt
+                                           ; (id⟷ , inj₁ tt) → inj₁ tt ; (id⟷ , inj₂ tt) → inj₂ tt
+                                           ; (proj₁ ◎ proj₂ , inj₁ tt) → {!!} ; (proj₁ ◎ proj₂ , inj₂ tt) → {!!}
+                                           ; (proj₁ ⊕ proj₂ , inj₁ tt) → {!!} ; (proj₁ ⊕ proj₂ , inj₂ tt) → {!!}
+                                           }
+                                   ; ρ-resp-≈ = {!!}
+                                   ; identityA = {!!}
+                                   ; compatibility = {!!}
+                                   }
+        where open Indexed-universe τ-univ
