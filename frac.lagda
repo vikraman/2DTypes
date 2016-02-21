@@ -29,6 +29,7 @@
 %% \newcommand{\mystrut}{\rule[-0.01\baselineskip]{0pt}{2.2\baselineskip}}
 \newcommand{\fv}[2]{\fcolorbox{black}{white}{\strut $#1$}\fcolorbox{black}{gray!20}{$\strut #2$}}
 \newcommand{\pt}[2]{\bullet[#1,#2]}
+\newcommand{\refl}{\AgdaInductiveConstructor{refl}}
 
 \renewcommand{\AgdaCodeStyle}{\small}
 %% shorten the longarrow
@@ -113,26 +114,76 @@ data U : Set where
 \item If we have combinators $c_1, c_2 : \tau_1\leftrightarrow\tau_2$,
   we have level-2 combinators $\alpha : c_1 \Leftrightarrow c_2$ which
   are (quite messy) equivalences of isomorphisms, and which happen to
-  correspond to the coherence conditions for rig groupoids.
+  correspond to the coherence conditions for rig groupoids. So far
+  these are not needed for the development that follows.
 
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{2D-types: Intuition}
 
-In HoTT, types are weak $\infty$-groupoids. We will look at special
-cases. A 0-groupoid is a set, i.e., a collection of points. A strict
-1-groupoid can be visualized as a collection of points connected by
-paths. The paths can be arbitrary subject to three conditions: there
-is an associative operation which composes paths; there is an identity
-path; and every path has an inverse. The equalities on paths are
-strict. This most general form of strict 1-groupoids is still
-difficult to capture structurally and computationally. There are
-however some interesting special cases within that form, one of which
-we explore in detail in this paper. The special case we study is that
-of an \emph{action groupoid} $S \rtimes \G$ where $S$ is a set and
-$\G$ is a group. This is a 1-groupoid in which the paths are generated
-by group.
+In HoTT, types are weak $\infty$-groupoids. In more detail, assume we
+have a collection of points $x_i$ and a collection of initial edges
+(paths or identities or equivalences) connecting these points. As an
+axiom, we have a special path $\refl~x_i$ between every point $x_i$
+and itself. Using the induction principle for identity types, we also
+have the following generated paths:
+
+\begin{itemize}
+
+\item For every path $p : x_i \equiv x_j$, we have an inverse path $!p
+: x_j \equiv x_i$
+
+\item For every pair of paths with a common intermediate point, $p :
+x_i \equiv x_j$ and $q : x_j \equiv x_k$, we have a composite path $p
+\circ q : x_i \equiv x_k$
+
+\end{itemize}
+
+\noindent These generated paths are not all independent; again using
+the induction principle for identity types, we can prove for
+appropriate starting and ending points:
+
+\begin{itemize}
+\item $\gamma_1 : p \circ \refl \equiv p$
+\item $\gamma_2 : \refl \circ q \equiv q$
+\item $\gamma_3 : ~!p \circ p \equiv \refl$
+\item $\gamma_4 : p ~\circ~ !p \equiv \refl$
+\item $\gamma_5 : ~! ~(! p) \equiv p$
+\item $\gamma_6 : (p \circ q) \circ r \equiv p \circ (q \circ r)$
+\item $\gamma_7 : ~! (p \circ q) \equiv ~! q ~\circ~ ! p$
+\end{itemize}
+
+At this point, we have generated a structure where the paths $p$, $q$,
+$r$, etc. can be viewed as ``points'' with the level-2 paths
+$\gamma_i$ connecting them. Using the \refl-postulate and the
+induction principle for identity types, we can therefore repeat the
+process above to generate the level-2 paths $!\gamma_i$ and $\gamma_i
+\circ \gamma_j$ subject to the conditions $\gamma_i \circ \refl \equiv
+\gamma_i$ etc. This gives rise to a level-3 collection of paths and so
+on ad infinitum.
+
+Generally speaking, an important endeavor in the HoTT context is to
+understand and characterize the structure of special types. As a
+simple example, the type with one point and one non-trivial path
+(other than \refl) gives rise to a path structure that is isomorphic
+to the natural numbers.
+
+Our paper can be seen as characterizing a special class of types at
+levels 0 and 1 of the hierarchy that already offers tantalizing new
+insights and benefits from a programming perspective. In more detail,
+a 0-groupoid is a set, i.e., a collection of points with only
+\refl-paths. A strict 1-groupoid takes us to the next level allowing a
+collection of points connected by non-trivial paths. We however
+explicitly collapse the higher-level structure by interpreting the
+identities $\gamma_1 : p \circ \refl \equiv p$ as \emph{strict}
+equalities. Even with the restriction, arbitrary strict 1-groupoids
+are as general as all finite groups which makes them still difficult
+to capture structurally and computationally. There are however some
+interesting special cases within that form, one of which we explore in
+detail in this paper. The special case we study is that of an
+\emph{action groupoid} $S \rtimes \G$ where $S$ is a set and $\G$ is a
+cyclic group. 
 
 Give lots of examples of action groupoids. Explain cardinality.
  
