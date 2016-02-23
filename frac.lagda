@@ -35,6 +35,7 @@
 %% shorten the longarrow
 \DeclareUnicodeCharacter{10231}{\ensuremath{\leftrightarrow}}
 \DeclareUnicodeCharacter{9678}{$\circledcirc$}
+\DeclareUnicodeCharacter{8759}{$::$}
 
 \AgdaHide{
 \begin{code}
@@ -44,9 +45,10 @@ module frac where
 open import Level 
 open import Data.Empty
 open import Data.Unit
-open import Data.Sum
+open import Data.Sum hiding (map)
 open import Data.Bool
-open import Data.Product
+open import Data.Product hiding (map)
+open import Data.Vec
 open import Data.Nat hiding (_⊔_)
 open import Function
 
@@ -125,7 +127,7 @@ data U : Set where
 In HoTT, types are weak $\infty$-groupoids. In more detail, assume we
 have a collection of points $x_i$ and a collection of initial edges
 (paths or identities or equivalences) connecting these points. As an
-axiom, we have a special path $\refl~x_i$ between every point $x_i$
+axiom, we have special paths $\refl~x_i$ between every point $x_i$
 and itself. Using the induction principle for identity types, we also
 have the following generated paths:
 
@@ -157,27 +159,27 @@ appropriate starting and ending points:
 At this point, we have generated a structure where the paths $p$, $q$,
 $r$, etc. can be viewed as ``points'' with the level-2 paths
 $\gamma_i$ connecting them. Using the \refl-postulate and the
-induction principle for identity types, we can therefore repeat the
-process above to generate the level-2 paths $!\gamma_i$ and $\gamma_i
-\circ \gamma_j$ subject to the conditions $\gamma_i \circ \refl \equiv
-\gamma_i$ etc. This gives rise to a level-3 collection of paths and so
-on ad infinitum.
+induction principle for identity types again, we can repeat the
+process above to generate the level-2 paths $!\gamma_i$ and
+$\gamma_i \circ \gamma_j$ subject to the conditions
+$\gamma_i \circ \refl \equiv \gamma_i$ etc. This gives rise to a
+level-3 collection of paths and so on ad infinitum.
 
 Generally speaking, an important endeavor in the HoTT context is to
-understand and characterize the structure of special types. As a
-simple example, the type with one point and one non-trivial path
-(other than \refl) gives rise to a path structure that is isomorphic
-to the natural numbers.
+understand and characterize the structure of this hierarchy of
+paths. As a simple example, the type with one point and one
+non-trivial path (other than \refl) gives rise to a path structure
+that is isomorphic to the natural numbers.
 
 Our paper can be seen as characterizing a special class of types at
 levels 0 and 1 of the hierarchy that already offers tantalizing new
-insights and benefits from a programming perspective. In more detail,
+insights and benefits to programming practice. In more detail,
 a 0-groupoid is a set, i.e., a collection of points with only
 \refl-paths. A strict 1-groupoid takes us to the next level allowing a
 collection of points connected by non-trivial paths. We however
 explicitly collapse the higher-level structure by interpreting the
-identities $\gamma_1 : p \circ \refl \equiv p$ as \emph{strict}
-equalities. Even with the restriction, arbitrary strict 1-groupoids
+identities $\gamma_1 : p ~\circ~ \refl \equiv p$ as \emph{strict}
+equalities. Even with this restriction, arbitrary strict 1-groupoids
 are as general as all finite groups which makes them still difficult
 to capture structurally and computationally. There are however some
 interesting special cases within that form, one of which we explore in
@@ -194,7 +196,7 @@ Give lots of examples of action groupoids. Explain cardinality.
 \item Our first generalization is to introduce \emph{pointed types}. A
   pointed type $\pt{\tau}{v}$ is a non-empty type $\tau$ along
   with one specific value $v : \tau$ that is considered ``in focus.''
-  Examples.
+  Examples:
 
 {\footnotesize{
 \begin{code}
@@ -203,6 +205,11 @@ record U• : Set where
   field
     carrier : U
     •    : ⟦ carrier ⟧
+
+pt₁ pt₂ pt₃ : U•
+pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
+pt₂ = •[ PLUS ONE ONE , (inj₂ tt) ]
+pt₃ = •[ TIMES ONE ONE , (tt , tt) ]
 \end{code}
 \smallskip
 
@@ -211,6 +218,9 @@ record U• : Set where
 open U•
 \end{code}
 }}}
+
+\item Of course we can never build a pointed type whose carrier is the
+  empty type.
 
 \item All the combinators $c : \tau_1\leftrightarrow\tau_2$ can be
   lifted to pointed types. See Fig.~\ref{pointedcomb}.
@@ -313,6 +323,31 @@ level.
 \end{array}\]
 The $\tau$ level describes plain sets. The $\twod$ level describes
 ``two-dimensional types'' which denote action groupoids. 
+
+\item We will represent a cyclic group as a vector of values where the
+group operation maps each value to the next and the last to the first.
+
+\begin{code}
+data 2D : Set where
+  DIV     : U → U → 2D
+  PLUS2   : 2D → 2D → 2D
+  TIMES2  : 2D → 2D → 2D
+
+enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣ 
+enum ZERO = []
+enum ONE = tt ∷ []
+enum (PLUS t₁ t₂) = map inj₁ (enum t₁) ++ map inj₂ (enum t₂)
+enum (TIMES t₁ t₂) = concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) (enum t₂)) (enum t₁)) 
+
+Cyclic : (t : U) → Set
+Cyclic t = Vec ⟦ t ⟧ ∣ t ∣ 
+
+2⟦_⟧ : 2D → Set
+2⟦ DIV t₁ t₂ ⟧ = ⟦ t₁ ⟧ × Cyclic t₂
+2⟦ PLUS2 T₁ T₂ ⟧ = {!!}
+2⟦ TIMES2 T₁ T₂ ⟧ = {!!} 
+
+\end{code}
 
 \item Note that 2D types are closed under sums and products but
   \emph{not} under ``division.'' In other words, we cannot form types
