@@ -328,10 +328,12 @@ The $\tau$ level describes plain sets. The $\twod$ level describes
 group operation maps each value to the next and the last to the first.
 
 \begin{code}
-data 2D : Set where
-  DIV     : U → U → 2D
-  PLUS2   : 2D → 2D → 2D
-  TIMES2  : 2D → 2D → 2D
+data 2D : U → U → Set where
+  DIV     : (t₁ t₂ : U) → 2D t₁ t₂
+  PLUS2   : {t₁ t₂ t₃ t₄ : U} → 2D t₁ t₂ → 2D t₃ t₄ →
+            2D (PLUS (TIMES t₁ t₄) (TIMES t₃ t₂)) (TIMES t₂ t₄)
+  TIMES2  : {t₁ t₂ t₃ t₄ : U} → 2D t₁ t₂ → 2D t₃ t₄ →
+            2D (TIMES t₁ t₃) (TIMES t₂ t₄)
 
 enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣ 
 enum ZERO = []
@@ -342,11 +344,22 @@ enum (TIMES t₁ t₂) = concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)
 Cyclic : (t : U) → Set
 Cyclic t = Vec ⟦ t ⟧ ∣ t ∣ 
 
-2⟦_⟧ : 2D → Set
-2⟦ DIV t₁ t₂ ⟧ = ⟦ t₁ ⟧ × Cyclic t₂
-2⟦ PLUS2 T₁ T₂ ⟧ = {!!}
-2⟦ TIMES2 T₁ T₂ ⟧ = {!!} 
+record ActionGroupoid : Set₁ where
+  constructor _//_
+  field
+    S : Set
+    G : Set
 
+plus2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
+plus2 = {!!} 
+
+times2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
+times2 = {!!} 
+
+2⟦_⟧ : {t₁ t₂ : U} → 2D t₁ t₂ → ActionGroupoid
+2⟦ DIV t₁ t₂ ⟧ = ⟦ t₁ ⟧ // Cyclic t₂
+2⟦ PLUS2 T₁ T₂ ⟧ = plus2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧
+2⟦ TIMES2 T₁ T₂ ⟧ = times2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧ 
 \end{code}
 
 \item Note that 2D types are closed under sums and products but
