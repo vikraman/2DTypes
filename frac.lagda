@@ -328,12 +328,10 @@ The $\tau$ level describes plain sets. The $\twod$ level describes
 group operation maps each value to the next and the last to the first.
 
 \begin{code}
-data 2D : U → U → Set where
-  DIV     : (t₁ t₂ : U) → 2D t₁ t₂
-  PLUS2   : {t₁ t₂ t₃ t₄ : U} → 2D t₁ t₂ → 2D t₃ t₄ →
-            2D (PLUS (TIMES t₁ t₄) (TIMES t₃ t₂)) (TIMES t₂ t₄)
-  TIMES2  : {t₁ t₂ t₃ t₄ : U} → 2D t₁ t₂ → 2D t₃ t₄ →
-            2D (TIMES t₁ t₃) (TIMES t₂ t₄)
+data 2D : Set where
+  DIV     :  (t₁ t₂ : U) → 2D
+  PLUS2   :  2D → 2D → 2D
+  TIMES2  :  2D → 2D → 2D
 
 enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣ 
 enum ZERO = []
@@ -341,23 +339,30 @@ enum ONE = tt ∷ []
 enum (PLUS t₁ t₂) = map inj₁ (enum t₁) ++ map inj₂ (enum t₂)
 enum (TIMES t₁ t₂) = concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) (enum t₂)) (enum t₁)) 
 
-Cyclic : (t : U) → Set
-Cyclic t = Vec ⟦ t ⟧ ∣ t ∣ 
+record Enum : Set where
+  constructor mkEnum
+  field
+    t : U
+    elems : Vec ⟦ t ⟧ ∣ t ∣ 
 
 record ActionGroupoid : Set₁ where
   constructor _//_
   field
     S : Set
-    G : Set
+    G : Enum
 
 plus2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
-plus2 = {!!} 
+plus2 (S₁ // mkEnum t₁ elems₁) (S₂ // mkEnum t₂ elems₂) =
+  ((S₁ × ⟦ t₂ ⟧) ⊎ (S₂ × ⟦ t₁ ⟧)) //
+  mkEnum (TIMES t₁ t₂) (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
 
 times2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
-times2 = {!!} 
+times2 (S₁ // mkEnum t₁ elems₁) (S₂ // mkEnum t₂ elems₂) =
+  (S₁ × S₂) //
+  mkEnum (TIMES t₁ t₂) (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
 
-2⟦_⟧ : {t₁ t₂ : U} → 2D t₁ t₂ → ActionGroupoid
-2⟦ DIV t₁ t₂ ⟧ = ⟦ t₁ ⟧ // Cyclic t₂
+2⟦_⟧ : 2D → ActionGroupoid
+2⟦ DIV t₁ t₂ ⟧ = ⟦ t₁ ⟧ // mkEnum t₂ (enum t₂)
 2⟦ PLUS2 T₁ T₂ ⟧ = plus2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧
 2⟦ TIMES2 T₁ T₂ ⟧ = times2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧ 
 \end{code}
