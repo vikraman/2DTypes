@@ -42,7 +42,7 @@
 {-# OPTIONS --without-K #-}
 
 module frac where
-open import Level 
+open import Level renaming (suc to lsuc) 
 open import Data.Empty
 open import Data.Unit
 open import Data.Sum hiding (map)
@@ -50,6 +50,8 @@ open import Data.Bool
 open import Data.Product hiding (map)
 open import Data.Vec
 open import Data.Nat hiding (_⊔_)
+open import Data.Integer using (+_) 
+open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
 open import Function
 
 infixr 30 _⟷_
@@ -365,12 +367,70 @@ times2 (S₁ // mkEnum t₁ elems₁) (S₂ // mkEnum t₂ elems₂) =
 2⟦ DIV t₁ t₂ ⟧ = ⟦ t₁ ⟧ // mkEnum t₂ (enum t₂)
 2⟦ PLUS2 T₁ T₂ ⟧ = plus2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧
 2⟦ TIMES2 T₁ T₂ ⟧ = times2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧ 
+
 \end{code}
 
 \item Note that 2D types are closed under sums and products but
   \emph{not} under ``division.'' In other words, we cannot form types
   $\fract{(\fract{\tau_1}{\tau_2})}{(\fract{\tau_3}{\tau_4})}$. This is
   why we call our types 2D as we are restricted to two levels.
+
+\item So far we have allowed division by zero. There are general
+approaches to dealing with his: the exception monad, meadow axioms
+instead of field axioms, or pointed types. The latter seems to lead to
+a good operational semantics.
+
+\item Pointed groupoids:
+
+\begin{code}
+data 2D• : Set where
+  DIV•     :  (t₁ : U) → (t₂ : U•) → 2D•
+  PLUS2•   :  2D• → 2D• → 2D•
+  TIMES2•  :  2D• → 2D• → 2D•
+
+record Enum• : Set where
+  constructor mkEnum•
+  field
+    t : U•
+    elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ -- other than point on focus
+
+record ActionGroupoid• : Set₁ where
+  constructor _//•_
+  field
+    S : Set
+    G : Enum•
+
+plus2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
+plus2• (S₁ //• mkEnum• •[ t₁ , p₁ ] elems₁) (S₂ //• mkEnum• •[ t₂ , p₂ ] elems₂) =
+  ((S₁ × ⟦ t₂ ⟧) ⊎ (S₂ × ⟦ t₁ ⟧)) //•
+  mkEnum•
+    •[ TIMES t₁ t₂ , (p₁ , p₂) ] 
+    (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
+
+times2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
+times2• (S₁ //• mkEnum• •[ t₁ , p₁ ] elems₁) (S₂ //• mkEnum• •[ t₂ , p₂ ] elems₂) =
+  (S₁ × S₂) //•
+  mkEnum•
+    •[ TIMES t₁ t₂ , (p₁ , p₂) ]
+    (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
+
+2⟦_⟧• : 2D• → ActionGroupoid•
+2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ //• mkEnum• t₂ (enum (carrier t₂))
+2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
+2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
+
+∣_∣• : 2D• → ℚ
+∣ DIV• t₁ •[ t₂ , p₂ ] ∣• = mkRational ∣ t₁ ∣ ∣ t₂ ∣ {{!!}}
+∣ PLUS2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ+ ∣ T₂ ∣•
+∣ TIMES2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ* ∣ T₂ ∣• 
+\end{code}
+
+\item Examples
+
+\begin{code}
+-- Recall pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
+-- show ∣ DIV• (PLUS ONE ONE) pt₁ ∣• 
+\end{code}
 
 \item The values of type $\fract{\tau_1}{\tau_2}$ will be denoted
 $\fv{v}{\G}$ where $v : \tau_1$ is in white and $\G$ in grey is
