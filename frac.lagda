@@ -454,7 +454,9 @@ pt≠0 •[ TIMES t₁ t₂ , (x , y) ] with pt≠0 •[ t₁ , x ] | pt≠0 •
 
 \begin{code}
 -- Recall pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
--- show ∣ DIV• (PLUS ONE ONE) pt₁ ∣• 
+r₁ = show ∣ DIV• (PLUS ONE ONE) pt₁ ∣• -- "1/1"
+r₂ = show ∣ DIV• ONE pt₁ ∣• -- "1/2"
+r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣• -- "3/2"
 \end{code}
 
 \item The values of type $\fract{\tau_1}{\tau_2}$ will be denoted
