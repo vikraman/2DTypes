@@ -53,6 +53,7 @@ open import Data.Nat hiding (_⊔_)
 open import Data.Integer using (+_) 
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
 open import Function
+open import Relation.Binary.PropositionalEquality
 
 infixr 30 _⟷_
 infixr 10 _◎_
@@ -419,13 +420,29 @@ times2• (S₁ //• mkEnum• •[ t₁ , p₁ ] elems₁) (S₂ //• mkEnum�
 2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
 2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
 
+NonZero+ : {m n : ℕ} → NonZero m → NonZero (m + n)
+NonZero+ {0} {n} m≠0 = ⊥-elim m≠0
+NonZero+ {suc m} {n} tt = tt  
+
+NonZeror+ : {m n : ℕ} → NonZero n → NonZero (m + n)
+NonZeror+ {m} {0} n≠0 = ⊥-elim n≠0
+NonZeror+ {0} {suc n} tt = tt
+NonZeror+ {suc m} {suc n} tt = tt
+
+NonZero* : {m n : ℕ} → NonZero m → NonZero n → NonZero (m * n)
+NonZero* {0} {n} m≠0 n≠0 = ⊥-elim m≠0
+NonZero* {suc m} {0} m≠0 n≠0 = ⊥-elim n≠0
+NonZero* {suc m} {suc n} m≠0 n≠0 = tt 
+
 pt≠0 : (t : U•) → NonZero ∣ carrier t ∣
 pt≠0 •[ ZERO , () ] 
 pt≠0 •[ ONE , p ] = tt
 pt≠0 •[ PLUS t₁ t₂ , inj₁ x ] with pt≠0 •[ t₁ , x ]
-... | t₁≠0 = {!!} 
-pt≠0 •[ PLUS t₁ t₂ , inj₂ y ] = {!!}
-pt≠0 •[ TIMES t₁ t₂ , p ] = {!!} 
+... | t₁≠0 = NonZero+ t₁≠0 
+pt≠0 •[ PLUS t₁ t₂ , inj₂ y ] with pt≠0 •[ t₂ , y ]
+... | t₂≠0 = NonZeror+ {∣ t₁ ∣} t₂≠0 
+pt≠0 •[ TIMES t₁ t₂ , (x , y) ] with pt≠0 •[ t₁ , x ] | pt≠0 •[ t₂ , y ]
+... | t₁≠0 | t₂≠0 = NonZero* t₁≠0 t₂≠0 
 
 ∣_∣• : 2D• → ℚ
 ∣ DIV• t₁ •[ t₂ , p₂ ] ∣• = mkRational ∣ t₁ ∣ ∣ t₂ ∣ {pt≠0 •[ t₂ , p₂ ]}
