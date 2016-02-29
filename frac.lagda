@@ -403,11 +403,14 @@ through the elements.
 
 \item \textbf{Note:} Since we are dealing with finite groups, there
   must exist a bijection $f$ from the carrier of $\G$ to $\{ 1, \ldots
-  |\G| \}$, we can define our cycle function $cycle(g) =
-  f^{-1}((f(g)+1) \% | \G |)$.  And for any group $\G$ and set $S$ we
-  always have the action for all $g ∈ \G $, $g(s) = s$ which will give
-  us an action groupoid with cardinality $|S|/|\G|$. So actually we
-  can just pick any group with the correct order
+  |\G| \}$, we can define our cycle function:
+  \[
+    \mathit{cycle}(g) = f^{ -1} ((f(g) + 1) \mod | \G |)
+  \]
+  And for any group $\G$ and set $S$ we always have the action for all
+  $g ∈ \G $, $g(s) = s$ which will give us an action groupoid with
+  cardinality $|S|/|\G|$. So actually we can just pick any group with
+  the correct order
 
 \item \textbf{Question:} Ok so a value of type $\tau_1/\tau_2$ can be
 $\fv{v}{\G}$ for any $v : \tau_1$ and any $\G$ of order
@@ -481,7 +484,7 @@ record Enum• : Set where
   constructor mkEnum•
   field
     t : U•
-    elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ -- other than point on focus
+    elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ 
 
 _Enum•×_ : Enum• → Enum• → Enum•
 (mkEnum• •[ t₁ , p₁ ] elems₁) Enum•× (mkEnum• •[ t₂ , p₂ ] elems₂) =
@@ -558,6 +561,14 @@ r₂ = show ∣ DIV• ONE pt₁ ∣•                        -- "1/2"
 r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
 \end{code}
 
+\item Semantics: Now we want to relate our definitions to Categories.Groupoid 
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eta and Epsilon}
+
+\begin{itemize}
 \item We can ``create'' and ``cancel'' fractional pointed types using $\eta_{\pt{\tau}{v}}$ and $\epsilon_{\pt{\tau}{v}}$ as follows: 
 \[\begin{array}{rcl}
 \eta_{\pt{\tau}{v}} &:& \ot \rightarrow \pt{\tau}{v} \otimes 1/\pt{\tau}{v} \\
