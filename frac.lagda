@@ -226,7 +226,11 @@ open U•
   empty type.
 
 \item All the combinators $c : \tau_1\leftrightarrow\tau_2$ can be
-  lifted to pointed types. See Fig.~\ref{pointedcomb}.
+  lifted to pointed types. See Fig.~\ref{pointedcomb}. (Alternatively
+  we can use eval and derive the lifted combinators as coherent
+  actions. At this point we are not yet using the pointed
+  combinators. We will see how things develop.)
+
 \end{itemize}
 
 {\footnotesize{
@@ -328,25 +332,34 @@ The $\tau$ level describes plain sets. The $\twod$ level describes
 ``two-dimensional types'' which denote action groupoids. 
 
 \item We will represent a cyclic group as a vector of values where the
-group operation maps each value to the next and the last to the first.
+group operation maps each value to the next and the last to the
+first. We first define this vector of values as an enumeration, then
+define action groupoids, and then our 2D types. This definition will
+allow divisions by zero so we then move everything to pointed types.
 
 \begin{code}
-data 2D : Set where
-  DIV     :  (t₁ t₂ : U) → 2D
-  PLUS2   :  2D → 2D → 2D
-  TIMES2  :  2D → 2D → 2D
+_enum×_ : {t₁ t₂ : U} →
+  Vec ⟦ t₁ ⟧ ∣ t₁ ∣ → Vec ⟦ t₂ ⟧ ∣ t₂ ∣ → Vec ⟦ TIMES t₁ t₂ ⟧ ∣ TIMES t₁ t₂ ∣ 
+vs₁ enum× vs₂ = concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) vs₂) vs₁)
 
 enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣ 
 enum ZERO = []
 enum ONE = tt ∷ []
 enum (PLUS t₁ t₂) = map inj₁ (enum t₁) ++ map inj₂ (enum t₂)
-enum (TIMES t₁ t₂) = concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) (enum t₂)) (enum t₁)) 
+enum (TIMES t₁ t₂) = (enum t₁) enum× (enum t₂)
 
 record Enum : Set where
   constructor mkEnum
   field
     t : U
     elems : Vec ⟦ t ⟧ ∣ t ∣ 
+
+_Enum×_ : Enum → Enum → Enum
+(mkEnum t₁ elems₁) Enum× (mkEnum t₂ elems₂) =
+  mkEnum (TIMES t₁ t₂) (elems₁ enum× elems₂)
+        
+
+--
 
 record ActionGroupoid : Set₁ where
   constructor _//_
@@ -355,14 +368,19 @@ record ActionGroupoid : Set₁ where
     G : Enum
 
 plus2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
-plus2 (S₁ // mkEnum t₁ elems₁) (S₂ // mkEnum t₂ elems₂) =
-  ((S₁ × ⟦ t₂ ⟧) ⊎ (S₂ × ⟦ t₁ ⟧)) //
-  mkEnum (TIMES t₁ t₂) (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
+plus2 (S₁ // enum₁) (S₂ // enum₂) = 
+  ((S₁ × ⟦ Enum.t enum₂ ⟧) ⊎ (S₂ × ⟦ Enum.t enum₁ ⟧)) //
+  (enum₁ Enum× enum₂)
 
 times2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
-times2 (S₁ // mkEnum t₁ elems₁) (S₂ // mkEnum t₂ elems₂) =
-  (S₁ × S₂) //
-  mkEnum (TIMES t₁ t₂) (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
+times2 (S₁ // enum₁) (S₂ // enum₂) = (S₁ × S₂) // (enum₁ Enum× enum₂)
+
+--
+
+data 2D : Set where
+  DIV     :  (t₁ t₂ : U) → 2D
+  PLUS2   :  2D → 2D → 2D
+  TIMES2  :  2D → 2D → 2D
 
 2⟦_⟧ : 2D → ActionGroupoid
 2⟦ DIV t₁ t₂ ⟧ = ⟦ t₁ ⟧ // mkEnum t₂ (enum t₂)
@@ -375,89 +393,6 @@ times2 (S₁ // mkEnum t₁ elems₁) (S₂ // mkEnum t₂ elems₂) =
   \emph{not} under ``division.'' In other words, we cannot form types
   $\fract{(\fract{\tau_1}{\tau_2})}{(\fract{\tau_3}{\tau_4})}$. This is
   why we call our types 2D as we are restricted to two levels.
-
-\item So far we have allowed division by zero. There are general
-approaches to dealing with his: the exception monad, meadow axioms
-instead of field axioms, or pointed types. The latter seems to lead to
-a good operational semantics.
-
-\item Pointed groupoids:
-
-\begin{code}
-data 2D• : Set where
-  DIV•     :  (t₁ : U) → (t₂ : U•) → 2D•
-  PLUS2•   :  2D• → 2D• → 2D•
-  TIMES2•  :  2D• → 2D• → 2D•
-
-record Enum• : Set where
-  constructor mkEnum•
-  field
-    t : U•
-    elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ -- other than point on focus
-
-record ActionGroupoid• : Set₁ where
-  constructor _//•_
-  field
-    S : Set
-    G : Enum•
-
-plus2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
-plus2• (S₁ //• mkEnum• •[ t₁ , p₁ ] elems₁) (S₂ //• mkEnum• •[ t₂ , p₂ ] elems₂) =
-  ((S₁ × ⟦ t₂ ⟧) ⊎ (S₂ × ⟦ t₁ ⟧)) //•
-  mkEnum•
-    •[ TIMES t₁ t₂ , (p₁ , p₂) ] 
-    (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
-
-times2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
-times2• (S₁ //• mkEnum• •[ t₁ , p₁ ] elems₁) (S₂ //• mkEnum• •[ t₂ , p₂ ] elems₂) =
-  (S₁ × S₂) //•
-  mkEnum•
-    •[ TIMES t₁ t₂ , (p₁ , p₂) ]
-    (concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) elems₂) elems₁))
-
-2⟦_⟧• : 2D• → ActionGroupoid•
-2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ //• mkEnum• t₂ (enum (carrier t₂))
-2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
-2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
-
-NonZero+ : {m n : ℕ} → NonZero m → NonZero (m + n)
-NonZero+ {0} {n} m≠0 = ⊥-elim m≠0
-NonZero+ {suc m} {n} tt = tt  
-
-NonZeror+ : {m n : ℕ} → NonZero n → NonZero (m + n)
-NonZeror+ {m} {0} n≠0 = ⊥-elim n≠0
-NonZeror+ {0} {suc n} tt = tt
-NonZeror+ {suc m} {suc n} tt = tt
-
-NonZero* : {m n : ℕ} → NonZero m → NonZero n → NonZero (m * n)
-NonZero* {0} {n} m≠0 n≠0 = ⊥-elim m≠0
-NonZero* {suc m} {0} m≠0 n≠0 = ⊥-elim n≠0
-NonZero* {suc m} {suc n} m≠0 n≠0 = tt 
-
-pt≠0 : (t : U•) → NonZero ∣ carrier t ∣
-pt≠0 •[ ZERO , () ] 
-pt≠0 •[ ONE , p ] = tt
-pt≠0 •[ PLUS t₁ t₂ , inj₁ x ] with pt≠0 •[ t₁ , x ]
-... | t₁≠0 = NonZero+ t₁≠0 
-pt≠0 •[ PLUS t₁ t₂ , inj₂ y ] with pt≠0 •[ t₂ , y ]
-... | t₂≠0 = NonZeror+ {∣ t₁ ∣} t₂≠0 
-pt≠0 •[ TIMES t₁ t₂ , (x , y) ] with pt≠0 •[ t₁ , x ] | pt≠0 •[ t₂ , y ]
-... | t₁≠0 | t₂≠0 = NonZero* t₁≠0 t₂≠0 
-
-∣_∣• : 2D• → ℚ
-∣ DIV• t₁ •[ t₂ , p₂ ] ∣• = mkRational ∣ t₁ ∣ ∣ t₂ ∣ {pt≠0 •[ t₂ , p₂ ]}
-∣ PLUS2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ+ ∣ T₂ ∣•
-∣ TIMES2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ* ∣ T₂ ∣• 
-\end{code}
-
-\item Examples
-
-\begin{code}
--- Recall pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
-r₁ = show ∣ DIV• (PLUS ONE ONE) pt₁ ∣• -- "1/1"
-r₂ = show ∣ DIV• ONE pt₁ ∣• -- "1/2"
-r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣• -- "3/2"
-\end{code}
 
 \item The values of type $\fract{\tau_1}{\tau_2}$ will be denoted
 $\fv{v}{\G}$ where $v : \tau_1$ is in white and $\G$ in grey is
@@ -533,6 +468,95 @@ keep track of that in the type.
 \item Semantically when we have a type $\fract{1}{\pt{\tau}{v}}$, we have the
 group $\G_\tau$ which cycles through the elements of $\tau$ with one
 particular value $v$ in focus. We will denote this as $\G_\tau^v$
+
+\item So far we have allowed division by zero. There are general
+approaches to dealing with his: the exception monad, meadow axioms
+instead of field axioms, or pointed types. The latter seems to lead to
+a good operational semantics.
+
+\item Pointed groupoids:
+
+\begin{code}
+record Enum• : Set where
+  constructor mkEnum•
+  field
+    t : U•
+    elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ -- other than point on focus
+
+_Enum•×_ : Enum• → Enum• → Enum•
+(mkEnum• •[ t₁ , p₁ ] elems₁) Enum•× (mkEnum• •[ t₂ , p₂ ] elems₂) =
+  mkEnum•
+    •[ TIMES t₁ t₂ , (p₁ , p₂) ] 
+    (elems₁ enum× elems₂)
+
+--
+
+record ActionGroupoid• : Set₁ where
+  constructor _//•_
+  field
+    S : Set
+    G : Enum•
+
+plus2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
+plus2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+  ((S₁ × ⟦ U•.carrier (Enum•.t enum₂) ⟧) ⊎ (S₂ × ⟦ U•.carrier (Enum•.t enum₁) ⟧)) //•
+  (enum₁ Enum•× enum₂)
+
+times2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
+times2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+  (S₁ × S₂) //• (enum₁ Enum•× enum₂)
+
+--
+
+data 2D• : Set where
+  DIV•     :  (t₁ : U) → (t₂ : U•) → 2D•
+  PLUS2•   :  2D• → 2D• → 2D•
+  TIMES2•  :  2D• → 2D• → 2D•
+
+2⟦_⟧• : 2D• → ActionGroupoid•
+2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ //• mkEnum• t₂ (enum (carrier t₂))
+2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
+2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
+
+∣_∣• : 2D• → ℚ
+∣ PLUS2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ+ ∣ T₂ ∣•
+∣ TIMES2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ* ∣ T₂ ∣•
+∣ DIV• t₁ •[ t₂ , p₂ ] ∣• = mkRational ∣ t₁ ∣ ∣ t₂ ∣ {pt≠0 •[ t₂ , p₂ ]}
+  where
+    NonZero+ : {m n : ℕ} → NonZero m → NonZero (m + n)
+    NonZero+ {0} {n} m≠0 = ⊥-elim m≠0
+    NonZero+ {suc m} {n} tt = tt  
+
+    NonZeror+ : {m n : ℕ} → NonZero n → NonZero (m + n)
+    NonZeror+ {m} {0} n≠0 = ⊥-elim n≠0
+    NonZeror+ {0} {suc n} tt = tt
+    NonZeror+ {suc m} {suc n} tt = tt
+
+    NonZero* : {m n : ℕ} → NonZero m → NonZero n → NonZero (m * n)
+    NonZero* {0} {n} m≠0 n≠0 = ⊥-elim m≠0
+    NonZero* {suc m} {0} m≠0 n≠0 = ⊥-elim n≠0
+    NonZero* {suc m} {suc n} m≠0 n≠0 = tt 
+
+    pt≠0 : (t : U•) → NonZero ∣ carrier t ∣
+    pt≠0 •[ ZERO , () ] 
+    pt≠0 •[ ONE , p ] = tt
+    pt≠0 •[ PLUS t₁ t₂ , inj₁ x ] with pt≠0 •[ t₁ , x ]
+    ... | t₁≠0 = NonZero+ t₁≠0 
+    pt≠0 •[ PLUS t₁ t₂ , inj₂ y ] with pt≠0 •[ t₂ , y ]
+    ... | t₂≠0 = NonZeror+ {∣ t₁ ∣} t₂≠0 
+    pt≠0 •[ TIMES t₁ t₂ , (x , y) ] with pt≠0 •[ t₁ , x ] | pt≠0 •[ t₂ , y ]
+    ... | t₁≠0 | t₂≠0 = NonZero* t₁≠0 t₂≠0 
+
+\end{code}
+
+\item Examples
+
+\begin{code}
+-- Recall pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
+r₁ = show ∣ DIV• (PLUS ONE ONE) pt₁ ∣•             -- "1/1"
+r₂ = show ∣ DIV• ONE pt₁ ∣•                        -- "1/2"
+r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
+\end{code}
 
 \item We can ``create'' and ``cancel'' fractional pointed types using $\eta_{\pt{\tau}{v}}$ and $\epsilon_{\pt{\tau}{v}}$ as follows: 
 \[\begin{array}{rcl}
