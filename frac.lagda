@@ -600,6 +600,9 @@ r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
 
 \end{code}
 
+\item Then we want to lift combinators to 2D types; check each
+combinators is an equivalence of categories; etc.
+
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
