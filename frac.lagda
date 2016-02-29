@@ -43,6 +43,8 @@
 
 module frac where
 open import Level renaming (zero to lzero; suc to lsuc) 
+open import Algebra
+open import Algebra.Structures
 open import Data.Empty
 open import Data.Unit
 open import Data.Fin using (Fin)
@@ -504,6 +506,25 @@ _Enum•×_ : Enum• → Enum• → Enum•
   mkEnum•
     •[ TIMES t₁ t₂ , (p₁ , p₂) ] 
     (elems₁ enum× elems₂)
+
+-- need a proof that every v ∈ ⟦ t ⟧ is in enum t and the index of the position
+
+index : {t : U} → (v : ⟦ t ⟧) → Fin ∣ t ∣
+index = {!!} 
+
+2Group : U• → Group lzero lzero
+2Group •[ t , v₀ ] = record {
+    Carrier = ⟦ t ⟧
+  ; _≈_ = P._≡_
+  ; _∙_ = λ v₁ v₂ → let vs = enum t 
+                        i₁ = index v₁
+                        i₂ = index v₂
+                        i = {!!} -- (toℕ i₁ + toℕ i₂) mod ∣ t ∣ 
+                    in lookup i vs
+  ; ε = v₀
+  ; _⁻¹ = {!!}
+  ; isGroup = {!!} 
+  }
 
 --
 
