@@ -42,7 +42,7 @@
 {-# OPTIONS --without-K #-}
 
 module frac where
-open import Level renaming (suc to lsuc) 
+open import Level renaming (zero to lzero; suc to lsuc) 
 open import Data.Empty
 open import Data.Unit
 open import Data.Sum hiding (map)
@@ -54,6 +54,8 @@ open import Data.Integer using (+_)
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
 open import Function
 open import Relation.Binary.PropositionalEquality
+
+open import Categories.Category
 
 infixr 30 _⟷_
 infixr 10 _◎_
@@ -562,6 +564,29 @@ r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
 \end{code}
 
 \item Semantics: Now we want to relate our definitions to Categories.Groupoid 
+
+\begin{code}
+2DCat : 2D• → Category lzero lzero lzero
+2DCat (DIV• ZERO t) = record {
+    Obj  = ⊥
+  ; _⇒_  = λ { () () } 
+  ; _≡_  = λ { {()} {()} f g }
+  ; id   = λ { {()} } 
+  ; _∘_  = λ { {()} {()} {()} f g } 
+  }
+2DCat (DIV• ONE t) = record {
+    Obj  = ⊤
+  ; _⇒_  = λ _ _ → Enum•
+  ; _≡_  = λ f g → {!!}
+  ; id   = {!!}
+  ; _∘_  = {!!}
+  }
+2DCat (DIV• (PLUS t₁ t₂) t) = {!!}
+2DCat (DIV• (TIMES t₁ t₂) t) = {!!}
+2DCat (PLUS2• T₁ T₂) = {!!} 
+2DCat (TIMES2• T₁ T₂) = {!!} 
+
+\end{code}
 
 \end{itemize}
 

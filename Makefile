@@ -6,7 +6,7 @@ frac.pdf : frac.tex
 	pdflatex frac.tex
 
 frac.tex : frac.lagda
-	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(AGDALIB) frac.lagda
+	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(AGDALIB) -i $(CATLIB) frac.lagda
 
 clean:
 	rm -f *.{aux,bbl,bcf,blg,fdb_latexmk,fls,flx,ilg,lof,log,lop}	\
