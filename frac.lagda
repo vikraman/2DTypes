@@ -45,6 +45,7 @@ module frac where
 open import Level renaming (zero to lzero; suc to lsuc) 
 open import Data.Empty
 open import Data.Unit
+open import Data.Fin using (Fin)
 open import Data.Sum hiding (map)
 open import Data.Bool
 open import Data.Product hiding (map)
@@ -53,7 +54,7 @@ open import Data.Nat hiding (_⊔_)
 open import Data.Integer using (+_) 
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
 open import Function
-open import Relation.Binary.PropositionalEquality
+open import Relation.Binary.PropositionalEquality as P
 
 open import Categories.Category
 
@@ -360,6 +361,16 @@ _Enum×_ : Enum → Enum → Enum
 (mkEnum t₁ elems₁) Enum× (mkEnum t₂ elems₂) =
   mkEnum (TIMES t₁ t₂) (elems₁ enum× elems₂)
         
+muli : {A : Set} {n : ℕ} → (Vec A n) → (i j : Fin n) → Fin n
+muli v i j = {!!} 
+
+mule : {A : Set} {n : ℕ} → (Vec A n) → (x y : A) → A
+mule v i j = {!!} 
+
+-- get index of x (must be there)
+-- get index of y (must be there)
+-- new index is x + y mod n
+-- return elem at new index
 
 --
 
@@ -574,12 +585,13 @@ r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
   ; id   = λ { {()} } 
   ; _∘_  = λ { {()} {()} {()} f g } 
   }
-2DCat (DIV• ONE t) = record {
+2DCat (DIV• ONE •[ t , p ]) = record {
     Obj  = ⊤
-  ; _⇒_  = λ _ _ → Enum•
-  ; _≡_  = λ f g → {!!}
-  ; id   = {!!}
-  ; _∘_  = {!!}
+  ; _⇒_  = λ _ _ → ⟦ t ⟧
+  ; _≡_  = λ f g → f P.≡ g
+  ; id   = p
+  ; _∘_  = λ f g → mule (enum t) f g
+                   
   }
 2DCat (DIV• (PLUS t₁ t₂) t) = {!!}
 2DCat (DIV• (TIMES t₁ t₂) t) = {!!}
