@@ -41,6 +41,7 @@
 \DeclareUnicodeCharacter{9678}{$\circledcirc$}
 \DeclareUnicodeCharacter{8759}{$::$}
 \DeclareUnicodeCharacter{737}{${}^{l}$}
+\DeclareUnicodeCharacter{931}{$\Sigma$}
 \DeclareUnicodeCharacter{8718}{$\qed$}
 
 \AgdaHide{
@@ -66,9 +67,6 @@ open import Data.Integer using (+_)
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_)
 import Relation.Binary.PropositionalEquality as P
-
-infixr 30 _⟷_
-infixr 10 _◎_
 \end{code}
 }
 
@@ -140,6 +138,95 @@ data U : Set where
   set $\tau$.
 
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Pointed Types and Path Skeletons}
+
+\begin{itemize}
+
+\item We introduce \emph{pointed types}. A pointed type $\pt{\tau}{v}$
+  is a non-empty type $\tau$ along with one specific value $v : \tau$
+  that is considered ``in focus.''  Examples:
+
+{\footnotesize{
+\begin{code}
+record U• : Set where
+  constructor •[_,_]
+  field
+    carrier : U
+    •    : ⟦ carrier ⟧
+
+pt₁ pt₂ pt₃ : U•
+pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
+pt₂ = •[ PLUS ONE ONE , (inj₂ tt) ]
+pt₃ = •[ TIMES ONE ONE , (tt , tt) ]
+\end{code}
+\smallskip
+
+\AgdaHide{
+\begin{code}
+open U•
+\end{code}
+}}}
+
+\item Of course we can never build a pointed type whose carrier is the
+  empty type.
+
+\item We will think of the special point in focus as the start point
+of a path whose endpoint is unspecified. To that end, we introduce
+\emph{path skeletons}. These are paths connecting the points
+\emph{inside} the types and \emph{not} paths \emph{between} the types,
+i.e., these are not type isomorphisms, permutations, equivalences,
+etc. From any particular point, we can build the skeleton paths
+starting at that point and ending at an arbitrary point within
+\emph{any other} type.
+
+\begin{code}
+data _≈_ {t₁ t₂ : U} : (x : ⟦ t₁ ⟧) → (y : ⟦ t₂ ⟧) → Set where
+  eq : (x : ⟦ t₁ ⟧) (y : ⟦ t₂ ⟧) → x ≈ y
+
+points→paths : (pt : U•) → {t : U} → (y : ⟦ t ⟧) → (• pt ≈ y)
+points→paths •[ t , x ] y = eq x y
+
+\end{code}
+
+\item Now we introduce something interesting: a type built from a
+set of points together with a family of skeleton paths.
+
+\begin{code}
+record FiniteGroupoid : Set where
+  field
+    S : U
+    G : Σ[ pt ∈ U• ] ((y : ⟦ S ⟧) → (• pt ≈ y))
+
+-- Examples 1/2
+
+1/2 : FiniteGroupoid
+1/2 = record {
+        S = PLUS ONE ONE
+      ; G = (•[ ONE , tt ] , λ y → eq tt y)
+      }
+                  
+
+\end{code}
+
+\end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+0-skeleton: 3 points
+
+  Focus   point   other-point
+
+
+1-skeleton: one path skeleton
+
+  Anchored-endpoint -------- loose-endpoint that can connect to point or other-point so this gives us 1/2
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Groupoids and Action Groupoids}
@@ -238,117 +325,79 @@ module X where
   open import Categories.Support.Equivalence
   open import Categories.Support.EqReasoning
   open import Data.Product
---  open import Relation.Binary.PropositionalEquality using (_≡_)
-
-  data _⟷_ : U → U → Set where
-    unite₊l : {t : U} → PLUS ZERO t ⟷ t
-    uniti₊l : {t : U} → t ⟷ PLUS ZERO t
-    unite₊r : {t : U} → PLUS t ZERO ⟷ t
-    uniti₊r : {t : U} → t ⟷ PLUS t ZERO
-    swap₊   : {t₁ t₂ : U} → PLUS t₁ t₂ ⟷ PLUS t₂ t₁
-    assocl₊ : {t₁ t₂ t₃ : U} → PLUS t₁ (PLUS t₂ t₃) ⟷ PLUS (PLUS t₁ t₂) t₃
-    assocr₊ : {t₁ t₂ t₃ : U} → PLUS (PLUS t₁ t₂) t₃ ⟷ PLUS t₁ (PLUS t₂ t₃)
-    unite⋆l  : {t : U} → TIMES ONE t ⟷ t
-    uniti⋆l  : {t : U} → t ⟷ TIMES ONE t
-    unite⋆r : {t : U} → TIMES t ONE ⟷ t
-    uniti⋆r : {t : U} → t ⟷ TIMES t ONE
-    swap⋆   : {t₁ t₂ : U} → TIMES t₁ t₂ ⟷ TIMES t₂ t₁
-    assocl⋆ : {t₁ t₂ t₃ : U} → TIMES t₁ (TIMES t₂ t₃) ⟷ TIMES (TIMES t₁ t₂) t₃
-    assocr⋆ : {t₁ t₂ t₃ : U} → TIMES (TIMES t₁ t₂) t₃ ⟷ TIMES t₁ (TIMES t₂ t₃)
-    absorbr : {t : U} → TIMES ZERO t ⟷ ZERO
-    absorbl : {t : U} → TIMES t ZERO ⟷ ZERO
-    factorzr : {t : U} → ZERO ⟷ TIMES t ZERO
-    factorzl : {t : U} → ZERO ⟷ TIMES ZERO t
-    dist    : {t₁ t₂ t₃ : U} → 
-              TIMES (PLUS t₁ t₂) t₃ ⟷ PLUS (TIMES t₁ t₃) (TIMES t₂ t₃)
-    factor  : {t₁ t₂ t₃ : U} → 
-              PLUS (TIMES t₁ t₃) (TIMES t₂ t₃) ⟷ TIMES (PLUS t₁ t₂) t₃
-    distl   : {t₁ t₂ t₃ : U } →
-              TIMES t₁ (PLUS t₂ t₃) ⟷ PLUS (TIMES t₁ t₂) (TIMES t₁ t₃)
-    factorl : {t₁ t₂ t₃ : U } →
-              PLUS (TIMES t₁ t₂) (TIMES t₁ t₃) ⟷ TIMES t₁ (PLUS t₂ t₃)
-    id⟷    : {t : U} → t ⟷ t
-    _◎_     : {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
-    _⊕_     : {t₁ t₂ t₃ t₄ : U} → 
-              (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (PLUS t₁ t₂ ⟷ PLUS t₃ t₄)
-    _⊗_     : {t₁ t₂ t₃ t₄ : U} → 
-              (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (TIMES t₁ t₂ ⟷ TIMES t₃ t₄)
-
-  ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
-  ! = {!!} 
 \end{code}}
 
 \begin{code}
-  record FiniteGroupoid : Set (lsuc lzero) where
-    infixr 9 _∘_
+--   record FiniteGroupoid : Set (lsuc lzero) where
+--     infixr 9 _∘_
 
-    field
-      S    : U
-      _⇒_  : ⟦ S ⟧ → ⟦ S ⟧ → Set
-      id   : ∀ {A} → (A ⇒ A)
-      _∘_  : ∀ {A B C} → (B ⇒ C) → (A ⇒ B) → (A ⇒ C)
-      _⁻¹  : ∀ {A B} → (A ⇒ B) → (B ⇒ A)
+--     field
+--       S    : U
+--       _⇒_  : ⟦ S ⟧ → ⟦ S ⟧ → Set
+--       id   : ∀ {A} → (A ⇒ A)
+--       _∘_  : ∀ {A B C} → (B ⇒ C) → (A ⇒ B) → (A ⇒ C)
+--       _⁻¹  : ∀ {A B} → (A ⇒ B) → (B ⇒ A)
 
--- Examples
-  G0 : FiniteGroupoid
-  G0 = record {
-         S = ZERO
-       ; _⇒_ = λ ()
-       ; id = λ { {()} }
-       ; _∘_ = λ { {()} }
-       ; _⁻¹ = λ { {()} }
-       }
+-- -- Examples
+--   G0 : FiniteGroupoid
+--   G0 = record {
+--          S = ZERO
+--        ; _⇒_ = λ ()
+--        ; id = λ { {()} }
+--        ; _∘_ = λ { {()} }
+--        ; _⁻¹ = λ { {()} }
+--        }
 
-  G1 : FiniteGroupoid
-  G1 = record {
-         S = ONE
-       ; _⇒_ = λ { tt tt → ⊤ }
-       ; id = tt
-       ; _∘_ = λ { tt tt → tt }
-       ; _⁻¹ = λ { tt → tt }
-       }
+--   G1 : FiniteGroupoid
+--   G1 = record {
+--          S = ONE
+--        ; _⇒_ = λ { tt tt → ⊤ }
+--        ; id = tt
+--        ; _∘_ = λ { tt tt → tt }
+--        ; _⁻¹ = λ { tt → tt }
+--        }
 
-  G2 : FiniteGroupoid
-  G2 = record {
-         S = PLUS ONE ONE
-       ; _⇒_ = λ { (inj₁ tt) (inj₁ tt) → ⊤;
-                   (inj₁ tt) (inj₂ tt) → ⊥;
-                   (inj₂ tt) (inj₁ tt) → ⊥;
-                   (inj₂ tt) (inj₂ tt) → ⊤ } 
-       ; id = λ { {inj₁ tt} → tt; {inj₂ tt} → tt }
-       ; _∘_ = {!!} 
-       ; _⁻¹ = {!!} 
-       }
+--   G2 : FiniteGroupoid
+--   G2 = record {
+--          S = PLUS ONE ONE
+--        ; _⇒_ = λ { (inj₁ tt) (inj₁ tt) → ⊤;
+--                    (inj₁ tt) (inj₂ tt) → ⊥;
+--                    (inj₂ tt) (inj₁ tt) → ⊥;
+--                    (inj₂ tt) (inj₂ tt) → ⊤ } 
+--        ; id = λ { {inj₁ tt} → tt; {inj₂ tt} → tt }
+--        ; _∘_ = {!!} 
+--        ; _⁻¹ = {!!} 
+--        }
 
-  G1/2 : FiniteGroupoid
-  G1/2 = record {
-         S = ONE
-       ; _⇒_ = λ _ _ → Bool
-       ; id = true
-       ; _∘_ = _∧_
-       ; _⁻¹ = not
-       }
+--   G1/2 : FiniteGroupoid
+--   G1/2 = record {
+--          S = ONE
+--        ; _⇒_ = λ _ _ → Bool
+--        ; id = true
+--        ; _∘_ = _∧_
+--        ; _⁻¹ = not
+--        }
 
-  -- eventually we want to produce this G1/2 by combining ONE and (ONE PLUS ONE)
-  -- something like...
+--   -- eventually we want to produce this G1/2 by combining ONE and (ONE PLUS ONE)
+--   -- something like...
 
-  G1/2' : FiniteGroupoid
-  G1/2' = record {
-         S = ONE
-       ; _⇒_ = λ _ _ → PLUS ONE ONE ⟷ PLUS ONE ONE 
-       ; id = id⟷ 
-       ; _∘_ = _◎_ 
-       ; _⁻¹ = ! 
-       }
+--   G1/2' : FiniteGroupoid
+--   G1/2' = record {
+--          S = ONE
+--        ; _⇒_ = {!!} -- λ _ _ → PLUS ONE ONE ⟷ PLUS ONE ONE 
+--        ; id = {!!} -- id⟷ 
+--        ; _∘_ = {!!} -- _◎_ 
+--        ; _⁻¹ = {!!} -- ! 
+--        }
 
-  G1/3 : FiniteGroupoid
-  G1/3 = record {
-         S = ONE
-       ; _⇒_ = λ _ _ → (PLUS ONE (PLUS ONE ONE)) ⟷ (PLUS ONE (PLUS ONE ONE))
-       ; id = id⟷
-       ; _∘_ = _◎_ 
-       ; _⁻¹ = ! 
-       }
+--   G1/3 : FiniteGroupoid
+--   G1/3 = record {
+--          S = ONE
+--        ; _⇒_ = {!!} -- λ _ _ → (PLUS ONE (PLUS ONE ONE)) ⟷ (PLUS ONE (PLUS ONE ONE))
+--        ; id = {!!} -- id⟷
+--        ; _∘_ = {!!} -- _◎_ 
+--        ; _⁻¹ = {!!} -- ! 
+--        }
 
   -- now the problem is that we have too many paths; the groupoid
   -- cardinality would be 1/6 not 1/3; need 2 paths to collapse some?????
@@ -403,34 +452,6 @@ than the size of the type.
 \section{Pointed Types} 
  
 \begin{itemize}
-\item Our first generalization is to introduce \emph{pointed types}. A
-  pointed type $\pt{\tau}{v}$ is a non-empty type $\tau$ along
-  with one specific value $v : \tau$ that is considered ``in focus.''
-  Examples:
-
-{\footnotesize{
-\begin{code}
-record U• : Set where
-  constructor •[_,_]
-  field
-    carrier : U
-    •    : ⟦ carrier ⟧
-
-pt₁ pt₂ pt₃ : U•
-pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
-pt₂ = •[ PLUS ONE ONE , (inj₂ tt) ]
-pt₃ = •[ TIMES ONE ONE , (tt , tt) ]
-\end{code}
-\smallskip
-
-\AgdaHide{
-\begin{code}
-open U•
-\end{code}
-}}}
-
-\item Of course we can never build a pointed type whose carrier is the
-  empty type.
 
 \item All the combinators $c : \tau_1\leftrightarrow\tau_2$ can be
   lifted to pointed types. See Fig.~\ref{pointedcomb}. (Alternatively
@@ -440,100 +461,7 @@ open U•
 
 \end{itemize}
 
-{\footnotesize{
-\begin{figure*}[ht]
-{\setlength{\mathindent}{0cm}
-\begin{multicols}{2}
-\begin{code} 
-data _⟷_ : U• → U• → Set where
-  unite₊ : ∀ {t v} → •[ PLUS ZERO t , inj₂ v ] ⟷ •[ t , v ]
-  uniti₊ : ∀ {t v} → •[ t , v ] ⟷ •[ PLUS ZERO t , inj₂ v ]
-  swap1₊ : ∀ {t₁ t₂ v₁} → 
-    •[ PLUS t₁ t₂ , inj₁ v₁ ] ⟷ •[ PLUS t₂ t₁ , inj₂ v₁ ]
-  swap2₊ : ∀ {t₁ t₂ v₂} → 
-    •[ PLUS t₁ t₂ , inj₂ v₂ ] ⟷ •[ PLUS t₂ t₁ , inj₁ v₂ ]
-  assocl1₊ : ∀ {t₁ t₂ t₃ v₁} → 
-             •[ PLUS t₁ (PLUS t₂ t₃) , inj₁ v₁ ] ⟷ 
-             •[ PLUS (PLUS t₁ t₂) t₃ , inj₁ (inj₁ v₁) ]
-  assocl2₊ : ∀ {t₁ t₂ t₃ v₂} → 
-             •[ PLUS t₁ (PLUS t₂ t₃) , inj₂ (inj₁ v₂) ] ⟷ 
-             •[ PLUS (PLUS t₁ t₂) t₃ , inj₁ (inj₂ v₂) ]
-  assocl3₊ : ∀ {t₁ t₂ t₃ v₃} → 
-             •[ PLUS t₁ (PLUS t₂ t₃) , inj₂ (inj₂ v₃) ] ⟷ 
-             •[ PLUS (PLUS t₁ t₂) t₃ , inj₂ v₃ ]
-  assocr1₊ : ∀ {t₁ t₂ t₃ v₁} → 
-             •[ PLUS (PLUS t₁ t₂) t₃ , inj₁ (inj₁ v₁) ] ⟷ 
-             •[ PLUS t₁ (PLUS t₂ t₃) , inj₁ v₁ ] 
-  assocr2₊ : ∀ {t₁ t₂ t₃ v₂} → 
-             •[ PLUS (PLUS t₁ t₂) t₃ , inj₁ (inj₂ v₂) ] ⟷ 
-             •[ PLUS t₁ (PLUS t₂ t₃) , inj₂ (inj₁ v₂) ] 
-  assocr3₊ : ∀ {t₁ t₂ t₃ v₃} → 
-             •[ PLUS (PLUS t₁ t₂) t₃ , inj₂ v₃ ] ⟷ 
-             •[ PLUS t₁ (PLUS t₂ t₃) , inj₂ (inj₂ v₃) ]
-  unite⋆ : ∀ {t v} → •[ TIMES ONE t , (tt , v) ] ⟷ •[ t , v ]
-  uniti⋆ : ∀ {t v} → •[ t , v ] ⟷ •[ TIMES ONE t , (tt , v) ] 
-  swap⋆ : ∀ {t₁ t₂ v₁ v₂} → 
-    •[ TIMES t₁ t₂ , (v₁ , v₂) ] ⟷
-    •[ TIMES t₂ t₁ , (v₂ , v₁) ]
-  assocl⋆ : ∀ {t₁ t₂ t₃ v₁ v₂ v₃} → 
-            •[ TIMES t₁ (TIMES t₂ t₃) , (v₁ , (v₂ , v₃)) ] ⟷ 
-            •[ TIMES (TIMES t₁ t₂) t₃ , ((v₁ , v₂) , v₃) ]
-  assocr⋆ : ∀ {t₁ t₂ t₃ v₁ v₂ v₃} → 
-            •[ TIMES (TIMES t₁ t₂) t₃ , ((v₁ , v₂) , v₃) ] ⟷ 
-            •[ TIMES t₁ (TIMES t₂ t₃) , (v₁ , (v₂ , v₃)) ]
-  distz : ∀ {t v absurd} → 
-    •[ TIMES ZERO t , (absurd , v) ] ⟷ •[ ZERO , absurd ]
-  factorz : ∀ {t v absurd} → 
-    •[ ZERO , absurd ] ⟷ •[ TIMES ZERO t , (absurd , v) ]
-  dist1 : ∀ {t₁ t₂ t₃ v₁ v₃} → 
-    •[ TIMES (PLUS t₁ t₂) t₃ , (inj₁ v₁ , v₃) ] ⟷ 
-    •[ PLUS (TIMES t₁ t₃) (TIMES t₂ t₃) , inj₁ (v₁ , v₃) ]
-  dist2 : ∀ {t₁ t₂ t₃ v₂ v₃} → 
-    •[ TIMES (PLUS t₁ t₂) t₃ , (inj₂ v₂ , v₃) ] ⟷ 
-    •[ PLUS (TIMES t₁ t₃) (TIMES t₂ t₃) , inj₂ (v₂ , v₃) ]
-  factor1 : ∀ {t₁ t₂ t₃ v₁ v₃} → 
-    •[ PLUS (TIMES t₁ t₃) (TIMES t₂ t₃) , inj₁ (v₁ , v₃) ] ⟷ 
-    •[ TIMES (PLUS t₁ t₂) t₃ , (inj₁ v₁ , v₃) ]
-  factor2 : ∀ {t₁ t₂ t₃ v₂ v₃} → 
-    •[ PLUS (TIMES t₁ t₃) (TIMES t₂ t₃) , inj₂ (v₂ , v₃) ] ⟷ 
-    •[ TIMES (PLUS t₁ t₂) t₃ , (inj₂ v₂ , v₃) ]
-  id⟷ : ∀ {t v} → •[ t , v ] ⟷ •[ t , v ]
-  _◎_ : ∀ {t₁ t₂ t₃ v₁ v₂ v₃} → (•[ t₁ , v₁ ] ⟷ •[ t₂ , v₂ ]) → 
-    (•[ t₂ , v₂ ] ⟷ •[ t₃ , v₃ ]) → (•[ t₁ , v₁ ] ⟷ •[ t₃ , v₃ ])
-  _⊕1_ : ∀ {t₁ t₂ t₃ t₄ v₁ v₂ v₃ v₄} → 
-    (•[ t₁ , v₁ ] ⟷ •[ t₃ , v₃ ]) → (•[ t₂ , v₂ ] ⟷ •[ t₄ , v₄ ]) → 
-    (•[ PLUS t₁ t₂ , inj₁ v₁ ] ⟷ •[ PLUS t₃ t₄ , inj₁ v₃ ])
-  _⊕2_ : ∀ {t₁ t₂ t₃ t₄ v₁ v₂ v₃ v₄} → 
-    (•[ t₁ , v₁ ] ⟷ •[ t₃ , v₃ ]) → (•[ t₂ , v₂ ] ⟷ •[ t₄ , v₄ ]) → 
-    (•[ PLUS t₁ t₂ , inj₂ v₂ ] ⟷ •[ PLUS t₃ t₄ , inj₂ v₄ ])
-  _⊗_ : ∀ {t₁ t₂ t₃ t₄ v₁ v₂ v₃ v₄} → 
-    (•[ t₁ , v₁ ] ⟷ •[ t₃ , v₃ ]) → (•[ t₂ , v₂ ] ⟷ •[ t₄ , v₄ ]) → 
-    (•[ TIMES t₁ t₂ , (v₁ , v₂) ] ⟷ •[ TIMES t₃ t₄ , (v₃ , v₄) ])
-\end{code}
-\end{multicols}}
-\caption{Pointed version of $\Pi$-combinators
-\label{pointedcomb}}
-\end{figure*}
-}}
 
-{\footnotesize{
-\begin{figure*}[ht]
-{\setlength{\mathindent}{0cm}
-\begin{multicols}{2}
-\begin{code} 
-data _⇔_ : {t₁ t₂ : U•} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
-  id⇔     : {t₁ t₂ : U•} {c : t₁ ⟷ t₂} → c ⇔ c
-  trans⇔  : {t₁ t₂ : U•} {c₁ c₂ c₃ : t₁ ⟷ t₂} → 
-         (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
-  _⊡_  : {t₁ t₂ t₃ : U•} 
-         {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₁ ⟷ t₂} {c₄ : t₂ ⟷ t₃} →
-         (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
-\end{code}
-\end{multicols}}
-\caption{Pointed version of $\Pi$-combinators
-\label{pointedcomb}}
-\end{figure*}
-}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{2D-types}
