@@ -129,26 +129,31 @@ data U : Set where
   the axioms of commutative rigs. Combinators are also a
   representation of permutations and they preserve the size of types.
 
-\item If we have combinators $c_1, c_2 : \tau_1\leftrightarrow\tau_2$,
-  we have level-2 combinators $\alpha : c_1 \Leftrightarrow c_2$ which
-  are (quite messy) equivalences of isomorphisms, and which happen to
-  correspond to the coherence conditions for rig groupoids. So far
-  these are not needed for the development that follows.
+\item For $c_1, c_2 : \tau_1\leftrightarrow\tau_2$, we have level-2
+ combinators $\alpha : c_1 \Leftrightarrow c_2$ which are (quite
+ messy) equivalences of isomorphisms, and which happen to correspond
+ to the coherence conditions for rig groupoids.
 
-\item There should be $∣ \tau ∣ !$ \emph{distinct} combinators of type
-  $\tau\leftrightarrow\tau$ corresponding to the permutations on the
-  set $\tau$.
+\item There should be $∣ \tau ∣ !$ \emph{distinct} (up to
+  $\Leftrightarrow$) combinators of type $\tau\leftrightarrow\tau$
+  corresponding to the permutations on the set $\tau$.
 
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Action Groupoids}
 
-We introduce a new type $\tau ~//~ p$ where $p$ is a permutation on
-$\tau$. We view the type $\tau ~//~ p$ as follows: apply the
-permutation $p$ to $\tau$ and look at the connected components. For
-each connected component $i$, count the length of the orbit
-$\ell_i$. The cardinality is $\sum_i 1/\ell_i$.
+We introduce a new type $\tau ~//~ p$ where $\tau$ is a $\Pi$-type and
+$p$ is a permutation on $\tau$ of type $\tau \leftrightarrow \tau$. We
+view the type $\tau ~//~ p$ as follows: consider two copies of $\tau$
+and consider the action of the permutation $p$ as connecting points in
+the two types. Now merge the two copies keeping the paths between the
+points that were induced by the permutation. The new type has the same
+points as $\tau$ but because there are possibly non-trivial
+connections between them, it may have a different cardinality. To
+calculate the cardinality, we calculate the connected components of
+the type and for each connected component $i$, count the length of the
+orbit $\ell_i$. The cardinality is $\sum_i 1/\ell_i$.
 
 \AgdaHide{
 \begin{code}
