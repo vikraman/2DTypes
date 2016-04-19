@@ -614,6 +614,14 @@ x₁₀ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Need to do:
+- equivalence of types
+- groupoid interpretation of types
+- equivalence of types interprets as natural transformations which witness
+  equivalence of groupoids
+- operational semantics?
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 
 0-skeleton: 3 points
@@ -795,84 +803,10 @@ module X where
   open import Categories.Support.Equivalence
   open import Categories.Support.EqReasoning
   open import Data.Product
+  open import Categories.Groupoid
+  
 \end{code}}
 
-\begin{code}
---   record FiniteGroupoid : Set (lsuc lzero) where
---     infixr 9 _∘_
-
---     field
---       S    : U
---       _⇒_  : ⟦ S ⟧ → ⟦ S ⟧ → Set
---       id   : ∀ {A} → (A ⇒ A)
---       _∘_  : ∀ {A B C} → (B ⇒ C) → (A ⇒ B) → (A ⇒ C)
---       _⁻¹  : ∀ {A B} → (A ⇒ B) → (B ⇒ A)
-
--- -- Examples
---   G0 : FiniteGroupoid
---   G0 = record {
---          S = ZERO
---        ; _⇒_ = λ ()
---        ; id = λ { {()} }
---        ; _∘_ = λ { {()} }
---        ; _⁻¹ = λ { {()} }
---        }
-
---   G1 : FiniteGroupoid
---   G1 = record {
---          S = ONE
---        ; _⇒_ = λ { tt tt → ⊤ }
---        ; id = tt
---        ; _∘_ = λ { tt tt → tt }
---        ; _⁻¹ = λ { tt → tt }
---        }
-
---   G2 : FiniteGroupoid
---   G2 = record {
---          S = PLUS ONE ONE
---        ; _⇒_ = λ { (inj₁ tt) (inj₁ tt) → ⊤;
---                    (inj₁ tt) (inj₂ tt) → ⊥;
---                    (inj₂ tt) (inj₁ tt) → ⊥;
---                    (inj₂ tt) (inj₂ tt) → ⊤ } 
---        ; id = λ { {inj₁ tt} → tt; {inj₂ tt} → tt }
---        ; _∘_ = {!!} 
---        ; _⁻¹ = {!!} 
---        }
-
---   G1/2 : FiniteGroupoid
---   G1/2 = record {
---          S = ONE
---        ; _⇒_ = λ _ _ → Bool
---        ; id = true
---        ; _∘_ = _∧_
---        ; _⁻¹ = not
---        }
-
---   -- eventually we want to produce this G1/2 by combining ONE and (ONE PLUS ONE)
---   -- something like...
-
---   G1/2' : FiniteGroupoid
---   G1/2' = record {
---          S = ONE
---        ; _⇒_ = {!!} -- λ _ _ → PLUS ONE ONE ⟷ PLUS ONE ONE 
---        ; id = {!!} -- id⟷ 
---        ; _∘_ = {!!} -- _◎_ 
---        ; _⁻¹ = {!!} -- ! 
---        }
-
---   G1/3 : FiniteGroupoid
---   G1/3 = record {
---          S = ONE
---        ; _⇒_ = {!!} -- λ _ _ → (PLUS ONE (PLUS ONE ONE)) ⟷ (PLUS ONE (PLUS ONE ONE))
---        ; id = {!!} -- id⟷
---        ; _∘_ = {!!} -- _◎_ 
---        ; _⁻¹ = {!!} -- ! 
---        }
-
-  -- now the problem is that we have too many paths; the groupoid
-  -- cardinality would be 1/6 not 1/3; need 2 paths to collapse some?????
-
-\end{code}
 
 \begin{definition}[Groupoid Cardinality]
 The cardinality of a groupoid $\mathcal{G}$, written $∥ \mathcal{G} ∥$,
