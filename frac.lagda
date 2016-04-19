@@ -591,6 +591,12 @@ x₈ = ({!!} , (id⟷ , id⇔)) -- impossible to fill as ZERO is empty type
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Need to do:
+- equivalence of types
+- groupoid interpretation of types
+- equivalence of types interprets as natural transformations which witness
+  equivalence of groupoids
+- operational semantics?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
