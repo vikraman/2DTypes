@@ -42,6 +42,7 @@
 \DeclareUnicodeCharacter{9678}{$\circledcirc$}
 \DeclareUnicodeCharacter{964}{$\tau$}
 \DeclareUnicodeCharacter{945}{$\alpha$}
+\DeclareUnicodeCharacter{7522}{${}_i$}
 \DeclareUnicodeCharacter{8759}{$::$}
 \DeclareUnicodeCharacter{737}{${}^{l}$}
 \DeclareUnicodeCharacter{931}{$\Sigma$}
@@ -609,17 +610,39 @@ x₁₀ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
 -- four values clustered in 1 connected component; each connected
 -- component has orbits of length 4; cardinality 1/4
 
+∣_∣// : U// → ℚ
+∣ ZERO // p ∣// = + 0 ÷ 1  
+∣ τ // p ∣// = {!!} 
+-- for each connected component i, calculate the length of the orbit ℓᵢ
+-- return ∑ᵢ 1/ℓᵢ
+
+
 \end{code}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Operational Semantics}
 
-Need to do:
-- equivalence of types
-- groupoid interpretation of types
-- equivalence of types interprets as natural transformations which witness
+\begin{code}
+ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
+ap c v = {!!} 
+
+eval// : {t₁ t₂ : U} {p : t₁ ⟷ t₁} {q : t₂ ⟷ t₂} →
+         (c : t₁ ⟷ t₂) → ⟦ t₁ // p ⟧// → ⟦ t₂ // ! c ◎ p ◎ c ⟧//
+eval// c (v , (p' , α)) = ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)) 
+\end{code}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{TODO}
+
+\begin{itemize}
+\item equivalence of types
+\item groupoid interpretation of types
+\item equivalence of types interprets as natural transformations which witness
   equivalence of groupoids
-- operational semantics?
+\item operational semantics?
+\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
