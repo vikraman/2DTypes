@@ -13,6 +13,7 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{stmaryrd}
+\usepackage{mathrsfs}
 
 \newcommand{\alt}{~|~}
 \newcommand{\inl}[1]{\textsf{inl}(#1)}
@@ -505,17 +506,29 @@ singleton p = (p , id⇔)
 fromSingleton : {τ : U} {p : τ ⟷ τ} → Singleton p → (τ ⟷ τ)
 fromSingleton (p , _) = p
 
+-- 1D
+
 data U// : Set where
   _//_ : (τ : U) → (p : τ ⟷ τ) → U//
+  
+-- 2D
+
+data U//2 : Set where
+  _×²_ : U// → U// → U//2
   
 ⟦_⟧// : U// → Set
 ⟦ τ // p ⟧// = ⟦ τ ⟧ × Singleton p 
 
+⟦_⟧//2 : U//2 → Set
+⟦ T₁ ×² T₂ ⟧//2 = ⟦ T₁ ⟧// × ⟦ T₂ ⟧//
+
 _⊞_ : U// → U// → U//
 (τ₁ // p₁) ⊞ (τ₂ // p₂) = (PLUS τ₁ τ₂) // (p₁ ⊕ p₂)
 
-_⊠_ : U// → U// → U//
-(τ₁ // p₁) ⊠ (τ₂ // p₂) = (TIMES τ₁ τ₂) // (p₁ ⊗ p₂)
+_⊠_ : U// → U// → U//2
+(τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×² (τ₂ // p₂) 
+
+-- need something like ((id⟷ ⊗ id⟷) ⊕ ((id⟷ ⊗ p₂) ⊕ ((p₁ ⊗ id⟷) ⊕ (p₁ ⊗ p₂))))
 
 -- examples:
 
@@ -532,17 +545,17 @@ T₂ = BOOL // swap₊
 -- one connected component with orbit length 2 => cardinality 1/2
 
 x₁ x₂ x₃ : ⟦ T₁ ⟧//
-x₁ = (inj₁ tt , (id⟷ , id⇔))
+x₁ = (inj₁ tt , singleton id⟷)
 -- can only reach (inj₁ tt) by following the permutation
 x₂ = (inj₁ tt , (swap₊ ◎ swap₊ , linv◎l))
 -- can only reach (inj₁ tt) by following the permutation
-x₃ = (inj₂ tt , (id⟷ , id⇔))
+x₃ = (inj₂ tt , singleton id⟷)
 -- can only reach (inj₂ tt) by following the permutation
 
 x₄ x₅ : ⟦ T₂ ⟧//
-x₄ = (inj₁ tt , (swap₊ , id⇔))
+x₄ = (inj₁ tt , singleton swap₊)
 -- can reach both (inj₁ tt) and (inj₂ tt) by following the permutation
-x₅ = (inj₂ tt , (swap₊ , id⇔))
+x₅ = (inj₂ tt , singleton swap₊)
 -- can reach both (inj₁ tt) and (inj₂ tt) by following the permutation
 
 p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
@@ -569,14 +582,14 @@ T₈ = THREEL // p₆
 -- cardinality = 3/2
 
 x₆ : ⟦ (BOOL // swap₊) ⊞ (ONE // id⟷) ⟧//
-x₆ = (inj₁ (inj₁ tt) , (p₂ , id⇔))
+x₆ = (inj₁ (inj₁ tt) , singleton p₂)
 -- BOOL // swap₊ has cardinality 1/2
 -- ONE // id⟷ has cardinality 1
 -- the sum type has points 1,2 | 3 with permutation (2 1 | 3) and so has cardinality 3/2
 -- in this case 1/2 + 1 = 3/2 so ⊞ works nicely
 
-x₇ : ⟦ (BOOL // swap₊) ⊠ (ONE // id⟷) ⟧//
-x₇ = ((inj₁ tt , tt) , (swap₊ ⊗ id⟷ , id⇔))
+x₇ : ⟦ (BOOL // swap₊) ⊠ (ONE // id⟷) ⟧//2
+x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
 -- BOOL // swap₊ has cardinality 1/2
 -- ONE // id⟷ has cardinality 1
 -- the product type has points (1,3),(2,3) with permutation ((2,3) (1,3))
@@ -584,18 +597,17 @@ x₇ = ((inj₁ tt , tt) , (swap₊ ⊗ id⟷ , id⇔))
 -- in this case 1/2 * 1 = 1/2 so ⊠ works nicely
 
 x₈ : ⟦ ZERO // id⟷ ⟧//
-x₈ = ({!!} , (id⟷ , id⇔)) -- impossible to fill as ZERO is empty type
+x₈ = ({!!} , singleton id⟷) -- impossible to fill as ZERO is empty type
 
 x₉ : ⟦ (BOOL // swap₊) ⊞ (BOOL // swap₊) ⟧//
-x₉ = (inj₁ (inj₁ tt)  , (swap₊ ⊕ swap₊ , id⇔))
+x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
 -- four values clustered in two connected components; each connected
 -- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
 
-x₁₀ : ⟦ (BOOL // swap₊) ⊠ (BOOL // swap₊) ⟧//
-x₁₀ = ((inj₁ tt , inj₂ tt) , (swap₊ ⊗ swap₊ , id⇔))
--- four values clustered in two connected components; each connected
--- component has orbits of length 2; cardinality 1/2 + 1/2 = 1; we
--- wanted 1/4 !!
+x₁₀ : ⟦ (BOOL // swap₊) ⊠ (BOOL // swap₊) ⟧//2
+x₁₀ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
+-- four values clustered in 1 connected component; each connected
+-- component has orbits of length 4; cardinality 1/4
 
 \end{code}
 
