@@ -586,6 +586,17 @@ x₇ = ((inj₁ tt , tt) , (swap₊ ⊗ id⟷ , id⇔))
 x₈ : ⟦ ZERO // id⟷ ⟧//
 x₈ = ({!!} , (id⟷ , id⇔)) -- impossible to fill as ZERO is empty type
 
+x₉ : ⟦ (BOOL // swap₊) ⊞ (BOOL // swap₊) ⟧//
+x₉ = (inj₁ (inj₁ tt)  , (swap₊ ⊕ swap₊ , id⇔))
+-- four values clustered in two connected components; each connected
+-- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
+
+x₁₀ : ⟦ (BOOL // swap₊) ⊠ (BOOL // swap₊) ⟧//
+x₁₀ = ((inj₁ tt , inj₂ tt) , (swap₊ ⊗ swap₊ , id⇔))
+-- four values clustered in two connected components; each connected
+-- component has orbits of length 2; cardinality 1/2 + 1/2 = 1; we
+-- wanted 1/4 !!
+
 \end{code}
 
 
