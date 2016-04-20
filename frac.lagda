@@ -530,7 +530,9 @@ _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
 ⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
 ⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
 
--- examples:
+-- some type examples
+
+-- 0-dimensional 
 
 BOOL : U
 BOOL = PLUS ONE ONE
@@ -538,11 +540,65 @@ BOOL = PLUS ONE ONE
 THREEL : U
 THREEL = PLUS BOOL ONE
 
-T₁ T₂ : U/ 1
+p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
+p₁ = id⟷ -- (1 2 | 3)
+p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
+p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
+p₄ = p₂ ◎ p₃ -- (2 3 | 1)
+p₅ = p₃ ◎ p₂ -- (3 1 | 2)
+p₆ = p₄ ◎ p₂ -- (3 2 | 1)
+
+-- 1-dimensional 
+
+T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
+
+T₀ = ZERO // id⟷
+-- empty
 T₁ = BOOL // id⟷
 -- two connected components; each with orbit length 1 => cardinality = 2
 T₂ = BOOL // swap₊
 -- one connected component with orbit length 2 => cardinality 1/2
+T₃ = THREEL // p₁
+-- three connected components; each with orbit length 1 => cardinality = 3
+T₄ = THREEL // p₂
+-- two connected components; first with orbit length 2 and second with orbit length 1 =>
+-- cardinality 1/2 + 1 = 3/2
+T₅ = THREEL // p₃
+-- cardinality = 3/2
+T₆ = THREEL // p₄
+-- cardinality = 1/3
+T₇ = THREEL // p₅
+-- cardinality = 1/3
+T₈ = THREEL // p₆
+-- cardinality = 3/2
+T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
+-- BOOL // swap₊ has cardinality 1/2
+-- ONE // id⟷ has cardinality 1
+-- the sum type has points 1,2 | 3 with permutation (2 1 | 3) and so has cardinality 3/2
+-- in this case 1/2 + 1 = 3/2 so ⊞ works nicely
+T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
+-- four values clustered in two connected components; each connected
+-- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
+
+-- 2-dimensional 
+
+S₁ S₂ : U/ 2
+
+S₁ = (BOOL // swap₊) ⊠ (ONE // id⟷)
+S₂ = (BOOL // swap₊) ⊠ (BOOL // swap₊)
+
+-- 3,4,5-dimensional
+
+W₁ : U/ 3
+W₁ = S₁ ⊠ T₁
+
+W₂ : U/ 4
+W₂ = (S₁ ⊠ S₂) ⊞ (W₁ ⊠ T₂)
+
+W₃ : U/ 5
+W₃ = (W₁ ⊠ S₂) ⊞ (T₂ ⊠ W₂)
+
+-- examples values
 
 x₁ x₂ x₃ : ⟦ T₁ ⟧/
 x₁ = (inj₁ tt , singleton id⟷)
@@ -558,37 +614,14 @@ x₄ = (inj₁ tt , singleton swap₊)
 x₅ = (inj₂ tt , singleton swap₊)
 -- can reach both (inj₁ tt) and (inj₂ tt) by following the permutation
 
-p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
-p₁ = id⟷ -- (1 2 | 3)
-p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
-p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
-p₄ = p₂ ◎ p₃ -- (2 3 | 1)
-p₅ = p₃ ◎ p₂ -- (3 1 | 2)
-p₆ = p₄ ◎ p₂ -- (3 2 | 1)
-
-T₃ T₄ T₅ T₆ T₇ T₈ : U/ 1
-T₃ = THREEL // p₁
--- three connected components; each with orbit length 1 => cardinality = 3
-T₄ = THREEL // p₂
--- two connected components; first with orbit length 2 and second with orbit length 1 =>
--- cardinality 1/2 + 1 = 3/2
-T₅ = THREEL // p₃
--- cardinality = 3/2
-T₆ = THREEL // p₄
--- cardinality = 1/3
-T₇ = THREEL // p₅
--- cardinality = 1/3
-T₈ = THREEL // p₆
--- cardinality = 3/2
-
-x₆ : ⟦ (BOOL // swap₊) ⊞ (ONE // id⟷) ⟧/
+x₆ : ⟦ T₉ ⟧/
 x₆ = (inj₁ (inj₁ tt) , singleton p₂)
 -- BOOL // swap₊ has cardinality 1/2
 -- ONE // id⟷ has cardinality 1
 -- the sum type has points 1,2 | 3 with permutation (2 1 | 3) and so has cardinality 3/2
 -- in this case 1/2 + 1 = 3/2 so ⊞ works nicely
 
-x₇ : ⟦ (BOOL // swap₊) ⊠ (ONE // id⟷) ⟧/
+x₇ : ⟦ S₁ ⟧/
 x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
 -- BOOL // swap₊ has cardinality 1/2
 -- ONE // id⟷ has cardinality 1
@@ -596,25 +629,24 @@ x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
 -- 1/2
 -- in this case 1/2 * 1 = 1/2 so ⊠ works nicely
 
-x₈ : ⟦ ZERO // id⟷ ⟧/
-x₈ = ({!!} , singleton id⟷) -- impossible to fill as ZERO is empty type
+x₈ : ⟦ S₂ ⟧/
+x₈ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
+-- four values clustered in 1 connected component; each connected
+-- component has orbits of length 4; cardinality 1/4
 
-x₉ : ⟦ (BOOL // swap₊) ⊞ (BOOL // swap₊) ⟧/
+x₉ : ⟦ T₁₀ ⟧/
 x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
 -- four values clustered in two connected components; each connected
 -- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
 
-x₁₀ : ⟦ (BOOL // swap₊) ⊠ (BOOL // swap₊) ⟧/
-x₁₀ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
--- four values clustered in 1 connected component; each connected
--- component has orbits of length 4; cardinality 1/4
+-- Cardinality
 
 ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
 ∣ ZERO // p ∣/ = + 0 ÷ 1
 ∣ τ // p ∣/ = {!!}
+∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
 -- for each connected component i, calculate the length of the orbit ℓᵢ
 -- return ∑ᵢ 1/ℓᵢ
-∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
 
 \end{code}
 
@@ -623,19 +655,32 @@ x₁₀ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
 \section{Operational Semantics}
 
 \begin{code}
+-- 0-dimensional evaluator
+
 ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
 ap c v = {!!} 
 
-eval/ : {t₁ t₂ : U} {p : t₁ ⟷ t₁} {q : t₂ ⟷ t₂} →
+-- 1-dimensional evaluator; cool how p is maintainted as evaluation progresses
+
+eval/1 : {t₁ t₂ : U} {p : t₁ ⟷ t₁} {q : t₂ ⟷ t₂} →
          (c : t₁ ⟷ t₂) → ⟦ t₁ // p ⟧/ → ⟦ t₂ // ! c ◎ p ◎ c ⟧/
-eval/ c (v , (p' , α)) = ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)) 
+eval/1 c (v , (p' , α)) = (ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)))
+
+-- general evaluator
+-- need n-dimensional combiantor
+
+-- data _⟷/_ : {n : ℕ} → (U/ n) → (U/ n) → Set where
+--   _⟷¹_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷/ τ₂)
+--  _⟷ⁿ_ : {n : ℕ} {T₁ → (
+
+-- eval/ : {n : ℕ} 
+
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Groupoid Semantics}
 
 \begin{code}
-
 
 -- open import Relation.Binary.Core using (Rel; IsEquivalence)
 
@@ -710,22 +755,22 @@ eval/ c (v , (p' , α)) = ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔))
 
 {\footnotesize{
 \begin{code}
-record U• : Set where
-  constructor •[_,_]
-  field
-    carrier : U
-    •    : ⟦ carrier ⟧
+-- record U• : Set where
+--   constructor •[_,_]
+--   field
+--     carrier : U
+--     •    : ⟦ carrier ⟧
 
-pt₁ pt₂ pt₃ : U•
-pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
-pt₂ = •[ PLUS ONE ONE , (inj₂ tt) ]
-pt₃ = •[ TIMES ONE ONE , (tt , tt) ]
+-- pt₁ pt₂ pt₃ : U•
+-- pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
+-- pt₂ = •[ PLUS ONE ONE , (inj₂ tt) ]
+-- pt₃ = •[ TIMES ONE ONE , (tt , tt) ]
 \end{code}
 \smallskip
 
 \AgdaHide{
 \begin{code}
-open U•
+-- open U•
 \end{code}
 }}}
 
@@ -962,32 +1007,32 @@ define action groupoids, and then our 2D types. This definition will
 allow divisions by zero so we then move everything to pointed types.
 
 \begin{code}
-_enum×_ : {t₁ t₂ : U} →
-  Vec ⟦ t₁ ⟧ ∣ t₁ ∣ → Vec ⟦ t₂ ⟧ ∣ t₂ ∣ → Vec ⟦ TIMES t₁ t₂ ⟧ ∣ TIMES t₁ t₂ ∣ 
-vs₁ enum× vs₂ = {!!} -- concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) vs₂) vs₁)
+-- _enum×_ : {t₁ t₂ : U} →
+--   Vec ⟦ t₁ ⟧ ∣ t₁ ∣ → Vec ⟦ t₂ ⟧ ∣ t₂ ∣ → Vec ⟦ TIMES t₁ t₂ ⟧ ∣ TIMES t₁ t₂ ∣ 
+-- vs₁ enum× vs₂ = {!!} -- concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) vs₂) vs₁)
 
-enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣ 
-enum ZERO = []
-enum ONE = tt ∷ []
-enum (PLUS t₁ t₂) = {!!} -- map inj₁ (enum t₁) ++ map inj₂ (enum t₂)
-enum (TIMES t₁ t₂) = (enum t₁) enum× (enum t₂)
+-- enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣ 
+-- enum ZERO = []
+-- enum ONE = tt ∷ []
+-- enum (PLUS t₁ t₂) = {!!} -- map inj₁ (enum t₁) ++ map inj₂ (enum t₂)
+-- enum (TIMES t₁ t₂) = (enum t₁) enum× (enum t₂)
 
-record Enum : Set where
-  constructor mkEnum
-  field
-    t : U
-    elems : Vec ⟦ t ⟧ ∣ t ∣ 
+-- record Enum : Set where
+--   constructor mkEnum
+--   field
+--     t : U
+--     elems : Vec ⟦ t ⟧ ∣ t ∣ 
 
-_Enum×_ : Enum → Enum → Enum
-(mkEnum t₁ elems₁) Enum× (mkEnum t₂ elems₂) =
-  mkEnum (TIMES t₁ t₂) (elems₁ enum× elems₂)
+-- _Enum×_ : Enum → Enum → Enum
+-- (mkEnum t₁ elems₁) Enum× (mkEnum t₂ elems₂) =
+--   mkEnum (TIMES t₁ t₂) (elems₁ enum× elems₂)
         
-postulate
-  mule : {A : Set} {n : ℕ} → (Vec A n) → (x y : A) → A
-  -- get index of x (must be there)
-  -- get index of y (must be there)
-  -- new index is x + y mod n
-  -- return elem at new index
+-- postulate
+--   mule : {A : Set} {n : ℕ} → (Vec A n) → (x y : A) → A
+--   -- get index of x (must be there)
+--   -- get index of y (must be there)
+--   -- new index is x + y mod n
+--   -- return elem at new index
 
 --
 
@@ -1112,44 +1157,44 @@ a good operational semantics.
 \item Pointed groupoids:
 
 \begin{code}
-open import Relation.Binary.Core using (Transitive; _⇒_)
+-- open import Relation.Binary.Core using (Transitive; _⇒_)
 
-record Enum• : Set where
-  constructor mkEnum•
-  field
-    t : U•
-    elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ 
+-- record Enum• : Set where
+--   constructor mkEnum•
+--   field
+--     t : U•
+--     elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ 
 
-_Enum•×_ : Enum• → Enum• → Enum•
-(mkEnum• •[ t₁ , p₁ ] elems₁) Enum•× (mkEnum• •[ t₂ , p₂ ] elems₂) =
-  mkEnum•
-    •[ TIMES t₁ t₂ , (p₁ , p₂) ] 
-    (elems₁ enum× elems₂)
+-- _Enum•×_ : Enum• → Enum• → Enum•
+-- (mkEnum• •[ t₁ , p₁ ] elems₁) Enum•× (mkEnum• •[ t₂ , p₂ ] elems₂) =
+--   mkEnum•
+--     •[ TIMES t₁ t₂ , (p₁ , p₂) ] 
+--     (elems₁ enum× elems₂)
 
--- need a proof that every v ∈ ⟦ t ⟧ is in enum t and the index of the position
+-- -- need a proof that every v ∈ ⟦ t ⟧ is in enum t and the index of the position
 
-index : {t : U} → (v : ⟦ t ⟧) → Fin ∣ t ∣
-index = {!!} 
+-- index : {t : U} → (v : ⟦ t ⟧) → Fin ∣ t ∣
+-- index = {!!} 
 
-record CyclicGroup : Set₁ where
-  constructor cyclic
-  field
-    Carrier : Set
-    ε : Carrier
-    order : ℕ
-    generator : Carrier
-    _∙_ : Carrier → Carrier → Carrier
+-- record CyclicGroup : Set₁ where
+--   constructor cyclic
+--   field
+--     Carrier : Set
+--     ε : Carrier
+--     order : ℕ
+--     generator : Carrier
+--     _∙_ : Carrier → Carrier → Carrier
 
-_+₃_ : Fin 3 → Fin 3 → Fin 3
-zero +₃ y = y
-suc x +₃ zero = inject+ 1 x
-suc zero +₃ suc zero = suc (suc zero)
-suc (suc x) +₃ suc zero = inject+ 2 x
-suc x +₃ suc (suc zero) = inject+ 1 x
-suc x +₃ suc (suc (suc ()))
+-- _+₃_ : Fin 3 → Fin 3 → Fin 3
+-- zero +₃ y = y
+-- suc x +₃ zero = inject+ 1 x
+-- suc zero +₃ suc zero = suc (suc zero)
+-- suc (suc x) +₃ suc zero = inject+ 2 x
+-- suc x +₃ suc (suc zero) = inject+ 1 x
+-- suc x +₃ suc (suc (suc ()))
 
-ℤ₃ : CyclicGroup
-ℤ₃ = cyclic (Fin 3) zero 1 zero _+₃_
+-- ℤ₃ : CyclicGroup
+-- ℤ₃ = cyclic (Fin 3) zero 1 zero _+₃_
 
 -- postulate
 --   +-comm : (m n : ℕ) → m + n ≡ n + m
@@ -1229,112 +1274,112 @@ suc x +₃ suc (suc (suc ()))
 -- and then use enum and Fin.Mod; go back to DIV instead of RECIP
 
 -- direct product of groups
-_G×_ : Group lzero lzero → Group lzero lzero → Group lzero lzero
-G G× H = record {
-    Carrier = gC × hC
-  ; _≈_ = λ { (g₁ , h₁) (g₂ , h₂) → g₁ g≈ g₂ × h₁ h≈ h₂ }
-  ; _∙_ = λ { (g₁ , h₁) (g₂ , h₂) → (g₁ g∙ g₂ , h₁ h∙ h₂) }
-  ; ε = (gε , hε)
-  ; _⁻¹ = λ { (g , h) → (g g⁻¹ , h h⁻¹) } 
-  ; isGroup = {!!}
-  }
-  where
-    open Group G
-      renaming (Carrier to gC;
-                _≈_ to _g≈_;
-                _∙_ to _g∙_;
-                ε to gε;
-                _⁻¹ to _g⁻¹; 
-                isGroup to gisGroup)
-    open Group H
-      renaming (Carrier to hC;
-                _≈_ to _h≈_;
-                _∙_ to _h∙_;
-                ε to hε;
-                _⁻¹ to _h⁻¹; 
-                isGroup to hisGroup)
+-- _G×_ : Group lzero lzero → Group lzero lzero → Group lzero lzero
+-- G G× H = record {
+--     Carrier = gC × hC
+--   ; _≈_ = λ { (g₁ , h₁) (g₂ , h₂) → g₁ g≈ g₂ × h₁ h≈ h₂ }
+--   ; _∙_ = λ { (g₁ , h₁) (g₂ , h₂) → (g₁ g∙ g₂ , h₁ h∙ h₂) }
+--   ; ε = (gε , hε)
+--   ; _⁻¹ = λ { (g , h) → (g g⁻¹ , h h⁻¹) } 
+--   ; isGroup = {!!}
+--   }
+--   where
+--     open Group G
+--       renaming (Carrier to gC;
+--                 _≈_ to _g≈_;
+--                 _∙_ to _g∙_;
+--                 ε to gε;
+--                 _⁻¹ to _g⁻¹; 
+--                 isGroup to gisGroup)
+--     open Group H
+--       renaming (Carrier to hC;
+--                 _≈_ to _h≈_;
+--                 _∙_ to _h∙_;
+--                 ε to hε;
+--                 _⁻¹ to _h⁻¹; 
+--                 isGroup to hisGroup)
 
-2Group : U• → Group lzero lzero
-2Group •[ ZERO , () ]
-2Group •[ ONE , tt ] = record {
-    Carrier = ⊤
-  ; _≈_ = {!!} -- _≡_
-  ; _∙_ = λ _ _ → tt
-  ; ε = tt
-  ; _⁻¹ = λ _ → tt
-  ; isGroup = {!!} 
-  }
-2Group •[ PLUS t₁ t₂ , inj₁ v₁ ] =
-  let G = 2Group •[ t₁ , v₁ ]
-  in record {
-    Carrier = Group.Carrier G ⊎ ⟦ t₂ ⟧
-  ; _≈_ = {!!}
-  ; _∙_ = {!!}
-  ; ε = {!!}
-  ; _⁻¹ = {!!}
-  ; isGroup = {!!} 
-  }
+-- 2Group : U• → Group lzero lzero
+-- 2Group •[ ZERO , () ]
+-- 2Group •[ ONE , tt ] = record {
+--     Carrier = ⊤
+--   ; _≈_ = {!!} -- _≡_
+--   ; _∙_ = λ _ _ → tt
+--   ; ε = tt
+--   ; _⁻¹ = λ _ → tt
+--   ; isGroup = {!!} 
+--   }
+-- 2Group •[ PLUS t₁ t₂ , inj₁ v₁ ] =
+--   let G = 2Group •[ t₁ , v₁ ]
+--   in record {
+--     Carrier = Group.Carrier G ⊎ ⟦ t₂ ⟧
+--   ; _≈_ = {!!}
+--   ; _∙_ = {!!}
+--   ; ε = {!!}
+--   ; _⁻¹ = {!!}
+--   ; isGroup = {!!} 
+--   }
 
-2Group •[ PLUS t₁ t₂ , inj₂ v₂ ] = 2Group •[ t₂ , v₂ ] -- ...
-2Group •[ TIMES t₁ t₂ , (v₁ , v₂) ] = 2Group •[ t₁ , v₁ ] G× 2Group •[ t₂ , v₂ ] 
+-- 2Group •[ PLUS t₁ t₂ , inj₂ v₂ ] = 2Group •[ t₂ , v₂ ] -- ...
+-- 2Group •[ TIMES t₁ t₂ , (v₁ , v₂) ] = 2Group •[ t₁ , v₁ ] G× 2Group •[ t₂ , v₂ ] 
 
---
+-- --
 
-record ActionGroupoid• : Set₁ where
-  constructor _//•_
-  field
-    S : Set
-    G : Enum•
+-- record ActionGroupoid• : Set₁ where
+--   constructor _//•_
+--   field
+--     S : Set
+--     G : Enum•
 
-plus2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
-plus2• (S₁ //• enum₁) (S₂ //• enum₂) = 
-  ((S₁ × ⟦ U•.carrier (Enum•.t enum₂) ⟧) ⊎ (S₂ × ⟦ U•.carrier (Enum•.t enum₁) ⟧)) //•
-  (enum₁ Enum•× enum₂)
+-- plus2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
+-- plus2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+--   ((S₁ × ⟦ U•.carrier (Enum•.t enum₂) ⟧) ⊎ (S₂ × ⟦ U•.carrier (Enum•.t enum₁) ⟧)) //•
+--   (enum₁ Enum•× enum₂)
 
-times2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
-times2• (S₁ //• enum₁) (S₂ //• enum₂) = 
-  (S₁ × S₂) //• (enum₁ Enum•× enum₂)
+-- times2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
+-- times2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+--   (S₁ × S₂) //• (enum₁ Enum•× enum₂)
 
---
+-- --
 
-data 2D• : Set where
-  DIV•     :  (t₁ : U) → (t₂ : U•) → 2D•
-  PLUS2•   :  2D• → 2D• → 2D•
-  TIMES2•  :  2D• → 2D• → 2D•
+-- data 2D• : Set where
+--   DIV•     :  (t₁ : U) → (t₂ : U•) → 2D•
+--   PLUS2•   :  2D• → 2D• → 2D•
+--   TIMES2•  :  2D• → 2D• → 2D•
 
-2⟦_⟧• : 2D• → ActionGroupoid•
-2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ //• mkEnum• t₂ (enum (carrier t₂))
-2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
-2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
+-- 2⟦_⟧• : 2D• → ActionGroupoid•
+-- 2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ //• mkEnum• t₂ (enum (carrier t₂))
+-- 2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
+-- 2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
 
-∣_∣• : 2D• → ℚ
-∣ PLUS2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ+ ∣ T₂ ∣•
-∣ TIMES2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ* ∣ T₂ ∣•
-∣ DIV• t₁ •[ t₂ , p₂ ] ∣• = mkRational ∣ t₁ ∣ ∣ t₂ ∣ {pt≠0 •[ t₂ , p₂ ]}
-  where
-    NonZero+ : {m n : ℕ} → NonZero m → NonZero (m + n)
-    NonZero+ {0} {n} m≠0 = ⊥-elim m≠0
-    NonZero+ {suc m} {n} tt = tt  
+-- ∣_∣• : 2D• → ℚ
+-- ∣ PLUS2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ+ ∣ T₂ ∣•
+-- ∣ TIMES2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ* ∣ T₂ ∣•
+-- ∣ DIV• t₁ •[ t₂ , p₂ ] ∣• = mkRational ∣ t₁ ∣ ∣ t₂ ∣ {pt≠0 •[ t₂ , p₂ ]}
+--   where
+--     NonZero+ : {m n : ℕ} → NonZero m → NonZero (m + n)
+--     NonZero+ {0} {n} m≠0 = ⊥-elim m≠0
+--     NonZero+ {suc m} {n} tt = tt  
 
-    NonZeror+ : {m n : ℕ} → NonZero n → NonZero (m + n)
-    NonZeror+ {m} {0} n≠0 = ⊥-elim n≠0
-    NonZeror+ {0} {suc n} tt = tt
-    NonZeror+ {suc m} {suc n} tt = tt
+--     NonZeror+ : {m n : ℕ} → NonZero n → NonZero (m + n)
+--     NonZeror+ {m} {0} n≠0 = ⊥-elim n≠0
+--     NonZeror+ {0} {suc n} tt = tt
+--     NonZeror+ {suc m} {suc n} tt = tt
 
-    NonZero* : {m n : ℕ} → NonZero m → NonZero n → NonZero (m * n)
-    NonZero* {0} {n} m≠0 n≠0 = ⊥-elim m≠0
-    NonZero* {suc m} {0} m≠0 n≠0 = ⊥-elim n≠0
-    NonZero* {suc m} {suc n} m≠0 n≠0 = tt 
+--     NonZero* : {m n : ℕ} → NonZero m → NonZero n → NonZero (m * n)
+--     NonZero* {0} {n} m≠0 n≠0 = ⊥-elim m≠0
+--     NonZero* {suc m} {0} m≠0 n≠0 = ⊥-elim n≠0
+--     NonZero* {suc m} {suc n} m≠0 n≠0 = tt 
 
-    pt≠0 : (t : U•) → NonZero ∣ carrier t ∣
-    pt≠0 •[ ZERO , () ] 
-    pt≠0 •[ ONE , p ] = tt
-    pt≠0 •[ PLUS t₁ t₂ , inj₁ x ] with pt≠0 •[ t₁ , x ]
-    ... | t₁≠0 = NonZero+ t₁≠0 
-    pt≠0 •[ PLUS t₁ t₂ , inj₂ y ] with pt≠0 •[ t₂ , y ]
-    ... | t₂≠0 = NonZeror+ {∣ t₁ ∣} t₂≠0 
-    pt≠0 •[ TIMES t₁ t₂ , (x , y) ] with pt≠0 •[ t₁ , x ] | pt≠0 •[ t₂ , y ]
-    ... | t₁≠0 | t₂≠0 = NonZero* t₁≠0 t₂≠0 
+--     pt≠0 : (t : U•) → NonZero ∣ carrier t ∣
+--     pt≠0 •[ ZERO , () ] 
+--     pt≠0 •[ ONE , p ] = tt
+--     pt≠0 •[ PLUS t₁ t₂ , inj₁ x ] with pt≠0 •[ t₁ , x ]
+--     ... | t₁≠0 = NonZero+ t₁≠0 
+--     pt≠0 •[ PLUS t₁ t₂ , inj₂ y ] with pt≠0 •[ t₂ , y ]
+--     ... | t₂≠0 = NonZeror+ {∣ t₁ ∣} t₂≠0 
+--     pt≠0 •[ TIMES t₁ t₂ , (x , y) ] with pt≠0 •[ t₁ , x ] | pt≠0 •[ t₂ , y ]
+--     ... | t₁≠0 | t₂≠0 = NonZero* t₁≠0 t₂≠0 
 
 \end{code}
 
@@ -1342,9 +1387,9 @@ data 2D• : Set where
 
 \begin{code}
 -- Recall pt₁ = •[ PLUS ONE ONE , (inj₁ tt) ]
-r₁ = show ∣ DIV• (PLUS ONE ONE) pt₁ ∣•             -- "1/1"
-r₂ = show ∣ DIV• ONE pt₁ ∣•                        -- "1/2"
-r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
+-- r₁ = show ∣ DIV• (PLUS ONE ONE) pt₁ ∣•             -- "1/1"
+-- r₂ = show ∣ DIV• ONE pt₁ ∣•                        -- "1/2"
+-- r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
 \end{code}
 
 \item Semantics: Now we want to relate our definitions to Categories.Groupoid 
