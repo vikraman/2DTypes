@@ -509,29 +509,26 @@ singleton p = (p , id⇔)
 fromSingleton : {τ : U} {p : τ ⟷ τ} → Singleton p → (τ ⟷ τ)
 fromSingleton (p , _) = p
 
--- 1D
+-- N-dimensional fractional types
 
-data U// : Set where
-  _//_ : (τ : U) → (p : τ ⟷ τ) → U//
-  
--- 2D
+data U/ : (n : ℕ) → Set where
+  _//_ : (τ : U) → (p : τ ⟷ τ) → U/ 1 -- 1 dimensional
+  _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) -- n+1 dimensional hypercube
 
-data U//2 : Set where
-  _×²_ : U// → U// → U//2
-  
-⟦_⟧// : U// → Set
-⟦ τ // p ⟧// = ⟦ τ ⟧ × Singleton p 
-
-⟦_⟧//2 : U//2 → Set
-⟦ T₁ ×² T₂ ⟧//2 = ⟦ T₁ ⟧// × ⟦ T₂ ⟧//
-
-_⊞_ : U// → U// → U//
+_⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
 (τ₁ // p₁) ⊞ (τ₂ // p₂) = (PLUS τ₁ τ₂) // (p₁ ⊕ p₂)
+(τ // p) ⊞ (() ×ⁿ ()) 
+(() ×ⁿ ()) ⊞ (τ // p) 
+(T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
 
-_⊠_ : U// → U// → U//2
-(τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×² (τ₂ // p₂) 
+_⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
+(τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
+(τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
+(T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
 
--- need something like ((id⟷ ⊗ id⟷) ⊕ ((id⟷ ⊗ p₂) ⊕ ((p₁ ⊗ id⟷) ⊕ (p₁ ⊗ p₂))))
+⟦_⟧/ : {n : ℕ} → (U/ n) → Set
+⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
+⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
 
 -- examples:
 
@@ -541,13 +538,13 @@ BOOL = PLUS ONE ONE
 THREEL : U
 THREEL = PLUS BOOL ONE
 
-T₁ T₂ : U//
+T₁ T₂ : U/ 1
 T₁ = BOOL // id⟷
 -- two connected components; each with orbit length 1 => cardinality = 2
 T₂ = BOOL // swap₊
 -- one connected component with orbit length 2 => cardinality 1/2
 
-x₁ x₂ x₃ : ⟦ T₁ ⟧//
+x₁ x₂ x₃ : ⟦ T₁ ⟧/
 x₁ = (inj₁ tt , singleton id⟷)
 -- can only reach (inj₁ tt) by following the permutation
 x₂ = (inj₁ tt , (swap₊ ◎ swap₊ , linv◎l))
@@ -555,7 +552,7 @@ x₂ = (inj₁ tt , (swap₊ ◎ swap₊ , linv◎l))
 x₃ = (inj₂ tt , singleton id⟷)
 -- can only reach (inj₂ tt) by following the permutation
 
-x₄ x₅ : ⟦ T₂ ⟧//
+x₄ x₅ : ⟦ T₂ ⟧/
 x₄ = (inj₁ tt , singleton swap₊)
 -- can reach both (inj₁ tt) and (inj₂ tt) by following the permutation
 x₅ = (inj₂ tt , singleton swap₊)
@@ -569,7 +566,7 @@ p₄ = p₂ ◎ p₃ -- (2 3 | 1)
 p₅ = p₃ ◎ p₂ -- (3 1 | 2)
 p₆ = p₄ ◎ p₂ -- (3 2 | 1)
 
-T₃ T₄ T₅ T₆ T₇ T₈ : U//
+T₃ T₄ T₅ T₆ T₇ T₈ : U/ 1
 T₃ = THREEL // p₁
 -- three connected components; each with orbit length 1 => cardinality = 3
 T₄ = THREEL // p₂
@@ -584,14 +581,14 @@ T₇ = THREEL // p₅
 T₈ = THREEL // p₆
 -- cardinality = 3/2
 
-x₆ : ⟦ (BOOL // swap₊) ⊞ (ONE // id⟷) ⟧//
+x₆ : ⟦ (BOOL // swap₊) ⊞ (ONE // id⟷) ⟧/
 x₆ = (inj₁ (inj₁ tt) , singleton p₂)
 -- BOOL // swap₊ has cardinality 1/2
 -- ONE // id⟷ has cardinality 1
 -- the sum type has points 1,2 | 3 with permutation (2 1 | 3) and so has cardinality 3/2
 -- in this case 1/2 + 1 = 3/2 so ⊞ works nicely
 
-x₇ : ⟦ (BOOL // swap₊) ⊠ (ONE // id⟷) ⟧//2
+x₇ : ⟦ (BOOL // swap₊) ⊠ (ONE // id⟷) ⟧/
 x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
 -- BOOL // swap₊ has cardinality 1/2
 -- ONE // id⟷ has cardinality 1
@@ -599,25 +596,25 @@ x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
 -- 1/2
 -- in this case 1/2 * 1 = 1/2 so ⊠ works nicely
 
-x₈ : ⟦ ZERO // id⟷ ⟧//
+x₈ : ⟦ ZERO // id⟷ ⟧/
 x₈ = ({!!} , singleton id⟷) -- impossible to fill as ZERO is empty type
 
-x₉ : ⟦ (BOOL // swap₊) ⊞ (BOOL // swap₊) ⟧//
+x₉ : ⟦ (BOOL // swap₊) ⊞ (BOOL // swap₊) ⟧/
 x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
 -- four values clustered in two connected components; each connected
 -- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
 
-x₁₀ : ⟦ (BOOL // swap₊) ⊠ (BOOL // swap₊) ⟧//2
+x₁₀ : ⟦ (BOOL // swap₊) ⊠ (BOOL // swap₊) ⟧/
 x₁₀ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
 -- four values clustered in 1 connected component; each connected
 -- component has orbits of length 4; cardinality 1/4
 
-∣_∣// : U// → ℚ
-∣ ZERO // p ∣// = + 0 ÷ 1  
-∣ τ // p ∣// = {!!} 
+∣_∣/ : {n : ℕ} → (U/ n) → ℚ
+∣ ZERO // p ∣/ = + 0 ÷ 1
+∣ τ // p ∣/ = {!!}
 -- for each connected component i, calculate the length of the orbit ℓᵢ
 -- return ∑ᵢ 1/ℓᵢ
-
+∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
 
 \end{code}
 
@@ -629,9 +626,9 @@ x₁₀ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
 ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
 ap c v = {!!} 
 
-eval// : {t₁ t₂ : U} {p : t₁ ⟷ t₁} {q : t₂ ⟷ t₂} →
-         (c : t₁ ⟷ t₂) → ⟦ t₁ // p ⟧// → ⟦ t₂ // ! c ◎ p ◎ c ⟧//
-eval// c (v , (p' , α)) = ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)) 
+eval/ : {t₁ t₂ : U} {p : t₁ ⟷ t₁} {q : t₂ ⟷ t₂} →
+         (c : t₁ ⟷ t₂) → ⟦ t₁ // p ⟧/ → ⟦ t₂ // ! c ◎ p ◎ c ⟧/
+eval/ c (v , (p' , α)) = ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)) 
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -639,42 +636,43 @@ eval// c (v , (p' , α)) = ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)
 
 \begin{code}
 
-open import Relation.Binary.Core using (Rel; IsEquivalence)
 
-_≈_ : {t : U} {c : t ⟷ t} → Rel ⟦ t ⟧ lzero
-_≈_ {t} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
+-- open import Relation.Binary.Core using (Rel; IsEquivalence)
 
-triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
-triv≡ _ _ = ⊤
+-- _≈_ : {t : U} {c : t ⟷ t} → Rel ⟦ t ⟧ lzero
+-- _≈_ {t} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
 
-triv≡Equiv : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} →
-             IsEquivalence (triv≡ {t} {c} {v₁} {v₂})
-triv≡Equiv = record 
-  { refl = tt
-  ; sym = λ _ → tt
-  ; trans = λ _ _ → tt
-  }
+-- triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
+-- triv≡ _ _ = ⊤
 
-toC : U// → Category lzero lzero lzero
-toC (τ // p) = record
-  { Obj = ⟦ τ ⟧
-  ; _⇒_ = _≈_ {τ} {p}
-  ; _≡_ = triv≡ {τ} {p} 
-  ; id = {!!}
-  ; _∘_ = λ y x → {!!}
-  ; assoc = tt
-  ; identityˡ = tt
-  ; identityʳ = tt
-  ; equiv = triv≡Equiv {τ} {p}
-  ; ∘-resp-≡ = λ _ _ → tt
-  }
+-- triv≡Equiv : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} →
+--              IsEquivalence (triv≡ {t} {c} {v₁} {v₂})
+-- triv≡Equiv = record 
+--   { refl = tt
+--   ; sym = λ _ → tt
+--   ; trans = λ _ _ → tt
+--   }
+
+-- toC : U// → Category lzero lzero lzero
+-- toC (τ // p) = record
+--   { Obj = ⟦ τ ⟧
+--   ; _⇒_ = _≈_ {τ} {p}
+--   ; _≡_ = triv≡ {τ} {p} 
+--   ; id = {!!}
+--   ; _∘_ = λ y x → {!!}
+--   ; assoc = tt
+--   ; identityˡ = tt
+--   ; identityʳ = tt
+--   ; equiv = triv≡Equiv {τ} {p}
+--   ; ∘-resp-≡ = λ _ _ → tt
+--   }
 
 
-toG : (tp : U//) → Groupoid (toC tp)
-toG (τ // p) = record 
-  { _⁻¹ = {!!}
-  ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
-  }
+-- toG : (tp : U//) → Groupoid (toC tp)
+-- toG (τ // p) = record 
+--   { _⁻¹ = {!!}
+--   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
+--   }
 
 \end{code}
 
