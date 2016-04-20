@@ -71,6 +71,8 @@ open import Data.Integer using (+_)
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_)
 import Relation.Binary.PropositionalEquality as P
+open import Categories.Category
+open import Categories.Groupoid
 \end{code}
 }
 
@@ -632,6 +634,49 @@ eval// : {t₁ t₂ : U} {p : t₁ ⟷ t₁} {q : t₂ ⟷ t₂} →
 eval// c (v , (p' , α)) = ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)) 
 \end{code}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Groupoid Semantics}
+
+\begin{code}
+
+open import Relation.Binary.Core using (Rel; IsEquivalence)
+
+_≈_ : {t : U} {c : t ⟷ t} → Rel ⟦ t ⟧ lzero
+_≈_ {t} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
+
+triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
+triv≡ _ _ = ⊤
+
+triv≡Equiv : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} →
+             IsEquivalence (triv≡ {t} {c} {v₁} {v₂})
+triv≡Equiv = record 
+  { refl = tt
+  ; sym = λ _ → tt
+  ; trans = λ _ _ → tt
+  }
+
+toC : U// → Category lzero lzero lzero
+toC (τ // p) = record
+  { Obj = ⟦ τ ⟧
+  ; _⇒_ = _≈_ {τ} {p}
+  ; _≡_ = triv≡ {τ} {p} 
+  ; id = {!!}
+  ; _∘_ = λ y x → {!!}
+  ; assoc = tt
+  ; identityˡ = tt
+  ; identityʳ = tt
+  ; equiv = triv≡Equiv {τ} {p}
+  ; ∘-resp-≡ = λ _ _ → tt
+  }
+
+
+toG : (tp : U//) → Groupoid (toC tp)
+toG (τ // p) = record 
+  { _⁻¹ = {!!}
+  ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
+  }
+
+\end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{TODO}
@@ -699,11 +744,11 @@ starting at that point and ending at an arbitrary point within
 \emph{any other} type.
 
 \begin{code}
-data _≈_ {t₁ t₂ : U} : (x : ⟦ t₁ ⟧) → (y : ⟦ t₂ ⟧) → Set where
-  eq : (x : ⟦ t₁ ⟧) (y : ⟦ t₂ ⟧) → x ≈ y
+-- data _≈_ {t₁ t₂ : U} : (x : ⟦ t₁ ⟧) → (y : ⟦ t₂ ⟧) → Set where
+--  eq : (x : ⟦ t₁ ⟧) (y : ⟦ t₂ ⟧) → x ≈ y
 
-points→paths : (pt : U•) → {t : U} → (y : ⟦ t ⟧) → (• pt ≈ y)
-points→paths •[ t , x ] y = eq x y
+-- points→paths : (pt : U•) → {t : U} → (y : ⟦ t ⟧) → (• pt ≈ y)
+-- points→paths •[ t , x ] y = eq x y
 
 \end{code}
 
@@ -711,18 +756,18 @@ points→paths •[ t , x ] y = eq x y
 set of points together with a family of skeleton paths.
 
 \begin{code}
-record FiniteGroupoid : Set where
-  field
-    S : U
-    G : Σ[ pt ∈ U• ] ((y : ⟦ S ⟧) → (• pt ≈ y))
+-- record FiniteGroupoid : Set where
+--   field
+--     S : U
+--     G : Σ[ pt ∈ U• ] ((y : ⟦ S ⟧) → (• pt ≈ y))
 
--- Examples 1/2
+-- -- Examples 1/2
 
-1/2 : FiniteGroupoid
-1/2 = record {
-        S = PLUS ONE ONE
-      ; G = (•[ ONE , tt ] , λ y → eq tt y)
-      }
+-- 1/2 : FiniteGroupoid
+-- 1/2 = record {
+--         S = PLUS ONE ONE
+--       ; G = (•[ ONE , tt ] , λ y → eq tt y)
+--       }
                   
 
 \end{code}
@@ -838,8 +883,8 @@ is defined as follows:
 \medskip
 
 \begin{code}
-  ∥_∥ : FiniteGroupoid → ℚ
-  ∥ G ∥ = {!!} 
+  -- ∥_∥ : FiniteGroupoid → ℚ
+  -- ∥ G ∥ = {!!} 
 
   -- To calculate this we would need:
   --  - an enumeration of the distinct component of G
