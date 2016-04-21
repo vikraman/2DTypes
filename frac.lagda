@@ -760,6 +760,8 @@ apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Groupoid Semantics}
 
+This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
+
 \begin{code}
 
 -- starting from v we equate it to every value in its orbit including itself
@@ -773,9 +775,6 @@ apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ
 data _≈_ {τ : U} {c : τ ⟷ τ} : Rel ⟦ τ ⟧ lzero where
   step : {v : ⟦ τ ⟧} → v ≈ ap c v
   trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → v₁ ≈ v₂ → v₂ ≈ v₃ → v₁ ≈ v₃
-
--- This may be helpful http://www.engr.uconn.edu/~vkk06001/report.pdf
-
 
 triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
 triv≡ _ _ = ⊤
