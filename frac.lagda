@@ -801,6 +801,7 @@ apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ
 
 ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
 ∣ ZERO // p ∣/ = + 0 ÷ 1
+∣ τ // id⟷ ∣/ = ∣ τ ∣ ÷1
 ∣ τ // p ∣/ = {!!}
 ∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
 -- for each connected component i, calculate the length of the orbit ℓᵢ

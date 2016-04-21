@@ -68,6 +68,13 @@ _÷_ : (numerator : ℤ) (denominator : ℕ)
 (n ÷ suc d) {c} =
   record { numerator = n; denominator-1 = d; isCoprime = c }
 
+-- n/1 from n
+_÷1 : ℕ → ℚ
+_÷1 n = record { numerator = + n
+               ; denominator-1 = 0
+               ; isCoprime = fromWitness (λ {_} → C.sym (C.1-coprimeTo n))
+               }
+
 private
 
   -- Note that the implicit arguments do not need to be given for
