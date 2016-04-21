@@ -73,6 +73,8 @@ open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
 import Relation.Binary.PropositionalEquality as P
 open import Categories.Category
 open import Categories.Groupoid
+open import Relation.Binary.Core using (Rel; IsEquivalence)
+
 \end{code}
 }
 
@@ -515,6 +517,9 @@ data U/ : (n : ℕ) → Set where
   _//_ : (τ : U) → (p : τ ⟷ τ) → U/ 1 -- 1 dimensional
   _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) -- n+1 dimensional hypercube
 
+⇑ : U → U/ 1
+⇑ τ = τ // id⟷
+
 _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
 (τ₁ // p₁) ⊞ (τ₂ // p₂) = (PLUS τ₁ τ₂) // (p₁ ⊕ p₂)
 (τ // p) ⊞ (() ×ⁿ ()) 
@@ -639,15 +644,6 @@ x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
 -- four values clustered in two connected components; each connected
 -- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
 
--- Cardinality
-
-∣_∣/ : {n : ℕ} → (U/ n) → ℚ
-∣ ZERO // p ∣/ = + 0 ÷ 1
-∣ τ // p ∣/ = {!!}
-∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
--- for each connected component i, calculate the length of the orbit ℓᵢ
--- return ∑ᵢ 1/ℓᵢ
-
 \end{code}
 
 
@@ -658,22 +654,106 @@ x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
 -- 0-dimensional evaluator
 
 ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
-ap c v = {!!} 
+ap unite₊l (inj₁ ())
+ap unite₊l (inj₂ v) = v
+ap uniti₊l v = inj₂ v
+ap unite₊r (inj₁ x) = x
+ap unite₊r (inj₂ ())
+ap uniti₊r v = inj₁ v
+ap swap₊ (inj₁ v) = inj₂ v
+ap swap₊ (inj₂ v) = inj₁ v
+ap assocl₊ (inj₁ v) = inj₁ (inj₁ v)
+ap assocl₊ (inj₂ (inj₁ v)) = inj₁ (inj₂ v)
+ap assocl₊ (inj₂ (inj₂ v)) = inj₂ v
+ap assocr₊ (inj₁ (inj₁ v)) = inj₁ v
+ap assocr₊ (inj₁ (inj₂ v)) = inj₂ (inj₁ v)
+ap assocr₊ (inj₂ v) = inj₂ (inj₂ v)
+ap unite⋆l (tt , v) = v
+ap uniti⋆l v = (tt , v)
+ap unite⋆r (v , tt) = v
+ap uniti⋆r v = v , tt
+ap swap⋆ (v₁ , v₂) = (v₂ , v₁)
+ap assocl⋆ (v₁ , (v₂ , v₃)) = ((v₁ , v₂) , v₃)
+ap assocr⋆ ((v₁ , v₂) , v₃) = (v₁ , (v₂ , v₃))
+ap absorbr (x , _) = x
+ap absorbl (_ , y) = y
+ap factorzl ()
+ap factorzr ()
+ap dist (inj₁ v₁ , v₃) = inj₁ (v₁ , v₃)
+ap dist (inj₂ v₂ , v₃) = inj₂ (v₂ , v₃)
+ap factor (inj₁ (v₁ , v₃)) = (inj₁ v₁ , v₃)
+ap factor (inj₂ (v₂ , v₃)) = (inj₂ v₂ , v₃)
+ap distl (v , inj₁ x) = inj₁ (v , x)
+ap distl (v , inj₂ y) = inj₂ (v , y)
+ap factorl (inj₁ (x , y)) = x , inj₁ y
+ap factorl (inj₂ (x , y)) = x , inj₂ y
+ap id⟷ v = v
+ap (c₁ ◎ c₂) v = ap c₂ (ap c₁ v)
+ap (c₁ ⊕ c₂) (inj₁ v) = inj₁ (ap c₁ v)
+ap (c₁ ⊕ c₂) (inj₂ v) = inj₂ (ap c₂ v)
+ap (c₁ ⊗ c₂) (v₁ , v₂) = (ap c₁ v₁ , ap c₂ v₂)
+
+-- useful to have the backwards ap too
+
+ap! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₂ ⟧ → ⟦ t₁ ⟧
+ap! unite₊l x = inj₂ x
+ap! uniti₊l (inj₁ ())
+ap! uniti₊l (inj₂ y) = y
+ap! unite₊r v = inj₁ v
+ap! uniti₊r (inj₁ x) = x
+ap! uniti₊r (inj₂ ())
+ap! swap₊ (inj₁ x) = inj₂ x
+ap! swap₊ (inj₂ y) = inj₁ y
+ap! assocl₊ (inj₁ (inj₁ x)) = inj₁ x
+ap! assocl₊ (inj₁ (inj₂ y)) = inj₂ (inj₁ y)
+ap! assocl₊ (inj₂ y) = inj₂ (inj₂ y)
+ap! assocr₊ (inj₁ x) = inj₁ (inj₁ x)
+ap! assocr₊ (inj₂ (inj₁ x)) = inj₁ (inj₂ x)
+ap! assocr₊ (inj₂ (inj₂ y)) = inj₂ y
+ap! unite⋆l x = tt , x
+ap! uniti⋆l (tt , x) = x
+ap! unite⋆r v = v , tt
+ap! uniti⋆r (v , tt) = v
+ap! swap⋆ (x , y) = y , x
+ap! assocl⋆ ((x , y) , z) = x , y , z
+ap! assocr⋆ (x , y , z) = (x , y) , z
+ap! absorbr ()
+ap! absorbl ()
+ap! factorzr (_ , x) = x
+ap! factorzl (x , _) = x
+ap! dist (inj₁ (x , y)) = inj₁ x , y
+ap! dist (inj₂ (x , y)) = inj₂ x , y
+ap! factor (inj₁ x , z) = inj₁ (x , z)
+ap! factor (inj₂ y , z) = inj₂ (y , z)
+ap! distl (inj₁ (x , y)) = x , inj₁ y
+ap! distl (inj₂ (x , y)) = x , inj₂ y
+ap! factorl (v , inj₁ x) = inj₁ (v , x)
+ap! factorl (v , inj₂ y) = inj₂ (v , y)
+ap! id⟷ x = x
+ap! (c₀ ◎ c₁) x = ap! c₀ (ap! c₁ x)
+ap! (c₀ ⊕ c₁) (inj₁ x) = inj₁ (ap! c₀ x)
+ap! (c₀ ⊕ c₁) (inj₂ y) = inj₂ (ap! c₁ y)
+ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 
 -- 1-dimensional evaluator; cool how p is maintainted as evaluation progresses
 
-eval/1 : {t₁ t₂ : U} {p : t₁ ⟷ t₁} {q : t₂ ⟷ t₂} →
-         (c : t₁ ⟷ t₂) → ⟦ t₁ // p ⟧/ → ⟦ t₂ // ! c ◎ p ◎ c ⟧/
+eval/1 : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} {q : τ₂ ⟷ τ₂} →
+         (c : τ₁ ⟷ τ₂) → ⟦ τ₁ // p ⟧/ → ⟦ τ₂ // ! c ◎ p ◎ c ⟧/
 eval/1 c (v , (p' , α)) = (ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)))
 
--- general evaluator
--- need n-dimensional combiantor
+-- general evaluator subsumes the above
+-- need n-dimensional combinators
 
--- data _⟷/_ : {n : ℕ} → (U/ n) → (U/ n) → Set where
---   _⟷¹_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷/ τ₂)
---  _⟷ⁿ_ : {n : ℕ} {T₁ → (
+data _⟷ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → Set where
+  base : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} → 
+         (c : τ₁ ⟷ τ₂) → ((τ₁ // p) ⟷ⁿ (τ₂ // (! c ◎ p ◎ c)))
+  hdim : {n : ℕ} {T₁ T₂ T₃ T₄ : U/ n} →
+         (α : T₁ ⟷ⁿ T₃) (β : T₂ ⟷ⁿ T₄) → 
+         (T₁ ×ⁿ T₂) ⟷ⁿ (T₃ ×ⁿ T₄)
 
--- eval/ : {n : ℕ} 
+apⁿ : {n : ℕ} {T₁ T₂ : U/ n} → (cⁿ : T₁ ⟷ⁿ T₂) → ⟦ T₁ ⟧/ → ⟦ T₂ ⟧/
+apⁿ (base c) (v , (p , α)) = ap c v , (! c ◎ p ◎ c , id⇔ ⊡ (α ⊡ id⇔))
+apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ cⁿ₂ vⁿ₂
 
 \end{code}
 
@@ -681,8 +761,6 @@ eval/1 c (v , (p' , α)) = (ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔
 \section{Groupoid Semantics}
 
 \begin{code}
-
--- open import Relation.Binary.Core using (Rel; IsEquivalence)
 
 -- _≈_ : {t : U} {c : t ⟷ t} → Rel ⟦ t ⟧ lzero
 -- _≈_ {t} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
@@ -718,6 +796,15 @@ eval/1 c (v , (p' , α)) = (ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔
 --   { _⁻¹ = {!!}
 --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
 --   }
+
+-- Cardinality
+
+∣_∣/ : {n : ℕ} → (U/ n) → ℚ
+∣ ZERO // p ∣/ = + 0 ÷ 1
+∣ τ // p ∣/ = {!!}
+∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
+-- for each connected component i, calculate the length of the orbit ℓᵢ
+-- return ∑ᵢ 1/ℓᵢ
 
 \end{code}
 
