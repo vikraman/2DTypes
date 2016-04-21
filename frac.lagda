@@ -762,33 +762,36 @@ apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ
 
 \begin{code}
 
--- _≈_ : {t : U} {c : t ⟷ t} → Rel ⟦ t ⟧ lzero
--- _≈_ {t} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
+_≈_ : {τ : U} {c : τ ⟷ τ} → Rel ⟦ τ ⟧ lzero
+_≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
 
--- triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
--- triv≡ _ _ = ⊤
+triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
+triv≡ _ _ = ⊤
 
--- triv≡Equiv : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} →
---              IsEquivalence (triv≡ {t} {c} {v₁} {v₂})
--- triv≡Equiv = record 
---   { refl = tt
---   ; sym = λ _ → tt
---   ; trans = λ _ _ → tt
---   }
+triv≡Equiv : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} →
+             IsEquivalence (triv≡ {t} {c} {v₁} {v₂})
+triv≡Equiv = record 
+  { refl = tt
+  ; sym = λ _ → tt
+  ; trans = λ _ _ → tt
+  }
 
--- toC : U// → Category lzero lzero lzero
--- toC (τ // p) = record
---   { Obj = ⟦ τ ⟧
---   ; _⇒_ = _≈_ {τ} {p}
---   ; _≡_ = triv≡ {τ} {p} 
---   ; id = {!!}
---   ; _∘_ = λ y x → {!!}
---   ; assoc = tt
---   ; identityˡ = tt
---   ; identityʳ = tt
---   ; equiv = triv≡Equiv {τ} {p}
---   ; ∘-resp-≡ = λ _ _ → tt
---   }
+U1toC : U/ 1 → Category lzero lzero lzero
+U1toC (() ×ⁿ ())
+U1toC (τ // p) = record
+  { Obj = ⟦ τ ⟧
+  ; _⇒_ = _≈_ {τ} {p}
+  ; _≡_ = triv≡ {τ} {p} 
+  ; id = {!!}
+  ; _∘_ = λ y x → {!!}
+  ; assoc = tt
+  ; identityˡ = tt
+  ; identityʳ = tt
+  ; equiv = triv≡Equiv {τ} {p}
+  ; ∘-resp-≡ = λ _ _ → tt
+  }
+
+-- then U/n would have to use some multiplication on groupoids inductively
 
 
 -- toG : (tp : U//) → Groupoid (toC tp)
@@ -801,7 +804,7 @@ apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ
 
 ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
 ∣ ZERO // p ∣/ = + 0 ÷ 1
-∣ τ // id⟷ ∣/ = ∣ τ ∣ ÷1
+-- ∣ τ // id⟷ ∣/ = ∣ τ ∣ ÷1
 ∣ τ // p ∣/ = {!!}
 ∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
 -- for each connected component i, calculate the length of the orbit ℓᵢ
