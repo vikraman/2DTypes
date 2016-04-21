@@ -765,8 +765,14 @@ apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ
 -- starting from v we equate it to every value in its orbit including itself
 -- definition below is nonsense
 
-_≈_ : {τ : U} {c : τ ⟷ τ} → Rel ⟦ τ ⟧ lzero
-_≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
+-- _≈_ : {τ : U} {c : τ ⟷ τ} → Rel ⟦ τ ⟧ lzero
+-- _≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
+
+-- something like
+
+data _≈_ {τ : U} {c : τ ⟷ τ} : Rel ⟦ τ ⟧ lzero where
+  step : {v : ⟦ τ ⟧} → v ≈ ap c v
+  trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → v₁ ≈ v₂ → v₂ ≈ v₃ → v₁ ≈ v₃
 
 triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
 triv≡ _ _ = ⊤
