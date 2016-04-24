@@ -492,25 +492,6 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 
 \begin{code}
 
--- From http://stackoverflow.com/questions/21351906/how-to-define-a-singleton-set
--- and specialized to permutations
-
--- Singleton x is the set that only contains x. Its values are tuples containing
--- a value of type A and a proof that this value is equal to x.
-
-Singleton : {τ : U} → (p : τ ⟷ τ) → Set
-Singleton {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
-
--- injection
-
-singleton : {τ : U} → (p : τ ⟷ τ) → Singleton p
-singleton p = (p , id⇔)
-
--- projection
-
-fromSingleton : {τ : U} {p : τ ⟷ τ} → Singleton p → (τ ⟷ τ)
-fromSingleton (p , _) = p
-
 -- N-dimensional fractional types
 
 data U/ : (n : ℕ) → Set where
@@ -530,6 +511,27 @@ _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
 (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
 (τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
 (T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
+
+-- Semantics in Set
+
+-- From http://stackoverflow.com/questions/21351906/how-to-define-a-singleton-set
+-- and specialized to permutations
+
+-- Singleton x is the set that only contains x. Its values are tuples containing
+-- a value of type A and a proof that this value is equal to x.
+
+Singleton : {τ : U} → (p : τ ⟷ τ) → Set
+Singleton {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
+
+-- injection
+
+singleton : {τ : U} → (p : τ ⟷ τ) → Singleton p
+singleton p = (p , id⇔)
+
+-- projection
+
+fromSingleton : {τ : U} {p : τ ⟷ τ} → Singleton p → (τ ⟷ τ)
+fromSingleton (p , _) = p
 
 ⟦_⟧/ : {n : ℕ} → (U/ n) → Set
 ⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
@@ -772,15 +774,18 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 
 -- something like
 
-data _≈_ {τ : U} {c : τ ⟷ τ} : Rel ⟦ τ ⟧ lzero where
-  step : {v : ⟦ τ ⟧} → v ≈ ap c v
-  trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → v₁ ≈ v₂ → v₂ ≈ v₃ → v₁ ≈ v₃
+data c≈ {τ : U} : (c : τ ⟷ τ) → Rel ⟦ τ ⟧ lzero where
+  step : {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v (ap c v)
+  trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v₁ v₂ → c≈ c v₂ v₃ → c≈ c v₁ v₃
 
-triv≡ : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} → (f g : _≈_ {t} {c} v₁ v₂) → Set
+≈refl : {τ : U} {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v v
+≈refl = {!!} 
+
+triv≡ : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} → (f g : c≈ c v₁ v₂) → Set
 triv≡ _ _ = ⊤
 
-triv≡Equiv : {t : U} {c : t ⟷ t} {v₁ v₂ : ⟦ t ⟧} →
-             IsEquivalence (triv≡ {t} {c} {v₁} {v₂})
+triv≡Equiv : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} →
+             IsEquivalence (triv≡ {τ} {c} {v₁} {v₂})
 triv≡Equiv = record 
   { refl = tt
   ; sym = λ _ → tt
@@ -791,10 +796,10 @@ U1toC : U/ 1 → Category lzero lzero lzero
 U1toC (() ×ⁿ ())
 U1toC (τ // p) = record
   { Obj = ⟦ τ ⟧
-  ; _⇒_ = _≈_ {τ} {p}
+  ; _⇒_ = c≈ p 
   ; _≡_ = triv≡ {τ} {p} 
-  ; id = {!!}
-  ; _∘_ = λ y x → {!!}
+  ; id = ≈refl p
+  ; _∘_ = λ y x → trans p x y
   ; assoc = tt
   ; identityˡ = tt
   ; identityʳ = tt
@@ -803,7 +808,6 @@ U1toC (τ // p) = record
   }
 
 -- then U/n would have to use some multiplication on groupoids inductively
-
 
 -- toG : (tp : U//) → Groupoid (toC tp)
 -- toG (τ // p) = record 
@@ -815,11 +819,11 @@ U1toC (τ // p) = record
 
 ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
 ∣ ZERO // p ∣/ = + 0 ÷ 1
--- ∣ τ // id⟷ ∣/ = ∣ τ ∣ ÷1
 ∣ τ // p ∣/ = {!!}
-∣ T₁ ×ⁿ T₂ ∣/ = {!!} 
--- for each connected component i, calculate the length of the orbit ℓᵢ
--- return ∑ᵢ 1/ℓᵢ
+  -- for each connected component i, calculate the length of the orbit ℓᵢ
+  -- return ∑ᵢ 1/ℓᵢ
+∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
+
 
 \end{code}
 
