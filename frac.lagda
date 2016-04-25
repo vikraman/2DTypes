@@ -149,17 +149,21 @@ data U : Set where
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Action Groupoids}
 
-We introduce a new type $\tau ~//~ p$ where $\tau$ is a $\Pi$-type and
-$p$ is a permutation on $\tau$ of type $\tau \leftrightarrow \tau$. We
-view the type $\tau ~//~ p$ as follows: consider two copies of $\tau$
-and consider the action of the permutation $p$ as connecting points in
-the two types. Now merge the two copies keeping the paths between the
-points that were induced by the permutation. The new type has the same
-points as $\tau$ but because there are possibly non-trivial
-connections between them, it may have a different cardinality. To
-calculate the cardinality, we calculate the connected components of
-the type and for each connected component $i$, count the length of the
-orbit $\ell_i$. The cardinality is $\sum_i 1/\ell_i$.
+We introduce a new type $p_1 ~//~ p_2$ where $p_1$ and $p_2$ are
+permutations of types $\tau_1 \leftrightarrow \tau_1$ and $\tau_2
+\leftrightarrow \tau_2$ respectively.
+
+
+We view the type $\tau ~//~ p$ as follows: consider two copies of
+$\tau$ and consider the action of the permutation $p$ as connecting
+points in the two types. Now merge the two copies keeping the paths
+between the points that were induced by the permutation. The new type
+has the same points as $\tau$ but because there are possibly
+non-trivial connections between them, it may have a different
+cardinality. To calculate the cardinality, we calculate the connected
+components of the type and for each connected component $i$, count the
+number of automorphisms $\ell_i$. The cardinality is $\sum_i
+1/\ell_i$.
 
 \AgdaHide{
 \begin{code}
@@ -492,159 +496,206 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 
 \begin{code}
 
--- N-dimensional fractional types
-
-data U/ : (n : ℕ) → Set where
-  _//_ : (τ : U) → (p : τ ⟷ τ) → U/ 1 -- 1 dimensional
-  _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) -- n+1 dimensional hypercube
-
-⇑ : U → U/ 1
-⇑ τ = τ // id⟷
-
-_⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
-(τ₁ // p₁) ⊞ (τ₂ // p₂) = (PLUS τ₁ τ₂) // (p₁ ⊕ p₂)
-(τ // p) ⊞ (() ×ⁿ ()) 
-(() ×ⁿ ()) ⊞ (τ // p) 
-(T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
-
-_⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
-(τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
-(τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
-(T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
-
--- Semantics in Set
+-- The starting point is to treat a permutation as a (singleton) type
+-- and show that it corresponds to a groupoid
 
 -- From http://stackoverflow.com/questions/21351906/how-to-define-a-singleton-set
 -- and specialized to permutations
 
--- Singleton x is the set that only contains x. Its values are tuples containing
--- a value of type A and a proof that this value is equal to x.
+-- Perm p is the set that only contains p. 
 
-Singleton : {τ : U} → (p : τ ⟷ τ) → Set
-Singleton {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
+Perm : {τ : U} → (p : τ ⟷ τ) → Set
+Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
 
--- injection
-
-singleton : {τ : U} → (p : τ ⟷ τ) → Singleton p
+singleton : {τ : U} → (p : τ ⟷ τ) → Perm p
 singleton p = (p , id⇔)
 
--- projection
+-- -- projection
 
-fromSingleton : {τ : U} {p : τ ⟷ τ} → Singleton p → (τ ⟷ τ)
-fromSingleton (p , _) = p
+-- fromSingleton : {τ : U} {p : τ ⟷ τ} → Singleton p → (τ ⟷ τ)
+-- fromSingleton (p , _) = p
 
-⟦_⟧/ : {n : ℕ} → (U/ n) → Set
-⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
-⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
+-- starting from v we equate it to every value in its orbit including itself
+-- definition below is nonsense
 
--- some type examples
+-- _≈_ : {τ : U} {c : τ ⟷ τ} → Rel ⟦ τ ⟧ lzero
+-- _≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
 
--- 0-dimensional 
+-- something like
 
-BOOL : U
-BOOL = PLUS ONE ONE
+-- data c≈ {τ : U} : (c : τ ⟷ τ) → Rel ⟦ τ ⟧ lzero where
+--   step : {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v (ap c v)
+--   trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v₁ v₂ → c≈ c v₂ v₃ → c≈ c v₁ v₃
 
-THREEL : U
-THREEL = PLUS BOOL ONE
+-- ≈refl : {τ : U} {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v v
+-- ≈refl = {!!} 
 
-p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
-p₁ = id⟷ -- (1 2 | 3)
-p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
-p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
-p₄ = p₂ ◎ p₃ -- (2 3 | 1)
-p₅ = p₃ ◎ p₂ -- (3 1 | 2)
-p₆ = p₄ ◎ p₂ -- (3 2 | 1)
+-- triv≡ : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} → (f g : c≈ c v₁ v₂) → Set
+-- triv≡ _ _ = ⊤
 
--- 1-dimensional 
+-- triv≡Equiv : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} →
+--              IsEquivalence (triv≡ {τ} {c} {v₁} {v₂})
+-- triv≡Equiv = record 
+--   { refl = tt
+--   ; sym = λ _ → tt
+--   ; trans = λ _ _ → tt
+--   }
 
-T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
+iterate : {τ : U} (p : τ ⟷ τ) (n : ℕ) → (τ ⟷ τ) 
+iterate p 0 = id⟷ 
+iterate p (suc n) = p ◎ (iterate p n)
 
-T₀ = ZERO // id⟷
--- empty
-T₁ = BOOL // id⟷
--- two connected components; each with orbit length 1 => cardinality = 2
-T₂ = BOOL // swap₊
--- one connected component with orbit length 2 => cardinality 1/2
-T₃ = THREEL // p₁
--- three connected components; each with orbit length 1 => cardinality = 3
-T₄ = THREEL // p₂
--- two connected components; first with orbit length 2 and second with orbit length 1 =>
--- cardinality 1/2 + 1 = 3/2
-T₅ = THREEL // p₃
--- cardinality = 3/2
-T₆ = THREEL // p₄
--- cardinality = 1/3
-T₇ = THREEL // p₅
--- cardinality = 1/3
-T₈ = THREEL // p₆
--- cardinality = 3/2
-T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
--- BOOL // swap₊ has cardinality 1/2
--- ONE // id⟷ has cardinality 1
--- the sum type has points 1,2 | 3 with permutation (2 1 | 3) and so has cardinality 3/2
--- in this case 1/2 + 1 = 3/2 so ⊞ works nicely
-T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
--- four values clustered in two connected components; each connected
--- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
+Iterate : {τ : U} (p : τ ⟷ τ) (n : ℕ) → Set
+Iterate p n = Perm (iterate p n)
+  
+PtoC : {τ : U} {p : τ ⟷ τ} → Perm p → Category lzero lzero lzero
+PtoC (p , α) = record
+  { Obj = ⊤
+  ; _⇒_ = λ _ _ → (n : ℕ) → Iterate p n
+  ; _≡_ = {!!} -- triv≡ {τ} {p} 
+  ; id = {!!} -- ≈refl p
+  ; _∘_ = {!!} -- λ y x → trans p x y
+  ; assoc = {!!} -- tt
+  ; identityˡ = {!!} -- tt
+  ; identityʳ = {!!} -- tt
+  ; equiv = {!!} -- triv≡Equiv {τ} {p}
+  ; ∘-resp-≡ = {!!} -- λ _ _ → tt
+  }
 
--- 2-dimensional 
+-- U1toC : U/ 1 → Category lzero lzero lzero
+-- U1toC (() ×ⁿ ())
+-- U1toC (τ // p) = record
+--   { Obj = ⟦ τ ⟧
+--   ; _⇒_ = c≈ p 
+--   ; _≡_ = triv≡ {τ} {p} 
+--   ; id = ≈refl p
+--   ; _∘_ = λ y x → trans p x y
+--   ; assoc = tt
+--   ; identityˡ = tt
+--   ; identityʳ = tt
+--   ; equiv = triv≡Equiv {τ} {p}
+--   ; ∘-resp-≡ = λ _ _ → tt
+--   }
 
-S₁ S₂ : U/ 2
+-- -- then U/n would have to use some multiplication on groupoids inductively
 
-S₁ = (BOOL // swap₊) ⊠ (ONE // id⟷)
-S₂ = (BOOL // swap₊) ⊠ (BOOL // swap₊)
+-- -- toG : (tp : U//) → Groupoid (toC tp)
+-- -- toG (τ // p) = record 
+-- --   { _⁻¹ = {!!}
+-- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
+-- --   }
 
--- 3,4,5-dimensional
+-- -- Cardinality
 
-W₁ : U/ 3
-W₁ = S₁ ⊠ T₁
+-- ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
+-- ∣ ZERO // p ∣/ = + 0 ÷ 1
+-- ∣ τ // p ∣/ = {!!}
+--   -- for each connected component i, calculate the number of automorphisms ℓᵢ
+--   -- return ∑ᵢ 1/ℓᵢ
+-- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
 
-W₂ : U/ 4
-W₂ = (S₁ ⊠ S₂) ⊞ (W₁ ⊠ T₂)
 
-W₃ : U/ 5
-W₃ = (W₁ ⊠ S₂) ⊞ (T₂ ⊠ W₂)
 
--- examples values
+-- N-dimensional fractional types
 
-x₁ x₂ x₃ : ⟦ T₁ ⟧/
-x₁ = (inj₁ tt , singleton id⟷)
--- can only reach (inj₁ tt) by following the permutation
-x₂ = (inj₁ tt , (swap₊ ◎ swap₊ , linv◎l))
--- can only reach (inj₁ tt) by following the permutation
-x₃ = (inj₂ tt , singleton id⟷)
--- can only reach (inj₂ tt) by following the permutation
+-- data U/ : (n : ℕ) → Set where
+--   _//_ : {τ₁ τ₂ : U} → (p₁ : τ₁ ⟷ τ₁) → (p₂ : τ₂ ⟷ τ₂)→ U/ 1 -- 1 dimensional
+--   _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) -- n+1 dimensional hypercube
 
-x₄ x₅ : ⟦ T₂ ⟧/
-x₄ = (inj₁ tt , singleton swap₊)
--- can reach both (inj₁ tt) and (inj₂ tt) by following the permutation
-x₅ = (inj₂ tt , singleton swap₊)
--- can reach both (inj₁ tt) and (inj₂ tt) by following the permutation
+-- ⇑ : U → U/ 1
+-- ⇑ τ = τ // id⟷
 
-x₆ : ⟦ T₉ ⟧/
-x₆ = (inj₁ (inj₁ tt) , singleton p₂)
--- BOOL // swap₊ has cardinality 1/2
--- ONE // id⟷ has cardinality 1
--- the sum type has points 1,2 | 3 with permutation (2 1 | 3) and so has cardinality 3/2
--- in this case 1/2 + 1 = 3/2 so ⊞ works nicely
+-- _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
+-- (τ₁ // p₁) ⊞ (τ₂ // p₂) = (PLUS τ₁ τ₂) // (p₁ ⊕ p₂)
+-- (τ // p) ⊞ (() ×ⁿ ()) 
+-- (() ×ⁿ ()) ⊞ (τ // p) 
+-- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
 
-x₇ : ⟦ S₁ ⟧/
-x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
--- BOOL // swap₊ has cardinality 1/2
--- ONE // id⟷ has cardinality 1
--- the product type has points (1,3),(2,3) with permutation ((2,3) (1,3))
--- 1/2
--- in this case 1/2 * 1 = 1/2 so ⊠ works nicely
+-- _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
+-- (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
+-- (τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
+-- (T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
 
-x₈ : ⟦ S₂ ⟧/
-x₈ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
--- four values clustered in 1 connected component; each connected
--- component has orbits of length 4; cardinality 1/4
+-- Semantics in Set
 
-x₉ : ⟦ T₁₀ ⟧/
-x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
--- four values clustered in two connected components; each connected
--- component has orbits of length 2; cardinality 1/2 + 1/2 = 1
+-- ⟦_⟧/ : {n : ℕ} → (U/ n) → Set
+-- ⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
+-- ⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
+
+-- -- some type examples
+
+-- -- 0-dimensional 
+
+-- BOOL : U
+-- BOOL = PLUS ONE ONE
+
+-- THREEL : U
+-- THREEL = PLUS BOOL ONE
+
+-- p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
+-- p₁ = id⟷ -- (1 2 | 3)
+-- p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
+-- p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
+-- p₄ = p₂ ◎ p₃ -- (2 3 | 1)
+-- p₅ = p₃ ◎ p₂ -- (3 1 | 2)
+-- p₆ = p₄ ◎ p₂ -- (3 2 | 1)
+
+-- -- 1-dimensional 
+
+-- T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
+
+-- T₀ = ZERO // id⟷
+-- T₁ = BOOL // id⟷
+-- T₂ = BOOL // swap₊
+-- T₃ = THREEL // p₁
+-- T₄ = THREEL // p₂
+-- T₅ = THREEL // p₃
+-- T₆ = THREEL // p₄
+-- T₇ = THREEL // p₅
+-- T₈ = THREEL // p₆
+-- T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
+-- T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
+
+-- -- 2-dimensional 
+
+-- S₁ S₂ : U/ 2
+
+-- S₁ = (BOOL // swap₊) ⊠ (ONE // id⟷)
+-- S₂ = (BOOL // swap₊) ⊠ (BOOL // swap₊)
+
+-- -- 3,4,5-dimensional
+
+-- W₁ : U/ 3
+-- W₁ = S₁ ⊠ T₁
+
+-- W₂ : U/ 4
+-- W₂ = (S₁ ⊠ S₂) ⊞ (W₁ ⊠ T₂)
+
+-- W₃ : U/ 5
+-- W₃ = (W₁ ⊠ S₂) ⊞ (T₂ ⊠ W₂)
+
+-- -- examples values
+
+-- x₁ x₂ x₃ : ⟦ T₁ ⟧/
+-- x₁ = (inj₁ tt , singleton id⟷)
+-- x₂ = (inj₁ tt , (swap₊ ◎ swap₊ , linv◎l))
+-- x₃ = (inj₂ tt , singleton id⟷)
+
+-- x₄ x₅ : ⟦ T₂ ⟧/
+-- x₄ = (inj₁ tt , singleton swap₊)
+-- x₅ = (inj₂ tt , singleton swap₊)
+
+-- x₆ : ⟦ T₉ ⟧/
+-- x₆ = (inj₁ (inj₁ tt) , singleton p₂)
+
+-- x₇ : ⟦ S₁ ⟧/
+-- x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
+
+-- x₈ : ⟦ S₂ ⟧/
+-- x₈ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
+
+-- x₉ : ⟦ T₁₀ ⟧/
+-- x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
 
 \end{code}
 
@@ -739,23 +790,23 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 
 -- 1-dimensional evaluator; cool how p is maintainted as evaluation progresses
 
-eval/1 : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} {q : τ₂ ⟷ τ₂} →
-         (c : τ₁ ⟷ τ₂) → ⟦ τ₁ // p ⟧/ → ⟦ τ₂ // ! c ◎ p ◎ c ⟧/
-eval/1 c (v , (p' , α)) = (ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)))
+-- eval/1 : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} {q : τ₂ ⟷ τ₂} →
+--          (c : τ₁ ⟷ τ₂) → ⟦ τ₁ // p ⟧/ → ⟦ τ₂ // ! c ◎ p ◎ c ⟧/
+-- eval/1 c (v , (p' , α)) = (ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)))
 
--- general evaluator subsumes the above
--- need n-dimensional combinators
+-- -- general evaluator subsumes the above
+-- -- need n-dimensional combinators
 
-data _⟷ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → Set where
-  base : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} → 
-         (c : τ₁ ⟷ τ₂) → ((τ₁ // p) ⟷ⁿ (τ₂ // (! c ◎ p ◎ c)))
-  hdim : {n : ℕ} {T₁ T₂ T₃ T₄ : U/ n} →
-         (α : T₁ ⟷ⁿ T₃) (β : T₂ ⟷ⁿ T₄) → 
-         (T₁ ×ⁿ T₂) ⟷ⁿ (T₃ ×ⁿ T₄)
+-- data _⟷ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → Set where
+--   base : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} → 
+--          (c : τ₁ ⟷ τ₂) → ((τ₁ // p) ⟷ⁿ (τ₂ // (! c ◎ p ◎ c)))
+--   hdim : {n : ℕ} {T₁ T₂ T₃ T₄ : U/ n} →
+--          (α : T₁ ⟷ⁿ T₃) (β : T₂ ⟷ⁿ T₄) → 
+--          (T₁ ×ⁿ T₂) ⟷ⁿ (T₃ ×ⁿ T₄)
 
-apⁿ : {n : ℕ} {T₁ T₂ : U/ n} → (cⁿ : T₁ ⟷ⁿ T₂) → ⟦ T₁ ⟧/ → ⟦ T₂ ⟧/
-apⁿ (base c) (v , (p , α)) = ap c v , (! c ◎ p ◎ c , id⇔ ⊡ (α ⊡ id⇔))
-apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ cⁿ₂ vⁿ₂
+-- apⁿ : {n : ℕ} {T₁ T₂ : U/ n} → (cⁿ : T₁ ⟷ⁿ T₂) → ⟦ T₁ ⟧/ → ⟦ T₂ ⟧/
+-- apⁿ (base c) (v , (p , α)) = ap c v , (! c ◎ p ◎ c , id⇔ ⊡ (α ⊡ id⇔))
+-- apⁿ (hdim cⁿ₁ cⁿ₂) (vⁿ₁ , vⁿ₂) = apⁿ cⁿ₁ vⁿ₁ , apⁿ cⁿ₂ vⁿ₂
 
 \end{code}
 
@@ -774,55 +825,55 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 
 -- something like
 
-data c≈ {τ : U} : (c : τ ⟷ τ) → Rel ⟦ τ ⟧ lzero where
-  step : {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v (ap c v)
-  trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v₁ v₂ → c≈ c v₂ v₃ → c≈ c v₁ v₃
+-- data c≈ {τ : U} : (c : τ ⟷ τ) → Rel ⟦ τ ⟧ lzero where
+--   step : {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v (ap c v)
+--   trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v₁ v₂ → c≈ c v₂ v₃ → c≈ c v₁ v₃
 
-≈refl : {τ : U} {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v v
-≈refl = {!!} 
+-- ≈refl : {τ : U} {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v v
+-- ≈refl = {!!} 
 
-triv≡ : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} → (f g : c≈ c v₁ v₂) → Set
-triv≡ _ _ = ⊤
+-- triv≡ : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} → (f g : c≈ c v₁ v₂) → Set
+-- triv≡ _ _ = ⊤
 
-triv≡Equiv : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} →
-             IsEquivalence (triv≡ {τ} {c} {v₁} {v₂})
-triv≡Equiv = record 
-  { refl = tt
-  ; sym = λ _ → tt
-  ; trans = λ _ _ → tt
-  }
-
-U1toC : U/ 1 → Category lzero lzero lzero
-U1toC (() ×ⁿ ())
-U1toC (τ // p) = record
-  { Obj = ⟦ τ ⟧
-  ; _⇒_ = c≈ p 
-  ; _≡_ = triv≡ {τ} {p} 
-  ; id = ≈refl p
-  ; _∘_ = λ y x → trans p x y
-  ; assoc = tt
-  ; identityˡ = tt
-  ; identityʳ = tt
-  ; equiv = triv≡Equiv {τ} {p}
-  ; ∘-resp-≡ = λ _ _ → tt
-  }
-
--- then U/n would have to use some multiplication on groupoids inductively
-
--- toG : (tp : U//) → Groupoid (toC tp)
--- toG (τ // p) = record 
---   { _⁻¹ = {!!}
---   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
+-- triv≡Equiv : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} →
+--              IsEquivalence (triv≡ {τ} {c} {v₁} {v₂})
+-- triv≡Equiv = record 
+--   { refl = tt
+--   ; sym = λ _ → tt
+--   ; trans = λ _ _ → tt
 --   }
 
--- Cardinality
+-- U1toC : U/ 1 → Category lzero lzero lzero
+-- U1toC (() ×ⁿ ())
+-- U1toC (τ // p) = record
+--   { Obj = ⟦ τ ⟧
+--   ; _⇒_ = c≈ p 
+--   ; _≡_ = triv≡ {τ} {p} 
+--   ; id = ≈refl p
+--   ; _∘_ = λ y x → trans p x y
+--   ; assoc = tt
+--   ; identityˡ = tt
+--   ; identityʳ = tt
+--   ; equiv = triv≡Equiv {τ} {p}
+--   ; ∘-resp-≡ = λ _ _ → tt
+--   }
 
-∣_∣/ : {n : ℕ} → (U/ n) → ℚ
-∣ ZERO // p ∣/ = + 0 ÷ 1
-∣ τ // p ∣/ = {!!}
-  -- for each connected component i, calculate the length of the orbit ℓᵢ
-  -- return ∑ᵢ 1/ℓᵢ
-∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
+-- -- then U/n would have to use some multiplication on groupoids inductively
+
+-- -- toG : (tp : U//) → Groupoid (toC tp)
+-- -- toG (τ // p) = record 
+-- --   { _⁻¹ = {!!}
+-- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
+-- --   }
+
+-- -- Cardinality
+
+-- ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
+-- ∣ ZERO // p ∣/ = + 0 ÷ 1
+-- ∣ τ // p ∣/ = {!!}
+--   -- for each connected component i, calculate the number of automorphisms ℓᵢ
+--   -- return ∑ᵢ 1/ℓᵢ
+-- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
 
 
 \end{code}
