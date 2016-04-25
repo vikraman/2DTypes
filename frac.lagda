@@ -541,17 +541,17 @@ singleton p = (p , id⇔)
 --   ; trans = λ _ _ → tt
 --   }
 
-iterate : {τ : U} (p : τ ⟷ τ) (n : ℕ) → (τ ⟷ τ) 
-iterate p 0 = id⟷ 
+iterate : {τ : U} {n : ℕ} (p : τ ⟷ τ) (i : Fin n) → (τ ⟷ τ) 
+iterate p zero = id⟷ 
 iterate p (suc n) = p ◎ (iterate p n)
 
-Iterate : {τ : U} (p : τ ⟷ τ) (n : ℕ) → Set
+Iterate : {τ : U} {n : ℕ} (p : τ ⟷ τ) (i : Fin n) → Set
 Iterate p n = Perm (iterate p n)
   
 PtoC : {τ : U} {p : τ ⟷ τ} → Perm p → Category lzero lzero lzero
 PtoC {τ} (p , α) = record
   { Obj = ⊤
-  ; _⇒_ = λ _ _ → Iterate p ∣ τ ∣ 
+  ; _⇒_ = λ _ _ → (n : Fin ∣ τ ∣) → Iterate p n
   ; _≡_ = {!!} -- triv≡ {τ} {p} 
   ; id = {!!} -- ≈refl p
   ; _∘_ = {!!} -- λ y x → trans p x y
