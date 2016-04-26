@@ -548,20 +548,17 @@ iterate p (suc n) = p ◎ (iterate p n)
 Iterate : {τ : U} {n : ℕ} (p : τ ⟷ τ) (i : Fin n) → Set
 Iterate p n = Perm (iterate p n)
   
-lift⇔ : {τ : U} {p₁ p₂ : τ ⟷ τ} → Perm p₁ → Perm p₂ → Set
-lift⇔ (p₁ , α₁) (p₂ , α₂) = p₁ ⇔ p₂ 
-
 Iterate≡ : {τ : U} → (p : τ ⟷ τ) →
-           (p₁ p₂ : (n : Fin ∣ τ ∣) → Iterate p n) → Set
-Iterate≡ p p₁ p₂ = ∀ {i} → lift⇔ (p₁ i) (p₂ i)  
+           (p₁ p₂ : Σ[ n ∈ Fin (suc ∣ τ ∣) ] (Iterate p n)) → Set
+Iterate≡ p (n₁ , (p₁ , α₁)) (n₂ , (p₂ , α₂)) = (n₁ P.≡ n₂) × (p₁ ⇔ p₂)
 
 PtoC : {τ : U} {p : τ ⟷ τ} → Perm p → Category lzero lzero lzero
 PtoC {τ} (p , α) = record
   { Obj = ⊤
-  ; _⇒_ = λ _ _ → (n : Fin ∣ τ ∣) → Iterate p n
+  ; _⇒_ = λ _ _ → Σ[ n ∈ Fin (suc ∣ τ ∣) ] (Iterate p n)
   ; _≡_ = λ p₁ p₂ → Iterate≡ p p₁ p₂ 
-  ; id = {!λ n → !} -- ≈refl p
-  ; _∘_ = {!!} -- λ y x → trans p x y
+  ; id = (zero , singleton id⟷)
+  ; _∘_ = λ { (m₁ , (p₁ , α₁)) (m₂ , (p₂ , α₂)) → {!!}} 
   ; assoc = {!!} -- tt
   ; identityˡ = {!!} -- tt
   ; identityʳ = {!!} -- tt
