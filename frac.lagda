@@ -722,24 +722,30 @@ singleton : {τ : U} → (p : τ ⟷ τ) → Perm p
 singleton p = (p , id⇔)
 
 data U/ : (n : ℕ) → Set where
-  _⋊_ : {τ₁ : U} {p : τ₁ ⟷ τ₁} → (τ : U) → Perm p → U/ 1 -- 1-dimensional
-  _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) -- n+1-dimensional hypercube
+  ⇑ : U → U/ 0
+  _//_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n
+  _⋊_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n 
+  _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) 
 
-_⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
-(τ₁ ⋊ p₁) ⊞ (τ₂ ⋊ p₂) = {!!} -- (PLUS τ₁ τ₂) ⋊ (p₁ ⊕ p₂)
-(τ ⋊ p) ⊞ (() ×ⁿ ()) 
-(() ×ⁿ ()) ⊞ (τ ⋊ p) 
-(T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
+-- _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
+-- (τ₁ ⋊ p) ⊞ T = {!!} 
+-- T ⊞ (τ₁ ⋊ p) = {!!} 
+-- (τ₁ // (p₁ , α₁)) ⊞ (τ₂ // (p₂ , α₂)) =  {!(τ₁ ⋊ (p₂ , α₂)) ⊞ (τ₂ ⋊ (p₁ , α₁))!}  // (p₁ ⊗ p₂ , resp⊗⇔ α₁ α₂) 
+-- (τ // p) ⊞ T = {!!} -- (() ×ⁿ ()) 
+-- T ⊞ (τ // p) = {!!} -- (() ×ⁿ ())
+-- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
 
-_⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
-(τ₁ ⋊ p₁) ⊠ (τ₂ ⋊ p₂) = (τ₁ ⋊ p₁) ×ⁿ (τ₂ ⋊ p₂)
-(τ ⋊ p) ⊠ (T₁ ×ⁿ T₂) = ((τ ⋊ p) ⊠ T₁) ×ⁿ ((τ ⋊ p) ⊠ T₂)
-(T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
+-- _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
+-- (τ₁ ⋊ p) ⊠ T = {!!} 
+-- T ⊠ (τ₁ ⋊ p) = {!!} 
+-- (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
+-- (τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
+-- (T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
 
 -- Semantics in Set
 
 -- ⟦_⟧/ : {n : ℕ} → (U/ n) → Set
--- ⟦ τ ⋊ p ⟧/ = ⟦ τ ⟧ × Singleton p
+-- ⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
 -- ⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
 
 -- -- some type examples
@@ -764,24 +770,24 @@ _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
 
 -- T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
 
--- T₀ = ZERO ⋊ id⟷
--- T₁ = BOOL ⋊ id⟷
--- T₂ = BOOL ⋊ swap₊
--- T₃ = THREEL ⋊ p₁
--- T₄ = THREEL ⋊ p₂
--- T₅ = THREEL ⋊ p₃
--- T₆ = THREEL ⋊ p₄
--- T₇ = THREEL ⋊ p₅
--- T₈ = THREEL ⋊ p₆
--- T₉ = (BOOL ⋊ swap₊) ⊞ (ONE ⋊ id⟷)
--- T₁₀ = (BOOL ⋊ swap₊) ⊞ (BOOL ⋊ swap₊)
+-- T₀ = ZERO // id⟷
+-- T₁ = BOOL // id⟷
+-- T₂ = BOOL // swap₊
+-- T₃ = THREEL // p₁
+-- T₄ = THREEL // p₂
+-- T₅ = THREEL // p₃
+-- T₆ = THREEL // p₄
+-- T₇ = THREEL // p₅
+-- T₈ = THREEL // p₆
+-- T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
+-- T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
 
 -- -- 2-dimensional 
 
 -- S₁ S₂ : U/ 2
 
--- S₁ = (BOOL ⋊ swap₊) ⊠ (ONE ⋊ id⟷)
--- S₂ = (BOOL ⋊ swap₊) ⊠ (BOOL ⋊ swap₊)
+-- S₁ = (BOOL // swap₊) ⊠ (ONE // id⟷)
+-- S₂ = (BOOL // swap₊) ⊠ (BOOL // swap₊)
 
 -- -- 3,4,5-dimensional
 
@@ -1006,18 +1012,18 @@ allow divisions by zero so we then move everything to pointed types.
 --
 
 -- record ActionGroupoid : Set₁ where
---   constructor _⋊_
+--   constructor _//_
 --   field
 --     S : Set
 --     G : Enum
 
 -- plus2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
--- plus2 (S₁ ⋊ enum₁) (S₂ ⋊ enum₂) = 
---   ((S₁ × ⟦ Enum.t enum₂ ⟧) ⊎ (S₂ × ⟦ Enum.t enum₁ ⟧)) ⋊
+-- plus2 (S₁ // enum₁) (S₂ // enum₂) = 
+--   ((S₁ × ⟦ Enum.t enum₂ ⟧) ⊎ (S₂ × ⟦ Enum.t enum₁ ⟧)) //
 --   (enum₁ Enum× enum₂)
 
 -- times2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
--- times2 (S₁ ⋊ enum₁) (S₂ ⋊ enum₂) = (S₁ × S₂) ⋊ (enum₁ Enum× enum₂)
+-- times2 (S₁ // enum₁) (S₂ // enum₂) = (S₁ × S₂) // (enum₁ Enum× enum₂)
 
 -- --
 
@@ -1029,7 +1035,7 @@ allow divisions by zero so we then move everything to pointed types.
 
 -- 2⟦_⟧ : 2D → ActionGroupoid
 -- 2⟦ LIFT t ⟧        = {!!}
--- 2⟦ RECIP t ⟧       = ⊤ ⋊ mkEnum t (enum t)
+-- 2⟦ RECIP t ⟧       = ⊤ // mkEnum t (enum t)
 -- 2⟦ PLUS2 T₁ T₂ ⟧   = plus2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧
 -- 2⟦ TIMES2 T₁ T₂ ⟧  = times2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧ 
 
@@ -1295,19 +1301,19 @@ a good operational semantics.
 -- --
 
 -- record ActionGroupoid• : Set₁ where
---   constructor _⋊•_
+--   constructor _//•_
 --   field
 --     S : Set
 --     G : Enum•
 
 -- plus2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
--- plus2• (S₁ ⋊• enum₁) (S₂ ⋊• enum₂) = 
---   ((S₁ × ⟦ U•.carrier (Enum•.t enum₂) ⟧) ⊎ (S₂ × ⟦ U•.carrier (Enum•.t enum₁) ⟧)) ⋊•
+-- plus2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+--   ((S₁ × ⟦ U•.carrier (Enum•.t enum₂) ⟧) ⊎ (S₂ × ⟦ U•.carrier (Enum•.t enum₁) ⟧)) //•
 --   (enum₁ Enum•× enum₂)
 
 -- times2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
--- times2• (S₁ ⋊• enum₁) (S₂ ⋊• enum₂) = 
---   (S₁ × S₂) ⋊• (enum₁ Enum•× enum₂)
+-- times2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+--   (S₁ × S₂) //• (enum₁ Enum•× enum₂)
 
 -- --
 
@@ -1317,7 +1323,7 @@ a good operational semantics.
 --   TIMES2•  :  2D• → 2D• → 2D•
 
 -- 2⟦_⟧• : 2D• → ActionGroupoid•
--- 2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ ⋊• mkEnum• t₂ (enum (carrier t₂))
+-- 2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ //• mkEnum• t₂ (enum (carrier t₂))
 -- 2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
 -- 2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
 
@@ -1419,7 +1425,7 @@ course of action is for the constraint to travel back to the second site, adjust
   finite groupoids which is probably just as bad as classifying finite
   groups. However there are some interesting perspectives from the
   point of complexity theory
-  \url{http:⋊citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.68.7980&rep=rep1&type=pdf}
+  \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.68.7980&rep=rep1&type=pdf}
 
 \end{itemize}
 
@@ -1520,7 +1526,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- The starting point is to treat a permutation as a (singleton) type
 -- and show that it corresponds to a groupoid
 
--- From http:⋊stackoverflow.com/questions/21351906/how-to-define-a-singleton-set
+-- From http://stackoverflow.com/questions/21351906/how-to-define-a-singleton-set
 -- and specialized to permutations
 
 -- Perm p is the set that only contains p. 
@@ -1589,7 +1595,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 
 -- U1toC : U/ 1 → Category lzero lzero lzero
 -- U1toC (() ×ⁿ ())
--- U1toC (τ ⋊ p) = record
+-- U1toC (τ // p) = record
 --   { Obj = ⟦ τ ⟧
 --   ; _⇒_ = c≈ p 
 --   ; _≡_ = triv≡ {τ} {p} 
@@ -1604,8 +1610,8 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 
 -- -- then U/n would have to use some multiplication on groupoids inductively
 
--- -- toG : (tp : U⋊) → Groupoid (toC tp)
--- -- toG (τ ⋊ p) = record 
+-- -- toG : (tp : U//) → Groupoid (toC tp)
+-- -- toG (τ // p) = record 
 -- --   { _⁻¹ = {!!}
 -- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
 -- --   }
@@ -1613,8 +1619,8 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- -- Cardinality
 
 -- ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
--- ∣ ZERO ⋊ p ∣/ = + 0 ÷ 1
--- ∣ τ ⋊ p ∣/ = {!!}
+-- ∣ ZERO // p ∣/ = + 0 ÷ 1
+-- ∣ τ // p ∣/ = {!!}
 --   -- for each connected component i, calculate the number of automorphisms ℓᵢ
 --   -- return ∑ᵢ 1/ℓᵢ
 -- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
@@ -1624,27 +1630,27 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- N-dimensional fractional types
 
 -- data U/ : (n : ℕ) → Set where
---   _⋊_ : {τ₁ τ₂ : U} → (p₁ : τ₁ ⟷ τ₁) → (p₂ : τ₂ ⟷ τ₂)→ U/ 1 -- 1 dimensional
+--   _//_ : {τ₁ τ₂ : U} → (p₁ : τ₁ ⟷ τ₁) → (p₂ : τ₂ ⟷ τ₂)→ U/ 1 -- 1 dimensional
 --   _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) -- n+1 dimensional hypercube
 
 -- ⇑ : U → U/ 1
--- ⇑ τ = τ ⋊ id⟷
+-- ⇑ τ = τ // id⟷
 
 -- _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
--- (τ₁ ⋊ p₁) ⊞ (τ₂ ⋊ p₂) = (PLUS τ₁ τ₂) ⋊ (p₁ ⊕ p₂)
--- (τ ⋊ p) ⊞ (() ×ⁿ ()) 
--- (() ×ⁿ ()) ⊞ (τ ⋊ p) 
+-- (τ₁ // p₁) ⊞ (τ₂ // p₂) = (PLUS τ₁ τ₂) // (p₁ ⊕ p₂)
+-- (τ // p) ⊞ (() ×ⁿ ()) 
+-- (() ×ⁿ ()) ⊞ (τ // p) 
 -- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
 
 -- _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
--- (τ₁ ⋊ p₁) ⊠ (τ₂ ⋊ p₂) = (τ₁ ⋊ p₁) ×ⁿ (τ₂ ⋊ p₂)
--- (τ ⋊ p) ⊠ (T₁ ×ⁿ T₂) = ((τ ⋊ p) ⊠ T₁) ×ⁿ ((τ ⋊ p) ⊠ T₂)
+-- (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
+-- (τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
 -- (T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
 
 -- Semantics in Set
 
 -- ⟦_⟧/ : {n : ℕ} → (U/ n) → Set
--- ⟦ τ ⋊ p ⟧/ = ⟦ τ ⟧ × Singleton p
+-- ⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
 -- ⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
 
 -- -- some type examples
@@ -1669,24 +1675,24 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 
 -- T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
 
--- T₀ = ZERO ⋊ id⟷
--- T₁ = BOOL ⋊ id⟷
--- T₂ = BOOL ⋊ swap₊
--- T₃ = THREEL ⋊ p₁
--- T₄ = THREEL ⋊ p₂
--- T₅ = THREEL ⋊ p₃
--- T₆ = THREEL ⋊ p₄
--- T₇ = THREEL ⋊ p₅
--- T₈ = THREEL ⋊ p₆
--- T₉ = (BOOL ⋊ swap₊) ⊞ (ONE ⋊ id⟷)
--- T₁₀ = (BOOL ⋊ swap₊) ⊞ (BOOL ⋊ swap₊)
+-- T₀ = ZERO // id⟷
+-- T₁ = BOOL // id⟷
+-- T₂ = BOOL // swap₊
+-- T₃ = THREEL // p₁
+-- T₄ = THREEL // p₂
+-- T₅ = THREEL // p₃
+-- T₆ = THREEL // p₄
+-- T₇ = THREEL // p₅
+-- T₈ = THREEL // p₆
+-- T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
+-- T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
 
 -- -- 2-dimensional 
 
 -- S₁ S₂ : U/ 2
 
--- S₁ = (BOOL ⋊ swap₊) ⊠ (ONE ⋊ id⟷)
--- S₂ = (BOOL ⋊ swap₊) ⊠ (BOOL ⋊ swap₊)
+-- S₁ = (BOOL // swap₊) ⊠ (ONE // id⟷)
+-- S₂ = (BOOL // swap₊) ⊠ (BOOL // swap₊)
 
 -- -- 3,4,5-dimensional
 
@@ -1728,7 +1734,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- 1-dimensional evaluator; cool how p is maintainted as evaluation progresses
 
 -- eval/1 : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} {q : τ₂ ⟷ τ₂} →
---          (c : τ₁ ⟷ τ₂) → ⟦ τ₁ ⋊ p ⟧/ → ⟦ τ₂ ⋊ ! c ◎ p ◎ c ⟧/
+--          (c : τ₁ ⟷ τ₂) → ⟦ τ₁ // p ⟧/ → ⟦ τ₂ // ! c ◎ p ◎ c ⟧/
 -- eval/1 c (v , (p' , α)) = (ap c v , (! c ◎ p' ◎ c , id⇔ ⊡ (α ⊡ id⇔)))
 
 -- -- general evaluator subsumes the above
@@ -1736,7 +1742,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 
 -- data _⟷ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → Set where
 --   base : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} → 
---          (c : τ₁ ⟷ τ₂) → ((τ₁ ⋊ p) ⟷ⁿ (τ₂ ⋊ (! c ◎ p ◎ c)))
+--          (c : τ₁ ⟷ τ₂) → ((τ₁ // p) ⟷ⁿ (τ₂ // (! c ◎ p ◎ c)))
 --   hdim : {n : ℕ} {T₁ T₂ T₃ T₄ : U/ n} →
 --          (α : T₁ ⟷ⁿ T₃) (β : T₂ ⟷ⁿ T₄) → 
 --          (T₁ ×ⁿ T₂) ⟷ⁿ (T₃ ×ⁿ T₄)
@@ -1747,7 +1753,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 
 \end{code}
 
-This may be helpful \url{http:⋊www.engr.uconn.edu/~vkk06001/report.pdf}
+This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 
 \begin{code}
 
@@ -1779,7 +1785,7 @@ This may be helpful \url{http:⋊www.engr.uconn.edu/~vkk06001/report.pdf}
 
 -- U1toC : U/ 1 → Category lzero lzero lzero
 -- U1toC (() ×ⁿ ())
--- U1toC (τ ⋊ p) = record
+-- U1toC (τ // p) = record
 --   { Obj = ⟦ τ ⟧
 --   ; _⇒_ = c≈ p 
 --   ; _≡_ = triv≡ {τ} {p} 
@@ -1794,8 +1800,8 @@ This may be helpful \url{http:⋊www.engr.uconn.edu/~vkk06001/report.pdf}
 
 -- -- then U/n would have to use some multiplication on groupoids inductively
 
--- -- toG : (tp : U⋊) → Groupoid (toC tp)
--- -- toG (τ ⋊ p) = record 
+-- -- toG : (tp : U//) → Groupoid (toC tp)
+-- -- toG (τ // p) = record 
 -- --   { _⁻¹ = {!!}
 -- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
 -- --   }
@@ -1803,8 +1809,8 @@ This may be helpful \url{http:⋊www.engr.uconn.edu/~vkk06001/report.pdf}
 -- -- Cardinality
 
 -- ∣_∣/ : {n : ℕ} → (U/ n) → ℚ
--- ∣ ZERO ⋊ p ∣/ = + 0 ÷ 1
--- ∣ τ ⋊ p ∣/ = {!!}
+-- ∣ ZERO // p ∣/ = + 0 ÷ 1
+-- ∣ τ // p ∣/ = {!!}
 --   -- for each connected component i, calculate the number of automorphisms ℓᵢ
 --   -- return ∑ᵢ 1/ℓᵢ
 -- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
