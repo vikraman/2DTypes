@@ -75,6 +75,18 @@ open import Categories.Category
 open import Categories.Groupoid
 open import Relation.Binary.Core using (Rel; IsEquivalence)
 
+open import Level
+open import Categories.Category 
+import Categories.Morphisms
+open import Relation.Binary
+  using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
+  renaming (_⇒_ to _⊆_)
+open import Function using (flip)
+open import Categories.Support.PropositionalEquality
+open import Categories.Support.Equivalence
+open import Categories.Support.EqReasoning
+open import Data.Product
+open import Categories.Groupoid
 \end{code}
 }
 
@@ -678,19 +690,6 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 \section{Permutations are Types}
 
 \begin{code}
-open import Level
-open import Categories.Category 
-import Categories.Morphisms
-open import Relation.Binary
-  using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
-  renaming (_⇒_ to _⊆_)
-open import Function using (flip)
-open import Categories.Support.PropositionalEquality
-open import Categories.Support.Equivalence
-open import Categories.Support.EqReasoning
-open import Data.Product
-open import Categories.Groupoid
-  
 -- Permutation to groupoid
 
 repeat : {A : Set} → (k : ℕ) → (A → A) → A → A
@@ -724,7 +723,7 @@ p⇒C {τ} p = record {
 
 p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
 p⇒G {τ} p = record
-  { _⁻¹ = λ { {v₁} {v₂} (k , a) → (k , {!!})}
+  { _⁻¹ = λ { {v₁} {v₂} (k , a) → (k , {!!})} -- have a  : repeat k (ap p) v₁ = v₂; want: repeat k (ap p) v₂ = v₁
   ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
   }
 
@@ -732,13 +731,14 @@ p⇒G {τ} p = record
 
 compose : {τ : U} → (k : ℕ) → (p : τ ⟷ τ) → (τ ⟷ τ)
 compose ℕ.zero p = id⟷
-compose (ℕ.suc k) p = compose k p ◎ p 
+compose (ℕ.suc k) p = p ◎ compose k p 
 
 compose+ : {τ : U} {p : τ ⟷ τ} →
          (k₁ k₂ : ℕ) → ((compose k₁ p) ◎ (compose k₂ p)) ⇔ compose (k₁ + k₂) p
-compose+ = {!!}         
+compose+ ℕ.zero k₂ = idl◎l
+compose+ (ℕ.suc k₁) k₂ = trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
 
--- Perm p is the set that only contains p. 
+-- Perm p is the singleton type that only contains p. 
 
 Perm : {τ : U} → (p : τ ⟷ τ) → Set
 Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
@@ -752,13 +752,20 @@ p/⇒C {τ} p = record {
    ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p)) 
    ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
    ; id = (0 , singleton id⟷) 
-   ; _∘_ = λ { (k₂ , p₂) (k₁ , p₁) → (k₁ + k₂ , {!!}) } 
+   ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
+               (k₁ + k₂ ,  (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
    ; assoc = assoc◎l 
    ; identityˡ = idr◎l 
    ; identityʳ = idl◎l 
    ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
    ; ∘-resp-≡ = λ f g → g ⊡ f 
    }
+
+p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p/⇒C p)
+p/⇒G {τ} p = record
+  { _⁻¹ = {!!}
+  ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
+  }
 
 \end{code}
 
