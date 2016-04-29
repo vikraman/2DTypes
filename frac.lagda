@@ -468,6 +468,125 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
        ((id⟷ ⊕ swap₊) ⊕ id⟷)) ◎ (assocl₊ ⊕ id⟷) ⇔
     (distl ◎ (dist {t₁} {t₂} {t₃} ⊕ dist {t₁} {t₂} {t₄})) ◎ assocl₊
 
+2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+2! assoc◎l = assoc◎r
+2! assoc◎r = assoc◎l
+2! assocl⊕l = assocl⊕r
+2! assocl⊕r = assocl⊕l
+2! assocl⊗l = assocl⊗r
+2! assocl⊗r = assocl⊗l
+2! assocr⊕r = assocr⊕l
+2! assocr⊕l = assocr⊕r
+2! assocr⊗r = assocr⊗l
+2! assocr⊗l = assocr⊗r
+2! dist⇔l = dist⇔r
+2! dist⇔r = dist⇔l
+2! distl⇔l = distl⇔r
+2! distl⇔r = distl⇔l
+2! factor⇔l = factor⇔r
+2! factor⇔r = factor⇔l
+2! factorl⇔l = factorl⇔r
+2! factorl⇔r = factorl⇔l
+2! idl◎l = idl◎r
+2! idl◎r = idl◎l
+2! idr◎l = idr◎r
+2! idr◎r = idr◎l
+2! linv◎l = linv◎r
+2! linv◎r = linv◎l
+2! rinv◎l = rinv◎r
+2! rinv◎r = rinv◎l
+2! unite₊l⇔l = unite₊l⇔r
+2! unite₊l⇔r = unite₊l⇔l
+2! uniti₊l⇔l = uniti₊l⇔r
+2! uniti₊l⇔r = uniti₊l⇔l
+2! unite₊r⇔l = unite₊r⇔r
+2! unite₊r⇔r = unite₊r⇔l
+2! uniti₊r⇔l = uniti₊r⇔r
+2! uniti₊r⇔r = uniti₊r⇔l
+2! swapl₊⇔ = swapr₊⇔
+2! swapr₊⇔ = swapl₊⇔
+2! unitel⋆⇔l = uniter⋆⇔l
+2! uniter⋆⇔l = unitel⋆⇔l
+2! unitil⋆⇔l = unitir⋆⇔l
+2! unitir⋆⇔l = unitil⋆⇔l
+2! unitel⋆⇔r = uniter⋆⇔r
+2! uniter⋆⇔r = unitel⋆⇔r
+2! unitil⋆⇔r = unitir⋆⇔r
+2! unitir⋆⇔r = unitil⋆⇔r
+2! swapl⋆⇔ = swapr⋆⇔
+2! swapr⋆⇔ = swapl⋆⇔
+2! id⇔ = id⇔
+2! (α ⊡ β) = (2! α) ⊡ (2! β)
+2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
+2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
+2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
+2! id⟷⊕id⟷⇔ = split⊕-id⟷
+2! split⊕-id⟷ = id⟷⊕id⟷⇔
+2! hom⊕◎⇔ = hom◎⊕⇔
+2! hom◎⊕⇔ = hom⊕◎⇔
+2! id⟷⊗id⟷⇔ = split⊗-id⟷
+2! split⊗-id⟷ = id⟷⊗id⟷⇔
+2! hom⊗◎⇔ = hom◎⊗⇔
+2! hom◎⊗⇔ = hom⊗◎⇔
+2! triangle⊕l = triangle⊕r
+2! triangle⊕r = triangle⊕l
+2! triangle⊗l = triangle⊗r
+2! triangle⊗r = triangle⊗l
+2! pentagon⊕l = pentagon⊕r
+2! pentagon⊕r = pentagon⊕l
+2! pentagon⊗l = pentagon⊗r
+2! pentagon⊗r = pentagon⊗l
+2! unite₊l-coh-l = unite₊l-coh-r
+2! unite₊l-coh-r = unite₊l-coh-l
+2! unite⋆l-coh-l = unite⋆l-coh-r
+2! unite⋆l-coh-r = unite⋆l-coh-l
+2! hexagonr⊕l = hexagonr⊕r
+2! hexagonr⊕r = hexagonr⊕l
+2! hexagonl⊕l = hexagonl⊕r
+2! hexagonl⊕r = hexagonl⊕l
+2! hexagonr⊗l = hexagonr⊗r
+2! hexagonr⊗r = hexagonr⊗l
+2! hexagonl⊗l = hexagonl⊗r
+2! hexagonl⊗r = hexagonl⊗l
+2! absorbl⇔l = absorbl⇔r
+2! absorbl⇔r = absorbl⇔l
+2! absorbr⇔l = absorbr⇔r
+2! absorbr⇔r = absorbr⇔l
+2! factorzl⇔l = factorzl⇔r
+2! factorzl⇔r = factorzl⇔l
+2! factorzr⇔l = factorzr⇔r
+2! factorzr⇔r = factorzr⇔l
+2! swap₊distl⇔l = swap₊distl⇔r
+2! swap₊distl⇔r = swap₊distl⇔l
+2! dist-swap⋆⇔l = dist-swap⋆⇔r
+2! dist-swap⋆⇔r = dist-swap⋆⇔l
+2! assocl₊-dist-dist⇔l = assocl₊-dist-dist⇔r
+2! assocl₊-dist-dist⇔r = assocl₊-dist-dist⇔l
+2! assocl⋆-distl⇔l = assocl⋆-distl⇔r
+2! assocl⋆-distl⇔r = assocl⋆-distl⇔l
+2! absorbr0-absorbl0⇔ = absorbl0-absorbr0⇔
+2! absorbl0-absorbr0⇔ = absorbr0-absorbl0⇔
+2! absorbr⇔distl-absorb-unite = distl-absorb-unite⇔absorbr
+2! distl-absorb-unite⇔absorbr = absorbr⇔distl-absorb-unite
+2! unite⋆r0-absorbr1⇔ = absorbr1-unite⋆r-⇔
+2! absorbr1-unite⋆r-⇔ = unite⋆r0-absorbr1⇔
+2! absorbl≡swap⋆◎absorbr = swap⋆◎absorbr≡absorbl
+2! swap⋆◎absorbr≡absorbl = absorbl≡swap⋆◎absorbr
+2! absorbr⇔[assocl⋆◎[absorbr⊗id⟷]]◎absorbr = 
+    [assocl⋆◎[absorbr⊗id⟷]]◎absorbr⇔absorbr
+2!  [assocl⋆◎[absorbr⊗id⟷]]◎absorbr⇔absorbr = 
+    absorbr⇔[assocl⋆◎[absorbr⊗id⟷]]◎absorbr
+2! [id⟷⊗absorbr]◎absorbl⇔assocl⋆◎[absorbl⊗id⟷]◎absorbr =
+    assocl⋆◎[absorbl⊗id⟷]◎absorbr⇔[id⟷⊗absorbr]◎absorbl
+2! assocl⋆◎[absorbl⊗id⟷]◎absorbr⇔[id⟷⊗absorbr]◎absorbl =
+    [id⟷⊗absorbr]◎absorbl⇔assocl⋆◎[absorbl⊗id⟷]◎absorbr
+2! elim⊥-A[0⊕B]⇔l = elim⊥-A[0⊕B]⇔r
+2! elim⊥-A[0⊕B]⇔r = elim⊥-A[0⊕B]⇔l
+2! elim⊥-1[A⊕B]⇔l = elim⊥-1[A⊕B]⇔r
+2! elim⊥-1[A⊕B]⇔r = elim⊥-1[A⊕B]⇔l
+2! fully-distribute⇔l = fully-distribute⇔r
+2! fully-distribute⇔r = fully-distribute⇔l
+
 -- 0-dimensional evaluator
 
 ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
@@ -556,164 +675,70 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Groupoids and Action Groupoids}
+\section{Permutations are Types}
 
-In HoTT, types are weak $\infty$-groupoids.
-
-%%%%%
-\subsection{Types in HoTT}
-
-Assume we have a collection of points $x_i$ and a collection of
-initial edges (paths or identities or equivalences) connecting these
-points. As an axiom, we have special paths $\refl~x_i$ between every
-point $x_i$ and itself. Using the induction principle for identity
-types, we also have the following generated paths:
-
-\begin{itemize}
-
-\item For every path $p : x_i \equiv x_j$, we have an inverse path $!p
-: x_j \equiv x_i$
-
-\item For every pair of paths with a common intermediate point, $p :
-x_i \equiv x_j$ and $q : x_j \equiv x_k$, we have a composite path $p
-\circ q : x_i \equiv x_k$
-
-\end{itemize}
-
-\noindent These generated paths are not all independent; again using
-the induction principle for identity types, we can prove for
-appropriate starting and ending points:
-
-\begin{itemize}
-\item $\gamma_1 : p \circ \refl \equiv p$
-\item $\gamma_2 : \refl \circ q \equiv q$
-\item $\gamma_3 : ~!p \circ p \equiv \refl$
-\item $\gamma_4 : p ~\circ~ !p \equiv \refl$
-\item $\gamma_5 : ~! ~(! p) \equiv p$
-\item $\gamma_6 : (p \circ q) \circ r \equiv p \circ (q \circ r)$
-\item $\gamma_7 : ~! (p \circ q) \equiv ~! q ~\circ~ ! p$
-\end{itemize}
-
-At this point, we have generated a structure where the paths $p$, $q$,
-$r$, etc. can themselves be viewed as ``points'' with the level-2 paths
-$\gamma_i$ connecting them. Using the \refl-postulate and the
-induction principle for identity types again, we can repeat the
-process above to generate the level-2 paths $!\gamma_i$ and
-$\gamma_i \circ \gamma_j$ subject to the conditions
-$\gamma_i \circ \refl \equiv \gamma_i$ etc. This gives rise to a
-level-3 collection of paths and so on ad infinitum.
-
-Generally speaking, an important endeavor in the HoTT context is to
-understand and characterize the structure of this hierarchy of
-paths. As a simple example, the type with one point and one
-non-trivial path (other than \refl) gives rise to a path structure
-that is isomorphic to the natural numbers.
-
-Our paper can be seen as characterizing a special class of types at
-levels 0 and 1 of the hierarchy that already offers tantalizing new
-insights and benefits to programming practice. In more detail, a
-0-groupoid is a set, i.e., a collection of points with only
-\refl-paths. A strict 1-groupoid takes us to the next level allowing a
-collection of points connected by non-trivial paths. We however
-explicitly collapse the higher-level structure by interpreting the
-identities $\gamma_1 : p ~\circ~ \refl \equiv p$ as \emph{strict}
-equalities. Even with this restriction, arbitrary strict 1-groupoids
-are as general as all finite groups which makes them interesting but
-difficult to capture structurally and computationally. There are
-however some interesting special cases within that form, one of which
-we explore in detail in this paper. The special case we study is that
-of an \emph{action groupoid} defined and explained in the next
-section.
-
-%%%%%
-\subsection{Groupoids and Groupoid Cardinality}
-
-\begin{definition}[Groupoid]
-There are several possible definitions. For our purposes, we define a
-groupoid as a category in which every morphism is an isomorphism.
-\end{definition}
-
-We are only going to be interested in \emph{finite}
-groupoids. Furthermore, we are going to hardwire that equivalence of
-morphisms in that category is trivial.
-
-\medskip
-
-\AgdaHide{
 \begin{code}
-module X where
-  open import Level
-  open import Categories.Category 
-  import Categories.Morphisms
-  open import Relation.Binary
-    using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
-    renaming (_⇒_ to _⊆_)
-  open import Function using (flip)
-  open import Categories.Support.PropositionalEquality
-  open import Categories.Support.Equivalence
-  open import Categories.Support.EqReasoning
-  open import Data.Product
-  open import Categories.Groupoid
+open import Level
+open import Categories.Category 
+import Categories.Morphisms
+open import Relation.Binary
+  using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
+  renaming (_⇒_ to _⊆_)
+open import Function using (flip)
+open import Categories.Support.PropositionalEquality
+open import Categories.Support.Equivalence
+open import Categories.Support.EqReasoning
+open import Data.Product
+open import Categories.Groupoid
   
-\end{code}}
+-- Permutation to groupoid
 
-\begin{definition}[Groupoid Cardinality]
-The cardinality of a groupoid $\mathcal{G}$, written $∥ \mathcal{G} ∥$,
-is defined as follows:
+repeat : {A : Set} → (k : ℕ) → (A → A) → A → A
+repeat 0 f x = x
+repeat (suc k) f x = repeat k f (f x)
 
-\medskip
+repeat+ : {A : Set} {x : A} {f : A → A} →
+          (k₁ k₂ : ℕ) → repeat k₂ f (repeat k₁ f x) P.≡ repeat (k₁ + k₂) f x
+repeat+ ℕ.zero k₂ = P.refl
+repeat+ {x = x} {f = f} (ℕ.suc k₁) k₂ = repeat+ {x = f x} k₁ k₂ 
 
-\begin{code}
-  -- ∥_∥ : FiniteGroupoid → ℚ
-  -- ∥ G ∥ = {!!} 
+repeat∘ : {A : Set} {x y z : A} {k₁ k₂ : ℕ} {f : A → A} →
+          repeat k₁ f x P.≡ y → repeat k₂ f y P.≡ z → repeat (k₁ + k₂) f x P.≡ z
+repeat∘ {z = z} {k₁ = k₁} {k₂ = k₂} {f = f} a₁ a₂ =
+  P.trans (P.sym (repeat+ k₁ k₂)) (P.subst (λ h → repeat k₂ f h P.≡ z) (P.sym a₁) a₂) 
 
-  -- To calculate this we would need:
-  --  - an enumeration of the distinct component of G
-  --  - for each component X, the order of the group Aut(X)
-\end{code}
+p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p⇒C {τ} p = record {
+     Obj = ⟦ τ ⟧ 
+   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] repeat k (ap p) v₁ P.≡ v₂ 
+   ; _≡_ = λ _ _ → ⊤
+   ; id = (0 , P.refl) 
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) →
+             (k₁ + k₂ , repeat∘ {⟦ τ ⟧} {v₁} {v₂} {v₃} {k₁} {k₂} {ap p} a₁ a₂)} 
+   ; assoc = tt 
+   ; identityˡ = tt 
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
+   ; ∘-resp-≡ = λ _ _ → tt 
+   }
 
-\end{definition}
+p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
+p⇒G {τ} p = record
+  { _⁻¹ = λ { {v₁} {v₂} (k , a) → (k , {!!})}
+  ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
+  }
 
-%%%%%
-\subsection{Action Groupoids and their Cardinality}
+-- The other way of getting a groupoid from a permutation
 
-\begin{definition}[Action Groupoid]
-An action groupoid $S \rtimes \G$ is constructed from a set $S$ and a
-group $\G$.
-\end{definition}
+compose : {τ : U} → (k : ℕ) → (p : τ ⟷ τ) → (τ ⟷ τ)
+compose ℕ.zero p = id⟷
+compose (ℕ.suc k) p = compose k p ◎ p 
 
-Give lots of examples of action groupoids. Explain cardinality.
- 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Programming with Action Groupoids}
+compose+ : {τ : U} {p : τ ⟷ τ} →
+         (k₁ k₂ : ℕ) → ((compose k₁ p) ◎ (compose k₂ p)) ⇔ compose (k₁ + k₂) p
+compose+ = {!!}         
 
-%%%%%
-\subsection{$\Pi$-combinators as Groups}
-
-Every $\Pi$-combinator denotes a permutation on finite sets: we will
-use such permutations as a proxy for the group we need to build action
-groupoids. Thus, we introduce a new type $\tau ~\rtimes~ p$ where $\tau :
-U$ is a $\Pi$-type, i.e., a finite set, and $p : \tau' \leftrightarrow
-\tau'$ is some permutation on a possibly distinct type $\tau' : U$. 
-
-We view the type $\tau ~\rtimes~ p$ as follows. The permutation $p$
-will be viewed as a one point category whose morphisms are $p^0, p^1,
-p^2, \ldots, p^{∣p∣}$ where $∣p∣$ is the order of the permutation. The
-resulting group will act trivially (using the identity permutation) on
-the points of $\tau$. The result will be a groupoid of cardinality
-$∣\tau∣/∣p∣$.
-
-We obviously want to build sums and products of these types. Sums will
-have to have a common denominator and products will have to keep the
-different permutations and collect them giving rise to a notion of
-dimension that is essentially the number of independent permutations
-we are keeping in the type.
-
-\begin{code}
-
--- N-dimensional fractional types
-
--- Turn a particular permutation into a singleton type
+-- Perm p is the set that only contains p. 
 
 Perm : {τ : U} → (p : τ ⟷ τ) → Set
 Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
@@ -721,126 +746,21 @@ Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
 singleton : {τ : U} → (p : τ ⟷ τ) → Perm p
 singleton p = (p , id⇔)
 
-data U/ : (n : ℕ) → Set where
-  ⇑ : U → U/ 0
-  _//_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n
-  _⋊_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n 
-  _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) 
-
--- _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
--- (τ₁ ⋊ p) ⊞ T = {!!} 
--- T ⊞ (τ₁ ⋊ p) = {!!} 
--- (τ₁ // (p₁ , α₁)) ⊞ (τ₂ // (p₂ , α₂)) =  {!(τ₁ ⋊ (p₂ , α₂)) ⊞ (τ₂ ⋊ (p₁ , α₁))!}  // (p₁ ⊗ p₂ , resp⊗⇔ α₁ α₂) 
--- (τ // p) ⊞ T = {!!} -- (() ×ⁿ ()) 
--- T ⊞ (τ // p) = {!!} -- (() ×ⁿ ())
--- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
-
--- _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
--- (τ₁ ⋊ p) ⊠ T = {!!} 
--- T ⊠ (τ₁ ⋊ p) = {!!} 
--- (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
--- (τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
--- (T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
-
--- Semantics in Set
-
--- ⟦_⟧/ : {n : ℕ} → (U/ n) → Set
--- ⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
--- ⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
-
--- -- some type examples
-
--- -- 0-dimensional 
-
--- BOOL : U
--- BOOL = PLUS ONE ONE
-
--- THREEL : U
--- THREEL = PLUS BOOL ONE
-
--- p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
--- p₁ = id⟷ -- (1 2 | 3)
--- p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
--- p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
--- p₄ = p₂ ◎ p₃ -- (2 3 | 1)
--- p₅ = p₃ ◎ p₂ -- (3 1 | 2)
--- p₆ = p₄ ◎ p₂ -- (3 2 | 1)
-
--- -- 1-dimensional 
-
--- T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
-
--- T₀ = ZERO // id⟷
--- T₁ = BOOL // id⟷
--- T₂ = BOOL // swap₊
--- T₃ = THREEL // p₁
--- T₄ = THREEL // p₂
--- T₅ = THREEL // p₃
--- T₆ = THREEL // p₄
--- T₇ = THREEL // p₅
--- T₈ = THREEL // p₆
--- T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
--- T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
-
--- -- 2-dimensional 
-
--- S₁ S₂ : U/ 2
-
--- S₁ = (BOOL // swap₊) ⊠ (ONE // id⟷)
--- S₂ = (BOOL // swap₊) ⊠ (BOOL // swap₊)
-
--- -- 3,4,5-dimensional
-
--- W₁ : U/ 3
--- W₁ = S₁ ⊠ T₁
-
--- W₂ : U/ 4
--- W₂ = (S₁ ⊠ S₂) ⊞ (W₁ ⊠ T₂)
-
--- W₃ : U/ 5
--- W₃ = (W₁ ⊠ S₂) ⊞ (T₂ ⊠ W₂)
-
--- -- examples values
-
--- x₁ x₂ x₃ : ⟦ T₁ ⟧/
--- x₁ = (inj₁ tt , singleton id⟷)
--- x₂ = (inj₁ tt , (swap₊ ◎ swap₊ , linv◎l))
--- x₃ = (inj₂ tt , singleton id⟷)
-
--- x₄ x₅ : ⟦ T₂ ⟧/
--- x₄ = (inj₁ tt , singleton swap₊)
--- x₅ = (inj₂ tt , singleton swap₊)
-
--- x₆ : ⟦ T₉ ⟧/
--- x₆ = (inj₁ (inj₁ tt) , singleton p₂)
-
--- x₇ : ⟦ S₁ ⟧/
--- x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
-
--- x₈ : ⟦ S₂ ⟧/
--- x₈ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
-
--- x₉ : ⟦ T₁₀ ⟧/
--- x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
+p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p/⇒C {τ} p = record {
+     Obj = ⊤
+   ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p)) 
+   ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
+   ; id = (0 , singleton id⟷) 
+   ; _∘_ = λ { (k₂ , p₂) (k₁ , p₁) → (k₁ + k₂ , {!!}) } 
+   ; assoc = assoc◎l 
+   ; identityˡ = idr◎l 
+   ; identityʳ = idl◎l 
+   ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
+   ; ∘-resp-≡ = λ f g → g ⊡ f 
+   }
 
 \end{code}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Operational Semantics}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Groupoid Semantics}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{TODO}
-
-\begin{itemize}
-\item equivalence of types
-\item groupoid interpretation of types
-\item equivalence of types interprets as natural transformations which witness
-  equivalence of groupoids
-\item operational semantics?
-\end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
@@ -1818,3 +1738,289 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 
 \end{code}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Groupoids and Action Groupoids}
+
+In HoTT, types are weak $\infty$-groupoids.
+
+%%%%%
+\subsection{Types in HoTT}
+
+Assume we have a collection of points $x_i$ and a collection of
+initial edges (paths or identities or equivalences) connecting these
+points. As an axiom, we have special paths $\refl~x_i$ between every
+point $x_i$ and itself. Using the induction principle for identity
+types, we also have the following generated paths:
+
+\begin{itemize}
+
+\item For every path $p : x_i \equiv x_j$, we have an inverse path $!p
+: x_j \equiv x_i$
+
+\item For every pair of paths with a common intermediate point, $p :
+x_i \equiv x_j$ and $q : x_j \equiv x_k$, we have a composite path $p
+\circ q : x_i \equiv x_k$
+
+\end{itemize}
+
+\noindent These generated paths are not all independent; again using
+the induction principle for identity types, we can prove for
+appropriate starting and ending points:
+
+\begin{itemize}
+\item $\gamma_1 : p \circ \refl \equiv p$
+\item $\gamma_2 : \refl \circ q \equiv q$
+\item $\gamma_3 : ~!p \circ p \equiv \refl$
+\item $\gamma_4 : p ~\circ~ !p \equiv \refl$
+\item $\gamma_5 : ~! ~(! p) \equiv p$
+\item $\gamma_6 : (p \circ q) \circ r \equiv p \circ (q \circ r)$
+\item $\gamma_7 : ~! (p \circ q) \equiv ~! q ~\circ~ ! p$
+\end{itemize}
+
+At this point, we have generated a structure where the paths $p$, $q$,
+$r$, etc. can themselves be viewed as ``points'' with the level-2 paths
+$\gamma_i$ connecting them. Using the \refl-postulate and the
+induction principle for identity types again, we can repeat the
+process above to generate the level-2 paths $!\gamma_i$ and
+$\gamma_i \circ \gamma_j$ subject to the conditions
+$\gamma_i \circ \refl \equiv \gamma_i$ etc. This gives rise to a
+level-3 collection of paths and so on ad infinitum.
+
+Generally speaking, an important endeavor in the HoTT context is to
+understand and characterize the structure of this hierarchy of
+paths. As a simple example, the type with one point and one
+non-trivial path (other than \refl) gives rise to a path structure
+that is isomorphic to the natural numbers.
+
+Our paper can be seen as characterizing a special class of types at
+levels 0 and 1 of the hierarchy that already offers tantalizing new
+insights and benefits to programming practice. In more detail, a
+0-groupoid is a set, i.e., a collection of points with only
+\refl-paths. A strict 1-groupoid takes us to the next level allowing a
+collection of points connected by non-trivial paths. We however
+explicitly collapse the higher-level structure by interpreting the
+identities $\gamma_1 : p ~\circ~ \refl \equiv p$ as \emph{strict}
+equalities. Even with this restriction, arbitrary strict 1-groupoids
+are as general as all finite groups which makes them interesting but
+difficult to capture structurally and computationally. There are
+however some interesting special cases within that form, one of which
+we explore in detail in this paper. The special case we study is that
+of an \emph{action groupoid} defined and explained in the next
+section.
+
+%%%%%
+\subsection{Groupoids and Groupoid Cardinality}
+
+\begin{definition}[Groupoid]
+There are several possible definitions. For our purposes, we define a
+groupoid as a category in which every morphism is an isomorphism.
+\end{definition}
+
+We are only going to be interested in \emph{finite}
+groupoids. Furthermore, we are going to hardwire that equivalence of
+morphisms in that category is trivial.
+
+\medskip
+
+\AgdaHide{
+\begin{code}
+module X where
+  open import Level
+  open import Categories.Category 
+  import Categories.Morphisms
+  open import Relation.Binary
+    using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
+    renaming (_⇒_ to _⊆_)
+  open import Function using (flip)
+  open import Categories.Support.PropositionalEquality
+  open import Categories.Support.Equivalence
+  open import Categories.Support.EqReasoning
+  open import Data.Product
+  open import Categories.Groupoid
+  
+\end{code}}
+
+\begin{definition}[Groupoid Cardinality]
+The cardinality of a groupoid $\mathcal{G}$, written $∥ \mathcal{G} ∥$,
+is defined as follows:
+
+\medskip
+
+\begin{code}
+  -- ∥_∥ : FiniteGroupoid → ℚ
+  -- ∥ G ∥ = {!!} 
+
+  -- To calculate this we would need:
+  --  - an enumeration of the distinct component of G
+  --  - for each component X, the order of the group Aut(X)
+\end{code}
+
+\end{definition}
+
+%%%%%
+\subsection{Action Groupoids and their Cardinality}
+
+\begin{definition}[Action Groupoid]
+An action groupoid $S \rtimes \G$ is constructed from a set $S$ and a
+group $\G$.
+\end{definition}
+
+Give lots of examples of action groupoids. Explain cardinality.
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Programming with Action Groupoids}
+
+%%%%%
+\subsection{$\Pi$-combinators as Groups}
+
+Every $\Pi$-combinator denotes a permutation on finite sets: we will
+use such permutations as a proxy for the group we need to build action
+groupoids. Thus, we introduce a new type $\tau ~\rtimes~ p$ where $\tau :
+U$ is a $\Pi$-type, i.e., a finite set, and $p : \tau' \leftrightarrow
+\tau'$ is some permutation on a possibly distinct type $\tau' : U$. 
+
+We view the type $\tau ~\rtimes~ p$ as follows. The permutation $p$
+will be viewed as a one point category whose morphisms are $p^0, p^1,
+p^2, \ldots, p^{∣p∣}$ where $∣p∣$ is the order of the permutation. The
+resulting group will act trivially (using the identity permutation) on
+the points of $\tau$. The result will be a groupoid of cardinality
+$∣\tau∣/∣p∣$.
+
+We obviously want to build sums and products of these types. Sums will
+have to have a common denominator and products will have to keep the
+different permutations and collect them giving rise to a notion of
+dimension that is essentially the number of independent permutations
+we are keeping in the type.
+
+\begin{code}
+
+-- N-dimensional fractional types
+
+-- Turn a particular permutation into a singleton type
+
+-- Perm : {τ : U} → (p : τ ⟷ τ) → Set
+-- Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
+
+-- singleton : {τ : U} → (p : τ ⟷ τ) → Perm p
+-- singleton p = (p , id⇔)
+
+-- data U/ : (n : ℕ) → Set where
+--   ⇑ : U → U/ 0
+--   _//_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n
+--   _⋊_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n 
+--   _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) 
+
+-- _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
+-- (τ₁ ⋊ p) ⊞ T = {!!} 
+-- T ⊞ (τ₁ ⋊ p) = {!!} 
+-- (τ₁ // (p₁ , α₁)) ⊞ (τ₂ // (p₂ , α₂)) =  {!(τ₁ ⋊ (p₂ , α₂)) ⊞ (τ₂ ⋊ (p₁ , α₁))!}  // (p₁ ⊗ p₂ , resp⊗⇔ α₁ α₂) 
+-- (τ // p) ⊞ T = {!!} -- (() ×ⁿ ()) 
+-- T ⊞ (τ // p) = {!!} -- (() ×ⁿ ())
+-- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
+
+-- _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
+-- (τ₁ ⋊ p) ⊠ T = {!!} 
+-- T ⊠ (τ₁ ⋊ p) = {!!} 
+-- (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
+-- (τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
+-- (T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
+
+-- Semantics in Set
+
+-- ⟦_⟧/ : {n : ℕ} → (U/ n) → Set
+-- ⟦ τ // p ⟧/ = ⟦ τ ⟧ × Singleton p
+-- ⟦ T₁ ×ⁿ T₂ ⟧/ = ⟦ T₁ ⟧/ × ⟦ T₂ ⟧/
+
+-- -- some type examples
+
+-- -- 0-dimensional 
+
+-- BOOL : U
+-- BOOL = PLUS ONE ONE
+
+-- THREEL : U
+-- THREEL = PLUS BOOL ONE
+
+-- p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
+-- p₁ = id⟷ -- (1 2 | 3)
+-- p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
+-- p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
+-- p₄ = p₂ ◎ p₃ -- (2 3 | 1)
+-- p₅ = p₃ ◎ p₂ -- (3 1 | 2)
+-- p₆ = p₄ ◎ p₂ -- (3 2 | 1)
+
+-- -- 1-dimensional 
+
+-- T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
+
+-- T₀ = ZERO // id⟷
+-- T₁ = BOOL // id⟷
+-- T₂ = BOOL // swap₊
+-- T₃ = THREEL // p₁
+-- T₄ = THREEL // p₂
+-- T₅ = THREEL // p₃
+-- T₆ = THREEL // p₄
+-- T₇ = THREEL // p₅
+-- T₈ = THREEL // p₆
+-- T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
+-- T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
+
+-- -- 2-dimensional 
+
+-- S₁ S₂ : U/ 2
+
+-- S₁ = (BOOL // swap₊) ⊠ (ONE // id⟷)
+-- S₂ = (BOOL // swap₊) ⊠ (BOOL // swap₊)
+
+-- -- 3,4,5-dimensional
+
+-- W₁ : U/ 3
+-- W₁ = S₁ ⊠ T₁
+
+-- W₂ : U/ 4
+-- W₂ = (S₁ ⊠ S₂) ⊞ (W₁ ⊠ T₂)
+
+-- W₃ : U/ 5
+-- W₃ = (W₁ ⊠ S₂) ⊞ (T₂ ⊠ W₂)
+
+-- -- examples values
+
+-- x₁ x₂ x₃ : ⟦ T₁ ⟧/
+-- x₁ = (inj₁ tt , singleton id⟷)
+-- x₂ = (inj₁ tt , (swap₊ ◎ swap₊ , linv◎l))
+-- x₃ = (inj₂ tt , singleton id⟷)
+
+-- x₄ x₅ : ⟦ T₂ ⟧/
+-- x₄ = (inj₁ tt , singleton swap₊)
+-- x₅ = (inj₂ tt , singleton swap₊)
+
+-- x₆ : ⟦ T₉ ⟧/
+-- x₆ = (inj₁ (inj₁ tt) , singleton p₂)
+
+-- x₇ : ⟦ S₁ ⟧/
+-- x₇ = (inj₁ tt , singleton swap₊) , (tt , singleton id⟷)
+
+-- x₈ : ⟦ S₂ ⟧/
+-- x₈ = (inj₁ tt , singleton swap₊) , (inj₂ tt , singleton swap₊)
+
+-- x₉ : ⟦ T₁₀ ⟧/
+-- x₉ = (inj₁ (inj₁ tt)  , singleton (swap₊ ⊕ swap₊))
+
+\end{code}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Operational Semantics}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Groupoid Semantics}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{TODO}
+
+\begin{itemize}
+\item equivalence of types
+\item groupoid interpretation of types
+\item equivalence of types interprets as natural transformations which witness
+  equivalence of groupoids
+\item operational semantics?
+\end{itemize}
