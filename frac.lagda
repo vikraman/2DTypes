@@ -56,8 +56,10 @@ module frac where
 open import Level renaming (zero to lzero; suc to lsuc) 
 open import Algebra
 open import Algebra.Structures
+import Algebra.FunctionProperties
 open import Data.Empty
 open import Data.Unit hiding (_≤_)
+open import Data.Integer using (ℤ; +_; -[1+_]) renaming (_+_ to _ℤ+_)
 open import Data.Nat.Properties
 open import Data.Fin using (Fin; zero; suc; inject+; raise; inject≤; toℕ; fromℕ)
   renaming (_+_ to _F+_)
@@ -87,6 +89,8 @@ open import Categories.Support.Equivalence
 open import Categories.Support.EqReasoning
 open import Data.Product
 open import Categories.Groupoid
+
+open Algebra.FunctionProperties (P._≡_ {A = ℤ})
 \end{code}
 }
 
@@ -692,36 +696,31 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 \begin{code}
 -- Permutation to groupoid
 
-repeat : {A : Set} → (k : ℕ) → (A → A) → A → A
-repeat 0 f x = x
-repeat (suc k) f x = repeat k f (f x)
+identityˡ : LeftIdentity (+ 0) _ℤ+_
+identityˡ -[1+ _ ] = P.refl
+identityˡ (+   _ ) = P.refl
 
-repeat+ : {A : Set} {x : A} {f : A → A} →
-          (k₁ k₂ : ℕ) → repeat k₂ f (repeat k₁ f x) P.≡ repeat (k₁ + k₂) f x
-repeat+ ℕ.zero k₂ = P.refl
-repeat+ {x = x} {f = f} (ℕ.suc k₁) k₂ = repeat+ {x = f x} k₁ k₂ 
+compose : {τ : U} → (k : ℤ) → (p : τ ⟷ τ) → (τ ⟷ τ)
+compose (+ 0) p = id⟷
+compose (+ (suc k)) p = p ◎ compose (+ k) p 
+compose -[1+ 0 ] p = ! p
+compose -[1+ (suc k) ] p = ! p ◎ compose -[1+ k ] p 
 
-repeat∘ : {A : Set} {x y z : A} {k₁ k₂ : ℕ} {f : A → A} →
-          repeat k₁ f x P.≡ y → repeat k₂ f y P.≡ z → repeat (k₁ + k₂) f x P.≡ z
-repeat∘ {z = z} {k₁ = k₁} {k₂ = k₂} {f = f} a₁ a₂ =
-  P.trans (P.sym (repeat+ k₁ k₂)) (P.subst (λ h → repeat k₂ f h P.≡ z) (P.sym a₁) a₂) 
+compose+ : {τ : U} {p : τ ⟷ τ} →
+         (k₁ k₂ : ℤ) → ((compose k₁ p) ◎ (compose k₂ p)) ⇔ compose (k₁ ℤ+ k₂) p
+compose+ {p = p} (+ 0) k₂ = {!!} -- idl◎l 
+compose+ (+ (suc k₁)) k₂ = {!!} -- trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
+compose+ -[1+ 0 ] k₂ = {!!} 
+compose+ -[1+ (suc k) ] k₂ = {!!} 
 
 p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p⇒C {τ} p = record {
      Obj = ⟦ τ ⟧ 
-   ; _⇒_ = λ v₁ v₂ →
-             Σ[ k ∈ ℕ ]
-             (repeat k (ap p) v₁ P.≡ v₂ ⊎ repeat (ℕ.suc k) (ap (! p)) v₁ P.≡ v₂)
+   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℤ ] ap (compose k p) v₁ P.≡ v₂
    ; _≡_ = λ _ _ → ⊤
-   ; id = (0 , inj₁ P.refl) 
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , inj₁ a₂) (k₁ , inj₁ a₁) →
-                 (k₁ + k₂ , inj₁ (repeat∘ {⟦ τ ⟧} {v₁} {v₂} {v₃} {k₁} {k₂} {ap p} a₁ a₂));
-               {v₁} {v₂} {v₃} (k₂ , inj₂ a₂) (k₁ , inj₁ a₁) →
-                 {!!};
-               {v₁} {v₂} {v₃} (k₂ , inj₁ a₂) (k₁ , inj₂ a₁) →
-                 {!!};
-               {v₁} {v₂} {v₃} (k₂ , inj₂ a₂) (k₁ , inj₂ a₁) →
-                 {!!}}
+   ; id = (+ 0 , P.refl) 
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → {!!} }
+--                 (k₁ + k₂ , (repeat∘ {⟦ τ ⟧} {v₁} {v₂} {v₃} {k₁} {k₂} {ap p} a₁ a₂));
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
@@ -737,15 +736,6 @@ p⇒G {τ} p = record
 
 -- The other way of getting a groupoid from a permutation
 
-compose : {τ : U} → (k : ℕ) → (p : τ ⟷ τ) → (τ ⟷ τ)
-compose ℕ.zero p = id⟷
-compose (ℕ.suc k) p = p ◎ compose k p 
-
-compose+ : {τ : U} {p : τ ⟷ τ} →
-         (k₁ k₂ : ℕ) → ((compose k₁ p) ◎ (compose k₂ p)) ⇔ compose (k₁ + k₂) p
-compose+ ℕ.zero k₂ = idl◎l
-compose+ (ℕ.suc k₁) k₂ = trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
-
 -- Perm p is the singleton type that only contains p. 
 
 Perm : {τ : U} → (p : τ ⟷ τ) → Set
@@ -757,11 +747,11 @@ singleton p = (p , id⇔)
 p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p/⇒C {τ} p = record {
      Obj = ⊤
-   ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p)) 
+   ; _⇒_ = λ _ _ → Σ[ k ∈ ℤ ] (Perm (compose k p)) 
    ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
-   ; id = (0 , singleton id⟷) 
+   ; id = (+ 0 , singleton id⟷) 
    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
-               (k₁ + k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+               (k₁ ℤ+ k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
    ; assoc = assoc◎l 
    ; identityˡ = idr◎l 
    ; identityʳ = idl◎l 
