@@ -708,8 +708,8 @@ compose -[1+ (suc k) ] p = ! p ◎ compose -[1+ k ] p
 
 compose+ : {τ : U} {p : τ ⟷ τ} →
          (k₁ k₂ : ℤ) → ((compose k₁ p) ◎ (compose k₂ p)) ⇔ compose (k₁ ℤ+ k₂) p
-compose+ {p = p} (+ 0) k₂ = {!!} -- idl◎l 
-compose+ (+ (suc k₁)) k₂ = {!!} -- trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
+compose+ {p = p} (+ 0) k₂ rewrite (identityˡ k₂) = idl◎l 
+compose+ (+ (suc k₁)) k₂ = trans⇔ assoc◎r {!!} -- (id⇔ ⊡ (compose+ (+ k₁) k₂))
 compose+ -[1+ 0 ] k₂ = {!!} 
 compose+ -[1+ (suc k) ] k₂ = {!!} 
 
