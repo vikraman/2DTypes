@@ -717,11 +717,11 @@ p⇒C {τ} p = record {
    ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , inj₁ a₂) (k₁ , inj₁ a₁) →
                  (k₁ + k₂ , inj₁ (repeat∘ {⟦ τ ⟧} {v₁} {v₂} {v₃} {k₁} {k₂} {ap p} a₁ a₂));
                {v₁} {v₂} {v₃} (k₂ , inj₂ a₂) (k₁ , inj₁ a₁) →
-                 ?;
+                 {!!};
                {v₁} {v₂} {v₃} (k₂ , inj₁ a₂) (k₁ , inj₂ a₁) →
-                 ?;
+                 {!!};
                {v₁} {v₂} {v₃} (k₂ , inj₂ a₂) (k₁ , inj₂ a₁) →
-                 ?}
+                 {!!}}
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
