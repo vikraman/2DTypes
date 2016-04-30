@@ -58,20 +58,20 @@ open import Algebra
 open import Algebra.Structures
 import Algebra.FunctionProperties
 open import Data.Empty
-open import Data.Unit hiding (_≤_)
+open import Data.Unit hiding (_≤_; _≤?_)
 open import Data.Integer using (ℤ; +_; -[1+_]) renaming (_+_ to _ℤ+_)
 open import Data.Nat.Properties
 open import Data.Fin using (Fin; zero; suc; inject+; raise; inject≤; toℕ; fromℕ)
   renaming (_+_ to _F+_)
-open import Data.Fin.Properties
+open import Data.Fin.Properties hiding (reverse)
 open import Data.Sum hiding (map)
 open import Data.Bool
 open import Data.Product hiding (map)
-open import Data.Vec
+open import Data.Vec hiding (reverse)
 open import Data.Nat hiding (_⊔_)
 open import Data.Integer using (+_) 
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
-  hiding (_≤_)
+  hiding (_≤_; _≤?_)
 import Relation.Binary.PropositionalEquality as P
 open import Categories.Category
 open import Categories.Groupoid
@@ -696,31 +696,40 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 \begin{code}
 -- Permutation to groupoid
 
-identityˡ : LeftIdentity (+ 0) _ℤ+_
-identityˡ -[1+ _ ] = P.refl
-identityˡ (+   _ ) = P.refl
+compose : {τ : U} → (k : ℕ) → (p : τ ⟷ τ) → (τ ⟷ τ)
+compose 0 p = id⟷
+compose (suc k) p = p ◎ compose k p 
 
-compose : {τ : U} → (k : ℤ) → (p : τ ⟷ τ) → (τ ⟷ τ)
-compose (+ 0) p = id⟷
-compose (+ (suc k)) p = p ◎ compose (+ k) p 
-compose -[1+ 0 ] p = ! p
-compose -[1+ (suc k) ] p = ! p ◎ compose -[1+ k ] p 
+compose+ : {τ : U} {p : τ ⟷ τ} → (k₁ k₂ : ℕ) →
+           (compose k₁ p ◎ compose k₂ p) ⇔ compose (k₁ + k₂) p
+compose+ {p = p} 0 k₂ = idl◎l 
+compose+ (suc k₁) k₂ = trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
 
-compose+ : {τ : U} {p : τ ⟷ τ} →
-         (k₁ k₂ : ℤ) → ((compose k₁ p) ◎ (compose k₂ p)) ⇔ compose (k₁ ℤ+ k₂) p
-compose+ {p = p} (+ 0) k₂ rewrite (identityˡ k₂) = idl◎l 
-compose+ (+ (suc k₁)) k₂ = trans⇔ assoc◎r {!!} -- (id⇔ ⊡ (compose+ (+ k₁) k₂))
-compose+ -[1+ 0 ] k₂ = {!!} 
-compose+ -[1+ (suc k) ] k₂ = {!!} 
+compose≡ : {τ : U} {v₁ v₂ v₃ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k₁ k₂ : ℕ)
+  (a₁ : ap (compose k₁ p) v₁ P.≡ v₂ × ap (compose k₁ (! p)) v₁ P.≡ v₂) →
+  (a₂ : ap (compose k₂ p) v₂ P.≡ v₃ × ap (compose k₂ (! p)) v₂ P.≡ v₃) →
+  Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₃ × ap (compose k (! p)) v₁ P.≡ v₃)
+compose≡ k₁ k₂ a₁ a₂ = {!!}                       
+
+reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
+          ap (compose k p) v₁ P.≡ v₂ →
+          ap (compose k (! p)) v₂ P.≡ v₁
+reverse = {!!}           
+
+-- Notice that we are using the trivial relation on morphisms which
+-- means we are not taking the group structure of the permutation into
+-- account. This is however the sensible thing to do if we have
+-- 1-groupoids.
 
 p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p⇒C {τ} p = record {
      Obj = ⟦ τ ⟧ 
-   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℤ ] ap (compose k p) v₁ P.≡ v₂
+   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₂ × 
+                                 ap (compose k (! p)) v₁ P.≡ v₂)
    ; _≡_ = λ _ _ → ⊤
-   ; id = (+ 0 , P.refl) 
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → {!!} }
---                 (k₁ + k₂ , (repeat∘ {⟦ τ ⟧} {v₁} {v₂} {v₃} {k₁} {k₂} {ap p} a₁ a₂));
+   ; id = (0 , (P.refl , P.refl))
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) →
+             compose≡ {τ} {v₁} {v₂} {v₃} {p} k₁ k₂ a₁ a₂ }
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
@@ -730,7 +739,7 @@ p⇒C {τ} p = record {
 
 p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
 p⇒G {τ} p = record
-  { _⁻¹ = λ { {v₁} {v₂} (k , a) → (k , {!!})} 
+  { _⁻¹ = λ { {v₁} {v₂} (k , (a₁ , a₂)) → (k , {!!} , reverse k a₁)}
   ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
   }
 
@@ -747,11 +756,11 @@ singleton p = (p , id⇔)
 p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p/⇒C {τ} p = record {
      Obj = ⊤
-   ; _⇒_ = λ _ _ → Σ[ k ∈ ℤ ] (Perm (compose k p)) 
+   ; _⇒_ = λ _ _ → {!!} -- Σ[ k ∈ ℤ ] (Perm (compose k p)) 
    ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
    ; id = (+ 0 , singleton id⟷) 
    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
-               (k₁ ℤ+ k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+               (k₁ ℤ+ k₂ , {!!})} -- (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
    ; assoc = assoc◎l 
    ; identityˡ = idr◎l 
    ; identityʳ = idl◎l 
