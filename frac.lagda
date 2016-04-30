@@ -709,11 +709,19 @@ repeat∘ {z = z} {k₁ = k₁} {k₂ = k₂} {f = f} a₁ a₂ =
 p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p⇒C {τ} p = record {
      Obj = ⟦ τ ⟧ 
-   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] repeat k (ap p) v₁ P.≡ v₂ 
+   ; _⇒_ = λ v₁ v₂ →
+             Σ[ k ∈ ℕ ]
+             (repeat k (ap p) v₁ P.≡ v₂ ⊎ repeat (ℕ.suc k) (ap (! p)) v₁ P.≡ v₂)
    ; _≡_ = λ _ _ → ⊤
-   ; id = (0 , P.refl) 
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) →
-             (k₁ + k₂ , repeat∘ {⟦ τ ⟧} {v₁} {v₂} {v₃} {k₁} {k₂} {ap p} a₁ a₂)} 
+   ; id = (0 , inj₁ P.refl) 
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , inj₁ a₂) (k₁ , inj₁ a₁) →
+                 (k₁ + k₂ , inj₁ (repeat∘ {⟦ τ ⟧} {v₁} {v₂} {v₃} {k₁} {k₂} {ap p} a₁ a₂));
+               {v₁} {v₂} {v₃} (k₂ , inj₂ a₂) (k₁ , inj₁ a₁) →
+                 ?;
+               {v₁} {v₂} {v₃} (k₂ , inj₁ a₂) (k₁ , inj₂ a₁) →
+                 ?;
+               {v₁} {v₂} {v₃} (k₂ , inj₂ a₂) (k₁ , inj₂ a₁) →
+                 ?}
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
@@ -723,7 +731,7 @@ p⇒C {τ} p = record {
 
 p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
 p⇒G {τ} p = record
-  { _⁻¹ = λ { {v₁} {v₂} (k , a) → (k , {!!})} -- have a  : repeat k (ap p) v₁ = v₂; want: repeat k (ap p) v₂ = v₁
+  { _⁻¹ = λ { {v₁} {v₂} (k , a) → (k , {!!})} 
   ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
   }
 
@@ -753,7 +761,7 @@ p/⇒C {τ} p = record {
    ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
    ; id = (0 , singleton id⟷) 
    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
-               (k₁ + k₂ ,  (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+               (k₁ + k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
    ; assoc = assoc◎l 
    ; identityˡ = idr◎l 
    ; identityʳ = idl◎l 
