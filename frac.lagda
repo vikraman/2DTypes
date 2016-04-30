@@ -694,7 +694,7 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 \section{Permutations are Types}
 
 \begin{code}
--- Permutation to groupoid
+-- Permutation to "poset-style" groupoid
 
 compose : {τ : U} → (k : ℕ) → (p : τ ⟷ τ) → (τ ⟷ τ)
 compose 0 p = id⟷
@@ -705,16 +705,32 @@ compose+ : {τ : U} {p : τ ⟷ τ} → (k₁ k₂ : ℕ) →
 compose+ {p = p} 0 k₂ = idl◎l 
 compose+ (suc k₁) k₂ = trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
 
+composeAssoc : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
+               p ◎ compose k p ⇔ compose k p ◎ p
+composeAssoc ℕ.zero = trans⇔ idr◎l idl◎r
+composeAssoc (ℕ.suc k) = trans⇔ (id⇔ ⊡ (composeAssoc k)) assoc◎l                
+
+reverse◎ : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
+           ! (compose k p) ⇔ compose k (! p)
+reverse◎ ℕ.zero = id⇔ 
+reverse◎ {p = p} (ℕ.suc k) =
+  trans⇔ (reverse◎ k ⊡ id⇔ ) (2! (composeAssoc {p = ! p} k))
+
+postulate
+  ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ P.≡ v₂) → (ap (! p) v₂ P.≡ v₁)
+  ap∼ : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} → (p₁ ⇔ p₂) → ap p₁ v P.≡ ap p₂ v
+
+reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
+          ap (compose k p) v₁ P.≡ v₂ →
+          ap (compose k (! p)) v₂ P.≡ v₁
+reverse {τ} {v₁} {v₂} {p} k pkv₁≡v₂ =
+  P.trans (ap∼ (2! (reverse◎ k))) (ap!≡ {τ} {v₁} {v₂} {compose k p} pkv₁≡v₂) 
+
 compose≡ : {τ : U} {v₁ v₂ v₃ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k₁ k₂ : ℕ)
   (a₁ : ap (compose k₁ p) v₁ P.≡ v₂ × ap (compose k₁ (! p)) v₁ P.≡ v₂) →
   (a₂ : ap (compose k₂ p) v₂ P.≡ v₃ × ap (compose k₂ (! p)) v₂ P.≡ v₃) →
   Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₃ × ap (compose k (! p)) v₁ P.≡ v₃)
 compose≡ k₁ k₂ a₁ a₂ = {!!}                       
-
-reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
-          ap (compose k p) v₁ P.≡ v₂ →
-          ap (compose k (! p)) v₂ P.≡ v₁
-reverse = {!!}           
 
 -- Notice that we are using the trivial relation on morphisms which
 -- means we are not taking the group structure of the permutation into
@@ -743,7 +759,7 @@ p⇒G {τ} p = record
   ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
   }
 
--- The other way of getting a groupoid from a permutation
+-- Permutation to "monoid-style" groupoid
 
 -- Perm p is the singleton type that only contains p. 
 
