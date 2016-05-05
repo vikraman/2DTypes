@@ -72,6 +72,7 @@ open import Data.Nat hiding (_⊔_)
 open import Data.Integer using (+_) 
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
+open import Relation.Nullary
 import Relation.Binary.PropositionalEquality as P
 open import Categories.Category
 open import Categories.Groupoid
@@ -716,9 +717,10 @@ reverse◎ ℕ.zero = id⇔
 reverse◎ {p = p} (ℕ.suc k) =
   trans⇔ (reverse◎ k ⊡ id⇔ ) (2! (composeAssoc {p = ! p} k))
 
-postulate
+postulate -- available in pi-dual; waiting for fork
   ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ P.≡ v₂) → (ap (! p) v₂ P.≡ v₁)
-  ap∼ : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} → (p₁ ⇔ p₂) → ap p₁ v P.≡ ap p₂ v
+  ap∼  : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} → (p₁ ⇔ p₂) → ap p₁ v P.≡ ap p₂ v
+  !!   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) P.≡ c
 
 reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
           ap (compose k p) v₁ P.≡ v₂ →
@@ -730,7 +732,9 @@ compose≡ : {τ : U} {v₁ v₂ v₃ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k₁ k�
   (a₁ : ap (compose k₁ p) v₁ P.≡ v₂ × ap (compose k₁ (! p)) v₁ P.≡ v₂) →
   (a₂ : ap (compose k₂ p) v₂ P.≡ v₃ × ap (compose k₂ (! p)) v₂ P.≡ v₃) →
   Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₃ × ap (compose k (! p)) v₁ P.≡ v₃)
-compose≡ k₁ k₂ a₁ a₂ = {!!}                       
+compose≡ k₁ k₂ a₁ a₂ with k₁ ≤? k₂
+... | yes k₁≤k₂ = ((k₂ ∸ k₁) , {!!})
+... | no k₁>k₂ = (k₁ ∸ k₂ , {!!})
 
 -- Notice that we are using the trivial relation on morphisms which
 -- means we are not taking the group structure of the permutation into
@@ -755,8 +759,14 @@ p⇒C {τ} p = record {
 
 p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
 p⇒G {τ} p = record
-  { _⁻¹ = λ { {v₁} {v₂} (k , (a₁ , a₂)) → (k , {!!} , reverse k a₁)}
-  ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
+  { _⁻¹ =
+    λ { {v₁} {v₂} (k , (a₁ , a₂)) →
+        (k , (P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k a₂) ,
+              reverse k a₁))}
+  ; iso = record {
+    isoˡ = tt;
+    isoʳ = tt
+    }
   }
 
 -- Permutation to "monoid-style" groupoid
@@ -772,11 +782,11 @@ singleton p = (p , id⇔)
 p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p/⇒C {τ} p = record {
      Obj = ⊤
-   ; _⇒_ = λ _ _ → {!!} -- Σ[ k ∈ ℤ ] (Perm (compose k p)) 
-   ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
-   ; id = (+ 0 , singleton id⟷) 
+   ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] ((Perm (compose k p)) × (Perm (compose k (! p))))
+   ; _≡_ = {!!} -- λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
+   ; id = (0 , (singleton id⟷ , singleton id⟷)) 
    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
-               (k₁ ℤ+ k₂ , {!!})} -- (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+               {!!}} -- (k₁ + k₂ , {!!})} -- (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
    ; assoc = assoc◎l 
    ; identityˡ = idr◎l 
    ; identityʳ = idl◎l 
@@ -786,7 +796,7 @@ p/⇒C {τ} p = record {
 
 p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p/⇒C p)
 p/⇒G {τ} p = record
-  { _⁻¹ = {!!}
+  { _⁻¹ = λ {(k , (fwd , bwd)) → (k , (fwd , bwd))}
   ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
   }
 
