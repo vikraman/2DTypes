@@ -53,7 +53,7 @@
 {-# OPTIONS --without-K #-}
 
 module frac where
-open import Level renaming (zero to lzero; suc to lsuc) 
+open import Level using () renaming (zero to lzero)
 open import Algebra
 open import Algebra.Structures
 import Algebra.FunctionProperties
@@ -61,8 +61,8 @@ open import Data.Empty
 open import Data.Unit hiding (_≤_; _≤?_)
 open import Data.Integer using (ℤ; +_; -[1+_]) renaming (_+_ to _ℤ+_)
 open import Data.Nat.Properties
-open import Data.Fin using (Fin; zero; suc; inject+; raise; inject≤; toℕ; fromℕ)
-  renaming (_+_ to _F+_)
+open import Data.Fin using (Fin; inject+; raise; inject≤; toℕ; fromℕ)
+  renaming (zero to fzero; suc to fsuc; _+_ to _f+_)
 open import Data.Fin.Properties hiding (reverse)
 open import Data.Sum hiding (map)
 open import Data.Bool
@@ -78,7 +78,6 @@ open import Categories.Category
 open import Categories.Groupoid
 open import Relation.Binary.Core using (Rel; IsEquivalence)
 
-open import Level
 open import Categories.Category 
 import Categories.Morphisms
 open import Relation.Binary
@@ -719,11 +718,11 @@ composeAssoc (ℕ.suc k) = trans⇔ (id⇔ ⊡ (composeAssoc k)) assoc◎l
 compose≡ : {τ : U} {v₁ v₂ v₃ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k₁ k₂ : ℕ)
   (a₁ : ap (compose k₁ p) v₁ P.≡ v₂) → 
   (a₂ : ap (compose k₂ p) v₂ P.≡ v₃) → 
-  Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₃)
+  (ap (compose (k₁ + k₂) p) v₁ P.≡ v₃)
 compose≡ {p = p} k₁ k₂ a₁ a₂ =
-  (k₁ + k₂ , (P.trans
-               (ap∼ (2! (compose+ k₁ k₂)))
-               (P.trans (P.cong (λ h → ap (compose k₂ p) h) a₁) a₂)))
+  (P.trans
+    (ap∼ (2! (compose+ k₁ k₂)))
+    (P.trans (P.cong (λ h → ap (compose k₂ p) h) a₁) a₂))
 
 -- Notice that we are using the trivial relation on morphisms which
 -- means we are not taking the group structure of the permutation into
@@ -736,7 +735,7 @@ p⇒C {τ} p = record {
    ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₂)
    ; _≡_ = λ _ _ → ⊤
    ; id = (0 , P.refl)
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → compose≡ k₁ k₂ a₁ a₂ }
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
@@ -750,7 +749,45 @@ p⇒C {τ} p = record {
    ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k (! p)) v₁ P.≡ v₂)
    ; _≡_ = λ _ _ → ⊤
    ; id = (0 , P.refl)
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → compose≡ k₁ k₂ a₁ a₂ }
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
+   ; assoc = tt 
+   ; identityˡ = tt 
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
+   ; ∘-resp-≡ = λ _ _ → tt 
+   }
+
+-- need to combine the above two categories to make a groupoid; something like that:
+
+p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p!p⇒C {τ} p = record {
+     Obj = ⟦ τ ⟧ 
+   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] ((ap (compose k p) v₁ P.≡ v₂) × (ap (compose k (! p)) v₁ P.≡ v₂))
+   ; _≡_ = λ _ _ → ⊤
+   ; id = (0 , (P.refl , P.refl))
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → {!!} }
+   ; assoc = tt 
+   ; identityˡ = tt 
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
+   ; ∘-resp-≡ = λ _ _ → tt 
+   }
+
+
+-- also need to internalize that (compose p k) ⇔ id⟷ where k is the order of the permutation p;
+-- perhaps by chaning objects to the (value, length of orbit from that value)
+
+composeF : {τ : U} {o : ℕ} → (k : Fin o) → (p : τ ⟷ τ) → (τ ⟷ τ)
+composeF fzero p = id⟷
+composeF (fsuc k) p = p ◎ composeF k p 
+
+p⇒OC : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p⇒OC {τ} p = record {
+     Obj = (⟦ τ ⟧ × ℕ)
+   ; _⇒_ = λ { (v₁ , o₁) (v₂ , o₂) → o₁ P.≡ o₂ × Σ[ k ∈ Fin (suc o₁) ] (ap (composeF k p) v₁ P.≡ v₂) }
+   ; _≡_ = λ _ _ → ⊤
+   ; id = (P.refl , (fzero , P.refl))
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → {!!} } -- (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
