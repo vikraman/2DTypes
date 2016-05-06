@@ -695,6 +695,11 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 \section{Permutations are Types}
 
 \begin{code}
+postulate -- available in pi-dual; waiting for fork
+  ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ P.≡ v₂) → (ap (! p) v₂ P.≡ v₁)
+  ap∼  : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} → (p₁ ⇔ p₂) → ap p₁ v P.≡ ap p₂ v
+  !!   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) P.≡ c
+
 -- Permutation to "poset-style" groupoid
 
 compose : {τ : U} → (k : ℕ) → (p : τ ⟷ τ) → (τ ⟷ τ)
@@ -711,30 +716,14 @@ composeAssoc : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
 composeAssoc ℕ.zero = trans⇔ idr◎l idl◎r
 composeAssoc (ℕ.suc k) = trans⇔ (id⇔ ⊡ (composeAssoc k)) assoc◎l                
 
-reverse◎ : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
-           ! (compose k p) ⇔ compose k (! p)
-reverse◎ ℕ.zero = id⇔ 
-reverse◎ {p = p} (ℕ.suc k) =
-  trans⇔ (reverse◎ k ⊡ id⇔ ) (2! (composeAssoc {p = ! p} k))
-
-postulate -- available in pi-dual; waiting for fork
-  ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ P.≡ v₂) → (ap (! p) v₂ P.≡ v₁)
-  ap∼  : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} → (p₁ ⇔ p₂) → ap p₁ v P.≡ ap p₂ v
-  !!   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) P.≡ c
-
-reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
-          ap (compose k p) v₁ P.≡ v₂ →
-          ap (compose k (! p)) v₂ P.≡ v₁
-reverse {τ} {v₁} {v₂} {p} k pkv₁≡v₂ =
-  P.trans (ap∼ (2! (reverse◎ k))) (ap!≡ {τ} {v₁} {v₂} {compose k p} pkv₁≡v₂) 
-
 compose≡ : {τ : U} {v₁ v₂ v₃ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k₁ k₂ : ℕ)
-  (a₁ : ap (compose k₁ p) v₁ P.≡ v₂ × ap (compose k₁ (! p)) v₁ P.≡ v₂) →
-  (a₂ : ap (compose k₂ p) v₂ P.≡ v₃ × ap (compose k₂ (! p)) v₂ P.≡ v₃) →
-  Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₃ × ap (compose k (! p)) v₁ P.≡ v₃)
-compose≡ k₁ k₂ a₁ a₂ with k₁ ≤? k₂
-... | yes k₁≤k₂ = ((k₂ ∸ k₁) , {!!})
-... | no k₁>k₂ = (k₁ ∸ k₂ , {!!})
+  (a₁ : ap (compose k₁ p) v₁ P.≡ v₂) → 
+  (a₂ : ap (compose k₂ p) v₂ P.≡ v₃) → 
+  Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₃)
+compose≡ {p = p} k₁ k₂ a₁ a₂ =
+  (k₁ + k₂ , (P.trans
+               (ap∼ (2! (compose+ k₁ k₂)))
+               (P.trans (P.cong (λ h → ap (compose k₂ p) h) a₁) a₂)))
 
 -- Notice that we are using the trivial relation on morphisms which
 -- means we are not taking the group structure of the permutation into
@@ -744,12 +733,10 @@ compose≡ k₁ k₂ a₁ a₂ with k₁ ≤? k₂
 p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p⇒C {τ} p = record {
      Obj = ⟦ τ ⟧ 
-   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₂ × 
-                                 ap (compose k (! p)) v₁ P.≡ v₂)
+   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₂)
    ; _≡_ = λ _ _ → ⊤
-   ; id = (0 , (P.refl , P.refl))
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) →
-             compose≡ {τ} {v₁} {v₂} {v₃} {p} k₁ k₂ a₁ a₂ }
+   ; id = (0 , P.refl)
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → compose≡ k₁ k₂ a₁ a₂ }
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
@@ -757,17 +744,49 @@ p⇒C {τ} p = record {
    ; ∘-resp-≡ = λ _ _ → tt 
    }
 
-p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
-p⇒G {τ} p = record
-  { _⁻¹ =
-    λ { {v₁} {v₂} (k , (a₁ , a₂)) →
-        (k , (P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k a₂) ,
-              reverse k a₁))}
-  ; iso = record {
-    isoˡ = tt;
-    isoʳ = tt
-    }
-  }
+!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+!p⇒C {τ} p = record {
+     Obj = ⟦ τ ⟧ 
+   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k (! p)) v₁ P.≡ v₂)
+   ; _≡_ = λ _ _ → ⊤
+   ; id = (0 , P.refl)
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → compose≡ k₁ k₂ a₁ a₂ }
+   ; assoc = tt 
+   ; identityˡ = tt 
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
+   ; ∘-resp-≡ = λ _ _ → tt 
+   }
+
+--
+-- -->HERE!!!<--
+--
+-- Now build a category whose morphisms are either the ones in p⇒C or !p⇒C
+-- and show it is a groupoid
+
+reverse◎ : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
+           ! (compose k p) ⇔ compose k (! p)
+reverse◎ ℕ.zero = id⇔ 
+reverse◎ {p = p} (ℕ.suc k) =
+  trans⇔ (reverse◎ k ⊡ id⇔ ) (2! (composeAssoc {p = ! p} k))
+
+reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
+          ap (compose k p) v₁ P.≡ v₂ →
+          ap (compose k (! p)) v₂ P.≡ v₁
+reverse {τ} {v₁} {v₂} {p} k pkv₁≡v₂ =
+  P.trans (ap∼ (2! (reverse◎ k))) (ap!≡ {τ} {v₁} {v₂} {compose k p} pkv₁≡v₂) 
+
+-- p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
+-- p⇒G {τ} p = record
+--   { _⁻¹ =
+--     λ { {v₁} {v₂} (k , (a₁ , a₂)) →
+--         (k , (P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k a₂) ,
+--               reverse k a₁))}
+--   ; iso = record {
+--     isoˡ = tt;
+--     isoʳ = tt
+--     }
+--   }
 
 -- Permutation to "monoid-style" groupoid
 
