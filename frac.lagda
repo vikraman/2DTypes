@@ -47,6 +47,7 @@
 \DeclareUnicodeCharacter{737}{${}^{l}$}
 \DeclareUnicodeCharacter{931}{$\Sigma$}
 \DeclareUnicodeCharacter{8718}{$\qed$}
+\DeclareUnicodeCharacter{7503}{${}^k$}
 
 \AgdaHide{
 \begin{code}
@@ -717,15 +718,14 @@ compose≡ {p = p} k₁ k₂ a₁ a₂ =
     (ap∼ (2! (compose+ k₁ k₂)))
     (P.trans (P.cong (λ h → ap (compose k₂ p) h) a₁) a₂))
 
--- Notice that we are using the trivial relation on morphisms which
--- means we are not taking the group structure of the permutation into
--- account.
+-- We are using the trivial relation on morphisms but we still take
+-- the group structure of the permutation into account as we have that
+-- for any p, there exist j and k such that pʲ ◎ !pᵏ is id
 --
--- The alternative would be to use pointed 1-combinators •[ τ₁ , v₁ ]
--- ⟷ •[ τ₂ , v₂ ] and use a version of ⇔ to equate pointed
--- 1-combinators.  This assumes that the level 2 combinators ⇔ are
--- rich enough to prove that for a permutation p of order k, we have
--- compose k p ⇔ p
+-- We could consider using pointed 1-combinators •[ τ₁ , v₁ ] ⟷ •[ τ₂
+-- , v₂ ] and use a version of ⇔ to equate pointed 1-combinators.
+-- This assumes that the level 2 combinators ⇔ are rich enough to
+-- prove that for a permutation p of order k, we have compose k p ⇔ p
 
 p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p⇒C {τ} p = record {
@@ -772,6 +772,9 @@ p⇒C {τ} p = record {
 -- 4 -> 3             4 -> 1
 
 -- there is a morphism 1 -> 2 using (compose p 1) and (compose !p 3)
+-- p¹ is the same as !p³
+-- p² is the same as !p²
+-- p³ is the same as !p¹
 
 p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p!p⇒C {τ} p = record {
@@ -876,11 +879,18 @@ p!p/⇒C {τ} p = record {
     ; ∘-resp-≡ = λ { (ff , fb) (gf , gb) → gf ⊡ ff , gb ⊡ fb } 
     }
 
+postulate
+  ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (α : p ⇔ q) → (! p ⇔ ! q)
+  !!⇔ : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₂} → (! (! p) ⇔ p)
+
 p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
 p/⇒G {τ} p = record
   { _⁻¹ = λ {((j , (pj , α)) , (k , (pk , β))) →
-          ((k , {!!}) , (j , {!!}))}
-  ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
+             ((k , (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) )) ,
+              (j , (! pj , trans⇔ (⇔! α) (reverse◎ j))))}
+  ; iso = λ { {f = ((j , (pj , α)) , (k , (pk , β)))} → record {
+            isoˡ = ({!!} , {!!}); 
+            isoʳ = ({!!} , {!!})}}
   }
 
 \end{code}
