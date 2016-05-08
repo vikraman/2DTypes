@@ -843,16 +843,15 @@ p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p/⇒C {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p))
-    ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → compose k₁ p₁ ⇔ compose k₂ p₂} 
+    ; _≡_ = λ { (k₁ , (pk₁ , α₁)) (k₂ , (pk₂ , α₂)) → pk₁ ⇔ pk₂} 
     ; id = (0 , singleton id⟷)
-    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
-                (k₁ + k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
-    ; assoc = {!!} -- assoc◎l 
-    ; identityˡ = λ { {_} {_} {(k , (p , α))} → {!!} } -- idr◎l
-    -- compose (k + 0) p ⇔ compose k p
-    ; identityʳ = λ { {_} {_} {(k , (pk , α))} → {!!} } -- idl◎l 
+    ; _∘_ = λ { (k₂ , (pk₂ , α₂)) (k₁ , (pk₁ , α₁)) →
+                (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+    ; assoc = assoc◎l 
+    ; identityˡ = idr◎l 
+    ; identityʳ = idl◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = {!!} -- λ f g → g ⊡ f 
+    ; ∘-resp-≡ = λ α β → β ⊡ α
     }
 
 -- Generalize to groupoid by allowing !p
@@ -862,38 +861,27 @@ p!p/⇒C {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] (Perm (compose j p))) ×
                     (Σ[ k ∈ ℕ ] (Perm (compose k (! p))))
-    ; _≡_ = λ { ((j₁ , (p₁ , α₁)) , (k₁ , (!p₁ , β₁))) ((j₂ , (p₂ , α₂)) , (k₂ , (!p₂ , β₂))) → 
-            (compose j₁ p₁ ⇔ compose j₂ p₂) × (compose k₁ !p₁ ⇔ compose k₂ !p₂)  }
---    ; _≡_ = {!!} -- λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
+    ; _≡_ = λ { ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) → 
+                (pj₁ ⇔ pj₂) × (pk₁ ⇔ pk₂) }
     ; id = ((0 , singleton id⟷) , (0 , singleton id⟷))
-    ; _∘_ = {!!} -- λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) → (k₁ + k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
-    ; assoc = {!!} -- assoc◎l 
-    ; identityˡ = {!!} -- idr◎l 
-    ; identityʳ = {!!} -- idl◎l 
-    ; equiv = {!!} -- record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = {!!} -- λ f g → g ⊡ f 
+    ; _∘_ = λ { ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) →
+                 ((j₁ + j₂ , (pj₁ ◎ pj₂ , trans⇔ (α₁ ⊡ α₂) (compose+ j₁ j₂))) ,
+                  (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (β₁ ⊡ β₂) (compose+ k₁ k₂)))) } 
+    ; assoc = (assoc◎l , assoc◎l)
+    ; identityˡ = (idr◎l , idr◎l)
+    ; identityʳ = (idl◎l , idl◎l)
+    ; equiv = record { refl = (id⇔ , id⇔);
+                       sym = λ { (α , β) → 2! α , 2! β};
+                       trans = λ { (α₁ , β₁) (α₂ , β₂) → trans⇔ α₁ α₂ , trans⇔ β₁ β₂ }}
+    ; ∘-resp-≡ = λ { (ff , fb) (gf , gb) → gf ⊡ ff , gb ⊡ fb } 
     }
 
--- p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
--- p/⇒C {τ} p = record {
---      Obj = ⊤
---    ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] ((Perm (compose k p)) × (Perm (compose k (! p))))
---    ; _≡_ = {!!} -- λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
---    ; id = (0 , (singleton id⟷ , singleton id⟷)) 
---    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
---                {!!}} -- (k₁ + k₂ , {!!})} -- (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
---    ; assoc = assoc◎l 
---    ; identityˡ = idr◎l 
---    ; identityʳ = idl◎l 
---    ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
---    ; ∘-resp-≡ = λ f g → g ⊡ f 
---    }
-
--- p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p/⇒C p)
--- p/⇒G {τ} p = record
---   { _⁻¹ = λ {(k , (fwd , bwd)) → (k , (fwd , bwd))}
---   ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
---   }
+p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
+p/⇒G {τ} p = record
+  { _⁻¹ = λ {((j , (pj , α)) , (k , (pk , β))) →
+          ((k , {!!}) , (j , {!!}))}
+  ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
+  }
 
 \end{code}
 
