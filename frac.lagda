@@ -847,11 +847,12 @@ p/⇒C {τ} p = record {
     ; id = (0 , singleton id⟷)
     ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
                 (k₁ + k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
-    ; assoc = ? -- assoc◎l 
-    ; identityˡ = ? -- idr◎l 
-    ; identityʳ = ? -- idl◎l 
+    ; assoc = {!!} -- assoc◎l 
+    ; identityˡ = λ { {_} {_} {(k , (p , α))} → {!!} } -- idr◎l
+    -- compose (k + 0) p ⇔ compose k p
+    ; identityʳ = λ { {_} {_} {(k , (pk , α))} → {!!} } -- idl◎l 
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = ? -- λ f g → g ⊡ f 
+    ; ∘-resp-≡ = {!!} -- λ f g → g ⊡ f 
     }
 
 -- Generalize to groupoid by allowing !p
