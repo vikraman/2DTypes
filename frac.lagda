@@ -695,9 +695,7 @@ ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
 
 \begin{code}
 postulate -- available in pi-dual; waiting for fork
-  ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ P.≡ v₂) → (ap (! p) v₂ P.≡ v₁)
   ap∼  : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} → (p₁ ⇔ p₂) → ap p₁ v P.≡ ap p₂ v
-  !!   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) P.≡ c
 
 -- Permutation to "poset-style" groupoid
 
@@ -710,11 +708,6 @@ compose+ : {τ : U} {p : τ ⟷ τ} → (k₁ k₂ : ℕ) →
 compose+ {p = p} 0 k₂ = idl◎l 
 compose+ (suc k₁) k₂ = trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
 
-composeAssoc : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
-               p ◎ compose k p ⇔ compose k p ◎ p
-composeAssoc ℕ.zero = trans⇔ idr◎l idl◎r
-composeAssoc (ℕ.suc k) = trans⇔ (id⇔ ⊡ (composeAssoc k)) assoc◎l                
-
 compose≡ : {τ : U} {v₁ v₂ v₃ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k₁ k₂ : ℕ)
   (a₁ : ap (compose k₁ p) v₁ P.≡ v₂) → 
   (a₂ : ap (compose k₂ p) v₂ P.≡ v₃) → 
@@ -726,8 +719,13 @@ compose≡ {p = p} k₁ k₂ a₁ a₂ =
 
 -- Notice that we are using the trivial relation on morphisms which
 -- means we are not taking the group structure of the permutation into
--- account. This is however the sensible thing to do if we have
--- 1-groupoids.
+-- account.
+--
+-- The alternative would be to use pointed 1-combinators •[ τ₁ , v₁ ]
+-- ⟷ •[ τ₂ , v₂ ] and use a version of ⇔ to equate pointed
+-- 1-combinators.  This assumes that the level 2 combinators ⇔ are
+-- rich enough to prove that for a permutation p of order k, we have
+-- compose k p ⇔ p
 
 p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p⇒C {τ} p = record {
@@ -743,29 +741,47 @@ p⇒C {τ} p = record {
    ; ∘-resp-≡ = λ _ _ → tt 
    }
 
-!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
-!p⇒C {τ} p = record {
-     Obj = ⟦ τ ⟧ 
-   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k (! p)) v₁ P.≡ v₂)
-   ; _≡_ = λ _ _ → ⊤
-   ; id = (0 , P.refl)
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
-   ; assoc = tt 
-   ; identityˡ = tt 
-   ; identityʳ = tt 
-   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
-   ; ∘-resp-≡ = λ _ _ → tt 
-   }
+-- To show that the resulting category is a groupoid, we need to allow
+-- the use of p and !p for every morphism
 
--- need to combine the above two categories to make a groupoid; something like that:
+-- Example
+-- p = (1 2 3 4)
+
+-- compose p 0 = compose !p 0 = compose p 4 = compose !p 4
+-- 1 -> 1
+-- 2 -> 2
+-- 3 -> 3
+-- 4 -> 4
+
+-- compose p 1        compose !p 1
+-- 1 -> 2             1 -> 4
+-- 2 -> 3             2 -> 1
+-- 3 -> 4             3 -> 2
+-- 4 -> 1             4 -> 3
+
+-- compose p 2        compose !p 2
+-- 1 -> 3             1 -> 3
+-- 2 -> 4             2 -> 4
+-- 3 -> 1             3 -> 1
+-- 4 -> 2             4 -> 2
+
+-- compose p 3        compose !p 3
+-- 1 -> 4             1 -> 2
+-- 2 -> 1             2 -> 3
+-- 3 -> 2             3 -> 4
+-- 4 -> 3             4 -> 1
+
+-- there is a morphism 1 -> 2 using (compose p 1) and (compose !p 3)
 
 p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p!p⇒C {τ} p = record {
      Obj = ⟦ τ ⟧ 
-   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] ((ap (compose k p) v₁ P.≡ v₂) × (ap (compose k (! p)) v₁ P.≡ v₂))
+   ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℕ ] (ap (compose j p) v₁ P.≡ v₂)) ×
+                     (Σ[ k ∈ ℕ ] (ap (compose k (! p)) v₁ P.≡ v₂))
    ; _≡_ = λ _ _ → ⊤
-   ; id = (0 , (P.refl , P.refl))
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → {!!} }
+   ; id = ((0 , P.refl) , (0 , P.refl))
+   ; _∘_ = λ { {v₁} {v₂} {v₃} ((j₂ , a₂₃) , (k₂ , b₂₃)) ((j₁ , a₁₂) , (k₁ , b₁₂)) →
+             ((j₁ + j₂ , compose≡ j₁ j₂ a₁₂ a₂₃) , (k₁ + k₂ , compose≡ k₁ k₂ b₁₂ b₂₃)) }
    ; assoc = tt 
    ; identityˡ = tt 
    ; identityʳ = tt 
@@ -773,33 +789,14 @@ p!p⇒C {τ} p = record {
    ; ∘-resp-≡ = λ _ _ → tt 
    }
 
+postulate -- available in pi-dual; waiting for fork
+  ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ P.≡ v₂) → (ap (! p) v₂ P.≡ v₁)
+  !!   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) P.≡ c
 
--- also need to internalize that (compose p k) ⇔ id⟷ where k is the order of the permutation p;
--- perhaps by chaning objects to the (value, length of orbit from that value)
-
-composeF : {τ : U} {o : ℕ} → (k : Fin o) → (p : τ ⟷ τ) → (τ ⟷ τ)
-composeF fzero p = id⟷
-composeF (fsuc k) p = p ◎ composeF k p 
-
-p⇒OC : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
-p⇒OC {τ} p = record {
-     Obj = (⟦ τ ⟧ × ℕ)
-   ; _⇒_ = λ { (v₁ , o₁) (v₂ , o₂) → o₁ P.≡ o₂ × Σ[ k ∈ Fin (suc o₁) ] (ap (composeF k p) v₁ P.≡ v₂) }
-   ; _≡_ = λ _ _ → ⊤
-   ; id = (P.refl , (fzero , P.refl))
-   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → {!!} } -- (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
-   ; assoc = tt 
-   ; identityˡ = tt 
-   ; identityʳ = tt 
-   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
-   ; ∘-resp-≡ = λ _ _ → tt 
-   }
-
---
--- -->HERE!!!<--
---
--- Now build a category whose morphisms are either the ones in p⇒C or !p⇒C
--- and show it is a groupoid
+composeAssoc : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
+               p ◎ compose k p ⇔ compose k p ◎ p
+composeAssoc ℕ.zero = trans⇔ idr◎l idl◎r
+composeAssoc (ℕ.suc k) = trans⇔ (id⇔ ⊡ (composeAssoc k)) assoc◎l                
 
 reverse◎ : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
            ! (compose k p) ⇔ compose k (! p)
@@ -813,18 +810,19 @@ reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
 reverse {τ} {v₁} {v₂} {p} k pkv₁≡v₂ =
   P.trans (ap∼ (2! (reverse◎ k))) (ap!≡ {τ} {v₁} {v₂} {compose k p} pkv₁≡v₂) 
 
--- p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p⇒C p)
--- p⇒G {τ} p = record
---   { _⁻¹ =
---     λ { {v₁} {v₂} (k , (a₁ , a₂)) →
---         (k , (P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k a₂) ,
---               reverse k a₁))}
---   ; iso = record {
---     isoˡ = tt;
---     isoʳ = tt
---     }
---   }
+p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p⇒C p)
+p⇒G {τ} p = record
+  { _⁻¹ =
+    λ { {v₁} {v₂} ((j , a) , (k , b)) →
+      (( k , P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k b) ) ,
+       (j , reverse j a)) } 
+  ; iso = record {
+    isoˡ = tt;
+    isoʳ = tt
+    }
+  }
 
+-----------  
 -- Permutation to "monoid-style" groupoid
 
 -- Perm p is the singleton type that only contains p. 
