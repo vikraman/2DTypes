@@ -825,7 +825,7 @@ p⇒G {τ} p = record
 -----------  
 -- Permutation to "monoid-style" groupoid
 
--- Perm p is the singleton type that only contains p. 
+-- Perm p is the singleton type that only contains p up to ⇔ 
 
 Perm : {τ : U} → (p : τ ⟷ τ) → Set
 Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
@@ -833,26 +833,66 @@ Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
 singleton : {τ : U} → (p : τ ⟷ τ) → Perm p
 singleton p = (p , id⇔)
 
+-- First convert p to a plain category and then generalize to
+-- groupoid. Note that because we are using ⇔ we can enforce that
+-- iterating p will eventually produce id⟷. In particular we equate
+-- two morphisms if composing one of them k₁ times is ⇔ to composing
+-- the other k₂ times.
+
 p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p/⇒C {τ} p = record {
      Obj = ⊤
-   ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] ((Perm (compose k p)) × (Perm (compose k (! p))))
-   ; _≡_ = {!!} -- λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
-   ; id = (0 , (singleton id⟷ , singleton id⟷)) 
-   ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
-               {!!}} -- (k₁ + k₂ , {!!})} -- (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
-   ; assoc = assoc◎l 
-   ; identityˡ = idr◎l 
-   ; identityʳ = idl◎l 
-   ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-   ; ∘-resp-≡ = λ f g → g ⊡ f 
-   }
+    ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p))
+    ; _≡_ = λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → compose k₁ p₁ ⇔ compose k₂ p₂} 
+    ; id = (0 , singleton id⟷)
+    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
+                (k₁ + k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+    ; assoc = ? -- assoc◎l 
+    ; identityˡ = ? -- idr◎l 
+    ; identityʳ = ? -- idl◎l 
+    ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
+    ; ∘-resp-≡ = ? -- λ f g → g ⊡ f 
+    }
 
-p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p/⇒C p)
-p/⇒G {τ} p = record
-  { _⁻¹ = λ {(k , (fwd , bwd)) → (k , (fwd , bwd))}
-  ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
-  }
+-- Generalize to groupoid by allowing !p
+
+p!p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p!p/⇒C {τ} p = record {
+     Obj = ⊤
+    ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] (Perm (compose j p))) ×
+                    (Σ[ k ∈ ℕ ] (Perm (compose k (! p))))
+    ; _≡_ = λ { ((j₁ , (p₁ , α₁)) , (k₁ , (!p₁ , β₁))) ((j₂ , (p₂ , α₂)) , (k₂ , (!p₂ , β₂))) → 
+            (compose j₁ p₁ ⇔ compose j₂ p₂) × (compose k₁ !p₁ ⇔ compose k₂ !p₂)  }
+--    ; _≡_ = {!!} -- λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
+    ; id = ((0 , singleton id⟷) , (0 , singleton id⟷))
+    ; _∘_ = {!!} -- λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) → (k₁ + k₂ , (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+    ; assoc = {!!} -- assoc◎l 
+    ; identityˡ = {!!} -- idr◎l 
+    ; identityʳ = {!!} -- idl◎l 
+    ; equiv = {!!} -- record { refl = id⇔; sym = 2!; trans = trans⇔ }
+    ; ∘-resp-≡ = {!!} -- λ f g → g ⊡ f 
+    }
+
+-- p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+-- p/⇒C {τ} p = record {
+--      Obj = ⊤
+--    ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] ((Perm (compose k p)) × (Perm (compose k (! p))))
+--    ; _≡_ = {!!} -- λ { (k₁ , (p₁ , α₁)) (k₂ , (p₂ , α₂)) → p₁ ⇔ p₂} 
+--    ; id = (0 , (singleton id⟷ , singleton id⟷)) 
+--    ; _∘_ = λ { (k₂ , (p₂ , α₂)) (k₁ , (p₁ , α₁)) →
+--                {!!}} -- (k₁ + k₂ , {!!})} -- (p₁ ◎ p₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+--    ; assoc = assoc◎l 
+--    ; identityˡ = idr◎l 
+--    ; identityʳ = idl◎l 
+--    ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
+--    ; ∘-resp-≡ = λ f g → g ⊡ f 
+--    }
+
+-- p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p/⇒C p)
+-- p/⇒G {τ} p = record
+--   { _⁻¹ = λ {(k , (fwd , bwd)) → (k , (fwd , bwd))}
+--   ; iso = record { isoˡ = {!!}; isoʳ = {!!}}
+--   }
 
 \end{code}
 
