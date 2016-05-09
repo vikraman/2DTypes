@@ -720,7 +720,9 @@ compose≡ {p = p} k₁ k₂ a₁ a₂ =
 
 -- We are using the trivial relation on morphisms but we still take
 -- the group structure of the permutation into account as we have that
--- for any p, there exist j and k such that pʲ ◎ !pᵏ is id
+-- for any p, there exist j and k such that pʲ ◎ !pᵏ is id. More
+-- explicitly by saying that all morphisms from v₁ to v₂ are equal we
+-- are saying that p^{k} is equal to p^{k+order}.
 --
 -- We could consider using pointed 1-combinators •[ τ₁ , v₁ ] ⟷ •[ τ₂
 -- , v₂ ] and use a version of ⇔ to equate pointed 1-combinators.
@@ -892,6 +894,10 @@ p/⇒G {τ} p = record
             isoˡ = ({!!} , {!!}); 
             isoʳ = ({!!} , {!!})}}
   }
+
+-- Now we are asking p^{j} ◎ p^{k} is id for arbitrary j and k which
+-- is clearly false. We need to encode that j + k is the order of the
+-- permutation somehow.
 
 \end{code}
 
