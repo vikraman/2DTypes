@@ -54,7 +54,7 @@
 {-# OPTIONS --without-K #-}
 
 module frac where
-open import Level using () renaming (zero to lzero)
+open import Level using (_⊔_) renaming (zero to lzero)
 open import Algebra
 open import Algebra.Structures
 import Algebra.FunctionProperties
@@ -901,8 +901,20 @@ p/⇒G {τ} p = record
 
 -- Sums and products of groupoids: should be in categories package
 
--- G+ : ∀ {l m o} {ℂ₁ ℂ₂ : Category l m o} → Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (ℂ₁ +++? ℂ₂)
--- G× : ∀ {l m o} {ℂ₁ ℂ₂ : Category l m o} → Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (ℂ₁ xxx? ℂ₂)
+open import Categories.Product
+
+-- does not seem that Categories package has coproducts????
+postulate
+  Sum : ∀ {o₁ ℓ₁ e₁ o₂ ℓ₂ e₂} → (ℂ₁ : Category o₁ ℓ₁ e₁) (ℂ₂ : Category o₂ ℓ₂ e₂) →
+     Category (o₁ ⊔ o₂) (ℓ₁ ⊔ ℓ₂) (e₁ ⊔ e₂)
+
+G+ : ∀ {o₁ ℓ₁ e₁ o₂ ℓ₂ e₂} {ℂ₁ : Category o₁ ℓ₁ e₁} {ℂ₂ : Category o₂ ℓ₂ e₂} →
+     Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (Sum ℂ₁ ℂ₂)
+G+ = {!!}
+
+G× : ∀ {o₁ ℓ₁ e₁ o₂ ℓ₂ e₂} {ℂ₁ : Category o₁ ℓ₁ e₁} {ℂ₂ : Category o₂ ℓ₂ e₂} →
+     Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (Product ℂ₁ ℂ₂)
+G× = {!!} 
 
 \end{code}
 
@@ -922,6 +934,20 @@ data U/ : Set where
 
 ⇑ : (τ : U) → U/
 ⇑ τ = T {τ} id⟷
+
+-- summary of conjectures:
+
+-- T p₁ ⊞ T p₂ = T (p₁ ⊕ p₂)
+-- 1/T p₁ ⊞ 1/T p₂ ≠ 1/T (p₁ ⊕ p₂)
+-- but 1/T p₁ ⊞ 1/T p₂ = (T p₂ ⊞ T p₁) ⊠ 1/T (p₁ ⊗ p₂)
+
+-- T p₁ ⊠ T p₂ ≠ T (p₁ ⊗ p₂)
+-- and this where we might need n-dimensional hupercubes
+-- 1/T p₁ ⊠ 1/T p₂ = 1/T (p₁ ⊗ p₂)
+
+-- T p ⊠ 1/T p = ⇑ ONE = T id⟷ = 1/T id⟷
+
+-- 
 
 BOOL : U
 BOOL = PLUS ONE ONE
