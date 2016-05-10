@@ -899,6 +899,11 @@ p/⇒G {τ} p = record
 -- is clearly false. We need to encode that j + k is the order of the
 -- permutation somehow.
 
+-- Sums and products of groupoids: should be in categories package
+
+-- G+ : ∀ {l m o} {ℂ₁ ℂ₂ : Category l m o} → Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (ℂ₁ +++? ℂ₂)
+-- G× : ∀ {l m o} {ℂ₁ ℂ₂ : Category l m o} → Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (ℂ₁ xxx? ℂ₂)
+
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -950,6 +955,11 @@ u₅ τ₁ τ₂ = ⇑ (PLUS τ₁ τ₂)
 u₆ τ₁ τ₂ = ⇑ τ₁ ⊞ ⇑ τ₂
 u₇ τ₁ τ₂ = ⇑ (TIMES τ₁ τ₂)
 u₈ τ₁ τ₂ = ⇑ τ₁ ⊠ ⇑ τ₂
+
+-- I do not expect
+-- T p₁ ⊠ T p₂ = T (p₁ ⊗ p₂)
+-- nor do I expect
+-- 1/T p₁ ⊞ 1/T p₂ = 1/T (p₁ ⊕ p₂)
 \end{code}
 
 
