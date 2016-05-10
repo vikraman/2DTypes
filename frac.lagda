@@ -908,11 +908,15 @@ We now have a new level of types
 
 \begin{code}
 data U/ : Set where
-  ⇑ : (τ : U) → U/
   T : {τ : U} → (p : τ ⟷ τ) → U/
   1/T : {τ : U} → (p : τ ⟷ τ) → U/
   _⊞_ : U/ → U/ → U/
   _⊠_ : U/ → U/ → U/
+
+-- we can lift a regular type in U to U/ by using the id⟷ permutation on it as a proxy
+
+⇑ : (τ : U) → U/
+⇑ τ = T {τ} id⟷
 
 BOOL : U
 BOOL = PLUS ONE ONE
@@ -932,13 +936,20 @@ P₅ = P₃ ◎ P₂ -- (3 1 | 2)
 P₆ = P₄ ◎ P₂ -- (3 2 | 1)
 
 -- conjecture that u₁, u₂, and u₃ should be equivalent
--- and that u₄ should be equivalent to ⇑ ONE
+-- that u₄ should be equivalent to ⇑ ONE
+-- that u₅ and u₆ are equivalent and 
+-- that u₇ and u₈ are equivalent 
 u₁ u₂ u₃ u₄ : U/
 u₁ = T P₃ ⊠ ⇑ BOOL
 u₂ = T (P₃ ⊕ P₃)
 u₃ = T P₃ ⊞ T P₃
 u₄ = T P₃ ⊠ 1/T P₃
-
+--
+u₅ u₆ u₇ u₈ : (τ₁ τ₂ : U) → U/ 
+u₅ τ₁ τ₂ = ⇑ (PLUS τ₁ τ₂)
+u₆ τ₁ τ₂ = ⇑ τ₁ ⊞ ⇑ τ₂
+u₇ τ₁ τ₂ = ⇑ (TIMES τ₁ τ₂)
+u₈ τ₁ τ₂ = ⇑ τ₁ ⊠ ⇑ τ₂
 \end{code}
 
 
