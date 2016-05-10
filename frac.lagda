@@ -66,7 +66,7 @@ open import Data.Fin using (Fin; inject+; raise; inject≤; toℕ; fromℕ)
   renaming (zero to fzero; suc to fsuc; _+_ to _f+_)
 open import Data.Fin.Properties hiding (reverse)
 open import Data.Sum hiding (map)
-open import Data.Bool
+open import Data.Bool hiding (T)
 open import Data.Product hiding (map)
 open import Data.Vec hiding (reverse)
 open import Data.Nat hiding (_⊔_)
@@ -900,6 +900,49 @@ p/⇒G {τ} p = record
 -- permutation somehow.
 
 \end{code}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Algebra}
+
+We now have a new level of types
+
+\begin{code}
+data U/ : Set where
+  ⇑ : (τ : U) → U/
+  T : {τ : U} → (p : τ ⟷ τ) → U/
+  1/T : {τ : U} → (p : τ ⟷ τ) → U/
+  _⊞_ : U/ → U/ → U/
+  _⊠_ : U/ → U/ → U/
+
+BOOL : U
+BOOL = PLUS ONE ONE
+
+NOT : BOOL ⟷ BOOL
+NOT = swap₊ 
+
+THREEL : U
+THREEL = PLUS BOOL ONE
+
+P₁ P₂ P₃ P₄ P₅ P₆ : THREEL ⟷ THREEL
+P₁ = id⟷ -- (1 2 | 3)
+P₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
+P₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
+P₄ = P₂ ◎ P₃ -- (2 3 | 1)
+P₅ = P₃ ◎ P₂ -- (3 1 | 2)
+P₆ = P₄ ◎ P₂ -- (3 2 | 1)
+
+-- conjecture that u₁, u₂, and u₃ should be equivalent
+-- and that u₄ should be equivalent to ⇑ ONE
+u₁ u₂ u₃ u₄ : U/
+u₁ = T P₃ ⊠ ⇑ BOOL
+u₂ = T (P₃ ⊕ P₃)
+u₃ = T P₃ ⊞ T P₃
+u₄ = T P₃ ⊠ 1/T P₃
+
+\end{code}
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
