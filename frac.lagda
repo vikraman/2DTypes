@@ -947,7 +947,25 @@ data U/ : Set where
 
 -- T p ⊠ 1/T p = ⇑ ONE = T id⟷ = 1/T id⟷
 
--- 
+-- The type T Bool has elements {false, true} and has paths:
+--   not⁰ : false = false
+--   not⁰ : true = true
+--   not¹ : false = true
+--   not¹ : true = false
+-- The type 1/T Bool has elements {*} and has paths:
+--   not⁰ : * = *
+--   not¹ : * = *
+-- and two paths
+--   α : not¹ ∘ not¹ = not⁰ 
+
+-- In HoTT having an equivalence not : Bool ≃ Bool does not give you
+-- the right to say there is a path between false and true. But here
+-- we can build a type corresponding to 'not' and INSIDE that type, it
+-- is safe to have false = true
+
+-- Regarding 1/T, how would you say in HoTT that we have an
+-- equivalence that when applied 12 times gives you back id? Here we
+-- have a natural way of saying that.
 
 BOOL : U
 BOOL = PLUS ONE ONE
