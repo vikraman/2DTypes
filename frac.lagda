@@ -957,6 +957,24 @@ data U/ : Set where
 -- 3. We can use the equation to express t1 as 3/t2
 -- which. Plausible?????
 
+-- More details: Say I have a type C and I want to operate on its
+-- values. Say I have two concurrent sites. I could define an iso
+-- between C and A x B and let one site process the A component and
+-- the second site process the B component. The total computational
+-- cost is A+B instead of A*B (modulo some overhead). This works like
+-- a charm is the size of C can be factored into the sizes of A and
+-- B. But what if the size of C is 17? Conventionally we are
+-- stuck. Here we can still split C into 17/5 and 5. One site
+-- processes 4 equivalence classes of elements and the other processes
+-- 5 at a computational cost of 9 (modulo the overhead of splitting
+-- and recombining). We can even go one step further in
+-- decentralization: we decide to split 17 using a parameteric 't'
+-- unknown at this point: so we would have 17/t and t. Now we have the
+-- two concurrent components of size 17/t and t and let's say that
+-- site 2 decides it has resources to process 4 elements so fixes t to
+-- be 4 by generating 1 => 4 * 1/4 and forcing t * 1/4 to be 1. Site 1
+-- now is forced to process 17/4 etc. 
+
 -- summary of conjectures:
 
 -- T p₁ ⊞ T p₂ = T (p₁ ⊕ p₂)
