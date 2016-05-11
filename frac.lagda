@@ -899,15 +899,6 @@ p/⇒G {τ} p = record
 -- is clearly false. We need to encode that j + k is the order of the
 -- permutation somehow.
 
--- Application: Say I have a type Bool × Bool × Bool of 3 bit
--- registers. Now say I want to the type of 'even' 3 bit numbers and
--- 'odd' 3 bits numbers. I cold write a permutation that has two
--- orbits: one that cycles through 000 -> 010 -> 0100 -> 0110 and the
--- other that cycles through 001 -> 011 -> 0101 -> 0111. If I then
--- take T of this permutation I will get the type with two clusters:
--- the even cluster and the odd cluster. Not sure how 1/T fits in the
--- picture...
-
 -- Sums and products of groupoids: should be in categories package
 
 open import Categories.Product
@@ -943,6 +934,22 @@ data U/ : Set where
 
 ⇑ : (τ : U) → U/
 ⇑ τ = T {τ} id⟷
+
+-- Application: Say I have a type Bool × Bool × Bool of 3 bit
+-- registers. Now say I want to the type of 'even' 3 bit numbers and
+-- 'odd' 3 bits numbers. I cold write a permutation (call it p) that
+-- has two orbits: one that cycles through 000 -> 010 -> 0100 -> 0110
+-- and the other that cycles through 001 -> 011 -> 0101 -> 0111. If I
+-- then take T of this permutation I will get the type with two
+-- clusters: the even cluster and the odd cluster. Now imagine I have
+-- another computation that over 3 bit numbers that adds 1 modulo 8. I
+-- can use to compute over T p and it would take evens to odds and
+-- vice versa.
+
+-- Conclusion: T p is really a conventional quotient type. We might
+-- want to use τ // p instead of T p
+
+-- Now what is 1/T p ??????
 
 -- summary of conjectures:
 
