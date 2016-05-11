@@ -949,7 +949,13 @@ data U/ : Set where
 -- Conclusion: T p is really a conventional quotient type. We might
 -- want to use τ // p instead of T p
 
--- Now what is 1/T p ??????
+-- More generally what we have is a way to define as solutions of some
+-- polynomials. Instead of defining types explicitly using 0, 1, +,
+-- and *, we can define the type t such that 2 * t = 7. That 't' will
+-- be the quotient of 7 by some permutation of order 2. We can also
+-- define types t1 and t2 that are related by the equation t1 * t2 =
+-- 3. We can use the equation to express t1 as 3/t2
+-- which. Plausible?????
 
 -- summary of conjectures:
 
