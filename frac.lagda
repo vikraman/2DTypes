@@ -119,19 +119,19 @@ parallel. We will do this even if $n$ is prime!
 We will use a running example in this section containing 7 values:
 \[
 C = \{
-\texttt{sunday}, \texttt{mon}, \texttt{tue},
+\texttt{sun}, \texttt{mon}, \texttt{tue},
 \texttt{wed}, \texttt{thu}, \texttt{fri},
 \texttt{sat} \} 
 \]
 
-\paragraph*{Part I. Decomposing and Recombining} We will decompose the
-type $C$ into the products of $A$ and $B$ where $A$ will have size
-$\frac{7}{3}$ and $B$ will have size 3. The first step will be to
-write a permutation $p$ on $C$ of order 3. For example:
+We will decompose the type $C$ into the products of $A$ and $B$ where
+$A$ will have size $2\frac{1}{3}$ and $B$ will have size 3. The first
+step will be to write a permutation $p$ on $C$ of order 3. For
+example:
 \[\begin{array}{rcl}
-p(\texttt{sunday}) &=& \texttt{mon} \\
+p(\texttt{sun}) &=& \texttt{mon} \\
 p(\texttt{mon}) &=& \texttt{tue} \\
-p(\texttt{tue}) &=& \texttt{sunday} \\
+p(\texttt{tue}) &=& \texttt{sun} \\
 p(\texttt{wed}) &=& \texttt{thu} \\
 p(\texttt{thu}) &=& \texttt{fri} \\
 p(\texttt{fri}) &=& \texttt{wed} \\
@@ -142,7 +142,7 @@ which we call $T p$ is depicted below:
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
   \draw (0,0) ellipse (8cm and 1.6cm);
-  \node[below] at (-6,0) {\texttt{sunday}};
+  \node[below] at (-6,0) {\texttt{sun}};
    \node[below] at (-4,0) {\texttt{mon}};
   \node[below] at (-2,0) {\texttt{tue}};
   \node[below] at (0,0) {\texttt{wed}};
@@ -177,7 +177,7 @@ The second which we call $1/T p$ is depicted below:
 The interesting property is that $T p \times 1/T p$ is equivalent $\ot$.
 
 Now we will take the type $C$ and map to $C \times \ot$ and then map
-$\ot$ to $T p \times 1/T p$. So to summarize:
+$\ot$ to $T p \times 1/T p$. To summarize:
 \[ C ≃  C \times \ot ≃ C \times (T p \times 1/T p) ≃ (C \times 1/T p) \times T p \]
 We have arrived at the following situation. Our type $C$ has been
 decomposed into the following product:
@@ -188,7 +188,7 @@ decomposed into the following product:
 \begin{minipage}{0.4\textwidth}
 \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
   \draw (0,0) ellipse (9cm and 6cm);
-  \node[below] (1) at (-6,0) {\texttt{sunday}};
+  \node[below] (1) at (-6,0) {\texttt{sun}};
    \node[below] (2) at (-4,0) {\texttt{mon}};
   \node[below] (3) at (-2,0) {\texttt{tue}};
   \node[below] (4) at (0,0) {\texttt{wed}};
@@ -238,7 +238,7 @@ $\times$
 \begin{minipage}{0.4\textwidth}
 \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
   \draw (0,0) ellipse (8cm and 1.6cm);
-  \node[below] at (-6,0) {\texttt{sunday}};
+  \node[below] at (-6,0) {\texttt{sun}};
    \node[below] at (-4,0) {\texttt{mon}};
   \node[below] at (-2,0) {\texttt{tue}};
   \node[below] at (0,0) {\texttt{wed}};
@@ -304,6 +304,8 @@ $\times$
 
 If we were to recombine the two types we would get:
 
+\medskip
+
 \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
   \draw (0,0) ellipse (12cm and 4cm);
 
@@ -338,7 +340,7 @@ If we were to recombine the two types we would get:
   \path (9) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (9);
 \end{tikzpicture}
 
-
+which is equivalent to $C$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}
