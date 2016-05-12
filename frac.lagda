@@ -1141,6 +1141,7 @@ p/⇒G {τ} p = record
 -- Sums and products of groupoids: should be in categories package
 
 open import Categories.Product
+import Categories.Morphisms as M
 
 -- does not seem that Categories package has coproducts????
 postulate
@@ -1149,11 +1150,17 @@ postulate
 
 G+ : ∀ {o₁ ℓ₁ e₁ o₂ ℓ₂ e₂} {ℂ₁ : Category o₁ ℓ₁ e₁} {ℂ₂ : Category o₂ ℓ₂ e₂} →
      Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (Sum ℂ₁ ℂ₂)
-G+ = {!!}
+G+ c₁ c₂ = {!!}
 
 G× : ∀ {o₁ ℓ₁ e₁ o₂ ℓ₂ e₂} {ℂ₁ : Category o₁ ℓ₁ e₁} {ℂ₂ : Category o₂ ℓ₂ e₂} →
      Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (Product ℂ₁ ℂ₂)
-G× = {!!} 
+G× c₁ c₂ = record
+         { _⁻¹ = λ {(x₁ , x₂) → Groupoid._⁻¹ c₁ x₁
+                              , Groupoid._⁻¹ c₂ x₂}
+         ; iso = record { isoˡ = M.Iso.isoˡ (Groupoid.iso c₁)
+                               , M.Iso.isoˡ (Groupoid.iso c₂)
+                        ; isoʳ = M.Iso.isoʳ (Groupoid.iso c₁)
+                               , M.Iso.isoʳ (Groupoid.iso c₂) } }
 
 \end{code}
 
