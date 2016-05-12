@@ -14,6 +14,9 @@
 \usepackage{amsmath}
 \usepackage{stmaryrd}
 \usepackage{mathrsfs}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{quotes}
 
 \newcommand{\alt}{~|~}
 \newcommand{\inl}[1]{\textsf{inl}(#1)}
@@ -100,6 +103,242 @@ open Algebra.FunctionProperties (P._≡_ {A = ℤ})
 \author{Everyone}
 \begin{document}
 \maketitle 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Speedup of $\sqrt{n}$}
+
+We have a type $C$ containing $n$ values and we want to operate on
+each value. We will split the type $C$ as the product of $A$ and $B$
+where the sizes of $A$ and $B$ are approximately $\sqrt{n}$ and we
+will operate on $A$ and $B$ independently and potentially in
+parallel. We will do this even if $n$ is prime!
+
+We will use a running example in this section containing 7 values:
+\[
+C = \{
+\texttt{sunday}, \texttt{mon}, \texttt{tue},
+\texttt{wed}, \texttt{thu}, \texttt{fri},
+\texttt{sat} \} 
+\]
+
+\paragraph*{Part I. Decomposing and Recombining} We will decompose the
+type $C$ into the products of $A$ and $B$ where $A$ will have size
+$\frac{7}{3}$ and $B$ will have size 3. The first step will be to
+write a permutation $p$ on $C$ of order 3. For example:
+\[\begin{array}{rcl}
+p(\texttt{sunday}) &=& \texttt{mon} \\
+p(\texttt{mon}) &=& \texttt{tue} \\
+p(\texttt{tue}) &=& \texttt{sunday} \\
+p(\texttt{wed}) &=& \texttt{thu} \\
+p(\texttt{thu}) &=& \texttt{fri} \\
+p(\texttt{fri}) &=& \texttt{wed} \\
+p(\texttt{sat}) &=& \texttt{sat}
+\end{array}\]
+The definition of $p$ will induce two types (groupoids). The first
+which we call $T p$ is depicted below:
+\begin{center}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
+  \draw (0,0) ellipse (8cm and 1.6cm);
+  \node[below] at (-6,0) {\texttt{sunday}};
+   \node[below] at (-4,0) {\texttt{mon}};
+  \node[below] at (-2,0) {\texttt{tue}};
+  \node[below] at (0,0) {\texttt{wed}};
+  \node[below] at (2,0) {\texttt{thu}};
+  \node[below] at (4,0) {\texttt{fri}};
+  \node[below] at (6,0) {\texttt{sat}};
+  \draw[fill] (-6,0) circle [radius=0.05];
+  \draw[fill] (-4,0) circle [radius=0.05];
+  \draw[fill] (-2,0) circle [radius=0.05];
+  \draw[fill] (0,0) circle [radius=0.05];
+  \draw[fill] (2,0) circle [radius=0.05];
+  \draw[fill] (4,0) circle [radius=0.05];
+  \draw[fill] (6,0) circle [radius=0.05];
+  \draw[->] (-6,0) -- (-4,0);
+  \draw[->] (-4,0) -- (-2,0);
+  \draw[->] (0,0) -- (2,0);
+  \draw[->] (2,0) -- (4,0);
+  \draw[->] (-6,0) to[bend left] (-2,0) ;
+  \draw[->] (0,0) to[bend left] (4,0) ;
+\end{tikzpicture}
+\end{center}
+The second which we call $1/T p$ is depicted below:
+\begin{center}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
+  \draw (0,1.4) ellipse (2cm and 2cm);
+  \node[below] (B) at (0,0) {\texttt{*}};
+  \path (B) edge [loop above] node[above] {$p^0$} (B);
+  \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (B);
+  \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (B);
+\end{tikzpicture}
+\end{center}
+The interesting property is that $T p \times 1/T p$ is equivalent $\ot$.
+
+Now we will take the type $C$ and map to $C \times \ot$ and then map
+$\ot$ to $T p \times 1/T p$. So to summarize:
+\[ C ≃  C \times \ot ≃ C \times (T p \times 1/T p) ≃ (C \times 1/T p) \times T p \]
+We have arrived at the following situation. Our type $C$ has been
+decomposed into the following product:
+
+\medskip
+
+\begin{tabular}{ccc}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
+  \draw (0,0) ellipse (9cm and 6cm);
+  \node[below] (1) at (-6,0) {\texttt{sunday}};
+   \node[below] (2) at (-4,0) {\texttt{mon}};
+  \node[below] (3) at (-2,0) {\texttt{tue}};
+  \node[below] (4) at (0,0) {\texttt{wed}};
+  \node[below] (5) at (2,0) {\texttt{thu}};
+  \node[below] (6) at (4,0) {\texttt{fri}};
+  \node[below] (7) at (6,0) {\texttt{sat}};
+  \draw[fill] (-6,0) circle [radius=0.05];
+  \draw[fill] (-4,0) circle [radius=0.05];
+  \draw[fill] (-2,0) circle [radius=0.05];
+  \draw[fill] (0,0) circle [radius=0.05];
+  \draw[fill] (2,0) circle [radius=0.05];
+  \draw[fill] (4,0) circle [radius=0.05];
+  \draw[fill] (6,0) circle [radius=0.05];
+
+  \path (1) edge [loop above] node[above] {$p^0$} (1);
+  \path (1) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (1);
+  \path (1) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (1);
+
+  \path (2) edge [loop above] node[above] {$p^0$} (2);
+  \path (2) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (2);
+  \path (2) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (2);
+
+  \path (3) edge [loop above] node[above] {$p^0$} (3);
+  \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
+  \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
+
+  \path (4) edge [loop above] node[above] {$p^0$} (4);
+  \path (4) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (4);
+  \path (4) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (4);
+
+  \path (5) edge [loop above] node[above] {$p^0$} (5);
+  \path (5) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (5);
+  \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
+
+  \path (6) edge [loop above] node[above] {$p^0$} (6);
+  \path (6) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (6);
+  \path (6) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (6);
+
+  \path (7) edge [loop above] node[above] {$p^0$} (7);
+  \path (7) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (7);
+  \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
+\end{tikzpicture}
+\end{minipage}
+& 
+$\times$
+& 
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
+  \draw (0,0) ellipse (8cm and 1.6cm);
+  \node[below] at (-6,0) {\texttt{sunday}};
+   \node[below] at (-4,0) {\texttt{mon}};
+  \node[below] at (-2,0) {\texttt{tue}};
+  \node[below] at (0,0) {\texttt{wed}};
+  \node[below] at (2,0) {\texttt{thu}};
+  \node[below] at (4,0) {\texttt{fri}};
+  \node[below] at (6,0) {\texttt{sat}};
+  \draw[fill] (-6,0) circle [radius=0.05];
+  \draw[fill] (-4,0) circle [radius=0.05];
+  \draw[fill] (-2,0) circle [radius=0.05];
+  \draw[fill] (0,0) circle [radius=0.05];
+  \draw[fill] (2,0) circle [radius=0.05];
+  \draw[fill] (4,0) circle [radius=0.05];
+  \draw[fill] (6,0) circle [radius=0.05];
+  \draw[->] (-6,0) -- (-4,0);
+  \draw[->] (-4,0) -- (-2,0);
+  \draw[->] (0,0) -- (2,0);
+  \draw[->] (2,0) -- (4,0);
+  \draw[->] (-6,0) to[bend left] (-2,0) ;
+  \draw[->] (0,0) to[bend left] (4,0) ;
+\end{tikzpicture}
+\end{minipage}
+\end{tabular}
+
+The type of the left is equivalent to a type with $2\frac{1}{3}$
+elements. The type of the right is equivalent to a type with 3
+elements. So we have divided our 7 elements into the product of
+$2\frac{1}{3}$ and 3 and we can operate on each cluster
+separately. After simplification, the situation reduces to:
+
+\medskip
+
+\begin{tabular}{ccc}
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
+  \draw (0,0) ellipse (6cm and 4cm);
+  \node[below] (3) at (-3,0) {\texttt{smt}};
+  \node[below] (4) at (0,0) {\texttt{wrf}};
+  \node[below] (5) at (3,0) {\texttt{sat}};
+  \draw[fill] (-3,0) circle [radius=0.05];
+  \draw[fill] (0,0) circle [radius=0.05];
+  \draw[fill] (3,0) circle [radius=0.05];
+
+  \path (5) edge [loop above] node[above] {$p^0$} (5);
+  \path (5) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (5);
+  \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
+\end{tikzpicture}
+\end{minipage}
+& 
+$\times$
+& 
+\begin{minipage}{0.4\textwidth}
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
+  \draw (0,0) ellipse (5cm and 1.6cm);
+  \node[below] at (-3,0) {\texttt{smt}};
+  \node[below] at (0,0) {\texttt{wrf}};
+  \node[below] at (3,0) {\texttt{sat}};
+  \draw[fill] (-3,0) circle [radius=0.05];
+  \draw[fill] (0,0) circle [radius=0.05];
+  \draw[fill] (3,0) circle [radius=0.05];
+\end{tikzpicture}
+\end{minipage}
+\end{tabular}
+
+If we were to recombine the two types we would get:
+
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
+  \draw (0,0) ellipse (12cm and 4cm);
+
+  \node[below] (1) at (-11,0) {\texttt{(smt,smt)}};
+  \node[below] (2) at (-8,0) {\texttt{(wrf,smt)}};
+  \node[below] (3) at (-5,0) {\texttt{(sat,smt)}};
+  \draw[fill] (-11,0) circle [radius=0.05];
+  \draw[fill] (-8,0) circle [radius=0.05];
+  \draw[fill] (-5,0) circle [radius=0.05];
+  \path (3) edge [loop above] node[above] {$p^0$} (3);
+  \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
+  \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
+
+  \node[below] (4) at (-3,0) {\texttt{(smt,wrf)}};
+  \node[below] (5) at (-1,0) {\texttt{(wrf,wrf)}};
+  \node[below] (6) at (1,0) {\texttt{(sat,wrf)}};
+  \draw[fill] (-3,0) circle [radius=0.05];
+  \draw[fill] (-1,0) circle [radius=0.05];
+  \draw[fill] (1,0) circle [radius=0.05];
+  \path (6) edge [loop above] node[above] {$p^0$} (6);
+  \path (6) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (6);
+  \path (6) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (6);
+
+  \node[below] (7) at (3,0) {\texttt{(smt,sat)}};
+  \node[below] (8) at (5,0) {\texttt{(sat,wrf)}};
+  \node[below] (9) at (7,0) {\texttt{(sat,sat)}};
+  \draw[fill] (3,0) circle [radius=0.05];
+  \draw[fill] (5,0) circle [radius=0.05];
+  \draw[fill] (7,0) circle [radius=0.05];
+  \path (9) edge [loop above] node[above] {$p^0$} (9);
+  \path (9) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (9);
+  \path (9) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (9);
+\end{tikzpicture}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}
