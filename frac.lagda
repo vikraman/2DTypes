@@ -1142,15 +1142,6 @@ p/⇒G {τ} p = record
 
 -- Sums and products of groupoids: should be in categories package
 
--- does not seem that Categories package has coproducts????
-postulate
-  Sum : ∀ {o₁ ℓ₁ e₁ o₂ ℓ₂ e₂} → (ℂ₁ : Category o₁ ℓ₁ e₁) (ℂ₂ : Category o₂ ℓ₂ e₂) →
-     Category (o₁ ⊔ o₂) (ℓ₁ ⊔ ℓ₂) (e₁ ⊔ e₂)
-
-G+ : ∀ {o₁ ℓ₁ e₁ o₂ ℓ₂ e₂} {ℂ₁ : Category o₁ ℓ₁ e₁} {ℂ₂ : Category o₂ ℓ₂ e₂} →
-     Groupoid ℂ₁ → Groupoid ℂ₂ → Groupoid (Sum ℂ₁ ℂ₂)
-G+ c₁ c₂ = {!!}
-
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
