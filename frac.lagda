@@ -220,16 +220,15 @@ C &≃&  C \boxtimes \ot \\
 &≃& (\ag{C}{p}) \boxtimes \order{p}
 \end{array}\]
 First note that the types are built from permutations etc. This is a
-different level of types with different sums and products. The usual
-$\Pi$-combinators lift to this level and there are two new
-transfomations that we need to justify. In their most general form, they are:
+different level of types. The usual $\Pi$-combinators lift to this level and there
+are two new transfomations that we need to justify. In their most general form, they are:
 \begin{itemize}
 \item If $p : \tau \leftrightarrow \tau$, then $\order{p} \boxtimes 1/p ≃ \ot$
 \item If $p : \tau \leftrightarrow \tau$, then $\tau \boxtimes 1/p ≃ \ag{\tau}{p}$
 \end{itemize}
 
 In our running example, interpreting $\boxtimes$ are a regular
-product, we might guess that $\order{p} \boxtimes 1/p$ looks like:
+product, $\order{p} \boxtimes 1/p$ looks like:
 
 \medskip
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
@@ -254,40 +253,10 @@ product, we might guess that $\order{p} \boxtimes 1/p$ looks like:
   \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
 \end{tikzpicture}
 
-We want this type simplify to just one point but this false from both
-a homotopy or categorical perspective. But notice that $p$ acts on
-each copy of $\frac{1}{3}$ to give back the same objects: $p$ acts on
-$p^0$ to produce $p^1$, on $p^1$ to produce $p^2$, and on $p^2$ to
-produce $p^3 = p^0$. So a more sensible picture for $\order{p}
-\boxtimes 1/p$ might be:
-
-\medskip
-\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
-  \draw (0,0) ellipse (7cm and 4cm);
-  \node[below] (1) at (-3.5,-1.5) {$p^0$};
-   \node[below] (2) at (0,-1.5) {$p^1$};
-  \node[below] (3) at (3.5,-1.5) {$p^2$};
-  \draw[fill] (-3.5,-1.5) circle [radius=0.05];
-  \draw[fill] (0,-1.5) circle [radius=0.05];
-  \draw[fill] (3.5,-1.5) circle [radius=0.05];
-
-%%  \path (1) edge [loop above] node[above] {$p^0$} (1);
-  \path (1) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (1);
-  \path (1) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (1);
-
-%%  \path (2) edge [loop above] node[above] {$p^0$} (2);
-  \path (2) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (2);
-  \path (2) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (2);
-
-%%  \path (3) edge [loop above] node[above] {$p^0$} (3);
-  \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
-  \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
-
-  \path (1) edge node[above] {$p$} (2) ;
-  \path (2) edge node[above] {$p$} (3);
-  \path (1) edge [out=-45, in=-135] node[below] {$p$} (3);
-
-\end{tikzpicture}
+We want to argue that this type is ``equivalent'' to just one point
+but this false from both a categorical perspective if we take
+equivalence of categories as the notion of equivalence. There are
+other notions of equivalence for groupoids that should be adequte.
 
 The second equivalence, that $C \boxtimes 1/p$ is equivalent to
 $\ag{C}{p}$ would follow from two facts: that three copies of $1/p$
