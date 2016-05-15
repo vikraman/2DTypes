@@ -6,7 +6,7 @@ open import Data.Empty
 open import Data.Sum
 open import Data.Product
 open import Relation.Binary
-open import Agda.Primitive
+open import Data.Bool
 
 data U : Set where
   ZERO  : U
@@ -112,23 +112,84 @@ module _ {τ : U} {p : τ ⟷ τ} where
   ⟦ ap¹ ⟧apⁿ v = ap p v
   ⟦ apˢ a ⟧apⁿ v = ap p (⟦ a ⟧apⁿ v)
 
-open import Relation.Binary.PropositionalEquality
+-- open import Relation.Binary.PropositionalEquality
 
-order : (τ : U) (p : τ ⟷ τ) → (v : ⟦ τ ⟧) → Σ[ n ∈ ℕ ] Σ[ a ∈ apⁿ p n ] ⟦ a ⟧apⁿ v ≡ v
-order ZERO id⟷ ()
-order ZERO (p₁ ◎ p₂) ()
-order ONE id⟷ tt = 1 , ap¹ , refl
-order ONE (p₁ ◎ p₂) tt = 1 , ap¹ , refl
-order (PLUS τ .τ) swap₊ (inj₁ x) = 2 , apˢ ap¹ , refl
-order (PLUS τ .τ) swap₊ (inj₂ y) = 2 , apˢ ap¹ , refl
-order (PLUS τ₁ τ₂) id⟷ (inj₁ x) = 1 , ap¹ , refl
-order (PLUS τ₁ τ₂) id⟷ (inj₂ y) = 1 , ap¹ , refl
-order (PLUS τ₁ τ₂) (p₁ ◎ p₂) (inj₁ x) = let (n₁ , a₁ , pf₁) = order τ₁ {!!} x
-                                        in {!!} , {!!} , {!!}
-order (PLUS τ₁ τ₂) (p₁ ◎ p₂) (inj₂ y) = {!!}
-order (PLUS τ₁ τ₂) (p₁ ⊕ p₂) (inj₁ x) = {!!}
-order (PLUS τ₁ τ₂) (p₁ ⊕ p₂) (inj₂ y) = {!!}
-order (TIMES τ .τ) swap⋆ (proj₁ , proj₂) = 2 , apˢ ap¹ , refl
-order (TIMES τ₁ τ₂) id⟷ (proj₁ , proj₂) = 1 , ap¹ , refl
-order (TIMES τ₁ τ₂) (p₁ ◎ p₂) (proj₁ , proj₂) = {!!}
-order (TIMES τ₁ τ₂) (p₁ ⊗ p₂) (proj₁ , proj₂) = {!!}
+-- order : (τ : U) (p : τ ⟷ τ) → (v : ⟦ τ ⟧) → Σ[ n ∈ ℕ ] Σ[ a ∈ apⁿ p n ] ⟦ a ⟧apⁿ v ≡ v
+-- order ZERO id⟷ ()
+-- order ZERO (p₁ ◎ p₂) ()
+-- order ONE id⟷ tt = 1 , ap¹ , refl
+-- order ONE (p₁ ◎ p₂) tt = 1 , ap¹ , refl
+-- order (PLUS τ .τ) swap₊ (inj₁ x) = 2 , apˢ ap¹ , refl
+-- order (PLUS τ .τ) swap₊ (inj₂ y) = 2 , apˢ ap¹ , refl
+-- order (PLUS τ₁ τ₂) id⟷ (inj₁ x) = 1 , ap¹ , refl
+-- order (PLUS τ₁ τ₂) id⟷ (inj₂ y) = 1 , ap¹ , refl
+-- order (PLUS τ₁ τ₂) (p₁ ◎ p₂) (inj₁ x) = let (n₁ , a₁ , pf₁) = order τ₁ {!!} x
+--                                         in {!!} , {!!} , {!!}
+-- order (PLUS τ₁ τ₂) (p₁ ◎ p₂) (inj₂ y) = {!!}
+-- order (PLUS τ₁ τ₂) (p₁ ⊕ p₂) (inj₁ x) = {!!}
+-- order (PLUS τ₁ τ₂) (p₁ ⊕ p₂) (inj₂ y) = {!!}
+-- order (TIMES τ .τ) swap⋆ (proj₁ , proj₂) = 2 , apˢ ap¹ , refl
+-- order (TIMES τ₁ τ₂) id⟷ (proj₁ , proj₂) = 1 , ap¹ , refl
+-- order (TIMES τ₁ τ₂) (p₁ ◎ p₂) (proj₁ , proj₂) = {!!}
+-- order (TIMES τ₁ τ₂) (p₁ ⊗ p₂) (proj₁ , proj₂) = {!!}
+
+open import Data.Vec renaming (map to mapV)
+
+elems : (τ : U) → Vec ⟦ τ ⟧ (toℕ τ)
+elems ZERO = []
+elems ONE = tt ∷ []
+elems (PLUS τ₁ τ₂) = mapV inj₁ (elems τ₁) ++ mapV inj₂ (elems τ₂)
+elems (TIMES τ₁ τ₂) = concat (mapV (λ v₁ → mapV (λ v₂ → v₁ , v₂) (elems τ₂)) (elems τ₁))
+
+open import Data.Nat.LCM
+
+lcm' : ℕ → ℕ → ℕ
+lcm' i j with lcm i j
+... | k , _ = k
+
+_==_ : {τ : U} → ⟦ τ ⟧ → ⟦ τ ⟧ → Bool
+_==_ {ZERO} () ()
+_==_ {ONE} tt tt = true
+_==_ {PLUS τ τ'} (inj₁ x) (inj₁ y) = x == y
+_==_ {PLUS τ τ'} (inj₁ x) (inj₂ y) = false
+_==_ {PLUS τ τ'} (inj₂ x) (inj₁ y) = false
+_==_ {PLUS τ τ'} (inj₂ x) (inj₂ y) = x == y
+_==_ {TIMES τ τ'} (x , x') (y , y') = x == y ∧ x' == y'
+
+{-# NON_TERMINATING #-}
+order : (τ : U) (p : τ ⟷ τ) → ℕ
+order τ p = foldr (λ _ → ℕ) (λ v o → lcm' o (go τ p v v 1)) 1 (elems τ)
+  where go : (τ : U) (p : τ ⟷ τ) → ⟦ τ ⟧ → ⟦ τ ⟧ → ℕ → ℕ
+        go τ p v v' n with ap p v'
+        ... | v'' = if v == v'' then n else go τ p v v'' (suc n)
+
+open import Agda.Builtin.IO
+open import Agda.Builtin.Unit
+open import Data.String
+open import Data.Nat.Show renaming (show to showℕ)
+open import Function
+
+postulate
+  putStrLn : String -> IO ⊤
+{-# IMPORT Data.Text.IO #-}
+{-# COMPILED putStrLn Data.Text.IO.putStrLn #-}
+
+print : ℕ → IO ⊤
+print = putStrLn ∘ showℕ
+
+BOOL : U
+BOOL = PLUS ONE ONE
+
+THREEL : U
+THREEL = PLUS BOOL ONE
+
+p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
+p₁ = id⟷ -- (1 2 | 3)
+p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
+p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
+p₄ = p₂ ◎ p₃ -- (2 3 | 1)
+p₅ = p₃ ◎ p₂ -- (3 1 | 2)
+p₆ = p₄ ◎ p₂ -- (3 2 | 1)
+
+main : IO ⊤
+main = print $ order THREEL p₄
