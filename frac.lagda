@@ -117,8 +117,8 @@ open Algebra.FunctionProperties (P._≡_ {A = ℤ})
 
 We have a type $C$ containing $n$ values and we want to operate on
 each value. We will split the type $C$ as the product of $A$ and $B$
-where the sizes of $A$ and $B$ are approximately $\sqrt{n}$ and we
-will operate on $A$ and $B$ independently and potentially in
+where the cardinalities of $A$ and $B$ are approximately $\sqrt{n}$
+and we will operate on $A$ and $B$ independently and potentially in
 parallel. We will do this even if $n$ is prime!
 
 We will use the type $C$ below as a running example in this
@@ -144,8 +144,17 @@ section. It has cardinality 7:
 \end{center}
 
 We will decompose the type $C$ into the products of $A$ and $B$ where
-$A$ will have size $2\frac{1}{3}$ and $B$ will have size 3. The first
-step will be to write a permutation $p$ on $C$ of order 3. For
+$A$ will have cardinality $2\frac{1}{3}$ and $B$ will cardinality
+3. The first step is to explain how to calculate such
+cardinalities. We will use the Euler characteristic of a category
+which in our case also correspond to the groupoid cardinality. There
+are several formulations and explanations but the basic idea is
+simple. First collapse all the isomorphic objects. Then fix a
+particular order of the objects and write a matrix whose $ij$ entry is
+the number of morphisms from $i$ to $j$. Invert the matrix. The
+cardinality is the sum of the elements in the matrix.
+
+The next step is to write a permutation $p$ on $C$ of order 3. For
 example:
 \[\begin{array}{rcl}
 p(\texttt{sun}) &=& \texttt{mon} \\
@@ -159,8 +168,14 @@ p(\texttt{sat}) &=& \texttt{sat}
 The definition of $p$ will induce three types (groupoids):
 
 \begin{itemize}
-\item The first is the action groupoid $\ag{C}{p}$ depicted below. It
-has cardinality $2\frac{1}{3}$:
+
+\item The first is the action groupoid $\ag{C}{p}$ depicted below. The
+objects are the elements of $C$ and there is a morphism between $x$
+and $y$ iff $p^k$ for some $k$ maps $x$ to $y$. We do not draw the
+identity morphisms. Note that all of $p^0$, $p^1$, and $p^2$ map
+\texttt{sat} to \texttt{sat} which explains the two non-trivial
+morphisms on \texttt{sat}:
+
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
   \draw (0,0) ellipse (8cm and 1.6cm);
@@ -188,7 +203,26 @@ has cardinality $2\frac{1}{3}$:
   \path (B) edge [loop above, looseness=5, in=40, out=140] node[above] {} (B);
 \end{tikzpicture}
 \end{center}
-\item The second which we call $1/p$ is depicted below. It has cardinality $\frac{1}{3}$:
+
+To calculate the cardinality, we first collapse all the isomorphic
+objects (i.e., collapse the two strongly connected components to one
+object each) and write the resulting matrix:
+\[
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 3 
+\end{pmatrix}
+\]
+Its inverse is 0 everywhere except on the main diagonal which has
+entries 1, 1, and $\frac{1}{3}$ and hence the cardinality of this
+category is $2\frac{1}{3}$.
+
+\item The second which we call $1/p$ is depicted below. It has one
+trivial object and a morphism for each iteration of $p$. It has
+cardinality $\frac{1}{3}$ as the connectivity matrix has one entry
+$3$ whose inverse is $\frac{1}{3}$:
+
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
   \draw (0,1.4) ellipse (2cm and 2cm);
@@ -198,7 +232,10 @@ has cardinality $2\frac{1}{3}$:
   \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (B);
 \end{tikzpicture}
 \end{center}
-\item The third is the order type $\order{p}$ depicted below. It has cardinality $3$:
+
+\item The third is the order type $\order{p}$ depicted below. It has
+three objects corrsponding to each iteration of $p$. It has
+cardinality $3$:
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
   \draw (0,0) ellipse (4cm and 1cm);
@@ -219,18 +256,20 @@ C &≃&  C \boxtimes \ot \\
 &≃& (C \boxtimes 1/p) \boxtimes \order{p} \\
 &≃& (\ag{C}{p}) \boxtimes \order{p}
 \end{array}\]
-First note that the types are built from permutations etc. This is a
-different level of types. The usual $\Pi$-combinators lift to this level and there
-are two new transfomations that we need to justify. In their most general form, they are:
+First note that the types are built from permutations over finite
+types: this is a different level of types from the level of plain
+finite types. The usual $\Pi$-combinators lift to this level and there
+are two new transfomations that we need to justify. If $p : \tau \leftrightarrow \tau$, then:
 \begin{itemize}
-\item If $p : \tau \leftrightarrow \tau$, then $\order{p} \boxtimes 1/p ≃ \ot$
-\item If $p : \tau \leftrightarrow \tau$, then $\tau \boxtimes 1/p ≃ \ag{\tau}{p}$
+\item $\order{p} \boxtimes 1/p ≃ \ot$, and 
+\item $\tau \boxtimes 1/p ≃ \ag{\tau}{p}$
 \end{itemize}
 
 In our running example, interpreting $\boxtimes$ are a regular
 product, $\order{p} \boxtimes 1/p$ looks like:
 
 \medskip
+\begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
   \draw (0,0) ellipse (7cm and 2.5cm);
   \node[below] (1) at (-3.5,-1.5) {$p^0$};
@@ -252,11 +291,18 @@ product, $\order{p} \boxtimes 1/p$ looks like:
   \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
   \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
 \end{tikzpicture}
+\end{center}
 
-We want to argue that this type is ``equivalent'' to just one point
-but this false from both a categorical perspective if we take
-equivalence of categories as the notion of equivalence. There are
-other notions of equivalence for groupoids that should be adequte.
+We want to argue that this type is ``equivalent'' to the one-object
+category. The two categories have the same cardinality but there are
+not equivalent under the conventional notion of equivalence of
+categories. There are however other notions of equivalence of
+groupoids like Morita equivalence and weak equivalence that we explore
+later. The intuition of these weaker notions of equivalence is that
+two groupoids can be considered equivalent if it is not possible to
+distinguish them using certain observations. This informally
+corresponds to the notion of ``observational equivalence'' in
+programming language semantics.
 
 The second equivalence, that $C \boxtimes 1/p$ is equivalent to
 $\ag{C}{p}$ would follow from two facts: that three copies of $1/p$
@@ -468,6 +514,11 @@ relatively easy to establish).
 % \end{tikzpicture}
 
 % which is equivalent to $C$.
+
+\amr{Is weak equivalence in HoTT what we want??? Here is one
+definition: A map $f : X \rightarrow Y$ is a weak homotopy equivalence
+(or just a weak equivalence) if for every $x \in X$, and all $n \geq
+0$ the map $\pi_n(X,x) \rightarrow \pi_n(Y,f(x))$ is a bijection.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}
@@ -1269,7 +1320,17 @@ p/⇒G {τ} p = record
 
 -- Sums and products of groupoids: should be in categories package
 
+-- Now define #order p
+
+order : {τ : U} → (τ ⟷ τ) → ℕ
+order {τ} p = ?
+
+orderU : {τ : U} → (τ ⟷ τ) → U
+orderU = {!!} 
+
 \end{code}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algebra}
