@@ -112,6 +112,64 @@ open Algebra.FunctionProperties (P._≡_ {A = ℤ})
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+If quantum field theory is correct (as it so far seems to be) then
+\emph{information}, during any physical process, is neither created
+nor destroyed. Our starting point is this \emph{conservation
+  principle} --- the \emph{conservation of entropy or information},
+adapted to the computational setting, i.e., we study computations
+which are information-preserving. Our initial investigation was in the
+setting of computations over finite types: in that setting
+information-preservation coincides with type isomorphsims,
+permutations on finite sets, and HoTT equivalences. In this paper, we
+extend the work to computations over \emph{groupoids}. 
+
+In both the situation with finite sets and groupoids, our measure of
+information is the same. With each type $T$ (finite set or groupoid)
+of cardinality $n$, we associate the information measure
+$H(T) = \log{n}$. One way to think of $H(T)$ is that it is a measure
+of how much space it takes to store values in $T$, not knowing
+anything about their distribution. For non-empty finite sets,
+$\log{n}$ is always a natural number representing the number of bits
+necessary to store values of type $T$. For groupoids, it is possible
+to have non-negative rational numbers as their cardinality, e.g.,
+$\frac{1}{3}$, which would give us \emph{negative} entropy,
+information, or space. 
+
+An important paper about negative entropy in the context of the
+Landauer limit and reversible computation:
+\url{http://www.nature.com/nature/journal/v474/n7349/full/nature10123.html}
+
+Something else about negative entropy
+\url{https://en.wikipedia.org/wiki/Negentropy}: In information theory
+and statistics, negentropy is used as a measure of distance to
+normality. Out of all distributions with a given mean and variance,
+the normal or Gaussian distribution is the one with the highest
+entropy. Negentropy measures the difference in entropy between a given
+distribution and the Gaussian distribution with the same mean and
+variance.
+
+One more link about negative entropy
+\url{https://www.quora.com/What-does-negative-entropy-mean}: For
+example, if you burn fuel, you get water, CO2 and some other
+wastes. Could be possible on a lab transform water + CO2 + some other
+wastes on fuel again? Of course yes, but the energy to make that is
+much more than the energy that you could obtain again from the
+reconstructed fuel. If you see the local process (I've converted
+water+ CO2 + some other wastes on fuel) the entropy is clearly
+negative. But if you consider the energy necessary to achieve that the
+global entropy is clearly positive.
+
+Something about negative information:
+\url{http://www.ucl.ac.uk/oppenheim/negative-information_p2.html}
+
+In terms of space, we interpret a negative amount as the ability to
+reclaim that much space. 
+
+Since information is defined using cardinality, the conclusion is that
+we will consider computations between types $T_1$ and $T_2$ (finite
+sets or groupoids) such that the cardinality of $T_1$ is the same as
+the cardinality of $T_2$.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Speedup of $\sqrt{n}$}
 
@@ -266,7 +324,7 @@ are two new transfomations that we need to justify. If $p : \tau \leftrightarrow
 \end{itemize}
 
 In our running example, interpreting $\boxtimes$ are a regular
-product, $\order{p} \boxtimes 1/p$ looks like:
+product, $\order{p} \boxtimes 1/p$ looks like: 
 
 \medskip
 \begin{center}
@@ -293,72 +351,60 @@ product, $\order{p} \boxtimes 1/p$ looks like:
 \end{tikzpicture}
 \end{center}
 
-We want to argue that this type is ``equivalent'' to the one-object
-category. The two categories have the same cardinality but there are
-not equivalent under the conventional notion of equivalence of
-categories. There are however other notions of equivalence of
-groupoids like Morita equivalence and weak equivalence that we explore
-later. The intuition of these weaker notions of equivalence is that
-two groupoids can be considered equivalent if it is not possible to
-distinguish them using certain observations. This informally
-corresponds to the notion of ``observational equivalence'' in
-programming language semantics. Note that two categories can have the
-same cardinality but not be equivalent or even Morita equivalent but
-the converse is guaranteed. So it is necessary to have a separate
-notion of equivalence and check that whenever we have the same
-cardinality, the particular categories in question are equivalent. The
-second equivalence, that $C \boxtimes 1/p$ is equivalent to
-$\ag{C}{p}$ would follow from two facts: that three copies of $1/p$
-simplify to a point (which is the first equivalence above) and that
-three connected points also simplify to a single point (which is
-relatively easy to establish).
+This has the same cardinality as the finite set with one element and
+hence ``informally-equivalent'' to $\ot$.
 
-% \medskip
-% \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
-%   \draw (0,0) ellipse (9cm and 2.7cm);
-%   \node[below] (1) at (-6,-1.5) {\texttt{sun}};
-%    \node[below] (2) at (-4,-1.5) {\texttt{mon}};
-%   \node[below] (3) at (-2,-1.5) {\texttt{tue}};
-%   \node[below] (4) at (0,-1.5) {\texttt{wed}};
-%   \node[below] (5) at (2,-1.5) {\texttt{thu}};
-%   \node[below] (6) at (4,-1.5) {\texttt{fri}};
-%   \node[below] (7) at (6,-1.5) {\texttt{sat}};
-%   \draw[fill] (-6,-1.5) circle [radius=0.05];
-%   \draw[fill] (-4,-1.5) circle [radius=0.05];
-%   \draw[fill] (-2,-1.5) circle [radius=0.05];
-%   \draw[fill] (0,-1.5) circle [radius=0.05];
-%   \draw[fill] (2,-1.5) circle [radius=0.05];
-%   \draw[fill] (4,-1.5) circle [radius=0.05];
-%   \draw[fill] (6,-1.5) circle [radius=0.05];
+The type $C \boxtimes 1/p$ looks like:
 
-% %%  \path (1) edge [loop above] node[above] {$p^0$} (1);
-%   \path (1) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (1);
-%   \path (1) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (1);
+\medskip
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
+  \draw (0,0) ellipse (9cm and 2.7cm);
+  \node[below] (1) at (-6,-1.5) {\texttt{sun}};
+   \node[below] (2) at (-4,-1.5) {\texttt{mon}};
+  \node[below] (3) at (-2,-1.5) {\texttt{tue}};
+  \node[below] (4) at (0,-1.5) {\texttt{wed}};
+  \node[below] (5) at (2,-1.5) {\texttt{thu}};
+  \node[below] (6) at (4,-1.5) {\texttt{fri}};
+  \node[below] (7) at (6,-1.5) {\texttt{sat}};
+  \draw[fill] (-6,-1.5) circle [radius=0.05];
+  \draw[fill] (-4,-1.5) circle [radius=0.05];
+  \draw[fill] (-2,-1.5) circle [radius=0.05];
+  \draw[fill] (0,-1.5) circle [radius=0.05];
+  \draw[fill] (2,-1.5) circle [radius=0.05];
+  \draw[fill] (4,-1.5) circle [radius=0.05];
+  \draw[fill] (6,-1.5) circle [radius=0.05];
 
-% %%  \path (2) edge [loop above] node[above] {$p^0$} (2);
-%   \path (2) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (2);
-%   \path (2) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (2);
+%%  \path (1) edge [loop above] node[above] {$p^0$} (1);
+  \path (1) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (1);
+  \path (1) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (1);
 
-% %%  \path (3) edge [loop above] node[above] {$p^0$} (3);
-%   \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
-%   \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
+%%  \path (2) edge [loop above] node[above] {$p^0$} (2);
+  \path (2) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (2);
+  \path (2) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (2);
 
-% %%  \path (4) edge [loop above] node[above] {$p^0$} (4);
-%   \path (4) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (4);
-%   \path (4) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (4);
+%%  \path (3) edge [loop above] node[above] {$p^0$} (3);
+  \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
+  \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
 
-% %%  \path (5) edge [loop above] node[above] {$p^0$} (5);
-%   \path (5) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (5);
-%   \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
+%%  \path (4) edge [loop above] node[above] {$p^0$} (4);
+  \path (4) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (4);
+  \path (4) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (4);
 
-% %%  \path (6) edge [loop above] node[above] {$p^0$} (6);
-%   \path (6) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (6);
-%   \path (6) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (6);
+%%  \path (5) edge [loop above] node[above] {$p^0$} (5);
+  \path (5) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (5);
+  \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
 
-% %%  \path (7) edge [loop above] node[above] {$p^0$} (7);
-%   \path (7) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (7);
-%   \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
-% \end{tikzpicture}
+%%  \path (6) edge [loop above] node[above] {$p^0$} (6);
+  \path (6) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (6);
+  \path (6) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (6);
+
+%%  \path (7) edge [loop above] node[above] {$p^0$} (7);
+  \path (7) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (7);
+  \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
+\end{tikzpicture}
+
+This type is again informally-equivalent to $\ag{C}{p}$ as it has the
+same cardinality.
 
 % \begin{tabular}{ccc}
 % \begin{minipage}{0.4\textwidth}
@@ -518,10 +564,51 @@ relatively easy to establish).
 
 % which is equivalent to $C$.
 
-\amr{Is weak equivalence in HoTT what we want??? Here is one
-definition: A map $f : X \rightarrow Y$ is a weak homotopy equivalence
-(or just a weak equivalence) if for every $x \in X$, and all $n \geq
-0$ the map $\pi_n(X,x) \rightarrow \pi_n(Y,f(x))$ is a bijection.}
+\subsection{Information-Equivalence}
+
+Our notion of information equivalence is coarser than the conventional
+notion of equivalence of categories (groupoids). This is fine as there
+are several competing notions of equivalence of groupoids that are
+coarser than strict categorical equivalence. 
+
+Need to explain the example above in terms of information!!! The best
+explanation I have so far is the credit card analogy: we want money
+here and now, so we create money and a debt. That debt is reconciled
+somewhere else. The example above uses the same: we want to process
+some values from $C$ here and now. So we create a third of them,
+process them, and reconcile this third somewhere else. When all three
+thirds have been reconciled the computation is finished. 
+
+\amr{adapt the following}
+
+There are however other notions of equivalence of groupoids like
+Morita equivalence and weak equivalence that we explore later. The
+intuition of these weaker notions of equivalence is that two groupoids
+can be considered equivalent if it is not possible to distinguish them
+using certain observations. This informally corresponds to the notion
+of ``observational equivalence'' in programming language
+semantics. Note that negative entropy can only make sense locally in
+an open system but that in a closed system, i.e., in a complete
+computation, entropy cannot be negative. Thus we restrict
+observational contexts to those in which fractional types do not
+occur. Note that two categories can have the same cardinality but not
+be equivalent or even Morita equivalent but the converse is
+guaranteed. So it is necessary to have a separate notion of
+equivalence and check that whenever we have the same cardinality, the
+particular categories in question are equivalent. The second
+equivalence, that $C \boxtimes 1/p$ is equivalent to $\ag{C}{p}$ would
+follow from two facts: that three copies of $1/p$ simplify to a point
+(which is the first equivalence above) and that three connected points
+also simplify to a single point (which is relatively easy to
+establish).
+
+\amr{Is weak equivalence in HoTT related??? Here is one definition: A
+  map $f : X \rightarrow Y$ is a weak homotopy equivalence (or just a
+  weak equivalence) if for every $x \in X$, and all $n \geq 0$ the map
+  $\pi_n(X,x) \rightarrow \pi_n(Y,f(x))$ is a bijection. In our
+  setting this might mean something like: two types $T$ and $U$ are
+  equivalent if $T \leftrightarrow T$ is equivalent to
+  $U \leftrightarrow U$ are equivalent.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}
