@@ -1323,7 +1323,7 @@ p/⇒G {τ} p = record
 -- Now define #order p
 
 order : {τ : U} → (τ ⟷ τ) → ℕ
-order {τ} p = ?
+order {τ} p = {!!}
 
 orderU : {τ : U} → (τ ⟷ τ) → U
 orderU = {!!} 
