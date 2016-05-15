@@ -148,11 +148,11 @@ $A$ will have cardinality $2\frac{1}{3}$ and $B$ will cardinality
 3. The first step is to explain how to calculate such
 cardinalities. We will use the Euler characteristic of a category
 which in our case also correspond to the groupoid cardinality. There
-are several formulations and explanations but the basic idea is
-simple. First collapse all the isomorphic objects. Then fix a
-particular order of the objects and write a matrix whose $ij$ entry is
-the number of morphisms from $i$ to $j$. Invert the matrix. The
-cardinality is the sum of the elements in the matrix.
+are several formulations and explanations. The following is quite
+simple to implement: first collapse all the isomorphic objects. Then
+fix a particular order of the objects and write a matrix whose $ij$'s
+entry is the number of morphisms from $i$ to $j$. Invert the
+matrix. The cardinality is the sum of the elements in the matrix.
 
 The next step is to write a permutation $p$ on $C$ of order 3. For
 example:
@@ -302,9 +302,12 @@ later. The intuition of these weaker notions of equivalence is that
 two groupoids can be considered equivalent if it is not possible to
 distinguish them using certain observations. This informally
 corresponds to the notion of ``observational equivalence'' in
-programming language semantics.
-
-The second equivalence, that $C \boxtimes 1/p$ is equivalent to
+programming language semantics. Note that two categories can have the
+same cardinality but not be equivalent or even Morita equivalent but
+the converse is guaranteed. So it is necessary to have a separate
+notion of equivalence and check that whenever we have the same
+cardinality, the particular categories in question are equivalent. The
+second equivalence, that $C \boxtimes 1/p$ is equivalent to
 $\ag{C}{p}$ would follow from two facts: that three copies of $1/p$
 simplify to a point (which is the first equivalence above) and that
 three connected points also simplify to a single point (which is
