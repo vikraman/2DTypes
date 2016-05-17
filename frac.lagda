@@ -1442,6 +1442,7 @@ We now have a new level of types
 
 \begin{code}
 data U/ : Set where
+  ⇑ : U → U/    
   # : {τ : U} → (p : τ ⟷ τ) → U/    -- finite set of cardinality (order p)
   1/p : {τ : U} → (p : τ ⟷ τ) → U/  -- monoid style groupoid 
   _⊞_ : U/ → U/ → U/                -- conventional sums and products
@@ -1475,6 +1476,7 @@ discreteG S = record
   }
 
 ⟦_⟧/ : U/ → ∃ (λ ℂ → Groupoid ℂ)
+⟦ ⇑ S ⟧/ = (discreteC ⟦ S ⟧ , discreteG ⟦ S ⟧)
 ⟦ # {τ} p ⟧/ = let S = ⟦ Ufromℕ (order τ p) ⟧ 
               in (discreteC S , discreteG S)
 ⟦ 1/p p ⟧/ = (p!p/⇒C p , p/⇒G p)
@@ -1482,6 +1484,19 @@ discreteG S = record
 ... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Sum ℂ₁ ℂ₂ , GSum G₁ G₂)
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
 ... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
+
+
+--
+--
+--
+-- Need to write combinators for sequential composition etc. of U/
+--
+--
+--
+
+
+
+
 
 -- we can lift a regular type in U to U/ by using the id⟷ permutation on it as a proxy
 
@@ -1642,6 +1657,9 @@ sevenp = Seven
 
 1/sevenp : U/
 1/sevenp = 1/p sevenp
+
+ex : U → U/
+ex C = {!!} 
 
 \end{code}
 
