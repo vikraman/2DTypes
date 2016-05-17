@@ -83,8 +83,8 @@ open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
 open import Relation.Nullary
 import Relation.Binary.PropositionalEquality as P
--- open import Categories.Category
--- open import Categories.Groupoid
+open import Categories.Category
+open import Categories.Groupoid
 open import Relation.Binary.Core using (Rel; IsEquivalence)
 
 open import Relation.Binary
@@ -1252,19 +1252,19 @@ compose≡ {p = p} k₁ k₂ a₁ a₂ =
 -- This assumes that the level 2 combinators ⇔ are rich enough to
 -- prove that for a permutation p of order k, we have compose k p ⇔ p
 
--- p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
--- p⇒C {τ} p = record {
---      Obj = ⟦ τ ⟧ 
---    ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₂)
---    ; _≡_ = λ _ _ → ⊤
---    ; id = (0 , P.refl)
---    ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
---    ; assoc = tt 
---    ; identityˡ = tt 
---    ; identityʳ = tt 
---    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
---    ; ∘-resp-≡ = λ _ _ → tt 
---    }
+p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p⇒C {τ} p = record {
+     Obj = ⟦ τ ⟧ 
+   ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₂)
+   ; _≡_ = λ _ _ → ⊤
+   ; id = (0 , P.refl)
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
+   ; assoc = tt 
+   ; identityˡ = tt 
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
+   ; ∘-resp-≡ = λ _ _ → tt 
+   }
 
 -- To show that the resulting category is a groupoid, we need to allow
 -- the use of p and !p for every morphism
@@ -1301,21 +1301,21 @@ compose≡ {p = p} k₁ k₂ a₁ a₂ =
 -- p² is the same as !p²
 -- p³ is the same as !p¹
 
--- p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
--- p!p⇒C {τ} p = record {
---      Obj = ⟦ τ ⟧ 
---    ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℕ ] (ap (compose j p) v₁ P.≡ v₂)) ×
---                      (Σ[ k ∈ ℕ ] (ap (compose k (! p)) v₁ P.≡ v₂))
---    ; _≡_ = λ _ _ → ⊤
---    ; id = ((0 , P.refl) , (0 , P.refl))
---    ; _∘_ = λ { {v₁} {v₂} {v₃} ((j₂ , a₂₃) , (k₂ , b₂₃)) ((j₁ , a₁₂) , (k₁ , b₁₂)) →
---              ((j₁ + j₂ , compose≡ j₁ j₂ a₁₂ a₂₃) , (k₁ + k₂ , compose≡ k₁ k₂ b₁₂ b₂₃)) }
---    ; assoc = tt 
---    ; identityˡ = tt 
---    ; identityʳ = tt 
---    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
---    ; ∘-resp-≡ = λ _ _ → tt 
---    }
+p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p!p⇒C {τ} p = record {
+     Obj = ⟦ τ ⟧ 
+   ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℕ ] (ap (compose j p) v₁ P.≡ v₂)) ×
+                     (Σ[ k ∈ ℕ ] (ap (compose k (! p)) v₁ P.≡ v₂))
+   ; _≡_ = λ _ _ → ⊤
+   ; id = ((0 , P.refl) , (0 , P.refl))
+   ; _∘_ = λ { {v₁} {v₂} {v₃} ((j₂ , a₂₃) , (k₂ , b₂₃)) ((j₁ , a₁₂) , (k₁ , b₁₂)) →
+             ((j₁ + j₂ , compose≡ j₁ j₂ a₁₂ a₂₃) , (k₁ + k₂ , compose≡ k₁ k₂ b₁₂ b₂₃)) }
+   ; assoc = tt 
+   ; identityˡ = tt 
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
+   ; ∘-resp-≡ = λ _ _ → tt 
+   }
 
 postulate -- available in pi-dual; waiting for fork
   ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ P.≡ v₂) → (ap (! p) v₂ P.≡ v₁)
@@ -1338,17 +1338,17 @@ reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
 reverse {τ} {v₁} {v₂} {p} k pkv₁≡v₂ =
   P.trans (ap∼ (2! (reverse◎ k))) (ap!≡ {τ} {v₁} {v₂} {compose k p} pkv₁≡v₂) 
 
--- p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p⇒C p)
--- p⇒G {τ} p = record
---   { _⁻¹ =
---     λ { {v₁} {v₂} ((j , a) , (k , b)) →
---       (( k , P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k b) ) ,
---        (j , reverse j a)) } 
---   ; iso = record {
---     isoˡ = tt;
---     isoʳ = tt
---     }
---   }
+p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p⇒C p)
+p⇒G {τ} p = record
+  { _⁻¹ =
+    λ { {v₁} {v₂} ((j , a) , (k , b)) →
+      (( k , P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k b) ) ,
+       (j , reverse j a)) } 
+  ; iso = record {
+    isoˡ = tt;
+    isoʳ = tt
+    }
+  }
 
 -----------  
 -- Permutation to "monoid-style" groupoid
@@ -1367,56 +1367,56 @@ singleton p = (p , id⇔)
 -- two morphisms if composing one of them k₁ times is ⇔ to composing
 -- the other k₂ times.
 
--- p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
--- p/⇒C {τ} p = record {
---      Obj = ⊤
---     ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p))
---     ; _≡_ = λ { (k₁ , (pk₁ , α₁)) (k₂ , (pk₂ , α₂)) → pk₁ ⇔ pk₂} 
---     ; id = (0 , singleton id⟷)
---     ; _∘_ = λ { (k₂ , (pk₂ , α₂)) (k₁ , (pk₁ , α₁)) →
---                 (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
---     ; assoc = assoc◎l 
---     ; identityˡ = idr◎l 
---     ; identityʳ = idl◎l
---     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
---     ; ∘-resp-≡ = λ α β → β ⊡ α
---     }
+p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p/⇒C {τ} p = record {
+     Obj = ⊤
+    ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p))
+    ; _≡_ = λ { (k₁ , (pk₁ , α₁)) (k₂ , (pk₂ , α₂)) → pk₁ ⇔ pk₂} 
+    ; id = (0 , singleton id⟷)
+    ; _∘_ = λ { (k₂ , (pk₂ , α₂)) (k₁ , (pk₁ , α₁)) →
+                (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
+    ; assoc = assoc◎l 
+    ; identityˡ = idr◎l 
+    ; identityʳ = idl◎l
+    ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
+    ; ∘-resp-≡ = λ α β → β ⊡ α
+    }
 
 -- Generalize to groupoid by allowing !p
 
--- p!p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
--- p!p/⇒C {τ} p = record {
---      Obj = ⊤
---     ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] (Perm (compose j p))) ×
---                     (Σ[ k ∈ ℕ ] (Perm (compose k (! p))))
---     ; _≡_ = λ { ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) → 
---                 (pj₁ ⇔ pj₂) × (pk₁ ⇔ pk₂) }
---     ; id = ((0 , singleton id⟷) , (0 , singleton id⟷))
---     ; _∘_ = λ { ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) →
---                  ((j₁ + j₂ , (pj₁ ◎ pj₂ , trans⇔ (α₁ ⊡ α₂) (compose+ j₁ j₂))) ,
---                   (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (β₁ ⊡ β₂) (compose+ k₁ k₂)))) } 
---     ; assoc = (assoc◎l , assoc◎l)
---     ; identityˡ = (idr◎l , idr◎l)
---     ; identityʳ = (idl◎l , idl◎l)
---     ; equiv = record { refl = (id⇔ , id⇔);
---                        sym = λ { (α , β) → 2! α , 2! β};
---                        trans = λ { (α₁ , β₁) (α₂ , β₂) → trans⇔ α₁ α₂ , trans⇔ β₁ β₂ }}
---     ; ∘-resp-≡ = λ { (ff , fb) (gf , gb) → gf ⊡ ff , gb ⊡ fb } 
---     }
+p!p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
+p!p/⇒C {τ} p = record {
+     Obj = ⊤
+    ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] (Perm (compose j p))) ×
+                    (Σ[ k ∈ ℕ ] (Perm (compose k (! p))))
+    ; _≡_ = λ { ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) → 
+                (pj₁ ⇔ pj₂) × (pk₁ ⇔ pk₂) }
+    ; id = ((0 , singleton id⟷) , (0 , singleton id⟷))
+    ; _∘_ = λ { ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) →
+                 ((j₁ + j₂ , (pj₁ ◎ pj₂ , trans⇔ (α₁ ⊡ α₂) (compose+ j₁ j₂))) ,
+                  (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (β₁ ⊡ β₂) (compose+ k₁ k₂)))) } 
+    ; assoc = (assoc◎l , assoc◎l)
+    ; identityˡ = (idr◎l , idr◎l)
+    ; identityʳ = (idl◎l , idl◎l)
+    ; equiv = record { refl = (id⇔ , id⇔);
+                       sym = λ { (α , β) → 2! α , 2! β};
+                       trans = λ { (α₁ , β₁) (α₂ , β₂) → trans⇔ α₁ α₂ , trans⇔ β₁ β₂ }}
+    ; ∘-resp-≡ = λ { (ff , fb) (gf , gb) → gf ⊡ ff , gb ⊡ fb } 
+    }
 
 postulate
   ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (α : p ⇔ q) → (! p ⇔ ! q)
   !!⇔ : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₂} → (! (! p) ⇔ p)
 
--- p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
--- p/⇒G {τ} p = record
---   { _⁻¹ = λ {((j , (pj , α)) , (k , (pk , β))) →
---              ((k , (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) )) ,
---               (j , (! pj , trans⇔ (⇔! α) (reverse◎ j))))}
---   ; iso = λ { {f = ((j , (pj , α)) , (k , (pk , β)))} → record {
---             isoˡ = ({!!} , {!!}); 
---             isoʳ = ({!!} , {!!})}}
---   }
+p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
+p/⇒G {τ} p = record
+  { _⁻¹ = λ {((j , (pj , α)) , (k , (pk , β))) →
+             ((k , (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) )) ,
+              (j , (! pj , trans⇔ (⇔! α) (reverse◎ j))))}
+  ; iso = λ { {f = ((j , (pj , α)) , (k , (pk , β)))} → record {
+            isoˡ = ({!!} , {!!}); 
+            isoʳ = ({!!} , {!!})}}
+  }
 
 -- Now we are asking p^{j} ◎ p^{k} is id for arbitrary j and k which
 -- is clearly false. We need to encode that j + k is the order of the
