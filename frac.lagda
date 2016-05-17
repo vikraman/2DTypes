@@ -1597,6 +1597,52 @@ P₆ = P₄ ◎ P₂ -- (3 2 | 1)
 -- T p₁ ⊠ T p₂ = T (p₁ ⊗ p₂)
 -- nor do I expect
 -- 1/T p₁ ⊞ 1/T p₂ = 1/T (p₁ ⊕ p₂)
+
+-- Example from introduction
+
+Seven : U
+Seven = PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE ONE)))))
+
+infixr 2  _⟷⟨_⟩_   
+infix  3  _□       
+
+_⟷⟨_⟩_ : (t₁ : U) {t₂ : U} {t₃ : U} → 
+          (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃) 
+_ ⟷⟨ α ⟩ β = α ◎ β
+
+_□ : (t : U) → {t : U} → (t ⟷ t)
+_□ t = id⟷
+
+rotate3 : PLUS (PLUS ONE ONE) ONE ⟷ PLUS (PLUS ONE ONE) ONE
+rotate3 = P₅
+
+sevenp : Seven ⟷ Seven
+sevenp = Seven
+           ⟷⟨ assocl₊ ⟩ 
+         PLUS (PLUS ONE ONE) (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE ONE))))
+           ⟷⟨ assocl₊ ⟩ 
+         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS ONE (PLUS ONE (PLUS ONE ONE)))
+           ⟷⟨ id⟷ ⊕ assocl₊ ⟩
+         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS ONE ONE) (PLUS ONE ONE))
+           ⟷⟨ id⟷ ⊕ assocl₊ ⟩
+         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS (PLUS ONE ONE) ONE) ONE)
+           ⟷⟨ rotate3 ⊕ (rotate3 ⊕ id⟷) ⟩ 
+         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS (PLUS ONE ONE) ONE) ONE)
+           ⟷⟨ id⟷ ⊕ assocr₊ ⟩
+         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS ONE ONE) (PLUS ONE ONE))
+           ⟷⟨ id⟷ ⊕ assocr₊ ⟩
+         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS ONE (PLUS ONE (PLUS ONE ONE)))           
+           ⟷⟨ assocr₊ ⟩ 
+         PLUS (PLUS ONE ONE) (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE ONE))))
+           ⟷⟨ assocr₊ ⟩ 
+         Seven □
+
+#sevenp : U
+#sevenp = PLUS ONE (PLUS ONE ONE) -- calculate from order!!
+
+1/sevenp : U/
+1/sevenp = 1/p sevenp
+
 \end{code}
 
 
