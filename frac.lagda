@@ -93,9 +93,10 @@ import Algebra.FunctionProperties
 open Algebra.FunctionProperties (P._≡_ {A = ℤ})
 
 open import Categories.Category
+open import Categories.Sum
 open import Categories.Product 
-open import Categories.Groupoid renaming (Product to GProduct)
 open import Categories.Groupoid.Sum renaming (Sum to GSum)
+open import Categories.Groupoid renaming (Product to GProduct)
 
 -- import Categories.Morphisms
 -- open import Categories.Support.PropositionalEquality
@@ -1453,13 +1454,34 @@ Ufromℕ : ℕ → U
 Ufromℕ 0 = ZERO
 Ufromℕ (suc n) = PLUS ONE (Ufromℕ n)
 
+discreteC : Set → Category lzero lzero lzero
+discreteC S = record {
+     Obj = S
+    ; _⇒_ = λ s₁ s₂ → s₁ P.≡ s₂
+    ; _≡_ = λ _ _ → ⊤ 
+    ; id = P.refl 
+    ; _∘_ = λ { {A} {.A} {.A} P.refl P.refl → P.refl }
+    ; assoc = tt 
+    ; identityˡ = tt 
+    ; identityʳ = tt 
+    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }  
+    ; ∘-resp-≡ = λ _ _ → tt 
+    }
+
+discreteG : (S : Set) → Groupoid (discreteC S)
+discreteG S = record
+  { _⁻¹ = λ { {A} {.A} P.refl → P.refl }
+  ; iso = record { isoˡ = tt; isoʳ = tt }
+  }
+
 ⟦_⟧/ : U/ → ∃ (λ ℂ → Groupoid ℂ)
-⟦ # {τ} p ⟧/ = {!!} -- build discrete groupoid from (Ufromℕ (order τ p))
+⟦ # {τ} p ⟧/ = let S = ⟦ Ufromℕ (order τ p) ⟧ 
+              in (discreteC S , discreteG S)
 ⟦ 1/p p ⟧/ = (p!p/⇒C p , p/⇒G p)
 ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( {!!} , GSum G₁ G₂)
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Sum ℂ₁ ℂ₂ , GSum G₁ G₂)
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
 
 -- we can lift a regular type in U to U/ by using the id⟷ permutation on it as a proxy
 
