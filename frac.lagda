@@ -85,6 +85,7 @@ open import Relation.Nullary
 import Relation.Binary.PropositionalEquality as P
 open import Categories.Category
 open import Categories.Groupoid
+open import Categories.Groupoid.Sum
 open import Relation.Binary.Core using (Rel; IsEquivalence)
 
 open import Relation.Binary
@@ -1424,17 +1425,7 @@ p/⇒G {τ} p = record
 
 -- Sums and products of groupoids: should be in categories package
 
--- Now define #order p
-
-order : {τ : U} → (τ ⟷ τ) → ℕ
-order {τ} p = {!!}
-
-orderU : {τ : U} → (τ ⟷ τ) → U
-orderU = {!!} 
-
 \end{code}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Algebra}
@@ -1443,15 +1434,30 @@ We now have a new level of types
 
 \begin{code}
 data U/ : Set where
-  T : {τ : U} → (p : τ ⟷ τ) → U/
-  1/T : {τ : U} → (p : τ ⟷ τ) → U/
-  _⊞_ : U/ → U/ → U/
-  _⊠_ : U/ → U/ → U/
+  # : {τ : U} → (p : τ ⟷ τ) → U/    -- finite set of cardinality (order p)
+  1/p : {τ : U} → (p : τ ⟷ τ) → U/  -- monoid style groupoid 
+  _⊞_ : U/ → U/ → U/                -- conventional sums and products
+  _⊠_ : U/ → U/ → U/                -- of groupoids
+
+postulate
+  order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda
+
+Ufromℕ : ℕ → U
+Ufromℕ 0 = ZERO
+Ufromℕ (suc n) = PLUS ONE (Ufromℕ n)
+
+⟦_⟧/ : U/ → ∃ (λ ℂ → Groupoid ℂ)
+⟦ # {τ} p ⟧/ = {!!} -- build discrete groupoid from (Ufromℕ (order τ p))
+⟦ 1/p p ⟧/ = (p!p/⇒C p , p/⇒G p)
+⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( {!!} , Sum G₁ G₂)
+⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( {!!} , {!!})
 
 -- we can lift a regular type in U to U/ by using the id⟷ permutation on it as a proxy
 
-⇑ : (τ : U) → U/
-⇑ τ = T {τ} id⟷
+-- ⇑ : (τ : U) → U/
+-- ⇑ τ = T {τ} id⟷
 
 -- Application: Say I have a type Bool × Bool × Bool of 3 bit
 -- registers. Now say I want to the type of 'even' 3 bit numbers and
@@ -1546,17 +1552,17 @@ P₆ = P₄ ◎ P₂ -- (3 2 | 1)
 -- that u₄ should be equivalent to ⇑ ONE
 -- that u₅ and u₆ are equivalent and 
 -- that u₇ and u₈ are equivalent 
-u₁ u₂ u₃ u₄ : U/
-u₁ = T P₃ ⊠ ⇑ BOOL
-u₂ = T (P₃ ⊕ P₃)
-u₃ = T P₃ ⊞ T P₃
-u₄ = T P₃ ⊠ 1/T P₃
---
-u₅ u₆ u₇ u₈ : (τ₁ τ₂ : U) → U/ 
-u₅ τ₁ τ₂ = ⇑ (PLUS τ₁ τ₂)
-u₆ τ₁ τ₂ = ⇑ τ₁ ⊞ ⇑ τ₂
-u₇ τ₁ τ₂ = ⇑ (TIMES τ₁ τ₂)
-u₈ τ₁ τ₂ = ⇑ τ₁ ⊠ ⇑ τ₂
+-- u₁ u₂ u₃ u₄ : U/
+-- u₁ = T P₃ ⊠ ⇑ BOOL
+-- u₂ = T (P₃ ⊕ P₃)
+-- u₃ = T P₃ ⊞ T P₃
+-- u₄ = T P₃ ⊠ 1/T P₃
+-- --
+-- u₅ u₆ u₇ u₈ : (τ₁ τ₂ : U) → U/ 
+-- u₅ τ₁ τ₂ = ⇑ (PLUS τ₁ τ₂)
+-- u₆ τ₁ τ₂ = ⇑ τ₁ ⊞ ⇑ τ₂
+-- u₇ τ₁ τ₂ = ⇑ (TIMES τ₁ τ₂)
+-- u₈ τ₁ τ₂ = ⇑ τ₁ ⊠ ⇑ τ₂
 
 -- I do not expect
 -- T p₁ ⊠ T p₂ = T (p₁ ⊗ p₂)
