@@ -63,43 +63,45 @@
 
 module frac where
 open import Level using (_⊔_) renaming (zero to lzero)
-open import Algebra
-open import Algebra.Structures
-import Algebra.FunctionProperties
+
 open import Data.Empty
 open import Data.Unit hiding (_≤_; _≤?_)
-open import Data.Integer using (ℤ; +_; -[1+_]) renaming (_+_ to _ℤ+_)
+open import Data.Bool hiding (T)
+open import Data.Nat hiding (_⊔_)
 open import Data.Nat.Properties
+open import Data.Integer using (ℤ; +_; -[1+_]) renaming (_+_ to _ℤ+_)
+open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
+  hiding (_≤_; _≤?_)
 open import Data.Fin using (Fin; inject+; raise; inject≤; toℕ; fromℕ)
   renaming (zero to fzero; suc to fsuc; _+_ to _f+_)
 open import Data.Fin.Properties hiding (reverse)
 open import Data.Sum hiding (map)
-open import Data.Bool hiding (T)
 open import Data.Product hiding (map)
 open import Data.Vec hiding (reverse)
-open import Data.Nat hiding (_⊔_)
-open import Data.Integer using (+_) 
-open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
-  hiding (_≤_; _≤?_)
-open import Relation.Nullary
-import Relation.Binary.PropositionalEquality as P
-open import Categories.Category
-open import Categories.Groupoid
-open import Categories.Groupoid.Sum
-open import Relation.Binary.Core using (Rel; IsEquivalence)
 
+open import Function using (flip)
+open import Relation.Nullary
+open import Relation.Binary.Core using (Rel; IsEquivalence)
+import Relation.Binary.PropositionalEquality as P
 open import Relation.Binary
   using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
   renaming (_⇒_ to _⊆_)
-open import Function using (flip)
+
+open import Algebra
+open import Algebra.Structures
+import Algebra.FunctionProperties
+open Algebra.FunctionProperties (P._≡_ {A = ℤ})
+
+open import Categories.Category
+open import Categories.Product 
+open import Categories.Groupoid renaming (Product to GProduct)
+open import Categories.Groupoid.Sum renaming (Sum to GSum)
+
 -- import Categories.Morphisms
 -- open import Categories.Support.PropositionalEquality
 -- open import Categories.Support.Equivalence
 -- open import Categories.Support.EqReasoning
-open import Data.Product
 
-
-open Algebra.FunctionProperties (P._≡_ {A = ℤ})
 \end{code}
 }
 
@@ -178,6 +180,9 @@ each value. We will split the type $C$ as the product of $A$ and $B$
 where the cardinalities of $A$ and $B$ are approximately $\sqrt{n}$
 and we will operate on $A$ and $B$ independently and potentially in
 parallel. We will do this even if $n$ is prime!
+
+%%%%%
+\subsection{Example}
 
 We will use the type $C$ below as a running example in this
 section. It has cardinality 7:
@@ -356,7 +361,7 @@ hence ``informally-equivalent'' to $\ot$.
 
 The type $C \boxtimes 1/p$ looks like:
 
-\medskip
+\begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
   \draw (0,0) ellipse (9cm and 2.7cm);
   \node[below] (1) at (-6,-1.5) {\texttt{sun}};
@@ -402,6 +407,7 @@ The type $C \boxtimes 1/p$ looks like:
   \path (7) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (7);
   \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
 \end{tikzpicture}
+\end{center} 
 
 This type is again informally-equivalent to $\ag{C}{p}$ as it has the
 same cardinality.
@@ -564,6 +570,7 @@ same cardinality.
 
 % which is equivalent to $C$.
 
+%%%%%
 \subsection{Information-Equivalence}
 
 Our notion of information equivalence is coarser than the conventional
@@ -1450,9 +1457,9 @@ Ufromℕ (suc n) = PLUS ONE (Ufromℕ n)
 ⟦ # {τ} p ⟧/ = {!!} -- build discrete groupoid from (Ufromℕ (order τ p))
 ⟦ 1/p p ⟧/ = (p!p/⇒C p , p/⇒G p)
 ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( {!!} , Sum G₁ G₂)
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( {!!} , GSum G₁ G₂)
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( {!!} , {!!})
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = ( Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
 
 -- we can lift a regular type in U to U/ by using the id⟷ permutation on it as a proxy
 
