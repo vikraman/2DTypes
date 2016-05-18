@@ -1472,8 +1472,15 @@ p/⇒G {τ} p = record
              (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) ) ,
              (! pj , trans⇔ (⇔! α) (reverse◎ j)))}
   ; iso = λ { {f = (j , k , jk|p , (pj , α) , (pk , β))} → record {
-            isoˡ = ({!!} , {!!}); 
-            isoʳ = ({!!} , {!!})}}
+            isoˡ = (trans⇔ (α ⊡ trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔))
+                           (trans⇔ (compose+ j k) jk|p) ,
+                   trans⇔ (β ⊡ (trans⇔ (⇔! α) (reverse◎ j)))
+                     (trans⇔ (compose+ k j) (trans⇔ (2! (reverse◎ (k + j)))
+                     (⇔! (trans⇔ (composeℕ (+-comm k j)) jk|p))))); 
+            isoʳ = (trans⇔ (trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) ⊡ α)
+                   (trans⇔ (compose+ k j) (trans⇔ (composeℕ (+-comm k j)) jk|p))  ,
+                   trans⇔ (trans⇔ (⇔! α) (reverse◎ j) ⊡ β)
+                   (trans⇔ (compose+ j k) (trans⇔ (2! (reverse◎ (j + k))) (⇔! jk|p))))}}
   }
 
 \end{code}
