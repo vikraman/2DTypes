@@ -1494,15 +1494,42 @@ discreteG S = record
 --
 --
 
-
-
-
-
--- we can lift a regular type in U to U/ by using the id⟷ permutation on it as a proxy
-
--- ⇑ : (τ : U) → U/
--- ⇑ τ = T {τ} id⟷
-
+data Comb/ : (S T : U/) → Set where
+  liftC : {τ₁ τ₂ : U} → Comb/ (⇑ τ₁) (⇑ τ₂)
+  etaC : {τ : U} {p : τ ⟷ τ} → Comb/ (⇑ ONE) (# p ⊠ 1/p p)
+  epsilonC : {τ : U} {p : τ ⟷ τ} → Comb/ (# p ⊠ 1/p p) (⇑ ONE)
+  unite₊lC : {S : U/} → Comb/ (⇑ ZERO ⊞ S) S
+  uniti₊lC : {S : U/} → Comb/ S (⇑ ZERO ⊞ S)
+  unite₊rC : {S : U/} → Comb/ (S ⊞ ⇑ ZERO) S
+  uniti₊rC : {S : U/} → Comb/ S (S ⊞ ⇑ ZERO)
+  swap₊C   : {S₁ S₂ : U/} → Comb/ (S₁ ⊞ S₂) (S₂ ⊞ S₁)
+  assocl₊C : {S₁ S₂ S₃ : U/} → Comb/ (S₁ ⊞ (S₂ ⊞ S₃)) ((S₁ ⊞ S₂) ⊞ S₃)
+  assocr₊C : {S₁ S₂ S₃ : U/} → Comb/ ((S₁ ⊞ S₂) ⊞ S₃) (S₁ ⊞ (S₂ ⊞ S₃)) 
+  unite⋆lC : {S : U/} → Comb/ (⇑ ONE ⊠ S) S
+  uniti⋆lC : {S : U/} → Comb/ S (⇑ ONE ⊠ S)
+  unite⋆rC : {S : U/} → Comb/ (S ⊠ ⇑ ONE) S
+  uniti⋆rC : {S : U/} → Comb/ S (S ⊠ ⇑ ONE)
+  swap⋆C   : {S₁ S₂ : U/} → Comb/ (S₁ ⊠ S₂) (S₂ ⊠ S₁)
+  assocl⋆C : {S₁ S₂ S₃ : U/} → Comb/ (S₁ ⊠ (S₂ ⊠ S₃)) ((S₁ ⊠ S₂) ⊠ S₃)
+  assocr⋆C : {S₁ S₂ S₃ : U/} → Comb/ ((S₁ ⊠ S₂) ⊠ S₃) (S₁ ⊠ (S₂ ⊠ S₃)) 
+  absorbrC : {S : U/} → Comb/ (⇑ ZERO ⊠ S) (⇑ ZERO)
+  absorblC : {S : U/} → Comb/ (S ⊠ ⇑ ZERO) (⇑ ZERO)
+  factorzrC : {S : U/} → Comb/ (⇑ ZERO) (S ⊠ ⇑ ZERO)
+  factorzlC : {S : U/} → Comb/ (⇑ ZERO) (⇑ ZERO ⊠ S)
+  distC    : {S₁ S₂ S₃ : U/} →
+             Comb/ ((S₁ ⊞ S₂) ⊠ S₃) ((S₁ ⊠ S₃) ⊞ (S₂ ⊠ S₃))
+  factorC  : {S₁ S₂ S₃ : U/} →
+             Comb/ ((S₁ ⊠ S₃) ⊞ (S₂ ⊠ S₃)) ((S₁ ⊞ S₂) ⊠ S₃)
+  distl   : {S₁ S₂ S₃ : U/} →
+            Comb/ (S₁ ⊠ (S₂ ⊞ S₃)) ((S₁ ⊠ S₂) ⊞ (S₁ ⊠ S₃))
+  factorl : {S₁ S₂ S₃ : U/} →
+            Comb/ ((S₁ ⊠ S₂) ⊞ (S₁ ⊠ S₃)) (S₁ ⊠ (S₂ ⊞ S₃))
+  idC : {S : U/} → Comb/ S S
+  transC : {S T U : U/} → Comb/ S T → Comb/ T U → Comb/ S U
+  sumC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊞ T₁) (S₂ ⊞ T₂)) 
+  prodC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊠ T₁) (S₂ ⊠ T₂)) 
+  -- perhaps some things on order p₁ + order p₂ <=> order (p₁ ⊕ p₂) or whatever the right thing is
+ 
 -- Application: Say I have a type Bool × Bool × Bool of 3 bit
 -- registers. Now say I want to the type of 'even' 3 bit numbers and
 -- 'odd' 3 bits numbers. I cold write a permutation (call it p) that
@@ -1658,8 +1685,11 @@ sevenp = Seven
 1/sevenp : U/
 1/sevenp = 1/p sevenp
 
-ex : U → U/
-ex C = {!!} 
+ex : Comb/ (⇑ Seven) ((⇑ Seven ⊠ 1/p sevenp) ⊠ # sevenp)
+ex = transC uniti⋆rC -- ⇑ Seven ⊠ ⇑ ONE
+     (transC (prodC idC (etaC {Seven} {sevenp})) -- ⇑ Seven ⊠ (# p ⊠ 1/p p)
+     (transC (prodC idC swap⋆C) -- ⇑ Seven ⊠ (1/p p ⊠ # p)
+     assocl⋆C)) 
 
 \end{code}
 
