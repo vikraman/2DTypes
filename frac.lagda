@@ -69,6 +69,7 @@ open import Data.Unit hiding (_≤_; _≤?_)
 open import Data.Bool hiding (T)
 open import Data.Nat hiding (_⊔_)
 open import Data.Nat.Properties
+open import Data.Nat.Divisibility
 open import Data.Integer using (ℤ; +_; -[1+_]) renaming (_+_ to _ℤ+_)
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
@@ -88,6 +89,8 @@ open import Relation.Binary
   renaming (_⇒_ to _⊆_)
 
 open import Algebra
+private
+  module CS = CommutativeSemiring Data.Nat.Properties.commutativeSemiring
 open import Algebra.Structures
 import Algebra.FunctionProperties
 open Algebra.FunctionProperties (P._≡_ {A = ℤ})
@@ -1395,24 +1398,30 @@ p/⇒C {τ} p = record {
 
 postulate  
   order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda  
+  composeOrder : {τ : U} {p : τ ⟷ τ} → compose (order τ p) p P.≡ compose 0 p
+
+-- We keep two arrows together: if p has order 4, we will have:
+--   p^0 and !p^4 together
+--   p^1 and !p^3 together
+--   p^2 and !p^2 together
+--   p^3 and !p^1 together
 
 p!p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p!p/⇒C {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] Σ[ k ∈ ℕ ]
-                        j + k P.≡ order τ p × 
+                        j + k ∣ order τ p × 
                         Perm (compose j p) ×
                         Perm (compose k (! p)))
-    ; _≡_ = λ { (j₁ , k₁ , j₁≡k₁ , (pj₁ , α₁) , (pk₁ , β₁))
-                (j₂ , k₂ , j₂≡k₂ , (pj₂ , α₂) , (pk₂ , β₂)) → 
+    ; _≡_ = λ { (j₁ , k₁ , j₁k₁|p , (pj₁ , α₁) , (pk₁ , β₁))
+                (j₂ , k₂ , j₂k₂|p , (pj₂ , α₂) , (pk₂ , β₂)) → 
                 (pj₁ ⇔ pj₂) × (pk₁ ⇔ pk₂) }
-    ; id = (0 , order τ p , P.refl , singleton id⟷ , singleton (compose (order τ p) (! p)))
-    ; _∘_ = λ { (j₂ , k₂ , j₂≡k₂ , (pj₂ , α₂) , (pk₂ , β₂))
-                (j₁ , k₁ , j₁≡k₁ , (pj₁ , α₁) , (pk₁ , β₁)) →
+    ; id = (0 , order τ p , divides 1 (P.sym (proj₁ CS.*-identity (order τ p))) ,
+           singleton id⟷ ,
+           singleton (compose (order τ p) (! p)))
+    ; _∘_ = λ { (j₂ , k₂ , j₂k₂|p , (pj₂ , α₂) , (pk₂ , β₂))
+                (j₁ , k₁ , j₁k₁|p , (pj₁ , α₁) , (pk₁ , β₁)) →
             (j₁ + j₂ , k₁ + k₂ , {!!} ,
-            -- Given: j₂≡k₂ : j₂ + k₂ P.≡ order τ p
-            --        j₁≡k₁ : j₁ + k₁ P.≡ order τ p
-            -- Show: ?0 : j₁ + j₂ + (k₁ + k₂) P.≡ order τ p
             (pj₁ ◎ pj₂ , trans⇔ (α₁ ⊡ α₂) (compose+ j₁ j₂)) ,
             (pk₁ ◎ pk₂ , trans⇔ (β₁ ⊡ β₂) (compose+ k₁ k₂))) }
     ; assoc = (assoc◎l , assoc◎l)
@@ -1430,11 +1439,11 @@ postulate
 
 p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
 p/⇒G {τ} p = record
-  { _⁻¹ = λ {(j , k , j≡k , (pj , α) , (pk , β)) →
-             (k , j , {!!} ,
+  { _⁻¹ = λ {(j , k , jk|p , (pj , α) , (pk , β)) →
+             (k , j , P.subst (λ x → x ∣ order τ p) {!!} jk|p ,
              (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) ) ,
              (! pj , trans⇔ (⇔! α) (reverse◎ j)))}
-  ; iso = λ { {f = (j , k , j≡k , (pj , α) , (pk , β))} → record {
+  ; iso = λ { {f = (j , k , jk|p , (pj , α) , (pk , β))} → record {
             isoˡ = ({!!} , {!!}); 
             isoʳ = ({!!} , {!!})}}
   }
