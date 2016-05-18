@@ -1437,10 +1437,18 @@ postulate
   ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (α : p ⇔ q) → (! p ⇔ ! q)
   !!⇔ : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₂} → (! (! p) ⇔ p)
 
++-suc : (i j : ℕ) → suc (i + j) P.≡ i + suc j
++-suc 0 j = P.refl
++-suc (suc i) j = P.cong suc (+-suc i j)
+
++-comm : (m n : ℕ) → m + n P.≡ n + m
++-comm 0 n = P.sym (proj₁ CS.*-identity n)
++-comm (suc m) n = P.trans (P.cong suc (+-comm m n)) (+-suc n m) 
+
 p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
 p/⇒G {τ} p = record
   { _⁻¹ = λ {(j , k , jk|p , (pj , α) , (pk , β)) →
-             (k , j , P.subst (λ x → x ∣ order τ p) {!!} jk|p ,
+             (k , j , P.subst (λ x → x ∣ order τ p) (+-comm j k) jk|p ,
              (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) ) ,
              (! pj , trans⇔ (⇔! α) (reverse◎ j)))}
   ; iso = λ { {f = (j , k , jk|p , (pj , α) , (pk , β))} → record {
