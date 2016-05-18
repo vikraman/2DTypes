@@ -1393,20 +1393,31 @@ p/⇒C {τ} p = record {
 
 -- Generalize to groupoid by allowing !p
 
+postulate  
+  order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda  
+
 p!p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p!p/⇒C {τ} p = record {
      Obj = ⊤
-    ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] (Perm (compose j p))) ×
-                    (Σ[ k ∈ ℕ ] (Perm (compose k (! p))))
-    ; _≡_ = λ { ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) → 
+    ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] Σ[ k ∈ ℕ ]
+                        j + k P.≡ order τ p × 
+                        Perm (compose j p) ×
+                        Perm (compose k (! p)))
+    ; _≡_ = λ { (j₁ , k₁ , j₁≡k₁ , (pj₁ , α₁) , (pk₁ , β₁))
+                (j₂ , k₂ , j₂≡k₂ , (pj₂ , α₂) , (pk₂ , β₂)) → 
                 (pj₁ ⇔ pj₂) × (pk₁ ⇔ pk₂) }
-    ; id = ((0 , singleton id⟷) , (0 , singleton id⟷))
-    ; _∘_ = λ { ((j₂ , (pj₂ , α₂)) , (k₂ , (pk₂ , β₂))) ((j₁ , (pj₁ , α₁)) , (k₁ , (pk₁ , β₁))) →
-                 ((j₁ + j₂ , (pj₁ ◎ pj₂ , trans⇔ (α₁ ⊡ α₂) (compose+ j₁ j₂))) ,
-                  (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (β₁ ⊡ β₂) (compose+ k₁ k₂)))) } 
+    ; id = (0 , order τ p , P.refl , singleton id⟷ , singleton (compose (order τ p) (! p)))
+    ; _∘_ = λ { (j₂ , k₂ , j₂≡k₂ , (pj₂ , α₂) , (pk₂ , β₂))
+                (j₁ , k₁ , j₁≡k₁ , (pj₁ , α₁) , (pk₁ , β₁)) →
+            (j₁ + j₂ , k₁ + k₂ , {!!} ,
+            -- Given: j₂≡k₂ : j₂ + k₂ P.≡ order τ p
+            --        j₁≡k₁ : j₁ + k₁ P.≡ order τ p
+            -- Show: ?0 : j₁ + j₂ + (k₁ + k₂) P.≡ order τ p
+            (pj₁ ◎ pj₂ , trans⇔ (α₁ ⊡ α₂) (compose+ j₁ j₂)) ,
+            (pk₁ ◎ pk₂ , trans⇔ (β₁ ⊡ β₂) (compose+ k₁ k₂))) }
     ; assoc = (assoc◎l , assoc◎l)
-    ; identityˡ = (idr◎l , idr◎l)
-    ; identityʳ = (idl◎l , idl◎l)
+    ; identityˡ = (idr◎l , {!!}) -- idr◎l
+    ; identityʳ = (idl◎l , {!!}) -- idl◎l
     ; equiv = record { refl = (id⇔ , id⇔);
                        sym = λ { (α , β) → 2! α , 2! β};
                        trans = λ { (α₁ , β₁) (α₂ , β₂) → trans⇔ α₁ α₂ , trans⇔ β₁ β₂ }}
@@ -1419,10 +1430,11 @@ postulate
 
 p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
 p/⇒G {τ} p = record
-  { _⁻¹ = λ {((j , (pj , α)) , (k , (pk , β))) →
-             ((k , (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) )) ,
-              (j , (! pj , trans⇔ (⇔! α) (reverse◎ j))))}
-  ; iso = λ { {f = ((j , (pj , α)) , (k , (pk , β)))} → record {
+  { _⁻¹ = λ {(j , k , j≡k , (pj , α) , (pk , β)) →
+             (k , j , {!!} ,
+             (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) ) ,
+             (! pj , trans⇔ (⇔! α) (reverse◎ j)))}
+  ; iso = λ { {f = (j , k , j≡k , (pj , α) , (pk , β))} → record {
             isoˡ = ({!!} , {!!}); 
             isoʳ = ({!!} , {!!})}}
   }
@@ -1492,9 +1504,6 @@ data Comb/ : (S T : U/) → Set where
 \subsection{Denotational Semantics in Groupoids}
  
 \begin{code}
-postulate  
-  order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda  
-
 Ufromℕ : ℕ → U
 Ufromℕ 0 = ZERO
 Ufromℕ (suc n) = PLUS ONE (Ufromℕ n)
