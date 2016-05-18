@@ -174,7 +174,7 @@ sets or groupoids) such that the cardinality of $T_1$ is the same as
 the cardinality of $T_2$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Speedup of $\sqrt{n}$}
+\section{Example and Information Equivalence}
 
 We have a type $C$ containing $n$ values and we want to operate on
 each value. We will split the type $C$ as the product of $A$ and $B$
@@ -1436,8 +1436,11 @@ p/⇒G {τ} p = record
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Algebra}
+\section{A Programming Language} 
 
+%%%%%
+\subsection{Syntax}
+ 
 We now have a new level of types
 
 \begin{code}
@@ -1447,52 +1450,6 @@ data U/ : Set where
   1/p : {τ : U} → (p : τ ⟷ τ) → U/  -- monoid style groupoid 
   _⊞_ : U/ → U/ → U/                -- conventional sums and products
   _⊠_ : U/ → U/ → U/                -- of groupoids
-
-postulate
-  order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda
-
-Ufromℕ : ℕ → U
-Ufromℕ 0 = ZERO
-Ufromℕ (suc n) = PLUS ONE (Ufromℕ n)
-
-discreteC : Set → Category lzero lzero lzero
-discreteC S = record {
-     Obj = S
-    ; _⇒_ = λ s₁ s₂ → s₁ P.≡ s₂
-    ; _≡_ = λ _ _ → ⊤ 
-    ; id = P.refl 
-    ; _∘_ = λ { {A} {.A} {.A} P.refl P.refl → P.refl }
-    ; assoc = tt 
-    ; identityˡ = tt 
-    ; identityʳ = tt 
-    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }  
-    ; ∘-resp-≡ = λ _ _ → tt 
-    }
-
-discreteG : (S : Set) → Groupoid (discreteC S)
-discreteG S = record
-  { _⁻¹ = λ { {A} {.A} P.refl → P.refl }
-  ; iso = record { isoˡ = tt; isoʳ = tt }
-  }
-
-⟦_⟧/ : U/ → ∃ (λ ℂ → Groupoid ℂ)
-⟦ ⇑ S ⟧/ = (discreteC ⟦ S ⟧ , discreteG ⟦ S ⟧)
-⟦ # {τ} p ⟧/ = let S = ⟦ Ufromℕ (order τ p) ⟧ 
-              in (discreteC S , discreteG S)
-⟦ 1/p p ⟧/ = (p!p/⇒C p , p/⇒G p)
-⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Sum ℂ₁ ℂ₂ , GSum G₁ G₂)
-⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
-
-
---
---
---
--- Need to write combinators for sequential composition etc. of U/
---
---
---
 
 data Comb/ : (S T : U/) → Set where
   liftC : {τ₁ τ₂ : U} → Comb/ (⇑ τ₁) (⇑ τ₂)
@@ -1529,79 +1486,54 @@ data Comb/ : (S T : U/) → Set where
   sumC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊞ T₁) (S₂ ⊞ T₂)) 
   prodC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊠ T₁) (S₂ ⊠ T₂)) 
   -- perhaps some things on order p₁ + order p₂ <=> order (p₁ ⊕ p₂) or whatever the right thing is
+\end{code}
+
+%%%%%
+\subsection{Denotational Semantics in Groupoids}
  
--- Application: Say I have a type Bool × Bool × Bool of 3 bit
--- registers. Now say I want to the type of 'even' 3 bit numbers and
--- 'odd' 3 bits numbers. I cold write a permutation (call it p) that
--- has two orbits: one that cycles through 000 -> 010 -> 0100 -> 0110
--- and the other that cycles through 001 -> 011 -> 0101 -> 0111. If I
--- then take T of this permutation I will get the type with two
--- clusters: the even cluster and the odd cluster. Now imagine I have
--- another computation that over 3 bit numbers that adds 1 modulo 8. I
--- can use to compute over T p and it would take evens to odds and
--- vice versa.
+\begin{code}
+postulate  
+  order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda  
 
--- Conclusion: T p is really a conventional quotient type. We might
--- want to use τ // p instead of T p
+Ufromℕ : ℕ → U
+Ufromℕ 0 = ZERO
+Ufromℕ (suc n) = PLUS ONE (Ufromℕ n)
 
--- More generally what we have is a way to define as solutions of some
--- polynomials. Instead of defining types explicitly using 0, 1, +,
--- and *, we can define the type t such that 2 * t = 7. That 't' will
--- be the quotient of 7 by some permutation of order 2. We can also
--- define types t1 and t2 that are related by the equation t1 * t2 =
--- 3. We can use the equation to express t1 as 3/t2
--- which. Plausible?????
+discreteC : Set → Category lzero lzero lzero
+discreteC S = record {
+     Obj = S
+    ; _⇒_ = λ s₁ s₂ → s₁ P.≡ s₂
+    ; _≡_ = λ _ _ → ⊤ 
+    ; id = P.refl 
+    ; _∘_ = λ { {A} {.A} {.A} P.refl P.refl → P.refl }
+    ; assoc = tt 
+    ; identityˡ = tt 
+    ; identityʳ = tt 
+    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }  
+    ; ∘-resp-≡ = λ _ _ → tt 
+    }
 
--- More details: Say I have a type C and I want to operate on its
--- values. Say I have two concurrent sites. I could define an iso
--- between C and A x B and let one site process the A component and
--- the second site process the B component. The total computational
--- cost is A+B instead of A*B (modulo some overhead). This works like
--- a charm is the size of C can be factored into the sizes of A and
--- B. But what if the size of C is 17? Conventionally we are
--- stuck. Here we can still split C into 17/5 and 5. One site
--- processes 4 equivalence classes of elements and the other processes
--- 5 at a computational cost of 9 (modulo the overhead of splitting
--- and recombining). We can even go one step further in
--- decentralization: we decide to split 17 using a parameteric 't'
--- unknown at this point: so we would have 17/t and t. Now we have the
--- two concurrent components of size 17/t and t and let's say that
--- site 2 decides it has resources to process 4 elements so fixes t to
--- be 4 by generating 1 => 4 * 1/4 and forcing t * 1/4 to be 1. Site 1
--- now is forced to process 17/4 etc. 
+discreteG : (S : Set) → Groupoid (discreteC S)
+discreteG S = record
+  { _⁻¹ = λ { {A} {.A} P.refl → P.refl }
+  ; iso = record { isoˡ = tt; isoʳ = tt }
+  }
 
--- summary of conjectures:
+⟦_⟧/ : U/ → ∃ (λ ℂ → Groupoid ℂ)
+⟦ ⇑ S ⟧/ = (discreteC ⟦ S ⟧ , discreteG ⟦ S ⟧)
+⟦ # {τ} p ⟧/ = let S = ⟦ Ufromℕ (order τ p) ⟧ 
+              in (discreteC S , discreteG S)
+⟦ 1/p p ⟧/ = (p!p/⇒C p , p/⇒G p)
+⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Sum ℂ₁ ℂ₂ , GSum G₁ G₂)
+⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
+... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
+\end{code}
 
--- T p₁ ⊞ T p₂ = T (p₁ ⊕ p₂)
--- 1/T p₁ ⊞ 1/T p₂ ≠ 1/T (p₁ ⊕ p₂)
--- but 1/T p₁ ⊞ 1/T p₂ = (T p₂ ⊞ T p₁) ⊠ 1/T (p₁ ⊗ p₂)
+%%%%%
+\subsection{Examples}
 
--- T p₁ ⊠ T p₂ ≠ T (p₁ ⊗ p₂)
--- and this where we might need n-dimensional hupercubes
--- 1/T p₁ ⊠ 1/T p₂ = 1/T (p₁ ⊗ p₂)
-
--- T p ⊠ 1/T p = ⇑ ONE = T id⟷ = 1/T id⟷
-
--- The type T Bool has elements {false, true} and has paths:
---   not⁰ : false = false
---   not⁰ : true = true
---   not¹ : false = true
---   not¹ : true = false
--- The type 1/T Bool has elements {*} and has paths:
---   not⁰ : * = *
---   not¹ : * = *
--- and two paths
---   α : not¹ ∘ not¹ = not⁰ 
-
--- In HoTT having an equivalence not : Bool ≃ Bool does not give you
--- the right to say there is a path between false and true. But here
--- we can build a type corresponding to 'not' and INSIDE that type, it
--- is safe to have false = true
-
--- Regarding 1/T, how would you say in HoTT that we have an
--- equivalence that when applied 12 times gives you back id? Here we
--- have a natural way of saying that.
-
+\begin{code}
 BOOL : U
 BOOL = PLUS ONE ONE
 
@@ -1619,26 +1551,8 @@ P₄ = P₂ ◎ P₃ -- (2 3 | 1)
 P₅ = P₃ ◎ P₂ -- (3 1 | 2)
 P₆ = P₄ ◎ P₂ -- (3 2 | 1)
 
--- conjecture that u₁, u₂, and u₃ should be equivalent
--- that u₄ should be equivalent to ⇑ ONE
--- that u₅ and u₆ are equivalent and 
--- that u₇ and u₈ are equivalent 
--- u₁ u₂ u₃ u₄ : U/
--- u₁ = T P₃ ⊠ ⇑ BOOL
--- u₂ = T (P₃ ⊕ P₃)
--- u₃ = T P₃ ⊞ T P₃
--- u₄ = T P₃ ⊠ 1/T P₃
--- --
--- u₅ u₆ u₇ u₈ : (τ₁ τ₂ : U) → U/ 
--- u₅ τ₁ τ₂ = ⇑ (PLUS τ₁ τ₂)
--- u₆ τ₁ τ₂ = ⇑ τ₁ ⊞ ⇑ τ₂
--- u₇ τ₁ τ₂ = ⇑ (TIMES τ₁ τ₂)
--- u₈ τ₁ τ₂ = ⇑ τ₁ ⊠ ⇑ τ₂
-
--- I do not expect
--- T p₁ ⊠ T p₂ = T (p₁ ⊗ p₂)
--- nor do I expect
--- 1/T p₁ ⊞ 1/T p₂ = 1/T (p₁ ⊕ p₂)
+-- What can we say about 1/p + 1/q, 1/p * 1/q, etc. Old paper with
+-- Roshan had many of these worked out.
 
 -- Example from introduction
 
@@ -1691,29 +1605,87 @@ ex = transC uniti⋆rC -- ⇑ Seven ⊠ ⇑ ONE
      (transC (prodC idC swap⋆C) -- ⇑ Seven ⊠ (1/p p ⊠ # p)
      assocl⋆C)) 
 
+-- More details: Say I have a type C and I want to operate on its
+-- values. Say I have two concurrent sites. I could define an iso
+-- between C and A x B and let one site process the A component and
+-- the second site process the B component. The total computational
+-- cost is A+B instead of A*B (modulo some overhead). This works like
+-- a charm is the size of C can be factored into the sizes of A and
+-- B. But what if the size of C is 17? Conventionally we are
+-- stuck. Here we can still split C into 17/5 and 5. One site
+-- processes 4 equivalence classes of elements and the other processes
+-- 5 at a computational cost of 9 (modulo the overhead of splitting
+-- and recombining). We can even go one step further in
+-- decentralization: we decide to split 17 using a parameteric 't'
+-- unknown at this point: so we would have 17/t and t. Now we have the
+-- two concurrent components of size 17/t and t and let's say that
+-- site 2 decides it has resources to process 4 elements so fixes t to
+-- be 4 by generating 1 => 4 * 1/4 and forcing t * 1/4 to be 1. Site 1
+-- now is forced to process 17/4 etc. 
+
+-- Application: Say I have a type THREE = Bool × Bool × Bool of 3 bit
+-- registers. Now say I want to the type of 'even' 3 bit numbers and
+-- 'odd' 3 bits numbers. I cold write a permutation (call it p) that
+-- has two orbits: one that cycles through 000 -> 010 -> 0100 -> 0110
+-- and the other that cycles through 001 -> 011 -> 0101 -> 0111. If I
+-- then take THREE * 1/p I will get the type with two
+-- clusters: the even cluster and the odd cluster. Now imagine I have
+-- another computation that over 3 bit numbers that adds 1 modulo 8. I
+-- can use it to compute over THREE * 1/p and it would take evens to odds and
+-- vice versa. Conclusion: THRREE * 1/p is really a conventional
+-- quotient type. We use THREE // p as a notation
+
+-- More generally what we have is a way to define as solutions of some
+-- polynomials. Instead of defining types explicitly using 0, 1, +,
+-- and *, we can define the type t such that 2 * t = 7. That 't' will
+-- be the quotient of 7 by some permutation of order 2. We can also
+-- define types t1 and t2 that are related by the equation t1 * t2 =
+-- 3. We can use the equation to express t1 as 3/t2
+-- which. 
+
+-- In HoTT having an equivalence not : Bool ≃ Bool does not give you
+-- the right to say there is a path between false and true. But here
+-- we can build a type corresponding to 'not' and INSIDE that type, it
+-- is safe to have false = true
+
+-- Regarding 1/p, how would you say in HoTT that we have an
+-- equivalence that when applied 12 times gives you back id? Here we
+-- have a natural way of saying that.
+
 \end{code}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Operational Semantics}
 
+Give operational semantics which will force us to deal with order p
+much more seriously. Which value do you get when you use eta. How do
+you establish that some permutation of order 2 is equivalent to
+bool. It would seem the program itself needs to know the order
+internally. The goal would be to run this example:
+
+Another example. credit card. Say I have 1 dollar in my bank account
+($x$) and I want to buy something for 1 dollar right here and now. I
+can manufacture 1 dollar by creating 3 bits (or more or less) with
+default value $000$, swap $000$ with $001$, and give the $001$ to
+merchant. That would be nice but now are left with $1/p$ and this has
+to be reconciled before the program typechecks. The formal steps are:
+create a permutation $p$ of order 2 on 8 elements that swap $000$ and
+$001$. From nothing I can create $\order{p} \boxtimes 1/p$. The type
+$\order{p}$ has two elements and hence is isomoprhic to the booleans
+
+\begin{verbatim}
+x = x * 1
+  = x * (x * 1/x)
+  = (x * 1/x) * x
+  = 1 * x
+  = x
+\end{verbatim}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 
-we only care about left group actions; every type comes with an
-enumeration (which is cyclic group); we have the group element that
-says rotate 0 positions; another that says rotate $i$ positions
-etc. So at the end we have a fucntion that takes $k$ and rotates $k$
-times. Giving 0 is the identity and the number range from 0 to less
-than the size of the type. 
-
-0-skeleton: 3 points
-
-  Focus   point   other-point
-
-
-1-skeleton: one path skeleton
-
-  Anchored-endpoint -------- loose-endpoint that can connect to point or other-point so this gives us 1/2
+OLD STUFF 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Pointed Types and Path Skeletons}
@@ -1786,15 +1758,6 @@ set of points together with a family of skeleton paths.
 
 \end{code}
 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{2D-types: Intuition}
- 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Pointed Types} 
- 
 \begin{itemize}
 
 \item All the combinators $c : \tau_1\leftrightarrow\tau_2$ can be
@@ -1804,8 +1767,6 @@ set of points together with a family of skeleton paths.
   combinators. We will see how things develop.)
 
 \end{itemize}
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{2D-types}
@@ -2282,9 +2243,6 @@ course of action is for the constraint to travel back to the second site, adjust
   \url{http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.68.7980&rep=rep1&type=pdf}
 
 \end{itemize}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\end{document}
 
 {--
 record Typ : Set where
