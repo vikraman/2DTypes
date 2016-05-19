@@ -117,6 +117,26 @@ open import Categories.Groupoid renaming (Product to GProduct)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+Conservation of information is our starting point. If your entire
+framework is based on such a conservation principle then you
+\emph{can}, temporarily, introduce \emph{negative information}. This
+negative information will never be duplicated or erased and will
+eventually have to be reconciled. But what could the benefit possibly
+be? The intuition is simple and is essentially closely related to how
+we use credit cards. A credit card creates money and a corresponding
+debt out of nothing. The merchant can get their money and the debt
+propagates through the system until it is reconciled at some later
+point. If the entire system guarantees that the debt will not be
+duplicated or erased, then the net effect is additional convenience
+for everyone. Computationally what his happening is that we have
+created needed resources at one site with a debt: someone must
+eventually provide these resources.
+
+
+
+
+
+
 If quantum field theory is correct (as it so far seems to be) then
 \emph{information}, during any physical process, is neither created
 nor destroyed. Our starting point is this \emph{conservation
