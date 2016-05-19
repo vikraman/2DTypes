@@ -11,9 +11,12 @@ open import Data.Product using (_×_; _,_)
 \end{code}
 }
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}
  
+\amr{collect everything related to pi here and also talk about order
+of permutations and introduce that here too}
+
 Our starting point is $\Pi$:
 \begin{itemize}
 
