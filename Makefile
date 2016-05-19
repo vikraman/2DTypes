@@ -1,10 +1,10 @@
-all : frac.pdf
+all : popl.pdf
 
-frac.pdf : frac.tex
-	pdflatex frac.tex
+popl.pdf : popl.tex
+	pdflatex popl.tex
 
-frac.tex : frac.lagda
-	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library frac.lagda
+popl.tex : popl.lagda
+	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library popl.lagda
 
 clean:
 	rm -f *.{aux,bbl,bcf,blg,fdb_latexmk,fls,flx,ilg,lof,log,lop}	\

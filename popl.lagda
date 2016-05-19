@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass[preprint]{sigplanconf}
 \usepackage{agda}
 \usepackage[utf8x]{inputenc}
 \usepackage{amsthm}
@@ -61,7 +61,7 @@
 \begin{code}
 {-# OPTIONS --without-K #-}
 
-module frac where
+module popl where
 open import Level using (_⊔_) renaming (zero to lzero)
 
 open import Data.Empty
@@ -99,20 +99,39 @@ open import Categories.Sum
 open import Categories.Product 
 open import Categories.Groupoid.Sum renaming (Sum to GSum)
 open import Categories.Groupoid renaming (Product to GProduct)
-
--- import Categories.Morphisms
--- open import Categories.Support.PropositionalEquality
--- open import Categories.Support.Equivalence
--- open import Categories.Support.EqReasoning
-
 \end{code}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Action Groupoids and Fractional Types}
-\author{Everyone}
 \begin{document}
-\maketitle 
+
+\special{papersize=8.5in,11in}
+\setlength{\pdfpageheight}{\paperheight}
+\setlength{\pdfpagewidth}{\paperwidth}
+
+\conferenceinfo{CONF 'yy}{Month d--d, 20yy, City, ST, Country}
+\copyrightyear{20yy}
+\copyrightdata{978-1-nnnn-nnnn-n/yy/mm}
+\copyrightdoi{nnnnnnn.nnnnnnn}
+
+\titlebanner{Fractional Types and Negative Information}
+\preprintfooter{\date\time}
+
+\title{Fractional Types and Negative Information} 
+\authorinfo{Anonymous}{}{}
+%% Chao-Hong Chen, Vikraman Choudhury, Robert Rose,
+%% Jacques Carette, Amr Sabry
+\maketitle
+
+\begin{abstract}
+\ldots
+\end{abstract}
+
+\category{CR-number}{subcategory}{third-level}
+\terms
+term1, term2
+\keywords
+keyword1, keyword2
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -1752,6 +1771,7 @@ x = x * 1
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abbrvnat}
 \end{document}
 
 OLD STUFF 
@@ -2016,8 +2036,6 @@ a good operational semantics.
 \item Pointed groupoids:
 
 \begin{code}
--- open import Relation.Binary.Core using (Transitive; _⇒_)
-
 -- record Enum• : Set where
 --   constructor mkEnum•
 --   field
@@ -2787,18 +2805,11 @@ morphisms in that category is trivial.
 \begin{code}
 module X where
   open import Level
---  open import Categories.Category 
---  open import Categories.Groupoid
   open import Relation.Binary
     using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
     renaming (_⇒_ to _⊆_)
   open import Function using (flip)
---  import Categories.Morphisms
---  open import Categories.Support.PropositionalEquality
---  open import Categories.Support.Equivalence
---  open import Categories.Support.EqReasoning
   open import Data.Product
-  
 \end{code}}
 
 \begin{definition}[Groupoid Cardinality]
