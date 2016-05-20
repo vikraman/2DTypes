@@ -1,12 +1,30 @@
+\DeclareUnicodeCharacter{738}{${}^S$}
 
 \AgdaHide{
 \begin{code}
 module pibackground where
+
 open import Data.Empty using (⊥) 
 open import Data.Unit using (⊤; tt)
-open import Data.Nat using (ℕ; _+_; _*_)
+open import Data.Bool using (Bool; false; true; _∧_; if_then_else_)
+open import Data.Nat using (ℕ; suc; _+_; _*_)
+open import Data.Nat.LCM using (lcm)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Data.Product using (_×_; _,_)
+open import Data.Vec
+  using (Vec; []; _∷_; _++_; concat; foldr)
+  renaming (map to mapV)
+
+open import Function using (_∘_; _$_)
+open import Relation.Binary.PropositionalEquality using (_≡_)
+
+open import Data.Nat.Show using () renaming (show to showℕ)
+open import Data.String using (String)
+open import Agda.Builtin.IO using (IO)
+
+infix  30 _⟷_
+infix  30 _⇔_
+infixr 50 _◎_
 
 \end{code}
 }
@@ -17,65 +35,21 @@ open import Data.Product using (_×_; _,_)
 \amr{collect everything related to pi here and also talk about order
 of permutations and introduce that here too}
 
-Our starting point is $\Pi$:
-\begin{itemize}
+%%%%%
+\subsection{$\Pi$: Syntax and Operational Semantics} 
 
-\item We have finite types $\zt$, $\ot$, $\tau_1\oplus\tau_2$, and
-$\tau_1\otimes\tau_2$. 
-
-{\footnotesize{
-\smallskip
 \begin{code} 
 data U : Set where
   ZERO   : U
   ONE    : U
   PLUS   : U → U → U
   TIMES  : U → U → U
-\end{code}
-}}
 
-\item A type $\tau$ has points in $\llbracket \tau \rrbracket$:
-
-{\footnotesize{
-\smallskip
-\begin{code} 
 ⟦_⟧ : U → Set
 ⟦ ZERO ⟧         = ⊥ 
 ⟦ ONE ⟧          = ⊤
 ⟦ PLUS t₁ t₂ ⟧   = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
 ⟦ TIMES t₁ t₂ ⟧  = ⟦ t₁ ⟧ × ⟦ t₂ ⟧
-\end{code}
-}}
-
-\item A type $\tau$ has a cardinality $|\tau|$ which just counts the points:
-
-{\footnotesize{
-\smallskip
-\begin{code} 
-∣_∣ : U → ℕ
-∣ ZERO ∣         = 0
-∣ ONE ∣          = 1
-∣ PLUS t₁ t₂ ∣   = ∣ t₁ ∣ + ∣ t₂ ∣
-∣ TIMES t₁ t₂ ∣  = ∣ t₁ ∣ * ∣ t₂ ∣
-\end{code}
-}}
-
-\item We have combinators $c : \tau_1\leftrightarrow\tau_2$ between
-  the types which witness type isomorphisms and which correspond to
-  the axioms of commutative rigs. Combinators are also a
-  representation of permutations and they preserve the size of types.
-
-\item For $c_1, c_2 : \tau_1\leftrightarrow\tau_2$, we have level-2
- combinators $\alpha : c_1 \Leftrightarrow c_2$ which are (quite
- messy) equivalences of isomorphisms, and which happen to correspond
- to the coherence conditions for rig groupoids.
-
-\end{itemize}
-
-\AgdaHide{
-\begin{code}
-infix  30 _⟷_
-infixr 50 _◎_
 
 data _⟷_ : U → U → Set where
   unite₊l : {t : U} → PLUS ZERO t ⟷ t
@@ -139,8 +113,57 @@ data _⟷_ : U → U → Set where
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
 
-infix  30 _⇔_
+ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
+ap unite₊l (inj₁ ())
+ap unite₊l (inj₂ v) = v
+ap uniti₊l v = inj₂ v
+ap unite₊r (inj₁ x) = x
+ap unite₊r (inj₂ ())
+ap uniti₊r v = inj₁ v
+ap swap₊ (inj₁ v) = inj₂ v
+ap swap₊ (inj₂ v) = inj₁ v
+ap assocl₊ (inj₁ v) = inj₁ (inj₁ v)
+ap assocl₊ (inj₂ (inj₁ v)) = inj₁ (inj₂ v)
+ap assocl₊ (inj₂ (inj₂ v)) = inj₂ v
+ap assocr₊ (inj₁ (inj₁ v)) = inj₁ v
+ap assocr₊ (inj₁ (inj₂ v)) = inj₂ (inj₁ v)
+ap assocr₊ (inj₂ v) = inj₂ (inj₂ v)
+ap unite⋆l (tt , v) = v
+ap uniti⋆l v = (tt , v)
+ap unite⋆r (v , tt) = v
+ap uniti⋆r v = v , tt
+ap swap⋆ (v₁ , v₂) = (v₂ , v₁)
+ap assocl⋆ (v₁ , (v₂ , v₃)) = ((v₁ , v₂) , v₃)
+ap assocr⋆ ((v₁ , v₂) , v₃) = (v₁ , (v₂ , v₃))
+ap absorbr (x , _) = x
+ap absorbl (_ , y) = y
+ap factorzl ()
+ap factorzr ()
+ap dist (inj₁ v₁ , v₃) = inj₁ (v₁ , v₃)
+ap dist (inj₂ v₂ , v₃) = inj₂ (v₂ , v₃)
+ap factor (inj₁ (v₁ , v₃)) = (inj₁ v₁ , v₃)
+ap factor (inj₂ (v₂ , v₃)) = (inj₂ v₂ , v₃)
+ap distl (v , inj₁ x) = inj₁ (v , x)
+ap distl (v , inj₂ y) = inj₂ (v , y)
+ap factorl (inj₁ (x , y)) = x , inj₁ y
+ap factorl (inj₂ (x , y)) = x , inj₂ y
+ap id⟷ v = v
+ap (c₁ ◎ c₂) v = ap c₂ (ap c₁ v)
+ap (c₁ ⊕ c₂) (inj₁ v) = inj₁ (ap c₁ v)
+ap (c₁ ⊕ c₂) (inj₂ v) = inj₂ (ap c₂ v)
+ap (c₁ ⊗ c₂) (v₁ , v₂) = (ap c₁ v₁ , ap c₂ v₂)
 
+\end{code}
+
+%%%%%
+\subsection{Level 2}
+
+For $c_1, c_2 : \tau_1\leftrightarrow\tau_2$, we have level-2
+combinators $\alpha : c_1 \Leftrightarrow c_2$ which are (quite messy)
+equivalences of isomorphisms, and which happen to correspond to the
+coherence conditions for rig groupoids.
+
+\begin{code}
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
           (c₁ ◎ (c₂ ◎ c₃)) ⇔ ((c₁ ◎ c₂) ◎ c₃)
@@ -517,89 +540,93 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! fully-distribute⇔l = fully-distribute⇔r
 2! fully-distribute⇔r = fully-distribute⇔l
 
--- 0-dimensional evaluator
+\end{code}
 
-ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
-ap unite₊l (inj₁ ())
-ap unite₊l (inj₂ v) = v
-ap uniti₊l v = inj₂ v
-ap unite₊r (inj₁ x) = x
-ap unite₊r (inj₂ ())
-ap uniti₊r v = inj₁ v
-ap swap₊ (inj₁ v) = inj₂ v
-ap swap₊ (inj₂ v) = inj₁ v
-ap assocl₊ (inj₁ v) = inj₁ (inj₁ v)
-ap assocl₊ (inj₂ (inj₁ v)) = inj₁ (inj₂ v)
-ap assocl₊ (inj₂ (inj₂ v)) = inj₂ v
-ap assocr₊ (inj₁ (inj₁ v)) = inj₁ v
-ap assocr₊ (inj₁ (inj₂ v)) = inj₂ (inj₁ v)
-ap assocr₊ (inj₂ v) = inj₂ (inj₂ v)
-ap unite⋆l (tt , v) = v
-ap uniti⋆l v = (tt , v)
-ap unite⋆r (v , tt) = v
-ap uniti⋆r v = v , tt
-ap swap⋆ (v₁ , v₂) = (v₂ , v₁)
-ap assocl⋆ (v₁ , (v₂ , v₃)) = ((v₁ , v₂) , v₃)
-ap assocr⋆ ((v₁ , v₂) , v₃) = (v₁ , (v₂ , v₃))
-ap absorbr (x , _) = x
-ap absorbl (_ , y) = y
-ap factorzl ()
-ap factorzr ()
-ap dist (inj₁ v₁ , v₃) = inj₁ (v₁ , v₃)
-ap dist (inj₂ v₂ , v₃) = inj₂ (v₂ , v₃)
-ap factor (inj₁ (v₁ , v₃)) = (inj₁ v₁ , v₃)
-ap factor (inj₂ (v₂ , v₃)) = (inj₂ v₂ , v₃)
-ap distl (v , inj₁ x) = inj₁ (v , x)
-ap distl (v , inj₂ y) = inj₂ (v , y)
-ap factorl (inj₁ (x , y)) = x , inj₁ y
-ap factorl (inj₂ (x , y)) = x , inj₂ y
-ap id⟷ v = v
-ap (c₁ ◎ c₂) v = ap c₂ (ap c₁ v)
-ap (c₁ ⊕ c₂) (inj₁ v) = inj₁ (ap c₁ v)
-ap (c₁ ⊕ c₂) (inj₂ v) = inj₂ (ap c₂ v)
-ap (c₁ ⊗ c₂) (v₁ , v₂) = (ap c₁ v₁ , ap c₂ v₂)
+%%%%%
+\subsection{Properties} 
 
--- useful to have the backwards ap too
+\begin{code}
 
-ap! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₂ ⟧ → ⟦ t₁ ⟧
-ap! unite₊l x = inj₂ x
-ap! uniti₊l (inj₁ ())
-ap! uniti₊l (inj₂ y) = y
-ap! unite₊r v = inj₁ v
-ap! uniti₊r (inj₁ x) = x
-ap! uniti₊r (inj₂ ())
-ap! swap₊ (inj₁ x) = inj₂ x
-ap! swap₊ (inj₂ y) = inj₁ y
-ap! assocl₊ (inj₁ (inj₁ x)) = inj₁ x
-ap! assocl₊ (inj₁ (inj₂ y)) = inj₂ (inj₁ y)
-ap! assocl₊ (inj₂ y) = inj₂ (inj₂ y)
-ap! assocr₊ (inj₁ x) = inj₁ (inj₁ x)
-ap! assocr₊ (inj₂ (inj₁ x)) = inj₁ (inj₂ x)
-ap! assocr₊ (inj₂ (inj₂ y)) = inj₂ y
-ap! unite⋆l x = tt , x
-ap! uniti⋆l (tt , x) = x
-ap! unite⋆r v = v , tt
-ap! uniti⋆r (v , tt) = v
-ap! swap⋆ (x , y) = y , x
-ap! assocl⋆ ((x , y) , z) = x , y , z
-ap! assocr⋆ (x , y , z) = (x , y) , z
-ap! absorbr ()
-ap! absorbl ()
-ap! factorzr (_ , x) = x
-ap! factorzl (x , _) = x
-ap! dist (inj₁ (x , y)) = inj₁ x , y
-ap! dist (inj₂ (x , y)) = inj₂ x , y
-ap! factor (inj₁ x , z) = inj₁ (x , z)
-ap! factor (inj₂ y , z) = inj₂ (y , z)
-ap! distl (inj₁ (x , y)) = x , inj₁ y
-ap! distl (inj₂ (x , y)) = x , inj₂ y
-ap! factorl (v , inj₁ x) = inj₁ (v , x)
-ap! factorl (v , inj₂ y) = inj₂ (v , y)
-ap! id⟷ x = x
-ap! (c₀ ◎ c₁) x = ap! c₀ (ap! c₁ x)
-ap! (c₀ ⊕ c₁) (inj₁ x) = inj₁ (ap! c₀ x)
-ap! (c₀ ⊕ c₁) (inj₂ y) = inj₂ (ap! c₁ y)
-ap! (c₀ ⊗ c₁) (x , y) = ap! c₀ x , ap! c₁ y
+postulate 
+  ap∼  : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} → (p₁ ⇔ p₂) → ap p₁ v ≡ ap p₂ v
+  ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (ap p v₁ ≡ v₂) → (ap (! p) v₂ ≡ v₁)
+  !!   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) ≡ c
+  ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (α : p ⇔ q) → (! p ⇔ ! q)
+  !!⇔ : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₂} → (! (! p) ⇔ p)
+\end{code}
+
+
+%%%%%
+\subsection{Order} 
+
+\begin{code}
+data apⁿ {τ : U} (p : τ ⟷ τ) : ℕ → Set where
+  ap¹ : apⁿ p 1
+  apˢ : ∀ {n} → apⁿ p n → apⁿ p (suc n)
+
+module _ {τ : U} {p : τ ⟷ τ} where
+  ⟦_⟧apⁿ : {n : ℕ} → apⁿ p n → ⟦ τ ⟧ → ⟦ τ ⟧
+  ⟦ ap¹ ⟧apⁿ v = ap p v
+  ⟦ apˢ a ⟧apⁿ v = ap p (⟦ a ⟧apⁿ v)
+
+∣_∣ : U → ℕ
+∣ ZERO ∣         = 0
+∣ ONE ∣          = 1
+∣ PLUS t₁ t₂ ∣   = ∣ t₁ ∣ + ∣ t₂ ∣
+∣ TIMES t₁ t₂ ∣  = ∣ t₁ ∣ * ∣ t₂ ∣
+
+elems : (τ : U) → Vec ⟦ τ ⟧ ∣ τ ∣ 
+elems ZERO = []
+elems ONE = tt ∷ []
+elems (PLUS τ₁ τ₂) = mapV inj₁ (elems τ₁) ++ mapV inj₂ (elems τ₂)
+elems (TIMES τ₁ τ₂) = concat (mapV (λ v₁ → mapV (λ v₂ → v₁ , v₂) (elems τ₂)) (elems τ₁))
+
+lcm' : ℕ → ℕ → ℕ
+lcm' i j with lcm i j
+... | k , _ = k
+
+_==_ : {τ : U} → ⟦ τ ⟧ → ⟦ τ ⟧ → Bool
+_==_ {ZERO} () ()
+_==_ {ONE} tt tt = true
+_==_ {PLUS τ τ'} (inj₁ x) (inj₁ y) = x == y
+_==_ {PLUS τ τ'} (inj₁ x) (inj₂ y) = false
+_==_ {PLUS τ τ'} (inj₂ x) (inj₁ y) = false
+_==_ {PLUS τ τ'} (inj₂ x) (inj₂ y) = x == y
+_==_ {TIMES τ τ'} (x , x') (y , y') = x == y ∧ x' == y'
+
+{-# NON_TERMINATING #-}
+order : (τ : U) (p : τ ⟷ τ) → ℕ
+order τ p = foldr (λ _ → ℕ) (λ v o → lcm' o (go τ p v v 1)) 1 (elems τ)
+  where go : (τ : U) (p : τ ⟷ τ) → ⟦ τ ⟧ → ⟦ τ ⟧ → ℕ → ℕ
+        go τ p v v' n with ap p v'
+        ... | v'' = if v == v'' then n else go τ p v v'' (suc n)
+
+postulate
+  order-!≡ : {τ : U} {p : τ ⟷ τ} →  order τ p ≡ order τ (! p)
+
+postulate
+  putStrLn : String -> IO ⊤
+{-# IMPORT Data.Text.IO #-}
+{-# COMPILED putStrLn Data.Text.IO.putStrLn #-}
+
+print : ℕ → IO ⊤
+print = putStrLn ∘ showℕ
+
+BOOL : U
+BOOL = PLUS ONE ONE
+
+THREEL : U
+THREEL = PLUS BOOL ONE
+
+p₁ p₂ p₃ p₄ p₅ p₆ : THREEL ⟷ THREEL
+p₁ = id⟷ -- (1 2 | 3)
+p₂ = swap₊ ⊕ id⟷ -- (2 1 | 3)
+p₃ = assocr₊ ◎ (id⟷ ⊕ swap₊) ◎ assocl₊ -- (1 3 | 2)
+p₄ = p₂ ◎ p₃ -- (2 3 | 1)
+p₅ = p₃ ◎ p₂ -- (3 1 | 2)
+p₆ = p₄ ◎ p₂ -- (3 2 | 1)
+
+main : IO ⊤
+main = print $ order THREEL p₄
 
 \end{code}
-}
