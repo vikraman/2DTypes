@@ -74,8 +74,7 @@ data _⟷_ : U → U → Set where
   factorl : ∀ {t₁ t₂ t₃} →
     PLUS (TIMES t₁ t₂) (TIMES t₁ t₃) ⟷ TIMES t₁ (PLUS t₂ t₃)
   id⟷    : ∀ {t} → t ⟷ t
-  _◎_     : ∀ {t₁ t₂ t₃} →
-    (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
+  _◎_     : ∀ {t₁ t₂ t₃} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
   _⊕_     : ∀ {t₁ t₂ t₃ t₄} → 
     (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (PLUS t₁ t₂ ⟷ PLUS t₃ t₄)
   _⊗_     : ∀ {t₁ t₂ t₃ t₄} → 
@@ -254,7 +253,14 @@ order {τ} p = foldr (λ _ → ℕ)
 postulate
   order-!≡ : {τ : U} {p : τ ⟷ τ} →  order p ≡ order (! p)
 
+-- Conjecture:          p ⇔ q   implies  order p = order q
+-- Corollary order-!≡:  p ⇔ !q  implies  order p = order (! q)
+
+-- The opposite is not true.
+
 \end{code}
+
+
 
 %%%%%
 \subsection{Examples}
