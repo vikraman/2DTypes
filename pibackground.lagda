@@ -16,6 +16,8 @@ open import Data.Vec
 open import Function using (_∘_; _$_)
 open import Relation.Binary.PropositionalEquality using (_≡_)
 
+open import Universe using (Universe)
+
 infix  30 _⟷_
 infix  30 _⇔_
 infixr 50 _◎_
@@ -27,22 +29,19 @@ infixr 50 _◎_
 \section{Background}
  
 %%%%%
-\subsection{$\Pi$: Syntax and Operational Semantics} 
+\subsection{$\Pi$ Syntax} 
+
+Types and programs
 
 \begin{code} 
-data U : Set where
-  ZERO   : U
-  ONE    : U
-  PLUS   : U → U → U
-  TIMES  : U → U → U
 
-⟦_⟧ : U → Set
-⟦ ZERO ⟧         = ⊥ 
-⟦ ONE ⟧          = ⊤
-⟦ PLUS t₁ t₂ ⟧   = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
-⟦ TIMES t₁ t₂ ⟧  = ⟦ t₁ ⟧ × ⟦ t₂ ⟧
+data FT : Set where
+  ZERO   : FT
+  ONE    : FT
+  PLUS   : FT → FT → FT
+  TIMES  : FT → FT → FT
 
-data _⟷_ : U → U → Set where
+data _⟷_ : FT → FT → Set where
   unite₊l : ∀ {t} → PLUS ZERO t ⟷ t
   uniti₊l : ∀ {t} → t ⟷ PLUS ZERO t
   unite₊r : ∀ {t} → PLUS t ZERO ⟷ t
@@ -80,7 +79,7 @@ data _⟷_ : U → U → Set where
   _⊗_     : ∀ {t₁ t₂ t₃ t₄} → 
     (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (TIMES t₁ t₂ ⟷ TIMES t₃ t₄)
 
-! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
+! : {t₁ t₂ : FT} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! unite₊l   = uniti₊l
 ! uniti₊l   = unite₊l
 ! unite₊r   = uniti₊r
@@ -108,7 +107,29 @@ data _⟷_ : U → U → Set where
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
 
-ap : {t₁ t₂ : U} → (t₁ ⟷ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
+\end{code}
+
+%%%%%
+\subsection{Semantics and Program Equivalence}
+
+\begin{code}
+
+-- Denotation as finite sets
+
+UFT : Universe _ _
+UFT = record { U = FT; El = ⟦_⟧ }
+  where
+    ⟦_⟧ : FT → Set
+    ⟦ ZERO ⟧         = ⊥ 
+    ⟦ ONE ⟧          = ⊤
+    ⟦ PLUS t₁ t₂ ⟧   = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
+    ⟦ TIMES t₁ t₂ ⟧  = ⟦ t₁ ⟧ × ⟦ t₂ ⟧
+
+open Universe.Universe UFT
+
+-- Operational semantics
+
+ap : {t₁ t₂ : FT} → (t₁ ⟷ t₂) → El t₁ → El t₂
 ap unite₊l (inj₁ ())
 ap unite₊l (inj₂ v) = v
 ap uniti₊l v = inj₂ v
@@ -150,14 +171,11 @@ ap (c₁ ⊗ c₂) (v₁ , v₂) = (ap c₁ v₁ , ap c₂ v₂)
 
 \end{code}
 
-%%%%%
-\subsection{Level 2}
-
 For $c_1, c_2 : \tau_1\leftrightarrow\tau_2$, we have level-2
-combinators $\alpha : c_1 \Leftrightarrow c_2$ which are (quite messy)
-equivalences of isomorphisms, and which happen to correspond to the
-coherence conditions for rig groupoids. Many of the level 2
-combinators not used. These are the ones we need:
+combinators $\alpha : c_1 \Leftrightarrow c_2$ which are equivalences
+of isomorphisms, and which happen to correspond to the coherence
+conditions for rig groupoids. Many of the level 2 combinators not
+used. We only present the ones we use in this paper:
 
 \begin{code}
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
@@ -198,9 +216,9 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 \begin{code}
 
 postulate 
-  ap∼  : {τ : U} {v : ⟦ τ ⟧} {p₁ p₂ : τ ⟷ τ} →
+  ap∼  : {τ : U} {v : El τ} {p₁ p₂ : τ ⟷ τ} →
     (p₁ ⇔ p₂) → ap p₁ v ≡ ap p₂ v
-  ap!≡ : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} →
+  ap!≡ : {τ : U} {v₁ v₂ : El τ} {p : τ ⟷ τ} →
     (ap p v₁ ≡ v₂) → (ap (! p) v₂ ≡ v₁)
   !!   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) ≡ c
   ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (α : p ⇔ q) → (! p ⇔ ! q)
@@ -209,7 +227,7 @@ postulate
 
 
 %%%%%
-\subsection{Order} 
+\subsection{Order of a Combinator} 
 
 \begin{code}
 ∣_∣ : U → ℕ
@@ -218,7 +236,7 @@ postulate
 ∣ PLUS t₁ t₂ ∣   = ∣ t₁ ∣ + ∣ t₂ ∣
 ∣ TIMES t₁ t₂ ∣  = ∣ t₁ ∣ * ∣ t₂ ∣
 
-elems : (τ : U) → Vec ⟦ τ ⟧ ∣ τ ∣ 
+elems : (τ : U) → Vec (El τ) ∣ τ ∣ 
 elems ZERO = []
 elems ONE = tt ∷ []
 elems (PLUS τ₁ τ₂) =
@@ -233,7 +251,7 @@ lcm' : ℕ → ℕ → ℕ
 lcm' i j with lcm i j
 ... | k , _ = k
 
-_==_ : {τ : U} → ⟦ τ ⟧ → ⟦ τ ⟧ → Bool
+_==_ : {τ : U} → El τ → El τ → Bool
 _==_ {ZERO} () ()
 _==_ {ONE} tt tt = true
 _==_ {PLUS τ τ'} (inj₁ x) (inj₁ y) = x == y
@@ -246,7 +264,7 @@ _==_ {TIMES τ τ'} (x , x') (y , y') = x == y ∧ x' == y'
 order : {τ : U} (p : τ ⟷ τ) → ℕ
 order {τ} p = foldr (λ _ → ℕ)
                 (λ v o → lcm' o (go τ p v v 1)) 1 (elems τ)
-  where go : (τ : U) (p : τ ⟷ τ) → ⟦ τ ⟧ → ⟦ τ ⟧ → ℕ → ℕ
+  where go : (τ : U) (p : τ ⟷ τ) → El τ → El τ → ℕ → ℕ
         go τ p v v' n with ap p v'
         ... | v'' = if v == v'' then n else go τ p v v'' (suc n)
 
@@ -292,8 +310,6 @@ postulate
 -- p³ is the same as !p¹
 
 \end{code}
-
-
 
 %%%%%
 \subsection{Examples}

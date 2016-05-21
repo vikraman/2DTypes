@@ -581,7 +581,7 @@ same cardinality.
 % which is equivalent to $C$.
 
 %%%%%
-\subsection{Information-Equivalence}
+\subsection{Information Equivalence}
 
 Our notion of information equivalence is coarser than the conventional
 notion of equivalence of categories (groupoids). This is fine as there
