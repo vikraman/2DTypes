@@ -1,5 +1,7 @@
 \AgdaHide{
 \begin{code}
+{-# OPTIONS --without-K #-}
+
 module pibackground where
 
 open import Data.Empty using (⊥) 
@@ -31,7 +33,7 @@ infixr 50 _◎_
 %%%%%
 \subsection{$\Pi$ Syntax} 
 
-Types and programs
+Types FT, programs $⟷$, and equivalences $⇔$.
 
 \begin{code} 
 
@@ -106,11 +108,50 @@ data _⟷_ : FT → FT → Set where
 ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁ 
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
+\end{code}
+
+For $c_1, c_2 : \tau_1\leftrightarrow\tau_2$, we have level-2
+combinators $\alpha : c_1 \Leftrightarrow c_2$ which are equivalences
+of isomorphisms, and which happen to correspond to the coherence
+conditions for rig groupoids. Many of the level 2 combinators not
+used. We only present the ones we use in this paper:
+
+\begin{code}
+data _⇔_ : {t₁ t₂ : FT} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
+  assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
+    (c₁ ◎ (c₂ ◎ c₃)) ⇔ ((c₁ ◎ c₂) ◎ c₃)
+  assoc◎r : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} → 
+    ((c₁ ◎ c₂) ◎ c₃) ⇔ (c₁ ◎ (c₂ ◎ c₃))
+  idl◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    (id⟷ ◎ c) ⇔ c
+  idl◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    c ⇔ id⟷ ◎ c
+  idr◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    (c ◎ id⟷) ⇔ c
+  idr◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    c ⇔ (c ◎ id⟷) 
+  id⇔     : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    c ⇔ c
+  trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → 
+    (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+  _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} → 
+    (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
+
+2! : {t₁ t₂ : FT} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+2! assoc◎l = assoc◎r
+2! assoc◎r = assoc◎l
+2! idl◎l = idl◎r
+2! idl◎r = idl◎l
+2! idr◎l = idr◎r
+2! idr◎r = idr◎l
+2! id⇔ = id⇔
+2! (α ⊡ β) = (2! α) ⊡ (2! β)
+2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
 
 \end{code}
 
 %%%%%
-\subsection{Semantics and Program Equivalence}
+\subsection{Semantics}
 
 \begin{code}
 
@@ -169,45 +210,6 @@ ap (c₁ ⊕ c₂) (inj₁ v) = inj₁ (ap c₁ v)
 ap (c₁ ⊕ c₂) (inj₂ v) = inj₂ (ap c₂ v)
 ap (c₁ ⊗ c₂) (v₁ , v₂) = (ap c₁ v₁ , ap c₂ v₂)
 
-\end{code}
-
-For $c_1, c_2 : \tau_1\leftrightarrow\tau_2$, we have level-2
-combinators $\alpha : c_1 \Leftrightarrow c_2$ which are equivalences
-of isomorphisms, and which happen to correspond to the coherence
-conditions for rig groupoids. Many of the level 2 combinators not
-used. We only present the ones we use in this paper:
-
-\begin{code}
-data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
-  assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
-    (c₁ ◎ (c₂ ◎ c₃)) ⇔ ((c₁ ◎ c₂) ◎ c₃)
-  assoc◎r : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} → 
-    ((c₁ ◎ c₂) ◎ c₃) ⇔ (c₁ ◎ (c₂ ◎ c₃))
-  idl◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    (id⟷ ◎ c) ⇔ c
-  idl◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    c ⇔ id⟷ ◎ c
-  idr◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    (c ◎ id⟷) ⇔ c
-  idr◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    c ⇔ (c ◎ id⟷) 
-  id⇔     : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    c ⇔ c
-  trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → 
-    (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
-  _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} → 
-    (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
-
-2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
-2! assoc◎l = assoc◎r
-2! assoc◎r = assoc◎l
-2! idl◎l = idl◎r
-2! idl◎r = idl◎l
-2! idr◎l = idr◎r
-2! idr◎r = idr◎l
-2! id⇔ = id⇔
-2! (α ⊡ β) = (2! α) ⊡ (2! β)
-2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
 \end{code}
 
 %%%%%
@@ -343,3 +345,5 @@ TOFFOLI : TIMES BOOL BOOL² ⟷ TIMES BOOL BOOL² -- has order 2
 TOFFOLI = dist ◎ (id⟷ ⊕ (id⟷ ⊗ CNOT)) ◎ factor
 
 \end{code}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
