@@ -57,6 +57,8 @@
 \DeclareUnicodeCharacter{931}{$\Sigma$}
 \DeclareUnicodeCharacter{8718}{$\qed$}
 \DeclareUnicodeCharacter{7503}{${}^k$}
+\DeclareUnicodeCharacter{951}{$\eta$}
+\DeclareUnicodeCharacter{956}{$\mu$}
 
 \AgdaHide{
 \begin{code}
