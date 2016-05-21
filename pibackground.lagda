@@ -253,10 +253,43 @@ order {τ} p = foldr (λ _ → ℕ)
 postulate
   order-!≡ : {τ : U} {p : τ ⟷ τ} →  order p ≡ order (! p)
 
--- Conjecture:          p ⇔ q   implies  order p = order q
--- Corollary order-!≡:  p ⇔ !q  implies  order p = order (! q)
+-- Conjecture:  p ⇔ q   implies  order p = order q
+-- Corollary:   p ⇔ !q  implies  order p = order (! q)
 
 -- The opposite is not true.
+
+-- Example
+-- p = (1 2 3 4)
+
+-- compose p 0 = compose !p 0 = compose p 4 = compose !p 4
+-- 1 -> 1
+-- 2 -> 2
+-- 3 -> 3
+-- 4 -> 4
+
+-- compose p 1  ***     compose !p 1
+-- 1 -> 2       ***     1 -> 4
+-- 2 -> 3       ***     2 -> 1
+-- 3 -> 4       ***     3 -> 2
+-- 4 -> 1       ***     4 -> 3
+
+-- compose p 2  ***     compose !p 2
+-- 1 -> 3       ***     1 -> 3
+-- 2 -> 4       ***     2 -> 4
+-- 3 -> 1       ***     3 -> 1
+-- 4 -> 2       ***     4 -> 2
+
+-- compose p 3  ***     compose !p 3
+-- 1 -> 4       ***     1 -> 2
+-- 2 -> 1       ***     2 -> 3
+-- 3 -> 2       ***     3 -> 4
+-- 4 -> 3       ***     4 -> 1
+
+-- there is a morphism 1 -> 2 using
+-- (compose p 1) and (compose !p 3)
+-- p¹ is the same as !p³
+-- p² is the same as !p²
+-- p³ is the same as !p¹
 
 \end{code}
 
