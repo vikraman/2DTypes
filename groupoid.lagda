@@ -147,7 +147,20 @@ orderCom {τ} p = record {
 -- the comonad to map p^i to p^(suc i) and
 -- then to #q using c. So as an effect we can
 -- constuct maps that move around #p and #q
--- using p and q. 
+-- using p and q.
+--
+-- A more general perspective: computations
+-- happen in a context in the following sense:
+-- say we have a collection of values v1, v2, ...
+-- a computation takes vi to wi. In many cases,
+-- the vi's form a structure of some kind and
+-- so do the wi's. A monad focuses on the w's
+-- structure and how to compose computations
+-- on it. The comonad focuses on the v's structure
+-- and how to compose computations on it. Some
+-- people talk about monads expressing how to
+-- affect the context and comonads expressing
+-- what to expect from the context. 
 
 -- moncom = ?
 

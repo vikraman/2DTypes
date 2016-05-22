@@ -6,7 +6,7 @@ module pifrac where
 
 open import Level using () renaming (zero to lzero; suc to lsuc)
 
-open import Data.Product using (∃; _,_)
+open import Data.Product using (∃; Σ; Σ-syntax; _,_)
 
 open import Universe using (Universe)
 
@@ -43,7 +43,7 @@ data FT/ : Set where
   _⊞_ : FT/ → FT/ → FT/              
   _⊠_ : FT/ → FT/ → FT/              
 
-⟦_⟧/ : FT/ → ∃ (λ ℂ → Groupoid ℂ)
+⟦_⟧/ : FT/ → Σ[ ℂ ∈ Category _ _ _ ] (Groupoid ℂ)
 ⟦ ⇑ S ⟧/ = (discreteC (El S) , discreteG (El S))
   where open Universe.Universe UFT  
 ⟦ # p ⟧/ = (orderC p , orderG p)
