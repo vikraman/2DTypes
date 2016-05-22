@@ -8,7 +8,7 @@ open import Data.Unit using (⊤; tt)
 open import Data.Nat using (ℕ; suc)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
-  renaming (-_ to ℤ-; suc to ℤsuc)
+  renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
 open import Data.Product using (Σ; Σ-syntax; _,_)
 
 open import Categories.Category using (Category)
@@ -18,7 +18,7 @@ open import Comonad using (Comonad)
 
 open import pibackground using (FT;
   _⟷_; !; id⟷; _◎_;
-  _⇔_; 2!; id⇔; trans⇔; _⊡_)
+  _⇔_; 2!; id⇔; trans⇔; assoc◎l; idr◎l; idl◎l; _⊡_)
 
 infix 40 _^_ 
 
@@ -28,8 +28,17 @@ infix 40 _^_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Combinators as Groupoids}
 
+Each combinator $p : \tau ⟷ \tau$ will give rise to two groupoids:
+\begin{itemize}
+\item one groupoid $\mathit{order}~p$ with objects $p^i$ and morphisms $⇔$, and 
+\item another groupoid $\mathit{frac}~p$ with one object and morphisms $p^i$ under $⇔$
+\end{itemize}
+There is also a third groupoid $\ag{tau}{p}$ that is equivalent to
+$\tau \boxtimes \mathit{frac}~p$ and that is a conventional quotient type.
+
 \begin{code}
 
+-- First each p^i is an Agda type
 -- Perm p i is the singleton type that only contains p^i up to ⇔ 
 
 _^_ : {τ : FT} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
@@ -43,6 +52,8 @@ Perm {τ} p i = Σ[ p' ∈ (τ ⟷ τ) ] (p' ^ i ⇔ p ^ i)
 
 singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 1)
 singleton p = (p , id⇔)
+
+-- orderC is the groupoid with objects p^i
 
 orderC : {τ : FT} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
@@ -113,6 +124,24 @@ orderCoM {τ} p = record {
   ; identityˡ = tt
   ; identityʳ = tt
   }
+
+-- fracC is the the groupoid with one object and morphisms p^i
+
+fracC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
+fracC {τ} p = record {
+     Obj = ⊤
+    ; _⇒_ = λ _ _ → Σ[ i ∈ ℤ ] (Perm p i)
+    ; _≡_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n} 
+    ; id = (+ 0 , singleton id⟷)
+    ; _∘_ = λ { (m , (p , α)) (n , (q , β)) → (m ℤ+ n , (p ◎ q , {!!})) }
+    ; assoc = {!!} -- assoc◎l 
+    ; identityˡ = {!!} -- idr◎l 
+    ; identityʳ = {!◎l !} -- idl◎l
+    ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
+    ; ∘-resp-≡ = λ α β → {!!} -- β ⊡ α
+    }
+
+
 
 
 \end{code}
