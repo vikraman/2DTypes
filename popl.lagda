@@ -653,6 +653,15 @@ consistent.
 \input{groupoid.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Sec 5, 6, and 7
+%% A new language with fractional types
+%% its denotational semantics
+%% its operational semantics
+%% pragmatics
+
+\input{pifrac.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{abbrvnat}
 \end{document}
 

@@ -11,12 +11,18 @@ open import Data.Integer
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
 open import Data.Product using (Σ; Σ-syntax; _,_)
 
+open import Relation.Binary.PropositionalEquality
+  using (_≡_; refl)
+open import Universe using (Universe)
+
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
 open import Categories.Monad using (Monad)
 open import Comonad using (Comonad)
 
-open import pibackground using (FT;
+open import Categories.Product using (Product)
+
+open import pibackground using (FT; UFT; 
   _⟷_; !; id⟷; _◎_;
   _⇔_; 2!; id⇔; trans⇔; assoc◎l; idr◎l; idl◎l; _⊡_)
 
@@ -31,15 +37,16 @@ infix 40 _^_
 Each combinator $p : \tau ⟷ \tau$ will give rise to two groupoids:
 \begin{itemize}
 \item one groupoid $\mathit{order}~p$ with objects $p^i$ and morphisms $⇔$, and 
-\item another groupoid $\mathit{frac}~p$ with one object and morphisms $p^i$ under $⇔$
+\item another groupoid $\mathit{1/order}~p$ with one object and morphisms $p^i$ under $⇔$
 \end{itemize}
-There is also a third groupoid $\ag{tau}{p}$ that is equivalent to
-$\tau \boxtimes \mathit{frac}~p$ and that is a conventional quotient type.
+There is also a third groupoid $\ag{\tau}{p}$ that is equivalent to
+$\tau \boxtimes \mathit{1/order}~p$ and that is a conventional quotient type.
 
 \begin{code}
 
 -- First each p^i is an Agda type
--- Perm p i is the singleton type that only contains p^i up to ⇔ 
+-- Perm p i is the singleton type that only
+--   contains p^i up to ⇔ 
 
 _^_ : {τ : FT} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0) = id⟷
@@ -78,6 +85,8 @@ orderG {τ} p = record {
       }
   }
 
+-- p is a monad on (order p)
+
 ^suc : {τ : FT} {p : τ ⟷ τ} {i : ℤ} → p ^ ℤsuc i ⇔ p ◎ p ^ i
 ^suc = {!!}
 
@@ -106,8 +115,10 @@ orderM {τ} p = record {
   ; identityʳ = tt
   }
 
-orderCoM : {τ : FT} → (p : τ ⟷ τ) → Comonad (orderC p)
-orderCoM {τ} p = record {
+-- ! p is a comonad on (order p)
+
+orderCom : {τ : FT} → (p : τ ⟷ τ) → Comonad (orderC p)
+orderCom {τ} p = record {
     F = record {
           F₀ = {!!} 
         ; F₁ = {!!}
@@ -125,10 +136,15 @@ orderCoM {τ} p = record {
   ; identityʳ = tt
   }
 
--- fracC is the the groupoid with one object and morphisms p^i
+-- the monad and comonad are inverses
 
-fracC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
-fracC {τ} p = record {
+-- moncom = ?
+
+-- 1/orderC is the the groupoid with one object
+--   and morphisms p^i
+
+1/orderC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
+1/orderC {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → Σ[ i ∈ ℤ ] (Perm p i)
     ; _≡_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n} 
@@ -142,7 +158,43 @@ fracC {τ} p = record {
     }
 
 
+1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
+1/orderG = {!!} 
 
+1/orderM : {τ : FT} (p : τ ⟷ τ) → Monad (1/orderC p)
+1/orderM = {!!} 
+
+1/orderCom : {τ : FT} (p : τ ⟷ τ) → Comonad (1/orderC p)
+1/orderCom = {!!} 
+
+-- τ // p
+
+discreteC : Set → Category _ _ _
+discreteC S = record {
+     Obj = S
+    ; _⇒_ = λ s₁ s₂ → s₁ ≡ s₂
+    ; _≡_ = λ _ _ → ⊤ 
+    ; id = refl 
+    ; _∘_ = λ { {A} {.A} {.A} refl refl → refl }
+    ; assoc = tt 
+    ; identityˡ = tt 
+    ; identityʳ = tt 
+    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }  
+    ; ∘-resp-≡ = λ _ _ → tt 
+    }
+
+discreteG : (S : Set) → Groupoid (discreteC S)
+discreteG S = record
+  { _⁻¹ = λ { {A} {.A} refl → refl }
+  ; iso = record { isoˡ = tt; isoʳ = tt }
+  }
+
+_//_ : (τ : FT) → (p : τ ⟷ τ) → Category _ _ _
+τ // p = Product (discreteC (El τ)) (1/orderC p)
+  where open Universe.Universe UFT
+
+quotientG : (τ : FT) → (p : τ ⟷ τ) → Groupoid (τ // p)
+quotientG = {!!} 
 
 \end{code}
 
