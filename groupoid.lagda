@@ -137,6 +137,17 @@ orderCom {τ} p = record {
   }
 
 -- the monad and comonad are inverses
+-- idea regarding the significance of the
+-- monad/comonad construction. Say we have
+-- a combinator c : #p ⟷ #q that maps
+-- p^i to q^j. Then we can use the q-monad
+-- to write a combinator pc : #p ⟷ #q which
+-- maps p^i to q^j using c and then to
+-- q^(suc j) using the monad. We can use
+-- the comonad to map p^i to p^(suc i) and
+-- then to #q using c. So as an effect we can
+-- constuct maps that move around #p and #q
+-- using p and q. 
 
 -- moncom = ?
 

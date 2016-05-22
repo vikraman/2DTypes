@@ -46,15 +46,15 @@ data FT/ : Set where
 ⟦_⟧/ : FT/ → ∃ (λ ℂ → Groupoid ℂ)
 ⟦ ⇑ S ⟧/ = (discreteC (El S) , discreteG (El S))
   where open Universe.Universe UFT  
-⟦ # {τ} p ⟧/ = (orderC p , orderG p)
+⟦ # p ⟧/ = (orderC p , orderG p)
 ⟦ 1/# p ⟧/ = (1/orderC p , 1/orderG p)
 ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
 ... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Sum ℂ₁ ℂ₂ , GSum G₁ G₂)
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
 ... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
   
--- values of type FT/ are a point in the carrier and an automorphism
--- on that point
+-- values of type FT/ are a point in the carrier and
+-- an automorphism on that point
 
 \end{code}
 
