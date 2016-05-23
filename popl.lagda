@@ -102,7 +102,98 @@ open import pibackground
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+In Homotopy Type Theory (HoTT)~\citeyearpar{hottbook}, types are
+\emph{weak $\omega$-groupoids}. As a first approximation, we can think
+of such structures as sets with points (objects) and connections
+(equivalences) between the points and connections between these
+connections and so on. Here are two simple but non-trivial examples:
+
+\medskip
+\begin{figure}[h]
+\begin{tabular}{c@{\qquad}c}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
+  \draw[dashed] (0,0) ellipse (3cm and 1.2cm);
+  \node[below] (A) at (-1.7,0.3) {\texttt{a}};
+  \node[below] (B) at (-1.1,0.3) {\texttt{b}};
+  \node[below] (C) at (-0.5,0.3) {\texttt{c}};
+  \node[below] (D) at (0.5,0.3) {\texttt{d}};
+  \node[below] (E) at (1.1,0.3) {\texttt{e}};
+  \node[below] (F) at (1.7,0.3) {\texttt{f}};
+  \draw[fill] (-1.7,0.3) circle [radius=0.05];
+  \draw[fill] (-1.1,0.3) circle [radius=0.05];
+  \draw[fill] (-0.5,0.3) circle [radius=0.05];
+  \draw[fill] (0.5,0.3) circle [radius=0.05];
+  \draw[fill] (1.1,0.3) circle [radius=0.05];
+  \draw[fill] (1.7,0.3) circle [radius=0.05];
+  \draw (-1.7,0.3) -- (-1.1,0.3);
+  \draw (-1.1,0.3) -- (-0.5,0.3);
+  \draw (-1.7,0.3) to[bend left] (-0.5,0.3) ;
+  \draw (0.5,0.3) -- (1.1,0.3);
+  \draw (1.1,0.3) -- (1.7,0.3);
+  \draw (0.5,0.3) to[bend left] (1.7,0.3) ;
+  \path (A) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (D) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (E) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (F) edge [loop below] node[below] {\texttt{id}} (B);
+\end{tikzpicture}
+& 
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
+  \draw[dashed] (0,0) ellipse (1.5cm and 2.1cm);
+  \node[below] (B) at (0,-0.7) {\texttt{*}};
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p$} (B);
+  \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$q$} (B);
+\end{tikzpicture}
+\end{tabular}
+\caption{\label{fig:groupoids}(a) The groupoid $\ag{6}{3}$ \qquad (b) The groupoid $\frac{1}{3}$}
+\end{figure}
+
+\medskip\noindent \citet{groupoidcard} assign to each groupoid a
+\emph{cardinality} that counts the objects up to equivalences. The
+groupoid on the left has six points \texttt{a}, \texttt{b},
+\texttt{c}, \texttt{d}, \texttt{e}, and \texttt{f} that are clustered
+in two equivalence classes and hence the groupoid has
+cardinality~2. The groupoid on the right has one point \texttt{*} with
+three distinct equivalences \texttt{id}, $p$, and~$q$ on it and hence
+has cardinality $\frac{1}{3}$.
+
+Both groupoids illustrated in Fig.~\ref{fig:groupoids} involve some
+notion of ``division'' that can be captured at the level of types
+using a notion of \emph{fractional types.} The existence of such
+fractional types raises an intriguing question about their
+applicability to programming practice. In this introduction, we
+present several inter-related motivations and applications of
+fractional types that are formalized and justified in the remainder of
+the paper.
+
+\paragraph*{Quotient Types.} Groupoids similar to $\ag{6}{3}$ in
+Fig.~\ref{fig:groupoids}(a) intuitively correspond to conventional
+\emph{quotient types}. Traditionally~\citep {quotient}, a quotient
+type $\ag{T}{E}$ combines a type $T$ with an equivalence relation $E$
+that serves as the equality relation on the elements of $T$. Our
+notion of fractional types will subsume conventional quotient types
+and their applications~\citep{Cohen2013} (e.g., defining fractions,
+multivariate polynomials, field extensions, algebraic numbers, etc.)
+
+\paragraph*{First-class Equivalence Relations.} 
+
+\paragraph*{Conservation of Information and Negative Information.}
+
+\paragraph*{Resource Creation and Annihilation.}
+
+
+
+
+
+
+~
+\medskip
 \amr{todo}
+
+"apply this program i times" is a VALUE !!!
+
 
 Conservation of information is our starting point. If your entire
 framework is based on such a conservation principle then you
@@ -119,11 +210,6 @@ for everyone. Computationally what his happening is that we have
 created needed resources at one site with a debt: someone must
 eventually provide these resources.
 
-
-
-
-
-
 If quantum field theory is correct (as it so far seems to be) then
 \emph{information}, during any physical process, is neither created
 nor destroyed. Our starting point is this \emph{conservation
@@ -131,7 +217,7 @@ nor destroyed. Our starting point is this \emph{conservation
 adapted to the computational setting, i.e., we study computations
 which are information-preserving. Our initial investigation was in the
 setting of computations over finite types: in that setting
-information-preservation coincides with type isomorphsims,
+information-preservation coincides with type isomorphisms,
 permutations on finite sets, and HoTT equivalences. In this paper, we
 extend the work to computations over \emph{groupoids}. 
 
@@ -309,7 +395,7 @@ $3$ whose inverse is $\frac{1}{3}$:
 \end{center}
 
 \item The third is the order type $\order{p}$ depicted below. It has
-three objects corrsponding to each iteration of $p$. It has
+three objects corresponding to each iteration of $p$. It has
 cardinality $3$:
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
@@ -334,7 +420,7 @@ C &≃&  C \boxtimes \ot \\
 First note that the types are built from permutations over finite
 types: this is a different level of types from the level of plain
 finite types. The usual $\Pi$-combinators lift to this level and there
-are two new transfomations that we need to justify. If $p : \tau \leftrightarrow \tau$, then:
+are two new transformations that we need to justify. If $p : \tau \leftrightarrow \tau$, then:
 \begin{itemize}
 \item $\order{p} \boxtimes 1/p ≃ \ot$, and 
 \item $\tau \boxtimes 1/p ≃ \ag{\tau}{p}$
@@ -663,5 +749,6 @@ consistent.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{abbrvnat}
+\bibliography{cites}
 \end{document}
 
