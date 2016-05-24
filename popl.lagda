@@ -195,7 +195,33 @@ upon. These first-class equivalence relations therefore enhance $\pifrac$
 with the same expressiveness afforded by the presence of first-class
 functions in conventional languages.
 
-\paragraph*{Conservation of Information and Negative Information.} 
+\paragraph*{Conservation of Information and Negative Information.} A
+finite type with $n$ elements where $n$ is a non-zero natural number
+has entropy $\log{n}$. This entropy is a measure of information which
+materializes itself in memory or bandwidth requirements when storing
+or transmitting elements of this type. Thus a type with 8 elements
+needs 3 bits of memory for storage or 3 bits of bandwidth for
+communication. If quantum field theory is correct (as it so far seems
+to be) then information, during any physical process, is neither
+created nor
+destroyed. Landauer~\citeyearpar{Landauer:1961,bennett1985fundamental,Landauer},
+Bennet~\citeyearpar{Bennett:1973:LRC,bennett2003notes,bennett2010notes},
+Fredkin~\citeyearpar{fredkin1982conservative} and others made
+compelling arguments that this physical principle induces a
+corresponding computational principle of ``conservation of
+information.'' In the context of finite types, this means that the
+foundational notion of computation is computation via type
+isomorphisms~\cite{James:2012:IE:2103656.2103667} or HoTT
+equivalences~\cite{Carette2016} which are both size-preserving. The
+introduction in $\pifrac$ of types (groupoids) with fractional
+cardinalities introduces types with \emph{negative entropy}! For
+example, a type with cardinality $\frac{1}{8}$ has \emph{negative
+  entropy} $\log{\frac{1}{8}} = -3$. In the context of $\pifrac$ we
+will interpret this negative entropy just like we interpret negative
+money, as a debt to be repaid by some other part of the program. This
+ability to manipulate negative information as a first-class entity
+enhances $\pifrac$ with an expressiveness similar to the one afforded
+by the presence of negative numbers in finance.
 
 \paragraph*{Resource Creation and Annihilation.}
 
