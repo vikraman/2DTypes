@@ -217,7 +217,7 @@ equivalences~\cite{Carette2016} which are both
 cardinality-preserving. The introduction, in $\pifrac$, of types
 (groupoids) with fractional cardinalities introduces types with
 \emph{negative entropy}. For example, a type with cardinality
-$\frac{1}{8}$ has \emph{negative entropy} $\log{\frac{1}{8}} = -3$. In
+$\frac{1}{8}$ has negative entropy $\log{\frac{1}{8}} = -3$. In
 the context of $\pifrac$ we will interpret this negative entropy just
 like we interpret negative money, as a debt to be repaid by some other
 part of the system. This ability to manipulate negative information as
@@ -406,7 +406,7 @@ cardinality $\order{p}$ and $1/\hash p$. In our case, we get:
   figure.) It has cardinality $3$:
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
-  \draw[dashed] (0,0) ellipse (3cm and 0.7cm);
+  \draw[dashed] (0,-0.2) ellipse (3cm and 0.7cm);
   \node[below] at (-2,0) {$p^0$};
   \node[below] at (0,0) {$p^1$};
   \node[below] at (2,0) {$p^2$};
