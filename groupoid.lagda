@@ -34,6 +34,101 @@ infix 40 _^_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Combinators as Groupoids}
 
+We will decompose the type $C$ into the products of $A$ and $B$ where
+$A$ will have cardinality $2\frac{1}{3}$ and $B$ will cardinality
+3. The first step is to explain how to calculate such
+cardinalities. We will use the Euler characteristic of a category
+which in our case also correspond to the groupoid cardinality. There
+are several formulations and explanations. The following is quite
+simple to implement: first collapse all the isomorphic objects. Then
+fix a particular order of the objects and write a matrix whose $ij$'s
+entry is the number of morphisms from $i$ to $j$. Invert the
+matrix. The cardinality is the sum of the elements in the matrix.
+
+The definition of $p$ will induce three types (groupoids):
+
+\begin{itemize}
+
+\item The first is the action groupoid $\ag{C}{p}$ depicted below. The
+objects are the elements of $C$ and there is a morphism between $x$
+and $y$ iff $p^k$ for some $k$ maps $x$ to $y$. We do not draw the
+identity morphisms. Note that all of $p^0$, $p^1$, and $p^2$ map
+\texttt{sat} to \texttt{sat} which explains the two non-trivial
+morphisms on \texttt{sat}:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw (0,0) ellipse (8cm and 1.6cm);
+  \node[below] at (-6,0) {\texttt{sun}};
+  \node[below] at (-4,0) {\texttt{mon}};
+  \node[below] at (-2,0) {\texttt{tue}};
+  \node[below] at (0,0) {\texttt{wed}};
+  \node[below] at (2,0) {\texttt{thu}};
+  \node[below] at (4,0) {\texttt{fri}};
+  \node[below] (B) at (6,0) {\texttt{sat}};
+  \draw[fill] (-6,0) circle [radius=0.05];
+  \draw[fill] (-4,0) circle [radius=0.05];
+  \draw[fill] (-2,0) circle [radius=0.05];
+  \draw[fill] (0,0) circle [radius=0.05];
+  \draw[fill] (2,0) circle [radius=0.05];
+  \draw[fill] (4,0) circle [radius=0.05];
+  \draw[fill] (6,0) circle [radius=0.05];
+  \draw (-6,0) -- (-4,0);
+  \draw (-4,0) -- (-2,0);
+  \draw (0,0) -- (2,0);
+  \draw (2,0) -- (4,0);
+  \draw (-6,0) to[bend left] (-2,0) ;
+  \draw (0,0) to[bend left] (4,0) ;
+  \path (B) edge [loop above, looseness=3, in=48, out=132] node[above] {} (B);
+  \path (B) edge [loop above, looseness=5, in=40, out=140] node[above] {} (B);
+\end{tikzpicture}
+\end{center}
+
+To calculate the cardinality, we first collapse all the isomorphic
+objects (i.e., collapse the two strongly connected components to one
+object each) and write the resulting matrix:
+\[
+\begin{pmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 3 
+\end{pmatrix}
+\]
+Its inverse is 0 everywhere except on the main diagonal which has
+entries 1, 1, and $\frac{1}{3}$ and hence the cardinality of this
+category is $2\frac{1}{3}$.
+
+\item The second which we call $1/p$ is depicted below. It has one
+trivial object and a morphism for each iteration of $p$. It has
+cardinality $\frac{1}{3}$ as the connectivity matrix has one entry
+$3$ whose inverse is $\frac{1}{3}$:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
+  \draw (0,1.4) ellipse (2cm and 2cm);
+  \node[below] (B) at (0,0) {\texttt{*}};
+%%  \path (B) edge [loop above] node[above] {$p^0$} (B);
+  \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p$} (B);
+  \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (B);
+\end{tikzpicture}
+\end{center}
+
+\item The third is the order type $\order{p}$ depicted below. It has
+three objects corresponding to each iteration of $p$. It has
+cardinality $3$:
+\begin{center}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
+  \draw (0,0) ellipse (4cm and 1cm);
+  \node[below] at (-2,0) {$p^0$};
+  \node[below] at (0,0) {$p^1$};
+  \node[below] at (2,0) {$p^2$};
+  \draw[fill] (-2,0) circle [radius=0.05];
+  \draw[fill] (0,0) circle [radius=0.05];
+  \draw[fill] (2,0) circle [radius=0.05];
+\end{tikzpicture}
+\end{center}
+\end{itemize}
+
 Each combinator $p : \tau ⟷ \tau$ will give rise to two groupoids:
 \begin{itemize}
 \item one groupoid $\mathit{order}~p$ with objects $p^i$ and morphisms $⇔$, and 
@@ -222,6 +317,67 @@ quotientG = {!!}
 
 \end{code}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%
+\subsection{Information Equivalence}
+ 
+Our notion of information equivalence is coarser than the conventional
+notion of equivalence of categories (groupoids). This is fine as there
+are several competing notions of equivalence of groupoids that are
+coarser than strict categorical equivalence. 
 
+Need to explain the example above in terms of information!!! The best
+explanation I have so far is the credit card analogy: we want money
+here and now, so we create money and a debt. That debt is reconciled
+somewhere else. The example above uses the same: we want to process
+some values from $C$ here and now. So we create a third of them,
+process them, and reconcile this third somewhere else. When all three
+thirds have been reconciled the computation is finished. 
+
+There are however other notions of equivalence of groupoids like
+Morita equivalence and weak equivalence that we explore later. The
+intuition of these weaker notions of equivalence is that two groupoids
+can be considered equivalent if it is not possible to distinguish them
+using certain observations. This informally corresponds to the notion
+of ``observational equivalence'' in programming language
+semantics. Note that negative entropy can only make sense locally in
+an open system but that in a closed system, i.e., in a complete
+computation, entropy cannot be negative. Thus we restrict
+observational contexts to those in which fractional types do not
+occur. Note that two categories can have the same cardinality but not
+be equivalent or even Morita equivalent but the converse is
+guaranteed. So it is necessary to have a separate notion of
+equivalence and check that whenever we have the same cardinality, the
+particular categories in question are equivalent. The second
+equivalence, that $C \boxtimes 1/p$ is equivalent to $\ag{C}{p}$ would
+follow from two facts: that three copies of $1/p$ simplify to a point
+(which is the first equivalence above) and that three connected points
+also simplify to a single point (which is relatively easy to
+establish).
+
+Is weak equivalence in HoTT related??? Here is one definition: A map
+$f : X \rightarrow Y$ is a weak homotopy equivalence (or just a weak
+equivalence) if for every $x \in X$, and all $n \geq 0$ the map
+$\pi_n(X,x) \rightarrow \pi_n(Y,f(x))$ is a bijection. In our setting
+this might mean something like: two types $T$ and $U$ are equivalent
+if $T \leftrightarrow T$ is equivalent to $U \leftrightarrow U$ are
+equivalent.
+
+First the equivalence can only make sense in a framework where
+everything is reversible. If we allow arbitrary functions then bad
+things happen as we can throw away the negative information for
+example. In our reversible information-preserving framework, the
+theory is consistent in the sense that not all types are
+identified. This is easy to see as we only identify types that have
+the same cardinality. This is evident for all the combinators except
+for the new ones. For those new ones the only subtle situation is with
+the empty type. Note however that there is no way to define 1/0 and no
+permutation has order 0. For 0 we have one permutation id which has
+order 1. So if we try to use it, we will map 1 to 1 times 1/id which
+is fine. So if we always preserve types and trivially 1 and 0 have
+different cardinalities so there is no way to identify them and we are
+consistent.
+
+"apply this program i times" is a VALUE !!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

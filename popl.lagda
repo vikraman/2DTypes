@@ -162,8 +162,9 @@ has cardinality $\frac{1}{3}$.
 
 Both groupoids illustrated in Fig.~\ref{fig:groupoids} involve some
 notion of ``division'' that can be captured at the level of types
-using a notion of \emph{fractional types.} The existence of such
-fractional types raises an intriguing question about their
+using a syntactic notion of \emph{fractional types.} The existence of
+such fractional types that denote groupoids as the ones depicted in
+Fig.~\ref{fig:groupoids} raises an intriguing question about their
 applicability to programming practice. In this introduction, we
 present, in the context of a new language $\pifrac$, several
 inter-related motivations and applications of fractional types that
@@ -195,7 +196,7 @@ upon. These first-class equivalence relations therefore enhance $\pifrac$
 with the same expressiveness afforded by the presence of first-class
 functions in conventional languages.
 
-\paragraph*{Conservation of Information and Negative Information.} A
+\paragraph*{Conservation of Information and Negative Entropy.} A
 finite type with $n$ elements where $n$ is a non-zero natural number
 has entropy $\log{n}$. This entropy is a measure of information which
 materializes itself in memory or bandwidth requirements when storing
@@ -212,123 +213,159 @@ corresponding computational principle of ``conservation of
 information.'' In the context of finite types, this means that the
 foundational notion of computation is computation via type
 isomorphisms~\cite{James:2012:IE:2103656.2103667} or HoTT
-equivalences~\cite{Carette2016} which are both size-preserving. The
-introduction in $\pifrac$ of types (groupoids) with fractional
-cardinalities introduces types with \emph{negative entropy}! For
-example, a type with cardinality $\frac{1}{8}$ has \emph{negative
-  entropy} $\log{\frac{1}{8}} = -3$. In the context of $\pifrac$ we
-will interpret this negative entropy just like we interpret negative
-money, as a debt to be repaid by some other part of the program. This
-ability to manipulate negative information as a first-class entity
-enhances $\pifrac$ with an expressiveness similar to the one afforded
-by the presence of negative numbers in finance.
+equivalences~\cite{Carette2016} which are both
+cardinality-preserving. The introduction, in $\pifrac$, of types
+(groupoids) with fractional cardinalities introduces types with
+\emph{negative entropy}. For example, a type with cardinality
+$\frac{1}{8}$ has \emph{negative entropy} $\log{\frac{1}{8}} = -3$. In
+the context of $\pifrac$ we will interpret this negative entropy just
+like we interpret negative money, as a debt to be repaid by some other
+part of the system. This ability to manipulate negative information as
+a first-class entity enhances $\pifrac$ with an expressiveness similar
+to the one afforded by the presence of negative numbers in finance.
 
-\paragraph*{Resource Creation and Annihilation.}
+\paragraph*{Resource Creation and Annihilation.} In $\pifrac$ all
+programs preserve information and hence preserve
+cardinality. Furthermore, for non-zero natural numbers $n$, the
+cardinality of the type $n \times \frac{1}{n}$ in $\pifrac$
+is~1. Therefore, $\pifrac$ has, for example, terms of type
+$1 \rightarrow (8 \times \frac{1}{8})$. Such terms take the type $1$
+with entropy $\log{1} = 0$ to the type $8 \times \frac{1}{8}$ with
+entropy $\log{8} + (- \log{8}) = 3 - 3 = 0$. The entropy is globally
+preserved as desired and expected. But interestingly, the term
+introduces, locally, two types that have entropies of $3$ and $-3$
+respectively. Each of these types can be further processed
+independently and, as long as the entire system is
+information-preserving, the net positive and negative entropies must
+eventually cancel out by a use of a term of the reverse type
+$(8 \times \frac{1}{8}) \rightarrow 1$. The simplest way to appreciate
+the expressiveness afforded by such a mechanism is the following
+credit card analogy. Think of the computation of type
+$1 \rightarrow (8 \times \frac{1}{8})$ as creating, out of nothing, 3
+dollars to be paid to the merchant instantly with a corresponding debt
+that propagates through the system. As long as the entire financial
+system is debt-preserving, the debt is guaranteed to propagate to the
+appropriate bank account and must eventually be reconciled by the
+original buyer. In more conventional computational terms, what has
+happened is that the resources needed at one point in the computation
+were created and consumed instantly without requiring a
+synchronization with the part of the system holding the resources,
+giving us a more asynchronous and decentralized model of computation.
+
+\paragraph*{Outline.} The remainder of the paper is organized as
+follows. \ldots
 
 
+% Conservation of information is our starting point. If your entire
+% framework is based on such a conservation principle then you
+% \emph{can}, temporarily, introduce \emph{negative information}. This
+% negative information will never be duplicated or erased and will
+% eventually have to be reconciled. But what could the benefit possibly
+% be? The intuition is simple and is essentially closely related to how
+% we use credit cards. A credit card creates money and a corresponding
+% debt out of nothing. The merchant can get their money and the debt
+% propagates through the system until it is reconciled at some later
+% point. If the entire system guarantees that the debt will not be
+% duplicated or erased, then the net effect is additional convenience
+% for everyone. Computationally what his happening is that we have
+% created needed resources at one site with a debt: someone must
+% eventually provide these resources.
 
+% If quantum field theory is correct (as it so far seems to be) then
+% \emph{information}, during any physical process, is neither created
+% nor destroyed. Our starting point is this \emph{conservation
+%   principle} --- the \emph{conservation of entropy or information},
+% adapted to the computational setting, i.e., we study computations
+% which are information-preserving. Our initial investigation was in the
+% setting of computations over finite types: in that setting
+% information-preservation coincides with type isomorphisms,
+% permutations on finite sets, and HoTT equivalences. In this paper, we
+% extend the work to computations over \emph{groupoids}. 
 
+% In both the situation with finite sets and groupoids, our measure of
+% information is the same. With each type $T$ (finite set or groupoid)
+% of cardinality $n$, we associate the information measure
+% $H(T) = \log{n}$. One way to think of $H(T)$ is that it is a measure
+% of how much space it takes to store values in $T$, not knowing
+% anything about their distribution. For non-empty finite sets,
+% $\log{n}$ is always a natural number representing the number of bits
+% necessary to store values of type $T$. For groupoids, it is possible
+% to have non-negative rational numbers as their cardinality, e.g.,
+% $\frac{1}{3}$, which would give us \emph{negative} entropy,
+% information, or space. 
 
+% An important paper about negative entropy in the context of the
+% Landauer limit and reversible computation:
+% \url{http://www.nature.com/nature/journal/v474/n7349/full/nature10123.html}
 
-~
-\medskip
-\amr{todo}
+% Something else about negative entropy
+% \url{https://en.wikipedia.org/wiki/Negentropy}: In information theory
+% and statistics, negentropy is used as a measure of distance to
+% normality. Out of all distributions with a given mean and variance,
+% the normal or Gaussian distribution is the one with the highest
+% entropy. Negentropy measures the difference in entropy between a given
+% distribution and the Gaussian distribution with the same mean and
+% variance.
 
-"apply this program i times" is a VALUE !!!
+% One more link about negative entropy
+% \url{https://www.quora.com/What-does-negative-entropy-mean}: For
+% example, if you burn fuel, you get water, CO2 and some other
+% wastes. Could be possible on a lab transform water + CO2 + some other
+% wastes on fuel again? Of course yes, but the energy to make that is
+% much more than the energy that you could obtain again from the
+% reconstructed fuel. If you see the local process (I've converted
+% water+ CO2 + some other wastes on fuel) the entropy is clearly
+% negative. But if you consider the energy necessary to achieve that the
+% global entropy is clearly positive.
 
+% Something about negative information:
+% \url{http://www.ucl.ac.uk/oppenheim/negative-information_p2.html}
 
-Conservation of information is our starting point. If your entire
-framework is based on such a conservation principle then you
-\emph{can}, temporarily, introduce \emph{negative information}. This
-negative information will never be duplicated or erased and will
-eventually have to be reconciled. But what could the benefit possibly
-be? The intuition is simple and is essentially closely related to how
-we use credit cards. A credit card creates money and a corresponding
-debt out of nothing. The merchant can get their money and the debt
-propagates through the system until it is reconciled at some later
-point. If the entire system guarantees that the debt will not be
-duplicated or erased, then the net effect is additional convenience
-for everyone. Computationally what his happening is that we have
-created needed resources at one site with a debt: someone must
-eventually provide these resources.
+% In terms of space, we interpret a negative amount as the ability to
+% reclaim that much space. 
 
-If quantum field theory is correct (as it so far seems to be) then
-\emph{information}, during any physical process, is neither created
-nor destroyed. Our starting point is this \emph{conservation
-  principle} --- the \emph{conservation of entropy or information},
-adapted to the computational setting, i.e., we study computations
-which are information-preserving. Our initial investigation was in the
-setting of computations over finite types: in that setting
-information-preservation coincides with type isomorphisms,
-permutations on finite sets, and HoTT equivalences. In this paper, we
-extend the work to computations over \emph{groupoids}. 
-
-In both the situation with finite sets and groupoids, our measure of
-information is the same. With each type $T$ (finite set or groupoid)
-of cardinality $n$, we associate the information measure
-$H(T) = \log{n}$. One way to think of $H(T)$ is that it is a measure
-of how much space it takes to store values in $T$, not knowing
-anything about their distribution. For non-empty finite sets,
-$\log{n}$ is always a natural number representing the number of bits
-necessary to store values of type $T$. For groupoids, it is possible
-to have non-negative rational numbers as their cardinality, e.g.,
-$\frac{1}{3}$, which would give us \emph{negative} entropy,
-information, or space. 
-
-An important paper about negative entropy in the context of the
-Landauer limit and reversible computation:
-\url{http://www.nature.com/nature/journal/v474/n7349/full/nature10123.html}
-
-Something else about negative entropy
-\url{https://en.wikipedia.org/wiki/Negentropy}: In information theory
-and statistics, negentropy is used as a measure of distance to
-normality. Out of all distributions with a given mean and variance,
-the normal or Gaussian distribution is the one with the highest
-entropy. Negentropy measures the difference in entropy between a given
-distribution and the Gaussian distribution with the same mean and
-variance.
-
-One more link about negative entropy
-\url{https://www.quora.com/What-does-negative-entropy-mean}: For
-example, if you burn fuel, you get water, CO2 and some other
-wastes. Could be possible on a lab transform water + CO2 + some other
-wastes on fuel again? Of course yes, but the energy to make that is
-much more than the energy that you could obtain again from the
-reconstructed fuel. If you see the local process (I've converted
-water+ CO2 + some other wastes on fuel) the entropy is clearly
-negative. But if you consider the energy necessary to achieve that the
-global entropy is clearly positive.
-
-Something about negative information:
-\url{http://www.ucl.ac.uk/oppenheim/negative-information_p2.html}
-
-In terms of space, we interpret a negative amount as the ability to
-reclaim that much space. 
-
-Since information is defined using cardinality, the conclusion is that
-we will consider computations between types $T_1$ and $T_2$ (finite
-sets or groupoids) such that the cardinality of $T_1$ is the same as
-the cardinality of $T_2$.
+% Since information is defined using cardinality, the conclusion is that
+% we will consider computations between types $T_1$ and $T_2$ (finite
+% sets or groupoids) such that the cardinality of $T_1$ is the same as
+% the cardinality of $T_2$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Example and Information Equivalence}
+\section{Examples}
 
-\amr{todo}
-
-We have a type $C$ containing $n$ values and we want to operate on
-each value. We will split the type $C$ as the product of $A$ and $B$
-where the cardinalities of $A$ and $B$ are approximately $\sqrt{n}$
-and we will operate on $A$ and $B$ independently and potentially in
-parallel. We will do this even if $n$ is prime!
+We present two examples that illustrate the novelty of fractional
+types in a programming context. The first example is of a denotational
+flavor showing how to decompose types in components that could be
+processed independently. The second example, of a more operational
+flavor, formalizes the credit card analogy from the introduction as an
+executable program.
 
 %%%%%
-\subsection{Example}
+\subsection{$\sqrt{n}$ Speedup}
 
-We will use the type $C$ below as a running example in this
-section. It has cardinality 7:
+Say we want to add 1 $\pmod{100}$ to numbers in the range
+$[0..99]$. One approach is to represent the input type as a monolithic
+type with 100 elements giving us a unary representation of the
+numbers. The addition function in this case will have 100 cases, one
+for each possible input, and might, in the worst case, take 100 steps
+to compute the successor of a number. A better approach is to
+represent the input type as the product of two types, of
+cardinality~10 each, giving us a decimal representation of the
+numbers. The addition function in this case will take a maximum of 20
+steps: 10 to calculate the successor of the digit in the unit position
+and, in case of a carry, another 10 to calculate the successor of the
+digit in the tens position. In a conventional setting, this idea works
+perfectly but only if the input cardinality~$n$ has factors near
+$\sqrt{n}$: it is completely useless if the input cardinality~$n$ is a
+prime number.
+
+Yet we can make this idea work with fractional types even if the
+cardinality is prime. Here is an example in which we will decompose a
+type with 7 elements into the product of two types with cardinality
+$2 \frac{1}{3}$ and 3 respectively. Let $C$ be the following type with
+7 elements:
 \begin{center}
 \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
-  \draw (0,0) ellipse (8cm and 1.6cm);
+  \draw[dashed] (0,0) ellipse (8cm and 1.6cm);
   \node[below] at (-6,0) {\texttt{sun}};
   \node[below] at (-4,0) {\texttt{mon}};
   \node[below] at (-2,0) {\texttt{tue}};
@@ -346,102 +383,30 @@ section. It has cardinality 7:
 \end{tikzpicture}
 \end{center}
 
-We will decompose the type $C$ into the products of $A$ and $B$ where
-$A$ will have cardinality $2\frac{1}{3}$ and $B$ will cardinality
-3. The first step is to explain how to calculate such
-cardinalities. We will use the Euler characteristic of a category
-which in our case also correspond to the groupoid cardinality. There
-are several formulations and explanations. The following is quite
-simple to implement: first collapse all the isomorphic objects. Then
-fix a particular order of the objects and write a matrix whose $ij$'s
-entry is the number of morphisms from $i$ to $j$. Invert the
-matrix. The cardinality is the sum of the elements in the matrix.
-
-The next step is to write a permutation $p$ on $C$ of order 3. For
-example:
-\[\begin{array}{rcl}
-p(\texttt{sun}) &=& \texttt{mon} \\
-p(\texttt{mon}) &=& \texttt{tue} \\
-p(\texttt{tue}) &=& \texttt{sun} \\
-p(\texttt{wed}) &=& \texttt{thu} \\
-p(\texttt{thu}) &=& \texttt{fri} \\
-p(\texttt{fri}) &=& \texttt{wed} \\
+\noindent The first step is to write a program $p$ that represents a
+permutation of $C$ of order 3. For example:
+\[\begin{array}{rcl@{\qquad\qquad\qquad}rcl}
+p(\texttt{sun}) &=& \texttt{mon} & 
+                                   p(\texttt{mon}) &=& \texttt{tue} \\
+p(\texttt{tue}) &=& \texttt{sun} & 
+                                   p(\texttt{wed}) &=& \texttt{thu} \\
+p(\texttt{thu}) &=& \texttt{fri} & 
+                                   p(\texttt{fri}) &=& \texttt{wed} \\
 p(\texttt{sat}) &=& \texttt{sat}
 \end{array}\]
-The definition of $p$ will induce three types (groupoids):
 
+\noindent Clearly applying $p$ three consecutive times yields the
+identity function. The definition of any $p$ representing a
+permutation of order $\hash p$ will induce two groupoids of
+cardinality $\order{p}$ and $1/\hash p$. In our case, we get:
 \begin{itemize}
-
-\item The first is the action groupoid $\ag{C}{p}$ depicted below. The
-objects are the elements of $C$ and there is a morphism between $x$
-and $y$ iff $p^k$ for some $k$ maps $x$ to $y$. We do not draw the
-identity morphisms. Note that all of $p^0$, $p^1$, and $p^2$ map
-\texttt{sat} to \texttt{sat} which explains the two non-trivial
-morphisms on \texttt{sat}:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw (0,0) ellipse (8cm and 1.6cm);
-  \node[below] at (-6,0) {\texttt{sun}};
-  \node[below] at (-4,0) {\texttt{mon}};
-  \node[below] at (-2,0) {\texttt{tue}};
-  \node[below] at (0,0) {\texttt{wed}};
-  \node[below] at (2,0) {\texttt{thu}};
-  \node[below] at (4,0) {\texttt{fri}};
-  \node[below] (B) at (6,0) {\texttt{sat}};
-  \draw[fill] (-6,0) circle [radius=0.05];
-  \draw[fill] (-4,0) circle [radius=0.05];
-  \draw[fill] (-2,0) circle [radius=0.05];
-  \draw[fill] (0,0) circle [radius=0.05];
-  \draw[fill] (2,0) circle [radius=0.05];
-  \draw[fill] (4,0) circle [radius=0.05];
-  \draw[fill] (6,0) circle [radius=0.05];
-  \draw (-6,0) -- (-4,0);
-  \draw (-4,0) -- (-2,0);
-  \draw (0,0) -- (2,0);
-  \draw (2,0) -- (4,0);
-  \draw (-6,0) to[bend left] (-2,0) ;
-  \draw (0,0) to[bend left] (4,0) ;
-  \path (B) edge [loop above, looseness=3, in=48, out=132] node[above] {} (B);
-  \path (B) edge [loop above, looseness=5, in=40, out=140] node[above] {} (B);
-\end{tikzpicture}
-\end{center}
-
-To calculate the cardinality, we first collapse all the isomorphic
-objects (i.e., collapse the two strongly connected components to one
-object each) and write the resulting matrix:
-\[
-\begin{pmatrix}
-1 & 0 & 0 \\
-0 & 1 & 0 \\
-0 & 0 & 3 
-\end{pmatrix}
-\]
-Its inverse is 0 everywhere except on the main diagonal which has
-entries 1, 1, and $\frac{1}{3}$ and hence the cardinality of this
-category is $2\frac{1}{3}$.
-
-\item The second which we call $1/p$ is depicted below. It has one
-trivial object and a morphism for each iteration of $p$. It has
-cardinality $\frac{1}{3}$ as the connectivity matrix has one entry
-$3$ whose inverse is $\frac{1}{3}$:
-
+\item The first groupoid which we denote $\order{p}$ has (up to
+  equivalence) three clusters of objects corresponding to each
+  distinct iteration of $p$. (We omit the identity arrows in the
+  figure.) It has cardinality $3$:
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
-  \draw (0,1.4) ellipse (2cm and 2cm);
-  \node[below] (B) at (0,0) {\texttt{*}};
-%%  \path (B) edge [loop above] node[above] {$p^0$} (B);
-  \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p$} (B);
-  \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (B);
-\end{tikzpicture}
-\end{center}
-
-\item The third is the order type $\order{p}$ depicted below. It has
-three objects corresponding to each iteration of $p$. It has
-cardinality $3$:
-\begin{center}
-\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
-  \draw (0,0) ellipse (4cm and 1cm);
+  \draw[dashed] (0,0) ellipse (3cm and 0.7cm);
   \node[below] at (-2,0) {$p^0$};
   \node[below] at (0,0) {$p^1$};
   \node[below] at (2,0) {$p^2$};
@@ -450,60 +415,63 @@ cardinality $3$:
   \draw[fill] (2,0) circle [radius=0.05];
 \end{tikzpicture}
 \end{center}
-\end{itemize}
-
-Now we will take the type $C$ and apply the following sequence of transformations:
-\[\begin{array}{rcl}
-C &≃&  C \boxtimes \ot \\
-&≃& C \boxtimes (\order{p} \boxtimes 1/p) \\
-&≃& (C \boxtimes 1/p) \boxtimes \order{p} \\
-&≃& (\ag{C}{p}) \boxtimes \order{p}
-\end{array}\]
-First note that the types are built from permutations over finite
-types: this is a different level of types from the level of plain
-finite types. The usual $\Pi$-combinators lift to this level and there
-are two new transformations that we need to justify. If $p : \tau \leftrightarrow \tau$, then:
-\begin{itemize}
-\item $\order{p} \boxtimes 1/p ≃ \ot$, and 
-\item $\tau \boxtimes 1/p ≃ \ag{\tau}{p}$
-\end{itemize}
-
-In our running example, interpreting $\boxtimes$ are a regular
-product, $\order{p} \boxtimes 1/p$ looks like: 
-
-\medskip
+\item The second groupoid which we denote $1/\hash~p$ has one 
+trivial object and a loop for each distinct iteration of $p$. (We
+explicitly include the identity arrow to emphasize that there are
+three distinct loops):
 \begin{center}
-\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
-  \draw (0,0) ellipse (7cm and 2.5cm);
-  \node[below] (1) at (-3.5,-1.5) {$p^0$};
-   \node[below] (2) at (0,-1.5) {$p^1$};
-  \node[below] (3) at (3.5,-1.5) {$p^2$};
-  \draw[fill] (-3.5,-1.5) circle [radius=0.05];
-  \draw[fill] (0,-1.5) circle [radius=0.05];
-  \draw[fill] (3.5,-1.5) circle [radius=0.05];
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw[dashed] (0,0) ellipse (1.5cm and 2.1cm);
+  \node[below] (B) at (0,-0.7) {\texttt{*}};
+  \path (B) edge [loop below] node[below] {$p^0$} (B);
+  \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (B);
+  \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (B);
+\end{tikzpicture}
+\end{center}
+\end{itemize}
 
-%%  \path (1) edge [loop above] node[above] {$p^0$} (1);
+It is a fact that, in $\pifrac$, the trivial one point groupoid has the
+same cardinality as $\order{p} \times 1/\hash p$ for any $p$. Indeed
+taking the product of $\order{p}$ and $1/\hash p$ produces the groupoid:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw[dashed] (0,-0.3) ellipse (7cm and 2.7cm);
+  \node[below] (1) at (-3.5,-1) {$p^0$};
+   \node[below] (2) at (0,-1) {$p^1$};
+  \node[below] (3) at (3.5,-1) {$p^2$};
+  \draw[fill] (-3.5,-1) circle [radius=0.05];
+  \draw[fill] (0,-1) circle [radius=0.05];
+  \draw[fill] (3.5,-1) circle [radius=0.05];
+
+  \path (1) edge [loop below] node[below] {$p^0$} (1);
   \path (1) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (1);
   \path (1) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (1);
 
-%%  \path (2) edge [loop above] node[above] {$p^0$} (2);
+  \path (2) edge [loop below] node[below] {$p^0$} (2);
   \path (2) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (2);
   \path (2) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (2);
 
-%%  \path (3) edge [loop above] node[above] {$p^0$} (3);
+  \path (3) edge [loop below] node[below] {$p^0$} (3);
   \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
   \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
 \end{tikzpicture}
 \end{center}
-
-This has the same cardinality as the finite set with one element and
-hence ``informally-equivalent'' to $\ot$.
-
-The type $C \boxtimes 1/p$ looks like:
+\noindent which has cardinality 1. This justifies the following
+cardinality-preserving transformations on $C$:
+\[\begin{array}{rcl}
+C &≃&  C \times 1 \\
+&≃& C \times (\order{p} \times 1/\hash p) \\
+&≃& (C \times 1/\hash p) \times \order{p} 
+\end{array}\]
+which decomposes $C$ into the product of $C \times 1/\hash p$ and
+$\order{p}$. The latter groupoid has cardinality 3. The first groupoid,
+depicted below, has cardinality $2\frac{1}{3}$. (We omit the identity
+arrows to avoid excessive clutter):
 
 \begin{center}
 \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw (0,0) ellipse (9cm and 2.7cm);
+  \draw[dashed] (0,-0.5) ellipse (9cm and 2.7cm);
   \node[below] (1) at (-6,-1.5) {\texttt{sun}};
    \node[below] (2) at (-4,-1.5) {\texttt{mon}};
   \node[below] (3) at (-2,-1.5) {\texttt{tue}};
@@ -549,8 +517,35 @@ The type $C \boxtimes 1/p$ looks like:
 \end{tikzpicture}
 \end{center} 
 
-This type is again informally-equivalent to $\ag{C}{p}$ as it has the
-same cardinality.
+%%%%%
+\subsection{Credit Card Computation} 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Sec 3
+
+\input{pibackground.tex} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Sec 4
+
+\input{groupoid.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Sec 5, 6, and 7
+%% A new language with fractional types
+%% its denotational semantics
+%% its operational semantics
+%% pragmatics
+
+\input{pifrac.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{abbrvnat}
+\bibliography{cites}
+\end{document}
+
+%% This type is again informally-equivalent to $\ag{C}{p}$ as it has the
+%% same cardinality.
 
 % \begin{tabular}{ccc}
 % \begin{minipage}{0.4\textwidth}
@@ -709,88 +704,4 @@ same cardinality.
 % \end{tikzpicture}
 
 % which is equivalent to $C$.
-
-%%%%%
-\subsection{Information Equivalence}
-
-Our notion of information equivalence is coarser than the conventional
-notion of equivalence of categories (groupoids). This is fine as there
-are several competing notions of equivalence of groupoids that are
-coarser than strict categorical equivalence. 
-
-Need to explain the example above in terms of information!!! The best
-explanation I have so far is the credit card analogy: we want money
-here and now, so we create money and a debt. That debt is reconciled
-somewhere else. The example above uses the same: we want to process
-some values from $C$ here and now. So we create a third of them,
-process them, and reconcile this third somewhere else. When all three
-thirds have been reconciled the computation is finished. 
-
-There are however other notions of equivalence of groupoids like
-Morita equivalence and weak equivalence that we explore later. The
-intuition of these weaker notions of equivalence is that two groupoids
-can be considered equivalent if it is not possible to distinguish them
-using certain observations. This informally corresponds to the notion
-of ``observational equivalence'' in programming language
-semantics. Note that negative entropy can only make sense locally in
-an open system but that in a closed system, i.e., in a complete
-computation, entropy cannot be negative. Thus we restrict
-observational contexts to those in which fractional types do not
-occur. Note that two categories can have the same cardinality but not
-be equivalent or even Morita equivalent but the converse is
-guaranteed. So it is necessary to have a separate notion of
-equivalence and check that whenever we have the same cardinality, the
-particular categories in question are equivalent. The second
-equivalence, that $C \boxtimes 1/p$ is equivalent to $\ag{C}{p}$ would
-follow from two facts: that three copies of $1/p$ simplify to a point
-(which is the first equivalence above) and that three connected points
-also simplify to a single point (which is relatively easy to
-establish).
-
-Is weak equivalence in HoTT related??? Here is one definition: A map
-$f : X \rightarrow Y$ is a weak homotopy equivalence (or just a weak
-equivalence) if for every $x \in X$, and all $n \geq 0$ the map
-$\pi_n(X,x) \rightarrow \pi_n(Y,f(x))$ is a bijection. In our setting
-this might mean something like: two types $T$ and $U$ are equivalent
-if $T \leftrightarrow T$ is equivalent to $U \leftrightarrow U$ are
-equivalent.
-
-First the equivalence can only make sense in a framework where
-everything is reversible. If we allow arbitrary functions then bad
-things happen as we can throw away the negative information for
-example. In our reversible information-preserving framework, the
-theory is consistent in the sense that not all types are
-identified. This is easy to see as we only identify types that have
-the same cardinality. This is evident for all the combinators except
-for the new ones. For those new ones the only subtle situation is with
-the empty type. Note however that there is no way to define 1/0 and no
-permutation has order 0. For 0 we have one permutation id which has
-order 1. So if we try to use it, we will map 1 to 1 times 1/id which
-is fine. So if we always preserve types and trivially 1 and 0 have
-different cardinalities so there is no way to identify them and we are
-consistent.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Sec 3
-
-\input{pibackground.tex} 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Sec 4
-
-\input{groupoid.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Sec 5, 6, and 7
-%% A new language with fractional types
-%% its denotational semantics
-%% its operational semantics
-%% pragmatics
-
-\input{pifrac.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\bibliographystyle{abbrvnat}
-\bibliography{cites}
-\end{document}
 
