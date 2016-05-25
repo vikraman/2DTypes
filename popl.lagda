@@ -525,20 +525,20 @@ arrows to avoid excessive clutter):
 \begin{center}
 \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge node[below] {5} (0,1);
-  \path (1,1.8) edge node[above] {1} (2,1.8);
-  \path (1,0.2) edge node[below] {5} (4,0.2);
-  \draw (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
-  \path (3,2.6) edge node[above] {5} (6,2.6);
-  \path (3,1) edge node[above] {$\frac{1}{5}$} (4,1);
+  \path (-1,1) edge node[below] {\textsf{Bool}} (0,1);
+  \path (1,1.8) edge node[above] {1} (1.6,1.8);
+  \path (1,0.2) edge node[below] {\textsf{Bool}} (4,0.2);
+  \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
+  \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
+  \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
   \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge node[above] {1} (6,1);
+  \path (5,1) edge node[above] {1??} (6,1);
   \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge node[above] {5} (8,1.8);
-  \node at (0.5,1) {$A$};
-  \node at (2.5,1.8) {$B$};
-  \node at (4.5,1) {$C$};
-  \node at (6.5,1.8) {$D$};
+  \path (7,1.8) edge node[above] {5??} (8,1.8);
+  \node at (0.5,1) {$\textsf{unit*}$};
+  \node at (2.1,1.8) {$\eta$};
+  \node at (4.5,1) {$C??$};
+  \node at (6.5,1.8) {$D??$};
 \end{tikzpicture}
 \end{center}
 
