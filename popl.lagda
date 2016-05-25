@@ -525,22 +525,88 @@ arrows to avoid excessive clutter):
 \begin{center}
 \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge node[below] {\textsf{Bool}} (0,1);
+  \path (-1.1,1) edge node[below] {$\order{\textsf{swap}}$} (0,1);
   \path (1,1.8) edge node[above] {1} (1.6,1.8);
-  \path (1,0.2) edge node[below] {\textsf{Bool}} (4,0.2);
+  \path (1,0.2) edge node[below] {$\order{\textsf{swap}}$} (4,0.2);
   \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
   \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
   \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
   \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge node[above] {1??} (6,1);
+  \path (5,1) edge node[above] {1} (6,1);
   \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge node[above] {5??} (8,1.8);
+  \path (7,1.8) edge node[above] {$\order{\textsf{swap}}$} (8,1.8);
   \node at (0.5,1) {$\textsf{unit*}$};
   \node at (2.1,1.8) {$\eta$};
-  \node at (4.5,1) {$C??$};
-  \node at (6.5,1.8) {$D??$};
+  \node at (4.5,1) {$\epsilon$};
+  \node at (6.5,1.8) {$\textsf{unit*}$};
 \end{tikzpicture}
 \end{center}
+
+The values of $\order{p}$ are $p^0=\mathit{id}$, $p$, $p^2$,
+etc. $\eta$ has a choice: assume we always choose $p$.  The values of
+$1/\hash p$ are $[*,p^0]$, $[*,p]$, $[*,p^2]$, etc. $\eta$ makes a
+choice consistent with the above. Possible executions:
+
+\begin{verbatim}
+id -> 
+((),id) -> 
+((id,[*,id]),id) ->
+(id,([*,id],id)) ->
+(id,()) ->
+id
+\end{verbatim}
+
+\begin{verbatim}
+id -> 
+((),id) -> 
+((swap,[*,swap]),id) ->
+(swap,([*,swap],id)) ->
+STUCK ?? hopefully type error of some kind
+\end{verbatim}
+
+\begin{verbatim}
+swap -> 
+((),swap) -> 
+((id,[*,id]),swap) ->
+(id,([*,id],swap)) ->
+STUCK ?? hopefully type error of some kind
+\end{verbatim}
+
+\begin{verbatim}
+swap -> 
+((),swap) -> 
+((swap,[*,swap]),swap) ->
+(swap,([*,swap],swap)) ->
+(swap,()) ->
+swap
+\end{verbatim}
+
+One way to make this work: eta always choose p and 1/p. If epsilon
+receives something other than p we can use the monad to cycle through
+the different $p^i$ until we have a match???  So that leaves two schedules:
+
+\begin{verbatim}
+id -> 
+((),id) -> 
+((swap,[*,swap]),id) ->
+(swap,([*,swap],id)) ->
+   -- somehow use monad ???
+(swap,([*,swap.swap],id)) ->
+   -- which somehow propagates ???
+(swap.swap,([*,swap.swap],id)) ->
+   -- now we proceed in standard way
+id
+\end{verbatim}
+
+\begin{verbatim}
+swap -> 
+((),swap) -> 
+((swap,[*,swap]),swap) ->
+(swap,([*,swap],swap)) ->
+(swap,()) ->
+swap
+\end{verbatim}
+
 
 \noindent Of course we can execute from left-to-right but there is a
 more interesting schedule. Although we do not formalize the
