@@ -520,6 +520,167 @@ arrows to avoid excessive clutter):
 %%%%%
 \subsection{Credit Card Computation} 
  
+\noindent Initial circuit:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1,1) edge node[below] {5} (0,1);
+  \path (1,1.8) edge node[above] {1} (2,1.8);
+  \path (1,0.2) edge node[below] {5} (4,0.2);
+  \draw (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
+  \path (3,2.6) edge node[above] {5} (6,2.6);
+  \path (3,1) edge node[above] {$\frac{1}{5}$} (4,1);
+  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge node[above] {1} (6,1);
+  \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge node[above] {5} (8,1.8);
+  \node at (0.5,1) {$A$};
+  \node at (2.5,1.8) {$B$};
+  \node at (4.5,1) {$C$};
+  \node at (6.5,1.8) {$D$};
+\end{tikzpicture}
+\end{center}
+
+\noindent Of course we can execute from left-to-right but there is a
+more interesting schedule. Although we do not formalize the
+operational semantics with varying schedules, it is possible to do so
+and it is instructive for this example. The wires carrying no
+information can be initialized:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1,1) edge node[below] {5} (0,1);
+  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
+  \path (1,0.2) edge node[below] {5} (4,0.2);
+  \draw (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
+  \path (3,2.6) edge node[above] {5} (6,2.6);
+  \path (3,1) edge node[above] {$\frac{1}{5}$} (4,1);
+  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge[thick,red] node[above] {1} (6,1);
+  \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge node[above] {5} (8,1.8);
+  \node at (0.5,1) {$A$};
+  \node at (2.5,1.8) {$B$};
+  \node at (4.5,1) {$C$};
+  \node at (6.5,1.8) {$D$};
+\end{tikzpicture}
+\end{center}
+
+\noindent  The $B$ computation has its inputs ready: we can create a value of
+type $5$ together with a debt of type $\frac{1}{5}$. 
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1,1) edge node[below] {5} (0,1);
+  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
+  \path (1,0.2) edge node[below] {5} (4,0.2);
+  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
+  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
+  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
+  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge[thick,red] node[above] {1} (6,1);
+  \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge node[above] {5} (8,1.8);
+  \node at (0.5,1) {$A$};
+  \node at (2.5,1.8) {$B$};
+  \node at (4.5,1) {$C$};
+  \node at (6.5,1.8) {$D$};
+\end{tikzpicture}
+\end{center}
+
+\noindent  The computation $D$ has its inputs ready: the merchant gets the money:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1,1) edge node[below] {5} (0,1);
+  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
+  \path (1,0.2) edge node[below] {5} (4,0.2);
+  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
+  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
+  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
+  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge[thick,red] node[above] {1} (6,1);
+  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
+  \node at (0.5,1) {$A$};
+  \node at (2.5,1.8) {$B$};
+  \node at (4.5,1) {$C$};
+  \node at (6.5,1.8) {$D$};
+\end{tikzpicture}
+\end{center}
+
+\noindent  The buyer has the money available:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1,1) edge[thick,red] node[below] {5} (0,1);
+  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
+  \path (1,0.2) edge node[below] {5} (4,0.2);
+  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
+  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
+  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
+  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge[thick,red] node[above] {1} (6,1);
+  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
+  \node at (0.5,1) {$A$};
+  \node at (2.5,1.8) {$B$};
+  \node at (4.5,1) {$C$};
+  \node at (6.5,1.8) {$D$};
+\end{tikzpicture}
+\end{center}
+
+\noindent  The computation $A$ executes:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw[thick,red] (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1,1) edge[thick,red] node[below] {5} (0,1);
+  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
+  \path (1,0.2) edge[thick,red] node[below] {5} (4,0.2);
+  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
+  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
+  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
+  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge[thick,red] node[above] {1} (6,1);
+  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
+  \node at (0.5,1) {$A$};
+  \node at (2.5,1.8) {$B$};
+  \node at (4.5,1) {$C$};
+  \node at (6.5,1.8) {$D$};
+\end{tikzpicture}
+\end{center}
+
+\noindent  The last computation has its inputs ready; the entire circuit
+completes execution: the debt has been repaid.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+  \draw[thick,red] (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1,1) edge[thick,red] node[below] {5} (0,1);
+  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
+  \path (1,0.2) edge[thick,red] node[below] {5} (4,0.2);
+  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
+  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
+  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
+  \draw[thick,red] (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge[thick,red] node[above] {1} (6,1);
+  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
+  \node at (0.5,1) {$A$};
+  \node at (2.5,1.8) {$B$};
+  \node at (4.5,1) {$C$};
+  \node at (6.5,1.8) {$D$};
+\end{tikzpicture}
+\end{center}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sec 3
 
