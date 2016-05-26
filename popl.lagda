@@ -520,10 +520,16 @@ arrows to avoid excessive clutter):
 %%%%%
 \subsection{Credit Card Computation} 
  
+Generally speaking, the values of $\order{p}$ are $p^0=\mathit{id}$,
+$p$, $p^2$, etc. The values of $1/\hash p$ are $[*,p^0]$, $[*,p]$,
+$[*,p^2]$, etc. $\eta$ has a choice: it always chooses $p$ and
+$[*,p]$. $\epsilon$ has to have a matched pair to give 1; otherwise it
+backtracks.
+
 \noindent Initial circuit:
 
 \begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \path (-1.1,1) edge node[below] {$\order{\textsf{swap}}$} (0,1);
   \path (1,1.8) edge node[above] {1} (1.6,1.8);
@@ -542,36 +548,8 @@ arrows to avoid excessive clutter):
 \end{tikzpicture}
 \end{center}
 
-The values of $\order{p}$ are $p^0=\mathit{id}$, $p$, $p^2$,
-etc. $\eta$ has a choice: assume we always choose $p$.  The values of
-$1/\hash p$ are $[*,p^0]$, $[*,p]$, $[*,p^2]$, etc. $\eta$ makes a
-choice consistent with the above. Possible executions:
-
-\begin{verbatim}
-id -> 
-((),id) -> 
-((id,[*,id]),id) ->
-(id,([*,id],id)) ->
-(id,()) ->
-id
-\end{verbatim}
-
-\begin{verbatim}
-id -> 
-((),id) -> 
-((swap,[*,swap]),id) ->
-(swap,([*,swap],id)) ->
-STUCK ?? hopefully type error of some kind
-\end{verbatim}
-
-\begin{verbatim}
-swap -> 
-((),swap) -> 
-((id,[*,id]),swap) ->
-(id,([*,id],swap)) ->
-STUCK ?? hopefully type error of some kind
-\end{verbatim}
-
+There are two possible inputs id and swap. If the input is swap then
+execution proceeds as follows:
 \begin{verbatim}
 swap -> 
 ((),swap) -> 
@@ -581,171 +559,29 @@ swap ->
 swap
 \end{verbatim}
 
-One way to make this work: eta always choose p and 1/p. If epsilon
-receives something other than p we can use the monad to cycle through
-the different $p^i$ until we have a match???  So that leaves two schedules:
+If the input is id then execution proceeds as follows:
 
 \begin{verbatim}
-id -> 
-((),id) -> 
-((swap,[*,swap]),id) ->
-(swap,([*,swap],id)) ->
-   -- somehow use monad ???
-(swap,([*,swap.swap],id)) ->
-   -- which somehow propagates ???
-(swap.swap,([*,swap.swap],id)) ->
-   -- now we proceed in standard way
-id
+  swap^0
+>> unit* >>
+  ((),swap^0)
+>> eta x id >>
+  ((swap^1,[*,swap^1]),swap^0)
+>> assoc >>
+  (swap^1,([*,swap^1],swap^0)) 
+>> id x epsilon >>
+  (swap^1,([*,swap^1],swap^0)) 
+<< assoc <<
+  ((swap^1,[*,swap^1]),swap^0)
+<< eta x id <<
+  ((swap^2,[*,swap^2]),swap^0)
+>> assoc >>
+  ((swap^2,[*,swap^2]),swap^0)
+>> id x epsilon >>
+  (swap^2,())
+>> unit* >>
+  swap^2
 \end{verbatim}
-
-\begin{verbatim}
-swap -> 
-((),swap) -> 
-((swap,[*,swap]),swap) ->
-(swap,([*,swap],swap)) ->
-(swap,()) ->
-swap
-\end{verbatim}
-
-
-\noindent Of course we can execute from left-to-right but there is a
-more interesting schedule. Although we do not formalize the
-operational semantics with varying schedules, it is possible to do so
-and it is instructive for this example. The wires carrying no
-information can be initialized:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge node[below] {5} (0,1);
-  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
-  \path (1,0.2) edge node[below] {5} (4,0.2);
-  \draw (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
-  \path (3,2.6) edge node[above] {5} (6,2.6);
-  \path (3,1) edge node[above] {$\frac{1}{5}$} (4,1);
-  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge[thick,red] node[above] {1} (6,1);
-  \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge node[above] {5} (8,1.8);
-  \node at (0.5,1) {$A$};
-  \node at (2.5,1.8) {$B$};
-  \node at (4.5,1) {$C$};
-  \node at (6.5,1.8) {$D$};
-\end{tikzpicture}
-\end{center}
-
-\noindent  The $B$ computation has its inputs ready: we can create a value of
-type $5$ together with a debt of type $\frac{1}{5}$. 
-
-\begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge node[below] {5} (0,1);
-  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
-  \path (1,0.2) edge node[below] {5} (4,0.2);
-  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
-  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
-  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
-  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge[thick,red] node[above] {1} (6,1);
-  \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge node[above] {5} (8,1.8);
-  \node at (0.5,1) {$A$};
-  \node at (2.5,1.8) {$B$};
-  \node at (4.5,1) {$C$};
-  \node at (6.5,1.8) {$D$};
-\end{tikzpicture}
-\end{center}
-
-\noindent  The computation $D$ has its inputs ready: the merchant gets the money:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge node[below] {5} (0,1);
-  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
-  \path (1,0.2) edge node[below] {5} (4,0.2);
-  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
-  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
-  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
-  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge[thick,red] node[above] {1} (6,1);
-  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
-  \node at (0.5,1) {$A$};
-  \node at (2.5,1.8) {$B$};
-  \node at (4.5,1) {$C$};
-  \node at (6.5,1.8) {$D$};
-\end{tikzpicture}
-\end{center}
-
-\noindent  The buyer has the money available:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge[thick,red] node[below] {5} (0,1);
-  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
-  \path (1,0.2) edge node[below] {5} (4,0.2);
-  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
-  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
-  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
-  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge[thick,red] node[above] {1} (6,1);
-  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
-  \node at (0.5,1) {$A$};
-  \node at (2.5,1.8) {$B$};
-  \node at (4.5,1) {$C$};
-  \node at (6.5,1.8) {$D$};
-\end{tikzpicture}
-\end{center}
-
-\noindent  The computation $A$ executes:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw[thick,red] (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge[thick,red] node[below] {5} (0,1);
-  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
-  \path (1,0.2) edge[thick,red] node[below] {5} (4,0.2);
-  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
-  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
-  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
-  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge[thick,red] node[above] {1} (6,1);
-  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
-  \node at (0.5,1) {$A$};
-  \node at (2.5,1.8) {$B$};
-  \node at (4.5,1) {$C$};
-  \node at (6.5,1.8) {$D$};
-\end{tikzpicture}
-\end{center}
-
-\noindent  The last computation has its inputs ready; the entire circuit
-completes execution: the debt has been repaid.
-
-\begin{center}
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-  \draw[thick,red] (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1,1) edge[thick,red] node[below] {5} (0,1);
-  \path (1,1.8) edge[thick,red] node[above] {1} (2,1.8);
-  \path (1,0.2) edge[thick,red] node[below] {5} (4,0.2);
-  \draw[thick,red] (2,0.8) -- (3,0.8) -- (3,2.8) -- (2,2.8) -- cycle;
-  \path (3,2.6) edge[thick,red] node[above] {5} (6,2.6);
-  \path (3,1) edge[thick,red] node[above] {$\frac{1}{5}$} (4,1);
-  \draw[thick,red] (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge[thick,red] node[above] {1} (6,1);
-  \draw[thick,red] (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge[thick,red] node[above] {5} (8,1.8);
-  \node at (0.5,1) {$A$};
-  \node at (2.5,1.8) {$B$};
-  \node at (4.5,1) {$C$};
-  \node at (6.5,1.8) {$D$};
-\end{tikzpicture}
-\end{center}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sec 3
