@@ -583,6 +583,45 @@ If the input is id then execution proceeds as follows:
   swap^2
 \end{verbatim}
 
+\begin{figure*}[ht]
+Execution in terms of the machine states (eliding assoc):
+\begin{verbatim}
+    < unit*;etaxid;idxepsilon;unit* , swap^0 , [] >
+|-> < unit* , swap^0 , Fst [] etaxid;idxepsilon;unit* >
+|-> [ unit* , ((),swap^0) , Fst [] etaxid;idxepsilon;unit* ]
+|-> < etaxid;idxepsilon;unit* , ((),swap^0) , Snd unit* [] >
+|-> < etaxid , ((),swap^0) , Fst (Snd unit* []) (idxepsilon;unit*) >
+|-> < eta , () , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 >
+|-> [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 ]
+|-> < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
+|-> [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
+|-> [ etaxid , (swap^1 , (1/swap^1 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
+|-> < idxepsilon;unit* , (swap^1 , (1/swap^1 , swap^0)) , Snd etaxid (Snd unit* []) >
+|->*< epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
+BACKWARDS EXECUTION STARTS
+<-| < epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
+<-| [ id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) ]
+<-| < id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) >
+<-| < idxepsilon , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd etaxid (Snd unit* [])) unit* > 
+<-| < idxepsilon;unit* , ((swap^1 , 1/swap^1) , swap^0) , Snd etaxid (Snd unit* []) > 
+<-| [ etaxid , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd unit* []) idxepsilon;unit* ]
+<-| [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) ]
+<-| < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) >
+<-| [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
+REVERSE AGAIN; USED MONAD
+|-> [ eta , (swap^2 , 1/swap^2) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
+|-> < id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
+|-> [ id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
+|-> [ etaxid , (swap^2 , (1/swap^2 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
+|-> < idxepsilon;unit* , (swap^2 , (1/swap^2 , swap^0)) , Snd etaxid (Snd unit* []) >
+|->*< epsilon , (1/swap^2 , swap^0) , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) >
+|-> [ epsilon , () , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) ]
+|-> [ idxepsilon , (swap^2,()) , Fst (Snd etaxid (Snd unit* [])) unit* ]
+|-> < unit* , (swap^2,()) , Snd idxepsilon (Snd etaxid (Snd unit* [])) >
+|->*[swap^2 , Snd unit* (Snd idxepsilon (Snd etaxid (Snd unit* []))) ]
+\end{verbatim}
+\end{figure*}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sec 3
 
