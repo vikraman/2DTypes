@@ -520,13 +520,27 @@ arrows to avoid excessive clutter):
 %%%%%
 \subsection{Credit Card Computation} 
  
-Generally speaking, the values of $\order{p}$ are $p^0=\mathit{id}$,
-$p$, $p^2$, etc. The values of $1/\hash p$ are $[*,p^0]$, $[*,p]$,
-$[*,p^2]$, etc. $\eta$ has a choice: it always chooses $p$ and
-$[*,p]$. $\epsilon$ has to have a matched pair to give 1; otherwise it
-backtracks.
+Generally speaking, a value is a point and a loop on that point. When
+the loop is trivial we omit it; when the point is trivial we omit
+it. So values of type $\order{p}$ will be denoted, $p^0=\mathit{id}$,
+$p$, $p^2$, etc and values of type $1/\hash p$ will be denoted
+$1/p^0=\mathit{id}$, $1/p$, $1/p^2$, etc. The semantics of $\eta$ and
+$\epsilon$ involves some synchronization: $\eta$ initially makes a
+choice to generate $(p,1/p)$ speculatively. As in any situation
+involving speculative execution, the choice may be wrong. This would
+become apparent when we reach $\epsilon$. (In a complete program we
+are guaranteed to reach $\epsilon$ as a complete program cannot
+produce something of a fractional type.) When we encounter $\epsilon$,
+if the speculative guess done by $\eta$ was correct, we proceed to
+cancel the positive and negative information. Otherwise $\epsilon$
+backtracks by reversing the execution. When the reverse execution
+reaches $\eta$, it uses the monad to update its speculative value by
+appending one iteration of $p$ and then resumes forward
+execution. This back-and-forth negotiation may occur several times but
+is guaranteed to terminate since we will eventually exhaust all the
+possible choices of iterating $p$ given that it has a finite order.
 
-\noindent Initial circuit:
+Here is a small circuit that illustrates the ideas: 
 
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
