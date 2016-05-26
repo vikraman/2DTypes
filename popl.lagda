@@ -200,12 +200,12 @@ upon. These first-class equivalence relations therefore enhance
 $\pifrac$ with the same expressiveness afforded by the presence of
 first-class functions in conventional languages.
 
-\paragraph*{Conservation of Information and Negative Entropy.} A
-finite type with $n$ elements where $n$ is a non-zero natural number
-has entropy $(\log{n})$. This entropy is a measure of information
-which materializes itself in memory or bandwidth requirements when
-storing or transmitting elements of this type. Thus a type with 8
-elements needs 3 bits of memory for storage or 3 bits of bandwidth for
+\paragraph*{Conservation of Information and Negative Entropy.} A type
+with $n$ elements where $n$ is a non-zero natural number has entropy
+$(\log{n})$. This entropy is a measure of information which
+materializes itself in memory or bandwidth requirements when storing
+or transmitting elements of this type. Thus a type with 8 elements
+needs 3 bits of memory for storage or 3 bits of bandwidth for
 communication. If quantum field theory is correct (as it so far seems
 to be) then information, during any physical process, is neither
 created nor
@@ -214,19 +214,21 @@ Bennet~\citeyearpar{Bennett:1973:LRC,bennett2003notes,bennett2010notes},
 Fredkin~\citeyearpar{fredkin1982conservative} and others made
 compelling arguments that this physical principle induces a
 corresponding computational principle of ``conservation of
-information.'' In the context of finite types, this means that the
-foundational notion of computation is computation via type
-isomorphisms~\cite{James:2012:IE:2103656.2103667} or HoTT
-equivalences~\cite{Carette2016} which are both
-cardinality-preserving. The introduction, in $\pifrac$, of types
-(groupoids) with fractional cardinalities introduces types with
-\emph{negative entropy}. For example, a type with cardinality
-$\frac{1}{8}$ has negative entropy $\log{\frac{1}{8}} = -3$. In the
-context of $\pifrac$ we will interpret this negative entropy just like
-we interpret ``negative money,'' as a debt to be repaid by some other
-part of the system. This ability to manipulate negative information as
-a first-class entity enhances $\pifrac$ with an expressiveness similar
-to the one afforded by the presence of negative numbers in finance.
+information.'' In the context of finite types, generated from the
+empty type, the unit type, and sums and products, this principle
+states that the foundational notion of computation is computation via
+type isomorphisms~\cite{James:2012:IE:2103656.2103667} or HoTT
+equivalences~\cite{Carette2016} as they are both sound and complete
+with respect to cardinality-preserving maps. The introduction, in
+$\pifrac$, of types (groupoids) with fractional cardinalities
+introduces types with \emph{negative entropy}. For example, a type
+with cardinality $\frac{1}{8}$ has entropy $\log{\frac{1}{8}} =
+-3$. In the context of $\pifrac$ we will interpret this negative entropy
+just like we interpret ``negative money,'' as a debt to be repaid by
+some other part of the system. This ability to manipulate negative
+information as a first-class entity enhances $\pifrac$ with an
+expressiveness similar to the one afforded by the presence of negative
+numbers in finance.
 
 \paragraph*{Resource Creation and Annihilation.} In $\pifrac$ all
 programs preserve information and hence preserve
@@ -249,20 +251,16 @@ $1 \rightarrow (8 \times \frac{1}{8})$ as creating, out of nothing, an
 amount of money to be paid to the merchant instantly, together with a
 corresponding debt that propagates through the system. As long as the
 entire financial system is debt-preserving, the debt is must
-eventually be reconciled. The actual underlying process, as described
-in the next section, is more subtle and involves a speculative guess
-of the amount of money to create and a back-and-forth negotiation that
-adjusts the speculative value to agree with the actual provided
-value. In more conventional computational terms, what has happened is
-that the resources needed at one point in the computation were
-speculatively created at the point of need without requiring an
-immediate synchronization with the part of the system holding the
-resources. Well-designed algorithms exploiting speculative computation
-can gain much speedups by avoiding synchronization and
-centralization. It is also possible, of course, to use speculation
-poorly causing cascades of backtracking. Our main concern in this
-paper is however just the fact that fractional types naturally provide
-a notion of speculative computation. 
+eventually be reconciled by an equivalent amount of money present
+elsewhere. As described in detail in the section, the actual
+underlying computational process by which such reconciliation happens
+is subtle. Briefly speaking, it involves a speculative guess of the
+amount of money to create and a back-and-forth negotiation that
+adjusts the speculative value to agree with the actually provided
+value. More abstractly, fractional types enable the \emph{speculative}
+creation of resources needed at one point in the computation while
+also providing a backtracking mechanism that adjusts the speculative
+values based on actual available resources. 
 
 \paragraph*{Outline.} The remainder of the paper is organized as
 follows. \ldots
@@ -555,7 +553,7 @@ possible choices of iterating $p$ given that it has a finite order.
 Here is a small circuit that illustrates the ideas: 
 
 \begin{center}
-\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \path (-1.1,1) edge node[below] {$\order{\textsf{swap}}$} (0,1);
   \path (1,1.8) edge node[above] {1} (1.6,1.8);
