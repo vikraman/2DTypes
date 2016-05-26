@@ -111,7 +111,7 @@ connections and so on. Here are two simple but non-trivial examples:
 
 \medskip
 \begin{figure}[h]
-\begin{tabular}{c@{\qquad}c}
+\begin{tabular}{cc}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
   \draw[dashed] (0,0) ellipse (3cm and 1.2cm);
   \node[below] (A) at (-1.7,0.3) {\texttt{a}};
@@ -141,11 +141,13 @@ connections and so on. Here are two simple but non-trivial examples:
 \end{tikzpicture}
 & 
 \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
-  \draw[dashed] (0,0) ellipse (1.5cm and 2.1cm);
+  \draw[dashed] (0,0) ellipse (2cm and 3cm);
   \node[below] (B) at (0,-0.7) {\texttt{*}};
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p$} (B);
   \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$q$} (B);
+  \path (B) edge [loop above, looseness=40, in=32, out=148] node[above] {$q'$} (B);
+  \path (-1,0.8) edge[double, bend left] node[left] {$\alpha$} (-1,1.4);
 \end{tikzpicture}
 \end{tabular}
 \caption{\label{fig:groupoids}(a) The groupoid $\ag{6}{3}$ \qquad (b) The groupoid $\frac{1}{3}$}
@@ -157,8 +159,10 @@ groupoid on the left has six points \texttt{a}, \texttt{b},
 \texttt{c}, \texttt{d}, \texttt{e}, and \texttt{f} that are clustered
 in two equivalence classes and hence the groupoid has
 cardinality~2. The groupoid on the right has one point \texttt{*} with
-three distinct equivalences \texttt{id}, $p$, and~$q$ on it and hence
-has cardinality $\frac{1}{3}$.
+four equivalences \texttt{id}, $p$, $q$, and $q'$ on it. The
+equivalences $q$ and $q'$ are however identified by $\alpha$ leaving
+only three distinct equivalence classes and hence making the
+cardinality $\frac{1}{3}$.
 
 Both groupoids illustrated in Fig.~\ref{fig:groupoids} involve some
 notion of ``division'' that can be captured at the level of types
