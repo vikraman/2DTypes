@@ -49,14 +49,11 @@ data FT/ : Set where
 ⟦ # p ⟧/ = , orderG p
 ⟦ 1/ (⇑ S) ⟧/ = , 1/orderG {S} {!!}
 -- need cyclic permutation
--- or better can directly build 1/⇑ S
--- Each object is a morphism on *
 ⟦ 1/ (# p) ⟧/ = , 1/orderG p
 ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
 ⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!}
 -- extract p₁ from T₁
 -- extract p₂ from T₂
--- use 1/ (# (p₁ ⊕ p₂)) ???
 ⟦ 1/ (T₁ ⊠ T₂) ⟧/ with ⟦ 1/ T₁ ⟧/ | ⟦ 1/ T₂ ⟧/
 ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
 ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
