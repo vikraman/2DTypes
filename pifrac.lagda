@@ -49,7 +49,7 @@ data FT/ : Set where
   where open Universe.Universe UFT  
 ⟦ # p ⟧/ = (orderC p , orderG p)
 ⟦ 1/ (⇑ S) ⟧/ = (orderC {S} {!!} , orderG {S} {!!}) -- need cyclic permutation
-⟦ 1/ (# p) ⟧/ = (orderC p , orderG p)
+⟦ 1/ (# p) ⟧/ = (1/orderC p , 1/orderG p)
 ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
 ⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!} 
 ⟦ 1/ (T₁ ⊠ T₂) ⟧/ with ⟦ 1/ T₁ ⟧/ | ⟦ 1/ T₂ ⟧/
