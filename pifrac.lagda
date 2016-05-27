@@ -6,7 +6,7 @@ module pifrac where
 
 open import Level using () renaming (zero to lzero; suc to lsuc)
 
-open import Data.Product using (∃; Σ; Σ-syntax; _,_)
+open import Data.Product using (∃; Σ; Σ-syntax; ,_; _,_)
 
 open import Universe using (Universe)
 
@@ -44,21 +44,25 @@ data FT/ : Set where
   _⊞_ : FT/ → FT/ → FT/              
   _⊠_ : FT/ → FT/ → FT/              
 
-⟦_⟧/ : FT/ → Σ[ ℂ ∈ Category _ _ _ ] (Groupoid ℂ)
-⟦ ⇑ S ⟧/ = (discreteC (El S) , discreteG (El S))
-  where open Universe.Universe UFT  
-⟦ # p ⟧/ = (orderC p , orderG p)
-⟦ 1/ (⇑ S) ⟧/ = (1/orderC {S} {!!} , 1/orderG {S} {!!}) -- need cyclic permutation
--- or better can directly build 1/⇑ S. Each object is a morphism on *
-⟦ 1/ (# p) ⟧/ = (1/orderC p , 1/orderG p)
+⟦_⟧/ : FT/ → ∃ Groupoid
+⟦ ⇑ S ⟧/ = , discreteG (El S) where open Universe.Universe UFT  
+⟦ # p ⟧/ = , orderG p
+⟦ 1/ (⇑ S) ⟧/ = , 1/orderG {S} {!!}
+-- need cyclic permutation
+-- or better can directly build 1/⇑ S
+-- Each object is a morphism on *
+⟦ 1/ (# p) ⟧/ = , 1/orderG p
 ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
-⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!} 
+⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!}
+-- extract p₁ from T₁
+-- extract p₂ from T₂
+-- use 1/ (# (p₁ ⊕ p₂)) ???
 ⟦ 1/ (T₁ ⊠ T₂) ⟧/ with ⟦ 1/ T₁ ⟧/ | ⟦ 1/ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
+... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
 ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Sum ℂ₁ ℂ₂ , GSum G₁ G₂)
+... | (_ , G₁) | (_ , G₂) = , GSum G₁ G₂
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (ℂ₁ , G₁) | (ℂ₂ , G₂) = (Product ℂ₁ ℂ₂ , GProduct G₁ G₂)
+... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
 
 -- data FT/ : Set where
 --   ⇑ : FT → FT/    
