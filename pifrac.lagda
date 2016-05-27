@@ -48,7 +48,7 @@ data FT/ : Set where
 ⟦ ⇑ S ⟧/ = (discreteC (El S) , discreteG (El S))
   where open Universe.Universe UFT  
 ⟦ # p ⟧/ = (orderC p , orderG p)
-⟦ 1/ (⇑ S) ⟧/ = (orderC {S} {!!} , orderG {S} {!!}) -- need cyclic permutation
+⟦ 1/ (⇑ S) ⟧/ = (1/orderC {S} {!!} , 1/orderG {S} {!!}) -- need cyclic permutation
 ⟦ 1/ (# p) ⟧/ = (1/orderC p , 1/orderG p)
 ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
 ⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!} 
