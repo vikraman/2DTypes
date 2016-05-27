@@ -49,6 +49,7 @@ data FT/ : Set where
   where open Universe.Universe UFT  
 ⟦ # p ⟧/ = (orderC p , orderG p)
 ⟦ 1/ (⇑ S) ⟧/ = (1/orderC {S} {!!} , 1/orderG {S} {!!}) -- need cyclic permutation
+-- or better can directly build 1/⇑ S. Each object is a morphism on *
 ⟦ 1/ (# p) ⟧/ = (1/orderC p , 1/orderG p)
 ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
 ⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!} 
