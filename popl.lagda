@@ -597,7 +597,7 @@ the matched pair of values $(\textsf{swap}^1,1/\textsf{swap}^1)$. This
 constitutes a guess as there is another matched pair of values it
 could produce, e.g., $(\textsf{id},1/\textsf{id})$. When
 $\epsilon_{\textsf{swap}}$ executes from left-to-right it checks the
-incoming pair of values and annhiliates them if they match. Otherwise
+incoming pair of values and annihilates them if they match. Otherwise
 $\epsilon_{\textsf{swap}}$ blocks the forward progress of evaluation
 and starts a backwards execution. If $\eta_{\textsf{swap}}$ is
 approached from the right with some pair of values $(p,1/p)$, it
@@ -610,7 +610,7 @@ iterations but is bounded by the order of $p$ which is 2 in our case.
 Putting it all together, the program above can be executed with either
 $\textsf{id}$ or $\textsf{swap}$ as the incoming value to the left. In
 the latter case, the first speculative guess is correct and the
-program terminates with no backtracking. In the former execution
+program terminates with no backtracking. In the former case, execution
 proceeds as follows in the forward direction:
 
 \begin{center}
@@ -618,9 +618,42 @@ proceeds as follows in the forward direction:
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
                                  node[below,red] {$\textsf{id}$} (0,1);
-  \path (1,1.8) edge node[above] {$\ot$} (1.6,1.8);
-  \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} (4,0.2);
+  \path (1,1.8) edge node[above] {$\ot$} 
+                               node[below,red] {$()$} (1.6,1.8);
+  \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
+                               node[below,red] {$\textsf{id}$} (4,0.2);
   \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
+  \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} 
+                                  node[below,red] {$\textsf{swap}$} (6,2.6);
+  \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} 
+                               node[below,red] {$1/\textsf{swap}$} (4,1);
+  \draw [blue,thick] (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge node[above] {$\ot$} (6,1);
+  \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge node[above] {$\order{\textsf{swap}}$} (8,1.8);
+  \node at (0.5,1) {$\textsf{unit}_\times$};
+  \node at (2.1,1.8) {$\eta_{\textsf{swap}}$};
+  \node at (4.5,1) {$\epsilon_{\textsf{swap}}$};
+  \node at (6.5,1.8) {$\textsf{unit}_\times$};
+\end{tikzpicture}
+\end{center}
+
+In the figure, the values of each type is shown in red under the
+corresponding wire. At this point, the active combinator
+$\epsilon_{\textsf{swap}}$ (shown in blue) has received a pair of
+unmatched values which reverses execution back to the following state
+with $\eta_{\textsf{swap}}$ being active in the reverse direction:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
+                                 node[below,red] {$\textsf{id}$} (0,1);
+  \path (1,1.8) edge node[above] {$\ot$} 
+                               node[below,red] {$()$} (1.6,1.8);
+  \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
+                               node[below,red] {$\textsf{id}$} (4,0.2);
+  \draw [blue,thick] (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
   \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
   \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
   \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
@@ -634,8 +667,12 @@ proceeds as follows in the forward direction:
 \end{tikzpicture}
 \end{center}
 
-
-
+At this point, $\eta_{\textsf{swap}}$ updates its guess from
+$(\textsf{swap},1/\textsf{swap})$ to
+$(\textsf{swap}^2,1/\textsf{swap}^2)$ which is
+$(\textsf{id},1/\textsf{id})$ and resumes forward execution. This guess
+proves to be the correct one to match the input value and the entire
+circuit terminates with the value $\textsf{id}$.
 
 % There are two possible inputs id and swap. If the input is swap then
 % execution proceeds as follows:
