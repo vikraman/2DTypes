@@ -40,14 +40,6 @@ data State = Enter Combinator Value Context | Exit Combinator Value Context
 data Dir = Forward | Back
   deriving (Eq,Show)
 
-isFinal :: State -> Bool
-isFinal (Exit _ _ Empty) = True
-isFinal _ = False
-
-unload :: State -> Value
-unload (Exit _ v Empty) = v
-unload _ = error "Not final state"
-
 traceForward :: State -> a -> a
 traceForward s@(Enter _ _ _) = trace (">>> " ++ show s ++ "\n\n")
 traceForward _ = id
@@ -56,20 +48,25 @@ traceBack :: State -> a -> a
 traceBack s@(Exit _ _ _) = trace ("<<< " ++ show s ++ "\n\n")
 traceBack _ = id
 
+fwdS, backS :: String
+fwdS =  "******************* FORWARD *******************\n\n"
+backS = "****************** BACK *******************\n\n"
+
 eval :: State -> Value
 eval = loopForward
-  where loopForward s = traceForward s $
-          let (d,s') = stepForward s
-          in if isFinal s'
-             then unload s'
-             else if d == Forward
-                  then loopForward s'
-                  else trace ("****************** BACK *******************\n\n") $ loopBack s'
-        loopBack s = traceBack s $
-          let (d,s') = stepBack s
-          in if d == Back
-             then loopBack s'
-             else trace ("******************* FORWARD *******************\n\n") $ loopForward s'
+  where 
+    loopForward s = traceForward s $
+      let (d,s') = stepForward s in
+      case s' of
+        (Exit _ v Empty) -> v
+        _ -> case d of
+          Forward -> loopForward s'
+          Back    -> trace backS $ loopBack s'
+    loopBack s = traceBack s $
+      let (d,s') = stepBack s
+      in case d of
+         Back    -> loopBack s'
+         Forward -> trace fwdS $ loopForward s'
 
 stepForward :: State -> (Dir,State)
 stepForward (Exit c1 v (Fst k c2)) = (Forward, Enter c2 v (Snd c1 k))
