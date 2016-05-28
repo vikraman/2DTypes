@@ -18,13 +18,15 @@ data Combinator a =
                 | Seq (Combinator a) (Combinator a)
                 | Plus (Combinator a) (Combinator a) 
                 | Times (Combinator a) (Combinator a)
-                | Eta (Combinator a) | Epsilon (Combinator a) a
-                | Test
+                | Eta (Combinator a) | Epsilon a
   deriving (Eq,Show)
 
+-- a Pale imitation of <=>.  But enough for the tests.
 ceq :: Eq a => Combinator a -> Combinator a -> Bool
-ceq (Seq Test Test) Id = True
-ceq Id (Seq Test Test) = True
+ceq (Seq Id Id) Id = True
+ceq Id (Seq Id Id) = True
+ceq (Seq SwapTimes SwapTimes) Id = True
+ceq Id (Seq SwapTimes SwapTimes) = True
 ceq c1 c2 = c1 == c2
 
 data Value a = Unit a | Inj1 (Value a) | Inj2 (Value a) 
@@ -108,16 +110,15 @@ stepForward (Enter (Plus c1 c2) (Inj1 v) k) = (Forward, Enter c1 v (LeftPlus k c
 stepForward (Enter (Plus c1 c2) (Inj2 v) k) = (Forward, Enter c2 v (RightPlus c1 k))
 stepForward (Enter (Times c1 c2) (Pair v1 v2) k) = (Forward, Enter c1 v1 (LeftTimes k c2 v2))
 stepForward (Enter (Eta p) (Unit _) k) = (Forward, Exit (Eta p) (Pair (Comb p) (Recip p)) k)
-stepForward (Enter (Epsilon r z) (Pair (Recip q) (Comb p)) k) 
-  | ceq p q   = (Forward, Exit (Epsilon r z) (Unit z) k)
-  | otherwise = (Back, Enter (Epsilon r z) (Pair (Recip q) (Comb p)) k)
+stepForward (Enter (Epsilon z) (Pair (Recip q) (Comb p)) k) 
+  | ceq p q   = (Forward, Exit (Epsilon z) (Unit z) k)
+  | otherwise = (Back, Enter (Epsilon z) (Pair (Recip q) (Comb p)) k)
 -- these cases were previously missing
 stepForward (Enter DistribZero (Pair _ _) _) = 
   error "impossible case (DistribZero), but Haskell can't see that"
 stepForward (Enter FactorZero _ _) = 
   error "impossible case (FactorZero), but Haskell can't see that"
 stepForward (Enter (Sym c) v k) = stepBack (Exit c v k)
-stepForward (Enter Test _ _) = error "should never evaluate Test"
 stepForward (Exit _ _ Empty) = error "should not be trying to step at end"
 -- these cases would all be eliminated by dependent types
 -- these were added by hand after checking that the proper case was in place
@@ -134,7 +135,7 @@ stepForward (Enter Distrib _ _) = error "ill-typed"
 stepForward (Enter (Plus _ _) _ _) = error "ill-typed"
 stepForward (Enter (Times _ _) _ _) = error "ill-typed"
 stepForward (Enter (Eta _) _ _) = error "ill-typed"
-stepForward (Enter (Epsilon _ _) _ _) = error "ill-typed"
+stepForward (Enter (Epsilon _) _ _) = error "ill-typed"
 stepForward (Enter DistribZero _ _) = error "ill-typed"
 
 stepBack :: Eq a => State a -> (Dir,State a)
@@ -168,18 +169,16 @@ stepBack (Exit (Seq c1 c2) v k) = (Back, Exit c2 v (Snd c1 k))
 stepBack (Exit (Plus c1 c2) (Inj1 v) k) = (Back, Exit c1 v (LeftPlus k c2))
 stepBack (Exit (Plus c1 c2) (Inj2 v) k) = (Back, Exit c2 v (RightPlus c1 k))
 stepBack (Exit (Times c1 c2) (Pair v1 v2) k) = (Back, Exit c2 v2 (RightTimes c1 v1 k))
-stepBack (Exit (Eta r) (Pair (Comb p) (Recip q)) k) | ceq p q = 
-  (Forward, Exit (Eta r) (Pair (Comb (Seq r p)) (Recip (Seq r q))) k)
-                                                    | otherwise =
-  error "Unexpected eta back if we are starting from left"
-stepBack (Exit (Epsilon _ _) (Unit _) _) =
+stepBack (Exit (Eta r) (Pair (Comb p) (Recip q)) k) 
+  | ceq p q   = (Forward, Exit (Eta r) (Pair (Comb (Seq r p)) (Recip (Seq r q))) k)
+  | otherwise = error "Unexpected eta back if we are starting from left"
+stepBack (Exit (Epsilon _) (Unit _) _) =
   error "Unexpected epsilon back if we are starting from left"
 stepBack (Exit DistribZero (Pair _ _) _) = 
   error "impossible case (DistribZero), but Haskell can't see that"
 stepBack (Exit FactorZero _ _) = 
   error "impossible case (FactorZero), but Haskell can't see that"
 stepBack (Exit (Sym c) v k) = stepForward (Enter c v k)
-stepBack (Exit Test _ _) = error "should never evaluate Test"
 stepBack (Enter _ _ Empty) = error "should not be trying to step back at start"
 stepBack (Exit Zeroi _ _) = error "ill-typed"
 stepBack (Exit (Uniti _) _ _) = error "ill-typed"
@@ -194,18 +193,17 @@ stepBack (Exit Distrib _ _) = error "ill-typed"
 stepBack (Exit (Plus _ _) _ _) = error "ill-typed"
 stepBack (Exit (Times _ _) _ _) = error "ill-typed"
 stepBack (Exit (Eta _) _ _) = error "ill-typed"
-stepBack (Exit (Epsilon _ _) _ _) = error "ill-typed"
+stepBack (Exit (Epsilon _) _ _) = error "ill-typed"
 stepBack (Exit DistribZero _ _) = error "ill-typed"
 
 -- Credit Card Example
 
 ex :: a -> Combinator a
-ex z = foldr1 Seq [Uniti z, Times (Eta Test) Id, AssocrTimes, Times Id (Epsilon Test z), SwapTimes, Unite z]
+ex z = foldr1 Seq [Uniti z, Times (Eta SwapTimes) Id, AssocrTimes, Times Id (Epsilon z), SwapTimes, Unite z]
 
 load :: Combinator a -> Value a -> State a
 load c v = Enter c v Empty
 
 test1, test2 :: Value String
-test1 = eval $ load (ex "test1") (Comb Test)
+test1 = eval $ load (ex "test1") (Comb SwapTimes)
 test2 = eval $ load (ex "test2") (Comb Id)
-
