@@ -1,5 +1,7 @@
 module AM where
 
+import Debug.Trace
+
 -- Abstract Machine for PI/
 
 data Combinator = Zeroe | Zeroi
@@ -31,25 +33,24 @@ data Context = Empty
   deriving (Eq,Show)
 
 data State = Enter Combinator Value Context | Exit Combinator Value Context
-  deriving Eq
+  deriving (Eq,Show)
 
 isFinal :: State -> Bool
 isFinal (Exit c v Empty) = True
 isFinal _ = False
 
-evalForward :: Combinator -> Value -> Value
-evalForward c v = unload $ loop $ load c v
-  where loop s = let s' = stepForward s
+evalForward :: State -> State
+evalForward s = loop s
+  where loop s = trace (">>" ++ show s ++ "\n\n") $
+                 let s' = stepForward s
                  in if isFinal s'
                     then s'
                     else loop s'
 
-load :: Combinator -> Value -> State
-load c v = Enter c v Empty
-
-unload :: State -> Value
-unload (Exit c v Empty) = v
-unload _ = error "Not final state"
+evalBack :: State -> State
+evalBack s = loop s
+  where loop s = trace ("<<" ++ show s ++ "\n\n") $
+                 loop (stepBack s)
 
 stepForward :: State -> State
 stepForward (Enter (Seq c1 c2) v k) = Enter c1 v (Fst k c2)
@@ -83,9 +84,9 @@ stepForward (Exit c2 v (RightPlus c1 k)) = Exit (Plus c1 c2) (Inj2 v) k
 stepForward (Exit c1 v1 (LeftTimes k c2 v2)) = Enter c2 v2 (RightTimes c1 v1 k)
 stepForward (Exit c2 v2 (RightTimes c1 v1 k)) = Exit (Times c1 c2) (Pair v1 v2) k
 stepForward (Enter (Eta p) Unit k) = Exit (Eta p) (Pair (Comb p) (Recip p)) k
-stepForward (Enter (Epsilon r) (Pair (Comb p) (Recip q)) k) | ceq p q = Exit (Epsilon r) Unit k
+stepForward (Enter (Epsilon r) (Pair (Recip q) (Comb p)) k) | ceq p q = Exit (Epsilon r) Unit k
                                                             | otherwise =
-  stepBack (Enter (Epsilon r) (Pair (Comb p) (Recip q)) k)
+  evalBack (Enter (Epsilon r) (Pair (Recip q) (Comb p)) k)
 
 stepBack :: State -> State
 stepBack (Enter c1 v (Fst k c2)) = (Enter (Seq c1 c2) v k)
@@ -120,12 +121,21 @@ stepBack (Enter c2 v2 (RightTimes c1 v1 k)) = (Exit c1 v1 (LeftTimes k c2 v2))
 stepBack (Exit (Times c1 c2) (Pair v1 v2) k) = (Exit c2 v2 (RightTimes c1 v1 k))
 stepBack (Exit (Eta r) (Pair (Comb p) (Recip q)) k) | ceq p q = Enter (Eta r) Unit k
                                                     | otherwise =
-  stepForward (Exit (Eta r) (Pair (Comb (Seq r p)) (Recip q)) k)
-stepBack (Exit (Epsilon p) Unit k) = (Enter (Epsilon p) (Pair (Comb p) (Recip p)) k)
+  evalForward (Exit (Eta r) (Pair (Comb (Seq r p)) (Recip q)) k)
+stepBack (Exit (Epsilon p) Unit k) = (Enter (Epsilon p) (Pair (Recip p) (Comb p)) k)
 
 -- Credit Card Example
 
 ex :: Combinator
 ex = foldr1 Seq [Uniti, Times (Eta Test) Id, AssocrTimes, Times Id (Epsilon Test), SwapTimes, Unite]
 
-test = evalForward ex (Comb Test)
+load :: Combinator -> Value -> State
+load c v = Enter c v Empty
+
+unload :: State -> Value
+unload (Exit c v Empty) = v
+unload _ = error "Not final state"
+
+test1 = unload $ evalForward $ load ex (Comb Test)
+test2 = unload $ evalForward $ load ex (Comb Id)
+
