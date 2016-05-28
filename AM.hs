@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -Wall #-}
 module AM where
 
 import Debug.Trace
@@ -40,21 +41,23 @@ data Dir = Forward | Back
   deriving (Eq,Show)
 
 isFinal :: State -> Bool
-isFinal (Exit c v Empty) = True
+isFinal (Exit _ _ Empty) = True
 isFinal _ = False
 
 unload :: State -> Value
-unload (Exit c v Empty) = v
+unload (Exit _ v Empty) = v
 unload _ = error "Not final state"
 
+traceForward :: State -> a -> a
 traceForward s@(Enter _ _ _) = trace (">>> " ++ show s ++ "\n\n")
 traceForward _ = id
 
+traceBack :: State -> a -> a
 traceBack s@(Exit _ _ _) = trace ("<<< " ++ show s ++ "\n\n")
 traceBack _ = id
 
 eval :: State -> Value
-eval s = loopForward s
+eval = loopForward
   where loopForward s = traceForward s $
           let (d,s') = stepForward s
           in if isFinal s'
@@ -103,6 +106,31 @@ stepForward (Enter (Eta p) Unit k) = (Forward, Exit (Eta p) (Pair (Comb p) (Reci
 stepForward (Enter (Epsilon r) (Pair (Recip q) (Comb p)) k) | ceq p q = (Forward, Exit (Epsilon r) Unit k)
                                                             | otherwise =
   (Back, Enter (Epsilon r) (Pair (Recip q) (Comb p)) k)
+-- these cases were previously missing
+stepForward (Enter DistribZero (Pair _ _) _) = 
+  error "impossible case (DistribZero), but Haskell can't see that"
+stepForward (Enter FactorZero _ _) = 
+  error "impossible case (FactorZero), but Haskell can't see that"
+stepForward (Enter (Sym c) v k) = stepBack (Exit c v k)
+stepForward (Enter Test _ _) = error "should never evaluate Test"
+stepForward (Exit _ _ Empty) = error "should not be trying to step at end"
+-- these cases would all be eliminated by dependent types
+-- these were added by hand after checking that the proper case was in place
+stepForward (Enter Zeroe _ _) = error "ill-typed"
+stepForward (Enter SwapPlus _ _) = error "ill-typed"
+stepForward (Enter AssoclPlus _ _) = error "ill-typed"
+stepForward (Enter AssocrPlus _ _) = error "ill-typed"
+stepForward (Enter Unite _ _) = error "ill-typed"
+stepForward (Enter SwapTimes _ _) = error "ill-typed"
+stepForward (Enter AssoclTimes _ _) = error "ill-typed"
+stepForward (Enter AssocrTimes _ _) = error "ill-typed"
+stepForward (Enter Factor _ _) = error "ill-typed"
+stepForward (Enter Distrib _ _) = error "ill-typed"
+stepForward (Enter (Plus _ _) _ _) = error "ill-typed"
+stepForward (Enter (Times _ _) _ _) = error "ill-typed"
+stepForward (Enter (Eta _) _ _) = error "ill-typed"
+stepForward (Enter (Epsilon _) _ _) = error "ill-typed"
+stepForward (Enter DistribZero _ _) = error "ill-typed"
 
 stepBack :: State -> (Dir,State)
 stepBack (Enter c1 v (Fst k c2)) = (Back, Enter (Seq c1 c2) v k)
@@ -139,8 +167,30 @@ stepBack (Exit (Eta r) (Pair (Comb p) (Recip q)) k) | ceq p q =
   (Forward, Exit (Eta r) (Pair (Comb (Seq r p)) (Recip (Seq r q))) k)
                                                     | otherwise =
   error "Unexpected eta back if we are starting from left"
-stepBack (Exit (Epsilon p) Unit k) =
+stepBack (Exit (Epsilon _) Unit _) =
   error "Unexpected epsilon back if we are starting from left"
+stepBack (Exit DistribZero (Pair _ _) _) = 
+  error "impossible case (DistribZero), but Haskell can't see that"
+stepBack (Exit FactorZero _ _) = 
+  error "impossible case (FactorZero), but Haskell can't see that"
+stepBack (Exit (Sym c) v k) = stepForward (Enter c v k)
+stepBack (Exit Test _ _) = error "should never evaluate Test"
+stepBack (Enter _ _ Empty) = error "should not be trying to step back at start"
+stepBack (Exit Zeroi _ _) = error "ill-typed"
+stepBack (Exit Uniti _ _) = error "ill-typed"
+stepBack (Exit SwapPlus _ _) = error "ill-typed"
+stepBack (Exit AssoclPlus _ _) = error "ill-typed"
+stepBack (Exit AssocrPlus _ _) = error "ill-typed"
+stepBack (Exit SwapTimes _ _) = error "ill-typed"
+stepBack (Exit AssoclTimes _ _) = error "ill-typed"
+stepBack (Exit AssocrTimes _ _) = error "ill-typed"
+stepBack (Exit Factor _ _) = error "ill-typed"
+stepBack (Exit Distrib _ _) = error "ill-typed"
+stepBack (Exit (Plus _ _) _ _) = error "ill-typed"
+stepBack (Exit (Times _ _) _ _) = error "ill-typed"
+stepBack (Exit (Eta _) _ _) = error "ill-typed"
+stepBack (Exit (Epsilon _) _ _) = error "ill-typed"
+stepBack (Exit DistribZero _ _) = error "ill-typed"
 
 -- Credit Card Example
 
@@ -150,6 +200,7 @@ ex = foldr1 Seq [Uniti, Times (Eta Test) Id, AssocrTimes, Times Id (Epsilon Test
 load :: Combinator -> Value -> State
 load c v = Enter c v Empty
 
+test1, test2 :: Value
 test1 = eval $ load ex (Comb Test)
 test2 = eval $ load ex (Comb Id)
 
