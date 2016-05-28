@@ -165,14 +165,17 @@ only three distinct equivalence classes and hence making the
 cardinality $\frac{1}{3}$.
 
 Both groupoids illustrated in Fig.~\ref{fig:groupoids} involve some
-notion of ``division'' that can be captured at the level of types
-using a syntactic notion of \emph{fractional types}. The existence of
-such fractional types that denote groupoids as the ones depicted in
-Fig.~\ref{fig:groupoids} raises an intriguing question about their
-applicability to programming practice. In this introduction, we
-present, in the context of a new language~$\pifrac$, several
-inter-related motivations and applications of fractional types that
-are formalized and justified in the remainder of the paper.
+notion of ``division'' that we capture at the level of types using a
+syntactic notion of \emph{fractional types}. In this introduction, we
+loosely write $\frac{1}{n}$ for the fractional type with that
+cardinality and defer the discussion of the precise syntax to the
+technical parts of the paper. The existence of such fractional types
+that denote groupoids as the ones depicted in Fig.~\ref{fig:groupoids}
+raises an intriguing question about their applicability to programming
+practice. In this introduction, we present, in the context of a new
+language~$\pifrac$, several inter-related motivations and applications
+of fractional types that are formalized and justified in the remainder
+of the paper.
 
 \paragraph*{Quotient Types.} Groupoids similar to $\ag{6}{3}$ in
 Fig.~\ref{fig:groupoids}(a) intuitively correspond to conventional
@@ -186,7 +189,7 @@ algebraic numbers, etc.)
 
 \paragraph*{First-class Equivalence Relations.} Groupoids similar to
 $\frac{1}{3}$ in Fig.~\ref{fig:groupoids}(b) can be thought of as a
-limiting case of quotient types $\ag{1}{3}$ which purely consist of an
+limiting case of quotient types $\ag{1}{3}$ which consist of just an
 equivalence relation. We therefore think of such groupoids as
 representing a \emph{first-class} notion of equivalence relations. As
 explained in the remainder of the paper, such relations are
@@ -201,7 +204,7 @@ $\pifrac$ with the same expressiveness afforded by the presence of
 first-class functions in conventional languages.
 
 \paragraph*{Conservation of Information and Negative Entropy.} A type
-with $n$ elements where $n$ is a non-zero natural number has entropy
+with~$n$ elements where $n$ is a non-zero natural number has entropy
 $(\log{n})$. This entropy is a measure of information which
 materializes itself in memory or bandwidth requirements when storing
 or transmitting elements of this type. Thus a type with 8 elements
@@ -215,56 +218,67 @@ Fredkin~\citeyearpar{fredkin1982conservative} and others made
 compelling arguments that this physical principle induces a
 corresponding computational principle of ``conservation of
 information.'' In the context of finite types, generated from the
-empty type, the unit type, and sums and products, this principle
-states that the foundational notion of computation is computation via
-type isomorphisms~\cite{James:2012:IE:2103656.2103667} or HoTT
+empty type $\zt$, the unit type $\ot$, and sums and products $⊎$ and
+$×$, this principle states that the foundational notion of computation
+is computation via type
+isomorphisms~\cite{James:2012:IE:2103656.2103667} or HoTT
 equivalences~\cite{Carette2016} as they are both sound and complete
 with respect to cardinality-preserving maps. The introduction, in
 $\pifrac$, of types (groupoids) with fractional cardinalities
 introduces types with \emph{negative entropy}. For example, a type
 with cardinality $\frac{1}{8}$ has entropy $\log{\frac{1}{8}} =
--3$. In the context of $\pifrac$ we will interpret this negative entropy
-just like we interpret ``negative money,'' as a debt to be repaid by
-some other part of the system. This ability to manipulate negative
-information as a first-class entity enhances $\pifrac$ with an
-expressiveness similar to the one afforded by the presence of negative
-numbers in finance.
+-3$. In the context of $\pifrac$ we will interpret this negative
+entropy just like we interpret ``negative money,'' as a debt to be
+repaid by some other part of the system. This ability to manipulate
+negative information as a first-class entity enhances $\pifrac$ with
+an expressiveness similar to the one afforded by the presence of
+negative numbers in finance.
 
 \paragraph*{Resource Creation and Annihilation.} In $\pifrac$ all
 programs preserve information and hence preserve
 cardinality. Furthermore, for non-zero natural numbers $n$, the
 cardinality of the type $n \times \frac{1}{n}$ in $\pifrac$
-is~1. Therefore, $\pifrac$ has, for example, terms of type
-$1 \rightarrow (8 \times \frac{1}{8})$. Such terms take the type $1$
-with entropy $\log{1} = 0$ to the type $8 \times \frac{1}{8}$ with
-entropy $\log{8} + (- \log{8}) = 3 - 3 = 0$. The entropy is globally
-preserved as desired and expected. But interestingly, the term
-introduces, locally, two types that have entropies of $3$ and $-3$
-respectively. Each of these types can be further processed
+is~1. Therefore, $\pifrac$ has, for example, terms of type $\ot
+\rightarrow (8 \times \frac{1}{8})$. Such terms take the unit type
+$\ot$ with entropy $\log{1} = 0$ to the type $8 \times \frac{1}{8}$
+with entropy $\log{8} + (- \log{8}) = 3 - 3 = 0$. The entropy is
+globally preserved as desired and expected. But interestingly, the
+term introduces, locally, two types that have entropies of $3$ and
+$-3$ respectively. Each of these types can be further processed
 independently and, as long as the entire system is
 information-preserving, the net positive and negative entropies must
-eventually cancel out by a use of a term of the reverse type
-$(8 \times \frac{1}{8}) \rightarrow 1$. The simplest way to appreciate
+eventually cancel out by a use of a term of the reverse type $(8
+\times \frac{1}{8}) \rightarrow \ot$. The simplest way to appreciate
 the expressiveness afforded by such a mechanism is the following
-credit card analogy. Think of the computation of type
-$1 \rightarrow (8 \times \frac{1}{8})$ as creating, out of nothing, an
-amount of money to be paid to the merchant instantly, together with a
+credit card analogy. Think of the computation of type $\ot \rightarrow
+(8 \times \frac{1}{8})$ as creating, out of thin air, an amount of
+money to be paid to the merchant instantly, together with a
 corresponding debt that propagates through the system. As long as the
-entire financial system is debt-preserving, the debt is must
-eventually be reconciled by an equivalent amount of money present
-elsewhere. As described in detail in the section, the actual
-underlying computational process by which such reconciliation happens
-is subtle. Briefly speaking, it involves a speculative guess of the
+entire financial system is debt-preserving, the debt must eventually
+be reconciled by an equivalent amount of money present elsewhere. As
+described in detail in the section, the actual underlying
+computational process by which such reconciliation happens is
+subtle. Briefly speaking, it involves a speculative guess of the
 amount of money to create and a back-and-forth negotiation that
 adjusts the speculative value to agree with the actually provided
 value. More abstractly, fractional types enable the \emph{speculative}
 creation of resources needed at one point in the computation while
 also providing a backtracking mechanism that adjusts the speculative
-values based on actual available resources. 
+values based on actual available resources.
+
+\paragraph*{Correspondence with Commutative Semifields.} Computations
+over finite types naturally emerge from viewing types as syntax for
+semiring elements, semiring identities as type isomorphisms, and
+justifications for semiring identities as program transformations and
+optimizations~\cite{Carette2016}. This correspondence provides a rich,
+proof-relevant, version of the Curry-Howard correspondence between
+algebra and reversible programming languages. The addition to
+fractional types to the mix enriches the correspondence to commutative
+semifields, providing a categorical interpretation of the non-negative
+rational numbers in a computational setting. 
 
 \paragraph*{Outline.} The remainder of the paper is organized as
 follows. \ldots
-
 
 % Conservation of information is our starting point. If your entire
 % framework is based on such a conservation principle then you
@@ -354,7 +368,7 @@ executable program.
 
 Say we want to add 1 $\pmod{100}$ to numbers in the range
 $[0..99]$. One approach is to represent the input type as a monolithic
-type with 100 elements giving us a unary representation of the
+type with 100 constructors giving us a unary representation of the
 numbers. The addition function in this case will have 100 cases, one
 for each possible input, and might, in the worst case, take 100 steps
 to compute the successor of a number. A better approach is to
@@ -530,121 +544,197 @@ arrows to avoid excessive clutter):
 %%%%%
 \subsection{Credit Card Computation} 
  
-Generally speaking, a value is a point and a loop on that point. When
-the loop is trivial we omit it; when the point is trivial we omit
-it. So values of type $\order{p}$ will be denoted, $p^0=\mathit{id}$,
-$p$, $p^2$, etc and values of type $1/\hash p$ will be denoted
-$1/p^0=\mathit{id}$, $1/p$, $1/p^2$, etc. The semantics of $\eta$ and
-$\epsilon$ involves some synchronization: $\eta$ initially makes a
-choice to generate $(p,1/p)$ speculatively. As in any situation
-involving speculative execution, the choice may be wrong. This would
-become apparent when we reach $\epsilon$. (In a complete program we
-are guaranteed to reach $\epsilon$ as a complete program cannot
-produce something of a fractional type.) When we encounter $\epsilon$,
-if the speculative guess done by $\eta$ was correct, we proceed to
-cancel the positive and negative information. Otherwise $\epsilon$
-backtracks by reversing the execution. When the reverse execution
-reaches $\eta$, it uses the monad to update its speculative value by
-appending one iteration of $p$ and then resumes forward
-execution. This back-and-forth negotiation may occur several times but
-is guaranteed to terminate since we will eventually exhaust all the
-possible choices of iterating $p$ given that it has a finite order.
-
-Here is a small circuit that illustrates the ideas: 
+We will illustrate the speculative creation and annihilation of values
+with the following small example. Let $\textsf{swap}$ be the
+permutation that swaps two elements: it has order 2, i.e.,
+$\textsf{swap}^0 = \textsf{swap}^2 = \textsf{swap} \odot \textsf{swap} =
+\textsf{id}$.
+As explained in the previous section, this permutation introduces two
+types $\order{\textsf{swap}}$ and $1/\hash \textsf{swap}$ of
+cardinality 2 and $\frac{1}{2}$ respectively. The first type has two
+values $\textsf{swap}^0$ (or $\textsf{id}$) and $\textsf{swap}^1$. The
+second type has a single point and two loops: operationally we refer
+to the values of this type as $1/\textsf{swap}^0$ (or $\textsf{id}$)
+and $1/\textsf{swap}^1$ where we use the prefix `$1/$' to express the
+fact that these values refer to equivalences not to objects. Given
+these ingredients, it is possible to write the following
+graphically-illustrated program in $\pifrac$:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1.1,1) edge node[below] {$\order{\textsf{swap}}$} (0,1);
-  \path (1,1.8) edge node[above] {1} (1.6,1.8);
-  \path (1,0.2) edge node[below] {$\order{\textsf{swap}}$} (4,0.2);
+  \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$} (0,1);
+  \path (1,1.8) edge node[above] {$\ot$} (1.6,1.8);
+  \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} (4,0.2);
   \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
   \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
   \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
   \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
-  \path (5,1) edge node[above] {1} (6,1);
+  \path (5,1) edge node[above] {$\ot$} (6,1);
   \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
   \path (7,1.8) edge node[above] {$\order{\textsf{swap}}$} (8,1.8);
-  \node at (0.5,1) {$\textsf{unit*}$};
-  \node at (2.1,1.8) {$\eta$};
-  \node at (4.5,1) {$\epsilon$};
-  \node at (6.5,1.8) {$\textsf{unit*}$};
+  \node at (0.5,1) {$\textsf{unit}_\times$};
+  \node at (2.1,1.8) {$\eta_{\textsf{swap}}$};
+  \node at (4.5,1) {$\epsilon_{\textsf{swap}}$};
+  \node at (6.5,1.8) {$\textsf{unit}_\times$};
 \end{tikzpicture}
 \end{center}
 
-There are two possible inputs id and swap. If the input is swap then
-execution proceeds as follows:
-\begin{verbatim}
-swap -> 
-((),swap) -> 
-((swap,[*,swap]),swap) ->
-(swap,([*,swap],swap)) ->
-(swap,()) ->
-swap
-\end{verbatim}
+\noindent In the figure, the wires are labeled by the types of the
+values they may carry and the boxes are cardinality-preserving
+primitives in the language. Their types are as follows:
+\[\begin{array}{rcccl}
+\tau &:& \textsf{unit}_\times &:& \tau \times \ot \\
+\ot &:& \eta_{\textsf{swap}} &:& \order{\textsf{swap}} \times 1/\hash \textsf{swap} \\
+\order{\textsf{swap}} \times 1/\hash \textsf{swap} &:& \epsilon_{\textsf{swap}} &:& \ot
+\end{array}\]
+As is common in string diagrams for
+categories~\cite{selinger-graphical}, we elide associativity in the
+figure. Operationally, each primitive may execute in the left-to-right
+or right-to-left direction. When $\eta_{\textsf{swap}}$ executes from
+left-to-right, it consumes the unique value of type $\ot$ and produces
+the matched pair of values $(\textsf{swap}^1,1/\textsf{swap}^1)$. This
+constitutes a guess as there is another matched pair of values it
+could produce, e.g., $(\textsf{id},1/\textsf{id})$. When
+$\epsilon_{\textsf{swap}}$ executes from left-to-right it checks the
+incoming pair of values and annhiliates them if they match. Otherwise
+$\epsilon_{\textsf{swap}}$ blocks the forward progress of evaluation
+and starts a backwards execution. If $\eta_{\textsf{swap}}$ is
+approached from the right with some pair of values $(p,1/p)$, it
+updates the pair with the next matched pair of values by composing $p$
+with a new occurrence of $\textsf{swap}$, i.e., by producing the pair
+$(\textsf{swap} \odot p,1/(\textsf{swap} \odot p))$ and then resuming the forward
+execution again. This back-and-forth negotiation may require several
+iterations but is bounded by the order of $p$ which is 2 in our case. 
 
-If the input is id then execution proceeds as follows:
+Putting it all together, the program above can be executed with either
+$\textsf{id}$ or $\textsf{swap}$ as the incoming value to the left. In
+the latter case, the first speculative guess is correct and the
+program terminates with no backtracking. In the former execution
+proceeds as follows in the forward direction:
 
-\begin{verbatim}
-  swap^0
->> unit* >>
-  ((),swap^0)
->> eta x id >>
-  ((swap^1,[*,swap^1]),swap^0)
->> assoc >>
-  (swap^1,([*,swap^1],swap^0)) 
->> id x epsilon >>
-  (swap^1,([*,swap^1],swap^0)) 
-<< assoc <<
-  ((swap^1,[*,swap^1]),swap^0)
-<< eta x id <<
-  ((swap^2,[*,swap^2]),swap^0)
->> assoc >>
-  ((swap^2,[*,swap^2]),swap^0)
->> id x epsilon >>
-  (swap^2,())
->> unit* >>
-  swap^2
-\end{verbatim}
+\begin{center}
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
+                                 node[below,red] {$\textsf{id}$} (0,1);
+  \path (1,1.8) edge node[above] {$\ot$} (1.6,1.8);
+  \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} (4,0.2);
+  \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
+  \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
+  \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
+  \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
+  \path (5,1) edge node[above] {$\ot$} (6,1);
+  \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
+  \path (7,1.8) edge node[above] {$\order{\textsf{swap}}$} (8,1.8);
+  \node at (0.5,1) {$\textsf{unit}_\times$};
+  \node at (2.1,1.8) {$\eta_{\textsf{swap}}$};
+  \node at (4.5,1) {$\epsilon_{\textsf{swap}}$};
+  \node at (6.5,1.8) {$\textsf{unit}_\times$};
+\end{tikzpicture}
+\end{center}
 
-\begin{figure*}[ht]
-Execution in terms of the machine states (eliding assoc):
-\begin{verbatim}
-    < unit*;etaxid;idxepsilon;unit* , swap^0 , [] >
-|-> < unit* , swap^0 , Fst [] etaxid;idxepsilon;unit* >
-|-> [ unit* , ((),swap^0) , Fst [] etaxid;idxepsilon;unit* ]
-|-> < etaxid;idxepsilon;unit* , ((),swap^0) , Snd unit* [] >
-|-> < etaxid , ((),swap^0) , Fst (Snd unit* []) (idxepsilon;unit*) >
-|-> < eta , () , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 >
-|-> [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 ]
-|-> < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
-|-> [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
-|-> [ etaxid , (swap^1 , (1/swap^1 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
-|-> < idxepsilon;unit* , (swap^1 , (1/swap^1 , swap^0)) , Snd etaxid (Snd unit* []) >
-|->*< epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
-BACKWARDS EXECUTION STARTS
-<-| < epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
-<-| [ id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) ]
-<-| < id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) >
-<-| < idxepsilon , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd etaxid (Snd unit* [])) unit* > 
-<-| < idxepsilon;unit* , ((swap^1 , 1/swap^1) , swap^0) , Snd etaxid (Snd unit* []) > 
-<-| [ etaxid , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd unit* []) idxepsilon;unit* ]
-<-| [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) ]
-<-| < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) >
-<-| [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
-REVERSE AGAIN; USED MONAD
-|-> [ eta , (swap^2 , 1/swap^2) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
-|-> < id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
-|-> [ id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
-|-> [ etaxid , (swap^2 , (1/swap^2 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
-|-> < idxepsilon;unit* , (swap^2 , (1/swap^2 , swap^0)) , Snd etaxid (Snd unit* []) >
-|->*< epsilon , (1/swap^2 , swap^0) , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) >
-|-> [ epsilon , () , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) ]
-|-> [ idxepsilon , (swap^2,()) , Fst (Snd etaxid (Snd unit* [])) unit* ]
-|-> < unit* , (swap^2,()) , Snd idxepsilon (Snd etaxid (Snd unit* [])) >
-|->*[swap^2 , Snd unit* (Snd idxepsilon (Snd etaxid (Snd unit* []))) ]
-\end{verbatim}
-\end{figure*}
+
+
+
+% There are two possible inputs id and swap. If the input is swap then
+% execution proceeds as follows:
+% \begin{verbatim}
+% swap -> 
+% ((),swap) -> 
+% ((swap,[*,swap]),swap) ->
+% (swap,([*,swap],swap)) ->
+% (swap,()) ->
+% swap
+% \end{verbatim}
+
+% If the input is id then execution proceeds as follows:
+
+% \begin{verbatim}
+%   swap^0
+% >> unit* >>
+%   ((),swap^0)
+% >> eta x id >>
+%   ((swap^1,[*,swap^1]),swap^0)
+% >> assoc >>
+%   (swap^1,([*,swap^1],swap^0)) 
+% >> id x epsilon >>
+%   (swap^1,([*,swap^1],swap^0)) 
+% << assoc <<
+%   ((swap^1,[*,swap^1]),swap^0)
+% << eta x id <<
+%   ((swap^2,[*,swap^2]),swap^0)
+% >> assoc >>
+%   ((swap^2,[*,swap^2]),swap^0)
+% >> id x epsilon >>
+%   (swap^2,())
+% >> unit* >>
+%   swap^2
+% \end{verbatim}
+
+% \begin{figure*}[ht]
+% Execution in terms of the machine states (eliding assoc):
+% \begin{verbatim}
+%     < unit*;etaxid;idxepsilon;unit* , swap^0 , [] >
+% |-> < unit* , swap^0 , Fst [] etaxid;idxepsilon;unit* >
+% |-> [ unit* , ((),swap^0) , Fst [] etaxid;idxepsilon;unit* ]
+% |-> < etaxid;idxepsilon;unit* , ((),swap^0) , Snd unit* [] >
+% |-> < etaxid , ((),swap^0) , Fst (Snd unit* []) (idxepsilon;unit*) >
+% |-> < eta , () , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 >
+% |-> [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 ]
+% |-> < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
+% |-> [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
+% |-> [ etaxid , (swap^1 , (1/swap^1 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
+% |-> < idxepsilon;unit* , (swap^1 , (1/swap^1 , swap^0)) , Snd etaxid (Snd unit* []) >
+% |->*< epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
+% BACKWARDS EXECUTION STARTS
+% <-| < epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
+% <-| [ id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) ]
+% <-| < id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) >
+% <-| < idxepsilon , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd etaxid (Snd unit* [])) unit* > 
+% <-| < idxepsilon;unit* , ((swap^1 , 1/swap^1) , swap^0) , Snd etaxid (Snd unit* []) > 
+% <-| [ etaxid , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd unit* []) idxepsilon;unit* ]
+% <-| [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) ]
+% <-| < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) >
+% <-| [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
+% REVERSE AGAIN; USED MONAD
+% |-> [ eta , (swap^2 , 1/swap^2) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
+% |-> < id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
+% |-> [ id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
+% |-> [ etaxid , (swap^2 , (1/swap^2 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
+% |-> < idxepsilon;unit* , (swap^2 , (1/swap^2 , swap^0)) , Snd etaxid (Snd unit* []) >
+% |->*< epsilon , (1/swap^2 , swap^0) , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) >
+% |-> [ epsilon , () , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) ]
+% |-> [ idxepsilon , (swap^2,()) , Fst (Snd etaxid (Snd unit* [])) unit* ]
+% |-> < unit* , (swap^2,()) , Snd idxepsilon (Snd etaxid (Snd unit* [])) >
+% |->*[swap^2 , Snd unit* (Snd idxepsilon (Snd etaxid (Snd unit* []))) ]
+% \end{verbatim}
+% \end{figure*}
+
+% $\order{\textsf{swap}}$ be the type with
+% two distinct values
+
+% Generally speaking, a value is a point and a loop on that point. When
+% the loop is trivial we omit it; when the point is trivial we omit
+% it. So values of type $\order{p}$ will be denoted, $p^0=\mathit{id}$,
+% $p$, $p^2$, etc and values of type $1/\hash p$ will be denoted
+% $1/p^0=\mathit{id}$, $1/p$, $1/p^2$, etc. The semantics of $\eta$ and
+% $\epsilon$ involves some synchronization: $\eta$ initially makes a
+% choice to generate $(p,1/p)$ speculatively. As in any situation
+% involving speculative execution, the choice may be wrong. This would
+% become apparent when we reach $\epsilon$. (In a complete program we
+% are guaranteed to reach $\epsilon$ as a complete program cannot
+% produce something of a fractional type.) When we encounter $\epsilon$,
+% if the speculative guess done by $\eta$ was correct, we proceed to
+% cancel the positive and negative information. Otherwise $\epsilon$
+% backtracks by reversing the execution. When the reverse execution
+% reaches $\eta$, it uses the monad to update its speculative value by
+% appending one iteration of $p$ and then resumes forward
+% execution. This back-and-forth negotiation may occur several times but
+% is guaranteed to terminate since we will eventually exhaust all the
+% possible choices of iterating $p$ given that it has a finite order.
+
+% Here is a small circuit that illustrates the ideas: 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Sec 3
