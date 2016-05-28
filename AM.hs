@@ -47,20 +47,26 @@ unload :: State -> Value
 unload (Exit c v Empty) = v
 unload _ = error "Not final state"
 
+traceForward s@(Enter _ _ _) = trace (">>> " ++ show s ++ "\n\n")
+traceForward _ = id
+
+traceBack s@(Exit _ _ _) = trace ("<<< " ++ show s ++ "\n\n")
+traceBack _ = id
+
 eval :: State -> Value
 eval s = loopForward s
-  where loopForward s = trace (">>> " ++ show s ++ "\n\n") $
+  where loopForward s = traceForward s $
           let (d,s') = stepForward s
           in if isFinal s'
              then unload s'
              else if d == Forward
                   then loopForward s'
-                  else loopBack s'
-        loopBack s = trace ("<<< " ++ show s ++ "\n\n") $
+                  else trace ("****************** BACK *******************\n\n") $ loopBack s'
+        loopBack s = traceBack s $
           let (d,s') = stepBack s
           in if d == Back
              then loopBack s'
-             else loopForward s'
+             else trace ("******************* FORWARD *******************\n\n") $ loopForward s'
 
 stepForward :: State -> (Dir,State)
 stepForward (Exit c1 v (Fst k c2)) = (Forward, Enter c2 v (Snd c1 k))
