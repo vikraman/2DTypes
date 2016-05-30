@@ -80,6 +80,45 @@ ap∼ (p₁ ⊡ p₂) = {!!}
 !◎ (p₁ ⊕ p₂) p₃ = id⇔
 !◎ (p₁ ⊗ p₂) p₃ = id⇔
 
+!!⇔ : {τ₁ τ₂ : U} → (p : τ₁ ⟷ τ₂) → (! (! p) ⇔ p)
+!!⇔ unite₊l = id⇔
+!!⇔ uniti₊l = id⇔
+!!⇔ unite₊r = id⇔
+!!⇔ uniti₊r = id⇔
+!!⇔ swap₊ = id⇔
+!!⇔ assocl₊ = id⇔
+!!⇔ assocr₊ = id⇔
+!!⇔ unite⋆l = id⇔
+!!⇔ uniti⋆l = id⇔
+!!⇔ unite⋆r = id⇔
+!!⇔ uniti⋆r = id⇔
+!!⇔ swap⋆ = id⇔
+!!⇔ assocl⋆ = id⇔
+!!⇔ assocr⋆ = id⇔
+!!⇔ absorbr = id⇔
+!!⇔ absorbl = id⇔
+!!⇔ factorzr = id⇔
+!!⇔ factorzl = id⇔
+!!⇔ dist = id⇔
+!!⇔ factor = id⇔
+!!⇔ distl = id⇔
+!!⇔ factorl = id⇔
+!!⇔ id⟷ = id⇔
+!!⇔ (p₁ ◎ p₂) = (!!⇔ p₁) ⊡ (!!⇔ p₂)
+!!⇔ (p₁ ⊕ p₂) = {!!}
+!!⇔ (p₁ ⊗ p₂) = {!!}
+
+⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
+⇔! assoc◎l = assoc◎r
+⇔! assoc◎r = assoc◎l
+⇔! idl◎l = idr◎l
+⇔! idl◎r = idr◎r
+⇔! idr◎l = idl◎l
+⇔! idr◎r = idl◎r
+⇔! id⇔ = id⇔
+⇔! (trans⇔ q₁ q₂) = trans⇔ (⇔! q₁) (⇔! q₂)
+⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
+
 ap⇔ : {τ : U} {v : El τ} {p₁ p₂ : τ ⟷ τ}
     → p₁ ⇔ p₂ → ap p₁ v ≡ ap p₂ v
 ap⇔ assoc◎l = refl
