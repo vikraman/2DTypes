@@ -33,6 +33,7 @@ infix 40 _^_
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Combinators as Groupoids}
+\label{sec:groupoids}
 
 We will decompose the type $C$ into the products of $A$ and $B$ where
 $A$ will have cardinality $2\frac{1}{3}$ and $B$ will cardinality

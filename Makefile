@@ -3,7 +3,7 @@ all : popl.pdf
 popl.pdf : popl.tex
 	pdflatex popl.tex
 
-popl.tex : popl.lagda pibackground.tex groupoid.tex pifrac.tex
+popl.tex : popl.lagda pibackground.tex groupoid.tex pifrac.tex opsem.tex limitations.tex
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library popl.lagda
 
 pibackground.tex : pibackground.lagda
@@ -14,6 +14,12 @@ groupoid.tex : groupoid.lagda
 
 pifrac.tex : pifrac.lagda
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library pifrac.lagda
+
+opsem.tex : opsem.lagda
+	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library opsem.lagda
+
+limitations.tex : limitations.lagda
+	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library limitations.lagda
 
 clean:
 	rm -f *.{aux,bbl,bcf,blg,fdb_latexmk,fls,flx,ilg,lof,log,lop}	\
