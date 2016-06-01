@@ -10,6 +10,13 @@ module opsem where
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Operational Semantics} 
 
+values of type FT/ are a point in the carrier and
+an automorphism on that point
+
+"apply this program i times" is a VALUE of type hash p !!!
+  
+interpreter from Haskell
+
 First the equivalence can only make sense in a framework where
 everything is reversible. If we allow arbitrary functions then bad
 things happen as we can throw away the negative information for
@@ -25,7 +32,5 @@ is fine. So if we always preserve types and trivially 1 and 0 have
 different cardinalities so there is no way to identify them and we are
 consistent.
 
-"apply this program i times" is a VALUE !!!
-  
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

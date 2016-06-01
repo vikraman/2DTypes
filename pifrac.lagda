@@ -27,44 +27,11 @@ open import pibackground using (FT; UFT; _⟷_;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
 
-\begin{code}
+combinators between FT/ types including eta and epsilon
 
-postulate -- in groupoid.lagda
-  discreteC : Set → Category lzero lzero lzero
-  discreteG : (S : Set) → Groupoid (discreteC S)
-  orderC : {τ : FT} → (p : τ ⟷ τ) → Category lzero lzero lzero
-  orderG : {τ : FT} → (p : τ ⟷ τ) → Groupoid (orderC p)
-  1/orderC : {τ : FT} (p : τ ⟷ τ) → Category lzero lzero lzero
-  1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
+proof that combinators are information preserving
 
--- data FT/ : Set where
---   ⇑   : FT → FT/    
---   #   : {τ : FT} → (p : τ ⟷ τ) → FT/ 
---   1/  : FT/ → FT/
---   _⊞_ : FT/ → FT/ → FT/              
---   _⊠_ : FT/ → FT/ → FT/              
-
--- ⟦_⟧/ : FT/ → ∃ Groupoid
--- ⟦ ⇑ S ⟧/ = , discreteG (El S) where open Universe.Universe UFT  
--- ⟦ # p ⟧/ = , orderG p
--- ⟦ 1/ (⇑ S) ⟧/ = , 1/orderG {S} {!!}
--- -- need cyclic permutation
--- ⟦ 1/ (# p) ⟧/ = , 1/orderG p
--- ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
--- ⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!}
--- -- extract p₁ from T₁
--- -- extract p₂ from T₂
--- ⟦ 1/ (T₁ ⊠ T₂) ⟧/ with ⟦ 1/ T₁ ⟧/ | ⟦ 1/ T₂ ⟧/
--- ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
--- ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
--- ... | (_ , G₁) | (_ , G₂) = , GSum G₁ G₂
--- ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
--- ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
-
--- values of type FT/ are a point in the carrier and
--- an automorphism on that point
-
-\end{code}
+other properties: inverses etc.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
