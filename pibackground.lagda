@@ -9,6 +9,7 @@ open import Data.Unit using (⊤; tt)
 open import Data.Bool using (Bool; false; true; _∧_; if_then_else_)
 open import Data.Nat using (ℕ; suc; _+_; _*_)
 open import Data.Nat.LCM using (lcm)
+open import Rational+ using (NonZero)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
 open import Data.Product using (_×_; _,_)
 open import Data.Vec
@@ -271,6 +272,7 @@ order {τ} p = foldr (λ _ → ℕ)
         ... | v'' = if v == v'' then n else go τ p v v'' (suc n)
 
 postulate
+  order-nz : {τ : U} {p : τ ⟷ τ} → NonZero (order p)
   order-!≡ : {τ : U} {p : τ ⟷ τ} →  order p ≡ order (! p)
 
 -- Conjecture:  p ⇔ q   implies  order p = order q
