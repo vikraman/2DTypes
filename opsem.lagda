@@ -207,6 +207,29 @@ V : (T : FT/) → Set
 V T = let ℂ , _ = ⟦ T ⟧/
           open Category ℂ
       in Σ[ v ∈ Obj ] (v ⇒ v)
+
+-- Examples
+
+v₁ : V (⇑ BOOL)
+v₁ = (inj₁ tt , refl)
+
+v₂ v₃ : V (# NOT)
+v₂ = ((+ 0 , id⟷ , id⇔) , id⇔)
+v₃ = ((+ 1 , NOT , id⇔) , id⇔)
+
+v₄ v₅ : V (1/# NOT)
+v₄ = (tt , (+ 1 , id⟷ , id⇔))
+v₅ = (tt , (+ 1 , NOT , id⇔))
+
+v₆ v₇ : V (# NOT ⊞ ⇑ BOOL)
+v₆ = inj₁ (+ 0 , id⟷ , id⇔) , id⇔
+v₇ = inj₂ (inj₁ tt) , refl
+
+v₈ : V (# NOT ⊠ ⇑ BOOL)
+v₈ = ((((+ 1 , NOT , id⇔) , (inj₁ tt))) , (id⇔ , refl))
+
+v₉ : V (# NOT ⊠ 1/# NOT)
+v₉ = ((((+ 1 , NOT , id⇔) , tt)) , (id⇔ , (+ 1 , id⟷ , id⇔)))
 \end{code}
 
 %%%%%%%
