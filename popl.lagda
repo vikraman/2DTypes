@@ -60,6 +60,7 @@
 \DeclareUnicodeCharacter{7503}{${}^k$}
 \DeclareUnicodeCharacter{951}{$\eta$}
 \DeclareUnicodeCharacter{956}{$\mu$}
+\DeclareUnicodeCharacter{8703}{\ensuremath{\leftrightarrowtriangle}}
 
 \AgdaHide{
 \begin{code}
