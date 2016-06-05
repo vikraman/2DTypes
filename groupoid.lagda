@@ -11,12 +11,27 @@ open import Data.Nat using (ℕ; suc)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
+open import Algebra using (CommutativeMonoid)
+open import Algebra.Structures using (IsCommutativeMonoid; IsSemigroup)
+import Data.Integer.Addition.Properties as Add
+open CommutativeMonoid Add.commutativeMonoid
+  using ()
+  renaming (isCommutativeMonoid to ℤ+-isCommutativeMonoid;
+            identityˡ to ℤ+-identityˡ)
+open IsCommutativeMonoid ℤ+-isCommutativeMonoid
+  using ()
+  renaming (isSemigroup to ℤ+-isSemigroup;
+            comm to ℤ+-comm)
+open IsSemigroup ℤ+-isSemigroup
+  using ()
+  renaming (assoc to ℤ+-assoc)
+
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
 open import Data.Product using (Σ; Σ-syntax; _,_; ∃; ,_)
 
 open import Relation.Binary.PropositionalEquality
-  using (_≡_; refl)
+  using (_≡_; refl; sym; trans)
 open import Universe using (Universe)
 
 open import Categories.Category using (Category)
@@ -29,7 +44,7 @@ open import Categories.Groupoid using () renaming (Product to GProduct)
 
 open import pibackground using (FT; UFT; ∣_∣; order; order-nz; 
   _⟷_; !; id⟷; _◎_;
-  _⇔_; 2!; id⇔; trans⇔; assoc◎l; idr◎l; idl◎l; _⊡_)
+  _⇔_; 2!; id⇔; trans⇔; sym⇔; assoc◎l; idr◎l; idl◎l; _⊡_)
 
 infix 40 _^_ 
 
@@ -90,6 +105,9 @@ Perm {τ} p i = Σ[ p' ∈ (τ ⟷ τ) ] (p' ^ i ⇔ p ^ i)
 singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 1)
 singleton p = (p , id⇔)
 
+^⇔ : {τ : FT} {p : τ ⟷ τ} {i j : ℤ} → i ≡ j → p ^ i ⇔ p ^ j
+^⇔ (refl) = id⇔
+
 -- orderC is the groupoid with objects p^i
 
 orderC : {τ : FT} → (p : τ ⟷ τ) → Category _ _ _
@@ -123,13 +141,16 @@ orderG {τ} p = record {
     ; id = (+ 0 , singleton id⟷)
     ; _∘_ = λ { (m , (p₁ , α)) (n , (p₂ , β)) → ((m ℤ+ n) , (p , id⇔)) }
     ; assoc = λ { {f = (m₁ , (p₁ , α₁))} {g = (m₂ , (p₂ , α₂))} {h = (m₃ , (p₃ , α₃))}
-                → {!!}} -- assoc◎l
-    ; identityˡ = λ { {f = (m , (p₁ , α))} → {!!} } -- idr◎l 
-    ; identityʳ = λ { {f = (m , (p₁ , α))} → {!!} } -- idl◎l
+                → ^⇔ (ℤ+-assoc m₃ m₂ m₁)} -- assoc◎l
+    ; identityˡ = λ { {f = (m , (p₁ , α))}
+                    → sym⇔ (trans⇔ α (^⇔ (sym (ℤ+-identityˡ m)))) } -- idr◎l 
+    ; identityʳ = λ { {f = (m , (p₁ , α))}
+                    → sym⇔ (trans⇔ α (^⇔ (sym (trans (ℤ+-comm m (+ 0)) (ℤ+-identityˡ m))))) } -- idl◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = λ α β → {!!} -- β ⊡ α
+    ; ∘-resp-≡ = λ { {f = (m₁ , (p₁ , α₁))} {h = (m₂ , (p₂ , α₂))}
+                     {g = (m₃ , (p₃ , α₃))} {i = (m₄ , (p₄ , α₄))} α β
+                   → {!!}} -- β ⊡ α
     }
-
 
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
 1/orderG = {!!} 
