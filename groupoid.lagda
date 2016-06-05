@@ -119,12 +119,13 @@ orderG {τ} p = record {
 1/orderC {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → Σ[ i ∈ ℤ ] (Perm p i)
-    ; _≡_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n} 
+    ; _≡_ = λ { (m , (p₁ , _)) (n , (p₂ , _)) → p₁ ^ m ⇔ p₂ ^ n}
     ; id = (+ 0 , singleton id⟷)
-    ; _∘_ = λ { (m , (p , α)) (n , (q , β)) → (m ℤ+ n , (p ◎ q , {!!})) }
-    ; assoc = {!!} -- assoc◎l 
-    ; identityˡ = {!!} -- idr◎l 
-    ; identityʳ = {!◎l !} -- idl◎l
+    ; _∘_ = λ { (m , (p₁ , α)) (n , (p₂ , β)) → ((m ℤ+ n) , (p , id⇔)) }
+    ; assoc = λ { {f = (m₁ , (p₁ , α₁))} {g = (m₂ , (p₂ , α₂))} {h = (m₃ , (p₃ , α₃))}
+                → {!!}} -- assoc◎l
+    ; identityˡ = λ { {f = (m , (p₁ , α))} → {!!} } -- idr◎l 
+    ; identityʳ = λ { {f = (m , (p₁ , α))} → {!!} } -- idl◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
     ; ∘-resp-≡ = λ α β → {!!} -- β ⊡ α
     }
