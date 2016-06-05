@@ -6,7 +6,7 @@ module opsem where
 
 open import Level using () renaming (zero to l0; suc to lsuc)
 open import Universe using (Universe)
-open import Data.Sum
+open import Data.Sum hiding ([_,_])
 open import Data.Product
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
@@ -208,28 +208,71 @@ V T = let ℂ , _ = ⟦ T ⟧/
           open Category ℂ
       in Σ[ v ∈ Obj ] (v ⇒ v)
 
--- Examples
+-- Examples:
+
+-- When we have a discrete category, the objects are values and we
+-- want a morphism from every value to itself so the morphisms are
+-- propositional equalities; when we have the category 1/# p, there is
+-- only a trivial object and the morphisms are combinators; when we
+-- have the category #p, the objects are combinators and the morphisms
+-- are 2-combinators. So we have a progression of objects: values, tt,
+-- combinators and a corresponding progression of morphisms: refl,
+-- combinators, and 2-combinators. And then we have sums and products
+-- of these things.
+
+-- Abbreviations: 
+
+-- discrete values
+
+dv : {τ : FT} → Universe.El UFT τ → V (⇑ τ)
+dv v = (v , refl)
+
+-- fractional values
+
+fv : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → V (1/# p)
+fv p i = (tt , (i , (p , id⇔)))
+
+-- combinator values
+
+cv : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → V (# p)
+cv p i = ((i , (p , id⇔)) , id⇔)
+
+-- left and right injections
+
+inj₁/ : {T₁ T₂ : FT/} → V T₁ → V (T₁ ⊞ T₂)
+inj₁/ (v , av) = (inj₁ v , av)
+
+inj₂/ : {T₁ T₂ : FT/} → V T₂ → V (T₁ ⊞ T₂)
+inj₂/ (v , av) = (inj₂ v , av)
+
+-- pairing
+
+[_,_] : {T₁ T₂ : FT/} → V T₁ → V T₂ → V (T₁ ⊠ T₂)
+[ (v₁ , av₁) , (v₂ , av₂) ] = ((v₁ , v₂) , (av₁ , av₂))
+
+--
 
 v₁ : V (⇑ BOOL)
-v₁ = (inj₁ tt , refl)
+v₁ = dv (inj₁ tt)
 
 v₂ v₃ : V (# NOT)
-v₂ = ((+ 0 , id⟷ , id⇔) , id⇔)
-v₃ = ((+ 1 , NOT , id⇔) , id⇔)
+v₂ = cv NOT (+ 0)
+v₃ = cv NOT (+ 1)
 
 v₄ v₅ : V (1/# NOT)
-v₄ = (tt , (+ 1 , id⟷ , id⇔))
-v₅ = (tt , (+ 1 , NOT , id⇔))
+v₄ = fv NOT (+ 0)
+v₅ = fv NOT (+ 1)
 
 v₆ v₇ : V (# NOT ⊞ ⇑ BOOL)
-v₆ = inj₁ (+ 0 , id⟷ , id⇔) , id⇔
-v₇ = inj₂ (inj₁ tt) , refl
+v₆ = inj₁/ {T₁ = # NOT} {T₂ = ⇑ BOOL} v₂
+v₇ = inj₂/ {T₁ = # NOT} {T₂ = ⇑ BOOL} v₁
 
 v₈ : V (# NOT ⊠ ⇑ BOOL)
-v₈ = ((((+ 1 , NOT , id⇔) , (inj₁ tt))) , (id⇔ , refl))
+v₈ = [_,_] {T₁ = # NOT} {T₂ = ⇑ BOOL} v₂ v₁
 
 v₉ : V (# NOT ⊠ 1/# NOT)
-v₉ = ((((+ 1 , NOT , id⇔) , tt)) , (id⇔ , (+ 1 , id⟷ , id⇔)))
+v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅ -- mismatched pair
+
 \end{code}
 
 %%%%%%%
