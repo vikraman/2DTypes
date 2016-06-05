@@ -278,45 +278,71 @@ v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅ -- mismatched pair
 %%%%%%%
 \subsection{Interpreter}
 
-This is just a starting point. We cannot implement eta and epsilon
-here. We have to define the inverse interpreter, contexts, and the
-back-and-forth synchronization that eta and epsilon do together to
-agree on the speculative choice.
-
 \begin{code}
-ap/ : {T₁ T₂ : FT/} → (T₁ ⇿ T₂) → V T₁ → V T₂
-ap/ {⇑ τ₁} {⇑ τ₂} (lift c) (v , _) = let v' = ap c v in (v' , refl)
-ap/ η (v , av) = {!!}
-ap/ ε (v , av) = {!!}
-ap/ unite₊l/ (inj₁ () , _)
-ap/ unite₊l/ (inj₂ v , av) = (v , av)
-ap/ uniti₊l/ (v , av) = (inj₂ v , av)
-ap/ unite₊r/ (inj₁ v , av) = (v , av)
-ap/ unite₊r/ (inj₂ () , _)
-ap/ uniti₊r/ (v , av) = (inj₁ v , av)
-ap/ swap₊/ (inj₁ v , av) = (inj₂ v , av)
-ap/ swap₊/ (inj₂ v , av) = (inj₁ v , av)
-ap/ assocl₊/ (v , av) = {!!}
-ap/ assocr₊/ (v , av) = {!!}
-ap/ unite⋆l/ (v , av) = {!!}
-ap/ uniti⋆l/ (v , av) = {!!}
-ap/ unite⋆r/ (v , av) = {!!}
-ap/ uniti⋆r/ (v , av) = {!!}
-ap/ swap⋆/ (v , av) = {!!}
-ap/ assocl⋆/ (v , av) = {!!}
-ap/ assocr⋆/ (v , av) = {!!}
-ap/ absorbr/ (v , av) = {!!}
-ap/ absorbl/ (v , av) = {!!}
-ap/ factorzr/ (v , av) = {!!}
-ap/ factorzl/ (v , av) = {!!}
-ap/ dist/ (v , av) = {!!}
-ap/ factor/ (v , av) = {!!}
-ap/ distl/ (v , av) = {!!}
-ap/ factorl/ (v , av) = {!!}
-ap/ id⇿ (v , av) = (v , av)
-ap/ (c₁ ◎/ c₂) (v , av) = {!!}
-ap/ (c₁ ⊕/ c₂) (v , av) = {!!}
-ap/ (c₁ ⊗/ c₂) (v , av) = {!!} 
+data Context : FT/ → FT/ → Set where
+  Empty : {T : FT/} → Context T T
+  Fst : {T₂ T₃ T : FT/} → (C : Context T₃ T) → (P₂ : T₂ ⇿ T₃) → Context T₂ T
+  Snd : {T₁ T₂ T₃ T : FT/} → (P₁ : T₁ ⇿ T₂) → (C : Context T₃ T) → Context T₃ T
+  L× : {T₁ T₂ T₃ T₄ T : FT/} → (C : Context (T₃ ⊠ T₄) T) →
+        (P₂ : T₂ ⇿ T₄) → V T₂ → Context T₃ T
+  R× : {T₁ T₂ T₃ T₄ T : FT/} → (P₁ : T₁ ⇿ T₃) → V T₂ →
+       (C : Context (T₃ ⊠ T₄) T) → Context T₄ T
+  L+ : {T₁ T₂ T₃ T₄ T : FT/} → (C : Context (T₃ ⊞ T₄) T) → (P₂ : T₂ ⇿ T₄) → 
+       Context T₃ T
+  R+ : {T₁ T₂ T₃ T₄ T : FT/} → (P₁ : T₁ ⇿ T₃) → (C : Context (T₃ ⊞ T₄) T) → 
+       Context T₄ T
+
+data State : FT/ → Set where
+  Enter : {T₁ T₂ T : FT/} → (P : T₁ ⇿ T₂) → V T₁ → Context T₂ T → State T
+  Exit : {T₁ T₂ T : FT/} → (P : T₁ ⇿ T₂) → V T₂ → Context T₂ T → State T
+
+data Dir : Set where
+  Fwd : Dir
+  Bck : Dir
+
+-- stepForward 
+
+ap/ : {T : FT/} → State T → Dir × State T
+ap/ (Enter (lift p) v C) = {!!}
+ap/ (Enter η v C) = {!!}
+ap/ (Enter ε v C) = {!!}
+ap/ (Enter unite₊l/ v C) = {!!}
+ap/ (Enter uniti₊l/ v C) = {!!}
+ap/ (Enter unite₊r/ v C) = {!!}
+ap/ (Enter uniti₊r/ v C) = {!!}
+ap/ (Enter swap₊/ v C) = {!!}
+ap/ (Enter assocl₊/ v C) = {!!}
+ap/ (Enter assocr₊/ v C) = {!!}
+ap/ (Enter unite⋆l/ v C) = {!!}
+ap/ (Enter uniti⋆l/ v C) = {!!}
+ap/ (Enter unite⋆r/ v C) = {!!}
+ap/ (Enter uniti⋆r/ v C) = {!!}
+ap/ (Enter swap⋆/ v C) = {!!}
+ap/ (Enter assocl⋆/ v C) = {!!}
+ap/ (Enter assocr⋆/ v C) = {!!}
+ap/ (Enter absorbr/ v C) = {!!}
+ap/ (Enter absorbl/ v C) = {!!}
+ap/ (Enter factorzr/ v C) = {!!}
+ap/ (Enter factorzl/ v C) = {!!}
+ap/ (Enter dist/ v C) = {!!}
+ap/ (Enter factor/ v C) = {!!}
+ap/ (Enter distl/ v C) = {!!}
+ap/ (Enter factorl/ v C) = {!!}
+ap/ (Enter id⇿ v C) = {!!}
+ap/ (Enter (P₁ ◎/ P₂) v C) = Fwd , Enter P₁ v (Fst C P₂)
+ap/ (Enter {T₁ ⊞ T₃} (P₁ ⊕/ P₂) (inj₁ v₁ , av) C) = Fwd , Enter P₁ (v₁ , av) (L+ {T₁} C P₂)
+ap/ (Enter {T₁ ⊞ T₃} {T₂ ⊞ T₄} (P₁ ⊕/ P₂) (inj₂ v₂ , av) C) =
+  Fwd , Enter P₂ (v₂ , av) (R+ {T₁} {T₂} P₁ C)
+ap/ (Enter {T₁ ⊠ T₃} {T₂ ⊠ T₄} {T} (P₁ ⊗/ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
+  Fwd , Enter P₁ (v₁ , av₁) (L× {T₁} {T₃} {T₂} {T₄} {T} C P₂ (v₂ , av₂))
+ap/ (Exit P v Empty) = {!!}
+ap/ (Exit P₁ v (Fst C P₂)) = Fwd , Enter P₂ v (Snd P₁ C) 
+ap/ (Exit P₂ v₂ (Snd P₁ C)) = {!!} 
+ap/ (Exit {T₁} {T₂} {T} P₁ v₁ (L× C P₂ v₂)) = Fwd , Enter P₂ v₂ (R× {T₁} {T₂} P₁ v₁ C) 
+ap/ (Exit P₂ v₂ (R× P₁ v₁ C)) = {!!} 
+ap/ (Exit P₁ (v₁ , av) (L+ C P₂)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₁ v₁ , av) C  
+ap/ (Exit P₂ (v₂ , av) (R+ P₁ C)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₂ v₂ , av) C 
+
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
