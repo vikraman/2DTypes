@@ -18,7 +18,7 @@ open import Data.Integer
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
 open import Relation.Binary.PropositionalEquality
-  using (_≡_; refl; trans)
+  using (_≡_; refl; trans; subst)
 open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
 open import Categories.Groupoid using () renaming (Product to GProduct)
 
@@ -49,6 +49,16 @@ p ^ (+ 0) = id⟷
 p ^ (+ (suc k)) = p ◎ p ^ (+ k)
 p ^ -[1+ 0 ] = ! p
 p ^ (-[1+ (suc k) ]) = ! p ◎ p ^ -[1+ k ]
+
+p^0+n⇔p^n : {τ : FT} → (p : τ ⟷ τ) → (n : ℤ) → p ^ (+ 0 ℤ+ n) ⇔ p ^ n
+p^0+n⇔p^n p (+_ n) = id⇔
+p^0+n⇔p^n p (-[1+_] n) = id⇔
+
+-- this should be provable use Data.Integer.Properties
+p^n+0⇔p^n : {τ : FT} → (p : τ ⟷ τ) → (n : ℤ) → p ^ (n ℤ+ + 0) ⇔ p ^ n
+p^n+0⇔p^n p (+_ n) = {!!}
+p^n+0⇔p^n p (-[1+_] n) = {!!}
+
 Perm : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → Set
 Perm {τ} p i = Σ[ p' ∈ (τ ⟷ τ) ] (p' ^ i ⇔ p ^ i)
 singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 1)
@@ -82,8 +92,9 @@ orderG {τ} p = record {
     ; id = (+ 0 , singleton id⟷)
     ; _∘_ = λ { (m , (p , α)) (n , (q , β)) → (m ℤ+ n , (pp , id⇔)) }
     ; assoc = {!!} -- assoc◎l 
-    ; identityˡ = {!!} -- idr◎l 
-    ; identityʳ = {!◎l !} -- idl◎l
+    ; identityˡ = λ { {_} {_} {fi , (fp , fα)} → 
+        trans⇔ (p^0+n⇔p^n pp fi) (2! fα) }  -- idr◎l 
+    ; identityʳ = {! !} -- idl◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
     ; ∘-resp-≡ = λ { {_} {_} {_} {fi , (fp , fα)}
          {hi , (hp , _)} {gi , (gp , _)} {ii , (ip , _)} α β → {!!} } -- β ⊡ α
