@@ -44,7 +44,7 @@ open import Categories.Groupoid using () renaming (Product to GProduct)
 
 open import pibackground using (FT; UFT; ∣_∣; order; order-nz; 
   _⟷_; !; id⟷; _◎_;
-  _⇔_; 2!; id⇔; trans⇔; sym⇔; assoc◎l; idr◎l; idl◎l; _⊡_)
+  _⇔_; 2!; id⇔; trans⇔; assoc◎l; idr◎l; idl◎l; _⊡_)
 
 infix 40 _^_ 
 
@@ -143,9 +143,9 @@ orderG {τ} p = record {
     ; assoc = λ { {f = (m₁ , (p₁ , α₁))} {g = (m₂ , (p₂ , α₂))} {h = (m₃ , (p₃ , α₃))}
                 → ^⇔ (ℤ+-assoc m₃ m₂ m₁)} -- assoc◎l
     ; identityˡ = λ { {f = (m , (p₁ , α))}
-                    → sym⇔ (trans⇔ α (^⇔ (sym (ℤ+-identityˡ m)))) } -- idr◎l 
+                    → 2! (trans⇔ α (^⇔ (sym (ℤ+-identityˡ m)))) } -- idr◎l 
     ; identityʳ = λ { {f = (m , (p₁ , α))}
-                    → sym⇔ (trans⇔ α (^⇔ (sym (trans (ℤ+-comm m (+ 0)) (ℤ+-identityˡ m))))) } -- idl◎l
+                    → 2! (trans⇔ α (^⇔ (sym (trans (ℤ+-comm m (+ 0)) (ℤ+-identityˡ m))))) } -- idl◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
     ; ∘-resp-≡ = λ { {f = (m₁ , (p₁ , α₁))} {h = (m₂ , (p₂ , α₂))}
                      {g = (m₃ , (p₃ , α₃))} {i = (m₄ , (p₄ , α₄))} α β
