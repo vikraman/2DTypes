@@ -47,9 +47,24 @@ card (T₁ ⊞ T₂)  = (card T₁) ℚ+ (card T₂)
 card (T₁ ⊠ T₂)  = (card T₁) ℚ* (card T₂)
 _^_ : {τ : FT} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0) = id⟷
-p ^ (+ (suc k)) = p ◎ p ^ (+ k)
+p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ] = ! p
-p ^ (-[1+ (suc k) ]) = ! p ◎ p ^ -[1+ k ]
+p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+  
+cong^ : {τ : FT} → {p q : τ ⟷ τ} → (k : ℤ) → (eq : p ⇔ q) → p ^ k ⇔ q ^ k
+cong^ (+_ ℕ.zero) eq = id⇔
+cong^ (+_ (suc n)) eq = eq ⊡ cong^ (+ n) eq
+cong^ (-[1+_] ℕ.zero) eq = ⇔! eq
+cong^ (-[1+_] (suc n)) eq = (⇔! eq) ⊡ cong^ (-[1+ n ]) eq
+
+-- first match on m, n, then proof is purely PiLevel1
+lower : {τ : FT} {p : τ ⟷ τ} (m n : ℤ) → p ^ (m ℤ+ n) ⇔ ((p ^ m) ◎ (p ^ n))
+lower (+_ ℕ.zero) (+_ n) = idl◎r
+lower (+_ ℕ.zero) (-[1+_] n) = idl◎r
+lower (+_ (suc m)) (+_ n) = trans⇔ (id⇔ ⊡ lower (+ m) (+ n)) assoc◎l
+lower (+_ (suc m)) (-[1+_] n) = {!!}
+lower (-[1+_] m) (+_ n) = {!!}
+lower (-[1+_] m) (-[1+_] n) = {!!}
 
 p^0+n⇔p^n : {τ : FT} → (p : τ ⟷ τ) → (n : ℤ) → p ^ (+ 0 ℤ+ n) ⇔ p ^ n
 p^0+n⇔p^n p (+_ n) = id⇔
@@ -60,13 +75,11 @@ p^n+0⇔p^n : {τ : FT} → (p : τ ⟷ τ) → (n : ℤ) → p ^ (n ℤ+ + 0) �
 p^n+0⇔p^n p (+_ n) = {!!}
 p^n+0⇔p^n p (-[1+_] n) = {!!}
 
-Perm : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → Set
-Perm {τ} p i = Σ[ p' ∈ (τ ⟷ τ) ] (p' ^ i ⇔ p ^ i)
-singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 1)
-singleton p = (p , id⇔)
+Perm : {τ : FT} → (p : τ ⟷ τ) → Set
+Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
 orderC : {τ : FT} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
-     Obj = Σ[ i ∈ ℤ ] (Perm p i)
+     Obj = ℤ × Perm p
    ; _⇒_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n } 
    ; _≡_ = λ _ _ → ⊤ 
    ; id = id⇔ 
@@ -88,20 +101,24 @@ orderG {τ} p = record {
 1/orderC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
 1/orderC {τ} pp = record {
      Obj = ⊤
-    ; _⇒_ = λ _ _ → Σ[ i ∈ ℤ ] (Perm pp i)
+    ; _⇒_ = λ _ _ → ℤ × Perm pp
     ; _≡_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n} 
-    ; id = (+ 0 , singleton id⟷)
+    ; id = (+ 0 , pp , id⇔)
     ; _∘_ = λ { (m , (p , α)) (n , (q , β)) → (m ℤ+ n , (pp , id⇔)) }
     ; assoc = {!!} -- assoc◎l 
     ; identityˡ = λ { {_} {_} {fi , (fp , fα)} → 
-        trans⇔ (p^0+n⇔p^n pp fi) (2! fα) }  -- idr◎l 
-    ; identityʳ = {! !} -- idl◎l
+        trans⇔ (p^0+n⇔p^n pp fi) ({!!}) }  -- idr◎l 
+    ; identityʳ =  λ { {f = (fi , (fp , fα))} →
+        trans⇔ (trans⇔ (lower fi (+ 0)) idr◎l) (cong^ fi (2! fα)) } -- idr◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
     ; ∘-resp-≡ = λ { {_} {_} {_} {fi , (fp , fα)}
          {hi , (hp , _)} {gi , (gp , _)} {ii , (ip , _)} α β → {!!} } -- β ⊡ α
     }
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
-1/orderG = {!!} 
+1/orderG p = record {
+      _⁻¹ = λ { (i , (q , eq)) → ℤ- i , (q , eq)}
+    ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } }
+
 discreteC : Set → Category _ _ _
 discreteC S = record {
      Obj = S
