@@ -75,17 +75,18 @@ orderG {τ} p = record {
       }
   }
 1/orderC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
-1/orderC {τ} p = record {
+1/orderC {τ} pp = record {
      Obj = ⊤
-    ; _⇒_ = λ _ _ → Σ[ i ∈ ℤ ] (Perm p i)
+    ; _⇒_ = λ _ _ → Σ[ i ∈ ℤ ] (Perm pp i)
     ; _≡_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n} 
     ; id = (+ 0 , singleton id⟷)
-    ; _∘_ = λ { (m , (p , α)) (n , (q , β)) → (m ℤ+ n , (p ◎ q , {!!})) }
+    ; _∘_ = λ { (m , (p , α)) (n , (q , β)) → (m ℤ+ n , (pp , id⇔)) }
     ; assoc = {!!} -- assoc◎l 
     ; identityˡ = {!!} -- idr◎l 
     ; identityʳ = {!◎l !} -- idl◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = λ α β → {!!} -- β ⊡ α
+    ; ∘-resp-≡ = λ { {_} {_} {_} {fi , (fp , fα)}
+         {hi , (hp , _)} {gi , (gp , _)} {ii , (ip , _)} α β → {!!} } -- β ⊡ α
     }
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
 1/orderG = {!!} 
@@ -302,8 +303,19 @@ data Dir : Set where
 
 -- stepForward 
 
+-- This is just a starting point. We cannot implement eta and epsilon
+-- here. We have to define the inverse interpreter, contexts, and the
+-- back-and-forth synchronization that eta and epsilon do together to
+-- agree on the speculative choice.
+
+-- Although, there is a trivial implementation of both that does
+-- type check (see below).  Might be interesting to figure out why
+-- that is.
+
 ap/ : {T : FT/} → State T → Dir × State T
 ap/ (Enter (lift p) v C) = {!!}
+-- ap/ (η {τ} {p}) (v , av) = (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
+-- ap/ ε (v , av) = tt , refl
 ap/ (Enter η v C) = {!!}
 ap/ (Enter ε v C) = {!!}
 ap/ (Enter unite₊l/ v C) = {!!}
