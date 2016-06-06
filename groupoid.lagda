@@ -42,10 +42,7 @@ open import Categories.Groupoid using () renaming (Product to GProduct)
 -- open import Categories.Monad using (Monad)
 -- open import Comonad using (Comonad)
 
-open import pibackground using (FT; UFT; ∣_∣; order; order-nz; 
-  _⟷_; !; id⟷; _◎_;
-  _⇔_; 2!; id⇔; trans⇔; assoc◎l; idr◎l; idl◎l; _⊡_)
-
+open import pibackground
 infix 40 _^_ 
 
 \end{code}
@@ -95,15 +92,15 @@ groupoid.
 
 _^_ : {τ : FT} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0) = id⟷
-p ^ (+ (suc k)) = p ◎ p ^ (+ k)
+p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ] = ! p
-p ^ (-[1+ (suc k) ]) = ! p ◎ p ^ -[1+ k ]
+p ^ (-[1+ (suc k) ]) = ! p ◎ (p ^ -[1+ k ])
 
 Perm : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → Set
-Perm {τ} p i = Σ[ p' ∈ (τ ⟷ τ) ] (p' ^ i ⇔ p ^ i)
+Perm {τ} p i = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p ^ i)
 
 singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 1)
-singleton p = (p , id⇔)
+singleton p = (p , idr◎r)
 
 ^⇔ : {τ : FT} {p : τ ⟷ τ} {i j : ℤ} → i ≡ j → p ^ i ⇔ p ^ j
 ^⇔ (refl) = id⇔
@@ -132,7 +129,7 @@ orderG {τ} p = record {
       ; isoʳ = tt
       }
   }
-
+{-
 1/orderC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
 1/orderC {τ} p = record {
      Obj = ⊤
@@ -154,7 +151,7 @@ orderG {τ} p = record {
 
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
 1/orderG = {!!} 
-
+-}
 -- τ // p
 
 discreteC : Set → Category _ _ _
@@ -187,6 +184,7 @@ discreteG S = record
 \end{code}
 
 \begin{code}
+{-
 ⟦_⟧/ : (T : FT/) → Universe.El UG T
 ⟦ ⇑ S ⟧/ = , discreteG (Universe.El UFT S)
 ⟦ # p ⟧/ = , orderG p
@@ -195,6 +193,7 @@ discreteG S = record
 ... | (_ , G₁) | (_ , G₂) = , GSum G₁ G₂
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
 ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
+-}
 \end{code}
 
 %%%%%
