@@ -135,10 +135,18 @@ data _⇔_ : {t₁ t₂ : FT} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set wh
     c ⇔ c
   rinv◎l  : {t₁ t₂ : FT} {c : t₁ ⟷ t₂} → (! c ◎ c) ⇔ id⟷
   rinv◎r  : {t₁ t₂ : FT} {c : t₁ ⟷ t₂} → id⟷ ⇔ (! c ◎ c) 
+  linv◎l  : {t₁ t₂ : FT} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ id⟷
+  linv◎r  : {t₁ t₂ : FT} {c : t₁ ⟷ t₂} → id⟷ ⇔ (c ◎ ! c) 
   trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → 
     (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} → 
     (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
+  resp⊕⇔  : {t₁ t₂ t₃ t₄ : FT} 
+         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} → 
+         (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊕ c₂) ⇔ (c₃ ⊕ c₄)
+  resp⊗⇔  : {t₁ t₂ t₃ t₄ : FT} 
+         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} → 
+         (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
 
 2! : {t₁ t₂ : FT} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! assoc◎l = assoc◎r
@@ -149,9 +157,13 @@ data _⇔_ : {t₁ t₂ : FT} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set wh
 2! idr◎r = idr◎l
 2! rinv◎l = rinv◎r
 2! rinv◎r = rinv◎l
+2! linv◎l = linv◎r
+2! linv◎r = linv◎l
 2! id⇔ = id⇔
 2! (α ⊡ β) = (2! α) ⊡ (2! β)
 2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
+2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
+2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
 
 \end{code}
 
