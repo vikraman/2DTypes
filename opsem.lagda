@@ -422,8 +422,13 @@ ap/ (Exit P₂ (v₂ , av) (R+ P₁ C)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₂ v�
 
 ap⁻¹/ : {T : FT/} → State T → Dir × State T
 ap⁻¹/ (Exit (lift p) (v , _) C) = Bck , Enter (lift p) (ap⁻¹ p v , refl) C 
-ap⁻¹/ (Exit (η p) v C) = {!!} 
-ap⁻¹/ (Exit (ε p) v C) = {!!}
+ap⁻¹/ (Exit (η p) (((i , (q , α)) , tt) , (β , (j , (r , γ)))) C) =
+  if (q ⇔? r)
+  then Bck , Enter (η p) (tt , refl) C
+  else Fwd , Exit (η p) (((ℤsuc i , (q , α)) , tt) , ({!!} , (ℤsuc j , (r , γ)))) C
+ap⁻¹/ (Exit (ε p) (tt , _) C) =
+  Bck , Enter (ε p) ((((+ 1 , (p , id⇔)) , tt)) , (id⇔ , (+ 1 , (p , id⇔)))) C
+
 ap⁻¹/ (Exit uniti₊l/ (inj₁ () , av) C) 
 ap⁻¹/ (Exit uniti₊l/ (inj₂ v , av) C) = Bck , Enter uniti₊l/ (v , av) C
 ap⁻¹/ (Exit unite₊l/ (v , av) C) = Bck , Enter unite₊l/ (inj₂ v , av) C
@@ -482,6 +487,31 @@ ap⁻¹/ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
   Bck , Exit P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
 ap⁻¹/ (Enter P₁ (v₁ , av) (L+ C P₂)) = Bck , Enter (P₁ ⊕/ P₂) (inj₁ v₁ , av) C  
 ap⁻¹/ (Enter P₂ (v₂ , av) (R+ P₁ C)) = Bck , Enter (P₁ ⊕/ P₂) (inj₂ v₂ , av) C 
+
+{-# NON_TERMINATING #-}
+mutual 
+  loopFwd : {T : FT/} → State T → V T
+  loopFwd s with ap/ s
+  ... | Fwd , s' = loopFwd s'
+  ... | Bck , s' = loopBck s'
+  ... | Done , Exit _ v Empty = v
+  ... | Done , _ = {!!}
+
+  loopBck : {T : FT/} → State T → V T
+  loopBck s with ap⁻¹/ s
+  ... | Bck , s' = loopBck s'
+  ... | Fwd , s' = loopFwd s'
+  ... | Done , _ = {!!}
+
+-- Credit card example
+
+cc : # NOT ⇿ # NOT
+cc = uniti⋆l/ ◎/
+     (((η NOT) ⊗/ id⇿) ◎/
+     ((assocr⋆/ ◎/
+     ((id⇿ ⊗/ swap⋆/) ◎/
+     ((id⇿ ⊗/ (ε NOT)) ◎/
+     unite⋆r/)))))
 
 \end{code}
 
