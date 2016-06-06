@@ -92,8 +92,8 @@ groupoid.
 \begin{code}
 
 -- First each p is an Agda type
--- Perm p is the singleton type that only
---   contains p up to ⇔ 
+-- Perm p i is the type that contains the i^th iterate of p, i.e p^i
+--  up to <=>.
 -- the parens in the definition of ^ need to be there!
 _^_ : {τ : FT} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0) = id⟷
@@ -101,9 +101,14 @@ p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ] = ! p
 p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
 
-Perm : {τ : FT} → (p : τ ⟷ τ) → Set
-Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
-
+-- i.e. Perm is: for all i, any p' such that p' ⇔ p ^ i
+record Perm {τ : FT} (p : τ ⟷ τ) : Set where
+  constructor perm
+  field
+    iter : ℤ
+    p' : τ ⟷ τ
+    p'⇔p^i : p' ⇔ p ^ iter
+    
 cong^ : {τ : FT} → {p q : τ ⟷ τ} → (k : ℤ) → (eq : p ⇔ q) → p ^ k ⇔ q ^ k
 cong^ (+_ ℕ.zero) eq = id⇔
 cong^ (+_ (suc n)) eq = eq ⊡ cong^ (+ n) eq
@@ -139,14 +144,8 @@ cong^ (-[1+_] (suc n)) eq = (⇔! eq) ⊡ cong^ (-[1+ n ]) eq
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
 
--- Property of ^: negating exponent is same as reversing combinator
-^⇔! : {τ : FT} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ- k)) ⇔ ((! p) ^ k)
-^⇔! (+_ ℕ.zero) = id⇔
-^⇔! (+_ (suc ℕ.zero)) = idr◎r
-^⇔! (+_ (suc (suc n))) = id⇔ ⊡ ^⇔! (+ suc n)
-^⇔! {p = p} (-[1+_] ℕ.zero) = trans⇔ idr◎l (!!⇔id p)
-^⇔! {p = p} (-[1+_] (suc n)) = (!!⇔id p) ⊡ ^⇔! -[1+ n ]
-
+-- because ^ is iterated composition of the same thing, then by
+-- associativity, we can hive off compositions from left or right
 assoc1 : {τ : FT} → {p : τ ⟷ τ} → (m : ℕ) →
   (p ◎ (p ^ (+ m))) ⇔ ((p ^ (+ m)) ◎ p)
 assoc1 ℕ.zero = trans⇔ idr◎l idl◎r
@@ -156,6 +155,17 @@ assoc1- : {τ : FT} → {p : τ ⟷ τ} → (m : ℕ) →
   ((! p) ◎ (p ^ -[1+ m ])) ⇔ ((p ^ -[1+ m ]) ◎ (! p))
 assoc1- ℕ.zero = id⇔
 assoc1- (suc m) = trans⇔ (id⇔ ⊡ assoc1- m) assoc◎l
+
+-- Property of ^: negating exponent is same as composing in the
+-- other direction, then reversing.
+^⇔! : {τ : FT} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ- k)) ⇔ ! (p ^ k)
+^⇔! (+_ ℕ.zero) = id⇔
+-- need to dig deeper, as we end up negating
+^⇔! (+_ (suc ℕ.zero)) = idl◎r
+^⇔! (+_ (suc (suc n))) = trans⇔ (assoc1- n) (^⇔! (+ suc n) ⊡ id⇔)
+^⇔! {p = p} (-[1+_] ℕ.zero) = trans⇔ idr◎l (!!⇔id p)
+^⇔! {p = p} (-[1+_] (suc n)) =
+  trans⇔ (assoc1 (suc n)) ((^⇔! -[1+ n ]) ⊡ (!!⇔id p))
 
 -- first match on m, n, then proof is purely PiLevel1
 lower : {τ : FT} {p : τ ⟷ τ} (m n : ℤ) → p ^ (m ℤ+ n) ⇔ ((p ^ m) ◎ (p ^ n))
@@ -182,6 +192,8 @@ lower (-[1+_] ℕ.zero) (-[1+_] n) = id⇔
 lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
   trans⇔ (id⇔ ⊡ lower (-[1+ m ]) (-[1+ n ])) assoc◎l
 
+-- These are true, but no longer used
+{-
 cancel-rinv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
   ((p ^ i) ◎ ((! p) ^ i)) ⇔ id⟷
 cancel-rinv (+_ ℕ.zero) = idl◎l
@@ -208,12 +220,13 @@ cancel-linv (-[1+_] (suc n)) = trans⇔ (assoc1- n ⊡ id⇔) (
   trans⇔  assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
   trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
   cancel-linv -[1+ n ])))))
+-}
 
 -- orderC is the groupoid with objects p^i
 orderC : {τ : FT} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
-     Obj = ℤ × Perm p
-   ; _⇒_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n } 
+     Obj = Perm p
+   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ^ i ⇔ p₂ ^ j } 
    ; _≡_ = λ _ _ → ⊤ 
    ; id = id⇔ 
    ; _∘_ = λ α β → trans⇔ β α
@@ -223,6 +236,8 @@ orderC {τ} p = record {
    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
    ; ∘-resp-≡ = λ _ _ → tt  
    }
+   where open Perm
+   
 orderG : {τ : FT} → (p : τ ⟷ τ) → Groupoid (orderC p)
 orderG {τ} p = record {
     _⁻¹ = 2!
@@ -237,7 +252,7 @@ orderG {τ} p = record {
 discreteC : Set → Category _ _ _
 discreteC S = record {
      Obj = S
-    ; _⇒_ = λ s₁ s₂ → s₁ ≡ s₂
+    ; _⇒_ = _≡_
     ; _≡_ = λ _ _ → ⊤ 
     ; id = refl 
     ; _∘_ = λ { {A} {.A} {.A} refl refl → refl }
@@ -257,36 +272,22 @@ discreteG S = record
 1/orderC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
 1/orderC {τ} pp = record {
      Obj = ⊤
-    ; _⇒_ = λ _ _ → ℤ × Perm pp
-    ; _≡_ = λ { (m , (p , _)) (n , (q , _)) → p ^ m ⇔ q ^ n} 
-    ; id = (+ 0 , pp , id⇔)
-    ; _∘_ = λ { (m , (p , α)) (n , (q , β)) → (m ℤ+ n , (pp , id⇔)) }
-    ; assoc = λ { {f = fi , (fp , fα)} {gi , _} {hi , _} → -- assoc◎r
-      trans⇔ (lower (hi ℤ+ gi) fi) (
-      trans⇔ (lower hi gi ⊡ id⇔) (
-      trans⇔ assoc◎r (
-      trans⇔ (id⇔ ⊡ (2! (lower gi fi))) (
-      (2! (lower hi (gi ℤ+ fi))))))) }
-    ; identityˡ = λ { {_} {_} {fi , (fp , fα)} → -- idl◎l
-        trans⇔ (lower (+ 0) fi) (trans⇔ idl◎l (cong^ fi (2! fα))) } 
-    ; identityʳ =  λ { {f = (fi , (fp , fα))} →  -- idr◎r
-        trans⇔ (trans⇔ (lower fi (+ 0)) idr◎l) (cong^ fi (2! fα)) }
+    ; _⇒_ = λ _ _ → Perm pp
+    ; _≡_ = λ { (perm m p _) (perm n q  _) → p ⇔ q } -- pp ^ m ⇔ pp ^ n 
+    ; id = perm (+ 0) id⟷ id⇔
+    ; _∘_ = λ { (perm m p α) (perm n q β) →
+        perm (m ℤ+ n) (p ◎ q) (trans⇔ (α ⊡ β) (2! (lower m n))) }
+    ; assoc = assoc◎r
+    ; identityˡ = idl◎l
+    ; identityʳ =  idr◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = λ { {_} {_} {_} {fi , (fp , fα)}
-         {hi , (hp , hα)} {gi , (gp , gα)} {ii , (ip , iα)} α β →
-         trans⇔ (lower fi gi) (
-         trans⇔ (2! (cong^ fi fα) ⊡ (2! (cong^ gi gα))) (
-         trans⇔ (α ⊡ β) (
-         trans⇔ (cong^ hi hα ⊡ cong^ ii iα) (
-         2! (lower hi ii))))) }
+    ; ∘-resp-≡ = _⊡_
     }
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
 1/orderG p = record {
-      _⁻¹ = λ { (i , (q , eq)) → ℤ- i , (q , eq)}
-    ; iso = λ { {f = (i , _)} → record {
-        isoˡ = trans⇔ (lower (ℤ- i) i) (trans⇔ (^⇔! i ⊡ id⇔) (cancel-linv i))
-      ; isoʳ = trans⇔ (lower i (ℤ- i)) (trans⇔ (id⇔ ⊡ ^⇔! i) (cancel-rinv i))
-      } }
+      _⁻¹ = λ { (perm i q eq) →
+              perm (ℤ- i) (! q) (trans⇔ (⇔! eq) (2! (^⇔! {p = p} i)))}
+    ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
     }
 
 -- _//_ : (τ : FT) → (p : τ ⟷ τ) → Category _ _ _
