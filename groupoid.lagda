@@ -93,7 +93,7 @@ groupoid.
 _^_ : {τ : FT} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0) = id⟷
 p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
-p ^ -[1+ 0 ] = ! p
+p ^ -[1+ 0 ] = id⟷
 p ^ (-[1+ (suc k) ]) = ! p ◎ (p ^ -[1+ k ])
 
 Perm : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → Set
@@ -103,9 +103,10 @@ singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 0)
 singleton p = (id⟷ , id⇔)
 
 ^⇔ : {τ : FT} {p : τ ⟷ τ} (m n : ℤ) → (p ^ m) ◎ (p ^ n) ⇔ p ^ (m ℤ+ n)
-^⇔ m (+_ ℕ.zero) = {!idl◎l!}
+^⇔ m (+_ ℕ.zero) = trans⇔ idr◎l {!!}
 ^⇔ m (+_ (suc n)) = {!!}
-^⇔ m (-[1+_] n) = {!!}
+^⇔ m (-[1+_] ℕ.zero) = trans⇔ idr◎l {!!}
+^⇔ m (-[1+_] (suc n)) = {!!}
 
 -- orderC is the groupoid with objects p^i
 
@@ -193,7 +194,6 @@ discreteG S = record
 \end{code}
 
 \begin{code}
-{-
 ⟦_⟧/ : (T : FT/) → Universe.El UG T
 ⟦ ⇑ S ⟧/ = , discreteG (Universe.El UFT S)
 ⟦ # p ⟧/ = , orderG p
@@ -202,7 +202,6 @@ discreteG S = record
 ... | (_ , G₁) | (_ , G₂) = , GSum G₁ G₂
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
 ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
--}
 \end{code}
 
 %%%%%
