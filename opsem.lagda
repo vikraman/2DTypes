@@ -70,12 +70,12 @@ dv v = (v , refl)
 -- fractional values
 
 fv : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → V (1/# p)
-fv p i = (tt , (i , (p , id⇔)))
+fv p i = (tt , perm i (p ^ i) id⇔)
 
 -- combinator values
 
 cv : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → V (# p)
-cv p i = ((i , (p , id⇔)) , id⇔)
+cv p i = (perm i (p ^ i) id⇔ , id⇔)
 
 -- left and right injections
 
@@ -167,11 +167,11 @@ postulate
 ap/ : {T : FT/} → State T → Dir × State T
 ap/ (Enter (lift p) (v , _) C) = Fwd , Exit (lift p) (ap p v , refl) C 
 ap/ (Enter (η p) (tt , av) C) =
-  Fwd , Exit (η p) ((((+ 1 , (p , id⇔)) , tt)) , (id⇔ , (+ 1 , (p , id⇔)))) C
-ap/ (Enter (ε p) (((i , (q , α)) , tt) , (β , (j , (r , γ)))) C) =
+   Fwd , Exit (η p) (((perm (+ 1) p idr◎r) , tt) , (id⇔ , (perm (+ 1) p idr◎r))) C
+ap/ (Enter (ε p) (((perm i q α) , tt) , (β , (perm j r γ))) C) =
   if (q ⇔? r)
   then Fwd , Exit (ε p) (tt , refl) C
-  else Bck , Enter (ε p) (((i , (q , α)) , tt) , (β , (j , (r , γ)))) C
+  else Bck , Enter (ε p) (((perm i q α) , tt) , (β , (perm j r γ))) C
 ap/ (Enter unite₊l/ (inj₁ () , av) C) 
 ap/ (Enter unite₊l/ (inj₂ v , av) C) = Fwd , Exit unite₊l/ (v , av) C
 ap/ (Enter uniti₊l/ (v , av) C) = Fwd , Exit uniti₊l/ (inj₂ v , av) C
@@ -232,12 +232,16 @@ ap/ (Exit P₂ (v₂ , av) (R+ P₁ C)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₂ v�
 
 ap⁻¹/ : {T : FT/} → State T → Dir × State T
 ap⁻¹/ (Exit (lift p) (v , _) C) = Bck , Enter (lift p) (ap⁻¹ p v , refl) C 
-ap⁻¹/ (Exit (η p) (((i , (q , α)) , tt) , (β , (j , (r , γ)))) C) =
+ap⁻¹/ (Exit (η p) (((perm i q α) , tt) , (β , (perm j r γ))) C) =
   if (q ⇔? r)
   then Bck , Enter (η p) (tt , refl) C
-  else Fwd , Exit (η p) (((ℤsuc i , (q , α)) , tt) , ({!!} , (ℤsuc j , (r , γ)))) C
+  else Fwd , Exit (η p)
+         (((perm (ℤsuc i) (p ◎ q) (trans⇔ (id⇔ ⊡ α) (
+             trans⇔ (idr◎r ⊡ id⇔) (2! (lower {p = p} (+ 1) i))))) , tt) , (id⇔ ,
+           (perm (ℤsuc j) (p ◎ r) (trans⇔ (id⇔ ⊡ γ)
+             (trans⇔ (idr◎r ⊡ id⇔) (2! (lower {p = p} (+ 1) j))))))) C
 ap⁻¹/ (Exit (ε p) (tt , _) C) =
-  Bck , Enter (ε p) ((((+ 1 , (p , id⇔)) , tt)) , (id⇔ , (+ 1 , (p , id⇔)))) C
+  Bck , Enter (ε p) ((((perm (+ 1) p idr◎r) , tt)) , (id⇔ , (perm (+ 1) p idr◎r))) C
 
 ap⁻¹/ (Exit uniti₊l/ (inj₁ () , av) C) 
 ap⁻¹/ (Exit uniti₊l/ (inj₂ v , av) C) = Bck , Enter uniti₊l/ (v , av) C
