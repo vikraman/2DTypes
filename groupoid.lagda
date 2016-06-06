@@ -193,34 +193,33 @@ lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
   trans⇔ (id⇔ ⊡ lower (-[1+ m ]) (-[1+ n ])) assoc◎l
 
 -- These are true, but no longer used
-{-
-cancel-rinv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
-  ((p ^ i) ◎ ((! p) ^ i)) ⇔ id⟷
-cancel-rinv (+_ ℕ.zero) = idl◎l
-cancel-rinv (+_ (suc n)) = 
-  trans⇔ (assoc1 n ⊡ id⇔) (trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
-  (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
-  cancel-rinv (+ n))))))
-cancel-rinv (-[1+_] ℕ.zero) = linv◎l
-cancel-rinv (-[1+_] (suc n)) = 
-  trans⇔ (assoc1- n ⊡ id⇔) (
-  trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
-  (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
-  (cancel-rinv -[1+ n ])))))
+-- cancel-rinv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
+--   ((p ^ i) ◎ ((! p) ^ i)) ⇔ id⟷
+-- cancel-rinv (+_ ℕ.zero) = idl◎l
+-- cancel-rinv (+_ (suc n)) = 
+--   trans⇔ (assoc1 n ⊡ id⇔) (trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
+--   (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
+--   cancel-rinv (+ n))))))
+-- cancel-rinv (-[1+_] ℕ.zero) = linv◎l
+-- cancel-rinv (-[1+_] (suc n)) = 
+--   trans⇔ (assoc1- n ⊡ id⇔) (
+--   trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
+--   (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
+--   (cancel-rinv -[1+ n ])))))
 
-cancel-linv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
-  (((! p) ^ i) ◎ (p ^ i)) ⇔ id⟷
-cancel-linv (+_ ℕ.zero) = idr◎l
-cancel-linv (+_ (suc n)) = trans⇔ (assoc1 n ⊡ id⇔) (
-   trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
-   trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
-   (cancel-linv (+ n))))))
-cancel-linv (-[1+_] ℕ.zero) = rinv◎l
-cancel-linv (-[1+_] (suc n)) = trans⇔ (assoc1- n ⊡ id⇔) (
-  trans⇔  assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
-  trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
-  cancel-linv -[1+ n ])))))
--}
+-- cancel-linv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
+--   (((! p) ^ i) ◎ (p ^ i)) ⇔ id⟷
+-- cancel-linv (+_ ℕ.zero) = idr◎l
+-- cancel-linv (+_ (suc n)) = trans⇔ (assoc1 n ⊡ id⇔) (
+--    trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
+--    trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
+--    (cancel-linv (+ n))))))
+-- cancel-linv (-[1+_] ℕ.zero) = rinv◎l
+-- cancel-linv (-[1+_] (suc n)) = trans⇔ (assoc1- n ⊡ id⇔) (
+--   trans⇔  assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
+--   trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
+--   cancel-linv -[1+ n ])))))
+
 
 -- orderC is the groupoid with objects p^i
 orderC : {τ : FT} → (p : τ ⟷ τ) → Category _ _ _
@@ -289,15 +288,14 @@ discreteG S = record
               perm (ℤ- i) (! q) (trans⇔ (⇔! eq) (2! (^⇔! {p = p} i)))}
     ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
     }
-
--- _//_ : (τ : FT) → (p : τ ⟷ τ) → Category _ _ _
--- τ // p = Product (discreteC (El τ)) (1/orderC p)
---   where open Universe.Universe UFT
-
--- quotientG : (τ : FT) → (p : τ ⟷ τ) → Groupoid (τ // p)
--- quotientG = {!!} 
-
 \end{code}
+
+%% _//_ : (τ : FT) → (p : τ ⟷ τ) → Category _ _ _
+%% τ // p = Product (discreteC (El τ)) (1/orderC p)
+%%   where open Universe.Universe UFT
+%% 
+%% quotientG : (τ : FT) → (p : τ ⟷ τ) → Groupoid (τ // p)
+%% quotientG = {!!} 
 
 \begin{code}
 ⟦_⟧/ : (T : FT/) → Universe.El UG T
