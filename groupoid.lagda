@@ -99,11 +99,13 @@ p ^ (-[1+ (suc k) ]) = ! p ◎ (p ^ -[1+ k ])
 Perm : {τ : FT} → (p : τ ⟷ τ) (i : ℤ) → Set
 Perm {τ} p i = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p ^ i)
 
-singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 1)
-singleton p = (p , idr◎r)
+singleton : {τ : FT} → (p : τ ⟷ τ) → Perm p (+ 0)
+singleton p = (id⟷ , id⇔)
 
-^⇔ : {τ : FT} {p : τ ⟷ τ} {i j : ℤ} → i ≡ j → p ^ i ⇔ p ^ j
-^⇔ (refl) = id⇔
+^⇔ : {τ : FT} {p : τ ⟷ τ} (m n : ℤ) → (p ^ m) ◎ (p ^ n) ⇔ p ^ (m ℤ+ n)
+^⇔ m (+_ ℕ.zero) = {!idl◎l!}
+^⇔ m (+_ (suc n)) = {!!}
+^⇔ m (-[1+_] n) = {!!}
 
 -- orderC is the groupoid with objects p^i
 
@@ -129,29 +131,36 @@ orderG {τ} p = record {
       ; isoʳ = tt
       }
   }
-{-
+
 1/orderC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
 1/orderC {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → Σ[ i ∈ ℤ ] (Perm p i)
-    ; _≡_ = λ { (m , (p₁ , _)) (n , (p₂ , _)) → p₁ ^ m ⇔ p₂ ^ n}
-    ; id = (+ 0 , singleton id⟷)
-    ; _∘_ = λ { (m , (p₁ , α)) (n , (p₂ , β)) → ((m ℤ+ n) , (p , id⇔)) }
-    ; assoc = λ { {f = (m₁ , (p₁ , α₁))} {g = (m₂ , (p₂ , α₂))} {h = (m₃ , (p₃ , α₃))}
-                → ^⇔ (ℤ+-assoc m₃ m₂ m₁)} -- assoc◎l
+    ; _≡_ = λ { (m , (p₁ , _)) (n , (p₂ , _)) → p₁ ⇔ p₂}
+    ; id = (+ 0 , singleton p)
+    ; _∘_ = λ { (m , (p₁ , α)) (n , (p₂ , β))
+              → (m ℤ+ n , (p₁ ◎ p₂) , trans⇔ (α ⊡ β) (^⇔ m n)) }
+    ; assoc = λ { {f = (m₁ , (p₁ , α₁))}
+                  {g = (m₂ , (p₂ , α₂))}
+                  {h = (m₃ , (p₃ , α₃))}
+                → assoc◎r }
     ; identityˡ = λ { {f = (m , (p₁ , α))}
-                    → 2! (trans⇔ α (^⇔ (sym (ℤ+-identityˡ m)))) } -- idr◎l 
+                    → idl◎l }
     ; identityʳ = λ { {f = (m , (p₁ , α))}
-                    → 2! (trans⇔ α (^⇔ (sym (trans (ℤ+-comm m (+ 0)) (ℤ+-identityˡ m))))) } -- idl◎l
+                    → idr◎l }
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = λ { {f = (m₁ , (p₁ , α₁))} {h = (m₂ , (p₂ , α₂))}
-                     {g = (m₃ , (p₃ , α₃))} {i = (m₄ , (p₄ , α₄))} α β
-                   → {!!}} -- β ⊡ α
+    ; ∘-resp-≡ = λ { {f = (m₁ , (p₁ , α₁))}
+                     {h = (m₂ , (p₂ , α₂))}
+                     {g = (m₃ , (p₃ , α₃))}
+                     {i = (m₄ , (p₄ , α₄))} α β
+                   → α ⊡ β} -- β ⊡ α
     }
 
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
-1/orderG = {!!} 
--}
+1/orderG {τ} p = record {
+           _⁻¹ = λ { (m , (p' , α)) → {!!}}
+         ; iso = {!!} } 
+
 -- τ // p
 
 discreteC : Set → Category _ _ _
