@@ -141,20 +141,11 @@ orderG {τ} p = record {
     ; id = (+ 0 , singleton p)
     ; _∘_ = λ { (m , (p₁ , α)) (n , (p₂ , β))
               → (m ℤ+ n , (p₁ ◎ p₂) , trans⇔ (α ⊡ β) (^⇔ m n)) }
-    ; assoc = λ { {f = (m₁ , (p₁ , α₁))}
-                  {g = (m₂ , (p₂ , α₂))}
-                  {h = (m₃ , (p₃ , α₃))}
-                → assoc◎r }
-    ; identityˡ = λ { {f = (m , (p₁ , α))}
-                    → idl◎l }
-    ; identityʳ = λ { {f = (m , (p₁ , α))}
-                    → idr◎l }
+    ; assoc = assoc◎r
+    ; identityˡ = idl◎l
+    ; identityʳ = idr◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
-    ; ∘-resp-≡ = λ { {f = (m₁ , (p₁ , α₁))}
-                     {h = (m₂ , (p₂ , α₂))}
-                     {g = (m₃ , (p₃ , α₃))}
-                     {i = (m₄ , (p₄ , α₄))} α β
-                   → α ⊡ β} -- β ⊡ α
+    ; ∘-resp-≡ = λ α β → α ⊡ β
     }
 
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
