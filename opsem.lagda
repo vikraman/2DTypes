@@ -309,22 +309,24 @@ v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅ -- mismatched pair
 \subsection{Interpreter}
 
 \begin{code}
-data Context : FT/ → FT/ → Set where
-  Empty : {T : FT/} → Context T T
-  Fst : {T₂ T₃ T : FT/} → (C : Context T₃ T) → (P₂ : T₂ ⇿ T₃) → Context T₂ T
-  Snd : {T₁ T₂ T₃ T : FT/} → (P₁ : T₁ ⇿ T₂) → (C : Context T₃ T) → Context T₃ T
-  L× : {T₁ T₂ T₃ T₄ T : FT/} → (C : Context (T₃ ⊠ T₄) T) →
-        (P₂ : T₂ ⇿ T₄) → V T₂ → Context T₃ T
-  R× : {T₁ T₂ T₃ T₄ T : FT/} → (P₁ : T₁ ⇿ T₃) → V T₂ →
-       (C : Context (T₃ ⊠ T₄) T) → Context T₄ T
-  L+ : {T₁ T₂ T₃ T₄ T : FT/} → (C : Context (T₃ ⊞ T₄) T) → (P₂ : T₂ ⇿ T₄) → 
-       Context T₃ T
-  R+ : {T₁ T₂ T₃ T₄ T : FT/} → (P₁ : T₁ ⇿ T₃) → (C : Context (T₃ ⊞ T₄) T) → 
-       Context T₄ T
+-- Context T1 T2 T3 : missing T1 ⇿ T2 combinator; returns T3 as final answer
+
+data Context : FT/ → FT/ → FT/ → Set where
+  Empty : {T : FT/} → Context T T T
+  Fst : {T₁ T₂ T₃ T : FT/} → (C : Context T₁ T₃ T) → (P₂ : T₂ ⇿ T₃) → Context T₁ T₂ T
+  Snd : {T₁ T₂ T₃ T : FT/} → (P₁ : T₁ ⇿ T₂) → (C : Context T₁ T₃ T) → Context T₂ T₃ T
+  L× : {T₁ T₂ T₃ T₄ T : FT/} → (C : Context (T₁ ⊠ T₂) (T₃ ⊠ T₄) T) →
+       (P₂ : T₂ ⇿ T₄) → V T₂ → Context T₁ T₃ T
+  R× : {T₁ T₂ T₃ T₄ T : FT/} → (P₁ : T₁ ⇿ T₃) → V T₃ →
+       (C : Context (T₁ ⊠ T₂) (T₃ ⊠ T₄) T) → Context T₂ T₄ T
+  L+ : {T₁ T₂ T₃ T₄ T : FT/} → (C : Context (T₁ ⊞ T₂) (T₃ ⊞ T₄) T) → (P₂ : T₂ ⇿ T₄) → 
+       Context T₁ T₃ T
+  R+ : {T₁ T₂ T₃ T₄ T : FT/} → (P₁ : T₁ ⇿ T₃) → (C : Context (T₁ ⊞ T₂) (T₃ ⊞ T₄) T) → 
+       Context T₂ T₄ T
 
 data State : FT/ → Set where
-  Enter : {T₁ T₂ T : FT/} → (P : T₁ ⇿ T₂) → V T₁ → Context T₂ T → State T
-  Exit : {T₁ T₂ T : FT/} → (P : T₁ ⇿ T₂) → V T₂ → Context T₂ T → State T
+  Enter : {T₁ T₂ T : FT/} → (P : T₁ ⇿ T₂) → V T₁ → Context T₁ T₂ T → State T
+  Exit : {T₁ T₂ T : FT/} → (P : T₁ ⇿ T₂) → V T₂ → Context T₁ T₂ T → State T
 
 data Dir : Set where
   Fwd : Dir
@@ -340,15 +342,15 @@ data Dir : Set where
 
 -- Although, there is a trivial implementation of both that does
 -- type check (see below).  Might be interesting to figure out why
--- that is.
+-- that is:
+-- ap/ (η {τ} {p}) (v , av) = (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
+-- ap/ ε (v , av) = tt , refl
 
 postulate
   _⇔?_ : {τ : FT} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
 
 ap/ : {T : FT/} → State T → Dir × State T
 ap/ (Enter (lift p) (v , _) C) = Fwd , Exit (lift p) (ap p v , refl) C 
--- ap/ (η {τ} {p}) (v , av) = (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
--- ap/ ε (v , av) = tt , refl
 ap/ (Enter (η p) (tt , av) C) =
   Fwd , Exit (η p) ((((+ 1 , (p , id⇔)) , tt)) , (id⇔ , (+ 1 , (p , id⇔)))) C
 ap/ (Enter (ε p) (((i , (q , α)) , tt) , (β , (j , (r , γ)))) C) =
@@ -378,8 +380,8 @@ ap/ (Enter assocl⋆/ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C) 
   Fwd , Exit assocl⋆/ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C
 ap/ (Enter assocr⋆/ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C) =
   Fwd , Exit assocr⋆/ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C
-ap/ (Enter (absorbr/ {T}) ((v , _) , (av , _)) C) = Fwd , Exit (absorbr/ {T}) (v , av) C
-ap/ (Enter (absorbl/ {T}) ((_ , v) , (_ , av)) C) = Fwd , Exit (absorbl/ {T}) (v , av) C
+ap/ (Enter absorbr/ ((v , _) , (av , _)) C) = Fwd , Exit absorbr/ (v , av) C
+ap/ (Enter absorbl/ ((_ , v) , (_ , av)) C) = Fwd , Exit absorbl/ (v , av) C
 ap/ (Enter factorzr/ (() , _) C) 
 ap/ (Enter factorzl/ (() , _) C)
 ap/ (Enter dist/ ((inj₁ v₁ , v₃) , (av₁ , av₃)) C) =
@@ -400,21 +402,26 @@ ap/ (Enter factorl/ (inj₂ (v₃ , v₂) , av) C) =
   Fwd , Exit factorl/ ((v₃ , inj₂ v₂) , av) C
 ap/ (Enter id⇿ v C) = Fwd , Exit id⇿ v C
 ap/ (Enter (P₁ ◎/ P₂) v C) = Fwd , Enter P₁ v (Fst C P₂)
-ap/ (Enter {T₁ ⊞ T₃} (P₁ ⊕/ P₂) (inj₁ v₁ , av) C) = Fwd , Enter P₁ (v₁ , av) (L+ {T₁} C P₂)
-ap/ (Enter {T₁ ⊞ T₃} {T₂ ⊞ T₄} (P₁ ⊕/ P₂) (inj₂ v₂ , av) C) =
-  Fwd , Enter P₂ (v₂ , av) (R+ {T₁} {T₂} P₁ C)
-ap/ (Enter {T₁ ⊠ T₃} {T₂ ⊠ T₄} {T} (P₁ ⊗/ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
-  Fwd , Enter P₁ (v₁ , av₁) (L× {T₁} {T₃} {T₂} {T₄} {T} C P₂ (v₂ , av₂))
+ap/ (Enter (P₁ ⊕/ P₂) (inj₁ v₁ , av) C) = Fwd , Enter P₁ (v₁ , av) (L+ C P₂) 
+ap/ (Enter (P₁ ⊕/ P₂) (inj₂ v₂ , av) C) = Fwd , Enter P₂ (v₂ , av) (R+ P₁ C) 
+ap/ (Enter (P₁ ⊗/ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
+  Fwd , Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
 ap/ (Exit P v Empty) = Done , Exit P v Empty
 ap/ (Exit P₁ v (Fst C P₂)) = Fwd , Enter P₂ v (Snd P₁ C) 
-ap/ (Exit P₂ v₂ (Snd P₁ C)) = Fwd , Exit (P₁ ◎/ {!P₂!}) v₂ C 
-ap/ (Exit {T₁} {T₂} {T} P₁ v₁ (L× C P₂ v₂)) = Fwd , Enter P₂ v₂ (R× {T₁} {T₂} P₁ v₁ C) 
+ap/ (Exit P₂ v₂ (Snd P₁ C)) = Fwd , Exit (P₁ ◎/ P₂) v₂ C 
+ap/ (Exit P₁ v₁ (L× C P₂ v₂)) = Fwd , Enter P₂ v₂ (R× P₁ v₁ C) 
 ap/ (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
-  Fwd , Exit (P₁ ⊗/ P₂) {!((v₁ , v₂) , (av₁ , av₂))!} C 
+  Fwd , Exit (P₁ ⊗/ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
 ap/ (Exit P₁ (v₁ , av) (L+ C P₂)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₁ v₁ , av) C  
 ap/ (Exit P₂ (v₂ , av) (R+ P₁ C)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₂ v₂ , av) C 
 
 \end{code}
+
+%%%%%%%
+\subsection{Pragmatics}
+
+We have a way to generate programs at run time from eta: it would be
+nice to have a way to execute these programs. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
