@@ -187,6 +187,9 @@ open Universe.Universe UFT
 
 -- Operational semantics
 
+postulate
+  ap⁻¹ : {t₁ t₂ : FT} → (t₁ ⟷ t₂) → El t₂ → El t₁
+
 ap : {t₁ t₂ : FT} → (t₁ ⟷ t₂) → El t₁ → El t₂
 ap unite₊l (inj₁ ())
 ap unite₊l (inj₂ v) = v

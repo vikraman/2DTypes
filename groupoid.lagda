@@ -11,12 +11,27 @@ open import Data.Nat using (ℕ; suc)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
+open import Algebra using (CommutativeMonoid)
+open import Algebra.Structures using (IsCommutativeMonoid; IsSemigroup)
+import Data.Integer.Addition.Properties as Add
+open CommutativeMonoid Add.commutativeMonoid
+  using ()
+  renaming (isCommutativeMonoid to ℤ+-isCommutativeMonoid;
+            identityˡ to ℤ+-identityˡ)
+open IsCommutativeMonoid ℤ+-isCommutativeMonoid
+  using ()
+  renaming (isSemigroup to ℤ+-isSemigroup;
+            comm to ℤ+-comm)
+open IsSemigroup ℤ+-isSemigroup
+  using ()
+  renaming (assoc to ℤ+-assoc)
+
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
 open import Data.Product using (Σ; Σ-syntax; _,_; ∃; ,_; _×_)
 
 open import Relation.Binary.PropositionalEquality
-  using (_≡_; refl)
+  using (_≡_; refl; sym; trans)
 open import Universe using (Universe)
 
 open import Categories.Category using (Category)
