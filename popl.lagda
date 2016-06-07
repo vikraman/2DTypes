@@ -16,6 +16,7 @@
 \usepackage{stmaryrd}
 \usepackage{mathrsfs}
 \usepackage{mathabx}
+\usepackage{bussproofs}
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{quotes}
@@ -795,6 +796,10 @@ circuit terminates with the value $\textsf{id}$.
 \section{Conclusion}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Appendix, experimental
+\input{appendix.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \bibliographystyle{abbrvnat}
 \bibliography{cites}
 \end{document}
