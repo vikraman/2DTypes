@@ -92,16 +92,19 @@ groupoid.
 \begin{code}
 
 -- First each p is an Agda type
--- Perm p i is the type that contains the i^th iterate of p, i.e p^i
---  up to <=>.
+-- Perm p i is the type that contains the i^th iterate
+-- of p, i.e p^i up to <=>.
 -- the parens in the definition of ^ need to be there!
+
 _^_ : {τ : FT} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0) = id⟷
 p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ] = ! p
 p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
 
--- i.e. Perm is: for all i, any p' such that p' ⇔ p ^ i
+-- i.e. Perm is: for all i, any p' such that
+-- p' ⇔ p ^ i
+
 record Perm {τ : FT} (p : τ ⟷ τ) : Set where
   constructor perm
   field
@@ -109,13 +112,15 @@ record Perm {τ : FT} (p : τ ⟷ τ) : Set where
     p' : τ ⟷ τ
     p'⇔p^i : p' ⇔ p ^ iter
     
-cong^ : {τ : FT} → {p q : τ ⟷ τ} → (k : ℤ) → (eq : p ⇔ q) → p ^ k ⇔ q ^ k
+cong^ : {τ : FT} → {p q : τ ⟷ τ} → (k : ℤ) → (eq : p ⇔ q) →
+  p ^ k ⇔ q ^ k
 cong^ (+_ ℕ.zero) eq = id⇔
 cong^ (+_ (suc n)) eq = eq ⊡ cong^ (+ n) eq
 cong^ (-[1+_] ℕ.zero) eq = ⇔! eq
 cong^ (-[1+_] (suc n)) eq = (⇔! eq) ⊡ cong^ (-[1+ n ]) eq
 
 -- this should go into PiLevel1
+
 !!⇔id : {t₁ t₂ : FT} → (p : t₁ ⟷ t₂) → p ⇔ ! (! p)
 !!⇔id _⟷_.unite₊l = id⇔
 !!⇔id _⟷_.uniti₊l = id⇔
@@ -144,8 +149,10 @@ cong^ (-[1+_] (suc n)) eq = (⇔! eq) ⊡ cong^ (-[1+ n ]) eq
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
 
--- because ^ is iterated composition of the same thing, then by
--- associativity, we can hive off compositions from left or right
+-- because ^ is iterated composition of the same thing,
+-- then by associativity, we can hive off compositions
+-- from left or right
+
 assoc1 : {τ : FT} → {p : τ ⟷ τ} → (m : ℕ) →
   (p ◎ (p ^ (+ m))) ⇔ ((p ^ (+ m)) ◎ p)
 assoc1 ℕ.zero = trans⇔ idr◎l idl◎r
@@ -156,9 +163,10 @@ assoc1- : {τ : FT} → {p : τ ⟷ τ} → (m : ℕ) →
 assoc1- ℕ.zero = id⇔
 assoc1- (suc m) = trans⇔ (id⇔ ⊡ assoc1- m) assoc◎l
 
--- Property of ^: negating exponent is same as composing in the
--- other direction, then reversing.
-^⇔! : {τ : FT} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ- k)) ⇔ ! (p ^ k)
+-- Property of ^: negating exponent is same as
+-- composing in the other direction, then reversing.
+^⇔! : {τ : FT} → {p : τ ⟷ τ} → (k : ℤ) →
+  (p ^ (ℤ- k)) ⇔ ! (p ^ k)
 ^⇔! (+_ ℕ.zero) = id⇔
 -- need to dig deeper, as we end up negating
 ^⇔! (+_ (suc ℕ.zero)) = idl◎r
@@ -168,10 +176,12 @@ assoc1- (suc m) = trans⇔ (id⇔ ⊡ assoc1- m) assoc◎l
   trans⇔ (assoc1 (suc n)) ((^⇔! -[1+ n ]) ⊡ (!!⇔id p))
 
 -- first match on m, n, then proof is purely PiLevel1
-lower : {τ : FT} {p : τ ⟷ τ} (m n : ℤ) → p ^ (m ℤ+ n) ⇔ ((p ^ m) ◎ (p ^ n))
+lower : {τ : FT} {p : τ ⟷ τ} (m n : ℤ) →
+  p ^ (m ℤ+ n) ⇔ ((p ^ m) ◎ (p ^ n))
 lower (+_ ℕ.zero) (+_ n) = idl◎r
 lower (+_ ℕ.zero) (-[1+_] n) = idl◎r
-lower (+_ (suc m)) (+_ n) = trans⇔ (id⇔ ⊡ lower (+ m) (+ n)) assoc◎l
+lower (+_ (suc m)) (+_ n) =
+  trans⇔ (id⇔ ⊡ lower (+ m) (+ n)) assoc◎l
 lower {p = p} (+_ (suc m)) (-[1+_] ℕ.zero) = 
   trans⇔ idr◎r (trans⇔ (id⇔ ⊡ linv◎r) (
   trans⇔ assoc◎l (2! (assoc1 m) ⊡ id⇔)))  -- p ^ ((m + 1) -1)
@@ -192,36 +202,9 @@ lower (-[1+_] ℕ.zero) (-[1+_] n) = id⇔
 lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
   trans⇔ (id⇔ ⊡ lower (-[1+ m ]) (-[1+ n ])) assoc◎l
 
--- These are true, but no longer used
--- cancel-rinv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
---   ((p ^ i) ◎ ((! p) ^ i)) ⇔ id⟷
--- cancel-rinv (+_ ℕ.zero) = idl◎l
--- cancel-rinv (+_ (suc n)) = 
---   trans⇔ (assoc1 n ⊡ id⇔) (trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
---   (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
---   cancel-rinv (+ n))))))
--- cancel-rinv (-[1+_] ℕ.zero) = linv◎l
--- cancel-rinv (-[1+_] (suc n)) = 
---   trans⇔ (assoc1- n ⊡ id⇔) (
---   trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
---   (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
---   (cancel-rinv -[1+ n ])))))
-
--- cancel-linv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
---   (((! p) ^ i) ◎ (p ^ i)) ⇔ id⟷
--- cancel-linv (+_ ℕ.zero) = idr◎l
--- cancel-linv (+_ (suc n)) = trans⇔ (assoc1 n ⊡ id⇔) (
---    trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
---    trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
---    (cancel-linv (+ n))))))
--- cancel-linv (-[1+_] ℕ.zero) = rinv◎l
--- cancel-linv (-[1+_] (suc n)) = trans⇔ (assoc1- n ⊡ id⇔) (
---   trans⇔  assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
---   trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
---   cancel-linv -[1+ n ])))))
-
 
 -- orderC is the groupoid with objects p^i
+
 orderC : {τ : FT} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Perm p
@@ -246,7 +229,7 @@ orderG {τ} p = record {
       }
   }
 
--- τ // p
+-- discrete groupoids corresponding to plain pi types
 
 discreteC : Set → Category _ _ _
 discreteC S = record {
@@ -268,6 +251,8 @@ discreteG S = record
   ; iso = record { isoˡ = tt; isoʳ = tt }
   }
 
+-- fractional groupoid
+
 1/orderC : {τ : FT} (p : τ ⟷ τ) → Category _ _ _
 1/orderC {τ} pp = record {
      Obj = ⊤
@@ -282,6 +267,7 @@ discreteG S = record
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
     ; ∘-resp-≡ = _⊡_
     }
+
 1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
 1/orderG p = record {
       _⁻¹ = λ { (perm i q eq) →
@@ -296,6 +282,8 @@ discreteG S = record
 %% 
 %% quotientG : (τ : FT) → (p : τ ⟷ τ) → Groupoid (τ // p)
 %% quotientG = {!!} 
+
+So now we can finally define our denotations:
 
 \begin{code}
 ⟦_⟧/ : (T : FT/) → Universe.El UG T
@@ -340,6 +328,9 @@ be equivalent or even Morita equivalent but the converse is
 guaranteed. So it is necessary to have a separate notion of
 equivalence and check that whenever we have the same cardinality, the
 particular categories in question are equivalent. 
+
+Define action groupoids $\ag{\tau}{p}$ and show they are equivalent to
+uparrow tau times 1 over hash p
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -530,4 +521,32 @@ particular categories in question are equivalent.
 % this might mean something like: two types $T$ and $U$ are equivalent
 % if $T \leftrightarrow T$ is equivalent to $U \leftrightarrow U$ are
 % equivalent.
+
+% -- These are true, but no longer used
+% -- cancel-rinv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
+% --   ((p ^ i) ◎ ((! p) ^ i)) ⇔ id⟷
+% -- cancel-rinv (+_ ℕ.zero) = idl◎l
+% -- cancel-rinv (+_ (suc n)) = 
+% --   trans⇔ (assoc1 n ⊡ id⇔) (trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
+% --   (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
+% --   cancel-rinv (+ n))))))
+% -- cancel-rinv (-[1+_] ℕ.zero) = linv◎l
+% -- cancel-rinv (-[1+_] (suc n)) = 
+% --   trans⇔ (assoc1- n ⊡ id⇔) (
+% --   trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔)
+% --   (trans⇔ ((id⇔ ⊡ linv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
+% --   (cancel-rinv -[1+ n ])))))
+
+% -- cancel-linv : {τ : FT} → {p : τ ⟷ τ} → (i : ℤ) →
+% --   (((! p) ^ i) ◎ (p ^ i)) ⇔ id⟷
+% -- cancel-linv (+_ ℕ.zero) = idr◎l
+% -- cancel-linv (+_ (suc n)) = trans⇔ (assoc1 n ⊡ id⇔) (
+% --    trans⇔ assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
+% --    trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔)
+% --    (cancel-linv (+ n))))))
+% -- cancel-linv (-[1+_] ℕ.zero) = rinv◎l
+% -- cancel-linv (-[1+_] (suc n)) = trans⇔ (assoc1- n ⊡ id⇔) (
+% --   trans⇔  assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
+% --   trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
+% --   cancel-linv -[1+ n ])))))
 

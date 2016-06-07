@@ -60,61 +60,58 @@ $\order{p_1} \boxplus \order{p_2}$, we want the delooping to construct
 a space with cardinality $\frac{1}{\order{p_1}+\order{p_2}}$ but that
 has nothing to do with the individual deloopings.
 
-\begin{code}
+% -- data FT/ : Set where
+% --   ⇑   : FT → FT/    
+% --   #   : {τ : FT} → (p : τ ⟷ τ) → FT/ 
+% --   1/  : FT/ → FT/
+% --   _⊞_ : FT/ → FT/ → FT/              
+% --   _⊠_ : FT/ → FT/ → FT/              
 
--- data FT/ : Set where
---   ⇑   : FT → FT/    
---   #   : {τ : FT} → (p : τ ⟷ τ) → FT/ 
---   1/  : FT/ → FT/
---   _⊞_ : FT/ → FT/ → FT/              
---   _⊠_ : FT/ → FT/ → FT/              
+% -- ⟦_⟧/ : FT/ → ∃ Groupoid
+% -- ⟦ ⇑ S ⟧/ = , discreteG (El S) where open Universe.Universe UFT  
+% -- ⟦ # p ⟧/ = , orderG p
+% -- ⟦ 1/ (⇑ S) ⟧/ = , 1/orderG {S} {!!}
+% -- -- need cyclic permutation
+% -- ⟦ 1/ (# p) ⟧/ = , 1/orderG p
+% -- ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
+% -- ⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!}
+% -- -- extract p₁ from T₁
+% -- -- extract p₂ from T₂
+% -- ⟦ 1/ (T₁ ⊠ T₂) ⟧/ with ⟦ 1/ T₁ ⟧/ | ⟦ 1/ T₂ ⟧/
+% -- ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
+% -- ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
+% -- ... | (_ , G₁) | (_ , G₂) = , GSum G₁ G₂
+% -- ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
+% -- ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
 
--- ⟦_⟧/ : FT/ → ∃ Groupoid
--- ⟦ ⇑ S ⟧/ = , discreteG (El S) where open Universe.Universe UFT  
--- ⟦ # p ⟧/ = , orderG p
--- ⟦ 1/ (⇑ S) ⟧/ = , 1/orderG {S} {!!}
--- -- need cyclic permutation
--- ⟦ 1/ (# p) ⟧/ = , 1/orderG p
--- ⟦ 1/ (1/ T) ⟧/ = ⟦ T ⟧/
--- ⟦ 1/ (T₁ ⊞ T₂) ⟧/ = {!!}
--- -- extract p₁ from T₁
--- -- extract p₂ from T₂
--- ⟦ 1/ (T₁ ⊠ T₂) ⟧/ with ⟦ 1/ T₁ ⟧/ | ⟦ 1/ T₂ ⟧/
--- ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
--- ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
--- ... | (_ , G₁) | (_ , G₂) = , GSum G₁ G₂
--- ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
--- ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
+% -- extract underlying permutations from a type
 
--- extract underlying permutations from a type
+% -- data #P : Set where
+% --   #one : {τ : FT} → (p : τ ⟷ τ) → #P
+% --   _#+_ : #P → #P → #P
+% --   _#*_ : #P → #P → #P
 
--- data #P : Set where
---   #one : {τ : FT} → (p : τ ⟷ τ) → #P
---   _#+_ : #P → #P → #P
---   _#*_ : #P → #P → #P
+% -- data FT#/ : Set where
+% --   #⇑    : FT → FT#/
+% --   ##    : {τ : FT} → (p : τ ⟷ τ) → FT#/
+% --   #1/    : FT#/ → FT#/
+% --   _#⊞_  : FT#/ → FT#/ → FT#/
+% --   _#⊠_  : FT#/ → FT#/ → FT#/
 
--- data FT#/ : Set where
---   #⇑    : FT → FT#/
---   ##    : {τ : FT} → (p : τ ⟷ τ) → FT#/
---   #1/    : FT#/ → FT#/
---   _#⊞_  : FT#/ → FT#/ → FT#/
---   _#⊠_  : FT#/ → FT#/ → FT#/
+% -- extractP : FT#/ → #P
+% -- extractP (#⇑ τ) = #one {τ} id⟷
+% -- extractP (## p) = #one p
+% -- extractP (#1/ p) = {!!}
+% -- extractP (T₁ #⊞ T₂) = extractP T₁ #+ extractP T₂ 
+% -- extractP (T₁ #⊠ T₂) = extractP T₁ #* extractP T₂ 
 
--- extractP : FT#/ → #P
--- extractP (#⇑ τ) = #one {τ} id⟷
--- extractP (## p) = #one p
--- extractP (#1/ p) = {!!}
--- extractP (T₁ #⊞ T₂) = extractP T₁ #+ extractP T₂ 
--- extractP (T₁ #⊠ T₂) = extractP T₁ #* extractP T₂ 
+% -- #UG : Universe l0 (lsuc l0)
+% -- #UG = record {
+% --         U = FT#/
+% --       ; El = λ T → Σ[ ℂ ∈ Category l0 l0 l0 ] (Groupoid ℂ)
+% --       }
 
--- #UG : Universe l0 (lsuc l0)
--- #UG = record {
---         U = FT#/
---       ; El = λ T → Σ[ ℂ ∈ Category l0 l0 l0 ] (Groupoid ℂ)
---       }
-
--- ⟦_⟧#/ : (T : FT#/) → Universe.El #UG T
--- ⟦ T ⟧#/ = G (extractP T)
---   where G : #P → Σ[ ℂ ∈ Category l0 l0 l0 ] (Groupoid ℂ)
---         G = {!!} 
-\end{code}
+% -- ⟦_⟧#/ : (T : FT#/) → Universe.El #UG T
+% -- ⟦ T ⟧#/ = G (extractP T)
+% --   where G : #P → Σ[ ℂ ∈ Category l0 l0 l0 ] (Groupoid ℂ)
+% --         G = {!!} 

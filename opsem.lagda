@@ -40,6 +40,16 @@ Values of types FT/ are a pair of a point and automorphism on that
 point. Note that the values of $\order{p}$ are things that represent
 ``apply this program $i$ times''
 
+When we have a discrete category, the objects are values and we want a
+morphism from every value to itself so the morphisms are propositional
+equalities; when we have the category 1 over hash p, there is only a
+trivial object and the morphisms are combinators; when we have the
+category hash p, the objects are combinators and the morphisms are
+2-combinators. So we have a progression of objects: values, tt,
+combinators and a corresponding progression of morphisms: refl,
+combinators, and 2-combinators. And then we have sums and products of
+these things.
+
 \medskip
 
 \begin{code}
@@ -49,16 +59,6 @@ V T = let ℂ , _ = ⟦ T ⟧/
       in Σ[ v ∈ Obj ] (v ⇒ v)
 
 -- Examples:
-
--- When we have a discrete category, the objects are values and we
--- want a morphism from every value to itself so the morphisms are
--- propositional equalities; when we have the category 1/# p, there is
--- only a trivial object and the morphisms are combinators; when we
--- have the category #p, the objects are combinators and the morphisms
--- are 2-combinators. So we have a progression of objects: values, tt,
--- combinators and a corresponding progression of morphisms: refl,
--- combinators, and 2-combinators. And then we have sums and products
--- of these things.
 
 -- Abbreviations: 
 
@@ -110,8 +110,8 @@ v₇ = inj₂/ {T₁ = # NOT} {T₂ = ⇑ BOOL} v₁
 v₈ : V (# NOT ⊠ ⇑ BOOL)
 v₈ = [_,_] {T₁ = # NOT} {T₂ = ⇑ BOOL} v₂ v₁
 
-v₉ : V (# NOT ⊠ 1/# NOT)
-v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅ -- mismatched pair
+v₉ : V (# NOT ⊠ 1/# NOT) -- mismatched pair
+v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅ 
 
 \end{code}
 
@@ -153,13 +153,6 @@ data Dir : Set where
   Done : Dir
 
 -- stepForward 
-
--- Trivial implementation of eta/epsilon that does
--- type check (see below).  Might be interesting to figure out why
--- that is:
--- ap/ (η {τ} {p}) (v , av) =
---   (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
--- ap/ ε (v , av) = tt , refl
 
 postulate
   _⇔?_ : {τ : FT} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
@@ -336,4 +329,11 @@ We have a way to generate programs at run time from eta: it would be
 nice to have a way to execute these programs. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% -- Trivial implementation of eta/epsilon that does
+%% -- type check (see below).  Might be interesting to figure out why
+%% -- that is:
+%% -- ap/ (η {τ} {p}) (v , av) =
+%% --   (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
+%% -- ap/ ε (v , av) = tt , refl
 

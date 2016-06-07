@@ -20,6 +20,8 @@ open import Categories.Groupoid using () renaming (Product to GProduct)
 open import pibackground 
 open import groupoid 
 
+infix  30 _⇿_
+
 \end{code}
 }
 
@@ -38,11 +40,6 @@ limitations section), consistent.
 \medskip
 
 \begin{code}
--- do the trick of parametrizing the types so that we
--- don't have to repeat the constructors??
-
-infix  30 _⇿_
-
 data _⇿_ : FT/ → FT/ → Set where
   lift : {τ₁ τ₂ : FT} → (p : τ₁ ⟷ τ₂) → (⇑ τ₁ ⇿ ⇑ τ₂)
   η : {τ : FT} → (p : τ ⟷ τ) → ⇑ ONE ⇿ (# p ⊠ 1/# p)
