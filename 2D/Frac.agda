@@ -85,6 +85,21 @@ record Perm {τ : U} (p : τ ⟷ τ) : Set where
     p' : τ ⟷ τ
     p'⇔p^i : p' ⇔ p ^ iter
 
+orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
+orderC {τ} p = record {
+     Obj = Perm p
+   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ^ i ⇔ p₂ ^ j } 
+   ; _≡_ = λ _ _ → ⊤ 
+   ; id = id⇔ 
+   ; _∘_ = λ α β → trans⇔ β α
+   ; assoc = tt
+   ; identityˡ = tt
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
+   ; ∘-resp-≡ = λ _ _ → tt  
+   }
+   where open Perm
+   
 1/orderC : (τ : U) → (τ ⟷ τ) → Category _ _ _
 1/orderC τ pp = record { Obj = ⊤
                        ; _⇒_ = λ _ _ → Perm pp
@@ -126,6 +141,8 @@ record Perm {τ : U} (p : τ ⟷ τ) : Set where
 !!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
+!!⇔id (_⟷_.η p) = {!!}
+!!⇔id (_⟷_.ε p) = {!!}
 
 ^⇔! : {τ : U} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ.- k)) ⇔ ! (p ^ k)
 ^⇔! (+_ ℕ.zero) = id⇔
@@ -152,9 +169,22 @@ record Perm {τ : U} (p : τ ⟷ τ) : Set where
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
+⇔! ccc₁l = {!!}
+⇔! ccc₁r = {!!}
+⇔! ccc₂l = {!!}
+⇔! ccc₂r = {!!}
 
-1/orderG : (τ : U) → (p : τ ⟷ τ) → Groupoid (1/orderC τ p)
-1/orderG τ p = record { _⁻¹ = λ { (perm i q eq) →
+orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (orderC p)
+orderG {τ} p = record {
+    _⁻¹ = 2!
+  ; iso = record {
+        isoˡ = tt
+      ; isoʳ = tt
+      }
+  }
+
+1/orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (1/orderC τ p)
+1/orderG {τ} p = record { _⁻¹ = λ { (perm i q eq) →
                         perm (ℤ.- i) (! q) (trans⇔ (⇔! eq) (2! (^⇔! {p = p} i)))}
                       ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
                       }
@@ -166,7 +196,8 @@ record Perm {τ : U} (p : τ ⟷ τ) : Set where
 ... | (_ , G₁) | (_ , G₂) = _ , Sum G₁ G₂
 ⟦ t₁ ⊗ t₂ ⟧ with ⟦ t₁ ⟧ | ⟦ t₂ ⟧
 ... | (_ , G₁) | (_ , G₂) = _ , Product G₁ G₂
-⟦ t ⊘ p ⟧ = _ , 1/orderG t p
+⟦ # p ⟧ = _ , orderG p
+⟦ 1/# p ⟧ = _ , 1/orderG p
 
 open import Rational+ as ℚ
 open import 2D.Order
@@ -179,5 +210,7 @@ open import 2D.Order
 ∣ 𝟙 ∣ = + 1 ÷ 1
 ∣ t₁ ⊕ t₂ ∣ = ∣ t₁ ∣ ℚ.+ ∣ t₂ ∣
 ∣ t₁ ⊗ t₂ ∣ = ∣ t₁ ∣ ℚ.* ∣ t₂ ∣
-∣ t ⊘ p ∣ with order p
+∣ # p ∣ with order p
+... | ord n n≥1 = mkRational n 1
+∣ 1/# p ∣ with order p
 ... | ord n n≥1 = 1÷_ n {n≥1}

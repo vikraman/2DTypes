@@ -2,10 +2,12 @@ module 2D.Types where
 
 infix 50 _⊕_
 infix 60 _⊗_
-infix 70 _⊘_
 infix  30 _⟷_
 infix  30 _⇔_
 infixr 50 _◎_
+
+-- The treatment of η and ε follows
+-- https://en.wikipedia.org/wiki/Compact_closed_category
 
 mutual
   data U : Set where
@@ -13,7 +15,8 @@ mutual
     𝟙 : U
     _⊕_ : U → U → U
     _⊗_ : U → U → U
-    _⊘_ : (τ : U) → (τ ⟷ τ) → U
+    # : {τ : U} → (τ ⟷ τ) → U
+    1/# : {τ : U} → (τ ⟷ τ) → U
 
   data _⟷_ : U → U → Set where
     unite₊l :  {t : U} → 𝟘 ⊕ t ⟷ t
@@ -42,6 +45,8 @@ mutual
     _◎_ :  {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
     _⊕_ :  {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
     _⊗_ :  {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
+    η : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ (1/# p ⊗ # p)
+    ε : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! unite₊l   = uniti₊l
@@ -70,6 +75,8 @@ mutual
 ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
+! (η p)     = swap⋆ ◎ ε p
+! (ε p)     = η p ◎ swap⋆
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -100,6 +107,15 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
+  -- coherence for compact closed categories
+  ccc₁l : {t : U} {p : t ⟷ t} →
+         uniti⋆r ◎ (id⟷ ⊗ η p) ◎ assocl⋆ ◎ (ε p ⊗ id⟷) ◎ unite⋆l ⇔ id⟷
+  ccc₁r : {t : U} {p : t ⟷ t} →
+         id⟷ ⇔ uniti⋆r ◎ (id⟷ ⊗ η p) ◎ assocl⋆ ◎ (ε p ⊗ id⟷) ◎ unite⋆l 
+  ccc₂l : {t : U} {p : t ⟷ t} →
+         uniti⋆l ◎ (η p ⊗ id⟷) ◎ assocr⋆ ◎ (id⟷ ⊗ ε p) ◎ unite⋆r ⇔ id⟷
+  ccc₂r : {t : U} {p : t ⟷ t} →
+         id⟷ ⇔ uniti⋆l ◎ (η p ⊗ id⟷) ◎ assocr⋆ ◎ (id⟷ ⊗ ε p) ◎ unite⋆r 
 
 2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! assoc◎l = assoc◎r
@@ -117,6 +133,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
+2! ccc₁l = ccc₁r
+2! ccc₁r = ccc₁l
+2! ccc₂l = ccc₂r
+2! ccc₂r = ccc₂l
 
 open import Data.Product
 
