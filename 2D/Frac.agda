@@ -141,8 +141,8 @@ orderC {τ} p = record {
 !!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
-!!⇔id (_⟷_.η p) = {!!}
-!!⇔id (_⟷_.ε p) = {!!}
+!!⇔id (_⟷_.η p) = trans⇔ idr◎r (trans⇔ (id⇔ ⊡ rinv◎r {c = swap⋆}) assoc◎l)
+!!⇔id (_⟷_.ε p) = trans⇔ idl◎r (trans⇔ (rinv◎r ⊡ id⇔) assoc◎r)
 
 ^⇔! : {τ : U} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ.- k)) ⇔ ! (p ^ k)
 ^⇔! (+_ ℕ.zero) = id⇔
@@ -169,7 +169,7 @@ orderC {τ} p = record {
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
-⇔! ccc₁l = {!!}
+⇔! ccc₁l = {!ccc₂l!}
 ⇔! ccc₁r = {!!}
 ⇔! ccc₂l = {!!}
 ⇔! ccc₂r = {!!}
