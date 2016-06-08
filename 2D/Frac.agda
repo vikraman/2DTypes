@@ -88,7 +88,7 @@ record Perm {τ : U} (p : τ ⟷ τ) : Set where
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Perm p
-   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ^ i ⇔ p₂ ^ j } 
+   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ⇔ p₂ } 
    ; _≡_ = λ _ _ → ⊤ 
    ; id = id⇔ 
    ; _∘_ = λ α β → trans⇔ β α

@@ -11,20 +11,6 @@ open import Data.Nat using (ℕ; suc)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
-open import Algebra using (CommutativeMonoid)
-open import Algebra.Structures using (IsCommutativeMonoid; IsSemigroup)
-import Data.Integer.Addition.Properties as Add
-open CommutativeMonoid Add.commutativeMonoid
-  using ()
-  renaming (isCommutativeMonoid to ℤ+-isCommutativeMonoid;
-            identityˡ to ℤ+-identityˡ)
-open IsCommutativeMonoid ℤ+-isCommutativeMonoid
-  using ()
-  renaming (isSemigroup to ℤ+-isSemigroup;
-            comm to ℤ+-comm)
-open IsSemigroup ℤ+-isSemigroup
-  using ()
-  renaming (assoc to ℤ+-assoc)
 
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
@@ -208,7 +194,7 @@ lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
 orderC : {τ : FT} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Perm p
-   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ^ i ⇔ p₂ ^ j } 
+   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ⇔ p₂ } 
    ; _≡_ = λ _ _ → ⊤ 
    ; id = id⇔ 
    ; _∘_ = λ α β → trans⇔ β α
