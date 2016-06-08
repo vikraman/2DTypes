@@ -33,6 +33,8 @@ open import pifrac
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Operational Semantics} 
 
+\amr{This section does not change much in style but needs to be adapted to the new definitions}
+
 %%%%%%%
 \subsection{Values}
 

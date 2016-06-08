@@ -28,6 +28,9 @@ infix  30 _⇿_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
 
+\amr{This now becomes a critical section, where we introduce the
+syntax of the language, probably in Agda}
+
 combinators between FT/ types including eta and epsilon
 
 proof that combinators are information preserving

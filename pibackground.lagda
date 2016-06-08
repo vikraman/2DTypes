@@ -31,6 +31,10 @@ infixr 50 _◎_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}
  
+\amr{Given that everything is mutually recursive, I suggest this
+section to be presented in the mathematical metlanguage, not in
+Agda. So let's remove all Agda code and explain the ideas.}
+
 %%%%%
 \subsection{$\Pi$ Syntax} 
 

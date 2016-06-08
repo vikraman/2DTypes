@@ -795,6 +795,10 @@ circuit terminates with the value $\textsf{id}$.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
+Need to look again at the 2D type theory papers by Harper et al. One
+might argue that we have a clean presentation of these ideas. If it is
+really clear that idea can also be moved to the introduction.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Appendix, experimental
 \input{appendix.tex}

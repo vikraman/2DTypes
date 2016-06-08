@@ -43,6 +43,8 @@ infix 40 _^_
 \section{Groupoids}
 \label{sec:groupoids}
 
+\amr{This section can focus on the categorical constructions. We can also do this without any Agda.} 
+
 %%%%%
 \subsection{A Universe of Groupoids} 
 
