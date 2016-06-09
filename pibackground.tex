@@ -1,11 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Background}
+\section{Programming with Equivalences} 
 
-The main syntactic vehicle for the technical developments in this paper is a
-simple language called $\Pi$ whose only computations are isomorphisms between
-finite types~\cite{James:2012:IE:2103656.2103667}. After reviewing the
-motivation for this language and its relevance to HoTT, we present its syntax
-and semantics.
+The main syntactic vehicle for the technical developments in this
+paper is the language $\Pi$ whose only computations are isomorphisms
+between finite types and equivalences between these
+isomorphisms~\cite{James:2012:IE:2103656.2103667,Carette2016}. We
+present the syntax and operational and denotational semantics of
+the parts of the language relevant to our development.
 
 \begin{figure*}[ht]
 \[\begin{array}{cc}
@@ -59,12 +60,22 @@ and semantics.
 \end{array}\]
 Each 1-combinator $c$ has an inverse $!~c$, e.g, $!~\unitepl=\unitipl$,
 $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
-\caption{$\Pi$-combinators~\cite{James:2012:IE:2103656.2103667}
+\caption{$\Pi$ 1-combinators~\cite{James:2012:IE:2103656.2103667}
 \label{pi-combinators}}
 \end{figure*}
 
 \begin{figure*}[ht]
 \[\begin{array}{c}
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\idisotwo : c \isotwo c}}
+{}
+~
+\Rule{}
+{c_1,c_2,c_3 : \tau_1 \iso \tau_2 \quad \alpha_1 : c_1 \isotwo c_2 \quad \alpha_2 : c_2 \isotwo c_3}
+{\jdg{}{}{\transtwo ~\alpha_1 ~\alpha_2 : c_1 \isotwo c_3}}
+{}
+~
 \Rule{}
 {c_1 : \tau_1 \iso \tau_2 \quad c_2 : \tau_2 \iso \tau_3 \quad c_3 : \tau_3 \iso \tau_4}
 {\jdg{}{}{\assocdl : c_1 \odot (c_2 \odot c_3) \isotwo (c_1 \odot c_2) \odot c_3 : \assocdr}}
@@ -75,18 +86,17 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 {c : \tau_1 \iso \tau_2}
 {\jdg{}{}{\idldl : \idiso \odot c \isotwo c : \idldr}}
 {}
-\quad
+~
 \Rule{}
 {c : \tau_1 \iso \tau_2}
 {\jdg{}{}{\idrdl : c \odot \idiso \isotwo c : \idrdr}}
 {}
-\\
-\\
+~
 \Rule{}
 {c : \tau_1 \iso \tau_2}
 {\jdg{}{}{\rinvdl : ~! c \odot c \isotwo \idiso : \rinvdr}}
 {}
-\quad
+~
 \Rule{}
 {c : \tau_1 \iso \tau_2}
 {\jdg{}{}{\linvdl : c ~\odot ~! c \isotwo \idiso : \linvdr}}
@@ -94,20 +104,9 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 \\
 \\
 \Rule{}
-{c : \tau_1 \iso \tau_2}
-{\jdg{}{}{\idisotwo : c \isotwo c}}
-{}
-\quad
-\Rule{}
-{c_1,c_2,c_3 : \tau_1 \iso \tau_2 \quad \alpha_1 : c_1 \isotwo c_2 \quad \alpha_2 : c_2 \isotwo c_3}
-{\jdg{}{}{\transtwo ~\alpha_1 ~\alpha_2 : c_1 \isotwo c_3}}
-{}
-\\
-\\
-\Rule{}
 {c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
   \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
-{\jdg{}{}{\alpha_1 \respstwo \alpha_2 : c_1 \odot c_2 \isotwo c_3 \odot c_4}}
+{\jdg{}{}{\alpha_1 ~\respstwo~ \alpha_2 : c_1 \odot c_2 \isotwo c_3 \odot c_4}}
 {}
 \\
 \\
@@ -116,8 +115,7 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
   \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
 {\jdg{}{}{\respptwo ~\alpha_1 ~\alpha_2 : c_1 \oplus c_2 \isotwo c_3 \oplus c_4}}
 {}
-\\
-\\
+~
 \Rule{}
 {c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
   \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
@@ -128,7 +126,7 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 Each 2-combinator $\alpha$ has an inverse $2!~\alpha$, e.g, $2!~\assocdl=\assocdr$,
 $2!(\transtwo~\alpha_1~\alpha_2) = \transtwo~(2!~\alpha_2)~(2!~\alpha_1)$, etc. 
 
-\caption{$\Pi$-combinators~\cite{James:2012:IE:2103656.2103667}
+\caption{$\Pi$ 2-combinators (excerpt)~\cite{Carette2016}
 \label{pi-combinators2}}
 \end{figure*}
 
@@ -183,39 +181,21 @@ $2!(\transtwo~\alpha_1~\alpha_2) = \transtwo~(2!~\alpha_2)~(2!~\alpha_1)$, etc.
   (\evalone{c_1}v_1, \evalone{c_2}v_2) 
 \end{array}\]
 \end{multicols}
-\caption{\label{opsem}Operational Semantics}
+\caption{\label{opsem}$\Pi$ operational semantics}
 \end{figure*}
-
-%%%%%%%%%%%%%%%%%%%%%
-\subsection{Reversibility} 
-
-The relevance of reversibility to HoTT is based on the following
-analysis. The conventional HoTT approach starts with two, a priori, different
-notions: functions and paths, and then postulates an equivalence between a
-particular class of functions and paths. As illustrated above, some functions
-like \AgdaFunction{not} correspond to paths. Most functions, however, are
-evidently unrelated to paths. In particular, any function of type
-\AgdaBound{A}~\AgdaSymbol{→}~\AgdaBound{B} that does not have an inverse of
-type \AgdaBound{B}~\AgdaSymbol{→}~\AgdaBound{A} cannot have any direct
-correspondence to paths as all paths have inverses. An interesting question
-then poses itself: since reversible computational models --- in which all
-functions have inverses --- are known to be universal computational models,
-what would happen if we considered a variant of HoTT based exclusively on
-reversible functions?  Presumably in such a variant, all functions --- being
-reversible --- would potentially correspond to paths and the distinction
-between the two notions would vanish making the univalence postulate
-unnecessary. This is the precise technical idea we investigate in detail in
-the remainder of the paper.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Syntax of $\Pi$}
 \label{opsempi}
 
-The $\Pi$ family of languages is based on type isomorphisms. In the variant
-we consider, the set of types $\tau$ includes the empty type $\zt$, the unit type
-$\ot$, and conventional sum and product types. The values classified by these
-types are the conventional ones: $\unitv$ of type $\ot$, $\inl{v}$ and $\inr{v}$ for
-injections into sum types, and $(v_1,v_2)$ for product types:
+The $\Pi$ family of languages is based on type isomorphisms. In the
+variant we consider, the set of types $\tau$ includes the empty
+type~$\zt$, the unit type $\ot$, and sum $\oplus$ and product
+$\otimes$ types. The values classified by these types are the
+conventional ones: $\unitv$ of type~$\ot$, $\inl{v}$ and $\inr{v}$ for
+injections into sum types, and $(v_1,v_2)$ for product types. The
+language has two other syntactic categories of programs to be
+described in detail:
 \[\begin{array}{lrcl}
 (\textrm{Types}) & 
   \tau &::=& \zt \alt \ot \alt \tau_1 \oplus \tau_2 \alt \tau_1 \otimes \tau_2 \\
@@ -227,26 +207,45 @@ injections into sum types, and $(v_1,v_2)$ for product types:
   \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2 \\
   & && [\textit{see Fig.~\ref{pi-combinators2}}]
 \end{array}\]
-The interesting syntactic category of $\Pi$ is that of \emph{combinators}
-which are witnesses for type isomorphisms $\tau_1 \iso \tau_2$. They consist
-of base combinators (on the left side of Fig.~\ref{pi-combinators}) and
-compositions (on the right side of the same figure). Each line of the figure
-on the left introduces a pair of dual constants\footnote{where $\swapp$ and
-$\swapt$ are self-dual.} that witness the type isomorphism in the
-middle. This set of isomorphisms is known to be
-complete~\cite{Fiore:2004,fiore-remarks} and the language is universal for
-hardware combinational
-circuits~\cite{James:2012:IE:2103656.2103667}.\footnote{If recursive types
-and a trace operator are added, the language becomes Turing
-complete~\cite{James:2012:IE:2103656.2103667,rc2011}. We will not be
-concerned with this extension in the main body of this paper but it will be
-briefly discussed in the conclusion.}
 
-For $c_1, c_2 : \tau_1\iso\tau_2$, we have level-2 combinators $\alpha
-: c_1 \isotwo c_2$ which are equivalences of isomorphisms, and which
-happen to correspond to the coherence conditions for rig
-groupoids. Many of the level 2 combinators not used. We only present
-the ones we use in this paper.
+Both classes of programs, 1-combinators $c$ and
+2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT
+sense. The elements $c$ of 1-combinators denote type isomorphisms. The
+elements $\alpha$ of 2-combinators denote equivalences between these
+type isomorphisms. Using the 1-combinators, it is possible to write
+any reversible boolean function and hence encode arbitrary boolean
+functions by a technique that goes back to \citet{Toffoli:1980}. The
+2-combinators provide a layer of programs that computes semantic
+preserving transformations of 1-combinators. As a small example, let
+us abbreviate $\ot \oplus \ot$ as $\mathsf{Bool}$ and examine two
+possible implementations of boolean negation. The first directly uses
+the primitive combinator
+$\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to swap the
+two values of type $\mathsf{Bool}$; the second use three consecutive
+copies of $\swapp$ to achieve the same effect:
+\[\begin{array}{rcl}
+\mathsf{not_1} &=& \swapp \\
+\mathsf{not_2} &=& (\swapp \odot \swapp) \odot \swapp 
+\end{array}\]
+We can write a 2-combinator whose \emph{type} is $\mathsf{not_2}
+\isotwo \mathsf{not_1}$:
+\[
+\transtwo~(\idldl ~\respstwo~ \idisotwo)~\idldl
+\]
+which not only shows the equivalence of the two implementations of
+negation but also shows \emph{how} to transform one to the other.
+
+Fig.~\ref{pi-combinators} lists all the 1-combinators which consist of
+base combinators (on the left) and compositions (on the right). Each
+line of the base combinators introduces a pair of dual
+constants\footnote{where $\swapp$ and $\swapt$ are self-dual.} that
+witness the type isomorphism in the middle. This set of isomorphisms
+is known to be sound and
+complete~\cite{Fiore:2004,fiore-remarks}. Fig.~\ref{pi-combinators2}
+lists a few of the 2-combinators that we use in this paper. Each
+2-combinator relates two 1-combinators of the same type and witnesses
+their equivalence. The 2-equivalences behave as expected with respect
+to inverses of 1-combinators as shown below. 
 
 \begin{proposition}
 For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
@@ -262,18 +261,14 @@ $!c_1 \isotwo ~!c_2$.
 
 We give an operational semantics for $\Pi$.  Operationally, the
 semantics consists of a pair of mutually recursive evaluators that
-take a combinator and a value and propagate the value in the
-``forward'' $\triangleright$ direction or in the
-``backwards''~$\triangleleft$ direction. We show the complete forward
-evaluator in Fig.~\ref{opsem}; the backwards evaluator differs in
-trivial ways.
+take a combinator and a value and propagate the value in the forward
+direction~$\triangleright$ or in the backward
+direction~$\triangleleft$. We show the complete forward evaluator in
+Fig.~\ref{opsem}; the backward evaluator is easy to infer.
 
-Every 1-combinator has an \emph{order} $n$: applying this combinator $n$ times is equivalent to the identity
-
-A couple of examples: compute order
-
-The type $(\ot \oplus \ot) \oplus \ot$ has cardinality 3 and hence has
-6 automorphisms on it:
+As an example, let $\mathbb{3}$ abbreviate the type
+$(\ot \oplus \ot) \oplus \ot$ and consider the following six
+combinators of type $\mathbb{3} \iso \mathbb{3}$:
 
 \[\begin{array}{rcl}
 a_1 &=& \idiso \\
@@ -283,6 +278,28 @@ a_4 &=& a_2 \odot a_3 \\
 a_5 &=& a_3 \odot a_2 \\
 a_6 &=& a_4 \odot a_2
 \end{array}\]
+
+There are three values of type $\mathbb{3}$ which are
+$\inl{\inl{\unitv}}$, $\inl{\inr{\unitv}}$, and
+$\inr{\unitv}$. Evaluting $a_2$ on each of these values, we get:
+\[\begin{array}{rcl}
+\evalone{(\swapp\oplus\idiso)}{\inl{\inl{\unitv}}} &=& \inl{\evalone{\swapp}{\inl{\unitv}}} \\
+&=& \inl{\inr{\unitv}} \\
+\\
+\evalone{(\swapp\oplus\idiso)}{\inl{\inr{\unitv}}} &=& \inl{\evalone{\swapp}{\inr{\unitv}}} \\
+&=& \inl{\inl{\unitv}} \\
+\\
+\evalone{(\swapp\oplus\idiso)}{\inr{\unitv}} &=& \inr{\evalone{\idiso}{\unitv}} \\
+&=& \inr{\unitv}
+\end{array}\]
+
+
+Every 1-combinator has an \emph{order} $n$: applying this combinator
+$n$ times is equivalent to the identityA couple of examples: compute order
+The type $(\ot \oplus \ot) \oplus \ot$ has cardinality 3 and hence has
+6 automorphisms on it:
+
+
 
 The combinators realize all the 3! permutations on the set of
 cardinality 3. The permutation $a_1$ is the identity permutation; the
@@ -301,7 +318,13 @@ orbits.
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Groupoid Model} 
 
-From the perspective of category theory, the language $\Pi$ models what is
+For $c_1, c_2 : \tau_1\iso\tau_2$, we have level-2 combinators $\alpha
+: c_1 \isotwo c_2$ which are equivalences of isomorphisms, and which
+happen to correspond to the coherence conditions for rig
+groupoids. Many of the level 2 combinators not used. We only present
+the ones we use in this paper.
+
+ From the perspective of category theory, the language $\Pi$ models what is
 called a \emph{symmetric bimonoidal category} or a \emph{commutative rig
 category}. These are categories with two binary operations and satisfying the
 axioms of a commutative rig (i.e., a commutative ring without negative

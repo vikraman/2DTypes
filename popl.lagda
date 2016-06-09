@@ -52,7 +52,7 @@ $\displaystyle
 {\begin{array}{l}#3\\\end{array}}$
  #4}}
 \newcommand{\proves}{\vdash}
-\newcommand{\jdg}[3]{#2 \proves_{#1} #3}
+\newcommand{\jdg}[3]{{#1} #3}
 \newcommand{\evalone}[2]{#1~\triangleright~#2}
 \newcommand{\evaloneb}[2]{#1~\triangleleft~#2}
 \newcommand{\unitv}{\bullet}
@@ -96,7 +96,7 @@ $\displaystyle
 \newcommand{\respptwo}{\mathsf{{resp_{\oplus\Leftrightarrow}}}}
 \newcommand{\respttwo}{\mathsf{{resp_{\otimes\Leftrightarrow}}}}
 
-\theoremstyle{remark}
+%% \theoremstyle{remark}
 \newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition}
 \newtheorem{example}{Example}
