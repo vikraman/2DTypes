@@ -838,13 +838,13 @@ circuit terminates with the value $\textsf{id}$.
 %% Sec 3 
 \input{pibackground.tex} 
 %% Sec 4 
-\input{groupoid.tex}
+%% \input{groupoid.tex}
 %% Sec 5 A new language with fractional types and its denotational semantics (mostly reference to sec 4)
-\input{pifrac.tex}
+%% \input{pifrac.tex}
 %% Sec 6 its operational semantics + pragramatics
-\input{opsem.tex}
+%% \input{opsem.tex}
 %% Sec 7 limitations; open problems
-\input{limitations.tex} 
+%% \input{limitations.tex} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
@@ -854,12 +854,13 @@ might argue that we have a clean presentation of these ideas. If it is
 really clear that idea can also be moved to the introduction.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Appendix, experimental
-\input{appendix.tex}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \bibliographystyle{abbrvnat}
 \bibliography{cites}
+
+%% Appendix, experimental
+\input{appendix.tex}
+
 \end{document}
 
 %% This type is again informally-equivalent to $\ag{C}{p}$ as it has the

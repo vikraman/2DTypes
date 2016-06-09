@@ -1,54 +1,48 @@
-\AgdaHide{
-\begin{code}
-{-# OPTIONS --without-K #-}
-
-module groupoid where
-
-open import Level using () renaming (zero to l0; suc to lsuc)
-
-open import Data.Unit using (⊤; tt)
-open import Data.Nat using (ℕ; suc)
-open import Data.Integer
-  using (ℤ; +_; -[1+_])
-  renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
-
-open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
-  hiding (_≤_; _≤?_)
-open import Data.Product using (Σ; Σ-syntax; _,_; ∃; ,_; _×_)
-
-open import Relation.Binary.PropositionalEquality
-  using (_≡_; refl; sym; trans)
-open import Universe using (Universe)
-
-open import Categories.Category using (Category)
-open import Categories.Product using (Product)
-open import Categories.Groupoid using (Groupoid)
-open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
-open import Categories.Groupoid using () renaming (Product to GProduct)
--- open import Categories.Monad using (Monad)
--- open import Comonad using (Comonad)
-
-open import pibackground using (FT; UFT; ∣_∣; order; order-nz; 
-  _⟷_; !; id⟷; _◎_;
-  _⇔_; 2!; id⇔; trans⇔; assoc◎l; assoc◎r; _⊡_;
-  idl◎r; idl◎l; idr◎l; idr◎r;
-  ⇔!; resp⊕⇔; resp⊗⇔; linv◎r; linv◎l; rinv◎l; rinv◎r)
-
-infix 40 _^_ 
-
-\end{code}
-}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Groupoids}
 \label{sec:groupoids}
-
-\amr{This section can focus on the categorical constructions. We can also do this without any Agda.} 
 
 %%%%%
 \subsection{A Universe of Groupoids} 
 
 \begin{code}
+-- Conjecture:  p ⇔ q   implies  order p = order q
+-- Corollary:   p ⇔ !q  implies  order p = order (! q)
+
+-- The opposite is not true.
+
+-- Example
+-- p = (1 2 3 4)
+
+-- compose p 0 = compose !p 0 = compose p 4 = compose !p 4
+-- 1 -> 1
+-- 2 -> 2
+-- 3 -> 3
+-- 4 -> 4
+
+-- compose p 1  ***     compose !p 1
+-- 1 -> 2       ***     1 -> 4
+-- 2 -> 3       ***     2 -> 1
+-- 3 -> 4       ***     3 -> 2
+-- 4 -> 1       ***     4 -> 3
+
+-- compose p 2  ***     compose !p 2
+-- 1 -> 3       ***     1 -> 3
+-- 2 -> 4       ***     2 -> 4
+-- 3 -> 1       ***     3 -> 1
+-- 4 -> 2       ***     4 -> 2
+
+-- compose p 3  ***     compose !p 3
+-- 1 -> 4       ***     1 -> 2
+-- 2 -> 1       ***     2 -> 3
+-- 3 -> 2       ***     3 -> 4
+-- 4 -> 3       ***     4 -> 1
+
+-- there is a morphism 1 -> 2 using
+-- (compose p 1) and (compose !p 3)
+-- p¹ is the same as !p³
+-- p² is the same as !p²
+-- p³ is the same as !p¹
+
 data FT/ : Set where
   ⇑    : FT → FT/
   #    : {τ : FT} → (p : τ ⟷ τ) → FT/ 
