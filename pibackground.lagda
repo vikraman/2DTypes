@@ -15,11 +15,13 @@ and semantics.
 \swapp :&  \tau_1 \oplus \tau_2 & \iso & \tau_2 \oplus \tau_1 &: \swapp \\
 \assoclp :&  \tau_1 \oplus (\tau_2 \oplus \tau_3) & \iso & (\tau_1 \oplus \tau_2) \oplus \tau_3 
   &: \assocrp \\
+\\
 \unitetl :&  \ot \otimes \tau & \iso & \tau &: \unititl \\
 \unitetr :&  \tau \otimes \ot & \iso & \tau &: \unititr \\
 \swapt :&  \tau_1 \otimes \tau_2 & \iso & \tau_2 \otimes \tau_1 &: \swapt \\
 \assoclt :&  \tau_1 \otimes (\tau_2 \otimes \tau_3) & \iso & (\tau_1 \otimes \tau_2) \otimes \tau_3 
   &: \assocrt \\
+\\
 \absorbr :&~ \zt \otimes \tau & \iso & \zt &: \factorzl \\
 \absorbl :&~ \tau \otimes \zt & \iso & \zt &: \factorzr \\
 \dist :&~ (\tau_1 \oplus \tau_2) \otimes \tau_3 & 
@@ -28,32 +30,48 @@ and semantics.
   \iso & (\tau_1 \otimes \tau_2) \oplus (\tau_1 \otimes \tau_3)~ &: \factorl 
 \end{array}
 & 
-\begin{minipage}{0.5\textwidth}
-\begin{center} 
+\begin{minipage}{0.4\textwidth}
+\[\begin{array}{c}
 \Rule{}
 {}
 {\jdg{}{}{\idiso : \tau \iso \tau}}
 {}
-~
+\\
+\\
 \Rule{}
 {\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_2 \iso \tau_3}
 {\jdg{}{}{c_1 \odot c_2 : \tau_1 \iso \tau_3}}
 {}
-\qquad
+\\
+\\
 \Rule{}
 {\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
 {\jdg{}{}{c_1 \oplus c_2 : \tau_1 \oplus \tau_3 \iso \tau_2 \oplus \tau_4}}
 {}
-\qquad
+\\
+\\
 \Rule{}
 {\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
 {\jdg{}{}{c_1 \otimes c_2 : \tau_1 \otimes \tau_3 \iso \tau_2 \otimes \tau_4}}
 {}
-\end{center}
+\end{array}\]
 \end{minipage}
 \end{array}\]
 \caption{$\Pi$-combinators~\cite{James:2012:IE:2103656.2103667}
 \label{pi-combinators}}
+\end{figure*}
+
+\begin{figure*}[ht]
+\[\begin{array}{c}
+\Rule{}
+{c_1 : \tau_1 \iso \tau_2 \quad c_2 : \tau_2 \iso \tau_3 \quad c_3 : \tau_3 \iso \tau_4}
+{\jdg{}{}{\assocdl : c_1 \odot (c_2 \odot c_3) \isotwo (c_1 \odot c_2) \odot c_3 : \assocdr}}
+{}
+\\
+\\
+\end{array}\]
+\caption{$\Pi$-combinators~\cite{James:2012:IE:2103656.2103667}
+\label{pi-combinators2}}
 \end{figure*}
 
 %%%%%%%%%%%%%%%%%%%%%
@@ -78,22 +96,25 @@ unnecessary. This is the precise technical idea we investigate in detail in
 the remainder of the paper.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Syntax and Semantics of $\Pi$}
+\subsection{Syntax and Operational Semantics of $\Pi$}
 \label{opsempi}
 
 The $\Pi$ family of languages is based on type isomorphisms. In the variant
 we consider, the set of types $\tau$ includes the empty type $\zt$, the unit type
 $\ot$, and conventional sum and product types. The values classified by these
-types are the conventional ones: $()$ of type $\ot$, $\inl{v}$ and $\inr{v}$ for
+types are the conventional ones: $\unitv$ of type $\ot$, $\inl{v}$ and $\inr{v}$ for
 injections into sum types, and $(v_1,v_2)$ for product types:
 \[\begin{array}{lrcl}
 (\textit{Types}) & 
   \tau &::=& \zt \alt \ot \alt \tau_1 \oplus \tau_2 \alt \tau_1 \otimes \tau_2 \\
+(\textit{L1 Combinator types}) &&& \tau_1 \iso \tau_2 \\
+(\textit{L2 Combinator types}) &&& (\tau_1 \iso \tau_2) \isotwo (\tau_1 \iso \tau_2) \\
 (\textit{Values}) & 
-  v &::=& () \alt \inl{v} \alt \inr{v} \alt (v_1,v_2) \\
-(\textit{Combinator types}) &&& \tau_1 \iso \tau_2 \\
-(\textit{Combinators}) & 
-  c &::=& [\textit{see Fig.~\ref{pi-combinators}}]
+  v &::=& \unitv \alt \inl{v} \alt \inr{v} \alt (v_1,v_2) \\
+(\textit{L1 Combinators}) & 
+  c &::=& [\textit{see Fig.~\ref{pi-combinators}}] \\
+(\textit{L2 Combinators}) & 
+  \alpha &::=& [\textit{see Fig.~\ref{pi-combinators2}}]
 \end{array}\]
 The interesting syntactic category of $\Pi$ is that of \emph{combinators}
 which are witnesses for type isomorphisms $\tau_1 \iso \tau_2$. They consist
@@ -123,12 +144,15 @@ sets and permutations in which we interpret every $\Pi$-type as a finite set,
 interpret the values as elements in these finite sets, and interpret the
 combinators as permutations. 
 
-Include the definition of $!$
-
-\begin{figure}[ht]
+\begin{figure*}[ht]
+\begin{multicols}{2}
 \[\begin{array}{r@{\!}lcl}
-\evalone{\identlp}{&(\inr{v})} &=& v \\
-\evalone{\identrp}{&v} &=& \inr{v} \\
+%% \evalone{\unitepl}{&(\inl{()})} \\
+\evalone{\unitepl}{&(\inr{v})} &=& v \\
+\evalone{\unitipl}{&v} &=& \inr{v} \\
+\evalone{\unitepr}{&(\inl{v})} &=& v \\
+%% \evalone{\unitepr}{&(\inr{()})} \\
+\evalone{\unitipr}{&v} &=& \inl{v} \\
 \evalone{\swapp}{&(\inl{v})} &=& \inr{v} \\
 \evalone{\swapp}{&(\inr{v})} &=& \inl{v} \\
 \evalone{\assoclp}{&(\inl{v})} &=& \inl{(\inl{v})} \\
@@ -137,27 +161,44 @@ Include the definition of $!$
 \evalone{\assocrp}{&(\inl{(\inl{v})})} &=& \inl{v} \\
 \evalone{\assocrp}{&(\inl{(\inr{v})})} &=& \inr{(\inl{v})} \\
 \evalone{\assocrp}{&(\inr{v})} &=& \inr{(\inr{v})} \\
-\evalone{\identlt}{&((),v)} &=& v \\
-\evalone{\identrt}{&v} &=& ((),v) \\
+\\
+\evalone{\unitetl}{&(\unitv,v)} &=& v \\
+\evalone{\unititl}{&v} &=& (\unitv,v) \\
+\evalone{\unitetr}{&(v,\unitv)} &=& v \\
+\evalone{\unititr}{&v} &=& (v,\unitv) \\
 \evalone{\swapt}{&(v_1,v_2)} &=& (v_2,v_1) \\
 \evalone{\assoclt}{&(v_1,(v_2,v_3))} &=& ((v_1,v_2),v_3) \\
 \evalone{\assocrt}{&((v_1,v_2),v_3)} &=& (v_1,(v_2,v_3)) \\
+\end{array}\]
+\[\begin{array}{r@{\!}lcl}
+\evalone{\absorbr}{&(v,\_)} &=& v \\
+\evalone{\absorbl}{&(\_,v)} &=& v \\
+%% \evalone{\factorzl}{&()} \\
+%% \evalone{\factorzr}{&()} \\
 \evalone{\dist}{&(\inl{v_1},v_3)} &=& \inl{(v_1,v_3)} \\
 \evalone{\dist}{&(\inr{v_2},v_3)} &=& \inr{(v_2,v_3)} \\
-\evalone{\factor}{&(\inl{(v_1,v_3)})} &=& (\inl{v_1},v_3) \\
-\evalone{\factor}{&(\inr{(v_2,v_3)})} &=& (\inr{v_2},v_3) \\
-\evalone{\idc}{&v} &=& v \\
-\evalone{(c_1 \fatsemi c_2)}{&v} &=& 
+\evalone{\factor}{&\inl{(v_1,v_3)}} &=& (\inl{v_1},v_3) \\
+\evalone{\factor}{&\inr{(v_2,v_3)}} &=& (\inr{v_2},v_3) \\
+\evalone{\distl}{&(v_1,\inl{v_3})} &=& \inl{(v_1,v_3)} \\
+\evalone{\distl}{&(v_2,\inr{v_3})} &=& \inr{(v_2,v_3)} \\
+\evalone{\factorl}{&\inl{(v_1,v_3)}} &=& (v_1,\inl{v_3}) \\
+\evalone{\factorl}{&\inr{(v_2,v_3)}} &=& (v_2,\inr{v_3}) \\
+\\
+\evalone{\idiso}{&v} &=& v \\
+\evalone{(c_1 \odot c_2)}{&v} &=& 
   \evalone{c_2}{(\evalone{c_1}{v})} \\
-\evalone{(c_1\oplus c_2)}{&(\inl{v})} &=& 
+\evalone{(c_1 \oplus c_2)}{&(\inl{v})} &=& 
   \inl{(\evalone{c_1}{v})} \\
-\evalone{(c_1\oplus c_2)}{&(\inr{v})} &=& 
+\evalone{(c_1 \oplus c_2)}{&(\inr{v})} &=& 
   \inr{(\evalone{c_2}{v})} \\
-\evalone{(c_1\otimes c_2)}{&(v_1,v_2)} &=& 
+\evalone{(c_1 \otimes c_2)}{&(v_1,v_2)} &=& 
   (\evalone{c_1}v_1, \evalone{c_2}v_2) 
 \end{array}\]
+\end{multicols}
 \caption{\label{opsem}Operational Semantics}
-\end{figure}
+\end{figure*}
+
+A couple of examples
 
 In the remainder of this paper, we will be more interested in a model based
 on groupoids. But first, we give an operational semantics for $\Pi$.
@@ -168,14 +209,19 @@ evaluators that take a combinator and a value and propagate the value in the
 evaluator in Fig.~\ref{opsem}; the backwards evaluator differs in trivial
 ways. 
 
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Properties}
+
+Include the definition of $!$
+
 Include the definitions of $<=>$ and $2!$
 
 Also \verb.!!<=>id. and \verb.<=>!.
 
+order
+
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Groupoid Model} 
-
-Talk about the order of a combinator here or next section??
 
 Explain that we only reach a trivial class of groupoids
 
@@ -226,12 +272,7 @@ compositions. By construction, every combinator has an inverse
 calculated as shown in Fig.~\ref{sym}. These constructions are
 sufficient to guarantee that the universe~\AgdaFunction{U} is a
 groupoid. Additionally, we have paths that connect values in different
-but isomorphic spaces like \pointed{{\AgdaInductiveConstructor{TIMES}
-\AgdaBound{t₁} \AgdaBound{t₂}}}{{\AgdaSymbol{(} \AgdaBound{v₁}
-\AgdaSymbol{,} \AgdaBound{v₂} \AgdaSymbol{)}}} and
-\pointed{{\AgdaInductiveConstructor{TIMES} \AgdaBound{t₂}
-\AgdaBound{t₁}}}{{\AgdaSymbol{(} \AgdaBound{v₂} \AgdaSymbol{,}
-\AgdaBound{v₁} \AgdaSymbol{)}}}.
+but isomorphic spaces like \ldots
 
 The example \AgdaFunction{notpath} which earlier required the use of the
 univalence axiom can now be directly defined using
@@ -256,11 +297,6 @@ have that.  Shouldn't we show that, somehow, BOOL and BOOL.F 'union'
 BOOL.T are somehow ``equivalent''?  And there there is a coherent
 notpath built the same way?  Especially since I am sure it is quite
 easy to build incoherent sets of paths!
-
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Examples} 
-
-Just a couple
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

@@ -25,6 +25,7 @@
 
 \newcommand{\pifrac}{\Pi^/}
 \newcommand{\iso}{\leftrightarrow}
+\newcommand{\isotwo}{\Leftrightarrow}
 \newcommand{\alt}{~|~}
 \newcommand{\ag}[2]{#1 \sslash #2}
 \newcommand{\order}[1]{\hash #1}
@@ -54,7 +55,7 @@ $\displaystyle
 \newcommand{\jdg}[3]{#2 \proves_{#1} #3}
 \newcommand{\evalone}[2]{#1~\triangleright~#2}
 \newcommand{\evaloneb}[2]{#1~\triangleleft~#2}
-
+\newcommand{\unitv}{\bullet}
 \newcommand{\unitepl}{\mathsf{{unite_+l}}}
 \newcommand{\unitipl}{\mathsf{{uniti_+l}}}
 \newcommand{\unitepr}{\mathsf{{unite_+r}}}
@@ -62,13 +63,13 @@ $\displaystyle
 \newcommand{\swapp}{\mathsf{{swap_+}}}
 \newcommand{\assoclp}{\mathsf{{assocl_+}}}
 \newcommand{\assocrp}{\mathsf{{assocr_+}}}
-\newcommand{\unitetl}{\mathsf{{unite_*l}}}
-\newcommand{\unititl}{\mathsf{{uniti_*l}}}
-\newcommand{\unitetr}{\mathsf{{unite_*r}}}
-\newcommand{\unititr}{\mathsf{{uniti_*r}}}
-\newcommand{\swapt}{\mathsf{{swap_*}}}
-\newcommand{\assoclt}{\mathsf{{assocl_*}}}
-\newcommand{\assocrt}{\mathsf{{assocr_*}}}
+\newcommand{\unitetl}{\mathsf{{unite_{\star}l}}}
+\newcommand{\unititl}{\mathsf{{uniti_{\star}l}}}
+\newcommand{\unitetr}{\mathsf{{unite_{\star}r}}}
+\newcommand{\unititr}{\mathsf{{uniti_{\star}r}}}
+\newcommand{\swapt}{\mathsf{{swap_{\star}}}}
+\newcommand{\assoclt}{\mathsf{{assocl_{\star}}}}
+\newcommand{\assocrt}{\mathsf{{assocr_{\star}}}}
 \newcommand{\absorbr}{\mathsf{{absorbr}}}
 \newcommand{\absorbl}{\mathsf{{absorbl}}}
 \newcommand{\factorzr}{\mathsf{{factorzr}}}
@@ -78,6 +79,22 @@ $\displaystyle
 \newcommand{\distl}{\mathsf{{distl}}}
 \newcommand{\factorl}{\mathsf{{factorl}}}
 \newcommand{\idiso}{\mathsf{{id}}}
+
+\newcommand{\assocdl}{\mathsf{{assoc_{\odot}l}}}
+\newcommand{\assocdr}{\mathsf{{assoc_{\odot}r}}}
+\newcommand{\idldl}{\mathsf{{idl_{\odot}l}}}
+\newcommand{\idldr}{\mathsf{{idl_{\odot}r}}}
+\newcommand{\idrdl}{\mathsf{{idr_{\odot}l}}}
+\newcommand{\idrdr}{\mathsf{{idr_{\odot}r}}}
+\newcommand{\idisotwo}{\mathsf{{id}}}
+\newcommand{\rinvdl}{\mathsf{{rinv_{\odot}l}}}
+\newcommand{\rinvdr}{\mathsf{{rinv_{\odot}r}}}
+\newcommand{\linvdl}{\mathsf{{linv_{\odot}l}}}
+\newcommand{\linvdr}{\mathsf{{linv_{\odot}r}}}
+\newcommand{\transtwo}{\mathsf{{trans_{\Leftrightarrow}}}}
+\newcommand{\seqtwo}{\mathsf{{\boxdot}}}
+\newcommand{\resppiso}{\mathsf{{resp_{\oplus\Leftrightarrow}}}}
+\newcommand{\resptiso}{\mathsf{{resp_{\otimes\Leftrightarrow}}}}
 
 \theoremstyle{remark}
 \newtheorem{definition}{Definition}
