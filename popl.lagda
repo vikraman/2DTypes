@@ -121,7 +121,6 @@ $\displaystyle
 \begin{code}
 {-# OPTIONS --without-K #-}
 module popl where
-open import pibackground
 \end{code}
 }
 

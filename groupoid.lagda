@@ -314,6 +314,8 @@ particular categories in question are equivalent.
 Define action groupoids $\ag{\tau}{p}$ and show they are equivalent to
 uparrow tau times 1 over hash p
 
+Talk about monad/comonad ????
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % -- p is a monad on (order p)
