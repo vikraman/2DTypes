@@ -86,18 +86,19 @@ $\displaystyle
 \newcommand{\idldr}{\mathsf{{idl_{\odot}r}}}
 \newcommand{\idrdl}{\mathsf{{idr_{\odot}l}}}
 \newcommand{\idrdr}{\mathsf{{idr_{\odot}r}}}
-\newcommand{\idisotwo}{\mathsf{{id}}}
 \newcommand{\rinvdl}{\mathsf{{rinv_{\odot}l}}}
 \newcommand{\rinvdr}{\mathsf{{rinv_{\odot}r}}}
 \newcommand{\linvdl}{\mathsf{{linv_{\odot}l}}}
 \newcommand{\linvdr}{\mathsf{{linv_{\odot}r}}}
+\newcommand{\idisotwo}{\mathsf{{id}}}
 \newcommand{\transtwo}{\mathsf{{trans_{\Leftrightarrow}}}}
-\newcommand{\seqtwo}{\mathsf{{\boxdot}}}
-\newcommand{\resppiso}{\mathsf{{resp_{\oplus\Leftrightarrow}}}}
-\newcommand{\resptiso}{\mathsf{{resp_{\otimes\Leftrightarrow}}}}
+\newcommand{\respstwo}{\mathsf{{\boxdot}}}
+\newcommand{\respptwo}{\mathsf{{resp_{\oplus\Leftrightarrow}}}}
+\newcommand{\respttwo}{\mathsf{{resp_{\otimes\Leftrightarrow}}}}
 
 \theoremstyle{remark}
 \newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
 \newtheorem{example}{Example}
 
 \renewcommand{\AgdaCodeStyle}{\small}

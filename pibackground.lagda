@@ -57,6 +57,8 @@ and semantics.
 \end{array}\]
 \end{minipage}
 \end{array}\]
+Each 1-combinator $c$ has an inverse $!~c$, e.g, $!~\unitepl=\unitipl$,
+$!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 \caption{$\Pi$-combinators~\cite{James:2012:IE:2103656.2103667}
 \label{pi-combinators}}
 \end{figure*}
@@ -69,80 +71,66 @@ and semantics.
 {}
 \\
 \\
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\idldl : \idiso \odot c \isotwo c : \idldr}}
+{}
+\quad
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\idrdl : c \odot \idiso \isotwo c : \idrdr}}
+{}
+\\
+\\
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\rinvdl : ~! c \odot c \isotwo \idiso : \rinvdr}}
+{}
+\quad
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\linvdl : c ~\odot ~! c \isotwo \idiso : \linvdr}}
+{}
+\\
+\\
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\idisotwo : c \isotwo c}}
+{}
+\quad
+\Rule{}
+{c_1,c_2,c_3 : \tau_1 \iso \tau_2 \quad \alpha_1 : c_1 \isotwo c_2 \quad \alpha_2 : c_2 \isotwo c_3}
+{\jdg{}{}{\transtwo ~\alpha_1 ~\alpha_2 : c_1 \isotwo c_3}}
+{}
+\\
+\\
+\Rule{}
+{c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
+  \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
+{\jdg{}{}{\alpha_1 \respstwo \alpha_2 : c_1 \odot c_2 \isotwo c_3 \odot c_4}}
+{}
+\\
+\\
+\Rule{}
+{c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
+  \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
+{\jdg{}{}{\respptwo ~\alpha_1 ~\alpha_2 : c_1 \oplus c_2 \isotwo c_3 \oplus c_4}}
+{}
+\\
+\\
+\Rule{}
+{c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
+  \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
+{\jdg{}{}{\respttwo ~\alpha_1 ~\alpha_2 : c_1 \otimes c_2 \isotwo c_3 \otimes c_4}}
+{}
 \end{array}\]
+
+Each 2-combinator $\alpha$ has an inverse $2!~\alpha$, e.g, $2!~\assocdl=\assocdr$,
+$2!(\transtwo~\alpha_1~\alpha_2) = \transtwo~(2!~\alpha_2)~(2!~\alpha_1)$, etc. 
+
 \caption{$\Pi$-combinators~\cite{James:2012:IE:2103656.2103667}
 \label{pi-combinators2}}
 \end{figure*}
-
-%%%%%%%%%%%%%%%%%%%%%
-\subsection{Reversibility} 
-
-The relevance of reversibility to HoTT is based on the following
-analysis. The conventional HoTT approach starts with two, a priori, different
-notions: functions and paths, and then postulates an equivalence between a
-particular class of functions and paths. As illustrated above, some functions
-like \AgdaFunction{not} correspond to paths. Most functions, however, are
-evidently unrelated to paths. In particular, any function of type
-\AgdaBound{A}~\AgdaSymbol{→}~\AgdaBound{B} that does not have an inverse of
-type \AgdaBound{B}~\AgdaSymbol{→}~\AgdaBound{A} cannot have any direct
-correspondence to paths as all paths have inverses. An interesting question
-then poses itself: since reversible computational models --- in which all
-functions have inverses --- are known to be universal computational models,
-what would happen if we considered a variant of HoTT based exclusively on
-reversible functions?  Presumably in such a variant, all functions --- being
-reversible --- would potentially correspond to paths and the distinction
-between the two notions would vanish making the univalence postulate
-unnecessary. This is the precise technical idea we investigate in detail in
-the remainder of the paper.
-
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Syntax and Operational Semantics of $\Pi$}
-\label{opsempi}
-
-The $\Pi$ family of languages is based on type isomorphisms. In the variant
-we consider, the set of types $\tau$ includes the empty type $\zt$, the unit type
-$\ot$, and conventional sum and product types. The values classified by these
-types are the conventional ones: $\unitv$ of type $\ot$, $\inl{v}$ and $\inr{v}$ for
-injections into sum types, and $(v_1,v_2)$ for product types:
-\[\begin{array}{lrcl}
-(\textit{Types}) & 
-  \tau &::=& \zt \alt \ot \alt \tau_1 \oplus \tau_2 \alt \tau_1 \otimes \tau_2 \\
-(\textit{L1 Combinator types}) &&& \tau_1 \iso \tau_2 \\
-(\textit{L2 Combinator types}) &&& (\tau_1 \iso \tau_2) \isotwo (\tau_1 \iso \tau_2) \\
-(\textit{Values}) & 
-  v &::=& \unitv \alt \inl{v} \alt \inr{v} \alt (v_1,v_2) \\
-(\textit{L1 Combinators}) & 
-  c &::=& [\textit{see Fig.~\ref{pi-combinators}}] \\
-(\textit{L2 Combinators}) & 
-  \alpha &::=& [\textit{see Fig.~\ref{pi-combinators2}}]
-\end{array}\]
-The interesting syntactic category of $\Pi$ is that of \emph{combinators}
-which are witnesses for type isomorphisms $\tau_1 \iso \tau_2$. They consist
-of base combinators (on the left side of Fig.~\ref{pi-combinators}) and
-compositions (on the right side of the same figure). Each line of the figure
-on the left introduces a pair of dual constants\footnote{where $\swapp$ and
-$\swapt$ are self-dual.} that witness the type isomorphism in the
-middle. This set of isomorphisms is known to be
-complete~\cite{Fiore:2004,fiore-remarks} and the language is universal for
-hardware combinational
-circuits~\cite{James:2012:IE:2103656.2103667}.\footnote{If recursive types
-and a trace operator are added, the language becomes Turing
-complete~\cite{James:2012:IE:2103656.2103667,rc2011}. We will not be
-concerned with this extension in the main body of this paper but it will be
-briefly discussed in the conclusion.}
-
-From the perspective of category theory, the language $\Pi$ models what is
-called a \emph{symmetric bimonoidal category} or a \emph{commutative rig
-category}. These are categories with two binary operations and satisfying the
-axioms of a commutative rig (i.e., a commutative ring without negative
-elements also known as a commutative semiring) up to coherent
-isomorphisms. And indeed the types of the $\Pi$-combinators are precisely the
-commutative semiring axioms. A formal way of saying this is that $\Pi$ is the
-\emph{categorification}~\cite{math/9802029} of the natural numbers. A simple
-(slightly degenerate) example of such categories is the category of finite
-sets and permutations in which we interpret every $\Pi$-type as a finite set,
-interpret the values as elements in these finite sets, and interpret the
-combinators as permutations. 
 
 \begin{figure*}[ht]
 \begin{multicols}{2}
@@ -198,30 +186,101 @@ combinators as permutations.
 \caption{\label{opsem}Operational Semantics}
 \end{figure*}
 
-A couple of examples
+%%%%%%%%%%%%%%%%%%%%%
+\subsection{Reversibility} 
 
-In the remainder of this paper, we will be more interested in a model based
-on groupoids. But first, we give an operational semantics for $\Pi$.
-Operationally, the semantics consists of a pair of mutually recursive
-evaluators that take a combinator and a value and propagate the value in the
-``forward'' $\triangleright$ direction or in the
-``backwards''~$\triangleleft$ direction. We show the complete forward
-evaluator in Fig.~\ref{opsem}; the backwards evaluator differs in trivial
-ways. 
+The relevance of reversibility to HoTT is based on the following
+analysis. The conventional HoTT approach starts with two, a priori, different
+notions: functions and paths, and then postulates an equivalence between a
+particular class of functions and paths. As illustrated above, some functions
+like \AgdaFunction{not} correspond to paths. Most functions, however, are
+evidently unrelated to paths. In particular, any function of type
+\AgdaBound{A}~\AgdaSymbol{→}~\AgdaBound{B} that does not have an inverse of
+type \AgdaBound{B}~\AgdaSymbol{→}~\AgdaBound{A} cannot have any direct
+correspondence to paths as all paths have inverses. An interesting question
+then poses itself: since reversible computational models --- in which all
+functions have inverses --- are known to be universal computational models,
+what would happen if we considered a variant of HoTT based exclusively on
+reversible functions?  Presumably in such a variant, all functions --- being
+reversible --- would potentially correspond to paths and the distinction
+between the two notions would vanish making the univalence postulate
+unnecessary. This is the precise technical idea we investigate in detail in
+the remainder of the paper.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Properties}
+\subsection{Syntax of $\Pi$}
+\label{opsempi}
 
-Include the definition of $!$
+The $\Pi$ family of languages is based on type isomorphisms. In the variant
+we consider, the set of types $\tau$ includes the empty type $\zt$, the unit type
+$\ot$, and conventional sum and product types. The values classified by these
+types are the conventional ones: $\unitv$ of type $\ot$, $\inl{v}$ and $\inr{v}$ for
+injections into sum types, and $(v_1,v_2)$ for product types:
+\[\begin{array}{lrcl}
+(\textrm{Types}) & 
+  \tau &::=& \zt \alt \ot \alt \tau_1 \oplus \tau_2 \alt \tau_1 \otimes \tau_2 \\
+(\textrm{Values}) & 
+  v &::=& \unitv \alt \inl{v} \alt \inr{v} \alt (v_1,v_2) \\
+(\textrm{1-combinators}) & 
+  c &:& \tau_1 \iso \tau_2 ~ [\textit{see Fig.~\ref{pi-combinators}}] \\
+(\textrm{2-combinators}) &
+  \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2 \\
+  & && [\textit{see Fig.~\ref{pi-combinators2}}]
+\end{array}\]
+The interesting syntactic category of $\Pi$ is that of \emph{combinators}
+which are witnesses for type isomorphisms $\tau_1 \iso \tau_2$. They consist
+of base combinators (on the left side of Fig.~\ref{pi-combinators}) and
+compositions (on the right side of the same figure). Each line of the figure
+on the left introduces a pair of dual constants\footnote{where $\swapp$ and
+$\swapt$ are self-dual.} that witness the type isomorphism in the
+middle. This set of isomorphisms is known to be
+complete~\cite{Fiore:2004,fiore-remarks} and the language is universal for
+hardware combinational
+circuits~\cite{James:2012:IE:2103656.2103667}.\footnote{If recursive types
+and a trace operator are added, the language becomes Turing
+complete~\cite{James:2012:IE:2103656.2103667,rc2011}. We will not be
+concerned with this extension in the main body of this paper but it will be
+briefly discussed in the conclusion.}
 
-Include the definitions of $<=>$ and $2!$
+\begin{proposition}
+For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
+\end{proposition} 
 
-Also \verb.!!<=>id. and \verb.<=>!.
+\begin{proposition}
+For any $c_1,c_2 : \tau_1 \iso \tau_2$, we have $c_1 \isotwo c_2$ implies
+$!c_1 \isotwo ~!c_2$.
+\end{proposition} 
 
-order
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Operational Semantics}
+
+We give an operational semantics for $\Pi$.  Operationally, the
+semantics consists of a pair of mutually recursive evaluators that
+take a combinator and a value and propagate the value in the
+``forward'' $\triangleright$ direction or in the
+``backwards''~$\triangleleft$ direction. We show the complete forward
+evaluator in Fig.~\ref{opsem}; the backwards evaluator differs in
+trivial ways.
+
+Every 1-combinator has an \emph{order} $n$: applying this combinator $n$ times is equivalent to the identity
+
+A couple of examples: compute order
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Groupoid Model} 
+
+From the perspective of category theory, the language $\Pi$ models what is
+called a \emph{symmetric bimonoidal category} or a \emph{commutative rig
+category}. These are categories with two binary operations and satisfying the
+axioms of a commutative rig (i.e., a commutative ring without negative
+elements also known as a commutative semiring) up to coherent
+isomorphisms. And indeed the types of the $\Pi$-combinators are precisely the
+commutative semiring axioms. A formal way of saying this is that $\Pi$ is the
+\emph{categorification}~\cite{math/9802029} of the natural numbers. A simple
+(slightly degenerate) example of such categories is the category of finite
+sets and permutations in which we interpret every $\Pi$-type as a finite set,
+interpret the values as elements in these finite sets, and interpret the
+combinators as permutations. 
 
 Explain that we only reach a trivial class of groupoids
 
