@@ -7,9 +7,6 @@ popl.pdf : popl.tex
 popl.tex : popl.lagda pibackground.tex appendix.tex
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library popl.lagda
 
-pibackground.tex : pibackground.lagda
-	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library pibackground.lagda
-
 groupoid.tex : groupoid.lagda
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library groupoid.lagda
 
