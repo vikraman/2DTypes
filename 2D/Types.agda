@@ -146,6 +146,63 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! ccc₂l = ccc₂r
 2! ccc₂r = ccc₂l
 
+-- Properties
+
+!!⇔id : {t₁ t₂ : U} → (p : t₁ ⟷ t₂) → p ⇔ ! (! p)
+!!⇔id _⟷_.unite₊l = id⇔
+!!⇔id _⟷_.uniti₊l = id⇔
+!!⇔id _⟷_.unite₊r = id⇔
+!!⇔id _⟷_.uniti₊r = id⇔
+!!⇔id _⟷_.swap₊ = id⇔
+!!⇔id _⟷_.assocl₊ = id⇔
+!!⇔id _⟷_.assocr₊ = id⇔
+!!⇔id _⟷_.unite⋆l = id⇔
+!!⇔id _⟷_.uniti⋆l = id⇔
+!!⇔id _⟷_.unite⋆r = id⇔
+!!⇔id _⟷_.uniti⋆r = id⇔
+!!⇔id _⟷_.swap⋆ = id⇔
+!!⇔id _⟷_.assocl⋆ = id⇔
+!!⇔id _⟷_.assocr⋆ = id⇔
+!!⇔id _⟷_.absorbr = id⇔
+!!⇔id _⟷_.absorbl = id⇔
+!!⇔id _⟷_.factorzr = id⇔
+!!⇔id _⟷_.factorzl = id⇔
+!!⇔id _⟷_.dist = id⇔
+!!⇔id _⟷_.factor = id⇔
+!!⇔id _⟷_.distl = id⇔
+!!⇔id _⟷_.factorl = id⇔
+!!⇔id id⟷ = id⇔
+!!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
+!!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
+!!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
+!!⇔id (η+ p) = id⇔
+!!⇔id (η- p) = id⇔
+!!⇔id (ε+ p) = id⇔
+!!⇔id (ε- p) = id⇔
+
+⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
+⇔! assoc◎l = assoc◎r
+⇔! assoc◎r = assoc◎l
+⇔! idl◎l = idr◎l
+⇔! idl◎r = idr◎r
+⇔! idr◎l = idl◎l
+⇔! idr◎r = idl◎r
+⇔! id⇔ = id⇔
+⇔! rinv◎l = linv◎l
+⇔! rinv◎r = linv◎r
+⇔! linv◎l = rinv◎l
+⇔! linv◎r = rinv◎r
+⇔! (trans⇔ q₁ q₂) = trans⇔ (⇔! q₁) (⇔! q₂)
+⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
+⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
+⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
+⇔! ccc₁l = ccc₂l
+⇔! ccc₁r = ccc₂r
+⇔! ccc₂l = ccc₁l
+⇔! ccc₂r = ccc₁r
+
+--
+
 open import Data.Product
 
 open import Categories.Category

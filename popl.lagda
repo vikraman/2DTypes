@@ -24,6 +24,7 @@
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Amr says: #1}\end{minipage}}}
 
 \newcommand{\pifrac}{\Pi^/}
+\newcommand{\iso}{\leftrightarrow}
 \newcommand{\alt}{~|~}
 \newcommand{\ag}[2]{#1 \sslash #2}
 \newcommand{\order}[1]{\hash #1}
@@ -42,6 +43,41 @@
 \newcommand{\fv}[2]{\fcolorbox{black}{white}{\strut $#1$}\fcolorbox{black}{gray!20}{$\strut #2$}}
 \newcommand{\pt}[2]{\bullet[#1,#2]}
 \newcommand{\refl}{\AgdaInductiveConstructor{refl}}
+
+\newcommand{\Rule}[4]{
+\makebox{{\rm #1}
+$\displaystyle
+\frac{\begin{array}{l}#2\\\end{array}}
+{\begin{array}{l}#3\\\end{array}}$
+ #4}}
+\newcommand{\proves}{\vdash}
+\newcommand{\jdg}[3]{#2 \proves_{#1} #3}
+\newcommand{\evalone}[2]{#1~\triangleright~#2}
+\newcommand{\evaloneb}[2]{#1~\triangleleft~#2}
+
+\newcommand{\unitepl}{\mathsf{{unite_+l}}}
+\newcommand{\unitipl}{\mathsf{{uniti_+l}}}
+\newcommand{\unitepr}{\mathsf{{unite_+r}}}
+\newcommand{\unitipr}{\mathsf{{uniti_+r}}}
+\newcommand{\swapp}{\mathsf{{swap_+}}}
+\newcommand{\assoclp}{\mathsf{{assocl_+}}}
+\newcommand{\assocrp}{\mathsf{{assocr_+}}}
+\newcommand{\unitetl}{\mathsf{{unite_*l}}}
+\newcommand{\unititl}{\mathsf{{uniti_*l}}}
+\newcommand{\unitetr}{\mathsf{{unite_*r}}}
+\newcommand{\unititr}{\mathsf{{uniti_*r}}}
+\newcommand{\swapt}{\mathsf{{swap_*}}}
+\newcommand{\assoclt}{\mathsf{{assocl_*}}}
+\newcommand{\assocrt}{\mathsf{{assocr_*}}}
+\newcommand{\absorbr}{\mathsf{{absorbr}}}
+\newcommand{\absorbl}{\mathsf{{absorbl}}}
+\newcommand{\factorzr}{\mathsf{{factorzr}}}
+\newcommand{\factorzl}{\mathsf{{factorzl}}}
+\newcommand{\dist}{\mathsf{{dist}}}
+\newcommand{\factor}{\mathsf{{factor}}}
+\newcommand{\distl}{\mathsf{{distl}}}
+\newcommand{\factorl}{\mathsf{{factorl}}}
+\newcommand{\idiso}{\mathsf{{id}}}
 
 \theoremstyle{remark}
 \newtheorem{definition}{Definition}
