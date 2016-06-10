@@ -837,7 +837,7 @@ circuit terminates with the value $\textsf{id}$.
 %% Sec 3 
 \input{pibackground.tex} 
 %% Sec 4 
-%% \input{groupoid.tex}
+\input{groupoid.tex}
 %% Sec 5 A new language with fractional types and its denotational semantics (mostly reference to sec 4)
 %% \input{pifrac.tex}
 %% Sec 6 its operational semantics + pragramatics
