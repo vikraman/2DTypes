@@ -127,162 +127,154 @@ data Dir : Set where
 
 postulate
   _⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
-{-
-ap/ : {T : FT/} → State T → Dir × State T
-ap/ (Enter (lift p) (v , _) C) = Fwd , Exit (lift p) (ap p v , refl) C 
-ap/ (Enter (η p) (tt , av) C) =
-   Fwd , Exit (η p) (((perm (+ 1) p idr◎r) , tt) , (id⇔ , (perm (+ 1) p idr◎r))) C
-ap/ (Enter (ε p) (((perm i q α) , tt) , (β , (perm j r γ))) C) =
-  if (q ⇔? r)
-  then Fwd , Exit (ε p) (tt , refl) C
-  else Bck , Enter (ε p) (((perm i q α) , tt) , (β , (perm j r γ))) C
-ap/ (Enter unite₊l/ (inj₁ () , av) C) 
-ap/ (Enter unite₊l/ (inj₂ v , av) C) = Fwd , Exit unite₊l/ (v , av) C
-ap/ (Enter uniti₊l/ (v , av) C) = Fwd , Exit uniti₊l/ (inj₂ v , av) C
-ap/ (Enter unite₊r/ (inj₁ v , av) C) = Fwd , Exit unite₊r/ (v , av) C
-ap/ (Enter unite₊r/ (inj₂ () , av) C)
-ap/ (Enter uniti₊r/ (v , av) C) = Fwd , Exit uniti₊r/ (inj₁ v , av) C
-ap/ (Enter swap₊/ (inj₁ v , av) C) = Fwd , Exit swap₊/ (inj₂ v , av) C
-ap/ (Enter swap₊/ (inj₂ v , av) C) = Fwd , Exit swap₊/ (inj₁ v , av) C
-ap/ (Enter assocl₊/ (inj₁ v , av) C) = Fwd , Exit assocl₊/ (inj₁ (inj₁ v) , av) C
-ap/ (Enter assocl₊/ (inj₂ (inj₁ v) , av) C) = Fwd , Exit assocl₊/ (inj₁ (inj₂ v) , av) C
-ap/ (Enter assocl₊/ (inj₂ (inj₂ v) , av) C) = Fwd , Exit assocl₊/ (inj₂ v , av) C
-ap/ (Enter assocr₊/ (inj₁ (inj₁ v) , av) C) = Fwd , Exit assocr₊/ (inj₁ v , av) C
-ap/ (Enter assocr₊/ (inj₁ (inj₂ v) , av) C) = Fwd , Exit assocr₊/ (inj₂ (inj₁ v) , av) C
-ap/ (Enter assocr₊/ (inj₂ v , av) C) = Fwd , Exit assocr₊/ (inj₂ (inj₂ v) , av) C
-ap/ (Enter unite⋆l/ ((tt , v) , (_ , av)) C) = Fwd , Exit unite⋆l/ (v , av) C
-ap/ (Enter uniti⋆l/ (v , av) C) = Fwd , Exit uniti⋆l/ ((tt , v) , (refl , av)) C
-ap/ (Enter unite⋆r/ ((v , tt) , (av , att)) C) = Fwd , Exit unite⋆r/ (v , av) C
-ap/ (Enter uniti⋆r/ (v , av) C) = Fwd , Exit uniti⋆r/ ((v , tt) , (av , refl)) C
-ap/ (Enter swap⋆/ ((v₁ , v₂) , (av₁ , av₂)) C) = Fwd , Exit swap⋆/ ((v₂ , v₁) , (av₂ , av₁)) C
-ap/ (Enter assocl⋆/ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C) =
-  Fwd , Exit assocl⋆/ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C
-ap/ (Enter assocr⋆/ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C) =
-  Fwd , Exit assocr⋆/ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C
-ap/ (Enter absorbr/ ((v , _) , (av , _)) C) = Fwd , Exit absorbr/ (v , av) C
-ap/ (Enter absorbl/ ((_ , v) , (_ , av)) C) = Fwd , Exit absorbl/ (v , av) C
-ap/ (Enter factorzr/ (() , _) C) 
-ap/ (Enter factorzl/ (() , _) C)
-ap/ (Enter dist/ ((inj₁ v₁ , v₃) , (av₁ , av₃)) C) =
-  Fwd , Exit dist/ (inj₁ (v₁ , v₃) , (av₁ , av₃)) C
-ap/ (Enter dist/ ((inj₂ v₂ , v₃) , (av₂ , av₃)) C) =
-  Fwd , Exit dist/ (inj₂ (v₂ , v₃) , (av₂ , av₃)) C
-ap/ (Enter factor/ (inj₁ (v₁ , v₃) , av) C) =
-  Fwd , Exit factor/ ((inj₁ v₁ , v₃) , av) C
-ap/ (Enter factor/ (inj₂ (v₂ , v₃) , av) C) =
-  Fwd , Exit factor/ ((inj₂ v₂ , v₃) , av) C
-ap/ (Enter distl/ ((v₃ , inj₁ v₁) , (av₃ , av₁)) C) =
-  Fwd , Exit distl/ (inj₁ (v₃ , v₁) , (av₃ , av₁)) C
-ap/ (Enter distl/ ((v₃ , inj₂ v₂) , (av₃ , av₂)) C) =
-  Fwd , Exit distl/ (inj₂ (v₃ , v₂) , (av₃ , av₂)) C
-ap/ (Enter factorl/ (inj₁ (v₃ , v₁) , av) C) =
-  Fwd , Exit factorl/ ((v₃ , inj₁ v₁) , av) C
-ap/ (Enter factorl/ (inj₂ (v₃ , v₂) , av) C) =
-  Fwd , Exit factorl/ ((v₃ , inj₂ v₂) , av) C
-ap/ (Enter id⇿ v C) = Fwd , Exit id⇿ v C
-ap/ (Enter (P₁ ◎/ P₂) v C) = Fwd , Enter P₁ v (Fst C P₂)
-ap/ (Enter (P₁ ⊕/ P₂) (inj₁ v₁ , av) C) = Fwd , Enter P₁ (v₁ , av) (L+ C P₂) 
-ap/ (Enter (P₁ ⊕/ P₂) (inj₂ v₂ , av) C) = Fwd , Enter P₂ (v₂ , av) (R+ P₁ C) 
-ap/ (Enter (P₁ ⊗/ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
-  Fwd , Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
-ap/ (Exit P v Empty) = Done , Exit P v Empty
-ap/ (Exit P₁ v (Fst C P₂)) = Fwd , Enter P₂ v (Snd P₁ C) 
-ap/ (Exit P₂ v₂ (Snd P₁ C)) = Fwd , Exit (P₁ ◎/ P₂) v₂ C 
-ap/ (Exit P₁ v₁ (L× C P₂ v₂)) = Fwd , Enter P₂ v₂ (R× P₁ v₁ C) 
-ap/ (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
-  Fwd , Exit (P₁ ⊗/ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
-ap/ (Exit P₁ (v₁ , av) (L+ C P₂)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₁ v₁ , av) C  
-ap/ (Exit P₂ (v₂ , av) (R+ P₁ C)) = Fwd , Exit (P₁ ⊕/ P₂) (inj₂ v₂ , av) C 
 
-ap⁻¹/ : {T : FT/} → State T → Dir × State T
-ap⁻¹/ (Exit (lift p) (v , _) C) = Bck , Enter (lift p) (ap⁻¹ p v , refl) C 
-ap⁻¹/ (Exit (η p) (((perm i q α) , tt) , (β , (perm j r γ))) C) =
-  if (q ⇔? r)
-  then Bck , Enter (η p) (tt , refl) C
-  else Fwd , Exit (η p)
-         (((perm (ℤsuc i) (p ◎ q) (trans⇔ (id⇔ ⊡ α) (
-             trans⇔ (idr◎r ⊡ id⇔) (2! (lower {p = p} (+ 1) i))))) , tt) , (id⇔ ,
-           (perm (ℤsuc j) (p ◎ r) (trans⇔ (id⇔ ⊡ γ)
-             (trans⇔ (idr◎r ⊡ id⇔) (2! (lower {p = p} (+ 1) j))))))) C
-ap⁻¹/ (Exit (ε p) (tt , _) C) =
-  Bck , Enter (ε p) ((((perm (+ 1) p idr◎r) , tt)) , (id⇔ , (perm (+ 1) p idr◎r))) C
+ap : {T : U} → State T → Dir × State T
+ap (Enter unite₊l (inj₁ () , av) C)
+ap (Enter unite₊l (inj₂ v , av) C) = Fwd , Exit unite₊l (v , av) C
+ap (Enter uniti₊l (v , av) C) = Fwd , Exit uniti₊l (inj₂ v , av) C
+ap (Enter unite₊r (inj₁ v , av) C) = Fwd , Exit unite₊r (v , av) C
+ap (Enter unite₊r (inj₂ () , av) C)
+ap (Enter uniti₊r (v , av) C) = Fwd , Exit uniti₊r (inj₁ v , av) C
+ap (Enter swap₊ (inj₁ v , av) C) = Fwd , Exit swap₊ (inj₂ v , av) C
+ap (Enter swap₊ (inj₂ v , av) C) = Fwd , Exit swap₊ (inj₁ v , av) C
+ap (Enter assocl₊ (inj₁ v , av) C) = Fwd , Exit assocl₊ (inj₁ (inj₁ v) , av) C
+ap (Enter assocl₊ (inj₂ (inj₁ v) , av) C) = Fwd , Exit assocl₊ (inj₁ (inj₂ v) , av) C
+ap (Enter assocl₊ (inj₂ (inj₂ v) , av) C) = Fwd , Exit assocl₊ (inj₂ v , av) C
+ap (Enter assocr₊ (inj₁ (inj₁ v) , av) C) = Fwd , Exit assocr₊ (inj₁ v , av) C
+ap (Enter assocr₊ (inj₁ (inj₂ v) , av) C) = Fwd , Exit assocr₊ (inj₂ (inj₁ v) , av) C
+ap (Enter assocr₊ (inj₂ v , av) C) = Fwd , Exit assocr₊ (inj₂ (inj₂ v) , av) C
+ap (Enter unite⋆l ((tt , v) , (_ , av)) C) = Fwd , Exit unite⋆l (v , av) C
+ap (Enter uniti⋆l (v , av) C) = Fwd , Exit uniti⋆l ((tt , v) , (refl , av)) C
+ap (Enter unite⋆r ((v , tt) , (av , _)) C) = Fwd , Exit unite⋆r (v , av) C
+ap (Enter uniti⋆r (v , av) C) = Fwd , Exit uniti⋆r ((v , tt) , (av , refl)) C
+ap (Enter swap⋆ ((v₁ , v₂) , (av₁ , av₂)) C) = Fwd , Exit swap⋆ ((v₂ , v₁) , (av₂ , av₁)) C
+ap (Enter assocl⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) C) = Fwd , Exit assocl⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C
+ap (Enter assocr⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C) = Fwd , Exit assocr⋆ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C
+ap (Enter absorbr ((v , _) , (av , _)) C) = Fwd , Exit absorbr (v , av) C
+ap (Enter absorbl ((_ , v) , (_ , av)) C) = Fwd , Exit absorbl (v , av) C
+ap (Enter factorzr (() , _) C)
+ap (Enter factorzl (() , _) C)
+ap (Enter dist ((inj₁ v₁ , v₃) , (av₁ , av₃)) C) = Fwd , Exit dist (inj₁ (v₁ , v₃) , (av₁ , av₃)) C
+ap (Enter dist ((inj₂ v₂ , v₃) , (av₂ , av₃)) C) = Fwd , Exit dist (inj₂ (v₂ , v₃) , (av₂ , av₃)) C
+ap (Enter factor (inj₁ (v₁ , v₃) , av) C) = Fwd , Exit factor ((inj₁ v₁ , v₃) , av) C
+ap (Enter factor (inj₂ (v₂ , v₃) , av) C) = Fwd , Exit factor ((inj₂ v₂ , v₃) , av) C
+ap (Enter distl ((v₃ , inj₁ v₁) , (av₃ , av₁)) C) = Fwd , Exit distl (inj₁ (v₃ , v₁) , (av₃ , av₁)) C
+ap (Enter distl ((v₃ , inj₂ v₂) , (av₃ , av₂)) C) = Fwd , Exit distl (inj₂ (v₃ , v₂) , (av₃ , av₂)) C
+ap (Enter factorl (inj₁ (v₃ , v₁) , av) C) = Fwd , Exit factorl ((v₃ , inj₁ v₁) , av) C
+ap (Enter factorl (inj₂ (v₃ , v₂) , av) C) = Fwd , Exit factorl ((v₃ , inj₂ v₂) , av) C
+ap (Enter id⟷ v C) = Fwd , Exit id⟷ v C
+ap (Enter (P₁ ◎ P₂) v C) = Fwd , Enter P₁ v (Fst C P₂)
+ap (Enter (P₁ ⊕ P₂) (inj₁ v₁ , av₁) C) = Fwd , Enter P₁ (v₁ , av₁) (L+ C P₂)
+ap (Enter (P₁ ⊕ P₂) (inj₂ v₂ , av₂) C) = Fwd , Enter P₂ (v₂ , av₂) (R+ P₁ C)
+ap (Enter (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) = Fwd , Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
+ap (Enter (η- P) (tt , av) C) = Fwd , Exit (η- P) ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔)) C
+ap (Enter (η+ P) (tt , av) C) = Fwd , Exit (η+ P) ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r)) C
+ap (Enter (ε+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
+   if (q ⇔? r)
+     then Fwd , Exit (ε+ P) (tt , refl) C
+     else Bck , Enter (ε+ P) ((perm i q α , tt) , (β , perm j r γ)) C
+ap (Enter (ε- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
+   if (q ⇔? r)
+     then Fwd , Exit (ε- P) (tt , refl) C
+     else Bck , Enter (ε- P) (((tt , perm i q α) , (perm j r γ , β))) C
+ap (Exit P v Empty) = Done , Exit P v Empty
+ap (Exit P₁ v (Fst C P₂)) = Fwd , Enter P₂ v (Snd P₁ C) 
+ap (Exit P₂ v₂ (Snd P₁ C)) = Fwd , Exit (P₁ ◎ P₂) v₂ C
+ap (Exit P₁ v₁ (L× C P₂ v₂)) = Fwd , Enter P₂ v₂ (R× P₁ v₁ C)
+ap (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) = Fwd , Exit (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
+ap (Exit P₁ (v₁ , av) (L+ C P₂)) = Fwd , Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
+ap (Exit P₂ (v₂ , av) (R+ P₁ C)) = Fwd , Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
 
-ap⁻¹/ (Exit uniti₊l/ (inj₁ () , av) C) 
-ap⁻¹/ (Exit uniti₊l/ (inj₂ v , av) C) = Bck , Enter uniti₊l/ (v , av) C
-ap⁻¹/ (Exit unite₊l/ (v , av) C) = Bck , Enter unite₊l/ (inj₂ v , av) C
-ap⁻¹/ (Exit uniti₊r/ (inj₁ v , av) C) = Bck , Enter uniti₊r/ (v , av) C
-ap⁻¹/ (Exit uniti₊r/ (inj₂ () , av) C)
-ap⁻¹/ (Exit unite₊r/ (v , av) C) = Bck , Enter unite₊r/ (inj₁ v , av) C
-ap⁻¹/ (Exit swap₊/ (inj₁ v , av) C) = Bck , Enter swap₊/ (inj₂ v , av) C
-ap⁻¹/ (Exit swap₊/ (inj₂ v , av) C) = Bck , Enter swap₊/ (inj₁ v , av) C
-ap⁻¹/ (Exit assocr₊/ (inj₁ v , av) C) = Bck , Enter assocr₊/ (inj₁ (inj₁ v) , av) C
-ap⁻¹/ (Exit assocr₊/ (inj₂ (inj₁ v) , av) C) = Bck , Enter assocr₊/ (inj₁ (inj₂ v) , av) C
-ap⁻¹/ (Exit assocr₊/ (inj₂ (inj₂ v) , av) C) = Bck , Enter assocr₊/ (inj₂ v , av) C
-ap⁻¹/ (Exit assocl₊/ (inj₁ (inj₁ v) , av) C) = Bck , Enter assocl₊/ (inj₁ v , av) C
-ap⁻¹/ (Exit assocl₊/ (inj₁ (inj₂ v) , av) C) = Bck , Enter assocl₊/ (inj₂ (inj₁ v) , av) C
-ap⁻¹/ (Exit assocl₊/ (inj₂ v , av) C) = Bck , Enter assocl₊/ (inj₂ (inj₂ v) , av) C
-ap⁻¹/ (Exit uniti⋆l/ ((tt , v) , (_ , av)) C) = Bck , Enter uniti⋆l/ (v , av) C
-ap⁻¹/ (Exit unite⋆l/ (v , av) C) = Bck , Enter unite⋆l/ ((tt , v) , (refl , av)) C
-ap⁻¹/ (Exit uniti⋆r/ ((v , tt) , (av , att)) C) = Bck , Enter uniti⋆r/ (v , av) C
-ap⁻¹/ (Exit unite⋆r/ (v , av) C) = Bck , Enter unite⋆r/ ((v , tt) , (av , refl)) C
-ap⁻¹/ (Exit swap⋆/ ((v₁ , v₂) , (av₁ , av₂)) C) = Bck , Enter swap⋆/ ((v₂ , v₁) , (av₂ , av₁)) C
-ap⁻¹/ (Exit assocr⋆/ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C) =
-  Bck , Enter assocr⋆/ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C
-ap⁻¹/ (Exit assocl⋆/ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C) =
-  Bck , Enter assocl⋆/ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C
-ap⁻¹/ (Exit factorzl/ ((v , _) , (av , _)) C) = Bck , Enter factorzl/ (v , av) C
-ap⁻¹/ (Exit factorzr/ ((_ , v) , (_ , av)) C) = Bck , Enter factorzr/ (v , av) C
-ap⁻¹/ (Exit absorbl/ (() , _) C) 
-ap⁻¹/ (Exit absorbr/ (() , _) C)
-ap⁻¹/ (Exit factor/ ((inj₁ v₁ , v₃) , (av₁ , av₃)) C) =
-  Bck , Enter factor/ (inj₁ (v₁ , v₃) , (av₁ , av₃)) C
-ap⁻¹/ (Exit factor/ ((inj₂ v₂ , v₃) , (av₂ , av₃)) C) =
-  Bck , Enter factor/ (inj₂ (v₂ , v₃) , (av₂ , av₃)) C
-ap⁻¹/ (Exit dist/ (inj₁ (v₁ , v₃) , av) C) =
-  Bck , Enter dist/ ((inj₁ v₁ , v₃) , av) C
-ap⁻¹/ (Exit dist/ (inj₂ (v₂ , v₃) , av) C) =
-  Bck , Enter dist/ ((inj₂ v₂ , v₃) , av) C
-ap⁻¹/ (Exit factorl/ ((v₃ , inj₁ v₁) , (av₃ , av₁)) C) =
-  Bck , Enter factorl/ (inj₁ (v₃ , v₁) , (av₃ , av₁)) C
-ap⁻¹/ (Exit factorl/ ((v₃ , inj₂ v₂) , (av₃ , av₂)) C) =
-  Bck , Enter factorl/ (inj₂ (v₃ , v₂) , (av₃ , av₂)) C
-ap⁻¹/ (Exit distl/ (inj₁ (v₃ , v₁) , av) C) =
-  Bck , Enter distl/ ((v₃ , inj₁ v₁) , av) C
-ap⁻¹/ (Exit distl/ (inj₂ (v₃ , v₂) , av) C) =
-  Bck , Enter distl/ ((v₃ , inj₂ v₂) , av) C
-ap⁻¹/ (Exit id⇿ v C) = Bck , Enter id⇿ v C
-ap⁻¹/ (Exit (P₁ ◎/ P₂) v C) = Bck , Exit P₂ v (Snd P₁ C)
-ap⁻¹/ (Exit (P₁ ⊕/ P₂) (inj₁ v₁ , av) C) = Bck , Exit P₁ (v₁ , av) (L+ C P₂) 
-ap⁻¹/ (Exit (P₁ ⊕/ P₂) (inj₂ v₂ , av) C) = Bck , Exit P₂ (v₂ , av) (R+ P₁ C) 
-ap⁻¹/ (Exit (P₁ ⊗/ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
-  Bck , Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)
-ap⁻¹/ (Enter P v Empty) = Done , Enter P v Empty
-ap⁻¹/ (Enter P₁ v (Fst C P₂)) = Bck , Enter (P₁ ◎/ P₂) v C 
-ap⁻¹/ (Enter P₂ v₂ (Snd P₁ C)) = Bck , Exit P₁ v₂ (Fst C P₂)
-ap⁻¹/ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) =
-  Bck , Enter (P₁ ⊗/ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
-ap⁻¹/ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
-  Bck , Exit P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
-ap⁻¹/ (Enter P₁ (v₁ , av) (L+ C P₂)) = Bck , Enter (P₁ ⊕/ P₂) (inj₁ v₁ , av) C  
-ap⁻¹/ (Enter P₂ (v₂ , av) (R+ P₁ C)) = Bck , Enter (P₁ ⊕/ P₂) (inj₂ v₂ , av) C 
+ap⁻¹ : {T : U} → State T → Dir × State T
+ap⁻¹ (Enter P v Empty) = Done , Enter P v Empty
+ap⁻¹ (Enter P₁ v (Fst C P₂)) = Bck , Enter (P₁ ◎ P₂) v C 
+ap⁻¹ (Enter P₂ v₂ (Snd P₁ C)) = Bck , Exit P₁ v₂ (Fst C P₂)
+ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) = Bck , Enter (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
+ap⁻¹ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) = Bck , Exit P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
+ap⁻¹ (Enter P₁ (v₁ , av) (L+ C P₂)) = Bck , Enter (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
+ap⁻¹ (Enter P₂ (v₂ , av) (R+ P₁ C)) = Bck , Enter (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
+ap⁻¹ (Exit unite₊l (v , av) C) = Bck , Enter unite₊l (inj₂ v , av) C
+ap⁻¹ (Exit uniti₊l (inj₁ () , av) C)
+ap⁻¹ (Exit uniti₊l (inj₂ v , av) C) = Bck , Enter uniti₊l (v , av) C
+ap⁻¹ (Exit unite₊r (v , av) C) = Bck , Enter unite₊r (inj₁ v , av) C
+ap⁻¹ (Exit uniti₊r (inj₁ v , av) C) = Bck , Enter uniti₊r (v , av) C
+ap⁻¹ (Exit uniti₊r (inj₂ () , av) C)
+ap⁻¹ (Exit swap₊ (inj₁ v , av) C) = Bck , Enter swap₊ (inj₂ v , av) C
+ap⁻¹ (Exit swap₊ (inj₂ v , av) C) = Bck , Enter swap₊ (inj₁ v , av) C
+ap⁻¹ (Exit assocl₊ (inj₁ (inj₁ v) , av) C) = Bck , Enter assocl₊ (inj₁ v , av) C
+ap⁻¹ (Exit assocl₊ (inj₁ (inj₂ v) , av) C) = Bck , Enter assocl₊ (inj₂ (inj₁ v) , av) C
+ap⁻¹ (Exit assocl₊ (inj₂ v , av) C) = Bck , Enter assocl₊ (inj₂ (inj₂ v) , av) C
+ap⁻¹ (Exit assocr₊ (inj₁ v , av) C) = Bck , Enter assocr₊ (inj₁ (inj₁ v) , av) C
+ap⁻¹ (Exit assocr₊ (inj₂ (inj₁ v) , av) C) = Bck , Enter assocr₊ (inj₁ (inj₂ v) , av) C
+ap⁻¹ (Exit assocr₊ (inj₂ (inj₂ v) , av) C) = Bck , Enter assocr₊ (inj₂ v , av) C
+ap⁻¹ (Exit uniti⋆l ((tt , v) , (_ , av)) C) = Bck , Enter uniti⋆l (v , av) C
+ap⁻¹ (Exit unite⋆l (v , av) C) = Bck , Enter unite⋆l ((tt , v) , (refl , av)) C
+ap⁻¹ (Exit uniti⋆r ((v , tt) , (av , att)) C) = Bck , Enter uniti⋆r (v , av) C
+ap⁻¹ (Exit unite⋆r (v , av) C) = Bck , Enter unite⋆r ((v , tt) , (av , refl)) C
+ap⁻¹ (Exit swap⋆ ((v₁ , v₂) , (av₁ , av₂)) C) = Bck , Enter swap⋆ ((v₂ , v₁) , (av₂ , av₁)) C
+ap⁻¹ (Exit assocl⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C) = Bck , Enter assocl⋆ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C
+ap⁻¹ (Exit assocr⋆ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C) = Bck , Enter assocr⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C
+ap⁻¹ (Exit absorbr (() , _) C) 
+ap⁻¹ (Exit absorbl (() , _) C)
+ap⁻¹ (Exit factorzr ((_ , v) , (_ , av)) C) = Bck , Enter factorzr (v , av) C
+ap⁻¹ (Exit factorzl ((v , _) , (av , _)) C) = Bck , Enter factorzl (v , av) C
+ap⁻¹ (Exit dist (inj₁ (v₁ , v₃) , av) C) = Bck , Enter dist ((inj₁ v₁ , v₃) , av) C
+ap⁻¹ (Exit dist (inj₂ (v₂ , v₃) , av) C) = Bck , Enter dist ((inj₂ v₂ , v₃) , av) C
+ap⁻¹ (Exit factor ((inj₁ v₁ , v₃) , (av₁ , av₃)) C) = Bck , Enter factor (inj₁ (v₁ , v₃) , (av₁ , av₃)) C
+ap⁻¹ (Exit factor ((inj₂ v₂ , v₃) , (av₂ , av₃)) C) = Bck , Enter factor (inj₂ (v₂ , v₃) , (av₂ , av₃)) C
+ap⁻¹ (Exit distl (inj₁ (v₃ , v₁) , av) C) = Bck , Enter distl ((v₃ , inj₁ v₁) , av) C
+ap⁻¹ (Exit distl (inj₂ (v₃ , v₂) , av) C) = Bck , Enter distl ((v₃ , inj₂ v₂) , av) C
+ap⁻¹ (Exit factorl ((v₃ , inj₁ v₁) , (av₃ , av₁)) C) = Bck , Enter factorl (inj₁ (v₃ , v₁) , (av₃ , av₁)) C
+ap⁻¹ (Exit factorl ((v₃ , inj₂ v₂) , (av₃ , av₂)) C) = Bck , Enter factorl (inj₂ (v₃ , v₂) , (av₃ , av₂)) C
+ap⁻¹ (Exit id⟷ v C) = Bck , Enter id⟷ v C
+ap⁻¹ (Exit (P₁ ◎ P₂) v C) = Bck , Exit P₂ v (Snd P₁ C)
+ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C) = Bck , Exit P₁ (v₁ , av) (L+ C P₂) 
+ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C) = Bck , Exit P₂ (v₂ , av) (R+ P₁ C) 
+ap⁻¹ (Exit (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) = Bck , Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)
+ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
+     if (q ⇔? r)
+        then Bck , Enter (η- P) (tt , refl) C
+        else Fwd , Exit (η- P)
+                        ( (tt , (perm (ℤsuc i) (P ◎ q)
+                                      (trans⇔ (id⇔ ⊡ α)
+                                              (trans⇔ (idr◎r ⊡ id⇔)
+                                                      (2! (lower {p = P} (+ 1) i))))))
+                        , ((perm (ℤsuc i) (P ◎ q)
+                                      (trans⇔ (id⇔ ⊡ α)
+                                              (trans⇔ (idr◎r ⊡ id⇔)
+                                                      (2! (lower {p = P} (+ 1) i))))) , id⇔)) C
+ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
+     if (q ⇔? r)
+        then Bck , Enter (η+ P) (tt , refl) C
+        else Fwd , Exit (η+ P)
+                        ( ((perm (ℤsuc i) (P ◎ q)
+                                 (trans⇔ (id⇔ ⊡ α)
+                                         (trans⇔ (idr◎r ⊡ id⇔)
+                                                 (2! (lower {p = P} (+ 1) i))))) , tt)
+                        , (id⇔ , (perm (ℤsuc i) (P ◎ q)
+                                       (trans⇔ (id⇔ ⊡ α)
+                                               (trans⇔ (idr◎r ⊡ id⇔)
+                                                       (2! (lower {p = P} (+ 1) i))))))) C
+ap⁻¹ (Exit (ε+ P) (tt , _) C) = Bck , Enter (ε+ P) ((((perm (+ 1) P idr◎r) , tt)) , (id⇔ , (perm (+ 1) P idr◎r))) C
+ap⁻¹ (Exit (ε- P) (tt , _) C) = Bck , Enter (ε- P) (((tt , (perm (+ 1) P idr◎r))) , ((perm (+ 1) P idr◎r) , id⇔)) C
 
 {-# NON_TERMINATING #-}
 mutual 
-  loopFwd : {T : FT/} → State T → V T
-  loopFwd s with ap/ s
+  loopFwd : {T : U} → State T → V T
+  loopFwd s with ap s
   ... | Fwd , s' = loopFwd s'
   ... | Bck , s' = loopBck s'
   ... | Done , Exit _ v Empty = v
   ... | Done , _ = {!!}
 
-  loopBck : {T : FT/} → State T → V T
-  loopBck s with ap⁻¹/ s
+  loopBck : {T : U} → State T → V T
+  loopBck s with ap⁻¹ s
   ... | Bck , s' = loopBck s'
   ... | Fwd , s' = loopFwd s'
   ... | Done , _ = {!!}
 
 -- Credit card example
--}
+
 cc : # NOT ⟷ # NOT
 cc = uniti⋆l ◎
      (((η+ NOT) ⊗ id⟷) ◎
