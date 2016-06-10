@@ -5,8 +5,8 @@ The main syntactic vehicle for the technical developments in this
 paper is the language $\Pi$ whose only computations are isomorphisms
 between finite types and equivalences between these
 isomorphisms~\cite{James:2012:IE:2103656.2103667,Carette2016}. We
-present the syntax and operational and denotational semantics of
-the parts of the language relevant to our development.
+present the syntax and operational semantics of the parts of the
+language relevant to our development.
 
 \begin{figure*}[ht]
 \[\begin{array}{cc}
@@ -257,19 +257,22 @@ $!c_1 \isotwo ~!c_2$.
 \end{proposition} 
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Operational Semantics}
+\subsection{Operational Semantics and the Order of 1-Combinators}
 
-We give an operational semantics for $\Pi$.  Operationally, the
-semantics consists of a pair of mutually recursive evaluators that
-take a combinator and a value and propagate the value in the forward
+We give an operational semantics for the 1-combinators of $\Pi$ which
+represent ``conventional'' programs.  Operationally, the semantics
+consists of a pair of mutually recursive evaluators that take a
+combinator and a value and propagate the value in the forward
 direction~$\triangleright$ or in the backward
 direction~$\triangleleft$. We show the complete forward evaluator in
 Fig.~\ref{opsem}; the backward evaluator is easy to infer.
 
 As an example, let $\mathbb{3}$ abbreviate the type
-$(\ot \oplus \ot) \oplus \ot$ and consider the following six
-combinators of type $\mathbb{3} \iso \mathbb{3}$:
-
+$(\ot \oplus \ot) \oplus \ot$. There are three values of type
+$\mathbb{3}$ which are $\inl{\inl{\unitv}}$, $\inl{\inr{\unitv}}$, and
+$\inr{\unitv}$. There are six combinators of type
+$\mathbb{3} \iso \mathbb{3}$, each representing a different
+permutation of three elements, which could be written as follows:
 \[\begin{array}{rcl}
 a_1 &=& \idiso \\
 a_2 &=& \swapp \oplus \idiso \\
@@ -278,10 +281,7 @@ a_4 &=& a_2 \odot a_3 \\
 a_5 &=& a_3 \odot a_2 \\
 a_6 &=& a_4 \odot a_2
 \end{array}\]
-
-There are three values of type $\mathbb{3}$ which are
-$\inl{\inl{\unitv}}$, $\inl{\inr{\unitv}}$, and
-$\inr{\unitv}$. Evaluting $a_2$ on each of these values, we get:
+Tracing the evaluation of $a_2$ on each of the possible inputs yields:
 \[\begin{array}{rcl}
 \evalone{(\swapp\oplus\idiso)}{\inl{\inl{\unitv}}} &=& \inl{\evalone{\swapp}{\inl{\unitv}}} \\
 &=& \inl{\inr{\unitv}} \\
@@ -292,129 +292,25 @@ $\inr{\unitv}$. Evaluting $a_2$ on each of these values, we get:
 \evalone{(\swapp\oplus\idiso)}{\inr{\unitv}} &=& \inr{\evalone{\idiso}{\unitv}} \\
 &=& \inr{\unitv}
 \end{array}\]
+Thus the effect of combinator $a_2$ is to swap the values
+$\inl{\inl{\unitv}}$ and $\inl{\inr{\unitv}}$ leaving the value
+$\inr{\unitv}$ intact. Iterating $a_2$ again is therefore equivalent
+to the identity permutation, which can be verified using the full set of
+2-combinators~\cite{Carette2016}:
+\[\begin{array}{rcl}
+a_2 \odot a_2 &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
+&\isotwo& (\swapp \odot \swapp) \oplus (\idiso \odot \idiso) \\
+&\isotwo& \idiso \oplus \idiso \\
+&=& \idiso
+\end{array}\]
 
-
-Every 1-combinator has an \emph{order} $n$: applying this combinator
-$n$ times is equivalent to the identityA couple of examples: compute order
-The type $(\ot \oplus \ot) \oplus \ot$ has cardinality 3 and hence has
-6 automorphisms on it:
-
-
-
-The combinators realize all the 3! permutations on the set of
-cardinality 3. The permutation $a_1$ is the identity permutation; the
-permutations $a_2$, $a_3$, and $a_6$ swap two of the three elements
-leaving the third intact; the permutations $a_4$ and $a_5$ rotate the
-three elements. A crucial property of combinators is their
-\emph{order} which classifies them according to the number of
-iterations needed for them to compose to the identity. In our case,
-the reader is invited to check the following: $\mathit{order}(a_1)=1$,
+A similar calculation shows that the combinator $a_1$ is the identity
+permutation; the combinators $a_3$ and $a_6$ also swap two of the
+three elements leaving the third intact; and the combinators $a_4$ and
+$a_5$ rotate the three elements. We therefore have
+$\mathit{order}(a_1)=1$,
 $\mathit{order}(a_2)=\mathit{order}(a_3)=\mathit{order}(a_6)=2$, and
-$\mathit{order}(a_4)=\mathit{order}(a_5)=3$. Generally speaking to
-calculate the order of a combinator $c$, we apply $c$ to every value
-and observe the length of the orbit. The order is the lcm of all the
-orbits.
-
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Groupoid Model} 
-
-For $c_1, c_2 : \tau_1\iso\tau_2$, we have level-2 combinators $\alpha
-: c_1 \isotwo c_2$ which are equivalences of isomorphisms, and which
-happen to correspond to the coherence conditions for rig
-groupoids. Many of the level 2 combinators not used. We only present
-the ones we use in this paper.
-
- From the perspective of category theory, the language $\Pi$ models what is
-called a \emph{symmetric bimonoidal category} or a \emph{commutative rig
-category}. These are categories with two binary operations and satisfying the
-axioms of a commutative rig (i.e., a commutative ring without negative
-elements also known as a commutative semiring) up to coherent
-isomorphisms. And indeed the types of the $\Pi$-combinators are precisely the
-commutative semiring axioms. A formal way of saying this is that $\Pi$ is the
-\emph{categorification}~\cite{math/9802029} of the natural numbers. A simple
-(slightly degenerate) example of such categories is the category of finite
-sets and permutations in which we interpret every $\Pi$-type as a finite set,
-interpret the values as elements in these finite sets, and interpret the
-combinators as permutations. 
-
-Explain that we only reach a trivial class of groupoids
-
-introduce discreteC and discreteG
-
-discrete category: give a set $S$ objects are $S$, morphisms are only
-identity morphisms; each object has exactly one morphism id. That is a
-groupoid, trivially, because id is symmetric
-
-Instead of modeling the types of $\Pi$ using sets and the combinators using
-permutations we use a semantics that identifies $\Pi$-combinators with
-\emph{paths}. More precisely, we model the universe of $\Pi$-types as a space
-\AgdaFunction{U} whose points are the individual $\Pi$-types (which are
-themselves spaces \AgdaBound{t} containing points). We then postulate that
-there is path between the spaces \AgdaBound{t₁} and \AgdaBound{t₂} if there
-is a $\Pi$-combinator $c : t_1 \iso t_2$. Our postulate is similar in spirit
-to the univalence axiom but, unlike the latter, it has a simple computational
-interpretation. A path directly corresponds to a type isomorphism with a
-clear operational semantics as presented in the previous section. As we will
-explain in more detail below, this approach replaces the datatype
-\AgdaSymbol{≡} modeling propositional equality with the datatype
-\AgdaSymbol{⟷} modeling type isomorphisms. With this switch, the
-$\Pi$-combinators of Fig.~\ref{pi-combinators} become \emph{syntax} for the
-paths in the space $U$. Put differently, instead of having exactly one
-constructor \AgdaInductiveConstructor{refl} for paths with all other paths
-discovered by proofs (see Secs. 2.5--2.12 of the HoTT
-book~\citeyearpar{hottbook}) or postulated by the univalence axiom, we have
-an \emph{inductive definition} that completely specifies all the paths in the
-space $U$.
-
-We begin with the datatype definition of the universe \AgdaFunction{U} of finite
-types which are constructed using \AgdaInductiveConstructor{ZERO},
-\AgdaInductiveConstructor{ONE}, \AgdaInductiveConstructor{PLUS}, and
-\AgdaInductiveConstructor{TIMES}. Each of these finite types will correspond
-to a set of points with paths connecting some of the points. The underlying
-set of points is computed by \AgdaSymbol{⟦}\_\AgdaSymbol{⟧} as follows:
-\AgdaInductiveConstructor{ZERO} maps to the empty set~\AgdaSymbol{⊥},
-\AgdaInductiveConstructor{ONE} maps to the singleton set \AgdaSymbol{⊤},
-\AgdaInductiveConstructor{PLUS} maps to the disjoint union \AgdaSymbol{⊎},
-and \AgdaInductiveConstructor{TIMES} maps to the cartesian product
-\AgdaSymbol{×}.
-
-We note that the refinement of the $\Pi$-combinators to combinators on
-pointed spaces is given by an inductive family for
-\emph{heterogeneous} equality that generalizes the usual inductive
-family for propositional equality. Put differently, what used to be
-the only constructor for paths \AgdaInductiveConstructor{refl} is now
-just one of the many constructors (named
-\AgdaInductiveConstructor{id⟷} in the figure). Among the new
-constructors we have \AgdaInductiveConstructor{◎} that constructs path
-compositions. By construction, every combinator has an inverse
-calculated as shown in Fig.~\ref{sym}. These constructions are
-sufficient to guarantee that the universe~\AgdaFunction{U} is a
-groupoid. Additionally, we have paths that connect values in different
-but isomorphic spaces like \ldots
-
-The example \AgdaFunction{notpath} which earlier required the use of the
-univalence axiom can now be directly defined using
-\AgdaInductiveConstructor{swap1₊} and \AgdaInductiveConstructor{swap2₊}. To
-see this, note that \AgdaPrimitiveType{Bool} can be viewed as a shorthand for
-\AgdaInductiveConstructor{PLUS} \AgdaInductiveConstructor{ONE}
-\AgdaInductiveConstructor{ONE} with \AgdaInductiveConstructor{true} and
-\AgdaInductiveConstructor{false} as shorthands for
-\AgdaInductiveConstructor{inj₁} \AgdaInductiveConstructor{tt} and
-\AgdaInductiveConstructor{inj₂} \AgdaInductiveConstructor{tt}. With this in
-mind, the path corresponding to boolean negation consists of two ``fibers'',
-one for each boolean value as shown below:
-
-\noindent In other words, a path between spaces is really a collection of
-paths connecting the various points. Note however that we never need to
-``collect'' these paths using a universal quantification.
-
-Shouldn't we also show that \AgdaPrimitiveType{Bool} contains exactly
-$2$ things, and that TRUE and FALSE are ``different''? The other thing
-is, whereas not used to be a path between Bool and Bool, we no longer
-have that.  Shouldn't we show that, somehow, BOOL and BOOL.F 'union'
-BOOL.T are somehow ``equivalent''?  And there there is a coherent
-notpath built the same way?  Especially since I am sure it is quite
-easy to build incoherent sets of paths!
+$\mathit{order}(a_4)=\mathit{order}(a_5)=3$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
