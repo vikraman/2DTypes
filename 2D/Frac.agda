@@ -163,3 +163,8 @@ open import 2D.Order
 ... | ord n n≥1 = mkRational n 1
 ∣ 1/# p ∣ with order p
 ... | ord n n≥1 = 1÷_ n {n≥1}
+
+Elem : (τ : U) → Set
+Elem τ = let ℂ , _ = ⟦ τ ⟧
+             open Category ℂ
+         in Obj
