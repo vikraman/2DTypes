@@ -17,7 +17,7 @@ consider combinators under order; this is a group
 also monad/comonad
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Symmetric Rig Groupoid} 
+\subsection{$\Pi$ Semantics as a Symmetric Rig Groupoid} 
 
 Viewed categorically, the types of $\Pi$ are objects that model sets
 of natural numbers, the 1-combinators are morphisms that model
@@ -48,8 +48,33 @@ denote a set with one element. Each set can be viewed as a category
 whose objects are the set elements and whose morphisms are just the
 identity morphisms: this category is a trivial discrete groupoid.
 
+As mentioned in the introduction, in the HoTT world like in the $\Pi$
+world, types are groupoids. The HoTT world is however much richer
+including weak $\infty$-groupoids which consist of infinitely
+ascending towers of equivalences up to equivalences up to equivalences
+etc. Our paper can be seen as characterizing a special class of
+2-groupoids that only includes non-trivial equivalences and
+non-trivial equivalences between equivalences, with no structure
+beyond this second level of equivalences. This class already offers
+tantalizing new insights and benefits to programming practice. In more
+detail, a 0-groupoid is a set, i.e., a collection of points with only
+identity-paths. A strict 1-groupoid takes us to the next level
+allowing a collection of points connected by non-trivial paths. We
+however explicitly collapse the higher-level structure. Even with this
+restriction, arbitrary strict 1-groupoids are as general as all finite
+groups which makes them interesting but difficult to capture
+structurally and computationally. There are however some interesting
+special cases within that form, one of which we explore in detail in
+this paper. The special case we study is that of an \emph{action
+  groupoid} defined and explained in the next section.
+
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Groupoid Model} 
+\subsection{Action Groupoids} 
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{xxx}
  
 For $c_1, c_2 : \tau_1\iso\tau_2$, we have level-2 combinators $\alpha
 : c_1 \isotwo c_2$ which are equivalences of isomorphisms, and which
