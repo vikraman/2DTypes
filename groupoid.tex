@@ -1,9 +1,56 @@
-\section{Groupoids}
+\section{Categorical Model: Groupoids}
 \label{sec:groupoids}
+
+rig groupoid
+objects types
+morphisms 1-combinators
+coherence conditions 2-combinators
+
+but so far objects are just finite sets essentially
+can we get more interesting groupoids such as the ones in the intro
+action groupoids
+
+challenge is to find a computational interpretation of action
+groupoids: group, group action, ... insight: all we need is to
+consider combinators under order; this is a group
+
+also monad/comonad
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Symmetric Rig Groupoid} 
+
+Viewed categorically, the types of $\Pi$ are objects that model sets
+of natural numbers, the 1-combinators are morphisms that model
+cardinality-preserving maps, and the 2-combinators are coherence
+conditions on these morphisms~\cite{Carette2016}. The resulting
+$\Pi$-category has a rich structure consisting of two symmetric
+monoidal structures~\cite{nla.cat-vn1051288} separately induced by the
+properties of addition and multiplication of the natural
+numbers. These two structures are then augmented with distributivity
+and absorption natural isomorphisms~\cite{laplaza} to model the full
+commutative semiring (aka, commutative rig) of the natural
+numbers. All the morphisms are invertible which makes the resulting
+category a ``symmetric rig groupoid''~\cite{nlabrig}.
+
+Despite this rich structure, the individual objects in the category
+are just plain sets with no interesting structure. Formally, each
+$\Pi$ type $\tau$ induces a finite set $\sem{\tau}$ as follows:
+
+\[\begin{array}{rcl}
+\sem{\zt} &=& \bot \\
+\sem{\ot} &=& \top \\
+\sem{\tau_1 \oplus \tau_2} &=& \sem{\tau_1} \uplus \sem{\tau_2} \\
+\sem{\tau_1 \otimes \tau_2} &=& \sem{\tau_1} \times \sem{\tau_2} 
+\end{array}\]
+
+\noindent where we use $\bot$ to denote the empty set and $\top$ to
+denote a set with one element. Each set can be viewed as a category
+whose objects are the set elements and whose morphisms are just the
+identity morphisms: this category is a trivial discrete groupoid.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Groupoid Model} 
-
+ 
 For $c_1, c_2 : \tau_1\iso\tau_2$, we have level-2 combinators $\alpha
 : c_1 \isotwo c_2$ which are equivalences of isomorphisms, and which
 happen to correspond to the coherence conditions for rig
@@ -383,7 +430,7 @@ easy to build incoherent sets of paths!
 \subsection{Information Equivalence}
  
 We need to show coherence of the definition of cardinalities on the
-universe syntax with the Euler characteric of the category which in
+universe syntax with the Euler characteristic of the category which in
 our case also corresponds to the groupoid cardinality. There are
 several formulations and explanations. The following is quite simple
 to implement: first collapse all the isomorphic objects. Then fix a
@@ -480,7 +527,7 @@ Talk about monad/comonad ????
 % -- q^(suc j) using the monad. We can use
 % -- the comonad to map p^i to p^(suc i) and
 % -- then to #q using c. So as an effect we can
-% -- constuct maps that move around #p and #q
+% -- construct maps that move around #p and #q
 % -- using p and q.
 % --
 % -- A more general perspective: computations

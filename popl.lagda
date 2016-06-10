@@ -96,6 +96,8 @@ $\displaystyle
 \newcommand{\respptwo}{\mathsf{{resp_{\oplus\Leftrightarrow}}}}
 \newcommand{\respttwo}{\mathsf{{resp_{\otimes\Leftrightarrow}}}}
 
+\newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+
 %% \theoremstyle{remark}
 \newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition}
