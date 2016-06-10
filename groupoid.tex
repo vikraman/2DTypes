@@ -43,22 +43,44 @@ $\Pi$ type $\tau$ induces a finite set $\sem{\tau}$ as follows:
 \sem{\tau_1 \otimes \tau_2} &=& \sem{\tau_1} \times \sem{\tau_2} 
 \end{array}\]
 
-\noindent where we use $\bot$ to denote the empty set and $\top$ to
-denote a set with one element. Each set can be viewed as a category
-whose objects are the set elements and whose morphisms are just the
-identity morphisms: this category is a trivial discrete groupoid. Thus
-$\Pi$ still leaves untapped an enormous amount of combinatorial
-structure that should be within reach. Indeed, as we show next, it is
-possible with a small technical insight to extend $\Pi$ with types
-whose denotations are non-trivial groupoids such as the ones
-illustrated in Fig.~\ref{fig:groupoids}. 
+\noindent where we use $\bot$ to denote the empty set, $\top$ to
+denote a set with one element, and $\uplus$ and $\times$ to denote the
+disjoint union of sets and the product of sets respectively. Each set
+can be viewed as a groupoid whose objects are the set elements and
+whose morphisms are just the identity morphisms. By only being able to
+express types whose denotations are trivial groupoids, $\Pi$ leaves
+untapped an enormous amount of combinatorial structure that should be
+within reach. Indeed, as we show next, it is possible with a small but
+deep technical insight to extend $\Pi$ with types whose denotations
+are non-trivial groupoids such as the ones illustrated in
+Fig.~\ref{fig:groupoids}.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{1-Combinators as Types} 
 
-From a 1-combinator $c : \tau \iso \tau$ of order $n$ we can generate
-two groupoids...
+From each 1-combinator $c : \tau \iso \tau$ that maps a type $\tau$ to
+itself, we generate two groupoids $\order{c}$ and $\iorder{c}$ with
+cardinalities $\mathit{order}(c)$ and $\frac{1}{\mathit{order}(c)}$
+respectively. Given that we have sums and products of groupoids, this
+small extension allows us to write types whose denotations are
+groupoids with the cardinality of an arbitrary positive rational
+number. This is in addition to the plain $\Pi$ types whose denotations
+are groupoids with the cardinality of an arbitrary natural number. To
+make these ideas precise, we first define the cardinality of a
+groupoid, and then give the details of the constructions of the
+groupoids $\order{c}$ and $\iorder{c}$.
 
+\begin{definition}[Groupoid Cardinality]
+\ldots
+\end{definition}
+
+\begin{definition}[$\order{c}$]
+\ldots
+\end{definition}
+
+\begin{definition}[$\iorder{c}$]
+\ldots
+\end{definition}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{xxx}

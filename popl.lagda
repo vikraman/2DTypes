@@ -30,6 +30,7 @@
 \newcommand{\ag}[2]{#1 \sslash #2}
 \newcommand{\agp}[3]{#1 \sslash_{#3} #2}
 \newcommand{\order}[1]{\hash #1}
+\newcommand{\iorder}[1]{1/\hash #1}
 \newcommand{\inl}[1]{\textsf{inl}(#1)}
 \newcommand{\inr}[1]{\textsf{inr}(#1)}
 \newcommand{\zt}{\mathbb{0}}
