@@ -145,12 +145,30 @@ Type formation, equality and introduction rules, but no elimination forms.
   \begin{bprooftree}
     \AxiomC{$A \typ$}
     \AxiomC{$p \in A \leftrightarrow A$}
-    \BinaryInfC{$\mathbb{1}/p \typ$}
+    \BinaryInfC{$\#p \typ$}
   \end{bprooftree}
+\]
+\[
   \begin{bprooftree}
     \AxiomC{$A \typ$}
     \AxiomC{$p, q \in A \leftrightarrow A$}
     \AxiomC{$r \in p \Leftrightarrow q$}
-    \TrinaryInfC{$\mathbb{1}/p = \mathbb{1}/q$}
+    \TrinaryInfC{$\#p = \#q$}
+  \end{bprooftree}
+\]
+
+\[
+  \begin{bprooftree}
+    \AxiomC{$A \typ$}
+    \AxiomC{$p \in A \leftrightarrow A$}
+    \BinaryInfC{$1/\#p \typ$}
+  \end{bprooftree}
+\]
+\[
+  \begin{bprooftree}
+    \AxiomC{$A \typ$}
+    \AxiomC{$p, q \in A \leftrightarrow A$}
+    \AxiomC{$r \in p \Leftrightarrow q$}
+    \TrinaryInfC{$1/\#p = \mathbb{1}/\#q$}
   \end{bprooftree}
 \]
