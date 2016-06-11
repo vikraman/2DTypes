@@ -1,3 +1,4 @@
 [submodule "categories"]
 	path = categories
 	url = https://github.com/vikraman/categories.git
+	branch = groupoid

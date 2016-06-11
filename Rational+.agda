@@ -19,7 +19,7 @@ import Data.Integer.Properties as ℤ
 open import Data.Nat.GCD
 open import Data.Nat.Divisibility as ℕDiv using (_∣_; divides)
 import Data.Nat.Coprimality as C
-open import Data.Nat as ℕ using (ℕ; zero; suc)
+open import Data.Nat as ℕ using (ℕ; zero; suc; _≥_)
 open import Data.Nat.Show renaming (show to ℕshow)
 open import Data.Sum
 open import Data.String using (String; _++_)
@@ -156,6 +156,10 @@ helper+ -[1+ n ] d {d≢0} =
 
 mkRational : (m n : ℕ) {n≠0 : NonZero n} → ℚ
 mkRational m n {n≠0} = helper+ (+ m) n {n≠0}
+
+-- 1/n from n
+1÷_ : (n : ℕ) → {n≥1 : n ≥ 1} → ℚ
+(1÷ (suc n)) {ℕ.s≤s n≥1} = mkRational 1 (ℕ.suc n)
 
 ------------------------------------------------------------------------------
 -- Operations on rationals: unary -, reciprocal, multiplication, addition

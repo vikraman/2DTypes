@@ -10,6 +10,7 @@ open import Data.Unit
 open import Categories.Category
 open import Categories.Groupoid
 open import Categories.Groupoid.Sum
+open import Categories.Groupoid.Product
 open import Level hiding (lower)
 
 open import Relation.Binary.PropositionalEquality
@@ -88,18 +89,18 @@ record Perm {τ : U} (p : τ ⟷ τ) : Set where
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Perm p
-   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ⇔ p₂ } 
-   ; _≡_ = λ _ _ → ⊤ 
-   ; id = id⇔ 
+   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ⇔ p₂ }
+   ; _≡_ = λ _ _ → ⊤
+   ; id = id⇔
    ; _∘_ = λ α β → trans⇔ β α
    ; assoc = tt
    ; identityˡ = tt
-   ; identityʳ = tt 
+   ; identityʳ = tt
    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
-   ; ∘-resp-≡ = λ _ _ → tt  
+   ; ∘-resp-≡ = λ _ _ → tt
    }
    where open Perm
-   
+
 1/orderC : (τ : U) → (τ ⟷ τ) → Category _ _ _
 1/orderC τ pp = record { Obj = ⊤
                        ; _⇒_ = λ _ _ → Perm pp
@@ -151,20 +152,12 @@ orderG {τ} p = record {
 open import Rational+ as ℚ
 open import 2D.Order
 
-1÷_ : (n : ℕ) → {n≥1 : n ≥ 1} → ℚ
-(1÷ (suc n)) {s≤s n≥1} = mkRational 1 (ℕ.suc n)
-
 ∣_∣ : U → ℚ
 ∣ 𝟘 ∣ = + 0 ÷ 1
 ∣ 𝟙 ∣ = + 1 ÷ 1
 ∣ t₁ ⊕ t₂ ∣ = ∣ t₁ ∣ ℚ.+ ∣ t₂ ∣
 ∣ t₁ ⊗ t₂ ∣ = ∣ t₁ ∣ ℚ.* ∣ t₂ ∣
 ∣ # p ∣ with order p
-... | ord n n≥1 = mkRational n 1
+... | ord n n≥1 = n ÷1
 ∣ 1/# p ∣ with order p
-... | ord n n≥1 = 1÷_ n {n≥1}
-
-Elem : (τ : U) → Set
-Elem τ = let ℂ , _ = ⟦ τ ⟧
-             open Category ℂ
-         in Obj
+... | ord n n≥1 = (1÷ n) {n≥1}
