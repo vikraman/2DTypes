@@ -32,6 +32,7 @@
 \newcommand{\agp}[3]{#1 \sslash_{#3} #2}
 \newcommand{\order}[1]{\hash #1}
 \newcommand{\iorder}[1]{1/\hash #1}
+\newcommand{\ord}[1]{\ensuremath{\mathsf{order}(#1)}}
 \newcommand{\inl}[1]{\textsf{inl}(#1)}
 \newcommand{\inr}[1]{\textsf{inr}(#1)}
 \newcommand{\zt}{\mathbb{0}}
@@ -40,6 +41,7 @@
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\Zn}{\mathbb{Z}_n}
 \newcommand{\Zvn}{\mathbb{Z}^v_n}
+\newcommand{\N}{\mathbb{N}}
 \newcommand{\cycle}{\textsf{cycle}}
 \newcommand{\twod}{\mathbb{T}}
 \newcommand{\fract}[2]{#1/#2}
@@ -105,6 +107,7 @@ $\displaystyle
 \newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition}
 \newtheorem{example}{Example}
+\newtheorem{lemma}{Lemma}
 
 \renewcommand{\AgdaCodeStyle}{\small}
 %% shorten the longarrow

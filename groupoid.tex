@@ -83,7 +83,7 @@ groupoids $\order{c}$ and $\iorder{c}$.
 
 \begin{definition}[Power of a permutation]
   The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
-  $k \in \mathbb{Z}$ is
+  $k \in \Z$ is
   \[
     p^k =
   \begin{cases}
@@ -94,18 +94,46 @@ groupoids $\order{c}$ and $\iorder{c}$.
   \]
 \end{definition}
 
+\begin{definition}[Order of a permutation]
+  The order of a 1-combinator $p : \tau \iso \tau$, $\ord{p}$, is the
+  least postitive natural number $k \in \N^+$ such that
+  $p^k \isotwo \idiso$.
+\end{definition}
+
+\begin{lemma}
+  Every $p : \tau \iso \tau$ has an order.
+\end{lemma}
+
+\begin{proof}
+  By cases.
+  \begin{enumerate}
+  \item $\ord{\idiso} = 1$
+  \item $\ord{\swapp} = \ord{\swapt} = 2$
+  \item $\ord{p_1 \odot p_2} = ???$
+  \item $\ord{p_1 \oplus p_2} = \ord{p_1 \otimes p_2} = \mathsf{lcm}(\ord{p_1}, \ord{p_2})$
+  \end{enumerate}
+\end{proof}
+
+\begin{lemma}
+  For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
+  $k = \ord{p}$.
+\end{lemma}
+
+\begin{proof}
+  Trivial.
+\end{proof}
+
 \begin{definition}[$\order{c}$]
   Denotationally, $\order{c}$ is the type representing the 1-groupoid
   whose objects are 1-combinators of $\mathit{order}(c)$ raised to some
-  power $k \in \mathbb{Z}$, and morphisms being 2-combinators between
-  them.
+  power $k \in \Z$, and morphisms being 2-combinators between them.
 \end{definition}
 
 \begin{definition}[$\iorder{c}$]
   Denotationally, $\iorder{c}$ is the type representing the 2-groupoid
   with a zero object $\bullet$, morphisms 1-combinators of
-  $\mathit{order}(c)$ raised to some power $k \in \mathbb{Z}$, and
-  2-morphisms being 2-combinators between them.
+  $\mathit{order}(c)$ raised to some power $k \in \Z$, and 2-morphisms
+  being 2-combinators between them.
 \end{definition}
 
 \vic{Should typing judgments be here?}
