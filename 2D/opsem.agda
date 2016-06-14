@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+-- {-# OPTIONS --without-K #-}
 
 module 2D.opsem where
 
@@ -199,13 +199,15 @@ data Dir : Set where
 ------------------------------------------------------------------------------
 -- Evaluation
 
-postulate
-  _⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
+-- WRONG!!! AND USES K ANYWAY
+_⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
+Prim id⟷ ⇔? Prim id⟷ = true
+Prim swap₊ ⇔? Prim swap₊ = true
+Prim id⟷ ⇔? Prim swap₊ = false
+Prim swap₊ ⇔? Prim id⟷ = false
+_ ⇔? _ = false 
 
 -- Forward execution one step at a time
-
-¬ : Set → Set
-¬ T = T → ⊥
 
 ap : {T : U} → (s : State T) → Dir × State T
 -- primitives
@@ -235,9 +237,11 @@ ap (Exit P₁ v₁ (L× C P₂ v₂)) =
 ap (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
   Fwd , Exit (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
 -- eta and epsilon
-ap (Enter (η+ P) (tt , av) C) =
-  Fwd , Exit (η+ P) ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r)) C
-ap (Enter (η- P) (tt , av) C) =
+ap (Enter (η+ P) (tt , _) C) =
+  Fwd , Exit (η+ P)
+        ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r))
+        C
+ap (Enter (η- P) (tt , _) C) =
   Fwd , Exit (η- P)
         ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
         C
@@ -250,7 +254,7 @@ ap (Enter (ε- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
      then Fwd , Exit (ε- P) (tt , refl) C
      else Bck , Enter (ε- P) (((tt , perm i q α) , (perm j r γ , β))) C
 -- done
-ap (Exit P v Empty) = {!!}
+ap (Exit P v Empty) = Fwd , Exit P v Empty
 
 -- Reverse execution one step at a time
 
@@ -284,12 +288,72 @@ ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) =
 -- eta and epsilon
 ap⁻¹ (Exit (ε+ P) (tt , _) C) =
   Bck , Enter (ε+ P)
-        ((((perm (+ 1) P idr◎r) , tt)) , (id⇔ , (perm (+ 1) P idr◎r)))
+        ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r))
         C
 ap⁻¹ (Exit (ε- P) (tt , _) C) =
   Bck , Enter (ε- P)
-        (((tt , (perm (+ 1) P idr◎r))) , ((perm (+ 1) P idr◎r) , id⇔))
+        ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
         C
+ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
+   if (q ⇔? r)
+     then Bck , Enter (η+ P) (tt , refl) C
+     else Fwd , Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C
+ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
+   if (q ⇔? r)
+     then Bck , Enter (η- P) (tt , refl) C
+     else Fwd , Exit (η- P) (((tt , perm i q α) , (perm j r γ , β))) C
+-- done 
+ap⁻¹ (Enter P v Empty) = Bck , Enter P v Empty 
+
+-- big step execution
+
+{-# NON_TERMINATING #-}
+
+mutual 
+  loopFwd : {T : U} → (s : State T) → V T
+  loopFwd s with ap s 
+  ... | Fwd , (Exit _ v Empty) = v
+  ... | Fwd , s' = loopFwd s' 
+  ... | Bck , s' = loopBck s'
+
+  loopBck : {T : U} → State T → V T
+  loopBck s with ap⁻¹ s
+  ... | Bck , (Enter _ v Empty) = v
+  ... | Bck , s' = loopBck s'
+  ... | Fwd , s' = loopFwd s'
+
+------------------------------------------------------------------------------
+-- Examples and thoughts
+
+-- Credit card example
+
+cc : # NOT ⟷ # NOT
+cc = Prim uniti⋆l ◎
+     (((η+ NOT) ⊗ Prim id⟷) ◎
+     ((Prim assocr⋆ ◎
+     ((Prim id⟷ ⊗ Prim swap⋆) ◎
+     ((Prim id⟷ ⊗ (ε+ NOT)) ◎
+     Prim unite⋆r)))))
+
+t0 = loopFwd (Enter cc (cv NOT (+ 0)) Empty)
+-- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
+t1 = loopFwd (Enter cc (cv NOT (+ 1)) Empty)
+-- evals to: perm (+ 1) (Prim swap₊ ◎ Prim id⟷) id⇔ , id⇔ 
+t2 = loopBck (Enter cc (cv NOT (+ 0)) Empty)
+-- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
+t3 = loopBck (Enter cc (cv NOT (+ 1)) Empty)
+-- evals to: perm (+ 1) (Prim swap₊ ◎ Prim id⟷) id⇔ , id⇔
+
+{-
+%% -- Trivial implementation of eta/epsilon that does
+%% -- type check (see below).  Might be interesting to figure out why
+%% -- that is:
+%% -- ap/ (η {τ} {p}) (v , av) =
+%% --   (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
+%% -- ap/ ε (v , av) = tt , refl
+-}
+
+{--
 ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
   if (q ⇔? r)
   then Bck , Enter (η+ P) (tt , refl) C
@@ -316,47 +380,7 @@ ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
                (trans⇔ (idr◎r ⊡ id⇔)
                (2! (lower {p = P} (+ 1) i))))) , id⇔))
              C
-
--- done 
-ap⁻¹ (Enter P v Empty) = {!!} 
-
--- big step execution
-
-{-# NON_TERMINATING #-}
-
-mutual 
-  loopFwd : {T : U} → (s : State T) → V T
-  loopFwd s with ap s 
-  ... | Fwd , (Exit _ v Empty) = v
-  ... | Fwd , s' = loopFwd s' 
-  ... | Bck , s' = loopBck s'
-
-  loopBck : {T : U} → State T → V T
-  loopBck s with ap⁻¹ s
-  ... | Bck , s' = loopBck s'
-  ... | Fwd , s' = loopFwd s'
-
-------------------------------------------------------------------------------
--- Examples and thoughts
-
--- Credit card example
-
-cc : # NOT ⟷ # NOT
-cc = Prim uniti⋆l ◎
-     (((η+ NOT) ⊗ Prim id⟷) ◎
-     ((Prim assocr⋆ ◎
-     ((Prim id⟷ ⊗ Prim swap⋆) ◎
-     ((Prim id⟷ ⊗ (ε+ NOT)) ◎
-     Prim unite⋆r)))))
-
-{-
-%% -- Trivial implementation of eta/epsilon that does
-%% -- type check (see below).  Might be interesting to figure out why
-%% -- that is:
-%% -- ap/ (η {τ} {p}) (v , av) =
-%% --   (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
-%% -- ap/ ε (v , av) = tt , refl
--}
+--}
 
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
