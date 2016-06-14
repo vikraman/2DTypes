@@ -4,6 +4,7 @@ module 2D.opsem where
 
 open import Level using () renaming (zero to l0; suc to lsuc)
 open import Universe using (Universe)
+open import Data.Empty
 open import Data.Bool
 open import Data.Sum hiding ([_,_])
 open import Data.Product
@@ -23,8 +24,9 @@ open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
 open import 2D.Types
 open import 2D.Frac
---open import groupoid
---open import pifrac
+
+------------------------------------------------------------------------------
+-- Values
 
 V : (T : U) → Set
 V T = let ℂ , _ = ⟦ T ⟧
@@ -32,12 +34,6 @@ V T = let ℂ , _ = ⟦ T ⟧
       in Σ[ v ∈ Obj ] (v ⇒ v)
 
 -- Examples:
-
--- Abbreviations: 
-
--- discrete values
--- dv : {τ : FT} → Universe.El UFT τ → V (⇑ τ)
--- dv v = (v , refl)
 
 -- fractional values
 
@@ -90,40 +86,8 @@ v₈ = [_,_] {T₁ = # NOT} {T₂ = BOOL} v₂ v₁
 v₉ : V (# NOT ⊗ 1/# NOT) -- mismatched pair
 v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅ 
 
--- Context T1 T2 T3 : missing T1 ⇿ T2 combinator;
--- returns T3 as final answer
-
-data Context : U → U → U → Set where
-  Empty : {T : U} → Context T T T
-  Fst : {T₁ T₂ T₃ T : U} →
-    (C : Context T₁ T₃ T) → (P₂ : T₂ ⟷ T₃) → Context T₁ T₂ T
-  Snd : {T₁ T₂ T₃ T : U} →
-    (P₁ : T₁ ⟷ T₂) → (C : Context T₁ T₃ T) → Context T₂ T₃ T
-  L× : {T₁ T₂ T₃ T₄ T : U} →
-    (C : Context (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) →
-    (P₂ : T₂ ⟷ T₄) → V T₂ → Context T₁ T₃ T
-  R× : {T₁ T₂ T₃ T₄ T : U} →
-    (P₁ : T₁ ⟷ T₃) → V T₃ →
-    (C : Context (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) → Context T₂ T₄ T
-  L+ : {T₁ T₂ T₃ T₄ T : U} →
-    (C : Context (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → (P₂ : T₂ ⟷ T₄) → 
-    Context T₁ T₃ T
-  R+ : {T₁ T₂ T₃ T₄ T : U} →
-    (P₁ : T₁ ⟷ T₃) → (C : Context (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → 
-    Context T₂ T₄ T
-
-data State : U → Set where
-  Enter : {T₁ T₂ T : U} →
-    (P : T₁ ⟷ T₂) → V T₁ → Context T₁ T₂ T → State T
-  Exit : {T₁ T₂ T : U} →
-    (P : T₁ ⟷ T₂) → V T₂ → Context T₁ T₂ T → State T
-
-data Dir : Set where
-  Fwd : Dir
-  Bck : Dir
-  Done : Dir
-
--- evalution of primitive simple combinators forwards and backwards
+------------------------------------------------------------------------------
+-- evaluation of simple combinators forwards and backwards
 
 prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₁ → V T₂
 prim unite₊l (inj₁ () , av)
@@ -197,17 +161,86 @@ prim⁻¹ distl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
 prim⁻¹ distl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
 prim⁻¹ id⟷ v = v
 
+------------------------------------------------------------------------------
+-- Contexts and machine states
+
+-- Context T1 T2 T3 is a context missing T1 ⇿ T2 combinator and which
+-- returns T3 as final answer
+
+data Context : U → U → U → Set where
+  Empty : {T : U} → Context T T T
+  Fst : {T₁ T₂ T₃ T : U} →
+    (C : Context T₁ T₃ T) → (P₂ : T₂ ⟷ T₃) → Context T₁ T₂ T
+  Snd : {T₁ T₂ T₃ T : U} →
+    (P₁ : T₁ ⟷ T₂) → (C : Context T₁ T₃ T) → Context T₂ T₃ T
+  L× : {T₁ T₂ T₃ T₄ T : U} →
+    (C : Context (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) →
+    (P₂ : T₂ ⟷ T₄) → V T₂ → Context T₁ T₃ T
+  R× : {T₁ T₂ T₃ T₄ T : U} →
+    (P₁ : T₁ ⟷ T₃) → V T₃ →
+    (C : Context (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) → Context T₂ T₄ T
+  L+ : {T₁ T₂ T₃ T₄ T : U} →
+    (C : Context (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → (P₂ : T₂ ⟷ T₄) → 
+    Context T₁ T₃ T
+  R+ : {T₁ T₂ T₃ T₄ T : U} →
+    (P₁ : T₁ ⟷ T₃) → (C : Context (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → 
+    Context T₂ T₄ T
+
+data State : U → Set where
+  Enter : {T₁ T₂ T : U} →
+    (P : T₁ ⟷ T₂) → V T₁ → Context T₁ T₂ T → State T
+  Exit : {T₁ T₂ T : U} →
+    (P : T₁ ⟷ T₂) → V T₂ → Context T₁ T₂ T → State T
+
+data Dir : Set where
+  Fwd : Dir
+  Bck : Dir
+
+------------------------------------------------------------------------------
+-- Evaluation
+
 postulate
   _⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
 
-ap : {T : U} → State T → Dir × State T
-ap (Enter (Prim c) v C) = Fwd , Exit (Prim c) (prim c v) C
-ap (Enter (P₁ ◎ P₂) v C) = Fwd , Enter P₁ v (Fst C P₂)
-ap (Enter (P₁ ⊕ P₂) (inj₁ v₁ , av₁) C) = Fwd , Enter P₁ (v₁ , av₁) (L+ C P₂)
-ap (Enter (P₁ ⊕ P₂) (inj₂ v₂ , av₂) C) = Fwd , Enter P₂ (v₂ , av₂) (R+ P₁ C)
-ap (Enter (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) = Fwd , Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
-ap (Enter (η- P) (tt , av) C) = Fwd , Exit (η- P) ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔)) C
-ap (Enter (η+ P) (tt , av) C) = Fwd , Exit (η+ P) ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r)) C
+-- Forward execution one step at a time
+
+¬ : Set → Set
+¬ T = T → ⊥
+
+ap : {T : U} → (s : State T) → Dir × State T
+-- primitives
+ap (Enter (Prim c) v C) =
+  Fwd , Exit (Prim c) (prim c v) C
+-- sequential composition
+ap (Enter (P₁ ◎ P₂) v C) =
+  Fwd , Enter P₁ v (Fst C P₂)
+ap (Exit P₁ v (Fst C P₂)) =
+  Fwd , Enter P₂ v (Snd P₁ C) 
+ap (Exit P₂ v₂ (Snd P₁ C)) =
+  Fwd , Exit (P₁ ◎ P₂) v₂ C
+-- choice composition
+ap (Enter (P₁ ⊕ P₂) (inj₁ v₁ , av₁) C) =
+  Fwd , Enter P₁ (v₁ , av₁) (L+ C P₂)
+ap (Exit P₁ (v₁ , av) (L+ C P₂)) =
+  Fwd , Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
+ap (Enter (P₁ ⊕ P₂) (inj₂ v₂ , av₂) C) =
+  Fwd , Enter P₂ (v₂ , av₂) (R+ P₁ C)
+ap (Exit P₂ (v₂ , av) (R+ P₁ C)) =
+  Fwd , Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
+-- parallel composition
+ap (Enter (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
+  Fwd , Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
+ap (Exit P₁ v₁ (L× C P₂ v₂)) =
+  Fwd , Enter P₂ v₂ (R× P₁ v₁ C)
+ap (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
+  Fwd , Exit (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
+-- eta and epsilon
+ap (Enter (η+ P) (tt , av) C) =
+  Fwd , Exit (η+ P) ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r)) C
+ap (Enter (η- P) (tt , av) C) =
+  Fwd , Exit (η- P)
+        ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
+        C
 ap (Enter (ε+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
    if (q ⇔? r)
      then Fwd , Exit (ε+ P) (tt , refl) C
@@ -216,68 +249,95 @@ ap (Enter (ε- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
    if (q ⇔? r)
      then Fwd , Exit (ε- P) (tt , refl) C
      else Bck , Enter (ε- P) (((tt , perm i q α) , (perm j r γ , β))) C
-ap (Exit P v Empty) = Done , Exit P v Empty
-ap (Exit P₁ v (Fst C P₂)) = Fwd , Enter P₂ v (Snd P₁ C) 
-ap (Exit P₂ v₂ (Snd P₁ C)) = Fwd , Exit (P₁ ◎ P₂) v₂ C
-ap (Exit P₁ v₁ (L× C P₂ v₂)) = Fwd , Enter P₂ v₂ (R× P₁ v₁ C)
-ap (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) = Fwd , Exit (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
-ap (Exit P₁ (v₁ , av) (L+ C P₂)) = Fwd , Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
-ap (Exit P₂ (v₂ , av) (R+ P₁ C)) = Fwd , Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
+-- done
+ap (Exit P v Empty) = {!!}
+
+-- Reverse execution one step at a time
 
 ap⁻¹ : {T : U} → State T → Dir × State T
-ap⁻¹ (Enter P v Empty) = Done , Enter P v Empty
-ap⁻¹ (Enter P₁ v (Fst C P₂)) = Bck , Enter (P₁ ◎ P₂) v C 
-ap⁻¹ (Enter P₂ v₂ (Snd P₁ C)) = Bck , Exit P₁ v₂ (Fst C P₂)
-ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) = Bck , Enter (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
-ap⁻¹ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) = Bck , Exit P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
-ap⁻¹ (Enter P₁ (v₁ , av) (L+ C P₂)) = Bck , Enter (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
-ap⁻¹ (Enter P₂ (v₂ , av) (R+ P₁ C)) = Bck , Enter (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
-ap⁻¹ (Exit (Prim c) v C) = Bck , Enter (Prim c) (prim⁻¹ c v) C
-ap⁻¹ (Exit (P₁ ◎ P₂) v C) = Bck , Exit P₂ v (Snd P₁ C)
-ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C) = Bck , Exit P₁ (v₁ , av) (L+ C P₂) 
-ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C) = Bck , Exit P₂ (v₂ , av) (R+ P₁ C) 
-ap⁻¹ (Exit (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) = Bck , Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)
-ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
-     if (q ⇔? r)
-        then Bck , Enter (η- P) (tt , refl) C
-        else Fwd , Exit (η- P)
-                        ( (tt , (perm (ℤsuc i) (P ◎ q)
-                                      (trans⇔ (id⇔ ⊡ α)
-                                              (trans⇔ (idr◎r ⊡ id⇔)
-                                                      (2! (lower {p = P} (+ 1) i))))))
-                        , ((perm (ℤsuc i) (P ◎ q)
-                                      (trans⇔ (id⇔ ⊡ α)
-                                              (trans⇔ (idr◎r ⊡ id⇔)
-                                                      (2! (lower {p = P} (+ 1) i))))) , id⇔)) C
+-- primitives
+ap⁻¹ (Exit (Prim c) v C) =
+  Bck , Enter (Prim c) (prim⁻¹ c v) C
+-- sequential composition
+ap⁻¹ (Exit (P₁ ◎ P₂) v C) =
+  Bck , Exit P₂ v (Snd P₁ C)
+ap⁻¹ (Enter P₂ v₂ (Snd P₁ C)) =
+  Bck , Exit P₁ v₂ (Fst C P₂)
+ap⁻¹ (Enter P₁ v (Fst C P₂)) =
+  Bck , Enter (P₁ ◎ P₂) v C 
+-- choice composition
+ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C) =
+  Bck , Exit P₁ (v₁ , av) (L+ C P₂) 
+ap⁻¹ (Enter P₁ (v₁ , av) (L+ C P₂)) =
+  Bck , Enter (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
+ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C) =
+  Bck , Exit P₂ (v₂ , av) (R+ P₁ C) 
+ap⁻¹ (Enter P₂ (v₂ , av) (R+ P₁ C)) =
+  Bck , Enter (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
+-- parallel composition
+ap⁻¹ (Exit (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
+  Bck , Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)
+ap⁻¹ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
+  Bck , Exit P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
+ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) =
+  Bck , Enter (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
+-- eta and epsilon
+ap⁻¹ (Exit (ε+ P) (tt , _) C) =
+  Bck , Enter (ε+ P)
+        ((((perm (+ 1) P idr◎r) , tt)) , (id⇔ , (perm (+ 1) P idr◎r)))
+        C
+ap⁻¹ (Exit (ε- P) (tt , _) C) =
+  Bck , Enter (ε- P)
+        (((tt , (perm (+ 1) P idr◎r))) , ((perm (+ 1) P idr◎r) , id⇔))
+        C
 ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
-     if (q ⇔? r)
-        then Bck , Enter (η+ P) (tt , refl) C
-        else Fwd , Exit (η+ P)
-                        ( ((perm (ℤsuc i) (P ◎ q)
-                                 (trans⇔ (id⇔ ⊡ α)
-                                         (trans⇔ (idr◎r ⊡ id⇔)
-                                                 (2! (lower {p = P} (+ 1) i))))) , tt)
-                        , (id⇔ , (perm (ℤsuc i) (P ◎ q)
-                                       (trans⇔ (id⇔ ⊡ α)
-                                               (trans⇔ (idr◎r ⊡ id⇔)
-                                                       (2! (lower {p = P} (+ 1) i))))))) C
-ap⁻¹ (Exit (ε+ P) (tt , _) C) = Bck , Enter (ε+ P) ((((perm (+ 1) P idr◎r) , tt)) , (id⇔ , (perm (+ 1) P idr◎r))) C
-ap⁻¹ (Exit (ε- P) (tt , _) C) = Bck , Enter (ε- P) (((tt , (perm (+ 1) P idr◎r))) , ((perm (+ 1) P idr◎r) , id⇔)) C
+  if (q ⇔? r)
+  then Bck , Enter (η+ P) (tt , refl) C
+  else Fwd , Exit (η+ P)
+             ( ((perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i))))) , tt)
+             , (id⇔ , (perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i)))))))
+             C
+ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
+  if (q ⇔? r)
+  then Bck , Enter (η- P) (tt , refl) C
+  else Fwd , Exit (η- P)
+             ( (tt , (perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i))))))
+             , ((perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i))))) , id⇔))
+             C
+
+-- done 
+ap⁻¹ (Enter P v Empty) = {!!} 
+
+-- big step execution
 
 {-# NON_TERMINATING #-}
+
 mutual 
-  loopFwd : {T : U} → State T → V T
-  loopFwd s with ap s
-  ... | Fwd , s' = loopFwd s'
+  loopFwd : {T : U} → (s : State T) → V T
+  loopFwd s with ap s 
+  ... | Fwd , (Exit _ v Empty) = v
+  ... | Fwd , s' = loopFwd s' 
   ... | Bck , s' = loopBck s'
-  ... | Done , Exit _ v Empty = v
-  ... | Done , _ = loopFwd s -- impossible case
 
   loopBck : {T : U} → State T → V T
   loopBck s with ap⁻¹ s
   ... | Bck , s' = loopBck s'
   ... | Fwd , s' = loopFwd s'
-  ... | Done , _ = loopBck s -- impossible case
+
+------------------------------------------------------------------------------
+-- Examples and thoughts
 
 -- Credit card example
 
@@ -297,3 +357,6 @@ cc = Prim uniti⋆l ◎
 %% --   (((+ 0) , (p , id⇔)) , tt) , (id⇔ , ((+ 0) , (p , id⇔)))
 %% -- ap/ ε (v , av) = tt , refl
 -}
+
+------------------------------------------------------------------------------
+------------------------------------------------------------------------------
