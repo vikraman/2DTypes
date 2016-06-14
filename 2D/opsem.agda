@@ -67,7 +67,7 @@ BOOL : U
 BOOL = 𝟙 ⊕ 𝟙
 
 NOT : BOOL ⟷ BOOL
-NOT = swap₊
+NOT = Prim swap₊
 
 v₁ : V BOOL
 v₁ = (inj₁ tt , refl)
@@ -123,46 +123,85 @@ data Dir : Set where
   Bck : Dir
   Done : Dir
 
--- stepForward 
+-- evalution of primitive simple combinators forwards and backwards
+
+prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₁ → V T₂
+prim unite₊l (inj₁ () , av)
+prim unite₊l (inj₂ v , av) = (v , av) 
+prim uniti₊l (v , av) = (inj₂ v , av)
+prim unite₊r (inj₁ v , av) = (v , av)
+prim unite₊r (inj₂ () , av)
+prim uniti₊r (v , av) = (inj₁ v , av)
+prim swap₊ (inj₁ v , av) = (inj₂ v , av)
+prim swap₊ (inj₂ v , av) = (inj₁ v , av)
+prim assocl₊ (inj₁ v , av) = (inj₁ (inj₁ v) , av)
+prim assocl₊ ((inj₂ (inj₁ v)) , av) = (inj₁ (inj₂ v) , av)
+prim assocl₊ ((inj₂ (inj₂ v)) , av) = (inj₂ v , av)
+prim assocr₊ ((inj₁ (inj₁ v)) , av) = (inj₁ v , av)
+prim assocr₊ ((inj₁ (inj₂ v)) , av) = (inj₂ (inj₁ v) , av)
+prim assocr₊ (inj₂ v , av) = (inj₂ (inj₂ v) , av)
+prim unite⋆l ((tt , v) , (_ , av)) = (v , av)
+prim uniti⋆l (v , av) = (tt , v) , (refl , av)
+prim unite⋆r ((v , tt) , (av , _)) = (v , av)
+prim uniti⋆r (v , av) = ((v , tt) , (av , refl))
+prim swap⋆ ((v₁ , v₂) , (av₁ , av₂)) = ((v₂ , v₁) , (av₂ , av₁))
+prim assocl⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) = (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃))
+prim assocr⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) = ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃))))
+prim absorbr ((v , _) , (av , _)) = (v , av)
+prim absorbl ((_ , v) , (_ , av)) = (v , av)
+prim factorzr (() , _)
+prim factorzl (() , _)
+prim dist ((inj₁ v₁ , v₃) , (av₁ , av₃)) = (inj₁ (v₁ , v₃) , (av₁ , av₃))
+prim dist ((inj₂ v₂ , v₃) , (av₂ , av₃)) = (inj₂ (v₂ , v₃) , (av₂ , av₃))
+prim factor (inj₁ (v₁ , v₃) , av) = ((inj₁ v₁ , v₃) , av)
+prim factor (inj₂ (v₂ , v₃) , av) = ((inj₂ v₂ , v₃) , av)
+prim distl ((v₃ , inj₁ v₁) , (av₃ , av₁)) = (inj₁ (v₃ , v₁) , (av₃ , av₁))
+prim distl ((v₃ , inj₂ v₂) , (av₃ , av₂)) = (inj₂ (v₃ , v₂) , (av₃ , av₂))
+prim factorl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
+prim factorl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
+prim id⟷ v = v
+
+prim⁻¹ : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₂ → V T₁
+prim⁻¹ uniti₊l (inj₁ () , av)
+prim⁻¹ uniti₊l (inj₂ v , av) = (v , av) 
+prim⁻¹ unite₊l (v , av) = (inj₂ v , av)
+prim⁻¹ uniti₊r (inj₁ v , av) = (v , av)
+prim⁻¹ uniti₊r (inj₂ () , av)
+prim⁻¹ unite₊r (v , av) = (inj₁ v , av)
+prim⁻¹ swap₊ (inj₁ v , av) = (inj₂ v , av)
+prim⁻¹ swap₊ (inj₂ v , av) = (inj₁ v , av)
+prim⁻¹ assocr₊ (inj₁ v , av) = (inj₁ (inj₁ v) , av)
+prim⁻¹ assocr₊ ((inj₂ (inj₁ v)) , av) = (inj₁ (inj₂ v) , av)
+prim⁻¹ assocr₊ ((inj₂ (inj₂ v)) , av) = (inj₂ v , av)
+prim⁻¹ assocl₊ ((inj₁ (inj₁ v)) , av) = (inj₁ v , av)
+prim⁻¹ assocl₊ ((inj₁ (inj₂ v)) , av) = (inj₂ (inj₁ v) , av)
+prim⁻¹ assocl₊ (inj₂ v , av) = (inj₂ (inj₂ v) , av)
+prim⁻¹ uniti⋆l ((tt , v) , (_ , av)) = (v , av)
+prim⁻¹ unite⋆l (v , av) = (tt , v) , (refl , av)
+prim⁻¹ uniti⋆r ((v , tt) , (av , _)) = (v , av)
+prim⁻¹ unite⋆r (v , av) = ((v , tt) , (av , refl))
+prim⁻¹ swap⋆ ((v₁ , v₂) , (av₁ , av₂)) = ((v₂ , v₁) , (av₂ , av₁))
+prim⁻¹ assocr⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) = (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃))
+prim⁻¹ assocl⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) = ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃))))
+prim⁻¹ factorzl ((v , _) , (av , _)) = (v , av)
+prim⁻¹ factorzr ((_ , v) , (_ , av)) = (v , av)
+prim⁻¹ absorbl (() , _)
+prim⁻¹ absorbr (() , _)
+prim⁻¹ factor ((inj₁ v₁ , v₃) , (av₁ , av₃)) = (inj₁ (v₁ , v₃) , (av₁ , av₃))
+prim⁻¹ factor ((inj₂ v₂ , v₃) , (av₂ , av₃)) = (inj₂ (v₂ , v₃) , (av₂ , av₃))
+prim⁻¹ dist (inj₁ (v₁ , v₃) , av) = ((inj₁ v₁ , v₃) , av)
+prim⁻¹ dist (inj₂ (v₂ , v₃) , av) = ((inj₂ v₂ , v₃) , av)
+prim⁻¹ factorl ((v₃ , inj₁ v₁) , (av₃ , av₁)) = (inj₁ (v₃ , v₁) , (av₃ , av₁))
+prim⁻¹ factorl ((v₃ , inj₂ v₂) , (av₃ , av₂)) = (inj₂ (v₃ , v₂) , (av₃ , av₂))
+prim⁻¹ distl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
+prim⁻¹ distl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
+prim⁻¹ id⟷ v = v
 
 postulate
   _⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
 
 ap : {T : U} → State T → Dir × State T
-ap (Enter unite₊l (inj₁ () , av) C)
-ap (Enter unite₊l (inj₂ v , av) C) = Fwd , Exit unite₊l (v , av) C
-ap (Enter uniti₊l (v , av) C) = Fwd , Exit uniti₊l (inj₂ v , av) C
-ap (Enter unite₊r (inj₁ v , av) C) = Fwd , Exit unite₊r (v , av) C
-ap (Enter unite₊r (inj₂ () , av) C)
-ap (Enter uniti₊r (v , av) C) = Fwd , Exit uniti₊r (inj₁ v , av) C
-ap (Enter swap₊ (inj₁ v , av) C) = Fwd , Exit swap₊ (inj₂ v , av) C
-ap (Enter swap₊ (inj₂ v , av) C) = Fwd , Exit swap₊ (inj₁ v , av) C
-ap (Enter assocl₊ (inj₁ v , av) C) = Fwd , Exit assocl₊ (inj₁ (inj₁ v) , av) C
-ap (Enter assocl₊ (inj₂ (inj₁ v) , av) C) = Fwd , Exit assocl₊ (inj₁ (inj₂ v) , av) C
-ap (Enter assocl₊ (inj₂ (inj₂ v) , av) C) = Fwd , Exit assocl₊ (inj₂ v , av) C
-ap (Enter assocr₊ (inj₁ (inj₁ v) , av) C) = Fwd , Exit assocr₊ (inj₁ v , av) C
-ap (Enter assocr₊ (inj₁ (inj₂ v) , av) C) = Fwd , Exit assocr₊ (inj₂ (inj₁ v) , av) C
-ap (Enter assocr₊ (inj₂ v , av) C) = Fwd , Exit assocr₊ (inj₂ (inj₂ v) , av) C
-ap (Enter unite⋆l ((tt , v) , (_ , av)) C) = Fwd , Exit unite⋆l (v , av) C
-ap (Enter uniti⋆l (v , av) C) = Fwd , Exit uniti⋆l ((tt , v) , (refl , av)) C
-ap (Enter unite⋆r ((v , tt) , (av , _)) C) = Fwd , Exit unite⋆r (v , av) C
-ap (Enter uniti⋆r (v , av) C) = Fwd , Exit uniti⋆r ((v , tt) , (av , refl)) C
-ap (Enter swap⋆ ((v₁ , v₂) , (av₁ , av₂)) C) = Fwd , Exit swap⋆ ((v₂ , v₁) , (av₂ , av₁)) C
-ap (Enter assocl⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) C) = Fwd , Exit assocl⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C
-ap (Enter assocr⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C) = Fwd , Exit assocr⋆ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C
-ap (Enter absorbr ((v , _) , (av , _)) C) = Fwd , Exit absorbr (v , av) C
-ap (Enter absorbl ((_ , v) , (_ , av)) C) = Fwd , Exit absorbl (v , av) C
-ap (Enter factorzr (() , _) C)
-ap (Enter factorzl (() , _) C)
-ap (Enter dist ((inj₁ v₁ , v₃) , (av₁ , av₃)) C) = Fwd , Exit dist (inj₁ (v₁ , v₃) , (av₁ , av₃)) C
-ap (Enter dist ((inj₂ v₂ , v₃) , (av₂ , av₃)) C) = Fwd , Exit dist (inj₂ (v₂ , v₃) , (av₂ , av₃)) C
-ap (Enter factor (inj₁ (v₁ , v₃) , av) C) = Fwd , Exit factor ((inj₁ v₁ , v₃) , av) C
-ap (Enter factor (inj₂ (v₂ , v₃) , av) C) = Fwd , Exit factor ((inj₂ v₂ , v₃) , av) C
-ap (Enter distl ((v₃ , inj₁ v₁) , (av₃ , av₁)) C) = Fwd , Exit distl (inj₁ (v₃ , v₁) , (av₃ , av₁)) C
-ap (Enter distl ((v₃ , inj₂ v₂) , (av₃ , av₂)) C) = Fwd , Exit distl (inj₂ (v₃ , v₂) , (av₃ , av₂)) C
-ap (Enter factorl (inj₁ (v₃ , v₁) , av) C) = Fwd , Exit factorl ((v₃ , inj₁ v₁) , av) C
-ap (Enter factorl (inj₂ (v₃ , v₂) , av) C) = Fwd , Exit factorl ((v₃ , inj₂ v₂) , av) C
-ap (Enter id⟷ v C) = Fwd , Exit id⟷ v C
+ap (Enter (Prim c) v C) = Fwd , Exit (Prim c) (prim c v) C
 ap (Enter (P₁ ◎ P₂) v C) = Fwd , Enter P₁ v (Fst C P₂)
 ap (Enter (P₁ ⊕ P₂) (inj₁ v₁ , av₁) C) = Fwd , Enter P₁ (v₁ , av₁) (L+ C P₂)
 ap (Enter (P₁ ⊕ P₂) (inj₂ v₂ , av₂) C) = Fwd , Enter P₂ (v₂ , av₂) (R+ P₁ C)
@@ -193,40 +232,7 @@ ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) = Bck , Enter (P
 ap⁻¹ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) = Bck , Exit P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
 ap⁻¹ (Enter P₁ (v₁ , av) (L+ C P₂)) = Bck , Enter (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
 ap⁻¹ (Enter P₂ (v₂ , av) (R+ P₁ C)) = Bck , Enter (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
-ap⁻¹ (Exit unite₊l (v , av) C) = Bck , Enter unite₊l (inj₂ v , av) C
-ap⁻¹ (Exit uniti₊l (inj₁ () , av) C)
-ap⁻¹ (Exit uniti₊l (inj₂ v , av) C) = Bck , Enter uniti₊l (v , av) C
-ap⁻¹ (Exit unite₊r (v , av) C) = Bck , Enter unite₊r (inj₁ v , av) C
-ap⁻¹ (Exit uniti₊r (inj₁ v , av) C) = Bck , Enter uniti₊r (v , av) C
-ap⁻¹ (Exit uniti₊r (inj₂ () , av) C)
-ap⁻¹ (Exit swap₊ (inj₁ v , av) C) = Bck , Enter swap₊ (inj₂ v , av) C
-ap⁻¹ (Exit swap₊ (inj₂ v , av) C) = Bck , Enter swap₊ (inj₁ v , av) C
-ap⁻¹ (Exit assocl₊ (inj₁ (inj₁ v) , av) C) = Bck , Enter assocl₊ (inj₁ v , av) C
-ap⁻¹ (Exit assocl₊ (inj₁ (inj₂ v) , av) C) = Bck , Enter assocl₊ (inj₂ (inj₁ v) , av) C
-ap⁻¹ (Exit assocl₊ (inj₂ v , av) C) = Bck , Enter assocl₊ (inj₂ (inj₂ v) , av) C
-ap⁻¹ (Exit assocr₊ (inj₁ v , av) C) = Bck , Enter assocr₊ (inj₁ (inj₁ v) , av) C
-ap⁻¹ (Exit assocr₊ (inj₂ (inj₁ v) , av) C) = Bck , Enter assocr₊ (inj₁ (inj₂ v) , av) C
-ap⁻¹ (Exit assocr₊ (inj₂ (inj₂ v) , av) C) = Bck , Enter assocr₊ (inj₂ v , av) C
-ap⁻¹ (Exit uniti⋆l ((tt , v) , (_ , av)) C) = Bck , Enter uniti⋆l (v , av) C
-ap⁻¹ (Exit unite⋆l (v , av) C) = Bck , Enter unite⋆l ((tt , v) , (refl , av)) C
-ap⁻¹ (Exit uniti⋆r ((v , tt) , (av , att)) C) = Bck , Enter uniti⋆r (v , av) C
-ap⁻¹ (Exit unite⋆r (v , av) C) = Bck , Enter unite⋆r ((v , tt) , (av , refl)) C
-ap⁻¹ (Exit swap⋆ ((v₁ , v₂) , (av₁ , av₂)) C) = Bck , Enter swap⋆ ((v₂ , v₁) , (av₂ , av₁)) C
-ap⁻¹ (Exit assocl⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C) = Bck , Enter assocl⋆ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C
-ap⁻¹ (Exit assocr⋆ ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃)))) C) = Bck , Enter assocr⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) C
-ap⁻¹ (Exit absorbr (() , _) C) 
-ap⁻¹ (Exit absorbl (() , _) C)
-ap⁻¹ (Exit factorzr ((_ , v) , (_ , av)) C) = Bck , Enter factorzr (v , av) C
-ap⁻¹ (Exit factorzl ((v , _) , (av , _)) C) = Bck , Enter factorzl (v , av) C
-ap⁻¹ (Exit dist (inj₁ (v₁ , v₃) , av) C) = Bck , Enter dist ((inj₁ v₁ , v₃) , av) C
-ap⁻¹ (Exit dist (inj₂ (v₂ , v₃) , av) C) = Bck , Enter dist ((inj₂ v₂ , v₃) , av) C
-ap⁻¹ (Exit factor ((inj₁ v₁ , v₃) , (av₁ , av₃)) C) = Bck , Enter factor (inj₁ (v₁ , v₃) , (av₁ , av₃)) C
-ap⁻¹ (Exit factor ((inj₂ v₂ , v₃) , (av₂ , av₃)) C) = Bck , Enter factor (inj₂ (v₂ , v₃) , (av₂ , av₃)) C
-ap⁻¹ (Exit distl (inj₁ (v₃ , v₁) , av) C) = Bck , Enter distl ((v₃ , inj₁ v₁) , av) C
-ap⁻¹ (Exit distl (inj₂ (v₃ , v₂) , av) C) = Bck , Enter distl ((v₃ , inj₂ v₂) , av) C
-ap⁻¹ (Exit factorl ((v₃ , inj₁ v₁) , (av₃ , av₁)) C) = Bck , Enter factorl (inj₁ (v₃ , v₁) , (av₃ , av₁)) C
-ap⁻¹ (Exit factorl ((v₃ , inj₂ v₂) , (av₃ , av₂)) C) = Bck , Enter factorl (inj₂ (v₃ , v₂) , (av₃ , av₂)) C
-ap⁻¹ (Exit id⟷ v C) = Bck , Enter id⟷ v C
+ap⁻¹ (Exit (Prim c) v C) = Bck , Enter (Prim c) (prim⁻¹ c v) C
 ap⁻¹ (Exit (P₁ ◎ P₂) v C) = Bck , Exit P₂ v (Snd P₁ C)
 ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C) = Bck , Exit P₁ (v₁ , av) (L+ C P₂) 
 ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C) = Bck , Exit P₂ (v₂ , av) (R+ P₁ C) 
@@ -265,23 +271,23 @@ mutual
   ... | Fwd , s' = loopFwd s'
   ... | Bck , s' = loopBck s'
   ... | Done , Exit _ v Empty = v
-  ... | Done , _ = {!!}
+  ... | Done , _ = loopFwd s -- impossible case
 
   loopBck : {T : U} → State T → V T
   loopBck s with ap⁻¹ s
   ... | Bck , s' = loopBck s'
   ... | Fwd , s' = loopFwd s'
-  ... | Done , _ = {!!}
+  ... | Done , _ = loopBck s -- impossible case
 
 -- Credit card example
 
 cc : # NOT ⟷ # NOT
-cc = uniti⋆l ◎
-     (((η+ NOT) ⊗ id⟷) ◎
-     ((assocr⋆ ◎
-     ((id⟷ ⊗ swap⋆) ◎
-     ((id⟷ ⊗ (ε+ NOT)) ◎
-     unite⋆r)))))
+cc = Prim uniti⋆l ◎
+     (((η+ NOT) ⊗ Prim id⟷) ◎
+     ((Prim assocr⋆ ◎
+     ((Prim id⟷ ⊗ Prim swap⋆) ◎
+     ((Prim id⟷ ⊗ (ε+ NOT)) ◎
+     Prim unite⋆r)))))
 
 {-
 %% -- Trivial implementation of eta/epsilon that does

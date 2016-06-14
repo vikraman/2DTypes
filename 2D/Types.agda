@@ -18,30 +18,33 @@ mutual
     # : {τ : U} → (τ ⟷ τ) → U
     1/# : {τ : U} → (τ ⟷ τ) → U
 
+  data Prim⟷ : U → U → Set where
+    unite₊l :  {t : U} → Prim⟷ (𝟘 ⊕ t) t
+    uniti₊l :  {t : U} → Prim⟷ t (𝟘 ⊕ t)
+    unite₊r :  {t : U} → Prim⟷ (t ⊕ 𝟘) t
+    uniti₊r :  {t : U} → Prim⟷ t (t ⊕ 𝟘)
+    swap₊   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊕ t₂) (t₂ ⊕ t₁)
+    assocl₊ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊕ (t₂ ⊕ t₃))  ((t₁ ⊕ t₂) ⊕ t₃)
+    assocr₊ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊕ t₂) ⊕ t₃) (t₁ ⊕ (t₂ ⊕ t₃))
+    unite⋆l :  {t : U} → Prim⟷ (𝟙 ⊗ t) t
+    uniti⋆l :  {t : U} → Prim⟷ t (𝟙 ⊗ t)
+    unite⋆r :  {t : U} → Prim⟷ (t ⊗ 𝟙) t
+    uniti⋆r :  {t : U} → Prim⟷ t (t ⊗ 𝟙)
+    swap⋆   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊗ t₂) (t₂ ⊗ t₁)
+    assocl⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊗ (t₂ ⊗ t₃)) ((t₁ ⊗ t₂) ⊗ t₃)
+    assocr⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊗ t₂) ⊗ t₃) (t₁ ⊗ (t₂ ⊗ t₃))
+    absorbr :  {t : U} → Prim⟷ (𝟘 ⊗ t) 𝟘
+    absorbl :  {t : U} → Prim⟷ (t ⊗ 𝟘) 𝟘
+    factorzr :  {t : U} → Prim⟷ 𝟘 (t ⊗ 𝟘)
+    factorzl :  {t : U} → Prim⟷ 𝟘 (𝟘 ⊗ t)
+    dist :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊕ t₂) ⊗ t₃) ((t₁ ⊗ t₃) ⊕ (t₂ ⊗ t₃))
+    factor :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊗ t₃) ⊕ (t₂ ⊗ t₃)) ((t₁ ⊕ t₂) ⊗ t₃)
+    distl :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊗ (t₂ ⊕ t₃)) ((t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃))
+    factorl :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃)) (t₁ ⊗ (t₂ ⊕ t₃))
+    id⟷ :  {t : U} → Prim⟷ t t
+
   data _⟷_ : U → U → Set where
-    unite₊l :  {t : U} → 𝟘 ⊕ t ⟷ t
-    uniti₊l :  {t : U} → t ⟷ 𝟘 ⊕ t
-    unite₊r :  {t : U} → t ⊕ 𝟘 ⟷ t
-    uniti₊r :  {t : U} → t ⟷ t ⊕ 𝟘
-    swap₊   :  {t₁ t₂ : U} → (t₁ ⊕ t₂) ⟷ (t₂ ⊕ t₁)
-    assocl₊ :  {t₁ t₂ t₃ : U} → t₁ ⊕ (t₂ ⊕ t₃) ⟷ (t₁ ⊕ t₂) ⊕ t₃
-    assocr₊ :  {t₁ t₂ t₃ : U} → (t₁ ⊕ t₂) ⊕ t₃ ⟷ t₁ ⊕ (t₂ ⊕ t₃)
-    unite⋆l :  {t : U} → 𝟙 ⊗ t ⟷ t
-    uniti⋆l :  {t : U} → t ⟷ 𝟙 ⊗ t
-    unite⋆r :  {t : U} → t ⊗ 𝟙 ⟷ t
-    uniti⋆r :  {t : U} → t ⟷ t ⊗ 𝟙
-    swap⋆   :  {t₁ t₂ : U} → t₁ ⊗ t₂ ⟷ t₂ ⊗ t₁
-    assocl⋆ :  {t₁ t₂ t₃ : U} → t₁ ⊗ (t₂ ⊗ t₃) ⟷ (t₁ ⊗ t₂) ⊗ t₃
-    assocr⋆ :  {t₁ t₂ t₃ : U} → (t₁ ⊗ t₂) ⊗ t₃ ⟷ t₁ ⊗ (t₂ ⊗ t₃)
-    absorbr :  {t : U} → 𝟘 ⊗ t ⟷ 𝟘
-    absorbl :  {t : U} → t ⊗ 𝟘 ⟷ 𝟘
-    factorzr :  {t : U} → 𝟘 ⟷ t ⊗ 𝟘
-    factorzl :  {t : U} → 𝟘 ⟷ 𝟘 ⊗ t
-    dist :  {t₁ t₂ t₃ : U} → (t₁ ⊕ t₂) ⊗ t₃ ⟷ (t₁ ⊗ t₃) ⊕ (t₂ ⊗ t₃)
-    factor :  {t₁ t₂ t₃ : U} → (t₁ ⊗ t₃) ⊕ (t₂ ⊗ t₃) ⟷ (t₁ ⊕ t₂) ⊗ t₃
-    distl :  {t₁ t₂ t₃ : U} → t₁ ⊗ (t₂ ⊕ t₃) ⟷ (t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃)
-    factorl :  {t₁ t₂ t₃ : U} → (t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃) ⟷ t₁ ⊗ (t₂ ⊕ t₃)
-    id⟷ :  {t : U} → t ⟷ t
+    Prim : {t₁ t₂ : U} → (Prim⟷ t₁ t₂) → (t₁ ⟷ t₂)
     _◎_ :  {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
     _⊕_ :  {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
     _⊗_ :  {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
@@ -51,29 +54,29 @@ mutual
     ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
-! unite₊l   = uniti₊l
-! uniti₊l   = unite₊l
-! unite₊r   = uniti₊r
-! uniti₊r   = unite₊r
-! swap₊     = swap₊
-! assocl₊   = assocr₊
-! assocr₊   = assocl₊
-! unite⋆l   = uniti⋆l
-! uniti⋆l   = unite⋆l
-! unite⋆r   = uniti⋆r
-! uniti⋆r   = unite⋆r
-! swap⋆     = swap⋆
-! assocl⋆   = assocr⋆
-! assocr⋆   = assocl⋆
-! absorbl   = factorzr
-! absorbr   = factorzl
-! factorzl  = absorbr
-! factorzr  = absorbl
-! dist      = factor
-! factor    = dist
-! distl     = factorl
-! factorl   = distl
-! id⟷     = id⟷
+! (Prim unite₊l)   = Prim uniti₊l
+! (Prim uniti₊l)   = Prim unite₊l
+! (Prim unite₊r)   = Prim uniti₊r
+! (Prim uniti₊r)   = Prim unite₊r
+! (Prim swap₊)     = Prim swap₊
+! (Prim assocl₊)   = Prim assocr₊
+! (Prim assocr₊)   = Prim assocl₊
+! (Prim unite⋆l)   = Prim uniti⋆l
+! (Prim uniti⋆l)   = Prim unite⋆l
+! (Prim unite⋆r)   = Prim uniti⋆r
+! (Prim uniti⋆r)   = Prim unite⋆r
+! (Prim swap⋆)     = Prim swap⋆
+! (Prim assocl⋆)   = Prim assocr⋆
+! (Prim assocr⋆)   = Prim assocl⋆
+! (Prim absorbl)   = Prim factorzr
+! (Prim absorbr)   = Prim factorzl
+! (Prim factorzl)  = Prim absorbr
+! (Prim factorzr)  = Prim absorbl
+! (Prim dist)      = Prim factor
+! (Prim factor)    = Prim dist
+! (Prim distl)     = Prim factorl
+! (Prim factorl)   = Prim distl
+! (Prim id⟷)       = Prim id⟷
 ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
@@ -88,19 +91,19 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   assoc◎r : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
     ((c₁ ◎ c₂) ◎ c₃) ⇔ (c₁ ◎ (c₂ ◎ c₃))
   idl◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    (id⟷ ◎ c) ⇔ c
+    (Prim id⟷ ◎ c) ⇔ c
   idl◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    c ⇔ id⟷ ◎ c
+    c ⇔ Prim id⟷ ◎ c
   idr◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    (c ◎ id⟷) ⇔ c
+    (c ◎ Prim id⟷) ⇔ c
   idr◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    c ⇔ (c ◎ id⟷)
+    c ⇔ (c ◎ Prim id⟷)
   id⇔     : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
     c ⇔ c
-  rinv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (! c ◎ c) ⇔ id⟷
-  rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (! c ◎ c)
-  linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ id⟷
-  linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (c ◎ ! c)
+  rinv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (! c ◎ c) ⇔ Prim id⟷
+  rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (! c ◎ c)
+  linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ Prim id⟷
+  linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (c ◎ ! c)
   trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
     (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} →
@@ -113,13 +116,17 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
   -- coherence for compact closed categories
   ccc₁l : {t : U} {p : t ⟷ t} →
-         uniti⋆r ◎ (id⟷ ⊗ η- p) ◎ assocl⋆ ◎ (ε+ p ⊗ id⟷) ◎ unite⋆l ⇔ id⟷
+         Prim uniti⋆r ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
+         (ε+ p ⊗ Prim id⟷) ◎ Prim unite⋆l ⇔ Prim id⟷
   ccc₁r : {t : U} {p : t ⟷ t} →
-         id⟷ ⇔ uniti⋆r ◎ (id⟷ ⊗ η- p) ◎ assocl⋆ ◎ (ε+ p ⊗ id⟷) ◎ unite⋆l 
+         Prim id⟷ ⇔ Prim uniti⋆r ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ Prim unite⋆l 
   ccc₂l : {t : U} {p : t ⟷ t} →
-         (((uniti⋆l ◎ (η+ p ⊗ id⟷)) ◎ assocr⋆) ◎ (id⟷ ⊗ ε- p)) ◎ unite⋆r ⇔ id⟷
+         (((Prim uniti⋆l ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
+         (Prim id⟷ ⊗ ε- p)) ◎ Prim unite⋆r ⇔ Prim id⟷
   ccc₂r : {t : U} {p : t ⟷ t} →
-         id⟷ ⇔ (((uniti⋆l ◎ (η+ p ⊗ id⟷)) ◎ assocr⋆) ◎ (id⟷ ⊗ ε- p)) ◎ unite⋆r
+         Prim id⟷ ⇔ (((Prim uniti⋆l ◎ (η+ p ⊗ Prim id⟷)) ◎
+         Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ Prim unite⋆r
 
   -- suggested alternate versions
   -- ccc₁l {t : U} {p : t ⟷ t} →
@@ -148,30 +155,33 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 
 -- Properties
 
+!!⇔prim : {t₁ t₂ : U} → (p : Prim⟷ t₁ t₂) → Prim p ⇔ (! (! (Prim p)))
+!!⇔prim unite₊l = id⇔
+!!⇔prim uniti₊l = id⇔
+!!⇔prim unite₊r = id⇔
+!!⇔prim uniti₊r = id⇔
+!!⇔prim swap₊ = id⇔
+!!⇔prim assocl₊ = id⇔
+!!⇔prim assocr₊ = id⇔
+!!⇔prim unite⋆l = id⇔
+!!⇔prim uniti⋆l = id⇔
+!!⇔prim unite⋆r = id⇔
+!!⇔prim uniti⋆r = id⇔
+!!⇔prim swap⋆ = id⇔
+!!⇔prim assocl⋆ = id⇔
+!!⇔prim assocr⋆ = id⇔
+!!⇔prim absorbr = id⇔
+!!⇔prim absorbl = id⇔
+!!⇔prim factorzr = id⇔
+!!⇔prim factorzl = id⇔
+!!⇔prim dist = id⇔
+!!⇔prim factor = id⇔
+!!⇔prim distl = id⇔
+!!⇔prim factorl = id⇔
+!!⇔prim id⟷ = id⇔
+
 !!⇔id : {t₁ t₂ : U} → (p : t₁ ⟷ t₂) → p ⇔ ! (! p)
-!!⇔id _⟷_.unite₊l = id⇔
-!!⇔id _⟷_.uniti₊l = id⇔
-!!⇔id _⟷_.unite₊r = id⇔
-!!⇔id _⟷_.uniti₊r = id⇔
-!!⇔id _⟷_.swap₊ = id⇔
-!!⇔id _⟷_.assocl₊ = id⇔
-!!⇔id _⟷_.assocr₊ = id⇔
-!!⇔id _⟷_.unite⋆l = id⇔
-!!⇔id _⟷_.uniti⋆l = id⇔
-!!⇔id _⟷_.unite⋆r = id⇔
-!!⇔id _⟷_.uniti⋆r = id⇔
-!!⇔id _⟷_.swap⋆ = id⇔
-!!⇔id _⟷_.assocl⋆ = id⇔
-!!⇔id _⟷_.assocr⋆ = id⇔
-!!⇔id _⟷_.absorbr = id⇔
-!!⇔id _⟷_.absorbl = id⇔
-!!⇔id _⟷_.factorzr = id⇔
-!!⇔id _⟷_.factorzl = id⇔
-!!⇔id _⟷_.dist = id⇔
-!!⇔id _⟷_.factor = id⇔
-!!⇔id _⟷_.distl = id⇔
-!!⇔id _⟷_.factorl = id⇔
-!!⇔id id⟷ = id⇔
+!!⇔id (_⟷_.Prim c) = !!⇔prim c
 !!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)

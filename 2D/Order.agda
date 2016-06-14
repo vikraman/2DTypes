@@ -6,7 +6,7 @@ open import Relation.Binary.PropositionalEquality
 open import 2D.Types
 
 pⁿ : {τ : U} → (τ ⟷ τ) → ℕ → (τ ⟷ τ)
-pⁿ p zero = id⟷
+pⁿ p zero = Prim id⟷
 pⁿ p (suc n) = p ◎ pⁿ p n
 
 record Order {τ : U} (p : τ ⟷ τ) : Set where

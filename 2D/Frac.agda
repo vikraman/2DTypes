@@ -40,7 +40,7 @@ open import Data.Integer as ℤ hiding (∣_∣)
 infix 40 _^_
 
 _^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
-p ^ (+ 0) = id⟷
+p ^ (+ 0) = Prim id⟷
 p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ] = ! p
 p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
@@ -105,7 +105,7 @@ orderC {τ} p = record {
 1/orderC τ pp = record { Obj = ⊤
                        ; _⇒_ = λ _ _ → Perm pp
                        ; _≡_ = λ { (perm m p _) (perm n q _) → p ⇔ q }
-                       ; id = perm (+ 0) id⟷ id⇔
+                       ; id = perm (+ 0) (Prim id⟷) id⇔
                        ; _∘_ = λ { (perm m p α) (perm n q β) →
                          perm (m ℤ.+ n) (p ◎ q) (trans⇔ (α ⊡ β) (2! (lower m n))) }
                        ; assoc = assoc◎r
