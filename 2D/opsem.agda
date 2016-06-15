@@ -11,7 +11,7 @@ open import Data.Product
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
 open import Data.Unit using (⊤; tt)
-open import Data.Nat using (ℕ; suc)
+open import Data.Nat using (ℕ; suc) renaming (_+_ to _ℕ+_)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
@@ -243,16 +243,14 @@ eqℕ ℕ.zero (suc m) = false
 eqℕ (suc n) ℕ.zero = false
 eqℕ (suc n) (suc m) = eqℕ n m
 
-{-# NON_TERMINATING #-}
+negModn : (n m : ℕ) → ℕ
+negModn n m = (toℕ (m mod n)) ℕ+ n
+
 _⇔?_ : {τ : U} {p : τ ⟷ τ} → (q r : Perm p) → Bool
 _⇔?_ {p = p} (perm i q α) (perm j r γ) with order p
 perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ (n₂ mod n))
-perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ =
-     perm (+_ n₁) q α ⇔? perm ((-[1+_] n₂) ℤ+ (+ n)) r (trans⇔ idl◎r (trans⇔ ((2! p^n⇔id⟷) ⊡ γ)
-                                                                             (2! ((lower (+ n) -[1+ n₂ ])))))
-perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ =
-     perm ((-[1+_] n₁) ℤ+ (+ n)) q ((trans⇔ idl◎r (trans⇔ ((2! p^n⇔id⟷) ⊡ α)
-                                                          (2! ((lower (+ n) -[1+ n₁ ])))))) ⇔? perm (+_ n₂) r γ
+perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ ((negModn n n₂) mod n))
+perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ ((negModn n n₁) mod n)) (toℕ (n₂ mod n))
 perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ (n₂ mod n))
 
 -- Forward execution one step at a time
