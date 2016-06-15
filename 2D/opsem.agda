@@ -11,7 +11,7 @@ open import Data.Product
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
 open import Data.Unit using (⊤; tt)
-open import Data.Nat using (ℕ; suc) renaming (_+_ to _ℕ+_)
+open import Data.Nat using (ℕ; suc; _≥_) renaming (_+_ to _ℕ+_)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
@@ -236,6 +236,10 @@ p ⇔? q = ⌊ p ⇔?? q ⌋
 
 open import Data.Nat.DivMod using (_mod_)
 open import Data.Fin using (toℕ)
+open import Relation.Nullary.Decidable
+
+n≥1⇒n≠0 : ∀ {n} → n ≥ 1 → ¬ (n ≡ 0)
+n≥1⇒n≠0 (Data.Nat.s≤s n≥1) ()
 
 eqℕ : (n m : ℕ) → Bool
 eqℕ ℕ.zero ℕ.zero = true
@@ -244,11 +248,18 @@ eqℕ (suc n) ℕ.zero = false
 eqℕ (suc n) (suc m) = eqℕ n m
 
 negModn : (n m : ℕ) → ℕ
-negModn n m = (toℕ (m mod n)) ℕ+ n
+negModn ℕ.zero m = ℕ.zero
+negModn (suc n) m = (toℕ (m mod (suc n))) ℕ+ (suc n)
+
+{- something like this should really help, but as it stands, it is wrong
+mmod : ℕ  → (n : ℕ) → n ≥ 1 → ℕ
+mmod m (suc n) (Data.Nat.s≤s n≥1) = _mod_ m (suc n) {fromWitnessFalse (n≥1⇒n≠0 n≥1)}
+-}
 
 _⇔?_ : {τ : U} {p : τ ⟷ τ} → (q r : Perm p) → Bool
 _⇔?_ {p = p} (perm i q α) (perm j r γ) with order p
-perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ (n₂ mod n))
+perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ =
+  eqℕ (toℕ (_mod_ n₁ n {fromWitnessFalse (n≥1⇒n≠0 n≥1)})) (toℕ (n₂ mod n))
 perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ ((negModn n n₂) mod n))
 perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ ((negModn n n₁) mod n)) (toℕ (n₂ mod n))
 perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ (n₂ mod n))
