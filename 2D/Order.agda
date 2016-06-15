@@ -22,4 +22,9 @@ record Order {τ : U} (p : τ ⟷ τ) : Set where
     p^n⇔id⟷ : p ^ (+ n) ⇔ Prim id⟷
 
 postulate
-  order : {τ : U} (p : τ ⟷ τ) → Order p
+  orderPostulate : {τ : U} (p : τ ⟷ τ) → Order p
+
+order : {τ : U} (p : τ ⟷ τ) → Order p
+order (Prim swap₊) = ord 2 (s≤s z≤n) (trans⇔ (id⇔ ⊡ idr◎l) rinv◎l)
+order {τ} p = orderPostulate {τ} p
+

@@ -416,13 +416,14 @@ cc = Prim uniti⋆l ◎
      Prim unite⋆r)))))
 
 t0 = loopFwd (Enter cc (cv NOT (+ 0)) Empty)
--- gets stuck trying to check:
---   eqℕ (toℕ (0 mod Order.n (order (Prim swap₊))))
---       (toℕ (1 mod Order.n (order (Prim swap₊))))
+-- evals to:
+-- perm (+ 2)
+--      (Prim swap₊ ◎ Prim swap₊)
+--      (trans⇔ (id⇔ ⊡ idr◎r)
+--      (trans⇔ (idr◎r ⊡ id⇔) (trans⇔ assoc◎r (id⇔ ⊡ idl◎l))))
+-- , id⇔
 t1 = loopFwd (Enter cc (cv NOT (+ 1)) Empty)
--- gets stuck trying to check:
---   eqℕ (toℕ (1 mod Order.n (order (Prim swap₊))))
---       (toℕ (1 mod Order.n (order (Prim swap₊))))
+-- evals to: perm (+ 1) (Prim swap₊) idr◎r , id⇔
 t2 = loopBck (Enter cc (cv NOT (+ 0)) Empty)
 -- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
 t3 = loopBck (Enter cc (cv NOT (+ 1)) Empty)
