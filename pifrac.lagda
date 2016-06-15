@@ -18,7 +18,6 @@ open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
 open import Categories.Groupoid using () renaming (Product to GProduct)
 
 open import pibackground 
-open import groupoid 
 
 infix  30 _⇿_
 

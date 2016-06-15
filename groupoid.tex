@@ -1,3 +1,40 @@
+\section{Negative Information} 
+
+%%%%%
+\subsection{Information Equivalence}
+
+We need to show coherence of the definition of cardinalities on the
+universe syntax with the Euler characteristic of the category which in
+our case also corresponds to the groupoid cardinality. There are
+several formulations and explanations. The following is quite simple
+to implement: first collapse all the isomorphic objects. Then fix a
+particular order of the objects and write a matrix whose $ij$'s entry
+is the number of morphisms from $i$ to $j$. Invert the matrix. The
+cardinality is the sum of the elements in the matrix.
+
+Our notion of information equivalence is coarser than the conventional
+notion of equivalence of categories (groupoids). This is fine as there
+are several competing notions of equivalence of groupoids that are
+coarser than strict categorical equivalence.
+
+There are however other notions of equivalence of groupoids like
+Morita equivalence and weak equivalence that we explore later. The
+intuition of these weaker notions of equivalence is that two groupoids
+can be considered equivalent if it is not possible to distinguish them
+using certain observations. This informally corresponds to the notion
+of ``observational equivalence'' in programming language
+semantics. Note that negative entropy can only make sense locally in
+an open system but that in a closed system, i.e., in a complete
+computation, entropy cannot be negative. Thus we restrict
+observational contexts to those in which fractional types do not
+occur. Note that two categories can have the same cardinality but not
+be equivalent or even Morita equivalent but the converse is
+guaranteed. So it is necessary to have a separate notion of
+equivalence and check that whenever we have the same cardinality, the
+particular categories in question are equivalent.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Categorical Model: Groupoid of Groupoids}
 \vic{Which is the groupoid of groupoids?}
 \label{sec:groupoids}
@@ -20,8 +57,22 @@ also monad/comonad
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{$\Pi$ Semantics: Groupoid of Finite Sets}
 
-Viewed categorically, the types of $\Pi$ are objects that model sets
-of natural numbers, the 1-combinators are morphisms that model
+From the perspective of category theory, the language $\Pi$ models
+what is called a \emph{symmetric bimonoidal category} or a
+\emph{commutative rig category}. These are categories with two binary
+operations and satisfying the axioms of a commutative rig (i.e., a
+commutative ring without negative elements also known as a commutative
+semiring) up to coherent isomorphisms. And indeed the types of the
+$\Pi$-combinators are precisely the commutative semiring axioms. A
+formal way of saying this is that $\Pi$ is the
+\emph{categorification}~\cite{math/9802029} of the natural numbers. A
+simple (slightly degenerate) example of such categories is the
+category of finite sets and permutations in which we interpret every
+$\Pi$-type as a finite set, interpret the values as elements in these
+finite sets, and interpret the combinators as permutations.
+
+More generally, the types of $\Pi$ are objects that model sets of
+natural numbers, the 1-combinators are morphisms that model
 cardinality-preserving maps, and the 2-combinators are coherence
 conditions on these morphisms~\cite{Carette2016}. The resulting
 $\Pi$-category has a rich structure consisting of two symmetric
@@ -159,109 +210,16 @@ groupoids $\order{p}$ and $\iorder{p}$.
 
 \vic{Should typing judgments be here?}
 
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{xxx}
-
-For $c_1, c_2 : \tau_1\iso\tau_2$, we have level-2 combinators $\alpha
-: c_1 \isotwo c_2$ which are equivalences of isomorphisms, and which
-happen to correspond to the coherence conditions for rig
-groupoids. Many of the level 2 combinators not used. We only present
-the ones we use in this paper.
-
- From the perspective of category theory, the language $\Pi$ models what is
-called a \emph{symmetric bimonoidal category} or a \emph{commutative rig
-category}. These are categories with two binary operations and satisfying the
-axioms of a commutative rig (i.e., a commutative ring without negative
-elements also known as a commutative semiring) up to coherent
-isomorphisms. And indeed the types of the $\Pi$-combinators are precisely the
-commutative semiring axioms. A formal way of saying this is that $\Pi$ is the
-\emph{categorification}~\cite{math/9802029} of the natural numbers. A simple
-(slightly degenerate) example of such categories is the category of finite
-sets and permutations in which we interpret every $\Pi$-type as a finite set,
-interpret the values as elements in these finite sets, and interpret the
-combinators as permutations.
-
-Explain that we only reach a trivial class of groupoids
-
-introduce discreteC and discreteG
-
-discrete category: give a set $S$ objects are $S$, morphisms are only
-identity morphisms; each object has exactly one morphism id. That is a
-groupoid, trivially, because id is symmetric
-
-Instead of modeling the types of $\Pi$ using sets and the combinators using
-permutations we use a semantics that identifies $\Pi$-combinators with
-\emph{paths}. More precisely, we model the universe of $\Pi$-types as a space
-\AgdaFunction{U} whose points are the individual $\Pi$-types (which are
-themselves spaces \AgdaBound{t} containing points). We then postulate that
-there is path between the spaces \AgdaBound{t₁} and \AgdaBound{t₂} if there
-is a $\Pi$-combinator $c : t_1 \iso t_2$. Our postulate is similar in spirit
-to the univalence axiom but, unlike the latter, it has a simple computational
-interpretation. A path directly corresponds to a type isomorphism with a
-clear operational semantics as presented in the previous section. As we will
-explain in more detail below, this approach replaces the datatype
-\AgdaSymbol{≡} modeling propositional equality with the datatype
-\AgdaSymbol{⟷} modeling type isomorphisms. With this switch, the
-$\Pi$-combinators of Fig.~\ref{pi-combinators} become \emph{syntax} for the
-paths in the space $U$. Put differently, instead of having exactly one
-constructor \AgdaInductiveConstructor{refl} for paths with all other paths
-discovered by proofs (see Secs. 2.5--2.12 of the HoTT
-book~\citeyearpar{hottbook}) or postulated by the univalence axiom, we have
-an \emph{inductive definition} that completely specifies all the paths in the
-space $U$.
-
-We begin with the datatype definition of the universe \AgdaFunction{U} of finite
-types which are constructed using \AgdaInductiveConstructor{ZERO},
-\AgdaInductiveConstructor{ONE}, \AgdaInductiveConstructor{PLUS}, and
-\AgdaInductiveConstructor{TIMES}. Each of these finite types will correspond
-to a set of points with paths connecting some of the points. The underlying
-set of points is computed by \AgdaSymbol{⟦}\_\AgdaSymbol{⟧} as follows:
-\AgdaInductiveConstructor{ZERO} maps to the empty set~\AgdaSymbol{⊥},
-\AgdaInductiveConstructor{ONE} maps to the singleton set \AgdaSymbol{⊤},
-\AgdaInductiveConstructor{PLUS} maps to the disjoint union \AgdaSymbol{⊎},
-and \AgdaInductiveConstructor{TIMES} maps to the cartesian product
-\AgdaSymbol{×}.
-
-We note that the refinement of the $\Pi$-combinators to combinators on
-pointed spaces is given by an inductive family for
-\emph{heterogeneous} equality that generalizes the usual inductive
-family for propositional equality. Put differently, what used to be
-the only constructor for paths \AgdaInductiveConstructor{refl} is now
-just one of the many constructors (named
-\AgdaInductiveConstructor{id⟷} in the figure). Among the new
-constructors we have \AgdaInductiveConstructor{◎} that constructs path
-compositions. By construction, every combinator has an inverse
-calculated as shown in Fig.~\ref{sym}. These constructions are
-sufficient to guarantee that the universe~\AgdaFunction{U} is a
-groupoid. Additionally, we have paths that connect values in different
-but isomorphic spaces like \ldots
-
-The example \AgdaFunction{notpath} which earlier required the use of the
-univalence axiom can now be directly defined using
-\AgdaInductiveConstructor{swap1₊} and \AgdaInductiveConstructor{swap2₊}. To
-see this, note that \AgdaPrimitiveType{Bool} can be viewed as a shorthand for
-\AgdaInductiveConstructor{PLUS} \AgdaInductiveConstructor{ONE}
-\AgdaInductiveConstructor{ONE} with \AgdaInductiveConstructor{true} and
-\AgdaInductiveConstructor{false} as shorthands for
-\AgdaInductiveConstructor{inj₁} \AgdaInductiveConstructor{tt} and
-\AgdaInductiveConstructor{inj₂} \AgdaInductiveConstructor{tt}. With this in
-mind, the path corresponding to boolean negation consists of two ``fibers'',
-one for each boolean value as shown below:
-
-\noindent In other words, a path between spaces is really a collection of
-paths connecting the various points. Note however that we never need to
-``collect'' these paths using a universal quantification.
-
-Shouldn't we also show that \AgdaPrimitiveType{Bool} contains exactly
-$2$ things, and that TRUE and FALSE are ``different''? The other thing
-is, whereas not used to be a path between Bool and Bool, we no longer
-have that.  Shouldn't we show that, somehow, BOOL and BOOL.F 'union'
-BOOL.T are somehow ``equivalent''?  And there there is a coherent
-notpath built the same way?  Especially since I am sure it is quite
-easy to build incoherent sets of paths!
-
 %%%%%
 \subsection{A Universe of Groupoids}
+
+Define action groupoids $\ag{\tau}{p}$ and show they are equivalent to
+uparrow tau times 1 over hash p
+
+Talk about monad/comonad ????
+
+each type is a groupoid: discrete and action groupoids
+collection of types is another groupoid: commutative semifield
 
 % \begin{code}
 % -- Conjecture:  p ⇔ q   implies  order p = order q
@@ -536,47 +494,6 @@ easy to build incoherent sets of paths!
 % ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
 % ... | (_ , G₁) | (_ , G₂) = , GProduct G₁ G₂
 % \end{code}
-
-%%%%%
-\subsection{Information Equivalence}
-
-We need to show coherence of the definition of cardinalities on the
-universe syntax with the Euler characteristic of the category which in
-our case also corresponds to the groupoid cardinality. There are
-several formulations and explanations. The following is quite simple
-to implement: first collapse all the isomorphic objects. Then fix a
-particular order of the objects and write a matrix whose $ij$'s entry
-is the number of morphisms from $i$ to $j$. Invert the matrix. The
-cardinality is the sum of the elements in the matrix.
-
-Our notion of information equivalence is coarser than the conventional
-notion of equivalence of categories (groupoids). This is fine as there
-are several competing notions of equivalence of groupoids that are
-coarser than strict categorical equivalence.
-
-There are however other notions of equivalence of groupoids like
-Morita equivalence and weak equivalence that we explore later. The
-intuition of these weaker notions of equivalence is that two groupoids
-can be considered equivalent if it is not possible to distinguish them
-using certain observations. This informally corresponds to the notion
-of ``observational equivalence'' in programming language
-semantics. Note that negative entropy can only make sense locally in
-an open system but that in a closed system, i.e., in a complete
-computation, entropy cannot be negative. Thus we restrict
-observational contexts to those in which fractional types do not
-occur. Note that two categories can have the same cardinality but not
-be equivalent or even Morita equivalent but the converse is
-guaranteed. So it is necessary to have a separate notion of
-equivalence and check that whenever we have the same cardinality, the
-particular categories in question are equivalent.
-
-Define action groupoids $\ag{\tau}{p}$ and show they are equivalent to
-uparrow tau times 1 over hash p
-
-Talk about monad/comonad ????
-
-each type is a groupoid: discrete and action groupoids
-collection of types is another groupoid: commutative semifield
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
