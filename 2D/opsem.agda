@@ -1,4 +1,4 @@
--- {-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K #-}
 
 module 2D.opsem where
 
@@ -256,10 +256,14 @@ mmod m n n≥1 = toℕ (_mod_ m n {fromWitnessFalse (n≥1⇒n≠0 n≥1)})
 
 _⇔?_ : {τ : U} {p : τ ⟷ τ} → (q r : Perm p) → Bool
 _⇔?_ {p = p} (perm i q α) (perm j r γ) with order p
-perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod n₁ n n≥1) (mmod n₂ n n≥1)
-perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod n₁ n n≥1) (mmod (negModn n n₂) n n≥1)
-perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod (negModn n n₁) n n≥1) (mmod n₂ n n≥1)
-perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod n₁ n n≥1) (mmod n₂ n n≥1)
+perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ =
+  eqℕ (mmod n₁ n n≥1) (mmod n₂ n n≥1)
+perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ =
+  eqℕ (mmod n₁ n n≥1) (mmod (negModn n n₂) n n≥1)
+perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ =
+  eqℕ (mmod (negModn n n₁) n n≥1) (mmod n₂ n n≥1)
+perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ =
+  eqℕ (mmod n₁ n n≥1) (mmod n₂ n n≥1)
 
 -- Forward execution one step at a time
 
@@ -341,6 +345,8 @@ ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) =
   Bck , Enter (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
 -- eta and epsilon
 ap⁻¹ (Exit (ε+ P) (tt , _) C) =
+  -- if forward execution proceeded past ε with p^5 we backtrack using p; this may cause
+  -- that we never reach a fixed point even if one exists
   Bck , Enter (ε+ P)
         ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r))
         C
@@ -349,13 +355,33 @@ ap⁻¹ (Exit (ε- P) (tt , _) C) =
         ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
         C
 ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
-   if ((perm i q α) ⇔? (perm j r γ))
-     then Bck , Enter (η+ P) (tt , refl) C
-     else Fwd , Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C
+  -- what should really happen is that η counts how many times backtracking reaches here
+  -- and after it exhausts all the choice, it lets execution proceed backwards for other
+  -- ηs upstream to get a chance at revisiting their choices
+   Fwd , Exit (η+ P)
+             ( ((perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i))))) , tt)
+             , (id⇔ , (perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i)))))))
+             C
 ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
-   if ((perm i q α) ⇔? (perm j r γ))
-     then Bck , Enter (η- P) (tt , refl) C
-     else Fwd , Exit (η- P) (((tt , perm i q α) , (perm j r γ , β))) C
+--   if ((perm i q α) ⇔? (perm j r γ))
+--     then Bck , Enter (η- P) (tt , refl) C
+--     else Fwd , Exit (η- P) (((tt , perm i q α) , (perm j r γ , β))) C
+ Fwd , Exit (η- P)
+             ( (tt , (perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i))))))
+             , ((perm (ℤsuc i) (P ◎ q)
+               (trans⇔ (id⇔ ⊡ α)
+               (trans⇔ (idr◎r ⊡ id⇔)
+               (2! (lower {p = P} (+ 1) i))))) , id⇔))
+             C
 -- done 
 ap⁻¹ (Enter P v Empty) = Bck , Enter P v Empty 
 
@@ -390,9 +416,13 @@ cc = Prim uniti⋆l ◎
      Prim unite⋆r)))))
 
 t0 = loopFwd (Enter cc (cv NOT (+ 0)) Empty)
--- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
+-- gets stuck trying to check:
+--   eqℕ (toℕ (0 mod Order.n (order (Prim swap₊))))
+--       (toℕ (1 mod Order.n (order (Prim swap₊))))
 t1 = loopFwd (Enter cc (cv NOT (+ 1)) Empty)
--- evals to: perm (+ 1) (Prim swap₊) idr◎r , id⇔
+-- gets stuck trying to check:
+--   eqℕ (toℕ (1 mod Order.n (order (Prim swap₊))))
+--       (toℕ (1 mod Order.n (order (Prim swap₊))))
 t2 = loopBck (Enter cc (cv NOT (+ 0)) Empty)
 -- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
 t3 = loopBck (Enter cc (cv NOT (+ 1)) Empty)
