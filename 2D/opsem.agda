@@ -251,18 +251,15 @@ negModn : (n m : ℕ) → ℕ
 negModn ℕ.zero m = ℕ.zero
 negModn (suc n) m = (toℕ (m mod (suc n))) ℕ+ (suc n)
 
-{- something like this should really help, but as it stands, it is wrong
-mmod : ℕ  → (n : ℕ) → n ≥ 1 → ℕ
-mmod m (suc n) (Data.Nat.s≤s n≥1) = _mod_ m (suc n) {fromWitnessFalse (n≥1⇒n≠0 n≥1)}
--}
+mmod : (m n : ℕ) → n ≥ 1 → ℕ
+mmod m n n≥1 = toℕ (_mod_ m n {fromWitnessFalse (n≥1⇒n≠0 n≥1)})
 
 _⇔?_ : {τ : U} {p : τ ⟷ τ} → (q r : Perm p) → Bool
 _⇔?_ {p = p} (perm i q α) (perm j r γ) with order p
-perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ =
-  eqℕ (toℕ (_mod_ n₁ n {fromWitnessFalse (n≥1⇒n≠0 n≥1)})) (toℕ (n₂ mod n))
-perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ ((negModn n n₂) mod n))
-perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ ((negModn n n₁) mod n)) (toℕ (n₂ mod n))
-perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (toℕ (n₁ mod n)) (toℕ (n₂ mod n))
+perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod n₁ n n≥1) (mmod n₂ n n≥1)
+perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod n₁ n n≥1) (mmod (negModn n n₂) n n≥1)
+perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod (negModn n n₁) n n≥1) (mmod n₂ n n≥1)
+perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ (mmod n₁ n n≥1) (mmod n₂ n n≥1)
 
 -- Forward execution one step at a time
 
