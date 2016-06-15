@@ -199,12 +199,38 @@ data Dir : Set where
 ------------------------------------------------------------------------------
 -- Evaluation
 
+open import Relation.Nullary
+open import Relation.Nullary.Decidable
+
 -- USES K; SOUND AND VERY INCOMPLETE
+
+_prim⇔?_ : {τ : U} → (p : Prim⟷ τ τ) → (q : Prim⟷ τ τ) → Dec (Prim p ⇔ Prim q)
+swap₊ prim⇔? swap₊ = yes id⇔
+swap₊ prim⇔? id⟷ = no {!!}
+swap⋆ prim⇔? swap⋆ = yes id⇔
+swap⋆ prim⇔? id⟷ = no {!!}
+id⟷ prim⇔? swap₊ = no {!!}
+id⟷ prim⇔? swap⋆ = no {!!}
+id⟷ prim⇔? id⟷ = yes id⇔
+
+_⇔??_ : {τ : U} → (p : τ ⟷ τ) → (q : τ ⟷ τ) → Dec (p ⇔ q)
+Prim p₁ ⇔?? Prim p₂ = p₁ prim⇔? p₂
+Prim p ⇔?? (q₁ ◎ q₂) = {!!}
+Prim p ⇔?? (q₁ ⊕ q₂) = {!!}
+Prim p ⇔?? (q₁ ⊗ q₂) = {!!}
+(p₁ ◎ p₂) ⇔?? Prim q = {!!}
+(p₁ ◎ p₂) ⇔?? (q₁ ◎ q₂) = {!!}
+(p₁ ◎ p₂) ⇔?? (q₁ ⊕ q₂) = {!!}
+(p₁ ◎ p₂) ⇔?? (q₁ ⊗ q₂) = {!!}
+(p₁ ⊕ p₂) ⇔?? Prim q = {!!}
+(p₁ ⊕ p₂) ⇔?? (q₁ ◎ q₂) = {!!}
+(p₁ ⊕ p₂) ⇔?? (q₁ ⊕ q₂) = {!!}
+(p₁ ⊗ p₂) ⇔?? Prim q = {!!}
+(p₁ ⊗ p₂) ⇔?? (q₁ ◎ q₂) = {!!}
+(p₁ ⊗ p₂) ⇔?? (q₁ ⊗ q₂) = {!!}
+
 _⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
-(Prim swap₊) ⇔? (Prim swap₊) = true
-(Prim id⟷) ⇔? (Prim swap₊) = false
-(Prim swap₊ ◎ Prim id⟷) ⇔? (Prim swap₊) = true
-_ ⇔? _ = {!!}
+p ⇔? q = ⌊ p ⇔?? q ⌋
 
 -- Forward execution one step at a time
 
