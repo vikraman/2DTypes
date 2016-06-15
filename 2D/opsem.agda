@@ -24,6 +24,7 @@ open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
 open import 2D.Types
 open import 2D.Frac
+open import 2D.Order
 
 ------------------------------------------------------------------------------
 -- Values
@@ -203,7 +204,7 @@ open import Relation.Nullary
 open import Relation.Nullary.Decidable
 
 -- USES K; SOUND AND VERY INCOMPLETE
-
+{-
 _prim⇔?_ : {τ : U} → (p : Prim⟷ τ τ) → (q : Prim⟷ τ τ) → Dec (Prim p ⇔ Prim q)
 swap₊ prim⇔? swap₊ = yes id⇔
 swap₊ prim⇔? id⟷ = no {!!}
@@ -231,6 +232,25 @@ Prim p ⇔?? (q₁ ⊗ q₂) = {!!}
 
 _⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
 p ⇔? q = ⌊ p ⇔?? q ⌋
+-}
+
+eqℕ : (n m : ℕ) → Bool
+eqℕ ℕ.zero ℕ.zero = true
+eqℕ ℕ.zero (suc m) = false
+eqℕ (suc n) ℕ.zero = false
+eqℕ (suc n) (suc m) = eqℕ n m
+
+{-# NON_TERMINATING #-}
+_⇔?_ : {τ : U} {p : τ ⟷ τ} → (q r : Perm p) → Bool
+_⇔?_ {p = p} (perm i q α) (perm j r γ) with order p
+perm (+_ n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ n₁ n₂
+perm (+_ n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ =
+     perm (+_ n₁) q α ⇔? perm ((-[1+_] n₂) ℤ+ (+ n)) r (trans⇔ idl◎r (trans⇔ ((2! p^n⇔id⟷) ⊡ γ)
+                                                                             (2! ((lower (+ n) -[1+ n₂ ])))))
+perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ =
+     perm ((-[1+_] n₁) ℤ+ (+ n)) q ((trans⇔ idl◎r (trans⇔ ((2! p^n⇔id⟷) ⊡ α)
+                                                          (2! ((lower (+ n) -[1+ n₁ ])))))) ⇔? perm (+_ n₂) r γ
+perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ = eqℕ n₁ n₂
 
 -- Forward execution one step at a time
 
@@ -271,11 +291,11 @@ ap (Enter (η- P) (tt , _) C) =
         ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
         C
 ap (Enter (ε+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
-   if (q ⇔? r)
+   if ((perm i q α) ⇔? (perm j r γ))
      then Fwd , Exit (ε+ P) (tt , refl) C
      else Bck , Enter (ε+ P) ((perm i q α , tt) , (β , perm j r γ)) C
 ap (Enter (ε- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
-   if (q ⇔? r)
+   if ((perm i q α) ⇔? (perm j r γ))
      then Fwd , Exit (ε- P) (tt , refl) C
      else Bck , Enter (ε- P) (((tt , perm i q α) , (perm j r γ , β))) C
 -- done
@@ -320,11 +340,11 @@ ap⁻¹ (Exit (ε- P) (tt , _) C) =
         ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
         C
 ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
-   if (q ⇔? r)
+   if ((perm i q α) ⇔? (perm j r γ))
      then Bck , Enter (η+ P) (tt , refl) C
      else Fwd , Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C
 ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
-   if (q ⇔? r)
+   if ((perm i q α) ⇔? (perm j r γ))
      then Bck , Enter (η- P) (tt , refl) C
      else Fwd , Exit (η- P) (((tt , perm i q α) , (perm j r γ , β))) C
 -- done 

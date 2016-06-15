@@ -15,6 +15,7 @@ open import Level hiding (lower)
 
 open import Relation.Binary.PropositionalEquality
 open import Function
+open import 2D.Order
 
 discreteC : Set → Category zero zero zero
 discreteC S = record { Obj = S
@@ -36,7 +37,7 @@ discreteG S = record { _⁻¹ = sym
 
 open import Data.Nat as ℕ
 open import Data.Integer as ℤ hiding (∣_∣)
-
+{-
 infix 40 _^_
 
 _^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
@@ -44,7 +45,7 @@ p ^ (+ 0) = Prim id⟷
 p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ] = ! p
 p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
-
+-}
 assoc1 : {τ : U} → {p : τ ⟷ τ} → (m : ℕ) →
   (p ◎ (p ^ (+ m))) ⇔ ((p ^ (+ m)) ◎ p)
 assoc1 ℕ.zero = trans⇔ idr◎l idl◎r
@@ -150,7 +151,7 @@ orderG {τ} p = record {
 ⟦ 1/# p ⟧ = _ , 1/orderG p
 
 open import Rational+ as ℚ
-open import 2D.Order
+--open import 2D.Order
 
 ∣_∣ : U → ℚ
 ∣ 𝟘 ∣ = + 0 ÷ 1
@@ -158,6 +159,6 @@ open import 2D.Order
 ∣ t₁ ⊕ t₂ ∣ = ∣ t₁ ∣ ℚ.+ ∣ t₂ ∣
 ∣ t₁ ⊗ t₂ ∣ = ∣ t₁ ∣ ℚ.* ∣ t₂ ∣
 ∣ # p ∣ with order p
-... | ord n n≥1 = n ÷1
+... | ord n n≥1 _ = n ÷1
 ∣ 1/# p ∣ with order p
-... | ord n n≥1 = (1÷ n) {n≥1}
+... | ord n n≥1 _ = (1÷ n) {n≥1}
