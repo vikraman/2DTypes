@@ -199,13 +199,12 @@ data Dir : Set where
 ------------------------------------------------------------------------------
 -- Evaluation
 
--- WRONG!!! AND USES K ANYWAY
+-- USES K; SOUND AND VERY INCOMPLETE
 _⇔?_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → Bool
-Prim id⟷ ⇔? Prim id⟷ = true
-Prim swap₊ ⇔? Prim swap₊ = true
-Prim id⟷ ⇔? Prim swap₊ = false
-Prim swap₊ ⇔? Prim id⟷ = false
-_ ⇔? _ = false 
+(Prim swap₊) ⇔? (Prim swap₊) = true
+(Prim id⟷) ⇔? (Prim swap₊) = false
+(Prim swap₊ ◎ Prim id⟷) ⇔? (Prim swap₊) = true
+_ ⇔? _ = {!!}
 
 -- Forward execution one step at a time
 
@@ -338,7 +337,7 @@ cc = Prim uniti⋆l ◎
 t0 = loopFwd (Enter cc (cv NOT (+ 0)) Empty)
 -- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
 t1 = loopFwd (Enter cc (cv NOT (+ 1)) Empty)
--- evals to: perm (+ 1) (Prim swap₊ ◎ Prim id⟷) id⇔ , id⇔ 
+-- evals to: perm (+ 1) (Prim swap₊) idr◎r , id⇔
 t2 = loopBck (Enter cc (cv NOT (+ 0)) Empty)
 -- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
 t3 = loopBck (Enter cc (cv NOT (+ 1)) Empty)
