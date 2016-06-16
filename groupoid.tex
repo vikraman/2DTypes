@@ -1,170 +1,3 @@
-\section{Negative Information} 
-
-To talk about information, we think of a type containing $N$ values as
-an abstract system that has $N$ distinguishable states. According to
-the conventional theory of information~\cite{Shannon1948}, the amount
-of information contained in one state is $\log N$ bits of
-information. For example, the type $\mathsf{Bool}$ can be thought of
-as an abstract system with two distinguishable states labeled
-$\mathsf{true}$ and $\mathsf{false}$. The amount of information
-contained in each one of these two states is one bit. As another
-example, the type $\mathsf{Bool} \otimes \mathbb{3}$ can be thought of
-a composite system consisting of two independent unrelated
-subsystems. A state of the full system is a pair of states one from
-each subsystem. The information contained in such a state is the sum
-of the information contained in each sub-state.
-
-%%%%%
-\subsection{Groupoid Cardinality}
-
-When translated to a computational setting, the physical principle of
-conservation of information implies that the foundational
-computational building blocks are functions $T_1 \rightarrow T_2$
-where the systems represented by $T_1$ and $T_2$ have the same number
-of states, i.e, the types have the same number of elements. In the
-degenerate case where types denote plain sets, counting the number of
-elements is trivial but things are much more interesting when types
-denote arbitrary weak $\infty$-groupoids. 
-
-\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
-  The cardinality of a groupoid $G$ is the real number
-  \[
-    |G| = \sum_{[x] \in \pi_0(G)} \frac{1}{|\textsf{Aut}(x)|}
-  \]
-  provided the sum converges, where the sum is over isomorphism classes
-  of objects of $G$ and $|\textsf{Aut}(x)|$ is the cardinality or order
-  of the automorphism group of an object $x$ in $G$.
-\end{definition}
-
-
-
-We want our computations to be information-preserving. Since the
-amount of information in each state is just the log of the cardinality
-of the space, computation just needs to be between spaces of the same
-cardinality. 
-
-\amr{from popl 12 paper: adapt}
-
-Now consider the \ensuremath{\mathit{bool} \rightarrow \mathit{bool}}
-function \ensuremath{\mathit{not}}. Let $p_F$ and $p_T$ be the
-probabilities that the input is \ensuremath{\mathit{false}} or
-\ensuremath{\mathit{true}} respectively. The outputs occur with the
-reverse probabilities, i.e., $p_T$ is the probability that the output
-is \ensuremath{\mathit{false}} and $p_F$ is the probability that t he
-output is \ensuremath{\mathit{true}}. Hence the output entropy of the
-function is $- p_F \log{p_F} - p_T \log{p_T}$ which is the same as the
-input entropy and the function is information-preserving. As another
-example, consider the \ensuremath{\mathit{bool} \rightarrow
-  \mathit{bool}} function \ensuremath{\mathit{constT}(x) =
-  \mathit{true}} which discards its input.  The output of the function
-is always \ensuremath{\mathit{true}} with no uncertainty, which means
-tha t the output entropy is 0, and that the function is not
-information-preserving. As a third example, consider the
-function~\ensuremath{\mathit{and}} and let the inputs occur with equal
-probabilities, i.e., let the entropy of the input be 2. The output is
-\ensuremath{\mathit{false}} with probability $3/4$ and
-\ensuremath{\mathit{true}} with probability $1/4$, which means that
-the output entropy is about 0.8 and the function is not
-information-preserving. As a final example, consider the
-\ensuremath{\mathit{bool} \rightarrow \mathit{bool}\times
-  \mathit{bool}} function \ensuremath{\mathit{fanout} ~(x) = (x,x)}
-which duplicates its input.  Let the input be
-\ensuremath{\mathit{false}} with probability $p_F$ and
-\ensuremath{\mathit{true}} be probability $p_T$. The output is
-\ensuremath{(\mathit{false},\mathit{false})} with probability $p_F$
-and \ensuremath{(\mathit{true},\mathit{true})} with probability $p_T$
-which means that the output entropy is the same as the input entropy
-and the function is information-preserving.
-
-We are now ready to formalize the connection between reversibility and
-entropy, once we define logical reversibility of computations. 
-
-\begin{definition}[Logical reversibility~\cite{Zuliani:2001:LR}]
-A function $f : b_1 \rightarrow b_2$ is logically reversible if there exists
-an inverse function $g : b_2 \rightarrow b_1$ such that for all values $v_1
-\in b_1$ and $v_2 \in b_2$, we have: $f(v_1) = v_2$ iff $g(v_2) = v_1$.
-\end{definition}
-
-\noindent The main proposition that motivates and justifies our approach is that
-logically reversible functions are information-preserving.
-
-\begin{proposition}
-A function is logically reversible iff it is information-preserving.
-\end{proposition}
-
-Looking at the examples above, we argued that \ensuremath{\mathit{constT}}, \ensuremath{\mathit{and}} are
-not information-preserving and that \ensuremath{\mathit{not}}, \ensuremath{\mathit{fanout}} are
-information-preserving. As expected, neither \ensuremath{\mathit{constT}} nor \ensuremath{\mathit{and}}
-are logically reversible and \ensuremath{\mathit{not}} is logically reversible. The
-situation with \ensuremath{\mathit{fanout}} is however subtle and deserves some
-explanation. First, note that the definition of logical reversibility
-does not require the functions to be total, and hence it is possible
-to define a \emph{partial} function \ensuremath{\mathit{fanin}} that is the logical
-inverse of \ensuremath{\mathit{fanout}}. The function \ensuremath{\mathit{fanin}} maps \ensuremath{(\mathit{false},\mathit{false})}
-to \ensuremath{\mathit{false}}, \ensuremath{(\mathit{true},\mathit{true})} to \ensuremath{\mathit{true}} and is undefined
-otherwise. Arguing that partial functions like \ensuremath{\mathit{fanin}} are
-information-preserving requires some care. Let the inputs to \ensuremath{\mathit{fanin}}
-occur with equal probabilities, i.e., let the entropy of the input
-be~2. Disregarding the partiality of \ensuremath{\mathit{fanin}}, one might reason that
-the output is \ensuremath{\mathit{false}} with probability $1/4$ and \ensuremath{\mathit{true}} with
-probability $1/4$ and hence that the output entropy is~1 which
-contradicts the fact that \ensuremath{\mathit{fanin}} is logically reversible. The
-subtlety is that entropy is defined with respect to observing some
-probabilistic event: an infinite loop is not an event that can be
-observed and hence the entropy analysis, just like the definition of
-logical reversibility, only applies to the pairs of inputs and outputs
-on which the function is defined. In the case of \ensuremath{\mathit{fanin}} this means
-that the only inputs that can be considered are \ensuremath{(\mathit{false},\mathit{false})} and
-\ensuremath{(\mathit{true},\mathit{true})} and in this case it is clear that the function is
-information-preserving as expected.
-
-\amr{end of popl 12 quote} 
-
-%%%%%
-\subsection{Constraints}
-
-If we have the type $\mathsf{Bool} \times \mathsf{Bool}$ the
-information in each state is 2 bits. But if our system also has a
-constraint that the state must be of the form $(b,b)$, then there are
-only possible states in the system and the information contained in
-each is just one bit. There is a neat way to express the constraint
-using an equivalence generated by a pi-program.
-  
-%%%%%
-\subsection{Information Equivalence}
-  
-We need to show coherence of the definition of cardinalities on the
-universe syntax with the Euler characteristic of the category which in
-our case also corresponds to the groupoid cardinality. There are
-several formulations and explanations. The following is quite simple
-to implement: first collapse all the isomorphic objects. Then fix a
-particular order of the objects and write a matrix whose $ij$'s entry
-is the number of morphisms from $i$ to $j$. Invert the matrix. The
-cardinality is the sum of the elements in the matrix.
-
-Our notion of information equivalence is coarser than the conventional
-notion of equivalence of categories (groupoids). This is fine as there
-are several competing notions of equivalence of groupoids that are
-coarser than strict categorical equivalence.
-
-There are however other notions of equivalence of groupoids like
-Morita equivalence and weak equivalence that we explore later. The
-intuition of these weaker notions of equivalence is that two groupoids
-can be considered equivalent if it is not possible to distinguish them
-using certain observations. This informally corresponds to the notion
-of ``observational equivalence'' in programming language
-semantics. Note that negative entropy can only make sense locally in
-an open system but that in a closed system, i.e., in a complete
-computation, entropy cannot be negative. Thus we restrict
-observational contexts to those in which fractional types do not
-occur. Note that two categories can have the same cardinality but not
-be equivalent or even Morita equivalent but the converse is
-guaranteed. So it is necessary to have a separate notion of
-equivalence and check that whenever we have the same cardinality, the
-particular categories in question are equivalent.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Categorical Model: Groupoid of Groupoids}
 \vic{Which is the groupoid of groupoids?}
 \label{sec:groupoids}
@@ -842,3 +675,174 @@ collection of types is another groupoid: commutative semifield
 % --   trans⇔  assoc◎l (trans⇔ (assoc◎r ⊡ id⇔) (
 % --   trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
 % --   cancel-linv -[1+ n ])))))
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Negative Information} 
+
+For an information-theoretic perspective on the language $\Pi$, we
+think of a type containing $N$ values as an abstract system that
+has~$N$ distinguishable states. According to the conventional theory
+of information~\cite{Shannon1948}, the amount of information contained
+in each state of a system with $N$ distinguishable states is $\log N$
+bits of information. For example, the type $\mathsf{Bool}$ can be
+thought of as an abstract system with two distinguishable states
+labeled $\mathsf{true}$ and $\mathsf{false}$ each containing
+$\log 2 = 1$ bit. Similarly, the type $\mathbb{3}$ can be thought of
+as an abstract system with three distinguishable states each
+containing $\log 3$ bits. The logarithmic map implies that information
+contained in a composite state is the sum of the information contained
+in its constituents. For example, the type
+$\mathsf{Bool} \otimes \mathbb{3}$ can be thought of a composite
+system consisting of two independent unrelated subsystems. Each state
+of the composite system therefore contains
+$\log (2 * 3) = \log 2 + \log 3$ bits.
+
+%%%%%
+\subsection{Groupoid Cardinality}
+
+As motivated above, the measure of information is intimately tied with
+the number of distinguishable states of a system which corresponds to
+the number of values of a given type. In the context of $\Pi$, types
+denote finite sets and the number of values of each type is just the
+cardinality of the set. As we aim to generalize from finite sets to
+more general groupoids, our first aim to define the cardinality of a
+groupoid.
+
+\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
+  The cardinality of a groupoid $G$ is the real number
+  \[
+    |G| = \sum_{[x] \in \pi_0(G)} \frac{1}{|\textsf{Aut}(x)|}
+  \]
+  provided the sum converges, where the sum is over isomorphism classes
+  of objects of $G$ and $|\textsf{Aut}(x)|$ is the cardinality or order
+  of the automorphism group of an object $x$ in $G$.
+\end{definition}
+
+
+
+We want our computations to be information-preserving. Since the
+amount of information in each state is just the log of the cardinality
+of the space, computation just needs to be between spaces of the same
+cardinality. 
+
+\amr{from popl 12 paper: adapt}
+
+Now consider the \ensuremath{\mathit{bool} \rightarrow \mathit{bool}}
+function \ensuremath{\mathit{not}}. Let $p_F$ and $p_T$ be the
+probabilities that the input is \ensuremath{\mathit{false}} or
+\ensuremath{\mathit{true}} respectively. The outputs occur with the
+reverse probabilities, i.e., $p_T$ is the probability that the output
+is \ensuremath{\mathit{false}} and $p_F$ is the probability that t he
+output is \ensuremath{\mathit{true}}. Hence the output entropy of the
+function is $- p_F \log{p_F} - p_T \log{p_T}$ which is the same as the
+input entropy and the function is information-preserving. As another
+example, consider the \ensuremath{\mathit{bool} \rightarrow
+  \mathit{bool}} function \ensuremath{\mathit{constT}(x) =
+  \mathit{true}} which discards its input.  The output of the function
+is always \ensuremath{\mathit{true}} with no uncertainty, which means
+tha t the output entropy is 0, and that the function is not
+information-preserving. As a third example, consider the
+function~\ensuremath{\mathit{and}} and let the inputs occur with equal
+probabilities, i.e., let the entropy of the input be 2. The output is
+\ensuremath{\mathit{false}} with probability $3/4$ and
+\ensuremath{\mathit{true}} with probability $1/4$, which means that
+the output entropy is about 0.8 and the function is not
+information-preserving. As a final example, consider the
+\ensuremath{\mathit{bool} \rightarrow \mathit{bool}\times
+  \mathit{bool}} function \ensuremath{\mathit{fanout} ~(x) = (x,x)}
+which duplicates its input.  Let the input be
+\ensuremath{\mathit{false}} with probability $p_F$ and
+\ensuremath{\mathit{true}} be probability $p_T$. The output is
+\ensuremath{(\mathit{false},\mathit{false})} with probability $p_F$
+and \ensuremath{(\mathit{true},\mathit{true})} with probability $p_T$
+which means that the output entropy is the same as the input entropy
+and the function is information-preserving.
+
+We are now ready to formalize the connection between reversibility and
+entropy, once we define logical reversibility of computations. 
+
+\begin{definition}[Logical reversibility~\cite{Zuliani:2001:LR}]
+A function $f : b_1 \rightarrow b_2$ is logically reversible if there exists
+an inverse function $g : b_2 \rightarrow b_1$ such that for all values $v_1
+\in b_1$ and $v_2 \in b_2$, we have: $f(v_1) = v_2$ iff $g(v_2) = v_1$.
+\end{definition}
+
+\noindent The main proposition that motivates and justifies our approach is that
+logically reversible functions are information-preserving.
+
+\begin{proposition}
+A function is logically reversible iff it is information-preserving.
+\end{proposition}
+
+Looking at the examples above, we argued that \ensuremath{\mathit{constT}}, \ensuremath{\mathit{and}} are
+not information-preserving and that \ensuremath{\mathit{not}}, \ensuremath{\mathit{fanout}} are
+information-preserving. As expected, neither \ensuremath{\mathit{constT}} nor \ensuremath{\mathit{and}}
+are logically reversible and \ensuremath{\mathit{not}} is logically reversible. The
+situation with \ensuremath{\mathit{fanout}} is however subtle and deserves some
+explanation. First, note that the definition of logical reversibility
+does not require the functions to be total, and hence it is possible
+to define a \emph{partial} function \ensuremath{\mathit{fanin}} that is the logical
+inverse of \ensuremath{\mathit{fanout}}. The function \ensuremath{\mathit{fanin}} maps \ensuremath{(\mathit{false},\mathit{false})}
+to \ensuremath{\mathit{false}}, \ensuremath{(\mathit{true},\mathit{true})} to \ensuremath{\mathit{true}} and is undefined
+otherwise. Arguing that partial functions like \ensuremath{\mathit{fanin}} are
+information-preserving requires some care. Let the inputs to \ensuremath{\mathit{fanin}}
+occur with equal probabilities, i.e., let the entropy of the input
+be~2. Disregarding the partiality of \ensuremath{\mathit{fanin}}, one might reason that
+the output is \ensuremath{\mathit{false}} with probability $1/4$ and \ensuremath{\mathit{true}} with
+probability $1/4$ and hence that the output entropy is~1 which
+contradicts the fact that \ensuremath{\mathit{fanin}} is logically reversible. The
+subtlety is that entropy is defined with respect to observing some
+probabilistic event: an infinite loop is not an event that can be
+observed and hence the entropy analysis, just like the definition of
+logical reversibility, only applies to the pairs of inputs and outputs
+on which the function is defined. In the case of \ensuremath{\mathit{fanin}} this means
+that the only inputs that can be considered are \ensuremath{(\mathit{false},\mathit{false})} and
+\ensuremath{(\mathit{true},\mathit{true})} and in this case it is clear that the function is
+information-preserving as expected.
+
+\amr{end of popl 12 quote} 
+
+%%%%%
+\subsection{Constraints}
+
+If we have the type $\mathsf{Bool} \times \mathsf{Bool}$ the
+information in each state is 2 bits. But if our system also has a
+constraint that the state must be of the form $(b,b)$, then there are
+only possible states in the system and the information contained in
+each is just one bit. There is a neat way to express the constraint
+using an equivalence generated by a pi-program.
+  
+%%%%%
+\subsection{Information Equivalence}
+  
+We need to show coherence of the definition of cardinalities on the
+universe syntax with the Euler characteristic of the category which in
+our case also corresponds to the groupoid cardinality. There are
+several formulations and explanations. The following is quite simple
+to implement: first collapse all the isomorphic objects. Then fix a
+particular order of the objects and write a matrix whose $ij$'s entry
+is the number of morphisms from $i$ to $j$. Invert the matrix. The
+cardinality is the sum of the elements in the matrix.
+
+Our notion of information equivalence is coarser than the conventional
+notion of equivalence of categories (groupoids). This is fine as there
+are several competing notions of equivalence of groupoids that are
+coarser than strict categorical equivalence.
+
+There are however other notions of equivalence of groupoids like
+Morita equivalence and weak equivalence that we explore later. The
+intuition of these weaker notions of equivalence is that two groupoids
+can be considered equivalent if it is not possible to distinguish them
+using certain observations. This informally corresponds to the notion
+of ``observational equivalence'' in programming language
+semantics. Note that negative entropy can only make sense locally in
+an open system but that in a closed system, i.e., in a complete
+computation, entropy cannot be negative. Thus we restrict
+observational contexts to those in which fractional types do not
+occur. Note that two categories can have the same cardinality but not
+be equivalent or even Morita equivalent but the converse is
+guaranteed. So it is necessary to have a separate notion of
+equivalence and check that whenever we have the same cardinality, the
+particular categories in question are equivalent.
+
+
