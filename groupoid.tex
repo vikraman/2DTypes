@@ -1,17 +1,42 @@
 \section{Negative Information} 
 
-Following HoTT, we think of a type as a (topological) space. To talk
-about information, we think of this type or space as an abstract
-system that has $N$ distinguishable states. So the type
-$\mathsf{Bool}$ has 2 distinguishable states and the type
-$B^3 = \mathsf{Bool} \times \mathsf{Bool} \times \mathsf{Bool}$ has 8
-distinguishable states. One of these states is
-$(\mathsf{true},\mathsf{false},\mathsf{false})$. The amount of
-information contained in each of the 8 states is $\log 8 = 3$
-bits. This is all the classical way of quantifying information.
+To talk about information, we think of a type containing $N$ values as
+an abstract system that has $N$ distinguishable states. According to
+the conventional theory of information~\cite{Shannon1948}, the amount
+of information contained in one state is $\log N$ bits of
+information. For example, the type $\mathsf{Bool}$ can be thought of
+as an abstract system with two distinguishable states labeled
+$\mathsf{true}$ and $\mathsf{false}$. The amount of information
+contained in each one of these two states is one bit. As another
+example, the type $\mathsf{Bool} \otimes \mathbb{3}$ can be thought of
+a composite system consisting of two independent unrelated
+subsystems. A state of the full system is a pair of states one from
+each subsystem. The information contained in such a state is the sum
+of the information contained in each sub-state.
 
 %%%%%
-\subsection{Conservation of Information}
+\subsection{Groupoid Cardinality}
+
+When translated to a computational setting, the physical principle of
+conservation of information implies that the foundational
+computational building blocks are functions $T_1 \rightarrow T_2$
+where the systems represented by $T_1$ and $T_2$ have the same number
+of states, i.e, the types have the same number of elements. In the
+degenerate case where types denote plain sets, counting the number of
+elements is trivial but things are much more interesting when types
+denote arbitrary weak $\infty$-groupoids. 
+
+\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
+  The cardinality of a groupoid $G$ is the real number
+  \[
+    |G| = \sum_{[x] \in \pi_0(G)} \frac{1}{|\textsf{Aut}(x)|}
+  \]
+  provided the sum converges, where the sum is over isomorphism classes
+  of objects of $G$ and $|\textsf{Aut}(x)|$ is the cardinality or order
+  of the automorphism group of an object $x$ in $G$.
+\end{definition}
+
+
 
 We want our computations to be information-preserving. Since the
 amount of information in each state is just the log of the cardinality
@@ -64,7 +89,7 @@ an inverse function $g : b_2 \rightarrow b_1$ such that for all values $v_1
 logically reversible functions are information-preserving.
 
 \begin{proposition}
-A function is logically reversible iff it is infor\-mation-preserving.
+A function is logically reversible iff it is information-preserving.
 \end{proposition}
 
 Looking at the examples above, we argued that \ensuremath{\mathit{constT}}, \ensuremath{\mathit{and}} are
