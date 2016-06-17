@@ -21,7 +21,7 @@ open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
 open import Relation.Binary.PropositionalEquality
   using (_≡_; refl; trans; subst)
 open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
-open import Categories.Groupoid using () renaming (Product to GProduct)
+open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
 open import pibackground 
 open import groupoid
