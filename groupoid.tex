@@ -1,4 +1,4 @@
-\section{Categorical Model: Groupoid of Groupoids}
+\section{Denotational Model: Groupoid of Groupoids}
 \vic{Which is the groupoid of groupoids?}
 \label{sec:groupoids}
 
@@ -677,7 +677,7 @@ collection of types is another groupoid: commutative semifield
 % --   cancel-linv -[1+ n ])))))
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Negative Information} 
+\section{Groupoid Cardinality and Negative Information} 
 
 For an information-theoretic perspective on the language $\Pi$, we
 think of a type containing $N$ values as an abstract system that
@@ -709,14 +709,51 @@ more general groupoids, our first aim to define the cardinality of a
 groupoid.
 
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
-  The cardinality of a groupoid $G$ is the real number
+  The cardinality of a groupoid $G$ is the real number:
   \[
-    |G| = \sum_{[x] \in \pi_0(G)} \frac{1}{|\textsf{Aut}(x)|}
+    |G| = \sum \frac{1}{|\textsf{Aut}(x)|}
   \]
-  provided the sum converges, where the sum is over isomorphism classes
-  of objects of $G$ and $|\textsf{Aut}(x)|$ is the cardinality or order
-  of the automorphism group of an object $x$ in $G$.
+  provided the sum converges, where the sum is over \emph{isomorphism
+    classes of objects $x$} and $|\textsf{Aut}(x)|$ is the number of
+  automorphisms of $x$.
 \end{definition}
+
+For plain sets, the definition just counts the elements as each
+element is its own equivalence class and has exactly one automorphism
+(the identity). For the groupoid on the left below, we have two
+isomorphism classes with representatives $a$ and $b$ with each class
+having just one automorphism; the cardinality is
+$\frac{1}{1} + \frac{1}{1} = 2$. For the groupoid on the right below,
+we also have two isomorphism classes with representatives $a$ and $b$
+but $b$ has \emph{two} automorphisms on it and hence the cardinality
+is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3.1cm and 2cm);
+  \node[below] (A) at (-2,0) {$a$};
+  \node[below] (B) at (0,0) {$b$};
+  \node[below] (C) at (2,0) {$c$};
+  \path (A) edge [bend left=50] (C); 
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+\end{tikzpicture}
+\qquad 
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3.1cm and 2cm);
+  \node[below] (A) at (-2,0) {$a$};
+  \node[below] (B) at (0,0) {$b$};
+  \node[below] (C) at (2,0) {$c$};
+  \path (A) edge [bend left=50] (C); 
+  \path (B) edge [out=140, in=40, looseness=4] (B);
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+\end{tikzpicture}
+\end{center}
+
+
 
 
 
