@@ -711,22 +711,27 @@ groupoid.
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
   The cardinality of a groupoid $G$ is the real number:
   \[
-    |G| = \sum \frac{1}{|\textsf{Aut}(x)|}
+    |G| = \sum_{[x]} \frac{1}{|\textsf{Aut}(x)|}
   \]
-  provided the sum converges, where the sum is over \emph{isomorphism
-    classes of objects $x$} and $|\textsf{Aut}(x)|$ is the number of
-  automorphisms of $x$.
+  provided the sum converges. The summation is over \emph{isomorphism
+    classes $[x]$ of objects $x$} and $|\textsf{Aut}(x)|$ is the
+  number of automorphisms of $x$.
 \end{definition}
 
 For plain sets, the definition just counts the elements as each
 element is its own equivalence class and has exactly one automorphism
 (the identity). For the groupoid on the left below, we have two
-isomorphism classes with representatives $a$ and $b$ with each class
-having just one automorphism; the cardinality is
-$\frac{1}{1} + \frac{1}{1} = 2$. For the groupoid on the right below,
-we also have two isomorphism classes with representatives $a$ and $b$
-but $b$ has \emph{two} automorphisms on it and hence the cardinality
-is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$:
+isomorphism classes with representatives $a$ and $b$; the class
+containing $b$ has one automorphism (the identity); the class
+containing $a$ has two automorphisms starting from $a$: the identity
+and the loop going from $a$ to $c$ and back. By the groupoid axioms,
+this loop is equivalent to the identity which means that the class
+containing $a$ has also just one automorphism making the cardinality
+of the groupoid $\frac{1}{1} + \frac{1}{1} = 2$. For the groupoid on
+the right below, we also have two isomorphism classes with
+representatives $a$ and $b$ but~$b$ now has \emph{two} non-equivalent
+automorphisms on it and hence the cardinality is
+$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
@@ -753,18 +758,37 @@ is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$:
 \end{tikzpicture}
 \end{center}
 
+%%%%%
+\subsection{Negative Information}
+
+As explained above, the groupoid on the left has cardinality 2 as it
+only has two distinguishable states $[a,c]$ and $[b]$. Each state
+contains one bit of information. We can arrive at this conclusion in a
+more illuminating way by dissecting the groupoid and viewing it as
+built from a set with three elements and an equivalence relation
+identifying the first and third element. Concretely we can view the
+groupoid as built from the type $\mathbb{3}$ (with the elements
+relabeled as $a$, $b$, and $c$) and the combinator $a_6$ in
+Sec.~\ref{sec:pisem}. Focusing on the plain type, we reason that each
+value of the type $\mathbb{3}$ has $\log 3$ bits of information. In
+order to conclude that $a$ has only $\log 2$ bits of information, it
+must be the case that the action of the combinator $a_6$ on $a$ has
+produced additional information of the amount
+$\log 2 - \log 3$ which is negative. 
+
+$\log \frac{2}{3}$.
 
 
 
+
+\amr{from popl 12 paper: adapt}
 
 We want our computations to be information-preserving. Since the
 amount of information in each state is just the log of the cardinality
 of the space, computation just needs to be between spaces of the same
 cardinality. 
 
-\amr{from popl 12 paper: adapt}
-
-Now consider the \ensuremath{\mathit{bool} \rightarrow \mathit{bool}}
+ Now consider the \ensuremath{\mathit{bool} \rightarrow \mathit{bool}}
 function \ensuremath{\mathit{not}}. Let $p_F$ and $p_T$ be the
 probabilities that the input is \ensuremath{\mathit{false}} or
 \ensuremath{\mathit{true}} respectively. The outputs occur with the
