@@ -695,18 +695,19 @@ in its constituents. For example, the type
 $\mathsf{Bool} \otimes \mathbb{3}$ can be thought of a composite
 system consisting of two independent unrelated subsystems. Each state
 of the composite system therefore contains
-$\log (2 * 3) = \log 2 + \log 3$ bits.
+$\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
+information contained in each projection.
 
 %%%%%
 \subsection{Groupoid Cardinality}
 
 As motivated above, the measure of information is intimately tied with
-the number of distinguishable states of a system which corresponds to
-the number of values of a given type. In the context of $\Pi$, types
-denote finite sets and the number of values of each type is just the
-cardinality of the set. As we aim to generalize from finite sets to
-more general groupoids, our first aim to define the cardinality of a
-groupoid.
+the number of distinguishable states of a system which in turn
+corresponds to the number of values of a given type. In the context of
+$\Pi$, types denote finite sets and the number of values of each type
+is just the cardinality of the set. As we aim to generalize from
+finite sets to more general groupoids, our first aim is to define the
+cardinality of a groupoid.
 
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
   The cardinality of a groupoid $G$ is the real number:
@@ -761,22 +762,36 @@ $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$:
 %%%%%
 \subsection{Negative Information}
 
-As explained above, the groupoid on the left has cardinality 2 as it
-only has two distinguishable states $[a,c]$ and $[b]$. Each state
-contains one bit of information. We can arrive at this conclusion in a
-more illuminating way by dissecting the groupoid and viewing it as
-built from a set with three elements and an equivalence relation
-identifying the first and third element. Concretely we can view the
-groupoid as built from the type $\mathbb{3}$ (with the elements
-relabeled as $a$, $b$, and $c$) and the combinator $a_6$ in
-Sec.~\ref{sec:pisem}. Focusing on the plain type, we reason that each
-value of the type $\mathbb{3}$ has $\log 3$ bits of information. In
-order to conclude that $a$ has only $\log 2$ bits of information, it
-must be the case that the action of the combinator $a_6$ on $a$ has
-produced additional information of the amount
-$\log 2 - \log 3$ which is negative. 
+As explained above, the groupoid on the right has cardinality
+$\frac{3}{2}$. A crucial innovation of our work is to view this
+groupoid as built from two components: a $\Pi$-type with three
+elements and a 1-combinator on that type whose action is to map $b$ to
+itself and to swap $a$ and $c$. Concretely we view this groupoid as
+being built from the type $\mathbb{3}$ and the 1-combinator $a_6$ from
+Sec.~\ref{sec:pisem}. The objects of this groupoid as the elements of
+the type $\mathbb{3}$. The morphisms of this groupoid are produced by
+considering all powers of $a_6$: iterating $a_6$ zero-times produces
+all the identity morphisms, iterating $a_6$ once produces the morphism
+between $a$ and $c$ (and back) as well as the non-identity morphism on
+$b$; because $a_6$ has order 2, iterating it or its inverse further
+just produces equivalent morphisms.
 
-$\log \frac{2}{3}$.
+Because the cardinality of $\mathbb{3}$ is 3 and the final cardinality
+of the groupoid is $\frac{3}{2}$, it must be that the cardinality of
+$a_6$ is $\frac{1}{2}$ and that the combination of $\mathbb{3}$ and
+$a_6$ is a product-like combination. From the information perspective,
+each state of the system represented by the type $\mathbb{3}$ has
+$\log 3$ bits; after combining the type $\mathbb{3}$ with the
+1-combinator $a_6$, each state of the combined system has only
+$\log \frac{3}{2} = \log 3 - \log 2$ bits. It must therefore be the
+case that the contribution of the 1-combinator is a negative amount of
+information $- \log 2 = \log \frac{1}{2}$ which agrees with our
+observation that the cardinality of $a_6$ must be $\frac{1}{2}$.
+
+\amr{build the groupoid $\mathbb{3} \otimes \iorder{a_6}$ and explain
+  its equivalence to the above}
+
+
 
 
 
