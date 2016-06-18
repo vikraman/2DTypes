@@ -85,58 +85,6 @@ make these ideas precise, we first define the cardinality of a
 groupoid, and then give the details of the constructions of the
 groupoids $\order{p}$ and $\iorder{p}$.
 
-\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
-  The cardinality of a groupoid $G$ is the real number
-  \[
-    |G| = \sum_{[x] \in \pi_0(G)} \frac{1}{|\textsf{Aut}(x)|}
-  \]
-  provided the sum converges, where the sum is over isomorphism classes
-  of objects of $G$ and $|\textsf{Aut}(x)|$ is the cardinality or order
-  of the automorphism group of an object $x$ in $G$.
-\end{definition}
-
-\begin{definition}[Power of a permutation]
-  The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
-  $k \in \Z$ is
-  \[
-    p^k =
-  \begin{cases}
-    \idiso & k = 0 \\
-    p \odot p^{k - 1} & k > 0 \\
-    (!~p) \odot p^{k + 1} & k < 0 \\
-  \end{cases}
-  \]
-\end{definition}
-
-\begin{definition}[Order of a permutation]
-  The order of a 1-combinator $p : \tau \iso \tau$, $\ord{p}$, is the
-  least postitive natural number $k \in \N^+$ such that
-  $p^k \isotwo \idiso$.
-\end{definition}
-
-\begin{lemma}
-  Every $p : \tau \iso \tau$ has an order.
-\end{lemma}
-
-\begin{proof}
-  By cases.
-  \begin{enumerate}
-  \item $\ord{\idiso} = 1$
-  \item $\ord{\swapp} = \ord{\swapt} = 2$
-  \item $\ord{p_1 \odot p_2} = ???$
-  \item $\ord{p_1 \oplus p_2} = \ord{p_1 \otimes p_2} = \mathsf{lcm}(\ord{p_1}, \ord{p_2})$
-  \end{enumerate}
-\end{proof}
-
-\begin{lemma}
-  For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
-  $k = \ord{p}$.
-\end{lemma}
-
-\begin{proof}
-  Trivial.
-\end{proof}
-
 \begin{definition}[$\order{p}$]
   Denotationally, $\order{p}$ is the 1-groupoid whose objects are powers
   of $p$, $p^k$ for $k \in \Z$, and morphisms being 2-combinators
