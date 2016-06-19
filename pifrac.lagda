@@ -15,7 +15,7 @@ open import Categories.Groupoid using (Groupoid)
 open import Categories.Sum using (Sum)
 open import Categories.Product using (Product)
 open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
-open import Categories.Groupoid using () renaming (Product to GProduct)
+open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
 open import pibackground 
 
