@@ -688,22 +688,31 @@ are equivalent in our setting.
 \begin{figure}[h]
 \begin{center}
 \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (3.1cm and 2cm);
+  \draw[dashed] (0,-0.3) ellipse (1.2cm and 2.1cm);
+  \node[below] (A) at (-0.5,0) {$a$};
+  \node[below] (C) at (0.5,0) {$c$};
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (C) edge [out=140, in=40, looseness=4] (C);
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
   \node[below] (A) at (-2,0) {$a$};
   \node[below] (B) at (0,0) {$b$};
-  \node[below] (C) at (2,0) {$c$};
-  \path (A) edge [bend left=50] (C); 
-  \path (B) edge [out=140, in=40, looseness=4] (B);
+  \node[below] (C) at (1.5,0) {$c$};
+  \path (A) edge [bend left=50] (B); 
+  \path (C) edge [out=140, in=40, looseness=4] (C);
   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
 \qquad
-\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (3.1cm and 2cm);
-  \node[below] (A) at (-2,0) {$x$};
-  \node[below] (B) at (0,0) {$y$};
-  \node[below] (C) at (2,0) {$z$};
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (2.8cm and 2.5cm);
+  \node[below] (A) at (-1.6,0) {$a$};
+  \node[below] (B) at (0,0) {$b$};
+  \node[below] (C) at (1.6,0) {$c$};
   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
@@ -772,10 +781,13 @@ we define values as follows.
   for each reachable object $w_i$.
 \end{definition}
 
-\begin{definition}[Distinguishability] Two values
-  $V = (v,[\alpha_i]_i)$ and $W = (w,[\beta_j]_j)$ in $G$ are
-  indistinguishable $V \sim W$, if there is path from $v$ to $w$ (and
-  hence vice versa) that uses the $\alpha_i$ and $\beta_j$ morphisms.
+% one dollar and four quarters are indistinguishable because every
+% transaction that can use one can use the other.
+
+\begin{definition}[Distinguishability] Two \emph{classes} of values
+  $\{V_i\}$ and $\{W_j\}$ in $G$ are indistinguishable $\{V_i\} \sim \{W_j\}$,
+  if there is path from any $V$ in $V$ to $w$ (and hence vice versa) that uses
+  the $\alpha_i$ and $\beta_j$ morphisms.
 \end{definition}
 
 For groupoid $G_1$, we have the following values:
