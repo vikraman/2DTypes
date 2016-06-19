@@ -14,24 +14,22 @@ open import Universe using (Universe; Indexed-universe)
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
 open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
-open import Categories.Groupoid using () renaming (Product to GProduct)
+open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
-open import pibackground
--- open import groupoid
-data FT/ : Set where
-  ⇑    : FT → FT/
-  #    : {τ : FT} → (p : τ ⟷ τ) → FT/ 
-  1/#  : {τ : FT} → (p : τ ⟷ τ) → FT/
-  _⊞_  : FT/ → FT/ → FT/              
-  _⊠_  : FT/ → FT/ → FT/
-postulate
-  ⟦_⟧/ : (T : FT/) → Σ[ ℂ ∈ Category l0 l0 l0 ] (Groupoid ℂ)
-  discreteC : Set → Category l0 l0 l0
-  discreteG : (S : Set) → Groupoid (discreteC S)
-  orderC : {τ : FT} → (p : τ ⟷ τ) → Category l0 l0 l0
-  orderG : {τ : FT} → (p : τ ⟷ τ) → Groupoid (orderC p)
-  1/orderC : {τ : FT} (p : τ ⟷ τ) → Category l0 l0 l0
-  1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
+-- data FT/ : Set where
+--   ⇑    : FT → FT/
+--   #    : {τ : FT} → (p : τ ⟷ τ) → FT/ 
+--   1/#  : {τ : FT} → (p : τ ⟷ τ) → FT/
+--   _⊞_  : FT/ → FT/ → FT/              
+--   _⊠_  : FT/ → FT/ → FT/
+-- postulate
+--   ⟦_⟧/ : (T : FT/) → Σ[ ℂ ∈ Category l0 l0 l0 ] (Groupoid ℂ)
+--   discreteC : Set → Category l0 l0 l0
+--   discreteG : (S : Set) → Groupoid (discreteC S)
+--   orderC : {τ : FT} → (p : τ ⟷ τ) → Category l0 l0 l0
+--   orderG : {τ : FT} → (p : τ ⟷ τ) → Groupoid (orderC p)
+--   1/orderC : {τ : FT} (p : τ ⟷ τ) → Category l0 l0 l0
+--   1/orderG : {τ : FT} (p : τ ⟷ τ) → Groupoid (1/orderC p)
 \end{code}
 }
 

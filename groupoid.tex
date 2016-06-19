@@ -71,8 +71,13 @@ are non-trivial groupoids such as the ones illustrated in
 Fig.~\ref{fig:groupoids}.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{1-Combinators as Types}
+\subsection{Action Groupoids} 
 
+Explain $\ag{\tau}{p}$ and its construction
+ 
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Order Groupoids and Inverse Order Groupoids} 
+ 
 From each 1-combinator $c : \tau \iso \tau$ that maps a type $\tau$ to
 itself, we generate two groupoids $\order{p}$ and $\iorder{p}$ with
 cardinalities $\mathit{order}(p)$ and $\frac{1}{\mathit{order}(p)}$
@@ -84,58 +89,6 @@ are groupoids with the cardinality of an arbitrary natural number. To
 make these ideas precise, we first define the cardinality of a
 groupoid, and then give the details of the constructions of the
 groupoids $\order{p}$ and $\iorder{p}$.
-
-\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
-  The cardinality of a groupoid $G$ is the real number
-  \[
-    |G| = \sum_{[x] \in \pi_0(G)} \frac{1}{|\textsf{Aut}(x)|}
-  \]
-  provided the sum converges, where the sum is over isomorphism classes
-  of objects of $G$ and $|\textsf{Aut}(x)|$ is the cardinality or order
-  of the automorphism group of an object $x$ in $G$.
-\end{definition}
-
-\begin{definition}[Power of a permutation]
-  The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
-  $k \in \Z$ is
-  \[
-    p^k =
-  \begin{cases}
-    \idiso & k = 0 \\
-    p \odot p^{k - 1} & k > 0 \\
-    (!~p) \odot p^{k + 1} & k < 0 \\
-  \end{cases}
-  \]
-\end{definition}
-
-\begin{definition}[Order of a permutation]
-  The order of a 1-combinator $p : \tau \iso \tau$, $\ord{p}$, is the
-  least postitive natural number $k \in \N^+$ such that
-  $p^k \isotwo \idiso$.
-\end{definition}
-
-\begin{lemma}
-  Every $p : \tau \iso \tau$ has an order.
-\end{lemma}
-
-\begin{proof}
-  By cases.
-  \begin{enumerate}
-  \item $\ord{\idiso} = 1$
-  \item $\ord{\swapp} = \ord{\swapt} = 2$
-  \item $\ord{p_1 \odot p_2} = ???$
-  \item $\ord{p_1 \oplus p_2} = \ord{p_1 \otimes p_2} = \mathsf{lcm}(\ord{p_1}, \ord{p_2})$
-  \end{enumerate}
-\end{proof}
-
-\begin{lemma}
-  For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
-  $k = \ord{p}$.
-\end{lemma}
-
-\begin{proof}
-  Trivial.
-\end{proof}
 
 \begin{definition}[$\order{p}$]
   Denotationally, $\order{p}$ is the 1-groupoid whose objects are powers
@@ -175,9 +128,6 @@ groupoids $\order{p}$ and $\iorder{p}$.
 
 %%%%%
 \subsection{A Universe of Groupoids}
-
-Define action groupoids $\ag{\tau}{p}$ and show they are equivalent to
-uparrow tau times 1 over hash p
 
 Talk about monad/comonad ????
 
@@ -696,7 +646,7 @@ $\mathsf{Bool} \otimes \mathbb{3}$ can be thought of a composite
 system consisting of two independent unrelated subsystems. Each state
 of the composite system therefore contains
 $\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
-information contained in each projection.
+information contained in each subsystem.
 
 %%%%%
 \subsection{Groupoid Cardinality}
@@ -706,8 +656,8 @@ the number of distinguishable states of a system which in turn
 corresponds to the number of values of a given type. In the context of
 $\Pi$, types denote finite sets and the number of values of each type
 is just the cardinality of the set. As we aim to generalize from
-finite sets to more general groupoids, our first aim is to define the
-cardinality of a groupoid.
+finite sets to more general groupoids, we first recall the definition
+of groupoid cardinality.
 
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
   The cardinality of a groupoid $G$ is the real number:
@@ -721,80 +671,328 @@ cardinality of a groupoid.
 
 For plain sets, the definition just counts the elements as each
 element is its own equivalence class and has exactly one automorphism
-(the identity). For the groupoid on the left below, we have two
-isomorphism classes with representatives $a$ and $b$; the class
-containing $b$ has one automorphism (the identity); the class
-containing $a$ has two automorphisms starting from $a$: the identity
-and the loop going from $a$ to $c$ and back. By the groupoid axioms,
-this loop is equivalent to the identity which means that the class
-containing $a$ has also just one automorphism making the cardinality
-of the groupoid $\frac{1}{1} + \frac{1}{1} = 2$. For the groupoid on
-the right below, we also have two isomorphism classes with
-representatives $a$ and $b$ but~$b$ now has \emph{two} non-equivalent
-automorphisms on it and hence the cardinality is
-$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$:
+(the identity). For the groupoids $G_1$, $G_2$, and $G_3$ in
+Fig.~\ref{fig:groupoids2}, the cardinality of each groupoid is
+$\frac{3}{2}$ but for a different reason. Groupoid $G_1$ consists of
+two isomorphism classes: class $a$ has one object with one
+automorphism (the identity) and class $c$ has one object with two
+distinct automorphisms; the cardinality is
+$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid $G_2$, we also
+have two isomorphism classes with representatives $a$ and $c$; the
+class containing $a$ has two automorphisms starting from $a$: the
+identity and the loop going from $a$ to $b$ and back. By the groupoid
+axioms, this loop is equivalent to the identity which means that the
+class containing $a$ has just one distinct automorphism. The
+isomorphism class of $c$ has two non-equivalent automorphisms on it
+and hence the cardinality of $G_2$ is
+$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For $G_3$, we have three
+isomorphism classes, each with two non-equivalent automorphisms, and
+hence the cardinality of $G_3$ is
+$\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$. 
 
+\begin{figure}[h]
 \begin{center}
 \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (3.1cm and 2cm);
+  \draw[dashed] (0,-0.3) ellipse (1.2cm and 2.1cm);
+  \node[below] (A) at (-0.5,0) {$a$};
+  \node[below] (C) at (0.5,0) {$c$};
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (C) edge [out=140, in=40, looseness=4] (C);
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
   \node[below] (A) at (-2,0) {$a$};
   \node[below] (B) at (0,0) {$b$};
-  \node[below] (C) at (2,0) {$c$};
-  \path (A) edge [bend left=50] (C); 
+  \node[below] (C) at (1.5,0) {$c$};
+  \path (A) edge [bend left=50] (B); 
+  \path (C) edge [out=140, in=40, looseness=4] (C);
   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
-\qquad 
-\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (3.1cm and 2cm);
-  \node[below] (A) at (-2,0) {$a$};
+\qquad
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (2.8cm and 2.5cm);
+  \node[below] (A) at (-1.6,0) {$a$};
   \node[below] (B) at (0,0) {$b$};
-  \node[below] (C) at (2,0) {$c$};
-  \path (A) edge [bend left=50] (C); 
-  \path (B) edge [out=140, in=40, looseness=4] (B);
+  \node[below] (C) at (1.6,0) {$c$};
   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (A) edge [loop above, looseness=3, in=48, out=132] (A);
+  \path (B) edge [loop above, looseness=3, in=48, out=132] (B);
+  \path (C) edge [loop above, looseness=3, in=48, out=132] (C);
 \end{tikzpicture}
 \end{center}
+\caption{\label{fig:groupoids2}Example groupoids $G_1$, $G_2$, and $G_3$.}
+\end{figure}
 
 %%%%%
 \subsection{Negative Information}
-
-As explained above, the groupoid on the right has cardinality
-$\frac{3}{2}$. A crucial innovation of our work is to view this
-groupoid as built from two components: a $\Pi$-type with three
-elements and a 1-combinator on that type whose action is to map $b$ to
-itself and to swap $a$ and $c$. Concretely we view this groupoid as
-being built from the type $\mathbb{3}$ and the 1-combinator $a_6$ from
-Sec.~\ref{sec:pisem}. The objects of this groupoid as the elements of
-the type $\mathbb{3}$. The morphisms of this groupoid are produced by
-considering all powers of $a_6$: iterating $a_6$ zero-times produces
-all the identity morphisms, iterating $a_6$ once produces the morphism
-between $a$ and $c$ (and back) as well as the non-identity morphism on
-$b$; because $a_6$ has order 2, iterating it or its inverse further
-just produces equivalent morphisms.
+ 
+As these three groupoids have the same cardinality, we will explain in
+the next section that they are equivalent in our setting. But first we
+focus on $G_2$ and how to compute its cardinality in an alternative,
+compositional, way by viewing $G_2$ as the product of a type with
+three elements with a equivalence relation that induces some
+identifications among the elements. This is one important innovation
+of our work: groupoid $G_2$ can be generated from a $\Pi$-type with
+three elements (like the type $\mathbb{3}$ in Sec.~\ref{sec:pisem})
+and a 1-combinator on that type whose action is to map $c$ to itself
+and to swap~$a$ and~$b$ (like the combinator $a_2$ in
+Sec.~\ref{sec:pisem}). These two ingredients are combined as follows:
+the objects of the groupoid are the elements of the type $\mathbb{3}$
+and the morphisms are produced by considering all powers of $a_2$:
+iterating $a_2$ zero-times produces all the identity morphisms,
+iterating $a_2$ once produces the morphism between $a$ and $b$ (and
+back) as well as the non-identity morphism on $c$; because $a_2$ has
+order 2, iterating it or its inverse further does not produce any new
+morphisms.
 
 Because the cardinality of $\mathbb{3}$ is 3 and the final cardinality
-of the groupoid is $\frac{3}{2}$, it must be that the cardinality of
-$a_6$ is $\frac{1}{2}$ and that the combination of $\mathbb{3}$ and
-$a_6$ is a product-like combination. From the information perspective,
-each state of the system represented by the type $\mathbb{3}$ has
-$\log 3$ bits; after combining the type $\mathbb{3}$ with the
-1-combinator $a_6$, each state of the combined system has only
-$\log \frac{3}{2} = \log 3 - \log 2$ bits. It must therefore be the
-case that the contribution of the 1-combinator is a negative amount of
-information $- \log 2 = \log \frac{1}{2}$ which agrees with our
-observation that the cardinality of $a_6$ must be $\frac{1}{2}$.
+of $G_2$ is $\frac{3}{2}$, it must be that this use $a_2$ had a
+cardinality of $\frac{1}{2}$ and that the combination of $\mathbb{3}$
+and $a_2$ is a product-like combination. From the information
+theoretic perspective, each state of the system represented by the
+type $\mathbb{3}$ has $\log 3$ bits; after combining the type
+$\mathbb{3}$ with the 1-combinator $a_2$, the information contained in
+each state is reduced to $\log \frac{3}{2} = \log 3 - \log 2$ bits. It
+must therefore be the case that the contribution of the 1-combinator
+is a negative amount of information $- \log 2 = \log \frac{1}{2}$
+which agrees with our observation that this use of $a_2$ must have
+cardinality $\frac{1}{2}$.
 
-\amr{build the groupoid $\mathbb{3} \otimes \iorder{a_6}$ and explain
-  its equivalence to the above}
+%%%%%
+\subsection{Distinguishable Values}
+
+Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
+of types with $\frac{3}{2}$ values and that the values of these types
+are in 1-1 correspondence. This raises an immediate puzzling question:
+how are we going to express the set of values of these types? We
+obviously cannot list ``half a value'' but what we \emph{can} do is to
+list an integral number of values and provide an equivalence relation
+that specifies which values are distinguishable such that the ultimate
+counting of distinguishable values is fractional. The idea is not
+uncommon: in the conventional $\lambda$-calculus, we list
+$\lambda x.x$ and $\lambda y.y$ as separate values of type
+$\tau \rightarrow \tau$ and then provide a separate equivalence
+relation ($\alpha$-equivalence) to express the fact that these two
+values are indistinguishable. The treatment in our setting is similar
+but richer as the equivalence relation is not external but is itself
+part of the value and the resulting count may be fractional. Formally
+we define values as follows.
+
+\begin{definition}[Semantic Values] Given a groupoid $G$, a
+  \emph{value} in~$G$ is a pair consisting of an object $v$ and its
+  collection $[\alpha_i]_i$ of outgoing morphisms
+  $\alpha_i : v \Rightarrow w_i$ for each reachable object $w_i$.
+\end{definition}
+
+\noindent The values in each of our three example groupoids in Fig.~\ref{fig:groupoids2} are:
+\begin{itemize}
+\item Values of $G_1$ are $(a,[\texttt{id}])$ and $(c,[\texttt{id},\swapp])$;
+\item Values of $G_2$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
+$(c, [\texttt{id}, \swapp])$; 
+\item Values of $G_3$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
+$(c, [\texttt{id}, \swapp])$.
+\end{itemize}
+
+These values can be considered raw values as they are not all
+indistinguishable. But we already see that $G_2$ and $G_3$ have the
+same raw values and hence can be reasonably considered as
+equivalent. To argue that either is also equivalent to $G_1$, we
+reason following a monetary analogy: why is a dollar bill (the value
+$(a,[\texttt{id}])$ in $G_1$) considered indistinguishable from two
+half-dollars (the values $(a,[\texttt{id},\swapp])$ and
+$(b,[\texttt{id},\swapp])$ in $G_2$)? Certainly not because we can
+find a 1-1 map between one object and two objects but because we have
+a process that can transform one collection of values to the other. In
+our case, we proceed as follows. Consider the value
+$(a,[\texttt{id}])$ in $G_1$; we can add another copy $\texttt{id}$
+and refine it to $\swapp\odot\swapp$ to transform the value to
+$(a,[\texttt{id},\swapp\odot\swapp])$. We then introduce a new
+intermediate object so that the loop $\swapp\odot\swapp])$ from $a$ to
+$a$ goes through an intermediate point $b$, i.e., we have a path
+$\swapp$ from $a$ to $b$ and a path $\swapp$ from $b$ to $a$. The
+result is groupoid $G_2$.
+
+% one dollar and four quarters are indistinguishable because every
+% transaction that can use one can use the other.
+
+\begin{definition}[Distinguishability] Two \emph{collections of
+    values} $\{V_i\}$ and $\{W_j\}$ in $G$ are indistinguishable
+  $\{V_i\} \sim \{W_j\}$, if \ldots
+  morphisms.
+\end{definition}
+
+\amr{formalize the above and then revisit G1, G2, and G3 to formally
+  argue that after taking distinguishability into account they all
+  have the same distinguishable values and the number of
+  distinguishable values is 1.5}
+
+% v : obj, loop space
+% loop : 1-combinator, 2 loop space
+% 2-loop : 2-combinator
+
+% define v ~ w; use any loop on v ...
+
+%% can we show t // p has same values as t x 1/p
+
+%% can we show 1 has same values as 3 x 1/3 which also has same values as
+%% fully connected 3 points 3 // 3
+
+%% -----------------
+
+% Ok so let's say a is a value, b is a value, c is a value and we have
+% the types 
+
+% a == a
+% a == b
+% a == c
+% b == a
+% b == b
+% b == c
+% c == a
+% c == b
+% c == c
+
+% that we can use to reason about which values are equivalent to which
+% values
+
+% Some of these are inhabited: x == x always has refl, a == c has swap,
+% c == a has swap, b == b has another member other than id which is swap
+% a == b is empty and so on
+
+%% -----------------
+
+% First lemma: if x ==A y and c : A <-> B then eval(c,x) ==B eval(c,y)
+% Proof: eval can manipulate the proof x == y along
+
+% argue that it is awkward to carry all these equivalences around, so it
+% is better to normalize everything and always manipulate fractional
+% types of the form 1/x that way all the equivalences about a value are
+% right there: we only have x == y iff x is identical to y but we may
+% have many inhabitants of the space in that case
+
+% so now a value is always of the form x as usual and then we have a
+% bunch of identities x==x that we carry around with the value that are
+% the cycles starting from x looping around and then coming back to x
+
+% eta_p : produces (p,*) and the * has many equivalences *==* that are
+% id,p,p2,p3,... epsilon receives (p,*) then all is good; epsilon
+% receives (p2,*)
+
+% Ok so perhaps we carry values and a list of transports to do; epsilon
+% can just let (p2,*) go through but produce a transport along p2
+
+% ---
+
+% Main question: How do we argue that a system with one state is
+% equivalent to a system with 3 states, each with with 1/3 information
+
+% (*,id)
+
+% vs
+
+% (id,[id,p,p2]), (p,[id,p,p2]), (p2,[id,p,p2])
+
+% ==> 
+
+% general idea
+
+% (p,[...,q,...]) is indistinguishable from (q.p,[...,q.q,...])
+
+% and 
+
+% (v,[id,p]) is indistinguishable from (ap p v, [ p , p2 ])
+
+% So for example groupoid, we have the following values:
+
+% (a,[id,swap])
+% (b,[id,swap])
+% (c,[id,swap])
+
+% and (a,[id,swap]) ~id~ (a,[id,swap]) 
+%       (a,[id,swap]) ~swap~ (c,[swap,swap2])
+%       (b,[id,swap]) ~id~ (b,[id,swap]) 
+%       (b,[id,swap]) ~swap~ (b,[swap,id])
+
+% So now a value is (obj,[autos]) and we have ==G that tells us which
+% values are indistinguishable from each other
+
+% Back to eta/epsilon. Let p have order 3 for this example:
+
+% eta_p (*,[id]) ==> ((p^1,*),([id],[id,p,p2]))
+
+% epsilon_p ((p^i,*),([id],[id,p,p2]))
+
+% No want:
+% eta_p (*,[id]) ==> (id,[id,p,p2]) which is indistinguishable from (p,[id,p,p2]) and (p2,[id,p,p2])
+
+% So a value is an object and a collection of loops
+% A loop is a 1-combinator and a collection of 2-loops
+% A 2-loop is a 2-combinator
+
+% we have an equivalence relation on values telling us which values are
+% indistinguishable; basically (v,[...p..]) is indistinguishable from
+% (pv,[...p2,...]). Same with loops (p,[...alpha...]) is
+% indistinguishable from (alpha p,[... alpha^2...])
+
+% we have an equivalence between the type 1 viewed as (*,[id]) and
+% viewed as { (id,[id,p,p2]), (p,[id,p,p2]), (p2,[id,p,p2]) }. The
+% latter has 3 values but they are all indistinguishable so they are
+% really one value. Eta allows us to separate one of the values in the
+% second representation into two components and use each independently:
+
+% (p,[id,p,p2])  ==> (p,[refl]) and (*,[id,p,p2])
+
+% Of course the value we are getting on the left (with refl) is
+% arbitrary; we could have split as follows:
+
+% (p,[id,p,p2])  ==> (id,[refl]) and (*,[id,p,p2]) 
+% (p,[id,p,p2])  ==> (p,[refl]) and (*,[id,p,p2]) 
+% (p,[id,p,p2])  ==> (p2,[refl]) and (*,[id,p,p2]) 
+
+% BUT as soon as we split, an individual value like (p,[refl]) is not
+% equivalent to (p2,[refl]). We don't have that knowledge locally and we
+% must treat them as different.
+
+% epsilon will receive something like 
+
+%  (p^i,[refl]) and (*,[id,p,p2])
+
+% WHAT SHOULD IT DO???
 
 
 
+% --- 
+
+% Values: vertex values: a, b, c
+%             edge values: (1-combinators) swap^0=id, swap^1=swap
+%             face values: (2-combinators) none here
+
+% edge values can be used to identify vertex values: id identifies a~a, b~b, c~c
+% swap identifies a~c,b~b,c~c
+
+% indistinguishable values 
+
+% we have (a,swap) which means we can apply swap to (a,id). We get
+% (c,id); this identifies (a,id) ~ (c,id)
+
+% values of the type and which are distinguishable
+
+% want to identify: (a,id),(a,swap),(c,id),(c,swap)
+% want to also identify: (b,id),(b,swap)
 
 
+
+% build the groupoid $\mathbb{3} \otimes \iorder{a_6}$ and explain its
+% equivalence to the above
+
+%%%%%
+\subsection{Old stuff to clean up or throw away}
 
 \amr{from popl 12 paper: adapt}
 

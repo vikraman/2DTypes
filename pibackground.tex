@@ -313,5 +313,49 @@ $\mathit{order}(a_1)=1$,
 $\mathit{order}(a_2)=\mathit{order}(a_3)=\mathit{order}(a_6)=2$, and
 $\mathit{order}(a_4)=\mathit{order}(a_5)=3$.
 
+\begin{definition}[Power of a permutation]
+  The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
+  $k \in \Z$ is
+  \[
+    p^k =
+  \begin{cases}
+    \idiso & k = 0 \\
+    p \odot p^{k - 1} & k > 0 \\
+    (!~p) \odot p^{k + 1} & k < 0 \\
+  \end{cases}
+  \]
+\end{definition}
+
+\begin{definition}[Order of a permutation]
+  The order of a 1-combinator $p : \tau \iso \tau$, $\ord{p}$, is the
+  least postitive natural number $k \in \N^+$ such that
+  $p^k \isotwo \idiso$.
+\end{definition}
+
+% \begin{lemma}
+%   Every $p : \tau \iso \tau$ has an order.
+% \end{lemma}
+
+% \begin{proof}
+%   By cases.
+%   \begin{enumerate}
+%   \item $\ord{\idiso} = 1$
+%   \item $\ord{\swapp} = \ord{\swapt} = 2$
+%   \item $\ord{p_1 \odot p_2} = ???$
+%   \item $\ord{p_1 \oplus p_2} = \ord{p_1 \otimes p_2} = \mathsf{lcm}(\ord{p_1}, \ord{p_2})$
+%   \end{enumerate}
+% \end{proof}
+
+\begin{lemma}
+  For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
+  $k = \ord{p}$.
+\end{lemma}
+
+\begin{proof}
+  Trivial.
+\end{proof}
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

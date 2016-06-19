@@ -3,8 +3,7 @@ all : popl.pdf
 popl.pdf : popl.tex
 	pdflatex popl.tex
 
-# popl.tex : popl.lagda pibackground.tex groupoid.tex pifrac.tex opsem.tex limitations.tex appendix.tex
-popl.tex : popl.lagda pibackground.tex groupoid.tex appendix.tex
+popl.tex : popl.lagda pibackground.tex groupoid.tex pifrac.tex opsem.tex limitations.tex appendix.tex
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library popl.lagda
 
 pifrac.tex : pifrac.lagda
