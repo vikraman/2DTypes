@@ -22,6 +22,7 @@ open import Relation.Binary.PropositionalEquality
   using (_≡_; refl; trans; subst)
 open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
 open import Categories.Groupoid.Product using () renaming (Product to GProduct)
+import Categories.Slice
 
 open import 2D.Types
 open import 2D.Frac
@@ -30,12 +31,19 @@ open import 2D.Order
 ------------------------------------------------------------------------------
 -- Values
 
-V : (T : U) → Set
+
+
+V : (T : U) → Set₁
 V T = let ℂ , _ = ⟦ T ⟧
           open Category ℂ
---      in Σ[ v ∈ Obj ] (v ⇒ v)
---      in Σ[ v ∈ Obj ] (List (Σ[ v' ∈ Obj ] (v ⇒ v')))
-      in Σ Obj (λ v → (List (Σ Obj (λ v' → (v ⇒ v')))))
+      in Σ[ v ∈ Obj ] (Category l0 l0 l0)
+
+v₁ : V (𝟙 ⊕ 𝟙)
+v₁ = let ob = inj₁ tt
+         ℂ , _ = ⟦ 𝟙 ⊕ 𝟙 ⟧
+         open Category ℂ
+         open Categories.Slice (ℂ)
+     in (ob , slice ob)
 
 -- Examples:
 
@@ -95,9 +103,9 @@ NOT = Prim swap₊
 
 prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₁ → V T₂
 prim unite₊l (inj₁ () , av)
-prim unite₊l (inj₂ v , av) = (v , mapL (λ { (inj₂ v' , x) → v' , x;
+prim unite₊l (inj₂ v , av) = {!!} {--(v , mapL (λ { (inj₂ v' , x) → v' , x;
                                             (inj₁ () , x) })
-                                       av)
+                                       av)--}
 prim uniti₊l (v , av) = (inj₂ v , {!!}) 
 prim unite₊r (inj₁ v , av) = (v , {!!}) 
 prim unite₊r (inj₂ () , av)
@@ -173,7 +181,7 @@ prim⁻¹ id⟷ v = v
 -- Context T1 T2 T3 is a context missing T1 ⇿ T2 combinator and which
 -- returns T3 as final answer
 
-data Context : U → U → U → Set where
+data Context : U → U → U → Set₁ where
   Empty : {T : U} → Context T T T
   Fst : {T₁ T₂ T₃ T : U} →
     (C : Context T₁ T₃ T) → (P₂ : T₂ ⟷ T₃) → Context T₁ T₂ T
@@ -192,7 +200,7 @@ data Context : U → U → U → Set where
     (P₁ : T₁ ⟷ T₃) → (C : Context (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → 
     Context T₂ T₄ T
 
-data State : U → Set where
+data State : U → Set₁ where
   Enter : {T₁ T₂ T : U} →
     (P : T₁ ⟷ T₂) → V T₁ → Context T₁ T₂ T → State T
   Exit : {T₁ T₂ T : U} →
