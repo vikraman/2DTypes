@@ -166,33 +166,33 @@ prim⁻¹ id⟷ v = v
 ------------------------------------------------------------------------------
 -- Contexts and machine states
 
--- Context T1 T2 T3 is a context missing T1 ⇿ T2 combinator and which
--- returns T3 as final answer
+-- Context T1 T2 T3 T₄ is a context missing T₂ ⇿ T₃ combinator and which
+-- returns takes T₁ as original input and produce T₄ as final answer
 
-data Context : U → U → U → Set where
-  Empty : {T : U} → Context T T T
-  Fst : {T₁ T₂ T₃ T : U} →
-    (C : Context T₁ T₃ T) → (P₂ : T₂ ⟷ T₃) → Context T₁ T₂ T
-  Snd : {T₁ T₂ T₃ T : U} →
-    (P₁ : T₁ ⟷ T₂) → (C : Context T₁ T₃ T) → Context T₂ T₃ T
-  L× : {T₁ T₂ T₃ T₄ T : U} →
-    (C : Context (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) →
-    (P₂ : T₂ ⟷ T₄) → V T₂ → Context T₁ T₃ T
-  R× : {T₁ T₂ T₃ T₄ T : U} →
+data Context : U → U → U → U → Set where
+  Empty : {T₁ T₂ : U} → Context T₁ T₁ T₂ T₂
+  Fst : {T₀ T₁ T₂ T₃ T : U} →
+    (C : Context T₀ T₁ T₃ T) → (P₂ : T₂ ⟷ T₃) → Context T₀ T₁ T₂ T
+  Snd : {T₀ T₁ T₂ T₃ T : U} →
+    (P₁ : T₁ ⟷ T₂) → (C : Context T₀ T₁ T₃ T) → Context T₀ T₂ T₃ T
+  L× : {T₀ T₁ T₂ T₃ T₄ T : U} →
+    (C : Context T₀ (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) →
+    (P₂ : T₂ ⟷ T₄) → V T₂ → Context T₀ T₁ T₃ T
+  R× : {T₀ T₁ T₂ T₃ T₄ T : U} →
     (P₁ : T₁ ⟷ T₃) → V T₃ →
-    (C : Context (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) → Context T₂ T₄ T
-  L+ : {T₁ T₂ T₃ T₄ T : U} →
-    (C : Context (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → (P₂ : T₂ ⟷ T₄) → 
-    Context T₁ T₃ T
-  R+ : {T₁ T₂ T₃ T₄ T : U} →
-    (P₁ : T₁ ⟷ T₃) → (C : Context (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → 
-    Context T₂ T₄ T
+    (C : Context T₀ (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) → Context T₀ T₂ T₄ T
+  L+ : {T₀ T₁ T₂ T₃ T₄ T : U} →
+    (C : Context T₀ (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → (P₂ : T₂ ⟷ T₄) → 
+    Context T₀ T₁ T₃ T
+  R+ : {T₀ T₁ T₂ T₃ T₄ T : U} →
+    (P₁ : T₁ ⟷ T₃) → (C : Context T₀ (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → 
+    Context T₀ T₂ T₄ T
 
-data State : U → Set where
-  Enter : {T₁ T₂ T : U} →
-    (P : T₁ ⟷ T₂) → V T₁ → Context T₁ T₂ T → State T
-  Exit : {T₁ T₂ T : U} →
-    (P : T₁ ⟷ T₂) → V T₂ → Context T₁ T₂ T → State T
+data State : U → U → Set where
+  Enter : {T₀ T₁ T₂ T : U} →
+    (P : T₁ ⟷ T₂) → V T₁ → Context T₀ T₁ T₂ T → State T₀ T
+  Exit : {T₀ T₁ T₂ T : U} →
+    (P : T₁ ⟷ T₂) → V T₂ → Context T₀ T₁ T₂ T → State T₀ T
 
 data Dir : Set where
   Fwd : Dir
@@ -268,7 +268,7 @@ perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ =
 
 -- Forward execution one step at a time
 
-ap : {T : U} → (s : State T) → Dir × State T
+ap : {T₀ T : U} → (s : State T₀ T) → Dir × State T₀ T
 -- primitives
 ap (Enter (Prim c) v C) =
   Fwd , Exit (Prim c) (prim c v) C
@@ -328,7 +328,7 @@ ap (Exit P v Empty) = Fwd , Exit P v Empty
 
 -- Reverse execution one step at a time
 
-ap⁻¹ : {T : U} → State T → Dir × State T
+ap⁻¹ : {T₀ T : U} → State T₀ T → Dir × State T₀ T
 -- primitives
 ap⁻¹ (Exit (Prim c) v C) =
   Bck , Enter (Prim c) (prim⁻¹ c v) C
@@ -408,31 +408,28 @@ ap⁻¹ (Enter P v Empty) = Bck , Enter P v Empty
 
 -- big step execution
 
+postulate
+  IMPOSSIBLE : {T : U} → V T
+
 {-# NON_TERMINATING #-}
 
 mutual 
-  loopFwd : {T : U} → (s : State T) → V T
+  loopFwd : {T₀ T : U} → (s : State T₀ T) → V T
   loopFwd s with ap s 
   ... | Fwd , (Exit _ v Empty) = v
   ... | Fwd , s' = loopFwd s' 
-  ... | Bck , s' = loopBck s'
+  ... | Bck , s' = loopBck s' 
 
-  loopBck : {T : U} → State T → V T
+  loopBck : {T₀ T : U} → State T₀ T → V T
   loopBck s with ap⁻¹ s
-  ... | Bck , (Enter _ v Empty) = v
+  ... | Bck , (Enter {T₀} {.T₀} {T} {.T} p v Empty) = IMPOSSIBLE {T}
   ... | Bck , s' = loopBck s'
   ... | Fwd , s' = loopFwd s'
-
--- Useful to run globally:
--- fwd : {T₁ T₂ T : U} → (T₁ ⟷ T₂) → V T₁ → V T
--- fwd {_} {_} {t} c v = loopFwd  (Enter c v Empty)
 
 ------------------------------------------------------------------------------
 -- Examples and thoughts
 
--- Change Empty to allow t₁ ⟷ t₂
-
-eval : {t : U} → (c : t ⟷ t) → V t → V t
+eval : {t₁ t₂ : U} → (c : t₁ ⟷ t₂) → V t₁ → V t₂
 eval c v = loopFwd (Enter c v Empty)
 
 -- Credit card example
