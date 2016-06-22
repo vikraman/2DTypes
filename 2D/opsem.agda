@@ -266,7 +266,10 @@ ap (Enter foldSwap (inj₁ tt , _) C) =
   Fwd , Exit foldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C 
 ap (Enter foldSwap (inj₂ tt , _) C) =
   Fwd , Exit foldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
-ap (Enter unfoldSwap (v , av) C) = {!!} 
+ap (Enter unfoldSwap (v , _) C) =
+   if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
+      then Fwd , Exit unfoldSwap (inj₁ tt , refl) C
+      else Fwd , Exit unfoldSwap (inj₂ tt , refl) C 
 -- eta and epsilon
 ap (Enter (η+ P) (tt , _) C) =
   Fwd , Exit (η+ P)
@@ -317,8 +320,12 @@ ap⁻¹ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
 ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) =
   Bck , Enter (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
 -- Swap
-ap⁻¹ (Exit foldSwap v C) = {!!} 
-ap⁻¹ (Exit unfoldSwap v C) = {!!} 
+ap⁻¹ (Exit foldSwap (v , _) C) =
+     if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
+        then Bck , Enter foldSwap (inj₁ tt , refl) C
+        else Fwd , Enter foldSwap (inj₂ tt , refl) C  
+ap⁻¹ (Exit unfoldSwap (inj₁ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C 
+ap⁻¹ (Exit unfoldSwap (inj₂ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
 -- eta and epsilon
 ap⁻¹ (Exit (ε+ P) (tt , _) C) =
   -- if forward execution proceeded past ε with p^5 we backtrack using p; this may cause
