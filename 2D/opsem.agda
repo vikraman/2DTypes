@@ -262,9 +262,9 @@ ap (Exit P₁ v₁ (L× C P₂ v₂)) =
 ap (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
   Fwd , Exit (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
 -- Swap
-ap (Enter foldSwap (inj₁ tt , _) C) =
+ap (Enter foldSwap (inj₁ tt , refl) C) =
   Fwd , Exit foldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C 
-ap (Enter foldSwap (inj₂ tt , _) C) =
+ap (Enter foldSwap (inj₂ tt , refl) C) =
   Fwd , Exit foldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
 ap (Enter unfoldSwap (v , _) C) =
    if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
@@ -385,6 +385,10 @@ mutual
   ... | Bck , s' = loopBck s'
   ... | Fwd , s' = loopFwd s'
 
+-- Useful to run globally:
+-- fwd : {T₁ T₂ T : U} → (T₁ ⟷ T₂) → V T₁ → V T
+-- fwd {_} {_} {t} c v = loopFwd  (Enter c v Empty)
+
 ------------------------------------------------------------------------------
 -- Examples and thoughts
 
@@ -449,6 +453,11 @@ ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
                (2! (lower {p = P} (+ 1) i))))) , id⇔))
              C
 --}
+
+------------------------------------------------------------------------------
+
+-- things that have to be true for all of this to hold together
+--- bwd◎fwd≡id :
 
 ------------------------------------------------------------------------------
 ------------------------------------------------------------------------------
