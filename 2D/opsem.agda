@@ -270,6 +270,8 @@ ap (Enter unfoldSwap (v , _) C) =
    if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
       then Fwd , Exit unfoldSwap (inj₁ tt , refl) C
       else Fwd , Exit unfoldSwap (inj₂ tt , refl) C 
+ap (Enter ap⟷ (proj₁ , proj₂) C) = {!!} 
+ap (Enter ap⁻¹⟷ v C) = {!!} 
 -- eta and epsilon
 ap (Enter (η+ P) (tt , _) C) =
   Fwd , Exit (η+ P)
@@ -326,6 +328,8 @@ ap⁻¹ (Exit foldSwap (v , _) C) =
         else Fwd , Enter foldSwap (inj₂ tt , refl) C  
 ap⁻¹ (Exit unfoldSwap (inj₁ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C 
 ap⁻¹ (Exit unfoldSwap (inj₂ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
+ap⁻¹ (Exit ap⟷ v C) = {!!} 
+ap⁻¹ (Exit ap⁻¹⟷ v C) = {!!} 
 -- eta and epsilon
 ap⁻¹ (Exit (ε+ P) (tt , _) C) =
   -- if forward execution proceeded past ε with p^5 we backtrack using p; this may cause
@@ -415,6 +419,15 @@ t2 = loopBck (Enter cc (cv NOT (+ 0)) Empty)
 -- evals to: perm (+ 0) (Prim id⟷) id⇔ , id⇔
 t3 = loopBck (Enter cc (cv NOT (+ 1)) Empty)
 -- evals to: perm (+ 1) (Prim swap₊ ◎ Prim id⟷) id⇔ , id⇔
+
+-- HOF
+
+cnot : BOOL ⊗ BOOL ⟷ BOOL ⊗ BOOL
+cnot = (foldSwap {𝟙} ⊗ Prim id⟷) ◎ ap⟷ ◎ (unfoldSwap ⊗ Prim id⟷)
+
+-- (1+1) x b
+-- dist 1xb + 1xb
+-- 
 
 {-
 %% -- Trivial implementation of eta/epsilon that does
