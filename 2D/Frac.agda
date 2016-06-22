@@ -162,3 +162,5 @@ open import Rational+ as ℚ
 ... | ord n n≥1 _ = n ÷1
 ∣ 1/# p ∣ with order p
 ... | ord n n≥1 _ = (1÷ n) {n≥1}
+
+

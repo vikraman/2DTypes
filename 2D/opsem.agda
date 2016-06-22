@@ -458,7 +458,6 @@ t3 = loopBck (Enter cc (cv NOT (+ 1)) Empty)
 
 -- HOF
 
-
 FALSE TRUE : V BOOL
 FALSE = (inj₁ tt , refl)
 TRUE = (inj₂ tt , refl)
@@ -467,11 +466,7 @@ cnot : BOOL ⊗ BOOL ⟷ BOOL ⊗ BOOL
 cnot = (foldSwap {𝟙} ⊗ Prim id⟷) ◎ ap⟷ ◎ (unfoldSwap ⊗ Prim id⟷)
 
 testcnot : V (BOOL ⊗ BOOL)
-testcnot = eval cnot ((inj₂ tt , inj₁ tt) , (refl , refl))
-
--- (1+1) x b
--- dist 1xb + 1xb
--- 
+testcnot = eval cnot ([_,_] {BOOL} {BOOL} TRUE FALSE)
 
 {-
 %% -- Trivial implementation of eta/epsilon that does
@@ -517,4 +512,37 @@ ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
 --- bwd◎fwd≡id :
 
 ------------------------------------------------------------------------------
+-- tau // p
+
+{--
+p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category _ _ _ 
+p!p⇒C {τ} p = record {
+     Obj = Category.Obj (proj₁ ⟦ τ ⟧)
+   ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℤ ] (eval (p ^ j) (v₁ , refl) ≡ (v₂ , refl))) ×
+                     (Σ[ k ∈ ℕ ] (ap ((! p) ^ k) v₁ ≡ v₂))
+   ; _≡_ = λ _ _ → ⊤
+   ; id = ((0 , refl) , (0 , refl))
+   ; _∘_ = λ { {v₁} {v₂} {v₃} ((j₂ , a₂₃) , (k₂ , b₂₃)) ((j₁ , a₁₂) , (k₁ , b₁₂)) →
+             ? } -- ((j₁ + j₂ , compose≡ j₁ j₂ a₁₂ a₂₃) , (k₁ + k₂ , compose≡ k₁ k₂ b₁₂ b₂₃)) }
+   ; assoc = tt 
+   ; identityˡ = tt 
+   ; identityʳ = tt 
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
+   ; ∘-resp-≡ = λ _ _ → tt 
+   }
+
+p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p⇒C p)
+p⇒G {τ} p = record
+  { _⁻¹ =
+    λ { {v₁} {v₂} ((j , a) , (k , b)) →
+      (( k , ?) , -- subst (λ h → ap ? {-(compose k h)-} v₂ ≡ v₁) !! (reverse k b) ) ,
+       (j , ?))} -- reverse j a)) } 
+  ; iso = record {
+    isoˡ = tt;
+    isoʳ = tt
+    }
+  }
+--}
+
+
 ------------------------------------------------------------------------------
