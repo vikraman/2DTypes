@@ -430,6 +430,11 @@ mutual
 ------------------------------------------------------------------------------
 -- Examples and thoughts
 
+-- Change Empty to allow t₁ ⟷ t₂
+
+eval : {t : U} → (c : t ⟷ t) → V t → V t
+eval c v = loopFwd (Enter c v Empty)
+
 -- Credit card example
 
 cc : # NOT ⟷ # NOT
@@ -456,8 +461,16 @@ t3 = loopBck (Enter cc (cv NOT (+ 1)) Empty)
 
 -- HOF
 
+
+FALSE TRUE : V BOOL
+FALSE = (inj₁ tt , refl)
+TRUE = (inj₂ tt , refl)
+
 cnot : BOOL ⊗ BOOL ⟷ BOOL ⊗ BOOL
 cnot = (foldSwap {𝟙} ⊗ Prim id⟷) ◎ ap⟷ ◎ (unfoldSwap ⊗ Prim id⟷)
+
+testcnot : V (BOOL ⊗ BOOL)
+testcnot = eval cnot ((inj₂ tt , inj₁ tt) , (refl , refl))
 
 -- (1+1) x b
 -- dist 1xb + 1xb
