@@ -162,6 +162,7 @@ prim⁻¹ distl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
 prim⁻¹ distl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
 prim⁻¹ id⟷ v = v
 
+
 ------------------------------------------------------------------------------
 -- Contexts and machine states
 
@@ -232,6 +233,39 @@ perm (-[1+_] n₁) q α ⇔? perm (+_ n₂) r γ | ord n n≥1 p^n⇔id⟷ =
 perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ =
   eqℕ (mmod n₁ n n≥1) (mmod n₂ n n≥1)
 
+--------------------------------------------------
+
+{-# NON_TERMINATING #-}
+𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₁ → V T₂
+𝓐𝓹 (_⟷_.Prim c) v = prim c v
+𝓐𝓹 (p ◎ q) v = 𝓐𝓹 q (𝓐𝓹 p v)
+𝓐𝓹 (p ⊕ q) (inj₁ v , av) with (𝓐𝓹 p (v , av))
+𝓐𝓹 (p ⊕ q) (inj₁ v , av) | v' , av' = (inj₁ v') , av'
+𝓐𝓹 (p ⊕ q) (inj₂ v , av) with (𝓐𝓹 q (v , av))
+𝓐𝓹 (p ⊕ q) (inj₂ v , av) | v' , av' = (inj₂ v') , av'
+𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , (av₁ , av₂)) with ((𝓐𝓹 p (v₁ , av₁)) , (𝓐𝓹 q (v₂ , av₂)))
+𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , av₁ , av₂) | (v₁' , av₁') , (v₂' , av₂') = (v₁' , v₂') , (av₁' , av₂')
+𝓐𝓹 (η+ p) v = ((perm (+ 1) p idr◎r , tt) , (id⇔ , perm (+ 1) p idr◎r))
+𝓐𝓹 (η- p) v = ((tt , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
+𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) =
+  if ((perm i q α) ⇔? (perm j r γ))
+     then (tt , refl)
+     else 𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) -- loop forever
+𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β)) =
+  if ((perm i q α) ⇔? (perm j r γ))
+     then (tt , refl)
+     else 𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β))
+𝓐𝓹 foldSwap (inj₁ tt , av) = (perm (+ 0) (Prim id⟷) id⇔ , id⇔)
+𝓐𝓹 foldSwap (inj₂ tt , av) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
+𝓐𝓹 unfoldSwap (v , av) =
+  if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
+     then (inj₁ tt , refl)
+     else (inj₂ tt , refl)
+𝓐𝓹 ap⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹 p' (v , av₂))
+𝓐𝓹 ap⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
+𝓐𝓹 ap⁻¹⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹 (p' ^ -[1+ 0 ]) (v , av₂))
+... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
+
 -- Forward execution one step at a time
 
 ap : {T : U} → (s : State T) → Dir × State T
@@ -270,8 +304,8 @@ ap (Enter unfoldSwap (v , _) C) =
    if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
       then Fwd , Exit unfoldSwap (inj₁ tt , refl) C
       else Fwd , Exit unfoldSwap (inj₂ tt , refl) C 
-ap (Enter ap⟷ (proj₁ , proj₂) C) = {!!} 
-ap (Enter ap⁻¹⟷ v C) = {!!} 
+ap (Enter ap⟷ v C) = Fwd , Exit ap⟷ (𝓐𝓹 ap⟷ v) C
+ap (Enter ap⁻¹⟷ v C) = Fwd , Exit ap⁻¹⟷ (𝓐𝓹 ap⁻¹⟷ v) C
 -- eta and epsilon
 ap (Enter (η+ P) (tt , _) C) =
   Fwd , Exit (η+ P)
@@ -328,8 +362,8 @@ ap⁻¹ (Exit foldSwap (v , _) C) =
         else Fwd , Enter foldSwap (inj₂ tt , refl) C  
 ap⁻¹ (Exit unfoldSwap (inj₁ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C 
 ap⁻¹ (Exit unfoldSwap (inj₂ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
-ap⁻¹ (Exit ap⟷ v C) = {!!} 
-ap⁻¹ (Exit ap⁻¹⟷ v C) = {!!} 
+ap⁻¹ (Exit ap⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⁻¹⟷ v) C 
+ap⁻¹ (Exit ap⁻¹⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⟷ v) C  
 -- eta and epsilon
 ap⁻¹ (Exit (ε+ P) (tt , _) C) =
   -- if forward execution proceeded past ε with p^5 we backtrack using p; this may cause
