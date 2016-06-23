@@ -19,7 +19,7 @@ open import Data.Integer
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
 open import Relation.Binary.PropositionalEquality
-  using (_≡_; refl; trans; subst)
+  using (_≡_; refl; trans; subst; cong; sym)
 open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
 open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
@@ -618,35 +618,54 @@ ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
 ------------------------------------------------------------------------------
 -- tau // p
 
-{--
+postulate
+  𝓐𝓹⇔≡ : {T₁ T₂ : U} {p q : T₁ ⟷ T₂} → p ⇔ q → (v : V T₁) → 𝓐𝓹 p v ≡ 𝓐𝓹 q v
+  𝓐𝓹≡ : {T₁ T₂ : U} {p : T₁ ⟷ T₂} (v : V T₂) → 𝓐𝓹 p (𝓐𝓹 (! p) v) ≡ v
+  𝓐𝓹!≡ : {T₁ T₂ : U} {p : T₁ ⟷ T₂} (v : V T₁) → 𝓐𝓹 (! p) (𝓐𝓹 p v) ≡ v
+
 p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category _ _ _ 
 p!p⇒C {τ} p = record {
-     Obj = Category.Obj (proj₁ ⟦ τ ⟧)
-   ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℤ ] (eval (p ^ j) (v₁ , refl) ≡ (v₂ , refl))) ×
-                     (Σ[ k ∈ ℕ ] (ap ((! p) ^ k) v₁ ≡ v₂))
-   ; _≡_ = λ _ _ → ⊤
-   ; id = ((0 , refl) , (0 , refl))
-   ; _∘_ = λ { {v₁} {v₂} {v₃} ((j₂ , a₂₃) , (k₂ , b₂₃)) ((j₁ , a₁₂) , (k₁ , b₁₂)) →
-             ? } -- ((j₁ + j₂ , compose≡ j₁ j₂ a₁₂ a₂₃) , (k₁ + k₂ , compose≡ k₁ k₂ b₁₂ b₂₃)) }
-   ; assoc = tt 
-   ; identityˡ = tt 
-   ; identityʳ = tt 
-   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
-   ; ∘-resp-≡ = λ _ _ → tt 
+     Obj = V τ
+   ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℤ ] (𝓐𝓹 (p ^ j) v₁) ≡ v₂)
+   ; _≡_ = λ { (j , _) (j' , _) → ((p ^ j) ⇔ (p ^ j')) }
+   ; id = ((+ 0) , refl)
+   ; _∘_ = λ { {v₁} {v₂} {v₃} (j₂ , a₂₃) (j₁ , a₁₂) →
+               (j₁ ℤ+ j₂ , trans (𝓐𝓹⇔≡ (lower j₁ j₂) v₁)
+                          (trans (cong (λ v → 𝓐𝓹 (p ^ j₂) v) a₁₂)
+                                 a₂₃)) } -- ((j₁ + j₂ , compose≡ j₁ j₂ a₁₂ a₂₃) , (k₁ + k₂ , compose≡ k₁ k₂ b₁₂ b₂₃)) }
+   ; assoc = (λ { {A} {B} {C} {D} {j₁ , α₁} {j₂ , α₂} {j₃ , α₃} →
+                trans⇔ (lower j₁ (j₂ ℤ+ j₃))
+               (trans⇔ (id⇔ ⊡ lower j₂ j₃)
+               (trans⇔ assoc◎l
+               (trans⇔ (2! (lower j₁ j₂) ⊡ id⇔)
+                       (2! (lower (j₁ ℤ+ j₂) j₃))))) })
+   ; identityˡ = λ { {A} {B} {j₁ , α₁} → trans⇔ (lower j₁ (+ 0)) idr◎l } 
+   ; identityʳ = λ { {A} {B} {j₁ , α₁} → trans⇔ (lower (+ 0) j₁) idl◎l } 
+   ; equiv = record { refl = id⇔ ; sym = 2! ; trans = trans⇔ } 
+   ; ∘-resp-≡ = λ { {A} {B} {C} {jf , αf} {jh , αh} {jg , αg} {ji , αi}
+                    p^jf⇔p^jh p^jg⇔p^ji → trans⇔ (lower jg jf)
+                                         (trans⇔ (p^jg⇔p^ji ⊡ p^jf⇔p^jh)
+                                                 (2! (lower ji jh))) }
    }
+
+j+-j : (j : ℤ) → j ℤ+ (ℤ- j) ≡ (+ 0)
+j+-j (+_ ℕ.zero) = refl
+j+-j (+_ (suc n)) = j+-j -[1+ n ]
+j+-j (-[1+_] ℕ.zero) = refl
+j+-j (-[1+_] (suc n)) = j+-j -[1+ n ]
 
 p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p⇒C p)
 p⇒G {τ} p = record
   { _⁻¹ =
-    λ { {v₁} {v₂} ((j , a) , (k , b)) →
-      (( k , ?) , -- subst (λ h → ap ? {-(compose k h)-} v₂ ≡ v₁) !! (reverse k b) ) ,
-       (j , ?))} -- reverse j a)) } 
+    λ { {v₁} {v₂} (j , α) → (ℤ- j) , (trans (cong (λ v → 𝓐𝓹 (p ^ (ℤ- j)) v) (sym α))
+                                     (trans (𝓐𝓹⇔≡ (2! (lower j (ℤ- j))) v₁)
+                                            (cong (λ z → 𝓐𝓹 (p ^ z) v₁) (j+-j j)))) }
   ; iso = record {
-    isoˡ = tt;
-    isoʳ = tt
+    isoˡ = {!!} ;
+    isoʳ = {!!}
     }
   }
---}
+
 
 
 ------------------------------------------------------------------------------
