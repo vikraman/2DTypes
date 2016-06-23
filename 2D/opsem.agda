@@ -8,6 +8,7 @@ open import Data.Empty
 open import Data.Bool
 open import Data.Sum hiding ([_,_])
 open import Data.Product
+open import Function using (case_of_)
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
 open import Data.Unit using (⊤; tt)
@@ -162,6 +163,41 @@ prim⁻¹ distl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
 prim⁻¹ distl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
 prim⁻¹ id⟷ v = v
 
+prim◎prim⁻¹≡id : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → (v : V T₂) → prim c (prim⁻¹ c v) ≡ v
+prim◎prim⁻¹≡id unite₊l (proj₁ , proj₂) = refl
+prim◎prim⁻¹≡id uniti₊l (inj₁ () , proj₂)
+prim◎prim⁻¹≡id uniti₊l (inj₂ y , proj₂) = refl
+prim◎prim⁻¹≡id unite₊r x = refl
+prim◎prim⁻¹≡id uniti₊r (inj₁ x , proj₂) = refl
+prim◎prim⁻¹≡id uniti₊r (inj₂ () , proj₂)
+prim◎prim⁻¹≡id swap₊ (inj₁ x , proj₂) = refl
+prim◎prim⁻¹≡id swap₊ (inj₂ y , proj₂) = refl
+prim◎prim⁻¹≡id assocl₊ (inj₁ (inj₁ x) , proj₂) = refl
+prim◎prim⁻¹≡id assocl₊ (inj₁ (inj₂ y) , proj₂) = refl
+prim◎prim⁻¹≡id assocl₊ (inj₂ y , proj₂) = refl
+prim◎prim⁻¹≡id assocr₊ (inj₁ x , proj₂) = refl
+prim◎prim⁻¹≡id assocr₊ (inj₂ (inj₁ x) , proj₂) = refl
+prim◎prim⁻¹≡id assocr₊ (inj₂ (inj₂ y) , proj₂) = refl
+prim◎prim⁻¹≡id unite⋆l x = refl
+prim◎prim⁻¹≡id uniti⋆l ((tt , proj₂) , refl , proj₃) = refl
+prim◎prim⁻¹≡id unite⋆r x = refl
+prim◎prim⁻¹≡id uniti⋆r ((proj₁ , tt) , proj₃ , refl) = refl
+prim◎prim⁻¹≡id swap⋆ x = refl
+prim◎prim⁻¹≡id assocl⋆ x = refl
+prim◎prim⁻¹≡id assocr⋆ x = refl
+prim◎prim⁻¹≡id absorbr (() , _)
+prim◎prim⁻¹≡id absorbl (() , _)
+prim◎prim⁻¹≡id factorzr ((proj₁ , ()) , y)
+prim◎prim⁻¹≡id factorzl ((() , proj₂) , proj₃ , proj₄)
+prim◎prim⁻¹≡id dist (inj₁ (proj₁ , proj₂) , proj₃ , proj₄) = refl
+prim◎prim⁻¹≡id dist (inj₂ y , proj₁ , proj₂) = refl
+prim◎prim⁻¹≡id factor ((inj₁ x , proj₂) , proj₁ , proj₃) = refl
+prim◎prim⁻¹≡id factor ((inj₂ y , proj₂) , proj₁ , proj₃) = refl
+prim◎prim⁻¹≡id distl (inj₁ x , proj₁ , proj₂) = refl
+prim◎prim⁻¹≡id distl (inj₂ y , proj₁ , proj₂) = refl
+prim◎prim⁻¹≡id factorl ((proj₁ , inj₁ x) , proj₃ , proj₄) = refl
+prim◎prim⁻¹≡id factorl ((proj₁ , inj₂ y) , proj₃ , proj₄) = refl
+prim◎prim⁻¹≡id id⟷ x = refl
 
 ------------------------------------------------------------------------------
 -- Contexts and machine states
@@ -235,39 +271,107 @@ perm (-[1+_] n₁) q α ⇔? perm (-[1+_] n₂) r γ | ord n n≥1 p^n⇔id⟷ =
 
 --------------------------------------------------
 
-{-# NON_TERMINATING #-}
-𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₁ → V T₂
-𝓐𝓹 (_⟷_.Prim c) v = prim c v
-𝓐𝓹 (p ◎ q) v = 𝓐𝓹 q (𝓐𝓹 p v)
-𝓐𝓹 (p ⊕ q) (inj₁ v , av) with (𝓐𝓹 p (v , av))
-𝓐𝓹 (p ⊕ q) (inj₁ v , av) | v' , av' = (inj₁ v') , av'
-𝓐𝓹 (p ⊕ q) (inj₂ v , av) with (𝓐𝓹 q (v , av))
-𝓐𝓹 (p ⊕ q) (inj₂ v , av) | v' , av' = (inj₂ v') , av'
-𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , (av₁ , av₂)) with ((𝓐𝓹 p (v₁ , av₁)) , (𝓐𝓹 q (v₂ , av₂)))
-𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , av₁ , av₂) | (v₁' , av₁') , (v₂' , av₂') = (v₁' , v₂') , (av₁' , av₂')
-𝓐𝓹 (η+ p) v = ((perm (+ 1) p idr◎r , tt) , (id⇔ , perm (+ 1) p idr◎r))
-𝓐𝓹 (η- p) v = ((tt , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
-𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) =
-  if ((perm i q α) ⇔? (perm j r γ))
-     then (tt , refl)
-     else 𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) -- loop forever
-𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β)) =
-  if ((perm i q α) ⇔? (perm j r γ))
-     then (tt , refl)
-     else 𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β))
-𝓐𝓹 foldSwap (inj₁ tt , av) = (perm (+ 0) (Prim id⟷) id⇔ , id⇔)
-𝓐𝓹 foldSwap (inj₂ tt , av) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
-𝓐𝓹 unfoldSwap (v , av) =
-  if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
-     then (inj₁ tt , refl)
-     else (inj₂ tt , refl)
-𝓐𝓹 ap⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹 p' (v , av₂))
-𝓐𝓹 ap⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
-𝓐𝓹 ap⁻¹⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹 (p' ^ -[1+ 0 ]) (v , av₂))
-... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
+mutual
+  {-# TERMINATING #-}
+  𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₁ → V T₂
+  𝓐𝓹 (_⟷_.Prim c) v = prim c v
+  𝓐𝓹 (p ◎ q) v = 𝓐𝓹 q (𝓐𝓹 p v)
+  𝓐𝓹 (p ⊕ q) (inj₁ v , av) with (𝓐𝓹 p (v , av))
+  𝓐𝓹 (p ⊕ q) (inj₁ v , av) | v' , av' = (inj₁ v') , av'
+  𝓐𝓹 (p ⊕ q) (inj₂ v , av) with (𝓐𝓹 q (v , av))
+  𝓐𝓹 (p ⊕ q) (inj₂ v , av) | v' , av' = (inj₂ v') , av'
+  𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , (av₁ , av₂)) with ((𝓐𝓹 p (v₁ , av₁)) , (𝓐𝓹 q (v₂ , av₂)))
+  𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , av₁ , av₂) | (v₁' , av₁') , (v₂' , av₂') = (v₁' , v₂') , (av₁' , av₂')
+  𝓐𝓹 (η+ p) v = ((perm (+ 1) p idr◎r , tt) , (id⇔ , perm (+ 1) p idr◎r))
+  𝓐𝓹 (η- p) v = ((tt , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
+  𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) =
+    if ((perm i q α) ⇔? (perm j r γ))
+       then (tt , refl)
+       else 𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) -- loop forever
+  𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β)) =
+    if ((perm i q α) ⇔? (perm j r γ))
+       then (tt , refl)
+       else 𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β))
+  𝓐𝓹 foldSwap (inj₁ tt , av) = (perm (+ 0) (Prim id⟷) id⇔ , id⇔)
+  𝓐𝓹 foldSwap (inj₂ tt , av) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
+  𝓐𝓹 unfoldSwap (v , av) =
+    if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
+       then (inj₁ tt , refl)
+       else (inj₂ tt , refl)
+  𝓐𝓹 ap⟷ ((perm iter q α , v) , (av₁ , av₂)) =
+    case (𝓐𝓹 q (v , av₂)) of λ { (v' , av₂') → (perm iter q α , v') , (av₁ , av₂') } 
+  𝓐𝓹 ap⁻¹⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹⁻¹ p' (v , av₂))
+  ... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
+
+  𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₂ → V T₁
+  𝓐𝓹⁻¹ (Prim c) v = prim⁻¹ c v
+  𝓐𝓹⁻¹ (c₀ ◎ c₁) v = 𝓐𝓹⁻¹ c₀ (𝓐𝓹⁻¹ c₁ v)
+  𝓐𝓹⁻¹ (c₀ ⊕ c₁) (inj₁ x , av) =  case (𝓐𝓹⁻¹ c₀ (x , av)) of λ {(v' , av') → inj₁ v' , av'}
+  𝓐𝓹⁻¹ (c₀ ⊕ c₁) (inj₂ y , av) = case (𝓐𝓹⁻¹ c₁ (y , av)) of λ {(v' , av') → inj₂ v' , av'}
+  𝓐𝓹⁻¹ (c₀ ⊗ c₁) ((x , y) , (av₁ , av₂)) =
+    case (𝓐𝓹⁻¹ c₀ (x , av₁) , 𝓐𝓹⁻¹ c₁ (y , av₂)) of
+        (λ { ((v₁ , av₁') , (v₂ , av₂')) → (v₁ , v₂) , (av₁' , av₂')})
+  𝓐𝓹⁻¹ foldSwap (v , av) = 
+    if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
+       then (inj₁ tt , refl)
+       else (inj₂ tt , refl)
+  𝓐𝓹⁻¹ unfoldSwap (inj₁ tt , refl) = (perm (+ 0) (Prim id⟷) id⇔ , id⇔)
+  𝓐𝓹⁻¹ unfoldSwap (inj₂ tt , refl) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
+  𝓐𝓹⁻¹ ap⟷ ((perm iter q α , v) , (av₁ , av₂)) =
+    case (𝓐𝓹 (! q) (v , av₂)) of (λ {(v' , av') → (perm iter q α , v') , (av₁ , av') })
+  𝓐𝓹⁻¹ ap⁻¹⟷ ((perm i q α , v) , (av₁ , av₂)) = 
+    case (𝓐𝓹 q (v , av₂)) of (λ { (v' , av') → ((perm i q α) , v') , (av₁ , av') })
+  𝓐𝓹⁻¹ (η- c) v = tt , refl -- probably not the best
+  𝓐𝓹⁻¹ (η+ c) v = tt , refl -- probably not the best
+  𝓐𝓹⁻¹ (ε+ c) v = ((perm (+ 1) c idr◎r) , tt) , id⇔ , (perm (+ 1) c idr◎r)
+  𝓐𝓹⁻¹ (ε- c) v = (tt , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
+
+-- but is it reversible?
+-- first, we need a relation on values.
+_≡V_ : {T : U} → V T → V T → Set
+_≡V_ {𝟘} (() , _) _
+_≡V_ {𝟙} v₁ v₂ = ⊤ -- they are always equal
+_≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₁ z , z⇒z) = _≡V_ {T} (x , x⇒x) (z , z⇒z)
+_≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₂ y , _) = ⊥
+_≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₁ x , _) = ⊥
+_≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₂ z , z⇒z) = _≡V_ {S} (y , y⇒y) (z , z⇒z)
+_≡V_ {T ⊗ S} ((t₁ , s₁) , (t₁⇒t₁ , s₁⇒s₁)) ((t₂ , s₂) , (t₂⇒t₂ , s₂⇒s₂)) = 
+  _≡V_ {T} (t₁ , t₁⇒t₁) (t₂ , t₂⇒t₂) × _≡V_ {S} (s₁ , s₁⇒s₁) (s₂ , s₂⇒s₂)
+_≡V_ {# x} (p , α) (q , β) = Perm.p' p ⇔ Perm.p' q
+_≡V_ {1/# x} (tt , p) (tt , q) = Perm.p' p ⇔ Perm.p' q
+
+-- and now we try!
+fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → _≡V_ {T₂} (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) v
+fwd◎bwd≈id {T₂ = 𝟘} (Prim c) (() , proj₂)
+fwd◎bwd≈id {T₂ = 𝟙} (Prim c) v = tt
+fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₁ x , proj₂) = {!!}
+fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₂ y , proj₂) = {!!}
+fwd◎bwd≈id {T₂ = T₂ ⊗ T₃} (Prim c) v = {!!}
+fwd◎bwd≈id {T₂ = # x} (Prim unite₊l) (perm iter q α , β) = β
+fwd◎bwd≈id {T₂ = # x} (Prim unite₊r) (perm iter q α , β) = β
+fwd◎bwd≈id {T₂ = # x} (Prim unite⋆l) (perm iter q α , β) = β
+fwd◎bwd≈id {T₂ = # x} (Prim unite⋆r) (perm iter q α , β) = β
+fwd◎bwd≈id {T₂ = # x} (Prim id⟷) (perm iter q α , β) = β
+fwd◎bwd≈id {T₂ = 1/# x} (Prim c) v = {!!}
+fwd◎bwd≈id (c ◎ c₁) v = {!!}
+fwd◎bwd≈id (c ⊕ c₁) v = {!!}
+fwd◎bwd≈id (c ⊗ c₁) v = {!!}
+fwd◎bwd≈id foldSwap v = {!!}
+fwd◎bwd≈id unfoldSwap v = {!!}
+fwd◎bwd≈id {T₂ = # p ⊗ 𝟘} ap⟷ ((perm iter p' p'⇔p^i , ()) , proj₃ , proj₄)
+fwd◎bwd≈id {T₂ = # p ⊗ 𝟙} ap⟷ ((perm iter p' p'⇔p^i , tt) , proj₃ , proj₄) = proj₃ , tt
+fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₁ x) , proj₃ , proj₄) = {!!}
+fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₂ y) , proj₃ , proj₄) = {!!}
+fwd◎bwd≈id {T₂ = # p ⊗ (t ⊗ t₁)} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
+fwd◎bwd≈id {T₂ = # p ⊗ # x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
+fwd◎bwd≈id {T₂ = # p ⊗ 1/# x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
+fwd◎bwd≈id ap⁻¹⟷ v = {!!}
+fwd◎bwd≈id (η- c) v = {!!}
+fwd◎bwd≈id (η+ c) v = {!!}
+fwd◎bwd≈id (ε+ c) v = {!!}
+fwd◎bwd≈id (ε- c) v = {!!}
 
 -- Forward execution one step at a time
-
 ap : {T₀ T : U} → (s : State T₀ T) → Dir × State T₀ T
 -- primitives
 ap (Enter (Prim c) v C) =
