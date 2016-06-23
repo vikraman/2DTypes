@@ -654,16 +654,21 @@ j+-j (+_ (suc n)) = j+-j -[1+ n ]
 j+-j (-[1+_] ℕ.zero) = refl
 j+-j (-[1+_] (suc n)) = j+-j -[1+ n ]
 
+-j+j : (j : ℤ) → (ℤ- j) ℤ+ j ≡ (+ 0)
+-j+j (+_ ℕ.zero) = refl
+-j+j (+_ (suc n)) = -j+j -[1+ n ]
+-j+j (-[1+_] ℕ.zero) = refl
+-j+j (-[1+_] (suc n)) = -j+j -[1+ n ]
+
 p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p⇒C p)
 p⇒G {τ} p = record
   { _⁻¹ =
     λ { {v₁} {v₂} (j , α) → (ℤ- j) , (trans (cong (λ v → 𝓐𝓹 (p ^ (ℤ- j)) v) (sym α))
                                      (trans (𝓐𝓹⇔≡ (2! (lower j (ℤ- j))) v₁)
                                             (cong (λ z → 𝓐𝓹 (p ^ z) v₁) (j+-j j)))) }
-  ; iso = record {
-    isoˡ = {!!} ;
-    isoʳ = {!!}
-    }
+  ; iso = λ { {A} {B} {j , α}
+        → record { isoˡ = subst (λ n → p ^ n ⇔ Prim id⟷) (sym (j+-j j)) id⇔
+                 ; isoʳ = subst (λ n → p ^ n ⇔ Prim id⟷) (sym (-j+j j)) id⇔ } }
   }
 
 
