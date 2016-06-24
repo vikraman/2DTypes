@@ -106,7 +106,7 @@ some number of iterations of $p$ to $v_i$ produces $v_j$.
  
 For example, consider the type $\mathbb{3}$ and the 1-combinator $a_2$
 from Sec.~\ref{sec:pisem}. Since $a_2$ has order 2, we have $a_2 ^ k$
-for any integer $k$ is essentially either $\texttt{id}$ or
+for any integer $k$ is, up to equivalence, either $\texttt{id}$ or
 $a_2$. Therefore, the groupoid $\ag{\mathbb{3}}{a_2}$ looks as
 follows:
 
@@ -128,16 +128,29 @@ In the resulting groupoid, we have two isomorphism classes with
 representatives $\inl{(\inl{\unitv})}$ and $\inr{\unitv}$; the class
 containing $\inl{(\inl{\unitv})}$ has two automorphisms starting from
 $\inl{(\inl{\unitv})}$: the identity and the loop going from
-$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back. By the
-groupoid axioms, this loop is equivalent to the identity which means
-that the class containing $\inl{(\inl{\unitv})}$ has just one distinct
+$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back. This loop
+$a_2 \odot a_2$ is equivalent to the identity which means that the
+class containing $\inl{(\inl{\unitv})}$ has just one distinct
 automorphism. The isomorphism class of $\inr{\unitv}$ has two
 non-equivalent automorphisms on it and hence the cardinality of
-$\ag{\mathbb{3}}{a_2}$ is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. 
+$\ag{\mathbb{3}}{a_2}$ is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$.
 
 Generally speaking, for 1-combinator $p : \tau \iso \tau$, the
 cardinality of $\ag{\tau}{p}$ is $|\tau|/\ord{p}$, i.e., the number of
 elements of $\sem{\tau}$ divided by the order of the 1-combinator $p$.
+For every type $\tau$, including $\zt$, we can form the action
+groupoid $\ag{\tau}{\idiso}$ whose cardinality is just the number of
+elements in the set $\tau$. For any two types $\tau_1$ and $\tau_2$,
+we can form the action groupoid $\ag{\tau_1\oplus\tau_2}{\swapp}$
+whose cardinality is half of the sum of the elements in $\tau_1$ and 
+$\tau_2$. Given $p_1 : \tau_1 \iso \tau_1$ of order $o_1$ and $p_2 :
+\tau_2 \iso \tau_2$ of order $o_2$, we can also form the action
+groupoid $\ag{\tau_1\oplus\tau_2}{p_1\oplus p_2}$ whose cardinality is
+the sum of the elements $\tau_1$ and $\tau_2$ divided by the least
+common multiple of $o_1$ and $o_2$. In case the cardinality of
+$\tau_1$ is 3, the cardinality of $\tau_2$ is 2, the order of $p_1$ is
+3, and the order of $p_2$ is 2, the resulting groupoid has cardinality
+$\frac{5}{6}$ which is a proper fraction. 
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Order Groupoids $\order{p}$}
