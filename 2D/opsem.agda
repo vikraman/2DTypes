@@ -27,14 +27,6 @@ open import 2D.Types
 open import 2D.Frac
 open import 2D.Order
 
-------------------------------------------------------------------------------
--- Values
-
-V : (T : U) → Set
-V T = let ℂ , _ = ⟦ T ⟧
-          open Category ℂ
-      in Σ[ v ∈ Obj ] (v ⇒ v)
-
 -- Examples:
 
 -- fractional values
