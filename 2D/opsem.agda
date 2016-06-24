@@ -19,7 +19,7 @@ open import Data.Integer
 open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
   hiding (_≤_; _≤?_)
 open import Relation.Binary.PropositionalEquality
-  using (_≡_; refl; trans; subst; cong; sym)
+  using (_≡_; refl; trans; subst; cong; sym; cong₂)
 open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
 open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
@@ -276,10 +276,10 @@ mutual
   𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₁ → V T₂
   𝓐𝓹 (_⟷_.Prim c) v = prim c v
   𝓐𝓹 (p ◎ q) v = 𝓐𝓹 q (𝓐𝓹 p v)
-  𝓐𝓹 (p ⊕ q) (inj₁ v , av) with (𝓐𝓹 p (v , av))
-  𝓐𝓹 (p ⊕ q) (inj₁ v , av) | v' , av' = (inj₁ v') , av'
-  𝓐𝓹 (p ⊕ q) (inj₂ v , av) with (𝓐𝓹 q (v , av))
-  𝓐𝓹 (p ⊕ q) (inj₂ v , av) | v' , av' = (inj₂ v') , av'
+  𝓐𝓹 (p ⊕ q) (inj₁ v , av) =
+    case (𝓐𝓹 p (v , av)) of λ { (v' , av') → (inj₁ v') , av' }
+  𝓐𝓹 (p ⊕ q) (inj₂ v , av) =
+    case (𝓐𝓹 q (v , av)) of λ { (v' , av') → (inj₂ v') , av' }
   𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , (av₁ , av₂)) with ((𝓐𝓹 p (v₁ , av₁)) , (𝓐𝓹 q (v₂ , av₂)))
   𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , av₁ , av₂) | (v₁' , av₁') , (v₂' , av₂') = (v₁' , v₂') , (av₁' , av₂')
   𝓐𝓹 (η+ p) v = ((perm (+ 1) p idr◎r , tt) , (id⇔ , perm (+ 1) p idr◎r))
@@ -342,29 +342,16 @@ _≡V_ {1/# x} (tt , p) (tt , q) = Perm.p' p ⇔ Perm.p' q
 
 -- and now we try!
 fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → _≡V_ {T₂} (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) v
-fwd◎bwd≈id {T₂ = 𝟘} (Prim c) (() , proj₂)
-fwd◎bwd≈id {T₂ = 𝟙} (Prim c) v = tt
-fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₁ x , proj₂) = {!!}
-fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₂ y , proj₂) = {!!}
-fwd◎bwd≈id {T₂ = T₂ ⊗ T₃} (Prim c) v = {!!}
-fwd◎bwd≈id {T₂ = # x} (Prim unite₊l) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim unite₊r) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim unite⋆l) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim unite⋆r) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim id⟷) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = 1/# x} (Prim c) v = {!!}
+fwd◎bwd≈id (Prim x) v = {!!}
 fwd◎bwd≈id (c ◎ c₁) v = {!!}
-fwd◎bwd≈id (c ⊕ c₁) v = {!!}
-fwd◎bwd≈id (c ⊗ c₁) v = {!!}
-fwd◎bwd≈id foldSwap v = {!!}
+fwd◎bwd≈id (c ⊕ c₁) (inj₁ x , x⇒x) = fwd◎bwd≈id c (x , x⇒x) 
+fwd◎bwd≈id (c ⊕ c₁) (inj₂ y , proj₂) = {!!}
+fwd◎bwd≈id (c ⊗ c₁) ((x , y) , (x⇒x , y⇒y)) = fwd◎bwd≈id c (x , x⇒x) , fwd◎bwd≈id c₁ (y , y⇒y)
+fwd◎bwd≈id foldSwap (perm i q α , β) with perm i q α ⇔? perm (+ 0) (Prim id⟷) id⇔
+... | true = {!!}
+... | false = {!!}
 fwd◎bwd≈id unfoldSwap v = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ 𝟘} ap⟷ ((perm iter p' p'⇔p^i , ()) , proj₃ , proj₄)
-fwd◎bwd≈id {T₂ = # p ⊗ 𝟙} ap⟷ ((perm iter p' p'⇔p^i , tt) , proj₃ , proj₄) = proj₃ , tt
-fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₁ x) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₂ y) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ (t ⊗ t₁)} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ # x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ 1/# x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
+fwd◎bwd≈id ap⟷ v = {!!}
 fwd◎bwd≈id ap⁻¹⟷ v = {!!}
 fwd◎bwd≈id (η- c) v = {!!}
 fwd◎bwd≈id (η+ c) v = {!!}
