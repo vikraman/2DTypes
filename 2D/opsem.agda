@@ -27,14 +27,6 @@ open import 2D.Types
 open import 2D.Frac
 open import 2D.Order
 
-------------------------------------------------------------------------------
--- Values
-
-V : (T : U) → Set
-V T = let ℂ , _ = ⟦ T ⟧
-          open Category ℂ
-      in Σ[ v ∈ Obj ] (v ⇒ v)
-
 -- Examples:
 
 -- fractional values
@@ -340,7 +332,7 @@ _≡V_ {T ⊗ S} ((t₁ , s₁) , (t₁⇒t₁ , s₁⇒s₁)) ((t₂ , s₂) , 
 _≡V_ {# x} (p , α) (q , β) = Perm.p' p ⇔ Perm.p' q
 _≡V_ {1/# x} (tt , p) (tt , q) = Perm.p' p ⇔ Perm.p' q
 
--- and now we try!
+-- and now we try! 
 fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → _≡V_ {T₂} (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) v
 fwd◎bwd≈id (Prim x) v = {!!}
 fwd◎bwd≈id (c ◎ c₁) v = {!!}

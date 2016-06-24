@@ -1,6 +1,9 @@
 \section{Denotational Model: Groupoid of Groupoids}
-\vic{Which is the groupoid of groupoids?}
 \label{sec:groupoids}
+
+%% \vic{Which is the groupoid of groupoids?}
+ 
+our two workhorses are $\order{p}$ and $\iorder{p}$
 
 rig groupoid
 objects types
@@ -70,25 +73,102 @@ deep technical insight to extend $\Pi$ with types whose denotations
 are non-trivial groupoids such as the ones illustrated in
 Fig.~\ref{fig:groupoids}.
 
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Action Groupoids} 
+%%%%%
+\subsection{Groupoid Cardinality}
 
-Explain $\ag{\tau}{p}$ and its construction
- 
+In the context of $\Pi$, types denote finite sets and the number of
+values of each type is just the cardinality of the set. As we aim to
+generalize from finite sets to more general groupoids, we first recall
+the definition of groupoid cardinality.
+
+\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
+  The cardinality of a groupoid $G$ is the real number:
+  \[
+    |G| = \sum_{[x]} \frac{1}{|\textsf{Aut}(x)|}
+  \]
+  provided the sum converges. The summation is over \emph{isomorphism
+    classes $[x]$ of objects $x$} and $|\textsf{Aut}(x)|$ is the
+  number of automorphisms of $x$.
+\end{definition}
+
+For plain sets, the definition just counts the elements as each
+element is its own equivalence class and has exactly one automorphism
+(the identity). 
+
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Order Groupoids and Inverse Order Groupoids} 
+\subsection{Action Groupoids $\ag{\tau}{p}$}
+
+Given a 1-combinator $p : \tau \iso \tau$, we can build the 
+\emph{action groupoid} $\ag{\tau}{p}$ defined as follows. The objects 
+of $\ag{\tau}{p}$ are the elements~$v_i$ of the set 
+$\sem{\tau}$. There is a morphism between $v_i$ and $v_j$ if applying
+some number of iterations of $p$ to $v_i$ produces $v_j$.
  
+For example, consider the type $\mathbb{3}$ and the 1-combinator $a_2$
+from Sec.~\ref{sec:pisem}. Since $a_2$ has order 2, we have $a_2 ^ k$
+for any integer $k$ is, up to equivalence, either $\texttt{id}$ or
+$a_2$. Therefore, the groupoid $\ag{\mathbb{3}}{a_2}$ looks as
+follows:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (4.5cm and 2cm);
+  \node[below] (A) at (-3,0) {$\inl{(\inl{\unitv})}$};
+  \node[below] (B) at (0,0) {$\inl{(\inr{\unitv})}$};
+  \node[below] (C) at (3,0) {$\inr{\unitv}$};
+  \path (A) edge [bend left=50] node[above] {$a_2$} (B); 
+  \path (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$} (C);
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+\end{tikzpicture}
+\end{center}
+
+In the resulting groupoid, we have two isomorphism classes with
+representatives $\inl{(\inl{\unitv})}$ and $\inr{\unitv}$; the class
+containing $\inl{(\inl{\unitv})}$ has two automorphisms starting from
+$\inl{(\inl{\unitv})}$: the identity and the loop going from
+$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back. This loop
+$a_2 \odot a_2$ is equivalent to the identity which means that the
+class containing $\inl{(\inl{\unitv})}$ has just one distinct
+automorphism. The isomorphism class of $\inr{\unitv}$ has two
+non-equivalent automorphisms on it and hence the cardinality of
+$\ag{\mathbb{3}}{a_2}$ is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$.
+
+Generally speaking, for 1-combinator $p : \tau \iso \tau$, the
+cardinality of $\ag{\tau}{p}$ is $|\tau|/\ord{p}$, i.e., the number of
+elements of $\sem{\tau}$ divided by the order of the 1-combinator $p$.
+For every type $\tau$, including $\zt$, we can form the action
+groupoid $\ag{\tau}{\idiso}$ whose cardinality is just the number of
+elements in the set $\tau$. For any two types $\tau_1$ and $\tau_2$,
+we can form the action groupoid $\ag{\tau_1\oplus\tau_2}{\swapp}$
+whose cardinality is half of the sum of the elements in $\tau_1$ and 
+$\tau_2$. Given $p_1 : \tau_1 \iso \tau_1$ of order $o_1$ and $p_2 :
+\tau_2 \iso \tau_2$ of order $o_2$, we can also form the action
+groupoid $\ag{\tau_1\oplus\tau_2}{p_1\oplus p_2}$ whose cardinality is
+the sum of the elements $\tau_1$ and $\tau_2$ divided by the least
+common multiple of $o_1$ and $o_2$. In case the cardinality of
+$\tau_1$ is 3, the cardinality of $\tau_2$ is 2, the order of $p_1$ is
+3, and the order of $p_2$ is 2, the resulting groupoid has cardinality
+$\frac{5}{6}$ which is a proper fraction. 
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Order Groupoids $\order{p}$}
+  
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inverse Order Groupoids $\iorder{p}$}
+  
 From each 1-combinator $c : \tau \iso \tau$ that maps a type $\tau$ to
 itself, we generate two groupoids $\order{p}$ and $\iorder{p}$ with
-cardinalities $\mathit{order}(p)$ and $\frac{1}{\mathit{order}(p)}$
-respectively. Given that we have sums and products of groupoids, this
-small extension allows us to write types whose denotations are
-groupoids with the cardinality of an arbitrary positive rational
-number. This is in addition to the plain $\Pi$ types whose denotations
-are groupoids with the cardinality of an arbitrary natural number. To
-make these ideas precise, we first define the cardinality of a
-groupoid, and then give the details of the constructions of the
-groupoids $\order{p}$ and $\iorder{p}$.
+cardinalities $\ord{p}$ and $\frac{1}{\ord{p}}$ respectively. Given
+that we have sums and products of groupoids, this small extension
+allows us to write types whose denotations are groupoids with the
+cardinality of an arbitrary positive rational number. This is in
+addition to the plain $\Pi$ types whose denotations are groupoids with
+the cardinality of an arbitrary natural number. To make these ideas
+precise, we first define the cardinality of a groupoid, and then give
+the details of the constructions of the groupoids $\order{p}$ and
+$\iorder{p}$.
 
 \begin{definition}[$\order{p}$]
   Denotationally, $\order{p}$ is the 1-groupoid whose objects are powers
@@ -655,23 +735,9 @@ As motivated above, the measure of information is intimately tied with
 the number of distinguishable states of a system which in turn
 corresponds to the number of values of a given type. In the context of
 $\Pi$, types denote finite sets and the number of values of each type
-is just the cardinality of the set. As we aim to generalize from
-finite sets to more general groupoids, we first recall the definition
-of groupoid cardinality.
+is just the cardinality of the set. 
 
-\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
-  The cardinality of a groupoid $G$ is the real number:
-  \[
-    |G| = \sum_{[x]} \frac{1}{|\textsf{Aut}(x)|}
-  \]
-  provided the sum converges. The summation is over \emph{isomorphism
-    classes $[x]$ of objects $x$} and $|\textsf{Aut}(x)|$ is the
-  number of automorphisms of $x$.
-\end{definition}
-
-For plain sets, the definition just counts the elements as each
-element is its own equivalence class and has exactly one automorphism
-(the identity). For the groupoids $G_1$, $G_2$, and $G_3$ in
+For the groupoids $G_1$, $G_2$, and $G_3$ in
 Fig.~\ref{fig:groupoids2}, the cardinality of each groupoid is
 $\frac{3}{2}$ but for a different reason. Groupoid $G_1$ consists of
 two isomorphism classes: class $a$ has one object with one
@@ -688,7 +754,7 @@ and hence the cardinality of $G_2$ is
 $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For $G_3$, we have three
 isomorphism classes, each with two non-equivalent automorphisms, and
 hence the cardinality of $G_3$ is
-$\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$. 
+$\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
 
 \begin{figure}[h]
 \begin{center}

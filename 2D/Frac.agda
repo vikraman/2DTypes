@@ -166,3 +166,10 @@ open import Rational+ as ℚ
 ... | ord n n≥1 _ = (1÷ n) {n≥1}
 
 
+------------------------------------------------------------------------------
+-- Values
+
+V : (T : U) → Set
+V T = let ℂ , _ = ⟦ T ⟧
+          open Category ℂ
+      in Σ[ v ∈ Obj ] (v ⇒ v)
