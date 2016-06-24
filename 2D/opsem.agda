@@ -320,48 +320,48 @@ mutual
 
 -- but is it reversible?
 -- first, we need a relation on values.
-_≡V_ : {T : U} → V T → V T → Set
-_≡V_ {𝟘} (() , _) _
-_≡V_ {𝟙} v₁ v₂ = ⊤ -- they are always equal
-_≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₁ z , z⇒z) = _≡V_ {T} (x , x⇒x) (z , z⇒z)
-_≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₂ y , _) = ⊥
-_≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₁ x , _) = ⊥
-_≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₂ z , z⇒z) = _≡V_ {S} (y , y⇒y) (z , z⇒z)
-_≡V_ {T ⊗ S} ((t₁ , s₁) , (t₁⇒t₁ , s₁⇒s₁)) ((t₂ , s₂) , (t₂⇒t₂ , s₂⇒s₂)) = 
-  _≡V_ {T} (t₁ , t₁⇒t₁) (t₂ , t₂⇒t₂) × _≡V_ {S} (s₁ , s₁⇒s₁) (s₂ , s₂⇒s₂)
-_≡V_ {# x} (p , α) (q , β) = Perm.p' p ⇔ Perm.p' q
-_≡V_ {1/# x} (tt , p) (tt , q) = Perm.p' p ⇔ Perm.p' q
+-- _≡V_ : {T : U} → V T → V T → Set
+-- _≡V_ {𝟘} (() , _) _
+-- _≡V_ {𝟙} v₁ v₂ = ⊤ -- they are always equal
+-- _≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₁ z , z⇒z) = _≡V_ {T} (x , x⇒x) (z , z⇒z)
+-- _≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₂ y , _) = ⊥
+-- _≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₁ x , _) = ⊥
+-- _≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₂ z , z⇒z) = _≡V_ {S} (y , y⇒y) (z , z⇒z)
+-- _≡V_ {T ⊗ S} ((t₁ , s₁) , (t₁⇒t₁ , s₁⇒s₁)) ((t₂ , s₂) , (t₂⇒t₂ , s₂⇒s₂)) = 
+--   _≡V_ {T} (t₁ , t₁⇒t₁) (t₂ , t₂⇒t₂) × _≡V_ {S} (s₁ , s₁⇒s₁) (s₂ , s₂⇒s₂)
+-- _≡V_ {# x} (p , α) (q , β) = Perm.p' p ⇔ Perm.p' q
+-- _≡V_ {1/# x} (tt , p) (tt , q) = Perm.p' p ⇔ Perm.p' q
 
 -- and now we try!
-fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → _≡V_ {T₂} (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) v
-fwd◎bwd≈id {T₂ = 𝟘} (Prim c) (() , proj₂)
-fwd◎bwd≈id {T₂ = 𝟙} (Prim c) v = tt
-fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₁ x , proj₂) = {!!}
-fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₂ y , proj₂) = {!!}
-fwd◎bwd≈id {T₂ = T₂ ⊗ T₃} (Prim c) v = {!!}
-fwd◎bwd≈id {T₂ = # x} (Prim unite₊l) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim unite₊r) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim unite⋆l) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim unite⋆r) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = # x} (Prim id⟷) (perm iter q α , β) = β
-fwd◎bwd≈id {T₂ = 1/# x} (Prim c) v = {!!}
-fwd◎bwd≈id (c ◎ c₁) v = {!!}
-fwd◎bwd≈id (c ⊕ c₁) v = {!!}
-fwd◎bwd≈id (c ⊗ c₁) v = {!!}
-fwd◎bwd≈id foldSwap v = {!!}
-fwd◎bwd≈id unfoldSwap v = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ 𝟘} ap⟷ ((perm iter p' p'⇔p^i , ()) , proj₃ , proj₄)
-fwd◎bwd≈id {T₂ = # p ⊗ 𝟙} ap⟷ ((perm iter p' p'⇔p^i , tt) , proj₃ , proj₄) = proj₃ , tt
-fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₁ x) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₂ y) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ (t ⊗ t₁)} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ # x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id {T₂ = # p ⊗ 1/# x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
-fwd◎bwd≈id ap⁻¹⟷ v = {!!}
-fwd◎bwd≈id (η- c) v = {!!}
-fwd◎bwd≈id (η+ c) v = {!!}
-fwd◎bwd≈id (ε+ c) v = {!!}
-fwd◎bwd≈id (ε- c) v = {!!}
+-- fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → _≡V_ {T₂} (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) v
+-- fwd◎bwd≈id {T₂ = 𝟘} (Prim c) (() , proj₂)
+-- fwd◎bwd≈id {T₂ = 𝟙} (Prim c) v = tt
+-- fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₁ x , proj₂) = {!!}
+-- fwd◎bwd≈id {T₂ = T₂ ⊕ T₃} (Prim c) (inj₂ y , proj₂) = {!!}
+-- fwd◎bwd≈id {T₂ = T₂ ⊗ T₃} (Prim c) v = {!!}
+-- fwd◎bwd≈id {T₂ = # x} (Prim unite₊l) (perm iter q α , β) = β
+-- fwd◎bwd≈id {T₂ = # x} (Prim unite₊r) (perm iter q α , β) = β
+-- fwd◎bwd≈id {T₂ = # x} (Prim unite⋆l) (perm iter q α , β) = β
+-- fwd◎bwd≈id {T₂ = # x} (Prim unite⋆r) (perm iter q α , β) = β
+-- fwd◎bwd≈id {T₂ = # x} (Prim id⟷) (perm iter q α , β) = β
+-- fwd◎bwd≈id {T₂ = 1/# x} (Prim c) v = {!!}
+-- fwd◎bwd≈id (c ◎ c₁) v = {!!}
+-- fwd◎bwd≈id (c ⊕ c₁) v = {!!}
+-- fwd◎bwd≈id (c ⊗ c₁) v = {!!}
+-- fwd◎bwd≈id foldSwap v = {!!}
+-- fwd◎bwd≈id unfoldSwap v = {!!}
+-- fwd◎bwd≈id {T₂ = # p ⊗ 𝟘} ap⟷ ((perm iter p' p'⇔p^i , ()) , proj₃ , proj₄)
+-- fwd◎bwd≈id {T₂ = # p ⊗ 𝟙} ap⟷ ((perm iter p' p'⇔p^i , tt) , proj₃ , proj₄) = proj₃ , tt
+-- fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₁ x) , proj₃ , proj₄) = {!!}
+-- fwd◎bwd≈id {T₂ = # p ⊗ (t ⊕ t₁)} ap⟷ ((perm iter p' p'⇔p^i , inj₂ y) , proj₃ , proj₄) = {!!}
+-- fwd◎bwd≈id {T₂ = # p ⊗ (t ⊗ t₁)} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
+-- fwd◎bwd≈id {T₂ = # p ⊗ # x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
+-- fwd◎bwd≈id {T₂ = # p ⊗ 1/# x} ap⟷ ((perm iter p' p'⇔p^i , proj₂) , proj₃ , proj₄) = {!!}
+-- fwd◎bwd≈id ap⁻¹⟷ v = {!!}
+-- fwd◎bwd≈id (η- c) v = {!!}
+-- fwd◎bwd≈id (η+ c) v = {!!}
+-- fwd◎bwd≈id (ε+ c) v = {!!}
+-- fwd◎bwd≈id (ε- c) v = {!!}
 
 -- Forward execution one step at a time
 ap : {T₀ T : U} → (s : State T₀ T) → Dir × State T₀ T
