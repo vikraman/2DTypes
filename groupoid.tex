@@ -74,13 +74,22 @@ are non-trivial groupoids such as the ones illustrated in
 Fig.~\ref{fig:groupoids}.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Action Groupoids} 
+\subsection{Action Groupoids $\ag{\tau}{p}$}
 
-Explain $\ag{\tau}{p}$ and its construction
+%% Explain $\ag{\tau}{p}$ and its construction
+
+Given a 1-combinator $p : \tau \iso \tau$, we can build the
+\emph{action groupoid} $\ag{\tau}{p}$ defined as follows. The objects
+of the $\ag{\tau}{p}$ are the elements $v_i$ of the set $\tau$; there
+is a morphism between $v_i$ and $v_j$ if applying some number of
+iterations of $p$ to $v_i$ produces $v_j$.
  
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Order Groupoids and Inverse Order Groupoids} 
- 
+\subsection{Order Groupoids $\order{p}$}
+  
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Inverse Order Groupoids $\iorder{p}$}
+  
 From each 1-combinator $c : \tau \iso \tau$ that maps a type $\tau$ to
 itself, we generate two groupoids $\order{p}$ and $\iorder{p}$ with
 cardinalities $\mathit{order}(p)$ and $\frac{1}{\mathit{order}(p)}$
