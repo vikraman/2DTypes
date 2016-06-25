@@ -205,17 +205,13 @@ $\iter{p}$. The elements of this set are triples consisting of an
 integer $k$, a 1-combinator $q : \tau\iso\tau$, and a 2-combinator
 $\alpha : q \isotwo p^k$. For example, we have:
 \[
-\iter{a_2} = \{ \triple{0}{\idiso}{\ldots}, \triple{1}{a_2}{\idisotwo},
-\triple{-1}{a_2}{\ldots}, \ldots \}
+\iter{a_2} = \{ \triple{0}{\idiso}{\idisotwo}, \triple{1}{a_2}{\idrdr},
+\triple{-1}{a_2}{\idisotwo}, \ldots \}
 \]
-
-%% record Perm {τ : U} (p : τ ⟷ τ) : Set where
-%%   constructor perm
-%%   field
-%%     iter : ℤ
-%%     p' : τ ⟷ τ
-%%     p'⇔p^i : p' ⇔ p ^ iter
-
+There are, up to equivalence, exactly $\ord{p}$ distinct elements of
+$\iter{p}$. In the next two sections, we will use the elements of
+$\iter{p}$ as objects in groupoid $\order{p}$ and as morphisms in
+groupoid $\iorder{p}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Order Groupoids $\order{p}$}
