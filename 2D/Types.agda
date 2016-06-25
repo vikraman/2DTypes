@@ -26,10 +26,10 @@ mutual
     swap₊   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊕ t₂) (t₂ ⊕ t₁)
     assocl₊ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊕ (t₂ ⊕ t₃))  ((t₁ ⊕ t₂) ⊕ t₃)
     assocr₊ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊕ t₂) ⊕ t₃) (t₁ ⊕ (t₂ ⊕ t₃))
-    unite⋆l :  {t : U} → Prim⟷ (𝟙 ⊗ t) t
-    uniti⋆l :  {t : U} → Prim⟷ t (𝟙 ⊗ t)
-    unite⋆r :  {t : U} → Prim⟷ (t ⊗ 𝟙) t
-    uniti⋆r :  {t : U} → Prim⟷ t (t ⊗ 𝟙)
+    unite⋆l :  {s t : U} → Prim⟷ (𝟙 ⊗ t) t
+    uniti⋆l :  {s t : U} → Prim⟷ t (𝟙 ⊗ t)
+    unite⋆r :  {s t : U} → Prim⟷ (t ⊗ 𝟙) t
+    uniti⋆r :  {s t : U} → Prim⟷ t (t ⊗ 𝟙)
     swap⋆   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊗ t₂) (t₂ ⊗ t₁)
     assocl⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊗ (t₂ ⊗ t₃)) ((t₁ ⊗ t₂) ⊗ t₃)
     assocr⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊗ t₂) ⊗ t₃) (t₁ ⊗ (t₂ ⊗ t₃))
@@ -52,10 +52,12 @@ mutual
     unfoldSwap : {t : U} → (# (Prim (swap₊ {t} {t}))) ⟷ (𝟙 ⊕ 𝟙) 
     ap⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
     ap⁻¹⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
-    η- : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ (1/# p ⊗ # p)
-    η+ : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ (# p ⊗ 1/# p)
-    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙
-    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙
+    η- : {t : U} → (p : t ⟷ t) → # (Prim (id⟷ {t})) ⟷ (1/# p ⊗ # p)
+    η+ : {t : U} → (p : t ⟷ t) → # (Prim (id⟷ {t})) ⟷ (# p ⊗ 1/# p)
+    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ # (Prim (id⟷ {t}))
+    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ # (Prim (id⟷ {t}))
+    contract : {t : U} → # (Prim (id⟷ {t})) ⟷ 𝟙
+    expand : {t : U} → 𝟙 ⟷ # (Prim (id⟷ {t}))
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -65,10 +67,10 @@ mutual
 ! (Prim swap₊)     = Prim swap₊
 ! (Prim assocl₊)   = Prim assocr₊
 ! (Prim assocr₊)   = Prim assocl₊
-! (Prim unite⋆l)   = Prim uniti⋆l
-! (Prim uniti⋆l)   = Prim unite⋆l
-! (Prim unite⋆r)   = Prim uniti⋆r
-! (Prim uniti⋆r)   = Prim unite⋆r
+! (Prim (unite⋆l {t}))   = Prim (uniti⋆l {t})
+! (Prim (uniti⋆l {t}))   = Prim (unite⋆l {t})
+! (Prim (unite⋆r {t}))   = Prim (uniti⋆r {t})
+! (Prim (uniti⋆r {t}))   = Prim (unite⋆r {t})
 ! (Prim swap⋆)     = Prim swap⋆
 ! (Prim assocl⋆)   = Prim assocr⋆
 ! (Prim assocr⋆)   = Prim assocl⋆
@@ -92,6 +94,8 @@ mutual
 ! unfoldSwap = foldSwap
 ! ap⟷ = ap⁻¹⟷ 
 ! ap⁻¹⟷ = ap⟷
+! expand = contract
+! contract = expand
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -124,17 +128,17 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
   -- coherence for compact closed categories
   ccc₁l : {t : U} {p : t ⟷ t} →
-         Prim uniti⋆r ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
-         (ε+ p ⊗ Prim id⟷) ◎ Prim unite⋆l ⇔ Prim id⟷
+         Prim (uniti⋆r {t}) ◎ (Prim id⟷ ⊗ expand) ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
+         (ε+ p ⊗ Prim id⟷) ◎ (contract ⊗ Prim id⟷) ◎ Prim (unite⋆l {t}) ⇔ Prim id⟷
   ccc₁r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ Prim uniti⋆r ◎ (Prim id⟷ ⊗ η- p) ◎
-         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ Prim unite⋆l 
+         Prim id⟷ ⇔ Prim (uniti⋆r {t}) ◎ (Prim id⟷ ⊗ expand) ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ (contract ⊗ Prim id⟷) ◎ Prim (unite⋆l {t})
   ccc₂l : {t : U} {p : t ⟷ t} →
-         (((Prim uniti⋆l ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
-         (Prim id⟷ ⊗ ε- p)) ◎ Prim unite⋆r ⇔ Prim id⟷
+         (((((Prim (uniti⋆l {t}) ◎ (expand ⊗ Prim id⟷)) ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
+         (Prim id⟷ ⊗ ε- p)) ◎ (Prim id⟷ ⊗ contract)) ◎ Prim (unite⋆r {t}) ⇔ Prim id⟷
   ccc₂r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ (((Prim uniti⋆l ◎ (η+ p ⊗ Prim id⟷)) ◎
-         Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ Prim unite⋆r
+         Prim id⟷ ⇔ (((((Prim (uniti⋆l {t}) ◎ (expand ⊗ Prim id⟷)) ◎ (η+ p ⊗ Prim id⟷)) ◎
+         Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ (Prim id⟷ ⊗ contract)) ◎ Prim (unite⋆r {t})
 
   -- suggested alternate versions
   -- ccc₁l {t : U} {p : t ⟷ t} →
@@ -200,7 +204,9 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id foldSwap = id⇔
 !!⇔id unfoldSwap = id⇔
 !!⇔id ap⟷ = id⇔ 
-!!⇔id ap⁻¹⟷ = id⇔ 
+!!⇔id ap⁻¹⟷ = id⇔
+!!⇔id contract = id⇔
+!!⇔id expand = id⇔
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
