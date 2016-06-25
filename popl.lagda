@@ -49,6 +49,8 @@
 \newcommand{\fv}[2]{\fcolorbox{black}{white}{\strut $#1$}\fcolorbox{black}{gray!20}{$\strut #2$}}
 \newcommand{\pt}[2]{\bullet[#1,#2]}
 \newcommand{\refl}{\AgdaInductiveConstructor{refl}}
+\newcommand{\iter}[1]{\textsc{Iter}(#1)}
+\newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
 
 \newcommand{\Rule}[4]{
 \makebox{{\rm #1}
