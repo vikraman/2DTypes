@@ -65,6 +65,9 @@ trans≈[ T ⊗ S ] ((t₁ , s₁) , t₁⇒t₁ , s₁⇒s₁) ((t₂ , s₂) ,
 trans≈[ # x ] (p , α) (q , β) (r , γ) (#≈ p₁) (#≈ p₂) = #≈ (trans⇔ p₁ p₂)
 trans≈[ 1/# x ] (tt , p) (tt , q) (tt , r) (1/#≈ p₁) (1/#≈ p₂) = 1/#≈ (trans⇔ p₁ p₂)
 
+≡⇒≈[_] : (T : U) → {x y : V T} → x ≡ y → [ T ] x ≈ y
+≡⇒≈[ T ] {x} refl = refl≈[ T ] x
+
 open import Relation.Binary
 
 ≈-isEquivalence[_] : (T : U) → IsEquivalence [ T ]_≈_
