@@ -26,6 +26,7 @@ open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 open import 2D.Types
 open import 2D.Frac
 open import 2D.Order
+open import 2D.Equality
 
 -- Examples:
 
@@ -310,45 +311,53 @@ mutual
   𝓐𝓹⁻¹ unfoldSwap (inj₁ tt , refl) = (perm (+ 0) (Prim id⟷) id⇔ , id⇔)
   𝓐𝓹⁻¹ unfoldSwap (inj₂ tt , refl) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
   𝓐𝓹⁻¹ ap⟷ ((perm iter q α , v) , (av₁ , av₂)) =
-    case (𝓐𝓹 (! q) (v , av₂)) of (λ {(v' , av') → (perm iter q α , v') , (av₁ , av') })
+    case (𝓐𝓹⁻¹ q (v , av₂)) of (λ {(v' , av') → (perm iter q α , v') , (av₁ , av') })
   𝓐𝓹⁻¹ ap⁻¹⟷ ((perm i q α , v) , (av₁ , av₂)) = 
     case (𝓐𝓹 q (v , av₂)) of (λ { (v' , av') → ((perm i q α) , v') , (av₁ , av') })
-  𝓐𝓹⁻¹ (η- c) v = tt , refl -- probably not the best
+  𝓐𝓹⁻¹ (η- c) ((v , _) , _) = v , refl -- probably not the best
   𝓐𝓹⁻¹ (η+ c) v = tt , refl -- probably not the best
   𝓐𝓹⁻¹ (ε+ c) v = ((perm (+ 1) c idr◎r) , tt) , id⇔ , (perm (+ 1) c idr◎r)
   𝓐𝓹⁻¹ (ε- c) v = (tt , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
 
--- but is it reversible?
--- first, we need a relation on values.
-_≡V_ : {T : U} → V T → V T → Set
-_≡V_ {𝟘} (() , _) _
-_≡V_ {𝟙} v₁ v₂ = ⊤ -- they are always equal
-_≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₁ z , z⇒z) = _≡V_ {T} (x , x⇒x) (z , z⇒z)
-_≡V_ {T ⊕ S} (inj₁ x , x⇒x) (inj₂ y , _) = ⊥
-_≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₁ x , _) = ⊥
-_≡V_ {T ⊕ S} (inj₂ y , y⇒y) (inj₂ z , z⇒z) = _≡V_ {S} (y , y⇒y) (z , z⇒z)
-_≡V_ {T ⊗ S} ((t₁ , s₁) , (t₁⇒t₁ , s₁⇒s₁)) ((t₂ , s₂) , (t₂⇒t₂ , s₂⇒s₂)) = 
-  _≡V_ {T} (t₁ , t₁⇒t₁) (t₂ , t₂⇒t₂) × _≡V_ {S} (s₁ , s₁⇒s₁) (s₂ , s₂⇒s₂)
-_≡V_ {# x} (p , α) (q , β) = Perm.p' p ⇔ Perm.p' q
-_≡V_ {1/# x} (tt , p) (tt , q) = Perm.p' p ⇔ Perm.p' q
+-- note how this uses 𝓐𝓹
+cong≈ : (S T : U) → (c : S ⟷ T) (x y : V S) → [ S ] x ≈ y →  [ T ] (𝓐𝓹 c x) ≈ (𝓐𝓹 c y)
+cong≈ S T (Prim c) x y eq = {!!}
+cong≈ S T (c₀ ◎ c₁) x y eq = {!!}
+cong≈ _ _ (_⊕_ {t} {_} {s} c₀ c₁) (inj₁ x , x⇒x) (inj₁ y , y⇒y) (inj₁≈ eq) =
+  inj₁≈ (cong≈ t s c₀ (x , x⇒x) (y , y⇒y) eq)
+cong≈ _ _ (c₀ ⊕ c₁) (inj₁ x , x⇒x) (inj₂ y , y⇒y) ()
+cong≈ _ _ (c₀ ⊕ c₁) (inj₂ x , x⇒x) (inj₁ y , y⇒y) ()
+cong≈ _ _ (c₀ ⊕ c₁) (inj₂ x , x⇒x) (inj₂ y , y⇒y) (inj₂≈ eq) = {!!}
+cong≈ _ _ (_⊗_ {t₀} {t₁} {t₂} {t₃} c₀ c₁) ((v , w) , v⇒v , w⇒w) ((x , y) , x⇒x , y⇒y) (proj≈ v≈x w≈y) =
+  proj≈ (cong≈ t₀ t₂ c₀ (v , v⇒v) (x , x⇒x) v≈x) (cong≈ t₁ t₃ c₁ (w , w⇒w) (y , y⇒y) w≈y)
+cong≈ .(𝟙 ⊕ 𝟙) .(# (Prim swap₊)) foldSwap (_ , proj₂) (_ , proj₃) (inj₁≈ eq) = {!!}
+cong≈ .(𝟙 ⊕ 𝟙) .(# (Prim swap₊)) foldSwap (_ , proj₂) (_ , proj₃) (inj₂≈ eq) = {!!}
+cong≈ .(# (Prim swap₊)) .(𝟙 ⊕ 𝟙) unfoldSwap (proj₁ , proj₂) (proj₃ , proj₄) (#≈ x) = {!!}
+cong≈ _ _ ap⟷ ((proj₁ , proj₅) , proj₂ , proj₆) ((proj₃ , proj₇) , proj₄ , proj₈) (proj≈ (#≈ x) eq₁) = {!!}
+cong≈ _ _ ap⁻¹⟷ x y eq = {!!}
+cong≈ .𝟙 .(1/# c ⊗ # c) (η- c) (.tt , .refl) (.tt , .refl) tt≈ = proj≈ (1/#≈ id⇔) (#≈ id⇔)
+cong≈ .𝟙 .(# c ⊗ 1/# c) (η+ c) (.tt , .refl) (.tt , .refl) tt≈ = proj≈ (#≈ id⇔) (1/#≈ id⇔)
+cong≈ .(# c ⊗ 1/# c) .𝟙 (ε+ c) ((q₁ , .tt) , (α , q₂)) ((q₃ , .tt) , (β , q₄)) (proj≈ (#≈ x) (1/#≈ x₁)) = {!!}
+cong≈ .(1/# c ⊗ # c) .𝟙 (ε- c) x y eq = {!!}
 
--- and now we try! 
-fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → _≡V_ {T₂} (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) v
-fwd◎bwd≈id (Prim x) v = {!!}
-fwd◎bwd≈id (c ◎ c₁) v = {!!}
-fwd◎bwd≈id (c ⊕ c₁) (inj₁ x , x⇒x) = fwd◎bwd≈id c (x , x⇒x) 
-fwd◎bwd≈id (c ⊕ c₁) (inj₂ y , proj₂) = {!!}
-fwd◎bwd≈id (c ⊗ c₁) ((x , y) , (x⇒x , y⇒y)) = fwd◎bwd≈id c (x , x⇒x) , fwd◎bwd≈id c₁ (y , y⇒y)
-fwd◎bwd≈id foldSwap (perm i q α , β) with perm i q α ⇔? perm (+ 0) (Prim id⟷) id⇔
-... | true = {!!}
-... | false = {!!}
-fwd◎bwd≈id unfoldSwap v = {!!}
-fwd◎bwd≈id ap⟷ v = {!!}
-fwd◎bwd≈id ap⁻¹⟷ v = {!!}
-fwd◎bwd≈id (η- c) v = {!!}
-fwd◎bwd≈id (η+ c) v = {!!}
-fwd◎bwd≈id (ε+ c) v = {!!}
-fwd◎bwd≈id (ε- c) v = {!!}
+fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → [ T₂ ] (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
+fwd◎bwd≈id {_} {T₂} (Prim x) v = ≡⇒≈[ T₂ ] (prim◎prim⁻¹≡id x v) 
+fwd◎bwd≈id (c ◎ c₁) v = {!!} -- need cong≈ ?
+fwd◎bwd≈id (c ⊕ c₁) (inj₁ x , x⇒x) = inj₁≈ (fwd◎bwd≈id c (x , x⇒x))
+fwd◎bwd≈id (c ⊕ c₁) (inj₂ y , y⇒y) = inj₂≈ (fwd◎bwd≈id c₁ (y , y⇒y))
+fwd◎bwd≈id (c ⊗ c₁) ((x , y) , (x⇒x , y⇒y)) =
+    proj≈ (fwd◎bwd≈id c (x , x⇒x)) (fwd◎bwd≈id c₁ (y , y⇒y))
+fwd◎bwd≈id foldSwap (perm i q α , β) = {!!}
+fwd◎bwd≈id unfoldSwap (inj₁ tt , refl) = refl≈[ 𝟙 ⊕ 𝟙 ] (inj₁ tt , refl) 
+fwd◎bwd≈id unfoldSwap (inj₂ tt , refl) = refl≈[ 𝟙 ⊕ 𝟙 ] (inj₂ tt , refl)
+fwd◎bwd≈id (ap⟷ {t} {p}) ((perm i q β , t₁) , (α , r)) =
+  proj≈ (refl≈[ # p ] (perm i q β , α) ) (fwd◎bwd≈id q (t₁ , r))
+fwd◎bwd≈id (ap⁻¹⟷ {_} {p}) ((perm i q α , t₁) , (β , r)) =
+  proj≈ (refl≈[ # p ] (perm i q α , β)) {!!} -- need to define mutually with other dir
+fwd◎bwd≈id (η- c) ((tt , r) , (p , β)) = proj≈ (1/#≈ {!!}) (#≈ {!!}) -- false
+fwd◎bwd≈id (η+ c) ((r , tt) , (β , p)) = proj≈ (#≈ {!!}) (1/#≈ {!!}) -- false
+fwd◎bwd≈id (ε+ c) v = {!!} -- warning: loops
+fwd◎bwd≈id (ε- c) v = {!!} -- warning: loops
 
 -- Forward execution one step at a time
 ap : {T₀ T : U} → (s : State T₀ T) → Dir × State T₀ T
