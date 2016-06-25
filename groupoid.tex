@@ -1,30 +1,25 @@
 \section{From Sets to Groupoids} 
 \label{sec:groupoids}
 
-%% \vic{Which is the groupoid of groupoids?}
+A simple semantics for $\Pi$ is to view a $\Pi$ type $\tau$ as a
+finite set and a $\Pi$ 1-combinator as a permutation on finite
+sets. This semantics can be generalized by enriching $\Pi$ types so
+that they denote more general groupoids and correspondingly enriching
+$\Pi$ 1-combinators so that they denote information equivalent
+transformations on groupoids. The generalization depends on one
+crucial insight which is the subject of this section. Briefly
+speaking, the main insight is that iterating a $\Pi$ 1-combinator can
+be treated as a value manipulated by other programs. Because
+1-combinators are reversible, have a finite order, and come equipped
+with an equivalence based on 2-combinators, this data structure has
+rich invariants that can be exploited to build three kinds of
+groupoids: action groupoids $\ag{\tau}{p}$, order groupoids
+$\order{p}$, and inverse order groupoids $\iorder{p}$. 
  
-our two workhorses are $\order{p}$ and $\iorder{p}$
-
-rig groupoid
-objects types
-morphisms 1-combinators
-coherence conditions 2-combinators
-
-but so far objects are just finite sets essentially
-can we get more interesting groupoids such as the ones in the intro
-action groupoids
-
-challenge is to find a computational interpretation of action
-groupoids: group, group action, ... insight: all we need is to
-consider combinators under order; this is a group
-
-also monad/comonad
-
 %%%%%
 \subsection{$\Pi$ Types as Sets}
 
-Formally, each $\Pi$ type $\tau$ induces a finite set $\sem{\tau}$ as
-follows:
+Each $\Pi$ type $\tau$ denotes a finite set $\sem{\tau}$ as follows:
 
 \[\begin{array}{rcl}
 \sem{\zt} &=& \bot \\
@@ -37,7 +32,7 @@ follows:
 denote a set with one element, and $\uplus$ and $\times$ to denote the
 disjoint union of sets and the product of sets respectively. Each set
 can be viewed as a groupoid whose objects are the set elements and
-whose morphisms are just the identity morphisms. By only being able to
+with only identity morphisms on each object. By only being able to
 express types whose denotations are trivial groupoids, $\Pi$ leaves
 untapped an enormous amount of combinatorial structure that should be
 within reach. Indeed, as we show next, it is possible with a small but
@@ -46,12 +41,19 @@ are non-trivial groupoids such as the ones illustrated in
 Fig.~\ref{fig:groupoids}.
 
 %%%%%
-\subsection{Groupoid Cardinality}
+\subsection{Groupoids and Groupoid Cardinality}
 
-In the context of $\Pi$, types denote finite sets and the number of
-values of each type is just the cardinality of the set. As we aim to
-generalize from finite sets to more general groupoids, we first recall
-the definition of groupoid cardinality.
+There are many definitions of groupoids that provide complimentary
+perspectives and insights. Perhaps the simplest definition is that a
+groupoid is a category in which every morphism has an inverse. Such a
+category generally consists of clusters of connected objects. Each
+cluster is equivalent (in the category-theoretic sense) to a
+group. Thus an alternative definition of a groupoid is as a
+generalization of a group that allows individual elements of have
+``internal
+symmetries''~\cite{groupoidintro}. \citet{2009arXiv0908.4305B}
+associate with each groupoid a cardinality that counts the elements up
+to these ``internal symmetries.''
 
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
   The cardinality of a groupoid $G$ is the real number:
@@ -63,49 +65,87 @@ the definition of groupoid cardinality.
   number of automorphisms of $x$.
 \end{definition}
 
-For plain sets, the definition just counts the elements as each
-element is its own equivalence class and has exactly one automorphism
-(the identity). 
-
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Action Groupoids $\ag{\tau}{p}$}
-
-Given a 1-combinator $p : \tau \iso \tau$, we can build the 
-\emph{action groupoid} $\ag{\tau}{p}$ defined as follows. The objects 
-of $\ag{\tau}{p}$ are the elements~$v_i$ of the set 
-$\sem{\tau}$. There is a morphism between $v_i$ and $v_j$ if applying
-some number of iterations of $p$ to $v_i$ produces $v_j$.
- 
-For example, consider the type $\mathbb{3}$ and the 1-combinator $a_2$
-from Sec.~\ref{sec:pisem}. Since $a_2$ has order 2, we have $a_2 ^ k$
-for any integer $k$ is, up to equivalence, either $\texttt{id}$ or
-$a_2$. Therefore, the groupoid $\ag{\mathbb{3}}{a_2}$ looks as
-follows:
-
+\begin{figure}[t]
 \begin{center}
-\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (4.5cm and 2cm);
-  \node[below] (A) at (-3,0) {$\inl{(\inl{\unitv})}$};
-  \node[below] (B) at (0,0) {$\inl{(\inr{\unitv})}$};
-  \node[below] (C) at (3,0) {$\inr{\unitv}$};
-  \path (A) edge [bend left=50] node[above] {$a_2$} (B); 
-  \path (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$} (C);
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (1.2cm and 2.1cm);
+  \node[below] (A) at (-0.5,0) {$a$};
+  \node[below] (C) at (0.5,0) {$c$};
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (C) edge [out=140, in=40, looseness=4] (C);
+\end{tikzpicture}
+\qquad
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
+  \node[below] (A) at (-2,0) {$a$};
+  \node[below] (B) at (0,0) {$b$};
+  \node[below] (C) at (1.5,0) {$c$};
+  \path (A) edge [bend left=50] (B); 
+  \path (C) edge [out=140, in=40, looseness=4] (C);
   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
+\qquad
+\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (2.8cm and 2.5cm);
+  \node[below] (A) at (-1.6,0) {$a$};
+  \node[below] (B) at (0,0) {$b$};
+  \node[below] (C) at (1.6,0) {$c$};
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (A) edge [loop above, looseness=3, in=48, out=132] (A);
+  \path (B) edge [loop above, looseness=3, in=48, out=132] (B);
+  \path (C) edge [loop above, looseness=3, in=48, out=132] (C);
+\end{tikzpicture}
 \end{center}
+\caption{\label{fig:groupoids2}Example groupoids $G_1$, $G_2$, and $G_3$.}
+\end{figure}
 
-In the resulting groupoid, we have two isomorphism classes with
-representatives $\inl{(\inl{\unitv})}$ and $\inr{\unitv}$; the class
-containing $\inl{(\inl{\unitv})}$ has two automorphisms starting from
-$\inl{(\inl{\unitv})}$: the identity and the loop going from
-$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back. This loop
-$a_2 \odot a_2$ is equivalent to the identity which means that the
-class containing $\inl{(\inl{\unitv})}$ has just one distinct
-automorphism. The isomorphism class of $\inr{\unitv}$ has two
-non-equivalent automorphisms on it and hence the cardinality of
-$\ag{\mathbb{3}}{a_2}$ is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$.
+For plain sets, the definition just counts the elements as each
+element is its own equivalence class and has exactly one automorphism
+(the identity). For the groupoids $G_1$, $G_2$, and $G_3$ in
+Fig.~\ref{fig:groupoids2}, the cardinality of each groupoid is
+$\frac{3}{2}$ but for a different reason. Groupoid $G_1$ consists of
+two isomorphism classes: class~$a$ has one object with one
+automorphism (the identity) and class~$c$ has one object with two
+distinct automorphisms; the cardinality is
+$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid $G_2$, we also
+have two isomorphism classes with representatives $a$ and $c$; the
+class containing $a$ has two automorphisms starting from $a$: the
+identity and the loop going from $a$ to $b$ and back. By the groupoid
+axioms, this loop is equivalent to the identity which means that the
+class containing $a$ has just one distinct automorphism. The
+isomorphism class of $c$ has two non-equivalent automorphisms on it
+and hence the cardinality of $G_2$ is
+$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For $G_3$, we have three
+isomorphism classes, each with two non-equivalent automorphisms, and
+hence the cardinality of $G_3$ is
+$\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Action Groupoids $\ag{\tau}{p}$}
+
+Given a 1-combinator $p : \tau \iso \tau$, we can build the
+\emph{action groupoid} $\ag{\tau}{p}$ defined as follows. The objects
+of $\ag{\tau}{p}$ are the elements~$v_i$ of the set $\sem{\tau}$ and
+there is a morphism between $v_i$ and $v_j$ if applying some number of
+iterations of $p$ to $v_i$ produces $v_j$. For example, consider the
+type $\mathbb{3}$ and the 1-combinator $a_2$ from
+Sec.~\ref{sec:pisem}. Since $a_2$ has order 2, we have $a_2 ^ k$ for
+any integer $k$ is, up to equivalence, either $\texttt{id}$ or
+$a_2$. Therefore, the groupoid $\ag{\mathbb{3}}{a_2}$ looks exactly
+like $G_2$ in Fig.~\ref{fig:groupoids2} with the names of the objects
+relabeled to $\inl{(\inl{\unitv})}$, $\inl{(\inr{\unitv})}$, and
+$\inr{\unitv}$ and the non-identity morphisms labeled $a_2$. As
+explained above, the groupoid has cardinality $\frac{3}{2}$ which
+corresponds to the quotient of the cardinality of the set $\mathbb{3}$
+divided by the order of $a_2$. Note that in the calculation of the
+cardinality, we use the fact that the loop $a_2 \odot a_2$ going from
+$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back is
+equivalent to the identity.
 
 Generally speaking, using known facts about the order of permutations
 on finite sets, we highlight a few additional properties of action
@@ -126,23 +166,48 @@ $\tau_1$ is 3, the cardinality of $\tau_2$ is 2, the order of $p_1$ is
 3, and the order of $p_2$ is 2, the resulting groupoid has cardinality
 $\frac{5}{6}$ which is a proper fraction.
 
+% \begin{center}
+% \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
+%   \draw[dashed] (0,-0.3) ellipse (4.5cm and 2cm);
+%   \node[below] (A) at (-3,0) {$\inl{(\inl{\unitv})}$};
+%   \node[below] (B) at (0,0) {$\inl{(\inr{\unitv})}$};
+%   \node[below] (C) at (3,0) {$\inr{\unitv}$};
+%   \path (A) edge [bend left=50] node[above] {$a_2$} (B); 
+%   \path (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$} (C);
+%   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+%   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+%   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+% \end{tikzpicture}
+% \end{center}
+
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Program Iteration as Data}
    
 Action groupoids $\ag{\tau}{p}$ allow us to build groupoids with
-fractional cardinality by taking the quotient of $\tau$ under the
-equivalence relation generated by $p$. We can generalize the situation
-by viewing $\ag{\tau}{p}$ as being formed from the product
-$\tau\otimes\iorder{p}$ consisting a plain type $\tau$ and a ``pure''
-equivalence relation $\iorder{p}$. Before explaining the construction
-of $\iorder{p}$ we will present the construction of a simpler related
-groupoid $\order{p}$ that will serve as the multiplicative inverse of
-$\iorder{p}$. Both constructions depend on a crucial insight:
-iterating a $\Pi$ 1-combinator can be treated as a value manipulated
-by other programs. Because combinators are reversible and have a
-finite order, this data structure has rich invariants that can be
-exploited to build $\order{p}$ and $\iorder{p}$ and show that they
-give rise to monads and comonads. 
+fractional cardinality by taking the quotient of a simple finite type
+$\tau$ under the equivalence relation generated by an automorphism $p$
+on $\tau$. We can generalize the situation by viewing $\ag{\tau}{p}$
+as being formed from the product $\tau\otimes\iorder{p}$ consisting a
+plain type $\tau$ and a ``pure'' equivalence relation
+$\iorder{p}$. Before explaining the construction of $\iorder{p}$ we
+will present the construction of a simpler related groupoid
+$\order{p}$ that will serve as the multiplicative inverse of
+$\iorder{p}$. Both constructions depend on a crucial insight which we
+explain in this section: that every 1-combinator $p$ comes equipped
+with a group structure whose elements are $p^k$ for some integer
+$k$. These elements, which mean ``apply combinator $p$ for $k$
+times'', can be simultaneously considered as \emph{programs}
+generating equivalence relations and as \emph{higher-order data} that
+can be manipulated by other programs.
+
+Formally for each 1-combinator $p : \tau\iso\tau$, we introduce a set
+$\iter{p}$. The elements of this set are triples consisting of an
+integer $k$, a 1-combinator $q : \tau\iso\tau$, and a 2-combinator
+$\alpha : q \isotwo p^k$. For example, we have:
+\[
+\iter{a_2} = \{ \triple{0}{\idiso}{\ldots}, \triple{1}{a_2}{\idisotwo},
+\triple{-1}{a_2}{\ldots}, \ldots \}
+\]
 
 %% record Perm {τ : U} (p : τ ⟷ τ) : Set where
 %%   constructor perm
@@ -218,8 +283,8 @@ $\iorder{p}$.
 
 \vic{Should typing judgments be here?}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Groupoid of Groupoids and Information Equivalence} 
+%%%%%%%%%%%%%
+\subsection{Groupoid of Groupoids and Information Equivalence} 
 
 From the perspective of category theory, the language $\Pi$ models
 what is called a \emph{symmetric bimonoidal category} or a
@@ -289,64 +354,6 @@ the number of distinguishable states of a system which in turn
 corresponds to the number of values of a given type. In the context of
 $\Pi$, types denote finite sets and the number of values of each type
 is just the cardinality of the set. 
-
-For the groupoids $G_1$, $G_2$, and $G_3$ in
-Fig.~\ref{fig:groupoids2}, the cardinality of each groupoid is
-$\frac{3}{2}$ but for a different reason. Groupoid $G_1$ consists of
-two isomorphism classes: class $a$ has one object with one
-automorphism (the identity) and class $c$ has one object with two
-distinct automorphisms; the cardinality is
-$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid $G_2$, we also
-have two isomorphism classes with representatives $a$ and $c$; the
-class containing $a$ has two automorphisms starting from $a$: the
-identity and the loop going from $a$ to $b$ and back. By the groupoid
-axioms, this loop is equivalent to the identity which means that the
-class containing $a$ has just one distinct automorphism. The
-isomorphism class of $c$ has two non-equivalent automorphisms on it
-and hence the cardinality of $G_2$ is
-$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For $G_3$, we have three
-isomorphism classes, each with two non-equivalent automorphisms, and
-hence the cardinality of $G_3$ is
-$\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
-
-\begin{figure}[h]
-\begin{center}
-\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (1.2cm and 2.1cm);
-  \node[below] (A) at (-0.5,0) {$a$};
-  \node[below] (C) at (0.5,0) {$c$};
-  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
-  \path (C) edge [out=140, in=40, looseness=4] (C);
-\end{tikzpicture}
-\qquad
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
-  \node[below] (A) at (-2,0) {$a$};
-  \node[below] (B) at (0,0) {$b$};
-  \node[below] (C) at (1.5,0) {$c$};
-  \path (A) edge [bend left=50] (B); 
-  \path (C) edge [out=140, in=40, looseness=4] (C);
-  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
-\end{tikzpicture}
-\qquad
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (2.8cm and 2.5cm);
-  \node[below] (A) at (-1.6,0) {$a$};
-  \node[below] (B) at (0,0) {$b$};
-  \node[below] (C) at (1.6,0) {$c$};
-  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
-  \path (A) edge [loop above, looseness=3, in=48, out=132] (A);
-  \path (B) edge [loop above, looseness=3, in=48, out=132] (B);
-  \path (C) edge [loop above, looseness=3, in=48, out=132] (C);
-\end{tikzpicture}
-\end{center}
-\caption{\label{fig:groupoids2}Example groupoids $G_1$, $G_2$, and $G_3$.}
-\end{figure}
 
 %%%%%
 \subsection{Negative Information}
