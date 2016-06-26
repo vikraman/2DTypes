@@ -51,6 +51,7 @@
 \newcommand{\refl}{\AgdaInductiveConstructor{refl}}
 \newcommand{\iter}[1]{\textsc{Iter}(#1)}
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
+\newcommand{\distiterplus}[3]{\mathsf{dist^{{\wedge}{+}}}~#1~#2~#3}
 
 \newcommand{\Rule}[4]{
 \makebox{{\rm #1}
