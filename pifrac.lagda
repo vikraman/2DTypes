@@ -36,6 +36,16 @@ which to define $\Pi^/$.
 %%%%%%%%%%%
 \subsection{Types and Combinators}
 
+We begin by defining two mutually recursive syntactic categories
+\AgdaRef{U} and \AgdaDatatype{\_⟷\_} of types and 1-combinators. The
+definitions are identical to the presentation of $\Pi$ in
+Sec.~\ref{sec:pi} except for the addition of the type constructors
+\AgdaInductiveConstructor{\#} and \AgdaInductiveConstructor{1/\#} that
+construct order groupoids and inverse order groupoids respectively. 
+
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
 \begin{code}
 mutual
   
@@ -95,7 +105,7 @@ mutual
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
     _⊗_ :   {t₁ t₂ t₃ t₄ : U} →
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
-\end{code}
+\end{code}}}}
 
 
 %%%%%%%%%%%
