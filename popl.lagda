@@ -127,6 +127,8 @@ $\displaystyle
 \DeclareUnicodeCharacter{951}{$\eta$}
 \DeclareUnicodeCharacter{956}{$\mu$}
 \DeclareUnicodeCharacter{8703}{\ensuremath{\leftrightarrowtriangle}}
+\DeclareUnicodeCharacter{120792}{$\zt$}
+\DeclareUnicodeCharacter{120793}{$\ot$}
 
 \AgdaHide{
 \begin{code}

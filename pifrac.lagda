@@ -4,20 +4,19 @@
 
 module pifrac where
 
-open import Level using () renaming (zero to lzero; suc to lsuc)
+open import Level
+open import Universe
 
-open import Data.Product using (∃; Σ; Σ-syntax; ,_; _,_)
+open import Data.Product
 
-open import Universe using (Universe)
+open import Categories.Category
+open import Categories.Groupoid
 
-open import Categories.Category using (Category)
-open import Categories.Groupoid using (Groupoid)
-open import Categories.Sum using (Sum)
-open import Categories.Product using (Product)
-open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
-open import Categories.Groupoid.Product using () renaming (Product to GProduct)
-
--- infix  30 _⇿_
+infix 50 _⊕_
+infix 60 _⊗_
+infix  30 _⟷_
+infix  30 _⇔_
+infixr 50 _◎_
 
 \end{code}
 }
@@ -25,10 +24,209 @@ open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
 
-\amr{This now becomes a critical section, where we introduce the
-syntax of the language, probably in Agda}
+We are now ready to turn the semantic treatment of groupoids from the
+previous section into an actual programming language. The language
+$\Pi^/$ will be an extension of $\Pi$ with new type constructors and
+new combinators for creating and manipulating fractional types. Every
+computation in $\Pi^/$ will also be information preserving but with
+the added expressiveness of being able to create and annihilate
+negative information. We use Agda as the appropriate metalanguage in
+which to define $\Pi^/$.
 
+%%%%%%%%%%%
+\subsection{Types and Combinators}
+
+\begin{code}
+mutual
+  data U : Set where
+    𝟘    : U
+    𝟙    : U
+    _⊕_  : U → U → U
+    _⊗_  : U → U → U
+    #    : {τ : U} → (τ ⟷ τ) → U
+    1/#  : {τ : U} → (τ ⟷ τ) → U
+
+  data Prim⟷ : U → U → Set where
+    unite₊l :   {t : U} → Prim⟷ (𝟘 ⊕ t) t
+    uniti₊l :   {t : U} → Prim⟷ t (𝟘 ⊕ t)
+    unite₊r :   {t : U} → Prim⟷ (t ⊕ 𝟘) t
+    uniti₊r :   {t : U} → Prim⟷ t (t ⊕ 𝟘)
+    swap₊   :   {t₁ t₂ : U} → Prim⟷ (t₁ ⊕ t₂) (t₂ ⊕ t₁)
+    assocl₊ :   {t₁ t₂ t₃ : U} →
+                Prim⟷ (t₁ ⊕ (t₂ ⊕ t₃))  ((t₁ ⊕ t₂) ⊕ t₃)
+    assocr₊ :   {t₁ t₂ t₃ : U} →
+                Prim⟷ ((t₁ ⊕ t₂) ⊕ t₃) (t₁ ⊕ (t₂ ⊕ t₃))
+    unite⋆l :   {t : U} → Prim⟷ (𝟙 ⊗ t) t
+    uniti⋆l :   {t : U} → Prim⟷ t (𝟙 ⊗ t)
+    unite⋆r :   {t : U} → Prim⟷ (t ⊗ 𝟙) t
+    uniti⋆r :   {t : U} → Prim⟷ t (t ⊗ 𝟙)
+    swap⋆   :   {t₁ t₂ : U} → Prim⟷ (t₁ ⊗ t₂) (t₂ ⊗ t₁)
+    assocl⋆ :   {t₁ t₂ t₃ : U} →
+                Prim⟷ (t₁ ⊗ (t₂ ⊗ t₃)) ((t₁ ⊗ t₂) ⊗ t₃)
+    assocr⋆ :   {t₁ t₂ t₃ : U} →
+                Prim⟷ ((t₁ ⊗ t₂) ⊗ t₃) (t₁ ⊗ (t₂ ⊗ t₃))
+    absorbr :   {t : U} → Prim⟷ (𝟘 ⊗ t) 𝟘
+    absorbl :   {t : U} → Prim⟷ (t ⊗ 𝟘) 𝟘
+    factorzr :  {t : U} → Prim⟷ 𝟘 (t ⊗ 𝟘)
+    factorzl :  {t : U} → Prim⟷ 𝟘 (𝟘 ⊗ t)
+    dist :      {t₁ t₂ t₃ : U} →
+                Prim⟷ ((t₁ ⊕ t₂) ⊗ t₃) ((t₁ ⊗ t₃) ⊕ (t₂ ⊗ t₃))
+    factor :    {t₁ t₂ t₃ : U} →
+                Prim⟷ ((t₁ ⊗ t₃) ⊕ (t₂ ⊗ t₃)) ((t₁ ⊕ t₂) ⊗ t₃)
+    distl :     {t₁ t₂ t₃ : U} →
+                Prim⟷ (t₁ ⊗ (t₂ ⊕ t₃)) ((t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃))
+    factorl :   {t₁ t₂ t₃ : U} →
+                Prim⟷ ((t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃)) (t₁ ⊗ (t₂ ⊕ t₃))
+    id⟷ :       {t : U} → Prim⟷ t t
+
+  data _⟷_ : U → U → Set where
+    Prim :  {t₁ t₂ : U} → (Prim⟷ t₁ t₂) → (t₁ ⟷ t₂)
+    _◎_ :   {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
+    _⊕_ :   {t₁ t₂ t₃ t₄ : U} →
+            (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
+    _⊗_ :   {t₁ t₂ t₃ t₄ : U} →
+            (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
+\end{code}
+
+
+%%%%%%%%%%%
 \subsection{Distinguishable Values}
+
+\begin{code}
+! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
+! (Prim unite₊l)   = Prim uniti₊l
+! (Prim uniti₊l)   = Prim unite₊l
+! (Prim unite₊r)   = Prim uniti₊r
+! (Prim uniti₊r)   = Prim unite₊r
+! (Prim swap₊)     = Prim swap₊
+! (Prim assocl₊)   = Prim assocr₊
+! (Prim assocr₊)   = Prim assocl₊
+! (Prim unite⋆l)   = Prim uniti⋆l
+! (Prim uniti⋆l)   = Prim unite⋆l
+! (Prim unite⋆r)   = Prim uniti⋆r
+! (Prim uniti⋆r)   = Prim unite⋆r
+! (Prim swap⋆)     = Prim swap⋆
+! (Prim assocl⋆)   = Prim assocr⋆
+! (Prim assocr⋆)   = Prim assocl⋆
+! (Prim absorbl)   = Prim factorzr
+! (Prim absorbr)   = Prim factorzl
+! (Prim factorzl)  = Prim absorbr
+! (Prim factorzr)  = Prim absorbl
+! (Prim dist)      = Prim factor
+! (Prim factor)    = Prim dist
+! (Prim distl)     = Prim factorl
+! (Prim factorl)   = Prim distl
+! (Prim id⟷)       = Prim id⟷
+! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
+! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
+! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
+
+data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
+  assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
+    (c₁ ◎ (c₂ ◎ c₃)) ⇔ ((c₁ ◎ c₂) ◎ c₃)
+  assoc◎r : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
+    ((c₁ ◎ c₂) ◎ c₃) ⇔ (c₁ ◎ (c₂ ◎ c₃))
+  idl◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    (Prim id⟷ ◎ c) ⇔ c
+  idl◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    c ⇔ Prim id⟷ ◎ c
+  idr◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    (c ◎ Prim id⟷) ⇔ c
+  idr◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    c ⇔ (c ◎ Prim id⟷)
+  id⇔     : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
+    c ⇔ c
+  rinv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (! c ◎ c) ⇔ Prim id⟷
+  rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (! c ◎ c)
+  linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ Prim id⟷
+  linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (c ◎ ! c)
+  trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
+    (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+  _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} →
+    (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
+  resp⊕⇔  : {t₁ t₂ t₃ t₄ : U}
+         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
+         (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊕ c₂) ⇔ (c₃ ⊕ c₄)
+  resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
+         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
+         (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
+
+2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+2! assoc◎l = assoc◎r
+2! assoc◎r = assoc◎l
+2! idl◎l = idl◎r
+2! idl◎r = idl◎l
+2! idr◎l = idr◎r
+2! idr◎r = idr◎l
+2! rinv◎l = rinv◎r
+2! rinv◎r = rinv◎l
+2! linv◎l = linv◎r
+2! linv◎r = linv◎l
+2! id⇔ = id⇔
+2! (α ⊡ β) = (2! α) ⊡ (2! β)
+2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
+2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
+2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
+
+-- Properties
+
+!!⇔prim : {t₁ t₂ : U} → (p : Prim⟷ t₁ t₂) → Prim p ⇔ (! (! (Prim p)))
+!!⇔prim unite₊l = id⇔
+!!⇔prim uniti₊l = id⇔
+!!⇔prim unite₊r = id⇔
+!!⇔prim uniti₊r = id⇔
+!!⇔prim swap₊ = id⇔
+!!⇔prim assocl₊ = id⇔
+!!⇔prim assocr₊ = id⇔
+!!⇔prim unite⋆l = id⇔
+!!⇔prim uniti⋆l = id⇔
+!!⇔prim unite⋆r = id⇔
+!!⇔prim uniti⋆r = id⇔
+!!⇔prim swap⋆ = id⇔
+!!⇔prim assocl⋆ = id⇔
+!!⇔prim assocr⋆ = id⇔
+!!⇔prim absorbr = id⇔
+!!⇔prim absorbl = id⇔
+!!⇔prim factorzr = id⇔
+!!⇔prim factorzl = id⇔
+!!⇔prim dist = id⇔
+!!⇔prim factor = id⇔
+!!⇔prim distl = id⇔
+!!⇔prim factorl = id⇔
+!!⇔prim id⟷ = id⇔
+
+!!⇔id : {t₁ t₂ : U} → (p : t₁ ⟷ t₂) → p ⇔ ! (! p)
+!!⇔id (_⟷_.Prim c) = !!⇔prim c
+!!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
+!!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
+!!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
+
+⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
+⇔! assoc◎l = assoc◎r
+⇔! assoc◎r = assoc◎l
+⇔! idl◎l = idr◎l
+⇔! idl◎r = idr◎r
+⇔! idr◎l = idl◎l
+⇔! idr◎r = idl◎r
+⇔! id⇔ = id⇔
+⇔! rinv◎l = linv◎l
+⇔! rinv◎r = linv◎r
+⇔! linv◎l = rinv◎l
+⇔! linv◎r = rinv◎r
+⇔! (trans⇔ q₁ q₂) = trans⇔ (⇔! q₁) (⇔! q₂)
+⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
+⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
+⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
+
+--
+
+El : U → Set₁
+El t = Σ[ C ∈ Category zero zero zero ] (Groupoid C)
+
+U-univ : Universe _ _
+U-univ = record { U = U ; El = El }
+\end{code}
+
 
 Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 of types with $\frac{3}{2}$ values and that the values of these types
