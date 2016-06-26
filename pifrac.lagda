@@ -4,14 +4,17 @@
 
 module pifrac where
 
-open import Level
+open import Level renaming (zero to l0)
 open import Universe
 
 open import Data.Product
+open import Data.Nat
+open import Data.Integer
 
 open import Categories.Category
 open import Categories.Groupoid
 
+infix 40 _^_
 infix 50 _⊕_
 infix 60 _⊗_
 infix  30 _⟷_
@@ -41,7 +44,8 @@ We begin by defining two mutually recursive syntactic categories
 definitions are identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of the type constructors
 \AgdaInductiveConstructor{\#} and \AgdaInductiveConstructor{1/\#} that
-create order groupoids and inverse order groupoids respectively.
+create order groupoids and inverse order groupoids respectively. We
+will introduce additional combinators in proper time. 
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -271,15 +275,46 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 \end{code}}}}}
 
 %%%%%%%%%%%
-\subsection{Distinguishable Values}
+\subsection{Values}
 
+When the types denote sets, it is evident what it means to have a
+value of a given type: it is just an element of the set. When types
+denote groupoids, it is less clear what it means to have a value,
+especially when the total number of values, as reported by the
+groupoid cardinality, is a proper fraction.
+
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
 \begin{code}
-El : U → Set₁
-El t = Σ[ C ∈ Category zero zero zero ] (Groupoid C)
+_^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
+p ^ (+ 0) = id⟷
+p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
+p ^ -[1+ 0 ] = ! p
+p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
 
-U-univ : Universe _ _
-U-univ = record { U = U ; El = El }
-\end{code}
+record Iter {τ : U} (p : τ ⟷ τ) : Set where
+  constructor <_,_,_>
+  field
+    k : ℤ
+    q : τ ⟷ τ
+    α : q ⇔ p ^ k
+
+_Iter⇔_ : {τ : U} {p : τ ⟷ τ} → Iter p → Iter p → Set
+< _ , q , _ > Iter⇔ < _ , r , _ > = q ⇔ r
+  
+data Val : (τ : U) → Set where
+  ⋆ :      Val 𝟙
+  inl :    {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
+  inr :    {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
+  [_,_] :  {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
+  _#_ :    {τ : U} {p : τ ⟷ τ} →
+           (p^k : Iter p) →  (p^k Iter⇔ p^k) → Val (# p)
+  _1/#_ :  {τ : U} {p : τ ⟷ τ} →
+           (p^k : Iter p) → (p^k Iter⇔ p^k) → Val (1/# p)
+\end{code}}}}
+
+\amr{wavefront}
 
 Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 of types with $\frac{3}{2}$ values and that the values of these types
@@ -355,6 +390,12 @@ limitations section), consistent.
 \medskip
 
 \begin{code}
+El : U → Set₁
+El t = Σ[ C ∈ Category l0 l0 l0 ] (Groupoid C)
+
+U-univ : Universe _ _
+U-univ = record { U = U ; El = El }
+
 -- data _⇿_ : FT/ → FT/ → Set where
 --   lift : {τ₁ τ₂ : FT} → (p : τ₁ ⟷ τ₂) → (⇑ τ₁ ⇿ ⇑ τ₂)
 --   η : {τ : FT} → (p : τ ⟷ τ) → ⇑ ONE ⇿ (# p ⊠ 1/# p)
