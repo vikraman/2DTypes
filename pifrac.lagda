@@ -37,11 +37,11 @@ which to define $\Pi^/$.
 \subsection{Types and Combinators}
 
 We begin by defining two mutually recursive syntactic categories
-\AgdaRef{U} and \AgdaDatatype{\_⟷\_} of types and 1-combinators. The
+\AgdaRef{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
 definitions are identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of the type constructors
 \AgdaInductiveConstructor{\#} and \AgdaInductiveConstructor{1/\#} that
-construct order groupoids and inverse order groupoids respectively. 
+create order groupoids and inverse order groupoids respectively.
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -107,12 +107,21 @@ mutual
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
 \end{code}}}}
 
+The complete code also includes definitions for \AgdaRef{!} which
+inverts a 1-combinator, \AgdaRef{⇔} which defines 2-combaintors,
+\AgdaRef{2!} which inversts 2-combinators, and \AgdaRef{!!⇔id} and
+\AgdaRef{⇔!} which show that 2-combinators commute as expected with
+inversion of 1-combinators:
 
-%%%%%%%%%%%
-\subsection{Distinguishable Values}
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
 
 \begin{code}
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
+\end{code}
+\AgdaHide{
+\begin{code}
 ! (Prim unite₊l)   = Prim uniti₊l
 ! (Prim uniti₊l)   = Prim unite₊l
 ! (Prim unite₊r)   = Prim uniti₊r
@@ -139,8 +148,15 @@ mutual
 ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
+\end{code}}
 
-data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
+\medskip
+\begin{code}
+data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
+\end{code}
+\AgdaHide{
+\begin{code}
+  where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
     (c₁ ◎ (c₂ ◎ c₃)) ⇔ ((c₁ ◎ c₂) ◎ c₃)
   assoc◎r : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -169,8 +185,14 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
+\end{code}}
 
+\medskip
+\begin{code}
 2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+\end{code}
+\AgdaHide{
+\begin{code}
 2! assoc◎l = assoc◎r
 2! assoc◎r = assoc◎l
 2! idl◎l = idl◎r
@@ -186,8 +208,6 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
-
--- Properties
 
 !!⇔prim : {t₁ t₂ : U} → (p : Prim⟷ t₁ t₂) → Prim p ⇔ (! (! (Prim p)))
 !!⇔prim unite₊l = id⇔
@@ -212,15 +232,27 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔prim factor = id⇔
 !!⇔prim distl = id⇔
 !!⇔prim factorl = id⇔
+\end{code}}
 
+\medskip
+\begin{code}
 !!⇔id : {t₁ t₂ : U} → (p : t₁ ⟷ t₂) → p ⇔ ! (! p)
+\end{code}
+\AgdaHide{
+\begin{code}
 !!⇔id id⟷ = id⇔
 !!⇔id (_⟷_.Prim c) = !!⇔prim c
 !!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
+\end{code}}
 
+\medskip
+\begin{code}
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
+\end{code}
+\AgdaHide{
+\begin{code}
 ⇔! assoc◎l = assoc◎r
 ⇔! assoc◎r = assoc◎l
 ⇔! idl◎l = idr◎l
@@ -236,16 +268,18 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
+\end{code}}}}}
 
---
+%%%%%%%%%%%
+\subsection{Distinguishable Values}
 
+\begin{code}
 El : U → Set₁
 El t = Σ[ C ∈ Category zero zero zero ] (Groupoid C)
 
 U-univ : Universe _ _
 U-univ = record { U = U ; El = El }
 \end{code}
-
 
 Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 of types with $\frac{3}{2}$ values and that the values of these types
