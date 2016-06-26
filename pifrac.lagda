@@ -38,6 +38,10 @@ which to define $\Pi^/$.
 
 \begin{code}
 mutual
+  
+  -- Finite types (cf. Sec. 3.1) extended
+  -- with #p and 1/#p 
+
   data U : Set where
     𝟘    : U
     𝟙    : U
@@ -46,7 +50,10 @@ mutual
     #    : {τ : U} → (τ ⟷ τ) → U
     1/#  : {τ : U} → (τ ⟷ τ) → U
 
+  -- Combinators (cf. Fig. 2)
+
   data Prim⟷ : U → U → Set where
+    -- additive monoid
     unite₊l :   {t : U} → Prim⟷ (𝟘 ⊕ t) t
     uniti₊l :   {t : U} → Prim⟷ t (𝟘 ⊕ t)
     unite₊r :   {t : U} → Prim⟷ (t ⊕ 𝟘) t
@@ -56,6 +63,7 @@ mutual
                 Prim⟷ (t₁ ⊕ (t₂ ⊕ t₃))  ((t₁ ⊕ t₂) ⊕ t₃)
     assocr₊ :   {t₁ t₂ t₃ : U} →
                 Prim⟷ ((t₁ ⊕ t₂) ⊕ t₃) (t₁ ⊕ (t₂ ⊕ t₃))
+    -- multiplicative monoid
     unite⋆l :   {t : U} → Prim⟷ (𝟙 ⊗ t) t
     uniti⋆l :   {t : U} → Prim⟷ t (𝟙 ⊗ t)
     unite⋆r :   {t : U} → Prim⟷ (t ⊗ 𝟙) t
@@ -65,6 +73,7 @@ mutual
                 Prim⟷ (t₁ ⊗ (t₂ ⊗ t₃)) ((t₁ ⊗ t₂) ⊗ t₃)
     assocr⋆ :   {t₁ t₂ t₃ : U} →
                 Prim⟷ ((t₁ ⊗ t₂) ⊗ t₃) (t₁ ⊗ (t₂ ⊗ t₃))
+    -- multiplication distributes over addition
     absorbr :   {t : U} → Prim⟷ (𝟘 ⊗ t) 𝟘
     absorbl :   {t : U} → Prim⟷ (t ⊗ 𝟘) 𝟘
     factorzr :  {t : U} → Prim⟷ 𝟘 (t ⊗ 𝟘)
@@ -77,10 +86,10 @@ mutual
                 Prim⟷ (t₁ ⊗ (t₂ ⊕ t₃)) ((t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃))
     factorl :   {t₁ t₂ t₃ : U} →
                 Prim⟷ ((t₁ ⊗ t₂) ⊕ (t₁ ⊗ t₃)) (t₁ ⊗ (t₂ ⊕ t₃))
-    id⟷ :       {t : U} → Prim⟷ t t
 
   data _⟷_ : U → U → Set where
     Prim :  {t₁ t₂ : U} → (Prim⟷ t₁ t₂) → (t₁ ⟷ t₂)
+    id⟷ :   {t : U} → t ⟷ t
     _◎_ :   {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
     _⊕_ :   {t₁ t₂ t₃ t₄ : U} →
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
@@ -116,7 +125,7 @@ mutual
 ! (Prim factor)    = Prim dist
 ! (Prim distl)     = Prim factorl
 ! (Prim factorl)   = Prim distl
-! (Prim id⟷)       = Prim id⟷
+! id⟷       = id⟷
 ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
@@ -127,19 +136,19 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   assoc◎r : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
     ((c₁ ◎ c₂) ◎ c₃) ⇔ (c₁ ◎ (c₂ ◎ c₃))
   idl◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    (Prim id⟷ ◎ c) ⇔ c
+    (id⟷ ◎ c) ⇔ c
   idl◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    c ⇔ Prim id⟷ ◎ c
+    c ⇔ id⟷ ◎ c
   idr◎l   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    (c ◎ Prim id⟷) ⇔ c
+    (c ◎ id⟷) ⇔ c
   idr◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
-    c ⇔ (c ◎ Prim id⟷)
+    c ⇔ (c ◎ id⟷)
   id⇔     : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} →
     c ⇔ c
-  rinv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (! c ◎ c) ⇔ Prim id⟷
-  rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (! c ◎ c)
-  linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ Prim id⟷
-  linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (c ◎ ! c)
+  rinv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (! c ◎ c) ⇔ id⟷
+  rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (! c ◎ c)
+  linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ id⟷
+  linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (c ◎ ! c)
   trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
     (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} →
@@ -193,9 +202,9 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔prim factor = id⇔
 !!⇔prim distl = id⇔
 !!⇔prim factorl = id⇔
-!!⇔prim id⟷ = id⇔
 
 !!⇔id : {t₁ t₂ : U} → (p : t₁ ⟷ t₂) → p ⇔ ! (! p)
+!!⇔id id⟷ = id⇔
 !!⇔id (_⟷_.Prim c) = !!⇔prim c
 !!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
