@@ -10,6 +10,7 @@ open import Relation.Binary.PropositionalEquality
 open import Data.Integer using (+_)
 
 open import 2D.Types
+open import 2D.Power
 open import 2D.Frac
 
 data [_]_≈_ : (T : U) → V T → V T → Set where
@@ -25,8 +26,8 @@ data [_]_≈_ : (T : U) → V T → V T → Set where
         → [ S ] (s₁ , s₁⇒s₁) ≈ (s₂ , s₂⇒s₂)
         → [ T ⊗ S ] ((t₁ , s₁) , (t₁⇒t₁ , s₁⇒s₁)) ≈ ((t₂ , s₂) , (t₂⇒t₂ , s₂⇒s₂))
   #≈ : ∀ {τ x p α q β} → Perm.p' {τ} p ⇔ Perm.p' {τ} q → [ # x ] (p , α) ≈ (q , β)
-  1/#≈ : ∀ {τ x p q} → Perm.p' {τ} p ⇔ Perm.p' {τ} q →
-      [ 1/# x ] (Perm.perm (Perm.iter p) (Prim id⟷) {!!} , p) ≈ (Perm.perm (Perm.iter p) (Prim id⟷) {!!} , q)
+  1/#≈ : ∀ {τ x p q} → Perm.p' {τ} p ⇔ Perm.p' {τ} q → (pp qq : Perm (Prim id⟷))
+        → [ 1/# x ] (pp , p) ≈ (qq , q)
 
 refl≈[_] : (T : U) → (x : V T) → [ T ] x ≈ x
 refl≈[ 𝟘 ] (() , _)
@@ -35,7 +36,7 @@ refl≈[ T ⊕ S ] (inj₁ x , x⇒x) = inj₁≈ (refl≈[ T ] (x , x⇒x))
 refl≈[ T ⊕ S ] (inj₂ y , y⇒y) = inj₂≈ (refl≈[ S ] (y , y⇒y))
 refl≈[ T ⊗ S ] ((x , y) , (x⇒x , y⇒y)) = proj≈ (refl≈[ T ] (x , x⇒x)) (refl≈[ S ] (y , y⇒y))
 refl≈[ # x ] (p , α) = #≈ α
-refl≈[ 1/# x ] (q , perm iter p' p'⇔p^i) = {!!}
+refl≈[ 1/# x ] (pp , qq) = 1/#≈ id⇔ pp pp
 
 sym≈[_] : (T : U) → (x y : V T) → [ T ] x ≈ y → [ T ] y ≈ x
 sym≈[ 𝟘 ] (() , _) (() , _)
@@ -47,7 +48,7 @@ sym≈[ T ⊕ S ] (inj₂ x , x⇒x) (inj₂ y , y⇒y) (inj₂≈ p) = inj₂�
 sym≈[ T ⊗ S ] ((t₁ , s₁) , t₁⇒t₁ , s₁⇒s₁) ((t₂ , s₂) , t₂⇒t₂ , s₂⇒s₂) (proj≈ p₁ p₂) =
   proj≈ (sym≈[ T ] (t₁ , t₁⇒t₁) (t₂ , t₂⇒t₂) p₁) (sym≈[ S ] (s₁ , s₁⇒s₁) (s₂ , s₂⇒s₂) p₂)
 sym≈[ # x ] (p , α) (q , β) (#≈ p') = #≈ (2! p')
-sym≈[ 1/# x ] (t , p) (qq , q) (eq) = {!!} -- 1/#≈ (2! p')
+sym≈[ 1/# x ] (t , p) (qq , q) (1/#≈ α .t .qq) = 1/#≈ (2! α) qq t
 
 trans≈[_] : (T : U) → (x y z : V T) → [ T ] x ≈ y → [ T ] y ≈ z → [ T ] x ≈ z
 trans≈[ 𝟘 ] (() , _) (() , _) (() , _)
@@ -65,8 +66,9 @@ trans≈[ T ⊗ S ] ((t₁ , s₁) , t₁⇒t₁ , s₁⇒s₁) ((t₂ , s₂) ,
   proj≈ (trans≈[ T ] (t₁ , t₁⇒t₁) (t₂ , t₂⇒t₂) (t₃ , t₃⇒t₃) p₁ q₁)
         (trans≈[ S ] (s₁ , s₁⇒s₁) (s₂ , s₂⇒s₂) (s₃ , s₃⇒s₃) p₂ q₂)
 trans≈[ # x ] (p , α) (q , β) (r , γ) (#≈ p₁) (#≈ p₂) = #≈ (trans⇔ p₁ p₂)
-trans≈[ 1/# x ] (pp , p) (qq , q) (rr , r) eq₁ eq₂ = {!!} -- (1/#≈ p₁) (1/#≈ p₂) = 1/#≈ (trans⇔ p₁ p₂)
-
+trans≈[ 1/# x ] (pp , p) (qq , q) (rr , r) (1/#≈ x₁ .pp .qq) (1/#≈ x₂ .qq .rr) = 
+  1/#≈ (trans⇔ x₁ x₂) pp rr
+  
 ≡⇒≈[_] : (T : U) → {x y : V T} → x ≡ y → [ T ] x ≈ y
 ≡⇒≈[ T ] {x} refl = refl≈[ T ] x
 
