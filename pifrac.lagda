@@ -107,11 +107,11 @@ mutual
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
 \end{code}}}}
 
-The complete code also includes definitions for \AgdaRef{!} which
-inverts a 1-combinator, \AgdaRef{⇔} which defines 2-combaintors,
-\AgdaRef{2!} which inversts 2-combinators, and \AgdaRef{!!⇔id} and
-\AgdaRef{⇔!} which show that 2-combinators commute as expected with
-inversion of 1-combinators:
+The complete code also includes definitions for \AgdaFunction{!} which
+inverts a 1-combinator, \AgdaDatatype{⇔} which defines 2-combinators,
+\AgdaFunction{2!} which inverts 2-combinators, and
+\AgdaFunction{!!⇔id} and \AgdaFunction{⇔!} which show that
+2-combinators commute as expected with inversion of 1-combinators:
 
 {\setlength{\mathindent}{0cm}
 \medskip
