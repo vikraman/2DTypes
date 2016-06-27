@@ -129,6 +129,7 @@ $\displaystyle
 \DeclareUnicodeCharacter{8703}{\ensuremath{\leftrightarrowtriangle}}
 \DeclareUnicodeCharacter{120792}{$\zt$}
 \DeclareUnicodeCharacter{120793}{$\ot$}
+\DeclareUnicodeCharacter{120795}{$\mathbb{3}$}
 
 \AgdaHide{
 \begin{code}

@@ -7,7 +7,7 @@ module pifrac where
 open import Level renaming (zero to l0)
 open import Universe
 
-open import Data.Product
+open import Data.Product hiding (<_,_>)
 open import Data.Nat
 open import Data.Integer
 
@@ -189,6 +189,14 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
+  hom⊕◎⇔ : {t₁ t₂ t₃ t₄ t₅ t₆ : U} {c₁ : t₅ ⟷ t₁} {c₂ : t₆ ⟷ t₂}
+        {c₃ : t₁ ⟷ t₃} {c₄ : t₂ ⟷ t₄} →
+        ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄)) ⇔ ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄))
+  hom◎⊕⇔ : {t₁ t₂ t₃ t₄ t₅ t₆ : U} {c₁ : t₅ ⟷ t₁} {c₂ : t₆ ⟷ t₂}
+        {c₃ : t₁ ⟷ t₃} {c₄ : t₂ ⟷ t₄} →
+         ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄)) ⇔ ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄))
+  split⊕-id⟷ : {t₁ t₂ : U} → id⟷ {t₁ ⊕ t₂} ⇔ id⟷ ⊕ id⟷
+  id⟷⊕id⟷⇔ : {t₁ t₂ : U} → (id⟷ {t₁} ⊕ id⟷ {t₂}) ⇔ id⟷
 \end{code}}
 
 \medskip
@@ -212,6 +220,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
+2! hom⊕◎⇔ = hom◎⊕⇔
+2! hom◎⊕⇔ = hom⊕◎⇔
+2! split⊕-id⟷ = id⟷⊕id⟷⇔
+2! id⟷⊕id⟷⇔ = split⊕-id⟷ 
 
 !!⇔prim : {t₁ t₂ : U} → (p : Prim⟷ t₁ t₂) → Prim p ⇔ (! (! (Prim p)))
 !!⇔prim unite₊l = id⇔
@@ -272,6 +284,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
+⇔! hom⊕◎⇔ = hom⊕◎⇔
+⇔! hom◎⊕⇔ = hom◎⊕⇔
+⇔! split⊕-id⟷ = split⊕-id⟷ 
+⇔! id⟷⊕id⟷⇔ = id⟷⊕id⟷⇔
 \end{code}}}}}
 
 As motivated in the previous section, we will also need to consider
@@ -308,7 +324,19 @@ When the types denote sets, it is evident what it means to have a
 value of a given type: it is just an element of the set. When types
 denote groupoids, it is less clear what it means to have a value,
 especially when the total number of values, as reported by the
-groupoid cardinality, is a proper fraction.
+groupoid cardinality, is a proper fraction. We obviously cannot list
+``half a value'' but what we \emph{can} do is to list an integral
+number of values and provide an equivalence relation that specifies
+which values are distinguishable such that the ultimate counting of
+distinguishable values is a fractional amount. The idea is not
+uncommon: in the conventional $\lambda$-calculus, we list $\lambda
+x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow
+\tau$ and then provide a separate equivalence relation
+($\alpha$-equivalence) to express the fact that these two values are
+indistinguishable. The treatment in our setting is similar but richer
+as the equivalence relation is not external but is itself part of the
+value and the resulting count may be fractional. Formally we define
+values as follows:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -319,30 +347,56 @@ data Val : (τ : U) → Set where
   inl :    {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
   inr :    {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
   [_,_] :  {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
-  _#_ :    {τ : U} {p : τ ⟷ τ} →
-           (pᵏ : Iter p) →  (pᵏ Iter⇔ pᵏ) → Val (# p)
+  comb :   {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) →  Val (# p)
   _1/#_ :  {τ : U} {p : τ ⟷ τ} →
            (pᵏ : Iter p) → (pᵏ Iter⇔ pᵏ) → Val (1/# p)
 \end{code}}}}
+
+\noindent The first four lines define the conventional values for the
+unit, sum, and product types. The last two lines deserve some
+explanation and examples. Values of type $\order{p}$ are iterates of
+$p$. Here are some examples:
+
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
+\begin{code}
+𝟛 : U
+𝟛 = (𝟙 ⊕ 𝟙) ⊕ 𝟙
+
+a₂ : 𝟛 ⟷ 𝟛
+a₂ = Prim swap₊ ⊕ id⟷ 
+
+v₀ v₁ v₂ v₃ v₄ v₅ : Val (# a₂)
+v₀ = comb < + 0 , id⟷ , id⇔ > 
+v₁ = comb < + 0 , id⟷ ◎ id⟷ , idr◎l > 
+v₂ = comb < -[1+ 1 ] ,
+            id⟷ , 
+            trans⇔ split⊕-id⟷
+            (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
+            (trans⇔ hom⊕◎⇔ id⇔)) >
+v₃ = comb < + 2 ,
+            id⟷ ,
+            trans⇔ split⊕-id⟷
+            (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
+            (trans⇔ hom⊕◎⇔ (id⇔ ⊡ idr◎r))) >
+v₄ = comb < -[1+ 0 ] , a₂ , id⇔ > 
+v₅ = comb < + 1 , a₂ , idr◎r > 
+\end{code}}}}
+
+\noindent Since $a_2$ has order 2, there are only two distinguishable
+values of type $\order{a_2}$. The values $v_0$, $v_1$, $v_2$, and
+$v_3$ are all equivalent to $a_2^0$ which is equivalent
+\AgdaInductiveConstructor{id⟷}. The values $v_4$ and $v_5$ are both
+equivalent to $a_2^1$ which is equivalent to $a_2$.
+
 
 \amr{wavefront}
 
 Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 of types with $\frac{3}{2}$ values and that the values of these types
 are in 1-1 correspondence. This raises an immediate puzzling question:
-how are we going to express the set of values of these types? We
-obviously cannot list ``half a value'' but what we \emph{can} do is to
-list an integral number of values and provide an equivalence relation
-that specifies which values are distinguishable such that the ultimate
-counting of distinguishable values is fractional. The idea is not
-uncommon: in the conventional $\lambda$-calculus, we list
-$\lambda x.x$ and $\lambda y.y$ as separate values of type
-$\tau \rightarrow \tau$ and then provide a separate equivalence
-relation ($\alpha$-equivalence) to express the fact that these two
-values are indistinguishable. The treatment in our setting is similar
-but richer as the equivalence relation is not external but is itself
-part of the value and the resulting count may be fractional. Formally
-we define values as follows.
+how are we going to express the set of values of these types? 
 
 \begin{definition}[Semantic Values] Given a groupoid $G$, a
   \emph{value} in~$G$ is a pair consisting of an object $v$ and its
@@ -470,7 +524,7 @@ values equivalent tilde tilde
 values indistinguishable
 
 %%%%%%%
-\subsection{Combinators}
+\subsection{Additional Combinators}
 
 most combinators do not look at higher components of values:
 indistinguishable values are treated the same!
