@@ -58,6 +58,8 @@ mutual
     ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ # (Prim (id⟷ {t}))
     contract : {t : U} → # (Prim (id⟷ {t})) ⟷ 𝟙
     expand : {t : U} → 𝟙 ⟷ # (Prim (id⟷ {t}))
+    iap⟷ : {t : U} {p : t ⟷ t} →  1/# p ⊗ t ⟷ 1/# p ⊗ t
+    iap⁻¹⟷ : {t : U} {p : t ⟷ t} →  1/# p ⊗ t ⟷ 1/# p ⊗ t
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -96,6 +98,8 @@ mutual
 ! ap⁻¹⟷ = ap⟷
 ! expand = contract
 ! contract = expand
+! iap⟷ = iap⁻¹⟷ 
+! iap⁻¹⟷ = iap⟷
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -207,6 +211,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id ap⁻¹⟷ = id⇔
 !!⇔id contract = id⇔
 !!⇔id expand = id⇔
+!!⇔id iap⟷ = id⇔ 
+!!⇔id iap⁻¹⟷ = id⇔ 
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r

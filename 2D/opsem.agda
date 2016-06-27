@@ -301,6 +301,9 @@ mutual
   ... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
   𝓐𝓹 contract (perm i _ _ , β) = tt , refl
   𝓐𝓹 expand (tt , refl) = perm (+ 0) (Prim id⟷) id⇔ , id⇔ -- this is not going to be reversible!
+  𝓐𝓹 iap⟷ ((pp , v) , (perm iter q α , av)) =
+    ((pp , v) , (perm iter q α , {!!}))
+  𝓐𝓹 iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!} 
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₂ → V T₁
   𝓐𝓹⁻¹ (Prim c) v = prim⁻¹ c v
@@ -327,7 +330,9 @@ mutual
   𝓐𝓹⁻¹ (ε- c) v = ({!!} , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
   𝓐𝓹⁻¹ (contract {t}) v = (perm (+ 0) (Prim id⟷) id⇔) , id⇔
   𝓐𝓹⁻¹ (expand {t}) v = tt , refl
-  
+  𝓐𝓹⁻¹ iap⟷ ((pp , v) , (perm iter q α , av)) = {!!} 
+  𝓐𝓹⁻¹ iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!} 
+
 -- note how this uses 𝓐𝓹
 cong≈ : (S T : U) → (c : S ⟷ T) (x y : V S) → [ S ] x ≈ y →  [ T ] (𝓐𝓹 c x) ≈ (𝓐𝓹 c y)
 cong≈ S T (Prim c) x y eq = {!!}
@@ -350,6 +355,8 @@ cong≈ _ _ (ε+ c) v w eq = {!!}
 cong≈ _ _ (ε- c) x y eq = {!!}
 cong≈ .(# (Prim id⟷)) .𝟙 contract (proj₁ , proj₂) (proj₃ , proj₄) (#≈ x) = tt≈
 cong≈ .𝟙 .(# (Prim id⟷)) expand (.tt , .refl) (.tt , .refl) tt≈ = #≈ id⇔
+cong≈ _ _ iap⟷ _ _ _ = {!!}
+cong≈ _ _ iap⁻¹⟷ _ _ _ = {!!}
 
 fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → [ T₂ ] (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
 fwd◎bwd≈id {_} {T₂} (Prim x) v = ≡⇒≈[ T₂ ] (prim◎prim⁻¹≡id x v) 
@@ -367,6 +374,8 @@ fwd◎bwd≈id (ap⁻¹⟷ {_} {p}) ((perm i q α , t₁) , (β , r)) =
   proj≈ (refl≈[ # p ] (perm i q α , β)) {!!} -- need to define mutually with other dir
 fwd◎bwd≈id (η- c) ((pp , r) , (p , β)) = proj≈ (1/#≈ {!!} {!!} {!!}) (#≈ {!!}) -- false
 fwd◎bwd≈id (η+ c) ((perm i r α , perm j _ _) , (β , perm k _ _)) = proj≈ (#≈ {!!}) {!!} -- false
+fwd◎bwd≈id (iap⟷ {t} {p}) _ = {!!} 
+fwd◎bwd≈id (iap⁻¹⟷ {_} {p}) _ = {!!}
 fwd◎bwd≈id (ε+ c) v = {!!} -- warning: loops
 fwd◎bwd≈id (ε- c) v = {!!} -- warning: loops
 fwd◎bwd≈id contract (tt , refl) = tt≈
@@ -411,6 +420,8 @@ ap (Enter unfoldSwap (v , _) C) =
       else Fwd , Exit unfoldSwap (inj₂ tt , refl) C 
 ap (Enter ap⟷ v C) = Fwd , Exit ap⟷ (𝓐𝓹 ap⟷ v) C
 ap (Enter ap⁻¹⟷ v C) = Fwd , Exit ap⁻¹⟷ (𝓐𝓹 ap⁻¹⟷ v) C
+ap (Enter iap⟷ v C) = {!!} 
+ap (Enter iap⁻¹⟷ v C) = {!!} 
 -- eta and epsilon
 ap (Enter (η+ P) (pp , _) C) =
   Fwd , Exit (η+ P)
@@ -471,6 +482,8 @@ ap⁻¹ (Exit unfoldSwap (inj₁ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 0)
 ap⁻¹ (Exit unfoldSwap (inj₂ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
 ap⁻¹ (Exit ap⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⁻¹⟷ v) C 
 ap⁻¹ (Exit ap⁻¹⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⟷ v) C  
+ap⁻¹ (Exit iap⟷ v C) = {!!} 
+ap⁻¹ (Exit iap⁻¹⟷ v C) = {!!}
 -- eta and epsilon
 ap⁻¹ (Exit (ε+ P) (pp , _) C) =
   -- if forward execution proceeded past ε with p^5 we backtrack using p; this may cause

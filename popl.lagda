@@ -51,6 +51,7 @@
 \newcommand{\refl}{\AgdaInductiveConstructor{refl}}
 \newcommand{\iter}[1]{\textsc{Iter}(#1)}
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
+\newcommand{\distiterplus}[3]{\mathsf{dist^{{\wedge}{+}}}~#1~#2~#3}
 
 \newcommand{\Rule}[4]{
 \makebox{{\rm #1}
@@ -126,6 +127,8 @@ $\displaystyle
 \DeclareUnicodeCharacter{951}{$\eta$}
 \DeclareUnicodeCharacter{956}{$\mu$}
 \DeclareUnicodeCharacter{8703}{\ensuremath{\leftrightarrowtriangle}}
+\DeclareUnicodeCharacter{120792}{$\zt$}
+\DeclareUnicodeCharacter{120793}{$\ot$}
 
 \AgdaHide{
 \begin{code}
