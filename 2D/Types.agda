@@ -17,6 +17,7 @@ mutual
     _⊗_ : U → U → U
     # : {τ : U} → (τ ⟷ τ) → U
     1/# : {τ : U} → (τ ⟷ τ) → U
+    𝟙# : {τ : U} → (τ ⟷ τ) → U
 
   data Prim⟷ : U → U → Set where
     unite₊l :  {t : U} → Prim⟷ (𝟘 ⊕ t) t
@@ -52,10 +53,14 @@ mutual
     unfoldSwap : {t : U} → (# (Prim (swap₊ {t} {t}))) ⟷ (𝟙 ⊕ 𝟙) 
     ap⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
     ap⁻¹⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
-    η- : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ (1/# p ⊗ # p)
-    η+ : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ (# p ⊗ 1/# p)
-    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙
-    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙
+    η- : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (1/# p ⊗ # p)
+    η+ : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (# p ⊗ 1/# p)
+    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙# p
+    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙# p
+    unite⋆l# :  {s t : U} (p : t ⟷ t) → (𝟙# p ⊗ s) ⟷ s
+    uniti⋆l# :  {s t : U} (p : t ⟷ t) → s ⟷ (𝟙# p ⊗ s)
+    unite⋆r# :  {s t : U} (p : t ⟷ t) → (s ⊗ 𝟙# p) ⟷ s
+    uniti⋆r# :  {s t : U} (p : t ⟷ t) → s ⟷ (s ⊗ 𝟙# p)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -92,6 +97,10 @@ mutual
 ! unfoldSwap = foldSwap
 ! ap⟷ = ap⁻¹⟷ 
 ! ap⁻¹⟷ = ap⟷
+! (unite⋆l# p) = uniti⋆l# p
+! (uniti⋆l# p) = unite⋆l# p
+! (unite⋆r# p) = uniti⋆r# p
+! (uniti⋆r# p) = unite⋆r# p
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -123,18 +132,18 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
   -- coherence for compact closed categories
-  ccc₁l : {t : U} {p : t ⟷ t} →
-         Prim uniti⋆r ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
-         (ε+ p ⊗ Prim id⟷) ◎ Prim unite⋆l ⇔ Prim id⟷
+  ccc₁l : {t : U} {p : t ⟷ t} → 
+         uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
+         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ Prim id⟷
   ccc₁r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ Prim uniti⋆r ◎ (Prim id⟷ ⊗ η- p) ◎
-         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ Prim unite⋆l 
+         Prim id⟷ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p 
   ccc₂l : {t : U} {p : t ⟷ t} →
-         (((Prim uniti⋆l ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
-         (Prim id⟷ ⊗ ε- p)) ◎ Prim unite⋆r ⇔ Prim id⟷
+         (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
+         (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p ⇔ Prim id⟷
   ccc₂r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ (((Prim uniti⋆l ◎ (η+ p ⊗ Prim id⟷)) ◎
-         Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ Prim unite⋆r
+         Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
+         Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
 
   -- suggested alternate versions
   -- ccc₁l {t : U} {p : t ⟷ t} →
@@ -200,7 +209,11 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id foldSwap = id⇔
 !!⇔id unfoldSwap = id⇔
 !!⇔id ap⟷ = id⇔ 
-!!⇔id ap⁻¹⟷ = id⇔ 
+!!⇔id ap⁻¹⟷ = id⇔
+!!⇔id (unite⋆l# p) = id⇔
+!!⇔id (uniti⋆l# p) = id⇔
+!!⇔id (unite⋆r# p) = id⇔
+!!⇔id (uniti⋆r# p) = id⇔
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
