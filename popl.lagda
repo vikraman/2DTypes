@@ -854,9 +854,9 @@ circuit terminates with the value $\textsf{id}$.
 %% Sec 5 A new language with fractional types and its denotational semantics (mostly reference to sec 4)
 \input{pifrac.tex}
 %% Sec 6 its operational semantics + pragramatics
-% \input{opsem.tex}
+\input{opsem.tex}
 %% Sec 7 limitations; open problems
-% \input{limitations.tex} 
+\input{limitations.tex} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}

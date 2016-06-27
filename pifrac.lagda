@@ -274,6 +274,33 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
 \end{code}}}}}
 
+As motivated in the previous section, we will also need to consider
+the iterates $p^k$ of combinators $p$ which are $k$-fold composition
+of $p$ and its inverse. These iterates are not independent: there are
+only $\ord{p}$ distinct iterates, up to 2-combinator equivalence:
+
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
+\begin{code}
+_^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
+p ^ (+ 0)             = id⟷
+p ^ (+ (suc k))       = p ◎ (p ^ (+ k))
+p ^ -[1+ 0 ]          = ! p
+p ^ (-[1+ (suc k) ])  = (! p) ◎ (p ^ -[1+ k ])
+
+record Iter {τ : U} (p : τ ⟷ τ) : Set where
+  constructor <_,_,_>
+  field
+    k : ℤ
+    q : τ ⟷ τ
+    α : q ⇔ p ^ k
+
+_Iter⇔_ : {τ : U} {p : τ ⟷ τ} → Iter p → Iter p → Set
+< _ , q , _ > Iter⇔ < _ , r , _ > = q ⇔ r
+\end{code}}}}  
+
+
 %%%%%%%%%%%
 \subsection{Values}
 
@@ -287,31 +314,15 @@ groupoid cardinality, is a proper fraction.
 \medskip
 {\footnotesize{
 \begin{code}
-_^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
-p ^ (+ 0) = id⟷
-p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
-p ^ -[1+ 0 ] = ! p
-p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
-
-record Iter {τ : U} (p : τ ⟷ τ) : Set where
-  constructor <_,_,_>
-  field
-    k : ℤ
-    q : τ ⟷ τ
-    α : q ⇔ p ^ k
-
-_Iter⇔_ : {τ : U} {p : τ ⟷ τ} → Iter p → Iter p → Set
-< _ , q , _ > Iter⇔ < _ , r , _ > = q ⇔ r
-  
 data Val : (τ : U) → Set where
   ⋆ :      Val 𝟙
   inl :    {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
   inr :    {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
   [_,_] :  {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
   _#_ :    {τ : U} {p : τ ⟷ τ} →
-           (p^k : Iter p) →  (p^k Iter⇔ p^k) → Val (# p)
+           (pᵏ : Iter p) →  (pᵏ Iter⇔ pᵏ) → Val (# p)
   _1/#_ :  {τ : U} {p : τ ⟷ τ} →
-           (p^k : Iter p) → (p^k Iter⇔ p^k) → Val (1/# p)
+           (pᵏ : Iter p) → (pᵏ Iter⇔ pᵏ) → Val (1/# p)
 \end{code}}}}
 
 \amr{wavefront}
@@ -454,6 +465,15 @@ which has order 1. So if we try to use it, we will map 1 to 1 times
 0 have different cardinalities so there is no way to identify them and
 we are consistent.
 
+values equivalent tilde tilde
+
+values indistinguishable
+
+%%%%%%%
+\subsection{Combinators}
+
+most combinators do not look at higher components of values:
+indistinguishable values are treated the same!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
