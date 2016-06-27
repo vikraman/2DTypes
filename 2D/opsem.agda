@@ -25,6 +25,7 @@ open import Categories.Groupoid.Product using () renaming (Product to GProduct)
 
 open import 2D.Types
 open import 2D.Frac
+open import 2D.Power
 open import 2D.Order
 open import 2D.Equality
 
@@ -33,7 +34,7 @@ open import 2D.Equality
 -- fractional values
 
 fv : {τ : U} → (p : τ ⟷ τ) (i : ℤ) → V (1/# p)
-fv p i = (tt , perm i (p ^ i) id⇔)
+fv p i = (perm i (Prim id⟷) (2! (id^i⇔id i)) , perm i (p ^ i) id⇔)
 
 -- combinator values
 
@@ -275,16 +276,19 @@ mutual
     case (𝓐𝓹 q (v , av)) of λ { (v' , av') → (inj₂ v') , av' }
   𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , (av₁ , av₂)) with ((𝓐𝓹 p (v₁ , av₁)) , (𝓐𝓹 q (v₂ , av₂)))
   𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , av₁ , av₂) | (v₁' , av₁') , (v₂' , av₂') = (v₁' , v₂') , (av₁' , av₂')
-  𝓐𝓹 (η+ p) v = ((perm (+ 1) p idr◎r , tt) , (id⇔ , perm (+ 1) p idr◎r))
-  𝓐𝓹 (η- p) v = ((tt , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
-  𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) =
+  𝓐𝓹 (η+ p) (perm i q α , y) =
+       ((perm i (p ^ i) id⇔) , (perm (ℤ- i ℤ+ i ℤ+ i) q {!!})) , (id⇔ , (perm i (p ^ i) id⇔))
+    -- ((perm (+ 1) p idr◎r , perm i q α) , (id⇔ , perm (+ 1) p idr◎r))
+  𝓐𝓹 (η- p) (pp , β) = ((pp , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
+  𝓐𝓹 (ε+ p) ((perm i q α , perm k id δ) , (β , perm j r γ)) =
+    (perm (i ℤ+ (ℤ- j) ℤ+ k) (p ^ (i ℤ+ (ℤ- j) ℤ+ k)) {!!}) , id⇔
+--    if ((perm i q α) ⇔? (perm j r γ))
+--       then (pp , id⇔)
+--       else 𝓐𝓹 (ε+ p) ((perm i q α , pp) , (β , perm j r γ)) -- loop forever
+  𝓐𝓹 (ε- p) ((pp , perm i q α) , (perm j r γ , β)) =
     if ((perm i q α) ⇔? (perm j r γ))
-       then (tt , refl)
-       else 𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) -- loop forever
-  𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β)) =
-    if ((perm i q α) ⇔? (perm j r γ))
-       then (tt , refl)
-       else 𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β))
+       then (pp , id⇔)
+       else 𝓐𝓹 (ε- p) ((pp , perm i q α) , (perm j r γ , β))
   𝓐𝓹 foldSwap (inj₁ tt , av) = (perm (+ 0) (Prim id⟷) id⇔ , id⇔)
   𝓐𝓹 foldSwap (inj₂ tt , av) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
   𝓐𝓹 unfoldSwap (v , av) =
@@ -295,6 +299,8 @@ mutual
     case (𝓐𝓹 q (v , av₂)) of λ { (v' , av₂') → (perm iter q α , v') , (av₁ , av₂') } 
   𝓐𝓹 ap⁻¹⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹⁻¹ p' (v , av₂))
   ... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
+  𝓐𝓹 contract (perm i _ _ , β) = tt , refl
+  𝓐𝓹 expand (tt , refl) = perm (+ 0) (Prim id⟷) id⇔ , id⇔ -- this is not going to be reversible!
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₂ → V T₁
   𝓐𝓹⁻¹ (Prim c) v = prim⁻¹ c v
@@ -314,11 +320,14 @@ mutual
     case (𝓐𝓹⁻¹ q (v , av₂)) of (λ {(v' , av') → (perm iter q α , v') , (av₁ , av') })
   𝓐𝓹⁻¹ ap⁻¹⟷ ((perm i q α , v) , (av₁ , av₂)) = 
     case (𝓐𝓹 q (v , av₂)) of (λ { (v' , av') → ((perm i q α) , v') , (av₁ , av') })
-  𝓐𝓹⁻¹ (η- c) ((v , _) , _) = v , refl -- probably not the best
-  𝓐𝓹⁻¹ (η+ c) v = tt , refl -- probably not the best
-  𝓐𝓹⁻¹ (ε+ c) v = ((perm (+ 1) c idr◎r) , tt) , id⇔ , (perm (+ 1) c idr◎r)
-  𝓐𝓹⁻¹ (ε- c) v = (tt , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
-
+  𝓐𝓹⁻¹ (η- c) ((v , _) , _) = v , id⇔ -- probably not the best
+  𝓐𝓹⁻¹ (η+ c) ((perm i p' α , perm j id γ) , (β , perm k q ν)) =
+    perm (i ℤ+ (ℤ- j) ℤ+ k) {!!} {!!} , {!!}
+  𝓐𝓹⁻¹ (ε+ c) v = ((perm (+ 1) c idr◎r) , {!!}) , id⇔ , (perm (+ 1) c idr◎r)
+  𝓐𝓹⁻¹ (ε- c) v = ({!!} , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
+  𝓐𝓹⁻¹ (contract {t}) v = (perm (+ 0) (Prim id⟷) id⇔) , id⇔
+  𝓐𝓹⁻¹ (expand {t}) v = tt , refl
+  
 -- note how this uses 𝓐𝓹
 cong≈ : (S T : U) → (c : S ⟷ T) (x y : V S) → [ S ] x ≈ y →  [ T ] (𝓐𝓹 c x) ≈ (𝓐𝓹 c y)
 cong≈ S T (Prim c) x y eq = {!!}
@@ -335,10 +344,12 @@ cong≈ .(𝟙 ⊕ 𝟙) .(# (Prim swap₊)) foldSwap (_ , proj₂) (_ , proj₃
 cong≈ .(# (Prim swap₊)) .(𝟙 ⊕ 𝟙) unfoldSwap (proj₁ , proj₂) (proj₃ , proj₄) (#≈ x) = {!!}
 cong≈ _ _ ap⟷ ((proj₁ , proj₅) , proj₂ , proj₆) ((proj₃ , proj₇) , proj₄ , proj₈) (proj≈ (#≈ x) eq₁) = {!!}
 cong≈ _ _ ap⁻¹⟷ x y eq = {!!}
-cong≈ .𝟙 .(1/# c ⊗ # c) (η- c) (.tt , .refl) (.tt , .refl) tt≈ = proj≈ (1/#≈ id⇔) (#≈ id⇔)
-cong≈ .𝟙 .(# c ⊗ 1/# c) (η+ c) (.tt , .refl) (.tt , .refl) tt≈ = proj≈ (#≈ id⇔) (1/#≈ id⇔)
-cong≈ .(# c ⊗ 1/# c) .𝟙 (ε+ c) ((q₁ , .tt) , (α , q₂)) ((q₃ , .tt) , (β , q₄)) (proj≈ (#≈ x) (1/#≈ x₁)) = {!!}
-cong≈ .(1/# c ⊗ # c) .𝟙 (ε- c) x y eq = {!!}
+cong≈ _ _ (η- c) v w eq = {!!}
+cong≈ _ _ (η+ c) v w eq = {!!}
+cong≈ _ _ (ε+ c) v w eq = {!!}
+cong≈ _ _ (ε- c) x y eq = {!!}
+cong≈ .(# (Prim id⟷)) .𝟙 contract (proj₁ , proj₂) (proj₃ , proj₄) (#≈ x) = tt≈
+cong≈ .𝟙 .(# (Prim id⟷)) expand (.tt , .refl) (.tt , .refl) tt≈ = #≈ id⇔
 
 fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → [ T₂ ] (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
 fwd◎bwd≈id {_} {T₂} (Prim x) v = ≡⇒≈[ T₂ ] (prim◎prim⁻¹≡id x v) 
@@ -354,10 +365,12 @@ fwd◎bwd≈id (ap⟷ {t} {p}) ((perm i q β , t₁) , (α , r)) =
   proj≈ (refl≈[ # p ] (perm i q β , α) ) (fwd◎bwd≈id q (t₁ , r))
 fwd◎bwd≈id (ap⁻¹⟷ {_} {p}) ((perm i q α , t₁) , (β , r)) =
   proj≈ (refl≈[ # p ] (perm i q α , β)) {!!} -- need to define mutually with other dir
-fwd◎bwd≈id (η- c) ((tt , r) , (p , β)) = proj≈ (1/#≈ {!!}) (#≈ {!!}) -- false
-fwd◎bwd≈id (η+ c) ((r , tt) , (β , p)) = proj≈ (#≈ {!!}) (1/#≈ {!!}) -- false
+fwd◎bwd≈id (η- c) ((pp , r) , (p , β)) = proj≈ (1/#≈ {!!} {!!} {!!}) (#≈ {!!}) -- false
+fwd◎bwd≈id (η+ c) ((perm i r α , perm j _ _) , (β , perm k _ _)) = proj≈ (#≈ {!!}) {!!} -- false
 fwd◎bwd≈id (ε+ c) v = {!!} -- warning: loops
 fwd◎bwd≈id (ε- c) v = {!!} -- warning: loops
+fwd◎bwd≈id contract (tt , refl) = tt≈
+fwd◎bwd≈id (expand {t}) (perm i q α , β) = #≈ (trans⇔ (2! (id^i⇔id i)) (2! α))
 
 -- Forward execution one step at a time
 ap : {T₀ T : U} → (s : State T₀ T) → Dir × State T₀ T
@@ -399,22 +412,24 @@ ap (Enter unfoldSwap (v , _) C) =
 ap (Enter ap⟷ v C) = Fwd , Exit ap⟷ (𝓐𝓹 ap⟷ v) C
 ap (Enter ap⁻¹⟷ v C) = Fwd , Exit ap⁻¹⟷ (𝓐𝓹 ap⁻¹⟷ v) C
 -- eta and epsilon
-ap (Enter (η+ P) (tt , _) C) =
+ap (Enter (η+ P) (pp , _) C) =
   Fwd , Exit (η+ P)
-        ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r))
+        ((perm (+ 1) P idr◎r , pp) , (id⇔ , perm (+ 1) P idr◎r))
         C
-ap (Enter (η- P) (tt , _) C) =
+ap (Enter (η- P) (pp , _) C) =
   Fwd , Exit (η- P)
-        ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
+        ((pp , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
         C
-ap (Enter (ε+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
+ap (Enter (ε+ P) ((perm i q α , pp) , (β , perm j r γ)) C) =
    if ((perm i q α) ⇔? (perm j r γ))
-     then Fwd , Exit (ε+ P) (tt , refl) C
-     else Bck , Enter (ε+ P) ((perm i q α , tt) , (β , perm j r γ)) C
-ap (Enter (ε- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
+     then Fwd , Exit (ε+ P) (pp , id⇔) C
+     else Bck , Enter (ε+ P) ((perm i q α , pp) , (β , perm j r γ)) C
+ap (Enter (ε- P) ((pp , perm i q α) , (perm j r γ , β)) C) =
    if ((perm i q α) ⇔? (perm j r γ))
-     then Fwd , Exit (ε- P) (tt , refl) C
-     else Bck , Enter (ε- P) (((tt , perm i q α) , (perm j r γ , β))) C
+     then Fwd , Exit (ε- P) (pp , id⇔) C
+     else Bck , Enter (ε- P) (((pp , perm i q α) , (perm j r γ , β))) C
+ap (Enter (contract {t}) v C) = {!!}
+ap (Enter (expand {t}) v C) = {!!}
 -- done
 ap (Exit P v Empty) = Fwd , Exit P v Empty
 
@@ -457,17 +472,17 @@ ap⁻¹ (Exit unfoldSwap (inj₂ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 1)
 ap⁻¹ (Exit ap⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⁻¹⟷ v) C 
 ap⁻¹ (Exit ap⁻¹⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⟷ v) C  
 -- eta and epsilon
-ap⁻¹ (Exit (ε+ P) (tt , _) C) =
+ap⁻¹ (Exit (ε+ P) (pp , _) C) =
   -- if forward execution proceeded past ε with p^5 we backtrack using p; this may cause
   -- that we never reach a fixed point even if one exists
   Bck , Enter (ε+ P)
-        ((perm (+ 1) P idr◎r , tt) , (id⇔ , perm (+ 1) P idr◎r))
+        ((perm (+ 1) P idr◎r , pp) , (id⇔ , perm (+ 1) P idr◎r))
         C
-ap⁻¹ (Exit (ε- P) (tt , _) C) =
+ap⁻¹ (Exit (ε- P) (pp , _) C) =
   Bck , Enter (ε- P)
-        ((tt , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
+        ((pp , perm (+ 1) P idr◎r) , (perm (+ 1) P idr◎r , id⇔))
         C
-ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
+ap⁻¹ (Exit (η+ P) ((perm i q α , pp) , (β , perm j r γ)) C) =
   -- what should really happen is that η counts how many times backtracking reaches here
   -- and after it exhausts all the choice, it lets execution proceed backwards for other
   -- ηs upstream to get a chance at revisiting their choices
@@ -475,18 +490,18 @@ ap⁻¹ (Exit (η+ P) ((perm i q α , tt) , (β , perm j r γ)) C) =
              ( ((perm (ℤsuc i) (P ◎ q)
                (trans⇔ (id⇔ ⊡ α)
                (trans⇔ (idr◎r ⊡ id⇔)
-               (2! (lower {p = P} (+ 1) i))))) , tt)
+               (2! (lower {p = P} (+ 1) i))))) , pp)
              , (id⇔ , (perm (ℤsuc i) (P ◎ q)
                (trans⇔ (id⇔ ⊡ α)
                (trans⇔ (idr◎r ⊡ id⇔)
                (2! (lower {p = P} (+ 1) i)))))))
              C
-ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
+ap⁻¹ (Exit (η- P) ((pp , perm i q α) , (perm j r γ , β)) C) =
 --   if ((perm i q α) ⇔? (perm j r γ))
 --     then Bck , Enter (η- P) (tt , refl) C
 --     else Fwd , Exit (η- P) (((tt , perm i q α) , (perm j r γ , β))) C
  Fwd , Exit (η- P)
-             ( (tt , (perm (ℤsuc i) (P ◎ q)
+             ( (pp , (perm (ℤsuc i) (P ◎ q)
                (trans⇔ (id⇔ ⊡ α)
                (trans⇔ (idr◎r ⊡ id⇔)
                (2! (lower {p = P} (+ 1) i))))))
@@ -495,6 +510,9 @@ ap⁻¹ (Exit (η- P) ((tt , perm i q α) , (perm j r γ , β)) C) =
                (trans⇔ (idr◎r ⊡ id⇔)
                (2! (lower {p = P} (+ 1) i))))) , id⇔))
              C
+ap⁻¹ (Exit (contract {t}) v C) = {!!}
+ap⁻¹ (Exit (expand {t}) v C) = {!!}
+
 -- done 
 ap⁻¹ (Enter P v Empty) = Bck , Enter P v Empty 
 
@@ -527,12 +545,12 @@ eval c v = loopFwd (Enter c v Empty)
 -- Credit card example
 
 cc : # NOT ⟷ # NOT
-cc = Prim uniti⋆l ◎
+cc = Prim (uniti⋆l {BOOL}) ◎ (expand ⊗ Prim id⟷) ◎
      (((η+ NOT) ⊗ Prim id⟷) ◎
      ((Prim assocr⋆ ◎
      ((Prim id⟷ ⊗ Prim swap⋆) ◎
      ((Prim id⟷ ⊗ (ε+ NOT)) ◎
-     Prim unite⋆r)))))
+     (Prim id⟷ ⊗ contract) ◎ Prim (unite⋆r {BOOL}))))))
 
 t0 = loopFwd (Enter cc (cv NOT (+ 0)) Empty)
 -- evals to:
