@@ -389,8 +389,14 @@ unit, sum, and product types. The last two lines define values of type
 $\order{p}$ and $\iorder{p}$ as iterates of $p$. In the case of
 $\order{p}$ the iterates are interpreted as ``\emph{programs}'' that
 can act on other values and in the case of $\iorder{p}$ the iterates
-are interpreted as ``\emph{quotients}'' that capture similarities in
-values.
+are interpreted as ``\emph{symmetries}'' that capture similarities in
+values. Note that if $p$ has order, say 3, then there are 3 distinct
+values of type $\order{p}$ and 3 distinct values of $\iorder{p}$. The
+values of type $\order{p}$ apply $p$ for 0, 1, or 2 times to given
+value. The values of type $\iorder{p}$ represent the three ``thirds''
+of $p$. If the full action of applying $p$ to a value is thought of as
+a rotation for example, then applying each third would correspond to
+1/3 of a rotation. 
 
 
 \amr{wavefront}
