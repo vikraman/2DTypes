@@ -403,133 +403,42 @@ a rotation for example, then applying each third would correspond to
 
 \begin{code}
 prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → Val T₁ → Val T₂
-prim unite₊l (inl ()) 
+prim unite₊l (inl ())
 prim unite₊l (inr v) = v
-prim uniti₊l ⋆ = {!!}
-prim uniti₊l (inl v) = {!!}
-prim uniti₊l (inr v) = {!!}
-prim uniti₊l [ v , v₁ ] = {!!}
-prim uniti₊l (comb pᵏ) = {!!}
-prim uniti₊l (1/comb pᵏ) = {!!}
-prim unite₊r (inl v) = {!!}
-prim unite₊r (inr v) = {!!}
-prim uniti₊r ⋆ = {!!}
-prim uniti₊r (inl v) = {!!}
-prim uniti₊r (inr v) = {!!}
-prim uniti₊r [ v , v₁ ] = {!!}
-prim uniti₊r (comb pᵏ) = {!!}
-prim uniti₊r (1/comb pᵏ) = {!!}
-prim swap₊ (inl v) = {!!}
-prim swap₊ (inr v) = {!!}
-prim assocl₊ (inl v) = {!!}
-prim assocl₊ (inr v) = {!!}
-prim assocr₊ (inl v) = {!!}
-prim assocr₊ (inr v) = {!!}
-prim unite⋆l [ v , v₁ ] = {!!}
-prim uniti⋆l ⋆ = {!!}
-prim uniti⋆l (inl v) = {!!}
-prim uniti⋆l (inr v) = {!!}
-prim uniti⋆l [ v , v₁ ] = {!!}
-prim uniti⋆l (comb pᵏ) = {!!}
-prim uniti⋆l (1/comb pᵏ) = {!!}
-prim unite⋆r [ v , v₁ ] = {!!}
-prim uniti⋆r ⋆ = {!!}
-prim uniti⋆r (inl v) = {!!}
-prim uniti⋆r (inr v) = {!!}
-prim uniti⋆r [ v , v₁ ] = {!!}
-prim uniti⋆r (comb pᵏ) = {!!}
-prim uniti⋆r (1/comb pᵏ) = {!!}
-prim swap⋆ [ v , v₁ ] = {!!}
-prim assocl⋆ [ v , v₁ ] = {!!}
-prim assocr⋆ [ v , v₁ ] = {!!}
-prim absorbr [ v , v₁ ] = {!!}
-prim absorbl [ v , v₁ ] = {!!}
+prim uniti₊l v = inr v
+prim unite₊r (inl v) = v
+prim unite₊r (inr ())
+prim uniti₊r v = inl v
+prim swap₊ (inl v) = inr v
+prim swap₊ (inr v) = inl v
+prim assocl₊ (inl v) = inl (inl v)
+prim assocl₊ (inr (inl v)) = inl (inr v)
+prim assocl₊ (inr (inr v)) = inr v
+prim assocr₊ (inl (inl v)) = inl v
+prim assocr₊ (inl (inr v)) = inr (inl v)
+prim assocr₊ (inr v) = inr (inr v)
+prim unite⋆l [ ⋆ , v ] = v
+prim uniti⋆l v = [ ⋆ , v ]
+prim unite⋆r [ v , ⋆  ] = v
+prim uniti⋆r v = [ v , ⋆ ]
+prim swap⋆ [ v₁ , v₂ ] = [ v₂ , v₁ ]
+prim assocl⋆ [ v₁ , [ v₂ , v₃ ] ] = [ [ v₁ , v₂ ] , v₃ ]
+prim assocr⋆ [ [ v₁ , v₂ ] , v₃ ] = [ v₁ , [ v₂ , v₃ ] ]
+prim absorbr [ () , v ]
+prim absorbl [ v , () ]
 prim factorzr ()
 prim factorzl ()
-prim dist [ v , v₁ ] = {!!}
-prim factor (inl v) = {!!}
-prim factor (inr v) = {!!}
-prim distl [ v , v₁ ] = {!!}
-prim factorl (inl v) = {!!}
-prim factorl (inr v) = {!!} 
-{--
-prim unite₊l (inj₁ () , av)
-prim unite₊l (inj₂ v , av) = (v , av) 
-prim uniti₊l (v , av) = (inj₂ v , av)
-prim unite₊r (inj₁ v , av) = (v , av)
-prim unite₊r (inj₂ () , av)
-prim uniti₊r (v , av) = (inj₁ v , av)
-prim swap₊ (inj₁ v , av) = (inj₂ v , av)
-prim swap₊ (inj₂ v , av) = (inj₁ v , av)
-prim assocl₊ (inj₁ v , av) = (inj₁ (inj₁ v) , av)
-prim assocl₊ ((inj₂ (inj₁ v)) , av) = (inj₁ (inj₂ v) , av)
-prim assocl₊ ((inj₂ (inj₂ v)) , av) = (inj₂ v , av)
-prim assocr₊ ((inj₁ (inj₁ v)) , av) = (inj₁ v , av)
-prim assocr₊ ((inj₁ (inj₂ v)) , av) = (inj₂ (inj₁ v) , av)
-prim assocr₊ (inj₂ v , av) = (inj₂ (inj₂ v) , av)
-prim unite⋆l ((tt , v) , (_ , av)) = (v , av)
-prim uniti⋆l (v , av) = (tt , v) , (refl , av)
-prim unite⋆r ((v , tt) , (av , _)) = (v , av)
-prim uniti⋆r (v , av) = ((v , tt) , (av , refl))
-prim swap⋆ ((v₁ , v₂) , (av₁ , av₂)) = ((v₂ , v₁) , (av₂ , av₁))
-prim assocl⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) = (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃))
-prim assocr⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) = ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃))))
-prim absorbr ((v , _) , (av , _)) = (v , av)
-prim absorbl ((_ , v) , (_ , av)) = (v , av)
-prim factorzr (() , _)
-prim factorzl (() , _)
-prim dist ((inj₁ v₁ , v₃) , (av₁ , av₃)) = (inj₁ (v₁ , v₃) , (av₁ , av₃))
-prim dist ((inj₂ v₂ , v₃) , (av₂ , av₃)) = (inj₂ (v₂ , v₃) , (av₂ , av₃))
-prim factor (inj₁ (v₁ , v₃) , av) = ((inj₁ v₁ , v₃) , av)
-prim factor (inj₂ (v₂ , v₃) , av) = ((inj₂ v₂ , v₃) , av)
-prim distl ((v₃ , inj₁ v₁) , (av₃ , av₁)) = (inj₁ (v₃ , v₁) , (av₃ , av₁))
-prim distl ((v₃ , inj₂ v₂) , (av₃ , av₂)) = (inj₂ (v₃ , v₂) , (av₃ , av₂))
-prim factorl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
-prim factorl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
-prim id⟷ v = v
-
-prim⁻¹ : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₂ → V T₁
-prim⁻¹ uniti₊l (inj₁ () , av)
-prim⁻¹ uniti₊l (inj₂ v , av) = (v , av) 
-prim⁻¹ unite₊l (v , av) = (inj₂ v , av)
-prim⁻¹ uniti₊r (inj₁ v , av) = (v , av)
-prim⁻¹ uniti₊r (inj₂ () , av)
-prim⁻¹ unite₊r (v , av) = (inj₁ v , av)
-prim⁻¹ swap₊ (inj₁ v , av) = (inj₂ v , av)
-prim⁻¹ swap₊ (inj₂ v , av) = (inj₁ v , av)
-prim⁻¹ assocr₊ (inj₁ v , av) = (inj₁ (inj₁ v) , av)
-prim⁻¹ assocr₊ ((inj₂ (inj₁ v)) , av) = (inj₁ (inj₂ v) , av)
-prim⁻¹ assocr₊ ((inj₂ (inj₂ v)) , av) = (inj₂ v , av)
-prim⁻¹ assocl₊ ((inj₁ (inj₁ v)) , av) = (inj₁ v , av)
-prim⁻¹ assocl₊ ((inj₁ (inj₂ v)) , av) = (inj₂ (inj₁ v) , av)
-prim⁻¹ assocl₊ (inj₂ v , av) = (inj₂ (inj₂ v) , av)
-prim⁻¹ uniti⋆l ((tt , v) , (_ , av)) = (v , av)
-prim⁻¹ unite⋆l (v , av) = (tt , v) , (refl , av)
-prim⁻¹ uniti⋆r ((v , tt) , (av , _)) = (v , av)
-prim⁻¹ unite⋆r (v , av) = ((v , tt) , (av , refl))
-prim⁻¹ swap⋆ ((v₁ , v₂) , (av₁ , av₂)) = ((v₂ , v₁) , (av₂ , av₁))
-prim⁻¹ assocr⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) = (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃))
-prim⁻¹ assocl⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) = ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃))))
-prim⁻¹ factorzl ((v , _) , (av , _)) = (v , av)
-prim⁻¹ factorzr ((_ , v) , (_ , av)) = (v , av)
-prim⁻¹ absorbl (() , _)
-prim⁻¹ absorbr (() , _)
-prim⁻¹ factor ((inj₁ v₁ , v₃) , (av₁ , av₃)) = (inj₁ (v₁ , v₃) , (av₁ , av₃))
-prim⁻¹ factor ((inj₂ v₂ , v₃) , (av₂ , av₃)) = (inj₂ (v₂ , v₃) , (av₂ , av₃))
-prim⁻¹ dist (inj₁ (v₁ , v₃) , av) = ((inj₁ v₁ , v₃) , av)
-prim⁻¹ dist (inj₂ (v₂ , v₃) , av) = ((inj₂ v₂ , v₃) , av)
-prim⁻¹ factorl ((v₃ , inj₁ v₁) , (av₃ , av₁)) = (inj₁ (v₃ , v₁) , (av₃ , av₁))
-prim⁻¹ factorl ((v₃ , inj₂ v₂) , (av₃ , av₂)) = (inj₂ (v₃ , v₂) , (av₃ , av₂))
-prim⁻¹ distl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
-prim⁻¹ distl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
-prim⁻¹ id⟷ v = v
---}
+prim dist [ inl v , v₁ ] = inl ([ v , v₁ ])
+prim dist [ inr v , v₁ ] = inr ([ v , v₁ ])
+prim factor (inl [ v , v₁ ]) = [ inl v , v₁ ]
+prim factor (inr [ v , v₁ ]) = [ inr v , v₁ ]
+prim distl [ v , inl v₁ ] = inl ([ v , v₁ ])
+prim distl [ v , inr v₁ ] = inr ([ v , v₁ ])
+prim factorl (inl [ v , v₁ ]) = [ v , inl v₁ ]
+prim factorl (inr [ v , v₁ ]) = [ v , inr v₁ ] 
 \end{code}
 
 %%%%%%%
-\subsection{Additional Combinators}
-
-=======
 \subsection{Additional Combinators}
 
 most combinators do not look at higher components of values:
