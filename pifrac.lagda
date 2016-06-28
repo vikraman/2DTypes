@@ -403,8 +403,8 @@ a rotation for example, then applying each third would correspond to
 
 \begin{code}
 prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → Val T₁ → Val T₂
-prim unite₊l (inl v) = {!!}
-prim unite₊l (inr v) = {!!}
+prim unite₊l (inl ()) 
+prim unite₊l (inr v) = v
 prim uniti₊l ⋆ = {!!}
 prim uniti₊l (inl v) = {!!}
 prim uniti₊l (inr v) = {!!}
