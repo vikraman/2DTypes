@@ -398,13 +398,143 @@ of $p$. If the full action of applying $p$ to a value is thought of as
 a rotation for example, then applying each third would correspond to
 1/3 of a rotation. 
 
+%%%%%%%
+\subsection{Operational Semantics}
 
-\amr{wavefront}
+\begin{code}
+prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → Val T₁ → Val T₂
+prim unite₊l (inl v) = {!!}
+prim unite₊l (inr v) = {!!}
+prim uniti₊l ⋆ = {!!}
+prim uniti₊l (inl v) = {!!}
+prim uniti₊l (inr v) = {!!}
+prim uniti₊l [ v , v₁ ] = {!!}
+prim uniti₊l (comb pᵏ) = {!!}
+prim uniti₊l (1/comb pᵏ) = {!!}
+prim unite₊r (inl v) = {!!}
+prim unite₊r (inr v) = {!!}
+prim uniti₊r ⋆ = {!!}
+prim uniti₊r (inl v) = {!!}
+prim uniti₊r (inr v) = {!!}
+prim uniti₊r [ v , v₁ ] = {!!}
+prim uniti₊r (comb pᵏ) = {!!}
+prim uniti₊r (1/comb pᵏ) = {!!}
+prim swap₊ (inl v) = {!!}
+prim swap₊ (inr v) = {!!}
+prim assocl₊ (inl v) = {!!}
+prim assocl₊ (inr v) = {!!}
+prim assocr₊ (inl v) = {!!}
+prim assocr₊ (inr v) = {!!}
+prim unite⋆l [ v , v₁ ] = {!!}
+prim uniti⋆l ⋆ = {!!}
+prim uniti⋆l (inl v) = {!!}
+prim uniti⋆l (inr v) = {!!}
+prim uniti⋆l [ v , v₁ ] = {!!}
+prim uniti⋆l (comb pᵏ) = {!!}
+prim uniti⋆l (1/comb pᵏ) = {!!}
+prim unite⋆r [ v , v₁ ] = {!!}
+prim uniti⋆r ⋆ = {!!}
+prim uniti⋆r (inl v) = {!!}
+prim uniti⋆r (inr v) = {!!}
+prim uniti⋆r [ v , v₁ ] = {!!}
+prim uniti⋆r (comb pᵏ) = {!!}
+prim uniti⋆r (1/comb pᵏ) = {!!}
+prim swap⋆ [ v , v₁ ] = {!!}
+prim assocl⋆ [ v , v₁ ] = {!!}
+prim assocr⋆ [ v , v₁ ] = {!!}
+prim absorbr [ v , v₁ ] = {!!}
+prim absorbl [ v , v₁ ] = {!!}
+prim factorzr ()
+prim factorzl ()
+prim dist [ v , v₁ ] = {!!}
+prim factor (inl v) = {!!}
+prim factor (inr v) = {!!}
+prim distl [ v , v₁ ] = {!!}
+prim factorl (inl v) = {!!}
+prim factorl (inr v) = {!!} 
+{--
+prim unite₊l (inj₁ () , av)
+prim unite₊l (inj₂ v , av) = (v , av) 
+prim uniti₊l (v , av) = (inj₂ v , av)
+prim unite₊r (inj₁ v , av) = (v , av)
+prim unite₊r (inj₂ () , av)
+prim uniti₊r (v , av) = (inj₁ v , av)
+prim swap₊ (inj₁ v , av) = (inj₂ v , av)
+prim swap₊ (inj₂ v , av) = (inj₁ v , av)
+prim assocl₊ (inj₁ v , av) = (inj₁ (inj₁ v) , av)
+prim assocl₊ ((inj₂ (inj₁ v)) , av) = (inj₁ (inj₂ v) , av)
+prim assocl₊ ((inj₂ (inj₂ v)) , av) = (inj₂ v , av)
+prim assocr₊ ((inj₁ (inj₁ v)) , av) = (inj₁ v , av)
+prim assocr₊ ((inj₁ (inj₂ v)) , av) = (inj₂ (inj₁ v) , av)
+prim assocr₊ (inj₂ v , av) = (inj₂ (inj₂ v) , av)
+prim unite⋆l ((tt , v) , (_ , av)) = (v , av)
+prim uniti⋆l (v , av) = (tt , v) , (refl , av)
+prim unite⋆r ((v , tt) , (av , _)) = (v , av)
+prim uniti⋆r (v , av) = ((v , tt) , (av , refl))
+prim swap⋆ ((v₁ , v₂) , (av₁ , av₂)) = ((v₂ , v₁) , (av₂ , av₁))
+prim assocl⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) = (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃))
+prim assocr⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) = ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃))))
+prim absorbr ((v , _) , (av , _)) = (v , av)
+prim absorbl ((_ , v) , (_ , av)) = (v , av)
+prim factorzr (() , _)
+prim factorzl (() , _)
+prim dist ((inj₁ v₁ , v₃) , (av₁ , av₃)) = (inj₁ (v₁ , v₃) , (av₁ , av₃))
+prim dist ((inj₂ v₂ , v₃) , (av₂ , av₃)) = (inj₂ (v₂ , v₃) , (av₂ , av₃))
+prim factor (inj₁ (v₁ , v₃) , av) = ((inj₁ v₁ , v₃) , av)
+prim factor (inj₂ (v₂ , v₃) , av) = ((inj₂ v₂ , v₃) , av)
+prim distl ((v₃ , inj₁ v₁) , (av₃ , av₁)) = (inj₁ (v₃ , v₁) , (av₃ , av₁))
+prim distl ((v₃ , inj₂ v₂) , (av₃ , av₂)) = (inj₂ (v₃ , v₂) , (av₃ , av₂))
+prim factorl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
+prim factorl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
+prim id⟷ v = v
+
+prim⁻¹ : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₂ → V T₁
+prim⁻¹ uniti₊l (inj₁ () , av)
+prim⁻¹ uniti₊l (inj₂ v , av) = (v , av) 
+prim⁻¹ unite₊l (v , av) = (inj₂ v , av)
+prim⁻¹ uniti₊r (inj₁ v , av) = (v , av)
+prim⁻¹ uniti₊r (inj₂ () , av)
+prim⁻¹ unite₊r (v , av) = (inj₁ v , av)
+prim⁻¹ swap₊ (inj₁ v , av) = (inj₂ v , av)
+prim⁻¹ swap₊ (inj₂ v , av) = (inj₁ v , av)
+prim⁻¹ assocr₊ (inj₁ v , av) = (inj₁ (inj₁ v) , av)
+prim⁻¹ assocr₊ ((inj₂ (inj₁ v)) , av) = (inj₁ (inj₂ v) , av)
+prim⁻¹ assocr₊ ((inj₂ (inj₂ v)) , av) = (inj₂ v , av)
+prim⁻¹ assocl₊ ((inj₁ (inj₁ v)) , av) = (inj₁ v , av)
+prim⁻¹ assocl₊ ((inj₁ (inj₂ v)) , av) = (inj₂ (inj₁ v) , av)
+prim⁻¹ assocl₊ (inj₂ v , av) = (inj₂ (inj₂ v) , av)
+prim⁻¹ uniti⋆l ((tt , v) , (_ , av)) = (v , av)
+prim⁻¹ unite⋆l (v , av) = (tt , v) , (refl , av)
+prim⁻¹ uniti⋆r ((v , tt) , (av , _)) = (v , av)
+prim⁻¹ unite⋆r (v , av) = ((v , tt) , (av , refl))
+prim⁻¹ swap⋆ ((v₁ , v₂) , (av₁ , av₂)) = ((v₂ , v₁) , (av₂ , av₁))
+prim⁻¹ assocr⋆ ((v₁ , (v₂ , v₃)) , (av₁ , (av₂ , av₃))) = (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃))
+prim⁻¹ assocl⋆ (((v₁ , v₂) , v₃) , ((av₁ , av₂) , av₃)) = ((v₁ , (v₂ , v₃)) , ((av₁ , (av₂ , av₃))))
+prim⁻¹ factorzl ((v , _) , (av , _)) = (v , av)
+prim⁻¹ factorzr ((_ , v) , (_ , av)) = (v , av)
+prim⁻¹ absorbl (() , _)
+prim⁻¹ absorbr (() , _)
+prim⁻¹ factor ((inj₁ v₁ , v₃) , (av₁ , av₃)) = (inj₁ (v₁ , v₃) , (av₁ , av₃))
+prim⁻¹ factor ((inj₂ v₂ , v₃) , (av₂ , av₃)) = (inj₂ (v₂ , v₃) , (av₂ , av₃))
+prim⁻¹ dist (inj₁ (v₁ , v₃) , av) = ((inj₁ v₁ , v₃) , av)
+prim⁻¹ dist (inj₂ (v₂ , v₃) , av) = ((inj₂ v₂ , v₃) , av)
+prim⁻¹ factorl ((v₃ , inj₁ v₁) , (av₃ , av₁)) = (inj₁ (v₃ , v₁) , (av₃ , av₁))
+prim⁻¹ factorl ((v₃ , inj₂ v₂) , (av₃ , av₂)) = (inj₂ (v₃ , v₂) , (av₃ , av₂))
+prim⁻¹ distl (inj₁ (v₃ , v₁) , av) = ((v₃ , inj₁ v₁) , av)
+prim⁻¹ distl (inj₂ (v₃ , v₂) , av) = ((v₃ , inj₂ v₂) , av)
+prim⁻¹ id⟷ v = v
+--}
+\end{code}
+
+%%%%%%%
+\subsection{Additional Combinators}
+
+most combinators do not look at higher components of values:
+indistinguishable values are treated the same!
 
 Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 of types with $\frac{3}{2}$ values and that the values of these types
-are in 1-1 correspondence. This raises an immediate puzzling question:
-how are we going to express the set of values of these types? 
+are in 1-1 correspondence. 
 
 \begin{definition}[Semantic Values] Given a groupoid $G$, a
   \emph{value} in~$G$ is a pair consisting of an object $v$ and its
@@ -460,59 +590,6 @@ other properties: inverses etc.
 Cardinality-preserving combinators: sound, not complete (see
 limitations section), consistent.
 
-\medskip
-
-\begin{code}
-El : U → Set₁
-El t = Σ[ C ∈ Category l0 l0 l0 ] (Groupoid C)
-
-U-univ : Universe _ _
-U-univ = record { U = U ; El = El }
-
--- data _⇿_ : FT/ → FT/ → Set where
---   lift : {τ₁ τ₂ : FT} → (p : τ₁ ⟷ τ₂) → (⇑ τ₁ ⇿ ⇑ τ₂)
---   η : {τ : FT} → (p : τ ⟷ τ) → ⇑ ONE ⇿ (# p ⊠ 1/# p)
---   ε : {τ : FT} → (p : τ ⟷ τ) → (# p ⊠ 1/# p) ⇿ ⇑ ONE
---   unite₊l/ : ∀ {T} → (⇑ ZERO ⊞ T) ⇿ T
---   uniti₊l/ : ∀ {T} → T ⇿ (⇑ ZERO ⊞ T) 
---   unite₊r/ : ∀ {T} → (T ⊞ ⇑ ZERO) ⇿ T
---   uniti₊r/ : ∀ {T} → T ⇿ (T ⊞ ⇑ ZERO)
---   swap₊/ : ∀ {T₁ T₂} → (T₁ ⊞ T₂) ⇿ (T₂ ⊞ T₁)
---   assocl₊/ : ∀ {T₁ T₂ T₃} →
---     (T₁ ⊞ (T₂ ⊞ T₃)) ⇿ ((T₁ ⊞ T₂) ⊞ T₃)
---   assocr₊/ : ∀ {T₁ T₂ T₃} →
---     ((T₁ ⊞ T₂) ⊞ T₃) ⇿ (T₁ ⊞ (T₂ ⊞ T₃))
---   unite⋆l/  : ∀ {T} → (⇑ ONE ⊠ T) ⇿ T
---   uniti⋆l/  : ∀ {T} → T ⇿ (⇑ ONE ⊠ T)
---   unite⋆r/ : ∀ {T} → (T ⊠ ⇑ ONE) ⇿ T
---   uniti⋆r/ : ∀ {T} → T ⇿ (T ⊠ ⇑ ONE)
---   swap⋆/   : ∀ {T₁ T₂} → (T₁ ⊠ T₂) ⇿ (T₂ ⊠ T₁)
---   assocl⋆/ : ∀ {T₁ T₂ T₃} →
---     (T₁ ⊠ (T₂ ⊠ T₃)) ⇿ ((T₁ ⊠ T₂) ⊠ T₃)
---   assocr⋆/ : ∀ {T₁ T₂ T₃} →
---     ((T₁ ⊠ T₂) ⊠ T₃) ⇿ (T₁ ⊠ (T₂ ⊠ T₃))
---   absorbr/ : ∀ {T} → (⇑ ZERO ⊠ T) ⇿ ⇑ ZERO
---   absorbl/ : ∀ {T} → (T ⊠ ⇑ ZERO) ⇿ ⇑ ZERO
---   factorzr/ : ∀ {T} → ⇑ ZERO ⇿ (T ⊠ ⇑ ZERO)
---   factorzl/ : ∀ {T} → ⇑ ZERO ⇿ (⇑ ZERO ⊠ T)
---   dist/    : ∀ {T₁ T₂ T₃} → 
---     ((T₁ ⊞ T₂) ⊠ T₃) ⇿ ((T₁ ⊠ T₃) ⊞ (T₂ ⊠ T₃))
---   factor/  : ∀ {T₁ T₂ T₃} → 
---     ((T₁ ⊠ T₃) ⊞ (T₂ ⊠ T₃)) ⇿ ((T₁ ⊞ T₂) ⊠ T₃)
---   distl/   : ∀ {T₁ T₂ T₃} →
---     (T₁ ⊠ (T₂ ⊞ T₃)) ⇿ ((T₁ ⊠ T₂) ⊞ (T₁ ⊠ T₃))
---   factorl/ : ∀ {T₁ T₂ T₃} →
---     ((T₁ ⊠ T₂) ⊞ (T₁ ⊠ T₃)) ⇿ (T₁ ⊠ (T₂ ⊞ T₃))
---   id⇿    : ∀ {T} → T ⇿ T
---   _◎/_     : ∀ {T₁ T₂ T₃} → (T₁ ⇿ T₂) → (T₂ ⇿ T₃) → (T₁ ⇿ T₃)
---   _⊕/_     : ∀ {T₁ T₂ T₃ T₄} → 
---     (T₁ ⇿ T₃) → (T₂ ⇿ T₄) → ((T₁ ⊞ T₂) ⇿ (T₃ ⊞ T₄))
---   _⊗/_     : ∀ {T₁ T₂ T₃ T₄} → 
---     (T₁ ⇿ T₃) → (T₂ ⇿ T₄) → ((T₁ ⊠ T₂) ⇿ (T₃ ⊠ T₄))
-\end{code}
-
-\medskip
-
 Consistency is defined in the following sense: If we allow arbitrary
 functions then bad things happen as we can throw away the negative
 information for example. In our reversible information-preserving
@@ -530,12 +607,6 @@ we are consistent.
 values equivalent tilde tilde
 
 values indistinguishable
-
-%%%%%%%
-\subsection{Additional Combinators}
-
-most combinators do not look at higher components of values:
-indistinguishable values are treated the same!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
