@@ -19,6 +19,7 @@ open import Relation.Binary.PropositionalEquality
 open import Function
 open import 2D.Power
 open import 2D.Sing
+open import 2D.Iter
 
 discreteC : Set → Category zero zero zero
 discreteC S = record { Obj = S
@@ -38,23 +39,14 @@ discreteG S = record { _⁻¹ = sym
                      ; iso = record { isoˡ = tt ; isoʳ = tt }
                      }
 
-open import Data.Integer as ℤ hiding (∣_∣)
-
-record Iter {τ : U} (p : τ ⟷ τ) : Set where
-  constructor <_,_,_>
-  field
-    k : ℤ
-    q : τ ⟷ τ
-    α : q ⇔ p ^ k
-
-record Comm#p {τ : U} {p : τ ⟷ τ} (p^i : Iter p) (p^j : Iter p) : Set where
+record _⇔#_ {τ : U} {p : τ ⟷ τ} (p^i : Iter p) (p^j : Iter p) : Set where
   constructor mor#p
   field
     q : Sing p
     r : Sing p
     χ : (Sing.p' q ◎ Iter.q p^i) ⇔ (Iter.q p^j ◎ Sing.p' r)
 
-record Comm1/#p {τ : U} {p : τ ⟷ τ} (p^i : Sing p) (p^j : Sing p) : Set where
+record _⇔1/#_ {τ : U} {p : τ ⟷ τ} (p^i : Sing p) (p^j : Sing p) : Set where
   field
     q : Iter p
     r : Iter p
@@ -69,10 +61,10 @@ record Equiv {τ : U} (p q r s : τ ⟷ τ) : Set where
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Iter p
-   ; _⇒_ = Comm#p
+   ; _⇒_ = _⇔#_
    ; _≡_ = λ c₁ c₂ → Equiv (p' (q c₁)) (p' (q c₂)) (p' (r c₁)) (p' (r c₂))
    ; id = λ { { < _ , q , α > } → mor#p ⟪ p , id⇔ ⟫ ⟪ p , id⇔ ⟫ {!!} }
-   ; _∘_ = λ c₁ c₂ → mor#p ((q c₁) ∘S (q c₂)) ((r c₁) ∘S (r c₂)) {!!} -- trans⇔ β α
+   ; _∘_ = λ c₁ c₂ → mor#p ((q c₁) ∘S (q c₂)) ((r c₁) ∘S (r c₂)) {!!}
    ; assoc = {!!}
    ; identityˡ = {!!}
    ; identityʳ = {!!}
@@ -81,8 +73,10 @@ orderC {τ} p = record {
    }
    where
      open Sing
-     open Comm#p
-     
+     open _⇔#_
+
+open import Data.Integer as ℤ hiding (∣_∣)
+
 1/orderC : (τ : U) → (τ ⟷ τ) → Category _ _ _
 1/orderC τ pp = record { Obj = ⊤
                        ; _⇒_ = λ _ _ → Iter pp
