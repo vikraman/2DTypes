@@ -46,11 +46,15 @@ orderC {τ} p = record {
    ; _⇒_ = _⇔#_
    ; _≡_ = _≡#_
    ; id  = id#p
-   ; _∘_ = λ c₁ c₂ → mor#p ((q c₁) ∘S (q c₂)) ((r c₁) ∘S (r c₂)) {!!}
+   ; _∘_ = _∘#_
    ; assoc = {!!}
-   ; identityˡ = {!!}
-   ; identityʳ = {!!}
-   ; equiv = record { refl = {!!} ; sym = λ c → {!!} ; trans = λ c₁ c₂ → {!!} }
+   ; identityˡ = λ {_} {_} {m} → id#pˡ {m = m}
+   ; identityʳ = λ {_} {_} {m} → id#pʳ {m = m}
+   ; equiv = record
+     { refl = λ {m} → refl# {m = m}
+     ; sym = λ c → {!!}
+     ; trans = λ c₁ c₂ → {!!}
+   }
    ; ∘-resp-≡ = λ c₁ c₂ → {!!}
    }
    where
