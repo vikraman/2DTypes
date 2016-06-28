@@ -398,13 +398,15 @@ of $p$. If the full action of applying $p$ to a value is thought of as
 a rotation for example, then applying each third would correspond to
 1/3 of a rotation. 
 
+%%%%%%%
+\subsection{Additional Combinators}
 
-\amr{wavefront}
+most combinators do not look at higher components of values:
+indistinguishable values are treated the same!
 
 Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 of types with $\frac{3}{2}$ values and that the values of these types
-are in 1-1 correspondence. This raises an immediate puzzling question:
-how are we going to express the set of values of these types? 
+are in 1-1 correspondence. 
 
 \begin{definition}[Semantic Values] Given a groupoid $G$, a
   \emph{value} in~$G$ is a pair consisting of an object $v$ and its
@@ -460,59 +462,6 @@ other properties: inverses etc.
 Cardinality-preserving combinators: sound, not complete (see
 limitations section), consistent.
 
-\medskip
-
-\begin{code}
-El : U → Set₁
-El t = Σ[ C ∈ Category l0 l0 l0 ] (Groupoid C)
-
-U-univ : Universe _ _
-U-univ = record { U = U ; El = El }
-
--- data _⇿_ : FT/ → FT/ → Set where
---   lift : {τ₁ τ₂ : FT} → (p : τ₁ ⟷ τ₂) → (⇑ τ₁ ⇿ ⇑ τ₂)
---   η : {τ : FT} → (p : τ ⟷ τ) → ⇑ ONE ⇿ (# p ⊠ 1/# p)
---   ε : {τ : FT} → (p : τ ⟷ τ) → (# p ⊠ 1/# p) ⇿ ⇑ ONE
---   unite₊l/ : ∀ {T} → (⇑ ZERO ⊞ T) ⇿ T
---   uniti₊l/ : ∀ {T} → T ⇿ (⇑ ZERO ⊞ T) 
---   unite₊r/ : ∀ {T} → (T ⊞ ⇑ ZERO) ⇿ T
---   uniti₊r/ : ∀ {T} → T ⇿ (T ⊞ ⇑ ZERO)
---   swap₊/ : ∀ {T₁ T₂} → (T₁ ⊞ T₂) ⇿ (T₂ ⊞ T₁)
---   assocl₊/ : ∀ {T₁ T₂ T₃} →
---     (T₁ ⊞ (T₂ ⊞ T₃)) ⇿ ((T₁ ⊞ T₂) ⊞ T₃)
---   assocr₊/ : ∀ {T₁ T₂ T₃} →
---     ((T₁ ⊞ T₂) ⊞ T₃) ⇿ (T₁ ⊞ (T₂ ⊞ T₃))
---   unite⋆l/  : ∀ {T} → (⇑ ONE ⊠ T) ⇿ T
---   uniti⋆l/  : ∀ {T} → T ⇿ (⇑ ONE ⊠ T)
---   unite⋆r/ : ∀ {T} → (T ⊠ ⇑ ONE) ⇿ T
---   uniti⋆r/ : ∀ {T} → T ⇿ (T ⊠ ⇑ ONE)
---   swap⋆/   : ∀ {T₁ T₂} → (T₁ ⊠ T₂) ⇿ (T₂ ⊠ T₁)
---   assocl⋆/ : ∀ {T₁ T₂ T₃} →
---     (T₁ ⊠ (T₂ ⊠ T₃)) ⇿ ((T₁ ⊠ T₂) ⊠ T₃)
---   assocr⋆/ : ∀ {T₁ T₂ T₃} →
---     ((T₁ ⊠ T₂) ⊠ T₃) ⇿ (T₁ ⊠ (T₂ ⊠ T₃))
---   absorbr/ : ∀ {T} → (⇑ ZERO ⊠ T) ⇿ ⇑ ZERO
---   absorbl/ : ∀ {T} → (T ⊠ ⇑ ZERO) ⇿ ⇑ ZERO
---   factorzr/ : ∀ {T} → ⇑ ZERO ⇿ (T ⊠ ⇑ ZERO)
---   factorzl/ : ∀ {T} → ⇑ ZERO ⇿ (⇑ ZERO ⊠ T)
---   dist/    : ∀ {T₁ T₂ T₃} → 
---     ((T₁ ⊞ T₂) ⊠ T₃) ⇿ ((T₁ ⊠ T₃) ⊞ (T₂ ⊠ T₃))
---   factor/  : ∀ {T₁ T₂ T₃} → 
---     ((T₁ ⊠ T₃) ⊞ (T₂ ⊠ T₃)) ⇿ ((T₁ ⊞ T₂) ⊠ T₃)
---   distl/   : ∀ {T₁ T₂ T₃} →
---     (T₁ ⊠ (T₂ ⊞ T₃)) ⇿ ((T₁ ⊠ T₂) ⊞ (T₁ ⊠ T₃))
---   factorl/ : ∀ {T₁ T₂ T₃} →
---     ((T₁ ⊠ T₂) ⊞ (T₁ ⊠ T₃)) ⇿ (T₁ ⊠ (T₂ ⊞ T₃))
---   id⇿    : ∀ {T} → T ⇿ T
---   _◎/_     : ∀ {T₁ T₂ T₃} → (T₁ ⇿ T₂) → (T₂ ⇿ T₃) → (T₁ ⇿ T₃)
---   _⊕/_     : ∀ {T₁ T₂ T₃ T₄} → 
---     (T₁ ⇿ T₃) → (T₂ ⇿ T₄) → ((T₁ ⊞ T₂) ⇿ (T₃ ⊞ T₄))
---   _⊗/_     : ∀ {T₁ T₂ T₃ T₄} → 
---     (T₁ ⇿ T₃) → (T₂ ⇿ T₄) → ((T₁ ⊠ T₂) ⇿ (T₃ ⊠ T₄))
-\end{code}
-
-\medskip
-
 Consistency is defined in the following sense: If we allow arbitrary
 functions then bad things happen as we can throw away the negative
 information for example. In our reversible information-preserving
@@ -530,12 +479,6 @@ we are consistent.
 values equivalent tilde tilde
 
 values indistinguishable
-
-%%%%%%%
-\subsection{Additional Combinators}
-
-most combinators do not look at higher components of values:
-indistinguishable values are treated the same!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
