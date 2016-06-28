@@ -112,10 +112,11 @@ mutual
 \end{code}}}}
 
 The complete code also includes definitions for \AgdaFunction{!} which
-inverts a 1-combinator, \AgdaDatatype{⇔} which defines 2-combinators,
-\AgdaFunction{2!} which inverts 2-combinators, and
-\AgdaFunction{!!⇔id} and \AgdaFunction{⇔!} which show that
-2-combinators commute as expected with inversion of 1-combinators:
+inverts a 1-combinator, \AgdaDatatype{⇔} which defines equivalences of
+1-combinators using 2-combinators, \AgdaFunction{2!} which inverts
+2-combinators, and \AgdaFunction{!!⇔id} and \AgdaFunction{⇔!} which
+show that 2-combinators commute as expected with inversion of
+1-combinators:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -291,7 +292,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 \end{code}}}}}
 
 As motivated in the previous section, we will also need to consider
-the iterates $p^k$ of combinators $p$ which are $k$-fold composition
+the iterates $p^k$ of combinators $p$ which are $k$-fold compositions
 of $p$ and its inverse. These iterates are not independent: there are
 only $\ord{p}$ distinct iterates, up to 2-combinator equivalence:
 
@@ -311,11 +312,43 @@ record Iter {τ : U} (p : τ ⟷ τ) : Set where
     k : ℤ
     q : τ ⟷ τ
     α : q ⇔ p ^ k
-
-_Iter⇔_ : {τ : U} {p : τ ⟷ τ} → Iter p → Iter p → Set
-< _ , q , _ > Iter⇔ < _ , r , _ > = q ⇔ r
 \end{code}}}}  
 
+For our running example using the type $\mathbb{3}$ and the combinator
+$a_2$, we can a few iterates of $a_2$ as follows:
+
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
+\begin{code}
+𝟛 : U
+𝟛 = (𝟙 ⊕ 𝟙) ⊕ 𝟙
+
+a₂ : 𝟛 ⟷ 𝟛
+a₂ = Prim swap₊ ⊕ id⟷ 
+
+p^₀ p^₁ p^₂ p^₃ p^₄ p^₅ : Iter a₂
+p^₀ = < + 0 , id⟷ , id⇔ > 
+p^₁ = < + 0 , id⟷ ◎ id⟷ , idr◎l > 
+p^₂ = <  -[1+ 1 ] ,
+         id⟷ , 
+         trans⇔ split⊕-id⟷
+         (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
+         (trans⇔ hom⊕◎⇔ id⇔)) >
+p^₃ = <  + 2 ,
+         id⟷ ,
+         trans⇔ split⊕-id⟷
+         (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
+         (trans⇔ hom⊕◎⇔ (id⇔ ⊡ idr◎r))) >
+p^₄ = < -[1+ 0 ] , a₂ , id⇔ > 
+p^₅ = < + 1 , a₂ , idr◎r > 
+\end{code}}}}  
+
+\noindent Since $a_2$ has order 2, there are only two distinguishable
+iterates. The first four iterates are all equivalent to $(a_2)^0$
+which is equivalent \AgdaInductiveConstructor{id⟷}. The last two are
+both equivalent to $(a_2)^1$ which is equivalent to $a_2$. The
+equivalences are explicit in the construction. 
 
 %%%%%%%%%%%
 \subsection{Values}
@@ -343,52 +376,21 @@ values as follows:
 {\footnotesize{
 \begin{code}
 data Val : (τ : U) → Set where
-  ⋆ :      Val 𝟙
-  inl :    {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
-  inr :    {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
-  [_,_] :  {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
-  comb :   {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) →  Val (# p)
-  _1/#_ :  {τ : U} {p : τ ⟷ τ} →
-           (pᵏ : Iter p) → (pᵏ Iter⇔ pᵏ) → Val (1/# p)
+  ⋆ :       Val 𝟙
+  inl :     {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
+  inr :     {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
+  [_,_] :   {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
+  comb :    {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) →  Val (# p)
+  1/comb :  {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) → Val (1/# p)
 \end{code}}}}
 
 \noindent The first four lines define the conventional values for the
-unit, sum, and product types. The last two lines deserve some
-explanation and examples. Values of type $\order{p}$ are iterates of
-$p$. Here are some examples:
-
-{\setlength{\mathindent}{0cm}
-\medskip
-{\footnotesize{
-\begin{code}
-𝟛 : U
-𝟛 = (𝟙 ⊕ 𝟙) ⊕ 𝟙
-
-a₂ : 𝟛 ⟷ 𝟛
-a₂ = Prim swap₊ ⊕ id⟷ 
-
-v₀ v₁ v₂ v₃ v₄ v₅ : Val (# a₂)
-v₀ = comb < + 0 , id⟷ , id⇔ > 
-v₁ = comb < + 0 , id⟷ ◎ id⟷ , idr◎l > 
-v₂ = comb < -[1+ 1 ] ,
-            id⟷ , 
-            trans⇔ split⊕-id⟷
-            (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
-            (trans⇔ hom⊕◎⇔ id⇔)) >
-v₃ = comb < + 2 ,
-            id⟷ ,
-            trans⇔ split⊕-id⟷
-            (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
-            (trans⇔ hom⊕◎⇔ (id⇔ ⊡ idr◎r))) >
-v₄ = comb < -[1+ 0 ] , a₂ , id⇔ > 
-v₅ = comb < + 1 , a₂ , idr◎r > 
-\end{code}}}}
-
-\noindent Since $a_2$ has order 2, there are only two distinguishable
-values of type $\order{a_2}$. The values $v_0$, $v_1$, $v_2$, and
-$v_3$ are all equivalent to $a_2^0$ which is equivalent
-\AgdaInductiveConstructor{id⟷}. The values $v_4$ and $v_5$ are both
-equivalent to $a_2^1$ which is equivalent to $a_2$.
+unit, sum, and product types. The last two lines define values of type
+$\order{p}$ and $\iorder{p}$ as iterates of $p$. In the case of
+$\order{p}$ the iterates are interpreted as ``\emph{programs}'' that
+can act on other values and in the case of $\iorder{p}$ the iterates
+are interpreted as ``\emph{quotients}'' that capture similarities in
+values.
 
 
 \amr{wavefront}
