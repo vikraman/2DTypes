@@ -393,50 +393,14 @@ are interpreted as ``\emph{symmetries}'' that capture similarities in
 values. Note that if $p$ has order, say 3, then there are 3 distinct
 values of type $\order{p}$ and 3 distinct values of $\iorder{p}$. The
 values of type $\order{p}$ apply $p$ for 0, 1, or 2 times to given
-value. The values of type $\iorder{p}$ represent the three ``thirds''
-of $p$. If the full action of applying $p$ to a value is thought of as
-a rotation for example, then applying each third would correspond to
-1/3 of a rotation. 
+value. The values of type $\iorder{p}$, say $x$, $y$, and $z$,
+represent the three ``thirds'' of $p$, so that applying $x(y(z(v)))$
+has the same effect as applying $p(v)$.
 
-%%%%%%%
-\subsection{Operational Semantics}
-
-\begin{code}
-prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → Val T₁ → Val T₂
-prim unite₊l (inl ())
-prim unite₊l (inr v) = v
-prim uniti₊l v = inr v
-prim unite₊r (inl v) = v
-prim unite₊r (inr ())
-prim uniti₊r v = inl v
-prim swap₊ (inl v) = inr v
-prim swap₊ (inr v) = inl v
-prim assocl₊ (inl v) = inl (inl v)
-prim assocl₊ (inr (inl v)) = inl (inr v)
-prim assocl₊ (inr (inr v)) = inr v
-prim assocr₊ (inl (inl v)) = inl v
-prim assocr₊ (inl (inr v)) = inr (inl v)
-prim assocr₊ (inr v) = inr (inr v)
-prim unite⋆l [ ⋆ , v ] = v
-prim uniti⋆l v = [ ⋆ , v ]
-prim unite⋆r [ v , ⋆  ] = v
-prim uniti⋆r v = [ v , ⋆ ]
-prim swap⋆ [ v₁ , v₂ ] = [ v₂ , v₁ ]
-prim assocl⋆ [ v₁ , [ v₂ , v₃ ] ] = [ [ v₁ , v₂ ] , v₃ ]
-prim assocr⋆ [ [ v₁ , v₂ ] , v₃ ] = [ v₁ , [ v₂ , v₃ ] ]
-prim absorbr [ () , v ]
-prim absorbl [ v , () ]
-prim factorzr ()
-prim factorzl ()
-prim dist [ inl v , v₁ ] = inl ([ v , v₁ ])
-prim dist [ inr v , v₁ ] = inr ([ v , v₁ ])
-prim factor (inl [ v , v₁ ]) = [ inl v , v₁ ]
-prim factor (inr [ v , v₁ ]) = [ inr v , v₁ ]
-prim distl [ v , inl v₁ ] = inl ([ v , v₁ ])
-prim distl [ v , inr v₁ ] = inr ([ v , v₁ ])
-prim factorl (inl [ v , v₁ ]) = [ v , inl v₁ ]
-prim factorl (inr [ v , v₁ ]) = [ v , inr v₁ ] 
-\end{code}
+Given the definitions of combinators and values, we can directly
+implement the operational semantics of Fig.~\ref{opsem}. We will
+however present a more involved operational semantics once we
+introduce additional combinators.
 
 %%%%%%%
 \subsection{Additional Combinators}
