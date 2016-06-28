@@ -1,3 +1,4 @@
+{-# OPTIONS --without-K #-}
 module 2D.ProgMorphisms where
 
 open import 2D.Types

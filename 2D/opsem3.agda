@@ -32,6 +32,7 @@ open import 2D.Order
 open import 2D.Iter
 open import 2D.Sing
 open import 2D.ProgMorphisms
+open import 2D.Power
 
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
@@ -79,8 +80,8 @@ mutual
   𝓐𝓹 ap⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹 (Iter.q x) v₁) ]
   𝓐𝓹 ap⁻¹⟷ v = {!!}
   𝓐𝓹 (η- c) (𝟙ₚ x) = [ (1/comb ⟪ c , id⇔ ⟫) , (comb x) ]
-  𝓐𝓹 (η+ c) v = {!!}
-  𝓐𝓹 (ε+ c) v = {!!}
+  𝓐𝓹 (η+ c) (𝟙ₚ x) = [ (comb x) , (1/comb ⟪ c , id⇔ ⟫) ]
+  𝓐𝓹 (ε+ c) [ comb x , 1/comb x₁ ] = 𝟙ₚ x
   𝓐𝓹 (ε- c) [ 1/comb x , comb x₁ ] = 𝟙ₚ x₁
   𝓐𝓹 (unite⋆l# c) v = {!!}
   𝓐𝓹 (uniti⋆l# c) v = {!!}
@@ -123,7 +124,7 @@ mutual
   𝓐𝓹⁻¹ (c ⊗ c₁) v = {!!}
   𝓐𝓹⁻¹ foldSwap v = {!!}
   𝓐𝓹⁻¹ unfoldSwap v = {!!}
-  𝓐𝓹⁻¹ ap⟷ v = {!!}
+  𝓐𝓹⁻¹ ap⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
   𝓐𝓹⁻¹ ap⁻¹⟷ v = {!!}
   𝓐𝓹⁻¹ (η- c) [ v , comb x ] = 𝟙ₚ x
   𝓐𝓹⁻¹ (η+ c) v = {!!}
@@ -142,7 +143,9 @@ fwd◎bwd≈id (c ⊕ c₁) v = {!!}
 fwd◎bwd≈id (c ⊗ c₁) v = {!!}
 fwd◎bwd≈id foldSwap v = {!!}
 fwd◎bwd≈id unfoldSwap v = {!!}
-fwd◎bwd≈id ap⟷ v = {!!}
+fwd◎bwd≈id ap⟷ [ comb {t} {p} < i , q , α > , v₁ ] =
+  [,]≈ (#p≈ ⟪ p , id⇔ ⟫ ⟪ p , id⇔ ⟫ (id⇔ ⊡ α ● assoc1g i ● (2! α) ⊡ id⇔))
+  (fwd◎bwd≈id q v₁)
 fwd◎bwd≈id ap⁻¹⟷ v = {!!}
 fwd◎bwd≈id (η- c) [ 1/comb x , comb x₁ ] =
   [,]≈ (1/#p≈ x₁ x₁ (id⇔ ⊡ 2! (Sing.eq x) ● 2! (swapSI x x₁)))
