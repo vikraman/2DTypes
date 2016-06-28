@@ -19,3 +19,7 @@ _∘S_ : {τ : U} {p : τ ⟷ τ} → Sing p → Sing p → Sing p
 -}
 _∘S_ : {τ : U} {p : τ ⟷ τ} → Sing p → Sing p → Sing p
 s ∘S _ = s
+
+-- all Sings are the same
+sing⇔ : {τ : U} {p : τ ⟷ τ} (q r : Sing p) → Sing.p' q ⇔ Sing.p' r
+sing⇔ {_} {_} ⟪ _ , α ⟫ ⟪ _ , β ⟫ = α ● 2! β

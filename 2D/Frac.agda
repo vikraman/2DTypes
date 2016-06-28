@@ -47,7 +47,7 @@ orderC {τ} p = record {
    ; _≡_ = _≡#_
    ; id  = id#p
    ; _∘_ = _∘#_
-   ; assoc = λ {_} {_} {_} {_} {f} {g} {h} → {!!}
+   ; assoc = λ {_} {_} {_} {_} {f} {g} {h} → assoc# {f = f} {g} {h}
    ; identityˡ = λ {_} {_} {m} → id#pˡ {m = m}
    ; identityʳ = λ {_} {_} {m} → id#pʳ {m = m}
    ; equiv = record
@@ -55,7 +55,7 @@ orderC {τ} p = record {
      ; sym = λ {m₁} {m₂} c → sym#p {m₁ = m₁} {m₂} c
      ; trans = λ {i} {j} {k} i≡j j≡k → trans#p {i = i} {j} {k} i≡j j≡k
    }
-   ; ∘-resp-≡ = λ c₁ c₂ → {!!}
+   ; ∘-resp-≡ = λ {_} {_} {_} {f} {g} {h} {i} c₁ c₂ → ∘#-resp-≡# {f = f} {g} {h} {i} c₁ c₂
    }
    where
      open Sing
@@ -79,10 +79,10 @@ open import Data.Integer as ℤ hiding (∣_∣)
 
 orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (orderC p)
 orderG {τ} p = record {
-    _⁻¹ = {!!} -- 2!
-  ; iso = record {
-        isoˡ = {!!}
-      ; isoʳ = {!!}
+    _⁻¹ = sym⇔#p
+  ; iso = λ {a} {b} {f} → record {
+        isoˡ = isoˡ#p {τ} {p} {a} {b} {f}
+      ; isoʳ = isoʳ#p {eq = f}
       }
   }
 
@@ -119,13 +119,11 @@ open import 2D.Order
 ... | ord n n≥1 _ = n ÷1
 ∣ 1/# p ∣ with order p
 ... | ord n n≥1 _ = (1÷ n) {n≥1}
-∣ 𝟙# p ∣ = + 1 ÷ 1 -- slight cheat, as this is really p / p.
+∣ 𝟙# p ∣ = + 1 ÷ 1 -- slight cheat, as this is really order p / order p.
 
 
 ------------------------------------------------------------------------------
 -- Values
 
 V : (T : U) → Set
-V T = let ℂ , _ = ⟦ T ⟧
-          open Category ℂ
-      in Obj
+V T = Category.Obj (proj₁ ⟦ T ⟧)

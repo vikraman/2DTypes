@@ -87,6 +87,22 @@ id#pʳ : {τ : U} {p : τ ⟷ τ} {a b : Iter p} {m : a ⇔# b} → (m ∘# id#p
 id#pʳ {p = p} {m = mor#p ⟪ p' , eq ⟫ ⟪ p'' , eq₁ ⟫ χ} = record
   { p⇔q = id⇔ ; r⇔q = eq₁ ● 2! eq ; r⇔s = id⇔ }
 
+assoc# : {τ : U} {p : τ ⟷ τ} {a b c d : Iter p} {f : a ⇔# b} {g : b ⇔# c} {h : c ⇔# d} →
+  ((h ∘# g) ∘# f) ≡# (h ∘# (g ∘# f))
+assoc# {f = mor#p q r χ} {mor#p q₁ r₁ χ₁} {mor#p q₂ r₂ χ₂} = record
+  { p⇔q = id⇔ ; r⇔q = sing⇔ r₂ q₂ ; r⇔s = id⇔ }
+
+-- because composition is forgetful, second argument is irrelevant!
+∘#-resp-≡# : {τ : U} {p : τ ⟷ τ} {a b c : Iter p} {f h : b ⇔# c} {g i : a ⇔# b} →
+  f ≡# h → g ≡# i → (f ∘# g) ≡# (h ∘# i)
+∘#-resp-≡# eq _ = eq
+
+isoˡ#p : {τ : U} {p : τ ⟷ τ} {a b : Iter p} { eq : a ⇔# b} → ((sym⇔#p eq) ∘# eq) ≡# id#p {p^i = b}
+isoˡ#p {eq = mor#p q r _} = record { p⇔q = Sing.eq r ; r⇔q = Sing.eq q ; r⇔s = Sing.eq q }
+
+isoʳ#p : {τ : U} {p : τ ⟷ τ} {a b : Iter p} { eq : a ⇔# b} → (eq ∘# (sym⇔#p eq)) ≡# id#p {p^i = b}
+isoʳ#p {eq = mor#p q r _} = record { p⇔q = Sing.eq q ; r⇔q = Sing.eq r ; r⇔s = Sing.eq r }
+
 ----------------------------------------------------------------------------
 -- for #1/p
 
