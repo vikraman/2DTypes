@@ -41,6 +41,13 @@ lower (-[1+_] ℕ.zero) (-[1+_] n) = id⇔
 lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
   (id⇔ ⊡ lower (-[1+ m ]) (-[1+ n ])) ● assoc◎l
 
+-- more generally
+assoc1g : {τ : U} → {p : τ ⟷ τ} → (i : ℤ) →  (p ◎ (p ^ i)) ⇔ ((p ^ i) ◎ p)
+assoc1g (+_ n) = assoc1 n
+assoc1g (-[1+_] ℕ.zero) = linv◎l ● rinv◎r
+assoc1g (-[1+_] (suc n)) = assoc◎l ● linv◎l ⊡ id⇔ ● idl◎l ●
+  (2! (assoc1- n ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ rinv◎l ● idr◎l))
+
 ^⇔! : {τ : U} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ.- k)) ⇔ ! (p ^ k)
 ^⇔! (+_ ℕ.zero) = id⇔
 -- need to dig deeper, as we end up negating

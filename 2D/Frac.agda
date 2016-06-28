@@ -20,6 +20,7 @@ open import Function
 open import 2D.Power
 open import 2D.Sing
 open import 2D.Iter
+open import 2D.ProgMorphisms
 
 discreteC : Set → Category zero zero zero
 discreteC S = record { Obj = S
@@ -39,31 +40,12 @@ discreteG S = record { _⁻¹ = sym
                      ; iso = record { isoˡ = tt ; isoʳ = tt }
                      }
 
-record _⇔#_ {τ : U} {p : τ ⟷ τ} (p^i : Iter p) (p^j : Iter p) : Set where
-  constructor mor#p
-  field
-    q : Sing p
-    r : Sing p
-    χ : (Sing.p' q ◎ Iter.q p^i) ⇔ (Iter.q p^j ◎ Sing.p' r)
-
-record _⇔1/#_ {τ : U} {p : τ ⟷ τ} (p^i : Sing p) (p^j : Sing p) : Set where
-  field
-    q : Iter p
-    r : Iter p
-    χ : Iter.q q ◎ Sing.p' p^i ⇔ Sing.p' p^j ◎ Iter.q r
-
-record Equiv {τ : U} (p q r s : τ ⟷ τ) : Set where
-  field
-    p⇔q : p ⇔ q
-    q⇔r : q ⇔ r
-    r⇔s : r ⇔ s
-
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Iter p
    ; _⇒_ = _⇔#_
-   ; _≡_ = λ c₁ c₂ → Equiv (p' (q c₁)) (p' (q c₂)) (p' (r c₁)) (p' (r c₂))
-   ; id = λ { { < _ , q , α > } → mor#p ⟪ p , id⇔ ⟫ ⟪ p , id⇔ ⟫ {!!} }
+   ; _≡_ = _≡#_
+   ; id  = id#p
    ; _∘_ = λ c₁ c₂ → mor#p ((q c₁) ∘S (q c₂)) ((r c₁) ∘S (r c₂)) {!!}
    ; assoc = {!!}
    ; identityˡ = {!!}
