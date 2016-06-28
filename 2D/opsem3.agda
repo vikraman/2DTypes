@@ -7,7 +7,7 @@ open import Universe using (Universe)
 open import Data.Empty
 open import Data.Bool
 open import Data.Sum hiding ([_,_])
-open import Data.Product
+open import Data.Product hiding (<_,_>;,_)
 
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
@@ -71,51 +71,23 @@ prim◎prim⁻¹≡id c v = {!!}
 mutual
   {-# TERMINATING #-}
   𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₁ → Val T₂
-  𝓐𝓹 (Prim x) v = {!!}
-  𝓐𝓹 (c ◎ c₁) v = {!!}
-  𝓐𝓹 (c ⊕ c₁) v = {!!}
-  𝓐𝓹 (c ⊗ c₁) v = {!!}
+  𝓐𝓹 (Prim x) v = prim x v
+  𝓐𝓹 (c ◎ c₁) v = 𝓐𝓹 c₁ (𝓐𝓹 c v)
+  𝓐𝓹 (c ⊕ c₁) (inl v) = inl (𝓐𝓹 c v)
+  𝓐𝓹 (c ⊕ c₁) (inr v) = inr (𝓐𝓹 c₁ v)
+  𝓐𝓹 (c ⊗ c₁) [ v , w ] = [ 𝓐𝓹 c v , 𝓐𝓹 c₁ w ]
   𝓐𝓹 foldSwap v = {!!}
   𝓐𝓹 unfoldSwap v = {!!}
   𝓐𝓹 ap⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹 (Iter.q x) v₁) ]
-  𝓐𝓹 ap⁻¹⟷ v = {!!}
+  𝓐𝓹 ap⁻¹⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
   𝓐𝓹 (η- c) (𝟙ₚ x) = [ (1/comb ⟪ c , id⇔ ⟫) , (comb x) ]
   𝓐𝓹 (η+ c) (𝟙ₚ x) = [ (comb x) , (1/comb ⟪ c , id⇔ ⟫) ]
   𝓐𝓹 (ε+ c) [ comb x , 1/comb x₁ ] = 𝟙ₚ x
   𝓐𝓹 (ε- c) [ 1/comb x , comb x₁ ] = 𝟙ₚ x₁
-  𝓐𝓹 (unite⋆l# c) v = {!!}
-  𝓐𝓹 (uniti⋆l# c) v = {!!}
-  𝓐𝓹 (unite⋆r# c) v = {!!}
-  𝓐𝓹 (uniti⋆r# c) v = {!!}
-{-  prim c v
-  𝓐𝓹 (p ◎ q) v = 𝓐𝓹 q (𝓐𝓹 p v)
-  𝓐𝓹 (p ⊕ q) (inj₁ v , av) =
-    case (𝓐𝓹 p (v , av)) of λ { (v' , av') → (inj₁ v') , av' }
-  𝓐𝓹 (p ⊕ q) (inj₂ v , av) =
-    case (𝓐𝓹 q (v , av)) of λ { (v' , av') → (inj₂ v') , av' }
-  𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , (av₁ , av₂)) with ((𝓐𝓹 p (v₁ , av₁)) , (𝓐𝓹 q (v₂ , av₂)))
-  𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , av₁ , av₂) | (v₁' , av₁') , (v₂' , av₂') = (v₁' , v₂') , (av₁' , av₂')
-  𝓐𝓹 (η+ p) v = ((perm (+ 1) p idr◎r , tt) , (id⇔ , perm (+ 1) p idr◎r))
-  𝓐𝓹 (η- p) v = ((tt , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
-  𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) =
-    if ((perm i q α) ⇔? (perm j r γ))
-       then (tt , refl)
-       else 𝓐𝓹 (ε+ p) ((perm i q α , tt) , (β , perm j r γ)) -- loop forever
-  𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β)) =
-    if ((perm i q α) ⇔? (perm j r γ))
-       then (tt , refl)
-       else 𝓐𝓹 (ε- p) ((tt , perm i q α) , (perm j r γ , β))
-  𝓐𝓹 foldSwap (inj₁ tt , av) = (perm (+ 0) (Prim id⟷) id⇔ , id⇔)
-  𝓐𝓹 foldSwap (inj₂ tt , av) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
-  𝓐𝓹 unfoldSwap (v , av) =
-    if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
-       then (inj₁ tt , refl)
-       else (inj₂ tt , refl)
-  𝓐𝓹 ap⟷ ((perm iter q α , v) , (av₁ , av₂)) =
-    case (𝓐𝓹 q (v , av₂)) of λ { (v' , av₂') → (perm iter q α , v') , (av₁ , av₂') } 
-  𝓐𝓹 ap⁻¹⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹⁻¹ p' (v , av₂))
-  ... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
--}
+  𝓐𝓹 (unite⋆l# c) [ v , v₁ ] = v₁
+  𝓐𝓹 (uniti⋆l# c) v = [ (𝟙ₚ ( < (+ 1) , c , idr◎r > )) , v ]
+  𝓐𝓹 (unite⋆r# c) [ v , v₁ ] = v
+  𝓐𝓹 (uniti⋆r# c) v = [ v , (𝟙ₚ < + 1 , c , idr◎r >) ]
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₂ → Val T₁
   𝓐𝓹⁻¹ (Prim x) v = {!!}
@@ -127,9 +99,9 @@ mutual
   𝓐𝓹⁻¹ ap⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
   𝓐𝓹⁻¹ ap⁻¹⟷ v = {!!}
   𝓐𝓹⁻¹ (η- c) [ v , comb x ] = 𝟙ₚ x
-  𝓐𝓹⁻¹ (η+ c) v = {!!}
-  𝓐𝓹⁻¹ (ε+ c) v = {!!}
-  𝓐𝓹⁻¹ (ε- c) v = {!!}
+  𝓐𝓹⁻¹ (η+ c) [ comb x , v₁ ] = 𝟙ₚ x
+  𝓐𝓹⁻¹ (ε+ c) (𝟙ₚ x) = [ (comb x) , (1/comb ⟪ c , id⇔ ⟫) ]
+  𝓐𝓹⁻¹ (ε- c) (𝟙ₚ x) = [ (1/comb ⟪ c , id⇔ ⟫) , (comb x) ]
   𝓐𝓹⁻¹ (unite⋆l# c) v = {!!}
   𝓐𝓹⁻¹ (uniti⋆l# c) v = {!!}
   𝓐𝓹⁻¹ (unite⋆r# c) v = {!!}
@@ -150,9 +122,11 @@ fwd◎bwd≈id ap⁻¹⟷ v = {!!}
 fwd◎bwd≈id (η- c) [ 1/comb x , comb x₁ ] =
   [,]≈ (1/#p≈ x₁ x₁ (id⇔ ⊡ 2! (Sing.eq x) ● 2! (swapSI x x₁)))
        (#p≈ x x (swapSI x x₁))
-fwd◎bwd≈id (η+ c) v = {!!}
-fwd◎bwd≈id (ε+ c) v = {!!}
-fwd◎bwd≈id (ε- c) v = {!!}
+fwd◎bwd≈id (η+ c) [ comb x , 1/comb x₁ ] =
+  [,]≈ (#p≈ x₁ x₁ (swapSI x₁ x))
+       (1/#p≈ x x {!!})
+fwd◎bwd≈id (ε+ c) (𝟙ₚ x) = 𝟙ₚ≈ {p₁ = x} {x} x x id⇔ -- trivial?
+fwd◎bwd≈id (ε- c) (𝟙ₚ x) = 𝟙ₚ≈ {p₁ = x} {x} x x id⇔
 fwd◎bwd≈id (unite⋆l# c) v = {!!}
 fwd◎bwd≈id (uniti⋆l# c) v = {!!}
 fwd◎bwd≈id (unite⋆r# c) v = {!!}
