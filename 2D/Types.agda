@@ -5,6 +5,8 @@ infix 60 _⊗_
 infix  30 _⟷_
 infix  30 _⇔_
 infixr 50 _◎_
+infixr 70 _⊡_
+infixr 60 _●_
 
 -- The treatment of η and ε follows
 -- https://en.wikipedia.org/wiki/Compact_closed_category
@@ -121,7 +123,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (! c ◎ c)
   linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ Prim id⟷
   linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (c ◎ ! c)
-  trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
+  _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
     (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} →
     (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
@@ -162,7 +164,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! linv◎r = linv◎l
 2! id⇔ = id⇔
 2! (α ⊡ β) = (2! α) ⊡ (2! β)
-2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
+2! (α ● β) = (2! β) ● (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
 2! ccc₁l = ccc₁r
@@ -227,7 +229,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! rinv◎r = linv◎r
 ⇔! linv◎l = rinv◎l
 ⇔! linv◎r = rinv◎r
-⇔! (trans⇔ q₁ q₂) = trans⇔ (⇔! q₁) (⇔! q₂)
+⇔! (q₁ ● q₂) = (⇔! q₁) ● (⇔! q₂)
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
