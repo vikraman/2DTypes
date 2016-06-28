@@ -529,6 +529,9 @@ prim⁻¹ id⟷ v = v
 %%%%%%%
 \subsection{Additional Combinators}
 
+=======
+\subsection{Additional Combinators}
+
 most combinators do not look at higher components of values:
 indistinguishable values are treated the same!
 
