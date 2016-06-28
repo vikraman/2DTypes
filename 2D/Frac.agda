@@ -47,13 +47,13 @@ orderC {τ} p = record {
    ; _≡_ = _≡#_
    ; id  = id#p
    ; _∘_ = _∘#_
-   ; assoc = {!!}
+   ; assoc = λ {_} {_} {_} {_} {f} {g} {h} → {!!}
    ; identityˡ = λ {_} {_} {m} → id#pˡ {m = m}
    ; identityʳ = λ {_} {_} {m} → id#pʳ {m = m}
    ; equiv = record
      { refl = λ {m} → refl# {m = m}
-     ; sym = λ c → {!!}
-     ; trans = λ c₁ c₂ → {!!}
+     ; sym = λ {m₁} {m₂} c → sym#p {m₁ = m₁} {m₂} c
+     ; trans = λ {i} {j} {k} i≡j j≡k → trans#p {i = i} {j} {k} i≡j j≡k
    }
    ; ∘-resp-≡ = λ c₁ c₂ → {!!}
    }
@@ -128,4 +128,4 @@ open import 2D.Order
 V : (T : U) → Set
 V T = let ℂ , _ = ⟦ T ⟧
           open Category ℂ
-      in Σ[ v ∈ Obj ] (v ⇒ v)
+      in Obj
