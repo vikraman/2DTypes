@@ -238,6 +238,13 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! ccc₂l = ccc₁l
 ⇔! ccc₂r = ccc₁r
 
+-- convenient lemma
+
+open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+
+≡⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ≡ q → (p ⇔ q)
+≡⇒⇔ refl = id⇔
+
 --
 
 open import Data.Product

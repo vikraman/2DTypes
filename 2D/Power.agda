@@ -2,6 +2,7 @@ module 2D.Power where
 
 open import Data.Nat using (ℕ; suc)
 open import Data.Integer as ℤ
+open import Relation.Binary.PropositionalEquality using (_≡_; subst)
 
 open import 2D.Types
 
@@ -48,6 +49,19 @@ assoc1g (-[1+_] ℕ.zero) = linv◎l ● rinv◎r
 assoc1g (-[1+_] (suc n)) = assoc◎l ● linv◎l ⊡ id⇔ ● idl◎l ●
   (2! (assoc1- n ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ rinv◎l ● idr◎l))
 
+open import Data.Integer.Properties renaming (commutativeRing to ℤcr)
+open import Algebra
+open import Algebra.Structures
+
+-- and even more generally.  Could do proof without subst, but this is simpler.
+comm-i-j : {τ : U} → {p : τ ⟷ τ} → (i j : ℤ) →  ((p ^ i ) ◎ (p ^ j)) ⇔ ((p ^ j) ◎ (p ^ i))
+comm-i-j {_} {p} i j =
+  2! (lower i j) ● subst (λ k → p ^ (i ℤ.+ j) ⇔ p ^ k) (+-comm i j) (id⇔ {c = p ^ (i ℤ.+ j)}) ●
+  lower j i
+  where
+    module cr = CommutativeRing ℤcr
+    open cr
+    
 ^⇔! : {τ : U} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ.- k)) ⇔ ! (p ^ k)
 ^⇔! (+_ ℕ.zero) = id⇔
 -- need to dig deeper, as we end up negating

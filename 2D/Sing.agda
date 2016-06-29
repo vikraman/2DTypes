@@ -23,3 +23,7 @@ s ∘S _ = s
 -- all Sings are the same
 sing⇔ : {τ : U} {p : τ ⟷ τ} (q r : Sing p) → Sing.p' q ⇔ Sing.p' r
 sing⇔ {_} {_} ⟪ _ , α ⟫ ⟪ _ , β ⟫ = α ● 2! β
+
+-- From a combinator to a Sing
+sing : {τ : U} (p : τ ⟷ τ) → Sing p
+sing p = ⟪ p , id⇔ ⟫
