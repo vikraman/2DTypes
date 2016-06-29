@@ -3,10 +3,10 @@
 module 2D.opsem3 where
 
 open import Data.Sum hiding ([_,_])
-open import Data.Product hiding (<_,_>;,_)
+open import Data.Product hiding (<_,_>;,_;_,_)
 
 open import Data.Unit using (⊤; tt)
-open import Data.Fin as F hiding (#_)
+open import Data.Fin as F hiding (#_;_<_)
 open import Data.Nat using (ℕ; suc; _≥_) renaming (_+_ to _ℕ+_)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
@@ -95,27 +95,27 @@ fwd◎bwd≈id (c ⊕ c₁) (inl v) = inj₁≈ (fwd◎bwd≈id c v)
 fwd◎bwd≈id (c ⊕ c₁) (inr v) = inj₂≈ (fwd◎bwd≈id c₁ v)
 fwd◎bwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (fwd◎bwd≈id c v) (fwd◎bwd≈id c₁ v₁)
 fwd◎bwd≈id (foldSwap {t}) (comb < k , q , α >) with mod2 k | swap₊-mod2 {t} k
-... | zero | pf = #p≈ (idr◎l ● 2! (((α ● pf) ⊡ id⇔) ● idl◎l ))
-... | suc zero | pf = #p≈ (2! ((α ● pf ● idr◎l) ⊡ id⇔))
+... | zero | pf = #p≈ (zeroth (Prim swap₊)) < k , q , α > (idl◎l ● ⇔! (α ● pf))
+... | suc zero | pf = #p≈ {!!} {!!} {!!} -- 2! ((α ● pf ● idr◎l) ⊡ id⇔))
 ... | suc (suc ()) | _ 
 fwd◎bwd≈id unfoldSwap (inl ⋆) = refl≈ refl
 fwd◎bwd≈id unfoldSwap (inr ⋆) = refl≈ refl
 fwd◎bwd≈id ap⟷ [ comb {t} {p} < i , q , α > , v₁ ] =
-  [,]≈ (#p≈ (id⇔ ⊡ α ● assoc1g i ● (2! α) ⊡ id⇔))
+  [,]≈ (#p≈ {!!} {!!} {!!}) -- (id⇔ ⊡ α ● assoc1g i ● (2! α) ⊡ id⇔))
   (fwd◎bwd≈id q v₁)
 fwd◎bwd≈id ap⁻¹⟷ [ comb x , v₁ ] = [,]≈ (refl≈ refl) {!!}
 fwd◎bwd≈id (η- c) [ 1/comb x , comb x₁ ] =
-  [,]≈ (1/#p≈ x₁ x₁ (id⇔ ⊡ 2! (Sing.eq x) ● 2! (swapSI x x₁)))
-       (#p≈ (swapSI (sing c) x₁))
+  [,]≈ {!!} -- (1/#p≈ x₁ x₁ (id⇔ ⊡ 2! (Sing.eq x) ● 2! (swapSI x x₁)))
+       {!!} -- (#p≈ (swapSI (sing c) x₁))
 fwd◎bwd≈id (η+ c) [ comb x , 1/comb x₁ ] =
-  [,]≈ (#p≈ (swapSI (sing c) x))
-       (1/#p≈ x x (id⇔ ⊡ 2! (Sing.eq x₁) ● 2! (swapSI x₁ x)))
-fwd◎bwd≈id (ε+ c) (𝟙ₚ x) = 𝟙ₚ≈ x x x x id⇔ -- trivial?  See below!
+  [,]≈ {!!} -- (#p≈ (swapSI (sing c) x))
+       {!!} -- (1/#p≈ x x (id⇔ ⊡ 2! (Sing.eq x₁) ● 2! (swapSI x₁ x)))
+fwd◎bwd≈id (ε+ c) (𝟙ₚ x) = {!!} -- 𝟙ₚ≈ x x x x id⇔ -- trivial?  See below!
   -- note that this means that we get x back on the nose.
 fwd◎bwd≈id (ε- c) (𝟙ₚ x) = refl≈ refl -- 𝟙ₚ≈ {p₁ = x} {x} x x id⇔
 fwd◎bwd≈id (unite⋆l# c) v = refl≈ refl
-fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ ii , v₁ ] = [,]≈ (𝟙ₚ≈ ii (iter c) (iter c) ii id⇔) (refl≈ refl)
+fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ ii , v₁ ] = [,]≈ (𝟙ₚ≈ {!!} {!!} {!!} {!!}) (refl≈ refl)
 fwd◎bwd≈id (unite⋆r# c) v = refl≈ refl
-fwd◎bwd≈id (uniti⋆r# c) [ p , 𝟙ₚ x ] = [,]≈ (refl≈ refl) (𝟙ₚ≈ x (iter c) (iter c) x id⇔)
+fwd◎bwd≈id (uniti⋆r# c) [ p , 𝟙ₚ x ] = [,]≈ (refl≈ refl) (𝟙ₚ≈ {!!} {!!} {!!} {!!})
 
 
