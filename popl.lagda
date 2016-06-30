@@ -153,14 +153,31 @@ module popl where
 \titlebanner{Fractional Types and Negative Information}
 \preprintfooter{\today\ \currenttime}
 
-\title{Fractional Types and Negative Information} 
+\title{Fractional Types} 
 \authorinfo{Anonymous}{}{}
-%% Chao-Hong Chen, Vikraman Choudhury, Robert Rose,
+%% Chao-Hong Chen, Vikraman Choudhury,
 %% Jacques Carette, Amr Sabry
 \maketitle
 
 \begin{abstract}
-\amr{todo}
+We exhibit types whose natural cardinality is fractional.
+More precisely, we show that the Groupoid cardinality (as
+defined by Baez-Dolan) of the denotation of the type of
+a singleton reversible program $p$ with exactly $k$ distinct
+proofs of reversibility has cardinality $1/k$.  We further
+show that this type is naturally a multiplicative inverse
+to the type of all iterates $p ^ i$ of that reversible
+program.
+
+We situate this work as an extension of a larger reversible
+programming language ($Π$), and show that this extension
+is also reversible.  Interestingly, this extension supports
+first-class functions as well as natural analogues of
+operations coming from traced monoidal categories.  We
+emphasize that the key ingredients are reversibility and
+proof relevance: cardinality $1/k$ arises from having
+exactly $k$ proofs of reversibility.  All results have
+been formalized in Agda. 
 \end{abstract}
 
 %% \category{CR-number}{subcategory}{third-level}
