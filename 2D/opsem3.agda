@@ -17,7 +17,7 @@ open import Relation.Binary.PropositionalEquality
   using (_≡_; refl; trans; subst; cong; sym; cong₂)
 
 open import 2D.Types
-open import 2D.Order
+-- open import 2D.Order
 open import 2D.Iter
 open import 2D.Sing
 open import 2D.ProgMorphisms
