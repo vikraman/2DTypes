@@ -88,34 +88,46 @@ swap₊-mod2 (-[1+_] ℕ.zero) = idr◎r
 swap₊-mod2 (-[1+_] (suc ℕ.zero)) = rinv◎l
 swap₊-mod2 (-[1+_] (suc (suc n))) = assoc◎l ● rinv◎l ⊡ id⇔ ● idl◎l ● swap₊-mod2 -[1+ n ]
 
-fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
-fwd◎bwd≈id (Prim x) v = refl≈ (prim◎prim⁻¹≡id x v)
-fwd◎bwd≈id (c ◎ c₁) v = {!fwd◎bwd≈id c (𝓐𝓹⁻¹ c₁ v)!} -- is going to need cong≈ and trans≈
-fwd◎bwd≈id (c ⊕ c₁) (inl v) = inj₁≈ (fwd◎bwd≈id c v)
-fwd◎bwd≈id (c ⊕ c₁) (inr v) = inj₂≈ (fwd◎bwd≈id c₁ v)
-fwd◎bwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (fwd◎bwd≈id c v) (fwd◎bwd≈id c₁ v₁)
-fwd◎bwd≈id (foldSwap {t}) (comb < k , q , α >) with mod2 k | swap₊-mod2 {t} k
-... | zero | pf = #p≈ (zeroth (Prim swap₊)) < k , q , α > (idl◎l ● ⇔! (α ● pf))
-... | suc zero | pf = #p≈ {!!} {!!} {!!} -- 2! ((α ● pf ● idr◎l) ⊡ id⇔))
-... | suc (suc ()) | _ 
-fwd◎bwd≈id unfoldSwap (inl ⋆) = refl≈ refl
-fwd◎bwd≈id unfoldSwap (inr ⋆) = refl≈ refl
-fwd◎bwd≈id ap⟷ [ comb {t} {p} < i , q , α > , v₁ ] =
-  [,]≈ (#p≈ {!!} {!!} {!!}) -- (id⇔ ⊡ α ● assoc1g i ● (2! α) ⊡ id⇔))
-  (fwd◎bwd≈id q v₁)
-fwd◎bwd≈id ap⁻¹⟷ [ comb x , v₁ ] = [,]≈ (refl≈ refl) {!!}
-fwd◎bwd≈id (η- c) [ 1/comb x , comb x₁ ] =
-  [,]≈ {!!} -- (1/#p≈ x₁ x₁ (id⇔ ⊡ 2! (Sing.eq x) ● 2! (swapSI x x₁)))
-       {!!} -- (#p≈ (swapSI (sing c) x₁))
-fwd◎bwd≈id (η+ c) [ comb x , 1/comb x₁ ] =
-  [,]≈ {!!} -- (#p≈ (swapSI (sing c) x))
-       {!!} -- (1/#p≈ x x (id⇔ ⊡ 2! (Sing.eq x₁) ● 2! (swapSI x₁ x)))
-fwd◎bwd≈id (ε+ c) (𝟙ₚ x) = {!!} -- 𝟙ₚ≈ x x x x id⇔ -- trivial?  See below!
-  -- note that this means that we get x back on the nose.
-fwd◎bwd≈id (ε- c) (𝟙ₚ x) = refl≈ refl -- 𝟙ₚ≈ {p₁ = x} {x} x x id⇔
-fwd◎bwd≈id (unite⋆l# c) v = refl≈ refl
-fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ ii , v₁ ] = [,]≈ (𝟙ₚ≈ {!!} {!!} {!!} {!!}) (refl≈ refl)
-fwd◎bwd≈id (unite⋆r# c) v = refl≈ refl
-fwd◎bwd≈id (uniti⋆r# c) [ p , 𝟙ₚ x ] = [,]≈ (refl≈ refl) (𝟙ₚ≈ {!!} {!!} {!!} {!!})
+postulate
+  cong≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₁} → v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
 
+{-# TERMINATING #-}
+mutual
+  fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
+  fwd◎bwd≈id (Prim x) v = refl≈ (prim◎prim⁻¹≡id x v)
+  fwd◎bwd≈id (c ◎ c₁) v = trans≈ (cong≈ c₁ (fwd◎bwd≈id c (𝓐𝓹⁻¹ c₁ v))) (fwd◎bwd≈id c₁ v)
+  fwd◎bwd≈id (c ⊕ c₁) (inl v) = inj₁≈ (fwd◎bwd≈id c v)
+  fwd◎bwd≈id (c ⊕ c₁) (inr v) = inj₂≈ (fwd◎bwd≈id c₁ v)
+  fwd◎bwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (fwd◎bwd≈id c v) (fwd◎bwd≈id c₁ v₁)
+  fwd◎bwd≈id (foldSwap {t}) (comb < k , q , α >) with mod2 k | swap₊-mod2 {t} k
+  ... | zero | pf = #p≈ (zeroth (Prim swap₊)) < k , q , α > (idl◎l ● ⇔! (α ● pf))
+  ... | suc zero | pf = #p≈ (iter (Prim swap₊)) < k , q , α > (id⇔ ⊡ (⇔! (α ● pf) ● idl◎l) ● rinv◎l) 
+  ... | suc (suc ()) | _ 
+  fwd◎bwd≈id unfoldSwap (inl ⋆) = refl≈ refl
+  fwd◎bwd≈id unfoldSwap (inr ⋆) = refl≈ refl
+  fwd◎bwd≈id ap⟷ [ comb {t} {p} < i , q , α > , v₁ ] =
+    [,]≈ (#p≈ < i , q , α > < i , q , α > linv◎l)
+         (fwd◎bwd≈id q v₁)
+  fwd◎bwd≈id ap⁻¹⟷ [ comb x , v₁ ] = [,]≈ (refl≈ refl) (bwd◎fwd≈id (Iter.q x) v₁)
+  fwd◎bwd≈id (η- c) [ 1/comb x , comb x₁ ] =
+    [,]≈ (1/#p≈ x₁ (sing c) x (id⇔ ⊡ ⇔! (Sing.eq x) ● linv◎l ● linv◎r))
+         (refl≈ refl)
+  fwd◎bwd≈id (η+ c) [ comb x , 1/comb x₁ ] =
+    [,]≈ (refl≈ refl)
+         (1/#p≈ x (sing c) x₁ ((id⇔ ⊡ ⇔! (Sing.eq x₁) ● linv◎l ● linv◎r)))
+  fwd◎bwd≈id (ε+ c) (𝟙ₚ x) = refl≈ refl -- trivial
+    -- note that this means that we get x back on the nose.
+  fwd◎bwd≈id (ε- c) (𝟙ₚ x) = refl≈ refl -- 𝟙ₚ≈ {p₁ = x} {x} x x id⇔
+  fwd◎bwd≈id (unite⋆l# c) v = refl≈ refl
+  fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] =
+    [,]≈ (𝟙ₚ≈  < (+ 1) ℤ+ (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ●
+                                             2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) >
+                                             (iter c) < i , q , α > id⇔)
+         (refl≈ refl)
+  fwd◎bwd≈id (unite⋆r# c) v = refl≈ refl
+  fwd◎bwd≈id (uniti⋆r# c) [ p , 𝟙ₚ < i , q , α > ] =
+   [,]≈ (refl≈ refl)
+        (𝟙ₚ≈  < ℤsuc (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ● 2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) > (iter c) < i , q , α > id⇔)
 
+  bwd◎fwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → (𝓐𝓹⁻¹ c (𝓐𝓹 c v)) ≈ v
+  bwd◎fwd≈id c v = {!!}
