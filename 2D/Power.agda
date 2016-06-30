@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module 2D.Power where
 
 open import Data.Nat using (ℕ; suc)

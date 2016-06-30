@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-} 
+
 module 2D.Types where
 
 infix 50 _⊕_
