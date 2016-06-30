@@ -58,6 +58,7 @@ trans≈ ([,]≈ eq₁ eq₂) ([,]≈ eq₃ eq₄) = [,]≈ (trans≈ eq₁ eq�
 trans≈ (inj₁≈ eq₁) (inj₁≈ eq₂) = inj₁≈ (trans≈ eq₁ eq₂)
 trans≈ (inj₂≈ eq₁) (inj₂≈ eq₂) = inj₂≈ (trans≈ eq₁ eq₂)
 
+{- -- comment out to compile the rest, for now.
 sym≈ : {t : U} → {a b : Val t} → a ≈ b → b ≈ a
 sym≈ ⋆≈ = ⋆≈
 sym≈ (#p≈ < k , q , α > < k₁ , q₁ , α₁ > x) =
@@ -69,6 +70,7 @@ sym≈ (𝟙ₚ≈ p₁ q r x) = 𝟙ₚ≈ {!!} r q {!!} -- you don't want p₁
 sym≈ ([,]≈ e₁ e₂) = [,]≈ (sym≈ e₁) (sym≈ e₂)
 sym≈ (inj₁≈ e) = inj₁≈ (sym≈ e)
 sym≈ (inj₂≈ e) = inj₂≈ (sym≈ e) 
+-}
 
 {--
 α  : q ⇔ .p ^ k
