@@ -64,7 +64,6 @@ sym≈ ⋆≈ = ⋆≈
 sym≈ (#p≈ < k , q , α > < k₁ , q₁ , α₁ > x) =
   #p≈ < k₁ , q₁ , α₁ > < k , q , α >
       ((!!⇔id q₁ ⊡ id⇔) ● ⇔! x)
-      -- (α₁ ⊡ ⇔! α ● (id⇔ ⊡ 2! (^⇔! k) ● {!!}) ● x) 
 sym≈ (1/#p≈ q p₁ p₂ x) = 1/#p≈ q p₂ p₁ ((sing⇔ p₂ p₁ ⊡ ⇔! (sing⇔ p₁ p₂)) ● x)
 sym≈ (𝟙ₚ≈ p₁ q r x) = 𝟙ₚ≈ {!!} r q {!!} -- you don't want p₁, but ! p₁ (as an Iter)
 sym≈ ([,]≈ e₁ e₂) = [,]≈ (sym≈ e₁) (sym≈ e₂)
@@ -72,11 +71,3 @@ sym≈ (inj₁≈ e) = inj₁≈ (sym≈ e)
 sym≈ (inj₂≈ e) = inj₂≈ (sym≈ e) 
 -}
 
-{--
-α  : q ⇔ .p ^ k
-α₁  : q₁ ⇔ .p ^ k₁
-x  : q ◎ ! q₁ ⇔ Prim id⟷
-
-?0 : q₁ ◎ ! q ⇔ q ◎ ! q₁
-
---}
