@@ -51,6 +51,7 @@
 \newcommand{\refl}{\AgdaInductiveConstructor{refl}}
 \newcommand{\iter}[1]{\textsc{Iter}(#1)}
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
+\newcommand{\distiterplus}[3]{\mathsf{dist^{{\wedge}{+}}}~#1~#2~#3}
 
 \newcommand{\Rule}[4]{
 \makebox{{\rm #1}
@@ -126,6 +127,9 @@ $\displaystyle
 \DeclareUnicodeCharacter{951}{$\eta$}
 \DeclareUnicodeCharacter{956}{$\mu$}
 \DeclareUnicodeCharacter{8703}{\ensuremath{\leftrightarrowtriangle}}
+\DeclareUnicodeCharacter{120792}{$\zt$}
+\DeclareUnicodeCharacter{120793}{$\ot$}
+\DeclareUnicodeCharacter{120795}{$\mathbb{3}$}
 
 \AgdaHide{
 \begin{code}
@@ -851,9 +855,9 @@ circuit terminates with the value $\textsf{id}$.
 %% Sec 5 A new language with fractional types and its denotational semantics (mostly reference to sec 4)
 \input{pifrac.tex}
 %% Sec 6 its operational semantics + pragramatics
-% \input{opsem.tex}
+\input{opsem.tex}
 %% Sec 7 limitations; open problems
-% \input{limitations.tex} 
+\input{limitations.tex} 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}

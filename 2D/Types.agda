@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-} 
+
 module 2D.Types where
 
 infix 50 _⊕_
@@ -29,10 +31,10 @@ mutual
     swap₊   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊕ t₂) (t₂ ⊕ t₁)
     assocl₊ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊕ (t₂ ⊕ t₃))  ((t₁ ⊕ t₂) ⊕ t₃)
     assocr₊ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊕ t₂) ⊕ t₃) (t₁ ⊕ (t₂ ⊕ t₃))
-    unite⋆l :  {t : U} → Prim⟷ (𝟙 ⊗ t) t
-    uniti⋆l :  {t : U} → Prim⟷ t (𝟙 ⊗ t)
-    unite⋆r :  {t : U} → Prim⟷ (t ⊗ 𝟙) t
-    uniti⋆r :  {t : U} → Prim⟷ t (t ⊗ 𝟙)
+    unite⋆l :  {s t : U} → Prim⟷ (𝟙 ⊗ t) t
+    uniti⋆l :  {s t : U} → Prim⟷ t (𝟙 ⊗ t)
+    unite⋆r :  {s t : U} → Prim⟷ (t ⊗ 𝟙) t
+    uniti⋆r :  {s t : U} → Prim⟷ t (t ⊗ 𝟙)
     swap⋆   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊗ t₂) (t₂ ⊗ t₁)
     assocl⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊗ (t₂ ⊗ t₃)) ((t₁ ⊗ t₂) ⊗ t₃)
     assocr⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊗ t₂) ⊗ t₃) (t₁ ⊗ (t₂ ⊗ t₃))
@@ -72,10 +74,10 @@ mutual
 ! (Prim swap₊)     = Prim swap₊
 ! (Prim assocl₊)   = Prim assocr₊
 ! (Prim assocr₊)   = Prim assocl₊
-! (Prim unite⋆l)   = Prim uniti⋆l
-! (Prim uniti⋆l)   = Prim unite⋆l
-! (Prim unite⋆r)   = Prim uniti⋆r
-! (Prim uniti⋆r)   = Prim unite⋆r
+! (Prim (unite⋆l {t}))   = Prim (uniti⋆l {t})
+! (Prim (uniti⋆l {t}))   = Prim (unite⋆l {t})
+! (Prim (unite⋆r {t}))   = Prim (uniti⋆r {t})
+! (Prim (uniti⋆r {t}))   = Prim (unite⋆r {t})
 ! (Prim swap⋆)     = Prim swap⋆
 ! (Prim assocl⋆)   = Prim assocr⋆
 ! (Prim assocr⋆)   = Prim assocl⋆

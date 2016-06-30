@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module 2D.Iter where
 
 open import 2D.Types

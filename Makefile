@@ -1,10 +1,13 @@
 all : popl.pdf
 
 popl.pdf : popl.tex
-	pdflatex popl.tex
+	pdflatex popl.tex 
 
 popl.tex : popl.lagda pibackground.tex groupoid.tex pifrac.tex opsem.tex limitations.tex appendix.tex
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library popl.lagda
+	cd latex/ && \
+	perl ../postprocess-latex.pl ../popl.tex > popl.processed && \
+	mv popl.processed ../popl.tex 
 
 pifrac.tex : pifrac.lagda
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library pifrac.lagda
