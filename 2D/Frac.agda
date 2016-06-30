@@ -95,8 +95,8 @@ orderG {τ} p = record {
                       }
 
 postulate
-  oneC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
-  oneG : {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC p)
+  oneC : ∀ {ℓ₁ ℓ₂ ℓ₃} {τ : U} → (p : τ ⟷ τ) → Category ℓ₁ ℓ₂ ℓ₃
+  oneG : ∀ {ℓ₁ ℓ₂ ℓ₃} {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC {ℓ₁} {ℓ₂} {ℓ₃} {τ} p)
   
 ⟦_⟧ : (τ : U) → El τ
 ⟦ 𝟘 ⟧ = discreteC ⊥ , discreteG ⊥
@@ -117,9 +117,9 @@ open import 2D.Order
 ∣ 𝟙 ∣ = + 1 ÷ 1
 ∣ t₁ ⊕ t₂ ∣ = ∣ t₁ ∣ ℚ.+ ∣ t₂ ∣
 ∣ t₁ ⊗ t₂ ∣ = ∣ t₁ ∣ ℚ.* ∣ t₂ ∣
-∣ # p ∣ with order p
+∣ # p ∣ with orderPostulate p
 ... | ord n n≥1 _ = n ÷1
-∣ 1/# p ∣ with order p
+∣ 1/# p ∣ with orderPostulate p
 ... | ord n n≥1 _ = (1÷ n) {n≥1}
 ∣ 𝟙# p ∣ = + 1 ÷ 1 -- slight cheat, as this is really order p / order p.
 
