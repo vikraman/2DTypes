@@ -3,7 +3,7 @@ module 2D.Frac where
 open import 2D.Types
 
 open import Data.Sum
-open import Data.Product
+open import Data.Product hiding (<_,_>;,_)
 open import Data.Empty
 open import Data.Unit
 
@@ -17,9 +17,10 @@ open import Level hiding (lower)
 
 open import Relation.Binary.PropositionalEquality
 open import Function
-
 open import 2D.Power
-open import 2D.Order
+open import 2D.Sing
+open import 2D.Iter
+open import 2D.ProgMorphisms
 
 discreteC : Set → Category zero zero zero
 discreteC S = record { Obj = S
@@ -39,60 +40,62 @@ discreteG S = record { _⁻¹ = sym
                      ; iso = record { isoˡ = tt ; isoʳ = tt }
                      }
 
--- open import Data.Nat as ℕ
-open import Data.Integer as ℤ hiding (∣_∣)
-
-record Perm {τ : U} (p : τ ⟷ τ) : Set where
-  constructor perm
-  field
-    iter : ℤ
-    p' : τ ⟷ τ
-    p'⇔p^i : p' ⇔ p ^ iter
-
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
-     Obj = Perm p
-   ; _⇒_ = λ { (perm i p₁ _) (perm j p₂ _) → p₁ ⇔ p₂ }
-   ; _≡_ = λ _ _ → ⊤
-   ; id = id⇔
-   ; _∘_ = λ α β → trans⇔ β α
-   ; assoc = tt
-   ; identityˡ = tt
-   ; identityʳ = tt
-   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
-   ; ∘-resp-≡ = λ _ _ → tt
+     Obj = Iter p
+   ; _⇒_ = _⇔#_
+   ; _≡_ = _≡#_
+   ; id  = id#p
+   ; _∘_ = _∘#_
+   ; assoc = λ {_} {_} {_} {_} {f} {g} {h} → assoc# {f = f} {g} {h}
+   ; identityˡ = λ {_} {_} {m} → id#pˡ {m = m}
+   ; identityʳ = λ {_} {_} {m} → id#pʳ {m = m}
+   ; equiv = record
+     { refl = λ {m} → refl# {m = m}
+     ; sym = λ {m₁} {m₂} c → sym#p {m₁ = m₁} {m₂} c
+     ; trans = λ {i} {j} {k} i≡j j≡k → trans#p {i = i} {j} {k} i≡j j≡k
    }
-   where open Perm
+   ; ∘-resp-≡ = λ {_} {_} {_} {f} {g} {h} {i} c₁ c₂ → ∘#-resp-≡# {f = f} {g} {h} {i} c₁ c₂
+   }
+   where
+     open Sing
+     open _⇔#_
+
+open import Data.Integer as ℤ hiding (∣_∣)
 
 1/orderC : (τ : U) → (τ ⟷ τ) → Category _ _ _
-1/orderC τ pp = record { Obj = Perm {τ} (Prim id⟷)
-                       ; _⇒_ = λ _ _ → Perm pp
-                       ; _≡_ = λ { (perm m p _) (perm n q _) → p ⇔ q }
-                       ; id = perm (+ 0) (Prim id⟷) id⇔
-                       ; _∘_ = λ { (perm m p α) (perm n q β) →
-                         perm (m ℤ.+ n) (p ◎ q) (trans⇔ (α ⊡ β) (2! (lower m n))) }
+1/orderC τ pp = record { Obj = ⊤
+                       ; _⇒_ = λ _ _ → Iter pp
+                       ; _≡_ = λ { pp qq  → Iter.q pp ⇔ Iter.q qq }
+                       ; id = < + 0 , Prim id⟷ , id⇔ >
+                       ; _∘_ = λ { < m , p , α > < n , q , β > →
+                         < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
                        ; assoc = assoc◎r
                        ; identityˡ = idl◎l
                        ; identityʳ = idr◎l
-                       ; equiv = record { refl = id⇔ ; sym = 2! ; trans = trans⇔ }
+                       ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
                        ; ∘-resp-≡ = _⊡_
                        }
 
 orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (orderC p)
 orderG {τ} p = record {
-    _⁻¹ = 2!
-  ; iso = record {
-        isoˡ = tt
-      ; isoʳ = tt
+    _⁻¹ = sym⇔#p
+  ; iso = λ {a} {b} {f} → record {
+        isoˡ = isoˡ#p {τ} {p} {a} {b} {f}
+      ; isoʳ = isoʳ#p {eq = f}
       }
   }
 
 1/orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (1/orderC τ p)
-1/orderG {τ} p = record { _⁻¹ = λ { (perm i q eq) →
-                        perm (ℤ.- i) (! q) (trans⇔ (⇔! eq) (2! (^⇔! {p = p} i)))}
+1/orderG {τ} p = record { _⁻¹ = λ { < i , q , eq > →
+                        < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > }
                       ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
                       }
 
+postulate
+  oneC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
+  oneG : {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC p)
+  
 ⟦_⟧ : (τ : U) → El τ
 ⟦ 𝟘 ⟧ = discreteC ⊥ , discreteG ⊥
 ⟦ 𝟙 ⟧ = discreteC ⊤ , discreteG ⊤
@@ -102,9 +105,10 @@ orderG {τ} p = record {
 ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
 ⟦ # p ⟧ = _ , orderG p
 ⟦ 1/# p ⟧ = _ , 1/orderG p
+⟦ 𝟙# p ⟧ = _ , oneG p
 
 open import Rational+ as ℚ
---open import 2D.Order
+open import 2D.Order
 
 ∣_∣ : U → ℚ
 ∣ 𝟘 ∣ = + 0 ÷ 1
@@ -115,12 +119,11 @@ open import Rational+ as ℚ
 ... | ord n n≥1 _ = n ÷1
 ∣ 1/# p ∣ with order p
 ... | ord n n≥1 _ = (1÷ n) {n≥1}
+∣ 𝟙# p ∣ = + 1 ÷ 1 -- slight cheat, as this is really order p / order p.
 
 
 ------------------------------------------------------------------------------
 -- Values
 
 V : (T : U) → Set
-V T = let ℂ , _ = ⟦ T ⟧
-          open Category ℂ
-      in Σ[ v ∈ Obj ] (v ⇒ v)
+V T = Category.Obj (proj₁ ⟦ T ⟧)
