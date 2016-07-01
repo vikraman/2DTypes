@@ -170,7 +170,7 @@ to the type of all iterates $p ^ i$ of that reversible
 program.
 
 We situate this work as an extension of a larger reversible
-programming language ($Π$), and show that this extension
+programming language ($\Pi$), and show that this extension
 is also reversible.  Interestingly, this extension supports
 first-class functions as well as natural analogues of
 operations coming from traced monoidal categories.  We
