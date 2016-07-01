@@ -9,7 +9,7 @@ open import 2D.Types
 open import 2D.Iter
 open import 2D.Sing
 open import 2D.Power
-open import 2D.ProgMorphisms using (swapSI)
+open import 2D.SingIter
 
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
