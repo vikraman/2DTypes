@@ -1,0 +1,57 @@
+There is still some outstanding code that needs done.  To be thorough, 
+here is the status of each file in 2D.  With - I indicated things that 
+must be done, and with ~, things that would be nice but are not 
+critical.  At the end, I distribute the open tasks around
+
+1.  Types - done
+2. Power - done
+~ could probably be cleaned up, and better names found
+3. Iter - done
+4. Sing - done
+5. ProgMorphisms
+- swapSI should be moved to its own file
+- Equiv is wrong.
+- the equivalences in here should be exactly the same as those in Types
+- which means that most of the properties needed here are already proved 
+in Types
+6. Val
+- sym~~ needs to be done (two holes)
+~ potential clean-up: some of the arguments to some of the ~~ 
+combinators can be made implicit
+~ add IsEquivalence and Setoid?
+7. Order2Lemmas - done
+8. opsem3
+- rename to opsem ?
+- bwd.fwd~~id needs to be completed
+- cong~~ and inverse need to be implemented
+- bwd-coherence needs to be implemented
+- figure out why Agda things Ap and its inverse are non-terminating.  [Bug?]
+9. Frac
+- orderC, orderG, 1/orderC, 1/orderG need to be reimplemented in terms 
+of things in Val and ProgMorphisms
+- oneC, oneG need implemented
+10. Order
+- do we try to implement order?
+
+and for completeness
+11. Equality - obsolete, all this is now in Val
+12. Lemmas - not needed?
+13. Lemmas2 - not needed?
+14. opsem - obsolete
+15. opsem2 - obsolete
+
+===
+
+- Finish ProgMorphisms: Jacques
+- Finish Val : Vikraman
+- Finish opsem3 [bwd.fwd~~id , cong~~ and bwd-coherence]: Vikraman
+- Figure out why Ap is not seen to be terminating: Chao-Hong
+- finish Frac: Chao-Hong
+- implement order: anyone who has time to give it a try!
+
+Please check-in and push often.  If your work depends on other work 
+being completed, go ahead and put some (temporary) postulates in place.
+
+If we have time, we might look to prove a further coherence theorem 
+between our two semantics.  I'm not sure how to best phrase it, so 
+that's why I have not put it in the list.
