@@ -220,20 +220,21 @@ described in detail:
   & && [\textit{see Fig.~\ref{pi-combinators2}}]
 \end{array}\]
 
-\noindent Both classes of programs, 1-combinators $c$ and
+\noindent Both classes of programs, 1-combinators $c$, and
 2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT
 sense. The elements $c$ of 1-combinators denote type isomorphisms. The
 elements $\alpha$ of 2-combinators denote equivalences between these
-type isomorphisms. Using the 1-combinators, it is possible to write
-any reversible boolean function and hence encode arbitrary boolean
+type isomorphisms which are sound and complete 1-combinator program
+transformations. Using the 1-combinators, it is possible to write any
+reversible boolean function and hence encode arbitrary boolean
 functions by a technique that goes back to \citet{Toffoli:1980}. The
 2-combinators provide a layer of programs that computes
 semantic-preserving transformations of 1-combinators. As a small
-example, let us abbreviate $\ot \oplus \ot$ as $\mathsf{Bool}$ and
-examine two possible implementations of boolean negation. The first
-directly uses the primitive combinator
+example, let us abbreviate $\ot \oplus \ot$ as the type $\mathbb{2}$
+of booleans and examine two possible implementations of boolean
+negation. The first directly uses the primitive combinator
 $\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to swap the
-two values of type $\mathsf{Bool}$; the second use three consecutive
+two values of type $\mathbb{2}$; the second use three consecutive
 copies of $\swapp$ to achieve the same effect:
 \[\begin{array}{rcl}
 \mathsf{not_1} &=& \swapp \\
@@ -256,8 +257,9 @@ is known to be sound and
 complete~\cite{Fiore:2004,fiore-remarks}. Fig.~\ref{pi-combinators2}
 lists a few of the 2-combinators that we use in this paper. Each
 2-combinator relates two 1-combinators of the same type and witnesses
-their equivalence. The 2-equivalences behave as expected with respect
-to inverses of 1-combinators as shown below. 
+their equivalence. Both 1-combinators and 2-combinators are invertible
+and the 2-combinators behave as expected with respect to inverses of
+1-combinators as shown below.
 
 \begin{proposition}
 For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
@@ -273,9 +275,9 @@ $!c_1 \isotwo ~!c_2$.
 \label{sec:pisem}
 
 We give an operational semantics for the 1-combinators of $\Pi$ which
-represent ``conventional'' programs.  Operationally, the semantics
-consists of a pair of mutually recursive evaluators that take a
-combinator and a value and propagate the value in the forward
+represent the conventional layer of programs.  Operationally, the
+semantics consists of a pair of mutually recursive evaluators that
+take a combinator and a value and propagate the value in the forward
 direction~$\triangleright$ or in the backward
 direction~$\triangleleft$. We show the complete forward evaluator in
 Fig.~\ref{opsem}; the backward evaluator is easy to infer.
@@ -389,14 +391,14 @@ abstract system that has~$N$ distinguishable states. According to the
 conventional theory of information~\cite{Shannon1948}, the amount of
 information contained in each state of a system with $N$
 distinguishable states is $\log N$ bits of information. For example,
-the type $\mathsf{Bool}$ can be thought of as an abstract system with
+the type $\mathbb{2}$ can be thought of as an abstract system with
 two distinguishable states labeled $\mathsf{true}$ and
 $\mathsf{false}$ each containing $\log 2 = 1$ bit. Similarly, the type
 $\mathbb{3}$ can be thought of as an abstract system with three
 distinguishable states each containing $\log 3$ bits. The logarithmic
 map implies that information contained in a composite state is the sum
 of the information contained in its constituents. For example, the
-type $\mathsf{Bool} \otimes \mathbb{3}$ can be thought of a composite
+type $\mathbb{2} \otimes \mathbb{3}$ can be thought of a composite
 system consisting of two independent unrelated subsystems. Each state
 of the composite system therefore contains
 $\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
