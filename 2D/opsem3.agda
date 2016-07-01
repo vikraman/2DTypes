@@ -20,7 +20,7 @@ open import 2D.Types
 -- open import 2D.Order
 open import 2D.Iter
 open import 2D.Sing
-open import 2D.ProgMorphisms
+open import 2D.SingIter
 open import 2D.Power
 open import 2D.Val
 open import 2D.Prim
@@ -90,6 +90,7 @@ swap₊-mod2 (-[1+_] (suc (suc n))) = assoc◎l ● rinv◎l ⊡ id⇔ ● idl�
 
 postulate
   cong≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₁} → v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
+  cong⁻¹≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₂} → v ≈ w → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹⁻¹ c w
 
 {-# TERMINATING #-}
 mutual
@@ -130,4 +131,24 @@ mutual
         (𝟙ₚ≈  < ℤsuc (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ● 2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) > (iter c) < i , q , α > id⇔)
 
   bwd◎fwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → (𝓐𝓹⁻¹ c (𝓐𝓹 c v)) ≈ v
-  bwd◎fwd≈id c v = {!!}
+  bwd◎fwd≈id (Prim x) v = refl≈ (prim⁻¹◎prim≡id x v)
+  bwd◎fwd≈id (c ◎ c₁) v = trans≈ (cong⁻¹≈ c (bwd◎fwd≈id c₁ (𝓐𝓹 c v))) (bwd◎fwd≈id c v)
+  bwd◎fwd≈id (c ⊕ c₁) (inl v) = inj₁≈ (bwd◎fwd≈id c v)
+  bwd◎fwd≈id (c ⊕ c₁) (inr v) = inj₂≈ (bwd◎fwd≈id c₁ v)
+  bwd◎fwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (bwd◎fwd≈id c v) (bwd◎fwd≈id c₁ v₁)
+  bwd◎fwd≈id foldSwap (inl ⋆) = inj₁≈ ⋆≈
+  bwd◎fwd≈id foldSwap (inr ⋆) = inj₂≈ ⋆≈
+  bwd◎fwd≈id unfoldSwap (comb x) = {!!}
+  bwd◎fwd≈id ap⟷ [ comb x , v₁ ] = [,]≈ (refl≈ refl) (bwd◎fwd≈id (Iter.q x) v₁)
+  bwd◎fwd≈id ap⁻¹⟷ [ comb x , v₁ ] = {!!}
+  bwd◎fwd≈id (η- c) (𝟙ₚ x) = refl≈ refl
+  bwd◎fwd≈id (η+ c) (𝟙ₚ x) = refl≈ refl
+  bwd◎fwd≈id (ε+ c) [ comb x , 1/comb x₁ ] = [,]≈ (refl≈ refl) (1/#p≈ x (sing c) x₁ {!!})
+  bwd◎fwd≈id (ε- c) [ 1/comb x , comb x₁ ] = {!!}
+  bwd◎fwd≈id (unite⋆l# c) [ 𝟙ₚ x , v₁ ] = [,]≈ (𝟙ₚ≈ {!!} {!!} x {!!}) (refl≈ refl)
+  bwd◎fwd≈id (uniti⋆l# c) v = refl≈ refl
+  bwd◎fwd≈id (unite⋆r# c) [ v , 𝟙ₚ x ] = {!!}
+  bwd◎fwd≈id (uniti⋆r# c) v = refl≈ refl
+
+bwd-coherence : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
+bwd-coherence c v = {!!}
