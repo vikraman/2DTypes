@@ -94,10 +94,29 @@ orderG {τ} p = record {
                       ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
                       }
 
-postulate
-  oneC : ∀ {ℓ₁ ℓ₂ ℓ₃} {τ : U} → (p : τ ⟷ τ) → Category ℓ₁ ℓ₂ ℓ₃
-  oneG : ∀ {ℓ₁ ℓ₂ ℓ₃} {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC {ℓ₁} {ℓ₂} {ℓ₃} {τ} p)
-  
+oneC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
+oneC {τ} p = record { Obj = Iter p
+                    ; _⇒_ = λ A B → Σ[ A⇔B ∈ (Iter.q A ⇔ Iter.q B) ] (Iter p)
+                    ; _≡_ = λ { {A} {B} (⇔₁ , iter₁) (⇔₂ , iter₂)
+                            → Iter.q iter₁ ⇔ Iter.q iter₂ }
+                    ; id = id⇔ , < + 0 , Prim id⟷ , id⇔ >
+                    ; _∘_ = λ { {A} {B} {C} (⇔₁ , < m , p , α >) (⇔₂ , < n , q , β >) →
+                                (⇔₂ ● ⇔₁) , < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
+                    ; assoc = assoc◎r
+                    ; identityˡ = idl◎l
+                    ; identityʳ = idr◎l
+                    ; equiv = record { refl = id⇔
+                                     ; sym = 2!
+                                     ; trans = _●_ }
+                    ; ∘-resp-≡ = _⊡_
+                    }
+
+oneG : {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC p)
+oneG {τ} p = record { _⁻¹ = λ { (⇔₁ , < i , q , eq >)
+                              → (2! ⇔₁ , < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) >) }
+                    ; iso = record { isoˡ = rinv◎l
+                                   ; isoʳ = linv◎l } }
+
 ⟦_⟧ : (τ : U) → El τ
 ⟦ 𝟘 ⟧ = discreteC ⊥ , discreteG ⊥
 ⟦ 𝟙 ⟧ = discreteC ⊤ , discreteG ⊤
