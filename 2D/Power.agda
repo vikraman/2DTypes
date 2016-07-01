@@ -78,4 +78,3 @@ id^i⇔id (+_ ℕ.zero) = id⇔
 id^i⇔id (+_ (ℕ.suc n)) = idl◎l ● id^i⇔id (+ n)
 id^i⇔id (-[1+_] ℕ.zero) = id⇔
 id^i⇔id (-[1+_] (ℕ.suc n)) = idl◎l ● id^i⇔id -[1+ n ]
-

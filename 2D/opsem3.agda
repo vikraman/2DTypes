@@ -102,7 +102,7 @@ mutual
   fwd◎bwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (fwd◎bwd≈id c v) (fwd◎bwd≈id c₁ v₁)
   fwd◎bwd≈id (foldSwap {t}) (comb < k , q , α >) with mod2 k | swap₊-mod2 {t} k
   ... | zero | pf = #p≈ (zeroth (Prim swap₊)) < k , q , α > (idl◎l ● ⇔! (α ● pf))
-  ... | suc zero | pf = #p≈ (iter (Prim swap₊)) < k , q , α > (id⇔ ⊡ (⇔! (α ● pf) ● idl◎l) ● rinv◎l) 
+  ... | suc zero | pf = #p≈ (iter (Prim swap₊)) < k , q , α > (id⇔ ⊡ (⇔! (α ● pf) ● idl◎l) ● rinv◎l)
   ... | suc (suc ()) | _ 
   fwd◎bwd≈id unfoldSwap (inl ⋆) = refl≈ refl
   fwd◎bwd≈id unfoldSwap (inr ⋆) = refl≈ refl
@@ -138,16 +138,31 @@ mutual
   bwd◎fwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (bwd◎fwd≈id c v) (bwd◎fwd≈id c₁ v₁)
   bwd◎fwd≈id foldSwap (inl ⋆) = inj₁≈ ⋆≈
   bwd◎fwd≈id foldSwap (inr ⋆) = inj₂≈ ⋆≈
-  bwd◎fwd≈id unfoldSwap (comb x) = {!!}
+  bwd◎fwd≈id (unfoldSwap {t}) (comb < k , q , α >) with mod2 k | swap₊-mod2 {t} k
+  ... | zero | pf = #p≈ (zeroth (Prim swap₊)) < k , q , α > (idl◎l ● ⇔! (α ● pf))
+  ... | suc zero | pf = #p≈ (iter (Prim swap₊)) < k , q , α > (id⇔ ⊡ (⇔! (α ● pf) ● idl◎l) ● rinv◎l)
+  ... | suc (suc ()) | _
   bwd◎fwd≈id ap⟷ [ comb x , v₁ ] = [,]≈ (refl≈ refl) (bwd◎fwd≈id (Iter.q x) v₁)
-  bwd◎fwd≈id ap⁻¹⟷ [ comb x , v₁ ] = {!!}
+  bwd◎fwd≈id ap⁻¹⟷ [ comb {t} {p} < i , q , α > , v₁ ] =
+    [,]≈ (#p≈ < i , q , α > < i , q , α > linv◎l)
+         (fwd◎bwd≈id q v₁)
   bwd◎fwd≈id (η- c) (𝟙ₚ x) = refl≈ refl
   bwd◎fwd≈id (η+ c) (𝟙ₚ x) = refl≈ refl
-  bwd◎fwd≈id (ε+ c) [ comb x , 1/comb x₁ ] = [,]≈ (refl≈ refl) (1/#p≈ x (sing c) x₁ {!!})
-  bwd◎fwd≈id (ε- c) [ 1/comb x , comb x₁ ] = {!!}
-  bwd◎fwd≈id (unite⋆l# c) [ 𝟙ₚ x , v₁ ] = [,]≈ (𝟙ₚ≈ {!!} {!!} x {!!}) (refl≈ refl)
+  bwd◎fwd≈id (ε+ c) [ comb < k , q , α > , 1/comb ⟪ p' , eq ⟫ ] =
+    [,]≈ (refl≈ refl)
+         (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ {!!})
+  bwd◎fwd≈id (ε- c) [ 1/comb ⟪ p' , eq ⟫ , comb < k , q , α > ] =
+    [,]≈ (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ {!!})
+         (refl≈ refl)
+  bwd◎fwd≈id (unite⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] =
+    [,]≈ (𝟙ₚ≈  < (+ 1) ℤ+ (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ●
+                                             2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) >
+                                             (iter c) < i , q , α > id⇔)
+         (refl≈ refl)
   bwd◎fwd≈id (uniti⋆l# c) v = refl≈ refl
-  bwd◎fwd≈id (unite⋆r# c) [ v , 𝟙ₚ x ] = {!!}
+  bwd◎fwd≈id (unite⋆r# c) [ v , 𝟙ₚ < i , q , α > ] =
+    [,]≈ (refl≈ refl)
+         (𝟙ₚ≈  < ℤsuc (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ● 2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) > (iter c) < i , q , α > id⇔)
   bwd◎fwd≈id (uniti⋆r# c) v = refl≈ refl
 
 bwd-coherence : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
