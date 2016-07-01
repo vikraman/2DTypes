@@ -4,6 +4,7 @@ digraph dependencies {
   opsem3[label="opsem3"];
   Types[label="Types"];
   Iter[label="Iter"];
+  SingIter[label="SingIter"];
   Sing[label="Sing"];
   ProgMorphisms[label="ProgMorphisms"];
   Power[label="Power"];
@@ -23,6 +24,10 @@ digraph dependencies {
   ProgMorphisms -> Iter;
   ProgMorphisms -> Power;
   Sing -> Types;
+  SingIter -> Types;
+  SingIter -> Sing;
+  SingIter -> Iter;
+  SingIter -> Power;
   Val -> Types;
   Val -> Iter;
   Val -> Sing;

@@ -209,18 +209,18 @@ described in detail:
   & && [\textit{see Fig.~\ref{pi-combinators2}}]
 \end{array}\]
 
-Both classes of programs, 1-combinators $c$ and
+\noindent Both classes of programs, 1-combinators $c$ and
 2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT
 sense. The elements $c$ of 1-combinators denote type isomorphisms. The
 elements $\alpha$ of 2-combinators denote equivalences between these
 type isomorphisms. Using the 1-combinators, it is possible to write
 any reversible boolean function and hence encode arbitrary boolean
 functions by a technique that goes back to \citet{Toffoli:1980}. The
-2-combinators provide a layer of programs that computes semantic
-preserving transformations of 1-combinators. As a small example, let
-us abbreviate $\ot \oplus \ot$ as $\mathsf{Bool}$ and examine two
-possible implementations of boolean negation. The first directly uses
-the primitive combinator
+2-combinators provide a layer of programs that computes
+semantic-preserving transformations of 1-combinators. As a small
+example, let us abbreviate $\ot \oplus \ot$ as $\mathsf{Bool}$ and
+examine two possible implementations of boolean negation. The first
+directly uses the primitive combinator
 $\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to swap the
 two values of type $\mathsf{Bool}$; the second use three consecutive
 copies of $\swapp$ to achieve the same effect:
@@ -306,14 +306,10 @@ a_2 \odot a_2 &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
 &=& \idiso
 \end{array}\]
 
-A similar calculation shows that the combinator $a_1$ is the identity
-permutation; the combinators $a_3$ and $a_6$ also swap two of the
-three elements leaving the third intact; and the combinators $a_4$ and
-$a_5$ rotate the three elements. We therefore have
-$\mathit{order}(a_1)=1$,
-$\mathit{order}(a_2)=\mathit{order}(a_3)=\mathit{order}(a_6)=2$, and
-$\mathit{order}(a_4)=\mathit{order}(a_5)=3$. More generally, we define
-the power and order of 1-combinators as follows.
+More generally we can iterate 1-combinators to produce different
+reversible functions between finite sets, eventually wrapping around
+at some number which represents the \emph{order} of the underlying
+permutation. 
 
 \begin{definition}[Power of a 1-combinator]
   The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
@@ -334,6 +330,15 @@ the power and order of 1-combinators as follows.
   $p^k \isotwo \idiso$.
 \end{definition}
 
+For our example combinators on the type $\mathbb{3}$, simple traces
+using the operational semantics show the combinator $a_1$ is the
+identity permutation; the combinators $a_3$ and $a_6$ swap two of the
+three elements leaving the third intact; and the combinators $a_4$ and
+$a_5$ rotate the three elements. We therefore have
+$\mathit{order}(a_1)=1$,
+$\mathit{order}(a_2)=\mathit{order}(a_3)=\mathit{order}(a_6)=2$, and
+$\mathit{order}(a_4)=\mathit{order}(a_5)=3$. 
+
 % \begin{lemma}
 %   Every $p : \tau \iso \tau$ has an order.
 % \end{lemma}
@@ -348,10 +353,9 @@ the power and order of 1-combinators as follows.
 %   \end{enumerate}
 % \end{proof}
 
-\begin{lemma}
-  For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
-  $k = \ord{p}$.
-\end{lemma}
+The 2-combinators, being complete equivalences between
+1-combinators~\cite{Carette2016}, also capture equivalences regarding
+power of combinators and their order. 
 
 % \begin{proof}
 %   Trivial.
@@ -363,20 +367,25 @@ the power and order of 1-combinators as follows.
   $\distiterplus{p}{m}{n} : (p^m \odot p^n) \isotwo p ^{m + n}$.
 \end{lemma}
 
-For an information-theoretic perspective on the language $\Pi$, we
-think of a type containing $N$ values as an abstract system that
-has~$N$ distinguishable states. According to the conventional theory
-of information~\cite{Shannon1948}, the amount of information contained
-in each state of a system with $N$ distinguishable states is $\log N$
-bits of information. For example, the type $\mathsf{Bool}$ can be
-thought of as an abstract system with two distinguishable states
-labeled $\mathsf{true}$ and $\mathsf{false}$ each containing
-$\log 2 = 1$ bit. Similarly, the type $\mathbb{3}$ can be thought of
-as an abstract system with three distinguishable states each
-containing $\log 3$ bits. The logarithmic map implies that information
-contained in a composite state is the sum of the information contained
-in its constituents. For example, the type
-$\mathsf{Bool} \otimes \mathbb{3}$ can be thought of a composite
+\begin{lemma}
+  For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
+  $k = \ord{p}$.
+\end{lemma}
+
+\paragraph{Intermezzo.} For an information-theoretic perspective on
+the language $\Pi$, we think of a type containing $N$ values as an
+abstract system that has~$N$ distinguishable states. According to the
+conventional theory of information~\cite{Shannon1948}, the amount of
+information contained in each state of a system with $N$
+distinguishable states is $\log N$ bits of information. For example,
+the type $\mathsf{Bool}$ can be thought of as an abstract system with
+two distinguishable states labeled $\mathsf{true}$ and
+$\mathsf{false}$ each containing $\log 2 = 1$ bit. Similarly, the type
+$\mathbb{3}$ can be thought of as an abstract system with three
+distinguishable states each containing $\log 3$ bits. The logarithmic
+map implies that information contained in a composite state is the sum
+of the information contained in its constituents. For example, the
+type $\mathsf{Bool} \otimes \mathbb{3}$ can be thought of a composite
 system consisting of two independent unrelated subsystems. Each state
 of the composite system therefore contains
 $\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
