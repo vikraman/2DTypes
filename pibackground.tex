@@ -74,7 +74,7 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 ~
 \Rule{}
 {c_1,c_2,c_3 : \tau_1 \iso \tau_2 \quad \alpha_1 : c_1 \isotwo c_2 \quad \alpha_2 : c_2 \isotwo c_3}
-{\jdg{}{}{\transtwo ~\alpha_1 ~\alpha_2 : c_1 \isotwo c_3}}
+{\jdg{}{}{\alpha_1~\transtwo~\alpha_2 : c_1 \isotwo c_3}}
 {}
 ~
 \Rule{}
@@ -105,6 +105,19 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 \\
 \\
 \Rule{}
+{}
+{\jdg{}{}{\sumid : \idiso\oplus\idiso \isotwo \idiso : \splitid}}
+{}
+~
+\Rule{}
+{c_1 : \tau_5\iso\tau_1 \quad c_2 : \tau_6\iso\tau_2 \quad c_3 :
+    \tau_1\iso\tau_3 \quad c_4 : \tau_2\iso\tau_4}
+{\jdg{}{}{\homps : (c_1\odot c_3)\oplus(c_2\odot c_4) \isotwo
+    (c_1\oplus c_2) \odot (c_3\oplus c_4) : \homsp }}
+{}
+\\
+\\
+\Rule{}
 {c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
   \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
 {\jdg{}{}{\alpha_1 ~\respstwo~ \alpha_2 : c_1 \odot c_2 \isotwo c_3 \odot c_4}}
@@ -123,10 +136,8 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 {\jdg{}{}{\respttwo ~\alpha_1 ~\alpha_2 : c_1 \otimes c_2 \isotwo c_3 \otimes c_4}}
 {}
 \end{array}\]
-
 Each 2-combinator $\alpha$ has an inverse $2!~\alpha$, e.g, $2!~\assocdl=\assocdr$,
-$2!(\transtwo~\alpha_1~\alpha_2) = \transtwo~(2!~\alpha_2)~(2!~\alpha_1)$, etc. 
-
+$2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc. 
 \caption{$\Pi$ 2-combinators (excerpt)~\cite{Carette2016}
 \label{pi-combinators2}}
 \end{figure*}
@@ -231,7 +242,7 @@ copies of $\swapp$ to achieve the same effect:
 We can write a 2-combinator whose \emph{type} is $\mathsf{not_2}
 \isotwo \mathsf{not_1}$:
 \[
-\transtwo~(\idldl ~\respstwo~ \idisotwo)~\idldl
+(\idldl ~\respstwo~ \idisotwo)~\transtwo~\idldl
 \]
 which not only shows the equivalence of the two implementations of
 negation but also shows \emph{how} to transform one to the other.
@@ -297,8 +308,8 @@ Tracing the evaluation of $a_2$ on each of the possible inputs yields:
 Thus the effect of combinator $a_2$ is to swap the values
 $\inl{\inl{\unitv}}$ and $\inl{\inr{\unitv}}$ leaving the value
 $\inr{\unitv}$ intact. Iterating $a_2$ again is therefore equivalent
-to the identity permutation, which can be verified using the full set of
-2-combinators~\cite{Carette2016}:
+to the identity permutation, which can be verified using the 
+2-combinators:
 \[\begin{array}{rcl}
 a_2 \odot a_2 &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
 &\isotwo& (\swapp \odot \swapp) \oplus (\idiso \odot \idiso) \\
