@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-} 
+
 module 2D.Types where
 
 infix 50 _⊕_
@@ -5,6 +7,8 @@ infix 60 _⊗_
 infix  30 _⟷_
 infix  30 _⇔_
 infixr 50 _◎_
+infixr 70 _⊡_
+infixr 60 _●_
 
 -- The treatment of η and ε follows
 -- https://en.wikipedia.org/wiki/Compact_closed_category
@@ -17,6 +21,7 @@ mutual
     _⊗_ : U → U → U
     # : {τ : U} → (τ ⟷ τ) → U
     1/# : {τ : U} → (τ ⟷ τ) → U
+    𝟙# : {τ : U} → (τ ⟷ τ) → U
 
   data Prim⟷ : U → U → Set where
     unite₊l :  {t : U} → Prim⟷ (𝟘 ⊕ t) t
@@ -52,14 +57,14 @@ mutual
     unfoldSwap : {t : U} → (# (Prim (swap₊ {t} {t}))) ⟷ (𝟙 ⊕ 𝟙) 
     ap⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
     ap⁻¹⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
-    η- : {t : U} → (p : t ⟷ t) → # (Prim (id⟷ {t})) ⟷ (1/# p ⊗ # p)
-    η+ : {t : U} → (p : t ⟷ t) → # (Prim (id⟷ {t})) ⟷ (# p ⊗ 1/# p)
-    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ # (Prim (id⟷ {t}))
-    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ # (Prim (id⟷ {t}))
-    contract : {t : U} → # (Prim (id⟷ {t})) ⟷ 𝟙
-    expand : {t : U} → 𝟙 ⟷ # (Prim (id⟷ {t}))
-    iap⟷ : {t : U} {p : t ⟷ t} →  1/# p ⊗ t ⟷ 1/# p ⊗ t
-    iap⁻¹⟷ : {t : U} {p : t ⟷ t} →  1/# p ⊗ t ⟷ 1/# p ⊗ t
+    η- : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (1/# p ⊗ # p)
+    η+ : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (# p ⊗ 1/# p)
+    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙# p
+    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙# p
+    unite⋆l# :  {s t : U} (p : t ⟷ t) → (𝟙# p ⊗ s) ⟷ s
+    uniti⋆l# :  {s t : U} (p : t ⟷ t) → s ⟷ (𝟙# p ⊗ s)
+    unite⋆r# :  {s t : U} (p : t ⟷ t) → (s ⊗ 𝟙# p) ⟷ s
+    uniti⋆r# :  {s t : U} (p : t ⟷ t) → s ⟷ (s ⊗ 𝟙# p)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -96,10 +101,10 @@ mutual
 ! unfoldSwap = foldSwap
 ! ap⟷ = ap⁻¹⟷ 
 ! ap⁻¹⟷ = ap⟷
-! expand = contract
-! contract = expand
-! iap⟷ = iap⁻¹⟷ 
-! iap⁻¹⟷ = iap⟷
+! (unite⋆l# p) = uniti⋆l# p
+! (uniti⋆l# p) = unite⋆l# p
+! (unite⋆r# p) = uniti⋆r# p
+! (uniti⋆r# p) = unite⋆r# p
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -120,7 +125,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (! c ◎ c)
   linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ Prim id⟷
   linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → Prim id⟷ ⇔ (c ◎ ! c)
-  trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
+  _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
     (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} →
     (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
@@ -131,18 +136,18 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
   -- coherence for compact closed categories
-  ccc₁l : {t : U} {p : t ⟷ t} →
-         Prim (uniti⋆r {t}) ◎ (Prim id⟷ ⊗ expand) ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
-         (ε+ p ⊗ Prim id⟷) ◎ (contract ⊗ Prim id⟷) ◎ Prim (unite⋆l {t}) ⇔ Prim id⟷
+  ccc₁l : {t : U} {p : t ⟷ t} → 
+         uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
+         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ Prim id⟷
   ccc₁r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ Prim (uniti⋆r {t}) ◎ (Prim id⟷ ⊗ expand) ◎ (Prim id⟷ ⊗ η- p) ◎
-         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ (contract ⊗ Prim id⟷) ◎ Prim (unite⋆l {t})
+         Prim id⟷ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p 
   ccc₂l : {t : U} {p : t ⟷ t} →
-         (((((Prim (uniti⋆l {t}) ◎ (expand ⊗ Prim id⟷)) ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
-         (Prim id⟷ ⊗ ε- p)) ◎ (Prim id⟷ ⊗ contract)) ◎ Prim (unite⋆r {t}) ⇔ Prim id⟷
+         (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
+         (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p ⇔ Prim id⟷
   ccc₂r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ (((((Prim (uniti⋆l {t}) ◎ (expand ⊗ Prim id⟷)) ◎ (η+ p ⊗ Prim id⟷)) ◎
-         Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ (Prim id⟷ ⊗ contract)) ◎ Prim (unite⋆r {t})
+         Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
+         Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
 
   -- suggested alternate versions
   -- ccc₁l {t : U} {p : t ⟷ t} →
@@ -161,7 +166,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! linv◎r = linv◎l
 2! id⇔ = id⇔
 2! (α ⊡ β) = (2! α) ⊡ (2! β)
-2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
+2! (α ● β) = (2! β) ● (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
 2! ccc₁l = ccc₁r
@@ -209,10 +214,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id unfoldSwap = id⇔
 !!⇔id ap⟷ = id⇔ 
 !!⇔id ap⁻¹⟷ = id⇔
-!!⇔id contract = id⇔
-!!⇔id expand = id⇔
-!!⇔id iap⟷ = id⇔ 
-!!⇔id iap⁻¹⟷ = id⇔ 
+!!⇔id (unite⋆l# p) = id⇔
+!!⇔id (uniti⋆l# p) = id⇔
+!!⇔id (unite⋆r# p) = id⇔
+!!⇔id (uniti⋆r# p) = id⇔
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
@@ -226,7 +231,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! rinv◎r = linv◎r
 ⇔! linv◎l = rinv◎l
 ⇔! linv◎r = rinv◎r
-⇔! (trans⇔ q₁ q₂) = trans⇔ (⇔! q₁) (⇔! q₂)
+⇔! (q₁ ● q₂) = (⇔! q₁) ● (⇔! q₂)
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
@@ -234,6 +239,13 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! ccc₁r = ccc₂r
 ⇔! ccc₂l = ccc₁l
 ⇔! ccc₂r = ccc₁r
+
+-- convenient lemma
+
+open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+
+≡⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ≡ q → (p ⇔ q)
+≡⇒⇔ refl = id⇔
 
 --
 
