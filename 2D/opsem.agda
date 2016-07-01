@@ -276,15 +276,12 @@ mutual
     case (𝓐𝓹 q (v , av)) of λ { (v' , av') → (inj₂ v') , av' }
   𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , (av₁ , av₂)) with ((𝓐𝓹 p (v₁ , av₁)) , (𝓐𝓹 q (v₂ , av₂)))
   𝓐𝓹 (p ⊗ q) ((v₁ , v₂) , av₁ , av₂) | (v₁' , av₁') , (v₂' , av₂') = (v₁' , v₂') , (av₁' , av₂')
-  𝓐𝓹 (η+ p) (perm i q α , y) =
-       ((perm i (p ^ i) id⇔) , (perm (ℤ- i ℤ+ i ℤ+ i) q {!!})) , (id⇔ , (perm i (p ^ i) id⇔))
-    -- ((perm (+ 1) p idr◎r , perm i q α) , (id⇔ , perm (+ 1) p idr◎r))
+  𝓐𝓹 (η+ p) (pp , y) = ((perm (+ 1) p idr◎r , pp) , (id⇔ , perm (+ 1) p idr◎r))
   𝓐𝓹 (η- p) (pp , β) = ((pp , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
-  𝓐𝓹 (ε+ p) ((perm i q α , perm k id δ) , (β , perm j r γ)) =
-    (perm (i ℤ+ (ℤ- j) ℤ+ k) (p ^ (i ℤ+ (ℤ- j) ℤ+ k)) {!!}) , id⇔
---    if ((perm i q α) ⇔? (perm j r γ))
---       then (pp , id⇔)
---       else 𝓐𝓹 (ε+ p) ((perm i q α , pp) , (β , perm j r γ)) -- loop forever
+  𝓐𝓹 (ε+ p) ((perm i q α , pp) , (β , perm j r γ)) =
+      if ((perm i q α) ⇔? (perm j r γ))
+         then (pp , id⇔)
+         else 𝓐𝓹 (ε+ p) ((perm i q α , pp) , (β , perm j r γ)) -- loop forever
   𝓐𝓹 (ε- p) ((pp , perm i q α) , (perm j r γ , β)) =
     if ((perm i q α) ⇔? (perm j r γ))
        then (pp , id⇔)
@@ -301,9 +298,9 @@ mutual
   ... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
   𝓐𝓹 contract (perm i _ _ , β) = tt , refl
   𝓐𝓹 expand (tt , refl) = perm (+ 0) (Prim id⟷) id⇔ , id⇔ -- this is not going to be reversible!
-  𝓐𝓹 iap⟷ ((pp , v) , (perm iter q α , av)) =
-    ((pp , v) , (perm iter q α , {!!}))
-  𝓐𝓹 iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!} 
+  𝓐𝓹 (iap⟷ {p = p}) ((pp , v) , (perm iter q α , av)) =
+    case (𝓐𝓹 q (v , av)) of λ { (v' , av₂') → (pp , v') , (perm ((+ 1) ℤ+ iter) (p ◎ q) (trans⇔ (idr◎r ⊡ α) (2! (lower (+ 1) iter))) , av₂') } 
+  𝓐𝓹 iap⁻¹⟷ ((pp , v) , (perm iter q α , av)) = 𝓐𝓹⁻¹ iap⟷ ((pp , v) , (perm iter q α , av))
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₂ → V T₁
   𝓐𝓹⁻¹ (Prim c) v = prim⁻¹ c v
@@ -330,8 +327,9 @@ mutual
   𝓐𝓹⁻¹ (ε- c) v = ({!!} , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
   𝓐𝓹⁻¹ (contract {t}) v = (perm (+ 0) (Prim id⟷) id⇔) , id⇔
   𝓐𝓹⁻¹ (expand {t}) v = tt , refl
-  𝓐𝓹⁻¹ iap⟷ ((pp , v) , (perm iter q α , av)) = {!!} 
-  𝓐𝓹⁻¹ iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!} 
+  𝓐𝓹⁻¹ (iap⟷ {p = p}) ((pp , v) , (perm iter q α , av)) = 
+        case (𝓐𝓹⁻¹ q (v , av)) of λ { (v' , av₂') → (pp , v') , (perm ((ℤ- ((+ 1))) ℤ+ iter) (! p ◎ q) (trans⇔ (id⇔ ⊡ α) ((2! (lower (ℤ- (+ 1)) iter)))) , av₂') }
+  𝓐𝓹⁻¹ iap⁻¹⟷ ((pp , v) , (perm iter q α , av)) = 𝓐𝓹 iap⟷ ((pp , v) , (perm iter q α , av)) 
 
 -- note how this uses 𝓐𝓹
 cong≈ : (S T : U) → (c : S ⟷ T) (x y : V S) → [ S ] x ≈ y →  [ T ] (𝓐𝓹 c x) ≈ (𝓐𝓹 c y)
