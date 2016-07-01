@@ -1,0 +1,50 @@
+
+digraph dependencies {
+
+  opsem3[label="opsem3"];
+  Types[label="Types"];
+  Iter[label="Iter"];
+  Sing[label="Sing"];
+  ProgMorphisms[label="ProgMorphisms"];
+  Power[label="Power"];
+  Val[label="Val"];
+  Prim[label="Prim"];
+  Order2Lemmas[label="Order2Lemmas"];
+  Order[label="Order"];
+  Frac[label="Frac"];
+  
+  Order2Lemmas -> Types;
+  Order2Lemmas -> Iter;
+  Order2Lemmas -> Order;
+  Power -> Types;
+  Prim -> Types;
+  ProgMorphisms -> Types;
+  ProgMorphisms -> Sing;
+  ProgMorphisms -> Iter;
+  ProgMorphisms -> Power;
+  Sing -> Types;
+  Val -> Types;
+  Val -> Iter;
+  Val -> Sing;
+  Val -> Power;
+  Val -> ProgMorphisms;
+  Iter -> Types;
+  Iter -> Power;
+  Order -> Types;
+  Order -> Power;
+  opsem3 -> Types;
+  opsem3 -> Order;
+  opsem3 -> Iter;
+  opsem3 -> Sing;
+  opsem3 -> ProgMorphisms;
+  opsem3 -> Power;
+  opsem3 -> Val;
+  opsem3 -> Prim;
+  opsem3 -> Order2Lemmas;
+  Frac -> Types;
+  Frac -> Power;
+  Frac -> Sing;
+  Frac -> Iter;
+  Frac -> ProgMorphisms;
+  Frac -> Order;
+}
