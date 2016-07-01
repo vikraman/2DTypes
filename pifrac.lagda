@@ -109,7 +109,8 @@ mutual
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
     _⊗_ :   {t₁ t₂ t₃ t₄ : U} →
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
-\end{code}}}}
+\end{code}
+}}}
 
 The complete code also includes definitions for \AgdaFunction{!} which
 inverts a 1-combinator, \AgdaDatatype{⇔} which defines equivalences of
@@ -153,7 +154,8 @@ show that 2-combinators commute as expected with inversion of
 ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
-\end{code}}
+\end{code}
+}
 
 \medskip
 \begin{code}
@@ -198,7 +200,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
          ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄)) ⇔ ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄))
   split⊕-id⟷ : {t₁ t₂ : U} → id⟷ {t₁ ⊕ t₂} ⇔ id⟷ ⊕ id⟷
   id⟷⊕id⟷⇔ : {t₁ t₂ : U} → (id⟷ {t₁} ⊕ id⟷ {t₂}) ⇔ id⟷
-\end{code}}
+\end{code}
+}
 
 \medskip
 \begin{code}
@@ -249,7 +252,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 !!⇔prim factor = id⇔
 !!⇔prim distl = id⇔
 !!⇔prim factorl = id⇔
-\end{code}}
+\end{code}
+}
 
 \medskip
 \begin{code}
@@ -262,7 +266,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 !!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
-\end{code}}
+\end{code}
+}
 
 \medskip
 \begin{code}
@@ -289,7 +294,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 ⇔! hom◎⊕⇔ = hom◎⊕⇔
 ⇔! split⊕-id⟷ = split⊕-id⟷ 
 ⇔! id⟷⊕id⟷⇔ = id⟷⊕id⟷⇔
-\end{code}}}}}
+\end{code}
+}}}}
 
 As motivated in the previous section, we will also need to consider
 the iterates $p^k$ of combinators $p$ which are $k$-fold compositions
@@ -312,7 +318,8 @@ record Iter {τ : U} (p : τ ⟷ τ) : Set where
     k : ℤ
     q : τ ⟷ τ
     α : q ⇔ p ^ k
-\end{code}}}}  
+\end{code}
+}}}
 
 For our running example using the type $\mathbb{3}$ and the combinator
 $a_2$, we can a few iterates of $a_2$ as follows:
@@ -342,7 +349,8 @@ p^₃ = <  + 2 ,
          (trans⇔ hom⊕◎⇔ (id⇔ ⊡ idr◎r))) >
 p^₄ = < -[1+ 0 ] , a₂ , id⇔ > 
 p^₅ = < + 1 , a₂ , idr◎r > 
-\end{code}}}}  
+\end{code}
+}}}
 
 \noindent Since $a_2$ has order 2, there are only two distinguishable
 iterates. The first four iterates are all equivalent to $(a_2)^0$
@@ -382,7 +390,8 @@ data Val : (τ : U) → Set where
   [_,_] :   {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
   comb :    {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) →  Val (# p)
   1/comb :  {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) → Val (1/# p)
-\end{code}}}}
+\end{code}
+}}}
 
 \noindent The first four lines define the conventional values for the
 unit, sum, and product types. The last two lines define values of type
