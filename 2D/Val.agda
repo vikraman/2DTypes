@@ -25,10 +25,10 @@ data _≈_ : {t : U} → Val t → Val t → Set where
        -- programs are equivalent exactly when they are inverses
   #p≈ : ∀ {t} {p : t ⟷ t} (p^i p^j : Iter p) →
         Iter.q p^i ◎ ! (Iter.q p^j) ⇔ Prim id⟷ → (comb p^i) ≈ (comb p^j)
-        -- all proofs are equivalent, and there's order p of them
+        -- p₁ and p₂ are equivalent, and there's order p proofs of that
   1/#p≈ : ∀ {t} {p : t ⟷ t}  (q : Iter p) → (p₁ p₂ : Sing p) →
         Sing.p' p₁ ◎ ! (Sing.p' p₂) ⇔ Iter.q q ◎ ! (Iter.q q) → (1/comb p₁) ≈ (1/comb p₂)
-        -- all are equivalent
+        -- all 𝟙ₚ q and 𝟙ₚ q are equivalent.
   𝟙ₚ≈ : ∀ {t} {p : t ⟷ t} → (p₁ q r : Iter p) →
         (Iter.q q ◎ ! (Iter.q r)) ⇔ Iter.q p₁ → (𝟙ₚ q) ≈ (𝟙ₚ r)
   [,]≈ : {s t : U} {sv₁ sv₂ : Val s} {tv₁ tv₂ : Val t} → sv₁ ≈ sv₂ → tv₁ ≈ tv₂ → [ sv₁ , tv₁ ] ≈ [ sv₂ , tv₂ ]
@@ -58,16 +58,16 @@ trans≈ ([,]≈ eq₁ eq₂) ([,]≈ eq₃ eq₄) = [,]≈ (trans≈ eq₁ eq�
 trans≈ (inj₁≈ eq₁) (inj₁≈ eq₂) = inj₁≈ (trans≈ eq₁ eq₂)
 trans≈ (inj₂≈ eq₁) (inj₂≈ eq₂) = inj₂≈ (trans≈ eq₁ eq₂)
 
-{- -- comment out to compile the rest, for now.
 sym≈ : {t : U} → {a b : Val t} → a ≈ b → b ≈ a
 sym≈ ⋆≈ = ⋆≈
 sym≈ (#p≈ < k , q , α > < k₁ , q₁ , α₁ > x) =
   #p≈ < k₁ , q₁ , α₁ > < k , q , α >
       ((!!⇔id q₁ ⊡ id⇔) ● ⇔! x)
 sym≈ (1/#p≈ q p₁ p₂ x) = 1/#p≈ q p₂ p₁ ((sing⇔ p₂ p₁ ⊡ ⇔! (sing⇔ p₁ p₂)) ● x)
-sym≈ (𝟙ₚ≈ p₁ q r x) = 𝟙ₚ≈ {!!} r q {!!} -- you don't want p₁, but ! p₁ (as an Iter)
+sym≈ (𝟙ₚ≈ < k , p₁ , α > q r x) =
+  𝟙ₚ≈ < ℤ.- k , ! p₁ , ⇔! α ● 2! (^⇔! k) > r q (!!⇔id (Iter.q r) ⊡ id⇔ ● ⇔! x)
 sym≈ ([,]≈ e₁ e₂) = [,]≈ (sym≈ e₁) (sym≈ e₂)
 sym≈ (inj₁≈ e) = inj₁≈ (sym≈ e)
 sym≈ (inj₂≈ e) = inj₂≈ (sym≈ e) 
--}
+
 
