@@ -78,12 +78,13 @@ sym# (1/#p≡ x) = 1/#p≡ (2! x)
 trans# : {τ : U} {p q : Val τ} {i j k : p ≈ q} →
   i ≡≈ j → j ≡≈ k → i ≡≈ k
 trans# {𝟘} () jj
-trans# {𝟙} {.⋆} {.⋆} {i} {j} {k} ⋆≡ jj = {!!}
-trans# {τ ⊕ τ₁} ii jj = {!!}
-trans# {τ ⊗ τ₁} ii jj = {!!}
-trans# {# x} ii jj = {!!}
-trans# {1/# x} ii jj = {!!}
-trans# {𝟙# x} ii jj = {!!}
+trans# {𝟙} {.⋆} {.⋆} {i} {j} {k} ⋆≡ jj = ⋆≡
+trans# {τ₁ ⊕ τ₂} inj₁≡ jj = inj₁≡
+trans# {τ₁ ⊕ τ₂} inj₂≡ jj = inj₂≡
+trans# {τ₁ ⊗ τ₂} [,]≡ jj = [,]≡
+trans# {# x} #p≡ jj = #p≡
+trans# {1/# x} (1/#p≡ x₁) jj = {!!}
+trans# {𝟙# x} 𝟙ₚ≡ jj = 𝟙ₚ≡
 
 {-
 id#pˡ : {τ : U} {p : τ ⟷ τ} {a b : Iter p} {m : a ⇔# b} → (id#p ∘# m) ≡# m
