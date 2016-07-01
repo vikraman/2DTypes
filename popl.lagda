@@ -150,7 +150,7 @@ module popl where
 \copyrightdata{978-1-nnnn-nnnn-n/yy/mm}
 \copyrightdoi{nnnnnnn.nnnnnnn}
 
-\titlebanner{Fractional Types and Negative Information}
+\titlebanner{Fractional Types}
 \preprintfooter{\today\ \currenttime}
 
 \title{Fractional Types} 
@@ -161,7 +161,7 @@ module popl where
 
 \begin{abstract}
 We exhibit types whose natural cardinality is fractional.
-More precisely, we show that the Groupoid cardinality (as
+More precisely, we show that the groupoid cardinality (as
 defined by Baez-Dolan) of the denotation of the type of
 a singleton reversible program $p$ with exactly $k$ distinct
 proofs of reversibility has cardinality $1/k$.  We further
