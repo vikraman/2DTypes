@@ -320,11 +320,16 @@ mutual
     case (𝓐𝓹⁻¹ q (v , av₂)) of (λ {(v' , av') → (perm iter q α , v') , (av₁ , av') })
   𝓐𝓹⁻¹ ap⁻¹⟷ ((perm i q α , v) , (av₁ , av₂)) = 
     case (𝓐𝓹 q (v , av₂)) of (λ { (v' , av') → ((perm i q α) , v') , (av₁ , av') })
-  𝓐𝓹⁻¹ (η- c) ((v , _) , _) = v , id⇔ -- probably not the best
-  𝓐𝓹⁻¹ (η+ c) ((perm i p' α , perm j id γ) , (β , perm k q ν)) =
-    perm (i ℤ+ (ℤ- j) ℤ+ k) {!!} {!!} , {!!}
-  𝓐𝓹⁻¹ (ε+ c) v = ((perm (+ 1) c idr◎r) , {!!}) , id⇔ , (perm (+ 1) c idr◎r)
-  𝓐𝓹⁻¹ (ε- c) v = ({!!} , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
+  𝓐𝓹⁻¹ (η- p) ((pp , perm i q α) , (perm j r γ , β)) =
+        if ((perm i q α) ⇔? (perm j r γ))
+         then (pp , id⇔)
+         else 𝓐𝓹 (ε+ p) ((perm i q α , pp) , (β , perm j r γ)) -- loop forever
+  𝓐𝓹⁻¹ (η+ p) ((perm i q α , pp) , (β , perm j r γ)) =
+        if ((perm i q α) ⇔? (perm j r γ))
+          then (pp , id⇔)
+          else 𝓐𝓹 (ε+ p) ((perm i q α , pp) , (β , perm j r γ)) -- loop forever
+  𝓐𝓹⁻¹ (ε+ p) (pp , y) = ((perm (+ 1) p idr◎r , pp) , (id⇔ , perm (+ 1) p idr◎r))
+  𝓐𝓹⁻¹ (ε- p) (pp , β) = ((pp , perm (+ 1) p idr◎r) , (perm (+ 1) p idr◎r , id⇔))
   𝓐𝓹⁻¹ (contract {t}) v = (perm (+ 0) (Prim id⟷) id⇔) , id⇔
   𝓐𝓹⁻¹ (expand {t}) v = tt , refl
   𝓐𝓹⁻¹ (iap⟷ {p = p}) ((pp , v) , (perm iter q α , av)) = 
