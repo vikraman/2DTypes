@@ -72,43 +72,20 @@ sym# 𝟙ₚ≡ = 𝟙ₚ≡
 sym# [,]≡ = [,]≡
 sym# inj₁≡ = inj₁≡
 sym# inj₂≡ = inj₂≡
-sym# (1/#p≡ x) = 1/#p≡ {!sym≈ x!}
+sym# (1/#p≡ x) = 1/#p≡ (2! x)
+
+-- I am stuck on this?!?
+trans# : {τ : U} {p q : Val τ} {i j k : p ≈ q} →
+  i ≡≈ j → j ≡≈ k → i ≡≈ k
+trans# {𝟘} () jj
+trans# {𝟙} {.⋆} {.⋆} {i} {j} {k} ⋆≡ jj = {!!}
+trans# {τ ⊕ τ₁} ii jj = {!!}
+trans# {τ ⊗ τ₁} ii jj = {!!}
+trans# {# x} ii jj = {!!}
+trans# {1/# x} ii jj = {!!}
+trans# {𝟙# x} ii jj = {!!}
 
 {-
--- basic morphisms and properties
-id#p : {τ : U} {p : τ ⟷ τ} {p^i : Iter p} → p^i ⇔# p^i
-id#p {_} {p} { < i , q , α > }  =
-  mor#p ⟪ p , id⇔ ⟫ ⟪ p , id⇔ ⟫ (id⇔ ⊡ α ● assoc1g i ● (2! α) ⊡ id⇔)
-
-sym⇔#p : {τ : U} {p : τ ⟷ τ} {p^i q^j : Iter p} → p^i ⇔# q^j → q^j ⇔# p^i
-sym⇔#p {p^i = p^i} {q^j} (mor#p q r χ) = mor#p r q (swapSI r q^j ● 2! χ ● swapSI q p^i)
-
-sym#p : {τ : U} {p : τ ⟷ τ} {p q : Iter p} {m₁ m₂ : p ⇔# q} → m₁ ≡# m₂ → m₂ ≡# m₁
-sym#p record { p⇔q = p⇔q ; r⇔q = r⇔q ; r⇔s = r⇔s } =
-  record { p⇔q = 2! p⇔q ; r⇔q = 2! r⇔s ● r⇔q ● 2! p⇔q ; r⇔s = 2! r⇔s }
-
-trans#p : {τ : U} {p : τ ⟷ τ} {p q : Iter p} {i j k : p ⇔# q} →
-  i ≡# j → j ≡# k → i ≡# k
-trans#p record { p⇔q = p⇔q ; r⇔q = r⇔q ; r⇔s = r⇔s }
-        record { p⇔q = p⇔q₁ ; r⇔q = r⇔q₁ ; r⇔s = r⇔s₁ } = record
-  { p⇔q = p⇔q ● p⇔q₁
-  ; r⇔q = r⇔q ● p⇔q₁ -- note how r⇔q₁ is not used
-  ; r⇔s = r⇔s ● r⇔s₁
-  }
-
-_∘#_ : {τ : U} {p : τ ⟷ τ} {a b c : Iter p} → b ⇔# c → a ⇔# b → a ⇔# c
-_∘#_ {_} {_} { < i , a , α > } { < j , b , β > } { < k , c , γ > }
-  (mor#p bc-q bc-r bc-χ) (mor#p ab-q ab-r ab-χ) =
-  mor#p (bc-q ∘S ab-q) (bc-r ∘S ab-r)
-    ((bc-q_eq ● 2! ab-q_eq) ⊡ id⇔ ● ab-χ ● β ⊡ ab-r_eq ● 2! (assoc1g j) ●
-    2! bc-q_eq ⊡ (2! β) ● bc-χ)
-  where
-    open _⇔#_
-    open Sing
-    bc-q_eq = Sing.eq bc-q
-    ab-q_eq = Sing.eq ab-q
-    ab-r_eq = Sing.eq ab-r
-
 id#pˡ : {τ : U} {p : τ ⟷ τ} {a b : Iter p} {m : a ⇔# b} → (id#p ∘# m) ≡# m
 id#pˡ {p = p} {m = mor#p ⟪ p' , eq ⟫ ⟪ p'' , eq₁ ⟫ χ} = record
   { p⇔q = 2! eq
