@@ -2,48 +2,79 @@
 
 module 2D.ProgMorphisms where
 
-open import 2D.Types
+open import Data.Product
 
+open import 2D.Types
 open import 2D.Sing
 open import 2D.Iter
 open import 2D.Power
-
-----------------------------------------------------------------------------
--- Generally useful lemmas
-
--- we can always exchange a Sing and an Iter
-swapSI : {τ : U} {p : τ ⟷ τ} (r : Sing p) (p^i : Iter p) →
-  Sing.p' r ◎ Iter.q p^i ⇔ Iter.q p^i ◎ Sing.p' r
-swapSI ⟪ p' , eq ⟫ < k , q , α > = eq ⊡ α ● assoc1g k ● 2! α ⊡ 2! eq
+open import 2D.Val
 
 ----------------------------------------------------------------------------
 -- For generic equivalences
 
+infix 4 _≡≈_
+
+-- because of 'without-K', this needs to cover all cases, as we can't
+-- case split on just one sub-case of ≈, so we need two auxilliaries
+-- which we need to be total (because of Agda) but whose only case that
+-- matters is the 1/ case.
+get-a-p : ∀ {t} → Val t → Σ U (λ s → s ⟷ s)
+get-a-p {𝟙} ⋆ = 𝟙 , Prim id⟷
+get-a-p (inl {t} v) = t , Prim id⟷
+get-a-p (inr {t} v) = t , Prim id⟷
+get-a-p ([_,_] {s} {t} _ _) = s ⊗ t , Prim id⟷
+get-a-p (comb {t} {p} x) = t , p
+get-a-p (1/comb {t} {p} x) = t , p
+get-a-p (𝟙ₚ {t} {p} _) = t , p
+
+get-iter : ∀ {t} {p₁ p₂ : Val t} → p₁ ≈ p₂ →
+  let ap = get-a-p p₁ in let s = proj₁ ap in let p = proj₂ ap in
+  Iter {s} p
+get-iter {_} {⋆} ⋆≈ = zeroth (proj₂ (get-a-p ⋆))
+get-iter (#p≈ {_} {p} p^i p^j x) = zeroth p
+get-iter (1/#p≈ q p₁ p₂ x) = q
+get-iter (𝟙ₚ≈ p₁ q r x) = p₁ -- the only important case!
+get-iter ([,]≈ {_} {_} {v} {_} {w} pf pf₁) = zeroth (proj₂ (get-a-p [ v , w ] ))
+get-iter (inj₁≈ {_} {t₂} {v} {_} pf) = zeroth (proj₂ (get-a-p (inl {_} {t₂} v)))
+get-iter (inj₂≈ {_} {_} {_} {w} pf) = zeroth (proj₂ (get-a-p (inr w)))
+
 -- (no need for a constructor, as we should never see the insides of this
 --  outside of this file.)
-record Equiv {τ : U} (p q r s : τ ⟷ τ) : Set where
-  field
-    p⇔q : p ⇔ q
-    r⇔q : r ⇔ q
-    r⇔s : r ⇔ s
+-- almost all cases are trivial, except for the 1/ case, at the end
+data _≡≈_ : {τ : U} {p q : Val τ} (x y : p ≈ q) → Set where
+  ⋆≡ : {e f : ⋆ ≈ ⋆} → e ≡≈ f
+  #p≡ : ∀ {t} {p : t ⟷ t} {p^i p^j : Iter p} {e f : comb p^i ≈ comb p^j} → e ≡≈ f
+  𝟙ₚ≡ :  ∀ {t} {p : t ⟷ t} {q r : Iter p} → {e f : (𝟙ₚ q) ≈ (𝟙ₚ r)} → e ≡≈ f
+  [,]≡ : {s t : U} {sv₁ sv₂ : Val s} {tv₁ tv₂ : Val t}
+        {e f : [ sv₁ , tv₁ ] ≈ [ sv₂ , tv₂ ]} → e ≡≈ f
+  inj₁≡ : {s t : U} → {sv₁ sv₂ : Val s} {e f : inl {s} {t} sv₁ ≈ inl sv₂} → e ≡≈ f
+  inj₂≡ : {s t : U} → {tv₁ tv₂ : Val t} {e f : inr {s} {t} tv₁ ≈ inr tv₂} → e ≡≈ f
 
-----------------------------------------------------------------------------
--- for #p
+  1/#p≡ : ∀ {t} {p : t ⟷ t}  {p₁ p₂ : Sing p} →
+          { e f : (1/comb p₁) ≈ (1/comb p₂) } →
+          Iter.q (get-iter e) ⇔ Iter.q (get-iter f) → e ≡≈ f
 
-record _⇔#_ {τ : U} {p : τ ⟷ τ} (p^i : Iter p) (p^j : Iter p) : Set where
-  constructor mor#p
-  field
-    q : Sing p
-    r : Sing p
-    χ : (Sing.p' q ◎ Iter.q p^i) ⇔ (Iter.q p^j ◎ Sing.p' r)
 
--- Equivalence for this case, and its properties
-_≡#_ : {τ : U} {p : τ ⟷ τ} {p^i p^j q^i q^j : Iter p} → p^i ⇔# p^j → q^i ⇔# q^j → Set
-(mor#p ⟪ p_q , _ ⟫ ⟪ p_r , _ ⟫ _) ≡# (mor#p ⟪ q_q , _ ⟫ ⟪ q_r , _ ⟫ _) = Equiv p_q q_q p_r q_r
+refl# : {τ : U} {p : τ ⟷ τ} {p q : Val τ} {eq : p ≈ q} → eq ≡≈ eq
+refl# {eq = ⋆≈} = ⋆≡
+refl# {eq = #p≈ p^i p^j x} = #p≡
+refl# {eq = 1/#p≈ q p₁ p₂ x} = 1/#p≡ id⇔ -- only interesting case
+refl# {eq = 𝟙ₚ≈ p₂ q r x} = 𝟙ₚ≡
+refl# {eq = [,]≈ eq eq₁} = [,]≡
+refl# {eq = inj₁≈ eq} = inj₁≡
+refl# {eq = inj₂≈ eq} = inj₂≡
 
-refl# : {τ : U} {p : τ ⟷ τ} {p q : Iter p} {m : p ⇔# q} → m ≡# m
-refl# {m = mor#p ⟪ p₁ , α ⟫ ⟪ p₂ , β ⟫ _} = record { p⇔q = id⇔ ; r⇔q = β ● 2! α ; r⇔s = id⇔ }
+sym# : {τ : U} {p : τ ⟷ τ} {p q : Val τ} {l r : p ≈ q} → l ≡≈ r → r ≡≈ l
+sym# ⋆≡ = ⋆≡
+sym# #p≡ = #p≡
+sym# 𝟙ₚ≡ = 𝟙ₚ≡
+sym# [,]≡ = [,]≡
+sym# inj₁≡ = inj₁≡
+sym# inj₂≡ = inj₂≡
+sym# (1/#p≡ x) = 1/#p≡ {!sym≈ x!}
 
+{-
 -- basic morphisms and properties
 id#p : {τ : U} {p : τ ⟷ τ} {p^i : Iter p} → p^i ⇔# p^i
 id#p {_} {p} { < i , q , α > }  =
@@ -115,3 +146,4 @@ record _⇔1/#_ {τ : U} {p : τ ⟷ τ} (p^i : Sing p) (p^j : Sing p) : Set whe
     r : Iter p
     χ : Iter.q q ◎ Sing.p' p^i ⇔ Sing.p' p^j ◎ Iter.q r
 
+-}
