@@ -118,3 +118,38 @@ prim◎prim⁻¹≡id factorl [ v , inl v₁ ] = refl
 prim◎prim⁻¹≡id factorl [ v , inr v₁ ] = refl
 prim◎prim⁻¹≡id id⟷ v = refl
 
+prim⁻¹◎prim≡id : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → (v : Val T₁) → prim⁻¹ c (prim c v) ≡ v
+prim⁻¹◎prim≡id unite₊l (inl ())
+prim⁻¹◎prim≡id unite₊l (inr v) = refl
+prim⁻¹◎prim≡id uniti₊l v = refl
+prim⁻¹◎prim≡id unite₊r (inl v) = refl
+prim⁻¹◎prim≡id unite₊r (inr ())
+prim⁻¹◎prim≡id uniti₊r v = refl
+prim⁻¹◎prim≡id swap₊ (inl v) = refl
+prim⁻¹◎prim≡id swap₊ (inr v) = refl
+prim⁻¹◎prim≡id assocl₊ (inl v) = refl
+prim⁻¹◎prim≡id assocl₊ (inr (inl v)) = refl
+prim⁻¹◎prim≡id assocl₊ (inr (inr v)) = refl
+prim⁻¹◎prim≡id assocr₊ (inl (inl v)) = refl
+prim⁻¹◎prim≡id assocr₊ (inl (inr v)) = refl
+prim⁻¹◎prim≡id assocr₊ (inr v) = refl
+prim⁻¹◎prim≡id unite⋆l [ ⋆ , v₁ ] = refl
+prim⁻¹◎prim≡id uniti⋆l v = refl
+prim⁻¹◎prim≡id unite⋆r [ v , ⋆ ] = refl
+prim⁻¹◎prim≡id uniti⋆r v = refl
+prim⁻¹◎prim≡id swap⋆ [ v , v₁ ] = refl
+prim⁻¹◎prim≡id assocl⋆ [ v , [ v₁ , v₂ ] ] = refl
+prim⁻¹◎prim≡id assocr⋆ [ [ v , v₁ ] , v₂ ] = refl
+prim⁻¹◎prim≡id absorbr [ () , v₁ ]
+prim⁻¹◎prim≡id absorbl [ v , () ]
+prim⁻¹◎prim≡id factorzr ()
+prim⁻¹◎prim≡id factorzl ()
+prim⁻¹◎prim≡id dist [ inl v , v₁ ] = refl
+prim⁻¹◎prim≡id dist [ inr v , v₁ ] = refl
+prim⁻¹◎prim≡id factor (inl [ v , v₁ ]) = refl
+prim⁻¹◎prim≡id factor (inr [ v , v₁ ]) = refl
+prim⁻¹◎prim≡id distl [ v , inl v₁ ] = refl
+prim⁻¹◎prim≡id distl [ v , inr v₁ ] = refl
+prim⁻¹◎prim≡id factorl (inl [ v , v₁ ]) = refl
+prim⁻¹◎prim≡id factorl (inr [ v , v₁ ]) = refl
+prim⁻¹◎prim≡id id⟷ v = refl
