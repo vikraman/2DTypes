@@ -53,10 +53,8 @@ mutual
     _◎_ :  {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
     _⊕_ :  {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊕ t₂ ⟷ t₃ ⊕ t₄)
     _⊗_ :  {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
-    foldSwap : {t : U} → (𝟙 ⊕ 𝟙) ⟷ (# (Prim (swap₊ {t} {t})))
-    unfoldSwap : {t : U} → (# (Prim (swap₊ {t} {t}))) ⟷ (𝟙 ⊕ 𝟙) 
-    ap⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
-    ap⁻¹⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
+    -- ap⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
+    -- ap⁻¹⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
     η- : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (1/# p ⊗ # p)
     η+ : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (# p ⊗ 1/# p)
     ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙# p
@@ -97,10 +95,8 @@ mutual
 ! (η+ p)    = ε+ p
 ! (ε- p)    = η- p
 ! (ε+ p)    = η+ p
-! foldSwap = unfoldSwap
-! unfoldSwap = foldSwap
-! ap⟷ = ap⁻¹⟷ 
-! ap⁻¹⟷ = ap⟷
+-- ! ap⟷ = ap⁻¹⟷ 
+-- ! ap⁻¹⟷ = ap⟷
 ! (unite⋆l# p) = uniti⋆l# p
 ! (uniti⋆l# p) = unite⋆l# p
 ! (unite⋆r# p) = uniti⋆r# p
@@ -148,7 +144,18 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   ccc₂r : {t : U} {p : t ⟷ t} →
          Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
          Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
-
+{-
+  -- application coherence
+  -- c ⇔ d means applying either is the same
+  resp-ap⟷r : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
+         (f ⊗ Prim id⟷) ◎ ap⟷ ⇔ ap⟷ ◎ (f ⊗ Prim id⟷)
+  resp-ap⟷l : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
+         ap⟷ ◎ (f ⊗ Prim id⟷) ⇔ (f ⊗ Prim id⟷) ◎ ap⟷
+  resp-ap⁻¹⟷r : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
+         ! (f ⊗ Prim id⟷) ◎ ap⁻¹⟷ ⇔ ap⁻¹⟷ ◎ ! (f ⊗ Prim id⟷)
+  resp-ap⁻¹⟷l : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
+         ap⁻¹⟷ ◎ ! (f ⊗ Prim id⟷) ⇔ ! (f ⊗ Prim id⟷) ◎ ap⁻¹⟷
+-}
   -- suggested alternate versions
   -- ccc₁l {t : U} {p : t ⟷ t} →
   --     uniti⋆r ◎ (id⟷ ⊗ η p) ◎ assocl⋆ ⇔ uniti⋆l ◎ ((η p ◎ swap⋆) ⊗ id⟷)
@@ -173,6 +180,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! ccc₁r = ccc₁l
 2! ccc₂l = ccc₂r
 2! ccc₂r = ccc₂l
+-- 2! (resp-ap⟷r f) = resp-ap⟷l f
+-- 2! (resp-ap⟷l f) = resp-ap⟷r f
+-- 2! (resp-ap⁻¹⟷r f) = resp-ap⁻¹⟷l f
+-- 2! (resp-ap⁻¹⟷l f) = resp-ap⁻¹⟷r f
 
 -- Properties
 
@@ -210,10 +221,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id (η- p) = id⇔
 !!⇔id (ε+ p) = id⇔
 !!⇔id (ε- p) = id⇔
-!!⇔id foldSwap = id⇔
-!!⇔id unfoldSwap = id⇔
-!!⇔id ap⟷ = id⇔ 
-!!⇔id ap⁻¹⟷ = id⇔
+-- !!⇔id ap⟷ = id⇔ 
+-- !!⇔id ap⁻¹⟷ = id⇔
 !!⇔id (unite⋆l# p) = id⇔
 !!⇔id (uniti⋆l# p) = id⇔
 !!⇔id (unite⋆r# p) = id⇔
@@ -239,6 +248,11 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! ccc₁r = ccc₂r
 ⇔! ccc₂l = ccc₁l
 ⇔! ccc₂r = ccc₁r
+-- ⇔! (resp-ap⟷r f) = resp-ap⁻¹⟷l f
+-- ⇔! (resp-ap⟷l f) = resp-ap⁻¹⟷r f
+-- is there any way that resp-ap can be made fully symmetric?
+-- ⇔! (resp-ap⁻¹⟷r f) = id⇔ ⊡ (resp⊗⇔ (2! (!!⇔id f)) id⇔) ● resp-ap⟷l f ● ((resp⊗⇔ (!!⇔id f) id⇔) ⊡ id⇔)
+-- ⇔! (resp-ap⁻¹⟷l f) = ((resp⊗⇔ (2! (!!⇔id f)) id⇔) ⊡ id⇔) ● resp-ap⟷r f ● id⇔ ⊡ (resp⊗⇔ (!!⇔id f) id⇔)
 
 -- convenient lemma
 
