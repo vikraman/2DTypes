@@ -10,11 +10,11 @@ critical.  At the end, I distribute the open tasks around
 4. Sing - done
 5. ProgMorphisms
 - swapSI should be moved to its own file [done]
-- Equiv is wrong. [done: no need for a "global" notion of equivalence!]
+- Equiv is wrong. [done]
 6. Val
 - sym~~ needs to be done (two holes) [done]
 ~ potential clean-up: some of the arguments to some of the ~~ 
-combinators can be made implicit
+     combinators can be made implicit
 ~ add IsEquivalence and Setoid?
 7. Order2Lemmas - done
 8. opsem3
