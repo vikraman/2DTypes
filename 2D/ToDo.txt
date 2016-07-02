@@ -9,13 +9,10 @@ critical.  At the end, I distribute the open tasks around
 3. Iter - done
 4. Sing - done
 5. ProgMorphisms
-- swapSI should be moved to its own file
-- Equiv is wrong.
-- the equivalences in here should be exactly the same as those in Types
-- which means that most of the properties needed here are already proved 
-in Types
+- swapSI should be moved to its own file [done]
+- Equiv is wrong. [done: no need for a "global" notion of equivalence!]
 6. Val
-- sym~~ needs to be done (two holes)
+- sym~~ needs to be done (two holes) [done]
 ~ potential clean-up: some of the arguments to some of the ~~ 
 combinators can be made implicit
 ~ add IsEquivalence and Setoid?
@@ -29,7 +26,7 @@ combinators can be made implicit
 9. Frac
 - orderC, orderG, 1/orderC, 1/orderG need to be reimplemented in terms 
 of things in Val and ProgMorphisms
-- oneC, oneG need implemented
+- oneC, oneG need implemented [done]
 10. Order
 - do we try to implement order?
 
