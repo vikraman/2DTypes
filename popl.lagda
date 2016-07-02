@@ -32,6 +32,7 @@
 \newcommand{\agp}[3]{#1 \sslash_{#3} #2}
 \newcommand{\order}[1]{\hash #1}
 \newcommand{\iorder}[1]{1/\hash #1}
+\newcommand{\oneg}[1]{\mathbb{1}_{#1}}
 \newcommand{\ord}[1]{\ensuremath{\mathsf{order}(#1)}}
 \newcommand{\inl}[1]{\textsf{inl}(#1)}
 \newcommand{\inr}[1]{\textsf{inr}(#1)}
@@ -49,7 +50,9 @@
 \newcommand{\fv}[2]{\fcolorbox{black}{white}{\strut $#1$}\fcolorbox{black}{gray!20}{$\strut #2$}}
 \newcommand{\pt}[2]{\bullet[#1,#2]}
 \newcommand{\refl}{\AgdaInductiveConstructor{refl}}
+\newcommand{\sing}[1]{\textsc{Sing}(#1)}
 \newcommand{\iter}[1]{\textsc{Iter}(#1)}
+\newcommand{\pair}[2]{\langle #1,#2 \rangle}
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
 \newcommand{\distiterplus}[3]{\mathsf{dist^{{\wedge}{+}}}~#1~#2~#3}
 
