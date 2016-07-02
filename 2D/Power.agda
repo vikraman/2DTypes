@@ -4,7 +4,7 @@ module 2D.Power where
 
 open import Data.Nat using (ℕ; suc)
 open import Data.Integer as ℤ
-open import Relation.Binary.PropositionalEquality using (_≡_; subst)
+open import Relation.Binary.PropositionalEquality using (_≡_; subst; refl)
 
 open import 2D.Types
 
@@ -78,3 +78,6 @@ id^i⇔id (+_ ℕ.zero) = id⇔
 id^i⇔id (+_ (ℕ.suc n)) = idl◎l ● id^i⇔id (+ n)
 id^i⇔id (-[1+_] ℕ.zero) = id⇔
 id^i⇔id (-[1+_] (ℕ.suc n)) = idl◎l ● id^i⇔id -[1+ n ]
+
+eq-power : {τ : U} {p : τ ⟷ τ} → {i j : ℤ} → i ≡ j → p ^ i ⇔ p ^ j
+eq-power refl = id⇔
