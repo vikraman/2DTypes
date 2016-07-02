@@ -25,97 +25,99 @@ open import 2D.Iter
 open import 2D.ProgMorphisms
 
 discreteC : Set → Category zero zero zero
-discreteC S = record { Obj = S
-                     ; _⇒_ = _≡_
-                     ; _≡_ = λ _ _ → ⊤
-                     ; id = refl
-                     ; _∘_ = flip trans
-                     ; assoc = tt
-                     ; identityˡ = tt
-                     ; identityʳ = tt
-                     ; equiv = record { refl = tt ; sym = λ _ → tt ; trans = λ _ _ → tt }
-                     ; ∘-resp-≡ = λ _ _ → tt
-                     }
+discreteC S = record {
+    Obj = S
+  ; _⇒_ = _≡_
+  ; _≡_ = λ _ _ → ⊤
+  ; id = refl
+  ; _∘_ = flip trans
+  ; assoc = tt
+  ; identityˡ = tt
+  ; identityʳ = tt
+  ; equiv = record { refl = tt ; sym = λ _ → tt ; trans = λ _ _ → tt }
+  ; ∘-resp-≡ = λ _ _ → tt
+  }
 
 discreteG : (S : Set) → Groupoid (discreteC S)
 discreteG S = record { _⁻¹ = sym
                      ; iso = record { isoˡ = tt ; isoʳ = tt }
                      }
 
+-- morphisms between p^i and p^j are proofs of reversibility.
+-- All proofs are equal
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Iter p
-   ; _⇒_ = _⇔#_
-   ; _≡_ = _≡#_
-   ; id  = id#p
-   ; _∘_ = _∘#_
-   ; assoc = λ {_} {_} {_} {_} {f} {g} {h} → assoc# {f = f} {g} {h}
-   ; identityˡ = λ {_} {_} {m} → id#pˡ {m = m}
-   ; identityʳ = λ {_} {_} {m} → id#pʳ {m = m}
+   ; _⇒_ = λ p^i p^j → Iter.q p^i ◎ ! (Iter.q p^j) ⇔ Prim id⟷
+   ; _≡_ = λ _ _ → ⊤
+   ; id  = linv◎l
+   ; _∘_ = λ B!C A!B → 2! (2! A!B ● idr◎r ● id⇔ ⊡ (2! B!C) ●
+           assoc◎l ● (assoc◎r ● id⇔ ⊡ rinv◎l ● idr◎l) ⊡ id⇔ )
+   ; assoc = tt
+   ; identityˡ = tt
+   ; identityʳ = tt
    ; equiv = record
-     { refl = λ {m} → refl# {m = m}
-     ; sym = λ {m₁} {m₂} c → sym#p {m₁ = m₁} {m₂} c
-     ; trans = λ {i} {j} {k} i≡j j≡k → trans#p {i = i} {j} {k} i≡j j≡k
+     { refl = tt
+     ; sym = λ _ → tt
+     ; trans = λ _ _ → tt
    }
-   ; ∘-resp-≡ = λ {_} {_} {_} {f} {g} {h} {i} c₁ c₂ → ∘#-resp-≡# {f = f} {g} {h} {i} c₁ c₂
+   ; ∘-resp-≡ = λ _ _ → tt
    }
-   where
-     open Sing
-     open _⇔#_
 
 open import Data.Integer as ℤ hiding (∣_∣)
 
 1/orderC : (τ : U) → (τ ⟷ τ) → Category _ _ _
-1/orderC τ pp = record { Obj = ⊤
-                       ; _⇒_ = λ _ _ → Iter pp
-                       ; _≡_ = λ { pp qq  → Iter.q pp ⇔ Iter.q qq }
-                       ; id = < + 0 , Prim id⟷ , id⇔ >
-                       ; _∘_ = λ { < m , p , α > < n , q , β > →
-                         < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
-                       ; assoc = assoc◎r
-                       ; identityˡ = idl◎l
-                       ; identityʳ = idr◎l
-                       ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
-                       ; ∘-resp-≡ = _⊡_
-                       }
+1/orderC τ pp = record {
+    Obj = Sing pp
+  ; _⇒_ = λ _ _ → Iter pp -- unlike in Val, here we skip the 'trivial' proof
+  ; _≡_ = λ { pp qq  → Iter.q pp ⇔ Iter.q qq }
+  ; id = zeroth pp
+  ; _∘_ = λ { < m , p , α > < n , q , β > →
+              < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
+  ; assoc = assoc◎r
+  ; identityˡ = idl◎l
+  ; identityʳ = idr◎l
+  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+  ; ∘-resp-≡ = _⊡_
+  }
 
 orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (orderC p)
 orderG {τ} p = record {
-    _⁻¹ = sym⇔#p
+    _⁻¹ = λ {_} {B} pf → !!⇔id (Iter.q B) ⊡ id⇔ ● ⇔! pf
   ; iso = λ {a} {b} {f} → record {
-        isoˡ = isoˡ#p {τ} {p} {a} {b} {f}
-      ; isoʳ = isoʳ#p {eq = f}
+        isoˡ = tt
+      ; isoʳ = tt
       }
   }
 
 1/orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (1/orderC τ p)
-1/orderG {τ} p = record { _⁻¹ = λ { < i , q , eq > →
-                        < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > }
-                      ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
-                      }
+1/orderG {τ} p = record {
+    _⁻¹ = λ { < i , q , eq > → < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > }
+  ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
+  }
 
 oneC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
-oneC {τ} p = record { Obj = Iter p
-                    ; _⇒_ = λ A B → Σ[ A⇔B ∈ (Iter.q A ⇔ Iter.q B) ] (Iter p)
-                    ; _≡_ = λ { {A} {B} (⇔₁ , iter₁) (⇔₂ , iter₂)
-                            → Iter.q iter₁ ⇔ Iter.q iter₂ }
-                    ; id = id⇔ , < + 0 , Prim id⟷ , id⇔ >
-                    ; _∘_ = λ { {A} {B} {C} (⇔₁ , < m , p , α >) (⇔₂ , < n , q , β >) →
-                                (⇔₂ ● ⇔₁) , < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
-                    ; assoc = assoc◎r
-                    ; identityˡ = idl◎l
-                    ; identityʳ = idr◎l
-                    ; equiv = record { refl = id⇔
-                                     ; sym = 2!
-                                     ; trans = _●_ }
-                    ; ∘-resp-≡ = _⊡_
-                    }
+oneC {τ} p = record {
+    Obj = Iter p
+  ; _⇒_ = λ _ _ → Iter p
+  ; _≡_ = λ iter₁ iter₂ → Iter.q iter₁ ⇔ Iter.q iter₂
+  ; id = zeroth p
+  ; _∘_ = λ { < m , p , α >  < n , q , β > →
+              < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
+  ; assoc = assoc◎r
+  ; identityˡ = idl◎l
+  ; identityʳ = idr◎l
+  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+  ; ∘-resp-≡ = _⊡_
+  }
 
 oneG : {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC p)
-oneG {τ} p = record { _⁻¹ = λ { (⇔₁ , < i , q , eq >)
-                              → (2! ⇔₁ , < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) >) }
-                    ; iso = record { isoˡ = rinv◎l
-                                   ; isoʳ = linv◎l } }
+oneG {τ} p = record {
+    _⁻¹ = λ { (< i , q , eq >) → < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > }
+  ; iso = record { isoˡ = rinv◎l
+                 ; isoʳ = linv◎l
+                 }
+  }
 
 ⟦_⟧ : (τ : U) → El τ
 ⟦ 𝟘 ⟧ = discreteC ⊥ , discreteG ⊥
