@@ -33,9 +33,9 @@ data _≈_ : {t : U} → Val t → Val t → Set where
         -- so it is best to have it instead of skipping it
   1/#p≈ : ∀ {t} {p : t ⟷ t}  (q : Iter p) → (p₁ p₂ : Sing p) →
         Sing.p' p₁ ◎ ! (Sing.p' p₂) ⇔ Iter.q q ◎ ! (Iter.q q) → (1/comb p₁) ≈ (1/comb p₂)
-        -- all 𝟙ₚ q and 𝟙ₚ q are equivalent.
+        -- 𝟙ₚ q and 𝟙ₚ q are equivalent when p and q are.  There's |order p| of them.
   𝟙ₚ≈ : ∀ {t} {p : t ⟷ t} → (p₁ q r : Iter p) →
-        (Iter.q q ◎ ! (Iter.q r)) ⇔ Iter.q p₁ → (𝟙ₚ q) ≈ (𝟙ₚ r)
+        (Iter.q q ◎ ! (Iter.q r)) ⇔ Prim id⟷ → (𝟙ₚ q) ≈ (𝟙ₚ r)
   [,]≈ : {s t : U} {sv₁ sv₂ : Val s} {tv₁ tv₂ : Val t} → sv₁ ≈ sv₂ → tv₁ ≈ tv₂ → [ sv₁ , tv₁ ] ≈ [ sv₂ , tv₂ ]
   inj₁≈ : {s t : U} → {sv₁ sv₂ : Val s} → sv₁ ≈ sv₂ → inl {s} {t} sv₁ ≈ inl sv₂
   inj₂≈ : {s t : U} → {tv₁ tv₂ : Val t} → tv₁ ≈ tv₂ → inr {s} {t} tv₁ ≈ inr tv₂
@@ -58,7 +58,7 @@ trans≈ (1/#p≈ q p₁ p₂ x) (1/#p≈ q₁ .p₂ p₃ x₁) =
   1/#p≈ q p₁ p₃ (2! (idr◎r ● ((2! x) ⊡ (id⇔ ● linv◎r ● 2! x₁)) ● assoc◎l ● (assoc◎r ● id⇔ ⊡ rinv◎l ● idr◎l) ⊡ id⇔  ))
 trans≈ (𝟙ₚ≈ {_} {p} < i , p₁ , α > q r x) (𝟙ₚ≈ < j , p₂ , β > .r r₁ x₁) =
   𝟙ₚ≈ < i ℤ.+ j , p₁ ◎ p₂ , α ⊡ β ● 2! (lower i j) > q r₁
-       (2! ((2! x) ⊡ (2! x₁) ● assoc◎l ● ((assoc◎r ● id⇔ ⊡ rinv◎l ● idr◎l) ⊡ id⇔)))
+       ((idr◎r ● (id⇔ ⊡ rinv◎r)) ⊡ id⇔ ● assoc◎l ⊡ id⇔ ● assoc◎r ● x ⊡ x₁ ● idl◎l )
 trans≈ ([,]≈ eq₁ eq₂) ([,]≈ eq₃ eq₄) = [,]≈ (trans≈ eq₁ eq₃) (trans≈ eq₂ eq₄)
 trans≈ (inj₁≈ eq₁) (inj₁≈ eq₂) = inj₁≈ (trans≈ eq₁ eq₂)
 trans≈ (inj₂≈ eq₁) (inj₂≈ eq₂) = inj₂≈ (trans≈ eq₁ eq₂)

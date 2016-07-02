@@ -36,9 +36,7 @@ Fin2⇒1+1 zero = inl ⋆
 Fin2⇒1+1 (suc zero) = inr ⋆
 Fin2⇒1+1 (suc (suc ()))
 
--- don't know why the TERMINATING is still needed.  Will investigate later.
 mutual
-  {-# TERMINATING #-}
   𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₁ → Val T₂
   𝓐𝓹 (Prim x) v = prim x v
   𝓐𝓹 (c ◎ c₁) v =
@@ -83,14 +81,14 @@ cong≈ (c₁ ⊗ c₂) ([,]≈ p₁ p₂) = [,]≈ (cong≈ c₁ p₁) (cong≈
 -- cong≈ ap⟷ ([,]≈ (#p≈ {_} {p} (comb x) (comb x₁) x₂) p₂) =
 --   [,]≈ (#p≈ (comb x) (comb x₁) x₂) ({!!})
 -- cong≈ ap⁻¹⟷ ([,]≈ p₁ p₂) = {!!}
-cong≈ (η- c) (𝟙ₚ≈ p q r x) = {!!}
-cong≈ (η+ c) (𝟙ₚ≈ p₁ q r x) = {!!}
-cong≈ (ε+ c) ([,]≈ (#p≈ (comb x) (comb x₁) x₂) (1/#p≈ q p₁ p₂ x₃)) = 𝟙ₚ≈ (zeroth c) x x₁ x₂
-cong≈ (ε- c) ([,]≈ p₁ p₂) = {!!}
+cong≈ (η- c) (𝟙ₚ≈ p q r x) = [,]≈ (refl≈ refl) (#p≈ (comb q) (comb r) x)
+cong≈ (η+ c) (𝟙ₚ≈ p₁ q r x) = [,]≈ (#p≈ (comb q) (comb r) x) (refl≈ refl)
+cong≈ (ε+ c) ([,]≈ (#p≈ (comb x) (comb x₁) x₂) (1/#p≈ q p₁ p₂ x₃)) = 𝟙ₚ≈ q x x₁ x₂
+cong≈ (ε- p) ([,]≈ (1/#p≈ q p₁ p₂ x₂) (#p≈ (comb x) (comb x₁) x₃)) = 𝟙ₚ≈ q x x₁ x₃
 cong≈ (unite⋆l# c) ([,]≈ p₁ p₂) = p₂
-cong≈ (uniti⋆l# c) p = {!!}
+cong≈ (uniti⋆l# c) p = [,]≈ (refl≈ refl) p
 cong≈ (unite⋆r# c) ([,]≈ p₁ p₂) = p₁
-cong≈ (uniti⋆r# c) p = {!!}
+cong≈ (uniti⋆r# c) p = [,]≈ p (refl≈ refl)
 
 cong⁻¹≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₂} → v ≈ w → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹⁻¹ c w
 cong⁻¹≈ (Prim x) p = prim⁻¹-cong≈ x p
@@ -100,16 +98,15 @@ cong⁻¹≈ (c₁ ⊕ c₂) (inj₂≈ p) = inj₂≈ (cong⁻¹≈ c₂ p)
 cong⁻¹≈ (c₁ ⊗ c₂) ([,]≈ p₁ p₂) = [,]≈ (cong⁻¹≈ c₁ p₁) (cong⁻¹≈ c₂ p₂)
 -- cong⁻¹≈ ap⟷ ([,]≈ p₁ p₂) = {!!}
 -- cong⁻¹≈ ap⁻¹⟷ ([,]≈ p₁ p₂) = {!!}
-cong⁻¹≈ (η- c) ([,]≈ p₁ p₂) = {!!}
-cong⁻¹≈ (η+ c) ([,]≈ p₁ p₂) = {!!}
-cong⁻¹≈ (ε+ c) (𝟙ₚ≈ p q r x) = {!!}
-cong⁻¹≈ (ε- c) (𝟙ₚ≈ p q r x) = {!!}
-cong⁻¹≈ (unite⋆l# c) p = {!!}
-cong⁻¹≈ (uniti⋆l# c) ([,]≈ p₁ p₂) = {!!}
-cong⁻¹≈ (unite⋆r# c) p = {!!}
-cong⁻¹≈ (uniti⋆r# c) ([,]≈ p₁ p₂) = {!!}
+cong⁻¹≈ (η- p) ([,]≈ (1/#p≈ q p₁ p₂ x₂) (#p≈ (comb x) (comb x₁) x₃)) = 𝟙ₚ≈ q x x₁ x₃
+cong⁻¹≈ (η+ p) ([,]≈ (#p≈ (comb x) (comb x₁) x₂) (1/#p≈ q p₁ p₂ x₃)) = 𝟙ₚ≈ q x x₁ x₂
+cong⁻¹≈ (ε+ c) (𝟙ₚ≈ p q r x) = [,]≈ (#p≈ (comb q) (comb r) x) (refl≈ refl)
+cong⁻¹≈ (ε- c) (𝟙ₚ≈ p q r x) = [,]≈ (refl≈ refl) (#p≈ (comb q) (comb r) x)
+cong⁻¹≈ (unite⋆l# c) p = [,]≈ (refl≈ refl) p
+cong⁻¹≈ (uniti⋆l# p) ([,]≈ (𝟙ₚ≈ p₁ q r x) p₂) = p₂
+cong⁻¹≈ (unite⋆r# c) p = [,]≈ p (refl≈ refl)
+cong⁻¹≈ (uniti⋆r# p) ([,]≈ p₁ (𝟙ₚ≈ p₂ q r x)) = p₁
 
-{-# TERMINATING #-}
 mutual
   fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
   fwd◎bwd≈id (Prim x) v = refl≈ (prim◎prim⁻¹≡id x v)
@@ -131,15 +128,16 @@ mutual
     -- note that this means that we get x back on the nose.
   fwd◎bwd≈id (ε- c) (𝟙ₚ x) = refl≈ refl -- 𝟙ₚ≈ {p₁ = x} {x} x x id⇔
   fwd◎bwd≈id (unite⋆l# c) v = refl≈ refl
-  fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] =
+  fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] = {![,]≈ ? ?!}
+    {-
     [,]≈ (𝟙ₚ≈  < (+ 1) ℤ+ (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ●
                                              2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) >
-                                             (iter c) < i , q , α > id⇔)
-         (refl≈ refl)
+                                             (iter c) < i , q , α > {!!}) 
+         (refl≈ refl) -}
   fwd◎bwd≈id (unite⋆r# c) v = refl≈ refl
   fwd◎bwd≈id (uniti⋆r# c) [ p , 𝟙ₚ < i , q , α > ] =
    [,]≈ (refl≈ refl)
-        (𝟙ₚ≈  < ℤsuc (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ● 2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) > (iter c) < i , q , α > id⇔)
+        (𝟙ₚ≈  < ℤsuc (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ● 2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) > (iter c) < i , q , α > {!!})
 
   bwd◎fwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → (𝓐𝓹⁻¹ c (𝓐𝓹 c v)) ≈ v
   bwd◎fwd≈id (Prim x) v = refl≈ (prim⁻¹◎prim≡id x v)
@@ -162,12 +160,12 @@ mutual
   bwd◎fwd≈id (unite⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] =
     [,]≈ (𝟙ₚ≈  < (+ 1) ℤ+ (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ●
                                              2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) >
-                                             (iter c) < i , q , α > id⇔)
+                                             (iter c) < i , q , α > {!!})
          (refl≈ refl)
   bwd◎fwd≈id (uniti⋆l# c) v = refl≈ refl
   bwd◎fwd≈id (unite⋆r# c) [ v , 𝟙ₚ < i , q , α > ] =
     [,]≈ (refl≈ refl)
-         (𝟙ₚ≈  < ℤsuc (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ● 2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) > (iter c) < i , q , α > id⇔)
+         (𝟙ₚ≈  < ℤsuc (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ● 2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) > (iter c) < i , q , α > {!!})
   bwd◎fwd≈id (uniti⋆r# c) v = refl≈ refl
 
 bwd-coherence : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
