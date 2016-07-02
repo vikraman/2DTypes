@@ -63,7 +63,7 @@ $\displaystyle
 \newcommand{\jdg}[3]{{#1} #3}
 \newcommand{\evalone}[2]{#1~\triangleright~#2}
 \newcommand{\evaloneb}[2]{#1~\triangleleft~#2}
-\newcommand{\unitv}{\bullet}
+\newcommand{\unitv}{()}
 \newcommand{\unitepl}{\mathsf{{unite_+l}}}
 \newcommand{\unitipl}{\mathsf{{uniti_+l}}}
 \newcommand{\unitepr}{\mathsf{{unite_+r}}}
@@ -99,10 +99,14 @@ $\displaystyle
 \newcommand{\linvdl}{\mathsf{{linv_{\odot}l}}}
 \newcommand{\linvdr}{\mathsf{{linv_{\odot}r}}}
 \newcommand{\idisotwo}{\mathsf{{id}}}
-\newcommand{\transtwo}{\mathsf{{trans_{\Leftrightarrow}}}}
+\newcommand{\transtwo}{\bullet}
 \newcommand{\respstwo}{\mathsf{{\boxdot}}}
 \newcommand{\respptwo}{\mathsf{{resp_{\oplus\Leftrightarrow}}}}
 \newcommand{\respttwo}{\mathsf{{resp_{\otimes\Leftrightarrow}}}}
+\newcommand{\sumid}{\mathsf{sumid}}
+\newcommand{\splitid}{\mathsf{splitid}}
+\newcommand{\homps}{\mathsf{hom_{\oplus\odot}}}
+\newcommand{\homsp}{\mathsf{hom_{\odot\oplus}}}
 
 \newcommand{\sem}[1]{\llbracket #1 \rrbracket}
 
