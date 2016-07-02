@@ -43,7 +43,8 @@ discreteG S = record { _⁻¹ = sym
                      ; iso = record { isoˡ = tt ; isoʳ = tt }
                      }
 
--- morphisms between p^i and p^j are proofs of reversibility.
+-- morphisms between p^i and p^j are proofs of equivalence, but
+-- phrased as one being the inverse of the other.
 -- All proofs are equal
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
@@ -60,7 +61,7 @@ orderC {τ} p = record {
      { refl = tt
      ; sym = λ _ → tt
      ; trans = λ _ _ → tt
-   }
+     }
    ; ∘-resp-≡ = λ _ _ → tt
    }
 
