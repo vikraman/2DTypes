@@ -20,11 +20,14 @@ data Val : (τ : U) → Set where
   1/comb :  {τ : U} {p : τ ⟷ τ} → Sing p → Val (1/# p)
   𝟙ₚ :       {τ : U} {p : τ ⟷ τ} → Iter p → Val (𝟙# p)
 
+get-q : {t : U} {p : t ⟷ t} → Val (# p) → t ⟷ t
+get-q (comb i) = Iter.q i
+
 data _≈_ : {t : U} → Val t → Val t → Set where
-  ⋆≈  : ⋆ ≈ ⋆
+  ⋆≈  : {e f : Val 𝟙} → e ≈ f
        -- programs are equivalent exactly when they are inverses
-  #p≈ : ∀ {t} {p : t ⟷ t} (p^i p^j : Iter p) →
-        Iter.q p^i ◎ ! (Iter.q p^j) ⇔ Prim id⟷ → (comb p^i) ≈ (comb p^j)
+  #p≈ : ∀ {t} {p : t ⟷ t} (p^i p^j : Val (# p)) →
+        get-q p^i ◎ ! (get-q p^j) ⇔ Prim id⟷ → p^i ≈ p^j
         -- p₁ and p₂ are equivalent, and there's order p proofs of that
         -- the "proof" is always easily done, but still expresses the right thing
         -- so it is best to have it instead of skipping it
@@ -42,7 +45,7 @@ refl≈ {v = ⋆} refl = ⋆≈
 refl≈ {v = inl v} refl = inj₁≈ (refl≈ refl)
 refl≈ {v = inr v} refl = inj₂≈ (refl≈ refl)
 refl≈ {v = [ v , w ]} refl = [,]≈ (refl≈ refl) (refl≈ refl)
-refl≈ {v = comb q } refl = #p≈ q q linv◎l
+refl≈ {v = comb q } refl = #p≈ (comb q) (comb q) linv◎l
 refl≈ {v = 1/comb {p = p} q} refl = 1/#p≈ (iter p) q q (linv◎l ● linv◎r)
 refl≈ {v = 𝟙ₚ {p = p} < i , q , α > } refl =
   let ii = < i , q , α > in 𝟙ₚ≈ (zeroth p) ii ii linv◎l
@@ -62,8 +65,8 @@ trans≈ (inj₂≈ eq₁) (inj₂≈ eq₂) = inj₂≈ (trans≈ eq₁ eq₂)
 
 sym≈ : {t : U} → {a b : Val t} → a ≈ b → b ≈ a
 sym≈ ⋆≈ = ⋆≈
-sym≈ (#p≈ < k , q , α > < k₁ , q₁ , α₁ > x) =
-  #p≈ < k₁ , q₁ , α₁ > < k , q , α >
+sym≈ (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x) =
+  #p≈ (comb < k₁ , q₁ , α₁ >) (comb < k , q , α > )
       ((!!⇔id q₁ ⊡ id⇔) ● ⇔! x)
 sym≈ (1/#p≈ q p₁ p₂ x) = 1/#p≈ q p₂ p₁ ((sing⇔ p₂ p₁ ⊡ ⇔! (sing⇔ p₁ p₂)) ● x)
 sym≈ (𝟙ₚ≈ < k , p₁ , α > q r x) =
