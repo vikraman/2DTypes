@@ -155,7 +155,11 @@ prim⁻¹◎prim≡id factorl (inr [ v , v₁ ]) = refl
 prim⁻¹◎prim≡id id⟷ v = refl
 
 prim-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → {v w : Val T₁} → v ≈ w → prim c v ≈ prim c w
-prim-cong≈ c ⋆≈ = refl≈ refl
+prim-cong≈ uniti₊l ⋆≈ = inj₂≈ ⋆≈
+prim-cong≈ uniti₊r ⋆≈ = inj₁≈ ⋆≈
+prim-cong≈ uniti⋆l ⋆≈ = [,]≈ ⋆≈ ⋆≈
+prim-cong≈ uniti⋆r ⋆≈ = [,]≈ ⋆≈ ⋆≈
+prim-cong≈ id⟷ ⋆≈ = ⋆≈
 prim-cong≈ uniti₊l (#p≈ p^i p^j x) = inj₂≈ (#p≈ p^i p^j x)
 prim-cong≈ uniti₊r (#p≈ p^i p^j x) = inj₁≈ (#p≈ p^i p^j x)
 prim-cong≈ uniti⋆l (#p≈ p^i p^j x) = [,]≈ ⋆≈ (#p≈ p^i p^j x)
