@@ -26,6 +26,8 @@ data _≈_ : {t : U} → Val t → Val t → Set where
   #p≈ : ∀ {t} {p : t ⟷ t} (p^i p^j : Iter p) →
         Iter.q p^i ◎ ! (Iter.q p^j) ⇔ Prim id⟷ → (comb p^i) ≈ (comb p^j)
         -- p₁ and p₂ are equivalent, and there's order p proofs of that
+        -- the "proof" is always easily done, but still expresses the right thing
+        -- so it is best to have it instead of skipping it
   1/#p≈ : ∀ {t} {p : t ⟷ t}  (q : Iter p) → (p₁ p₂ : Sing p) →
         Sing.p' p₁ ◎ ! (Sing.p' p₂) ⇔ Iter.q q ◎ ! (Iter.q q) → (1/comb p₁) ≈ (1/comb p₂)
         -- all 𝟙ₚ q and 𝟙ₚ q are equivalent.
