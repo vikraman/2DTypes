@@ -43,9 +43,10 @@ We begin by defining two mutually recursive syntactic categories
 \AgdaRef{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
 definitions are identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of the type constructors
-\AgdaInductiveConstructor{\#} and \AgdaInductiveConstructor{1/\#} that
-create order groupoids and inverse order groupoids respectively. We
-will introduce additional combinators in proper time. 
+\AgdaInductiveConstructor{\#}, \AgdaInductiveConstructor{1/\#}, and
+\AgdaInductiveConstructor{𝟙\#} that create order groupoids, inverse
+order groupoids, and expanded unit groupoids respectively. We will
+introduce additional combinators in proper time.
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -54,7 +55,7 @@ will introduce additional combinators in proper time.
 mutual
   
   -- Finite types (cf. Sec. 3.1) extended
-  -- with #p and 1/#p 
+  -- with #p, 1/#p, and 𝟙p
 
   data U : Set where
     𝟘    : U
@@ -63,6 +64,7 @@ mutual
     _⊗_  : U → U → U
     #    : {τ : U} → (τ ⟷ τ) → U
     1/#  : {τ : U} → (τ ⟷ τ) → U
+    𝟙#   : {τ : U} → (τ ⟷ τ) → U
 
   -- Combinators (cf. Fig. 2)
 
@@ -182,7 +184,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
   rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (! c ◎ c)
   linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ id⟷
   linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (c ◎ ! c)
-  trans⇔  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
+  _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
     (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   _⊡_  : ∀ {t₁ t₂ t₃} {c₁ c₃ : t₁ ⟷ t₂} {c₂ c₄ : t₂ ⟷ t₃} →
     (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
@@ -221,7 +223,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 2! linv◎r = linv◎l
 2! id⇔ = id⇔
 2! (α ⊡ β) = (2! α) ⊡ (2! β)
-2! (trans⇔ α β) = trans⇔ (2! β) (2! α)
+2! (α ● β) = (2! β) ● (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
 2! hom⊕◎⇔ = hom◎⊕⇔
@@ -286,7 +288,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 ⇔! rinv◎r = linv◎r
 ⇔! linv◎l = rinv◎l
 ⇔! linv◎r = rinv◎r
-⇔! (trans⇔ q₁ q₂) = trans⇔ (⇔! q₁) (⇔! q₂)
+⇔! (q₁ ● q₂) = (⇔! q₁) ● (⇔! q₂)
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
@@ -298,14 +300,20 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set
 }}}}
 
 As motivated in the previous section, we will also need to consider
-the iterates $p^k$ of combinators $p$ which are $k$-fold compositions
-of $p$ and its inverse. These iterates are not independent: there are
-only $\ord{p}$ distinct iterates, up to 2-combinator equivalence:
+the singleton type $\sing{p}$ including all combinators equivalent to
+$p$ and the type $\iter{p}$ of all the combinators equivalent to
+iterates $p^k$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
 \begin{code}
+record Sing {τ : U} (p : τ ⟷ τ) : Set where
+  constructor ⟪_,_⟫
+  field
+    q : τ ⟷ τ
+    α : q ⇔ p
+
 _^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0)             = id⟷
 p ^ (+ (suc k))       = p ◎ (p ^ (+ k))
@@ -322,7 +330,8 @@ record Iter {τ : U} (p : τ ⟷ τ) : Set where
 }}}
 
 For our running example using the type $\mathbb{3}$ and the combinator
-$a_2$, we can a few iterates of $a_2$ as follows:
+$a_2$, we can a few elements of $\sing{a_2}$ and $\iter{a_2}$ as
+follows:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -334,19 +343,25 @@ $a_2$, we can a few iterates of $a_2$ as follows:
 a₂ : 𝟛 ⟷ 𝟛
 a₂ = Prim swap₊ ⊕ id⟷ 
 
+x y z : Sing a₂
+x = ⟪ a₂ , id⇔ ⟫
+y = ⟪ id⟷ ◎ a₂ , idl◎l ⟫
+z = ⟪  a₂ ◎ (Prim assocr₊ ◎ Prim assocl₊) ,
+       (id⇔ ⊡ rinv◎l) ● idr◎l ⟫ 
+
 p^₀ p^₁ p^₂ p^₃ p^₄ p^₅ : Iter a₂
 p^₀ = < + 0 , id⟷ , id⇔ > 
 p^₁ = < + 0 , id⟷ ◎ id⟷ , idr◎l > 
 p^₂ = <  -[1+ 1 ] ,
          id⟷ , 
-         trans⇔ split⊕-id⟷
-         (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
-         (trans⇔ hom⊕◎⇔ id⇔)) >
+         split⊕-id⟷ ●
+         ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
+         (hom⊕◎⇔ ● id⇔)) >
 p^₃ = <  + 2 ,
          id⟷ ,
-         trans⇔ split⊕-id⟷
-         (trans⇔ (resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r)
-         (trans⇔ hom⊕◎⇔ (id⇔ ⊡ idr◎r))) >
+         split⊕-id⟷ ●
+         ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
+         (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r))) >
 p^₄ = < -[1+ 0 ] , a₂ , id⇔ > 
 p^₅ = < + 1 , a₂ , idr◎r > 
 \end{code}
@@ -388,23 +403,25 @@ data Val : (τ : U) → Set where
   inl :     {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
   inr :     {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
   [_,_] :   {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
-  comb :    {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) →  Val (# p)
-  1/comb :  {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) → Val (1/# p)
+  comb :    {τ : U} {p : τ ⟷ τ} → Iter p →  Val (# p)
+  1/comb :  {τ : U} {p : τ ⟷ τ} → Sing p → Val (1/# p) 
+  𝟙ₚ :      {τ : U} {p : τ ⟷ τ} → Iter p → Val (𝟙# p) 
 \end{code}
 }}}
 
 \noindent The first four lines define the conventional values for the
-unit, sum, and product types. The last two lines define values of type
-$\order{p}$ and $\iorder{p}$ as iterates of $p$. In the case of
-$\order{p}$ the iterates are interpreted as ``\emph{programs}'' that
-can act on other values and in the case of $\iorder{p}$ the iterates
-are interpreted as ``\emph{symmetries}'' that capture similarities in
-values. Note that if $p$ has order, say 3, then there are 3 distinct
-values of type $\order{p}$ and 3 distinct values of $\iorder{p}$. The
-values of type $\order{p}$ apply $p$ for 0, 1, or 2 times to given
-value. The values of type $\iorder{p}$, say $x$, $y$, and $z$,
-represent the three ``thirds'' of $p$, so that applying $x(y(z(v)))$
-has the same effect as applying $p(v)$.
+unit, sum, and product types. The last three lines define values of
+type $\order{p}$, $\iorder{p}$, and $\oneg{p}$ using the singleton $p$
+and the iterates of $p$. In the case of $\order{p}$ the iterates are
+interpreted as ``\emph{programs}'' that can act on other values and in
+the case of $\iorder{p}$ the iterates are interpreted as
+``\emph{symmetries}'' that capture similarities of programs. Note that
+if $p$ has order, say 3, then there are 3 distinct values of type
+$\order{p}$ and 3 distinct values of $\iorder{p}$. The values of type
+$\order{p}$ apply $p$ for 0, 1, or 2 times to given value. The values
+of type $\iorder{p}$, say $x$, $y$, and $z$, represent the three
+``thirds'' of $p$, so that applying $x(y(z(v)))$ has the same effect
+as applying $p(v)$.
 
 Given the definitions of combinators and values, we can directly
 implement the operational semantics of Fig.~\ref{opsem}. We will
