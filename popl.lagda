@@ -133,6 +133,7 @@ $\displaystyle
 \DeclareUnicodeCharacter{7503}{${}^k$}
 \DeclareUnicodeCharacter{951}{$\eta$}
 \DeclareUnicodeCharacter{956}{$\mu$}
+\DeclareUnicodeCharacter{8346}{${}_p$}
 \DeclareUnicodeCharacter{8703}{\ensuremath{\leftrightarrowtriangle}}
 \DeclareUnicodeCharacter{120792}{$\zt$}
 \DeclareUnicodeCharacter{120793}{$\ot$}

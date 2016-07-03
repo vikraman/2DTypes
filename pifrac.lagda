@@ -403,23 +403,25 @@ data Val : (τ : U) → Set where
   inl :     {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
   inr :     {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
   [_,_] :   {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
-  comb :    {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) →  Val (# p)
-  1/comb :  {τ : U} {p : τ ⟷ τ} → (pᵏ : Iter p) → Val (1/# p)
+  comb :    {τ : U} {p : τ ⟷ τ} → Iter p →  Val (# p)
+  1/comb :  {τ : U} {p : τ ⟷ τ} → Sing p → Val (1/# p) 
+  𝟙ₚ :      {τ : U} {p : τ ⟷ τ} → Iter p → Val (𝟙# p) 
 \end{code}
 }}}
 
 \noindent The first four lines define the conventional values for the
-unit, sum, and product types. The last two lines define values of type
-$\order{p}$ and $\iorder{p}$ as iterates of $p$. In the case of
-$\order{p}$ the iterates are interpreted as ``\emph{programs}'' that
-can act on other values and in the case of $\iorder{p}$ the iterates
-are interpreted as ``\emph{symmetries}'' that capture similarities in
-values. Note that if $p$ has order, say 3, then there are 3 distinct
-values of type $\order{p}$ and 3 distinct values of $\iorder{p}$. The
-values of type $\order{p}$ apply $p$ for 0, 1, or 2 times to given
-value. The values of type $\iorder{p}$, say $x$, $y$, and $z$,
-represent the three ``thirds'' of $p$, so that applying $x(y(z(v)))$
-has the same effect as applying $p(v)$.
+unit, sum, and product types. The last three lines define values of
+type $\order{p}$, $\iorder{p}$, and $\oneg{p}$ using the singleton $p$
+and the iterates of $p$. In the case of $\order{p}$ the iterates are
+interpreted as ``\emph{programs}'' that can act on other values and in
+the case of $\iorder{p}$ the iterates are interpreted as
+``\emph{symmetries}'' that capture similarities of programs. Note that
+if $p$ has order, say 3, then there are 3 distinct values of type
+$\order{p}$ and 3 distinct values of $\iorder{p}$. The values of type
+$\order{p}$ apply $p$ for 0, 1, or 2 times to given value. The values
+of type $\iorder{p}$, say $x$, $y$, and $z$, represent the three
+``thirds'' of $p$, so that applying $x(y(z(v)))$ has the same effect
+as applying $p(v)$.
 
 Given the definitions of combinators and values, we can directly
 implement the operational semantics of Fig.~\ref{opsem}. We will
