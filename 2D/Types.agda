@@ -59,10 +59,10 @@ mutual
     η+ : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (# p ⊗ 1/# p)
     ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙# p
     ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙# p
-    unite⋆l# :  {s t : U} (p : t ⟷ t) → (𝟙# p ⊗ s) ⟷ s
-    uniti⋆l# :  {s t : U} (p : t ⟷ t) → s ⟷ (𝟙# p ⊗ s)
-    unite⋆r# :  {s t : U} (p : t ⟷ t) → (s ⊗ 𝟙# p) ⟷ s
-    uniti⋆r# :  {s t : U} (p : t ⟷ t) → s ⟷ (s ⊗ 𝟙# p)
+    unite⋆l# :  {t : U} (p : t ⟷ t) → (𝟙# p ⊗ # p) ⟷ 𝟙# {t} (Prim id⟷) ⊗ # p 
+    uniti⋆l# :  {t : U} (p : t ⟷ t) → 𝟙# {t} (Prim id⟷) ⊗ # p ⟷ (𝟙# p ⊗ # p )
+    unite⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# p) ⟷ # p ⊗ 𝟙# {t} (Prim id⟷)
+    uniti⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# {t} (Prim id⟷)) ⟷ (# p ⊗ 𝟙# p)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -131,18 +131,18 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
-  -- coherence for compact closed categories
+  -- coherence for compact closed categories, almost
   ccc₁l : {t : U} {p : t ⟷ t} → 
          uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
-         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ Prim id⟷
+         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ (Prim swap⋆)
   ccc₁r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim swap⋆ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
          Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p 
   ccc₂l : {t : U} {p : t ⟷ t} →
          (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
-         (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p ⇔ Prim id⟷
+         (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p ⇔ Prim swap⋆
   ccc₂r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
+         Prim swap⋆ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
          Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
 {-
   -- application coherence
@@ -254,12 +254,15 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- ⇔! (resp-ap⁻¹⟷r f) = id⇔ ⊡ (resp⊗⇔ (2! (!!⇔id f)) id⇔) ● resp-ap⟷l f ● ((resp⊗⇔ (!!⇔id f) id⇔) ⊡ id⇔)
 -- ⇔! (resp-ap⁻¹⟷l f) = ((resp⊗⇔ (2! (!!⇔id f)) id⇔) ⊡ id⇔) ● resp-ap⟷r f ● id⇔ ⊡ (resp⊗⇔ (!!⇔id f) id⇔)
 
--- convenient lemma
+-- convenient lemmas
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
 ≡⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ≡ q → (p ⇔ q)
 ≡⇒⇔ refl = id⇔
+
+inverse⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ◎ ! q ⇔ Prim id⟷ → (p ⇔ q)
+inverse⇒⇔ {p = p} {q} pf = idr◎r {c = p} ● (id⇔ ⊡ rinv◎r {c = q}) ● assoc◎l ● pf ⊡ id⇔ ● idl◎l
 
 --
 
