@@ -137,6 +137,9 @@ $\displaystyle
 \DeclareUnicodeCharacter{120792}{$\zt$}
 \DeclareUnicodeCharacter{120793}{$\ot$}
 \DeclareUnicodeCharacter{120795}{$\mathbb{3}$}
+\DeclareUnicodeCharacter{10218}{$\langle\!\langle$}
+\DeclareUnicodeCharacter{10219}{$\rangle\!\rangle$}
+\DeclareUnicodeCharacter{9679}{$\bullet$}
 
 \AgdaHide{
 \begin{code}
