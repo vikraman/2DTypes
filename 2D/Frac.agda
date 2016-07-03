@@ -103,8 +103,8 @@ oneC {τ} p = record {
   ; _⇒_ = λ q r → Σ[ p₁ ∈ Iter p ] ((Iter.q r ◎ ! (Iter.q q)) ⇔ Iter.q p₁)
   ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
   ; id = zeroth p , linv◎l
-  ; _∘_ = λ { (< m , q , α > , pf₁)  (< n , r , β > , pf₂) →
-              (< m ℤ.+ n , q ◎ r , α ⊡ β ● 2! (lower m n)  > ,
+  ; _∘_ = λ { (q , pf₁)  (r , pf₂) →
+              (q ∘i r ,
                idr◎r ⊡ id⇔ ● ((id⇔ ⊡ rinv◎r) ⊡ id⇔ ● assoc◎l ⊡ id⇔ ● assoc◎r) ● pf₁ ⊡ pf₂)}
   ; assoc = assoc◎r
   ; identityˡ = idl◎l
@@ -115,8 +115,7 @@ oneC {τ} p = record {
 
 oneG : {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC p)
 oneG {τ} p = record {
-    _⁻¹ = λ { {A} (< i , q , eq > , pf) →
-               < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > , !!⇔id (Iter.q A) ⊡ id⇔ ● ⇔! pf }
+    _⁻¹ = λ { {A} (q , pf) → inv q , !!⇔id (Iter.q A) ⊡ id⇔ ● ⇔! pf }
   ; iso = record { isoˡ = rinv◎l 
                  ; isoʳ = linv◎l
                  }
