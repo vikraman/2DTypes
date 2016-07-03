@@ -128,7 +128,8 @@ mutual
     -- note that this means that we get x back on the nose.
   fwd◎bwd≈id (ε- c) (𝟙ₚ x) = refl≈ refl -- 𝟙ₚ≈ {p₁ = x} {x} x x id⇔
   fwd◎bwd≈id (unite⋆l# c) v = refl≈ refl
-  fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] = {![,]≈ ? ?!}
+  fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] =
+    [,]≈ (𝟙ₚ≈ {!!} {!!} {!!} {!!}) (refl≈ refl)
     {-
     [,]≈ (𝟙ₚ≈  < (+ 1) ℤ+ (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ●
                                              2! (lower (+ 1) (ℤ- i) ● idr◎l ⊡ id⇔) >
@@ -153,9 +154,9 @@ mutual
   bwd◎fwd≈id (η+ c) (𝟙ₚ x) = refl≈ refl
   bwd◎fwd≈id (ε+ c) [ comb < k , q , α > , 1/comb ⟪ p' , eq ⟫ ] =
     [,]≈ (refl≈ refl)
-         (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ {!!})
+         (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ (id⇔ ⊡ (⇔! eq) ● linv◎l ● linv◎r))
   bwd◎fwd≈id (ε- c) [ 1/comb ⟪ p' , eq ⟫ , comb < k , q , α > ] =
-    [,]≈ (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ {!!})
+    [,]≈ (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ ((id⇔ ⊡ (⇔! eq) ● linv◎l ● linv◎r)))
          (refl≈ refl)
   bwd◎fwd≈id (unite⋆l# c) [ 𝟙ₚ < i , q , α > , v₁ ] =
     [,]≈ (𝟙ₚ≈  < (+ 1) ℤ+ (ℤ- i) , c ◎ ! q , id⇔ ⊡ (⇔! α ● 2! (^⇔! i)) ●
