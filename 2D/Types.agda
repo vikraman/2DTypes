@@ -59,10 +59,10 @@ mutual
     η+ : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (# p ⊗ 1/# p)
     ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙# p
     ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙# p
-    unite⋆l# :  {t : U} (p : t ⟷ t) → (𝟙# p ⊗ # p) ⟷ 𝟙# {t} (Prim id⟷) ⊗ # p 
-    uniti⋆l# :  {t : U} (p : t ⟷ t) → 𝟙# {t} (Prim id⟷) ⊗ # p ⟷ (𝟙# p ⊗ # p )
-    unite⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# p) ⟷ # p ⊗ 𝟙# {t} (Prim id⟷)
-    uniti⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# {t} (Prim id⟷)) ⟷ (# p ⊗ 𝟙# p)
+    -- unite⋆l# :  {t : U} (p : t ⟷ t) → (𝟙# p ⊗ # p) ⟷ # p 
+    -- uniti⋆l# :  {t : U} (p : t ⟷ t) → # p ⟷ (𝟙# p ⊗ # p )
+    -- unite⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# p) ⟷ # p
+    -- uniti⋆r# :  {t : U} (p : t ⟷ t) → # p ⟷ (# p ⊗ 𝟙# p)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -97,10 +97,10 @@ mutual
 ! (ε+ p)    = η+ p
 -- ! ap⟷ = ap⁻¹⟷ 
 -- ! ap⁻¹⟷ = ap⟷
-! (unite⋆l# p) = uniti⋆l# p
-! (uniti⋆l# p) = unite⋆l# p
-! (unite⋆r# p) = uniti⋆r# p
-! (uniti⋆r# p) = unite⋆r# p
+-- ! (unite⋆l# p) = uniti⋆l# p
+-- ! (uniti⋆l# p) = unite⋆l# p
+-- ! (unite⋆r# p) = uniti⋆r# p
+-- ! (uniti⋆r# p) = unite⋆r# p
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -131,20 +131,21 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
-  -- coherence for compact closed categories, almost
+  -- coherence for compact closed categories
+{-
   ccc₁l : {t : U} {p : t ⟷ t} → 
          uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
-         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ (Prim swap⋆)
+         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ (Prim id⟷)
   ccc₁r : {t : U} {p : t ⟷ t} →
-         Prim swap⋆ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim id⟷ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
          Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p 
   ccc₂l : {t : U} {p : t ⟷ t} →
          (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
-         (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p ⇔ Prim swap⋆
+         (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p ⇔ Prim id⟷
   ccc₂r : {t : U} {p : t ⟷ t} →
-         Prim swap⋆ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
+         Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
          Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
-{-
+
   -- application coherence
   -- c ⇔ d means applying either is the same
   resp-ap⟷r : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
@@ -176,10 +177,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! (α ● β) = (2! β) ● (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
-2! ccc₁l = ccc₁r
-2! ccc₁r = ccc₁l
-2! ccc₂l = ccc₂r
-2! ccc₂r = ccc₂l
+-- 2! ccc₁l = ccc₁r
+-- 2! ccc₁r = ccc₁l
+-- 2! ccc₂l = ccc₂r
+-- 2! ccc₂r = ccc₂l
 -- 2! (resp-ap⟷r f) = resp-ap⟷l f
 -- 2! (resp-ap⟷l f) = resp-ap⟷r f
 -- 2! (resp-ap⁻¹⟷r f) = resp-ap⁻¹⟷l f
@@ -223,10 +224,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id (ε- p) = id⇔
 -- !!⇔id ap⟷ = id⇔ 
 -- !!⇔id ap⁻¹⟷ = id⇔
-!!⇔id (unite⋆l# p) = id⇔
-!!⇔id (uniti⋆l# p) = id⇔
-!!⇔id (unite⋆r# p) = id⇔
-!!⇔id (uniti⋆r# p) = id⇔
+-- !!⇔id (unite⋆l# p) = id⇔
+-- !!⇔id (uniti⋆l# p) = id⇔
+-- !!⇔id (unite⋆r# p) = id⇔
+-- !!⇔id (uniti⋆r# p) = id⇔
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
@@ -244,10 +245,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
-⇔! ccc₁l = ccc₂l
-⇔! ccc₁r = ccc₂r
-⇔! ccc₂l = ccc₁l
-⇔! ccc₂r = ccc₁r
+-- ⇔! ccc₁l = ccc₂l
+-- ⇔! ccc₁r = ccc₂r
+-- ⇔! ccc₂l = ccc₁l
+-- ⇔! ccc₂r = ccc₁r
 -- ⇔! (resp-ap⟷r f) = resp-ap⁻¹⟷l f
 -- ⇔! (resp-ap⟷l f) = resp-ap⁻¹⟷r f
 -- is there any way that resp-ap can be made fully symmetric?

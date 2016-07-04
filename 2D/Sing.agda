@@ -3,8 +3,10 @@
 module 2D.Sing where
 
 open import 2D.Types
+open import 2D.Power
 
 open import Relation.Binary.PropositionalEquality
+open import Data.Integer using (ℤ)
 
 record Sing {τ : U} (p : τ ⟷ τ) : Set where
   constructor ⟪_,_⟫
@@ -29,3 +31,10 @@ sing⇔ {_} {_} ⟪ _ , α ⟫ ⟪ _ , β ⟫ = α ● 2! β
 -- From a combinator to a Sing
 sing : {τ : U} (p : τ ⟷ τ) → Sing p
 sing p = ⟪ p , id⇔ ⟫
+
+-- this is a combination of Sing and Iter
+record SingI {τ : U} {p : τ ⟷ τ} (q : τ ⟷ τ) : Set where
+  constructor si
+  field
+    i : ℤ
+    eq : q ⇔ (p ^ i)
