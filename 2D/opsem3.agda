@@ -300,3 +300,11 @@ eq₁ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb
 
 eq₂ : cc₂ ≈ v₄
 eq₂ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb < + 1 , Prim swap₊ , idr◎r >) (idr◎l ⊡ id⇔ ● rinv◎l)) (refl≈ refl)
+
+--------------------------------
+-- Various things to check out
+zig-zag : ∀ {t : U} {c : t ⟷ t} → 𝟙# c ⊗ # c ⟷ # c ⊗ 𝟙# c
+zig-zag {_} {c} = η+ c ⊗ (Prim id⟷) ◎ Prim assocr⋆ ◎ (Prim id⟷ ⊗ ε- c)
+
+zz₁ = 𝓐𝓹 zig-zag v₁ -- get v₃
+zz₂ = 𝓐𝓹 zig-zag v₂ -- get 
