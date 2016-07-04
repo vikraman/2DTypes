@@ -68,7 +68,8 @@ mutual
 
   -- Combinators (cf. Fig. 2)
 
-  data Prim⟷ : U → U → Set where -- additive monoid
+  data Prim⟷ : U → U → Set where
+    -- additive monoid
     unite₊l :   {τ : U} → Prim⟷ (𝟘 ⊕ τ) τ
     uniti₊l :   {τ : U} → Prim⟷ τ (𝟘 ⊕ τ)
     unite₊r :   {τ : U} → Prim⟷ (τ ⊕ 𝟘) τ
@@ -301,7 +302,8 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 As motivated in the previous section, we will also need to consider
 the singleton type $\sing{p}$ including all combinators equivalent to
 $p$ and the type $\iter{p}$ of all the combinators equivalent to
-iterates $p^k$:
+iterates $p^k$. We also introduce another singleton type
+$\singi{p}{q}$ that includes one particular iterate:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -319,6 +321,12 @@ p ^ (+ (suc k))       = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ]          = ! p
 p ^ (-[1+ (suc k) ])  = (! p) ◎ (p ^ -[1+ k ])
 
+record SingI {τ : U} {p : τ ⟷ τ} (q : τ ⟷ τ) : Set where
+  constructor si
+  field
+    i : ℤ
+    eq : q ⇔ (p ^ i)
+
 record Iter {τ : U} (p : τ ⟷ τ) : Set where
   constructor <_,_,_>
   field
@@ -329,8 +337,8 @@ record Iter {τ : U} (p : τ ⟷ τ) : Set where
 }}}
 
 For our running example using the type $\mathbb{3}$ and the combinator
-$a_2$, we can a few elements of $\sing{a_2}$ and $\iter{a_2}$ as
-follows:
+$a_2$, we list a few elements of $\sing{a_2}$, $\singi{a_2}{\idiso}$,
+and $\iter{a_2}$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -342,25 +350,29 @@ follows:
 a₂ : 𝟛 ⟷ 𝟛
 a₂ = Prim swap₊ ⊕ id⟷ 
 
+id[a₂]² : id⟷ ⇔ a₂ ◎ (a₂ ◎ id⟷)
+id[a₂]² = split⊕-id⟷ ●
+          ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
+          (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r)))
+
 x y z : Sing a₂
 x = ⟪ a₂ , id⇔ ⟫
 y = ⟪ id⟷ ◎ a₂ , idl◎l ⟫
 z = ⟪  a₂ ◎ (Prim assocr₊ ◎ Prim assocl₊) ,
        (id⇔ ⊡ rinv◎l) ● idr◎l ⟫ 
 
+s t : SingI {𝟛} {a₂} id⟷
+s = si (+ 0) id⇔
+t = si (+ 2) id[a₂]²
+
 p^₀ p^₁ p^₂ p^₃ p^₄ p^₅ : Iter a₂
 p^₀ = < + 0 , id⟷ , id⇔ > 
 p^₁ = < + 0 , id⟷ ◎ id⟷ , idr◎l > 
-p^₂ = <  -[1+ 1 ] ,
-         id⟷ , 
+p^₂ = <  -[1+ 1 ] , id⟷ , 
          split⊕-id⟷ ●
          ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
          (hom⊕◎⇔ ● id⇔)) >
-p^₃ = <  + 2 ,
-         id⟷ ,
-         split⊕-id⟷ ●
-         ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
-         (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r))) >
+p^₃ = <  + 2 , id⟷ , id[a₂]² >
 p^₄ = < -[1+ 0 ] , a₂ , id⇔ > 
 p^₅ = < + 1 , a₂ , idr◎r > 
 \end{code}
