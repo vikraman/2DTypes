@@ -36,7 +36,7 @@ get-iter : ∀ {t} {p₁ p₂ : Val t} → p₁ ≈ p₂ →
 get-iter {_} {⋆} ⋆≈ = zeroth (proj₂ (get-a-p ⋆))
 get-iter (#p≈ {_} {p} (comb p^i) p^j x) = zeroth p
 get-iter (1/#p≈ q p₁ p₂ x) = q
-get-iter (𝟙ₚ≈ p₁ q r x) = p₁ -- the only important case!
+get-iter (𝟙ₚ≈ p₁ eq {q = q} {r = r}) = Iter.<_,_,_> (SingI.i q) p₁ (SingI.eq q) -- the only important case!
 get-iter ([,]≈ {_} {_} {v} {_} {w} pf pf₁) = zeroth (proj₂ (get-a-p [ v , w ] ))
 get-iter (inj₁≈ {_} {t₂} {v} {_} pf) = zeroth (proj₂ (get-a-p (inl {_} {t₂} v)))
 get-iter (inj₂≈ {_} {_} {_} {w} pf) = zeroth (proj₂ (get-a-p (inr w)))
@@ -59,7 +59,7 @@ refl# : {τ : U} {p : τ ⟷ τ} {p q : Val τ} {eq : p ≈ q} → eq ≡≈ eq
 refl# {eq = ⋆≈} = ⋆≡
 refl# {eq = #p≈ (comb p^i) (comb p^j) x} = #p≡
 refl# {eq = 1/#p≈ q p₁ p₂ x} = 1/#p≡ id⇔ -- only interesting case
-refl# {eq = 𝟙ₚ≈ p₂ q r x} = 𝟙ₚ≡
+refl# {eq = 𝟙ₚ≈ p₂ eq {q = q} {r = r}} = 𝟙ₚ≡
 refl# {eq = [,]≈ eq eq₁} = [,]≡
 refl# {eq = inj₁≈ eq} = inj≡
 refl# {eq = inj₂≈ eq} = inj≡
