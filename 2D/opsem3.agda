@@ -178,7 +178,46 @@ mutual
   -- bwd◎fwd≈id (uniti⋆r# c) (comb x) = refl≈ refl
 
 bwd-coherence : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
-bwd-coherence (Prim x) v = {!!}
+bwd-coherence (Prim unite₊l) v = inj₂≈ (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim uniti₊l) (inl ())
+bwd-coherence (Prim uniti₊l) (inr v) = bwd-coherence (Prim id⟷) v
+bwd-coherence (Prim unite₊r) v = inj₁≈ (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim uniti₊r) (inl v) = bwd-coherence (Prim id⟷) v
+bwd-coherence (Prim uniti₊r) (inr ())
+bwd-coherence (Prim swap₊) (inl v) = inj₂≈ (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim swap₊) (inr v) = inj₁≈ (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim assocl₊) (inl (inl v)) = inj₁≈ (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim assocl₊) (inl (inr v)) = inj₂≈ (bwd-coherence (Prim id⟷) (inl v))
+bwd-coherence (Prim assocl₊) (inr v) = inj₂≈ (bwd-coherence (Prim id⟷) (inr v))
+bwd-coherence (Prim assocr₊) (inl v) = inj₁≈ (bwd-coherence (Prim id⟷) (inl v))
+bwd-coherence (Prim assocr₊) (inr (inl v)) = inj₁≈ (bwd-coherence (Prim id⟷) (inr v))
+bwd-coherence (Prim assocr₊) (inr (inr v)) = inj₂≈ (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim unite⋆l) v = [,]≈ ⋆≈ (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim uniti⋆l) [ v , v₁ ] = bwd-coherence (Prim id⟷) v₁
+bwd-coherence (Prim unite⋆r) v = [,]≈ (bwd-coherence (Prim id⟷) v) ⋆≈
+bwd-coherence (Prim uniti⋆r) [ v , v₁ ] = bwd-coherence (Prim id⟷) v
+bwd-coherence (Prim swap⋆) [ v , v₁ ] = [,]≈ (bwd-coherence (Prim id⟷) v₁) (bwd-coherence (Prim id⟷) v)
+bwd-coherence (Prim assocl⋆) [ [ v , v₁ ] , v₂ ] = [,]≈ (bwd-coherence (Prim id⟷) v)
+                                                     (bwd-coherence (Prim id⟷) [ v₁ , v₂ ])
+bwd-coherence (Prim assocr⋆) [ v , [ v₁ , v₂ ] ] = [,]≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
+                                                     (bwd-coherence (Prim id⟷) v₂)
+bwd-coherence (Prim absorbr) ()
+bwd-coherence (Prim absorbl) ()
+bwd-coherence (Prim factorzr) [ v , v₁ ] = bwd-coherence (Prim id⟷) v₁
+bwd-coherence (Prim factorzl) [ v , v₁ ] = bwd-coherence (Prim id⟷) v
+bwd-coherence (Prim dist) (inl [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) (inl v))
+                                               (bwd-coherence (Prim id⟷) v₁)
+bwd-coherence (Prim dist) (inr [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) (inr v))
+                                               (bwd-coherence (Prim id⟷) v₁)
+bwd-coherence (Prim factor) [ inl v , v₁ ] = inj₁≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
+bwd-coherence (Prim factor) [ inr v , v₁ ] = inj₂≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
+bwd-coherence (Prim distl) (inl [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) v)
+                                                (bwd-coherence (Prim id⟷) (inl v₁))
+bwd-coherence (Prim distl) (inr [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) v)
+                                                (bwd-coherence (Prim id⟷) (inr v₁))
+bwd-coherence (Prim factorl) [ v , inl v₁ ] = inj₁≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
+bwd-coherence (Prim factorl) [ v , inr v₁ ] = inj₂≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
+bwd-coherence (Prim id⟷) v = refl≈ refl
 bwd-coherence (c ◎ c₁) v = 
   let eq = bwd-coherence c₁ v in
   trans≈ (cong⁻¹≈ c eq) (bwd-coherence c (𝓐𝓹 (! c₁) v))
