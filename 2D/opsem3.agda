@@ -141,7 +141,9 @@ cong⁻¹≈ (ε- c) (𝟙ₚ≈ p₁ {p₂} eq {si i α} {si j β}) =
 -- cong⁻¹≈ (unite⋆r# p) eq = {!!}
 -- cong⁻¹≈ (uniti⋆r# p) ([,]≈ p₁ (𝟙ₚ≈ p₂ q r x)) = {!!}
 cong⁻¹≈ (name f) v = {!!}
-cong⁻¹≈ (coname f) v = {!!}
+cong⁻¹≈ (coname f) (𝟙ₚ≈ {_} {c} p₁ equiv {si i α} {si j β}) =
+  [,]≈ (refl≈ refl)
+       (cong≈ f (#p≈ (comb < i , c ^ i , id⇔ >) (comb < j , (c ^ j) , id⇔ >) (2! α ⊡ (⇔! (2! β)) ● (equiv ⊡ id⇔) ● linv◎l)))
 
 mutual
   fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
@@ -169,7 +171,7 @@ mutual
   fwd◎bwd≈id (name f) [ 1/comb x , comb < k , q , α > ] = {!!}
   fwd◎bwd≈id (coname f) (𝟙ₚ {_} {c} (si i eq)) with 𝓐𝓹 f (comb < i , c ^ i , id⇔ >) | inspect (𝓐𝓹 f) (comb < i , c ^ i , id⇔ >)
   ... | comb < k , q , α > | [ eq₀ ] with 𝓐𝓹⁻¹ f (comb < k , q , α >) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α >)
-  ... | comb < j , r , β > | [ eq₁ ] = let pf = trans≈ (sym≈ (bwd◎fwd≈id f (comb < i , c ^ i , id⇔ >)))
+  ... | comb < j , r , β > | [ eq₁ ] = let pf = trans≈ (sym≈ (bwd◎fwd≈id f (comb < i , _ ^ i , id⇔ >)))
                                                   (trans≈ (cong⁻¹≈ f (refl≈ eq₀)) (refl≈ eq₁)) in
                                         let eq₂ = get-equiv pf in
                                         𝟙ₚ≈ r (2! (inverse⇒⇔ (eq ⊡ id⇔ ● eq₂)))
