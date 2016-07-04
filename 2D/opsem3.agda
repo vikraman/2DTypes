@@ -171,7 +171,7 @@ mutual
   fwd◎bwd≈id (name f) [ 1/comb x , comb < k , q , α > ] = {!!}
   fwd◎bwd≈id (coname f) (𝟙ₚ {_} {c} (si i eq)) with 𝓐𝓹 f (comb < i , c ^ i , id⇔ >) | inspect (𝓐𝓹 f) (comb < i , c ^ i , id⇔ >)
   ... | comb < k , q , α > | [ eq₀ ] with 𝓐𝓹⁻¹ f (comb < k , q , α >) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α >)
-  ... | comb < j , r , β > | [ eq₁ ] = let pf = trans≈ (sym≈ (bwd◎fwd≈id f (comb < i , c ^ i , id⇔ >)))
+  ... | comb < j , r , β > | [ eq₁ ] = let pf = trans≈ (sym≈ (bwd◎fwd≈id f (comb < i , _ ^ i , id⇔ >)))
                                                   (trans≈ (cong⁻¹≈ f (refl≈ eq₀)) (refl≈ eq₁)) in
                                         let eq₂ = get-equiv pf in
                                         𝟙ₚ≈ r (2! (inverse⇒⇔ (eq ⊡ id⇔ ● eq₂)))
