@@ -39,7 +39,10 @@ data _≈_ : {t : U} → Val t → Val t → Set where
   [,]≈ : {s t : U} {sv₁ sv₂ : Val s} {tv₁ tv₂ : Val t} → sv₁ ≈ sv₂ → tv₁ ≈ tv₂ → [ sv₁ , tv₁ ] ≈ [ sv₂ , tv₂ ]
   inj₁≈ : {s t : U} → {sv₁ sv₂ : Val s} → sv₁ ≈ sv₂ → inl {s} {t} sv₁ ≈ inl sv₂
   inj₂≈ : {s t : U} → {tv₁ tv₂ : Val t} → tv₁ ≈ tv₂ → inr {s} {t} tv₁ ≈ inr tv₂
-  
+
+get-equiv : ∀ {t} {p : t ⟷ t} {p^i p^j : Val (# p)} → p^i ≈ p^j → get-q p^i ◎ ! (get-q p^j) ⇔ Prim id⟷
+get-equiv (#p≈ _ _ x) = x
+
 refl≈ : ∀ {t} {v w : Val t} → v ≡ w → v ≈ w
 refl≈ {v = ⋆} refl = ⋆≈
 refl≈ {v = inl v} refl = inj₁≈ (refl≈ refl)

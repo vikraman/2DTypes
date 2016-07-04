@@ -63,6 +63,8 @@ mutual
     -- uniti⋆l# :  {t : U} (p : t ⟷ t) → # p ⟷ (𝟙# p ⊗ # p )
     -- unite⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# p) ⟷ # p
     -- uniti⋆r# :  {t : U} (p : t ⟷ t) → # p ⟷ (# p ⊗ 𝟙# p)
+    name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
+    coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -101,6 +103,8 @@ mutual
 -- ! (uniti⋆l# p) = unite⋆l# p
 -- ! (unite⋆r# p) = uniti⋆r# p
 -- ! (uniti⋆r# p) = unite⋆r# p
+! (name f) = coname f
+! (coname f) = name f
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -228,6 +232,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- !!⇔id (uniti⋆l# p) = id⇔
 -- !!⇔id (unite⋆r# p) = id⇔
 -- !!⇔id (uniti⋆r# p) = id⇔
+!!⇔id (name f) = id⇔
+!!⇔id (coname f) = id⇔
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
@@ -254,10 +260,14 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- is there any way that resp-ap can be made fully symmetric?
 -- ⇔! (resp-ap⁻¹⟷r f) = id⇔ ⊡ (resp⊗⇔ (2! (!!⇔id f)) id⇔) ● resp-ap⟷l f ● ((resp⊗⇔ (!!⇔id f) id⇔) ⊡ id⇔)
 -- ⇔! (resp-ap⁻¹⟷l f) = ((resp⊗⇔ (2! (!!⇔id f)) id⇔) ⊡ id⇔) ● resp-ap⟷r f ● id⇔ ⊡ (resp⊗⇔ (!!⇔id f) id⇔)
+-- should add coherence for name/coname here; later.
 
 -- convenient lemmas
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+
+≡⇒⟷ : {τ₁ τ₂ : U} → τ₁ ≡ τ₂ → τ₁ ⟷ τ₂
+≡⇒⟷ refl = Prim id⟷
 
 ≡⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ≡ q → (p ⇔ q)
 ≡⇒⇔ refl = id⇔
