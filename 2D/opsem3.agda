@@ -251,8 +251,9 @@ bwd-coherence (η- c) [ 1/comb x , comb x₁ ] = refl≈ refl
 bwd-coherence (η+ c) [ comb x , 1/comb x₁ ] = refl≈ refl
 bwd-coherence (ε+ c) (𝟙ₚ (si i eq)) = refl≈ refl
 bwd-coherence (ε- c) (𝟙ₚ (si i eq)) = refl≈ refl
-bwd-coherence (name f) v = {!!}
-bwd-coherence (coname f) v = {!!}
+bwd-coherence (name f) [ v , comb < k , q , α > ] with 𝓐𝓹⁻¹ f (comb < k , q , α >)
+... | comb < i , r , β > = refl≈ refl
+bwd-coherence (coname f) (𝟙ₚ (si i eq)) = refl≈ refl
 
 ------
 -- Examples
@@ -261,7 +262,7 @@ BOOL = 𝟙 ⊕ 𝟙
 
 NOT : BOOL ⟷ BOOL
 NOT = Prim swap₊
-{-
+
 -- cc-like
 cc : (𝟙# NOT ⊗ # NOT) ⟷ (# NOT ⊗ 𝟙# NOT)
 cc = (((η+ NOT) ⊗ Prim id⟷) ◎     -- (# NOT ⊗ 1/# NOT) ⊗ # NOT
@@ -269,23 +270,33 @@ cc = (((η+ NOT) ⊗ Prim id⟷) ◎     -- (# NOT ⊗ 1/# NOT) ⊗ # NOT
      ((Prim id⟷ ⊗ Prim swap⋆) ◎    --   # NOT ⊗ # NOT ⊗ 1/# NOT
      ((Prim id⟷ ⊗ (ε+ NOT)) )))))  -- # NOT ⊗ 1# NOT
 
+s₀ : SingI {BOOL} {NOT} (Prim id⟷)
+s₀ = si (+ 0) id⇔
+
+s₁ : SingI {BOOL} {NOT} (NOT)
+s₁ = si (+ 1) idr◎r
+
 i₀ i₁ : Iter NOT
-i₀ = zeroth NOT
-i₁ = iter NOT
+i₀ = zeroth NOT -- essentially id⟷
+i₁ = iter NOT   -- essentially swap⋆
 
-v₁ v₂ v₃ v₄ : Val (𝟙# NOT ⊗ # NOT)
-v₁ = [ 𝟙ₚ i₀ , comb i₀ ] 
-v₂ = [ 𝟙ₚ i₁ , comb i₀ ] 
-v₃ = [ 𝟙ₚ i₀ , comb i₁ ] 
-v₄ = [ 𝟙ₚ i₁ , comb i₁ ] 
+v₁ v₂ : Val (𝟙# NOT ⊗ # NOT)
+v₁ = [ 𝟙ₚ s₁ , comb i₀ ] 
+v₂ = [ 𝟙ₚ s₁ , comb i₁ ] 
 
-cc₁ cc₂ cc₃ cc₄ : Val (# NOT ⊗ 𝟙# NOT)
+v₃ v₄ : Val (# NOT ⊗ 𝟙# NOT)
+v₃ = [ comb i₁ , 𝟙ₚ s₀ ] -- note how 𝟙ₚ s₀ is of type 𝟙# NOT.  The type that matters is the {NOT}
+v₄ = [ comb i₁ , 𝟙ₚ s₁ ]
+
+cc₁ cc₂ : Val (# NOT ⊗ 𝟙# NOT)
 cc₁ = 𝓐𝓹 cc v₁
-  -- evaluates to v₁
+  -- evaluates to [ comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ > , 𝟙ₚ (si (+ 0) id⇔) ]
+  -- which is v₃, but not quite on the nose
 cc₂ = 𝓐𝓹 cc v₂
-  -- evaluates to v₂
-cc₃ = 𝓐𝓹 cc v₃
-  -- evauates to v₃
-cc₄ = 𝓐𝓹 cc v₄
-  -- evaluates to v₄
--}
+  -- evaluates to v₄ which is also swap⋆ v₂, again not quite on the nose
+
+eq₁ : cc₁ ≈ v₃
+eq₁ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb < + 1 , Prim swap₊ , idr◎r >)  (idr◎l ⊡ id⇔ ● rinv◎l)) (refl≈ refl)
+
+eq₂ : cc₂ ≈ v₄
+eq₂ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb < + 1 , Prim swap₊ , idr◎r >) (idr◎l ⊡ id⇔ ● rinv◎l)) (refl≈ refl)
