@@ -255,8 +255,9 @@ iterates we get the groupoid $\order{p}$.
 
 Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
 $\order{p}$ is the groupoid whose objects are the elements
-$\triple{k}{q}{\alpha}$ of $\iter{p}$ and whose morphisms are the
-2-combinators relating the $q$-components of the triple.
+$\triple{k}{q}{\alpha}$ of $\iter{p}$. There is a morphism between
+$\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
+$q_1\odot ! q_2 \isotwo \idisotwo$.
 
 \begin{lemma}
   $|\order{p}| = \ord{p}$
@@ -307,9 +308,20 @@ previous section.
   $|\iorder{p}|$ is $\frac{1}{o}$.
 \end{proof}
 
+Note that everything is well-defined even if we choose $p :
+\zt\iso\zt$. In that case, the cardinality is 1.
+
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Expanded Unit Groupoids $\oneg{p}$}
    
+For each combinator $p : \tau\iso\tau$, we also construct a groupoid
+$\oneg{p}$ of cardinality $\frac{\ord{p}}{\ord{p}} = 1$. (Recall that
+the order of a combinator can never be 0.) The objects of this
+groupoid as the iterates in $\iter{p}$. There is morphism between 
+$\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
+there exists a $\triple{k}{q}{\alpha}$ such that $q_1\odot !q_2
+\isotwo q$. 
+
 %%%%%%%%%%%%%
 \subsection{Groupoid of Groupoids}
 
