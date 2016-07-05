@@ -912,30 +912,41 @@ are only a finite number of possible choices for each value.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
-Need to look again at the 2D type theory papers by Harper et al. One
-might argue that we have a clean presentation of these ideas. If it is
-really clear that idea can also be moved to the introduction.
+We have presented a natural notion of \emph{fractional types} that
+enriches a class of reversible programming languages in several
+dimensions. Although it might be possible to use fractional types in a
+conventional (i.e., irreversible) programming language, their full
+potential is only achieved when the ambient language guarantees that
+no information is created or erased. 
 
-Instead of modeling the types of $\Pi$ using sets and the combinators using
-permutations we use a semantics that identifies $\Pi$-combinators with
-\emph{paths}. More precisely, we model the universe of $\Pi$-types as a space
-\AgdaFunction{U} whose points are the individual $\Pi$-types (which are
-themselves spaces \AgdaBound{t} containing points). We then postulate that
-there is path between the spaces \AgdaBound{t₁} and \AgdaBound{t₂} if there
-is a $\Pi$-combinator $c : t_1 \iso t_2$. Our postulate is similar in spirit
-to the univalence axiom but, unlike the latter, it has a simple computational
-interpretation. A path directly corresponds to a type isomorphism with a
-clear operational semantics as presented in the previous section. As we will
-explain in more detail below, this approach replaces the datatype
-\AgdaSymbol{≡} modeling propositional equality with the datatype
-\AgdaSymbol{⟷} modeling type isomorphisms. With this switch, the
-$\Pi$-combinators of Fig.~\ref{pi-combinators} become \emph{syntax} for the
-paths in the space $U$. Put differently, instead of having exactly one
-constructor \AgdaInductiveConstructor{refl} for paths with all other paths
-discovered by proofs (see Secs. 2.5--2.12 of the HoTT
-book~\citeyearpar{hottbook}) or postulated by the univalence axiom, we have
-an \emph{inductive definition} that completely specifies all the paths in the
-space $U$.
+Our fractional types extend the natural denotation of types from sets
+to non-trivial groupoids but they only scratch the surface of the
+tower of weak $\omega$-groupoids that is expressible in HoTT. 
+
+% Need to look again at the 2D type theory papers by Harper et al. One
+% might argue that we have a clean presentation of these ideas. If it is
+% really clear that idea can also be moved to the introduction.
+
+% Instead of modeling the types of $\Pi$ using sets and the combinators using
+% permutations we use a semantics that identifies $\Pi$-combinators with
+% \emph{paths}. More precisely, we model the universe of $\Pi$-types as a space
+% \AgdaFunction{U} whose points are the individual $\Pi$-types (which are
+% themselves spaces \AgdaBound{t} containing points). We then postulate that
+% there is path between the spaces \AgdaBound{t₁} and \AgdaBound{t₂} if there
+% is a $\Pi$-combinator $c : t_1 \iso t_2$. Our postulate is similar in spirit
+% to the univalence axiom but, unlike the latter, it has a simple computational
+% interpretation. A path directly corresponds to a type isomorphism with a
+% clear operational semantics as presented in the previous section. As we will
+% explain in more detail below, this approach replaces the datatype
+% \AgdaSymbol{≡} modeling propositional equality with the datatype
+% \AgdaSymbol{⟷} modeling type isomorphisms. With this switch, the
+% $\Pi$-combinators of Fig.~\ref{pi-combinators} become \emph{syntax} for the
+% paths in the space $U$. Put differently, instead of having exactly one
+% constructor \AgdaInductiveConstructor{refl} for paths with all other paths
+% discovered by proofs (see Secs. 2.5--2.12 of the HoTT
+% book~\citeyearpar{hottbook}) or postulated by the univalence axiom, we have
+% an \emph{inductive definition} that completely specifies all the paths in the
+% space $U$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -943,7 +954,7 @@ space $U$.
 \bibliography{cites}
 
 %% Appendix, experimental
-%% \input{appendix.tex}
+\input{appendix.tex}
 
 \end{document}
 

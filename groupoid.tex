@@ -254,8 +254,9 @@ Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
 $\order{p}$ is the groupoid whose objects are the elements
 $\triple{k}{q}{\alpha}$ of $\iter{p}$. There is a morphism between
 $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
-$q_1 ~\odot ~! q_2 \isotwo \idiso$. This asserts that $p ^ {k_1}$
-can be annihilated using $p ^ {-k_2}$. 
+$q_1 ~\odot ~! q_2 \isotwo \idiso$. This asserts that $p ^ {k_1}$ can
+be annihilated using $p ^ {-k_2}$. (See Appendix for the Agda
+construction.)
 
 \begin{lemma}
   $|\order{p}| = \ord{p}$
@@ -292,7 +293,7 @@ are the elements of $\sing{p}$. Since all these objects are
 equivalent, every pair of objects is connected by the morphisms in
 $\iter{p}$. To capture the relationship between these morphisms, we
 also have 2-morphisms relating the distinct iterates as in the
-previous section. 
+previous section. (See Appendix for the Agda construction.)
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$

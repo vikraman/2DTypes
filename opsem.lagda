@@ -359,7 +359,9 @@ postulate
 \subsection{Pragmatics}
 
 We have a way to generate programs at run time from eta: it would be
-nice to have a way to execute these programs. 
+nice to have a way to execute these programs.
+
+name/coname; other diagrams from previous submission; ap; foldswap; other ideas
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
