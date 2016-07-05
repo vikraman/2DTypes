@@ -258,7 +258,7 @@ on. Here are two simple but non-trivial examples:
 groupoid on the left has six points \texttt{a}, \texttt{b},
 \texttt{c}, \texttt{d}, \texttt{e}, and \texttt{f} with each three
 points clustered in an equivalence class and hence the groupoid has
-cardinality~2. The groupoid on the right has one point \texttt{*} with
+cardinality~2. The groupoid on the right has one point $\ast$ with
 four equivalences \texttt{id}, $p$, $q$, and~$q'$ on it. The
 equivalences $q$ and $q'$ are however identified by~$\alpha$ leaving
 only three distinct equivalence classes and hence making the
@@ -334,36 +334,36 @@ negative information as a first-class entity enhances $\pifrac$ with
 an expressiveness similar to the one afforded by the presence of
 negative numbers in finance.
 
-\paragraph*{Resource Creation and Annihilation.} In $\pifrac$ all
-programs preserve information and hence preserve
-cardinality. Furthermore, for non-zero natural numbers $n$, the
-cardinality of the type $n \times \frac{1}{n}$ in $\pifrac$
-is~1. Therefore, $\pifrac$ has, for example, terms of type $\ot
-\rightarrow (8 \times \frac{1}{8})$. Such terms take the unit type
-$\ot$ with entropy $\log{1} = 0$ to the type $8 \times \frac{1}{8}$
-with entropy $\log{8} + (- \log{8}) = 3 - 3 = 0$. The entropy is
-globally preserved as desired and expected. But interestingly, the
-term introduces, locally, two types that have entropies of $3$ and
-$-3$ respectively. Each of these types can be further processed
+\paragraph*{Resource Creation and Annihilation.} In $\pifrac$, all
+programs preserve information and hence preserve cardinality. As the
+cardinality of the type $n \times \frac{1}{n}$ is~1 (for non-zero
+$n$), $\pifrac$ has, for example, terms of type
+$\ot \rightarrow (8 \times \frac{1}{8})$. Such terms take the unit
+type $\ot$ with entropy $\log{1} = 0$ to the type
+$8 \times \frac{1}{8}$ with entropy
+$\log{8} + (- \log{8}) = 3 - 3 = 0$. The entropy is globally preserved
+as desired and expected. But interestingly, the term introduces,
+locally, two types that have entropies of $3$ and $-3$
+respectively. Each of these types can be further processed
 independently and, as long as the entire system is
 information-preserving, the net positive and negative entropies must
-eventually cancel out by a use of a term of the reverse type $(8
-\times \frac{1}{8}) \rightarrow \ot$. The simplest way to appreciate
-the expressiveness afforded by such a mechanism is the following
-credit card analogy. Think of the computation of type $\ot \rightarrow
-(8 \times \frac{1}{8})$ as creating, from nothing, an amount of money
-to be paid to the merchant instantly, together with a corresponding
-debt that propagates through the system. As long as the entire
-financial system is debt-preserving, the debt must eventually be
-reconciled by an equivalent amount of money present elsewhere. As
-described in detail in the next section, the actual underlying
-computational process by which such reconciliation happens is
-subtle. Briefly speaking, it involves a speculative guess of the
-amount of money to create that is confirmed at the point of actual
-consumption. More abstractly, fractional types enable the
-\emph{speculative} creation of resources needed at one point in the
-computation while also providing a mechanism that adjusts the
-speculative values based on actual available resources.
+eventually cancel out by a use of a term of the reverse type
+$(8 \times \frac{1}{8}) \rightarrow \ot$. The simplest way to
+appreciate the expressiveness afforded by such a mechanism is the
+following credit card analogy. Think of the computation of type
+$\ot \rightarrow (8 \times \frac{1}{8})$ as creating, from nothing, an
+amount of money to be paid to the merchant instantly, together with a
+corresponding debt that propagates through the system. As long as the
+entire financial system is debt-preserving, the debt must eventually
+be reconciled by an equivalent amount of money (perhaps in another
+currency even) present elsewhere. As described in detail in the next
+section, the actual underlying computational process by which such
+reconciliation happens is subtle. Briefly speaking, it involves a
+speculative guess of the amount of money to create that is confirmed
+at the point of actual consumption. More abstractly, fractional types
+enable the \emph{speculative} creation of resources needed at one
+point in the computation while also providing a mechanism that adjusts
+the speculative values based on actual available resources.
 
 \paragraph*{Correspondence with Commutative Semifields.} Computations
 over finite types naturally emerge from viewing types as syntax for
@@ -381,7 +381,7 @@ follows. We start by presenting two detailed examples that illustrate
 the expressiveness of fractional types in a programming
 setting. Sec.~3 reviews the necessary background consisting of the
 language $\Pi$ for programming in a reversible information-preserving
-way. Sec.~4 has the main novel semantic idea of using $\Pi$ programs
+way. Sec.~4 explains the main novel semantic ideas of using $\Pi$ programs
 to generate non-trivial groupoids with fractional cardinality. Sec.~5
 translates the semantic ideas into an extension of $\Pi$ with new type
 constructors denoting non-trivial groupoids and new programs that
@@ -516,8 +516,8 @@ $2 \frac{1}{3}$ and 3 respectively. Let $C$ be the following type with
 \end{tikzpicture}
 \end{center}
 
-\noindent The first step is to write a program $p$ that represents a
-permutation of $C$ of order 3. For example:
+\noindent The first step is to write a \emph{reversible} program $p$
+that represents a permutation of $C$ of order 3. For example:
 \[\begin{array}{rcl@{\qquad\qquad\qquad}rcl}
 p(\texttt{sun}) &=& \texttt{mon} & 
                                    p(\texttt{mon}) &=& \texttt{tue} \\
@@ -529,15 +529,22 @@ p(\texttt{sat}) &=& \texttt{sat}
 \end{array}\]
 
 \noindent Clearly applying $p$ three consecutive times yields the
-identity function. As explained in Sec.~\ref{sec:groupoids}, the
-definition of any $p$ representing a permutation of order $\ord{p}$
-will induce two groupoids of cardinality $\ord{p}$ and $1/\ord{p}$. In
-our case, we get:
+identity function. We express this fact by saying $\ord{p} = 3$. It
+follows that $p^0$ is equivalent to $p^3, p^{-3}, p^6, \ldots$, that
+$p^1$ is equivalent to $p^4, p^{-2}, p^7, p^{-5}, \ldots$, and that
+$p^2$ is equivalent to $p^5, p^{-1}, p^8, p^{-4}, \ldots$ where the
+negative powers are interpreted as applying the program in
+reverse. Furthermore we have that composing $p^i$ and $p^j$ is the
+identity if $i+j = 0\pmod{3}$. 
+
+As explained in Sec.~\ref{sec:groupoids}, the definition of any $p$
+representing a permutation of order $o$ will induce two groupoids of
+cardinality $o$ and $1/o$. In our case, we get:
 \begin{itemize}
-\item a first groupoid which we denote $\order{p}$ and which has (up to
-  equivalence) three clusters of objects corresponding to each
-  distinct iteration of $p$. (We omit the identity arrows in the
-  figure.) It has cardinality $3$:
+\item a first groupoid which we denote $\order{p}$ and which has (up
+  to equivalence) three clusters of objects corresponding to each
+  distinct (up to equivalence) iteration of $p$. (We omit the identity
+  arrows in the figure.) It has cardinality $3$:
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
   \draw[dashed] (0,-0.2) ellipse (3cm and 0.7cm);
@@ -549,14 +556,15 @@ our case, we get:
   \draw[fill] (2,0) circle [radius=0.05];
 \end{tikzpicture}
 \end{center}
-\item a second groupoid which we denote $1/\hash p$ and which has one 
-trivial object and an equivalence for each distinct iteration of~$p$. (We
-explicitly include the identity arrow to emphasize that there are
-three distinct equivalences):
+\item a second groupoid which we denote $1/\hash p$ and which has one
+  trivial object and an equivalence for each distinct iteration of~$p$
+  showing that it can be annhiliated to the identity by composing it
+  with its inverse. (We explicitly include the identity arrow to
+  emphasize that there are three distinct equivalences):
 \begin{center}
 \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
   \draw[dashed] (0,0) ellipse (1.5cm and 2.1cm);
-  \node[below] (B) at (0,-0.7) {\texttt{*}};
+  \node[below] (B) at (0,-0.7) {$\ast$};
   \path (B) edge [loop below] node[below] {$p^0$} (B);
   \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (B);
   \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (B);
@@ -565,7 +573,7 @@ three distinct equivalences):
 \end{itemize}
 
 It is a fact that, in $\pifrac$, the trivial one point groupoid has
-the same cardinality as $\order{p} \otimes 1/\hash p$ for any
+the same cardinality as $\order{p} ~\otimes~ 1/\hash p$ for any
 $p$. Indeed taking the product of the particular groupoids $\order{p}$
 and $1/\hash p$ above produces the groupoid:
 
@@ -663,11 +671,11 @@ $\textsf{swap}^0 = \textsf{swap}^2 = \textsf{swap} \odot \textsf{swap}
 where $\odot$ is the sequential composition of programs.  As explained
 in the previous section, this permutation introduces two types
 $\order{\textsf{swap}}$ and $1/\hash \textsf{swap}$ of cardinality 2
-and $\frac{1}{2}$ respectively. The first type has two values
-$\textsf{swap}^0$ (or $\textsf{id}$) and $\textsf{swap}^1$ (or just
-$\textsf{swap})$. The second type has also two values which we write
-as $\alpha_{\idiso}$ and $\alpha_{\textsf{swap}}$. These values are
-equivalences expressing a proof of reversibility for
+and $\frac{1}{2}$ respectively. The first type has, up to equivalence,
+two values $\textsf{swap}^0$ (or $\textsf{id}$) and $\textsf{swap}^1$
+(or just $\textsf{swap})$. The second type has also two values which
+we write as $\alpha_{\idiso}$ and $\alpha_{\textsf{swap}}$. These
+values are equivalences expressing a proof of reversibility for
 $\textsf{swap}$. The equivalence $\alpha_{\idiso}$ asserts that
 $\textsf{swap}^0$ has an inverse that annihilates it and the
 equivalence $\alpha_{\textsf{swap}}$ that $\textsf{swap}^1$ has an
@@ -725,21 +733,21 @@ situation:
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
+  \path [->] (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
                                  node[below,red] {$\textsf{swap}$} (0,1);
-  \path (1,1.8) edge node[above] {$\ot$} 
+  \path [->]  (1,1.8) edge node[above] {$\ot$} 
                                node[below,red] {$()$} (1.6,1.8);
-  \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
+  \path [->]  (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
                                node[below,red] {$\textsf{swap}$} (4,0.2);
   \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
-  \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} 
+  \path [->]  (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} 
                                   node[below,red] {$\idiso$} (6,2.6);
-  \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} 
+  \path [->]  (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} 
                                node[below,red] {$\alpha_{\idiso}$} (4,1);
   \draw [blue,thick] (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
   \path (5,1) edge node[above] {$\ot$} (6,1);
   \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
-  \path (7,1.8) edge node[above] {$\order{\textsf{swap}}$} (8,1.8);
+  \path  (7,1.8) edge node[above] {$\order{\textsf{swap}}$} (8,1.8);
   \node at (0.5,1) {$\textsf{unit}_\times$};
   \node at (2.1,1.8) {$\eta_{\textsf{swap}}$};
   \node at (4.5,1) {$\epsilon_{\textsf{swap}}$};
@@ -757,15 +765,15 @@ $\eta_{\textsf{swap}}$ to alter its choice:
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
+  \path [->] (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
                                  node[below,red] {$\textsf{swap}$} (0,1);
-  \path (1,1.8) edge node[above] {$\ot$} 
+  \path [->] (1,1.8) edge node[above] {$\ot$} 
                                node[below,red] {$()$} (1.6,1.8);
-  \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
+  \path [<-] (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
                                node[below,red] {$\textsf{swap}$} (4,0.2);
   \draw [blue,thick] (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
-  \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
-  \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
+  \path [<-] (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
+  \path [<-] (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
   \draw (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
   \path (5,1) edge node[above] {$\ot$} (6,1);
   \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
@@ -779,11 +787,14 @@ $\eta_{\textsf{swap}}$ to alter its choice:
 
 \noindent When $\eta_{\textsf{swap}}$ is approached in the reverse
 direction, it updates its guess to
-$(\textsf{swap},\alpha_{\textsf{swap}})$ and and resumes forward
+$(\textsf{swap},\alpha_{\textsf{swap}})$ and resumes forward
 execution. This guess proves to be the correct one to match the input
 value and the entire circuit terminates with the value
 $\textsf{swap}$. Of course the initial input could have been $\idiso$
-in which case no backtracking would have been needed.
+in which case no backtracking would have been needed. The set up
+generalizes to arbitrary reversible programs $p$ with finite order:
+the back-and-forth negoatiation is guaranteed to terminate as there
+are only a finite number of possible choices for each value.
 
 % There are two possible inputs id and swap. If the input is swap then
 % execution proceeds as follows:
