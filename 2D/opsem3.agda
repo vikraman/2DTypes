@@ -141,7 +141,9 @@ cong⁻¹≈ (ε- c) (𝟙ₚ≈ p₁ {p₂} eq {si i α} {si j β}) =
 -- cong⁻¹≈ (unite⋆r# p) eq = {!!}
 -- cong⁻¹≈ (uniti⋆r# p) ([,]≈ p₁ (𝟙ₚ≈ p₂ q r x)) = {!!}
 -- cong⁻¹≈ (name f) v = {!!}
--- cong⁻¹≈ (coname f) v = {!!}
+-- cong⁻¹≈ (coname f) (𝟙ₚ≈ {_} {c} p₁ equiv {si i α} {si j β}) =
+--   [,]≈ (refl≈ refl)
+--        (cong≈ f (#p≈ (comb < i , c ^ i , id⇔ >) (comb < j , (c ^ j) , id⇔ >) (2! α ⊡ (⇔! (2! β)) ● (equiv ⊡ id⇔) ● linv◎l)))
 
 mutual
   fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v

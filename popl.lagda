@@ -51,6 +51,7 @@
 \newcommand{\pt}[2]{\bullet[#1,#2]}
 \newcommand{\refl}{\AgdaInductiveConstructor{refl}}
 \newcommand{\sing}[1]{\textsc{Sing}(#1)}
+\newcommand{\singi}[2]{\textsc{SingI}_{{#1}}(#2)}
 \newcommand{\iter}[1]{\textsc{Iter}(#1)}
 \newcommand{\pair}[2]{\langle #1,#2 \rangle}
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
