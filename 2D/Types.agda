@@ -63,8 +63,9 @@ mutual
     -- uniti⋆l# :  {t : U} (p : t ⟷ t) → # p ⟷ (𝟙# p ⊗ # p )
     -- unite⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# p) ⟷ # p
     -- uniti⋆r# :  {t : U} (p : t ⟷ t) → # p ⟷ (# p ⊗ 𝟙# p)
-    name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
-    coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
+    -- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
+    -- coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
+
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -103,8 +104,8 @@ mutual
 -- ! (uniti⋆l# p) = unite⋆l# p
 -- ! (unite⋆r# p) = uniti⋆r# p
 -- ! (uniti⋆r# p) = unite⋆r# p
-! (name f) = coname f
-! (coname f) = name f
+-- ! (name f) = coname f
+-- ! (coname f) = name f
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -232,8 +233,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- !!⇔id (uniti⋆l# p) = id⇔
 -- !!⇔id (unite⋆r# p) = id⇔
 -- !!⇔id (uniti⋆r# p) = id⇔
-!!⇔id (name f) = id⇔
-!!⇔id (coname f) = id⇔
+-- !!⇔id (name f) = id⇔
+-- !!⇔id (coname f) = id⇔
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
@@ -274,6 +275,13 @@ open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
 inverse⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ◎ ! q ⇔ Prim id⟷ → (p ⇔ q)
 inverse⇒⇔ {p = p} {q} pf = idr◎r {c = p} ● (id⇔ ⊡ rinv◎r {c = q}) ● assoc◎l ● pf ⊡ id⇔ ● idl◎l
+
+-----------------------
+name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
+name {_} {c} f = η- c ◎ Prim id⟷ ⊗ f
+
+coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
+coname {_} {c} f = Prim id⟷ ⊗ (! f) ◎ ε- c
 
 --
 
