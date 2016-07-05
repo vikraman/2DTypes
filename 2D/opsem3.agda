@@ -57,10 +57,10 @@ mutual
 --     [ (𝟙ₚ (si k₁ α₁)) , (comb < k₁ , q₁ , α₁ >) ]
 --   𝓐𝓹 (unite⋆r# c) [ x , 𝟙ₚ s ] = x
 --   𝓐𝓹 (uniti⋆r# c) (comb < k , q , α >) = [ (comb < k , q , α >) , (𝟙ₚ (si k α)) ]
-  𝓐𝓹 (name {_} {c} f) (𝟙ₚ (si i eq)) = [ (1/comb ⟪ c , id⇔ ⟫) , 𝓐𝓹 f (comb < i , c ^ i , id⇔ > ) ]
-  𝓐𝓹 (coname {_} {c} f) [ x , comb < k , q , α > ] =
-    let w = 𝓐𝓹⁻¹ f (comb < k , q , α >) in
-    case w of λ { (comb < i , r , β > ) → 𝟙ₚ (si i β) }
+--   𝓐𝓹 (name {_} {c} f) (𝟙ₚ (si i eq)) = [ (1/comb ⟪ c , id⇔ ⟫) , 𝓐𝓹 f (comb < i , c ^ i , id⇔ > ) ]
+--   𝓐𝓹 (coname {_} {c} f) [ x , comb < k , q , α > ] =
+--     let w = 𝓐𝓹⁻¹ f (comb < k , q , α >) in
+--     case w of λ { (comb < i , r , β > ) → 𝟙ₚ (si i β) }
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₂ → Val T₁
   𝓐𝓹⁻¹ (Prim x) v = prim⁻¹ x v
@@ -78,10 +78,10 @@ mutual
 --   𝓐𝓹⁻¹ (uniti⋆l# c) [ 𝟙ₚ s , comb x₁ ] = (comb x₁)
 --   𝓐𝓹⁻¹ (unite⋆r# c) (comb < k , q , α >) = [ (comb < k , q , α >) , (𝟙ₚ (si k α)) ]
 --   𝓐𝓹⁻¹ (uniti⋆r# c) [ comb x , 𝟙ₚ s ] = comb x
-  𝓐𝓹⁻¹ (name f) [ x , comb < k , q , α > ] = 
-    let w = 𝓐𝓹⁻¹ f (comb < k , q , α >) in
-    case w of λ { (comb < i , r , β > ) → 𝟙ₚ (si i β) }
-  𝓐𝓹⁻¹ (coname {_} {c} f) (𝟙ₚ (si i eq)) =  [ (1/comb ⟪ c , id⇔ ⟫) , 𝓐𝓹 f (comb < i , c ^ i , id⇔ > ) ]
+--   𝓐𝓹⁻¹ (name f) [ x , comb < k , q , α > ] = 
+--     let w = 𝓐𝓹⁻¹ f (comb < k , q , α >) in
+--     case w of λ { (comb < i , r , β > ) → 𝟙ₚ (si i β) }
+--   𝓐𝓹⁻¹ (coname {_} {c} f) (𝟙ₚ (si i eq)) =  [ (1/comb ⟪ c , id⇔ ⟫) , 𝓐𝓹 f (comb < i , c ^ i , id⇔ > ) ]
 
 cong≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) {v w : Val T₁} → v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
 cong≈ (Prim x) p = prim-cong≈ x p
@@ -110,11 +110,11 @@ cong≈ (ε- p) ([,]≈ (1/#p≈ q p₁ p₂ x₂) (#p≈ (comb x) (comb x₁) x
 --   [,]≈ (𝟙ₚ≈ q) (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x₂)
 -- cong≈ (unite⋆r# p) ([,]≈ (#p≈ (comb x) (comb x₁) x₂) (𝟙ₚ≈ p₁)) = #p≈ (comb x) (comb x₁) x₂
 -- cong≈ (uniti⋆r# p) (#p≈ (comb x) (comb x₁) x₂) = {!!}
-cong≈ (name f) (𝟙ₚ≈ {_} {c} p₁ equiv {si i α} {si j β}) =
-  [,]≈ (refl≈ refl)
-       (cong≈ f (#p≈ (comb < i , c ^ i , id⇔ >) (comb < j , (c ^ j) , id⇔ >) (2! α ⊡ (⇔! (2! β)) ● (equiv ⊡ id⇔) ● linv◎l)))
-cong≈ (coname f) ([,]≈ (1/#p≈ q₂ p₁ p₂ x₂) (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x₃)) with 𝓐𝓹⁻¹ f (comb < k , q , α > ) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α > ) | 𝓐𝓹⁻¹ f (comb < k₁ , q₁ , α₁ >) | inspect (𝓐𝓹⁻¹ f) (comb < k₁ , q₁ , α₁ >)
-... | comb < i , r , β > | [ eq ] | comb < j , s , γ > | [ eq₂ ] = 𝟙ₚ≈ {!!} {!!}
+-- cong≈ (name f) (𝟙ₚ≈ {_} {c} p₁ equiv {si i α} {si j β}) =
+--   [,]≈ (refl≈ refl)
+--        (cong≈ f (#p≈ (comb < i , c ^ i , id⇔ >) (comb < j , (c ^ j) , id⇔ >) (2! α ⊡ (⇔! (2! β)) ● (equiv ⊡ id⇔) ● linv◎l)))
+-- cong≈ (coname f) ([,]≈ (1/#p≈ q₂ p₁ p₂ x₂) (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x₃)) with 𝓐𝓹⁻¹ f (comb < k , q , α > ) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α > ) | 𝓐𝓹⁻¹ f (comb < k₁ , q₁ , α₁ >) | inspect (𝓐𝓹⁻¹ f) (comb < k₁ , q₁ , α₁ >)
+-- ... | comb < i , r , β > | [ eq ] | comb < j , s , γ > | [ eq₂ ] = 𝟙ₚ≈ {!!} {!!}
 
 cong⁻¹≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₂} → v ≈ w → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹⁻¹ c w
 cong⁻¹≈ (Prim x) p = prim⁻¹-cong≈ x p
@@ -140,8 +140,8 @@ cong⁻¹≈ (ε- c) (𝟙ₚ≈ p₁ {p₂} eq {si i α} {si j β}) =
 -- cong⁻¹≈ (uniti⋆l# p) ([,]≈ (𝟙ₚ≈ p₁ q r x) p₂) = {!!}
 -- cong⁻¹≈ (unite⋆r# p) eq = {!!}
 -- cong⁻¹≈ (uniti⋆r# p) ([,]≈ p₁ (𝟙ₚ≈ p₂ q r x)) = {!!}
-cong⁻¹≈ (name f) v = {!!}
-cong⁻¹≈ (coname f) v = {!!}
+-- cong⁻¹≈ (name f) v = {!!}
+-- cong⁻¹≈ (coname f) v = {!!}
 
 mutual
   fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
@@ -166,13 +166,13 @@ mutual
   -- fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ q , comb x ] = {!!}
   -- fwd◎bwd≈id (unite⋆r# c) v = {!!} -- refl≈ refl
   -- fwd◎bwd≈id (uniti⋆r# c) [ comb x , 𝟙ₚ s ] = {!!}
-  fwd◎bwd≈id (name f) [ 1/comb x , comb < k , q , α > ] = {!!}
-  fwd◎bwd≈id (coname f) (𝟙ₚ {_} {c} (si i eq)) with 𝓐𝓹 f (comb < i , c ^ i , id⇔ >) | inspect (𝓐𝓹 f) (comb < i , c ^ i , id⇔ >)
-  ... | comb < k , q , α > | [ eq₀ ] with 𝓐𝓹⁻¹ f (comb < k , q , α >) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α >)
-  ... | comb < j , r , β > | [ eq₁ ] = let pf = trans≈ (sym≈ (bwd◎fwd≈id f (comb < i , c ^ i , id⇔ >)))
-                                                  (trans≈ (cong⁻¹≈ f (refl≈ eq₀)) (refl≈ eq₁)) in
-                                        let eq₂ = get-equiv pf in
-                                        𝟙ₚ≈ r (2! (inverse⇒⇔ (eq ⊡ id⇔ ● eq₂)))
+  -- fwd◎bwd≈id (name f) [ 1/comb x , comb < k , q , α > ] = {!!}
+  -- fwd◎bwd≈id (coname f) (𝟙ₚ {_} {c} (si i eq)) with 𝓐𝓹 f (comb < i , c ^ i , id⇔ >) | inspect (𝓐𝓹 f) (comb < i , c ^ i , id⇔ >)
+  -- ... | comb < k , q , α > | [ eq₀ ] with 𝓐𝓹⁻¹ f (comb < k , q , α >) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α >)
+  -- ... | comb < j , r , β > | [ eq₁ ] = let pf = trans≈ (sym≈ (bwd◎fwd≈id f (comb < i , c ^ i , id⇔ >)))
+  --                                                 (trans≈ (cong⁻¹≈ f (refl≈ eq₀)) (refl≈ eq₁)) in
+  --                                       let eq₂ = get-equiv pf in
+  --                                       𝟙ₚ≈ r (2! (inverse⇒⇔ (eq ⊡ id⇔ ● eq₂)))
 
   bwd◎fwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → (𝓐𝓹⁻¹ c (𝓐𝓹 c v)) ≈ v
   bwd◎fwd≈id (Prim x) v = refl≈ (prim⁻¹◎prim≡id x v)
@@ -197,8 +197,8 @@ mutual
   -- bwd◎fwd≈id (uniti⋆l# c) (comb x) = #p≈ (comb x) (comb x) linv◎l
   -- bwd◎fwd≈id (unite⋆r# c) [ comb x , 𝟙ₚ x₁ ] = [,]≈ (refl≈ refl) (𝟙ₚ≈ (Iter.q x))
   -- bwd◎fwd≈id (uniti⋆r# c) (comb x) = refl≈ refl
-  bwd◎fwd≈id (name f) v = {!!}
-  bwd◎fwd≈id (coname f) v = {!!}
+  -- bwd◎fwd≈id (name f) v = {!!}
+  -- bwd◎fwd≈id (coname f) v = {!!}
 
 bwd-coherence : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
 bwd-coherence (Prim unite₊l) v = inj₂≈ (refl≈ refl)
@@ -251,9 +251,9 @@ bwd-coherence (η- c) [ 1/comb x , comb x₁ ] = refl≈ refl
 bwd-coherence (η+ c) [ comb x , 1/comb x₁ ] = refl≈ refl
 bwd-coherence (ε+ c) (𝟙ₚ (si i eq)) = refl≈ refl
 bwd-coherence (ε- c) (𝟙ₚ (si i eq)) = refl≈ refl
-bwd-coherence (name f) [ v , comb < k , q , α > ] with 𝓐𝓹⁻¹ f (comb < k , q , α >)
-... | comb < i , r , β > = refl≈ refl
-bwd-coherence (coname f) (𝟙ₚ (si i eq)) = refl≈ refl
+-- bwd-coherence (name f) [ v , comb < k , q , α > ] with 𝓐𝓹⁻¹ f (comb < k , q , α >)
+-- ... | comb < i , r , β > = refl≈ refl
+-- bwd-coherence (coname f) (𝟙ₚ (si i eq)) = refl≈ refl
 
 ------
 -- Examples
@@ -307,4 +307,4 @@ zig-zag : ∀ {t : U} {c : t ⟷ t} → 𝟙# c ⊗ # c ⟷ # c ⊗ 𝟙# c
 zig-zag {_} {c} = η+ c ⊗ (Prim id⟷) ◎ Prim assocr⋆ ◎ (Prim id⟷ ⊗ ε- c)
 
 zz₁ = 𝓐𝓹 zig-zag v₁ -- get v₃
-zz₂ = 𝓐𝓹 zig-zag v₂ -- get 
+zz₂ = 𝓐𝓹 zig-zag v₂ -- get v₄
