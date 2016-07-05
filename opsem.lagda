@@ -8,7 +8,7 @@ open import Level using () renaming (zero to l0; suc to lsuc)
 open import Universe using (Universe)
 open import Data.Bool
 open import Data.Sum hiding ([_,_])
-open import Data.Product
+open import Data.Product hiding (<_,_>)
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
 open import Data.Unit using (⊤; tt)
@@ -141,20 +141,20 @@ postulate
 
 𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₁ → Val T₂
 𝓐𝓹 (Prim x) v = prim x v
+𝓐𝓹 id⟷ v = v 
 𝓐𝓹 (c ◎ c₁) v =
   let x = 𝓐𝓹 c v in 𝓐𝓹 c₁ x
 𝓐𝓹 (c ⊕ c₁) (inl v) = inl (𝓐𝓹 c v)
 𝓐𝓹 (c ⊕ c₁) (inr v) = inr (𝓐𝓹 c₁ v)
 𝓐𝓹 (c ⊗ c₁) [ v , w ] = [ 𝓐𝓹 c v , 𝓐𝓹 c₁ w ]
-𝓐𝓹 _ = {!!} 
--- 𝓐𝓹 (η- c) (𝟙ₚ (si i eq)) = [ (1/comb ⟪ c , id⇔ ⟫) , comb (<_,_,_> i (c ^ i) id⇔) ]
--- 𝓐𝓹 (η+ c) (𝟙ₚ (si i eq)) = [ (comb <_,_,_> i (c ^ i) id⇔) , (1/comb ⟪ c , id⇔ ⟫) ]
--- 𝓐𝓹 (ε+ c) [ comb < k , q , α > , 1/comb x₁ ] = 𝟙ₚ (si k α)
--- 𝓐𝓹 (ε- c) [ 1/comb x , comb < k , q , α > ] = 𝟙ₚ (si k α)
--- 𝓐𝓹 (name {_} {c} f) (𝟙ₚ (si i eq)) = [ (1/comb ⟪ c , id⇔ ⟫) , 𝓐𝓹 f (comb <_,_,_> i (c ^ i) id⇔ ) ]
--- 𝓐𝓹 (coname {_} {c} f) [ x , comb < k , q , α > ] =
---  let w = 𝓐𝓹⁻¹ f (comb <_,_,_> k q α) in
---  case w of λ { (comb < i , r , β > ) → 𝟙ₚ (si i β) }
+𝓐𝓹 (η- c) (𝟙ₚ (si i eq)) =
+  [ (1/comb ⟪ c , id⇔ ⟫) , comb < i , c ^ i , id⇔ > ]
+𝓐𝓹 (η+ c) (𝟙ₚ (si i eq)) =
+  [ (comb < i , (c ^ i) , id⇔ >) , (1/comb ⟪ c , id⇔ ⟫) ]
+𝓐𝓹 (ε+ c) [ comb < k , q , α > , 1/comb x₁ ] =
+  𝟙ₚ (si k α)
+𝓐𝓹 (ε- c) [ 1/comb x , comb < k , q , α > ] =
+  𝟙ₚ (si k α)
 \end{code}}}}
 
 
