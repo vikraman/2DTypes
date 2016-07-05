@@ -211,33 +211,37 @@ will present the construction of a simpler related groupoid
 $\order{p}$ that will serve as the multiplicative inverse of
 $\iorder{p}$. Both constructions depend on the possibility of treating
 programs (1-combinators) from a type to itself as data. More
-precisely, for each 1-combinator $p : \tau\iso\tau$, we form two sets:
+precisely, for each 1-combinator $p : \tau\iso\tau$, we form three sets:
 \begin{itemize}
 \item the set $\sing{p}$ whose elements are pairs consisting of a
   1-combinator $q : \tau\iso\tau$ and a 2-combinator
-  $\alpha : q \isotwo p$, and
+  $\alpha : q \isotwo p$, 
+\item the set $\singi{p}{q}$ whose elements are pairs consisting of an
+  integer~$k$ and a 2-combinator $\alpha : q \isotwo p^k$, and
 \item the set $\iter{p}$ whose elements are triples consisting of an
   integer~$k$, a 1-combinator $q : \tau\iso\tau$, and a 2-combinator
   $\alpha : q \isotwo p^k$.
 \end{itemize} 
 For example, we have:
 \[\begin{array}{rcl}
-\sing{a_2} &=& \{ \pair{a_2}{\idisotwo}, \pair{a_2\odot\idiso}{\idrdl},
-               \ldots \} \\
-\iter{a_2} &=& \{ \triple{0}{\idiso}{\idisotwo}, \triple{1}{a_2}{\idrdr},
-\triple{-1}{a_2}{\idisotwo}, \ldots \}
+\sing{a_2} &=& \{ \pair{a_2}{\idisotwo}, \pair{a_2\odot\idiso}{\idrdl},\ldots \} \\
+\singi{a_2}{\idiso} &=& \{ \pair{0}{\idisotwo}, \ldots \}, \\
+\singi{a_2}{a_2} &=& \{ \pair{1}{\idrdl}, \ldots \}, \\
+\iter{a_2} &=& \{ \triple{0}{\idiso}{\idisotwo},\triple{1}{a_2}{\idrdr}, \triple{-1}{a_2}{\idisotwo}, \ldots \}
 \end{array}\]
 The idea is that $\sing{a_2}$ is, up to equivalence, a singleton set
-containing the value $a_2$ and that $\iter{a_2}$ generalizes the
-situation by including all iterates $(a_2)^k$ of $a_2$. Because of the
-underlying group structure of automorphisms, there are, up to
-equivalence, only $\ord{a_2}$ distinct iterates in $\iter{a_2}$. We
-emphasize that, in our proof-relevant setting, it is critical to
-neither collapse $\sing{a_2}$ to just $\{ a_2 \}$ nor collapse
-$\iter{a_2}$ to just $\{ \idiso, a_2 \}$. In the next three sections,
-we will use the elements of $\sing{p}$ and $\iter{p}$ as either
-objects (emphasizing their ``data'' aspect) or morphisms (emphasizing
-their ``program'' aspect) in various groupoid constructions.
+containing the value $a_2$, that $\sing{a_2}{q}$ is a set containing
+proofs that $q$ is equivalent to some iterate $(a_2)^k$, and that
+$\iter{a_2}$ generalizes the situation by including all iterates
+$(a_2)^k$ of $a_2$.  Because of the underlying group structure of
+automorphisms, there are, up to equivalence, only $\ord{a_2}$ distinct
+iterates in $\iter{a_2}$.  We emphasize that, in our proof-relevant
+setting, it is critical to neither collapse $\sing{a_2}$ to just
+$\{ a_2 \}$ nor collapse $\iter{a_2}$ to just $\{ \idiso, a_2 \}$. In
+the next three sections, we will use the elements of $\sing{p}$,
+$\singi{p}{q}$, and $\iter{p}$ as either objects (emphasizing their
+``data'' aspect) or morphisms (emphasizing their ``program'' aspect)
+in various groupoid constructions.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Order Groupoids $\order{p}$}

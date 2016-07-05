@@ -111,6 +111,12 @@ mutual
             (τ₁ ⟷ τ₃) → (τ₂ ⟷ τ₄) → (τ₁ ⊕ τ₂ ⟷ τ₃ ⊕ τ₄)
     _⊗_ :   {τ₁ τ₂ τ₃ τ₄ : U} →
             (τ₁ ⟷ τ₃) → (τ₂ ⟷ τ₄) → (τ₁ ⊗ τ₂ ⟷ τ₃ ⊗ τ₄)
+    η- : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (1/# p ⊗ # p)
+    η+ : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (# p ⊗ 1/# p)
+    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙# p
+    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙# p
+    name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
+    coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
 \end{code}
 }}}
 
@@ -156,6 +162,12 @@ show that 2-combinators commute as expected with inversion of
 ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
+! (η- p)    = ε- p
+! (η+ p)    = ε+ p
+! (ε- p)    = η- p
+! (ε+ p)    = η+ p
+! (name f) = coname f
+! (coname f) = name f
 \end{code}
 }
 
@@ -268,6 +280,12 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 !!⇔id (p ◎ q) = !!⇔id p ⊡ !!⇔id q
 !!⇔id (p _⟷_.⊕ q) = resp⊕⇔ (!!⇔id p) (!!⇔id q)
 !!⇔id (p _⟷_.⊗ q) = resp⊗⇔ (!!⇔id p) (!!⇔id q)
+!!⇔id (η+ p) = id⇔
+!!⇔id (η- p) = id⇔
+!!⇔id (ε+ p) = id⇔
+!!⇔id (ε- p) = id⇔
+!!⇔id (name f) = id⇔
+!!⇔id (coname f) = id⇔
 \end{code}
 }
 
@@ -324,8 +342,8 @@ p ^ (-[1+ (suc k) ])  = (! p) ◎ (p ^ -[1+ k ])
 record SingI {τ : U} {p : τ ⟷ τ} (q : τ ⟷ τ) : Set where
   constructor si
   field
-    i : ℤ
-    eq : q ⇔ (p ^ i)
+    k : ℤ
+    α : q ⇔ p ^ k
 
 record Iter {τ : U} (p : τ ⟷ τ) : Set where
   constructor <_,_,_>
@@ -351,9 +369,9 @@ a₂ : 𝟛 ⟷ 𝟛
 a₂ = Prim swap₊ ⊕ id⟷ 
 
 id[a₂]² : id⟷ ⇔ a₂ ◎ (a₂ ◎ id⟷)
-id[a₂]² = split⊕-id⟷ ●
-          ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
-          (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r)))
+id[a₂]² =  split⊕-id⟷ ●
+           ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
+           (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r)))
 
 x y z : Sing a₂
 x = ⟪ a₂ , id⇔ ⟫
@@ -476,50 +494,50 @@ Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 of types with $\frac{3}{2}$ values and that the values of these types
 are in 1-1 correspondence. 
 
-\begin{definition}[Semantic Values] Given a groupoid $G$, a
-  \emph{value} in~$G$ is a pair consisting of an object $v$ and its
-  collection $[\alpha_i]_i$ of outgoing morphisms
-  $\alpha_i : v \Rightarrow w_i$ for each reachable object $w_i$.
-\end{definition}
+% \begin{definition}[Semantic Values] Given a groupoid $G$, a
+%   \emph{value} in~$G$ is a pair consisting of an object $v$ and its
+%   collection $[\alpha_i]_i$ of outgoing morphisms
+%   $\alpha_i : v \Rightarrow w_i$ for each reachable object $w_i$.
+% \end{definition}
 
-\noindent The values in each of our three example groupoids in Fig.~\ref{fig:groupoids2} are:
-\begin{itemize}
-\item Values of $G_1$ are $(a,[\texttt{id}])$ and $(c,[\texttt{id},\swapp])$;
-\item Values of $G_2$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
-$(c, [\texttt{id}, \swapp])$; 
-\item Values of $G_3$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
-$(c, [\texttt{id}, \swapp])$.
-\end{itemize}
+% \noindent The values in each of our three example groupoids in Fig.~\ref{fig:groupoids2} are:
+% \begin{itemize}
+% \item Values of $G_1$ are $(a,[\texttt{id}])$ and $(c,[\texttt{id},\swapp])$;
+% \item Values of $G_2$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
+% $(c, [\texttt{id}, \swapp])$; 
+% \item Values of $G_3$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
+% $(c, [\texttt{id}, \swapp])$.
+% \end{itemize}
 
-These values can be considered raw values as they are not all
-indistinguishable. But we already see that $G_2$ and $G_3$ have the
-same raw values and hence can be reasonably considered as
-equivalent. To argue that either is also equivalent to $G_1$, we
-reason following a monetary analogy: why is a dollar bill (the value
-$(a,[\texttt{id}])$ in $G_1$) considered indistinguishable from two
-half-dollars (the values $(a,[\texttt{id},\swapp])$ and
-$(b,[\texttt{id},\swapp])$ in $G_2$)? Certainly not because we can
-find a 1-1 map between one object and two objects but because we have
-a process that can transform one collection of values to the other. In
-our case, we proceed as follows. Consider the value
-$(a,[\texttt{id}])$ in $G_1$; we can add another copy $\texttt{id}$
-and refine it to $\swapp\odot\swapp$ to transform the value to
-$(a,[\texttt{id},\swapp\odot\swapp])$. We then introduce a new
-intermediate object so that the loop $\swapp\odot\swapp])$ from $a$ to
-$a$ goes through an intermediate point $b$, i.e., we have a path
-$\swapp$ from $a$ to $b$ and a path $\swapp$ from $b$ to $a$. The
-result is groupoid $G_2$.
+% These values can be considered raw values as they are not all
+% indistinguishable. But we already see that $G_2$ and $G_3$ have the
+% same raw values and hence can be reasonably considered as
+% equivalent. To argue that either is also equivalent to $G_1$, we
+% reason following a monetary analogy: why is a dollar bill (the value
+% $(a,[\texttt{id}])$ in $G_1$) considered indistinguishable from two
+% half-dollars (the values $(a,[\texttt{id},\swapp])$ and
+% $(b,[\texttt{id},\swapp])$ in $G_2$)? Certainly not because we can
+% find a 1-1 map between one object and two objects but because we have
+% a process that can transform one collection of values to the other. In
+% our case, we proceed as follows. Consider the value
+% $(a,[\texttt{id}])$ in $G_1$; we can add another copy $\texttt{id}$
+% and refine it to $\swapp\odot\swapp$ to transform the value to
+% $(a,[\texttt{id},\swapp\odot\swapp])$. We then introduce a new
+% intermediate object so that the loop $\swapp\odot\swapp])$ from $a$ to
+% $a$ goes through an intermediate point $b$, i.e., we have a path
+% $\swapp$ from $a$ to $b$ and a path $\swapp$ from $b$ to $a$. The
+% result is groupoid $G_2$.
 
-\begin{definition}[Distinguishability] Two \emph{collections of
-    values} $\{V_i\}$ and $\{W_j\}$ in $G$ are indistinguishable
-  $\{V_i\} \sim \{W_j\}$, if \ldots
-  morphisms.
-\end{definition}
+% \begin{definition}[Distinguishability] Two \emph{collections of
+%     values} $\{V_i\}$ and $\{W_j\}$ in $G$ are indistinguishable
+%   $\{V_i\} \sim \{W_j\}$, if \ldots
+%   morphisms.
+% \end{definition}
 
-\amr{formalize the above and then revisit G1, G2, and G3 to formally
-  argue that after taking distinguishability into account they all
-  have the same distinguishable values and the number of
-  distinguishable values is 1.5}
+% \amr{formalize the above and then revisit G1, G2, and G3 to formally
+%   argue that after taking distinguishability into account they all
+%   have the same distinguishable values and the number of
+%   distinguishable values is 1.5}
 
 combinators between FT/ types including eta and epsilon
 
@@ -543,10 +561,6 @@ which has order 1. So if we try to use it, we will map 1 to 1 times
 1/id which is fine. So if we always preserve types and trivially 1 and
 0 have different cardinalities so there is no way to identify them and
 we are consistent.
-
-values equivalent tilde tilde
-
-values indistinguishable
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
