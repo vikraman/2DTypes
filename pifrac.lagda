@@ -419,63 +419,69 @@ data Val : (τ : U) → Set where
   inr :     {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
   [_,_] :   {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
   comb :    {τ : U} {p : τ ⟷ τ} → Iter p →  Val (# p)
-  1/comb :  {τ : U} {p : τ ⟷ τ} → Sing p → Val (1/# p) 
+  1/comb :  {τ : U} {p : τ ⟷ τ} → Iter p → Val (1/# p) 
 \end{code}
 }}}
 
 \noindent The first four lines define the conventional values for the
-unit, sum, and product types. The last three lines define values of
-type $\order{p}$, $\iorder{p}$, and $\oneg{p}$ using the singleton
-type $\sing{p}$ and the type $\iter{p}$ of the iterates of $p$. 
+unit, sum, and product types. The last two lines define values of type
+$\order{p}$ and $\iorder{p}$ using the iterates of $p$. In the case of
+$\order{p}$, a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
+the program $p$ iterated $k$ times. In the case of $\iorder{p}$, a
+value $\AgdaInductiveConstructor{1/comb}(p^k)$ represents the
+equivalence that $p^k$ can be annihilated to the identity. 
 
-{\setlength{\mathindent}{0cm}
-\medskip
-{\footnotesize{
-\begin{code}
-get-q : {τ : U} {p : τ ⟷ τ} → Val (# p) → τ ⟷ τ
-get-q (comb i) = Iter.q i
+% Formally we declare when two values are indistinguishable using the
+% relation below:
 
-data _≈_ : {τ : U} → Val τ → Val τ → Set where
-  ⋆≈ :     {v w : Val 𝟙} → v ≈ w
-  #p≈ :    ∀ {τ} {p : τ ⟷ τ} (p^i p^j : Val (# p)) →
-           get-q p^i ◎ ! (get-q p^j) ⇔ id⟷ → p^i ≈ p^j
-  1/#p≈ :  ∀ {τ} {p : τ ⟷ τ} (q : Iter p) → (p₁ p₂ : Sing p) →
-           Sing.q p₁ ◎ ! (Sing.q p₂) ⇔ Iter.q q ◎ ! (Iter.q q) →
-           (1/comb p₁) ≈ (1/comb p₂)
-  [,]≈ :   {τ₁ τ₂ : U} {v₁ v₂ : Val τ₁} {w₁ w₂ : Val τ₂} →
-           v₁ ≈ v₂ → w₁ ≈ w₂ → [ v₁ , w₁ ] ≈ [ v₂ , w₂ ]
-  inj₁≈ :  {τ₁ τ₂ : U} → {v₁ v₂ : Val τ₁} →
-           v₁ ≈ v₂ → inl {τ₁} {τ₂} v₁ ≈ inl v₂
-  inj₂≈ :  {τ₁ τ₂ : U} → {w₁ w₂ : Val τ₂} →
-           w₁ ≈ w₂ → inr {τ₁} {τ₂} w₁ ≈ inr w₂
-\end{code}
-}}}
+% {\setlength{\mathindent}{0cm}
+% \medskip
+% {\footnotesize{
+% \begin{code}
+% get-q : {τ : U} {p : τ ⟷ τ} → Val (# p) → τ ⟷ τ
+% get-q (comb i) = Iter.q i
+
+% data _≈_ : {τ : U} → Val τ → Val τ → Set where
+%   ⋆≈ :     {v w : Val 𝟙} → v ≈ w
+%   inj₁≈ :  {τ₁ τ₂ : U} → {v₁ v₂ : Val τ₁} →
+%            v₁ ≈ v₂ → inl {τ₁} {τ₂} v₁ ≈ inl v₂
+%   inj₂≈ :  {τ₁ τ₂ : U} → {w₁ w₂ : Val τ₂} →
+%            w₁ ≈ w₂ → inr {τ₁} {τ₂} w₁ ≈ inr w₂
+%   [,]≈ :   {τ₁ τ₂ : U} {v₁ v₂ : Val τ₁} {w₁ w₂ : Val τ₂} →
+%            v₁ ≈ v₂ → w₁ ≈ w₂ → [ v₁ , w₁ ] ≈ [ v₂ , w₂ ]
+%   #p≈ :    ∀ {τ} {p : τ ⟷ τ} (p^i p^j : Val (# p)) →
+%            get-q p^i ◎ ! (get-q p^j) ⇔ id⟷ → p^i ≈ p^j
+%   1/#p≈ :  ∀ {τ} {p : τ ⟷ τ} (q : Iter p) → (p₁ p₂ : Sing p) →
+%            Sing.q p₁ ◎ ! (Sing.q p₂) ⇔ Iter.q q ◎ ! (Iter.q q) →
+%            (1/comb p₁) ≈ (1/comb p₂)
+% \end{code}
+% }}}
   
-In the case of $\order{p}$ the iterates are
-interpreted as ``\emph{programs}'' that can act on other values and in
-the case of $\iorder{p}$ the iterates are interpreted as
-``\emph{symmetries}'' that capture similarities of programs. Note that
-if $p$ has order, say 3, then there are 3 distinct values of type
-$\order{p}$ and 3 distinct values of $\iorder{p}$. The values of type
-$\order{p}$ apply $p$ for 0, 1, or 2 times to given value. The values
-of type $\iorder{p}$, say $x$, $y$, and $z$, represent the three
-``thirds'' of $p$, so that applying $x(y(z(v)))$ has the same effect
-as applying $p(v)$.
+% In the case of $\order{p}$ the iterates are
+% interpreted as ``\emph{programs}'' that can act on other values and in
+% the case of $\iorder{p}$ the iterates are interpreted as
+% ``\emph{symmetries}'' that capture similarities of programs. Note that
+% if $p$ has order, say 3, then there are 3 distinct values of type
+% $\order{p}$ and 3 distinct values of $\iorder{p}$. The values of type
+% $\order{p}$ apply $p$ for 0, 1, or 2 times to given value. The values
+% of type $\iorder{p}$, say $x$, $y$, and $z$, represent the three
+% ``thirds'' of $p$, so that applying $x(y(z(v)))$ has the same effect
+% as applying $p(v)$.
 
-Given the definitions of combinators and values, we can directly
-implement the operational semantics of Fig.~\ref{opsem}. We will
-however present a more involved operational semantics once we
-introduce additional combinators.
+% Given the definitions of combinators and values, we can directly
+% implement the operational semantics of Fig.~\ref{opsem}. We will
+% however present a more involved operational semantics once we
+% introduce additional combinators.
 
-%%%%%%%
-\subsection{Additional Combinators}
+% %%%%%%%
+% \subsection{Additional Combinators}
 
-most combinators do not look at higher components of values:
-indistinguishable values are treated the same!
+% most combinators do not look at higher components of values:
+% indistinguishable values are treated the same!
 
-Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
-of types with $\frac{3}{2}$ values and that the values of these types
-are in 1-1 correspondence. 
+% Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
+% of types with $\frac{3}{2}$ values and that the values of these types
+% are in 1-1 correspondence. 
 
 % \begin{definition}[Semantic Values] Given a groupoid $G$, a
 %   \emph{value} in~$G$ is a pair consisting of an object $v$ and its
@@ -522,28 +528,30 @@ are in 1-1 correspondence.
 %   have the same distinguishable values and the number of
 %   distinguishable values is 1.5}
 
-combinators between FT/ types including eta and epsilon
+% combinators between FT/ types including eta and epsilon
 
-proof that combinators are information preserving
+% proof that combinators are information preserving
 
-other properties: inverses etc.
+% other properties: inverses etc.
 
-Cardinality-preserving combinators: sound, not complete (see
-limitations section), consistent.
+% Cardinality-preserving combinators: sound, not complete (see
+% limitations section), consistent.
 
-Consistency is defined in the following sense: If we allow arbitrary
-functions then bad things happen as we can throw away the negative
-information for example. In our reversible information-preserving
-framework, the theory is consistent in the sense that not all types
-are identified. This is easy to see as we only identify types that
-have the same cardinality. This is evident for all the combinators
-except for the new ones. For those new ones the only subtle situation
-is with the empty type. Note however that there is no way to define
-1/0 and no permutation has order 0. For 0 we have one permutation id
-which has order 1. So if we try to use it, we will map 1 to 1 times
-1/id which is fine. So if we always preserve types and trivially 1 and
-0 have different cardinalities so there is no way to identify them and
-we are consistent.
+% \paragraph*{Intermezzo.} The combinators 
+
+% Consistency is defined in the following
+% sense: If we allow arbitrary functions then bad things happen as we
+% can throw away the negative information for example. In our reversible
+% information-preserving framework, the theory is consistent in the
+% sense that not all types are identified. This is easy to see as we
+% only identify types that have the same cardinality. This is evident
+% for all the combinators except for the new ones. For those new ones
+% the only subtle situation is with the empty type. Note however that
+% there is no way to define 1/0 and no permutation has order 0. For 0 we
+% have one permutation id which has order 1. So if we try to use it, we
+% will map 1 to 1 times 1/id which is fine. So if we always preserve
+% types and trivially 1 and 0 have different cardinalities so there is
+% no way to identify them and we are consistent.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
