@@ -530,9 +530,9 @@ p(\texttt{sat}) &=& \texttt{sat}
 
 \noindent Clearly applying $p$ three consecutive times yields the
 identity function. As explained in Sec.~\ref{sec:groupoids}, the
-definition of any $p$ representing a permutation of order $\hash p$
-will induce two groupoids of cardinality $\order{p}$ and $1/\hash
-p$. In our case, we get:
+definition of any $p$ representing a permutation of order $\ord{p}$
+will induce two groupoids of cardinality $\ord{p}$ and $1/\ord{p}$. In
+our case, we get:
 \begin{itemize}
 \item a first groupoid which we denote $\order{p}$ and which has (up to
   equivalence) three clusters of objects corresponding to each
@@ -549,8 +549,8 @@ p$. In our case, we get:
   \draw[fill] (2,0) circle [radius=0.05];
 \end{tikzpicture}
 \end{center}
-\item a second groupoid which we denote $1/\hash~p$ and which has one 
-trivial object and an equivalence for each distinct iteration of $p$. (We
+\item a second groupoid which we denote $1/\hash p$ and which has one 
+trivial object and an equivalence for each distinct iteration of~$p$. (We
 explicitly include the identity arrow to emphasize that there are
 three distinct equivalences):
 \begin{center}
@@ -565,7 +565,7 @@ three distinct equivalences):
 \end{itemize}
 
 It is a fact that, in $\pifrac$, the trivial one point groupoid has
-the same cardinality as $\order{p} \times 1/\hash p$ for any
+the same cardinality as $\order{p} \otimes 1/\hash p$ for any
 $p$. Indeed taking the product of the particular groupoids $\order{p}$
 and $1/\hash p$ above produces the groupoid:
 
@@ -595,11 +595,11 @@ and $1/\hash p$ above produces the groupoid:
 \noindent which has cardinality 1. This justifies the following
 cardinality-preserving transformations on $C$:
 \[\begin{array}{rcl}
-C &≃&  C \times 1 \\
-&≃& C \times (\order{p} \times 1/\hash p) \\
-&≃& (C \times 1/\hash p) \times \order{p} 
+C &≃&  C \otimes \ot \\
+&≃& C \otimes (\order{p} \otimes 1/\hash p) \\
+&≃& (C \otimes 1/\hash p) \otimes \order{p} 
 \end{array}\]
-which decomposes $C$ into the product of $C \times 1/\hash p$ and
+which decomposes $C$ into the product of $C \otimes 1/\hash p$ and
 $\order{p}$. The latter groupoid has cardinality 3. The first groupoid,
 depicted below, has cardinality $2\frac{1}{3}$. (We omit the identity
 arrows to avoid excessive clutter):
@@ -655,21 +655,24 @@ arrows to avoid excessive clutter):
 %%%%%
 \subsection{Credit Card Computation} 
  
-We will illustrate the speculative creation and annihilation of values
-with the following small example. Let $\textsf{swap}$ be the
-permutation that swaps two elements: it has order 2, i.e.,
-$\textsf{swap}^0 = \textsf{swap}^2 = \textsf{swap} \odot \textsf{swap} =
-\textsf{id}$ where $\odot$ is the sequential composition of programs.
-As explained in the previous section, this permutation introduces two
-types $\order{\textsf{swap}}$ and $1/\hash \textsf{swap}$ of
-cardinality 2 and $\frac{1}{2}$ respectively. The first type has two
-values $\textsf{swap}^0$ (or $\textsf{id}$) and $\textsf{swap}^1$. The
-second type has a single point and two equivalences: operationally we refer
-to the values of this type as $1/\textsf{swap}^0$ (or $\textsf{id}$)
-and $1/\textsf{swap}^1$ where we use the prefix `$1/$' to express the
-fact that these values refer to equivalences not to objects. Given
-these ingredients, it is possible to write the following
-program in $\pifrac$:
+We illustrate the speculative creation and annihilation of values with
+the following small example. Let $\textsf{swap}$ be the permutation
+that swaps two elements: it has order 2, i.e.,
+$\textsf{swap}^0 = \textsf{swap}^2 = \textsf{swap} \odot \textsf{swap}
+= \textsf{id}$
+where $\odot$ is the sequential composition of programs.  As explained
+in the previous section, this permutation introduces two types
+$\order{\textsf{swap}}$ and $1/\hash \textsf{swap}$ of cardinality 2
+and $\frac{1}{2}$ respectively. The first type has two values
+$\textsf{swap}^0$ (or $\textsf{id}$) and $\textsf{swap}^1$ (or just
+$\textsf{swap})$. The second type has also two values which we write
+as $\alpha_{\idiso}$ and $\alpha_{\textsf{swap}}$. These values are
+equivalences expressing a proof of reversibility for
+$\textsf{swap}$. The equivalence $\alpha_{\idiso}$ asserts that
+$\textsf{swap}^0$ has an inverse that annihilates it and the
+equivalence $\alpha_{\textsf{swap}}$ that $\textsf{swap}^1$ has an
+inverse that annihilates it. Given these ingredients, we can write the
+following program in $\pifrac$:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
@@ -699,45 +702,40 @@ primitives in the language. Their types are as follows:
 \ot &:& \eta_{\textsf{swap}} &:& \order{\textsf{swap}} \times 1/\hash \textsf{swap} \\
 \order{\textsf{swap}} \times 1/\hash \textsf{swap} &:& \epsilon_{\textsf{swap}} &:& \ot
 \end{array}\]
+
 As is common in string diagrams for
 categories~\cite{selinger-graphical}, we elide associativity in the
-figure. Operationally, each primitive may execute in the left-to-right
-or right-to-left direction. When $\eta_{\textsf{swap}}$ executes from
-left-to-right, it consumes the unique value of type $\ot$ and produces
-the matched pair of values $(\textsf{swap}^1,1/\textsf{swap}^1)$. This
-constitutes a guess as there is another matched pair of values it
-could produce, e.g., $(\textsf{id},1/\textsf{id})$. When
-$\epsilon_{\textsf{swap}}$ executes from left-to-right it checks the
-incoming pair of values and annihilates them if they match. Otherwise
-$\epsilon_{\textsf{swap}}$ blocks the forward progress of evaluation
-and starts a backwards execution. If $\eta_{\textsf{swap}}$ is
-approached from the right with some pair of values $(p,1/p)$, it
-updates the pair with the next matched pair of values by composing $p$
-with a new occurrence of $\textsf{swap}$, i.e., by producing the pair
-$(\textsf{swap} \odot p,1/(\textsf{swap} \odot p))$ and then resuming the forward
-execution again. This back-and-forth negotiation may require several
-iterations but is bounded by the order of $p$ which is 2 in our case. 
-
-Putting it all together, the program above can be executed with either
-$\textsf{id}$ or $\textsf{swap}$ as the incoming value to the left. In
-the latter case, the first speculative guess is correct and the
-program terminates with no backtracking. In the former case, execution
-proceeds as follows in the forward direction:
+figure. When $\eta_{\textsf{swap}}$ executes, it consumes the unique
+value of type $\ot$ and it must produce a pair of values of the given
+types. To maintain reversibility, $\eta_{\textsf{swap}}$ produces a
+program and the equivalence necessary to annihilate it which limits
+the choices to $(\idiso,\alpha_{\idiso})$ or to
+$(\textsf{swap},\alpha_{\textsf{swap}})$. At this point, there is not
+enough information to commit to either choice. The situation is
+analogous to several classical ones which involve speculative
+computation and can be resolved using the same techniques. In the
+following we use a backtracking approach in which
+$\eta_{\textsf{swap}}$ speculatively chooses
+$(\idiso,\alpha_{\idiso})$ as its initial value and adjusts its choice
+if it is not consistent with the upstream constraints. There are two
+execution scenarios depending on which input is given to the
+circuit. If the input is $\textsf{swap}$, we have the following
+situation:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
-                                 node[below,red] {$\textsf{id}$} (0,1);
+                                 node[below,red] {$\textsf{swap}$} (0,1);
   \path (1,1.8) edge node[above] {$\ot$} 
                                node[below,red] {$()$} (1.6,1.8);
   \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
-                               node[below,red] {$\textsf{id}$} (4,0.2);
+                               node[below,red] {$\textsf{swap}$} (4,0.2);
   \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
   \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} 
-                                  node[below,red] {$\textsf{swap}$} (6,2.6);
+                                  node[below,red] {$\idiso$} (6,2.6);
   \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} 
-                               node[below,red] {$1/\textsf{swap}$} (4,1);
+                               node[below,red] {$\alpha_{\idiso}$} (4,1);
   \draw [blue,thick] (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
   \path (5,1) edge node[above] {$\ot$} (6,1);
   \draw (6,0.8) -- (7,0.8) -- (7,2.8) -- (6,2.8) -- cycle;
@@ -749,22 +747,22 @@ proceeds as follows in the forward direction:
 \end{tikzpicture}
 \end{center}
 
-In the figure, the values of each type is shown in red under the
-corresponding wire. At this point, the active combinator
-$\epsilon_{\textsf{swap}}$ (shown in blue) has received a pair of
-unmatched values and hence reverses execution. The reverse execution
-reaches the following state with $\eta_{\textsf{swap}}$ being active
-in the reverse direction:
+\noindent In the figure, the values of each type is shown in red under
+the corresponding wire. Execution has proceed until the active
+combinator $\epsilon_{\textsf{swap}}$ (shown in blue). This combinator
+has received a pair of mismatched values which it cannot
+annihilate. It therefore reverses execution to force
+$\eta_{\textsf{swap}}$ to alter its choice:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \path (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
-                                 node[below,red] {$\textsf{id}$} (0,1);
+                                 node[below,red] {$\textsf{swap}$} (0,1);
   \path (1,1.8) edge node[above] {$\ot$} 
                                node[below,red] {$()$} (1.6,1.8);
   \path (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
-                               node[below,red] {$\textsf{id}$} (4,0.2);
+                               node[below,red] {$\textsf{swap}$} (4,0.2);
   \draw [blue,thick] (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
   \path (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
   \path (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} (4,1);
@@ -779,12 +777,13 @@ in the reverse direction:
 \end{tikzpicture}
 \end{center}
 
-At this point, $\eta_{\textsf{swap}}$ updates its guess from
-$(\textsf{swap},1/\textsf{swap})$ to
-$(\textsf{swap}^2,1/\textsf{swap}^2)$ which is
-$(\textsf{id},1/\textsf{id})$ and resumes forward execution. This guess
-proves to be the correct one to match the input value and the entire
-circuit terminates with the value $\textsf{id}$.
+\noindent When $\eta_{\textsf{swap}}$ is approached in the reverse
+direction, it updates its guess to
+$(\textsf{swap},\alpha_{\textsf{swap}})$ and and resumes forward
+execution. This guess proves to be the correct one to match the input
+value and the entire circuit terminates with the value
+$\textsf{swap}$. Of course the initial input could have been $\idiso$
+in which case no backtracking would have been needed.
 
 % There are two possible inputs id and swap. If the input is swap then
 % execution proceeds as follows:
