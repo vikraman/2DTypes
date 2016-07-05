@@ -41,12 +41,14 @@ which to define $\Pi^/$.
 
 We begin by defining two mutually recursive syntactic categories
 \AgdaRef{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
-definitions are identical to the presentation of $\Pi$ in
+definition of types is identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of the type constructors
-\AgdaInductiveConstructor{\#}, \AgdaInductiveConstructor{1/\#}, and
-\AgdaInductiveConstructor{𝟙\#} that create order groupoids, inverse
-order groupoids, and expanded unit groupoids respectively. We will
-introduce additional combinators in proper time.
+\AgdaInductiveConstructor{\#} and \AgdaInductiveConstructor{1/\#} that
+create order groupoids and inverse order groupoids. The definition of
+1-combinators is also identical to the presentation in
+Sec.~\ref{sec:pi} except for the addition of
+$\AgdaInductiveConstructor{η-}$, $\AgdaInductiveConstructor{η+}$,
+$\AgdaInductiveConstructor{ε+}$, and $\AgdaInductiveConstructor{ε-}$.
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -62,6 +64,7 @@ mutual
     𝟙    : U
     _⊕_  : U → U → U
     _⊗_  : U → U → U
+    -- new types
     #    : {τ : U} → (τ ⟷ τ) → U
     1/#  : {τ : U} → (τ ⟷ τ) → U
 
@@ -110,10 +113,11 @@ mutual
             (τ₁ ⟷ τ₃) → (τ₂ ⟷ τ₄) → (τ₁ ⊕ τ₂ ⟷ τ₃ ⊕ τ₄)
     _⊗_ :   {τ₁ τ₂ τ₃ τ₄ : U} →
             (τ₁ ⟷ τ₃) → (τ₂ ⟷ τ₄) → (τ₁ ⊗ τ₂ ⟷ τ₃ ⊗ τ₄)
-    η- : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ (1/# p ⊗ # p)
-    η+ : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ (# p ⊗ 1/# p)
-    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙
-    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙
+    -- new combinators
+    η- :    {τ : U} → (p : τ ⟷ τ) → 𝟙 ⟷ (1/# p ⊗ # p)
+    η+ :    {τ : U} → (p : τ ⟷ τ) → 𝟙 ⟷ (# p ⊗ 1/# p)
+    ε+ :    {τ : U} → (p : τ ⟷ τ) → (# p ⊗ 1/# p) ⟷ 𝟙
+    ε- :    {τ : U} → (p : τ ⟷ τ) → (1/# p ⊗ # p) ⟷ 𝟙
 \end{code}
 }}}
 
@@ -122,14 +126,15 @@ inverts a 1-combinator, \AgdaDatatype{⇔} which defines equivalences of
 1-combinators using 2-combinators, \AgdaFunction{2!} which inverts
 2-combinators, and \AgdaFunction{!!⇔id} and \AgdaFunction{⇔!} which
 show that 2-combinators commute as expected with inversion of
-1-combinators:
+1-combinators. The signatures of these additional functions and sets
+are given below:
 
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
 
 \begin{code}
-! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
+! : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₂ ⟷ τ₁)
 \end{code}
 \AgdaHide{
 \begin{code}
@@ -313,8 +318,7 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 As motivated in the previous section, we will also need to consider
 the singleton type $\sing{p}$ including all combinators equivalent to
 $p$ and the type $\iter{p}$ of all the combinators equivalent to
-iterates $p^k$. We also introduce another singleton type
-$\singi{p}{q}$ that includes one particular iterate:
+iterates $p^k$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -332,12 +336,6 @@ p ^ (+ (suc k))       = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ]          = ! p
 p ^ (-[1+ (suc k) ])  = (! p) ◎ (p ^ -[1+ k ])
 
-record SingI {τ : U} {p : τ ⟷ τ} (q : τ ⟷ τ) : Set where
-  constructor si
-  field
-    k : ℤ
-    α : q ⇔ p ^ k
-
 record Iter {τ : U} (p : τ ⟷ τ) : Set where
   constructor <_,_,_>
   field
@@ -348,8 +346,7 @@ record Iter {τ : U} (p : τ ⟷ τ) : Set where
 }}}
 
 For our running example using the type $\mathbb{3}$ and the combinator
-$a_2$, we list a few elements of $\sing{a_2}$, $\singi{a_2}{\idiso}$,
-and $\iter{a_2}$:
+$a_2$, we list a few elements of $\sing{a_2}$ and $\iter{a_2}$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -371,10 +368,6 @@ x = ⟪ a₂ , id⇔ ⟫
 y = ⟪ id⟷ ◎ a₂ , idl◎l ⟫
 z = ⟪  a₂ ◎ (Prim assocr₊ ◎ Prim assocl₊) ,
        (id⇔ ⊡ rinv◎l) ● idr◎l ⟫ 
-
-s t : SingI {𝟛} {a₂} id⟷
-s = si (+ 0) id⇔
-t = si (+ 2) id[a₂]²
 
 p^₀ p^₁ p^₂ p^₃ p^₄ p^₅ : Iter a₂
 p^₀ = < + 0 , id⟷ , id⇔ > 
