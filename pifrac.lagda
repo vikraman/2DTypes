@@ -25,7 +25,7 @@ infixr 50 _◎_
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$}
+\section{$\Pi^/$: Types, Values, and Combinators}
 
 We are now ready to turn the semantic treatment of groupoids from the
 previous section into an actual programming language. The language

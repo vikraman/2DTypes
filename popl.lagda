@@ -55,7 +55,7 @@
 \newcommand{\iter}[1]{\textsc{Iter}(#1)}
 \newcommand{\pair}[2]{\langle #1,#2 \rangle}
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
-\newcommand{\distiterplus}[3]{\mathsf{dist^{{\wedge}{+}}}~#1~#2~#3}
+\newcommand{\distiterplus}[3]{\mathsf{dist}~#1~#2~#3}
 
 \newcommand{\Rule}[4]{
 \makebox{{\rm #1}
@@ -558,7 +558,7 @@ cardinality $o$ and $1/o$. In our case, we get:
 \end{center}
 \item a second groupoid which we denote $1/\hash p$ and which has one
   trivial object and an equivalence for each distinct iteration of~$p$
-  showing that it can be annhiliated to the identity by composing it
+  showing that it can be annihilated to the identity by composing it
   with its inverse. (We explicitly include the identity arrow to
   emphasize that there are three distinct equivalences):
 \begin{center}
@@ -793,7 +793,7 @@ value and the entire circuit terminates with the value
 $\textsf{swap}$. Of course the initial input could have been $\idiso$
 in which case no backtracking would have been needed. The set up
 generalizes to arbitrary reversible programs $p$ with finite order:
-the back-and-forth negoatiation is guaranteed to terminate as there
+the back-and-forth negotiation is guaranteed to terminate as there
 are only a finite number of possible choices for each value.
 
 % There are two possible inputs id and swap. If the input is swap then
