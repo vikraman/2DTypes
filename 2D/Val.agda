@@ -9,9 +9,7 @@ open import Data.Product using (Σ) renaming (_,_ to _&_)
 
 open import 2D.Types
 open import 2D.Iter
-open import 2D.Sing
 open import 2D.Power
-open import 2D.SingIter
 
 -- a fraction p ÷ q is a way of identifying r such that p ^ i ◎ ! q ^ j ⇔ r
 -- or (equivalently) p ^ i ⇔ r ◎ q ^ j.
