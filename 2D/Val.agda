@@ -25,6 +25,9 @@ data Val : (τ : U) → Set where
 get-q : {t : U} {p : t ⟷ t} → Val (# p) → t ⟷ t
 get-q (comb i) = Iter.q i
 
+get-iter : {t : U} {p : t ⟷ t} → Val (# p) → Iter p
+get-iter (comb i) = i
+
 π₁ : {s t : U} → Val (s ⊗ t) → Val s
 π₁ [ x , _ ] = x
 π₂ : {s t : U} → Val (s ⊗ t) → Val t

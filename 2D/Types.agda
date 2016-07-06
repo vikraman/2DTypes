@@ -67,7 +67,7 @@ mutual
     synchr⋆ : {t : U} {p q : t ⟷ t} → (p // q) ⊗ # p ⟷ # p ⊗ (q \\ p)
     synchl⋆ : {t : U} {p q : t ⟷ t} → # p ⊗ (q \\ p) ⟷ (p // q) ⊗ # p
     -- we need to be able to do something to the numerator
-    app-num\\ : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → p \\ q ⟷ r \\ q
+    app-num\\ : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → q \\ p ⟷ q \\ r
     app-num// : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → p // q ⟷ r // q
 
 
@@ -143,6 +143,9 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
     c₀ ⇔ c₁ → app-num// {q = q} c₀ ⇔ app-num// c₁
   resp-app-num\\ : {t : U} {p q r : t ⟷ t} → {c₀ c₁ : # p ⟷ # r} →
     c₀ ⇔ c₁ → app-num\\ {q = q} c₀ ⇔ app-num\\ c₁
+  -- equivalent programs are equivalent
+  lift# : {t : U} {p r : t ⟷ t} → # p ⟷ # r → p ⇔ r
+  lift#! : {t : U} {p r : t ⟷ t} → # p ⟷ # r → ! p ⇔ ! r
     
   -- coherence for compact closed categories
 {-
@@ -182,6 +185,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- 2! ccc₂r = ccc₂l
 2! (resp-app-num// α) = resp-app-num// (2! α)
 2! (resp-app-num\\ α) = resp-app-num\\ (2! α)
+2! (lift# pr) = lift# (! pr)
+2! (lift#! pr) = lift#! (! pr)
 
 -- Properties
 
@@ -246,8 +251,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- ⇔! ccc₁r = ccc₂r
 -- ⇔! ccc₂l = ccc₁l
 -- ⇔! ccc₂r = ccc₁r
-⇔! (resp-app-num// α) = {!!}
-⇔! (resp-app-num\\ α) = {!!}
+⇔! (resp-app-num// α) = resp-app-num// (⇔! α)
+⇔! (resp-app-num\\ α) = resp-app-num\\ (⇔! α)
+⇔! (lift# pr) = lift#! pr
+⇔! (lift#! {p = p} {r} pr) = (2! (!!⇔id p)) ● lift# pr ● !!⇔id r
 
 -- convenient lemmas
 
@@ -264,10 +271,10 @@ inverse⇒⇔ {p = p} {q} pf = idr◎r {c = p} ● (id⇔ ⊡ rinv◎r {c = q}) 
 
 -----------------------
 name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙 ⟷ c \\ d)
-name {_} {c} f = η- c ◎ {!!}
+name {_} {c} f = η- c ◎ app-num\\ f
 
--- coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (c \\ d ⟷ 𝟙)
--- coname {_} {c} f = Prim id⟷ ⊗ (! f) ◎ ε- c
+coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (c // d ⟷ 𝟙)
+coname {_} {c} {d} f = app-num// f ◎ ε+ d
 
 --
 
