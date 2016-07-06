@@ -11,14 +11,11 @@ open import Data.Nat using (ℕ; suc; _≥_) renaming (_+_ to _ℕ+_)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
-open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
-  hiding (_≤_; _≤?_)
 open import Relation.Binary.PropositionalEquality
   using (_≡_; refl; trans; subst; cong; sym; cong₂; inspect; [_])
 open import Function using (case_of_)
 
 open import 2D.Types
--- open import 2D.Order
 open import 2D.Iter
 open import 2D.Sing
 open import 2D.SingIter
@@ -38,6 +35,11 @@ Fin2⇒1+1 (suc zero) = inr ⋆
 Fin2⇒1+1 (suc (suc ()))
 
 mutual
+  apply : {τ : U} (p q s : τ ⟷ τ) → (# p ⟷ # s) → (p ÷ q) → s ÷ q
+  apply p q s f x < i , s^i , α > < j , q^j , β > with 𝓐𝓹⁻¹ f (comb < i , s^i , α > ) | (inspect (𝓐𝓹⁻¹ f) (comb < i , s^i , α > )) 
+  ... | comb < k , p^k , γ > | [ eq ] with x < k , p^k , γ > < j , q^j , β >
+  ... | (r & pf ) = r & (2! (cong# f < i , s^i , α > ) ● (≡⇒⇔ (cong get-q eq))) ● pf 
+    
   𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₁ → Val T₂
   𝓐𝓹 (Prim x) v = prim x v
   𝓐𝓹 (c ◎ c₁) v =
@@ -51,9 +53,12 @@ mutual
   𝓐𝓹 (η+ c) ⋆ = tangr (c÷c c)
   𝓐𝓹 (ε+ c) (tangr x) = ⇔-irr (proj₂ (x (iter c) (iter c)))
   𝓐𝓹 (ε- c) (tangl x) = ⇔-irr (proj₂ (x (iter c) (iter c)))
+  -- note: we don't even have a q in hand to 'compute' with x, so the
+  -- only choice that will work for all q is v.  This encodes a sort of
+  -- parametricity.  Could be a theorem to prove?
   𝓐𝓹 synchr⋆ [ tangr x , v ] = [ v , tangl x ]
   𝓐𝓹 synchl⋆ [ v , tangl x ] = [ (tangr x) , v ]
-  𝓐𝓹 (app-num\\ {t} {p} {q} {r} f) (tangl x) = {!!}
+  𝓐𝓹 (app-num\\ {t} {p} {q} {r} f) (tangl x) = tangl (apply p q r f x)
   𝓐𝓹 (app-num// f) v = {!!}
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₂ → Val T₁
@@ -92,7 +97,12 @@ mutual
   cong≈ synchr⋆ {[ tangr p , comb c ]} {[ tangr q , comb d ]} ([,]≈ tangr≈ (#p≈ _ _ x)) = [,]≈ (#p≈ (comb c) (comb d) x) tangl≈
   cong≈ (app-num// f) v = tangr≈
   cong≈ (app-num\\ f) v = tangl≈
-  
+
+  postulate
+    cong# : {τ : U} {p s : τ ⟷ τ} (f : # p ⟷ # s) → (si : Iter s) →
+      get-q (𝓐𝓹⁻¹ f (comb si)) ⇔ get-q (comb si)
+      
+
 cong⁻¹≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₂} → v ≈ w → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹⁻¹ c w
 cong⁻¹≈ (Prim x) {v} {w} p = prim⁻¹-cong≈ x v w p
 cong⁻¹≈ (c₁ ◎ c₂) p = cong⁻¹≈ c₁ (cong⁻¹≈ c₂ p)

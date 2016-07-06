@@ -13,17 +13,16 @@ open import 2D.Sing
 open import 2D.Power
 open import 2D.SingIter
 
--- a fraction p ÷ q is a way of identifying r such that p ^ i ◎ ! q ^ j ⇔ r ^ (i - j)
--- or (equivalently) p ^ i ⇔ r ^ (i - j) ◎ q ^ j.
+-- a fraction p ÷ q is a way of identifying r such that p ^ i ◎ ! q ^ j ⇔ r
+-- or (equivalently) p ^ i ⇔ r ◎ q ^ j.
 _÷_ : {τ : U} (p q : τ ⟷ τ) → Set
-_÷_ {τ} p q = ((pi : Iter p) → (qi : Iter q) → Σ (τ ⟷ τ)
-  (λ r → Iter.q pi ⇔ (r ^ ((Iter.k pi) ℤ.+ (ℤ.- Iter.k qi))) ◎ Iter.q qi))
+_÷_ {τ} p q = (pi : Iter p) → (qj : Iter q) → Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
 
 -- the "identity" tangle:
 c÷c : {τ : U} (c : τ ⟷ τ) → c ÷ c
 c÷c {_} c < i , p , α > < j , q , β > =
-  c &
-  (α ● 2! (lower i (ℤ.- j) ⊡ β ● assoc◎r ● id⇔ ⊡ (^⇔! j) ⊡ id⇔ ● id⇔ ⊡ rinv◎l ● idr◎l))
+  c ^ (i ℤ.+ (ℤ.- j)) &
+  α ● 2! (lower i (ℤ.- j) ⊡ β ● assoc◎r ● id⇔ ⊡ (^⇔! j) ⊡ id⇔ ● id⇔ ⊡ rinv◎l ● idr◎l)
 
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
