@@ -20,7 +20,7 @@ open import Level hiding (lower)
 open import Relation.Binary.PropositionalEquality
 open import Function
 open import 2D.Power
-open import 2D.Sing
+-- open import 2D.Sing
 open import 2D.Iter
 open import 2D.ProgMorphisms
 
@@ -67,9 +67,9 @@ open import Data.Integer as ℤ hiding (∣_∣)
 
 1/orderC : (τ : U) → (τ ⟷ τ) → Category _ _ _
 1/orderC τ pp = record {
-    Obj = Sing pp
+    Obj = Iter {τ} (Prim id⟷)
   ; _⇒_ = λ _ _ → Iter pp -- unlike in Val, here we skip the 'trivial' proof
-  ; _≡_ = λ { pp qq  → Iter.q pp ⇔ Iter.q qq }
+  ; _≡_ = λ { p q  → Iter.q p ⇔ Iter.q q }
   ; id = zeroth pp
   ; _∘_ = λ { < m , p , α > < n , q , β > →
               < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
