@@ -11,4 +11,4 @@ import 2D.ProgMorphisms
 import 2D.Val
 import 2D.Order2Lemmas
 import 2D.Frac
--- import 2D.opsem3
+import 2D.opsem3
