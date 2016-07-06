@@ -4,6 +4,8 @@ module 2D.Types where
 
 infix 50 _⊕_
 infix 60 _⊗_
+infix 60 _//_
+infix 60 _\\_
 infix  30 _⟷_
 infix  30 _⇔_
 infixr 50 _◎_
@@ -20,8 +22,8 @@ mutual
     _⊕_ : U → U → U
     _⊗_ : U → U → U
     # : {τ : U} → (τ ⟷ τ) → U
-    1/# : {τ : U} → (τ ⟷ τ) → U
-    𝟙# : {τ : U} → (τ ⟷ τ) → U
+    _//_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- # c ⊗ 1/# d, tangled right
+    _\\_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- 1/# d ⊗ # c, tangled left
 
   data Prim⟷ : U → U → Set where
     unite₊l :  {t : U} → Prim⟷ (𝟘 ⊕ t) t
@@ -31,10 +33,10 @@ mutual
     swap₊   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊕ t₂) (t₂ ⊕ t₁)
     assocl₊ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊕ (t₂ ⊕ t₃))  ((t₁ ⊕ t₂) ⊕ t₃)
     assocr₊ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊕ t₂) ⊕ t₃) (t₁ ⊕ (t₂ ⊕ t₃))
-    unite⋆l :  {s t : U} → Prim⟷ (𝟙 ⊗ t) t
-    uniti⋆l :  {s t : U} → Prim⟷ t (𝟙 ⊗ t)
-    unite⋆r :  {s t : U} → Prim⟷ (t ⊗ 𝟙) t
-    uniti⋆r :  {s t : U} → Prim⟷ t (t ⊗ 𝟙)
+    unite⋆l :  {t : U} → Prim⟷ (𝟙 ⊗ t) t
+    uniti⋆l :  {t : U} → Prim⟷ t (𝟙 ⊗ t)
+    unite⋆r :  {t : U} → Prim⟷ (t ⊗ 𝟙) t
+    uniti⋆r :  {t : U} → Prim⟷ t (t ⊗ 𝟙)
     swap⋆   :  {t₁ t₂ : U} → Prim⟷ (t₁ ⊗ t₂) (t₂ ⊗ t₁)
     assocl⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ (t₁ ⊗ (t₂ ⊗ t₃)) ((t₁ ⊗ t₂) ⊗ t₃)
     assocr⋆ :  {t₁ t₂ t₃ : U} → Prim⟷ ((t₁ ⊗ t₂) ⊗ t₃) (t₁ ⊗ (t₂ ⊗ t₃))
@@ -55,17 +57,20 @@ mutual
     _⊗_ :  {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (t₁ ⊗ t₂ ⟷ t₃ ⊗ t₄)
     -- ap⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
     -- ap⁻¹⟷ : {t : U} {p : t ⟷ t} →  # p ⊗ t ⟷ # p ⊗ t
-    η- : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (1/# p ⊗ # p)
-    η+ : {t : U} → (p : t ⟷ t) → 𝟙# p ⟷ (# p ⊗ 1/# p)
-    ε+ : {t : U} → (p : t ⟷ t) → (# p ⊗ 1/# p) ⟷ 𝟙# p
-    ε- : {t : U} → (p : t ⟷ t) → (1/# p ⊗ # p) ⟷ 𝟙# p
-    -- unite⋆l# :  {t : U} (p : t ⟷ t) → (𝟙# p ⊗ # p) ⟷ # p 
-    -- uniti⋆l# :  {t : U} (p : t ⟷ t) → # p ⟷ (𝟙# p ⊗ # p )
-    -- unite⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# p) ⟷ # p
-    -- uniti⋆r# :  {t : U} (p : t ⟷ t) → # p ⟷ (# p ⊗ 𝟙# p)
-    -- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
-    -- coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
+    η- : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ p \\ p
+    η+ : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ p // p
+    ε+ : {t : U} → (p : t ⟷ t) → p // p ⟷ 𝟙
+    ε- : {t : U} → (p : t ⟷ t) → p \\ p ⟷ 𝟙
+    -- rather than assocl⋆, we need something to synchronize. Might need 2 more versions?
+    synchr⋆ : {t : U} {p q : t ⟷ t} → (p // q) ⊗ # p ⟷ # p ⊗ (q \\ p)
+    synchl⋆ : {t : U} {p q : t ⟷ t} → # p ⊗ (q \\ p) ⟷ (p // q) ⊗ # p
+    -- we need to be able to do something to the numerator
+--     app-num\\ : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → q \\ p ⟷ q \\ r
+--     app-num// : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → p // q ⟷ r // q
 
+-- convenient short hand
+#1/ : {τ : U} → (τ ⟷ τ) → U
+#1/ p = p // (Prim id⟷)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -100,12 +105,10 @@ mutual
 ! (ε+ p)    = η+ p
 -- ! ap⟷ = ap⁻¹⟷ 
 -- ! ap⁻¹⟷ = ap⟷
--- ! (unite⋆l# p) = uniti⋆l# p
--- ! (uniti⋆l# p) = unite⋆l# p
--- ! (unite⋆r# p) = uniti⋆r# p
--- ! (uniti⋆r# p) = unite⋆r# p
--- ! (name f) = coname f
--- ! (coname f) = name f
+! synchr⋆ = synchl⋆
+! synchl⋆ = synchr⋆
+-- ! (app-num// f) = app-num// (! f) -- note how these are different
+-- ! (app-num\\ f) = app-num\\ (! f)
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -136,13 +139,19 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
+{-  -- coherence for num-app
+  resp-app-num// : {t : U} {p q r : t ⟷ t} → {c₀ c₁ : # p ⟷ # r} →
+    c₀ ⇔ c₁ → app-num// {q = q} c₀ ⇔ app-num// c₁
+  resp-app-num\\ : {t : U} {p q r : t ⟷ t} → {c₀ c₁ : # p ⟷ # r} →
+    c₀ ⇔ c₁ → app-num\\ {q = q} c₀ ⇔ app-num\\ c₁
+-}  
   -- coherence for compact closed categories
 {-
   ccc₁l : {t : U} {p : t ⟷ t} → 
-         uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
-         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ (Prim id⟷)
+         uniti⋆r p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
+         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l p ⇔ (Prim id⟷)
   ccc₁r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim id⟷ ⇔ uniti⋆r p ◎ (Prim id⟷ ⊗ η- p) ◎
          Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p 
   ccc₂l : {t : U} {p : t ⟷ t} →
          (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
@@ -150,21 +159,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   ccc₂r : {t : U} {p : t ⟷ t} →
          Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
          Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
-
-  -- application coherence
-  -- c ⇔ d means applying either is the same
-  resp-ap⟷r : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         (f ⊗ Prim id⟷) ◎ ap⟷ ⇔ ap⟷ ◎ (f ⊗ Prim id⟷)
-  resp-ap⟷l : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         ap⟷ ◎ (f ⊗ Prim id⟷) ⇔ (f ⊗ Prim id⟷) ◎ ap⟷
-  resp-ap⁻¹⟷r : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         ! (f ⊗ Prim id⟷) ◎ ap⁻¹⟷ ⇔ ap⁻¹⟷ ◎ ! (f ⊗ Prim id⟷)
-  resp-ap⁻¹⟷l : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         ap⁻¹⟷ ◎ ! (f ⊗ Prim id⟷) ⇔ ! (f ⊗ Prim id⟷) ◎ ap⁻¹⟷
 -}
-  -- suggested alternate versions
-  -- ccc₁l {t : U} {p : t ⟷ t} →
-  --     uniti⋆r ◎ (id⟷ ⊗ η p) ◎ assocl⋆ ⇔ uniti⋆l ◎ ((η p ◎ swap⋆) ⊗ id⟷)
   
 2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! assoc◎l = assoc◎r
@@ -186,10 +181,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- 2! ccc₁r = ccc₁l
 -- 2! ccc₂l = ccc₂r
 -- 2! ccc₂r = ccc₂l
--- 2! (resp-ap⟷r f) = resp-ap⟷l f
--- 2! (resp-ap⟷l f) = resp-ap⟷r f
--- 2! (resp-ap⁻¹⟷r f) = resp-ap⁻¹⟷l f
--- 2! (resp-ap⁻¹⟷l f) = resp-ap⁻¹⟷r f
+-- 2! (resp-app-num// α) = resp-app-num// (2! α)
+-- 2! (resp-app-num\\ α) = resp-app-num\\ (2! α)
 
 -- Properties
 
@@ -229,12 +222,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id (ε- p) = id⇔
 -- !!⇔id ap⟷ = id⇔ 
 -- !!⇔id ap⁻¹⟷ = id⇔
--- !!⇔id (unite⋆l# p) = id⇔
--- !!⇔id (uniti⋆l# p) = id⇔
--- !!⇔id (unite⋆r# p) = id⇔
--- !!⇔id (uniti⋆r# p) = id⇔
--- !!⇔id (name f) = id⇔
--- !!⇔id (coname f) = id⇔
+!!⇔id synchl⋆ = id⇔
+!!⇔id synchr⋆ = id⇔
+-- !!⇔id (app-num// f) = resp-app-num// (!!⇔id f)
+-- !!⇔id (app-num\\ f) = resp-app-num\\ (!!⇔id f)
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
@@ -256,12 +247,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- ⇔! ccc₁r = ccc₂r
 -- ⇔! ccc₂l = ccc₁l
 -- ⇔! ccc₂r = ccc₁r
--- ⇔! (resp-ap⟷r f) = resp-ap⁻¹⟷l f
--- ⇔! (resp-ap⟷l f) = resp-ap⁻¹⟷r f
--- is there any way that resp-ap can be made fully symmetric?
--- ⇔! (resp-ap⁻¹⟷r f) = id⇔ ⊡ (resp⊗⇔ (2! (!!⇔id f)) id⇔) ● resp-ap⟷l f ● ((resp⊗⇔ (!!⇔id f) id⇔) ⊡ id⇔)
--- ⇔! (resp-ap⁻¹⟷l f) = ((resp⊗⇔ (2! (!!⇔id f)) id⇔) ⊡ id⇔) ● resp-ap⟷r f ● id⇔ ⊡ (resp⊗⇔ (!!⇔id f) id⇔)
--- should add coherence for name/coname here; later.
+-- ⇔! (resp-app-num// α) = resp-app-num// (⇔! α)
+-- ⇔! (resp-app-num\\ α) = resp-app-num\\ (⇔! α)
 
 -- convenient lemmas
 
@@ -276,12 +263,19 @@ open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 inverse⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ◎ ! q ⇔ Prim id⟷ → (p ⇔ q)
 inverse⇒⇔ {p = p} {q} pf = idr◎r {c = p} ● (id⇔ ⊡ rinv◎r {c = q}) ● assoc◎l ● pf ⊡ id⇔ ● idl◎l
 
------------------------
-name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
-name {_} {c} f = η- c ◎ Prim id⟷ ⊗ f
+-- these patterns recur so often, let's name them
+!aab⇔b : {s t u : U} {a : s ⟷ t} {b : t ⟷ u} → ! a ◎ a ◎ b ⇔ b
+!aab⇔b = (assoc◎l ● rinv◎l ⊡ id⇔) ● idl◎l
 
-coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
-coname {_} {c} f = Prim id⟷ ⊗ (! f) ◎ ε- c
+ab!b⇔a : {s t u : U} {a : s ⟷ t} {b : t ⟷ u} → a ◎ b ◎ ! b ⇔ a
+ab!b⇔a = id⇔ ⊡ linv◎l ● idr◎l
+
+-----------------------
+-- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙 ⟷ c \\ d)
+-- name {_} {c} f = η- c ◎ app-num\\ f
+-- 
+-- coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (c // d ⟷ 𝟙)
+-- coname {_} {c} {d} f = app-num// f ◎ ε+ d
 
 --
 

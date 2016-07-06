@@ -3,7 +3,7 @@
 module 2D.opsem3 where
 
 open import Data.Sum hiding ([_,_])
-open import Data.Product hiding (<_,_>;,_;_,_)
+open import Data.Product hiding (<_,_>;,_) renaming (_,_ to _&_ )
 
 open import Data.Unit using (⊤; tt)
 open import Data.Fin as F hiding (#_;_<_)
@@ -11,14 +11,11 @@ open import Data.Nat using (ℕ; suc; _≥_) renaming (_+_ to _ℕ+_)
 open import Data.Integer
   using (ℤ; +_; -[1+_])
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
-open import Rational+ renaming (_+_ to _ℚ+_; _*_ to _ℚ*_)
-  hiding (_≤_; _≤?_)
 open import Relation.Binary.PropositionalEquality
   using (_≡_; refl; trans; subst; cong; sym; cong₂; inspect; [_])
 open import Function using (case_of_)
 
 open import 2D.Types
--- open import 2D.Order
 open import 2D.Iter
 open import 2D.Sing
 open import 2D.SingIter
@@ -38,6 +35,13 @@ Fin2⇒1+1 (suc zero) = inr ⋆
 Fin2⇒1+1 (suc (suc ()))
 
 mutual
+{-
+  apply : {τ : U} (p q s : τ ⟷ τ) → (# p ⟷ # s) → (p ÷ q) → s ÷ q
+  apply p q s f x < i , s^i , α > < j , q^j , β > with 𝓐𝓹⁻¹ f (comb < i , s^i , α > ) | (inspect (𝓐𝓹⁻¹ f) (comb < i , s^i , α > )) 
+  ... | comb < k , p^k , γ > | [ eq ] with x < k , p^k , γ > < j , q^j , β >
+  ... | (r & pf ) = r & (2! (cong# f < i , s^i , α > ) ● (≡⇒⇔ (cong get-q eq))) ● pf
+-}
+  
   𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₁ → Val T₂
   𝓐𝓹 (Prim x) v = prim x v
   𝓐𝓹 (c ◎ c₁) v =
@@ -47,20 +51,17 @@ mutual
   𝓐𝓹 (c ⊗ c₁) [ v , w ] = [ 𝓐𝓹 c v , 𝓐𝓹 c₁ w ]
   -- 𝓐𝓹 ap⟷ [ comb < i , q , α > , v₁ ] = [ (comb < i , q , α >) , (𝓐𝓹 q v₁) ]
   -- 𝓐𝓹 ap⁻¹⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
-  𝓐𝓹 (η- c) (𝟙ₚ (si i eq)) = [ (1/comb ⟪ c , id⇔ ⟫) , comb < i , c ^ i , id⇔ > ]
-  𝓐𝓹 (η+ c) (𝟙ₚ (si i eq)) = [ (comb < i , (c ^ i) , id⇔ >) , (1/comb ⟪ c , id⇔ ⟫) ]
-  𝓐𝓹 (ε+ c) [ comb < k , q , α > , 1/comb x₁ ] = 𝟙ₚ (si k α)
-  𝓐𝓹 (ε- c) [ 1/comb x , comb < k , q , α > ] = 𝟙ₚ (si k α)
---   𝓐𝓹 (unite⋆l# c) [ 𝟙ₚ (si j β) , comb < k , q₁ , α₁ > ] =
---     comb < k , q₁ , α₁ >
---   𝓐𝓹 (uniti⋆l# c) (comb < k₁ , q₁ , α₁ > ) =
---     [ (𝟙ₚ (si k₁ α₁)) , (comb < k₁ , q₁ , α₁ >) ]
---   𝓐𝓹 (unite⋆r# c) [ x , 𝟙ₚ s ] = x
---   𝓐𝓹 (uniti⋆r# c) (comb < k , q , α >) = [ (comb < k , q , α >) , (𝟙ₚ (si k α)) ]
---   𝓐𝓹 (name {_} {c} f) (𝟙ₚ (si i eq)) = [ (1/comb ⟪ c , id⇔ ⟫) , 𝓐𝓹 f (comb < i , c ^ i , id⇔ > ) ]
---   𝓐𝓹 (coname {_} {c} f) [ x , comb < k , q , α > ] =
---     let w = 𝓐𝓹⁻¹ f (comb < k , q , α >) in
---     case w of λ { (comb < i , r , β > ) → 𝟙ₚ (si i β) }
+  𝓐𝓹 (η- c) ⋆ = tangl (c÷c c)
+  𝓐𝓹 (η+ c) ⋆ = tangr (c÷c c)
+  𝓐𝓹 (ε+ c) (tangr x) = ⋆
+  𝓐𝓹 (ε- c) (tangl x) = ⋆
+  -- note: we don't even have a q in hand to 'compute' with x, so the
+  -- only choice that will work for all q is v.  This encodes a sort of
+  -- parametricity.  Could be a theorem to prove?
+  𝓐𝓹 synchr⋆ [ tangr x , v ] = [ v , tangl x ]
+  𝓐𝓹 synchl⋆ [ v , tangl x ] = [ (tangr x) , v ]
+--  𝓐𝓹 (app-num\\ {t} {p} {q} {r} f) (tangl x) = tangl (apply p q r f x)
+--  𝓐𝓹 (app-num// f) v = {!!}
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₂ → Val T₁
   𝓐𝓹⁻¹ (Prim x) v = prim⁻¹ x v
@@ -70,192 +71,241 @@ mutual
   𝓐𝓹⁻¹ (c ⊗ c₁) [ v , w ] = [ (𝓐𝓹⁻¹ c v) , (𝓐𝓹⁻¹ c₁ w) ]
   -- 𝓐𝓹⁻¹ ap⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
   -- 𝓐𝓹⁻¹ ap⁻¹⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹 (Iter.q x) v₁) ]
-  𝓐𝓹⁻¹ (η- c) [ 1/comb x , comb < k , q , α > ] = 𝟙ₚ (si k α)
-  𝓐𝓹⁻¹ (η+ c) [ comb < k , q , α > , v₁ ] = 𝟙ₚ (si k α)
-  𝓐𝓹⁻¹ (ε+ c) (𝟙ₚ (si k α)) = [ (comb < k , c ^ k , id⇔ >) , (1/comb ⟪ c , id⇔ ⟫) ]
-  𝓐𝓹⁻¹ (ε- c) (𝟙ₚ (si k _)) = [ (1/comb ⟪ c , id⇔ ⟫) , (comb < k , (c ^ k) , id⇔ >) ]
---   𝓐𝓹⁻¹ (unite⋆l# c) (comb < k , q , α >) = [ (𝟙ₚ (si k α)) , (comb < k , q , α >) ]
---   𝓐𝓹⁻¹ (uniti⋆l# c) [ 𝟙ₚ s , comb x₁ ] = (comb x₁)
---   𝓐𝓹⁻¹ (unite⋆r# c) (comb < k , q , α >) = [ (comb < k , q , α >) , (𝟙ₚ (si k α)) ]
---   𝓐𝓹⁻¹ (uniti⋆r# c) [ comb x , 𝟙ₚ s ] = comb x
---   𝓐𝓹⁻¹ (name f) [ x , comb < k , q , α > ] = 
---     let w = 𝓐𝓹⁻¹ f (comb < k , q , α >) in
---     case w of λ { (comb < i , r , β > ) → 𝟙ₚ (si i β) }
---   𝓐𝓹⁻¹ (coname {_} {c} f) (𝟙ₚ (si i eq)) =  [ (1/comb ⟪ c , id⇔ ⟫) , 𝓐𝓹 f (comb < i , c ^ i , id⇔ > ) ]
+  𝓐𝓹⁻¹ (η- c) (tangl x) = ⋆
+  𝓐𝓹⁻¹ (η+ c) (tangr x) = ⋆
+  𝓐𝓹⁻¹ (ε+ c) ⋆ = tangr (c÷c c)
+  𝓐𝓹⁻¹ (ε- c) ⋆ = tangl (c÷c c)
+  𝓐𝓹⁻¹ synchr⋆ [ v , tangl x ] = [ tangr x , v ]
+  𝓐𝓹⁻¹ synchl⋆ [ tangr x , v₁ ] = [ v₁ , tangl x ]
+  -- 𝓐𝓹⁻¹ (app-num\\ f) v = {!!}
+  -- 𝓐𝓹⁻¹ (app-num// f) v = {!!}
 
-cong≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) {v w : Val T₁} → v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
-cong≈ (Prim x) p = prim-cong≈ x p
-cong≈ (c₁ ◎ c₂) p = cong≈ c₂ (cong≈ c₁ p)
-cong≈ (c₁ ⊕ c₂) (inj₁≈ p) = inj₁≈ (cong≈ c₁ p)
-cong≈ (c₁ ⊕ c₂) (inj₂≈ p) = inj₂≈ (cong≈ c₂ p)
-cong≈ (c₁ ⊗ c₂) ([,]≈ p₁ p₂) = [,]≈ (cong≈ c₁ p₁) (cong≈ c₂ p₂)
--- cong≈ ap⟷ ([,]≈ (#p≈ {_} {p} (comb x) (comb x₁) x₂) p₂) =
---   [,]≈ (#p≈ (comb x) (comb x₁) x₂) ({!!})
--- cong≈ ap⁻¹⟷ ([,]≈ p₁ p₂) = {!!}
-cong≈ (η- c) (𝟙ₚ≈ p₁ {p₂} eq {si i α} {si j β}) =
-  [,]≈ (refl≈ refl)
-       (#p≈ (comb < i , c ^ i , id⇔ >)
-            (comb < j , c ^ j , id⇔ >)
-            ((2! α) ⊡ (⇔! (2! β)) ● eq ⊡ id⇔ ● linv◎l))
-cong≈ (η+ c) (𝟙ₚ≈ p₁ {p₂} eq {si i α} {si j β}) =
-  [,]≈ (#p≈ (comb < i , c ^ i , id⇔ >)
-            (comb < j , c ^ j , id⇔ >)
-            ((2! α) ⊡ (⇔! (2! β)) ● eq ⊡ id⇔ ● linv◎l))
-       (refl≈ refl)
-cong≈ (ε+ c) ([,]≈ (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x₂) (1/#p≈ q₂ p₁ p₂ x₃)) =
-  𝟙ₚ≈ q (inverse⇒⇔ x₂)
-cong≈ (ε- p) ([,]≈ (1/#p≈ q p₁ p₂ x₂) (#p≈ (comb x) (comb x₁) x₃)) = 𝟙ₚ≈ (Iter.q x) (inverse⇒⇔ x₃)
--- cong≈ (unite⋆l# p) ([,]≈ (𝟙ₚ≈ q) (#p≈ (comb x) (comb x₁) x₃)) = #p≈ (comb x) (comb x₁) x₃
--- cong≈ (uniti⋆l# p) (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x₂) =
---   [,]≈ (𝟙ₚ≈ q) (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x₂)
--- cong≈ (unite⋆r# p) ([,]≈ (#p≈ (comb x) (comb x₁) x₂) (𝟙ₚ≈ p₁)) = #p≈ (comb x) (comb x₁) x₂
--- cong≈ (uniti⋆r# p) (#p≈ (comb x) (comb x₁) x₂) = {!!}
--- cong≈ (name f) (𝟙ₚ≈ {_} {c} p₁ equiv {si i α} {si j β}) =
---   [,]≈ (refl≈ refl)
---        (cong≈ f (#p≈ (comb < i , c ^ i , id⇔ >) (comb < j , (c ^ j) , id⇔ >) (2! α ⊡ (⇔! (2! β)) ● (equiv ⊡ id⇔) ● linv◎l)))
--- cong≈ (coname f) ([,]≈ (1/#p≈ q₂ p₁ p₂ x₂) (#p≈ (comb < k , q , α >) (comb < k₁ , q₁ , α₁ >) x₃)) with 𝓐𝓹⁻¹ f (comb < k , q , α > ) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α > ) | 𝓐𝓹⁻¹ f (comb < k₁ , q₁ , α₁ >) | inspect (𝓐𝓹⁻¹ f) (comb < k₁ , q₁ , α₁ >)
--- ... | comb < i , r , β > | [ eq ] | comb < j , s , γ > | [ eq₂ ] = 𝟙ₚ≈ {!!} {!!}
+  cong≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) {v w : Val T₁} → v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
+  cong≈ (Prim x) {v} {w} p = prim-cong≈ x v w p -- prim-cong≈ x p
+  cong≈ (c₁ ◎ c₂) p = cong≈ c₂ (cong≈ c₁ p)
+  cong≈ (c₁ ⊕ c₂) {inl v} {inl w} (inj≈ p) = inj≈ (cong≈ c₁ p)
+  cong≈ (c₁ ⊕ c₂) {inl v} {inr w} (inj≈ ())
+  cong≈ (c₁ ⊕ c₂) {inr v} {inl w} (inj≈ ())
+  cong≈ (c₁ ⊕ c₂) {inr v} {inr w} (inj≈ p) = inj≈ (cong≈ c₂ p)
+  cong≈ (c₁ ⊗ c₂) {[ v , v₁ ]} {[ w , w₁ ]} ([,]≈ p₁ p₂) = [,]≈ (cong≈ c₁ p₁) (cong≈ c₂ p₂)
+  -- cong≈ ap⟷ ([,]≈ (#p≈ {_} {p} (comb x) (comb x₁) x₂) p₂) =
+  --   [,]≈ (#p≈ (comb x) (comb x₁) x₂) ({!!})
+  -- cong≈ ap⁻¹⟷ ([,]≈ p₁ p₂) = {!!}
+  cong≈ (η- c) {⋆} {⋆} ⋆≈ = tangl≈
+  cong≈ (η+ c) ⋆≈ = tangr≈
+  cong≈ (ε+ c) tangr≈ = ⋆≈
+  cong≈ (ε- p) tangl≈ = ⋆≈
+  cong≈ synchl⋆ {[ .(comb x₂) , tangl x ]} {[ .(comb x₃) , tangl x₁ ]} ([,]≈ (#p≈ (comb x₂) (comb x₃) x₄) tangl≈) = [,]≈ tangr≈ (#p≈ (comb x₂) (comb x₃) x₄)
+  cong≈ synchr⋆ {[ tangr p , comb c ]} {[ tangr q , comb d ]} ([,]≈ tangr≈ (#p≈ _ _ x)) = [,]≈ (#p≈ (comb c) (comb d) x) tangl≈
+  -- cong≈ (app-num// f) v = tangr≈
+  -- cong≈ (app-num\\ f) v = tangl≈
+
+  -- postulate
+  --   cong# : {τ : U} {p s : τ ⟷ τ} (f : # p ⟷ # s) → (si : Iter s) →
+  --     get-q (𝓐𝓹⁻¹ f (comb si)) ⇔ get-q (comb si)
+      
 
 cong⁻¹≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₂} → v ≈ w → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹⁻¹ c w
-cong⁻¹≈ (Prim x) p = prim⁻¹-cong≈ x p
+cong⁻¹≈ (Prim x) {v} {w} p = prim⁻¹-cong≈ x v w p
 cong⁻¹≈ (c₁ ◎ c₂) p = cong⁻¹≈ c₁ (cong⁻¹≈ c₂ p)
-cong⁻¹≈ (c₁ ⊕ c₂) (inj₁≈ p) = inj₁≈ (cong⁻¹≈ c₁ p)
-cong⁻¹≈ (c₁ ⊕ c₂) (inj₂≈ p) = inj₂≈ (cong⁻¹≈ c₂ p)
-cong⁻¹≈ (c₁ ⊗ c₂) ([,]≈ p₁ p₂) = [,]≈ (cong⁻¹≈ c₁ p₁) (cong⁻¹≈ c₂ p₂)
+cong⁻¹≈ (c₁ ⊕ c₂) {inl v} {inl w} (inj≈ p) = inj≈ (cong⁻¹≈ c₁ p)
+cong⁻¹≈ (c₁ ⊕ c₂) {inl v} {inr w} (inj≈ ())
+cong⁻¹≈ (c₁ ⊕ c₂) {inr v} {inl w} (inj≈ ())
+cong⁻¹≈ (c₁ ⊕ c₂) {inr v} {inr w} (inj≈ p) = inj≈ (cong⁻¹≈ c₂ p)
+cong⁻¹≈ (c₁ ⊗ c₂) {[ v , v₁ ]} {[ w , w₁ ]} ([,]≈ p₁ p₂) = [,]≈ (cong⁻¹≈ c₁ p₁) (cong⁻¹≈ c₂ p₂)
 -- cong⁻¹≈ ap⟷ ([,]≈ p₁ p₂) = {!!}
 -- cong⁻¹≈ ap⁻¹⟷ ([,]≈ p₁ p₂) = {!!}
-cong⁻¹≈ (η- p) ([,]≈ (1/#p≈ q p₁ p₂ x₂) (#p≈ (comb x) (comb x₁) x₃)) = 𝟙ₚ≈ (Iter.q x) (inverse⇒⇔ x₃)
-cong⁻¹≈ (η+ p) ([,]≈ (#p≈ (comb x) (comb x₁) x₂) (1/#p≈ q p₁ p₂ x₃)) = 𝟙ₚ≈ (Iter.q x) (inverse⇒⇔ x₂)
-cong⁻¹≈ (ε+ c) (𝟙ₚ≈ p₁ {p₂} eq {si i α} {si j β}) =
-  [,]≈ (#p≈ (comb < i , c ^ i , id⇔ >)
-            (comb < j , c ^ j , id⇔ >)
-            ((2! α) ⊡ (⇔! (2! β)) ● eq ⊡ id⇔ ● linv◎l))
-       (refl≈ refl)
-cong⁻¹≈ (ε- c) (𝟙ₚ≈ p₁ {p₂} eq {si i α} {si j β}) =
-  [,]≈  (refl≈ refl)
-        (#p≈ (comb < i , c ^ i , id⇔ >)
-            (comb < j , c ^ j , id⇔ >)
-            ((2! α) ⊡ (⇔! (2! β)) ● eq ⊡ id⇔ ● linv◎l))      
--- cong⁻¹≈ (unite⋆l# p) eq = {!!}
--- cong⁻¹≈ (uniti⋆l# p) ([,]≈ (𝟙ₚ≈ p₁ q r x) p₂) = {!!}
--- cong⁻¹≈ (unite⋆r# p) eq = {!!}
--- cong⁻¹≈ (uniti⋆r# p) ([,]≈ p₁ (𝟙ₚ≈ p₂ q r x)) = {!!}
--- cong⁻¹≈ (name f) v = {!!}
--- cong⁻¹≈ (coname f) (𝟙ₚ≈ {_} {c} p₁ equiv {si i α} {si j β}) =
---   [,]≈ (refl≈ refl)
---        (cong≈ f (#p≈ (comb < i , c ^ i , id⇔ >) (comb < j , (c ^ j) , id⇔ >) (2! α ⊡ (⇔! (2! β)) ● (equiv ⊡ id⇔) ● linv◎l)))
+cong⁻¹≈ (η- p) eq = ⋆≈
+cong⁻¹≈ (η+ p) eq = ⋆≈
+cong⁻¹≈ (ε+ c) {⋆} {⋆} eq = tangr≈
+cong⁻¹≈ (ε- c) {⋆} {⋆} eq = tangl≈
+cong⁻¹≈ synchr⋆ {[ .x₂ , tangl x ]} {[ .w , tangl x₁ ]} ([,]≈ (#p≈ x₂ w x₃) tangl≈) = [,]≈ tangr≈ (#p≈ x₂ w x₃)
+cong⁻¹≈ synchl⋆ {[ tangr x , v₁ ]} {[ tangr x₁ , w₁ ]} ([,]≈ eq eq₁) = [,]≈ eq₁ tangl≈
+-- cong⁻¹≈ (app-num// f) v = tangr≈
+-- cong⁻¹≈ (app-num\\ f) v = tangl≈
 
 mutual
   fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
   fwd◎bwd≈id (Prim x) v = refl≈ (prim◎prim⁻¹≡id x v)
   fwd◎bwd≈id (c ◎ c₁) v = trans≈ (cong≈ c₁ (fwd◎bwd≈id c (𝓐𝓹⁻¹ c₁ v))) (fwd◎bwd≈id c₁ v)
-  fwd◎bwd≈id (c ⊕ c₁) (inl v) = inj₁≈ (fwd◎bwd≈id c v)
-  fwd◎bwd≈id (c ⊕ c₁) (inr v) = inj₂≈ (fwd◎bwd≈id c₁ v)
+  fwd◎bwd≈id (c ⊕ c₁) (inl v) = inj≈ (fwd◎bwd≈id c v)
+  fwd◎bwd≈id (c ⊕ c₁) (inr v) = inj≈ (fwd◎bwd≈id c₁ v)
   fwd◎bwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (fwd◎bwd≈id c v) (fwd◎bwd≈id c₁ v₁)
 --   fwd◎bwd≈id ap⟷ [ comb {t} {p} < i , q , α > , v₁ ] =
 --     [,]≈ (#p≈ (comb < i , q , α >) (comb < i , q , α >) linv◎l)
 --          (fwd◎bwd≈id q v₁)
 --   fwd◎bwd≈id ap⁻¹⟷ [ comb x , v₁ ] = [,]≈ (refl≈ refl) (bwd◎fwd≈id (Iter.q x) v₁)
-  fwd◎bwd≈id (η- c) [ 1/comb ⟪ x , β ⟫ , comb < k , q , α > ] =
-    [,]≈ (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ x , β ⟫ (2! β ⊡ id⇔ ● linv◎l ● linv◎r))
-        (#p≈ (comb < k , c ^ k , id⇔ >) (comb < k , q , α >) (2! α ⊡ id⇔ ● linv◎l))
-  fwd◎bwd≈id (η+ c) [ comb < k , q , α > , 1/comb x₁ ] =
-    [,]≈ (#p≈ (comb < k , c ^ k , id⇔ >) (comb < k , q , α >) (2! α ⊡ id⇔ ● linv◎l))
-        (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ x₁ (2! (Sing.eq x₁) ⊡ id⇔ ● linv◎l ● linv◎r))
-  fwd◎bwd≈id (ε+ c) (𝟙ₚ (si i eq)) = 𝟙ₚ≈ (c ^ i) (2! eq)
-  fwd◎bwd≈id (ε- c) (𝟙ₚ (si i eq)) = 𝟙ₚ≈ (c ^ i) (2! eq)
-  -- fwd◎bwd≈id (unite⋆l# c) v = {!!} -- refl≈ refl
-  -- fwd◎bwd≈id (uniti⋆l# c) [ 𝟙ₚ q , comb x ] = {!!}
-  -- fwd◎bwd≈id (unite⋆r# c) v = {!!} -- refl≈ refl
-  -- fwd◎bwd≈id (uniti⋆r# c) [ comb x , 𝟙ₚ s ] = {!!}
-  -- fwd◎bwd≈id (name f) [ 1/comb x , comb < k , q , α > ] = {!!}
-  -- fwd◎bwd≈id (coname f) (𝟙ₚ {_} {c} (si i eq)) with 𝓐𝓹 f (comb < i , c ^ i , id⇔ >) | inspect (𝓐𝓹 f) (comb < i , c ^ i , id⇔ >)
-  -- ... | comb < k , q , α > | [ eq₀ ] with 𝓐𝓹⁻¹ f (comb < k , q , α >) | inspect (𝓐𝓹⁻¹ f) (comb < k , q , α >)
-  -- ... | comb < j , r , β > | [ eq₁ ] = let pf = trans≈ (sym≈ (bwd◎fwd≈id f (comb < i , c ^ i , id⇔ >)))
-  --                                                 (trans≈ (cong⁻¹≈ f (refl≈ eq₀)) (refl≈ eq₁)) in
-  --                                       let eq₂ = get-equiv pf in
-  --                                       𝟙ₚ≈ r (2! (inverse⇒⇔ (eq ⊡ id⇔ ● eq₂)))
+  fwd◎bwd≈id (η- c) (tangl x) = tangl≈
+  fwd◎bwd≈id (η+ c) (tangr x) = tangr≈
+  fwd◎bwd≈id (ε+ c) ⋆ = ⋆≈
+  fwd◎bwd≈id (ε- c) ⋆ = ⋆≈
+  fwd◎bwd≈id synchl⋆ [ tangr x , v₁ ] = refl≈ refl
+  fwd◎bwd≈id synchr⋆ [ v , tangl x ] = refl≈ refl
+  -- fwd◎bwd≈id (app-num// f) v = tangr≈
+  -- fwd◎bwd≈id (app-num\\ f) v = tangl≈
 
   bwd◎fwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → (𝓐𝓹⁻¹ c (𝓐𝓹 c v)) ≈ v
   bwd◎fwd≈id (Prim x) v = refl≈ (prim⁻¹◎prim≡id x v)
   bwd◎fwd≈id (c ◎ c₁) v = trans≈ (cong⁻¹≈ c (bwd◎fwd≈id c₁ (𝓐𝓹 c v))) (bwd◎fwd≈id c v)
-  bwd◎fwd≈id (c ⊕ c₁) (inl v) = inj₁≈ (bwd◎fwd≈id c v)
-  bwd◎fwd≈id (c ⊕ c₁) (inr v) = inj₂≈ (bwd◎fwd≈id c₁ v)
+  bwd◎fwd≈id (c ⊕ c₁) (inl v) = inj≈ (bwd◎fwd≈id c v)
+  bwd◎fwd≈id (c ⊕ c₁) (inr v) = inj≈ (bwd◎fwd≈id c₁ v)
   bwd◎fwd≈id (c ⊗ c₁) [ v , v₁ ] = [,]≈ (bwd◎fwd≈id c v) (bwd◎fwd≈id c₁ v₁)
 --   bwd◎fwd≈id ap⟷ [ comb x , v₁ ] = [,]≈ (refl≈ refl) (bwd◎fwd≈id (Iter.q x) v₁)
 --   bwd◎fwd≈id ap⁻¹⟷ [ comb {t} {p} < i , q , α > , v₁ ] =
 --     [,]≈ (#p≈ (comb < i , q , α >) (comb < i , q , α >) linv◎l)
 --          (fwd◎bwd≈id q v₁)
-  bwd◎fwd≈id (η- c) (𝟙ₚ (si i eq)) = 𝟙ₚ≈ (c ^ i) (2! eq)
-  bwd◎fwd≈id (η+ c) (𝟙ₚ (si i eq)) = 𝟙ₚ≈ (c ^ i) (2! eq)
-  bwd◎fwd≈id (ε+ c) [ comb < k , q , α > , 1/comb ⟪ p' , eq ⟫ ] =
-    [,]≈ (#p≈ (comb < k , c ^ k , id⇔ >) (comb < k , q , α >)
-         ((2! α) ⊡ id⇔ ● linv◎l)) (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ ((2! eq) ⊡ id⇔ ● linv◎l ● linv◎r))
-  bwd◎fwd≈id (ε- c) [ 1/comb ⟪ p' , eq ⟫ , comb < k , q , α > ] =
-    [,]≈ (1/#p≈ < k , q , α > ⟪ c , id⇔ ⟫ ⟪ p' , eq ⟫ (id⇔ ⊡ (⇔! eq) ● linv◎l ● linv◎r))
-         (#p≈ (comb < k , c ^ k , id⇔ >) (comb < k , q , α >) (2! α ⊡ id⇔ ● linv◎l) )
-  -- bwd◎fwd≈id (unite⋆l# c) [ 𝟙ₚ {q = q} (si k eq) , comb < j , r , β > ] =
-  --   [,]≈ (𝟙ₚ≈ r) (#p≈ (comb < j , r , β >) (comb < j , r , β >) linv◎l)
-  -- bwd◎fwd≈id (uniti⋆l# c) (comb x) = #p≈ (comb x) (comb x) linv◎l
-  -- bwd◎fwd≈id (unite⋆r# c) [ comb x , 𝟙ₚ x₁ ] = [,]≈ (refl≈ refl) (𝟙ₚ≈ (Iter.q x))
-  -- bwd◎fwd≈id (uniti⋆r# c) (comb x) = refl≈ refl
-  -- bwd◎fwd≈id (name f) v = {!!}
-  -- bwd◎fwd≈id (coname f) v = {!!}
+  bwd◎fwd≈id (η- c) ⋆ = ⋆≈
+  bwd◎fwd≈id (η+ c) ⋆ = ⋆≈
+  bwd◎fwd≈id (ε+ c) (tangr x) = tangr≈
+  bwd◎fwd≈id (ε- c) (tangl x) = tangl≈
+  bwd◎fwd≈id synchl⋆ [ v , tangl x ] = refl≈ refl
+  bwd◎fwd≈id synchr⋆ [ tangr x , v₁ ] = refl≈ refl
+  -- bwd◎fwd≈id (app-num// f) v = tangr≈
+  -- bwd◎fwd≈id (app-num\\ f) v = tangl≈
 
 bwd-coherence : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
-bwd-coherence (Prim unite₊l) v = inj₂≈ (refl≈ refl)
+bwd-coherence (Prim unite₊l) v = inj≈ (refl≈ refl)
 bwd-coherence (Prim uniti₊l) (inl ())
 bwd-coherence (Prim uniti₊l) (inr v) = refl≈ refl
-bwd-coherence (Prim unite₊r) v = inj₁≈ (refl≈ refl)
+bwd-coherence (Prim unite₊r) v = inj≈ (refl≈ refl)
 bwd-coherence (Prim uniti₊r) (inl v) = refl≈ refl
 bwd-coherence (Prim uniti₊r) (inr ())
-bwd-coherence (Prim swap₊) (inl v) = inj₂≈ (bwd-coherence (Prim id⟷) v)
-bwd-coherence (Prim swap₊) (inr v) = inj₁≈ (bwd-coherence (Prim id⟷) v)
-bwd-coherence (Prim assocl₊) (inl (inl v)) = inj₁≈ (bwd-coherence (Prim id⟷) v)
-bwd-coherence (Prim assocl₊) (inl (inr v)) = inj₂≈ (bwd-coherence (Prim id⟷) (inl v))
-bwd-coherence (Prim assocl₊) (inr v) = inj₂≈ (bwd-coherence (Prim id⟷) (inr v))
-bwd-coherence (Prim assocr₊) (inl v) = inj₁≈ (bwd-coherence (Prim id⟷) (inl v))
-bwd-coherence (Prim assocr₊) (inr (inl v)) = inj₁≈ (bwd-coherence (Prim id⟷) (inr v))
-bwd-coherence (Prim assocr₊) (inr (inr v)) = inj₂≈ (bwd-coherence (Prim id⟷) v)
-bwd-coherence (Prim unite⋆l) v = [,]≈ ⋆≈ (bwd-coherence (Prim id⟷) v)
-bwd-coherence (Prim uniti⋆l) [ v , v₁ ] = bwd-coherence (Prim id⟷) v₁
-bwd-coherence (Prim unite⋆r) v = [,]≈ (bwd-coherence (Prim id⟷) v) ⋆≈
-bwd-coherence (Prim uniti⋆r) [ v , v₁ ] = bwd-coherence (Prim id⟷) v
-bwd-coherence (Prim swap⋆) [ v , v₁ ] = [,]≈ (bwd-coherence (Prim id⟷) v₁) (bwd-coherence (Prim id⟷) v)
-bwd-coherence (Prim assocl⋆) [ [ v , v₁ ] , v₂ ] = [,]≈ (bwd-coherence (Prim id⟷) v)
-                                                     (bwd-coherence (Prim id⟷) [ v₁ , v₂ ])
-bwd-coherence (Prim assocr⋆) [ v , [ v₁ , v₂ ] ] = [,]≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
-                                                     (bwd-coherence (Prim id⟷) v₂)
+bwd-coherence (Prim swap₊) (inl v) = refl≈ refl
+bwd-coherence (Prim swap₊) (inr v) = refl≈ refl
+bwd-coherence (Prim assocl₊) (inl (inl v)) = refl≈ refl
+bwd-coherence (Prim assocl₊) (inl (inr v)) = refl≈ refl
+bwd-coherence (Prim assocl₊) (inr v) = inj≈ (refl≈ refl)
+bwd-coherence (Prim assocr₊) (inl v) = inj≈ (refl≈ refl)
+bwd-coherence (Prim assocr₊) (inr (inl v)) = inj≈ (refl≈ refl)
+bwd-coherence (Prim assocr₊) (inr (inr v)) = inj≈ (refl≈ refl)
+bwd-coherence (Prim unite⋆l) v = [,]≈ ⋆≈ (refl≈ refl)
+bwd-coherence (Prim uniti⋆l) [ v , v₁ ] = refl≈ refl
+bwd-coherence (Prim unite⋆r) v = [,]≈ (refl≈ refl) ⋆≈
+bwd-coherence (Prim uniti⋆r) [ v , v₁ ] = refl≈ refl
+bwd-coherence (Prim swap⋆) [ v , v₁ ] = [,]≈ (refl≈ refl) (refl≈ refl)
+bwd-coherence (Prim assocl⋆) [ [ v , v₁ ] , v₂ ] = [,]≈ (refl≈ refl) (refl≈ refl)
+bwd-coherence (Prim assocr⋆) [ v , [ v₁ , v₂ ] ] = [,]≈ (refl≈ refl) (refl≈ refl)
 bwd-coherence (Prim absorbr) ()
 bwd-coherence (Prim absorbl) ()
-bwd-coherence (Prim factorzr) [ v , v₁ ] = bwd-coherence (Prim id⟷) v₁
-bwd-coherence (Prim factorzl) [ v , v₁ ] = bwd-coherence (Prim id⟷) v
-bwd-coherence (Prim dist) (inl [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) (inl v))
-                                               (bwd-coherence (Prim id⟷) v₁)
-bwd-coherence (Prim dist) (inr [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) (inr v))
-                                               (bwd-coherence (Prim id⟷) v₁)
-bwd-coherence (Prim factor) [ inl v , v₁ ] = inj₁≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
-bwd-coherence (Prim factor) [ inr v , v₁ ] = inj₂≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
-bwd-coherence (Prim distl) (inl [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) v)
-                                                (bwd-coherence (Prim id⟷) (inl v₁))
-bwd-coherence (Prim distl) (inr [ v , v₁ ]) = [,]≈ (bwd-coherence (Prim id⟷) v)
-                                                (bwd-coherence (Prim id⟷) (inr v₁))
-bwd-coherence (Prim factorl) [ v , inl v₁ ] = inj₁≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
-bwd-coherence (Prim factorl) [ v , inr v₁ ] = inj₂≈ (bwd-coherence (Prim id⟷) [ v , v₁ ])
+bwd-coherence (Prim factorzr) [ v , v₁ ] = refl≈ refl
+bwd-coherence (Prim factorzl) [ v , v₁ ] = refl≈ refl
+bwd-coherence (Prim dist) (inl [ v , v₁ ]) = [,]≈ (refl≈ refl) (refl≈ refl)
+bwd-coherence (Prim dist) (inr [ v , v₁ ]) = [,]≈ (refl≈ refl) (refl≈ refl)
+bwd-coherence (Prim factor) [ inl v , v₁ ] = inj≈ (refl≈ refl)
+bwd-coherence (Prim factor) [ inr v , v₁ ] = inj≈ (refl≈ refl)
+bwd-coherence (Prim distl) (inl [ v , v₁ ]) = [,]≈ (refl≈ refl) (refl≈ refl)
+bwd-coherence (Prim distl) (inr [ v , v₁ ]) = [,]≈ (refl≈ refl) (refl≈ refl)
+bwd-coherence (Prim factorl) [ v , inl v₁ ] = inj≈ (refl≈ refl)
+bwd-coherence (Prim factorl) [ v , inr v₁ ] = inj≈ (refl≈ refl)
 bwd-coherence (Prim id⟷) v = refl≈ refl
 bwd-coherence (c ◎ c₁) v = 
   let eq = bwd-coherence c₁ v in
   trans≈ (cong⁻¹≈ c eq) (bwd-coherence c (𝓐𝓹 (! c₁) v))
-bwd-coherence (c ⊕ c₁) (inl v) = inj₁≈ (bwd-coherence c v)
-bwd-coherence (c ⊕ c₁) (inr v) = inj₂≈ (bwd-coherence c₁ v)
+bwd-coherence (c ⊕ c₁) (inl v) = inj≈ (bwd-coherence c v)
+bwd-coherence (c ⊕ c₁) (inr v) = inj≈ (bwd-coherence c₁ v)
 bwd-coherence (c ⊗ c₁) [ v , v₁ ] = [,]≈ (bwd-coherence c v) (bwd-coherence c₁ v₁)
-bwd-coherence (η- c) [ 1/comb x , comb x₁ ] = refl≈ refl
-bwd-coherence (η+ c) [ comb x , 1/comb x₁ ] = refl≈ refl
-bwd-coherence (ε+ c) (𝟙ₚ (si i eq)) = refl≈ refl
-bwd-coherence (ε- c) (𝟙ₚ (si i eq)) = refl≈ refl
--- bwd-coherence (name f) [ v , comb < k , q , α > ] with 𝓐𝓹⁻¹ f (comb < k , q , α >)
--- ... | comb < i , r , β > = refl≈ refl
--- bwd-coherence (coname f) (𝟙ₚ (si i eq)) = refl≈ refl
+bwd-coherence (η- c) v = ⋆≈
+bwd-coherence (η+ c) v = ⋆≈
+bwd-coherence (ε+ c) ⋆ = tangr≈
+bwd-coherence (ε- c) ⋆ = tangl≈
+bwd-coherence synchl⋆ [ tangr x , v₁ ] = refl≈ refl
+bwd-coherence synchr⋆ [ v , tangl x ] = refl≈ refl
+-- bwd-coherence (app-num// f) v = tangr≈
+-- bwd-coherence (app-num\\ f) v = tangl≈
+
+lemma-1 : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → 𝓐𝓹 (! c) (𝓐𝓹 c v) ≈ v
+lemma-1 c v = trans≈ (sym≈ (bwd-coherence c (𝓐𝓹 c v))) (bwd◎fwd≈id c v)
+
+lemma-2 : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹 c (𝓐𝓹 (! c) v) ≈ v
+lemma-2 c v = trans≈ (cong≈ c (sym≈ (bwd-coherence c v))) (fwd◎bwd≈id c v)
+
+lemma-3 : {T₁ T₂ T₃ : U} → (c₁ : T₁ ⟷ T₂) (c₂ : T₂ ⟷ T₃) → (v : Val T₁) → 𝓐𝓹 (c₁ ◎ c₂) v ≈ 𝓐𝓹 c₂ (𝓐𝓹 c₁ v)
+lemma-3 c₁ c₂ ⋆ = refl≈ refl
+lemma-3 c₁ c₂ (inl v) = refl≈ refl
+lemma-3 c₁ c₂ (inr v) = refl≈ refl
+lemma-3 c₁ c₂ [ v₁ , v₂ ] = refl≈ refl
+lemma-3 c₁ c₂ (comb x) = refl≈ refl
+lemma-3 c₁ c₂ (tangr x) = refl≈ refl
+lemma-3 c₁ c₂ (tangl x) = refl≈ refl
+
+lemma-4 : {T : U} → (v : Val T) → 𝓐𝓹 (Prim id⟷) v ≈ v
+lemma-4 v = refl≈ refl
+
+lemma-5 : {T₁ T₂ T₃ : U} → (c₁ : T₁ ⟷ T₂) (c₂ : T₂ ⟷ T₃) → (v : Val T₃) → 𝓐𝓹⁻¹ (c₁ ◎ c₂) v ≈ 𝓐𝓹⁻¹ c₁ (𝓐𝓹⁻¹ c₂ v)
+lemma-5 c₁ c₂ ⋆ = refl≈ refl
+lemma-5 c₁ c₂ (inl v) = refl≈ refl
+lemma-5 c₁ c₂ (inr v) = refl≈ refl
+lemma-5 c₁ c₂ [ v , v₁ ] = refl≈ refl
+lemma-5 c₁ c₂ (comb x) = refl≈ refl
+lemma-5 c₁ c₂ (tangr x) = refl≈ refl
+lemma-5 c₁ c₂ (tangl x) = refl≈ refl
+
+-- most cases are symmetric, could be made more concise
+fwd-2-coherence : {T₁ T₂ : U} → (c₁ c₂ : T₁ ⟷ T₂) → (p : c₁ ⇔ c₂) → (v : Val T₁) → 𝓐𝓹 c₁ v ≈ 𝓐𝓹 c₂ v
+fwd-2-coherence _ _ assoc◎l v = refl≈ refl
+fwd-2-coherence _ _ assoc◎r v = refl≈ refl
+fwd-2-coherence .(Prim id⟷ ◎ c₂) c₂ idl◎l v = refl≈ refl
+fwd-2-coherence c₁ .(Prim id⟷ ◎ c₁) idl◎r v = refl≈ refl
+fwd-2-coherence .(c₂ ◎ Prim id⟷) c₂ idr◎l v = refl≈ refl
+fwd-2-coherence c₁ .(c₁ ◎ Prim id⟷) idr◎r v = refl≈ refl
+fwd-2-coherence c₁ .c₁ id⇔ v = refl≈ refl
+fwd-2-coherence .(! (Prim x) ◎ Prim x) .(Prim id⟷) (rinv◎l {c = Prim x}) v = lemma-2 (Prim x) v
+fwd-2-coherence .((! c₁ ◎ ! c) ◎ c ◎ c₁) .(Prim id⟷) (rinv◎l {c = c ◎ c₁}) v = lemma-2 (c ◎ c₁) v
+fwd-2-coherence .((! c ⊕ ! c₁) ◎ (c ⊕ c₁)) .(Prim id⟷) (rinv◎l {c = c ⊕ c₁}) v = lemma-2 (c ⊕ c₁) v
+fwd-2-coherence .(! c ⊗ ! c₁ ◎ c ⊗ c₁) .(Prim id⟷) (rinv◎l {c = c ⊗ c₁}) v = lemma-2 (c ⊗ c₁) v
+fwd-2-coherence .(ε- c ◎ η- c) .(Prim id⟷) (rinv◎l {c = η- c}) v = tangl≈
+fwd-2-coherence .(ε+ c ◎ η+ c) .(Prim id⟷) (rinv◎l {c = η+ c}) v = tangr≈
+fwd-2-coherence .(η+ c ◎ ε+ c) .(Prim id⟷) (rinv◎l {c = ε+ c}) v = ⋆≈
+fwd-2-coherence .(η- c ◎ ε- c) .(Prim id⟷) (rinv◎l {c = ε- c}) v = ⋆≈
+fwd-2-coherence .(synchl⋆ ◎ synchr⋆) .(Prim id⟷) (rinv◎l {c = synchr⋆}) v = lemma-2 synchr⋆ v
+fwd-2-coherence .(synchr⋆ ◎ synchl⋆) .(Prim id⟷) (rinv◎l {c = synchl⋆}) v = lemma-2 synchl⋆ v
+-- fwd-2-coherence .(app-num\\ (! c₃) ◎ app-num\\ c₃) .(Prim id⟷) (rinv◎l {c = app-num\\ c₃}) v = lemma-2 (app-num\\ c₃) v
+-- fwd-2-coherence .(app-num// (! c₃) ◎ app-num// c₃) .(Prim id⟷) (rinv◎l {c = app-num// c₃}) v = lemma-2 (app-num// c₃) v
+fwd-2-coherence .(Prim id⟷) .(! (Prim x) ◎ Prim x) (rinv◎r {c = Prim x}) v = sym≈ (lemma-2 (Prim x) v)
+fwd-2-coherence .(Prim id⟷) .((! c₁ ◎ ! c) ◎ c ◎ c₁) (rinv◎r {c = c ◎ c₁}) v = sym≈ (lemma-2 (c ◎ c₁) v)
+fwd-2-coherence .(Prim id⟷) .((! c ⊕ ! c₁) ◎ (c ⊕ c₁)) (rinv◎r {c = c ⊕ c₁}) v = sym≈ (lemma-2 (c ⊕ c₁) v)
+fwd-2-coherence .(Prim id⟷) .(! c ⊗ ! c₁ ◎ c ⊗ c₁) (rinv◎r {c = c ⊗ c₁}) v = sym≈ (lemma-2 (c ⊗ c₁) v)
+fwd-2-coherence .(Prim id⟷) .(ε- c ◎ η- c) (rinv◎r {c = η- c}) v = tangl≈
+fwd-2-coherence .(Prim id⟷) .(ε+ c ◎ η+ c) (rinv◎r {c = η+ c}) v = tangr≈
+fwd-2-coherence .(Prim id⟷) .(η+ c ◎ ε+ c) (rinv◎r {c = ε+ c}) v = ⋆≈
+fwd-2-coherence .(Prim id⟷) .(η- c ◎ ε- c) (rinv◎r {c = ε- c}) v = ⋆≈
+fwd-2-coherence .(Prim id⟷) .(synchl⋆ ◎ synchr⋆) (rinv◎r {c = synchr⋆}) v = sym≈ (lemma-2 synchr⋆ v)
+fwd-2-coherence .(Prim id⟷) .(synchr⋆ ◎ synchl⋆) (rinv◎r {c = synchl⋆}) v = sym≈ (lemma-2 synchl⋆ v)
+-- fwd-2-coherence .(Prim id⟷) .(app-num\\ (! c₃) ◎ app-num\\ c₃) (rinv◎r {c = app-num\\ c₃}) v = sym≈ (lemma-2 (app-num\\ c₃) v)
+-- fwd-2-coherence .(Prim id⟷) .(app-num// (! c₃) ◎ app-num// c₃) (rinv◎r {c = app-num// c₃}) v = sym≈ (lemma-2 (app-num// c₃) v)
+fwd-2-coherence .(Prim x ◎ ! (Prim x)) .(Prim id⟷) (linv◎l {c = Prim x}) v = lemma-1 (Prim x) v
+fwd-2-coherence .((c ◎ c₁) ◎ ! c₁ ◎ ! c) .(Prim id⟷) (linv◎l {c = c ◎ c₁}) v = lemma-1 (c ◎ c₁) v
+fwd-2-coherence .((c ⊕ c₁) ◎ (! c ⊕ ! c₁)) .(Prim id⟷) (linv◎l {c = c ⊕ c₁}) v = lemma-1 (c ⊕ c₁) v
+fwd-2-coherence .(c ⊗ c₁ ◎ ! c ⊗ ! c₁) .(Prim id⟷) (linv◎l {c = c ⊗ c₁}) v = lemma-1 (c ⊗ c₁) v
+fwd-2-coherence .(η- c ◎ ε- c) .(Prim id⟷) (linv◎l {c = η- c}) v = ⋆≈
+fwd-2-coherence .(η+ c ◎ ε+ c) .(Prim id⟷) (linv◎l {c = η+ c}) v = ⋆≈
+fwd-2-coherence .(ε+ c ◎ η+ c) .(Prim id⟷) (linv◎l {c = ε+ c}) v = tangr≈
+fwd-2-coherence .(ε- c ◎ η- c) .(Prim id⟷) (linv◎l {c = ε- c}) v = tangl≈
+fwd-2-coherence .(synchr⋆ ◎ synchl⋆) .(Prim id⟷) (linv◎l {c = synchr⋆}) v = lemma-1 synchr⋆ v
+fwd-2-coherence .(synchl⋆ ◎ synchr⋆) .(Prim id⟷) (linv◎l {c = synchl⋆}) v = lemma-1 synchl⋆ v
+-- fwd-2-coherence .(app-num\\ c₃ ◎ app-num\\ (! c₃)) .(Prim id⟷) (linv◎l {c = app-num\\ c₃}) v = lemma-1 (app-num\\ c₃) v
+-- fwd-2-coherence .(app-num// c₃ ◎ app-num// (! c₃)) .(Prim id⟷) (linv◎l {c = app-num// c₃}) v = lemma-1 (app-num// c₃) v
+fwd-2-coherence .(Prim id⟷) .(Prim x ◎ ! (Prim x)) (linv◎r {c = Prim x}) v = sym≈ (lemma-1 (Prim x) v)
+fwd-2-coherence .(Prim id⟷) .((c ◎ c₁) ◎ ! c₁ ◎ ! c) (linv◎r {c = c ◎ c₁}) v = sym≈ (lemma-1 (c ◎ c₁) v)
+fwd-2-coherence .(Prim id⟷) .((c ⊕ c₁) ◎ (! c ⊕ ! c₁)) (linv◎r {c = c ⊕ c₁}) v = sym≈ (lemma-1 (c ⊕ c₁) v)
+fwd-2-coherence .(Prim id⟷) .(c ⊗ c₁ ◎ ! c ⊗ ! c₁) (linv◎r {c = c ⊗ c₁}) v = sym≈ (lemma-1 (c ⊗ c₁) v)
+fwd-2-coherence .(Prim id⟷) .(η- c ◎ ε- c) (linv◎r {c = η- c}) v = ⋆≈ -- sym≈ (lemma-1 (η- c ◎ ε- c) v)
+fwd-2-coherence .(Prim id⟷) .(η+ c ◎ ε+ c) (linv◎r {c = η+ c}) v = ⋆≈ -- sym≈ (lemma-1 (η+ c ◎ ε+ c) v)
+fwd-2-coherence .(Prim id⟷) .(ε+ c ◎ η+ c) (linv◎r {c = ε+ c}) v = tangr≈ -- sym≈ (lemma-1 (ε+ c ◎ η+ c) v)
+fwd-2-coherence .(Prim id⟷) .(ε- c ◎ η- c) (linv◎r {c = ε- c}) v = tangl≈ -- sym≈ (lemma-1 (ε- c ◎ η- c) v)
+fwd-2-coherence .(Prim id⟷) .(synchr⋆ ◎ synchl⋆) (linv◎r {c = synchr⋆}) v = sym≈ (lemma-1 synchr⋆ v)
+fwd-2-coherence .(Prim id⟷) .(synchl⋆ ◎ synchr⋆) (linv◎r {c = synchl⋆}) v = sym≈ (lemma-1 synchl⋆ v)
+-- fwd-2-coherence .(Prim id⟷) .(app-num\\ c₃ ◎ app-num\\ (! c₃)) (linv◎r {c = app-num\\ c₃}) v = sym≈ (lemma-1 (app-num\\ c₃) v)
+-- fwd-2-coherence .(Prim id⟷) .(app-num// c₃ ◎ app-num// (! c₃)) (linv◎r {c = app-num// c₃}) v = sym≈ (lemma-1 (app-num// c₃) v)
+fwd-2-coherence c₁ c₂ (p₁ ● p₂) v =
+  trans≈ (fwd-2-coherence _ _ p₁ v) (fwd-2-coherence _ _ p₂ v)
+fwd-2-coherence _ _ (_⊡_ {c₁ = c₁} {c₃ = c₃} {c₄ = c₄} p₁ p₂) v =
+  trans≈ (fwd-2-coherence _ _ p₂ (𝓐𝓹 c₁ v)) (cong≈ c₄ (fwd-2-coherence _ _ p₁ v))
+fwd-2-coherence _ _ (resp⊕⇔ p₁ p₂) (inl v) = inj≈ (fwd-2-coherence _ _ p₁ v)
+fwd-2-coherence _ _ (resp⊕⇔ p₁ p₂) (inr v) = inj≈ (fwd-2-coherence _ _ p₂ v)
+fwd-2-coherence _ _ (resp⊗⇔ p₁ p₂) [ v₁ , v₂ ] = [,]≈ (fwd-2-coherence _ _ p₁ v₁) (fwd-2-coherence _ _ p₂ v₂)
+-- fwd-2-coherence _ _ (resp-app-num// p) (tangr x) = tangr≈
+-- fwd-2-coherence _ _ (resp-app-num\\ p) (tangl x) = tangl≈
 
 ------
 -- Examples
@@ -266,47 +316,38 @@ NOT : BOOL ⟷ BOOL
 NOT = Prim swap₊
 
 -- cc-like
-cc : (𝟙# NOT ⊗ # NOT) ⟷ (# NOT ⊗ 𝟙# NOT)
-cc = (((η+ NOT) ⊗ Prim id⟷) ◎     -- (# NOT ⊗ 1/# NOT) ⊗ # NOT
-     ((Prim assocr⋆ ◎               -- # NOT ⊗ (1/# NOT ⊗ # NOT)
-     ((Prim id⟷ ⊗ Prim swap⋆) ◎    --   # NOT ⊗ # NOT ⊗ 1/# NOT
-     ((Prim id⟷ ⊗ (ε+ NOT)) )))))  -- # NOT ⊗ 1# NOT
-
-s₀ : SingI {BOOL} {NOT} (Prim id⟷)
-s₀ = si (+ 0) id⇔
-
-s₁ : SingI {BOOL} {NOT} (NOT)
-s₁ = si (+ 1) idr◎r
+cc : # NOT ⟷ # NOT
+cc = Prim uniti⋆l ◎
+     (((η+ NOT) ⊗ Prim id⟷) ◎ 
+     ((synchr⋆ ◎ 
+     ((Prim id⟷ ⊗ (ε- NOT)) )))) ◎
+     Prim unite⋆r
 
 i₀ i₁ : Iter NOT
 i₀ = zeroth NOT -- essentially id⟷
 i₁ = iter NOT   -- essentially swap⋆
 
-v₁ v₂ : Val (𝟙# NOT ⊗ # NOT)
-v₁ = [ 𝟙ₚ s₁ , comb i₀ ] 
-v₂ = [ 𝟙ₚ s₁ , comb i₁ ] 
+v₀ v₁ : Val (# NOT)
+v₀ = comb i₀
+v₁ = comb i₁
 
-v₃ v₄ : Val (# NOT ⊗ 𝟙# NOT)
-v₃ = [ comb i₁ , 𝟙ₚ s₀ ] -- note how 𝟙ₚ s₀ is of type 𝟙# NOT.  The type that matters is the {NOT}
-v₄ = [ comb i₁ , 𝟙ₚ s₁ ]
-
-cc₁ cc₂ : Val (# NOT ⊗ 𝟙# NOT)
-cc₁ = 𝓐𝓹 cc v₁
-  -- evaluates to [ comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ > , 𝟙ₚ (si (+ 0) id⇔) ]
-  -- which is v₃, but not quite on the nose
-cc₂ = 𝓐𝓹 cc v₂
-  -- evaluates to v₄ which is also swap⋆ v₂, again not quite on the nose
-
-eq₁ : cc₁ ≈ v₃
-eq₁ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb < + 1 , Prim swap₊ , idr◎r >)  (idr◎l ⊡ id⇔ ● rinv◎l)) (refl≈ refl)
-
-eq₂ : cc₂ ≈ v₄
-eq₂ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb < + 1 , Prim swap₊ , idr◎r >) (idr◎l ⊡ id⇔ ● rinv◎l)) (refl≈ refl)
+cc₁ cc₂ : Val (# NOT)
+cc₁ = 𝓐𝓹 cc v₀ -- evaluates to v₀, on the nose
+cc₂ = 𝓐𝓹 cc v₁ -- evaluates to v₁, on the nose
 
 --------------------------------
 -- Various things to check out
-zig-zag : ∀ {t : U} {c : t ⟷ t} → 𝟙# c ⊗ # c ⟷ # c ⊗ 𝟙# c
-zig-zag {_} {c} = η+ c ⊗ (Prim id⟷) ◎ Prim assocr⋆ ◎ (Prim id⟷ ⊗ ε- c)
+zig-zag : ∀ {t : U} {c : t ⟷ t} → # c ⟷ # c
+zig-zag {_} {c} = Prim uniti⋆l ◎ η+ c ⊗ (Prim id⟷) ◎ synchr⋆ ◎ (Prim id⟷ ⊗ ε- c) ◎ Prim unite⋆r
 
-zz₁ = 𝓐𝓹 zig-zag v₁ -- get v₃
-zz₂ = 𝓐𝓹 zig-zag v₂ -- get v₄
+zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
+zig-zag-prop (comb x) = refl≈ refl
+
+--------------------------------
+-- To define trace, what we're missing is a combinator which goes from
+-- (f : s ⊗ # c ⟷ s ⊗ # c) to t ⊗ (c // c) ⟷ u ⊗ (c // c)
+
+-- trace : {s t u : U} {c : s ⟷ s} → (f : s ⊗ # c ⟷ s ⊗ # c) → t ⟷ u
+-- trace {s} {t} {u} {c = c} f =
+--   Prim (uniti⋆r {t}) ◎ (Prim id⟷ ⊗ η+ c) ◎ {!!} ◎ (Prim id⟷ ⊗ ε+ c) ◎ Prim unite⋆r
+
