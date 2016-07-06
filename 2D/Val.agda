@@ -44,9 +44,12 @@ get-iter (comb i) = i
 π₂ : {s t : U} → Val (s ⊗ t) → Val t
 π₂ [ _ , y ] = y
 
--- we also have some amount of "proof irrelevance" in some situations:
-⇔-irr : {τ : U} {p q : τ ⟷ τ} → p ⇔ q → Val 𝟙
-⇔-irr _ = ⋆
+-- we also have some amount of "proof irrelevance" in some situations.  Below is the reason.
+-- Basically: given p ÷ p, applied to the same p ^ i, will always give back something which
+-- is equivalent to the identity.  So we can safely throw it out.
+⇔-irr : {τ : U} {p : τ ⟷ τ} → (p÷p : p ÷ p) → ∀ (pi : Iter p) → Σ.proj₁ (p÷p pi pi) ⇔ Prim id⟷
+⇔-irr p÷p pi = let div = p÷p pi pi in let r = Σ.proj₁ div in let pf = Σ.proj₂ div in
+  (idr◎r ● id⇔ ⊡ linv◎r ● assoc◎l) ● 2! pf ⊡ id⇔ {c = ! (Iter.q pi)} ● linv◎l
 
 mutual
   inj-eq : {s t : U} (v₁ v₂ : Val (s ⊕ t)) → Set

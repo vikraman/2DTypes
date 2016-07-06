@@ -22,10 +22,8 @@ mutual
     _⊕_ : U → U → U
     _⊗_ : U → U → U
     # : {τ : U} → (τ ⟷ τ) → U
-    1/# : {τ : U} → (τ ⟷ τ) → U
     _//_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- # c ⊗ 1/# d, tangled right
     _\\_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- 1/# d ⊗ # c, tangled left
---    𝟙# : {τ : U} → (τ ⟷ τ) → U
 
   data Prim⟷ : U → U → Set where
     unite₊l :  {t : U} → Prim⟷ (𝟘 ⊕ t) t
@@ -67,9 +65,12 @@ mutual
     synchr⋆ : {t : U} {p q : t ⟷ t} → (p // q) ⊗ # p ⟷ # p ⊗ (q \\ p)
     synchl⋆ : {t : U} {p q : t ⟷ t} → # p ⊗ (q \\ p) ⟷ (p // q) ⊗ # p
     -- we need to be able to do something to the numerator
-    app-num\\ : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → q \\ p ⟷ q \\ r
-    app-num// : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → p // q ⟷ r // q
+--     app-num\\ : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → q \\ p ⟷ q \\ r
+--     app-num// : {t : U} {p q r : t ⟷ t} → (# p ⟷ # r) → p // q ⟷ r // q
 
+-- convenient short hand
+#1/ : {τ : U} → (τ ⟷ τ) → U
+#1/ p = p // (Prim id⟷)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! (Prim unite₊l)   = Prim uniti₊l
@@ -106,8 +107,8 @@ mutual
 -- ! ap⁻¹⟷ = ap⟷
 ! synchr⋆ = synchl⋆
 ! synchl⋆ = synchr⋆
-! (app-num// f) = app-num// (! f) -- note how these are different
-! (app-num\\ f) = app-num\\ (! f)
+-- ! (app-num// f) = app-num// (! f) -- note how these are different
+-- ! (app-num\\ f) = app-num\\ (! f)
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -138,12 +139,12 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
-  -- coherence for num-app
+{-  -- coherence for num-app
   resp-app-num// : {t : U} {p q r : t ⟷ t} → {c₀ c₁ : # p ⟷ # r} →
     c₀ ⇔ c₁ → app-num// {q = q} c₀ ⇔ app-num// c₁
   resp-app-num\\ : {t : U} {p q r : t ⟷ t} → {c₀ c₁ : # p ⟷ # r} →
     c₀ ⇔ c₁ → app-num\\ {q = q} c₀ ⇔ app-num\\ c₁
-    
+-}  
   -- coherence for compact closed categories
 {-
   ccc₁l : {t : U} {p : t ⟷ t} → 
@@ -180,8 +181,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- 2! ccc₁r = ccc₁l
 -- 2! ccc₂l = ccc₂r
 -- 2! ccc₂r = ccc₂l
-2! (resp-app-num// α) = resp-app-num// (2! α)
-2! (resp-app-num\\ α) = resp-app-num\\ (2! α)
+-- 2! (resp-app-num// α) = resp-app-num// (2! α)
+-- 2! (resp-app-num\\ α) = resp-app-num\\ (2! α)
 
 -- Properties
 
@@ -223,8 +224,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- !!⇔id ap⁻¹⟷ = id⇔
 !!⇔id synchl⋆ = id⇔
 !!⇔id synchr⋆ = id⇔
-!!⇔id (app-num// f) = resp-app-num// (!!⇔id f)
-!!⇔id (app-num\\ f) = resp-app-num\\ (!!⇔id f)
+-- !!⇔id (app-num// f) = resp-app-num// (!!⇔id f)
+-- !!⇔id (app-num\\ f) = resp-app-num\\ (!!⇔id f)
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
@@ -246,8 +247,8 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- ⇔! ccc₁r = ccc₂r
 -- ⇔! ccc₂l = ccc₁l
 -- ⇔! ccc₂r = ccc₁r
-⇔! (resp-app-num// α) = resp-app-num// (⇔! α)
-⇔! (resp-app-num\\ α) = resp-app-num\\ (⇔! α)
+-- ⇔! (resp-app-num// α) = resp-app-num// (⇔! α)
+-- ⇔! (resp-app-num\\ α) = resp-app-num\\ (⇔! α)
 
 -- convenient lemmas
 
@@ -263,11 +264,11 @@ inverse⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ◎ ! q ⇔ Prim
 inverse⇒⇔ {p = p} {q} pf = idr◎r {c = p} ● (id⇔ ⊡ rinv◎r {c = q}) ● assoc◎l ● pf ⊡ id⇔ ● idl◎l
 
 -----------------------
-name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙 ⟷ c \\ d)
-name {_} {c} f = η- c ◎ app-num\\ f
-
-coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (c // d ⟷ 𝟙)
-coname {_} {c} {d} f = app-num// f ◎ ε+ d
+-- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙 ⟷ c \\ d)
+-- name {_} {c} f = η- c ◎ app-num\\ f
+-- 
+-- coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (c // d ⟷ 𝟙)
+-- coname {_} {c} {d} f = app-num// f ◎ ε+ d
 
 --
 

@@ -129,8 +129,8 @@ oneG {τ} p = record {
 ⟦ t₁ ⊗ t₂ ⟧ with ⟦ t₁ ⟧ | ⟦ t₂ ⟧
 ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
 ⟦ # p ⟧ = _ , orderG p
-⟦ 1/# p ⟧ = _ , 1/orderG p
-⟦ 𝟙# p ⟧ = _ , oneG p
+⟦ p // q ⟧ = _ , ?
+⟦ q \\ p ⟧ = _ , ?
 
 open import Rational+ as ℚ
 open import 2D.Order
@@ -142,9 +142,8 @@ open import 2D.Order
 ∣ t₁ ⊗ t₂ ∣ = ∣ t₁ ∣ ℚ.* ∣ t₂ ∣
 ∣ # p ∣ with orderPostulate p
 ... | ord n n≥1 _ = n ÷1
-∣ 1/# p ∣ with orderPostulate p
-... | ord n n≥1 _ = (1÷ n) {n≥1}
-∣ 𝟙# p ∣ = + 1 ÷ 1 -- slight cheat, as this is really order p / order p.
+∣ p // q ∣ = ?
+∣ p \\ q ∣ = ?
 
 
 ------------------------------------------------------------------------------
