@@ -194,7 +194,12 @@ $\log \frac{3}{2} = \log 3 - \log 2$ bits. It must therefore be the
 case that each state of the system represented by $\iorder{a_2}$ has a
 negative amount of information $- \log 2 = \log \frac{1}{2}$ which
 agrees with our observation that this use of $a_2$ must have
-cardinality $\frac{1}{2}$.
+cardinality $\frac{1}{2}$. Intuitively speaking, imposing an
+equivalence relation on a type translates to the inability to
+distinguish previously distinguishable states. This
+indistinguishability subtracts knowledge about the system and hence,
+when viewed as an independent system, must have fractional
+cardinality.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Programs and Program Iteration as Data}
@@ -254,8 +259,9 @@ Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
 $\order{p}$ is the groupoid whose objects are the elements
 $\triple{k}{q}{\alpha}$ of $\iter{p}$. There is a morphism between
 $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
-$q_1 ~\odot ~! q_2 \isotwo \idiso$. This asserts that $p ^ {k_1}$
-can be annihilated using $p ^ {-k_2}$. 
+$q_1 ~\odot ~! q_2 \isotwo \idiso$. This asserts that $p ^ {k_1}$ can
+be annihilated using $p ^ {-k_2}$. (See Appendix for the Agda
+construction.)
 
 \begin{lemma}
   $|\order{p}| = \ord{p}$
@@ -292,7 +298,7 @@ are the elements of $\sing{p}$. Since all these objects are
 equivalent, every pair of objects is connected by the morphisms in
 $\iter{p}$. To capture the relationship between these morphisms, we
 also have 2-morphisms relating the distinct iterates as in the
-previous section. 
+previous section. (See Appendix for the Agda construction.)
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$
