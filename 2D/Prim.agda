@@ -213,6 +213,9 @@ prim-cong≈ factorl (inr [ v , v₁ ]) (inl [ w , w₁ ]) (inj≈ ())
 prim-cong≈ factorl (inr [ v , v₁ ]) (inr [ w , w₁ ]) (inj≈ ([,]≈ x x₁)) = [,]≈ x (inj≈ x₁)
 prim-cong≈ id⟷ v w eq = eq
 
+postulate
+  prim⁻¹-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → (v w : Val T₂) → v ≈ w → prim⁻¹ c v ≈ prim⁻¹ c w
+
 {-
 prim⁻¹-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → (v w : Val T₂) → v ≈ w → prim⁻¹ c v ≈ prim⁻¹ c w
 prim⁻¹-cong≈ unite₊l v w eq = {!!}
