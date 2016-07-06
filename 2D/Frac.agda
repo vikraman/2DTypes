@@ -43,17 +43,15 @@ discreteG S = record { _⁻¹ = sym
                      ; iso = record { isoˡ = tt ; isoʳ = tt }
                      }
 
--- morphisms between p^i and p^j are proofs of equivalence, but
--- phrased as one being the inverse of the other.
+-- morphisms between p^i and p^j are proofs of equivalence
 -- All proofs are equal
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
      Obj = Iter p
-   ; _⇒_ = λ p^i p^j → Iter.q p^i ◎ ! (Iter.q p^j) ⇔ Prim id⟷
+   ; _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
    ; _≡_ = λ _ _ → ⊤
-   ; id  = linv◎l
-   ; _∘_ = λ B!C A!B → 2! (2! A!B ● idr◎r ● id⇔ ⊡ (2! B!C) ●
-           assoc◎l ● (assoc◎r ● id⇔ ⊡ rinv◎l ● idr◎l) ⊡ id⇔ )
+   ; id  = id⇔
+   ; _∘_ = λ B!C A!B → A!B ● B!C
    ; assoc = tt
    ; identityˡ = tt
    ; identityʳ = tt
@@ -84,7 +82,7 @@ open import Data.Integer as ℤ hiding (∣_∣)
 
 orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (orderC p)
 orderG {τ} p = record {
-    _⁻¹ = λ {_} {B} pf → !!⇔id (Iter.q B) ⊡ id⇔ ● ⇔! pf
+    _⁻¹ = 2!
   ; iso = λ {a} {b} {f} → record {
         isoˡ = tt
       ; isoʳ = tt
@@ -97,15 +95,18 @@ orderG {τ} p = record {
   ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
   }
 
-oneC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
-oneC {τ} p = record {
+divC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+divC {τ} p q = record {
     Obj = Iter p
-  ; _⇒_ = λ q r → Σ[ p₁ ∈ Iter p ] ((Iter.q r ◎ ! (Iter.q q)) ⇔ Iter.q p₁)
+  ; _⇒_ = λ s t → Σ[ iq ∈ Iter q ] ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
   ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
-  ; id = zeroth p , linv◎l
-  ; _∘_ = λ { (q , pf₁)  (r , pf₂) →
-              (q ∘i r ,
-               idr◎r ⊡ id⇔ ● ((id⇔ ⊡ rinv◎r) ⊡ id⇔ ● assoc◎l ⊡ id⇔ ● assoc◎r) ● pf₁ ⊡ pf₂)}
+  ; id = λ {A} → zeroth q , idr◎l ● idl◎r
+  ; _∘_ = λ { { < ia , a , αa > } { < ib , b , αb > } { < ic , c , αc > }
+              ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
+                  ( < j , q , αq > ∘i < k , r , αr > , 
+                  id⇔ ⊡ ( αq ⊡ αr ● comm-i-j j k) ● assoc◎l ● 
+                  (id⇔ ⊡ 2! αr ● pf₂) ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ (id⇔ ⊡ 2! αq ● pf₁) ● 
+                  (assoc◎l ● (αr ⊡ αq ● comm-i-j k j ● 2! (αq ⊡ αr)) ⊡ id⇔)  ) }
   ; assoc = assoc◎r
   ; identityˡ = idl◎l
   ; identityʳ = idr◎l
@@ -113,9 +114,10 @@ oneC {τ} p = record {
   ; ∘-resp-≡ = _⊡_
   }
 
-oneG : {τ : U} → (p : τ ⟷ τ) → Groupoid (oneC p)
-oneG {τ} p = record {
-    _⁻¹ = λ { {A} (q , pf) → inv q , !!⇔id (Iter.q A) ⊡ id⇔ ● ⇔! pf }
+divG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divC p q)
+divG {τ} p q = record {
+    _⁻¹ = λ { {A} (q , pf) → inv q , (2! !aab⇔b ⊡ id⇔ ● assoc◎r) ●
+            id⇔ {c = ! (Iter.q q)} ⊡ 2! pf ⊡ id⇔ {c = ! (Iter.q q)} ● id⇔ ⊡ (assoc◎r ● ab!b⇔a)  }
   ; iso = record { isoˡ = rinv◎l 
                  ; isoʳ = linv◎l
                  }
@@ -129,9 +131,10 @@ oneG {τ} p = record {
 ⟦ t₁ ⊗ t₂ ⟧ with ⟦ t₁ ⟧ | ⟦ t₂ ⟧
 ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
 ⟦ # p ⟧ = _ , orderG p
-⟦ 1/# p ⟧ = _ , 1/orderG p
-⟦ 𝟙# p ⟧ = _ , oneG p
+⟦ p // q ⟧ = _ , divG p q
+⟦ q \\ p ⟧ = _ , divG p q
 
+open import Data.Nat as ℕ
 open import Rational+ as ℚ
 open import 2D.Order
 
@@ -142,9 +145,10 @@ open import 2D.Order
 ∣ t₁ ⊗ t₂ ∣ = ∣ t₁ ∣ ℚ.* ∣ t₂ ∣
 ∣ # p ∣ with orderPostulate p
 ... | ord n n≥1 _ = n ÷1
-∣ 1/# p ∣ with orderPostulate p
-... | ord n n≥1 _ = (1÷ n) {n≥1}
-∣ 𝟙# p ∣ = + 1 ÷ 1 -- slight cheat, as this is really order p / order p.
+∣ p // q ∣ with orderPostulate p | orderPostulate q
+... | ord i i≥1 _ | ord (ℕ.suc j) (ℕ.s≤s j≥1) _ = mkRational i (ℕ.suc j)
+∣ p \\ q ∣ with orderPostulate p | orderPostulate q
+... | ord i i≥1 _ | ord (ℕ.suc j) (ℕ.s≤s j≥1) _ = mkRational i (ℕ.suc j)
 
 
 ------------------------------------------------------------------------------
