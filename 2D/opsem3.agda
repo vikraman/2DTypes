@@ -228,3 +228,12 @@ zig-zag {_} {c} = Prim uniti⋆l ◎ η+ c ⊗ (Prim id⟷) ◎ synchr⋆ ◎ (P
 
 zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
 zig-zag-prop (comb x) = refl≈ refl
+
+--------------------------------
+-- To define trace, what we're missing is a combinator which goes from
+-- (f : s ⊗ # c ⟷ s ⊗ # c) to t ⊗ (c // c) ⟷ u ⊗ (c // c)
+
+-- trace : {s t u : U} {c : s ⟷ s} → (f : s ⊗ # c ⟷ s ⊗ # c) → t ⟷ u
+-- trace {s} {t} {u} {c = c} f =
+--   Prim (uniti⋆r {t}) ◎ (Prim id⟷ ⊗ η+ c) ◎ {!!} ◎ (Prim id⟷ ⊗ ε+ c) ◎ Prim unite⋆r
+
