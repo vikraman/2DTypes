@@ -13,7 +13,8 @@ behavior are themselves data that can manipulated by other
 programs. Depending on the precise setup, we can use a 1-combinator
 $p$ to build one of several kinds of non-trivial groupoids: an action
 groupoid $\ag{\tau}{p}$, an order groupoid $\order{p}$, or an inverse
-order groupoid $\iorder{p}$. 
+order groupoid $\iorder{p}$. We explain these constructions and then
+generalize them to a division groupoid $\divg{p}{q}$. 
 
 %%%%%
 \subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
@@ -259,9 +260,7 @@ Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
 $\order{p}$ is the groupoid whose objects are the elements
 $\triple{k}{q}{\alpha}$ of $\iter{p}$. There is a morphism between
 $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
-$q_1 ~\odot ~! q_2 \isotwo \idiso$. This asserts that $p ^ {k_1}$ can
-be annihilated using $p ^ {-k_2}$. (See Appendix for the Agda
-construction.)
+$q_1 \isotwo q_2$. (See Appendix for the Agda construction.)
 
 \begin{lemma}
   $|\order{p}| = \ord{p}$
@@ -313,9 +312,26 @@ previous section. (See Appendix for the Agda construction.)
 \end{proof}
 
 Note that for each power $p ^ i$ of $p$, there is a morphism
-$\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates
-$p^i$. Note also that everything is well-defined even if we choose
-$p : \zt\iso\zt$. In that case, the cardinality is 1.
+$\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$
+to the identity. Note also that everything is well-defined even if we
+choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Division Groupoids $\divg{p}{r}$}
+   
+The groupoid $\order{p}$ can be thought of as
+$\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
+of as $\divg{\idiso}{p}$. These two constructions can be generalized
+to allow arbitrary combinators in the numerator and denominator. Given
+two 1-combinators $p, r : \tau\iso\tau$, the objects of $\divg{p}{r}$
+are all the iterates $\iter{p}$. There is a morphism between
+$\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
+there exists an iterate $\triple{k}{q}{\alpha}$ in $\iter{r}$ such
+that $(q_1 \odot q) \isotwo (q \odot q_2)$. When $r$ is $\idiso$ this
+construction reduces to $\order{p}$. When $p$ is $\idiso$, this
+construction reduces to $\iorder{r}$. Generally, the cardinality of
+$\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. 
+
 
 % %%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Expanded Unit Groupoids $\oneg{p}$}
@@ -360,12 +376,13 @@ category a ``symmetric rig groupoid''~\cite{nlabrig}.
 
 Despite this rich structure, the individual objects in the category
 for $\Pi$ are just plain sets with no interesting structure. With the
-addition of action groupoids, order groupoids, and inverse order
-groupoids, we can enrich the symmetric rig groupoid of $\Pi$ so that
-objects themselves carry a non-trivial groupoid structure. Sums and
-products of these groupoids behave as expected which ensures that a
-sensible compositional programming language can be designed around
-fractional types. This is the subject of next section.
+addition of action groupoids, order groupoids, inverse order
+groupoids, and division groupoids we can enrich the symmetric rig
+groupoid of $\Pi$ so that objects themselves carry a non-trivial
+groupoid structure. Sums and products of these groupoids behave as
+expected which ensures that a sensible compositional programming
+language can be designed around fractional types. This is the subject
+of next section.
 
 %% Talk about monad/comonad ????
 

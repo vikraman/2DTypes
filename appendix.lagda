@@ -61,51 +61,91 @@ discreteG S = record { _⁻¹ = sym
 orderC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
 orderC {τ} p = record {
       Obj = Iter p
-   ;  _⇒_ = λ p^i p^j → Iter.q p^i ◎ ! (Iter.q p^j) ⇔ Prim id⟷
+   ;  _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
    ;  _≡_ = λ _ _ → ⊤
-   ;  id  = linv◎l
-   ;  _∘_ =  λ B!C A!B → 2! (2! A!B ● idr◎r ● id⇔ ⊡ (2! B!C) ●
-             assoc◎l ● (assoc◎r ● id⇔ ⊡ rinv◎l ● idr◎l) ⊡ id⇔ )
+   ;  id  = id⇔
+   ;  _∘_ = λ B!C A!B → A!B ● B!C
    ;  assoc = tt
    ;  identityˡ = tt
    ;  identityʳ = tt
-   ;  equiv = record {
-         refl = tt
-      ;  sym = λ _ → tt
-      ;  trans = λ _ _ → tt
+   ;  equiv = record
+      { refl = tt
+      ; sym = λ _ → tt
+      ; trans = λ _ _ → tt
       }
    ;  ∘-resp-≡ = λ _ _ → tt
    }
 
+
 orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (orderC p)
 orderG {τ} p = record {
-     _⁻¹ =  λ {_} {B} pf → !!⇔id (Iter.q B) ⊡ id⇔ ● ⇔! pf
-  ;  iso =  record { isoˡ = tt; isoʳ = tt }
+     _⁻¹ = 2!
+  ;  iso = λ {a} {b} {f} → record { isoˡ = tt; isoʳ = tt }
   }
 
 -- Construction of inverse order groupoids 1/#p
 
 1/orderC : {τ : U} → (τ ⟷ τ) → Category _ _ _
 1/orderC {τ} p = record {
-    Obj = Sing p
-  ; _⇒_ = λ _ _ → Iter p 
-  ; _≡_ = λ { q r  → Iter.q q ⇔ Iter.q r }
-  ; id = zeroth p
-  ; _∘_ = λ { < m , p , α > < n , q , β > →
-              < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
-  ; assoc = assoc◎r
-  ; identityˡ = idl◎l
-  ; identityʳ = idr◎l
-  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
-  ; ∘-resp-≡ = _⊡_
+     Obj = Sing p
+  ;  _⇒_ = λ _ _ → Iter p 
+  ;  _≡_ = λ { q r  → Iter.q q ⇔ Iter.q r }
+  ;  id = zeroth p
+  ;  _∘_ = λ {  < m , p , α > < n , q , β > →
+                < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
+  ;  assoc = assoc◎r
+  ;  identityˡ = idl◎l
+  ;  identityʳ = idr◎l
+  ;  equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+  ;  ∘-resp-≡ = _⊡_
   }
 
 1/orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (1/orderC p)
 1/orderG {τ} p = record {
-    _⁻¹ =  λ { < i , q , eq > →
-           < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > }
-  ; iso =  record { isoˡ = rinv◎l ; isoʳ = linv◎l }
+     _⁻¹ =  λ {  < i , q , eq > →
+                 < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > }
+  ;  iso =  record { isoˡ = rinv◎l ; isoʳ = linv◎l }
   }
+
+-- construction of division groupoids #p ÷ #q
+
+divC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+divC {τ} p q = record {
+     Obj = Iter p
+  ;  _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
+            ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
+  ;  _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
+  ;  id = λ {A} → zeroth q , idr◎l ● idl◎r
+  ;  _∘_ = λ {  { < ia , a , αa > }
+                { < ib , b , αb > }
+                { < ic , c , αc > }
+                ( < j , q , αq > , pf₁)
+                ( < k , r , αr > , pf₂) →
+                ( < j , q , αq > ∘i < k , r , αr > , 
+                id⇔ ⊡ ( αq ⊡ αr ● comm-i-j j k) ● assoc◎l ● 
+                (id⇔ ⊡ 2! αr ● pf₂) ⊡ id⇔ ● assoc◎r ●
+                id⇔ ⊡ (id⇔ ⊡ 2! αq ● pf₁) ● 
+                (assoc◎l ● (αr ⊡ αq ● comm-i-j k j ●
+                2! (αq ⊡ αr)) ⊡ id⇔)  ) }
+  ;  assoc = assoc◎r
+  ;  identityˡ = idl◎l
+  ;  identityʳ = idr◎l
+  ;  equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+  ;  ∘-resp-≡ = _⊡_
+  }
+
+divG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divC p q)
+divG {τ} p q = record {
+     _⁻¹ = λ {  {A} (q , pf) → inv q ,
+                (2! !aab⇔b ⊡ id⇔ ● assoc◎r) ●
+                id⇔ {c = ! (Iter.q q)} ⊡ 2! pf ⊡
+                id⇔ {c = ! (Iter.q q)} ● 
+                id⇔ ⊡ (assoc◎r ● ab!b⇔a)  }
+  ;  iso = record { isoˡ = rinv◎l; isoʳ = linv◎l }
+  }
+
+
+
 \end{code}}}}
 
 

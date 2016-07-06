@@ -33,6 +33,7 @@
 \newcommand{\order}[1]{\hash #1}
 \newcommand{\iorder}[1]{1/\hash #1}
 \newcommand{\oneg}[1]{\mathbb{1}_{#1}}
+\newcommand{\divg}[2]{\hash{#1} \div \hash{#2}}
 \newcommand{\ord}[1]{\ensuremath{\mathsf{order}(#1)}}
 \newcommand{\inl}[1]{\textsf{inl}(#1)}
 \newcommand{\inr}[1]{\textsf{inr}(#1)}
