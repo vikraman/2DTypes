@@ -47,23 +47,13 @@ mutual
   𝓐𝓹 (c ⊗ c₁) [ v , w ] = [ 𝓐𝓹 c v , 𝓐𝓹 c₁ w ]
   -- 𝓐𝓹 ap⟷ [ comb < i , q , α > , v₁ ] = [ (comb < i , q , α >) , (𝓐𝓹 q v₁) ]
   -- 𝓐𝓹 ap⁻¹⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
-  𝓐𝓹 (η- c) ⋆ = tangl (λ { q → q & id⇔ })
-  𝓐𝓹 (η+ c) ⋆ = tangr ((λ { q → q & id⇔ }))
-  𝓐𝓹 (ε+ c) p = ⋆
-  𝓐𝓹 (ε- c) p = ⋆
+  𝓐𝓹 (η- c) ⋆ = tangl (c÷c c)
+  𝓐𝓹 (η+ c) ⋆ = tangr (c÷c c)
+  𝓐𝓹 (ε+ c) (tangr x) = ⇔-irr (proj₂ (x (iter c) (iter c)))
+  𝓐𝓹 (ε- c) (tangl x) = ⇔-irr (proj₂ (x (iter c) (iter c)))
   𝓐𝓹 synchr⋆ [ tangr x , v ] = [ v , tangl x ]
   𝓐𝓹 synchl⋆ [ v , tangl x ] = [ (tangr x) , v ]
-  𝓐𝓹 (app-num\\ {t} {p} {q} {r} f) (tangl x) =
-    -- q₁ is an Iter q.  f : # p ⟷ # r.
-    tangl (λ { < j , q₁ , α > →
-      let res = x (< j , q₁ , α >) in
-      let vp = proj₁ res in -- itp is a Val (# p)
-      let vr = 𝓐𝓹 f (comb vp) in -- Val (# r)
-      let itr = get-iter vr in -- Iter r
-      let pf = proj₂ res in
-      let lift-f = lift# f in
-      case itr of λ { ( < i , fx , β > ) → 
-      itr & {!cong≈ f (#p≈ ? ? ?)!} } }) -- need an Iter r and a proof it's the same as q₁
+  𝓐𝓹 (app-num\\ {t} {p} {q} {r} f) (tangl x) = {!!}
   𝓐𝓹 (app-num// f) v = {!!}
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₂ → Val T₁
@@ -74,10 +64,10 @@ mutual
   𝓐𝓹⁻¹ (c ⊗ c₁) [ v , w ] = [ (𝓐𝓹⁻¹ c v) , (𝓐𝓹⁻¹ c₁ w) ]
   -- 𝓐𝓹⁻¹ ap⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
   -- 𝓐𝓹⁻¹ ap⁻¹⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹 (Iter.q x) v₁) ]
-  𝓐𝓹⁻¹ (η- c) p = ⋆ -- [ 1/comb x , comb < k , q , α > ] = 𝟙ₚ (si k α)
-  𝓐𝓹⁻¹ (η+ c) p = ⋆ -- [ comb < k , q , α > , v₁ ] = 𝟙ₚ (si k α)
-  𝓐𝓹⁻¹ (ε+ c) ⋆ = tangr ((λ { q → q & id⇔ })) -- [ (comb < k , c ^ k , id⇔ >) , (1/comb ⟪ c , id⇔ ⟫) ]
-  𝓐𝓹⁻¹ (ε- c) ⋆ = tangl ((λ { q → q & id⇔ })) -- [ (1/comb ⟪ c , id⇔ ⟫) , (comb < k , (c ^ k) , id⇔ >) ]
+  𝓐𝓹⁻¹ (η- c) (tangl x) = ⇔-irr (proj₂ (x (iter c) (iter c)))
+  𝓐𝓹⁻¹ (η+ c) (tangr x) = ⇔-irr (proj₂ (x (iter c) (iter c)))
+  𝓐𝓹⁻¹ (ε+ c) ⋆ = tangr (c÷c c)
+  𝓐𝓹⁻¹ (ε- c) ⋆ = tangl (c÷c c)
   𝓐𝓹⁻¹ synchr⋆ [ v , tangl x ] = [ tangr x , v ]
   𝓐𝓹⁻¹ synchl⋆ [ tangr x , v₁ ] = [ v₁ , tangl x ]
   𝓐𝓹⁻¹ (app-num\\ f) v = {!!}
@@ -251,10 +241,10 @@ fwd-2-coherence .(! (Prim x) ◎ Prim x) .(Prim id⟷) (rinv◎l {c = Prim x}) v
 fwd-2-coherence .((! c₁ ◎ ! c) ◎ c ◎ c₁) .(Prim id⟷) (rinv◎l {c = c ◎ c₁}) v = lemma-2 (c ◎ c₁) v
 fwd-2-coherence .((! c ⊕ ! c₁) ◎ (c ⊕ c₁)) .(Prim id⟷) (rinv◎l {c = c ⊕ c₁}) v = lemma-2 (c ⊕ c₁) v
 fwd-2-coherence .(! c ⊗ ! c₁ ◎ c ⊗ c₁) .(Prim id⟷) (rinv◎l {c = c ⊗ c₁}) v = lemma-2 (c ⊗ c₁) v
-fwd-2-coherence .(ε- c ◎ η- c) .(Prim id⟷) (rinv◎l {c = η- c}) v = lemma-2 (ε- c ◎ η- c) v
-fwd-2-coherence .(ε+ c ◎ η+ c) .(Prim id⟷) (rinv◎l {c = η+ c}) v = lemma-2 (ε+ c ◎ η+ c) v
-fwd-2-coherence .(η+ c ◎ ε+ c) .(Prim id⟷) (rinv◎l {c = ε+ c}) v = lemma-2 (η+ c ◎ ε+ c) v
-fwd-2-coherence .(η- c ◎ ε- c) .(Prim id⟷) (rinv◎l {c = ε- c}) v = lemma-2 (η- c ◎ ε- c) v
+fwd-2-coherence .(ε- c ◎ η- c) .(Prim id⟷) (rinv◎l {c = η- c}) v = tangl≈
+fwd-2-coherence .(ε+ c ◎ η+ c) .(Prim id⟷) (rinv◎l {c = η+ c}) v = tangr≈
+fwd-2-coherence .(η+ c ◎ ε+ c) .(Prim id⟷) (rinv◎l {c = ε+ c}) v = ⋆≈
+fwd-2-coherence .(η- c ◎ ε- c) .(Prim id⟷) (rinv◎l {c = ε- c}) v = ⋆≈
 fwd-2-coherence .(synchl⋆ ◎ synchr⋆) .(Prim id⟷) (rinv◎l {c = synchr⋆}) v = lemma-2 synchr⋆ v
 fwd-2-coherence .(synchr⋆ ◎ synchl⋆) .(Prim id⟷) (rinv◎l {c = synchl⋆}) v = lemma-2 synchl⋆ v
 fwd-2-coherence .(app-num\\ (! c₃) ◎ app-num\\ c₃) .(Prim id⟷) (rinv◎l {c = app-num\\ c₃}) v = lemma-2 (app-num\\ c₃) v
@@ -263,10 +253,10 @@ fwd-2-coherence .(Prim id⟷) .(! (Prim x) ◎ Prim x) (rinv◎r {c = Prim x}) v
 fwd-2-coherence .(Prim id⟷) .((! c₁ ◎ ! c) ◎ c ◎ c₁) (rinv◎r {c = c ◎ c₁}) v = sym≈ (lemma-2 (c ◎ c₁) v)
 fwd-2-coherence .(Prim id⟷) .((! c ⊕ ! c₁) ◎ (c ⊕ c₁)) (rinv◎r {c = c ⊕ c₁}) v = sym≈ (lemma-2 (c ⊕ c₁) v)
 fwd-2-coherence .(Prim id⟷) .(! c ⊗ ! c₁ ◎ c ⊗ c₁) (rinv◎r {c = c ⊗ c₁}) v = sym≈ (lemma-2 (c ⊗ c₁) v)
-fwd-2-coherence .(Prim id⟷) .(ε- c ◎ η- c) (rinv◎r {c = η- c}) v = sym≈ (lemma-2 (ε- c ◎ η- c) v)
-fwd-2-coherence .(Prim id⟷) .(ε+ c ◎ η+ c) (rinv◎r {c = η+ c}) v = sym≈ (lemma-2 (ε+ c ◎ η+ c) v)
-fwd-2-coherence .(Prim id⟷) .(η+ c ◎ ε+ c) (rinv◎r {c = ε+ c}) v = sym≈ (lemma-2 (η+ c ◎ ε+ c) v)
-fwd-2-coherence .(Prim id⟷) .(η- c ◎ ε- c) (rinv◎r {c = ε- c}) v = sym≈ (lemma-2 (η- c ◎ ε- c) v)
+fwd-2-coherence .(Prim id⟷) .(ε- c ◎ η- c) (rinv◎r {c = η- c}) v = tangl≈
+fwd-2-coherence .(Prim id⟷) .(ε+ c ◎ η+ c) (rinv◎r {c = η+ c}) v = tangr≈
+fwd-2-coherence .(Prim id⟷) .(η+ c ◎ ε+ c) (rinv◎r {c = ε+ c}) v = ⋆≈
+fwd-2-coherence .(Prim id⟷) .(η- c ◎ ε- c) (rinv◎r {c = ε- c}) v = ⋆≈
 fwd-2-coherence .(Prim id⟷) .(synchl⋆ ◎ synchr⋆) (rinv◎r {c = synchr⋆}) v = sym≈ (lemma-2 synchr⋆ v)
 fwd-2-coherence .(Prim id⟷) .(synchr⋆ ◎ synchl⋆) (rinv◎r {c = synchl⋆}) v = sym≈ (lemma-2 synchl⋆ v)
 fwd-2-coherence .(Prim id⟷) .(app-num\\ (! c₃) ◎ app-num\\ c₃) (rinv◎r {c = app-num\\ c₃}) v = sym≈ (lemma-2 (app-num\\ c₃) v)
@@ -275,10 +265,10 @@ fwd-2-coherence .(Prim x ◎ ! (Prim x)) .(Prim id⟷) (linv◎l {c = Prim x}) v
 fwd-2-coherence .((c ◎ c₁) ◎ ! c₁ ◎ ! c) .(Prim id⟷) (linv◎l {c = c ◎ c₁}) v = lemma-1 (c ◎ c₁) v
 fwd-2-coherence .((c ⊕ c₁) ◎ (! c ⊕ ! c₁)) .(Prim id⟷) (linv◎l {c = c ⊕ c₁}) v = lemma-1 (c ⊕ c₁) v
 fwd-2-coherence .(c ⊗ c₁ ◎ ! c ⊗ ! c₁) .(Prim id⟷) (linv◎l {c = c ⊗ c₁}) v = lemma-1 (c ⊗ c₁) v
-fwd-2-coherence .(η- c ◎ ε- c) .(Prim id⟷) (linv◎l {c = η- c}) v = lemma-1 (η- c ◎ ε- c) v
-fwd-2-coherence .(η+ c ◎ ε+ c) .(Prim id⟷) (linv◎l {c = η+ c}) v = lemma-1 (η+ c ◎ ε+ c) v
-fwd-2-coherence .(ε+ c ◎ η+ c) .(Prim id⟷) (linv◎l {c = ε+ c}) v = lemma-1 (ε+ c ◎ η+ c) v
-fwd-2-coherence .(ε- c ◎ η- c) .(Prim id⟷) (linv◎l {c = ε- c}) v = lemma-1 (ε- c ◎ η- c) v
+fwd-2-coherence .(η- c ◎ ε- c) .(Prim id⟷) (linv◎l {c = η- c}) v = ⋆≈
+fwd-2-coherence .(η+ c ◎ ε+ c) .(Prim id⟷) (linv◎l {c = η+ c}) v = ⋆≈
+fwd-2-coherence .(ε+ c ◎ η+ c) .(Prim id⟷) (linv◎l {c = ε+ c}) v = tangr≈
+fwd-2-coherence .(ε- c ◎ η- c) .(Prim id⟷) (linv◎l {c = ε- c}) v = tangl≈
 fwd-2-coherence .(synchr⋆ ◎ synchl⋆) .(Prim id⟷) (linv◎l {c = synchr⋆}) v = lemma-1 synchr⋆ v
 fwd-2-coherence .(synchl⋆ ◎ synchr⋆) .(Prim id⟷) (linv◎l {c = synchl⋆}) v = lemma-1 synchl⋆ v
 fwd-2-coherence .(app-num\\ c₃ ◎ app-num\\ (! c₃)) .(Prim id⟷) (linv◎l {c = app-num\\ c₃}) v = lemma-1 (app-num\\ c₃) v
@@ -287,10 +277,10 @@ fwd-2-coherence .(Prim id⟷) .(Prim x ◎ ! (Prim x)) (linv◎r {c = Prim x}) v
 fwd-2-coherence .(Prim id⟷) .((c ◎ c₁) ◎ ! c₁ ◎ ! c) (linv◎r {c = c ◎ c₁}) v = sym≈ (lemma-1 (c ◎ c₁) v)
 fwd-2-coherence .(Prim id⟷) .((c ⊕ c₁) ◎ (! c ⊕ ! c₁)) (linv◎r {c = c ⊕ c₁}) v = sym≈ (lemma-1 (c ⊕ c₁) v)
 fwd-2-coherence .(Prim id⟷) .(c ⊗ c₁ ◎ ! c ⊗ ! c₁) (linv◎r {c = c ⊗ c₁}) v = sym≈ (lemma-1 (c ⊗ c₁) v)
-fwd-2-coherence .(Prim id⟷) .(η- c ◎ ε- c) (linv◎r {c = η- c}) v = sym≈ (lemma-1 (η- c ◎ ε- c) v)
-fwd-2-coherence .(Prim id⟷) .(η+ c ◎ ε+ c) (linv◎r {c = η+ c}) v = sym≈ (lemma-1 (η+ c ◎ ε+ c) v)
-fwd-2-coherence .(Prim id⟷) .(ε+ c ◎ η+ c) (linv◎r {c = ε+ c}) v = sym≈ (lemma-1 (ε+ c ◎ η+ c) v)
-fwd-2-coherence .(Prim id⟷) .(ε- c ◎ η- c) (linv◎r {c = ε- c}) v = sym≈ (lemma-1 (ε- c ◎ η- c) v)
+fwd-2-coherence .(Prim id⟷) .(η- c ◎ ε- c) (linv◎r {c = η- c}) v = ⋆≈ -- sym≈ (lemma-1 (η- c ◎ ε- c) v)
+fwd-2-coherence .(Prim id⟷) .(η+ c ◎ ε+ c) (linv◎r {c = η+ c}) v = ⋆≈ -- sym≈ (lemma-1 (η+ c ◎ ε+ c) v)
+fwd-2-coherence .(Prim id⟷) .(ε+ c ◎ η+ c) (linv◎r {c = ε+ c}) v = tangr≈ -- sym≈ (lemma-1 (ε+ c ◎ η+ c) v)
+fwd-2-coherence .(Prim id⟷) .(ε- c ◎ η- c) (linv◎r {c = ε- c}) v = tangl≈ -- sym≈ (lemma-1 (ε- c ◎ η- c) v)
 fwd-2-coherence .(Prim id⟷) .(synchr⋆ ◎ synchl⋆) (linv◎r {c = synchr⋆}) v = sym≈ (lemma-1 synchr⋆ v)
 fwd-2-coherence .(Prim id⟷) .(synchl⋆ ◎ synchr⋆) (linv◎r {c = synchl⋆}) v = sym≈ (lemma-1 synchl⋆ v)
 fwd-2-coherence .(Prim id⟷) .(app-num\\ c₃ ◎ app-num\\ (! c₃)) (linv◎r {c = app-num\\ c₃}) v = sym≈ (lemma-1 (app-num\\ c₃) v)
@@ -304,8 +294,6 @@ fwd-2-coherence _ _ (resp⊕⇔ p₁ p₂) (inr v) = inj≈ (fwd-2-coherence _ _
 fwd-2-coherence _ _ (resp⊗⇔ p₁ p₂) [ v₁ , v₂ ] = [,]≈ (fwd-2-coherence _ _ p₁ v₁) (fwd-2-coherence _ _ p₂ v₂)
 fwd-2-coherence _ _ (resp-app-num// p) (tangr x) = tangr≈
 fwd-2-coherence _ _ (resp-app-num\\ p) (tangl x) = tangl≈
-fwd-2-coherence c₁ c₂ (lift# x) v = {!!}
-fwd-2-coherence _ _ (lift#! x) v = {!!}
 
 ------
 -- Examples

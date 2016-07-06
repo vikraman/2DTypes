@@ -5,7 +5,7 @@ module 2D.Val where
 open import Data.Integer as ℤ
 open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 open import Data.Empty using (⊥)
-open import Data.Product using (Σ)
+open import Data.Product using (Σ) renaming (_,_ to _&_)
 
 open import 2D.Types
 open import 2D.Iter
@@ -13,14 +13,26 @@ open import 2D.Sing
 open import 2D.Power
 open import 2D.SingIter
 
+-- a fraction p ÷ q is a way of identifying r such that p ^ i ◎ ! q ^ j ⇔ r ^ (i - j)
+-- or (equivalently) p ^ i ⇔ r ^ (i - j) ◎ q ^ j.
+_÷_ : {τ : U} (p q : τ ⟷ τ) → Set
+_÷_ {τ} p q = ((pi : Iter p) → (qi : Iter q) → Σ (τ ⟷ τ)
+  (λ r → Iter.q pi ⇔ (r ^ ((Iter.k pi) ℤ.+ (ℤ.- Iter.k qi))) ◎ Iter.q qi))
+
+-- the "identity" tangle:
+c÷c : {τ : U} (c : τ ⟷ τ) → c ÷ c
+c÷c {_} c < i , p , α > < j , q , β > =
+  c &
+  (α ● 2! (lower i (ℤ.- j) ⊡ β ● assoc◎r ● id⇔ ⊡ (^⇔! j) ⊡ id⇔ ● id⇔ ⊡ rinv◎l ● idr◎l))
+
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
   inl :     {τ₁ τ₂ : U} → Val τ₁ → Val (τ₁ ⊕ τ₂)
   inr :     {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
   [_,_] :   {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
   comb :    {τ : U} {p : τ ⟷ τ} → Iter p →  Val (# p)
-  tangr :   {τ : U} {p q : τ ⟷ τ} → ((r : Iter q) → Σ (Iter p) (λ s → Iter.q r ⇔ Iter.q s)) → Val (p // q)
-  tangl :   {τ : U} {q p : τ ⟷ τ} → ((r : Iter q) → Σ (Iter p) (λ s → Iter.q r ⇔ Iter.q s)) → Val (q \\ p)
+  tangr :   {τ : U} {p q : τ ⟷ τ} → p ÷ q → Val (p // q)
+  tangl :   {τ : U} {q p : τ ⟷ τ} → p ÷ q → Val (q \\ p)
 
 get-q : {t : U} {p : t ⟷ t} → Val (# p) → t ⟷ t
 get-q (comb i) = Iter.q i
@@ -32,6 +44,10 @@ get-iter (comb i) = i
 π₁ [ x , _ ] = x
 π₂ : {s t : U} → Val (s ⊗ t) → Val t
 π₂ [ _ , y ] = y
+
+-- we also have some amount of "proof irrelevance" in some situations:
+⇔-irr : {τ : U} {p q : τ ⟷ τ} → p ⇔ q → Val 𝟙
+⇔-irr _ = ⋆
 
 mutual
   inj-eq : {s t : U} (v₁ v₂ : Val (s ⊕ t)) → Set
