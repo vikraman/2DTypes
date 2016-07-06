@@ -154,132 +154,66 @@ prim⁻¹◎prim≡id factorl (inl [ v , v₁ ]) = refl
 prim⁻¹◎prim≡id factorl (inr [ v , v₁ ]) = refl
 prim⁻¹◎prim≡id id⟷ v = refl
 
-prim-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → {v w : Val T₁} → v ≈ w → prim c v ≈ prim c w
-prim-cong≈ uniti₊l ⋆≈ = inj₂≈ ⋆≈
-prim-cong≈ uniti₊r ⋆≈ = inj₁≈ ⋆≈
-prim-cong≈ uniti⋆l ⋆≈ = [,]≈ ⋆≈ ⋆≈
-prim-cong≈ uniti⋆r ⋆≈ = [,]≈ ⋆≈ ⋆≈
-prim-cong≈ id⟷ ⋆≈ = ⋆≈
-prim-cong≈ uniti₊l (#p≈ p^i p^j x) = inj₂≈ (#p≈ p^i p^j x)
-prim-cong≈ uniti₊r (#p≈ p^i p^j x) = inj₁≈ (#p≈ p^i p^j x)
-prim-cong≈ uniti⋆l (#p≈ p^i p^j x) = [,]≈ ⋆≈ (#p≈ p^i p^j x)
-prim-cong≈ uniti⋆r (#p≈ p^i p^j x) = [,]≈ (#p≈ p^i p^j x) ⋆≈
-prim-cong≈ id⟷ (#p≈ p^i p^j x) = #p≈ p^i p^j x
-prim-cong≈ uniti₊l (1/#p≈ q p₁ p₂ x) = inj₂≈ (1/#p≈ q p₁ p₂ x)
-prim-cong≈ uniti₊r (1/#p≈ q p₁ p₂ x) = inj₁≈ (1/#p≈ q p₁ p₂ x)
-prim-cong≈ uniti⋆l (1/#p≈ q p₁ p₂ x) = [,]≈ ⋆≈ (1/#p≈ q p₁ p₂ x)
-prim-cong≈ uniti⋆r (1/#p≈ q p₁ p₂ x) = [,]≈ (1/#p≈ q p₁ p₂ x) ⋆≈
-prim-cong≈ id⟷ (1/#p≈ q p₁ p₂ x) = 1/#p≈ q p₁ p₂ x
-prim-cong≈ uniti₊l (𝟙ₚ≈ q eq) = inj₂≈ (𝟙ₚ≈ q eq)
-prim-cong≈ uniti₊r (𝟙ₚ≈ q eq) = inj₁≈ (𝟙ₚ≈ q eq)
-prim-cong≈ uniti⋆l (𝟙ₚ≈ q eq) = [,]≈ ⋆≈ (𝟙ₚ≈ q eq)
-prim-cong≈ uniti⋆r (𝟙ₚ≈ q eq) = [,]≈ (𝟙ₚ≈ q eq) ⋆≈
-prim-cong≈ id⟷ (𝟙ₚ≈ q eq) = 𝟙ₚ≈ q eq
-prim-cong≈ uniti₊l ([,]≈ p q) = inj₂≈ ([,]≈ p q)
-prim-cong≈ uniti₊r ([,]≈ p q) = inj₁≈ ([,]≈ p q)
-prim-cong≈ unite⋆l ([,]≈ p q) = q
-prim-cong≈ uniti⋆l ([,]≈ p q) = [,]≈ ⋆≈ ([,]≈ p q)
-prim-cong≈ unite⋆r ([,]≈ p q) = p
-prim-cong≈ uniti⋆r ([,]≈ p q) = [,]≈ ([,]≈ p q) ⋆≈
-prim-cong≈ swap⋆ ([,]≈ p q) = [,]≈ q p
-prim-cong≈ assocl⋆ ([,]≈ p ([,]≈ x x₁)) = [,]≈ ([,]≈ p x) x₁
-prim-cong≈ assocr⋆ ([,]≈ ([,]≈ x x₁) q) = [,]≈ x ([,]≈ x₁ q)
-prim-cong≈ absorbr ([,]≈ p q) = p
-prim-cong≈ absorbl ([,]≈ p q) = q
-prim-cong≈ dist ([,]≈ (inj₁≈ x) q) = inj₁≈ ([,]≈ x q)
-prim-cong≈ dist ([,]≈ (inj₂≈ x) q) = inj₂≈ ([,]≈ x q)
-prim-cong≈ distl ([,]≈ p (inj₁≈ x)) = inj₁≈ ([,]≈ p x)
-prim-cong≈ distl ([,]≈ p (inj₂≈ x)) = inj₂≈ ([,]≈ p x)
-prim-cong≈ id⟷ ([,]≈ p q) = [,]≈ p q
-prim-cong≈ unite₊l (inj₁≈ {_} {_} {} p)
-prim-cong≈ uniti₊l (inj₁≈ p) = inj₂≈ (inj₁≈ p)
-prim-cong≈ unite₊r (inj₁≈ p) = p
-prim-cong≈ uniti₊r (inj₁≈ p) = inj₁≈ (inj₁≈ p)
-prim-cong≈ swap₊ (inj₁≈ p) = inj₂≈ p
-prim-cong≈ assocl₊ (inj₁≈ p) = inj₁≈ (inj₁≈ p)
-prim-cong≈ assocr₊ (inj₁≈ (inj₁≈ x)) = inj₁≈ x
-prim-cong≈ assocr₊ (inj₁≈ (inj₂≈ x)) = inj₂≈ (inj₁≈ x)
-prim-cong≈ uniti⋆l (inj₁≈ p) = [,]≈ ⋆≈ (inj₁≈ p)
-prim-cong≈ uniti⋆r (inj₁≈ p) = [,]≈ (inj₁≈ p) ⋆≈
-prim-cong≈ factor (inj₁≈ ([,]≈ x x₁)) = [,]≈ (inj₁≈ x) x₁
-prim-cong≈ factorl (inj₁≈ ([,]≈ x x₁)) = [,]≈ x (inj₁≈ x₁)
-prim-cong≈ id⟷ (inj₁≈ p) = inj₁≈ p
-prim-cong≈ unite₊l (inj₂≈ p) = p
-prim-cong≈ uniti₊l (inj₂≈ p) = inj₂≈ (inj₂≈ p)
-prim-cong≈ unite₊r (inj₂≈ {_} {_} {} p)
-prim-cong≈ uniti₊r (inj₂≈ p) = inj₁≈ (inj₂≈ p)
-prim-cong≈ swap₊ (inj₂≈ p) = inj₁≈ p
-prim-cong≈ assocl₊ (inj₂≈ (inj₁≈ x)) = inj₁≈ (inj₂≈ x)
-prim-cong≈ assocl₊ (inj₂≈ (inj₂≈ x)) = inj₂≈ x
-prim-cong≈ assocr₊ (inj₂≈ p) = inj₂≈ (inj₂≈ p)
-prim-cong≈ uniti⋆l (inj₂≈ p) = [,]≈ ⋆≈ (inj₂≈ p)
-prim-cong≈ uniti⋆r (inj₂≈ p) = [,]≈ (inj₂≈ p) ⋆≈
-prim-cong≈ factor (inj₂≈ ([,]≈ x x₁)) = [,]≈ (inj₂≈ x) x₁
-prim-cong≈ factorl (inj₂≈ ([,]≈ x x₁)) = [,]≈ x (inj₂≈ x₁)
-prim-cong≈ id⟷ (inj₂≈ p) = inj₂≈ p
+prim-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → (v w : Val T₁) → v ≈ w → prim c v ≈ prim c w
+prim-cong≈ unite₊l (inl ()) w eq
+prim-cong≈ unite₊l (inr v) (inl ()) eq
+prim-cong≈ unite₊l (inr v) (inr w) (inj≈ x) = x
+prim-cong≈ uniti₊l v w eq = inj≈ eq
+prim-cong≈ unite₊r (inl v) (inl w) (inj≈ x) = x
+prim-cong≈ unite₊r (inl v) (inr ()) eq
+prim-cong≈ unite₊r (inr ()) w eq
+prim-cong≈ uniti₊r v w eq = inj≈ eq
+prim-cong≈ swap₊ (inl v) (inl w) (inj≈ x) = inj≈ x
+prim-cong≈ swap₊ (inl v) (inr w) (inj≈ ())
+prim-cong≈ swap₊ (inr v) (inl w) (inj≈ ())
+prim-cong≈ swap₊ (inr v) (inr w) (inj≈ x) = inj≈ x
+prim-cong≈ assocl₊ (inl v) (inl w) (inj≈ x) = inj≈ (inj≈ x)
+prim-cong≈ assocl₊ (inl v) (inr (inl w)) (inj≈ ())
+prim-cong≈ assocl₊ (inl v) (inr (inr w)) (inj≈ ())
+prim-cong≈ assocl₊ (inr v) (inl w) (inj≈ ())
+prim-cong≈ assocl₊ (inr (inl v)) (inr (inl w)) (inj≈ (inj≈ x)) = inj≈ (inj≈ x)
+prim-cong≈ assocl₊ (inr (inr v)) (inr (inl w)) (inj≈ (inj≈ x)) = inj≈ x
+prim-cong≈ assocl₊ (inr (inl v)) (inr (inr w)) (inj≈ (inj≈ ()))
+prim-cong≈ assocl₊ (inr (inr v)) (inr (inr w)) (inj≈ (inj≈ x)) = inj≈ x
+prim-cong≈ assocr₊ (inl (inl v)) (inl (inl w)) (inj≈ (inj≈ x)) = inj≈ x
+prim-cong≈ assocr₊ (inl (inl v)) (inl (inr w)) (inj≈ (inj≈ ()))
+prim-cong≈ assocr₊ (inl (inr v)) (inl (inl w)) (inj≈ (inj≈ ()))
+prim-cong≈ assocr₊ (inl (inr v)) (inl (inr w)) (inj≈ (inj≈ x)) = inj≈ (inj≈ x)
+prim-cong≈ assocr₊ (inl (inl v)) (inr w) (inj≈ ())
+prim-cong≈ assocr₊ (inl (inr v)) (inr w) (inj≈ ())
+prim-cong≈ assocr₊ (inr v) (inl (inl w)) (inj≈ ())
+prim-cong≈ assocr₊ (inr v) (inl (inr w)) (inj≈ ())
+prim-cong≈ assocr₊ (inr v) (inr w) (inj≈ x) = inj≈ (inj≈ x)
+prim-cong≈ unite⋆l [ v , v₁ ] [ w , w₁ ] ([,]≈ eq eq₁) = eq₁
+prim-cong≈ uniti⋆l v w eq = [,]≈ ⋆≈ eq
+prim-cong≈ unite⋆r [ v , v₁ ] [ w , w₁ ] ([,]≈ eq eq₁) = eq
+prim-cong≈ uniti⋆r v w eq = [,]≈ eq ⋆≈
+prim-cong≈ swap⋆ [ v , v₁ ] [ w , w₁ ] ([,]≈ eq eq₁) = [,]≈ eq₁ eq
+prim-cong≈ assocl⋆ [ v , [ v₁ , v₂ ] ] [ w , [ w₁ , w₂ ] ] ([,]≈ eq ([,]≈ eq₁ eq₂)) = [,]≈ ([,]≈ eq eq₁) eq₂
+prim-cong≈ assocr⋆ [ [ v , v₁ ] , v₂ ] [ [ w , w₁ ] , w₂ ] ([,]≈ ([,]≈ eq eq₁) eq₂) = [,]≈ eq ([,]≈ eq₁ eq₂)
+prim-cong≈ absorbr [ () , v₁ ] w eq
+prim-cong≈ absorbl [ v , () ] w eq
+prim-cong≈ factorzr () w eq
+prim-cong≈ factorzl () w eq
+prim-cong≈ dist [ inl v , v₁ ] [ inl w , w₁ ] ([,]≈ (inj≈ x) eq₁) = inj≈ ([,]≈ x eq₁)
+prim-cong≈ dist [ inl v , v₁ ] [ inr w , w₁ ] ([,]≈ (inj≈ x) eq₁) = inj≈ x
+prim-cong≈ dist [ inr v , v₁ ] [ inl w , w₁ ] ([,]≈ (inj≈ x) eq₁) = inj≈ x
+prim-cong≈ dist [ inr v , v₁ ] [ inr w , w₁ ] ([,]≈ (inj≈ x) eq₁) = inj≈ ([,]≈ x eq₁)
+prim-cong≈ factor (inl [ v , v₁ ]) (inl [ w , w₁ ]) (inj≈ ([,]≈ x x₁)) = [,]≈ (inj≈ x) x₁
+prim-cong≈ factor (inl [ v , v₁ ]) (inr [ w , w₁ ]) (inj≈ ())
+prim-cong≈ factor (inr [ v , v₁ ]) (inl [ w , w₁ ]) (inj≈ ())
+prim-cong≈ factor (inr [ v , v₁ ]) (inr [ w , w₁ ]) (inj≈ ([,]≈ x x₁)) = [,]≈ (inj≈ x) x₁
+prim-cong≈ distl [ v , inl v₁ ] [ w , inl w₁ ] ([,]≈ eq (inj≈ x)) = inj≈ ([,]≈ eq x)
+prim-cong≈ distl [ v , inl v₁ ] [ w , inr w₁ ] ([,]≈ eq (inj≈ ()))
+prim-cong≈ distl [ v , inr v₁ ] [ w , inl w₁ ] ([,]≈ eq (inj≈ ()))
+prim-cong≈ distl [ v , inr v₁ ] [ w , inr w₁ ] ([,]≈ eq (inj≈ x)) = inj≈ ([,]≈ eq x)
+prim-cong≈ factorl (inl [ v , v₁ ]) (inl [ w , w₁ ]) (inj≈ ([,]≈ x x₁)) = [,]≈ x (inj≈ x₁)
+prim-cong≈ factorl (inl [ v , v₁ ]) (inr [ w , w₁ ]) (inj≈ ())
+prim-cong≈ factorl (inr [ v , v₁ ]) (inl [ w , w₁ ]) (inj≈ ())
+prim-cong≈ factorl (inr [ v , v₁ ]) (inr [ w , w₁ ]) (inj≈ ([,]≈ x x₁)) = [,]≈ x (inj≈ x₁)
+prim-cong≈ id⟷ v w eq = eq
 
+{-
 prim⁻¹-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → {v w : Val T₂} → v ≈ w → prim⁻¹ c v ≈ prim⁻¹ c w
-prim⁻¹-cong≈ unite₊l ⋆≈ = inj₂≈ ⋆≈
-prim⁻¹-cong≈ unite₊l (#p≈ p^i p^j x) = inj₂≈ (#p≈ p^i p^j x)
-prim⁻¹-cong≈ unite₊l (1/#p≈ q p₁ p₂ x) = inj₂≈ (1/#p≈ q p₁ p₂ x)
-prim⁻¹-cong≈ unite₊l (𝟙ₚ≈ q eq) = inj₂≈ (𝟙ₚ≈ q eq)
-prim⁻¹-cong≈ unite₊l ([,]≈ p p₁) = inj₂≈ ([,]≈ p p₁)
-prim⁻¹-cong≈ unite₊l (inj₁≈ p) = inj₂≈ (inj₁≈ p)
-prim⁻¹-cong≈ unite₊l (inj₂≈ p) = inj₂≈ (inj₂≈ p)
-prim⁻¹-cong≈ uniti₊l (inj₁≈ {_} {_} {} p)
-prim⁻¹-cong≈ uniti₊l (inj₂≈ p) = p
-prim⁻¹-cong≈ unite₊r ⋆≈ = inj₁≈ ⋆≈
-prim⁻¹-cong≈ unite₊r (#p≈ p^i p^j x) = inj₁≈ (#p≈ p^i p^j x)
-prim⁻¹-cong≈ unite₊r (1/#p≈ q p₁ p₂ x) = inj₁≈ (1/#p≈ q p₁ p₂ x)
-prim⁻¹-cong≈ unite₊r (𝟙ₚ≈ q eq) = inj₁≈ (𝟙ₚ≈ q eq)
-prim⁻¹-cong≈ unite₊r ([,]≈ p p₁) = inj₁≈ ([,]≈ p p₁)
-prim⁻¹-cong≈ unite₊r (inj₁≈ p) = inj₁≈ (inj₁≈ p)
-prim⁻¹-cong≈ unite₊r (inj₂≈ p) = inj₁≈ (inj₂≈ p)
-prim⁻¹-cong≈ uniti₊r (inj₁≈ p) = p
-prim⁻¹-cong≈ uniti₊r (inj₂≈ {_} {_} {} p)
-prim⁻¹-cong≈ swap₊ (inj₁≈ p) = inj₂≈ p
-prim⁻¹-cong≈ swap₊ (inj₂≈ p) = inj₁≈ p
-prim⁻¹-cong≈ assocl₊ (inj₁≈ (inj₁≈ x)) = inj₁≈ x
-prim⁻¹-cong≈ assocl₊ (inj₁≈ (inj₂≈ x)) = inj₂≈ (inj₁≈ x)
-prim⁻¹-cong≈ assocl₊ (inj₂≈ p) = inj₂≈ (inj₂≈ p)
-prim⁻¹-cong≈ assocr₊ (inj₁≈ p) = inj₁≈ (inj₁≈ p)
-prim⁻¹-cong≈ assocr₊ (inj₂≈ (inj₁≈ x)) = inj₁≈ (inj₂≈ x)
-prim⁻¹-cong≈ assocr₊ (inj₂≈ (inj₂≈ x)) = inj₂≈ x
-prim⁻¹-cong≈ unite⋆l ⋆≈ = [,]≈ ⋆≈ ⋆≈
-prim⁻¹-cong≈ unite⋆l (#p≈ p^i p^j x) = [,]≈ ⋆≈ (#p≈ p^i p^j x)
-prim⁻¹-cong≈ unite⋆l (1/#p≈ q p₁ p₂ x) = [,]≈ ⋆≈ (1/#p≈ q p₁ p₂ x)
-prim⁻¹-cong≈ unite⋆l (𝟙ₚ≈ q eq) = [,]≈ ⋆≈ (𝟙ₚ≈ q eq)
-prim⁻¹-cong≈ unite⋆l ([,]≈ p p₁) = [,]≈ ⋆≈ ([,]≈ p p₁)
-prim⁻¹-cong≈ unite⋆l (inj₁≈ p) = [,]≈ ⋆≈ (inj₁≈ p)
-prim⁻¹-cong≈ unite⋆l (inj₂≈ p) = [,]≈ ⋆≈ (inj₂≈ p)
-prim⁻¹-cong≈ uniti⋆l ([,]≈ p p₁) = p₁
-prim⁻¹-cong≈ unite⋆r ⋆≈ = [,]≈ ⋆≈ ⋆≈
-prim⁻¹-cong≈ unite⋆r (#p≈ p^i p^j x) = [,]≈ (#p≈ p^i p^j x) ⋆≈
-prim⁻¹-cong≈ unite⋆r (1/#p≈ q p₁ p₂ x) = [,]≈ (1/#p≈ q p₁ p₂ x) ⋆≈
-prim⁻¹-cong≈ unite⋆r (𝟙ₚ≈ q eq) = [,]≈ (𝟙ₚ≈ q eq) ⋆≈
-prim⁻¹-cong≈ unite⋆r ([,]≈ p p₁) = [,]≈ ([,]≈ p p₁) ⋆≈
-prim⁻¹-cong≈ unite⋆r (inj₁≈ p) = [,]≈ (inj₁≈ p) ⋆≈
-prim⁻¹-cong≈ unite⋆r (inj₂≈ p) = [,]≈ (inj₂≈ p) ⋆≈
-prim⁻¹-cong≈ uniti⋆r ([,]≈ p p₁) = p
-prim⁻¹-cong≈ swap⋆ ([,]≈ p p₁) = [,]≈ p₁ p
-prim⁻¹-cong≈ assocl⋆ ([,]≈ ([,]≈ x x₁) p₁) = [,]≈ x ([,]≈ x₁ p₁)
-prim⁻¹-cong≈ assocr⋆ ([,]≈ p ([,]≈ x x₁)) = [,]≈ ([,]≈ p x) x₁
-prim⁻¹-cong≈ absorbr ()
-prim⁻¹-cong≈ absorbl ()
-prim⁻¹-cong≈ factorzr ([,]≈ p p₁) = p₁
-prim⁻¹-cong≈ factorzl ([,]≈ p p₁) = p
-prim⁻¹-cong≈ dist (inj₁≈ ([,]≈ x x₁)) = [,]≈ (inj₁≈ x) x₁
-prim⁻¹-cong≈ dist (inj₂≈ ([,]≈ x x₁)) = [,]≈ (inj₂≈ x) x₁
-prim⁻¹-cong≈ factor ([,]≈ (inj₁≈ x) p₁) = inj₁≈ ([,]≈ x p₁)
-prim⁻¹-cong≈ factor ([,]≈ (inj₂≈ x) p₁) = inj₂≈ ([,]≈ x p₁)
-prim⁻¹-cong≈ distl (inj₁≈ ([,]≈ x x₁)) = [,]≈ x (inj₁≈ x₁)
-prim⁻¹-cong≈ distl (inj₂≈ ([,]≈ x x₁)) = [,]≈ x (inj₂≈ x₁)
-prim⁻¹-cong≈ factorl ([,]≈ p (inj₁≈ x)) = inj₁≈ ([,]≈ p x)
-prim⁻¹-cong≈ factorl ([,]≈ p (inj₂≈ x)) = inj₂≈ ([,]≈ p x)
-prim⁻¹-cong≈ id⟷ ⋆≈ = ⋆≈
-prim⁻¹-cong≈ id⟷ (#p≈ p^i p^j x) = #p≈ p^i p^j x
-prim⁻¹-cong≈ id⟷ (1/#p≈ q p₁ p₂ x) = 1/#p≈ q p₁ p₂ x
-prim⁻¹-cong≈ id⟷ (𝟙ₚ≈ q eq) = 𝟙ₚ≈ q eq
-prim⁻¹-cong≈ id⟷ ([,]≈ p p₁) = [,]≈ p p₁
-prim⁻¹-cong≈ id⟷ (inj₁≈ p) = inj₁≈ p
-prim⁻¹-cong≈ id⟷ (inj₂≈ p) = inj₂≈ p
+prim⁻¹-cong≈ c eq = {!!}
+-}
