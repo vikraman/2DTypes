@@ -95,8 +95,8 @@ mutual
   cong≈ (η+ c) ⋆≈ = tangr≈
   cong≈ (ε+ c) tangr≈ = ⋆≈
   cong≈ (ε- p) tangl≈ = ⋆≈
-  cong≈ synchl⋆ {[ .(comb x₂) , tangl x ]} {[ .(comb x₃) , tangl x₁ ]} ([,]≈ (#p≈ (comb x₂) (comb x₃) x₄) tangl≈) = [,]≈ tangr≈ (#p≈ (comb x₂) (comb x₃) x₄)
-  cong≈ synchr⋆ {[ tangr p , comb c ]} {[ tangr q , comb d ]} ([,]≈ tangr≈ (#p≈ _ _ x)) = [,]≈ (#p≈ (comb c) (comb d) x) tangl≈
+  cong≈ synchl⋆ {[ _ , tangl x ]} {[ _ , tangl x₁ ]} ([,]≈ (#p≈ x₄) tangl≈) = [,]≈ tangr≈ (#p≈ x₄)
+  cong≈ synchr⋆ {[ tangr p , _ ]} {[ tangr q , _ ]} ([,]≈ tangr≈ (#p≈ x)) = [,]≈ (#p≈ x) tangl≈
   -- cong≈ (app-num// f) v = tangr≈
   -- cong≈ (app-num\\ f) v = tangl≈
 
@@ -119,7 +119,7 @@ cong⁻¹≈ (η- p) eq = ⋆≈
 cong⁻¹≈ (η+ p) eq = ⋆≈
 cong⁻¹≈ (ε+ c) {⋆} {⋆} eq = tangr≈
 cong⁻¹≈ (ε- c) {⋆} {⋆} eq = tangl≈
-cong⁻¹≈ synchr⋆ {[ .x₂ , tangl x ]} {[ .w , tangl x₁ ]} ([,]≈ (#p≈ x₂ w x₃) tangl≈) = [,]≈ tangr≈ (#p≈ x₂ w x₃)
+cong⁻¹≈ synchr⋆ {[ _ , tangl x ]} {[ _ , tangl x₁ ]} ([,]≈ (#p≈ x₃) tangl≈) = [,]≈ tangr≈ (#p≈ x₃)
 cong⁻¹≈ synchl⋆ {[ tangr x , v₁ ]} {[ tangr x₁ , w₁ ]} ([,]≈ eq eq₁) = [,]≈ eq₁ tangl≈
 -- cong⁻¹≈ (app-num// f) v = tangr≈
 -- cong⁻¹≈ (app-num\\ f) v = tangl≈
