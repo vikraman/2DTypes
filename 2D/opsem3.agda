@@ -217,6 +217,27 @@ lemma-1 c v = trans≈ (sym≈ (bwd-coherence c (𝓐𝓹 c v))) (bwd◎fwd≈id
 lemma-2 : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹 c (𝓐𝓹 (! c) v) ≈ v
 lemma-2 c v = trans≈ (cong≈ c (sym≈ (bwd-coherence c v))) (fwd◎bwd≈id c v)
 
+lemma-3 : {T₁ T₂ T₃ : U} → (c₁ : T₁ ⟷ T₂) (c₂ : T₂ ⟷ T₃) → (v : Val T₁) → 𝓐𝓹 (c₁ ◎ c₂) v ≈ 𝓐𝓹 c₂ (𝓐𝓹 c₁ v)
+lemma-3 c₁ c₂ ⋆ = refl≈ refl
+lemma-3 c₁ c₂ (inl v) = refl≈ refl
+lemma-3 c₁ c₂ (inr v) = refl≈ refl
+lemma-3 c₁ c₂ [ v₁ , v₂ ] = refl≈ refl
+lemma-3 c₁ c₂ (comb x) = refl≈ refl
+lemma-3 c₁ c₂ (tangr x) = refl≈ refl
+lemma-3 c₁ c₂ (tangl x) = refl≈ refl
+
+lemma-4 : {T : U} → (v : Val T) → 𝓐𝓹 (Prim id⟷) v ≈ v
+lemma-4 v = refl≈ refl
+
+lemma-5 : {T₁ T₂ T₃ : U} → (c₁ : T₁ ⟷ T₂) (c₂ : T₂ ⟷ T₃) → (v : Val T₃) → 𝓐𝓹⁻¹ (c₁ ◎ c₂) v ≈ 𝓐𝓹⁻¹ c₁ (𝓐𝓹⁻¹ c₂ v)
+lemma-5 c₁ c₂ ⋆ = refl≈ refl
+lemma-5 c₁ c₂ (inl v) = refl≈ refl
+lemma-5 c₁ c₂ (inr v) = refl≈ refl
+lemma-5 c₁ c₂ [ v , v₁ ] = refl≈ refl
+lemma-5 c₁ c₂ (comb x) = refl≈ refl
+lemma-5 c₁ c₂ (tangr x) = refl≈ refl
+lemma-5 c₁ c₂ (tangl x) = refl≈ refl
+
 fwd-2-coherence : {T₁ T₂ : U} → (c₁ c₂ : T₁ ⟷ T₂) → (p : c₁ ⇔ c₂) → (v : Val T₁) → 𝓐𝓹 c₁ v ≈ 𝓐𝓹 c₂ v
 fwd-2-coherence _ _ assoc◎l v = refl≈ refl
 fwd-2-coherence _ _ assoc◎r v = refl≈ refl
