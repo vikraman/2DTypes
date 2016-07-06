@@ -24,7 +24,7 @@
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Amr says: #1}\end{minipage}}}
 \newcommand{\vic}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Vikraman says: #1}\end{minipage}}}
 
-\newcommand{\pifrac}{\Pi^/}
+\newcommand{\pifrac}{\ensuremath{\Pi^/}}
 \newcommand{\iso}{\leftrightarrow}
 \newcommand{\isotwo}{\Leftrightarrow}
 \newcommand{\alt}{~|~}
@@ -339,19 +339,21 @@ negative numbers (debts and loans) in finance.
 programs preserve information and hence preserve cardinality. As the
 cardinality of the type $n \times \frac{1}{n}$ is~1 (for non-zero
 $n$), $\pifrac$ has, for example, terms of type $\ot \rightarrow (8
-\times \frac{1}{8})$. Such terms take the unit type $\ot$ with entropy
-$\log{1} = 0$ to the type $8 \times \frac{1}{8}$ with entropy $\log{8}
-+ (- \log{8}) = 3 - 3 = 0$. The entropy is globally preserved as
-desired and expected. But interestingly, the term introduces, locally,
-two types that have entropies of $3$ and $-3$ respectively. Even
-though the positive and negative parts must maintain some
-``synchronization,'' they can be further processed independently under
-some conditions. The most important condition is that the entire
-system must be information-preserving as this ensures that the net
-positive and negative entropies must eventually cancel out by a use of
-a term of the reverse type $(8 \times \frac{1}{8}) \rightarrow
-\ot$. The simplest way to appreciate the expressiveness afforded by
-such a mechanism is the following credit card analogy. Think of the
+\times \frac{1}{8})$.\footnote{As will be explained in the following
+sections, the actual type on the right is a dependent type.} Such
+terms take the unit type $\ot$ with entropy $\log{1} = 0$ to the type
+$8 \times \frac{1}{8}$ with entropy $\log{8} + (- \log{8}) = 3 - 3 =
+0$. The entropy is globally preserved as desired and expected. But
+interestingly, the term introduces, locally, two types that have
+entropies of $3$ and $-3$ respectively. Even though the positive and
+negative parts must maintain some ``synchronization,'' they can be
+further processed independently under some conditions. The most
+important condition is that the entire system must be
+information-preserving as this ensures that the net positive and
+negative entropies must eventually cancel out by a use of a term of
+the reverse type $(8 \times \frac{1}{8}) \rightarrow \ot$. The
+simplest way to appreciate the expressiveness afforded by such a
+mechanism is the following credit card analogy. Think of the
 computation of type $\ot \rightarrow (8 \times \frac{1}{8})$ as
 creating, from nothing, an amount of money to be paid to the merchant
 instantly, together with a corresponding debt that propagates through
@@ -360,16 +362,20 @@ the debt must eventually be reconciled by an equivalent amount of
 money (perhaps in another currency) present elsewhere. The underlying
 computational process by which such reconciliation happens is
 subtle. Briefly speaking, if the positive and negative information are
-treated completely independently, the computation must involve a
-speculative guess of the amount of money to create that is confirmed
-at the point of actual consumption perhaps using backtracking or
-global references. An alternative idea is capture the ``entanglement''
-between the positive and negative information using dependent
-types. In this introduction, and in the next section, which are aimed
-at conveying high-level ideas and intuitions, we will use explain the
-basic ideas using the familiar backtracking construct. In the formal
-development, we directly capture the dependencies using dependent
-types.
+\emph{treated completely independently}, the computation must involve
+some other form of communication to ensure that the amount of money
+created matches the amount of money consumed. This other form of
+communication can be realized using several familiar computational
+effects such as global references, communication channels, or
+backtracking. An alternative idea is capture the ``entanglement''
+between the positive and negative information using a precise
+dependent type. In this introduction, and in the next section, which
+are aimed at conveying high-level ideas and intuitions, we will
+explain the basic ideas assuming the positive and negative components
+are independent and using an external notion of backtracking to
+reconcile them. After introducing the necessary background and
+notation, we will develop the necessary formalism to capture the
+dependencies using dependent types.
 
 \paragraph*{Correspondence with Commutative Semifields.} Computations
 over finite types naturally emerge from viewing types as syntax for
@@ -474,9 +480,9 @@ perspective and conclude.
 We present two examples that illustrate the novelty of fractional
 types in a programming context. The first example is of a denotational
 flavor showing how to decompose types into components that could be
-processed independently. The second example, of a more operational
-flavor, formalizes the credit card analogy from the introduction as an
-executable program.
+processed concurrently. The second example, of a more operational
+flavor, illustrates the main ideas involved in executing the credit
+card analogy from the introduction.
 
 %%%%%
 \subsection{$\sqrt{n}$ Speedup}
@@ -521,8 +527,10 @@ $2 \frac{1}{3}$ and 3 respectively. Let $C$ be the following type with
   \draw[fill] (6,0) circle [radius=0.05];
 \end{tikzpicture}
 \end{center}
+\noindent The labels on the objects are meant to mnemonic: formally the objects
+would correspond to various iterations of some program. 
 
-\noindent The first step is to write a \emph{reversible} program $p$
+The first step is to write a \emph{reversible} program $p$
 that represents a permutation of $C$ of order 3. For example:
 \[\begin{array}{rcl@{\qquad\qquad\qquad}rcl}
 p(\texttt{sun}) &=& \texttt{mon} & 
@@ -578,10 +586,11 @@ cardinality $o$ and $1/o$. In our case, we get:
 \end{center}
 \end{itemize}
 
-It is a fact that, in $\pifrac$, the trivial one point groupoid has
-the same cardinality as $\order{p} ~\otimes~ 1/\hash p$ for any
-$p$. Indeed taking the product of the particular groupoids $\order{p}$
-and $1/\hash p$ above produces the groupoid:
+Assuming, for simplicity in this section, that positive and negative
+information may be processed completely independently, the trivial one
+point groupoid has the same cardinality as $\order{p} ~\otimes~
+1/\hash p$ for any $p$. Indeed taking the product of the particular
+groupoids $\order{p}$ and $1/\hash p$ above produces the groupoid:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
@@ -669,23 +678,24 @@ arrows to avoid excessive clutter):
 %%%%%
 \subsection{Credit Card Computation} 
  
-We illustrate the speculative creation and annihilation of values with
-the following small example. Let $\textsf{swap}$ be the permutation
-that swaps two elements: it has order 2, i.e.,
-$\textsf{swap}^0 = \textsf{swap}^2 = \textsf{swap} \odot \textsf{swap}
-= \textsf{id}$
-where $\odot$ is the sequential composition of programs.  As explained
+We illustrate the creation and annihilation of values with the
+following small example. Let $\textsf{swap}$ be the permutation that
+swaps two elements: it has order 2, i.e., $\textsf{swap}^0 =
+\textsf{swap}^2 = \textsf{swap} \odot \textsf{swap} = \textsf{id}$
+where $\odot$ is the sequential composition of programs. As explained
 in the previous section, this permutation introduces two types
 $\order{\textsf{swap}}$ and $1/\hash \textsf{swap}$ of cardinality 2
-and $\frac{1}{2}$ respectively. The first type has, up to equivalence,
-two values $\textsf{swap}^0$ (or $\textsf{id}$) and $\textsf{swap}^1$
-(or just $\textsf{swap})$. The second type has also two values which
-we write as $\alpha_{\idiso}$ and $\alpha_{\textsf{swap}}$. These
-values are equivalences expressing a proof of reversibility for
-$\textsf{swap}$. The equivalence $\alpha_{\idiso}$ asserts that
-$\textsf{swap}^0$ has an inverse that annihilates it and the
-equivalence $\alpha_{\textsf{swap}}$ that $\textsf{swap}^1$ has an
-inverse that annihilates it. Given these ingredients, we can write the
+and $\frac{1}{2}$ respectively. The first type $\order{\textsf{swap}}$
+has, up to equivalence, two values $\textsf{swap}^0$ (or
+$\textsf{id}$) and $\textsf{swap}^1$ (or just $\textsf{swap})$. In the
+case of dependent types explained later, the second type
+$\iorder{\textsf{swap}}$ will have one value $\alpha$ which can
+annihilate either of the values in $\order{\textsf{swap}}$ by
+composing them with the right 1-combinator to produce the identity. In
+the current presentation using non-dependent types, we will think of
+$\alpha$ as having two instances: one $\alpha_{\idiso}$ which can
+annihilate the \textsf{id} and one $\alpha_{\textsf{swap}}$ which can
+annihilate \textsf{swap}. Given these ingredients, we can write the
 following program in $\pifrac$:
 
 \begin{center}
@@ -710,32 +720,36 @@ following program in $\pifrac$:
 
 \noindent In the figure, the wires are labeled by the types of the
 values they may carry and the boxes are cardinality-preserving
-primitives in the language. Their types are as follows:
+primitives in the language. A good approximation of their types for
+the purposes of this section is:
+
 \[\begin{array}{rcccl}
-\tau &:& \textsf{unit}_\times &:& \tau \times \ot \\
-\ot &:& \eta_{\textsf{swap}} &:& \order{\textsf{swap}} \times 1/\hash \textsf{swap} \\
-\order{\textsf{swap}} \times 1/\hash \textsf{swap} &:& \epsilon_{\textsf{swap}} &:& \ot
+\tau &:& \textsf{unit}_\times &:& \tau \otimes \ot \\
+\ot &:& \eta_{\textsf{swap}} &:& \order{\textsf{swap}} \otimes 1/\hash \textsf{swap} \\
+\order{\textsf{swap}} \otimes 1/\hash \textsf{swap} &:& \epsilon_{\textsf{swap}} &:& \ot
 \end{array}\]
 
 As is common in string diagrams for
 categories~\cite{selinger-graphical}, we elide associativity in the
 figure. When $\eta_{\textsf{swap}}$ executes, it consumes the unique
 value of type $\ot$ and it must produce a pair of values of the given
-types. To maintain reversibility, $\eta_{\textsf{swap}}$ produces a
-program and the equivalence necessary to annihilate it which limits
-the choices to $(\idiso,\alpha_{\idiso})$ or to
+types. To maintain reversibility, the only choices are a program and
+the equivalence that annihilates it so the choices are limited to
+$(\idiso,\alpha_{\idiso})$ and
 $(\textsf{swap},\alpha_{\textsf{swap}})$. At this point, there is not
 enough information to commit to either choice. The situation is
 analogous to several classical ones which involve speculative
-computation and can be resolved using the same techniques. In the
-following we use a backtracking approach in which
-$\eta_{\textsf{swap}}$ speculatively chooses
-$(\idiso,\alpha_{\idiso})$ as its initial value and adjusts its choice
-if it is not consistent with the upstream constraints. Other
-implementation techniques are possible as explained in
-Sec.~6. Assuming the backtracking approach, there are two execution
-scenarios depending on which input is given to the circuit. If the
-input is $\textsf{swap}$, we have the following situation:
+computation and can be resolved using the same techniques. One
+possibility is to speculatively choose a pair of values and backtrack
+if the choice proves incorrect. In the following we use this
+backtracking approach in which $\eta_{\textsf{swap}}$ speculatively
+chooses $(\idiso,\alpha_{\idiso})$ as its initial value and adjusts
+its choice if it is not consistent with the upstream constraints. Once
+the types of the constructs are made dependent, the implementation can
+avoid backtracking and use the dataflow dependencies to reconcile the
+values as shown in Sec.~6. For now, there are two execution scenarios
+depending on which input is given to the circuit. If the input is
+$\textsf{swap}$, we have the following situation:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
