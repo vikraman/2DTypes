@@ -47,10 +47,10 @@ mutual
   𝓐𝓹 (c ⊗ c₁) [ v , w ] = [ 𝓐𝓹 c v , 𝓐𝓹 c₁ w ]
   -- 𝓐𝓹 ap⟷ [ comb < i , q , α > , v₁ ] = [ (comb < i , q , α >) , (𝓐𝓹 q v₁) ]
   -- 𝓐𝓹 ap⁻¹⟷ [ comb x , v₁ ] = [ (comb x) , (𝓐𝓹⁻¹ (Iter.q x) v₁) ]
-  𝓐𝓹 (η- c) ⋆ = tangl (λ { q → q & id⇔ }) -- [ (1/comb ⟪ c , id⇔ ⟫) , comb < i , c ^ i , id⇔ > ]
-  𝓐𝓹 (η+ c) ⋆ = tangr ((λ { q → q & id⇔ })) -- [ (comb < i , (c ^ i) , id⇔ >) , (1/comb ⟪ c , id⇔ ⟫) ]
-  𝓐𝓹 (ε+ c) p = ⋆ -- [ comb < k , q , α > , 1/comb x₁ ] = 𝟙ₚ (si k α)
-  𝓐𝓹 (ε- c) p = ⋆ -- [ 1/comb x , comb < k , q , α > ] = 𝟙ₚ (si k α)
+  𝓐𝓹 (η- c) ⋆ = tangl (λ { q → q & id⇔ })
+  𝓐𝓹 (η+ c) ⋆ = tangr ((λ { q → q & id⇔ }))
+  𝓐𝓹 (ε+ c) p = ⋆
+  𝓐𝓹 (ε- c) p = ⋆
   𝓐𝓹 synchr⋆ [ tangr x , v ] = [ v , tangl x ]
   𝓐𝓹 synchl⋆ [ v , tangl x ] = [ (tangr x) , v ]
 
@@ -70,7 +70,7 @@ mutual
   𝓐𝓹⁻¹ synchl⋆ [ tangr x , v₁ ] = [ v₁ , tangl x ]
 
 cong≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) {v w : Val T₁} → v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
-cong≈ (Prim x) p = {!!} -- prim-cong≈ x p
+cong≈ (Prim x) {v} {w} p = {!prim-cong≈ x v w p!} -- prim-cong≈ x p
 cong≈ (c₁ ◎ c₂) p = cong≈ c₂ (cong≈ c₁ p)
 cong≈ (c₁ ⊕ c₂) {inl v} {inl w} (inj≈ p) = inj≈ (cong≈ c₁ p)
 cong≈ (c₁ ⊕ c₂) {inl v} {inr w} (inj≈ ())
@@ -101,8 +101,8 @@ cong⁻¹≈ (η- p) eq = ⋆≈
 cong⁻¹≈ (η+ p) eq = ⋆≈
 cong⁻¹≈ (ε+ c) {⋆} {⋆} eq = tangr≈
 cong⁻¹≈ (ε- c) {⋆} {⋆} eq = tangl≈
-cong⁻¹≈ synchr⋆ eq = {!!}
-cong⁻¹≈ synchl⋆ eq = {!!}
+cong⁻¹≈ synchr⋆ {[ .x₂ , tangl x ]} {[ .w , tangl x₁ ]} ([,]≈ (#p≈ x₂ w x₃) tangl≈) = [,]≈ tangr≈ (#p≈ x₂ w x₃)
+cong⁻¹≈ synchl⋆ {[ tangr x , v₁ ]} {[ tangr x₁ , w₁ ]} ([,]≈ eq eq₁) = [,]≈ eq₁ tangl≈
 
 mutual
   fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
