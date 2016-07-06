@@ -1,4 +1,5 @@
-\section{Appendix}
+\appendix
+\section{Agda Construction of Groupoids}
 
 \AgdaHide{
 \begin{code}
