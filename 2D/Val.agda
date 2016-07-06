@@ -90,3 +90,15 @@ sym≈ (inj≈ {v₁ = inr v₁} {inr v₂} e) = inj≈ (sym≈ e)
 sym≈ (tangl≈) = tangl≈
 sym≈ (tangr≈) = tangr≈
 
+open import Relation.Binary
+
+module _ {T : U} where
+  ≈-setoid : Setoid _ _
+  ≈-setoid = record { Carrier = Val T
+                    ; _≈_ = _≈_
+                    ; isEquivalence = record { refl = refl≈ refl
+                                             ; sym = sym≈
+                                             ; trans = trans≈ }
+                    }
+  module EqR where
+    open import Relation.Binary.EqReasoning ≈-setoid public
