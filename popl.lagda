@@ -723,10 +723,11 @@ computation and can be resolved using the same techniques. In the
 following we use a backtracking approach in which
 $\eta_{\textsf{swap}}$ speculatively chooses
 $(\idiso,\alpha_{\idiso})$ as its initial value and adjusts its choice
-if it is not consistent with the upstream constraints. There are two
-execution scenarios depending on which input is given to the
-circuit. If the input is $\textsf{swap}$, we have the following
-situation:
+if it is not consistent with the upstream constraints. Other
+implementation techniques are possible as explained in
+Sec.~6. Assuming the backtracking approach, there are two execution
+scenarios depending on which input is given to the circuit. If the
+input is $\textsf{swap}$, we have the following situation:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
