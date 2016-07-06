@@ -51,7 +51,7 @@ orderC {τ} p = record {
    ; _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
    ; _≡_ = λ _ _ → ⊤
    ; id  = id⇔
-   ; _∘_ = λ B!C A!B → A!B ● B!C
+   ; _∘_ = flip _●_
    ; assoc = tt
    ; identityˡ = tt
    ; identityʳ = tt
@@ -65,14 +65,14 @@ orderC {τ} p = record {
 
 open import Data.Integer as ℤ hiding (∣_∣)
 
+-- special case of div construction when q = Prim id⟷
 1/orderC : (τ : U) → (τ ⟷ τ) → Category _ _ _
 1/orderC τ pp = record {
     Obj = Iter {τ} (Prim id⟷)
-  ; _⇒_ = λ _ _ → Iter pp -- unlike in Val, here we skip the 'trivial' proof
-  ; _≡_ = λ { p q  → Iter.q p ⇔ Iter.q q }
+  ; _⇒_ = λ _ _ → Iter pp
+  ; _≡_ = λ p q  → Iter.q p ⇔ Iter.q q
   ; id = zeroth pp
-  ; _∘_ = λ { < m , p , α > < n , q , β > →
-              < m ℤ.+ n , p ◎ q , α ⊡ β ● 2! (lower m n) > }
+  ; _∘_ = _∘i_
   ; assoc = assoc◎r
   ; identityˡ = idl◎l
   ; identityʳ = idr◎l
@@ -91,7 +91,7 @@ orderG {τ} p = record {
 
 1/orderG : {τ : U} → (p : τ ⟷ τ) → Groupoid (1/orderC τ p)
 1/orderG {τ} p = record {
-    _⁻¹ = λ { < i , q , eq > → < ℤ.- i , ! q , ⇔! eq ● 2! (^⇔! {p = p} i) > }
+    _⁻¹ = inv
   ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
   }
 
@@ -101,8 +101,7 @@ divC {τ} p q = record {
   ; _⇒_ = λ s t → Σ[ iq ∈ Iter q ] ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
   ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
   ; id = λ {A} → zeroth q , idr◎l ● idl◎r
-  ; _∘_ = λ { { < ia , a , αa > } { < ib , b , αb > } { < ic , c , αc > }
-              ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
+  ; _∘_ = λ { ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
                   ( < j , q , αq > ∘i < k , r , αr > , 
                   id⇔ ⊡ ( αq ⊡ αr ● comm-i-j j k) ● assoc◎l ● 
                   (id⇔ ⊡ 2! αr ● pf₂) ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ (id⇔ ⊡ 2! αq ● pf₁) ● 
