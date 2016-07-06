@@ -63,12 +63,9 @@ mutual
     η+ : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ p // p
     ε+ : {t : U} → (p : t ⟷ t) → p // p ⟷ 𝟙
     ε- : {t : U} → (p : t ⟷ t) → p \\ p ⟷ 𝟙
-    -- unite⋆l# :  {t : U} (p : t ⟷ t) → (𝟙# p ⊗ # p) ⟷ # p 
-    -- uniti⋆l# :  {t : U} (p : t ⟷ t) → # p ⟷ (𝟙# p ⊗ # p )
-    -- unite⋆r# :  {t : U} (p : t ⟷ t) → (# p ⊗ 𝟙# p) ⟷ # p
-    -- uniti⋆r# :  {t : U} (p : t ⟷ t) → # p ⟷ (# p ⊗ 𝟙# p)
-    -- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙# c ⟷ 1/# c ⊗ # d)
-    -- coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (1/# c ⊗ # d ⟷ 𝟙# c)
+    -- rather than assocl⋆, we need something to synchronize. Might need 2 more versions?
+    synchr⋆ : {t : U} {p q : t ⟷ t} → (p // q) ⊗ # p ⟷ # p ⊗ (q \\ p)
+    synchl⋆ : {t : U} {p q : t ⟷ t} → # p ⊗ (q \\ p) ⟷ (p // q) ⊗ # p
 
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
@@ -104,12 +101,10 @@ mutual
 ! (ε+ p)    = η+ p
 -- ! ap⟷ = ap⁻¹⟷ 
 -- ! ap⁻¹⟷ = ap⟷
--- ! (unite⋆l# p) = uniti⋆l# p
--- ! (uniti⋆l# p) = unite⋆l# p
--- ! (unite⋆r# p) = uniti⋆r# p
--- ! (uniti⋆r# p) = unite⋆r# p
 -- ! (name f) = coname f
 -- ! (coname f) = name f
+! synchr⋆ = synchl⋆
+! synchl⋆ = synchr⋆
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : ∀ {t₁ t₂ t₃ t₄} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
@@ -143,10 +138,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   -- coherence for compact closed categories
 {-
   ccc₁l : {t : U} {p : t ⟷ t} → 
-         uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
-         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p ⇔ (Prim id⟷)
+         uniti⋆r p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
+         (ε+ p ⊗ Prim id⟷) ◎ unite⋆l p ⇔ (Prim id⟷)
   ccc₁r : {t : U} {p : t ⟷ t} →
-         Prim id⟷ ⇔ uniti⋆r# p ◎ (Prim id⟷ ⊗ η- p) ◎
+         Prim id⟷ ⇔ uniti⋆r p ◎ (Prim id⟷ ⊗ η- p) ◎
          Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p 
   ccc₂l : {t : U} {p : t ⟷ t} →
          (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
@@ -154,21 +149,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   ccc₂r : {t : U} {p : t ⟷ t} →
          Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
          Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
-
-  -- application coherence
-  -- c ⇔ d means applying either is the same
-  resp-ap⟷r : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         (f ⊗ Prim id⟷) ◎ ap⟷ ⇔ ap⟷ ◎ (f ⊗ Prim id⟷)
-  resp-ap⟷l : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         ap⟷ ◎ (f ⊗ Prim id⟷) ⇔ (f ⊗ Prim id⟷) ◎ ap⟷
-  resp-ap⁻¹⟷r : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         ! (f ⊗ Prim id⟷) ◎ ap⁻¹⟷ ⇔ ap⁻¹⟷ ◎ ! (f ⊗ Prim id⟷)
-  resp-ap⁻¹⟷l : {t : U} {c d : t ⟷ t} → (f : # c ⟷ # d) →
-         ap⁻¹⟷ ◎ ! (f ⊗ Prim id⟷) ⇔ ! (f ⊗ Prim id⟷) ◎ ap⁻¹⟷
 -}
-  -- suggested alternate versions
-  -- ccc₁l {t : U} {p : t ⟷ t} →
-  --     uniti⋆r ◎ (id⟷ ⊗ η p) ◎ assocl⋆ ⇔ uniti⋆l ◎ ((η p ◎ swap⋆) ⊗ id⟷)
   
 2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! assoc◎l = assoc◎r
@@ -233,12 +214,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id (ε- p) = id⇔
 -- !!⇔id ap⟷ = id⇔ 
 -- !!⇔id ap⁻¹⟷ = id⇔
--- !!⇔id (unite⋆l# p) = id⇔
--- !!⇔id (uniti⋆l# p) = id⇔
--- !!⇔id (unite⋆r# p) = id⇔
--- !!⇔id (uniti⋆r# p) = id⇔
 -- !!⇔id (name f) = id⇔
 -- !!⇔id (coname f) = id⇔
+!!⇔id synchl⋆ = id⇔
+!!⇔id synchr⋆ = id⇔
 
 ⇔! : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → (p ⇔ q) → (! p ⇔ ! q)
 ⇔! assoc◎l = assoc◎r
