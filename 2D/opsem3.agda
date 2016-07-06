@@ -213,21 +213,18 @@ i₀ i₁ : Iter NOT
 i₀ = zeroth NOT -- essentially id⟷
 i₁ = iter NOT   -- essentially swap⋆
 
+v₀ v₁ : Val (# NOT)
+v₀ = comb i₀
+v₁ = comb i₁
+
 cc₁ cc₂ : Val (# NOT)
-cc₁ = 𝓐𝓹 cc (comb i₀) -- evaluates to i₀
-cc₂ = 𝓐𝓹 cc (comb i₁) -- evaluates to i₁
+cc₁ = 𝓐𝓹 cc v₀ -- evaluates to v₀, on the nose
+cc₂ = 𝓐𝓹 cc v₁ -- evaluates to v₁, on the nose
 
-{-
-eq₁ : cc₁ ≈ v₃
-eq₁ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb < + 1 , Prim swap₊ , idr◎r >)  (idr◎l ⊡ id⇔ ● rinv◎l)) (refl≈ refl)
-
-eq₂ : cc₂ ≈ v₄
-eq₂ = [,]≈ (#p≈ (comb < + 1 , Prim swap₊ ◎ Prim id⟷ , id⇔ >) (comb < + 1 , Prim swap₊ , idr◎r >) (idr◎l ⊡ id⇔ ● rinv◎l)) (refl≈ refl)
--}
 --------------------------------
 -- Various things to check out
--- zig-zag : ∀ {t : U} {c : t ⟷ t} → # c ⟷ # c
--- zig-zag {_} {c} = Prim uniti⋆l ◎ η+ c ⊗ (Prim id⟷) ◎ syncl ◎ (Prim id⟷ ⊗ ε- c) ◎ Prim unite⋆r
+zig-zag : ∀ {t : U} {c : t ⟷ t} → # c ⟷ # c
+zig-zag {_} {c} = Prim uniti⋆l ◎ η+ c ⊗ (Prim id⟷) ◎ synchr⋆ ◎ (Prim id⟷ ⊗ ε- c) ◎ Prim unite⋆r
 
--- zz₁ = 𝓐𝓹 zig-zag v₁ -- get v₃
--- zz₂ = 𝓐𝓹 zig-zag v₂ -- get v₄
+zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
+zig-zag-prop (comb x) = refl≈ refl
