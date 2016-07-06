@@ -100,8 +100,8 @@ mutual
   cong≈ (ε- p) tangl≈ = ⋆≈
   cong≈ synchl⋆ {[ .(comb x₂) , tangl x ]} {[ .(comb x₃) , tangl x₁ ]} ([,]≈ (#p≈ (comb x₂) (comb x₃) x₄) tangl≈) = [,]≈ tangr≈ (#p≈ (comb x₂) (comb x₃) x₄)
   cong≈ synchr⋆ {[ tangr p , comb c ]} {[ tangr q , comb d ]} ([,]≈ tangr≈ (#p≈ _ _ x)) = [,]≈ (#p≈ (comb c) (comb d) x) tangl≈
-  cong≈ (app-num// f) v = {!!}
-  cong≈ (app-num\\ f) v = {!!}
+  cong≈ (app-num// f) v = tangr≈
+  cong≈ (app-num\\ f) v = tangl≈
   
 cong⁻¹≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₂} → v ≈ w → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹⁻¹ c w
 cong⁻¹≈ (Prim x) {v} {w} p = prim⁻¹-cong≈ x v w p
@@ -119,8 +119,8 @@ cong⁻¹≈ (ε+ c) {⋆} {⋆} eq = tangr≈
 cong⁻¹≈ (ε- c) {⋆} {⋆} eq = tangl≈
 cong⁻¹≈ synchr⋆ {[ .x₂ , tangl x ]} {[ .w , tangl x₁ ]} ([,]≈ (#p≈ x₂ w x₃) tangl≈) = [,]≈ tangr≈ (#p≈ x₂ w x₃)
 cong⁻¹≈ synchl⋆ {[ tangr x , v₁ ]} {[ tangr x₁ , w₁ ]} ([,]≈ eq eq₁) = [,]≈ eq₁ tangl≈
-cong⁻¹≈ (app-num// f) v = {!!}
-cong⁻¹≈ (app-num\\ f) v = {!!}
+cong⁻¹≈ (app-num// f) v = tangr≈
+cong⁻¹≈ (app-num\\ f) v = tangl≈
 
 mutual
   fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
@@ -139,8 +139,8 @@ mutual
   fwd◎bwd≈id (ε- c) ⋆ = ⋆≈
   fwd◎bwd≈id synchl⋆ [ tangr x , v₁ ] = refl≈ refl
   fwd◎bwd≈id synchr⋆ [ v , tangl x ] = refl≈ refl
-  fwd◎bwd≈id (app-num// f) v = {!!}
-  fwd◎bwd≈id (app-num\\ f) v = {!!}
+  fwd◎bwd≈id (app-num// f) v = tangr≈
+  fwd◎bwd≈id (app-num\\ f) v = tangl≈
 
   bwd◎fwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → (𝓐𝓹⁻¹ c (𝓐𝓹 c v)) ≈ v
   bwd◎fwd≈id (Prim x) v = refl≈ (prim⁻¹◎prim≡id x v)
@@ -158,8 +158,8 @@ mutual
   bwd◎fwd≈id (ε- c) (tangl x) = tangl≈
   bwd◎fwd≈id synchl⋆ [ v , tangl x ] = refl≈ refl
   bwd◎fwd≈id synchr⋆ [ tangr x , v₁ ] = refl≈ refl
-  bwd◎fwd≈id (app-num// f) v = {!!}
-  bwd◎fwd≈id (app-num\\ f) v = {!!}
+  bwd◎fwd≈id (app-num// f) v = tangr≈
+  bwd◎fwd≈id (app-num\\ f) v = tangl≈
 
 bwd-coherence : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₂) → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
 bwd-coherence (Prim unite₊l) v = inj≈ (refl≈ refl)
@@ -208,8 +208,8 @@ bwd-coherence (ε+ c) ⋆ = tangr≈
 bwd-coherence (ε- c) ⋆ = tangl≈
 bwd-coherence synchl⋆ [ tangr x , v₁ ] = refl≈ refl
 bwd-coherence synchr⋆ [ v , tangl x ] = refl≈ refl
-bwd-coherence (app-num// f) v = {!!}
-bwd-coherence (app-num\\ f) v = {!!}
+bwd-coherence (app-num// f) v = tangr≈
+bwd-coherence (app-num\\ f) v = tangl≈
 
 lemma-1 : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : Val T₁) → 𝓐𝓹 (! c) (𝓐𝓹 c v) ≈ v
 lemma-1 c v = trans≈ (sym≈ (bwd-coherence c (𝓐𝓹 c v))) (bwd◎fwd≈id c v)
@@ -302,8 +302,8 @@ fwd-2-coherence _ _ (_⊡_ {c₁ = c₁} {c₃ = c₃} {c₄ = c₄} p₁ p₂) 
 fwd-2-coherence _ _ (resp⊕⇔ p₁ p₂) (inl v) = inj≈ (fwd-2-coherence _ _ p₁ v)
 fwd-2-coherence _ _ (resp⊕⇔ p₁ p₂) (inr v) = inj≈ (fwd-2-coherence _ _ p₂ v)
 fwd-2-coherence _ _ (resp⊗⇔ p₁ p₂) [ v₁ , v₂ ] = [,]≈ (fwd-2-coherence _ _ p₁ v₁) (fwd-2-coherence _ _ p₂ v₂)
-fwd-2-coherence _ _ (resp-app-num// p) (tangr x) = {!!}
-fwd-2-coherence _ _ (resp-app-num\\ p) (tangl x) = {!!}
+fwd-2-coherence _ _ (resp-app-num// p) (tangr x) = tangr≈
+fwd-2-coherence _ _ (resp-app-num\\ p) (tangl x) = tangl≈
 fwd-2-coherence c₁ c₂ (lift# x) v = {!!}
 fwd-2-coherence _ _ (lift#! x) v = {!!}
 
