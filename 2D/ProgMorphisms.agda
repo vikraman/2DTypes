@@ -31,7 +31,7 @@ data _≡≈_ : {τ : U} {p q : Val τ} (x y : p ≈ q) → Set where
 
 refl# : {τ : U} {p : τ ⟷ τ} {p q : Val τ} {eq : p ≈ q} → eq ≡≈ eq
 refl# {eq = ⋆≈} = ⋆≡
-refl# {eq = #p≈ (comb p^i) (comb p^j) x} = #p≡
+refl# {eq = #p≈ x} = #p≡
 refl# {eq = [,]≈ eq eq₁} = [,]≡
 refl# {eq = inj≈ eq} = inj≡
 refl# {eq = tangr≈} = tangr≡
