@@ -332,38 +332,36 @@ entropy just like we interpret ``negative money,'' as a debt to be
 repaid by some other part of the system. This ability to manipulate
 negative information as a first-class entity enhances $\pifrac$ with
 an expressiveness similar to the one afforded by the presence of
-negative numbers in finance.
+negative numbers (debts and loans) in finance.
 
 \paragraph*{Resource Creation and Annihilation.} In $\pifrac$, all
 programs preserve information and hence preserve cardinality. As the
 cardinality of the type $n \times \frac{1}{n}$ is~1 (for non-zero
-$n$), $\pifrac$ has, for example, terms of type
-$\ot \rightarrow (8 \times \frac{1}{8})$. Such terms take the unit
-type $\ot$ with entropy $\log{1} = 0$ to the type
-$8 \times \frac{1}{8}$ with entropy
-$\log{8} + (- \log{8}) = 3 - 3 = 0$. The entropy is globally preserved
-as desired and expected. But interestingly, the term introduces,
-locally, two types that have entropies of $3$ and $-3$
-respectively. Each of these types can be further processed
-independently and, as long as the entire system is
-information-preserving, the net positive and negative entropies must
-eventually cancel out by a use of a term of the reverse type
-$(8 \times \frac{1}{8}) \rightarrow \ot$. The simplest way to
+$n$), $\pifrac$ has, for example, terms of type $\ot \rightarrow (8
+\times \frac{1}{8})$. Such terms take the unit type $\ot$ with entropy
+$\log{1} = 0$ to the type $8 \times \frac{1}{8}$ with entropy $\log{8}
++ (- \log{8}) = 3 - 3 = 0$. The entropy is globally preserved as
+desired and expected. But interestingly, the term introduces, locally,
+two types that have entropies of $3$ and $-3$ respectively. Each of
+these types can be further processed independently and, as long as the
+entire system is information-preserving, the net positive and negative
+entropies must eventually cancel out by a use of a term of the reverse
+type $(8 \times \frac{1}{8}) \rightarrow \ot$. The simplest way to
 appreciate the expressiveness afforded by such a mechanism is the
-following credit card analogy. Think of the computation of type
-$\ot \rightarrow (8 \times \frac{1}{8})$ as creating, from nothing, an
+following credit card analogy. Think of the computation of type $\ot
+\rightarrow (8 \times \frac{1}{8})$ as creating, from nothing, an
 amount of money to be paid to the merchant instantly, together with a
 corresponding debt that propagates through the system. As long as the
 entire financial system is debt-preserving, the debt must eventually
 be reconciled by an equivalent amount of money (perhaps in another
-currency even) present elsewhere. As described in detail in the next
+currency) present elsewhere. As described in detail in the next
 section, the actual underlying computational process by which such
 reconciliation happens is subtle. Briefly speaking, it involves a
 speculative guess of the amount of money to create that is confirmed
 at the point of actual consumption. More abstractly, fractional types
-enable the \emph{speculative} creation of resources needed at one
-point in the computation while also providing a mechanism that adjusts
-the speculative values based on actual available resources.
+enable the speculative creation of resources needed at one point in
+the computation while also providing a synchronization mechanism that
+adjusts the speculative values based on actual available resources.
 
 \paragraph*{Correspondence with Commutative Semifields.} Computations
 over finite types naturally emerge from viewing types as syntax for
@@ -904,7 +902,7 @@ are only a finite number of possible choices for each value.
 \input{groupoid.tex}
 %% Sec 5 A new language with fractional types and its denotational semantics (mostly reference to sec 4)
 \input{pifrac.tex}
-%% Sec 6 its operational semantics + pragramatics
+%% Sec 6 its operational semantics + pragmatics
 \input{opsem.tex}
 %% Sec 7 limitations; open problems
 \input{limitations.tex} 
@@ -927,8 +925,16 @@ rise to a groupoid with cardinality $\frac{1}{\ord{p}}$. Going from
 this observation to a full programming language required several
 difficult and subtle design choices which we have explored to produce
 $\Pi^/$. The latter language has a natural denotational semantics
-where types denote groupoids and two enlightening operational
-interpretations.
+where types denote groupoids. Its operational semantics requires a
+mechanism to express a computational effect which enables spatially
+separated parts of the program to communicate in a way that is
+reminiscent of entanglement in quantum mechanics. It is possible to
+realize such an operational semantics using global reference cells,
+backtracking, or other conventional technique. A more enlightening and
+less ad hoc implementation encodes the required dependency in dataflow
+constraints encoded in dependent types. The key idea is to generalize
+the usual cartesian product to a \emph{tangled product} in allows the
+components to interact at synchronization points. 
 
 Our fractional types extend the natural denotation of types from sets
 to non-trivial groupoids but they only scratch the surface of the
@@ -940,27 +946,6 @@ $\omega$-groupoids and that provide novel programming abstractions.
 % Need to look again at the 2D type theory papers by Harper et al. One
 % might argue that we have a clean presentation of these ideas. If it is
 % really clear that idea can also be moved to the introduction.
-
-% Instead of modeling the types of $\Pi$ using sets and the combinators using
-% permutations we use a semantics that identifies $\Pi$-combinators with
-% \emph{paths}. More precisely, we model the universe of $\Pi$-types as a space
-% \AgdaFunction{U} whose points are the individual $\Pi$-types (which are
-% themselves spaces \AgdaBound{t} containing points). We then postulate that
-% there is path between the spaces \AgdaBound{t₁} and \AgdaBound{t₂} if there
-% is a $\Pi$-combinator $c : t_1 \iso t_2$. Our postulate is similar in spirit
-% to the univalence axiom but, unlike the latter, it has a simple computational
-% interpretation. A path directly corresponds to a type isomorphism with a
-% clear operational semantics as presented in the previous section. As we will
-% explain in more detail below, this approach replaces the datatype
-% \AgdaSymbol{≡} modeling propositional equality with the datatype
-% \AgdaSymbol{⟷} modeling type isomorphisms. With this switch, the
-% $\Pi$-combinators of Fig.~\ref{pi-combinators} become \emph{syntax} for the
-% paths in the space $U$. Put differently, instead of having exactly one
-% constructor \AgdaInductiveConstructor{refl} for paths with all other paths
-% discovered by proofs (see Secs. 2.5--2.12 of the HoTT
-% book~\citeyearpar{hottbook}) or postulated by the univalence axiom, we have
-% an \emph{inductive definition} that completely specifies all the paths in the
-% space $U$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
