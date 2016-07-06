@@ -19,8 +19,8 @@ data Val : (τ : U) → Set where
   inr :     {τ₁ τ₂ : U} → Val τ₂ → Val (τ₁ ⊕ τ₂)
   [_,_] :   {τ₁ τ₂ : U} → Val τ₁ → Val τ₂ → Val (τ₁ ⊗ τ₂)
   comb :    {τ : U} {p : τ ⟷ τ} → Iter p →  Val (# p)
-  tangr :   {τ : U} {p q : τ ⟷ τ} → ((r : Iter p) → Σ (Iter q) (λ s → Iter.q r ⇔ Iter.q s)) → Val (p // q)
-  tangl :   {τ : U} {p q : τ ⟷ τ} → ((r : Iter q) → Σ (Iter p) (λ s → Iter.q r ⇔ Iter.q s)) → Val (q \\ p)
+  tangr :   {τ : U} {p q : τ ⟷ τ} → ((r : Iter q) → Σ (Iter p) (λ s → Iter.q r ⇔ Iter.q s)) → Val (p // q)
+  tangl :   {τ : U} {q p : τ ⟷ τ} → ((r : Iter q) → Σ (Iter p) (λ s → Iter.q r ⇔ Iter.q s)) → Val (q \\ p)
 
 get-q : {t : U} {p : t ⟷ t} → Val (# p) → t ⟷ t
 get-q (comb i) = Iter.q i
@@ -48,7 +48,7 @@ mutual
     [,]≈ : {s t : U} {v₁ v₂ : Val (s ⊗ t)} → π₁ v₁ ≈ π₁ v₂ → π₂ v₁ ≈ π₂ v₂ → v₁ ≈ v₂
     inj≈ : {s t : U} → {v₁ v₂ : Val (s ⊕ t)} → inj-eq v₁ v₂ → v₁ ≈ v₂
     tangr≈ : {τ : U} {p q : τ ⟷ τ} → {f g : Val (p // q)} → f ≈ g
-    tangl≈ : {τ : U} {p q : τ ⟷ τ} → {f g : Val (q \\ p)} → f ≈ g
+    tangl≈ : {τ : U} {q p : τ ⟷ τ} → {f g : Val (q \\ p)} → f ≈ g
 
 get-equiv : ∀ {t} {p : t ⟷ t} {p^i p^j : Val (# p)} → p^i ≈ p^j → get-q p^i ◎ ! (get-q p^j) ⇔ Prim id⟷
 get-equiv (#p≈ _ _ x) = x
