@@ -54,7 +54,7 @@ $\AgdaInductiveConstructor{ε+}$, and
 $\AgdaInductiveConstructor{ε-}$. As suggested from the example in
 Sec.~2, their implementation requires some kind of speculative
 computation and synchronization. It is possible to implement this
-operational semantics using more general comptuational effects such as
+operational semantics using more general computational effects such as
 reference cells or backtracking. In this section, we instead present a
 semantics in which the dependencies are directly expressed as dataflow
 constraints using dependent types. The key abstraction is that of a
