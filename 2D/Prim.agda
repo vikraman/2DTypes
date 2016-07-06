@@ -214,6 +214,28 @@ prim-cong≈ factorl (inr [ v , v₁ ]) (inr [ w , w₁ ]) (inj≈ ([,]≈ x x�
 prim-cong≈ id⟷ v w eq = eq
 
 {-
-prim⁻¹-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → {v w : Val T₂} → v ≈ w → prim⁻¹ c v ≈ prim⁻¹ c w
-prim⁻¹-cong≈ c eq = {!!}
+prim⁻¹-cong≈ : {T₁ T₂ : U} → (c : Prim⟷ T₁ T₂) → (v w : Val T₂) → v ≈ w → prim⁻¹ c v ≈ prim⁻¹ c w
+prim⁻¹-cong≈ unite₊l v w eq = {!!}
+prim⁻¹-cong≈ uniti₊l v w eq = {!!}
+prim⁻¹-cong≈ unite₊r v w eq = {!!}
+prim⁻¹-cong≈ uniti₊r v w eq = {!!}
+prim⁻¹-cong≈ swap₊ v w eq = {!!}
+prim⁻¹-cong≈ assocl₊ v w eq = {!!}
+prim⁻¹-cong≈ assocr₊ v w eq = {!!}
+prim⁻¹-cong≈ unite⋆l v w eq = {!!}
+prim⁻¹-cong≈ uniti⋆l v w eq = {!!}
+prim⁻¹-cong≈ unite⋆r v w eq = {!!}
+prim⁻¹-cong≈ uniti⋆r v w eq = {!!}
+prim⁻¹-cong≈ swap⋆ v w eq = {!!}
+prim⁻¹-cong≈ assocl⋆ v w eq = {!!}
+prim⁻¹-cong≈ assocr⋆ v w eq = {!!}
+prim⁻¹-cong≈ absorbr v w eq = {!!}
+prim⁻¹-cong≈ absorbl v w eq = {!!}
+prim⁻¹-cong≈ factorzr v w eq = {!!}
+prim⁻¹-cong≈ factorzl v w eq = {!!}
+prim⁻¹-cong≈ dist v w eq = {!!}
+prim⁻¹-cong≈ factor v w eq = {!!}
+prim⁻¹-cong≈ distl v w eq = {!!}
+prim⁻¹-cong≈ factorl v w eq = {!!}
+prim⁻¹-cong≈ id⟷ v w eq = eq
 -}
