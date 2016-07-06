@@ -919,9 +919,23 @@ conventional (i.e., irreversible) programming language, their full
 potential is only achieved when the ambient language guarantees that
 no information is created or erased. 
 
+The key semantic insight is that iterating a reversible program $p$ on
+a finite type must eventually reach the identity in $\ord{p}$
+steps. By being careful not to collapse proofs, each such reversible
+program has $\ord{p}$ distinct proofs of reversibility and hence gives
+rise to a groupoid with cardinality $\frac{1}{\ord{p}}$. Going from
+this observation to a full programming language required several
+difficult and subtle design choices which we have explored to produce
+$\Pi^/$. The latter language has a natural denotational semantics
+where types denote groupoids and two enlightening operational
+interpretations.
+
 Our fractional types extend the natural denotation of types from sets
 to non-trivial groupoids but they only scratch the surface of the
-tower of weak $\omega$-groupoids that is expressible in HoTT. 
+tower of weak $\omega$-groupoids that is expressible in HoTT. A long
+term goal of the research is to find natural type constructors
+inspired by the rich combinatorial structure of weak
+$\omega$-groupoids and that provide novel programming abstractions. 
 
 % Need to look again at the 2D type theory papers by Harper et al. One
 % might argue that we have a clean presentation of these ideas. If it is
