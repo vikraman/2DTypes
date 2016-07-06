@@ -304,8 +304,8 @@ enhance~$\pifrac$ with the same expressiveness afforded by the
 presence of first-class functions in conventional languages.
 
 \paragraph*{Conservation of Information and Negative Entropy.} A type
-with~$n$ elements where $n$ is a non-zero natural number has entropy
-$(\log{n})$. This entropy is a measure of information which
+with~$N$ elements where $N$ is a non-zero natural number has entropy
+$(\log{N})$. This entropy is a measure of information which
 materializes itself in memory or bandwidth requirements when storing
 or transmitting elements of this type. Thus a type with 8 elements
 needs 3 bits of memory for storage or 3 bits of bandwidth for
