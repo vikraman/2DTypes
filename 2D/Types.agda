@@ -263,6 +263,13 @@ open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 inverse⇒⇔ : {τ₁ τ₂ : U} {p q : τ₁ ⟷ τ₂} → p ◎ ! q ⇔ Prim id⟷ → (p ⇔ q)
 inverse⇒⇔ {p = p} {q} pf = idr◎r {c = p} ● (id⇔ ⊡ rinv◎r {c = q}) ● assoc◎l ● pf ⊡ id⇔ ● idl◎l
 
+-- these patterns recur so often, let's name them
+!aab⇔b : {s t u : U} {a : s ⟷ t} {b : t ⟷ u} → ! a ◎ a ◎ b ⇔ b
+!aab⇔b = (assoc◎l ● rinv◎l ⊡ id⇔) ● idl◎l
+
+ab!b⇔a : {s t u : U} {a : s ⟷ t} {b : t ⟷ u} → a ◎ b ◎ ! b ⇔ a
+ab!b⇔a = id⇔ ⊡ linv◎l ● idr◎l
+
 -----------------------
 -- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙 ⟷ c \\ d)
 -- name {_} {c} f = η- c ◎ app-num\\ f
