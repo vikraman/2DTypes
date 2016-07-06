@@ -174,24 +174,24 @@ module popl where
 \maketitle
 
 \begin{abstract}
-We exhibit types whose natural cardinality is fractional.
-More precisely, we show that the groupoid cardinality (as
-defined by Baez-Dolan) of the denotation of the type of
-a singleton reversible program $p$ with exactly $k$ distinct
-proofs of reversibility has cardinality $1/k$.  We further
-show that this type is naturally a multiplicative inverse
-to the type of all iterates $p ^ i$ of that reversible
-program.
+
+We exhibit types whose natural cardinality is fractional.  More
+precisely, we show that the groupoid cardinality (as defined by
+Baez-Dolan) of the denotation of the type of a singleton reversible
+program $p$ with exactly $k$ distinct proofs of reversibility has
+cardinality $1/k$.  We further show that this type is naturally a
+multiplicative inverse to the type of all iterates $p ^ i$ of that
+reversible program.
 
 We situate this work as an extension of a larger reversible
-programming language ($\Pi$), and show that this extension
-is also reversible.  Interestingly, this extension supports
-first-class functions as well as natural analogues of
-operations coming from traced monoidal categories.  We
-emphasize that the key ingredients are reversibility and
-proof relevance: cardinality $1/k$ arises from having
-exactly $k$ proofs of reversibility.  All results have
-been formalized in Agda. 
+programming language ($\Pi$), and show that this extension is also
+reversible.  Interestingly, this extension supports first-class
+functions as well as natural analogues of operations coming from
+compact closed categories.  We emphasize that the key ingredients are
+reversibility and proof relevance: cardinality $1/k$ arises from
+having exactly $k$ proofs of reversibility.  All results have been
+formalized in Agda.
+
 \end{abstract}
 
 %% \category{CR-number}{subcategory}{third-level}
@@ -342,26 +342,33 @@ $n$), $\pifrac$ has, for example, terms of type $\ot \rightarrow (8
 $\log{1} = 0$ to the type $8 \times \frac{1}{8}$ with entropy $\log{8}
 + (- \log{8}) = 3 - 3 = 0$. The entropy is globally preserved as
 desired and expected. But interestingly, the term introduces, locally,
-two types that have entropies of $3$ and $-3$ respectively. Each of
-these types can be further processed independently and, as long as the
-entire system is information-preserving, the net positive and negative
-entropies must eventually cancel out by a use of a term of the reverse
-type $(8 \times \frac{1}{8}) \rightarrow \ot$. The simplest way to
-appreciate the expressiveness afforded by such a mechanism is the
-following credit card analogy. Think of the computation of type $\ot
-\rightarrow (8 \times \frac{1}{8})$ as creating, from nothing, an
-amount of money to be paid to the merchant instantly, together with a
-corresponding debt that propagates through the system. As long as the
-entire financial system is debt-preserving, the debt must eventually
-be reconciled by an equivalent amount of money (perhaps in another
-currency) present elsewhere. As described in detail in the next
-section, the actual underlying computational process by which such
-reconciliation happens is subtle. Briefly speaking, it involves a
+two types that have entropies of $3$ and $-3$ respectively. Even
+though the positive and negative parts must maintain some
+``synchronization,'' they can be further processed independently under
+some conditions. The most important condition is that the entire
+system must be information-preserving as this ensures that the net
+positive and negative entropies must eventually cancel out by a use of
+a term of the reverse type $(8 \times \frac{1}{8}) \rightarrow
+\ot$. The simplest way to appreciate the expressiveness afforded by
+such a mechanism is the following credit card analogy. Think of the
+computation of type $\ot \rightarrow (8 \times \frac{1}{8})$ as
+creating, from nothing, an amount of money to be paid to the merchant
+instantly, together with a corresponding debt that propagates through
+the system. As long as the entire financial system is debt-preserving,
+the debt must eventually be reconciled by an equivalent amount of
+money (perhaps in another currency) present elsewhere. The underlying
+computational process by which such reconciliation happens is
+subtle. Briefly speaking, if the positive and negative information are
+treated completely independently, the computation must involve a
 speculative guess of the amount of money to create that is confirmed
-at the point of actual consumption. More abstractly, fractional types
-enable the speculative creation of resources needed at one point in
-the computation while also providing a synchronization mechanism that
-adjusts the speculative values based on actual available resources.
+at the point of actual consumption perhaps using backtracking or
+global references. An alternative idea is capture the ``entanglement''
+between the positive and negative information using dependent
+types. In this introduction, and in the next section, which are aimed
+at conveying high-level ideas and intuitions, we will use explain the
+basic ideas using the familiar backtracking construct. In the formal
+development, we directly capture the dependencies using dependent
+types.
 
 \paragraph*{Correspondence with Commutative Semifields.} Computations
 over finite types naturally emerge from viewing types as syntax for
