@@ -480,17 +480,22 @@ c÷c {_} c < i , p , α > < j , q , β > =
 unit, sum, and product types.  The next defines values of type
 $\order{p}$: a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
 the program $p$ iterated $k$ times.  We then define general quotient
-types, which come in right-handed and left-handed versions.  They
-both rely on a type $p ÷ q$ which intuitively says that given
-any iterate of $p$ (say $p ^ i$) and any iterate of $q$ (say $q ^ j$),
-we can build a combinator $r$ such that $p ^ i ⇔ r ◎ q ^ j$. This is
-of course exactly $p ^ i ◎ q ^ (- j)$.  We then interpret such a type
-as \emph{containing} all iterates of $p$ as objects, quotiented out
-by iterates of $q$ as relations.  As these are not independent, we
-consider them ``tangled'' (thus the name of the constructor).
+types, which come in right-handed and left-handed versions.  They both
+rely on a type $p ÷ q$ which intuitively says that given any iterate
+of $p$ (say $p ^ i$) and any iterate of $q$ (say $q ^ j$), we can
+build a combinator $r$ such that
+$\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i} ~\AgdaDatatype{⇔}~
+\AgdaBound{r}~\AgdaInductiveConstructor{◎}~\AgdaBound{q}~\AgdaFunction{\^{}}~\AgdaBound{j}$. This
+is of course exactly $\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i}
+~\AgdaInductiveConstructor{◎}~
+\AgdaBound{q}~\AgdaFunction{\^{}}~(\AgdaFunction{-} \AgdaBound{j})$.
+We then interpret such a type as \emph{containing} all iterates of $p$
+as objects, quotiented out by iterates of $q$ as relations.  As these
+are not independent, we consider them ``tangled'' (thus the name of
+the constructor).
 
 It is worthwhile noting two special cases.  First, when $q = \AgdaInductiveConstructor{id⟷}$,
-$p // q$ is then isomorphic to $\AgdaType{Iter} p$.  And when
+$p // q$ is then isomorphic to $\AgdaDatatype{Iter} p$.  And when
 $p = \AgdaInductiveConstructor{id⟷}$, we interpret $p // q$ as
 having a single object with $\order(q)$ symmetries.
 
