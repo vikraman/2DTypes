@@ -59,10 +59,7 @@ $\AgdaInductiveConstructor{ε+}$, and $\AgdaInductiveConstructor{ε-}$.
 {\footnotesize{
 \begin{code}
 mutual
-  
   -- Finite types (cf. Sec. 3.1) extended
-  -- with #p and 1/#p
-
   data U : Set where
     𝟘    : U
     𝟙    : U
@@ -70,10 +67,10 @@ mutual
     _⊗_  : U → U → U
     -- new types
     #    : {τ : U} → (τ ⟷ τ) → U
-    _//_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- # c ⊗ 1/# d, tangled right
-    _\\_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- 1/# d ⊗ # c, tangled left
-  -- Combinators (cf. Fig. 2)
+    _//_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- # c ⊗ 1/# d
+    _\\_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- 1/# d ⊗ # c
 
+  -- Combinators (cf. Fig. 2)
   data Prim⟷ : U → U → Set where
     -- additive monoid
     unite₊l :   {τ : U} → Prim⟷ (𝟘 ⊕ τ) τ
@@ -328,20 +325,13 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 }}}}
 
 As motivated in the previous section, we will also need to consider
-the singleton type $\sing{p}$ including all combinators equivalent to
-$p$ and the type $\iter{p}$ of all the combinators equivalent to
+the type $\iter{p}$ of all the combinators equivalent to
 iterates $p^k$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
 \begin{code}
-record Sing {τ : U} (p : τ ⟷ τ) : Set where
-  constructor ⟪_,_⟫
-  field
-    q : τ ⟷ τ
-    α : q ⇔ p
-
 _^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0)             = id⟷
 p ^ (+ (suc k))       = p ◎ (p ^ (+ k))
@@ -400,7 +390,7 @@ lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
 }
 
 For our running example using the type $\mathbb{3}$ and the combinator
-$a_2$, we list a few elements of $\sing{a_2}$ and $\iter{a_2}$:
+$a_2$, we list a few elements of $\iter{a_2}$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -416,12 +406,6 @@ id[a₂]² : id⟷ ⇔ a₂ ◎ (a₂ ◎ id⟷)
 id[a₂]² =  split⊕-id⟷ ●
            ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
            (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r)))
-
-x y z : Sing a₂
-x = ⟪ a₂ , id⇔ ⟫
-y = ⟪ id⟷ ◎ a₂ , idl◎l ⟫
-z = ⟪  a₂ ◎ (Prim assocr₊ ◎ Prim assocl₊) ,
-       (id⇔ ⊡ rinv◎l) ● idr◎l ⟫ 
 
 p^₀ p^₁ p^₂ p^₃ p^₄ p^₅ : Iter a₂
 p^₀ = < + 0 , id⟷ , id⇔ > 
