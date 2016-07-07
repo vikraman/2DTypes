@@ -59,10 +59,7 @@ $\AgdaInductiveConstructor{ε+}$, and $\AgdaInductiveConstructor{ε-}$.
 {\footnotesize{
 \begin{code}
 mutual
-  
   -- Finite types (cf. Sec. 3.1) extended
-  -- with #p and 1/#p
-
   data U : Set where
     𝟘    : U
     𝟙    : U
@@ -70,10 +67,10 @@ mutual
     _⊗_  : U → U → U
     -- new types
     #    : {τ : U} → (τ ⟷ τ) → U
-    _//_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- # c ⊗ 1/# d, tangled right
-    _\\_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- 1/# d ⊗ # c, tangled left
-  -- Combinators (cf. Fig. 2)
+    _//_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- # c ⊗ 1/# d
+    _\\_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- 1/# d ⊗ # c
 
+  -- Combinators (cf. Fig. 2)
   data Prim⟷ : U → U → Set where
     -- additive monoid
     unite₊l :   {τ : U} → Prim⟷ (𝟘 ⊕ τ) τ
@@ -328,20 +325,13 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 }}}}
 
 As motivated in the previous section, we will also need to consider
-the singleton type $\sing{p}$ including all combinators equivalent to
-$p$ and the type $\iter{p}$ of all the combinators equivalent to
+the type $\iter{p}$ of all the combinators equivalent to
 iterates $p^k$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
 \begin{code}
-record Sing {τ : U} (p : τ ⟷ τ) : Set where
-  constructor ⟪_,_⟫
-  field
-    q : τ ⟷ τ
-    α : q ⇔ p
-
 _^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0)             = id⟷
 p ^ (+ (suc k))       = p ◎ (p ^ (+ k))
@@ -400,7 +390,7 @@ lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
 }
 
 For our running example using the type $\mathbb{3}$ and the combinator
-$a_2$, we list a few elements of $\sing{a_2}$ and $\iter{a_2}$:
+$a_2$, we list a few elements of $\iter{a_2}$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -416,12 +406,6 @@ id[a₂]² : id⟷ ⇔ a₂ ◎ (a₂ ◎ id⟷)
 id[a₂]² =  split⊕-id⟷ ●
            ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
            (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r)))
-
-x y z : Sing a₂
-x = ⟪ a₂ , id⇔ ⟫
-y = ⟪ id⟷ ◎ a₂ , idl◎l ⟫
-z = ⟪  a₂ ◎ (Prim assocr₊ ◎ Prim assocl₊) ,
-       (id⇔ ⊡ rinv◎l) ● idr◎l ⟫ 
 
 p^₀ p^₁ p^₂ p^₃ p^₄ p^₅ : Iter a₂
 p^₀ = < + 0 , id⟷ , id⇔ > 
@@ -459,18 +443,17 @@ x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow
 \tau$ and then provide a separate equivalence relation
 ($\alpha$-equivalence) to express the fact that these two values are
 indistinguishable. The treatment in our setting is similar but richer
-as the equivalence relation is not external but is itself part of the
-value and the resulting count may be fractional. Formally we define
-values as follows:
+as in some cases the equivalence relation is not external but is
+itself part of the value and the resulting count may be fractional.
+Formally we define values as follows:
 
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
 \begin{code}
--- a fraction p ÷ q is a way of identifying r such that p ^ i ◎ ! q ^ j ⇔ r
--- or (equivalently) p ^ i ⇔ r ◎ q ^ j.
 _÷_ : {τ : U} (p q : τ ⟷ τ) → Set
-_÷_ {τ} p q = (pi : Iter p) → (qj : Iter q) → Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
+_÷_ {τ} p q = (pi : Iter p) → (qj : Iter q) →
+  Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
 
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
@@ -494,12 +477,22 @@ c÷c {_} c < i , p , α > < j , q , β > =
 }
 
 \noindent The first four lines define the conventional values for the
-unit, sum, and product types. The last two lines define values of type
-$\order{p}$ and $\iorder{p}$ using the iterates of $p$. In the case of
-$\order{p}$, a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
-the program $p$ iterated $k$ times. In the case of $\iorder{p}$, a
-value $\AgdaInductiveConstructor{1/comb}(p^k)$ represents the
-equivalence that $p^k$ can be annihilated to the identity. 
+unit, sum, and product types.  The next defines values of type
+$\order{p}$: a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
+the program $p$ iterated $k$ times.  We then define general quotient
+types, which come in right-handed and left-handed versions.  They
+both rely on a type $p ÷ q$ which intuitively says that given
+any iterate of $p$ (say $p ^ i$) and any iterate of $q$ (say $q ^ j$),
+we can build a combinator $r$ such that $p ^ i ⇔ r ◎ q ^ j$. This is
+of course exactly $p ^ i ◎ q ^ (- j)$.  We then interpret such a type
+as \emph{containing} all iterates of $p$ as objects, quotiented out
+by iterates of $q$ as relations.  As these are not independent, we
+consider them ``tangled'' (thus the name of the constructor).
+
+It is worthwhile noting two special cases.  First, when $q = \AgdaInductiveConstructor{id⟷}$,
+$p // q$ is then isomorphic to $\AgdaType{Iter} p$.  And when
+$p = \AgdaInductiveConstructor{id⟷}$, we interpret $p // q$ as
+having a single object with $\order(q)$ symmetries.
 
 % Formally we declare when two values are indistinguishable using the
 % relation below:
