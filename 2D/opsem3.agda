@@ -310,6 +310,15 @@ fwd-2-coherence _ _ (resp⊕⇔ p₁ p₂) (inr v) = inj≈ (fwd-2-coherence _ _
 fwd-2-coherence _ _ (resp⊗⇔ p₁ p₂) [ v₁ , v₂ ] = [,]≈ (fwd-2-coherence _ _ p₁ v₁) (fwd-2-coherence _ _ p₂ v₂)
 -- fwd-2-coherence _ _ (resp-app-num// p) (tangr x) = tangr≈
 -- fwd-2-coherence _ _ (resp-app-num\\ p) (tangl x) = tangl≈
+fwd-2-coherence _ _ hom⊕◎⇔ (inl v) = inj≈ (refl≈ refl)
+fwd-2-coherence _ _ hom⊕◎⇔ (inr v) = inj≈ (refl≈ refl)
+fwd-2-coherence _ _ hom◎⊕⇔ (inl v) = inj≈ (refl≈ refl)
+fwd-2-coherence _ _ hom◎⊕⇔ (inr v) = inj≈ (refl≈ refl)
+fwd-2-coherence .(Prim id⟷) .(Prim id⟷ ⊕ Prim id⟷) split⊕-id⟷ (inl v) = refl≈ refl
+fwd-2-coherence .(Prim id⟷) .(Prim id⟷ ⊕ Prim id⟷) split⊕-id⟷ (inr v) = refl≈ refl
+fwd-2-coherence .(Prim id⟷ ⊕ Prim id⟷) .(Prim id⟷) id⟷⊕id⟷⇔ (inl v) = refl≈ refl
+fwd-2-coherence .(Prim id⟷ ⊕ Prim id⟷) .(Prim id⟷) id⟷⊕id⟷⇔ (inr v) = refl≈ refl
+
 
 ------
 -- Examples
