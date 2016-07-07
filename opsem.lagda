@@ -191,6 +191,14 @@ fwd-2-coherence :  {τ₁ τ₂ : U} → (c₁ c₂ : τ₁ ⟷ τ₂) →
 fwd-2-coherence = {!!} -- omitted
 \end{code}}
 
+The operational definition of \AgdaInductiveConstructor{synchr⋆} might seem at
+odds with our claim that it is related to associativity while it looks like
+commutativity.  The way to understand it is as follows: if indeed all values
+were indepedendent, it would be associativity.  However, in this case,
+$p // q$ is really two \emph{tangled} values, which we do not have access to.
+To keep these synchronized and yet to achieve the given type, the only choice
+(operationally) is to swap.  This is where the ``action at a distance'' occurs.
+
 %%%%%%%
 \subsection{Examples} 
 

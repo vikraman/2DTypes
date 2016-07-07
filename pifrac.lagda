@@ -84,9 +84,11 @@ $\AgdaInductiveConstructor{\textbackslash\textbackslash}$. The two
 remaining combinators are \AgdaInductiveConstructor{synchr⋆} and
 \AgdaInductiveConstructor{synchl⋆} which, as their names suggest,
 perform a form of synchronization between positive and negative
-information. Their precise semantics will be discussed in the next
+information. Their precise semantics will be given in the next
 section but for now it is useful to think of them as generalized
-versions of associativity.
+versions of associativity: they come from translating
+the operation $\left(A \otimes A^*\right) \otimes A \rightarrow
+A \otimes\left(A^* \otimes A\right)$ and its inverse to our setting.
 
 {\setlength{\mathindent}{0cm}
 \medskip
