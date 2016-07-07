@@ -527,7 +527,7 @@ $2 \frac{1}{3}$ and 3 respectively. Let $C$ be the following type with
   \draw[fill] (6,0) circle [radius=0.05];
 \end{tikzpicture}
 \end{center}
-\noindent The labels on the objects are meant to mnemonic: formally the objects
+\noindent The labels on the objects are meant to be mnemonic: formally the objects
 would correspond to various iterations of some program. 
 
 The first step is to write a \emph{reversible} program $p$
@@ -549,13 +549,13 @@ $p^1$ is equivalent to $p^4, p^{-2}, p^7, p^{-5}, \ldots$, and that
 $p^2$ is equivalent to $p^5, p^{-1}, p^8, p^{-4}, \ldots$ where the
 negative powers are interpreted as applying the program in
 reverse. Furthermore we have that composing $p^i$ and $p^j$ is the
-identity if $i+j = 0\pmod{3}$. 
+identity if $i+j \equiv 0\pmod{3}$. 
 
 As explained in Sec.~\ref{sec:groupoids}, the definition of any $p$
 representing a permutation of order $o$ will induce two groupoids of
 cardinality $o$ and $1/o$. In our case, we get:
 \begin{itemize}
-\item a first groupoid which we denote $\order{p}$ and which has (up
+\item a first groupoid which we denote by $\order{p}$ and which has (up
   to equivalence) three clusters of objects corresponding to each
   distinct (up to equivalence) iteration of $p$. (We omit the identity
   arrows in the figure.) It has cardinality $3$:
@@ -570,7 +570,7 @@ cardinality $o$ and $1/o$. In our case, we get:
   \draw[fill] (2,0) circle [radius=0.05];
 \end{tikzpicture}
 \end{center}
-\item a second groupoid which we denote $1/\hash p$ and which has one
+\item a second groupoid which we denote by $1/\hash p$ and which has one
   trivial object and an equivalence for each distinct iteration of~$p$
   showing that it can be annihilated to the identity by composing it
   with its inverse. (We explicitly include the identity arrow to
@@ -694,7 +694,7 @@ annihilate either of the values in $\order{\textsf{swap}}$ by
 composing them with the right 1-combinator to produce the identity. In
 the current presentation using non-dependent types, we will think of
 $\alpha$ as having two instances: one $\alpha_{\idiso}$ which can
-annihilate the \textsf{id} and one $\alpha_{\textsf{swap}}$ which can
+annihilate \textsf{id} and one $\alpha_{\textsf{swap}}$ which can
 annihilate \textsf{swap}. Given these ingredients, we can write the
 following program in $\pifrac$:
 
@@ -776,10 +776,10 @@ $\textsf{swap}$, we have the following situation:
 \end{tikzpicture}
 \end{center}
 
-\noindent In the figure, the values of each type is shown in red under
-the corresponding wire. Execution has proceed until the active
+\noindent In the figure, the values of each type are shown in red under
+the corresponding wire. Execution proceeds until the active
 combinator $\epsilon_{\textsf{swap}}$ (shown in blue). This combinator
-has received a pair of mismatched values which it cannot
+receives a pair of mismatched values which it cannot
 annihilate. It therefore reverses execution to force
 $\eta_{\textsf{swap}}$ to alter its choice:
 
@@ -812,7 +812,7 @@ $(\textsf{swap},\alpha_{\textsf{swap}})$ and resumes forward
 execution. This guess proves to be the correct one to match the input
 value and the entire circuit terminates with the value
 $\textsf{swap}$. Of course the initial input could have been $\idiso$
-in which case no backtracking would have been needed. The set up
+in which case no backtracking would have been needed. The setup
 generalizes to arbitrary reversible programs $p$ with finite order:
 the back-and-forth negotiation is guaranteed to terminate as there
 are only a finite number of possible choices for each value.
