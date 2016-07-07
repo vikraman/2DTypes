@@ -66,8 +66,8 @@ a computational effect that requires synchronization with the
 ``future.'' Implementing this effect using backtracking, reference
 cells, or dataflow constraints is possible but each implementation
 choice is ad hoc. We conjecture that with the right monadic and/or
-comonadic abstraction, the operational semantics will be simpler and
-evidently reversible. 
+comonadic abstraction, the operational semantics will be simpler
+exposing richer properties. 
 
 %% not reversible; no inverses for all types; limited to 2-groupoids
 
