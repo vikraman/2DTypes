@@ -50,13 +50,16 @@ Sec.~\ref{sec:pi} except for the addition of type constructors for
 building non-trivial groupoids. In principle, we just need one type
 constructor whose denotation is a division groupoid. For convenience,
 we add more type constructors: \AgdaInductiveConstructor{\#},
-\AgdaInductiveConstructor{//}, and \AgdaInductiveConstructor{\\} such
-that $\AgdaInductiveConstructor{\#}~\AgdaBound{p}$ denotes an
-iteration groupoid, and both
+\AgdaInductiveConstructor{//}, and
+\AgdaInductiveConstructor{\textbackslash\textbackslash} such that
+$\AgdaInductiveConstructor{\#}~\AgdaBound{p}$ denotes an iteration
+groupoid, and both
 $\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ and
-$\AgdaBound{q}~\AgdaInductiveConstructor{\\}~\AgdaBound{p}$ denote
-$\divg{p}{q}$. There is no primitive that denotes $\iorder{p}$ but
-this groupoid can be denoted using
+$\AgdaBound{q}~\AgdaInductiveConstructor{\textbackslash\textbackslash}~\AgdaBound{p}$
+denote the division groupoid $\divg{p}{q}$. Having both versions
+simplifies some of the code avoid series of swaps. There is no
+primitive that denotes $\iorder{p}$ but this groupoid can be denoted
+using
 $\AgdaInductiveConstructor{id⟷}~\AgdaInductiveConstructor{//}~\AgdaBound{p}$
 for example.
 
@@ -64,7 +67,27 @@ The definition of 1-combinators is also identical to the presentation
 in Sec.~\ref{sec:pi} except for the addition of
 $\AgdaInductiveConstructor{η-}$, $\AgdaInductiveConstructor{η+}$,
 $\AgdaInductiveConstructor{ε+}$, $\AgdaInductiveConstructor{ε-}$, and
-\AgdaInductiveConstructor{synchr⋆}, and \AgdaInductiveConstructor{synchl⋆}.
+\AgdaInductiveConstructor{synchr⋆}, and 
+\AgdaInductiveConstructor{synchl⋆} which have the following
+explanation. The first constructors are inspired by similar morphisms
+from \emph{compact closed categories} which are the general framework
+for categories whose objects have duals~\cite{ccc}. In that setting,
+the dual $A^*$ of an object $A$ comes equipped with two morphisms:
+\begin{itemize}
+\item a \emph{unit} $\eta_A : \ot \rightarrow A^* \otimes A$, and
+\item a \emph{counit} $\epsilon_A : A \otimes A^* \rightarrow \ot$
+\end{itemize}
+that satisfy appropriate coherence conditions. In our setting every
+object $\order{p}$ has a dual $\iorder{p}$ and our versions of $\eta$
+and $\epsilon$ entangle the product $\iorder{p} \otimes \order{p}$
+using $\AgdaInductiveConstructor{//}$ or
+$\AgdaInductiveConstructor{\textbackslash\textbackslash}$. The two
+remaining combinators are \AgdaInductiveConstructor{synchr⋆} and
+\AgdaInductiveConstructor{synchl⋆} which, as their names suggest,
+perform a form of synchronization between positive and negative
+information. Their precise semantics will be discussed in the next
+section but for now it is useful to think of them as generalized
+versions of associativity. 
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -337,9 +360,29 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 \end{code}
 }}}}
 
-As motivated in the previous section, we will also need to consider
-the type $\iter{p}$ of all the combinators equivalent to
-iterates $p^k$:
+%%%%%%%%%%%
+\subsection{Values}
+
+When the types denote sets, it is evident what it means to have a
+value of a given type: it is just an element of the set. When types
+denote groupoids, it is less clear what it means to have a value,
+especially when the total number of values, as reported by the
+groupoid cardinality, is a proper fraction. We obviously cannot list
+``half a value'' but what we \emph{can} do is to list an integral
+number of values and provide an equivalence relation that specifies
+which values are distinguishable such that the ultimate counting of
+distinguishable values is a fractional amount. The idea is not
+uncommon: in the conventional $\lambda$-calculus, we list $\lambda
+x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow
+\tau$ and then provide a separate equivalence relation
+($\alpha$-equivalence) to express the fact that these two values are
+indistinguishable. The treatment in our setting is similar but richer
+as in some cases the equivalence relation is not external but is
+itself part of the value and the resulting count may be fractional.
+
+As motivated in the previous section, we will first need to consider
+the type $\iter{p}$ of all the combinators equivalent to iterates
+$p^k$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -402,8 +445,8 @@ lower (-[1+_] (suc m)) (-[1+_] n) = -- p ^ (-(1+1+m) - (1+n))
 \end{code}
 }
 
-For our running example using the type $\mathbb{3}$ and the combinator
-$a_2$, we list a few elements of $\iter{a_2}$:
+\noindent For our running example using the type $\mathbb{3}$ and the
+combinator $a_2$, we list a few elements of $\iter{a_2}$:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -439,25 +482,6 @@ which is equivalent \AgdaInductiveConstructor{id⟷}. The last two are
 both equivalent to $(a_2)^1$ which is equivalent to $a_2$. The
 equivalences are explicit in the construction. 
 
-%%%%%%%%%%%
-\subsection{Values}
-
-When the types denote sets, it is evident what it means to have a
-value of a given type: it is just an element of the set. When types
-denote groupoids, it is less clear what it means to have a value,
-especially when the total number of values, as reported by the
-groupoid cardinality, is a proper fraction. We obviously cannot list
-``half a value'' but what we \emph{can} do is to list an integral
-number of values and provide an equivalence relation that specifies
-which values are distinguishable such that the ultimate counting of
-distinguishable values is a fractional amount. The idea is not
-uncommon: in the conventional $\lambda$-calculus, we list $\lambda
-x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow
-\tau$ and then provide a separate equivalence relation
-($\alpha$-equivalence) to express the fact that these two values are
-indistinguishable. The treatment in our setting is similar but richer
-as in some cases the equivalence relation is not external but is
-itself part of the value and the resulting count may be fractional.
 Formally we define values as follows:
 
 {\setlength{\mathindent}{0cm}
@@ -465,8 +489,8 @@ Formally we define values as follows:
 {\footnotesize{
 \begin{code}
 _÷_ : {τ : U} (p q : τ ⟷ τ) → Set
-_÷_ {τ} p q = (pi : Iter p) → (qj : Iter q) →
-  Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
+_÷_ {τ} p q =   (pi : Iter p) → (qj : Iter q) →
+                       Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
 
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
@@ -488,8 +512,9 @@ rely on a type $p ÷ q$ which intuitively says that given any iterate
 of $p$ (say $p ^ i$) and any iterate of $q$ (say $q ^ j$), we can
 build a combinator $r$ such that
 $\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i} ~\AgdaDatatype{⇔}~
-\AgdaBound{r}~\AgdaInductiveConstructor{◎}~\AgdaBound{q}~\AgdaFunction{\^{}}~\AgdaBound{j}$. This
-is of course exactly $\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i}
+\AgdaBound{r}~\AgdaInductiveConstructor{◎}~\AgdaBound{q}~\AgdaFunction{\^{}}~\AgdaBound{j}$.
+This $\AgdaBound{r}$ is of course
+$\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i}
 ~\AgdaInductiveConstructor{◎}~
 \AgdaBound{q}~\AgdaFunction{\^{}}~(\AgdaFunction{-} \AgdaBound{j})$.
 We then interpret such a type as \emph{containing} all iterates of $p$
@@ -497,10 +522,39 @@ as objects, quotiented out by iterates of $q$ as relations.  As these
 are not independent, we consider them ``tangled'' (thus the name of
 the constructor).
 
-It is worthwhile noting two special cases.  First, when $q = \AgdaInductiveConstructor{id⟷}$,
-$p // q$ is then isomorphic to $\AgdaDatatype{Iter} p$.  And when
-$p = \AgdaInductiveConstructor{id⟷}$, we interpret $p // q$ as
-having a single object with $\order(q)$ symmetries.
+In the special case when $p$ and $q$ are identical, we get the
+\emph{identity tangle}~$p~\div~p$ which should intuitively be
+equivalent to the identity. Indeed we can verify this fact:
+
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
+\begin{code}
+c÷c : {τ : U} (c : τ ⟷ τ) → c ÷ c
+c÷c c < i , p , α > < j , q , β > =
+  c ^ (i ℤ.+ (ℤ.- j)) ,
+  α ● 2!  (lower i (ℤ.- j) ⊡ β ● 
+           assoc◎r ● id⇔ ⊡ (^⇔! j) ⊡ id⇔ ●
+           id⇔ ⊡ rinv◎l ● idr◎l)
+
+⇔-irr :  {τ : U} {p : τ ⟷ τ} → (p÷p : p ÷ p) →
+         ∀ (pi : Iter p) → Σ.proj₁ (p÷p pi pi) ⇔ id⟷
+⇔-irr p÷p pi =
+  let div = p÷p pi pi in
+  let r = Σ.proj₁ div in
+  let pf = Σ.proj₂ div in
+  (idr◎r ● id⇔ ⊡ linv◎r ● assoc◎l) ●
+  2! pf ⊡ id⇔ {c = ! (Iter.q pi)} ● linv◎l
+\end{code}}}}
+
+This means that we can freely introduce and eliminate identity tangles
+as they contain no information. It is worthwhile noting two other
+special cases.  First, when $q = \AgdaInductiveConstructor{id⟷}$,
+$\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ is then
+isomorphic to $\AgdaDatatype{Iter}~\AgdaBound{p}$.  And when $p =
+\AgdaInductiveConstructor{id⟷}$, we interpret
+$\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ as having
+a single object with $\ord{q}$ symmetries.
 
 % Formally we declare when two values are indistinguishable using the
 % relation below:

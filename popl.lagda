@@ -972,11 +972,10 @@ $\omega$-groupoids and that provide novel programming abstractions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\input{appendix.tex}
+
 \bibliographystyle{abbrvnat}
 \bibliography{cites}
-
-%% Appendix, experimental
-\input{appendix.tex}
 
 \end{document}
 

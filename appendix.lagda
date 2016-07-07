@@ -111,11 +111,12 @@ divC {τ} p q = record {
             ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
  ; id = λ {A} → zeroth q , idr◎l ● idl◎r
- ; _∘_ = λ {  ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
-                  ( < j , q , αq > ∘i < k , r , αr > , 
-                  id⇔ ⊡ ( αq ⊡ αr ● comm-i-j j k) ● assoc◎l ● 
-                  (id⇔ ⊡ 2! αr ● pf₂) ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ (id⇔ ⊡ 2! αq ● pf₁) ● 
-                  (assoc◎l ● (αr ⊡ αq ● comm-i-j k j ● 2! (αq ⊡ αr)) ⊡ id⇔)  ) }
+ ; _∘_ =
+   λ {  ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
+   ( < j , q , αq > ∘i < k , r , αr > , 
+   id⇔ ⊡ ( αq ⊡ αr ● comm-i-j j k) ● assoc◎l ● 
+   (id⇔ ⊡ 2! αr ● pf₂) ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ (id⇔ ⊡ 2! αq ● pf₁) ● 
+   (assoc◎l ● (αr ⊡ αq ● comm-i-j k j ● 2! (αq ⊡ αr)) ⊡ id⇔)  ) }
  ; assoc = assoc◎r
  ; identityˡ = idl◎l
  ; identityʳ = idr◎l
@@ -125,9 +126,10 @@ divC {τ} p q = record {
 
 divG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divC p q)
 divG {τ} p q = record {
-    _⁻¹ =  λ { {A} (q , pf) → inv q , (2! !aab⇔b ⊡ id⇔ ● assoc◎r) ●
-           id⇔ {c = ! (Iter.q q)} ⊡ 2! pf ⊡ id⇔ {c = ! (Iter.q q)} ● 
-           id⇔ ⊡ (assoc◎r ● ab!b⇔a)  }
+    _⁻¹ =
+    λ { {A} (q , pf) → inv q , (2! !aab⇔b ⊡ id⇔ ● assoc◎r) ●
+    id⇔ {c = ! (Iter.q q)} ⊡ 2! pf ⊡ id⇔ {c = ! (Iter.q q)} ● 
+    id⇔ ⊡ (assoc◎r ● ab!b⇔a)  }
  ; iso = record { isoˡ = rinv◎l; isoʳ = linv◎l }
  }
 
