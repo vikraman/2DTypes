@@ -1,4 +1,4 @@
-\section{From Sets to Groupoids} 
+\section{From Sets to Groupoids}
 \label{sec:groupoids}
 
 From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite
@@ -9,7 +9,7 @@ that they denote more general groupoids and correspondingly enriching
 transformations on groupoids. The generalization depends on one
 crucial insight which is the subject of this section. Briefly
 speaking, 1-combinators, their properties, and their operational
-behavior are themselves data that can manipulated by other
+behavior are themselves data that can be manipulated by other
 programs. Depending on the precise setup, we can use a 1-combinator
 $p$ to build one of several kinds of non-trivial groupoids: an action
 groupoid $\ag{\tau}{p}$, an iteration groupoid $\order{p}$, or an
@@ -49,7 +49,7 @@ groupoid is a category in which every morphism has an inverse. Such a
 category generally consists of clusters of connected objects. Each
 cluster is equivalent (in the category-theoretic sense) to a
 group. Thus an alternative definition of a groupoid is as a
-generalization of a group that allows individual elements of have
+generalization of a group that allows for individual elements to have
 ``internal
 symmetries''~\cite{groupoidintro}. \citet{2009arXiv0908.4305B}
 associate with each groupoid a cardinality that counts the elements up
@@ -62,7 +62,7 @@ to these ``internal symmetries.''
   \]
   provided the sum converges. The summation is over \emph{isomorphism
     classes $[x]$ of objects $x$} and $|\textsf{Aut}(x)|$ is the
-  number of automorphisms of $x$.
+  number of {\emph distinct} automorphisms of $x$.
 \end{definition}
 
 \begin{figure}[t]
@@ -81,7 +81,7 @@ to these ``internal symmetries.''
   \node[below] (A) at (-2,0) {$a$};
   \node[below] (B) at (0,0) {$b$};
   \node[below] (C) at (1.5,0) {$c$};
-  \path (A) edge [bend left=50] (B); 
+  \path (A) edge [bend left=50] (B);
   \path (C) edge [out=140, in=40, looseness=4] (C);
   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
@@ -129,32 +129,32 @@ $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
 \subsection{Action Groupoids $\ag{\tau}{p}$}
 
 Action groupoids~\cite{groupoidintro} were the inspiration for our
-semantic development. They provided the main insight of using the
+semantic development. They provide the main insight of using the
 group structure associated with reversible programs as the equivalence
 relation used to build quotient types. Once this construction was
-thoroughly understood, it was generalized to the iteration groupoids,
+thoroughly understood, it was generalized to iteration groupoids,
 inverse order groupoids, and division groupoids that are actually used
 in our semantics. We find it illuminating to present the material
-starting from action groupoids. 
+starting from action groupoids.
 
-Given a 1-combinator $p : \tau \iso \tau$, we build a groupoid
-$\ag{\tau}{p}$ defined as follows. The objects of $\ag{\tau}{p}$ are
-the elements~$v_i$ of the set $\sem{\tau}$ and there is a morphism
-between $v_i$ and~$v_j$ if applying some number of iterations of $p$
-to $v_i$ produces~$v_j$. For example, consider the type $\mathbb{3}$
-and the 1-combinator $a_2$ from Sec.~\ref{sec:pisem}. Since $a_2$ has
-order 2, we have $a_2 ^ k$ for any integer~$k$ is, up to equivalence,
-either $\texttt{id}$ or $a_2$. Therefore, the groupoid
-$\ag{\mathbb{3}}{a_2}$ looks exactly like $G_2$ in
-Fig.~\ref{fig:groupoids2} with the names of the objects relabeled to
-$\inl{(\inl{\unitv})}$, $\inl{(\inr{\unitv})}$, and $\inr{\unitv}$ and
-the non-identity morphisms labeled $a_2$. As explained above, the
-groupoid has cardinality $\frac{3}{2}$ which corresponds to the
-quotient of the cardinality of the set $\mathbb{3}$ divided by the
-order of $a_2$. Note that in the calculation of the cardinality, we
-use the fact that the loop $a_2 \odot a_2$ going from
-$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back is
-equivalent to the identity.
+Given a type $\tau$ and 1-combinator $p : \tau \iso \tau$, we build a
+groupoid $\ag{\tau}{p}$ defined as follows. The objects of
+$\ag{\tau}{p}$ are the elements~$v_i$ of the set $\sem{\tau}$ and there
+is a morphism between $v_i$ and~$v_j$, if applying some number of
+iterations of $p$ to $v_i$ produces~$v_j$. For example, consider the
+type $\mathbb{3}$ and the 1-combinator $a_2$ from
+Sec.~\ref{sec:pisem}. Since $a_2$ has order 2, we have that $a_2 ^ k$
+for any integer~$k$ is, up to equivalence, either $\texttt{id}$ or
+$a_2$. Therefore, the groupoid $\ag{\mathbb{3}}{a_2}$ looks exactly like
+$G_2$ in Fig.~\ref{fig:groupoids2} with the names of the objects
+relabeled to $\inl{(\inl{\unitv})}$, $\inl{(\inr{\unitv})}$, and
+$\inr{\unitv}$ and the non-identity morphisms labeled $a_2$. As
+explained above, the groupoid has cardinality $\frac{3}{2}$ which
+corresponds to the quotient of the cardinality of the set $\mathbb{3}$
+divided by the order of $a_2$. Note that in the calculation of
+cardinality, we use the fact that the loop $a_2 \odot a_2$ going from
+$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back is equivalent
+to the identity.
 
 Generally speaking, using known facts about the order of permutations
 on finite sets, we highlight a few additional properties of action
@@ -181,7 +181,7 @@ $\frac{5}{6}$ which is a proper fraction.
 %   \node[below] (A) at (-3,0) {$\inl{(\inl{\unitv})}$};
 %   \node[below] (B) at (0,0) {$\inl{(\inr{\unitv})}$};
 %   \node[below] (C) at (3,0) {$\inr{\unitv}$};
-%   \path (A) edge [bend left=50] node[above] {$a_2$} (B); 
+%   \path (A) edge [bend left=50] node[above] {$a_2$} (B);
 %   \path (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$} (C);
 %   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
 %   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
@@ -191,29 +191,28 @@ $\frac{5}{6}$ which is a proper fraction.
 
 \paragraph{Intermezzo.} Before concluding this section, we focus on
 $G_2$ and how to compute its cardinality in an alternative,
-compositional, way by viewing $G_2$ as equivalent to the product of
-two independent subsystems consisting of $\mathbb{3}$ and
-$\iorder{a_2}$.  Because the cardinality of $\mathbb{3}$ is 3 and the
-final cardinality of $G_2$ is $\frac{3}{2}$, it must be that using
+compositional, way by viewing $G_2$ as being equivalent to the product
+of two independent subsystems consisting of $\mathbb{3}$ and
+$\iorder{a_2}$. Because the cardinality of $\mathbb{3}$ is 3 and the
+final cardinality of $G_2$ is $\frac{3}{2}$, it must be that, using
 $a_2$ to define $\iorder{a_2}$ produces a groupoid with
 cardinality~$\frac{1}{2}$. From the information-theoretic perspective,
 each state of the system represented by the type $\mathbb{3}$ has
 $\log 3$ bits; after combining the type $\mathbb{3}$ with the type
 $\iorder{a_2}$, the information contained in each state is reduced to
-$\log \frac{3}{2} = \log 3 - \log 2$ bits. It must therefore be the
-case that each state of the system represented by $\iorder{a_2}$ has a
+$\log \frac{3}{2} = \log 3 - \log 2$ bits. It must therefore be the case
+that each state of the system represented by $\iorder{a_2}$ has a
 negative amount of information $- \log 2 = \log \frac{1}{2}$ which
-agrees with our observation that this use of $a_2$ must have
-cardinality $\frac{1}{2}$. Intuitively speaking, imposing an
-equivalence relation on a type translates to the inability to
-distinguish previously distinguishable states. This
-indistinguishability subtracts knowledge about the system and hence,
-when viewed as an independent system, must have fractional
-cardinality.
+agrees with our observation that this use of $a_2$ must have cardinality
+$\frac{1}{2}$. Intuitively speaking, imposing an equivalence relation on
+a type translates as the inability to distinguish previously
+distinguishable states. This indistinguishability subtracts knowledge
+about the system and hence, when viewed as an independent system, must
+have fractional cardinality.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Program Iteration as Data}
-   
+
 Action groupoids $\ag{\tau}{p}$ allow us to build groupoids with
 fractional cardinality by taking the quotient of a simple finite type
 $\tau$ under the equivalence relation generated by an automorphism $p$
@@ -227,7 +226,7 @@ $\iorder{p}$. Both constructions depend on the possibility of treating
 programs (1-combinators) from a type to itself as data. More
 precisely, for each 1-combinator $p : \tau\iso\tau$, we form the set
 $\sing{p}$ whose elements are pairs consisting of a 1-combinator
-$q : \tau\iso\tau$ and a 2-combinator $\alpha : q \isotwo p$. 
+$q : \tau\iso\tau$ and a 2-combinator $\alpha : q \isotwo p$.
 For example, we have:
 \[\begin{array}{rcl}
 \iter{a_2} &=& \{ \triple{0}{\idiso}{\idisotwo},\triple{1}{a_2}{\idrdr}, \triple{-1}{a_2}{\idisotwo}, \ldots \}
@@ -244,7 +243,7 @@ aspect) in various groupoid constructions.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Iteration Groupoids $\order{p}$}
-   
+
 In the previous section, we collected the iterates of a 1-combinator
 $p : \tau\iso\tau$ into a set $\iter{p}$ consisting of triples
 $\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators
@@ -276,7 +275,7 @@ $q_1 \isotwo q_2$. (See Appendix for the Agda construction.)
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Inverse Order Groupoids $\iorder{p}$}
-    
+
 The elements of $\iter{p}$ form a group under the following operation:
 \[\begin{array}{l}
 \triple{k_1}{p_1}{\alpha_1} ~\circ~ \triple{k_2}{p_2}{\alpha_2} = \\
@@ -288,7 +287,7 @@ Lem.~\ref{lem:distiterplus}. The common categorical representation of
 a group is a category with one trivial object and the group elements
 as morphisms on that trivial object. Our construction is essentially
 the same except that the trivial object is represented as the iterates
-of the identity over a singleton type. 
+of the identity over a singleton type.
 
 Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
 $\iorder{p}$ is the groupoid (2-groupoid technically) whose objects
@@ -317,51 +316,51 @@ choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Division Groupoids $\divg{p}{r}$}
-   
+
 The groupoid $\order{p}$ can be thought of as
 $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
 of as $\divg{\idiso}{p}$. The two previous constructions can therefore
 be generalized to allow arbitrary combinators in both the numerator
-and denominator. 
+and denominator.
 
-Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
-of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
-is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
+Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects of
+$\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There is a
+morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
 $\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
 $\triple{k}{q}{\alpha}$ in $\iter{r}$ such that
-$(q_1 \odot q) \isotwo (q \odot q_2)$. As before the morphisms are not
+$(q_1 \odot q) \isotwo (q \odot q_2)$. As before, the morphisms are not
 all independent: two morphisms are identified if their $q$ components
 are related by $\isotwo$.
 
-When $r$ is $\idiso$ this construction reduces to $\order{p}$. When
-$p$ is $\idiso$, this construction reduces to $\iorder{r}$. Generally,
-the cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See
-Appendix for the Agda construction.)
+When $r$ is $\idiso$, this construction reduces to $\order{p}$. When $p$
+is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
+cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
+for the Agda construction.)
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Expanded Unit Groupoids $\oneg{p}$}
-   
+
 % For each combinator $p : \tau\iso\tau$, we also construct a groupoid
 % $\oneg{p}$ of cardinality $\frac{\ord{p}}{\ord{p}} = 1$. (Recall that
 % the order of a combinator can never be 0.) The objects of this
-% groupoid as the iterates in $\iter{p}$. There is morphism between 
+% groupoid as the iterates in $\iter{p}$. There is morphism between
 % $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
 % there exists a $\triple{k}{q}{\alpha}$ such that $q_1 ~\odot~ !q_2
-% \isotwo q$. 
+% \isotwo q$.
 
 %%%%%%%%%%%%%
 \subsection{Groupoid of Groupoids}
 
-From the perspective of category theory, the language $\Pi$ models
-what is called a \emph{symmetric bimonoidal category} or a
-\emph{commutative rig category}. These are categories with two binary
-operations and satisfying the axioms of a commutative rig (i.e., a
-commutative ring without negative elements also known as a commutative
-semiring) up to coherent isomorphisms. And indeed the types of the
-$\Pi$ 1-combinators are precisely the commutative semiring axioms. A
-formal way of saying this is that $\Pi$ is the
-\emph{categorification}~\cite{math/9802029} of the natural numbers. 
+From the perspective of category theory, the language $\Pi$ models what
+is called a \emph{symmetric bimonoidal category} or a \emph{commutative
+  rig category}. These are categories with two binary operations and
+satisfying the axioms of a commutative rig (i.e., a commutative ring
+without negative elements, also known as a commutative semiring) up to
+coherent isomorphisms. And indeed the types of the $\Pi$ 1-combinators
+are precisely the commutative semiring axioms. A formal way of saying
+this is that $\Pi$ is the \emph{categorification}~\cite{math/9802029} of
+the natural numbers.
 
 As suggested above, a simple (slightly degenerate) example of such
 categories is the category of finite sets and permutations in which we
@@ -400,7 +399,7 @@ of next section.
 % We want our computations to be information-preserving. Since the
 % amount of information in each state is just the log of the cardinality
 % of the space, computation just needs to be between spaces of the same
-% cardinality. 
+% cardinality.
 
 %  Now consider the \ensuremath{\mathit{bool} \rightarrow \mathit{bool}}
 % function \ensuremath{\mathit{not}}. Let $p_F$ and $p_T$ be the
@@ -434,7 +433,7 @@ of next section.
 % and the function is information-preserving.
 
 % We are now ready to formalize the connection between reversibility and
-% entropy, once we define logical reversibility of computations. 
+% entropy, once we define logical reversibility of computations.
 
 % \begin{definition}[Logical reversibility~\cite{Zuliani:2001:LR}]
 % A function $f : b_1 \rightarrow b_2$ is logically reversible if there exists
@@ -475,7 +474,7 @@ of next section.
 % \ensuremath{(\mathit{true},\mathit{true})} and in this case it is clear that the function is
 % information-preserving as expected.
 
-% \amr{end of popl 12 quote} 
+% \amr{end of popl 12 quote}
 
 % %%%%%
 % \subsection{Constraints}
@@ -486,10 +485,10 @@ of next section.
 % only possible states in the system and the information contained in
 % each is just one bit. There is a neat way to express the constraint
 % using an equivalence generated by a pi-program.
-  
+
 % %%%%%
 % \subsection{Information Equivalence}
-  
+
 % We need to show coherence of the definition of cardinalities on the
 % universe syntax with the Euler characteristic of the category which in
 % our case also corresponds to the groupoid cardinality. There are
@@ -1012,8 +1011,8 @@ of next section.
 % --   trans⇔ ((id⇔ ⊡ rinv◎l) ⊡ id⇔) (trans⇔ (idr◎l ⊡ id⇔) (
 % --   cancel-linv -[1+ n ])))))
 
-% one dollar and four quarters are indistinguishable because every 
-% transaction that can use one can use the other. 
+% one dollar and four quarters are indistinguishable because every
+% transaction that can use one can use the other.
 
 % v : obj, loop space
 % loop : 1-combinator, 2 loop space
@@ -1029,7 +1028,7 @@ of next section.
 %% -----------------
 
 % Ok so let's say a is a value, b is a value, c is a value and we have
-% the types 
+% the types
 
 % a == a
 % a == b
@@ -1081,13 +1080,13 @@ of next section.
 
 % (id,[id,p,p2]), (p,[id,p,p2]), (p2,[id,p,p2])
 
-% ==> 
+% ==>
 
 % general idea
 
 % (p,[...,q,...]) is indistinguishable from (q.p,[...,q.q,...])
 
-% and 
+% and
 
 % (v,[id,p]) is indistinguishable from (ap p v, [ p , p2 ])
 
@@ -1097,9 +1096,9 @@ of next section.
 % (b,[id,swap])
 % (c,[id,swap])
 
-% and (a,[id,swap]) ~id~ (a,[id,swap]) 
+% and (a,[id,swap]) ~id~ (a,[id,swap])
 %       (a,[id,swap]) ~swap~ (c,[swap,swap2])
-%       (b,[id,swap]) ~id~ (b,[id,swap]) 
+%       (b,[id,swap]) ~id~ (b,[id,swap])
 %       (b,[id,swap]) ~swap~ (b,[swap,id])
 
 % So now a value is (obj,[autos]) and we have ==G that tells us which
@@ -1134,21 +1133,21 @@ of next section.
 % Of course the value we are getting on the left (with refl) is
 % arbitrary; we could have split as follows:
 
-% (p,[id,p,p2])  ==> (id,[refl]) and (*,[id,p,p2]) 
-% (p,[id,p,p2])  ==> (p,[refl]) and (*,[id,p,p2]) 
-% (p,[id,p,p2])  ==> (p2,[refl]) and (*,[id,p,p2]) 
+% (p,[id,p,p2])  ==> (id,[refl]) and (*,[id,p,p2])
+% (p,[id,p,p2])  ==> (p,[refl]) and (*,[id,p,p2])
+% (p,[id,p,p2])  ==> (p2,[refl]) and (*,[id,p,p2])
 
 % BUT as soon as we split, an individual value like (p,[refl]) is not
 % equivalent to (p2,[refl]). We don't have that knowledge locally and we
 % must treat them as different.
 
-% epsilon will receive something like 
+% epsilon will receive something like
 
 %  (p^i,[refl]) and (*,[id,p,p2])
 
 % WHAT SHOULD IT DO???
 
-% --- 
+% ---
 
 % Values: vertex values: a, b, c
 %             edge values: (1-combinators) swap^0=id, swap^1=swap
@@ -1157,7 +1156,7 @@ of next section.
 % edge values can be used to identify vertex values: id identifies a~a, b~b, c~c
 % swap identifies a~c,b~b,c~c
 
-% indistinguishable values 
+% indistinguishable values
 
 % we have (a,swap) which means we can apply swap to (a,id). We get
 % (c,id); this identifies (a,id) ~ (c,id)
@@ -1169,4 +1168,3 @@ of next section.
 
 % build the groupoid $\mathbb{3} \otimes \iorder{a_6}$ and explain its
 % equivalence to the above
-

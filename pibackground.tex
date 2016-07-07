@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Programming with Equivalences} 
+\section{Programming with Equivalences}
 \label{sec:pi}
 
 The main syntactic vehicle for the technical developments in this
@@ -15,23 +15,23 @@ language relevant to our development.
 \unitepl :&  \zt \oplus \tau & \iso & \tau &: \unitipl \\
 \unitepr :&  \tau \oplus \zt & \iso & \tau &: \unitipr \\
 \swapp :&  \tau_1 \oplus \tau_2 & \iso & \tau_2 \oplus \tau_1 &: \swapp \\
-\assoclp :&  \tau_1 \oplus (\tau_2 \oplus \tau_3) & \iso & (\tau_1 \oplus \tau_2) \oplus \tau_3 
+\assoclp :&  \tau_1 \oplus (\tau_2 \oplus \tau_3) & \iso & (\tau_1 \oplus \tau_2) \oplus \tau_3
   &: \assocrp \\
 \\
 \unitetl :&  \ot \otimes \tau & \iso & \tau &: \unititl \\
 \unitetr :&  \tau \otimes \ot & \iso & \tau &: \unititr \\
 \swapt :&  \tau_1 \otimes \tau_2 & \iso & \tau_2 \otimes \tau_1 &: \swapt \\
-\assoclt :&  \tau_1 \otimes (\tau_2 \otimes \tau_3) & \iso & (\tau_1 \otimes \tau_2) \otimes \tau_3 
+\assoclt :&  \tau_1 \otimes (\tau_2 \otimes \tau_3) & \iso & (\tau_1 \otimes \tau_2) \otimes \tau_3
   &: \assocrt \\
 \\
 \absorbr :&~ \zt \otimes \tau & \iso & \zt &: \factorzl \\
 \absorbl :&~ \tau \otimes \zt & \iso & \zt &: \factorzr \\
-\dist :&~ (\tau_1 \oplus \tau_2) \otimes \tau_3 & 
+\dist :&~ (\tau_1 \oplus \tau_2) \otimes \tau_3 &
   \iso & (\tau_1 \otimes \tau_3) \oplus (\tau_2 \otimes \tau_3)~ &: \factor \\
-\distl :&~ \tau_1 \otimes (\tau_2 \oplus \tau_3) & 
-  \iso & (\tau_1 \otimes \tau_2) \oplus (\tau_1 \otimes \tau_3)~ &: \factorl 
+\distl :&~ \tau_1 \otimes (\tau_2 \oplus \tau_3) &
+  \iso & (\tau_1 \otimes \tau_2) \oplus (\tau_1 \otimes \tau_3)~ &: \factorl
 \end{array}
-& 
+&
 \begin{minipage}{0.4\textwidth}
 \[\begin{array}{c}
 \Rule{}
@@ -137,7 +137,7 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 {}
 \end{array}\]
 Each 2-combinator $\alpha$ has an inverse $2!~\alpha$, e.g, $2!~\assocdl=\assocdr$,
-$2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc. 
+$2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \caption{$\Pi$ 2-combinators (excerpt)~\cite{Carette2016}
 \label{pi-combinators2}}
 \end{figure*}
@@ -183,14 +183,14 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \evalone{\factorl}{&\inr{(v_2,v_3)}} &=& (v_2,\inr{v_3}) \\
 \\
 \evalone{\idiso}{&v} &=& v \\
-\evalone{(c_1 \odot c_2)}{&v} &=& 
+\evalone{(c_1 \odot c_2)}{&v} &=&
   \evalone{c_2}{(\evalone{c_1}{v})} \\
-\evalone{(c_1 \oplus c_2)}{&(\inl{v})} &=& 
+\evalone{(c_1 \oplus c_2)}{&(\inl{v})} &=&
   \inl{(\evalone{c_1}{v})} \\
-\evalone{(c_1 \oplus c_2)}{&(\inr{v})} &=& 
+\evalone{(c_1 \oplus c_2)}{&(\inr{v})} &=&
   \inr{(\evalone{c_2}{v})} \\
-\evalone{(c_1 \otimes c_2)}{&(v_1,v_2)} &=& 
-  (\evalone{c_1}v_1, \evalone{c_2}v_2) 
+\evalone{(c_1 \otimes c_2)}{&(v_1,v_2)} &=&
+  (\evalone{c_1}v_1, \evalone{c_2}v_2)
 \end{array}\]
 \end{multicols}
 \caption{\label{opsem}$\Pi$ operational semantics}
@@ -209,11 +209,11 @@ injections into sum types, and $(v_1,v_2)$ for product types. The
 language has two other syntactic categories of programs to be
 described in detail:
 \[\begin{array}{lrcl}
-(\textrm{Types}) & 
+(\textrm{Types}) &
   \tau &::=& \zt \alt \ot \alt \tau_1 \oplus \tau_2 \alt \tau_1 \otimes \tau_2 \\
-(\textrm{Values}) & 
+(\textrm{Values}) &
   v &::=& \unitv \alt \inl{v} \alt \inr{v} \alt (v_1,v_2) \\
-(\textrm{1-combinators}) & 
+(\textrm{1-combinators}) &
   c &:& \tau_1 \iso \tau_2 ~ [\textit{see Fig.~\ref{pi-combinators}}] \\
 (\textrm{2-combinators}) &
   \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2 \\
@@ -229,7 +229,7 @@ transformations. Using the 1-combinators, it is possible to write any
 reversible boolean function and hence encode arbitrary boolean
 functions by a technique that goes back to \citet{Toffoli:1980}. The
 2-combinators provide a layer of programs that computes
-semantic-preserving transformations of 1-combinators. As a small
+semantics-preserving transformations of 1-combinators. As a small
 example, let us abbreviate $\ot \oplus \ot$ as the type $\mathbb{2}$
 of booleans and examine two possible implementations of boolean
 negation. The first directly uses the primitive combinator
@@ -238,7 +238,7 @@ two values of type $\mathbb{2}$; the second use three consecutive
 copies of $\swapp$ to achieve the same effect:
 \[\begin{array}{rcl}
 \mathsf{not_1} &=& \swapp \\
-\mathsf{not_2} &=& (\swapp \odot \swapp) \odot \swapp 
+\mathsf{not_2} &=& (\swapp \odot \swapp) \odot \swapp
 \end{array}\]
 We can write a 2-combinator whose \emph{type} is $\mathsf{not_2}
 \isotwo \mathsf{not_1}$:
@@ -263,12 +263,12 @@ and the 2-combinators behave as expected with respect to inverses of
 
 \begin{proposition}
 For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
-\end{proposition} 
+\end{proposition}
 
 \begin{proposition}
 For any $c_1,c_2 : \tau_1 \iso \tau_2$, we have $c_1 \isotwo c_2$ implies
 $!c_1 \isotwo ~!c_2$.
-\end{proposition} 
+\end{proposition}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Semantics}
@@ -310,7 +310,7 @@ Tracing the evaluation of $a_2$ on each of the possible inputs yields:
 Thus the effect of combinator $a_2$ is to swap the values
 $\inl{\inl{\unitv}}$ and $\inl{\inr{\unitv}}$ leaving the value
 $\inr{\unitv}$ intact. Iterating $a_2$ again is therefore equivalent
-to the identity permutation, which can be verified using the 
+to the identity permutation, which can be verified using the
 2-combinators:
 \[\begin{array}{rcl}
 a_2 \odot a_2 &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
@@ -322,7 +322,7 @@ a_2 \odot a_2 &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
 More generally we can iterate 1-combinators to produce different
 reversible functions between finite sets, eventually wrapping around
 at some number which represents the \emph{order} of the underlying
-permutation. 
+permutation.
 
 \begin{definition}[Power of a 1-combinator]
   The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
@@ -350,7 +350,7 @@ three elements leaving the third intact; and the combinators $a_4$ and
 $a_5$ rotate the three elements. We therefore have
 $\mathit{order}(a_1)=1$,
 $\mathit{order}(a_2)=\mathit{order}(a_3)=\mathit{order}(a_6)=2$, and
-$\mathit{order}(a_4)=\mathit{order}(a_5)=3$. 
+$\mathit{order}(a_4)=\mathit{order}(a_5)=3$.
 
 % \begin{lemma}
 %   Every $p : \tau \iso \tau$ has an order.
@@ -368,7 +368,7 @@ $\mathit{order}(a_4)=\mathit{order}(a_5)=3$.
 
 The 2-combinators, being complete equivalences between
 1-combinators~\cite{Carette2016}, also capture equivalences regarding
-power of combinators and their order. 
+power of combinators and their order.
 
 % \begin{proof}
 %   Trivial.
@@ -406,4 +406,3 @@ information contained in each subsystem. Since all the combinators
 preserve cardinality, they are also information-preserving.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
