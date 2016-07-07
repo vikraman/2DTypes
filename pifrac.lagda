@@ -429,14 +429,14 @@ equivalences are explicit in the construction.
 %%%%%%%%%%%
 \subsection{Values}
 
-When the types denote sets, it is evident what it means to have a
-value of a given type: it is just an element of the set. When types
-denote groupoids, it is less clear what it means to have a value,
-especially when the total number of values, as reported by the
-groupoid cardinality, is a proper fraction. We obviously cannot list
-``half a value'' but what we \emph{can} do is to list an integral
-number of values and provide an equivalence relation that specifies
-which values are distinguishable such that the ultimate counting of
+When types denote sets, it is evident what it means to have a value of
+a given type: it is just an element of the set. When types denote
+groupoids, it is less clear what it means to have a value, especially
+when the total number of values, as reported by the groupoid
+cardinality, is a proper fraction. We obviously cannot list ``half a
+value'' but what we \emph{can} do is to list an integral number of
+values and provide an equivalence relation that specifies which values
+are distinguishable, such that the ultimate counting of
 distinguishable values is a fractional amount. The idea is not
 uncommon: in the conventional $\lambda$-calculus, we list $\lambda
 x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow
@@ -484,10 +484,11 @@ as objects, quotiented out by iterates of $q$ as relations.  As these
 are not independent, we consider them ``tangled'' (thus the name of
 the constructor).
 
-It is worthwhile noting two special cases.  First, when $q = \AgdaInductiveConstructor{id⟷}$,
-$p // q$ is then isomorphic to $\AgdaDatatype{Iter} p$.  And when
-$p = \AgdaInductiveConstructor{id⟷}$, we interpret $p // q$ as
-having a single object with $\order(q)$ symmetries.
+It is worthwhile noting two special cases.  First, when $q =
+\AgdaInductiveConstructor{id⟷}$, $p // q$ is isomorphic to
+$\AgdaDatatype{Iter}\; p$. And when $p =
+\AgdaInductiveConstructor{id⟷}$, we interpret $p // q$ as having a
+single object with $\order(q)$ symmetries.
 
 % Formally we declare when two values are indistinguishable using the
 % relation below:
