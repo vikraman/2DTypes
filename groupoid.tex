@@ -320,17 +320,23 @@ choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
    
 The groupoid $\order{p}$ can be thought of as
 $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
-of as $\divg{\idiso}{p}$. These two constructions can be generalized
-to allow arbitrary combinators in the numerator and denominator. Given
-two 1-combinators $p, r : \tau\iso\tau$, the objects of $\divg{p}{r}$
-are all the iterates $\iter{p}$. There is a morphism between
-$\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if
-there exists an iterate $\triple{k}{q}{\alpha}$ in $\iter{r}$ such
-that $(q_1 \odot q) \isotwo (q \odot q_2)$. When $r$ is $\idiso$ this
-construction reduces to $\order{p}$. When $p$ is $\idiso$, this
-construction reduces to $\iorder{r}$. Generally, the cardinality of
-$\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix for the Agda
-construction.)
+of as $\divg{\idiso}{p}$. The two previous constructions can therefore
+be generalized to allow arbitrary combinators in both the numerator
+and denominator. 
+
+Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
+of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
+is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
+$\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
+$\triple{k}{q}{\alpha}$ in $\iter{r}$ such that
+$(q_1 \odot q) \isotwo (q \odot q_2)$. As before the morphisms are not
+all independent: two morphisms are identified if their $q$ components
+are related by $\isotwo$.
+
+When $r$ is $\idiso$ this construction reduces to $\order{p}$. When
+$p$ is $\idiso$, this construction reduces to $\iorder{r}$. Generally,
+the cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See
+Appendix for the Agda construction.)
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%
