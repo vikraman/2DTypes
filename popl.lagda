@@ -187,10 +187,10 @@ reversible program.
 We situate this work as an extension of a larger reversible
 programming language ($\Pi$), and show that this extension is also
 reversible.  Interestingly, this extension supports first-class
-functions as well as natural analogues of operations coming from
+functions as well as some natural analogues of operations coming from
 compact closed categories.  We emphasize that the key ingredients are
 reversibility and proof relevance: cardinality $1/k$ arises from
-having exactly $k$ proofs of reversibility.  All results have been
+having exactly $k$ proofs of reversibility.  Our results have been
 formalized in Agda.
 
 \end{abstract}
@@ -204,9 +204,9 @@ formalized in Agda.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In Homotopy Type Theory (HoTT)~\citeyearpar{hottbook}, types are
-\emph{weak $\omega$-groupoids}. As a first approximation, we can think
-of such structures as sets with points (objects) and paths
+In Homotopy Type Theory (HoTT)~\citeyearpar{hottbook}, types have the
+structure of \emph{weak $\omega$-groupoids}. As a first approximation, we can
+think of such structures as sets with points (objects) and paths
 (equivalences) between the points and paths between these paths and so
 on. Here are two simple but non-trivial examples:
 
@@ -256,10 +256,10 @@ on. Here are two simple but non-trivial examples:
 
 \medskip\noindent \citet{groupoidcard} assign to each groupoid a
 \emph{cardinality} that counts the objects up to equivalences. The
-groupoid on the left has six points \texttt{a}, \texttt{b},
-\texttt{c}, \texttt{d}, \texttt{e}, and \texttt{f} with each three
+groupoid on the left has six points \texttt{a}, \texttt{b}, \texttt{c},
+\texttt{d}, \texttt{e}, and \texttt{f} with two groups of three
 points clustered in an equivalence class and hence the groupoid has
-cardinality~2. The groupoid on the right has one point $\ast$ with
+cardinality~2. The (2-)groupoid on the right has one point $\ast$ with
 four equivalences \texttt{id}, $p$, $q$, and~$q'$ on it. The
 equivalences $q$ and $q'$ are however identified by~$\alpha$ leaving
 only three distinct equivalence classes and hence making the
@@ -322,8 +322,8 @@ information.'' In the context of finite types, generated from the
 empty type $\zt$, the unit type $\ot$, and sums and products $\oplus$
 and $\otimes$, this principle states that the foundational (i.e.,
 physical) notion of computation is computation via type
-isomorphisms~\cite{James:2012:IE:2103656.2103667} or HoTT
-equivalences~\cite{Carette2016} as they are both sound and complete
+isomorphisms~\cite{James:2012:IE:2103656.2103667} or type
+equivalences~\cite{Carette2016}, which are both sound and complete
 with respect to cardinality-preserving maps. The introduction, in
 $\pifrac$, of types (groupoids) with fractional cardinalities
 introduces types with \emph{negative entropy}. For example, a type
