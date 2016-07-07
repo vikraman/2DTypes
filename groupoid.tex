@@ -12,9 +12,9 @@ speaking, 1-combinators, their properties, and their operational
 behavior are themselves data that can manipulated by other
 programs. Depending on the precise setup, we can use a 1-combinator
 $p$ to build one of several kinds of non-trivial groupoids: an action
-groupoid $\ag{\tau}{p}$, an order groupoid $\order{p}$, or an inverse
-order groupoid $\iorder{p}$. We explain these constructions and then
-generalize them to a division groupoid $\divg{p}{q}$. 
+groupoid $\ag{\tau}{p}$, an iteration groupoid $\order{p}$, or an
+inverse order groupoid $\iorder{p}$. We explain these constructions
+and then generalize them to a division groupoid $\divg{p}{q}$.
 
 %%%%%
 \subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
@@ -243,7 +243,7 @@ will use the elements of $\sing{p}$ and $\iter{p}$ as either objects
 ``program'' aspect) in various groupoid constructions.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Order Groupoids $\order{p}$}
+\subsection{Iteration Groupoids $\order{p}$}
    
 In the previous section, we collected the iterates of a 1-combinator
 $p : \tau\iso\tau$ into a set $\iter{p}$ consisting of triples
@@ -376,7 +376,7 @@ category a ``symmetric rig groupoid''~\cite{nlabrig}.
 
 Despite this rich structure, the individual objects in the category
 for $\Pi$ are just plain sets with no interesting structure. With the
-addition of action groupoids, order groupoids, inverse order
+addition of action groupoids, iteration groupoids, inverse order
 groupoids, and division groupoids we can enrich the symmetric rig
 groupoid of $\Pi$ so that objects themselves carry a non-trivial
 groupoid structure. Sums and products of these groupoids behave as

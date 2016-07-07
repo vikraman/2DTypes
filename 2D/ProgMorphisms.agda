@@ -34,8 +34,8 @@ refl# {eq = ⋆≈} = ⋆≡
 refl# {eq = #p≈ x} = #p≡
 refl# {eq = [,]≈ eq eq₁} = [,]≡
 refl# {eq = inj≈ eq} = inj≡
-refl# {eq = tangr≈} = tangr≡
-refl# {eq = tangl≈} = tangl≡
+refl# {eq = tangr≈ _} = tangr≡
+refl# {eq = tangl≈ _} = tangl≡
 
 sym# : {τ : U} {p : τ ⟷ τ} {p q : Val τ} {l r : p ≈ q} → l ≡≈ r → r ≡≈ l
 sym# ⋆≡ = ⋆≡

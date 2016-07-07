@@ -44,7 +44,7 @@ We begin by defining two mutually recursive syntactic categories
 definition of types is identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of the type constructors
 \AgdaInductiveConstructor{\#} and \AgdaInductiveConstructor{1/\#} that
-create order groupoids and inverse order groupoids. The definition of
+create iteration groupoids and inverse order groupoids. The definition of
 1-combinators is also identical to the presentation in
 Sec.~\ref{sec:pi} except for the addition of
 $\AgdaInductiveConstructor{η-}$, $\AgdaInductiveConstructor{η+}$,
