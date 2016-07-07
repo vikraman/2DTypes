@@ -44,15 +44,27 @@ which to define $\Pi^/$.
 \subsection{Types and Combinators}
 
 We begin by defining two mutually recursive syntactic categories
-\AgdaRef{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
+\AgdaDatatype{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
 definition of types is identical to the presentation of $\Pi$ in
-Sec.~\ref{sec:pi} except for the addition of the type constructors
-\AgdaInductiveConstructor{\#} and \AgdaInductiveConstructor{1/\#} that
-create iteration groupoids and inverse order groupoids. The definition of
-1-combinators is also identical to the presentation in
-Sec.~\ref{sec:pi} except for the addition of
+Sec.~\ref{sec:pi} except for the addition of type constructors for
+building non-trivial groupoids. In principle, we just need one type
+constructor whose denotation is a division groupoid. For convenience,
+we add more type constructors: \AgdaInductiveConstructor{\#},
+\AgdaInductiveConstructor{//}, and \AgdaInductiveConstructor{\\} such
+that $\AgdaInductiveConstructor{\#}~\AgdaBound{p}$ denotes an
+iteration groupoid, and both
+$\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ and
+$\AgdaBound{q}~\AgdaInductiveConstructor{\\}~\AgdaBound{p}$ denote
+$\divg{p}{q}$. There is no primitive that denotes $\iorder{p}$ but
+this groupoid can be denoted using
+$\AgdaInductiveConstructor{id⟷}~\AgdaInductiveConstructor{//}~\AgdaBound{p}$
+for example.
+
+The definition of 1-combinators is also identical to the presentation
+in Sec.~\ref{sec:pi} except for the addition of
 $\AgdaInductiveConstructor{η-}$, $\AgdaInductiveConstructor{η+}$,
-$\AgdaInductiveConstructor{ε+}$, and $\AgdaInductiveConstructor{ε-}$.
+$\AgdaInductiveConstructor{ε+}$, $\AgdaInductiveConstructor{ε-}$, and
+\AgdaInductiveConstructor{synchr⋆}, and \AgdaInductiveConstructor{synchl⋆}.
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -61,14 +73,14 @@ $\AgdaInductiveConstructor{ε+}$, and $\AgdaInductiveConstructor{ε-}$.
 mutual
   -- Finite types (cf. Sec. 3.1) extended
   data U : Set where
-    𝟘    : U
-    𝟙    : U
-    _⊕_  : U → U → U
-    _⊗_  : U → U → U
+    𝟘 :     U
+    𝟙 :     U
+    _⊕_ :   U → U → U
+    _⊗_ :   U → U → U
     -- new types
-    #    : {τ : U} → (τ ⟷ τ) → U
-    _//_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- # c ⊗ 1/# d
-    _\\_ : {τ : U} → (τ ⟷ τ) → (τ ⟷ τ) → U -- 1/# d ⊗ # c
+    # :     {τ : U} → (τ ⟷ τ) → U
+    _//_ :  {τ : U} → (c : τ ⟷ τ) → (d : τ ⟷ τ) → U -- #c ⊗ 1/#d
+    _\\_ :  {τ : U} → (d : τ ⟷ τ) → (c : τ ⟷ τ) → U -- 1/#d ⊗ #c
 
   -- Combinators (cf. Fig. 2)
   data Prim⟷ : U → U → Set where
@@ -115,13 +127,14 @@ mutual
     _⊗_ :   {τ₁ τ₂ τ₃ τ₄ : U} →
             (τ₁ ⟷ τ₃) → (τ₂ ⟷ τ₄) → (τ₁ ⊗ τ₂ ⟷ τ₃ ⊗ τ₄)
     -- new combinators
-    η- : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ p \\ p
-    η+ : {t : U} → (p : t ⟷ t) → 𝟙 ⟷ p // p
-    ε+ : {t : U} → (p : t ⟷ t) → p // p ⟷ 𝟙
-    ε- : {t : U} → (p : t ⟷ t) → p \\ p ⟷ 𝟙
-    synchr⋆ : {t : U} {p q : t ⟷ t} → (p // q) ⊗ # p ⟷ # p ⊗ (q \\ p)
-    synchl⋆ : {t : U} {p q : t ⟷ t} → # p ⊗ (q \\ p) ⟷ (p // q) ⊗ # p
-
+    η- :       {τ : U} → (p : τ ⟷ τ) → 𝟙 ⟷ p \\ p
+    η+ :       {τ : U} → (p : τ ⟷ τ) → 𝟙 ⟷ p // p
+    ε+ :       {τ : U} → (p : τ ⟷ τ) → p // p ⟷ 𝟙
+    ε- :       {τ : U} → (p : τ ⟷ τ) → p \\ p ⟷ 𝟙
+    synchr⋆ :  {τ : U} {p q : τ ⟷ τ} →
+               (p // q) ⊗ # p ⟷ # p ⊗ (q \\ p)
+    synchl⋆ :  {τ : U} {p q : τ ⟷ τ} →
+               # p ⊗ (q \\ p) ⟷ (p // q) ⊗ # p
 \end{code}
 }}}
 
