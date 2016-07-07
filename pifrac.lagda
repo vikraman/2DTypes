@@ -479,16 +479,6 @@ data Val : (τ : U) → Set where
 \end{code}
 }}}
 
-\AgdaHide{
-\begin{code}
--- the "identity" tangle:
-c÷c : {τ : U} (c : τ ⟷ τ) → c ÷ c
-c÷c {_} c < i , p , α > < j , q , β > =
-  c ^ (i ℤ.+ (ℤ.- j)) ,
-  α ● 2! (lower i (ℤ.- j) ⊡ β ● assoc◎r ● id⇔ ⊡ (^⇔! j) ⊡ id⇔ ● id⇔ ⊡ rinv◎l ● idr◎l)
-\end{code}
-}
-
 \noindent The first four lines define the conventional values for the
 unit, sum, and product types.  The next defines values of type
 $\order{p}$: a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
