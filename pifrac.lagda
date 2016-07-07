@@ -57,7 +57,7 @@ groupoid, and both
 $\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ and
 $\AgdaBound{q}~\AgdaInductiveConstructor{\textbackslash\textbackslash}~\AgdaBound{p}$
 denote the division groupoid $\divg{p}{q}$. Having both versions
-simplifies some of the code avoid series of swaps. There is no
+simplifies some of the code by avoiding series of swaps. There is no
 primitive that denotes $\iorder{p}$ but this groupoid can be denoted
 using
 $\AgdaInductiveConstructor{id⟷}~\AgdaInductiveConstructor{//}~\AgdaBound{p}$
@@ -67,27 +67,26 @@ The definition of 1-combinators is also identical to the presentation
 in Sec.~\ref{sec:pi} except for the addition of
 $\AgdaInductiveConstructor{η-}$, $\AgdaInductiveConstructor{η+}$,
 $\AgdaInductiveConstructor{ε+}$, $\AgdaInductiveConstructor{ε-}$, and
-\AgdaInductiveConstructor{synchr⋆}, and 
+\AgdaInductiveConstructor{synchr⋆}, and
 \AgdaInductiveConstructor{synchl⋆} which have the following
-explanation. The first constructors are inspired by similar morphisms
-from \emph{compact closed categories} which are the general framework
-for categories whose objects have duals~\cite{ccc}. In that setting,
-the dual $A^*$ of an object $A$ comes equipped with two morphisms:
-\begin{itemize}
-\item a \emph{unit} $\eta_A : \ot \rightarrow A^* \otimes A$, and
-\item a \emph{counit} $\epsilon_A : A \otimes A^* \rightarrow \ot$
-\end{itemize}
-that satisfy appropriate coherence conditions. In our setting every
-object $\order{p}$ has a dual $\iorder{p}$ and our versions of $\eta$
-and $\epsilon$ entangle the product $\iorder{p} \otimes \order{p}$
-using $\AgdaInductiveConstructor{//}$ or
+explanation. The first four constructors are inspired by morphisms in
+\emph{compact closed categories} which are the general framework for
+categories whose objects have duals~\cite{ccc}. In that setting, the
+dual $A^*$ of an object $A$ comes equipped with two morphisms:
+\begin{itemize} \item a \emph{unit} $\eta_A : \ot \rightarrow A^*
+\otimes A$, and \item a \emph{counit} $\epsilon_A : A \otimes A^*
+\rightarrow \ot$ \end{itemize} that satisfy appropriate coherence
+conditions. In our setting every object $\order{p}$ has a dual
+$\iorder{p}$ and our versions of $\eta$ and $\epsilon$ entangle the
+product $\iorder{p} \otimes \order{p}$ using
+$\AgdaInductiveConstructor{//}$ or
 $\AgdaInductiveConstructor{\textbackslash\textbackslash}$. The two
 remaining combinators are \AgdaInductiveConstructor{synchr⋆} and
 \AgdaInductiveConstructor{synchl⋆} which, as their names suggest,
 perform a form of synchronization between positive and negative
 information. Their precise semantics will be discussed in the next
 section but for now it is useful to think of them as generalized
-versions of associativity. 
+versions of associativity.
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -490,7 +489,7 @@ Formally we define values as follows:
 \begin{code}
 _÷_ : {τ : U} (p q : τ ⟷ τ) → Set
 _÷_ {τ} p q =   (pi : Iter p) → (qj : Iter q) →
-                       Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
+                Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
 
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
@@ -513,7 +512,7 @@ of $p$ (say $p ^ i$) and any iterate of $q$ (say $q ^ j$), we can
 build a combinator $r$ such that
 $\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i} ~\AgdaDatatype{⇔}~
 \AgdaBound{r}~\AgdaInductiveConstructor{◎}~\AgdaBound{q}~\AgdaFunction{\^{}}~\AgdaBound{j}$.
-This $\AgdaBound{r}$ is of course
+This combinator $\AgdaBound{r}$ is of course, up to equivalence,
 $\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i}
 ~\AgdaInductiveConstructor{◎}~
 \AgdaBound{q}~\AgdaFunction{\^{}}~(\AgdaFunction{-} \AgdaBound{j})$.
@@ -524,7 +523,8 @@ the constructor).
 
 In the special case when $p$ and $q$ are identical, we get the
 \emph{identity tangle}~$p~\div~p$ which should intuitively be
-equivalent to the identity. Indeed we can verify this fact:
+equivalent to a trivial type with just one element. Indeed we can
+verify this fact:
 
 {\setlength{\mathindent}{0cm}
 \medskip

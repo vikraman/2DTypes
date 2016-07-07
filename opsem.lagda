@@ -148,21 +148,48 @@ mutual
 
 cong≈ :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) {v w : Val τ₁} → 
          v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
+\end{code}}}}
+\AgdaHide{
+\begin{code}
 cong≈ = {!!} -- omitted
+\end{code}}
 
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
+\begin{code}
 fwd◎bwd≈id :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) → 
               𝓐𝓹 c (𝓐𝓹⁻¹ c v) ≈ v
+\end{code}}}}
+\AgdaHide{
+\begin{code}
 fwd◎bwd≈id = {!!} -- omitted
+\end{code}}
 
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
+\begin{code}
 bwd-coherence :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) → 
                  𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
+\end{code}}}}
+\AgdaHide{
+\begin{code}
 bwd-coherence = {!!} -- omitted
+\end{code}}
 
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
+\begin{code}
 fwd-2-coherence :  {τ₁ τ₂ : U} → (c₁ c₂ : τ₁ ⟷ τ₂) →
                    (α : c₁ ⇔ c₂) → 
                    (v : Val τ₁) → 𝓐𝓹 c₁ v ≈ 𝓐𝓹 c₂ v
-fwd-2-coherence = {!!} -- omitted
 \end{code}}}}
+\AgdaHide{
+\begin{code}
+fwd-2-coherence = {!!} -- omitted
+\end{code}}
 
 %%%%%%%
 \subsection{Examples} 
