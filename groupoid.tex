@@ -128,24 +128,33 @@ $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Action Groupoids $\ag{\tau}{p}$}
 
-Given a 1-combinator $p : \tau \iso \tau$, we can build the
-\emph{action groupoid} $\ag{\tau}{p}$ defined as
-follows~\cite{groupoidintro}. The objects of $\ag{\tau}{p}$ are the
-elements~$v_i$ of the set $\sem{\tau}$ and there is a morphism between
-$v_i$ and~$v_j$ if applying some number of iterations of $p$ to $v_i$
-produces~$v_j$. For example, consider the type $\mathbb{3}$ and the
-1-combinator $a_2$ from Sec.~\ref{sec:pisem}. Since $a_2$ has order 2,
-we have $a_2 ^ k$ for any integer~$k$ is, up to equivalence, either
-$\texttt{id}$ or $a_2$. Therefore, the groupoid $\ag{\mathbb{3}}{a_2}$
-looks exactly like $G_2$ in Fig.~\ref{fig:groupoids2} with the names
-of the objects relabeled to $\inl{(\inl{\unitv})}$,
-$\inl{(\inr{\unitv})}$, and $\inr{\unitv}$ and the non-identity
-morphisms labeled $a_2$. As explained above, the groupoid has
-cardinality $\frac{3}{2}$ which corresponds to the quotient of the
-cardinality of the set $\mathbb{3}$ divided by the order of
-$a_2$. Note that in the calculation of the cardinality, we use the
-fact that the loop $a_2 \odot a_2$ going from $\inl{(\inl{\unitv})}$
-to $\inl{(\inr{\unitv})}$ and back is equivalent to the identity.
+Action groupoids~\cite{groupoidintro} were the inspiration for our
+semantic development. They provided the main insight of using the
+group structure associated with reversible programs as the equivalence
+relation used to build quotient types. Once this construction was
+thoroughly understood, it was generalized to the iteration groupoids,
+inverse order groupoids, and division groupoids that are actually used
+in our semantics. We find it illuminating to present the material
+starting from action groupoids. 
+
+Given a 1-combinator $p : \tau \iso \tau$, we build a groupoid
+$\ag{\tau}{p}$ defined as follows. The objects of $\ag{\tau}{p}$ are
+the elements~$v_i$ of the set $\sem{\tau}$ and there is a morphism
+between $v_i$ and~$v_j$ if applying some number of iterations of $p$
+to $v_i$ produces~$v_j$. For example, consider the type $\mathbb{3}$
+and the 1-combinator $a_2$ from Sec.~\ref{sec:pisem}. Since $a_2$ has
+order 2, we have $a_2 ^ k$ for any integer~$k$ is, up to equivalence,
+either $\texttt{id}$ or $a_2$. Therefore, the groupoid
+$\ag{\mathbb{3}}{a_2}$ looks exactly like $G_2$ in
+Fig.~\ref{fig:groupoids2} with the names of the objects relabeled to
+$\inl{(\inl{\unitv})}$, $\inl{(\inr{\unitv})}$, and $\inr{\unitv}$ and
+the non-identity morphisms labeled $a_2$. As explained above, the
+groupoid has cardinality $\frac{3}{2}$ which corresponds to the
+quotient of the cardinality of the set $\mathbb{3}$ divided by the
+order of $a_2$. Note that in the calculation of the cardinality, we
+use the fact that the loop $a_2 \odot a_2$ going from
+$\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back is
+equivalent to the identity.
 
 Generally speaking, using known facts about the order of permutations
 on finite sets, we highlight a few additional properties of action
@@ -203,7 +212,7 @@ when viewed as an independent system, must have fractional
 cardinality.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Programs and Program Iteration as Data}
+\subsection{Program Iteration as Data}
    
 Action groupoids $\ag{\tau}{p}$ allow us to build groupoids with
 fractional cardinality by taking the quotient of a simple finite type
@@ -216,31 +225,22 @@ will present the construction of a simpler related groupoid
 $\order{p}$ that will serve as the multiplicative inverse of
 $\iorder{p}$. Both constructions depend on the possibility of treating
 programs (1-combinators) from a type to itself as data. More
-precisely, for each 1-combinator $p : \tau\iso\tau$, we form two sets:
-\begin{itemize}
-\item the set $\sing{p}$ whose elements are pairs consisting of a
-  1-combinator $q : \tau\iso\tau$ and a 2-combinator
-  $\alpha : q \isotwo p$, 
-\item the set $\iter{p}$ whose elements are triples consisting of an
-  integer~$k$, a 1-combinator $q : \tau\iso\tau$, and a 2-combinator
-  $\alpha : q \isotwo p^k$.
-\end{itemize} 
+precisely, for each 1-combinator $p : \tau\iso\tau$, we form the set
+$\sing{p}$ whose elements are pairs consisting of a 1-combinator
+$q : \tau\iso\tau$ and a 2-combinator $\alpha : q \isotwo p$. 
 For example, we have:
 \[\begin{array}{rcl}
-\sing{a_2} &=& \{ \pair{a_2}{\idisotwo}, \pair{a_2\odot\idiso}{\idrdl},\ldots \} \\
 \iter{a_2} &=& \{ \triple{0}{\idiso}{\idisotwo},\triple{1}{a_2}{\idrdr}, \triple{-1}{a_2}{\idisotwo}, \ldots \}
 \end{array}\]
-The idea is that $\sing{a_2}$ is, up to equivalence, a singleton set
-containing the value $a_2$, and that $\iter{a_2}$ generalizes the
-situation by including all iterates $(a_2)^k$ of $a_2$.  Because of
-the underlying group structure of automorphisms, there are, up to
-equivalence, only $\ord{a_2}$ distinct iterates in $\iter{a_2}$.  We
-emphasize that, in our proof-relevant setting, it is critical to
-neither collapse $\sing{a_2}$ to just $\{ a_2 \}$ nor collapse
+The idea is that $\iter{a_2}$ is, up to equivalence, the set of all
+distinct iterates $(a_2)^k$ of $a_2$.  Because of the underlying group
+structure of automorphisms, there are, up to equivalence, only
+$\ord{a_2}$ distinct iterates in $\iter{a_2}$.  We emphasize that, in
+our proof-relevant setting, it is critical not to collapse
 $\iter{a_2}$ to just $\{ \idiso, a_2 \}$. In the next two sections, we
-will use the elements of $\sing{p}$ and $\iter{p}$ as either objects
-(emphasizing their ``data'' aspect) or morphisms (emphasizing their
-``program'' aspect) in various groupoid constructions.
+will use the elements of $\iter{p}$ as either objects (emphasizing
+their ``data'' aspect) or morphisms (emphasizing their ``program''
+aspect) in various groupoid constructions.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Iteration Groupoids $\order{p}$}
@@ -287,17 +287,16 @@ where $\distiterplus{p}{k_1}{k_2}$ is defined in
 Lem.~\ref{lem:distiterplus}. The common categorical representation of
 a group is a category with one trivial object and the group elements
 as morphisms on that trivial object. Our construction is essentially
-the same except that in our proof-relevant setting the trivial object
-is replaced by the collection of equivalent objects in the set
-$\sing{p}$. 
+the same except that the trivial object is represented as the iterates
+of the identity over a singleton type. 
 
 Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
 $\iorder{p}$ is the groupoid (2-groupoid technically) whose objects
-are the elements of $\sing{p}$. Since all these objects are
-equivalent, every pair of objects is connected by the morphisms in
-$\iter{p}$. To capture the relationship between these morphisms, we
-also have 2-morphisms relating the distinct iterates as in the
-previous section. (See Appendix for the Agda construction.)
+are the iterates in $\iter{\idiso_{\top}}$. Every pair of objects is
+connected by the morphisms in $\iter{p}$. To capture the relationship
+between these morphisms, we also have 2-morphisms relating the
+distinct iterates as in the previous section. (See Appendix for the
+Agda construction.)
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$
@@ -330,7 +329,8 @@ there exists an iterate $\triple{k}{q}{\alpha}$ in $\iter{r}$ such
 that $(q_1 \odot q) \isotwo (q \odot q_2)$. When $r$ is $\idiso$ this
 construction reduces to $\order{p}$. When $p$ is $\idiso$, this
 construction reduces to $\iorder{r}$. Generally, the cardinality of
-$\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. 
+$\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix for the Agda
+construction.)
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%
