@@ -123,3 +123,11 @@ module _ {T : U} where
                     }
   module EqR where
     open import Relation.Binary.EqReasoning ≈-setoid public
+
+-----------
+-- Justifying synchr⋆ 's implementation:
+--    synchr⋆ : {t : U} {p q : t ⟷ t} → (p // q) ⊗ # p ⟷ # p ⊗ (q \\ p)
+synchr⋆-lemma : {t : U} {p q : t ⟷ t} → (ip : Iter p) → (x : p ÷ q) →
+  ∀ (iq : Iter q) → Iter.q  ip ⇔ Σ.proj₁ (x ip iq) ◎ Iter.q iq
+synchr⋆-lemma ip x iq with x ip iq
+... | r & pf = pf
