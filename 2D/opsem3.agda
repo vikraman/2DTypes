@@ -44,8 +44,7 @@ mutual
   
   𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₁ → Val T₂
   𝓐𝓹 (Prim x) v = prim x v
-  𝓐𝓹 (c ◎ c₁) v =
-    let x = 𝓐𝓹 c v in 𝓐𝓹 c₁ x
+  𝓐𝓹 (c ◎ c₁) v = let x = 𝓐𝓹 c v in 𝓐𝓹 c₁ x
   𝓐𝓹 (c ⊕ c₁) (inl v) = inl (𝓐𝓹 c v)
   𝓐𝓹 (c ⊕ c₁) (inr v) = inr (𝓐𝓹 c₁ v)
   𝓐𝓹 (c ⊗ c₁) [ v , w ] = [ 𝓐𝓹 c v , 𝓐𝓹 c₁ w ]
