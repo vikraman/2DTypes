@@ -935,8 +935,8 @@ are only a finite number of possible choices for each value.
 
 We have presented a natural notion of \emph{fractional types} that
 enriches a class of reversible programming languages in several
-dimensions. Although it might be possible to use fractional types in a
-conventional (i.e., irreversible) programming language, their full
+dimensions.  Further research might show how to use fractional 
+types in a conventional (i.e., irreversible) programming language, their full
 potential is only achieved when the ambient language guarantees that
 no information is created or erased. 
 
@@ -956,13 +956,13 @@ realize such an operational semantics using global reference cells,
 backtracking, or other conventional technique. A more enlightening and
 less ad hoc implementation encodes the required dependency in dataflow
 constraints encoded in dependent types. The key idea is to generalize
-the usual cartesian product to a \emph{tangled product} in allows the
+the usual cartesian product to a \emph{tangled product} that allows the
 components to interact at synchronization points. 
 
 Our fractional types extend the natural denotation of types from sets
 to non-trivial groupoids but they only scratch the surface of the
 tower of weak $\omega$-groupoids that is expressible in HoTT. A long
-term goal of the research is to find natural type constructors
+term goal of our research is to find natural type constructors
 inspired by the rich combinatorial structure of weak
 $\omega$-groupoids and that provide novel programming abstractions. 
 
