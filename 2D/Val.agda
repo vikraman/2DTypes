@@ -37,6 +37,12 @@ get-q (comb i) = Iter.q i
 get-iter : {t : U} {p : t ⟷ t} → Val (# p) → Iter p
 get-iter (comb i) = i
 
+get// : {t : U} {p q : t ⟷ t} → Val (p // q) → p ÷ q
+get// (tangr x) = x
+
+get\\ : {t : U} {p q : t ⟷ t} → Val (q \\ p) → p ÷ q
+get\\ (tangl x) = x
+
 π₁ : {s t : U} → Val (s ⊗ t) → Val s
 π₁ [ x , _ ] = x
 π₂ : {s t : U} → Val (s ⊗ t) → Val t
@@ -63,8 +69,10 @@ mutual
           get-q p^i ⇔ get-q p^j → p^i ≈ p^j
     [,]≈ : {s t : U} {v₁ v₂ : Val (s ⊗ t)} → π₁ v₁ ≈ π₁ v₂ → π₂ v₁ ≈ π₂ v₂ → v₁ ≈ v₂
     inj≈ : {s t : U} → {v₁ v₂ : Val (s ⊕ t)} → inj-eq v₁ v₂ → v₁ ≈ v₂
-    tangr≈ : {τ : U} {p q : τ ⟷ τ} → {f g : Val (p // q)} → f ≈ g
-    tangl≈ : {τ : U} {q p : τ ⟷ τ} → {f g : Val (q \\ p)} → f ≈ g
+    tangr≈ : {τ : U} {p q : τ ⟷ τ} → {f g : Val (p // q)} →
+      (∀ {x : Iter p} {y : Iter q} → Σ.proj₁ (get// f x y) ⇔ Σ.proj₁ (get// g x y)) → f ≈ g
+    tangl≈ : {τ : U} {q p : τ ⟷ τ} → {f g : Val (q \\ p)} →
+      (∀ {x : Iter p} {y : Iter q} → Σ.proj₁ (get\\ f x y) ⇔ Σ.proj₁ (get\\ g x y)) → f ≈ g
 
 get-equiv : ∀ {t} {p : t ⟷ t} {p^i p^j : Val (# p)} → p^i ≈ p^j → get-q p^i ⇔ get-q p^j
 get-equiv (#p≈ x) = x
@@ -75,8 +83,8 @@ refl≈ {v = inl v} refl = inj≈ (refl≈ refl)
 refl≈ {v = inr v} refl = inj≈ (refl≈ refl)
 refl≈ {v = [ v , w ]} refl = [,]≈ (refl≈ refl) (refl≈ refl)
 refl≈ {v = comb q } refl = #p≈ id⇔
-refl≈ {v = tangr f } refl = tangr≈
-refl≈ {v = tangl f } refl = tangl≈
+refl≈ {v = tangr f } refl = tangr≈ id⇔
+refl≈ {v = tangl f } refl = tangl≈ id⇔
 
 trans≈ : {t : U} → {a b c : Val t} → a ≈ b → b ≈ c → a ≈ c
 trans≈ ⋆≈ ⋆≈ = ⋆≈
@@ -89,8 +97,8 @@ trans≈ (inj≈ {v₁ = inr v₁} {inl v₂} ()) (inj≈ {v₂ = inl v₃} eq�
 trans≈ (inj≈ {v₁ = inr v₁} {inr v₂} eq₁) (inj≈ {v₂ = inl v₃} ())
 trans≈ (inj≈ {v₁ = inr v₁} {inl v₂} ()) (inj≈ {v₂ = inr v₃} eq₂)
 trans≈ (inj≈ {v₁ = inr v₁} {inr v₂} eq₁) (inj≈ {v₂ = inr v₃} eq₂) = inj≈ (trans≈ eq₁ eq₂)
-trans≈ (tangr≈) (tangr≈) = tangr≈
-trans≈ (tangl≈) (tangl≈) = tangl≈
+trans≈ (tangr≈ x) (tangr≈ y) = tangr≈ (x ● y)
+trans≈ (tangl≈ x) (tangl≈ y) = tangl≈ (x ● y)
 
 sym≈ : {t : U} → {a b : Val t} → a ≈ b → b ≈ a
 sym≈ ⋆≈ = ⋆≈
@@ -100,8 +108,8 @@ sym≈ (inj≈ {v₁ = inl v₁} {inl v₂} e) = inj≈ (sym≈ e)
 sym≈ (inj≈ {v₁ = inl v₁} {inr v₂} ())
 sym≈ (inj≈ {v₁ = inr v₁} {inl v₂} ())
 sym≈ (inj≈ {v₁ = inr v₁} {inr v₂} e) = inj≈ (sym≈ e)
-sym≈ (tangl≈) = tangl≈
-sym≈ (tangr≈) = tangr≈
+sym≈ (tangl≈ x) = tangl≈ (2! x)
+sym≈ (tangr≈ x) = tangr≈ (2! x)
 
 open import Relation.Binary
 
