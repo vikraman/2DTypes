@@ -51,6 +51,13 @@ discreteG S = record { _⁻¹ = sym
 \end{code}
 }
 
+First, the iteration groupoids, corresponding to $\order{p}$.
+Then we present a hand-unrolled version which corresponds to
+$\iorder{p}$. And finally the general case of $\div{p}{q}$.
+The reader might find it an interesting exercise to show
+that the groupoids do indeed degenerate correctly when
+$p$ or $q$ is chosen as the identity combinator.
+
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
