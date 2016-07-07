@@ -325,7 +325,7 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 ⇔! split⊕-id⟷ = split⊕-id⟷
 ⇔! id⟷⊕id⟷⇔ = id⟷⊕id⟷⇔
 \end{code}
-}}}}}
+}}}}
 
 As motivated in the previous section, we will also need to consider
 the singleton type $\sing{p}$ including all combinators equivalent to
