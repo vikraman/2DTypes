@@ -337,12 +337,12 @@ negative numbers (debts and loans) in finance.
 
 \paragraph*{Resource Creation and Annihilation.} In $\pifrac$, all
 programs preserve information and hence preserve cardinality. As the
-cardinality of the type $n \times \frac{1}{n}$ is~1 (for non-zero
+cardinality of the type $n \otimes \frac{1}{n}$ is~1 (for non-zero
 $n$), $\pifrac$ has, for example, terms of type $\ot \rightarrow (8
-\times \frac{1}{8})$.\footnote{As will be explained in the following
+\otimes \frac{1}{8})$.\footnote{As will be explained in the following
 sections, the actual type on the right is a dependent type.} Such
 terms take the unit type $\ot$ with entropy $\log{1} = 0$ to the type
-$8 \times \frac{1}{8}$ with entropy $\log{8} + (- \log{8}) = 3 - 3 =
+$8 \otimes \frac{1}{8}$ with entropy $\log{8} + (- \log{8}) = 3 - 3 =
 0$. The entropy is globally preserved as desired and expected. But
 interestingly, the term introduces, locally, two types that have
 entropies of $3$ and $-3$ respectively. Even though the positive and
@@ -351,10 +351,10 @@ further processed independently under some conditions. The most
 important condition is that the entire system must be
 information-preserving as this ensures that the net positive and
 negative entropies must eventually cancel out by a use of a term of
-the reverse type $(8 \times \frac{1}{8}) \rightarrow \ot$. The
+the reverse type $(8 \otimes \frac{1}{8}) \rightarrow \ot$. The
 simplest way to appreciate the expressiveness afforded by such a
 mechanism is the following credit card analogy. Think of the
-computation of type $\ot \rightarrow (8 \times \frac{1}{8})$ as
+computation of type $\ot \rightarrow (8 \otimes \frac{1}{8})$ as
 creating, from nothing, an amount of money to be paid to the merchant
 instantly, together with a corresponding debt that propagates through
 the system. As long as the entire financial system is debt-preserving,
