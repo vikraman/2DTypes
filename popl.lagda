@@ -205,10 +205,10 @@ formalized in Agda.
 \section{Introduction}
 
 In Homotopy Type Theory (HoTT)~\citeyearpar{hottbook}, types have the
-structure of \emph{weak $\omega$-groupoids}. As a first approximation, we can
-think of such structures as sets with points (objects) and paths
-(equivalences) between the points and paths between these paths and so
-on. Here are two simple but non-trivial examples:
+structure of \emph{weak $\omega$-groupoids}. As a first approximation,
+we can think of such structures as sets with points (objects) and
+paths (equivalences) between the points and higher paths between these
+paths and so on. Here are two simple but non-trivial examples:
 
 \medskip
 \begin{figure}[h]
@@ -367,7 +367,7 @@ some other form of communication to ensure that the amount of money
 created matches the amount of money consumed. This other form of
 communication can be realized using several familiar computational
 effects such as global references, communication channels, or
-backtracking. An alternative idea is capture the ``entanglement''
+backtracking. An alternative idea is to capture the ``entanglement''
 between the positive and negative information using a precise
 dependent type. In this introduction, and in the next section, which
 are aimed at conveying high-level ideas and intuitions, we will
@@ -383,7 +383,7 @@ semiring elements, semiring identities as type isomorphisms, and
 justifications for semiring identities as program transformations and
 optimizations~\cite{Carette2016}. This correspondence provides a rich
 proof-relevant version of the Curry-Howard correspondence between
-algebra and reversible programming languages. The addition to
+algebra and reversible programming languages. The addition of
 fractional types to the mix enriches the correspondence to commutative
 semifields, providing a categorification~\cite{math/9802029} of the
 non-negative rational numbers in a computational setting.
