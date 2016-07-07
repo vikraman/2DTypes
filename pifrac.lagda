@@ -443,18 +443,17 @@ x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow
 \tau$ and then provide a separate equivalence relation
 ($\alpha$-equivalence) to express the fact that these two values are
 indistinguishable. The treatment in our setting is similar but richer
-as the equivalence relation is not external but is itself part of the
-value and the resulting count may be fractional. Formally we define
-values as follows:
+as in some cases the equivalence relation is not external but is
+itself part of the value and the resulting count may be fractional.
+Formally we define values as follows:
 
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
 \begin{code}
--- a fraction p ÷ q is a way of identifying r such that p ^ i ◎ ! q ^ j ⇔ r
--- or (equivalently) p ^ i ⇔ r ◎ q ^ j.
 _÷_ : {τ : U} (p q : τ ⟷ τ) → Set
-_÷_ {τ} p q = (pi : Iter p) → (qj : Iter q) → Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
+_÷_ {τ} p q = (pi : Iter p) → (qj : Iter q) →
+  Σ (τ ⟷ τ) (λ r → Iter.q pi ⇔ r ◎ Iter.q qj)
 
 data Val : (τ : U) → Set where
   ⋆ :       Val 𝟙
@@ -478,12 +477,22 @@ c÷c {_} c < i , p , α > < j , q , β > =
 }
 
 \noindent The first four lines define the conventional values for the
-unit, sum, and product types. The last two lines define values of type
-$\order{p}$ and $\iorder{p}$ using the iterates of $p$. In the case of
-$\order{p}$, a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
-the program $p$ iterated $k$ times. In the case of $\iorder{p}$, a
-value $\AgdaInductiveConstructor{1/comb}(p^k)$ represents the
-equivalence that $p^k$ can be annihilated to the identity. 
+unit, sum, and product types.  The next defines values of type
+$\order{p}$: a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
+the program $p$ iterated $k$ times.  We then define general quotient
+types, which come in right-handed and left-handed versions.  They
+both rely on a type $p ÷ q$ which intuitively says that given
+any iterate of $p$ (say $p ^ i$) and any iterate of $q$ (say $q ^ j$),
+we can build a combinator $r$ such that $p ^ i ⇔ r ◎ q ^ j$. This is
+of course exactly $p ^ i ◎ q ^ (- j)$.  We then interpret such a type
+as \emph{containing} all iterates of $p$ as objects, quotiented out
+by iterates of $q$ as relations.  As these are not independent, we
+consider them ``tangled'' (thus the name of the constructor).
+
+It is worthwhile noting two special cases.  First, when $q = \AgdaInductiveConstructor{id⟷}$,
+$p // q$ is then isomorphic to $\AgdaType{Iter} p$.  And when
+$p = \AgdaInductiveConstructor{id⟷}$, we interpret $p // q$ as
+having a single object with $\order(q)$ symmetries.
 
 % Formally we declare when two values are indistinguishable using the
 % relation below:
