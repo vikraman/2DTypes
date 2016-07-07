@@ -139,6 +139,15 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
+  hom⊕◎⇔ : {τ₁ τ₂ τ₃ τ₄ τ₅ τ₆ : U} {c₁ : τ₅ ⟷ τ₁} {c₂ : τ₆ ⟷ τ₂}
+        {c₃ : τ₁ ⟷ τ₃} {c₄ : τ₂ ⟷ τ₄} →
+        ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄)) ⇔ ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄))
+  hom◎⊕⇔ : {τ₁ τ₂ τ₃ τ₄ τ₅ τ₆ : U} {c₁ : τ₅ ⟷ τ₁} {c₂ : τ₆ ⟷ τ₂}
+        {c₃ : τ₁ ⟷ τ₃} {c₄ : τ₂ ⟷ τ₄} →
+         ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄)) ⇔ ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄))
+  split⊕-id⟷ : {τ₁ τ₂ : U} → Prim (id⟷ {τ₁ ⊕ τ₂}) ⇔ Prim id⟷ ⊕ Prim id⟷
+  id⟷⊕id⟷⇔ : {τ₁ τ₂ : U} → (Prim (id⟷ {τ₁}) ⊕ Prim (id⟷ {τ₂})) ⇔ Prim id⟷
+
 {-  -- coherence for num-app
   resp-app-num// : {t : U} {p q r : t ⟷ t} → {c₀ c₁ : # p ⟷ # r} →
     c₀ ⇔ c₁ → app-num// {q = q} c₀ ⇔ app-num// c₁
@@ -177,6 +186,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! (α ● β) = (2! β) ● (2! α)
 2! (resp⊕⇔ α β) = resp⊕⇔ (2! α) (2! β)
 2! (resp⊗⇔ α β) = resp⊗⇔ (2! α) (2! β)
+2! hom⊕◎⇔ = hom◎⊕⇔
+2! hom◎⊕⇔ = hom⊕◎⇔
+2! split⊕-id⟷ = id⟷⊕id⟷⇔
+2! id⟷⊕id⟷⇔ = split⊕-id⟷ 
 -- 2! ccc₁l = ccc₁r
 -- 2! ccc₁r = ccc₁l
 -- 2! ccc₂l = ccc₂r
@@ -243,6 +256,10 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 ⇔! (q₁ ⊡ q₂) = ⇔! q₂ ⊡ ⇔! q₁
 ⇔! (resp⊕⇔ q₁ q₂) = resp⊕⇔ (⇔! q₁) (⇔! q₂)
 ⇔! (resp⊗⇔ q₁ q₂) = resp⊗⇔ (⇔! q₁) (⇔! q₂)
+⇔! hom⊕◎⇔ = hom⊕◎⇔
+⇔! hom◎⊕⇔ = hom◎⊕⇔
+⇔! split⊕-id⟷ = split⊕-id⟷
+⇔! id⟷⊕id⟷⇔ = id⟷⊕id⟷⇔
 -- ⇔! ccc₁l = ccc₂l
 -- ⇔! ccc₁r = ccc₂r
 -- ⇔! ccc₂l = ccc₁l
