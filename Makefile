@@ -1,12 +1,12 @@
-all : types.pdf
+all : fractypes.pdf
 
-types.pdf : types.pdf
-	pdflatex types.tex
+fractypes.pdf : fractypes.tex
+	pdflatex fractypes.tex
 
-types.tex : types.lagda pibackground.tex groupoid.tex pifrac.tex opsem.tex limitations.tex appendix.tex
-	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library types.lagda
-	perl postprocess-latex.pl types.tex > types.processed && \
-	mv types.processed types.tex
+fractypes.tex : fractypes.lagda pibackground.tex groupoid.tex pifrac.tex opsem.tex limitations.tex appendix.tex
+	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library fractypes.lagda
+	perl postprocess-latex.pl fractypes.tex > fractypes.processed && \
+	mv fractypes.processed fractypes.tex
 
 pifrac.tex : pifrac.lagda
 	agda --allow-unsolved-metas --latex -i . --latex-dir=. -i $(CATLIB) -l standard-library pifrac.lagda

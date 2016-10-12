@@ -1,18 +1,13 @@
-\documentclass[preprint]{sigplanconf}
+\documentclass[a4paper,USenglish]{lipics-v2016}
 
+\usepackage{amsthm,amstext,amssymb,amsmath}
 \usepackage[references]{agda} %% \AgdaRef{...}
 \usepackage{datetime}
-\usepackage[utf8x]{inputenc}
-\usepackage{amsthm}
 \usepackage{bbold}
 \usepackage{url}
 \usepackage{xcolor}
-\usepackage{amssymb}
 \usepackage{multicol}
 \usepackage{proof}
-\usepackage{amstext}
-\usepackage{amssymb}
-\usepackage{amsmath}
 \usepackage{stmaryrd}
 \usepackage{mathrsfs}
 \usepackage{mathabx}
@@ -116,10 +111,10 @@ $\displaystyle
 \newcommand{\sem}[1]{\llbracket #1 \rrbracket}
 
 %% \theoremstyle{remark}
-\newtheorem{definition}{Definition}
+%\newtheorem{definition}{Definition}
 \newtheorem{proposition}{Proposition}
-\newtheorem{example}{Example}
-\newtheorem{lemma}{Lemma}
+%\newtheorem{example}{Example}
+%\newtheorem{lemma}{Lemma}
 
 \renewcommand{\AgdaCodeStyle}{\small}
 %% shorten the longarrow
@@ -149,29 +144,35 @@ $\displaystyle
 \AgdaHide{
 \begin{code}
 {-# OPTIONS --without-K #-}
-module popl where
+module fractypes where
 \end{code}
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\special{papersize=8.5in,11in}
-\setlength{\pdfpageheight}{\paperheight}
-\setlength{\pdfpagewidth}{\paperwidth}
-
-\conferenceinfo{CONF 'yy}{Month d--d, 20yy, City, ST, Country}
-\copyrightyear{20yy}
-\copyrightdata{978-1-nnnn-nnnn-n/yy/mm}
-\copyrightdoi{nnnnnnn.nnnnnnn}
-
-\titlebanner{Fractional Types}
-\preprintfooter{\today\ \currenttime}
-
 \title{Fractional Types} 
-\authorinfo{Anonymous}{}{}
-%% Chao-Hong Chen, Vikraman Choudhury,
-%% Jacques Carette, Amr Sabry
+\titlerunning{Fractional Types}
+\author[1]{Jacques Carette}
+\author[2]{Chao-Hong Chen}
+\author[3]{Vikraman Choudhury}
+\author[4]{Amr Sabry}
+\affil[1]{Computing and Software Department, McMaster University, 
+  Hamilton, Ontario, Canada \\ \texttt{carette@mcmaster.ca}}
+\affil[2]{Computer Science Department, Indiana University, 
+  Bloomington, Indiana, USA \\ \texttt{chen464@indiana.edu}}
+\affil[3]{Computer Science Department, Indiana University, 
+  Bloomington, Indiana, USA \\ \texttt{vikraman@indiana.edu}}
+\affil[4]{Computer Science Department, Indiana University, 
+  Bloomington, Indiana, USA \\ \texttt{sabry@indiana.edu}}
+
+\authorrunning{J. Carette, C.-H. Chen, V. Choudhury and A. Sabry}
+
+\Copyright{Jacques Carette, Chao-Hong Chen, Vikraman Choudhury and Amr Sabry}
+
+\keywords{dummy}
+\subjclass{dummy}
+
 \maketitle
 
 \begin{abstract}
@@ -204,7 +205,7 @@ formalized in Agda.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In Homotopy Type Theory (HoTT)~\citeyearpar{hottbook}, types have the
+In Homotopy Type Theory (HoTT)~\cite{hottbook}, types have the
 structure of \emph{weak $\omega$-groupoids}. As a first approximation,
 we can think of such structures as sets with points (objects) and
 paths (equivalences) between the points and higher paths between these
@@ -254,7 +255,7 @@ paths and so on. Here are two simple but non-trivial examples:
 \caption{\label{fig:groupoids}(a) The groupoid $\ag{6}{3}$ \qquad (b) The groupoid $\frac{1}{3}$}
 \end{figure}
 
-\medskip\noindent \citet{groupoidcard} assign to each groupoid a
+\medskip\noindent \cite{groupoidcard} assign to each groupoid a
 \emph{cardinality} that counts the objects up to equivalences. The
 groupoid on the left has six points \texttt{a}, \texttt{b}, \texttt{c},
 \texttt{d}, \texttt{e}, and \texttt{f} with two groups of three
@@ -280,11 +281,11 @@ are formalized and justified in the remainder of the paper.
 
 \paragraph*{Quotient Types.} Groupoids similar to $\ag{6}{3}$ in
 Fig.~\ref{fig:groupoids}(a) intuitively correspond to conventional
-\emph{quotient types}. Traditionally~\citep {quotient}, a quotient
+\emph{quotient types}. Traditionally~\cite {quotient}, a quotient
 type $\ag{T}{E}$ combines a type $T$ with an equivalence relation $E$
 that serves as the equality relation on the elements of $T$. Our
 notion of fractional types in $\pifrac$ will subsume conventional
-quotient types and their applications~\citep{Cohen2013} (e.g.,
+quotient types and their applications~\cite{Cohen2013} (e.g.,
 defining fractions, multivariate polynomials, field extensions,
 algebraic numbers, etc.)
 
@@ -313,9 +314,9 @@ needs 3 bits of memory for storage or 3 bits of bandwidth for
 communication. If quantum field theory is correct (as it so far seems
 to be) then information, during any physical process, is neither
 created nor
-destroyed. Landauer~\citeyearpar{Landauer:1961,bennett1985fundamental,Landauer},
-Bennet~\citeyearpar{Bennett:1973:LRC,bennett2003notes,bennett2010notes},
-Fredkin~\citeyearpar{fredkin1982conservative} and others made
+destroyed. Landauer~\cite{Landauer:1961,bennett1985fundamental,Landauer},
+Bennet~\cite{Bennett:1973:LRC,bennett2003notes,bennett2010notes},
+Fredkin~\cite{fredkin1982conservative} and others made
 compelling arguments that this physical principle induces a
 corresponding computational principle of ``conservation of
 information.'' In the context of finite types, generated from the
@@ -817,105 +818,6 @@ generalizes to arbitrary reversible programs $p$ with finite order:
 the back-and-forth negotiation is guaranteed to terminate as there
 are only a finite number of possible choices for each value.
 
-% There are two possible inputs id and swap. If the input is swap then
-% execution proceeds as follows:
-% \begin{verbatim}
-% swap -> 
-% ((),swap) -> 
-% ((swap,[*,swap]),swap) ->
-% (swap,([*,swap],swap)) ->
-% (swap,()) ->
-% swap
-% \end{verbatim}
-
-% If the input is id then execution proceeds as follows:
-
-% \begin{verbatim}
-%   swap^0
-% >> unit* >>
-%   ((),swap^0)
-% >> eta x id >>
-%   ((swap^1,[*,swap^1]),swap^0)
-% >> assoc >>
-%   (swap^1,([*,swap^1],swap^0)) 
-% >> id x epsilon >>
-%   (swap^1,([*,swap^1],swap^0)) 
-% << assoc <<
-%   ((swap^1,[*,swap^1]),swap^0)
-% << eta x id <<
-%   ((swap^2,[*,swap^2]),swap^0)
-% >> assoc >>
-%   ((swap^2,[*,swap^2]),swap^0)
-% >> id x epsilon >>
-%   (swap^2,())
-% >> unit* >>
-%   swap^2
-% \end{verbatim}
-
-% \begin{figure*}[ht]
-% Execution in terms of the machine states (eliding assoc):
-% \begin{verbatim}
-%     < unit*;etaxid;idxepsilon;unit* , swap^0 , [] >
-% |-> < unit* , swap^0 , Fst [] etaxid;idxepsilon;unit* >
-% |-> [ unit* , ((),swap^0) , Fst [] etaxid;idxepsilon;unit* ]
-% |-> < etaxid;idxepsilon;unit* , ((),swap^0) , Snd unit* [] >
-% |-> < etaxid , ((),swap^0) , Fst (Snd unit* []) (idxepsilon;unit*) >
-% |-> < eta , () , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 >
-% |-> [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) (idxepsilon;unit*)) id swap^0 ]
-% |-> < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
-% |-> [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
-% |-> [ etaxid , (swap^1 , (1/swap^1 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
-% |-> < idxepsilon;unit* , (swap^1 , (1/swap^1 , swap^0)) , Snd etaxid (Snd unit* []) >
-% |->*< epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
-% BACKWARDS EXECUTION STARTS
-% <-| < epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
-% <-| [ id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) ]
-% <-| < id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) >
-% <-| < idxepsilon , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd etaxid (Snd unit* [])) unit* > 
-% <-| < idxepsilon;unit* , ((swap^1 , 1/swap^1) , swap^0) , Snd etaxid (Snd unit* []) > 
-% <-| [ etaxid , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd unit* []) idxepsilon;unit* ]
-% <-| [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) ]
-% <-| < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) >
-% <-| [ eta , (swap^1 , 1/swap^1) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
-% REVERSE AGAIN; USED MONAD
-% |-> [ eta , (swap^2 , 1/swap^2) , Lx (Fst (Snd unit* []) idxepsilon;unit*) id swap^0 ]
-% |-> < id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) >
-% |-> [ id , swap^0 , Rx eta (swap^2 , 1/swap^2) (Rx (Fst (Snd unit* []) (idxepsilon;unit*))) ]
-% |-> [ etaxid , (swap^2 , (1/swap^2 , swap^0)) , Fst (Snd unit* []) (idxepsilon;unit*) ]
-% |-> < idxepsilon;unit* , (swap^2 , (1/swap^2 , swap^0)) , Snd etaxid (Snd unit* []) >
-% |->*< epsilon , (1/swap^2 , swap^0) , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) >
-% |-> [ epsilon , () , Rx id swap^2 (Fst (Snd etaxid (Snd unit* [])) unit*) ]
-% |-> [ idxepsilon , (swap^2,()) , Fst (Snd etaxid (Snd unit* [])) unit* ]
-% |-> < unit* , (swap^2,()) , Snd idxepsilon (Snd etaxid (Snd unit* [])) >
-% |->*[swap^2 , Snd unit* (Snd idxepsilon (Snd etaxid (Snd unit* []))) ]
-% \end{verbatim}
-% \end{figure*}
-
-% $\order{\textsf{swap}}$ be the type with
-% two distinct values
-
-% Generally speaking, a value is a point and a loop on that point. When
-% the loop is trivial we omit it; when the point is trivial we omit
-% it. So values of type $\order{p}$ will be denoted, $p^0=\mathit{id}$,
-% $p$, $p^2$, etc and values of type $1/\hash p$ will be denoted
-% $1/p^0=\mathit{id}$, $1/p$, $1/p^2$, etc. The semantics of $\eta$ and
-% $\epsilon$ involves some synchronization: $\eta$ initially makes a
-% choice to generate $(p,1/p)$ speculatively. As in any situation
-% involving speculative execution, the choice may be wrong. This would
-% become apparent when we reach $\epsilon$. (In a complete program we
-% are guaranteed to reach $\epsilon$ as a complete program cannot
-% produce something of a fractional type.) When we encounter $\epsilon$,
-% if the speculative guess done by $\eta$ was correct, we proceed to
-% cancel the positive and negative information. Otherwise $\epsilon$
-% backtracks by reversing the execution. When the reverse execution
-% reaches $\eta$, it uses the monad to update its speculative value by
-% appending one iteration of $p$ and then resumes forward
-% execution. This back-and-forth negotiation may occur several times but
-% is guaranteed to terminate since we will eventually exhaust all the
-% possible choices of iterating $p$ given that it has a finite order.
-
-% Here is a small circuit that illustrates the ideas: 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Body of the paper split into smaller files
 
@@ -966,177 +868,11 @@ term goal of our research is to find natural type constructors
 inspired by the rich combinatorial structure of weak
 $\omega$-groupoids and that provide novel programming abstractions. 
 
-% Need to look again at the 2D type theory papers by Harper et al. One
-% might argue that we have a clean presentation of these ideas. If it is
-% really clear that idea can also be moved to the introduction.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{appendix.tex}
 
-\bibliographystyle{abbrvnat}
+\bibliographystyle{plainurl}
 \bibliography{cites}
 
 \end{document}
-
-%% This type is again informally-equivalent to $\ag{C}{p}$ as it has the
-%% same cardinality.
-
-% \begin{tabular}{ccc}
-% \begin{minipage}{0.4\textwidth}
-% \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
-%   \draw (0,0) ellipse (9cm and 6cm);
-%   \node[below] (1) at (-6,0) {\texttt{sun}};
-%    \node[below] (2) at (-4,0) {\texttt{mon}};
-%   \node[below] (3) at (-2,0) {\texttt{tue}};
-%   \node[below] (4) at (0,0) {\texttt{wed}};
-%   \node[below] (5) at (2,0) {\texttt{thu}};
-%   \node[below] (6) at (4,0) {\texttt{fri}};
-%   \node[below] (7) at (6,0) {\texttt{sat}};
-%   \draw[fill] (-6,0) circle [radius=0.05];
-%   \draw[fill] (-4,0) circle [radius=0.05];
-%   \draw[fill] (-2,0) circle [radius=0.05];
-%   \draw[fill] (0,0) circle [radius=0.05];
-%   \draw[fill] (2,0) circle [radius=0.05];
-%   \draw[fill] (4,0) circle [radius=0.05];
-%   \draw[fill] (6,0) circle [radius=0.05];
-
-%   \path (1) edge [loop above] node[above] {$p^0$} (1);
-%   \path (1) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (1);
-%   \path (1) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (1);
-
-%   \path (2) edge [loop above] node[above] {$p^0$} (2);
-%   \path (2) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (2);
-%   \path (2) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (2);
-
-%   \path (3) edge [loop above] node[above] {$p^0$} (3);
-%   \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
-%   \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
-
-%   \path (4) edge [loop above] node[above] {$p^0$} (4);
-%   \path (4) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (4);
-%   \path (4) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (4);
-
-%   \path (5) edge [loop above] node[above] {$p^0$} (5);
-%   \path (5) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (5);
-%   \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
-
-%   \path (6) edge [loop above] node[above] {$p^0$} (6);
-%   \path (6) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (6);
-%   \path (6) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (6);
-
-%   \path (7) edge [loop above] node[above] {$p^0$} (7);
-%   \path (7) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (7);
-%   \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
-% \end{tikzpicture}
-% \end{minipage}
-% & 
-% $\times$
-% & 
-% \begin{minipage}{0.4\textwidth}
-% \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
-%   \draw (0,0) ellipse (8cm and 1.6cm);
-%   \node[below] at (-6,0) {\texttt{sun}};
-%    \node[below] at (-4,0) {\texttt{mon}};
-%   \node[below] at (-2,0) {\texttt{tue}};
-%   \node[below] at (0,0) {\texttt{wed}};
-%   \node[below] at (2,0) {\texttt{thu}};
-%   \node[below] at (4,0) {\texttt{fri}};
-%   \node[below] at (6,0) {\texttt{sat}};
-%   \draw[fill] (-6,0) circle [radius=0.05];
-%   \draw[fill] (-4,0) circle [radius=0.05];
-%   \draw[fill] (-2,0) circle [radius=0.05];
-%   \draw[fill] (0,0) circle [radius=0.05];
-%   \draw[fill] (2,0) circle [radius=0.05];
-%   \draw[fill] (4,0) circle [radius=0.05];
-%   \draw[fill] (6,0) circle [radius=0.05];
-%   \draw[->] (-6,0) -- (-4,0);
-%   \draw[->] (-4,0) -- (-2,0);
-%   \draw[->] (0,0) -- (2,0);
-%   \draw[->] (2,0) -- (4,0);
-%   \draw[->] (-6,0) to[bend left] (-2,0) ;
-%   \draw[->] (0,0) to[bend left] (4,0) ;
-% \end{tikzpicture}
-% \end{minipage}
-% \end{tabular}
-
-% The type of the left is equivalent to a type with $2\frac{1}{3}$
-% elements. The type of the right is equivalent to a type with 3
-% elements. So we have divided our 7 elements into the product of
-% $2\frac{1}{3}$ and 3 and we can operate on each cluster
-% separately. After simplification, the situation reduces to:
-
-% \medskip
-
-% \begin{tabular}{ccc}
-% \begin{minipage}{0.4\textwidth}
-% \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
-%   \draw (0,0) ellipse (6cm and 4cm);
-%   \node[below] (3) at (-3,0) {\texttt{smt}};
-%   \node[below] (4) at (0,0) {\texttt{wrf}};
-%   \node[below] (5) at (3,0) {\texttt{sat}};
-%   \draw[fill] (-3,0) circle [radius=0.05];
-%   \draw[fill] (0,0) circle [radius=0.05];
-%   \draw[fill] (3,0) circle [radius=0.05];
-
-%   \path (5) edge [loop above] node[above] {$p^0$} (5);
-%   \path (5) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (5);
-%   \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
-% \end{tikzpicture}
-% \end{minipage}
-% & 
-% $\times$
-% & 
-% \begin{minipage}{0.4\textwidth}
-% \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
-%   \draw (0,0) ellipse (5cm and 1.6cm);
-%   \node[below] at (-3,0) {\texttt{smt}};
-%   \node[below] at (0,0) {\texttt{wrf}};
-%   \node[below] at (3,0) {\texttt{sat}};
-%   \draw[fill] (-3,0) circle [radius=0.05];
-%   \draw[fill] (0,0) circle [radius=0.05];
-%   \draw[fill] (3,0) circle [radius=0.05];
-% \end{tikzpicture}
-% \end{minipage}
-% \end{tabular}
-
-% If we were to recombine the two types we would get:
-
-% \medskip
-
-% \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
-%   \draw (0,0) ellipse (12cm and 4cm);
-
-%   \node[below] (1) at (-11,0) {\texttt{(smt,smt)}};
-%   \node[below] (2) at (-8,0) {\texttt{(wrf,smt)}};
-%   \node[below] (3) at (-5,0) {\texttt{(sat,smt)}};
-%   \draw[fill] (-11,0) circle [radius=0.05];
-%   \draw[fill] (-8,0) circle [radius=0.05];
-%   \draw[fill] (-5,0) circle [radius=0.05];
-%   \path (3) edge [loop above] node[above] {$p^0$} (3);
-%   \path (3) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (3);
-%   \path (3) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (3);
-
-%   \node[below] (4) at (-3,0) {\texttt{(smt,wrf)}};
-%   \node[below] (5) at (-1,0) {\texttt{(wrf,wrf)}};
-%   \node[below] (6) at (1,0) {\texttt{(sat,wrf)}};
-%   \draw[fill] (-3,0) circle [radius=0.05];
-%   \draw[fill] (-1,0) circle [radius=0.05];
-%   \draw[fill] (1,0) circle [radius=0.05];
-%   \path (6) edge [loop above] node[above] {$p^0$} (6);
-%   \path (6) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (6);
-%   \path (6) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (6);
-
-%   \node[below] (7) at (3,0) {\texttt{(smt,sat)}};
-%   \node[below] (8) at (5,0) {\texttt{(sat,wrf)}};
-%   \node[below] (9) at (7,0) {\texttt{(sat,sat)}};
-%   \draw[fill] (3,0) circle [radius=0.05];
-%   \draw[fill] (5,0) circle [radius=0.05];
-%   \draw[fill] (7,0) circle [radius=0.05];
-%   \path (9) edge [loop above] node[above] {$p^0$} (9);
-%   \path (9) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (9);
-%   \path (9) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (9);
-% \end{tikzpicture}
-
-% which is equivalent to $C$.
-
