@@ -141,6 +141,8 @@ $\displaystyle
 \DeclareUnicodeCharacter{120016}{$\mathcal{A}$}
 \DeclareUnicodeCharacter{120057}{$p$}
 
+\usepackage{unicode-table}
+
 \AgdaHide{
 \begin{code}
 {-# OPTIONS --without-K #-}
