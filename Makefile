@@ -4,7 +4,7 @@ OPTS ?= --allow-unsolved-metas --latex -i . --latex-dir=.
 all : fractypes.pdf
 
 fractypes.pdf : fractypes.tex
-	pdflatex fractypes.tex
+	latexmk -pdf fractypes.tex
 
 fractypes.tex : fractypes.lagda pibackground.tex groupoid.tex pifrac.tex opsem.tex limitations.tex appendix.tex
 	$(AGDA) $(OPTS) fractypes.lagda
