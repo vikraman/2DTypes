@@ -29,7 +29,8 @@ infixr 60 _●_
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$: Types, Values, and Combinators}
+%\section{$\Pi^/$: Types, Values, and Combinators}
+\section{Types, Values, and Combinators}
 
 We are now ready to turn the semantic treatment of groupoids from the
 previous section into an actual programming language. The language
@@ -509,7 +510,7 @@ unit, sum, and product types.  The next defines values of type
 $\order{p}$: a value $\AgdaInductiveConstructor{comb}(p^k)$ represents
 the program $p$ iterated $k$ times.  We then define general quotient
 types, which come in right-handed and left-handed versions.  They both
-rely on a type $p ÷ q$ which intuitively says that given any iterate
+rely on a type $p \div q$ which intuitively says that given any iterate
 of $p$ (say $p ^ i$) and any iterate of $q$ (say $q ^ j$), we can
 build a combinator $r$ such that
 $\AgdaBound{p}~\AgdaFunction{\^{}}~\AgdaBound{i} ~\AgdaDatatype{⇔}~
@@ -557,128 +558,6 @@ isomorphic to $\AgdaDatatype{Iter}~\AgdaBound{p}$.  And when $p =
 \AgdaInductiveConstructor{id⟷}$, we interpret
 $\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ as having
 a single object with $\ord{q}$ symmetries.
-
-% Formally we declare when two values are indistinguishable using the
-% relation below:
-
-% {\setlength{\mathindent}{0cm}
-% \medskip
-% {\footnotesize{
-% \begin{code}
-% get-q : {τ : U} {p : τ ⟷ τ} → Val (# p) → τ ⟷ τ
-% get-q (comb i) = Iter.q i
-
-% data _≈_ : {τ : U} → Val τ → Val τ → Set where
-%   ⋆≈ :     {v w : Val 𝟙} → v ≈ w
-%   inj₁≈ :  {τ₁ τ₂ : U} → {v₁ v₂ : Val τ₁} →
-%            v₁ ≈ v₂ → inl {τ₁} {τ₂} v₁ ≈ inl v₂
-%   inj₂≈ :  {τ₁ τ₂ : U} → {w₁ w₂ : Val τ₂} →
-%            w₁ ≈ w₂ → inr {τ₁} {τ₂} w₁ ≈ inr w₂
-%   [,]≈ :   {τ₁ τ₂ : U} {v₁ v₂ : Val τ₁} {w₁ w₂ : Val τ₂} →
-%            v₁ ≈ v₂ → w₁ ≈ w₂ → [ v₁ , w₁ ] ≈ [ v₂ , w₂ ]
-%   #p≈ :    ∀ {τ} {p : τ ⟷ τ} (p^i p^j : Val (# p)) →
-%            get-q p^i ◎ ! (get-q p^j) ⇔ id⟷ → p^i ≈ p^j
-%   1/#p≈ :  ∀ {τ} {p : τ ⟷ τ} (q : Iter p) → (p₁ p₂ : Sing p) →
-%            Sing.q p₁ ◎ ! (Sing.q p₂) ⇔ Iter.q q ◎ ! (Iter.q q) →
-%            (1/comb p₁) ≈ (1/comb p₂)
-% \end{code}
-% }}}
-  
-% In the case of $\order{p}$ the iterates are
-% interpreted as ``\emph{programs}'' that can act on other values and in
-% the case of $\iorder{p}$ the iterates are interpreted as
-% ``\emph{symmetries}'' that capture similarities of programs. Note that
-% if $p$ has order, say 3, then there are 3 distinct values of type
-% $\order{p}$ and 3 distinct values of $\iorder{p}$. The values of type
-% $\order{p}$ apply $p$ for 0, 1, or 2 times to given value. The values
-% of type $\iorder{p}$, say $x$, $y$, and $z$, represent the three
-% ``thirds'' of $p$, so that applying $x(y(z(v)))$ has the same effect
-% as applying $p(v)$.
-
-% Given the definitions of combinators and values, we can directly
-% implement the operational semantics of Fig.~\ref{opsem}. We will
-% however present a more involved operational semantics once we
-% introduce additional combinators.
-
-% %%%%%%%
-% \subsection{Additional Combinators}
-
-% most combinators do not look at higher components of values:
-% indistinguishable values are treated the same!
-
-% Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
-% of types with $\frac{3}{2}$ values and that the values of these types
-% are in 1-1 correspondence. 
-
-% \begin{definition}[Semantic Values] Given a groupoid $G$, a
-%   \emph{value} in~$G$ is a pair consisting of an object $v$ and its
-%   collection $[\alpha_i]_i$ of outgoing morphisms
-%   $\alpha_i : v \Rightarrow w_i$ for each reachable object $w_i$.
-% \end{definition}
-
-% \noindent The values in each of our three example groupoids in Fig.~\ref{fig:groupoids2} are:
-% \begin{itemize}
-% \item Values of $G_1$ are $(a,[\texttt{id}])$ and $(c,[\texttt{id},\swapp])$;
-% \item Values of $G_2$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
-% $(c, [\texttt{id}, \swapp])$; 
-% \item Values of $G_3$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
-% $(c, [\texttt{id}, \swapp])$.
-% \end{itemize}
-
-% These values can be considered raw values as they are not all
-% indistinguishable. But we already see that $G_2$ and $G_3$ have the
-% same raw values and hence can be reasonably considered as
-% equivalent. To argue that either is also equivalent to $G_1$, we
-% reason following a monetary analogy: why is a dollar bill (the value
-% $(a,[\texttt{id}])$ in $G_1$) considered indistinguishable from two
-% half-dollars (the values $(a,[\texttt{id},\swapp])$ and
-% $(b,[\texttt{id},\swapp])$ in $G_2$)? Certainly not because we can
-% find a 1-1 map between one object and two objects but because we have
-% a process that can transform one collection of values to the other. In
-% our case, we proceed as follows. Consider the value
-% $(a,[\texttt{id}])$ in $G_1$; we can add another copy $\texttt{id}$
-% and refine it to $\swapp\odot\swapp$ to transform the value to
-% $(a,[\texttt{id},\swapp\odot\swapp])$. We then introduce a new
-% intermediate object so that the loop $\swapp\odot\swapp])$ from $a$ to
-% $a$ goes through an intermediate point $b$, i.e., we have a path
-% $\swapp$ from $a$ to $b$ and a path $\swapp$ from $b$ to $a$. The
-% result is groupoid $G_2$.
-
-% \begin{definition}[Distinguishability] Two \emph{collections of
-%     values} $\{V_i\}$ and $\{W_j\}$ in $G$ are indistinguishable
-%   $\{V_i\} \sim \{W_j\}$, if \ldots
-%   morphisms.
-% \end{definition}
-
-% \amr{formalize the above and then revisit G1, G2, and G3 to formally
-%   argue that after taking distinguishability into account they all
-%   have the same distinguishable values and the number of
-%   distinguishable values is 1.5}
-
-% combinators between FT/ types including eta and epsilon
-
-% proof that combinators are information preserving
-
-% other properties: inverses etc.
-
-% Cardinality-preserving combinators: sound, not complete (see
-% limitations section), consistent.
-
-% \paragraph*{Intermezzo.} The combinators 
-
-% Consistency is defined in the following
-% sense: If we allow arbitrary functions then bad things happen as we
-% can throw away the negative information for example. In our reversible
-% information-preserving framework, the theory is consistent in the
-% sense that not all types are identified. This is easy to see as we
-% only identify types that have the same cardinality. This is evident
-% for all the combinators except for the new ones. For those new ones
-% the only subtle situation is with the empty type. Note however that
-% there is no way to define 1/0 and no permutation has order 0. For 0 we
-% have one permutation id which has order 1. So if we try to use it, we
-% will map 1 to 1 times 1/id which is fine. So if we always preserve
-% types and trivially 1 and 0 have different cardinalities so there is
-% no way to identify them and we are consistent.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

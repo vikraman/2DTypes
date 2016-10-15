@@ -488,7 +488,8 @@ flavor, illustrates the main ideas involved in executing the credit
 card analogy from the introduction.
 
 %%%%%
-\subsection{$\sqrt{n}$ Speedup}
+%\subsection{$\sqrt{n}$ Speedup}
+\subsection{Speedup}
 
 Say we want to add 1 $\pmod{100}$ to numbers in the range
 $[0..99]$. One approach is to represent the input type as a monolithic

@@ -46,7 +46,8 @@ get\\ (tangl x) = x
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$: Operational Semantics} 
+%\section{$\Pi^/$: Operational Semantics}
+\section{Operational Semantics}
 
 The operational semantics for all the primitive combinators is a
 simple transliteration of Fig.~\ref{opsem}. We omit the
