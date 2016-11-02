@@ -9,9 +9,8 @@ isomorphisms~\cite{James:2012:IE:2103656.2103667,Carette2016}. We
 present the syntax and operational semantics of the parts of the
 language relevant to our development.
 
-\begin{figure*}[ht]
-\[\begin{array}{cc}
-\begin{array}{rrcll}
+\begin{figure}[ht]
+\[\begin{array}{rrcll}
 \unitepl :&  \zt \oplus \tau & \iso & \tau &: \unitipl \\
 \unitepr :&  \tau \oplus \zt & \iso & \tau &: \unitipr \\
 \swapp :&  \tau_1 \oplus \tau_2 & \iso & \tau_2 \oplus \tau_1 &: \swapp \\
@@ -30,16 +29,14 @@ language relevant to our development.
   \iso & (\tau_1 \otimes \tau_3) \oplus (\tau_2 \otimes \tau_3)~ &: \factor \\
 \distl :&~ \tau_1 \otimes (\tau_2 \oplus \tau_3) &
   \iso & (\tau_1 \otimes \tau_2) \oplus (\tau_1 \otimes \tau_3)~ &: \factorl
-\end{array}
-&
-\begin{minipage}{0.4\textwidth}
+\end{array}\]
+
 \[\begin{array}{c}
 \Rule{}
 {}
 {\jdg{}{}{\idiso : \tau \iso \tau}}
 {}
-\\
-\\
+\qquad\qquad
 \Rule{}
 {\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_2 \iso \tau_3}
 {\jdg{}{}{c_1 \odot c_2 : \tau_1 \iso \tau_3}}
@@ -50,22 +47,20 @@ language relevant to our development.
 {\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
 {\jdg{}{}{c_1 \oplus c_2 : \tau_1 \oplus \tau_3 \iso \tau_2 \oplus \tau_4}}
 {}
-\\
-\\
+\qquad\qquad
 \Rule{}
 {\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
 {\jdg{}{}{c_1 \otimes c_2 : \tau_1 \otimes \tau_3 \iso \tau_2 \otimes \tau_4}}
 {}
 \end{array}\]
-\end{minipage}
-\end{array}\]
+
 Each 1-combinator $c$ has an inverse $!~c$, e.g, $!~\unitepl=\unitipl$,
 $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 \caption{$\Pi$ 1-combinators~\cite{James:2012:IE:2103656.2103667}
 \label{pi-combinators}}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[ht]
+\begin{figure}[ht]
 \[\begin{array}{c}
 \Rule{}
 {c : \tau_1 \iso \tau_2}
@@ -76,7 +71,8 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 {c_1,c_2,c_3 : \tau_1 \iso \tau_2 \quad \alpha_1 : c_1 \isotwo c_2 \quad \alpha_2 : c_2 \isotwo c_3}
 {\jdg{}{}{\alpha_1~\transtwo~\alpha_2 : c_1 \isotwo c_3}}
 {}
-~
+\\
+\\
 \Rule{}
 {c_1 : \tau_1 \iso \tau_2 \quad c_2 : \tau_2 \iso \tau_3 \quad c_3 : \tau_3 \iso \tau_4}
 {\jdg{}{}{\assocdl : c_1 \odot (c_2 \odot c_3) \isotwo (c_1 \odot c_2) \odot c_3 : \assocdr}}
@@ -92,7 +88,8 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 {c : \tau_1 \iso \tau_2}
 {\jdg{}{}{\idrdl : c \odot \idiso \isotwo c : \idrdr}}
 {}
-~
+\\
+\\
 \Rule{}
 {c : \tau_1 \iso \tau_2}
 {\jdg{}{}{\rinvdl : ~! c \odot c \isotwo \idiso : \rinvdr}}
@@ -108,7 +105,8 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 {}
 {\jdg{}{}{\sumid : \idiso\oplus\idiso \isotwo \idiso : \splitid}}
 {}
-~
+\\
+\\
 \Rule{}
 {c_1 : \tau_5\iso\tau_1 \quad c_2 : \tau_6\iso\tau_2 \quad c_3 :
     \tau_1\iso\tau_3 \quad c_4 : \tau_2\iso\tau_4}
@@ -129,7 +127,8 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
   \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
 {\jdg{}{}{\respptwo ~\alpha_1 ~\alpha_2 : c_1 \oplus c_2 \isotwo c_3 \oplus c_4}}
 {}
-~
+\\
+\\
 \Rule{}
 {c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
   \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
@@ -140,11 +139,10 @@ Each 2-combinator $\alpha$ has an inverse $2!~\alpha$, e.g, $2!~\assocdl=\assocd
 $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \caption{$\Pi$ 2-combinators (excerpt)~\cite{Carette2016}
 \label{pi-combinators2}}
-\end{figure*}
+\end{figure}
 
-\begin{figure*}[ht]
-\begin{multicols}{2}
-\[\begin{array}{r@{\!}lcl}
+\begin{figure}[ht]
+\[\begin{array}{rlcl}
 %% \evalone{\unitepl}{&(\inl{()})} \\
 \evalone{\unitepl}{&(\inr{v})} &=& v \\
 \evalone{\unitipl}{&v} &=& \inr{v} \\
@@ -167,8 +165,7 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \evalone{\swapt}{&(v_1,v_2)} &=& (v_2,v_1) \\
 \evalone{\assoclt}{&(v_1,(v_2,v_3))} &=& ((v_1,v_2),v_3) \\
 \evalone{\assocrt}{&((v_1,v_2),v_3)} &=& (v_1,(v_2,v_3)) \\
-\end{array}\]
-\[\begin{array}{r@{\!}lcl}
+\\
 \evalone{\absorbr}{&(v,\_)} &=& v \\
 \evalone{\absorbl}{&(\_,v)} &=& v \\
 %% \evalone{\factorzl}{&()} \\
@@ -192,9 +189,8 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \evalone{(c_1 \otimes c_2)}{&(v_1,v_2)} &=&
   (\evalone{c_1}v_1, \evalone{c_2}v_2)
 \end{array}\]
-\end{multicols}
 \caption{\label{opsem}$\Pi$ operational semantics}
-\end{figure*}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Syntax of $\Pi$}
@@ -216,8 +212,8 @@ described in detail:
 (\textrm{1-combinators}) &
   c &:& \tau_1 \iso \tau_2 ~ [\textit{see Fig.~\ref{pi-combinators}}] \\
 (\textrm{2-combinators}) &
-  \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2 \\
-  & && [\textit{see Fig.~\ref{pi-combinators2}}]
+  \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2 
+  ~[\textit{see Fig.~\ref{pi-combinators2}}]
 \end{array}\]
 
 \noindent Both classes of programs, 1-combinators $c$, and
