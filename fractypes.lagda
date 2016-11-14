@@ -178,6 +178,13 @@ module fractypes where
 \begin{abstract}
 
 \begin{verbatim}
+Important dates
+----------------
+
+* Abstract submission:            28 November 2016 
+* Paper submission:               12 December 2016 
+* Notification of acceptance: 12 June 2017
+
 Ok, a plan then:
 
 - we motivate the paper by saying that we sought exactly what we got:
