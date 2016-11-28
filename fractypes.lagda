@@ -211,6 +211,10 @@ Open questions:
   time to do it right now]
 
 - when do we get the students back in?
+
+- We use ``value'' and ``term'' interchangeably. Values are canonical
+terms. How do we define canonical terms, esp. for fractional types?
+
 \end{verbatim}
 
 We exhibit types whose natural cardinality is fractional.  More
