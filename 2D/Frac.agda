@@ -10,11 +10,11 @@ open import Data.Empty
 open import Data.Unit
 
 open import Categories.Category
-import Categories.Sum as C
 import Categories.Product as C
+import Categories.Coproduct as C
 open import Categories.Groupoid
-import Categories.Groupoid.Sum as G
 import Categories.Groupoid.Product as G
+import Categories.Groupoid.Coproduct as G
 open import Level hiding (lower)
 
 open import Relation.Binary.PropositionalEquality
@@ -126,7 +126,7 @@ divG {τ} p q = record {
 ⟦ 𝟘 ⟧ = discreteC ⊥ , discreteG ⊥
 ⟦ 𝟙 ⟧ = discreteC ⊤ , discreteG ⊤
 ⟦ t₁ ⊕ t₂ ⟧ with ⟦ t₁ ⟧ | ⟦ t₂ ⟧
-... | (C₁ , G₁) | (C₂ , G₂) = C.Sum C₁ C₂ , G.Sum G₁ G₂
+... | (C₁ , G₁) | (C₂ , G₂) = C.Coproduct C₁ C₂ , G.Coproduct G₁ G₂
 ⟦ t₁ ⊗ t₂ ⟧ with ⟦ t₁ ⟧ | ⟦ t₂ ⟧
 ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
 ⟦ # p ⟧ = _ , orderG p
