@@ -61,7 +61,7 @@ mutual
   inj-eq (inl v) (inr w) = ⊥
   inj-eq (inr v) (inl w) = ⊥
   inj-eq (inr v) (inr w) = v ≈ w
-  
+
   data _≈_ : {t : U} → Val t → Val t → Set where
     ⋆≈  : {e f : Val 𝟙} → e ≈ f
          -- programs are equivalent when they are.. (which also means they are inverses)

@@ -63,7 +63,7 @@ comm-i-j {_} {p} i j =
   where
     module cr = CommutativeRing ℤcr
     open cr
-    
+
 ^⇔! : {τ : U} → {p : τ ⟷ τ} → (k : ℤ) → (p ^ (ℤ.- k)) ⇔ ! (p ^ k)
 ^⇔! (+_ ℕ.zero) = id⇔
 -- need to dig deeper, as we end up negating

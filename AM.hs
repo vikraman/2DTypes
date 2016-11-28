@@ -5,45 +5,45 @@ import Debug.Trace
 
 -- Abstract Machine for PI/
 
-data Combinator a = 
+data Combinator a =
                   Zeroe | Zeroi
-                | SwapPlus 
+                | SwapPlus
                 | AssoclPlus | AssocrPlus
                 | Unite a | Uniti a
-                | SwapTimes 
+                | SwapTimes
                 | AssoclTimes | AssocrTimes
                 | DistribZero | FactorZero
                 | Distrib | Factor
-                | Id | Sym (Combinator a) 
+                | Id | Sym (Combinator a)
                 | Seq (Combinator a) (Combinator a)
-                | Plus (Combinator a) (Combinator a) 
+                | Plus (Combinator a) (Combinator a)
                 | Times (Combinator a) (Combinator a)
                 | Eta (Combinator a) | Epsilon a
   deriving (Eq,Show)
 
 -- a Pale imitation of <=>.  But enough for the tests.
 ceq :: Eq a => Combinator a -> Combinator a -> Bool
-ceq (Seq Id Id) Id = True
-ceq Id (Seq Id Id) = True
+ceq (Seq Id Id) Id               = True
+ceq Id (Seq Id Id)               = True
 ceq (Seq SwapTimes SwapTimes) Id = True
 ceq Id (Seq SwapTimes SwapTimes) = True
-ceq c1 c2 = c1 == c2
+ceq c1 c2                        = c1 == c2
 
-data Value a = Unit a | Inj1 (Value a) | Inj2 (Value a) 
+data Value a = Unit a | Inj1 (Value a) | Inj2 (Value a)
              | Pair (Value a) (Value a)
              | Comb (Combinator a) | Recip (Combinator a)
   deriving (Eq,Show)
 
-data Context a = 
+data Context a =
     Empty
   | Fst (Context a) (Combinator a) | Snd (Combinator a) (Context a)
-  | LeftTimes (Context a) (Combinator a) (Value a) 
+  | LeftTimes (Context a) (Combinator a) (Value a)
   | RightTimes (Combinator a) (Value a) (Context a)
   | LeftPlus (Context a) (Combinator a) | RightPlus (Combinator a) (Context a)
   deriving (Eq,Show)
 
-data State a = 
-    Enter (Combinator a) (Value a) (Context a) 
+data State a =
+    Enter (Combinator a) (Value a) (Context a)
   | Exit (Combinator a) (Value a) (Context a)
   deriving (Eq,Show)
 
@@ -52,11 +52,11 @@ data Dir = Forward | Back
 
 traceForward :: Show a => State a -> b -> b
 traceForward s@(Enter _ _ _) = trace (">>> " ++ show s ++ "\n\n")
-traceForward _ = id
+traceForward _               = id
 
 traceBack :: Show a => State a -> b -> b
 traceBack s@(Exit _ _ _) = trace ("<<< " ++ show s ++ "\n\n")
-traceBack _ = id
+traceBack _              = id
 
 fwdS, backS :: String
 fwdS =  "******************* FORWARD *******************\n\n"
@@ -64,7 +64,7 @@ backS = "****************** BACK *******************\n\n"
 
 eval :: (Show a, Eq a) => State a -> Value a
 eval = loopForward
-  where 
+  where
     loopForward s = traceForward s $
       let (d,s') = stepForward s in
       case s' of
@@ -110,13 +110,13 @@ stepForward (Enter (Plus c1 c2) (Inj1 v) k) = (Forward, Enter c1 v (LeftPlus k c
 stepForward (Enter (Plus c1 c2) (Inj2 v) k) = (Forward, Enter c2 v (RightPlus c1 k))
 stepForward (Enter (Times c1 c2) (Pair v1 v2) k) = (Forward, Enter c1 v1 (LeftTimes k c2 v2))
 stepForward (Enter (Eta p) (Unit _) k) = (Forward, Exit (Eta p) (Pair (Comb p) (Recip p)) k)
-stepForward (Enter (Epsilon z) (Pair (Recip q) (Comb p)) k) 
+stepForward (Enter (Epsilon z) (Pair (Recip q) (Comb p)) k)
   | ceq p q   = (Forward, Exit (Epsilon z) (Unit z) k)
   | otherwise = (Back, Enter (Epsilon z) (Pair (Recip q) (Comb p)) k)
 -- these cases were previously missing
-stepForward (Enter DistribZero (Pair _ _) _) = 
+stepForward (Enter DistribZero (Pair _ _) _) =
   error "impossible case (DistribZero), but Haskell can't see that"
-stepForward (Enter FactorZero _ _) = 
+stepForward (Enter FactorZero _ _) =
   error "impossible case (FactorZero), but Haskell can't see that"
 stepForward (Enter (Sym c) v k) = stepBack (Exit c v k)
 stepForward (Exit _ _ Empty) = error "should not be trying to step at end"
@@ -169,14 +169,14 @@ stepBack (Exit (Seq c1 c2) v k) = (Back, Exit c2 v (Snd c1 k))
 stepBack (Exit (Plus c1 c2) (Inj1 v) k) = (Back, Exit c1 v (LeftPlus k c2))
 stepBack (Exit (Plus c1 c2) (Inj2 v) k) = (Back, Exit c2 v (RightPlus c1 k))
 stepBack (Exit (Times c1 c2) (Pair v1 v2) k) = (Back, Exit c2 v2 (RightTimes c1 v1 k))
-stepBack (Exit (Eta r) (Pair (Comb p) (Recip q)) k) 
+stepBack (Exit (Eta r) (Pair (Comb p) (Recip q)) k)
   | ceq p q   = (Forward, Exit (Eta r) (Pair (Comb (Seq r p)) (Recip (Seq r q))) k)
   | otherwise = error "Unexpected eta back if we are starting from left"
 stepBack (Exit (Epsilon _) (Unit _) _) =
   error "Unexpected epsilon back if we are starting from left"
-stepBack (Exit DistribZero (Pair _ _) _) = 
+stepBack (Exit DistribZero (Pair _ _) _) =
   error "impossible case (DistribZero), but Haskell can't see that"
-stepBack (Exit FactorZero _ _) = 
+stepBack (Exit FactorZero _ _) =
   error "impossible case (FactorZero), but Haskell can't see that"
 stepBack (Exit (Sym c) v k) = stepForward (Enter c v k)
 stepBack (Enter _ _ Empty) = error "should not be trying to step back at start"

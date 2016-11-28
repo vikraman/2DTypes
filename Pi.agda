@@ -8,13 +8,13 @@ open import Data.Nat using (ℕ; _+_; _*_)
 -- Define the ``universe'' for Pi.  All versions of Pi share the same
 -- universe.  Where they differ is in what combinators exist between
 -- members of the universe.
--- 
+--
 -- ZERO is a type with no elements
 -- ONE is a type with one element 'tt'
 -- PLUS ONE ONE is a type with elements 'false' and 'true'
 -- and so on for all finite types built from ZERO, ONE, PLUS, and TIMES
--- 
--- We also have that U is a type with elements ZERO, ONE, PLUS ONE ONE, 
+--
+-- We also have that U is a type with elements ZERO, ONE, PLUS ONE ONE,
 --   TIMES BOOL BOOL, etc.
 
 data U : Set where
@@ -29,7 +29,7 @@ toℕ : U → ℕ
 toℕ ZERO = 0
 toℕ ONE = 1
 toℕ (PLUS t₁ t₂) = toℕ t₁ + toℕ t₂
-toℕ (TIMES t₁ t₂) = toℕ t₁ * toℕ t₂ 
+toℕ (TIMES t₁ t₂) = toℕ t₁ * toℕ t₂
 
 -- We refine the trivial relation used in level-(-2). We do not
 -- identify all types: only those of the same "size". So between any
@@ -39,7 +39,7 @@ toℕ (TIMES t₁ t₂) = toℕ t₁ * toℕ t₂
 -- collapses to the set of natural numbers
 
 open import Data.Unit using (⊤; tt)
-open import Data.Nat using (ℕ) 
+open import Data.Nat using (ℕ)
 open import Relation.Binary.Core using (IsEquivalence)
 open import Relation.Binary.PropositionalEquality
   using (_≡_; refl; cong₂; module ≡-Reasoning)
@@ -55,7 +55,7 @@ infixr 50 _◎_
 size : U → ℕ
 size = toℕ
 
--- Combinators 
+-- Combinators
 
 data _⟷_ : U → U → Set where
   unite₊l : {t : U} → PLUS ZERO t ⟷ t
@@ -76,9 +76,9 @@ data _⟷_ : U → U → Set where
   absorbl : {t : U} → TIMES t ZERO ⟷ ZERO
   factorzr : {t : U} → ZERO ⟷ TIMES t ZERO
   factorzl : {t : U} → ZERO ⟷ TIMES ZERO t
-  dist    : {t₁ t₂ t₃ : U} → 
+  dist    : {t₁ t₂ t₃ : U} →
             TIMES (PLUS t₁ t₂) t₃ ⟷ PLUS (TIMES t₁ t₃) (TIMES t₂ t₃)
-  factor  : {t₁ t₂ t₃ : U} → 
+  factor  : {t₁ t₂ t₃ : U} →
             PLUS (TIMES t₁ t₃) (TIMES t₂ t₃) ⟷ TIMES (PLUS t₁ t₂) t₃
   distl   : {t₁ t₂ t₃ : U } →
             TIMES t₁ (PLUS t₂ t₃) ⟷ PLUS (TIMES t₁ t₂) (TIMES t₁ t₃)
@@ -86,9 +86,9 @@ data _⟷_ : U → U → Set where
             PLUS (TIMES t₁ t₂) (TIMES t₁ t₃) ⟷ TIMES t₁ (PLUS t₂ t₃)
   id⟷    : {t : U} → t ⟷ t
   _◎_     : {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
-  _⊕_     : {t₁ t₂ t₃ t₄ : U} → 
+  _⊕_     : {t₁ t₂ t₃ t₄ : U} →
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (PLUS t₁ t₂ ⟷ PLUS t₃ t₄)
-  _⊗_     : {t₁ t₂ t₃ t₄ : U} → 
+  _⊗_     : {t₁ t₂ t₃ t₄ : U} →
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (TIMES t₁ t₂ ⟷ TIMES t₃ t₄)
 
 -- At the next level we have a trivial equivalence that equates all
@@ -99,7 +99,7 @@ triv≡ : {t₁ t₂ : U} → (f g : t₁ ⟷ t₂) → Set
 triv≡ _ _ = ⊤
 
 triv≡Equiv : {t₁ t₂ : U} → IsEquivalence (triv≡ {t₁} {t₂})
-triv≡Equiv = record 
+triv≡Equiv = record
   { refl = tt
   ; sym = λ _ → tt
   ; trans = λ _ _ → tt
@@ -128,12 +128,12 @@ triv≡Equiv = record
 ! absorbr   = factorzl
 ! factorzl  = absorbr
 ! factorzr  = absorbl
-! dist      = factor 
+! dist      = factor
 ! factor    = dist
 ! distl     = factorl
 ! factorl   = distl
 ! id⟷       = id⟷
-! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁ 
+! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
 

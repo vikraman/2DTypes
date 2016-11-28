@@ -1,6 +1,6 @@
-There is still some outstanding code that needs done.  To be thorough, 
-here is the status of each file in 2D.  With - I indicated things that 
-must be done, and with ~, things that would be nice but are not 
+There is still some outstanding code that needs done.  To be thorough,
+here is the status of each file in 2D.  With - I indicated things that
+must be done, and with ~, things that would be nice but are not
 critical.  At the end, I distribute the open tasks around
 
 1.  Types - done
@@ -13,7 +13,7 @@ critical.  At the end, I distribute the open tasks around
 - Equiv is wrong. [done]
 6. Val
 - sym~~ needs to be done (two holes) [done]
-~ potential clean-up: some of the arguments to some of the ~~ 
+~ potential clean-up: some of the arguments to some of the ~~
      combinators can be made implicit
 ~ add IsEquivalence and Setoid?
 7. Order2Lemmas - done
@@ -24,7 +24,7 @@ critical.  At the end, I distribute the open tasks around
 - bwd-coherence needs to be implemented
 - figure out why Agda things Ap and its inverse are non-terminating.  [Bug?]
 9. Frac
-- orderC, orderG, 1/orderC, 1/orderG need to be reimplemented in terms 
+- orderC, orderG, 1/orderC, 1/orderG need to be reimplemented in terms
 of things in Val and ProgMorphisms
 - oneC, oneG need implemented [done]
 10. Order
@@ -46,9 +46,9 @@ and for completeness
 - finish Frac: Chao-Hong
 - implement order: anyone who has time to give it a try!
 
-Please check-in and push often.  If your work depends on other work 
+Please check-in and push often.  If your work depends on other work
 being completed, go ahead and put some (temporary) postulates in place.
 
-If we have time, we might look to prove a further coherence theorem 
-between our two semantics.  I'm not sure how to best phrase it, so 
+If we have time, we might look to prove a further coherence theorem
+between our two semantics.  I'm not sure how to best phrase it, so
 that's why I have not put it in the list.

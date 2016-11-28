@@ -142,15 +142,15 @@ helper+ (+ 0) d {d≢0} = + 0 ÷ 1
 helper+ (+ ℕ.suc n) d {d≢0} =
     let (g , G , g≢0) = gcd≢0 ∣ + ℕ.suc n ∣ d {tt}
         (nn , nd , nd≢0 , nc) = normalize {∣ + ℕ.suc n ∣} {d} {g} {d≢0} {g≢0} G
-    in ((S.+ ◃ nn) ÷ nd) 
-       {fromWitness (λ {i} → 
+    in ((S.+ ◃ nn) ÷ nd)
+       {fromWitness (λ {i} →
           subst (λ h → C.Coprime h nd) (P.sym (ℤ.abs-◃ S.+ nn)) nc)}
        {nd≢0}
 helper+ -[1+ n ] d {d≢0} =
     let (g , G , g≢0) = gcd≢0 ∣ -[1+ n ] ∣ d {tt}
         (nn , nd , nd≢0 , nc) = normalize {∣ -[1+ n ] ∣} {d} {g} {d≢0} {g≢0} G
-    in ((S.- ◃ nn) ÷ nd) 
-       {fromWitness (λ {i} → 
+    in ((S.- ◃ nn) ÷ nd)
+       {fromWitness (λ {i} →
           subst (λ h → C.Coprime h nd) (P.sym (ℤ.abs-◃ S.- nn)) nc)}
        {nd≢0}
 
@@ -165,7 +165,7 @@ mkRational m n {n≠0} = helper+ (+ m) n {n≠0}
 -- Operations on rationals: unary -, reciprocal, multiplication, addition
 
 -- unary negation
--- 
+--
 -- Andreas Abel says: Agda's type-checker is incomplete when it has to handle
 -- types with leading hidden quantification, such as the ones of Coprime m n
 -- and c.  A work around is to use hidden abstraction explicitly.  In your
@@ -187,19 +187,19 @@ mkRational m n {n≠0} = helper+ (+ m) n {n≠0}
 ... | + (ℕ.suc n) | d | c =
   ((S.+ ◃ ℕ.suc d) ÷ ℕ.suc n)
   {fromWitness (λ {i} →
-    subst (λ h → C.Coprime h (ℕ.suc n)) 
-          (P.sym (ℤ.abs-◃ S.+ (ℕ.suc d))) 
+    subst (λ h → C.Coprime h (ℕ.suc n))
+          (P.sym (ℤ.abs-◃ S.+ (ℕ.suc d)))
           (C.sym c))}
 ... | -[1+ n ] | d | c =
   ((S.- ◃ ℕ.suc d) ÷ ℕ.suc n)
   {fromWitness (λ {i} →
-    subst (λ h → C.Coprime h (ℕ.suc n)) 
-          (P.sym (ℤ.abs-◃ S.- (ℕ.suc d))) 
+    subst (λ h → C.Coprime h (ℕ.suc n))
+          (P.sym (ℤ.abs-◃ S.- (ℕ.suc d)))
           (C.sym c))}
 
 -- multiplication
 
-private 
+private
 
   helper* : (n₁ : ℤ) → (d₁ : ℕ) → (n₂ : ℤ) → (d₂ : ℕ) →
             {n≢0 : NonZero ∣ n₁ ℤ.* n₂ ∣} →
@@ -210,8 +210,8 @@ private
         d = d₁ ℕ.* d₂
         (g , G , g≢0) = gcd≢0 ∣ n ∣ d {n≢0}
         (nn , nd , nd≢0 , nc) = normalize {∣ n ∣} {d} {g} {d≢0} {g≢0} G
-    in ((sign n ◃ nn) ÷ nd) 
-       {fromWitness (λ {i} → 
+    in ((sign n ◃ nn) ÷ nd)
+       {fromWitness (λ {i} →
           subst (λ h → C.Coprime h nd) (P.sym (ℤ.abs-◃ (sign n) nn)) nc)}
        {nd≢0}
 
@@ -235,22 +235,22 @@ p₁ * p₂ with ℚ.numerator p₁ | ℚ.numerator p₂
 -- addition
 
 {--
-private 
+private
 
   helper+ : (n : ℤ) → (d : ℕ) → {d≢0 : NonZero d} → ℚ
   helper+ (+ 0) d {d≢0} = + 0 ÷ 1
   helper+ (+ ℕ.suc n) d {d≢0} =
     let (g , G , g≢0) = gcd≢0 ∣ + ℕ.suc n ∣ d {tt}
         (nn , nd , nd≢0 , nc) = normalize {∣ + ℕ.suc n ∣} {d} {g} {d≢0} {g≢0} G
-    in ((S.+ ◃ nn) ÷ nd) 
-       {fromWitness (λ {i} → 
+    in ((S.+ ◃ nn) ÷ nd)
+       {fromWitness (λ {i} →
           subst (λ h → C.Coprime h nd) (P.sym (ℤ.abs-◃ S.+ nn)) nc)}
        {nd≢0}
   helper+ -[1+ n ] d {d≢0} =
     let (g , G , g≢0) = gcd≢0 ∣ -[1+ n ] ∣ d {tt}
         (nn , nd , nd≢0 , nc) = normalize {∣ -[1+ n ] ∣} {d} {g} {d≢0} {g≢0} G
-    in ((S.- ◃ nn) ÷ nd) 
-       {fromWitness (λ {i} → 
+    in ((S.- ◃ nn) ÷ nd)
+       {fromWitness (λ {i} →
           subst (λ h → C.Coprime h nd) (P.sym (ℤ.abs-◃ S.- nn)) nc)}
        {nd≢0}
 --}

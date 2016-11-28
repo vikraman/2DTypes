@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Limitations} 
+\section{Limitations}
 
 Given any non-negative rational number, we can form a type whose
 cardinality is that number. And yet, our types do not capture the full

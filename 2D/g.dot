@@ -1,4 +1,3 @@
-
 digraph dependencies {
 
   opsem3[label="opsem3"];
@@ -13,7 +12,7 @@ digraph dependencies {
   Order2Lemmas[label="Order2Lemmas"];
   Order[label="Order"];
   Frac[label="Frac"];
-  
+
   Order2Lemmas -> Types;
   Order2Lemmas -> Iter;
   Order2Lemmas -> Order;

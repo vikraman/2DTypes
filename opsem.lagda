@@ -46,7 +46,7 @@ get\\ (tangl x) = x
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$: Operational Semantics} 
+\section{$\Pi^/$: Operational Semantics}
 
 The operational semantics for all the primitive combinators is a
 simple transliteration of Fig.~\ref{opsem}. We omit the
@@ -62,8 +62,8 @@ prim⁻¹ :  {τ₁ τ₂ : U} → (Prim⟷ τ₁ τ₂) → Val τ₂ → Val �
 \end{code}}}}
 \AgdaHide{
 \begin{code}
-prim = {!!} 
-prim⁻¹ = {!!} 
+prim = {!!}
+prim⁻¹ = {!!}
 \end{code}
 }
 
@@ -130,7 +130,7 @@ mutual
   inj-eq (inl v) (inr w) = ⊥
   inj-eq (inr v) (inl w) = ⊥
   inj-eq (inr v) (inr w) = v ≈ w
-  
+
   data _≈_ : {t : U} → Val t → Val t → Set where
     ⋆≈  :     {e f : Val 𝟙} → e ≈ f
     #p≈ :     ∀ {t} {p : t ⟷ t} {p^i p^j : Val (# p)} →
@@ -146,7 +146,7 @@ mutual
               (∀ {x : Iter p} {y : Iter q} →
               Σ.proj₁ (get\\ f x y) ⇔ Σ.proj₁ (get\\ g x y)) → f ≈ g
 
-cong≈ :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) {v w : Val τ₁} → 
+cong≈ :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) {v w : Val τ₁} →
          v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
 \end{code}}}}
 \AgdaHide{
@@ -158,7 +158,7 @@ cong≈ = {!!} -- omitted
 \medskip
 {\footnotesize{
 \begin{code}
-fwd◎bwd≈id :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) → 
+fwd◎bwd≈id :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) →
               𝓐𝓹 c (𝓐𝓹⁻¹ c v) ≈ v
 \end{code}}}}
 \AgdaHide{
@@ -170,7 +170,7 @@ fwd◎bwd≈id = {!!} -- omitted
 \medskip
 {\footnotesize{
 \begin{code}
-bwd-coherence :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) → 
+bwd-coherence :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) →
                  𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
 \end{code}}}}
 \AgdaHide{
@@ -183,7 +183,7 @@ bwd-coherence = {!!} -- omitted
 {\footnotesize{
 \begin{code}
 fwd-2-coherence :  {τ₁ τ₂ : U} → (c₁ c₂ : τ₁ ⟷ τ₂) →
-                   (α : c₁ ⇔ c₂) → 
+                   (α : c₁ ⇔ c₂) →
                    (v : Val τ₁) → 𝓐𝓹 c₁ v ≈ 𝓐𝓹 c₂ v
 \end{code}}}}
 \AgdaHide{
@@ -200,7 +200,7 @@ To keep these synchronized and yet to achieve the given type, the only choice
 (operationally) is to swap.  This is where the ``action at a distance'' occurs.
 
 %%%%%%%
-\subsection{Examples} 
+\subsection{Examples}
 
 We implement two examples that are similar to the credit card example
 from the introduction.
@@ -208,7 +208,7 @@ from the introduction.
 \AgdaHide{
 \begin{code}
 refl≈ : ∀ {t} {v w : Val t} → v ≡ w → v ≈ w
-refl≈ = {!!} 
+refl≈ = {!!}
 \end{code}}
 
 {\setlength{\mathindent}{0cm}
@@ -225,7 +225,7 @@ zig-zag {_} {c} =
 zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
 zig-zag-prop (comb x) = refl≈ refl
 
--- credit card like 
+-- credit card like
 
 BOOL : U
 BOOL = 𝟙 ⊕ 𝟙
@@ -235,8 +235,8 @@ NOT = Prim swap₊
 
 cc : # NOT ⟷ # NOT
 cc = Prim uniti⋆l ◎
-     (((η+ NOT) ⊗ id⟷) ◎ 
-     ((synchr⋆ ◎ 
+     (((η+ NOT) ⊗ id⟷) ◎
+     ((synchr⋆ ◎
      ((id⟷ ⊗ (ε- NOT)) )))) ◎
      Prim unite⋆r
 
@@ -255,4 +255,3 @@ cc₂ = 𝓐𝓹 cc v₁ -- evaluates to v₁, on the nose
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-

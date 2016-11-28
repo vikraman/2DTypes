@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-} 
+{-# OPTIONS --without-K #-}
 
 module 2D.Types where
 
@@ -103,7 +103,7 @@ mutual
 ! (η+ p)    = ε+ p
 ! (ε- p)    = η- p
 ! (ε+ p)    = η+ p
--- ! ap⟷ = ap⁻¹⟷ 
+-- ! ap⟷ = ap⁻¹⟷
 -- ! ap⁻¹⟷ = ap⟷
 ! synchr⋆ = synchl⋆
 ! synchl⋆ = synchr⋆
@@ -153,15 +153,15 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
     c₀ ⇔ c₁ → app-num// {q = q} c₀ ⇔ app-num// c₁
   resp-app-num\\ : {t : U} {p q r : t ⟷ t} → {c₀ c₁ : # p ⟷ # r} →
     c₀ ⇔ c₁ → app-num\\ {q = q} c₀ ⇔ app-num\\ c₁
--}  
+-}
   -- coherence for compact closed categories
 {-
-  ccc₁l : {t : U} {p : t ⟷ t} → 
+  ccc₁l : {t : U} {p : t ⟷ t} →
          uniti⋆r p ◎ (Prim id⟷ ⊗ η- p) ◎ Prim assocl⋆ ◎
          (ε+ p ⊗ Prim id⟷) ◎ unite⋆l p ⇔ (Prim id⟷)
   ccc₁r : {t : U} {p : t ⟷ t} →
          Prim id⟷ ⇔ uniti⋆r p ◎ (Prim id⟷ ⊗ η- p) ◎
-         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p 
+         Prim assocl⋆ ◎ (ε+ p ⊗ Prim id⟷) ◎ unite⋆l# p
   ccc₂l : {t : U} {p : t ⟷ t} →
          (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎ Prim assocr⋆) ◎
          (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p ⇔ Prim id⟷
@@ -169,7 +169,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
          Prim id⟷ ⇔ (((uniti⋆l# p ◎ (η+ p ⊗ Prim id⟷)) ◎
          Prim assocr⋆) ◎ (Prim id⟷ ⊗ ε- p)) ◎ unite⋆r# p
 -}
-  
+
 2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! assoc◎l = assoc◎r
 2! assoc◎r = assoc◎l
@@ -189,7 +189,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 2! hom⊕◎⇔ = hom◎⊕⇔
 2! hom◎⊕⇔ = hom⊕◎⇔
 2! split⊕-id⟷ = id⟷⊕id⟷⇔
-2! id⟷⊕id⟷⇔ = split⊕-id⟷ 
+2! id⟷⊕id⟷⇔ = split⊕-id⟷
 -- 2! ccc₁l = ccc₁r
 -- 2! ccc₁r = ccc₁l
 -- 2! ccc₂l = ccc₂r
@@ -233,7 +233,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 !!⇔id (η- p) = id⇔
 !!⇔id (ε+ p) = id⇔
 !!⇔id (ε- p) = id⇔
--- !!⇔id ap⟷ = id⇔ 
+-- !!⇔id ap⟷ = id⇔
 -- !!⇔id ap⁻¹⟷ = id⇔
 !!⇔id synchl⋆ = id⇔
 !!⇔id synchr⋆ = id⇔
@@ -290,7 +290,7 @@ ab!b⇔a = id⇔ ⊡ linv◎l ● idr◎l
 -----------------------
 -- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙 ⟷ c \\ d)
 -- name {_} {c} f = η- c ◎ app-num\\ f
--- 
+--
 -- coname : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (c // d ⟷ 𝟙)
 -- coname {_} {c} {d} f = app-num// f ◎ ε+ d
 

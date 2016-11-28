@@ -96,7 +96,7 @@ open Algebra.FunctionProperties (P._≡_ {A = ℤ})
 
 open import Categories.Category
 open import Categories.Sum
-open import Categories.Product 
+open import Categories.Product
 open import Categories.Groupoid.Sum renaming (Sum to GSum)
 open import Categories.Groupoid renaming (Product to GProduct)
 
@@ -112,7 +112,7 @@ open import Categories.Groupoid renaming (Product to GProduct)
 \title{Action Groupoids and Fractional Types}
 \author{Everyone}
 \begin{document}
-\maketitle 
+\maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -146,7 +146,7 @@ which are information-preserving. Our initial investigation was in the
 setting of computations over finite types: in that setting
 information-preservation coincides with type isomorphsims,
 permutations on finite sets, and HoTT equivalences. In this paper, we
-extend the work to computations over \emph{groupoids}. 
+extend the work to computations over \emph{groupoids}.
 
 In both the situation with finite sets and groupoids, our measure of
 information is the same. With each type $T$ (finite set or groupoid)
@@ -158,7 +158,7 @@ $\log{n}$ is always a natural number representing the number of bits
 necessary to store values of type $T$. For groupoids, it is possible
 to have non-negative rational numbers as their cardinality, e.g.,
 $\frac{1}{3}$, which would give us \emph{negative} entropy,
-information, or space. 
+information, or space.
 
 An important paper about negative entropy in the context of the
 Landauer limit and reversible computation:
@@ -188,7 +188,7 @@ Something about negative information:
 \url{http://www.ucl.ac.uk/oppenheim/negative-information_p2.html}
 
 In terms of space, we interpret a negative amount as the ability to
-reclaim that much space. 
+reclaim that much space.
 
 Since information is defined using cardinality, the conclusion is that
 we will consider computations between types $T_1$ and $T_2$ (finite
@@ -297,7 +297,7 @@ object each) and write the resulting matrix:
 \begin{pmatrix}
 1 & 0 & 0 \\
 0 & 1 & 0 \\
-0 & 0 & 3 
+0 & 0 & 3
 \end{pmatrix}
 \]
 Its inverse is 0 everywhere except on the main diagonal which has
@@ -347,12 +347,12 @@ types: this is a different level of types from the level of plain
 finite types. The usual $\Pi$-combinators lift to this level and there
 are two new transfomations that we need to justify. If $p : \tau \leftrightarrow \tau$, then:
 \begin{itemize}
-\item $\order{p} \boxtimes 1/p ≃ \ot$, and 
+\item $\order{p} \boxtimes 1/p ≃ \ot$, and
 \item $\tau \boxtimes 1/p ≃ \ag{\tau}{p}$
 \end{itemize}
 
 In our running example, interpreting $\boxtimes$ are a regular
-product, $\order{p} \boxtimes 1/p$ looks like: 
+product, $\order{p} \boxtimes 1/p$ looks like:
 
 \medskip
 \begin{center}
@@ -430,7 +430,7 @@ The type $C \boxtimes 1/p$ looks like:
   \path (7) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (7);
   \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
 \end{tikzpicture}
-\end{center} 
+\end{center}
 
 This type is again informally-equivalent to $\ag{C}{p}$ as it has the
 same cardinality.
@@ -483,9 +483,9 @@ same cardinality.
 %   \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
 % \end{tikzpicture}
 % \end{minipage}
-% & 
+% &
 % $\times$
-% & 
+% &
 % \begin{minipage}{0.4\textwidth}
 % \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
 %   \draw (0,0) ellipse (8cm and 1.6cm);
@@ -537,9 +537,9 @@ same cardinality.
 %   \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
 % \end{tikzpicture}
 % \end{minipage}
-% & 
+% &
 % $\times$
-% & 
+% &
 % \begin{minipage}{0.4\textwidth}
 % \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
 %   \draw (0,0) ellipse (5cm and 1.6cm);
@@ -599,7 +599,7 @@ same cardinality.
 Our notion of information equivalence is coarser than the conventional
 notion of equivalence of categories (groupoids). This is fine as there
 are several competing notions of equivalence of groupoids that are
-coarser than strict categorical equivalence. 
+coarser than strict categorical equivalence.
 
 Need to explain the example above in terms of information!!! The best
 explanation I have so far is the credit card analogy: we want money
@@ -607,7 +607,7 @@ here and now, so we create money and a debt. That debt is reconciled
 somewhere else. The example above uses the same: we want to process
 some values from $C$ here and now. So we create a third of them,
 process them, and reconcile this third somewhere else. When all three
-thirds have been reconciled the computation is finished. 
+thirds have been reconciled the computation is finished.
 
 \amr{adapt the following}
 
@@ -657,16 +657,16 @@ consistent.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Background}
- 
+
 Our starting point is $\Pi$:
 \begin{itemize}
 
 \item We have finite types $\zt$, $\ot$, $\tau_1\oplus\tau_2$, and
-$\tau_1\otimes\tau_2$. 
+$\tau_1\otimes\tau_2$.
 
 {\footnotesize{
 \smallskip
-\begin{code} 
+\begin{code}
 data U : Set where
   ZERO   : U
   ONE    : U
@@ -679,9 +679,9 @@ data U : Set where
 
 {\footnotesize{
 \smallskip
-\begin{code} 
+\begin{code}
 ⟦_⟧ : U → Set
-⟦ ZERO ⟧         = ⊥ 
+⟦ ZERO ⟧         = ⊥
 ⟦ ONE ⟧          = ⊤
 ⟦ PLUS t₁ t₂ ⟧   = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
 ⟦ TIMES t₁ t₂ ⟧  = ⟦ t₁ ⟧ × ⟦ t₂ ⟧
@@ -692,7 +692,7 @@ data U : Set where
 
 {\footnotesize{
 \smallskip
-\begin{code} 
+\begin{code}
 ∣_∣ : U → ℕ
 ∣ ZERO ∣         = 0
 ∣ ONE ∣          = 1
@@ -737,9 +737,9 @@ data _⟷_ : U → U → Set where
   absorbl : {t : U} → TIMES t ZERO ⟷ ZERO
   factorzr : {t : U} → ZERO ⟷ TIMES t ZERO
   factorzl : {t : U} → ZERO ⟷ TIMES ZERO t
-  dist    : {t₁ t₂ t₃ : U} → 
+  dist    : {t₁ t₂ t₃ : U} →
             TIMES (PLUS t₁ t₂) t₃ ⟷ PLUS (TIMES t₁ t₃) (TIMES t₂ t₃)
-  factor  : {t₁ t₂ t₃ : U} → 
+  factor  : {t₁ t₂ t₃ : U} →
             PLUS (TIMES t₁ t₃) (TIMES t₂ t₃) ⟷ TIMES (PLUS t₁ t₂) t₃
   distl   : {t₁ t₂ t₃ : U } →
             TIMES t₁ (PLUS t₂ t₃) ⟷ PLUS (TIMES t₁ t₂) (TIMES t₁ t₃)
@@ -747,9 +747,9 @@ data _⟷_ : U → U → Set where
             PLUS (TIMES t₁ t₂) (TIMES t₁ t₃) ⟷ TIMES t₁ (PLUS t₂ t₃)
   id⟷    : {t : U} → t ⟷ t
   _◎_     : {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
-  _⊕_     : {t₁ t₂ t₃ t₄ : U} → 
+  _⊕_     : {t₁ t₂ t₃ t₄ : U} →
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (PLUS t₁ t₂ ⟷ PLUS t₃ t₄)
-  _⊗_     : {t₁ t₂ t₃ t₄ : U} → 
+  _⊗_     : {t₁ t₂ t₃ t₄ : U} →
             (t₁ ⟷ t₃) → (t₂ ⟷ t₄) → (TIMES t₁ t₂ ⟷ TIMES t₃ t₄)
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
@@ -771,12 +771,12 @@ data _⟷_ : U → U → Set where
 ! absorbr   = factorzl
 ! factorzl  = absorbr
 ! factorzr  = absorbl
-! dist      = factor 
+! dist      = factor
 ! factor    = dist
 ! distl     = factorl
 ! factorl   = distl
 ! id⟷       = id⟷
-! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁ 
+! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 ! (c₁ ⊕ c₂) = (! c₁) ⊕ (! c₂)
 ! (c₁ ⊗ c₂) = (! c₁) ⊗ (! c₂)
 
@@ -785,115 +785,115 @@ infix  30 _⇔_
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   assoc◎l : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
           (c₁ ◎ (c₂ ◎ c₃)) ⇔ ((c₁ ◎ c₂) ◎ c₃)
-  assoc◎r : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} → 
+  assoc◎r : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₃ ⟷ t₄} →
           ((c₁ ◎ c₂) ◎ c₃) ⇔ (c₁ ◎ (c₂ ◎ c₃))
-  -- assocl⊕l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocl⊕l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --         ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊) ⇔ (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃))
-  -- assocl⊕r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocl⊕r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --         (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃)) ⇔ ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊)
-  -- assocl⊗l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocl⊗l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --         ((c₁ ⊗ (c₂ ⊗ c₃)) ◎ assocl⋆) ⇔ (assocl⋆ ◎ ((c₁ ⊗ c₂) ⊗ c₃))
-  -- assocl⊗r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocl⊗r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --         (assocl⋆ ◎ ((c₁ ⊗ c₂) ⊗ c₃)) ⇔ ((c₁ ⊗ (c₂ ⊗ c₃)) ◎ assocl⋆)
-  -- assocr⊕r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocr⊕r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --         (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊) ⇔ (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃)))
-  -- assocr⊗l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocr⊗l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --          (assocr⋆ ◎ (c₁ ⊗ (c₂ ⊗ c₃))) ⇔ (((c₁ ⊗ c₂) ⊗ c₃) ◎ assocr⋆)
-  -- assocr⊗r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocr⊗r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --         (((c₁ ⊗ c₂) ⊗ c₃) ◎ assocr⋆) ⇔ (assocr⋆ ◎ (c₁ ⊗ (c₂ ⊗ c₃)))
-  -- assocr⊕l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
-  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} → 
+  -- assocr⊕l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+  --         {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₅ ⟷ t₆} →
   --          (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃))) ⇔ (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊)
-  -- dist⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- dist⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --     ((a ⊕ b) ⊗ c) ◎ dist ⇔ dist ◎ ((a ⊗ c) ⊕ (b ⊗ c))
-  -- dist⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- dist⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --     dist ◎ ((a ⊗ c) ⊕ (b ⊗ c)) ⇔ ((a ⊕ b) ⊗ c) ◎ dist
-  -- distl⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- distl⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --     (a ⊗ (b ⊕ c)) ◎ distl ⇔ distl ◎ ((a ⊗ b) ⊕ (a ⊗ c))
-  -- distl⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- distl⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --     distl ◎ ((a ⊗ b) ⊕ (a ⊗ c)) ⇔ (a ⊗ (b ⊕ c)) ◎ distl
-  -- factor⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- factor⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --      ((a ⊗ c) ⊕ (b ⊗ c)) ◎ factor ⇔ factor ◎ ((a ⊕ b) ⊗ c)
-  -- factor⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- factor⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --      factor ◎ ((a ⊕ b) ⊗ c) ⇔ ((a ⊗ c) ⊕ (b ⊗ c)) ◎ factor
-  -- factorl⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- factorl⇔l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --      ((a ⊗ b) ⊕ (a ⊗ c)) ◎ factorl ⇔ factorl ◎ (a ⊗ (b ⊕ c))
-  -- factorl⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U} 
+  -- factorl⇔r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
   --         {a : t₁ ⟷ t₂} {b : t₃ ⟷ t₄} {c : t₅ ⟷ t₆} →
   --      factorl ◎ (a ⊗ (b ⊕ c)) ⇔ ((a ⊗ b) ⊕ (a ⊗ c)) ◎ factorl
   idl◎l   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (id⟷ ◎ c) ⇔ c
   idl◎r   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → c ⇔ id⟷ ◎ c
   idr◎l   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ id⟷) ⇔ c
-  idr◎r   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → c ⇔ (c ◎ id⟷) 
+  idr◎r   : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → c ⇔ (c ◎ id⟷)
   -- linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ id⟷
-  -- linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (c ◎ ! c) 
+  -- linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (c ◎ ! c)
   -- rinv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (! c ◎ c) ⇔ id⟷
-  -- rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (! c ◎ c) 
-  -- unite₊l⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → id⟷ ⇔ (! c ◎ c)
+  -- unite₊l⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         (unite₊l ◎ c₂) ⇔ ((c₁ ⊕ c₂) ◎ unite₊l)
-  -- unite₊l⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- unite₊l⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         ((c₁ ⊕ c₂) ◎ unite₊l) ⇔ (unite₊l ◎ c₂)
-  -- uniti₊l⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- uniti₊l⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         (uniti₊l ◎ (c₁ ⊕ c₂)) ⇔ (c₂ ◎ uniti₊l)
-  -- uniti₊l⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- uniti₊l⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         (c₂ ◎ uniti₊l) ⇔ (uniti₊l ◎ (c₁ ⊕ c₂))
-  -- unite₊r⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- unite₊r⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         (unite₊r ◎ c₂) ⇔ ((c₂ ⊕ c₁) ◎ unite₊r)
-  -- unite₊r⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- unite₊r⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         ((c₂ ⊕ c₁) ◎ unite₊r) ⇔ (unite₊r ◎ c₂)
-  -- uniti₊r⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- uniti₊r⇔l : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         (uniti₊r ◎ (c₂ ⊕ c₁)) ⇔ (c₂ ◎ uniti₊r)
-  -- uniti₊r⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} → 
+  -- uniti₊r⇔r : {t₁ t₂ : U} {c₁ : ZERO ⟷ ZERO} {c₂ : t₁ ⟷ t₂} →
   --         (c₂ ◎ uniti₊r) ⇔ (uniti₊r ◎ (c₂ ⊕ c₁))
-  -- swapl₊⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} → 
+  -- swapl₊⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} →
   --         (swap₊ ◎ (c₁ ⊕ c₂)) ⇔ ((c₂ ⊕ c₁) ◎ swap₊)
-  -- swapr₊⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} → 
+  -- swapr₊⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} →
   --         ((c₂ ⊕ c₁) ◎ swap₊) ⇔ (swap₊ ◎ (c₁ ⊕ c₂))
-  -- unitel⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- unitel⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         (unite⋆l ◎ c₂) ⇔ ((c₁ ⊗ c₂) ◎ unite⋆l)
-  -- uniter⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- uniter⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         ((c₁ ⊗ c₂) ◎ unite⋆l) ⇔ (unite⋆l ◎ c₂)
-  -- unitil⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- unitil⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         (uniti⋆l ◎ (c₁ ⊗ c₂)) ⇔ (c₂ ◎ uniti⋆l)
-  -- unitir⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- unitir⋆⇔l : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         (c₂ ◎ uniti⋆l) ⇔ (uniti⋆l ◎ (c₁ ⊗ c₂))
-  -- unitel⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- unitel⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         (unite⋆r ◎ c₂) ⇔ ((c₂ ⊗ c₁) ◎ unite⋆r)
-  -- uniter⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- uniter⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         ((c₂ ⊗ c₁) ◎ unite⋆r) ⇔ (unite⋆r ◎ c₂)
-  -- unitil⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- unitil⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         (uniti⋆r ◎ (c₂ ⊗ c₁)) ⇔ (c₂ ◎ uniti⋆r)
-  -- unitir⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} → 
+  -- unitir⋆⇔r : {t₁ t₂ : U} {c₁ : ONE ⟷ ONE} {c₂ : t₁ ⟷ t₂} →
   --         (c₂ ◎ uniti⋆r) ⇔ (uniti⋆r ◎ (c₂ ⊗ c₁))
-  -- swapl⋆⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} → 
+  -- swapl⋆⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} →
   --         (swap⋆ ◎ (c₁ ⊗ c₂)) ⇔ ((c₂ ⊗ c₁) ◎ swap⋆)
-  -- swapr⋆⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} → 
+  -- swapr⋆⇔ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} →
   --         ((c₂ ⊗ c₁) ◎ swap⋆) ⇔ (swap⋆ ◎ (c₁ ⊗ c₂))
   id⇔     : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → c ⇔ c
-  trans⇔  : {t₁ t₂ : U} {c₁ c₂ c₃ : t₁ ⟷ t₂} → 
+  trans⇔  : {t₁ t₂ : U} {c₁ c₂ c₃ : t₁ ⟷ t₂} →
              (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
-  _⊡_  : {t₁ t₂ t₃ : U} 
+  _⊡_  : {t₁ t₂ t₃ : U}
          {c₁ : t₁ ⟷ t₂} {c₂ : t₂ ⟷ t₃} {c₃ : t₁ ⟷ t₂} {c₄ : t₂ ⟷ t₃} →
          (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ◎ c₂) ⇔ (c₃ ◎ c₄)
-  -- resp⊕⇔  : {t₁ t₂ t₃ t₄ : U} 
-  --        {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} → 
+  -- resp⊕⇔  : {t₁ t₂ t₃ t₄ : U}
+  --        {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
   --        (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊕ c₂) ⇔ (c₃ ⊕ c₄)
-  -- resp⊗⇔  : {t₁ t₂ t₃ t₄ : U} 
-  --        {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} → 
+  -- resp⊗⇔  : {t₁ t₂ t₃ t₄ : U}
+  --        {c₁ : t₁ ⟷ t₂} {c₂ : t₃ ⟷ t₄} {c₃ : t₁ ⟷ t₂} {c₄ : t₃ ⟷ t₄} →
   --        (c₁ ⇔ c₃) → (c₂ ⇔ c₄) → (c₁ ⊗ c₂) ⇔ (c₃ ⊗ c₄)
   -- -- below are the combinators added for the RigCategory structure
   -- id⟷⊕id⟷⇔ : {t₁ t₂ : U} → (id⟷ {t₁} ⊕ id⟷ {t₂}) ⇔ id⟷
@@ -931,7 +931,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   --   assocr⋆ ◎ (assocr⋆ {t₁} {t₂} {TIMES t₃ t₄}) ⇔
   --   ((assocr⋆ ⊗ id⟷) ◎ assocr⋆) ◎ (id⟷ ⊗ assocr⋆)
   -- pentagon⊗r : {t₁ t₂ t₃ t₄ : U} →
-  --   ((assocr⋆ {t₁} {t₂} {t₃} ⊗ id⟷ {t₄}) ◎ assocr⋆) ◎ (id⟷ ⊗ assocr⋆) ⇔ 
+  --   ((assocr⋆ {t₁} {t₂} {t₃} ⊗ id⟷ {t₄}) ◎ assocr⋆) ◎ (id⟷ ⊗ assocr⋆) ⇔
   --   assocr⋆ ◎ assocr⋆
   -- -- from the braiding
   -- -- unit coherence
@@ -999,7 +999,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   --   ((id⟷ ⊗ distl) ◎ distl) ◎ (assocl⋆ ⊕ assocl⋆)
   -- assocl⋆-distl⇔r : {t₁ t₂ t₃ t₄ : U} →
   --   ((id⟷ ⊗ distl) ◎ distl) ◎ (assocl⋆ ⊕ assocl⋆) ⇔
-  --   assocl⋆ {t₁} {t₂} ◎ distl {TIMES t₁ t₂} {t₃} {t₄}  
+  --   assocl⋆ {t₁} {t₂} ◎ distl {TIMES t₁ t₂} {t₃} {t₄}
   -- absorbr0-absorbl0⇔ : absorbr {ZERO} ⇔ absorbl {ZERO}
   -- absorbl0-absorbr0⇔ : absorbl {ZERO} ⇔ absorbr {ZERO}
   -- absorbr⇔distl-absorb-unite : {t₁ t₂ : U} →
@@ -1026,11 +1026,11 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   -- elim⊥-A[0⊕B]⇔r : {t₁ t₂ : U} →
   --    (distl ◎ (absorbl ⊕ id⟷)) ◎ unite₊l ⇔ (id⟷ {t₁} ⊗ unite₊l {t₂})
   -- elim⊥-1[A⊕B]⇔l : {t₁ t₂ : U} →
-  --   unite⋆l ⇔ 
+  --   unite⋆l ⇔
   --   distl ◎ (unite⋆l {t₁} ⊕ unite⋆l {t₂})
   -- elim⊥-1[A⊕B]⇔r : {t₁ t₂ : U} →
   --   distl ◎ (unite⋆l {t₁} ⊕ unite⋆l {t₂}) ⇔ unite⋆l
-  -- fully-distribute⇔l : {t₁ t₂ t₃ t₄ : U} → 
+  -- fully-distribute⇔l : {t₁ t₂ t₃ t₄ : U} →
   --   (distl ◎ (dist {t₁} {t₂} {t₃} ⊕ dist {t₁} {t₂} {t₄})) ◎ assocl₊ ⇔
   --     ((((dist ◎ (distl ⊕ distl)) ◎ assocl₊) ◎ (assocr₊ ⊕ id⟷)) ◎
   --        ((id⟷ ⊕ swap₊) ⊕ id⟷)) ◎ (assocl₊ ⊕ id⟷)
@@ -1143,9 +1143,9 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
 -- 2! absorbr1-unite⋆r-⇔ = unite⋆r0-absorbr1⇔
 -- 2! absorbl≡swap⋆◎absorbr = swap⋆◎absorbr≡absorbl
 -- 2! swap⋆◎absorbr≡absorbl = absorbl≡swap⋆◎absorbr
--- 2! absorbr⇔[assocl⋆◎[absorbr⊗id⟷]]◎absorbr = 
+-- 2! absorbr⇔[assocl⋆◎[absorbr⊗id⟷]]◎absorbr =
 --     [assocl⋆◎[absorbr⊗id⟷]]◎absorbr⇔absorbr
--- 2!  [assocl⋆◎[absorbr⊗id⟷]]◎absorbr⇔absorbr = 
+-- 2!  [assocl⋆◎[absorbr⊗id⟷]]◎absorbr⇔absorbr =
 --     absorbr⇔[assocl⋆◎[absorbr⊗id⟷]]◎absorbr
 -- 2! [id⟷⊗absorbr]◎absorbl⇔assocl⋆◎[absorbl⊗id⟷]◎absorbr =
 --     assocl⋆◎[absorbl⊗id⟷]◎absorbr⇔[id⟷⊗absorbr]◎absorbl
@@ -1256,11 +1256,11 @@ postulate -- available in pi-dual; waiting for fork
 
 compose : {τ : U} → (k : ℕ) → (p : τ ⟷ τ) → (τ ⟷ τ)
 compose 0 p = id⟷
-compose (suc k) p = p ◎ compose k p 
+compose (suc k) p = p ◎ compose k p
 
 compose+ : {τ : U} {p : τ ⟷ τ} → (k₁ k₂ : ℕ) →
            (compose k₁ p ◎ compose k₂ p) ⇔ compose (k₁ + k₂) p
-compose+ {p = p} 0 k₂ = idl◎l 
+compose+ {p = p} 0 k₂ = idl◎l
 compose+ (suc k₁) k₂ = trans⇔ assoc◎r (id⇔ ⊡ (compose+ k₁ k₂))
 
 composeℕ : {τ : U} {p : τ ⟷ τ} {k₁ k₂ : ℕ} → (k₁ P.≡ k₂) →
@@ -1268,8 +1268,8 @@ composeℕ : {τ : U} {p : τ ⟷ τ} {k₁ k₂ : ℕ} → (k₁ P.≡ k₂) �
 composeℕ P.refl = id⇔
 
 compose≡ : {τ : U} {v₁ v₂ v₃ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k₁ k₂ : ℕ)
-  (a₁ : ap (compose k₁ p) v₁ P.≡ v₂) → 
-  (a₂ : ap (compose k₂ p) v₂ P.≡ v₃) → 
+  (a₁ : ap (compose k₁ p) v₁ P.≡ v₂) →
+  (a₂ : ap (compose k₂ p) v₂ P.≡ v₃) →
   (ap (compose (k₁ + k₂) p) v₁ P.≡ v₃)
 compose≡ {p = p} k₁ k₂ a₁ a₂ =
   (P.trans
@@ -1289,16 +1289,16 @@ compose≡ {p = p} k₁ k₂ a₁ a₂ =
 
 p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p⇒C {τ} p = record {
-     Obj = ⟦ τ ⟧ 
+     Obj = ⟦ τ ⟧
    ; _⇒_ = λ v₁ v₂ → Σ[ k ∈ ℕ ] (ap (compose k p) v₁ P.≡ v₂)
    ; _≡_ = λ _ _ → ⊤
    ; id = (0 , P.refl)
    ; _∘_ = λ { {v₁} {v₂} {v₃} (k₂ , a₂) (k₁ , a₁) → (k₁ + k₂ , compose≡ k₁ k₂ a₁ a₂) }
-   ; assoc = tt 
-   ; identityˡ = tt 
-   ; identityʳ = tt 
-   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
-   ; ∘-resp-≡ = λ _ _ → tt 
+   ; assoc = tt
+   ; identityˡ = tt
+   ; identityʳ = tt
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
+   ; ∘-resp-≡ = λ _ _ → tt
    }
 
 -- To show that the resulting category is a groupoid, we need to allow
@@ -1338,18 +1338,18 @@ p⇒C {τ} p = record {
 
 p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p!p⇒C {τ} p = record {
-     Obj = ⟦ τ ⟧ 
+     Obj = ⟦ τ ⟧
    ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℕ ] (ap (compose j p) v₁ P.≡ v₂)) ×
                      (Σ[ k ∈ ℕ ] (ap (compose k (! p)) v₁ P.≡ v₂))
    ; _≡_ = λ _ _ → ⊤
    ; id = ((0 , P.refl) , (0 , P.refl))
    ; _∘_ = λ { {v₁} {v₂} {v₃} ((j₂ , a₂₃) , (k₂ , b₂₃)) ((j₁ , a₁₂) , (k₁ , b₁₂)) →
              ((j₁ + j₂ , compose≡ j₁ j₂ a₁₂ a₂₃) , (k₁ + k₂ , compose≡ k₁ k₂ b₁₂ b₂₃)) }
-   ; assoc = tt 
-   ; identityˡ = tt 
-   ; identityʳ = tt 
-   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt } 
-   ; ∘-resp-≡ = λ _ _ → tt 
+   ; assoc = tt
+   ; identityˡ = tt
+   ; identityʳ = tt
+   ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
+   ; ∘-resp-≡ = λ _ _ → tt
    }
 
 postulate -- available in pi-dual; waiting for fork
@@ -1359,11 +1359,11 @@ postulate -- available in pi-dual; waiting for fork
 composeAssoc : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
                p ◎ compose k p ⇔ compose k p ◎ p
 composeAssoc ℕ.zero = trans⇔ idr◎l idl◎r
-composeAssoc (ℕ.suc k) = trans⇔ (id⇔ ⊡ (composeAssoc k)) assoc◎l                
+composeAssoc (ℕ.suc k) = trans⇔ (id⇔ ⊡ (composeAssoc k)) assoc◎l
 
 reverse◎ : {τ : U} {p : τ ⟷ τ} → (k : ℕ) →
            ! (compose k p) ⇔ compose k (! p)
-reverse◎ ℕ.zero = id⇔ 
+reverse◎ ℕ.zero = id⇔
 reverse◎ {p = p} (ℕ.suc k) =
   trans⇔ (reverse◎ k ⊡ id⇔ ) (2! (composeAssoc {p = ! p} k))
 
@@ -1371,24 +1371,24 @@ reverse : {τ : U} {v₁ v₂ : ⟦ τ ⟧} {p : τ ⟷ τ} → (k : ℕ) →
           ap (compose k p) v₁ P.≡ v₂ →
           ap (compose k (! p)) v₂ P.≡ v₁
 reverse {τ} {v₁} {v₂} {p} k pkv₁≡v₂ =
-  P.trans (ap∼ (2! (reverse◎ k))) (ap!≡ {τ} {v₁} {v₂} {compose k p} pkv₁≡v₂) 
+  P.trans (ap∼ (2! (reverse◎ k))) (ap!≡ {τ} {v₁} {v₂} {compose k p} pkv₁≡v₂)
 
 p⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p⇒C p)
 p⇒G {τ} p = record
   { _⁻¹ =
     λ { {v₁} {v₂} ((j , a) , (k , b)) →
       (( k , P.subst (λ h → ap (compose k h) v₂ P.≡ v₁) !! (reverse k b) ) ,
-       (j , reverse j a)) } 
+       (j , reverse j a)) }
   ; iso = record {
     isoˡ = tt;
     isoʳ = tt
     }
   }
 
------------  
+-----------
 -- Permutation to "monoid-style" groupoid
 
--- Perm p is the singleton type that only contains p up to ⇔ 
+-- Perm p is the singleton type that only contains p up to ⇔
 
 Perm : {τ : U} → (p : τ ⟷ τ) → Set
 Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
@@ -1406,12 +1406,12 @@ p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p/⇒C {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → Σ[ k ∈ ℕ ] (Perm (compose k p))
-    ; _≡_ = λ { (k₁ , (pk₁ , α₁)) (k₂ , (pk₂ , α₂)) → pk₁ ⇔ pk₂} 
+    ; _≡_ = λ { (k₁ , (pk₁ , α₁)) (k₂ , (pk₂ , α₂)) → pk₁ ⇔ pk₂}
     ; id = (0 , singleton id⟷)
     ; _∘_ = λ { (k₂ , (pk₂ , α₂)) (k₁ , (pk₁ , α₁)) →
-                (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) } 
-    ; assoc = assoc◎l 
-    ; identityˡ = idr◎l 
+                (k₁ + k₂ , (pk₁ ◎ pk₂ , trans⇔ (α₁ ⊡ α₂) (compose+ k₁ k₂))) }
+    ; assoc = assoc◎l
+    ; identityˡ = idr◎l
     ; identityʳ = idl◎l
     ; equiv = record { refl = id⇔; sym = 2!; trans = trans⇔ }
     ; ∘-resp-≡ = λ α β → β ⊡ α
@@ -1419,8 +1419,8 @@ p/⇒C {τ} p = record {
 
 -- Generalize to groupoid by allowing !p
 
-postulate  
-  order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda  
+postulate
+  order : (τ : U) → (p : τ ⟷ τ) → ℕ -- from Perm.agda
   order-!≡ : {τ : U} {p : τ ⟷ τ} →  order τ p P.≡ order τ (! p)
   composeOrder : {τ : U} {p : τ ⟷ τ} → compose (order τ p) p ⇔ compose 0 p
 
@@ -1430,7 +1430,7 @@ postulate
 
 +-comm : (m n : ℕ) → m + n P.≡ n + m
 +-comm 0 n = P.sym (proj₁ CS.*-identity n)
-+-comm (suc m) n = P.trans (P.cong suc (+-comm m n)) (+-suc n m) 
++-comm (suc m) n = P.trans (P.cong suc (+-comm m n)) (+-suc n m)
 
 +-assoc : (i j k : ℕ) → i + (j + k) P.≡ (i + j) + k
 +-assoc 0 j k = P.refl
@@ -1454,13 +1454,13 @@ p!p/⇒C : {τ : U} (p : τ ⟷ τ) → Category lzero lzero lzero
 p!p/⇒C {τ} p = record {
      Obj = ⊤
     ; _⇒_ = λ _ _ → (Σ[ j ∈ ℕ ] Σ[ k ∈ ℕ ]
-                        compose (j + k) p ⇔ compose 0 p × 
+                        compose (j + k) p ⇔ compose 0 p ×
                         Perm (compose j p) ×
                         Perm (compose k (! p)))
     ; _≡_ = λ { (j₁ , k₁ , j₁k₁|p , (pj₁ , α₁) , (pk₁ , β₁))
-                (j₂ , k₂ , j₂k₂|p , (pj₂ , α₂) , (pk₂ , β₂)) → 
+                (j₂ , k₂ , j₂k₂|p , (pj₂ , α₂) , (pk₂ , β₂)) →
                 (pj₁ ⇔ pj₂) × (pk₁ ⇔ pk₂) }
-    ; id = (0 , order τ p , composeOrder , 
+    ; id = (0 , order τ p , composeOrder ,
            singleton id⟷ ,
            (id⟷ , 2! (trans⇔ (composeℕ order-!≡) composeOrder)))
     ; _∘_ = λ { (j₂ , k₂ , j₂k₂|p , (pj₂ , α₂) , (pk₂ , β₂))
@@ -1469,7 +1469,7 @@ p!p/⇒C {τ} p = record {
             trans⇔ (composeℕ (+-rearr j₁ j₂ k₁ k₂))
             (trans⇔ (2! (compose+ (j₁ + k₁) (j₂ + k₂)))
             (trans⇔ (j₁k₁|p ⊡ j₂k₂|p)
-            idl◎l)) , 
+            idl◎l)) ,
             (pj₁ ◎ pj₂ , trans⇔ (α₁ ⊡ α₂) (compose+ j₁ j₂)) ,
             (pk₁ ◎ pk₂ , trans⇔ (β₁ ⊡ β₂) (compose+ k₁ k₂))) }
     ; assoc = (assoc◎l , assoc◎l)
@@ -1478,7 +1478,7 @@ p!p/⇒C {τ} p = record {
     ; equiv = record { refl = (id⇔ , id⇔);
                        sym = λ { (α , β) → 2! α , 2! β};
                        trans = λ { (α₁ , β₁) (α₂ , β₂) → trans⇔ α₁ α₂ , trans⇔ β₁ β₂ }}
-    ; ∘-resp-≡ = λ { (ff , fb) (gf , gb) → gf ⊡ ff , gb ⊡ fb } 
+    ; ∘-resp-≡ = λ { (ff , fb) (gf , gb) → gf ⊡ ff , gb ⊡ fb }
     }
 
 postulate
@@ -1488,7 +1488,7 @@ postulate
 p/⇒G : {τ : U} (p : τ ⟷ τ) → Groupoid (p!p/⇒C p)
 p/⇒G {τ} p = record
   { _⁻¹ = λ {(j , k , jk|p , (pj , α) , (pk , β)) →
-             (k , j , trans⇔ (composeℕ (+-comm k j)) jk|p , 
+             (k , j , trans⇔ (composeℕ (+-comm k j)) jk|p ,
              (! pk , trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) ) ,
              (! pj , trans⇔ (⇔! α) (reverse◎ j)))}
   ; iso = λ { {f = (j , k , jk|p , (pj , α) , (pk , β))} → record {
@@ -1496,7 +1496,7 @@ p/⇒G {τ} p = record
                            (trans⇔ (compose+ j k) jk|p) ,
                    trans⇔ (β ⊡ (trans⇔ (⇔! α) (reverse◎ j)))
                      (trans⇔ (compose+ k j) (trans⇔ (2! (reverse◎ (k + j)))
-                     (⇔! (trans⇔ (composeℕ (+-comm k j)) jk|p))))); 
+                     (⇔! (trans⇔ (composeℕ (+-comm k j)) jk|p)))));
             isoʳ = (trans⇔ (trans⇔ (⇔! β) (trans⇔ (⇔! (2! (reverse◎ k))) !!⇔) ⊡ α)
                    (trans⇔ (compose+ k j) (trans⇔ (composeℕ (+-comm k j)) jk|p))  ,
                    trans⇔ (trans⇔ (⇔! α) (reverse◎ j) ⊡ β)
@@ -1506,18 +1506,18 @@ p/⇒G {τ} p = record
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{A Programming Language} 
+\section{A Programming Language}
 
 %%%%%
 \subsection{Syntax}
- 
+
 We now have a new level of types
 
 \begin{code}
 data U/ : Set where
-  ⇑ : U → U/    
+  ⇑ : U → U/
   # : {τ : U} → (p : τ ⟷ τ) → U/    -- finite set of cardinality (order p)
-  1/p : {τ : U} → (p : τ ⟷ τ) → U/  -- monoid style groupoid 
+  1/p : {τ : U} → (p : τ ⟷ τ) → U/  -- monoid style groupoid
   _⊞_ : U/ → U/ → U/                -- conventional sums and products
   _⊠_ : U/ → U/ → U/                -- of groupoids
 
@@ -1531,14 +1531,14 @@ data Comb/ : (S T : U/) → Set where
   uniti₊rC : {S : U/} → Comb/ S (S ⊞ ⇑ ZERO)
   swap₊C   : {S₁ S₂ : U/} → Comb/ (S₁ ⊞ S₂) (S₂ ⊞ S₁)
   assocl₊C : {S₁ S₂ S₃ : U/} → Comb/ (S₁ ⊞ (S₂ ⊞ S₃)) ((S₁ ⊞ S₂) ⊞ S₃)
-  assocr₊C : {S₁ S₂ S₃ : U/} → Comb/ ((S₁ ⊞ S₂) ⊞ S₃) (S₁ ⊞ (S₂ ⊞ S₃)) 
+  assocr₊C : {S₁ S₂ S₃ : U/} → Comb/ ((S₁ ⊞ S₂) ⊞ S₃) (S₁ ⊞ (S₂ ⊞ S₃))
   unite⋆lC : {S : U/} → Comb/ (⇑ ONE ⊠ S) S
   uniti⋆lC : {S : U/} → Comb/ S (⇑ ONE ⊠ S)
   unite⋆rC : {S : U/} → Comb/ (S ⊠ ⇑ ONE) S
   uniti⋆rC : {S : U/} → Comb/ S (S ⊠ ⇑ ONE)
   swap⋆C   : {S₁ S₂ : U/} → Comb/ (S₁ ⊠ S₂) (S₂ ⊠ S₁)
   assocl⋆C : {S₁ S₂ S₃ : U/} → Comb/ (S₁ ⊠ (S₂ ⊠ S₃)) ((S₁ ⊠ S₂) ⊠ S₃)
-  assocr⋆C : {S₁ S₂ S₃ : U/} → Comb/ ((S₁ ⊠ S₂) ⊠ S₃) (S₁ ⊠ (S₂ ⊠ S₃)) 
+  assocr⋆C : {S₁ S₂ S₃ : U/} → Comb/ ((S₁ ⊠ S₂) ⊠ S₃) (S₁ ⊠ (S₂ ⊠ S₃))
   absorbrC : {S : U/} → Comb/ (⇑ ZERO ⊠ S) (⇑ ZERO)
   absorblC : {S : U/} → Comb/ (S ⊠ ⇑ ZERO) (⇑ ZERO)
   factorzrC : {S : U/} → Comb/ (⇑ ZERO) (S ⊠ ⇑ ZERO)
@@ -1553,14 +1553,14 @@ data Comb/ : (S T : U/) → Set where
             Comb/ ((S₁ ⊠ S₂) ⊞ (S₁ ⊠ S₃)) (S₁ ⊠ (S₂ ⊞ S₃))
   idC : {S : U/} → Comb/ S S
   transC : {S T U : U/} → Comb/ S T → Comb/ T U → Comb/ S U
-  sumC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊞ T₁) (S₂ ⊞ T₂)) 
-  prodC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊠ T₁) (S₂ ⊠ T₂)) 
+  sumC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊞ T₁) (S₂ ⊞ T₂))
+  prodC : {S₁ S₂ T₁ T₂ : U/} → (Comb/ S₁ S₂) → (Comb/ T₁ T₂) → (Comb/ (S₁ ⊠ T₁) (S₂ ⊠ T₂))
   -- perhaps some things on order p₁ + order p₂ <=> order (p₁ ⊕ p₂) or whatever the right thing is
 \end{code}
 
 %%%%%
 \subsection{Denotational Semantics in Groupoids}
- 
+
 In the category of groupoids and \emph{cardinality-preserving maps}!!!
 
 \begin{code}
@@ -1572,14 +1572,14 @@ discreteC : Set → Category lzero lzero lzero
 discreteC S = record {
      Obj = S
     ; _⇒_ = λ s₁ s₂ → s₁ P.≡ s₂
-    ; _≡_ = λ _ _ → ⊤ 
-    ; id = P.refl 
+    ; _≡_ = λ _ _ → ⊤
+    ; id = P.refl
     ; _∘_ = λ { {A} {.A} {.A} P.refl P.refl → P.refl }
-    ; assoc = tt 
-    ; identityˡ = tt 
-    ; identityʳ = tt 
-    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }  
-    ; ∘-resp-≡ = λ _ _ → tt 
+    ; assoc = tt
+    ; identityˡ = tt
+    ; identityʳ = tt
+    ; equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
+    ; ∘-resp-≡ = λ _ _ → tt
     }
 
 discreteG : (S : Set) → Groupoid (discreteC S)
@@ -1590,7 +1590,7 @@ discreteG S = record
 
 ⟦_⟧/ : U/ → ∃ (λ ℂ → Groupoid ℂ)
 ⟦ ⇑ S ⟧/ = (discreteC ⟦ S ⟧ , discreteG ⟦ S ⟧)
-⟦ # {τ} p ⟧/ = let S = ⟦ Ufromℕ (order τ p) ⟧ 
+⟦ # {τ} p ⟧/ = let S = ⟦ Ufromℕ (order τ p) ⟧
               in (discreteC S , discreteG S)
 ⟦ 1/p p ⟧/ = (p!p/⇒C p , p/⇒G p)
 ⟦ T₁ ⊞ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
@@ -1607,7 +1607,7 @@ BOOL : U
 BOOL = PLUS ONE ONE
 
 NOT : BOOL ⟷ BOOL
-NOT = swap₊ 
+NOT = swap₊
 
 THREEL : U
 THREEL = PLUS BOOL ONE
@@ -1628,11 +1628,11 @@ P₆ = P₄ ◎ P₂ -- (3 2 | 1)
 Seven : U
 Seven = PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE ONE)))))
 
-infixr 2  _⟷⟨_⟩_   
-infix  3  _□       
+infixr 2  _⟷⟨_⟩_
+infix  3  _□
 
-_⟷⟨_⟩_ : (t₁ : U) {t₂ : U} {t₃ : U} → 
-          (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃) 
+_⟷⟨_⟩_ : (t₁ : U) {t₂ : U} {t₃ : U} →
+          (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
 _ ⟷⟨ α ⟩ β = α ◎ β
 
 _□ : (t : U) → {t : U} → (t ⟷ t)
@@ -1643,23 +1643,23 @@ rotate3 = P₅
 
 sevenp : Seven ⟷ Seven
 sevenp = Seven
-           ⟷⟨ assocl₊ ⟩ 
+           ⟷⟨ assocl₊ ⟩
          PLUS (PLUS ONE ONE) (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE ONE))))
-           ⟷⟨ assocl₊ ⟩ 
+           ⟷⟨ assocl₊ ⟩
          PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS ONE (PLUS ONE (PLUS ONE ONE)))
            ⟷⟨ id⟷ ⊕ assocl₊ ⟩
          PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS ONE ONE) (PLUS ONE ONE))
            ⟷⟨ id⟷ ⊕ assocl₊ ⟩
          PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS (PLUS ONE ONE) ONE) ONE)
-           ⟷⟨ rotate3 ⊕ (rotate3 ⊕ id⟷) ⟩ 
+           ⟷⟨ rotate3 ⊕ (rotate3 ⊕ id⟷) ⟩
          PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS (PLUS ONE ONE) ONE) ONE)
            ⟷⟨ id⟷ ⊕ assocr₊ ⟩
          PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS (PLUS ONE ONE) (PLUS ONE ONE))
            ⟷⟨ id⟷ ⊕ assocr₊ ⟩
-         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS ONE (PLUS ONE (PLUS ONE ONE)))           
-           ⟷⟨ assocr₊ ⟩ 
+         PLUS (PLUS (PLUS ONE ONE) ONE) (PLUS ONE (PLUS ONE (PLUS ONE ONE)))
+           ⟷⟨ assocr₊ ⟩
          PLUS (PLUS ONE ONE) (PLUS ONE (PLUS ONE (PLUS ONE (PLUS ONE ONE))))
-           ⟷⟨ assocr₊ ⟩ 
+           ⟷⟨ assocr₊ ⟩
          Seven □
 
 #sevenp : U
@@ -1672,7 +1672,7 @@ ex : Comb/ (⇑ Seven) ((⇑ Seven ⊠ 1/p sevenp) ⊠ # sevenp)
 ex = transC uniti⋆rC -- ⇑ Seven ⊠ ⇑ ONE
      (transC (prodC idC (etaC {Seven} {sevenp})) -- ⇑ Seven ⊠ (# p ⊠ 1/p p)
      (transC (prodC idC swap⋆C) -- ⇑ Seven ⊠ (1/p p ⊠ # p)
-     assocl⋆C)) 
+     assocl⋆C))
 
 -- More details: Say I have a type C and I want to operate on its
 -- values. Say I have two concurrent sites. I could define an iso
@@ -1690,7 +1690,7 @@ ex = transC uniti⋆rC -- ⇑ Seven ⊠ ⇑ ONE
 -- two concurrent components of size 17/t and t and let's say that
 -- site 2 decides it has resources to process 4 elements so fixes t to
 -- be 4 by generating 1 => 4 * 1/4 and forcing t * 1/4 to be 1. Site 1
--- now is forced to process 17/4 etc. 
+-- now is forced to process 17/4 etc.
 
 -- Application: Say I have a type THREE = Bool × Bool × Bool of 3 bit
 -- registers. Now say I want to the type of 'even' 3 bit numbers and
@@ -1710,7 +1710,7 @@ ex = transC uniti⋆rC -- ⇑ Seven ⊠ ⇑ ONE
 -- be the quotient of 7 by some permutation of order 2. We can also
 -- define types t1 and t2 that are related by the equation t1 * t2 =
 -- 3. We can use the equation to express t1 as 3/t2
--- which. 
+-- which.
 
 -- In HoTT having an equivalence not : Bool ≃ Bool does not give you
 -- the right to say there is a path between false and true. But here
@@ -1754,7 +1754,7 @@ x = x * 1
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \end{document}
 
-OLD STUFF 
+OLD STUFF
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Pointed Types and Path Skeletons}
@@ -1823,7 +1823,7 @@ set of points together with a family of skeleton paths.
 --         S = PLUS ONE ONE
 --       ; G = (•[ ONE , tt ] , λ y → eq tt y)
 --       }
-                  
+
 
 \end{code}
 
@@ -1839,7 +1839,7 @@ set of points together with a family of skeleton paths.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{2D-types}
- 
+
 \begin{itemize}
 \item We generalize types in another way by adding another level; in
 the next section we will combine the pointed types with the additional
@@ -1851,13 +1851,13 @@ level.
   denotes the action groupoid $S \rtimes \G$.
 
 \item We actually have two levels of types:
-\[\begin{array}{rcl} 
+\[\begin{array}{rcl}
 \tau &::=& \zt \alt \ot \alt \tau_1\oplus\tau_2 \alt \tau_1\otimes\tau_2 \\
 \twod &::=& \fract{\tau_1}{\tau_2} \alt \twod_1 \boxplus \twod_2
-            \alt \twod_1 \boxtimes \twod_2  
+            \alt \twod_1 \boxtimes \twod_2
 \end{array}\]
 The $\tau$ level describes plain sets. The $\twod$ level describes
-``two-dimensional types'' which denote action groupoids. 
+``two-dimensional types'' which denote action groupoids.
 
 \item We will represent a cyclic group as a vector of values where the
 group operation maps each value to the next and the last to the
@@ -1867,10 +1867,10 @@ allow divisions by zero so we then move everything to pointed types.
 
 \begin{code}
 -- _enum×_ : {t₁ t₂ : U} →
---   Vec ⟦ t₁ ⟧ ∣ t₁ ∣ → Vec ⟦ t₂ ⟧ ∣ t₂ ∣ → Vec ⟦ TIMES t₁ t₂ ⟧ ∣ TIMES t₁ t₂ ∣ 
+--   Vec ⟦ t₁ ⟧ ∣ t₁ ∣ → Vec ⟦ t₂ ⟧ ∣ t₂ ∣ → Vec ⟦ TIMES t₁ t₂ ⟧ ∣ TIMES t₁ t₂ ∣
 -- vs₁ enum× vs₂ = {!!} -- concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) vs₂) vs₁)
 
--- enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣ 
+-- enum : (t : U) → Vec ⟦ t ⟧ ∣ t ∣
 -- enum ZERO = []
 -- enum ONE = tt ∷ []
 -- enum (PLUS t₁ t₂) = {!!} -- map inj₁ (enum t₁) ++ map inj₂ (enum t₂)
@@ -1880,12 +1880,12 @@ allow divisions by zero so we then move everything to pointed types.
 --   constructor mkEnum
 --   field
 --     t : U
---     elems : Vec ⟦ t ⟧ ∣ t ∣ 
+--     elems : Vec ⟦ t ⟧ ∣ t ∣
 
 -- _Enum×_ : Enum → Enum → Enum
 -- (mkEnum t₁ elems₁) Enum× (mkEnum t₂ elems₂) =
 --   mkEnum (TIMES t₁ t₂) (elems₁ enum× elems₂)
-        
+
 -- postulate
 --   mule : {A : Set} {n : ℕ} → (Vec A n) → (x y : A) → A
 --   -- get index of x (must be there)
@@ -1902,7 +1902,7 @@ allow divisions by zero so we then move everything to pointed types.
 --     G : Enum
 
 -- plus2 : ActionGroupoid → ActionGroupoid → ActionGroupoid
--- plus2 (S₁ // enum₁) (S₂ // enum₂) = 
+-- plus2 (S₁ // enum₁) (S₂ // enum₂) =
 --   ((S₁ × ⟦ Enum.t enum₂ ⟧) ⊎ (S₂ × ⟦ Enum.t enum₁ ⟧)) //
 --   (enum₁ Enum× enum₂)
 
@@ -1921,7 +1921,7 @@ allow divisions by zero so we then move everything to pointed types.
 -- 2⟦ LIFT t ⟧        = {!!}
 -- 2⟦ RECIP t ⟧       = ⊤ // mkEnum t (enum t)
 -- 2⟦ PLUS2 T₁ T₂ ⟧   = plus2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧
--- 2⟦ TIMES2 T₁ T₂ ⟧  = times2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧ 
+-- 2⟦ TIMES2 T₁ T₂ ⟧  = times2 2⟦ T₁ ⟧ 2⟦ T₂ ⟧
 
 \end{code}
 
@@ -1991,7 +1991,7 @@ satisfy the familiar algebraic identities for the rational numbers
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{2D Pointed Types}
- 
+
 \begin{itemize}
 
 \item We now introduce the idea of a \emph{pointed type}
@@ -2022,18 +2022,18 @@ a good operational semantics.
 --   constructor mkEnum•
 --   field
 --     t : U•
---     elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣ 
+--     elems : Vec ⟦ carrier t ⟧ ∣ carrier t ∣
 
 -- _Enum•×_ : Enum• → Enum• → Enum•
 -- (mkEnum• •[ t₁ , p₁ ] elems₁) Enum•× (mkEnum• •[ t₂ , p₂ ] elems₂) =
 --   mkEnum•
---     •[ TIMES t₁ t₂ , (p₁ , p₂) ] 
+--     •[ TIMES t₁ t₂ , (p₁ , p₂) ]
 --     (elems₁ enum× elems₂)
 
 -- -- need a proof that every v ∈ ⟦ t ⟧ is in enum t and the index of the position
 
 -- index : {t : U} → (v : ⟦ t ⟧) → Fin ∣ t ∣
--- index = {!!} 
+-- index = {!!}
 
 -- record CyclicGroup : Set₁ where
 --   constructor cyclic
@@ -2070,8 +2070,8 @@ a good operational semantics.
 -- ind (TIMES t₁ t₂) (v₁ , v₂) =
 --   let d = ind t₁ v₁
 --       b = ind t₂ v₂
---       n = ∣ t₁ ∣ 
---       m = ∣ t₂ ∣ 
+--       n = ∣ t₁ ∣
+--       m = ∣ t₂ ∣
 --   in inject≤
 --        (fromℕ (toℕ d * m + toℕ b))
 --        (trans≤ (i*n+k≤m*n d b) (refl′ refl))
@@ -2092,38 +2092,38 @@ a good operational semantics.
 --     cong+l≤ : ∀ {i j} → i ≤ j → (k : ℕ) → k + i ≤ k + j
 --     cong+l≤ {i} {j} i≤j k =
 --       begin (k + i
---                ≡⟨ +-comm k i ⟩ 
+--                ≡⟨ +-comm k i ⟩
 --              i + k
---                ≤⟨ cong+r≤ i≤j k ⟩ 
+--                ≤⟨ cong+r≤ i≤j k ⟩
 --              j + k
---                ≡⟨ +-comm j k ⟩ 
+--                ≡⟨ +-comm j k ⟩
 --              k + j ∎)
 --       where open ≤-Reasoning
 
 --     cong*r≤ : ∀ {i j} → i ≤ j → (k : ℕ) → i * k ≤ j * k
 --     cong*r≤ {0}     {j}     z≤n       k = z≤n
 --     cong*r≤ {suc i} {0}     ()        k -- absurd
---     cong*r≤ {suc i} {suc j} (s≤s i≤j) k = cong+l≤ (cong*r≤ i≤j k) k 
+--     cong*r≤ {suc i} {suc j} (s≤s i≤j) k = cong+l≤ (cong*r≤ i≤j k) k
 
 --     sinj≤ : ∀ {i j} → suc i ≤ suc j → i ≤ j
 --     sinj≤ {0}     {j}     _        = z≤n
 --     sinj≤ {suc i} {0}     (s≤s ()) -- absurd
 --     sinj≤ {suc i} {suc j} (s≤s p)  = p
 
---     i*n+k≤m*n : ∀ {m n} → (i : Fin m) → (k : Fin n) → 
+--     i*n+k≤m*n : ∀ {m n} → (i : Fin m) → (k : Fin n) →
 --                 (suc (toℕ i * n + toℕ k) ≤ m * n)
 --     i*n+k≤m*n {0} {_} () _
 --     i*n+k≤m*n {_} {0} _ ()
---     i*n+k≤m*n {suc m} {suc n} i k = 
---       begin (suc (toℕ i * suc n + toℕ k) 
+--     i*n+k≤m*n {suc m} {suc n} i k =
+--       begin (suc (toℕ i * suc n + toℕ k)
 --             ≡⟨  cong suc (+-comm (toℕ i * suc n) (toℕ k))  ⟩
 --             suc (toℕ k + toℕ i * suc n)
 --             ≡⟨ refl ⟩
 --             suc (toℕ k) + (toℕ i * suc n)
---             ≤⟨ cong+r≤ (bounded k) (toℕ i * suc n) ⟩ 
+--             ≤⟨ cong+r≤ (bounded k) (toℕ i * suc n) ⟩
 --             suc n + (toℕ i * suc n)
 --             ≤⟨ cong+l≤ (cong*r≤ (sinj≤ (bounded i)) (suc n)) (suc n) ⟩
---             suc n + (m * suc n) 
+--             suc n + (m * suc n)
 --             ≡⟨ refl ⟩
 --             suc m * suc n ∎)
 --       where open ≤-Reasoning
@@ -2139,7 +2139,7 @@ a good operational semantics.
 --   ; _≈_ = λ { (g₁ , h₁) (g₂ , h₂) → g₁ g≈ g₂ × h₁ h≈ h₂ }
 --   ; _∙_ = λ { (g₁ , h₁) (g₂ , h₂) → (g₁ g∙ g₂ , h₁ h∙ h₂) }
 --   ; ε = (gε , hε)
---   ; _⁻¹ = λ { (g , h) → (g g⁻¹ , h h⁻¹) } 
+--   ; _⁻¹ = λ { (g , h) → (g g⁻¹ , h h⁻¹) }
 --   ; isGroup = {!!}
 --   }
 --   where
@@ -2148,14 +2148,14 @@ a good operational semantics.
 --                 _≈_ to _g≈_;
 --                 _∙_ to _g∙_;
 --                 ε to gε;
---                 _⁻¹ to _g⁻¹; 
+--                 _⁻¹ to _g⁻¹;
 --                 isGroup to gisGroup)
 --     open Group H
 --       renaming (Carrier to hC;
 --                 _≈_ to _h≈_;
 --                 _∙_ to _h∙_;
 --                 ε to hε;
---                 _⁻¹ to _h⁻¹; 
+--                 _⁻¹ to _h⁻¹;
 --                 isGroup to hisGroup)
 
 -- 2Group : U• → Group lzero lzero
@@ -2166,7 +2166,7 @@ a good operational semantics.
 --   ; _∙_ = λ _ _ → tt
 --   ; ε = tt
 --   ; _⁻¹ = λ _ → tt
---   ; isGroup = {!!} 
+--   ; isGroup = {!!}
 --   }
 -- 2Group •[ PLUS t₁ t₂ , inj₁ v₁ ] =
 --   let G = 2Group •[ t₁ , v₁ ]
@@ -2176,11 +2176,11 @@ a good operational semantics.
 --   ; _∙_ = {!!}
 --   ; ε = {!!}
 --   ; _⁻¹ = {!!}
---   ; isGroup = {!!} 
+--   ; isGroup = {!!}
 --   }
 
 -- 2Group •[ PLUS t₁ t₂ , inj₂ v₂ ] = 2Group •[ t₂ , v₂ ] -- ...
--- 2Group •[ TIMES t₁ t₂ , (v₁ , v₂) ] = 2Group •[ t₁ , v₁ ] G× 2Group •[ t₂ , v₂ ] 
+-- 2Group •[ TIMES t₁ t₂ , (v₁ , v₂) ] = 2Group •[ t₁ , v₁ ] G× 2Group •[ t₂ , v₂ ]
 
 -- --
 
@@ -2191,12 +2191,12 @@ a good operational semantics.
 --     G : Enum•
 
 -- plus2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
--- plus2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+-- plus2• (S₁ //• enum₁) (S₂ //• enum₂) =
 --   ((S₁ × ⟦ U•.carrier (Enum•.t enum₂) ⟧) ⊎ (S₂ × ⟦ U•.carrier (Enum•.t enum₁) ⟧)) //•
 --   (enum₁ Enum•× enum₂)
 
 -- times2• : ActionGroupoid• → ActionGroupoid• → ActionGroupoid•
--- times2• (S₁ //• enum₁) (S₂ //• enum₂) = 
+-- times2• (S₁ //• enum₁) (S₂ //• enum₂) =
 --   (S₁ × S₂) //• (enum₁ Enum•× enum₂)
 
 -- --
@@ -2209,7 +2209,7 @@ a good operational semantics.
 -- 2⟦_⟧• : 2D• → ActionGroupoid•
 -- 2⟦ DIV• t₁ t₂ ⟧• = ⟦ t₁ ⟧ //• mkEnum• t₂ (enum (carrier t₂))
 -- 2⟦ PLUS2• T₁ T₂ ⟧• = plus2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
--- 2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧• 
+-- 2⟦ TIMES2• T₁ T₂ ⟧• = times2• 2⟦ T₁ ⟧• 2⟦ T₂ ⟧•
 
 -- ∣_∣• : 2D• → ℚ
 -- ∣ PLUS2• T₁ T₂ ∣• = ∣ T₁ ∣• ℚ+ ∣ T₂ ∣•
@@ -2218,7 +2218,7 @@ a good operational semantics.
 --   where
 --     NonZero+ : {m n : ℕ} → NonZero m → NonZero (m + n)
 --     NonZero+ {0} {n} m≠0 = ⊥-elim m≠0
---     NonZero+ {suc m} {n} tt = tt  
+--     NonZero+ {suc m} {n} tt = tt
 
 --     NonZeror+ : {m n : ℕ} → NonZero n → NonZero (m + n)
 --     NonZeror+ {m} {0} n≠0 = ⊥-elim n≠0
@@ -2228,17 +2228,17 @@ a good operational semantics.
 --     NonZero* : {m n : ℕ} → NonZero m → NonZero n → NonZero (m * n)
 --     NonZero* {0} {n} m≠0 n≠0 = ⊥-elim m≠0
 --     NonZero* {suc m} {0} m≠0 n≠0 = ⊥-elim n≠0
---     NonZero* {suc m} {suc n} m≠0 n≠0 = tt 
+--     NonZero* {suc m} {suc n} m≠0 n≠0 = tt
 
 --     pt≠0 : (t : U•) → NonZero ∣ carrier t ∣
---     pt≠0 •[ ZERO , () ] 
+--     pt≠0 •[ ZERO , () ]
 --     pt≠0 •[ ONE , p ] = tt
 --     pt≠0 •[ PLUS t₁ t₂ , inj₁ x ] with pt≠0 •[ t₁ , x ]
---     ... | t₁≠0 = NonZero+ t₁≠0 
+--     ... | t₁≠0 = NonZero+ t₁≠0
 --     pt≠0 •[ PLUS t₁ t₂ , inj₂ y ] with pt≠0 •[ t₂ , y ]
---     ... | t₂≠0 = NonZeror+ {∣ t₁ ∣} t₂≠0 
+--     ... | t₂≠0 = NonZeror+ {∣ t₁ ∣} t₂≠0
 --     pt≠0 •[ TIMES t₁ t₂ , (x , y) ] with pt≠0 •[ t₁ , x ] | pt≠0 •[ t₂ , y ]
---     ... | t₁≠0 | t₂≠0 = NonZero* t₁≠0 t₂≠0 
+--     ... | t₁≠0 | t₂≠0 = NonZero* t₁≠0 t₂≠0
 
 \end{code}
 
@@ -2251,7 +2251,7 @@ a good operational semantics.
 -- r₃ = show ∣ DIV• (PLUS (PLUS ONE ONE) ONE) pt₁ ∣•  -- "3/2"
 \end{code}
 
-\item Semantics: Now we want to relate our definitions to Categories.Groupoid 
+\item Semantics: Now we want to relate our definitions to Categories.Groupoid
 
 \item Then we want to lift combinators to 2D types; check each
 combinators is an equivalence of categories; etc.
@@ -2262,13 +2262,13 @@ combinators is an equivalence of categories; etc.
 \section{Eta and Epsilon}
 
 \begin{itemize}
-\item We can ``create'' and ``cancel'' fractional pointed types using $\eta_{\pt{\tau}{v}}$ and $\epsilon_{\pt{\tau}{v}}$ as follows: 
+\item We can ``create'' and ``cancel'' fractional pointed types using $\eta_{\pt{\tau}{v}}$ and $\epsilon_{\pt{\tau}{v}}$ as follows:
 \[\begin{array}{rcl}
 \eta_{\pt{\tau}{v}} &:& \ot \rightarrow \pt{\tau}{v} \otimes 1/\pt{\tau}{v} \\
 \eta_{\pt{\tau}{v}}~() &=& (v , \fv{()}{\G^v_{|\tau|}}) \\
 \\
 \epsilon_{\pt{\tau}{v}} &:& \pt{\tau}{v} \otimes 1/\pt{\tau}{v} \rightarrow \ot \\
-\epsilon_{\pt{\tau}{v}}~(v , \fv{()}{\G^v_{|\tau|}}) &=& () 
+\epsilon_{\pt{\tau}{v}}~(v , \fv{()}{\G^v_{|\tau|}}) &=& ()
 \end{array}\]
 \item Another crucial operation we can do is to use the group to cycle through the values:
 \[\begin{array}{rcl}
@@ -2296,7 +2296,7 @@ v &\mapsto& (v , ()) \\
 &\mapsto& v
 \end{array}\]
 To make sense of this story, consider that there are two sites; one site has a value $v$ that it wants to communicate to another site. In a conventional situation, the two sites must synchronize but here we have an alternative idea. The second site can speculatively proceed with a guess $v'$ and produce some constraint that can propagate independently that recalls the guess. The second site can in principle proceed further with its guessed value. Meanwhile the constraint reaches the first site and we discover that there is a mismatch. The only
-course of action is for the constraint to travel back to the second site, adjust the guess, and continue after the guessed value matches the original value. This idea is reminiscent of our ``reversible concurrency'' paper which discusses much related work. 
+course of action is for the constraint to travel back to the second site, adjust the guess, and continue after the guessed value matches the original value. This idea is reminiscent of our ``reversible concurrency'' paper which discusses much related work.
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2318,7 +2318,7 @@ record Typ : Set where
   constructor typ
   field
     carr : U
-    len = ∣ carr ∣ 
+    len = ∣ carr ∣
     auto : Vec (carr ⟷ carr) (ℕsuc len) -- the real magic goes here
 
     -- normally the stuff below is "global", but here
@@ -2326,7 +2326,7 @@ record Typ : Set where
     id : id⟷ ⇔ (auto !! zero)
     _⊙_ : Fin (ℕsuc len) → Fin (ℕsuc len) → Fin (ℕsuc len)
     coh : ∀ (i j : Fin (ℕsuc len)) → -- note the flip !!!
-        ((auto !! i) ◎ (auto !! j) ⇔ (auto !! (j ⊙ i))) 
+        ((auto !! i) ◎ (auto !! j) ⇔ (auto !! (j ⊙ i)))
     -- to get groupoid, we need inverse knowledge, do later
 --}
 
@@ -2344,36 +2344,36 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 {--
 2Group : U• → Group lzero lzero
 2Group •[ t , v₀ ] = record {
-    Carrier = ⟦ t ⟧ 
+    Carrier = ⟦ t ⟧
   ; _≈_ = _≡_
   ; _∙_ = λ v₁ v₂ → {!!}
   ; ε = v₀
   ; _⁻¹ = λ v → {!!}
-  ; isGroup = {!!} 
+  ; isGroup = {!!}
   }
 
 2Group : U• → Group lzero lzero
 2Group •[ t , v₀ ] = record {
-    Carrier = Vec (•[ t , v₀ ] ⟷ •[ t , v₀ ]) ∣ t ∣ 
+    Carrier = Vec (•[ t , v₀ ] ⟷ •[ t , v₀ ]) ∣ t ∣
   ; _≈_ = {!!}
   ; _∙_ = {!!}
   ; ε = {!!}
   ; _⁻¹ = {!!}
-  ; isGroup = {!!} 
+  ; isGroup = {!!}
   }
 
 2Group : U• → Group lzero lzero
 2Group •[ t , v₀ ] = record {
     Carrier = ⟦ t ⟧
   ; _≈_ = P._≡_
-  ; _∙_ = λ v₁ v₂ → let vs = enum t 
+  ; _∙_ = λ v₁ v₂ → let vs = enum t
                         i₁ = index v₁
                         i₂ = index v₂
-                        i = {!!} -- (toℕ i₁ + toℕ i₂) mod ∣ t ∣ 
+                        i = {!!} -- (toℕ i₁ + toℕ i₂) mod ∣ t ∣
                     in lookup i vs
   ; ε = v₀
   ; _⁻¹ = {!!}
-  ; isGroup = {!!} 
+  ; isGroup = {!!}
   }
 --}
 
@@ -2382,10 +2382,10 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 2DCat : 2D• → Category lzero lzero lzero
 2DCat (DIV• ZERO t) = record {
     Obj  = ⊥
-  ; _⇒_  = λ { () () } 
+  ; _⇒_  = λ { () () }
   ; _≡_  = λ { {()} {()} f g }
-  ; id   = λ { {()} } 
-  ; _∘_  = λ { {()} {()} {()} f g } 
+  ; id   = λ { {()} }
+  ; _∘_  = λ { {()} {()} {()} f g }
   }
 2DCat (DIV• ONE •[ t , p ]) = record {
     Obj  = ⊤
@@ -2393,12 +2393,12 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
   ; _≡_  = λ f g → f P.≡ g
   ; id   = p
   ; _∘_  = λ f g → mule (enum t) f g
-                   
+
   }
 2DCat (DIV• (PLUS t₁ t₂) t) = {!!}
 2DCat (DIV• (TIMES t₁ t₂) t) = {!!}
-2DCat (PLUS2• T₁ T₂) = {!!} 
-2DCat (TIMES2• T₁ T₂) = {!!} 
+2DCat (PLUS2• T₁ T₂) = {!!}
+2DCat (TIMES2• T₁ T₂) = {!!}
 --}
 \end{code}
 
@@ -2410,7 +2410,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- From http://stackoverflow.com/questions/21351906/how-to-define-a-singleton-set
 -- and specialized to permutations
 
--- Perm p is the set that only contains p. 
+-- Perm p is the set that only contains p.
 
 -- Perm : {τ : U} → (p : τ ⟷ τ) → Set
 -- Perm {τ} p = Σ[ p' ∈ (τ ⟷ τ) ] (p' ⇔ p)
@@ -2427,7 +2427,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- definition below is nonsense
 
 -- _≈_ : {τ : U} {c : τ ⟷ τ} → Rel ⟦ τ ⟧ lzero
--- _≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
+-- _≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁
 
 -- something like
 
@@ -2436,26 +2436,26 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 --   trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v₁ v₂ → c≈ c v₂ v₃ → c≈ c v₁ v₃
 
 -- ≈refl : {τ : U} {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v v
--- ≈refl = {!!} 
+-- ≈refl = {!!}
 
 -- triv≡ : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} → (f g : c≈ c v₁ v₂) → Set
 -- triv≡ _ _ = ⊤
 
 -- triv≡Equiv : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} →
 --              IsEquivalence (triv≡ {τ} {c} {v₁} {v₂})
--- triv≡Equiv = record 
+-- triv≡Equiv = record
 --   { refl = tt
 --   ; sym = λ _ → tt
 --   ; trans = λ _ _ → tt
 --   }
 
--- iterate : {τ : U} {n : ℕ} (p : τ ⟷ τ) (i : Fin n) → (τ ⟷ τ) 
--- iterate p zero = id⟷ 
+-- iterate : {τ : U} {n : ℕ} (p : τ ⟷ τ) (i : Fin n) → (τ ⟷ τ)
+-- iterate p zero = id⟷
 -- iterate p (suc n) = p ◎ (iterate p n)
 
 -- Iterate : {τ : U} {n : ℕ} (p : τ ⟷ τ) (i : Fin n) → Set
 -- Iterate p n = Perm (iterate p n)
-  
+
 -- Iterate≡ : {τ : U} → (p : τ ⟷ τ) →
 --            (p₁ p₂ : Σ[ n ∈ Fin (suc ∣ τ ∣) ] (Iterate p n)) → Set
 -- Iterate≡ p (n₁ , (p₁ , α₁)) (n₂ , (p₂ , α₂)) = (n₁ P.≡ n₂) × (p₁ ⇔ p₂)
@@ -2464,9 +2464,9 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- PtoC {τ} (p , α) = record
 --   { Obj = ⊤
 --   ; _⇒_ = λ _ _ → Σ[ n ∈ Fin (suc ∣ τ ∣) ] (Iterate p n)
---   ; _≡_ = λ p₁ p₂ → Iterate≡ p p₁ p₂ 
+--   ; _≡_ = λ p₁ p₂ → Iterate≡ p p₁ p₂
 --   ; id = (zero , singleton id⟷)
---   ; _∘_ = λ { (m₁ , (p₁ , α₁)) (m₂ , (p₂ , α₂)) → {!!}} 
+--   ; _∘_ = λ { (m₁ , (p₁ , α₁)) (m₂ , (p₂ , α₂)) → {!!}}
 --   ; assoc = {!!} -- tt
 --   ; identityˡ = {!!} -- tt
 --   ; identityʳ = {!!} -- tt
@@ -2478,8 +2478,8 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- U1toC (() ×ⁿ ())
 -- U1toC (τ // p) = record
 --   { Obj = ⟦ τ ⟧
---   ; _⇒_ = c≈ p 
---   ; _≡_ = triv≡ {τ} {p} 
+--   ; _⇒_ = c≈ p
+--   ; _≡_ = triv≡ {τ} {p}
 --   ; id = ≈refl p
 --   ; _∘_ = λ y x → trans p x y
 --   ; assoc = tt
@@ -2492,9 +2492,9 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- -- then U/n would have to use some multiplication on groupoids inductively
 
 -- -- toG : (tp : U//) → Groupoid (toC tp)
--- -- toG (τ // p) = record 
+-- -- toG (τ // p) = record
 -- --   { _⁻¹ = {!!}
--- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
+-- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} }
 -- --   }
 
 -- -- Cardinality
@@ -2504,7 +2504,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- ∣ τ // p ∣/ = {!!}
 --   -- for each connected component i, calculate the number of automorphisms ℓᵢ
 --   -- return ∑ᵢ 1/ℓᵢ
--- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
+-- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/
 
 
 
@@ -2519,9 +2519,9 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 
 -- _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
 -- (τ₁ // p₁) ⊞ (τ₂ // p₂) = (PLUS τ₁ τ₂) // (p₁ ⊕ p₂)
--- (τ // p) ⊞ (() ×ⁿ ()) 
--- (() ×ⁿ ()) ⊞ (τ // p) 
--- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
+-- (τ // p) ⊞ (() ×ⁿ ())
+-- (() ×ⁿ ()) ⊞ (τ // p)
+-- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄)
 
 -- _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
 -- (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
@@ -2536,7 +2536,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 
 -- -- some type examples
 
--- -- 0-dimensional 
+-- -- 0-dimensional
 
 -- BOOL : U
 -- BOOL = PLUS ONE ONE
@@ -2552,7 +2552,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- p₅ = p₃ ◎ p₂ -- (3 1 | 2)
 -- p₆ = p₄ ◎ p₂ -- (3 2 | 1)
 
--- -- 1-dimensional 
+-- -- 1-dimensional
 
 -- T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
 
@@ -2568,7 +2568,7 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
 -- T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
 
--- -- 2-dimensional 
+-- -- 2-dimensional
 
 -- S₁ S₂ : U/ 2
 
@@ -2622,10 +2622,10 @@ A2,B0 A2,B1 A0,B2 A2,B3 A2,B4
 -- -- need n-dimensional combinators
 
 -- data _⟷ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → Set where
---   base : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} → 
+--   base : {τ₁ τ₂ : U} {p : τ₁ ⟷ τ₁} →
 --          (c : τ₁ ⟷ τ₂) → ((τ₁ // p) ⟷ⁿ (τ₂ // (! c ◎ p ◎ c)))
 --   hdim : {n : ℕ} {T₁ T₂ T₃ T₄ : U/ n} →
---          (α : T₁ ⟷ⁿ T₃) (β : T₂ ⟷ⁿ T₄) → 
+--          (α : T₁ ⟷ⁿ T₃) (β : T₂ ⟷ⁿ T₄) →
 --          (T₁ ×ⁿ T₂) ⟷ⁿ (T₃ ×ⁿ T₄)
 
 -- apⁿ : {n : ℕ} {T₁ T₂ : U/ n} → (cⁿ : T₁ ⟷ⁿ T₂) → ⟦ T₁ ⟧/ → ⟦ T₂ ⟧/
@@ -2642,7 +2642,7 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 -- definition below is nonsense
 
 -- _≈_ : {τ : U} {c : τ ⟷ τ} → Rel ⟦ τ ⟧ lzero
--- _≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁ 
+-- _≈_ {τ} {c} v₁ v₂ = ap c v₁ P.≡ v₂ ⊎ ap c v₂ P.≡ v₁
 
 -- something like
 
@@ -2651,14 +2651,14 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 --   trans : {v₁ v₂ v₃ : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v₁ v₂ → c≈ c v₂ v₃ → c≈ c v₁ v₃
 
 -- ≈refl : {τ : U} {v : ⟦ τ ⟧} → (c : τ ⟷ τ) → c≈ c v v
--- ≈refl = {!!} 
+-- ≈refl = {!!}
 
 -- triv≡ : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} → (f g : c≈ c v₁ v₂) → Set
 -- triv≡ _ _ = ⊤
 
 -- triv≡Equiv : {τ : U} {c : τ ⟷ τ} {v₁ v₂ : ⟦ τ ⟧} →
 --              IsEquivalence (triv≡ {τ} {c} {v₁} {v₂})
--- triv≡Equiv = record 
+-- triv≡Equiv = record
 --   { refl = tt
 --   ; sym = λ _ → tt
 --   ; trans = λ _ _ → tt
@@ -2668,8 +2668,8 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 -- U1toC (() ×ⁿ ())
 -- U1toC (τ // p) = record
 --   { Obj = ⟦ τ ⟧
---   ; _⇒_ = c≈ p 
---   ; _≡_ = triv≡ {τ} {p} 
+--   ; _⇒_ = c≈ p
+--   ; _≡_ = triv≡ {τ} {p}
 --   ; id = ≈refl p
 --   ; _∘_ = λ y x → trans p x y
 --   ; assoc = tt
@@ -2682,9 +2682,9 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 -- -- then U/n would have to use some multiplication on groupoids inductively
 
 -- -- toG : (tp : U//) → Groupoid (toC tp)
--- -- toG (τ // p) = record 
+-- -- toG (τ // p) = record
 -- --   { _⁻¹ = {!!}
--- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} } 
+-- --   ; iso = record { isoˡ = {!!} ; isoʳ = {!!} }
 -- --   }
 
 -- -- Cardinality
@@ -2694,7 +2694,7 @@ This may be helpful \url{http://www.engr.uconn.edu/~vkk06001/report.pdf}
 -- ∣ τ // p ∣/ = {!!}
 --   -- for each connected component i, calculate the number of automorphisms ℓᵢ
 --   -- return ∑ᵢ 1/ℓᵢ
--- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/ 
+-- ∣ T₁ ×ⁿ T₂ ∣/ = ∣ T₁ ∣/ ℚ* ∣ T₂ ∣/
 
 
 \end{code}
@@ -2787,7 +2787,7 @@ morphisms in that category is trivial.
 \begin{code}
 module X where
   open import Level
---  open import Categories.Category 
+--  open import Categories.Category
 --  open import Categories.Groupoid
   open import Relation.Binary
     using (Rel; IsEquivalence; module IsEquivalence; Reflexive; Symmetric; Transitive)
@@ -2798,7 +2798,7 @@ module X where
 --  open import Categories.Support.Equivalence
 --  open import Categories.Support.EqReasoning
   open import Data.Product
-  
+
 \end{code}}
 
 \begin{definition}[Groupoid Cardinality]
@@ -2809,7 +2809,7 @@ is defined as follows:
 
 \begin{code}
   -- ∥_∥ : FiniteGroupoid → ℚ
-  -- ∥ G ∥ = {!!} 
+  -- ∥ G ∥ = {!!}
 
   -- To calculate this we would need:
   --  - an enumeration of the distinct component of G
@@ -2827,7 +2827,7 @@ group $\G$.
 \end{definition}
 
 Give lots of examples of action groupoids. Explain cardinality.
- 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Programming with Action Groupoids}
 
@@ -2838,7 +2838,7 @@ Every $\Pi$-combinator denotes a permutation on finite sets: we will
 use such permutations as a proxy for the group we need to build action
 groupoids. Thus, we introduce a new type $\tau ~\rtimes~ p$ where $\tau :
 U$ is a $\Pi$-type, i.e., a finite set, and $p : \tau' \leftrightarrow
-\tau'$ is some permutation on a possibly distinct type $\tau' : U$. 
+\tau'$ is some permutation on a possibly distinct type $\tau' : U$.
 
 We view the type $\tau ~\rtimes~ p$ as follows. The permutation $p$
 will be viewed as a one point category whose morphisms are $p^0, p^1,
@@ -2868,20 +2868,20 @@ we are keeping in the type.
 -- data U/ : (n : ℕ) → Set where
 --   ⇑ : U → U/ 0
 --   _//_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n
---   _⋊_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n 
---   _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n)) 
+--   _⋊_ : {n : ℕ} {τ : U} {p : τ ⟷ τ} → (T : U/ n) → Perm p → U/ n
+--   _×ⁿ_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ (suc n))
 
 -- _⊞_ : {n : ℕ} → (U/ n) → (U/ n) → (U/ n)
--- (τ₁ ⋊ p) ⊞ T = {!!} 
--- T ⊞ (τ₁ ⋊ p) = {!!} 
--- (τ₁ // (p₁ , α₁)) ⊞ (τ₂ // (p₂ , α₂)) =  {!(τ₁ ⋊ (p₂ , α₂)) ⊞ (τ₂ ⋊ (p₁ , α₁))!}  // (p₁ ⊗ p₂ , resp⊗⇔ α₁ α₂) 
--- (τ // p) ⊞ T = {!!} -- (() ×ⁿ ()) 
+-- (τ₁ ⋊ p) ⊞ T = {!!}
+-- T ⊞ (τ₁ ⋊ p) = {!!}
+-- (τ₁ // (p₁ , α₁)) ⊞ (τ₂ // (p₂ , α₂)) =  {!(τ₁ ⋊ (p₂ , α₂)) ⊞ (τ₂ ⋊ (p₁ , α₁))!}  // (p₁ ⊗ p₂ , resp⊗⇔ α₁ α₂)
+-- (τ // p) ⊞ T = {!!} -- (() ×ⁿ ())
 -- T ⊞ (τ // p) = {!!} -- (() ×ⁿ ())
--- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄) 
+-- (T₁ ×ⁿ T₂) ⊞ (T₃ ×ⁿ T₄) = (T₁ ⊞ T₃) ×ⁿ (T₂ ⊞ T₄)
 
 -- _⊠_ : {m n : ℕ} → (U/ m) → (U/ n) → (U/ (m + n))
--- (τ₁ ⋊ p) ⊠ T = {!!} 
--- T ⊠ (τ₁ ⋊ p) = {!!} 
+-- (τ₁ ⋊ p) ⊠ T = {!!}
+-- T ⊠ (τ₁ ⋊ p) = {!!}
 -- (τ₁ // p₁) ⊠ (τ₂ // p₂) = (τ₁ // p₁) ×ⁿ (τ₂ // p₂)
 -- (τ // p) ⊠ (T₁ ×ⁿ T₂) = ((τ // p) ⊠ T₁) ×ⁿ ((τ // p) ⊠ T₂)
 -- (T₁ ×ⁿ T₂) ⊠ T₃ = (T₁ ⊠ T₃) ×ⁿ (T₂ ⊠ T₃)
@@ -2894,7 +2894,7 @@ we are keeping in the type.
 
 -- -- some type examples
 
--- -- 0-dimensional 
+-- -- 0-dimensional
 
 -- BOOL : U
 -- BOOL = PLUS ONE ONE
@@ -2910,7 +2910,7 @@ we are keeping in the type.
 -- p₅ = p₃ ◎ p₂ -- (3 1 | 2)
 -- p₆ = p₄ ◎ p₂ -- (3 2 | 1)
 
--- -- 1-dimensional 
+-- -- 1-dimensional
 
 -- T₀ T₁ T₂ T₃ T₄ T₅ T₆ T₇ T₈ T₉ T₁₀ : U/ 1
 
@@ -2926,7 +2926,7 @@ we are keeping in the type.
 -- T₉ = (BOOL // swap₊) ⊞ (ONE // id⟷)
 -- T₁₀ = (BOOL // swap₊) ⊞ (BOOL // swap₊)
 
--- -- 2-dimensional 
+-- -- 2-dimensional
 
 -- S₁ S₂ : U/ 2
 

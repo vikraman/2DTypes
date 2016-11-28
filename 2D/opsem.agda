@@ -80,14 +80,14 @@ v₈ : V (# NOT ⊗ BOOL)
 v₈ = [_,_] {T₁ = # NOT} {T₂ = BOOL} v₂ v₁
 
 v₉ : V (# NOT ⊗ 1/# NOT) -- mismatched pair
-v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅ 
+v₉ = [_,_] {T₁ = # NOT} {T₂ = 1/# NOT} v₂ v₅
 
 ------------------------------------------------------------------------------
 -- evaluation of simple combinators forwards and backwards
 
 prim : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₁ → V T₂
 prim unite₊l (inj₁ () , av)
-prim unite₊l (inj₂ v , av) = (v , av) 
+prim unite₊l (inj₂ v , av) = (v , av)
 prim uniti₊l (v , av) = (inj₂ v , av)
 prim unite₊r (inj₁ v , av) = (v , av)
 prim unite₊r (inj₂ () , av)
@@ -123,7 +123,7 @@ prim id⟷ v = v
 
 prim⁻¹ : {T₁ T₂ : U} → (Prim⟷ T₁ T₂) → V T₂ → V T₁
 prim⁻¹ uniti₊l (inj₁ () , av)
-prim⁻¹ uniti₊l (inj₂ v , av) = (v , av) 
+prim⁻¹ uniti₊l (inj₂ v , av) = (v , av)
 prim⁻¹ unite₊l (v , av) = (inj₂ v , av)
 prim⁻¹ uniti₊r (inj₁ v , av) = (v , av)
 prim⁻¹ uniti₊r (inj₂ () , av)
@@ -212,10 +212,10 @@ data Context : U → U → U → U → Set where
     (P₁ : T₁ ⟷ T₃) → V T₃ →
     (C : Context T₀ (T₁ ⊗ T₂) (T₃ ⊗ T₄) T) → Context T₀ T₂ T₄ T
   L+ : {T₀ T₁ T₂ T₃ T₄ T : U} →
-    (C : Context T₀ (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → (P₂ : T₂ ⟷ T₄) → 
+    (C : Context T₀ (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → (P₂ : T₂ ⟷ T₄) →
     Context T₀ T₁ T₃ T
   R+ : {T₀ T₁ T₂ T₃ T₄ T : U} →
-    (P₁ : T₁ ⟷ T₃) → (C : Context T₀ (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) → 
+    (P₁ : T₁ ⟷ T₃) → (C : Context T₀ (T₁ ⊕ T₂) (T₃ ⊕ T₄) T) →
     Context T₀ T₂ T₄ T
 
 data State : U → U → Set where
@@ -296,14 +296,14 @@ mutual
        then (inj₁ tt , refl)
        else (inj₂ tt , refl)
   𝓐𝓹 ap⟷ ((perm iter q α , v) , (av₁ , av₂)) =
-    case (𝓐𝓹 q (v , av₂)) of λ { (v' , av₂') → (perm iter q α , v') , (av₁ , av₂') } 
+    case (𝓐𝓹 q (v , av₂)) of λ { (v' , av₂') → (perm iter q α , v') , (av₁ , av₂') }
   𝓐𝓹 ap⁻¹⟷ ((perm iter p' p'⇔p^i , v) , (av₁ , av₂)) with (𝓐𝓹⁻¹ p' (v , av₂))
   ... | v' , av₂' = (perm iter p' p'⇔p^i , v') , (av₁ , av₂')
   𝓐𝓹 contract (perm i _ _ , β) = tt , refl
   𝓐𝓹 expand (tt , refl) = perm (+ 0) (Prim id⟷) id⇔ , id⇔ -- this is not going to be reversible!
   𝓐𝓹 iap⟷ ((pp , v) , (perm iter q α , av)) =
     ((pp , v) , (perm iter q α , {!!}))
-  𝓐𝓹 iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!} 
+  𝓐𝓹 iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!}
 
   𝓐𝓹⁻¹ : {T₁ T₂ : U} → (T₁ ⟷ T₂) → V T₂ → V T₁
   𝓐𝓹⁻¹ (Prim c) v = prim⁻¹ c v
@@ -313,7 +313,7 @@ mutual
   𝓐𝓹⁻¹ (c₀ ⊗ c₁) ((x , y) , (av₁ , av₂)) =
     case (𝓐𝓹⁻¹ c₀ (x , av₁) , 𝓐𝓹⁻¹ c₁ (y , av₂)) of
         (λ { ((v₁ , av₁') , (v₂ , av₂')) → (v₁ , v₂) , (av₁' , av₂')})
-  𝓐𝓹⁻¹ foldSwap (v , av) = 
+  𝓐𝓹⁻¹ foldSwap (v , av) =
     if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
        then (inj₁ tt , refl)
        else (inj₂ tt , refl)
@@ -321,7 +321,7 @@ mutual
   𝓐𝓹⁻¹ unfoldSwap (inj₂ tt , refl) = (perm (+ 1) (Prim swap₊) idr◎r , id⇔)
   𝓐𝓹⁻¹ ap⟷ ((perm iter q α , v) , (av₁ , av₂)) =
     case (𝓐𝓹⁻¹ q (v , av₂)) of (λ {(v' , av') → (perm iter q α , v') , (av₁ , av') })
-  𝓐𝓹⁻¹ ap⁻¹⟷ ((perm i q α , v) , (av₁ , av₂)) = 
+  𝓐𝓹⁻¹ ap⁻¹⟷ ((perm i q α , v) , (av₁ , av₂)) =
     case (𝓐𝓹 q (v , av₂)) of (λ { (v' , av') → ((perm i q α) , v') , (av₁ , av') })
   𝓐𝓹⁻¹ (η- c) ((v , _) , _) = v , id⇔ -- probably not the best
   𝓐𝓹⁻¹ (η+ c) ((perm i p' α , perm j id γ) , (β , perm k q ν)) =
@@ -330,8 +330,8 @@ mutual
   𝓐𝓹⁻¹ (ε- c) v = ({!!} , (perm (+ 1) c idr◎r)) , (perm (+ 1) c idr◎r) , id⇔
   𝓐𝓹⁻¹ (contract {t}) v = (perm (+ 0) (Prim id⟷) id⇔) , id⇔
   𝓐𝓹⁻¹ (expand {t}) v = tt , refl
-  𝓐𝓹⁻¹ iap⟷ ((pp , v) , (perm iter q α , av)) = {!!} 
-  𝓐𝓹⁻¹ iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!} 
+  𝓐𝓹⁻¹ iap⟷ ((pp , v) , (perm iter q α , av)) = {!!}
+  𝓐𝓹⁻¹ iap⁻¹⟷ ((pp , v) , (perm iter p' p'⇔p^i , av)) = {!!}
 
 -- note how this uses 𝓐𝓹
 cong≈ : (S T : U) → (c : S ⟷ T) (x y : V S) → [ S ] x ≈ y →  [ T ] (𝓐𝓹 c x) ≈ (𝓐𝓹 c y)
@@ -359,14 +359,14 @@ cong≈ _ _ iap⟷ _ _ _ = {!!}
 cong≈ _ _ iap⁻¹⟷ _ _ _ = {!!}
 
 fwd◎bwd≈id : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → (v : V T₂) → [ T₂ ] (𝓐𝓹 c (𝓐𝓹⁻¹ c v)) ≈ v
-fwd◎bwd≈id {_} {T₂} (Prim x) v = ≡⇒≈[ T₂ ] (prim◎prim⁻¹≡id x v) 
+fwd◎bwd≈id {_} {T₂} (Prim x) v = ≡⇒≈[ T₂ ] (prim◎prim⁻¹≡id x v)
 fwd◎bwd≈id (c ◎ c₁) v = {!!} -- need cong≈ ?
 fwd◎bwd≈id (c ⊕ c₁) (inj₁ x , x⇒x) = inj₁≈ (fwd◎bwd≈id c (x , x⇒x))
 fwd◎bwd≈id (c ⊕ c₁) (inj₂ y , y⇒y) = inj₂≈ (fwd◎bwd≈id c₁ (y , y⇒y))
 fwd◎bwd≈id (c ⊗ c₁) ((x , y) , (x⇒x , y⇒y)) =
     proj≈ (fwd◎bwd≈id c (x , x⇒x)) (fwd◎bwd≈id c₁ (y , y⇒y))
 fwd◎bwd≈id foldSwap (perm i q α , β) = {!!}
-fwd◎bwd≈id unfoldSwap (inj₁ tt , refl) = refl≈[ 𝟙 ⊕ 𝟙 ] (inj₁ tt , refl) 
+fwd◎bwd≈id unfoldSwap (inj₁ tt , refl) = refl≈[ 𝟙 ⊕ 𝟙 ] (inj₁ tt , refl)
 fwd◎bwd≈id unfoldSwap (inj₂ tt , refl) = refl≈[ 𝟙 ⊕ 𝟙 ] (inj₂ tt , refl)
 fwd◎bwd≈id (ap⟷ {t} {p}) ((perm i q β , t₁) , (α , r)) =
   proj≈ (refl≈[ # p ] (perm i q β , α) ) (fwd◎bwd≈id q (t₁ , r))
@@ -374,7 +374,7 @@ fwd◎bwd≈id (ap⁻¹⟷ {_} {p}) ((perm i q α , t₁) , (β , r)) =
   proj≈ (refl≈[ # p ] (perm i q α , β)) {!!} -- need to define mutually with other dir
 fwd◎bwd≈id (η- c) ((pp , r) , (p , β)) = proj≈ (1/#≈ {!!} {!!} {!!}) (#≈ {!!}) -- false
 fwd◎bwd≈id (η+ c) ((perm i r α , perm j _ _) , (β , perm k _ _)) = proj≈ (#≈ {!!}) {!!} -- false
-fwd◎bwd≈id (iap⟷ {t} {p}) _ = {!!} 
+fwd◎bwd≈id (iap⟷ {t} {p}) _ = {!!}
 fwd◎bwd≈id (iap⁻¹⟷ {_} {p}) _ = {!!}
 fwd◎bwd≈id (ε+ c) v = {!!} -- warning: loops
 fwd◎bwd≈id (ε- c) v = {!!} -- warning: loops
@@ -390,38 +390,38 @@ ap (Enter (Prim c) v C) =
 ap (Enter (P₁ ◎ P₂) v C) =
   Fwd , Enter P₁ v (Fst C P₂)
 ap (Exit P₁ v (Fst C P₂)) =
-  Fwd , Enter P₂ v (Snd P₁ C) 
+  Fwd , Enter P₂ v (Snd P₁ C)
 ap (Exit P₂ v₂ (Snd P₁ C)) =
   Fwd , Exit (P₁ ◎ P₂) v₂ C
 -- choice composition
 ap (Enter (P₁ ⊕ P₂) (inj₁ v₁ , av₁) C) =
   Fwd , Enter P₁ (v₁ , av₁) (L+ C P₂)
 ap (Exit P₁ (v₁ , av) (L+ C P₂)) =
-  Fwd , Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
+  Fwd , Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C
 ap (Enter (P₁ ⊕ P₂) (inj₂ v₂ , av₂) C) =
   Fwd , Enter P₂ (v₂ , av₂) (R+ P₁ C)
 ap (Exit P₂ (v₂ , av) (R+ P₁ C)) =
-  Fwd , Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
+  Fwd , Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C
 -- parallel composition
 ap (Enter (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
   Fwd , Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
 ap (Exit P₁ v₁ (L× C P₂ v₂)) =
   Fwd , Enter P₂ v₂ (R× P₁ v₁ C)
 ap (Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
-  Fwd , Exit (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
+  Fwd , Exit (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C
 -- Swap
 ap (Enter foldSwap (inj₁ tt , refl) C) =
-  Fwd , Exit foldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C 
+  Fwd , Exit foldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C
 ap (Enter foldSwap (inj₂ tt , refl) C) =
-  Fwd , Exit foldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
+  Fwd , Exit foldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C
 ap (Enter unfoldSwap (v , _) C) =
    if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
       then Fwd , Exit unfoldSwap (inj₁ tt , refl) C
-      else Fwd , Exit unfoldSwap (inj₂ tt , refl) C 
+      else Fwd , Exit unfoldSwap (inj₂ tt , refl) C
 ap (Enter ap⟷ v C) = Fwd , Exit ap⟷ (𝓐𝓹 ap⟷ v) C
 ap (Enter ap⁻¹⟷ v C) = Fwd , Exit ap⁻¹⟷ (𝓐𝓹 ap⁻¹⟷ v) C
-ap (Enter iap⟷ v C) = {!!} 
-ap (Enter iap⁻¹⟷ v C) = {!!} 
+ap (Enter iap⟷ v C) = {!!}
+ap (Enter iap⁻¹⟷ v C) = {!!}
 -- eta and epsilon
 ap (Enter (η+ P) (pp , _) C) =
   Fwd , Exit (η+ P)
@@ -456,33 +456,33 @@ ap⁻¹ (Exit (P₁ ◎ P₂) v C) =
 ap⁻¹ (Enter P₂ v₂ (Snd P₁ C)) =
   Bck , Exit P₁ v₂ (Fst C P₂)
 ap⁻¹ (Enter P₁ v (Fst C P₂)) =
-  Bck , Enter (P₁ ◎ P₂) v C 
+  Bck , Enter (P₁ ◎ P₂) v C
 -- choice composition
 ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₁ v₁ , av) C) =
-  Bck , Exit P₁ (v₁ , av) (L+ C P₂) 
+  Bck , Exit P₁ (v₁ , av) (L+ C P₂)
 ap⁻¹ (Enter P₁ (v₁ , av) (L+ C P₂)) =
-  Bck , Enter (P₁ ⊕ P₂) (inj₁ v₁ , av) C  
+  Bck , Enter (P₁ ⊕ P₂) (inj₁ v₁ , av) C
 ap⁻¹ (Exit (P₁ ⊕ P₂) (inj₂ v₂ , av) C) =
-  Bck , Exit P₂ (v₂ , av) (R+ P₁ C) 
+  Bck , Exit P₂ (v₂ , av) (R+ P₁ C)
 ap⁻¹ (Enter P₂ (v₂ , av) (R+ P₁ C)) =
-  Bck , Enter (P₁ ⊕ P₂) (inj₂ v₂ , av) C 
+  Bck , Enter (P₁ ⊕ P₂) (inj₂ v₂ , av) C
 -- parallel composition
 ap⁻¹ (Exit (P₁ ⊗ P₂) ((v₁ , v₂) , (av₁ , av₂)) C) =
   Bck , Exit P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)
 ap⁻¹ (Enter P₂ (v₂ , av₂) (R× P₁ (v₁ , av₁) C)) =
   Bck , Exit P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))
 ap⁻¹ (Enter P₁ (v₁ , av₁) (L× C P₂ (v₂ , av₂))) =
-  Bck , Enter (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C 
+  Bck , Enter (P₁ ⊗ P₂) (((v₁ , v₂) , (av₁ , av₂))) C
 -- Swap
 ap⁻¹ (Exit foldSwap (v , _) C) =
      if (v ⇔? (perm (+ 0) (Prim id⟷) id⇔))
         then Bck , Enter foldSwap (inj₁ tt , refl) C
-        else Fwd , Enter foldSwap (inj₂ tt , refl) C  
-ap⁻¹ (Exit unfoldSwap (inj₁ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C 
-ap⁻¹ (Exit unfoldSwap (inj₂ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C 
-ap⁻¹ (Exit ap⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⁻¹⟷ v) C 
-ap⁻¹ (Exit ap⁻¹⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⟷ v) C  
-ap⁻¹ (Exit iap⟷ v C) = {!!} 
+        else Fwd , Enter foldSwap (inj₂ tt , refl) C
+ap⁻¹ (Exit unfoldSwap (inj₁ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 0) (Prim id⟷) id⇔ , id⇔) C
+ap⁻¹ (Exit unfoldSwap (inj₂ tt , _) C) = Bck , Enter unfoldSwap (perm (+ 1) (Prim swap₊) idr◎r , id⇔) C
+ap⁻¹ (Exit ap⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⁻¹⟷ v) C
+ap⁻¹ (Exit ap⁻¹⟷ v C) = Bck , Enter ap⟷ (𝓐𝓹 ap⟷ v) C
+ap⁻¹ (Exit iap⟷ v C) = {!!}
 ap⁻¹ (Exit iap⁻¹⟷ v C) = {!!}
 -- eta and epsilon
 ap⁻¹ (Exit (ε+ P) (pp , _) C) =
@@ -526,8 +526,8 @@ ap⁻¹ (Exit (η- P) ((pp , perm i q α) , (perm j r γ , β)) C) =
 ap⁻¹ (Exit (contract {t}) v C) = {!!}
 ap⁻¹ (Exit (expand {t}) v C) = {!!}
 
--- done 
-ap⁻¹ (Enter P v Empty) = Bck , Enter P v Empty 
+-- done
+ap⁻¹ (Enter P v Empty) = Bck , Enter P v Empty
 
 -- big step execution
 
@@ -536,12 +536,12 @@ postulate
 
 {-# NON_TERMINATING #-}
 
-mutual 
+mutual
   loopFwd : {T₀ T : U} → (s : State T₀ T) → V T
-  loopFwd s with ap s 
+  loopFwd s with ap s
   ... | Fwd , (Exit _ v Empty) = v
-  ... | Fwd , s' = loopFwd s' 
-  ... | Bck , s' = loopBck s' 
+  ... | Fwd , s' = loopFwd s'
+  ... | Bck , s' = loopBck s'
 
   loopBck : {T₀ T : U} → State T₀ T → V T
   loopBck s with ap⁻¹ s
@@ -642,7 +642,7 @@ postulate
   𝓐𝓹≡ : {T₁ T₂ : U} {p : T₁ ⟷ T₂} (v : V T₂) → 𝓐𝓹 p (𝓐𝓹 (! p) v) ≡ v
   𝓐𝓹!≡ : {T₁ T₂ : U} {p : T₁ ⟷ T₂} (v : V T₁) → 𝓐𝓹 (! p) (𝓐𝓹 p v) ≡ v
 
-p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category _ _ _ 
+p!p⇒C : {τ : U} (p : τ ⟷ τ) → Category _ _ _
 p!p⇒C {τ} p = record {
      Obj = V τ
    ; _⇒_ = λ v₁ v₂ → (Σ[ j ∈ ℤ ] (𝓐𝓹 (p ^ j) v₁) ≡ v₂)
@@ -658,9 +658,9 @@ p!p⇒C {τ} p = record {
                (trans⇔ assoc◎l
                (trans⇔ (2! (lower j₁ j₂) ⊡ id⇔)
                        (2! (lower (j₁ ℤ+ j₂) j₃))))) })
-   ; identityˡ = λ { {A} {B} {j₁ , α₁} → trans⇔ (lower j₁ (+ 0)) idr◎l } 
-   ; identityʳ = λ { {A} {B} {j₁ , α₁} → trans⇔ (lower (+ 0) j₁) idl◎l } 
-   ; equiv = record { refl = id⇔ ; sym = 2! ; trans = trans⇔ } 
+   ; identityˡ = λ { {A} {B} {j₁ , α₁} → trans⇔ (lower j₁ (+ 0)) idr◎l }
+   ; identityʳ = λ { {A} {B} {j₁ , α₁} → trans⇔ (lower (+ 0) j₁) idl◎l }
+   ; equiv = record { refl = id⇔ ; sym = 2! ; trans = trans⇔ }
    ; ∘-resp-≡ = λ { {A} {B} {C} {jf , αf} {jh , αh} {jg , αg} {ji , αi}
                     p^jf⇔p^jh p^jg⇔p^ji → trans⇔ (lower jg jf)
                                          (trans⇔ (p^jg⇔p^ji ⊡ p^jf⇔p^jh)

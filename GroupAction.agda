@@ -46,7 +46,7 @@ open import Pi1
                     (λ { true → refl ; false → refl }))
        ; ⁻¹-cong = cong id
        }
-     } 
+     }
 
 -- For various sets S, let's define various possible group actions ρ :
 -- ℤ₂ × S → S.  The resulting 'action groupoid' S //ρ ℤ₂ should always
@@ -55,7 +55,7 @@ open import Pi1
 record Action {c ℓ s} (G : Group c ℓ) (S : Set s) : Set (s ⊔ c) where
   open Group G
   field
-    φ : Carrier × S → S 
+    φ : Carrier × S → S
     identityA : ∀ {x} → φ (ε , x) ≡ x
     compatibility : ∀ {g h x} → φ (g ∙ h , x) ≡ φ (g , φ (h , x))
 
@@ -64,7 +64,7 @@ record Action {c ℓ s} (G : Group c ℓ) (S : Set s) : Set (s ⊔ c) where
 
 ρ-ℤ₂⊤ : Action ℤ₂ (Fin 1)
 ρ-ℤ₂⊤ = record {
-    φ = λ { (false , zero) → 0₁; 
+    φ = λ { (false , zero) → 0₁;
             (true , zero) →  0₁;
             (_ , suc ())}
   ; identityA = λ { {suc ()}; {zero} → refl }
@@ -149,22 +149,20 @@ postulate
 ℤ₁₊₁ : Group lzero lzero
 ℤ₁₊₁ = record {
        Carrier = BOOL ⟷ BOOL
-     ; _≈_ = _⇔_ 
+     ; _≈_ = _⇔_
      ; _∙_  = _◎_
      ; ε = id⟷
-     ; _⁻¹ = ! 
+     ; _⁻¹ = !
      ; isGroup = record {
          isMonoid = record {
            isSemigroup = record {
-             isEquivalence = ⇔Equiv 
-           ; assoc = λ c₁ c₂ c₃ → assoc◎r  
-           ; ∙-cong = _⊡_ 
+             isEquivalence = ⇔Equiv
+           ; assoc = λ c₁ c₂ c₃ → assoc◎r
+           ; ∙-cong = _⊡_
            }
-         ; identity = ((λ c → idl◎l) , (λ c → idr◎l))  
+         ; identity = ((λ c → idl◎l) , (λ c → idr◎l))
          }
-       ; inverse = ((λ c → rinv◎l) , (λ c → linv◎l)) 
-       ; ⁻¹-cong = λ {a} {b} c → xxx c 
+       ; inverse = ((λ c → rinv◎l) , (λ c → linv◎l))
+       ; ⁻¹-cong = λ {a} {b} c → xxx c
        }
-     } 
-
-
+     }

@@ -284,7 +284,7 @@ data _⇔_ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → (τ₁ ⟷ τ₂) → S
 2! hom⊕◎⇔ = hom◎⊕⇔
 2! hom◎⊕⇔ = hom⊕◎⇔
 2! split⊕-id⟷ = id⟷⊕id⟷⇔
-2! id⟷⊕id⟷⇔ = split⊕-id⟷ 
+2! id⟷⊕id⟷⇔ = split⊕-id⟷
 
 !!⇔prim : {τ₁ τ₂ : U} → (p : Prim⟷ τ₁ τ₂) → Prim p ⇔ (! (! (Prim p)))
 !!⇔prim unite₊l = id⇔
@@ -457,7 +457,7 @@ combinator $a_2$, we list a few elements of $\iter{a_2}$:
 𝟛 = (𝟙 ⊕ 𝟙) ⊕ 𝟙
 
 a₂ : 𝟛 ⟷ 𝟛
-a₂ = Prim swap₊ ⊕ id⟷ 
+a₂ = Prim swap₊ ⊕ id⟷
 
 id[a₂]² : id⟷ ⇔ a₂ ◎ (a₂ ◎ id⟷)
 id[a₂]² =  split⊕-id⟷ ●
@@ -465,15 +465,15 @@ id[a₂]² =  split⊕-id⟷ ●
            (hom⊕◎⇔ ● (id⇔ ⊡ idr◎r)))
 
 p^₀ p^₁ p^₂ p^₃ p^₄ p^₅ : Iter a₂
-p^₀ = < + 0 , id⟷ , id⇔ > 
-p^₁ = < + 0 , id⟷ ◎ id⟷ , idr◎l > 
-p^₂ = <  -[1+ 1 ] , id⟷ , 
+p^₀ = < + 0 , id⟷ , id⇔ >
+p^₁ = < + 0 , id⟷ ◎ id⟷ , idr◎l >
+p^₂ = <  -[1+ 1 ] , id⟷ ,
          split⊕-id⟷ ●
          ((resp⊕⇔ (linv◎r {c = Prim swap₊}) idr◎r) ●
          (hom⊕◎⇔ ● id⇔)) >
 p^₃ = <  + 2 , id⟷ , id[a₂]² >
-p^₄ = < -[1+ 0 ] , a₂ , id⇔ > 
-p^₅ = < + 1 , a₂ , idr◎r > 
+p^₄ = < -[1+ 0 ] , a₂ , id⇔ >
+p^₅ = < + 1 , a₂ , idr◎r >
 \end{code}
 }}}
 
@@ -481,7 +481,7 @@ p^₅ = < + 1 , a₂ , idr◎r >
 iterates. The first four iterates are all equivalent to $(a_2)^0$
 which is equivalent \AgdaInductiveConstructor{id⟷}. The last two are
 both equivalent to $(a_2)^1$ which is equivalent to $a_2$. The
-equivalences are explicit in the construction. 
+equivalences are explicit in the construction.
 
 Formally we define values as follows:
 
@@ -535,7 +535,7 @@ verify this fact:
 c÷c : {τ : U} (c : τ ⟷ τ) → c ÷ c
 c÷c c < i , p , α > < j , q , β > =
   c ^ (i ℤ.+ (ℤ.- j)) ,
-  α ● 2!  (lower i (ℤ.- j) ⊡ β ● 
+  α ● 2!  (lower i (ℤ.- j) ⊡ β ●
            assoc◎r ● id⇔ ⊡ (^⇔! j) ⊡ id⇔ ●
            id⇔ ⊡ rinv◎l ● idr◎l)
 
@@ -583,7 +583,7 @@ a single object with $\ord{q}$ symmetries.
 %            (1/comb p₁) ≈ (1/comb p₂)
 % \end{code}
 % }}}
-  
+
 % In the case of $\order{p}$ the iterates are
 % interpreted as ``\emph{programs}'' that can act on other values and in
 % the case of $\iorder{p}$ the iterates are interpreted as
@@ -608,7 +608,7 @@ a single object with $\ord{q}$ symmetries.
 
 % Our aim is to ensure that $G_1$, $G_2$, and $G_3$ are the denotations
 % of types with $\frac{3}{2}$ values and that the values of these types
-% are in 1-1 correspondence. 
+% are in 1-1 correspondence.
 
 % \begin{definition}[Semantic Values] Given a groupoid $G$, a
 %   \emph{value} in~$G$ is a pair consisting of an object $v$ and its
@@ -620,7 +620,7 @@ a single object with $\ord{q}$ symmetries.
 % \begin{itemize}
 % \item Values of $G_1$ are $(a,[\texttt{id}])$ and $(c,[\texttt{id},\swapp])$;
 % \item Values of $G_2$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
-% $(c, [\texttt{id}, \swapp])$; 
+% $(c, [\texttt{id}, \swapp])$;
 % \item Values of $G_3$ are $(a,[\texttt{id},\swapp])$, $(b,[\texttt{id},\swapp])$, and \\
 % $(c, [\texttt{id}, \swapp])$.
 % \end{itemize}
@@ -664,7 +664,7 @@ a single object with $\ord{q}$ symmetries.
 % Cardinality-preserving combinators: sound, not complete (see
 % limitations section), consistent.
 
-% \paragraph*{Intermezzo.} The combinators 
+% \paragraph*{Intermezzo.} The combinators
 
 % Consistency is defined in the following
 % sense: If we allow arbitrary functions then bad things happen as we
@@ -681,5 +681,3 @@ a single object with $\ord{q}$ symmetries.
 % no way to identify them and we are consistent.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-

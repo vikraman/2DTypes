@@ -168,7 +168,7 @@ module popl where
 \titlebanner{Fractional Types}
 \preprintfooter{\today\ \currenttime}
 
-\title{Fractional Types} 
+\title{Fractional Types}
 \authorinfo{Anonymous}{}{}
 %% Chao-Hong Chen, Vikraman Choudhury,
 %% Jacques Carette, Amr Sabry
@@ -240,7 +240,7 @@ paths and so on. Here are two simple but non-trivial examples:
   \path (E) edge [loop below] node[below] {\texttt{id}} (B);
   \path (F) edge [loop below] node[below] {\texttt{id}} (B);
 \end{tikzpicture}
-& 
+&
 \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
   \draw[dashed] (0,0) ellipse (2cm and 2.4cm);
   \node[below] (B) at (0,-1.1) {\texttt{*}};
@@ -425,7 +425,7 @@ perspective and conclude.
 % setting of computations over finite types: in that setting
 % information-preservation coincides with type isomorphisms,
 % permutations on finite sets, and HoTT equivalences. In this paper, we
-% extend the work to computations over \emph{groupoids}. 
+% extend the work to computations over \emph{groupoids}.
 
 % In both the situation with finite sets and groupoids, our measure of
 % information is the same. With each type $T$ (finite set or groupoid)
@@ -437,7 +437,7 @@ perspective and conclude.
 % necessary to store values of type $T$. For groupoids, it is possible
 % to have non-negative rational numbers as their cardinality, e.g.,
 % $\frac{1}{3}$, which would give us \emph{negative} entropy,
-% information, or space. 
+% information, or space.
 
 % An important paper about negative entropy in the context of the
 % Landauer limit and reversible computation:
@@ -467,7 +467,7 @@ perspective and conclude.
 % \url{http://www.ucl.ac.uk/oppenheim/negative-information_p2.html}
 
 % In terms of space, we interpret a negative amount as the ability to
-% reclaim that much space. 
+% reclaim that much space.
 
 % Since information is defined using cardinality, the conclusion is that
 % we will consider computations between types $T_1$ and $T_2$ (finite
@@ -528,16 +528,16 @@ $2 \frac{1}{3}$ and 3 respectively. Let $C$ be the following type with
 \end{tikzpicture}
 \end{center}
 \noindent The labels on the objects are meant to be mnemonic: formally the objects
-would correspond to various iterations of some program. 
+would correspond to various iterations of some program.
 
 The first step is to write a \emph{reversible} program $p$
 that represents a permutation of $C$ of order 3. For example:
 \[\begin{array}{rcl@{\qquad\qquad\qquad}rcl}
-p(\texttt{sun}) &=& \texttt{mon} & 
+p(\texttt{sun}) &=& \texttt{mon} &
                                    p(\texttt{mon}) &=& \texttt{tue} \\
-p(\texttt{tue}) &=& \texttt{sun} & 
+p(\texttt{tue}) &=& \texttt{sun} &
                                    p(\texttt{wed}) &=& \texttt{thu} \\
-p(\texttt{thu}) &=& \texttt{fri} & 
+p(\texttt{thu}) &=& \texttt{fri} &
                                    p(\texttt{fri}) &=& \texttt{wed} \\
 p(\texttt{sat}) &=& \texttt{sat}
 \end{array}\]
@@ -549,7 +549,7 @@ $p^1$ is equivalent to $p^4, p^{-2}, p^7, p^{-5}, \ldots$, and that
 $p^2$ is equivalent to $p^5, p^{-1}, p^8, p^{-4}, \ldots$ where the
 negative powers are interpreted as applying the program in
 reverse. Furthermore we have that composing $p^i$ and $p^j$ is the
-identity if $i+j \equiv 0\pmod{3}$. 
+identity if $i+j \equiv 0\pmod{3}$.
 
 As explained in Sec.~\ref{sec:groupoids}, the definition of any $p$
 representing a permutation of order $o$ will induce two groupoids of
@@ -620,7 +620,7 @@ cardinality-preserving transformations on $C$:
 \[\begin{array}{rcl}
 C &≃&  C \otimes \ot \\
 &≃& C \otimes (\order{p} \otimes 1/\hash p) \\
-&≃& (C \otimes 1/\hash p) \otimes \order{p} 
+&≃& (C \otimes 1/\hash p) \otimes \order{p}
 \end{array}\]
 which decomposes $C$ into the product of $C \otimes 1/\hash p$ and
 $\order{p}$. The latter groupoid has cardinality 3. The first groupoid,
@@ -673,11 +673,11 @@ arrows to avoid excessive clutter):
   \path (7) edge [loop above, looseness=15, in=48, out=132] node[above] {$p^1$} (7);
   \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
 \end{tikzpicture}
-\end{center} 
+\end{center}
 
 %%%%%
-\subsection{Credit Card Computation} 
- 
+\subsection{Credit Card Computation}
+
 We illustrate the creation and annihilation of values with the
 following small example. Let $\textsf{swap}$ be the permutation that
 swaps two elements: it has order 2, i.e., $\textsf{swap}^0 =
@@ -756,14 +756,14 @@ $\textsf{swap}$, we have the following situation:
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \path [->] (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
                                  node[below,red] {$\textsf{swap}$} (0,1);
-  \path [->]  (1,1.8) edge node[above] {$\ot$} 
+  \path [->]  (1,1.8) edge node[above] {$\ot$}
                                node[below,red] {$()$} (1.6,1.8);
-  \path [->]  (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
+  \path [->]  (1,0.2) edge node[above] {$\order{\textsf{swap}}$}
                                node[below,red] {$\textsf{swap}$} (4,0.2);
   \draw (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
-  \path [->]  (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} 
+  \path [->]  (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$}
                                   node[below,red] {$\idiso$} (6,2.6);
-  \path [->]  (2.6,1) edge node[above] {$1/\hash\textsf{swap}$} 
+  \path [->]  (2.6,1) edge node[above] {$1/\hash\textsf{swap}$}
                                node[below,red] {$\alpha_{\idiso}$} (4,1);
   \draw [blue,thick] (4,0) -- (5,0) -- (5,2) -- (4,2) -- cycle;
   \path (5,1) edge node[above] {$\ot$} (6,1);
@@ -788,9 +788,9 @@ $\eta_{\textsf{swap}}$ to alter its choice:
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \path [->] (-1.1,1) edge node[above] {$\order{\textsf{swap}}$}
                                  node[below,red] {$\textsf{swap}$} (0,1);
-  \path [->] (1,1.8) edge node[above] {$\ot$} 
+  \path [->] (1,1.8) edge node[above] {$\ot$}
                                node[below,red] {$()$} (1.6,1.8);
-  \path [<-] (1,0.2) edge node[above] {$\order{\textsf{swap}}$} 
+  \path [<-] (1,0.2) edge node[above] {$\order{\textsf{swap}}$}
                                node[below,red] {$\textsf{swap}$} (4,0.2);
   \draw [blue,thick] (1.6,0.8) -- (2.6,0.8) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
   \path [<-] (2.6,2.6) edge node[above] {$\order{\textsf{swap}}$} (6,2.6);
@@ -820,8 +820,8 @@ are only a finite number of possible choices for each value.
 % There are two possible inputs id and swap. If the input is swap then
 % execution proceeds as follows:
 % \begin{verbatim}
-% swap -> 
-% ((),swap) -> 
+% swap ->
+% ((),swap) ->
 % ((swap,[*,swap]),swap) ->
 % (swap,([*,swap],swap)) ->
 % (swap,()) ->
@@ -837,9 +837,9 @@ are only a finite number of possible choices for each value.
 % >> eta x id >>
 %   ((swap^1,[*,swap^1]),swap^0)
 % >> assoc >>
-%   (swap^1,([*,swap^1],swap^0)) 
+%   (swap^1,([*,swap^1],swap^0))
 % >> id x epsilon >>
-%   (swap^1,([*,swap^1],swap^0)) 
+%   (swap^1,([*,swap^1],swap^0))
 % << assoc <<
 %   ((swap^1,[*,swap^1]),swap^0)
 % << eta x id <<
@@ -871,8 +871,8 @@ are only a finite number of possible choices for each value.
 % <-| < epsilon , (1/swap^1 , swap^0) , Rx id swap^1 (Fst (Snd etaxid (Snd unit* [])) unit*) >
 % <-| [ id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) ]
 % <-| < id , swap^1 , Lx epsilon (1/swap^1 , swap^0) (Fst (Snd etaxid (Snd unit* [])) unit*) >
-% <-| < idxepsilon , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd etaxid (Snd unit* [])) unit* > 
-% <-| < idxepsilon;unit* , ((swap^1 , 1/swap^1) , swap^0) , Snd etaxid (Snd unit* []) > 
+% <-| < idxepsilon , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd etaxid (Snd unit* [])) unit* >
+% <-| < idxepsilon;unit* , ((swap^1 , 1/swap^1) , swap^0) , Snd etaxid (Snd unit* []) >
 % <-| [ etaxid , ((swap^1 , 1/swap^1) , swap^0) , Fst (Snd unit* []) idxepsilon;unit* ]
 % <-| [ id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) ]
 % <-| < id , swap^0 , Rx eta (swap^1 , 1/swap^1) (Fst (Snd unit* []) idxepsilon;unit*) >
@@ -914,31 +914,31 @@ are only a finite number of possible choices for each value.
 % is guaranteed to terminate since we will eventually exhaust all the
 % possible choices of iterating $p$ given that it has a finite order.
 
-% Here is a small circuit that illustrates the ideas: 
+% Here is a small circuit that illustrates the ideas:
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Body of the paper split into smaller files
 
-%% Sec 3 
-\input{pibackground.tex} 
-%% Sec 4 
+%% Sec 3
+\input{pibackground.tex}
+%% Sec 4
 \input{groupoid.tex}
 %% Sec 5 A new language with fractional types and its denotational semantics (mostly reference to sec 4)
 \input{pifrac.tex}
 %% Sec 6 its operational semantics + pragmatics
 \input{opsem.tex}
 %% Sec 7 limitations; open problems
-\input{limitations.tex} 
+\input{limitations.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
 We have presented a natural notion of \emph{fractional types} that
 enriches a class of reversible programming languages in several
-dimensions.  Further research might show how to use fractional 
+dimensions.  Further research might show how to use fractional
 types in a conventional (i.e., irreversible) programming language, their full
 potential is only achieved when the ambient language guarantees that
-no information is created or erased. 
+no information is created or erased.
 
 The key semantic insight is that iterating a reversible program $p$ on
 a finite type must eventually reach the identity in $\ord{p}$
@@ -957,14 +957,14 @@ backtracking, or other conventional technique. A more enlightening and
 less ad hoc implementation encodes the required dependency in dataflow
 constraints encoded in dependent types. The key idea is to generalize
 the usual cartesian product to a \emph{tangled product} that allows the
-components to interact at synchronization points. 
+components to interact at synchronization points.
 
 Our fractional types extend the natural denotation of types from sets
 to non-trivial groupoids but they only scratch the surface of the
 tower of weak $\omega$-groupoids that is expressible in HoTT. A long
 term goal of our research is to find natural type constructors
 inspired by the rich combinatorial structure of weak
-$\omega$-groupoids and that provide novel programming abstractions. 
+$\omega$-groupoids and that provide novel programming abstractions.
 
 % Need to look again at the 2D type theory papers by Harper et al. One
 % might argue that we have a clean presentation of these ideas. If it is
@@ -1030,9 +1030,9 @@ $\omega$-groupoids and that provide novel programming abstractions.
 %   \path (7) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (7);
 % \end{tikzpicture}
 % \end{minipage}
-% & 
+% &
 % $\times$
-% & 
+% &
 % \begin{minipage}{0.4\textwidth}
 % \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
 %   \draw (0,0) ellipse (8cm and 1.6cm);
@@ -1084,9 +1084,9 @@ $\omega$-groupoids and that provide novel programming abstractions.
 %   \path (5) edge [loop above, looseness=25, in=40, out=140] node[above] {$p^2$} (5);
 % \end{tikzpicture}
 % \end{minipage}
-% & 
+% &
 % $\times$
-% & 
+% &
 % \begin{minipage}{0.4\textwidth}
 % \begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
 %   \draw (0,0) ellipse (5cm and 1.6cm);
@@ -1139,4 +1139,3 @@ $\omega$-groupoids and that provide novel programming abstractions.
 % \end{tikzpicture}
 
 % which is equivalent to $C$.
-

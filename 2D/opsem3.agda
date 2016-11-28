@@ -37,11 +37,11 @@ Fin2⇒1+1 (suc (suc ()))
 mutual
 {-
   apply : {τ : U} (p q s : τ ⟷ τ) → (# p ⟷ # s) → (p ÷ q) → s ÷ q
-  apply p q s f x < i , s^i , α > < j , q^j , β > with 𝓐𝓹⁻¹ f (comb < i , s^i , α > ) | (inspect (𝓐𝓹⁻¹ f) (comb < i , s^i , α > )) 
+  apply p q s f x < i , s^i , α > < j , q^j , β > with 𝓐𝓹⁻¹ f (comb < i , s^i , α > ) | (inspect (𝓐𝓹⁻¹ f) (comb < i , s^i , α > ))
   ... | comb < k , p^k , γ > | [ eq ] with x < k , p^k , γ > < j , q^j , β >
   ... | (r & pf ) = r & (2! (cong# f < i , s^i , α > ) ● (≡⇒⇔ (cong get-q eq))) ● pf
 -}
-  
+
   𝓐𝓹 : {T₁ T₂ : U} → (T₁ ⟷ T₂) → Val T₁ → Val T₂
   𝓐𝓹 (Prim x) v = prim x v
   𝓐𝓹 (c ◎ c₁) v = let x = 𝓐𝓹 c v in 𝓐𝓹 c₁ x
@@ -102,7 +102,7 @@ mutual
   -- postulate
   --   cong# : {τ : U} {p s : τ ⟷ τ} (f : # p ⟷ # s) → (si : Iter s) →
   --     get-q (𝓐𝓹⁻¹ f (comb si)) ⇔ get-q (comb si)
-      
+
 
 cong⁻¹≈ : {T₁ T₂ : U} → (c : T₁ ⟷ T₂) → {v w : Val T₂} → v ≈ w → 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹⁻¹ c w
 cong⁻¹≈ (Prim x) {v} {w} p = prim⁻¹-cong≈ x v w p
@@ -203,7 +203,7 @@ bwd-coherence (Prim distl) (inr [ v , v₁ ]) = [,]≈ (refl≈ refl) (refl≈ r
 bwd-coherence (Prim factorl) [ v , inl v₁ ] = inj≈ (refl≈ refl)
 bwd-coherence (Prim factorl) [ v , inr v₁ ] = inj≈ (refl≈ refl)
 bwd-coherence (Prim id⟷) v = refl≈ refl
-bwd-coherence (c ◎ c₁) v = 
+bwd-coherence (c ◎ c₁) v =
   let eq = bwd-coherence c₁ v in
   trans≈ (cong⁻¹≈ c eq) (bwd-coherence c (𝓐𝓹 (! c₁) v))
 bwd-coherence (c ⊕ c₁) (inl v) = inj≈ (bwd-coherence c v)
@@ -330,8 +330,8 @@ NOT = Prim swap₊
 -- cc-like
 cc : # NOT ⟷ # NOT
 cc = Prim uniti⋆l ◎
-     (((η+ NOT) ⊗ Prim id⟷) ◎ 
-     ((synchr⋆ ◎ 
+     (((η+ NOT) ⊗ Prim id⟷) ◎
+     ((synchr⋆ ◎
      ((Prim id⟷ ⊗ (ε- NOT)) )))) ◎
      Prim unite⋆r
 
@@ -362,4 +362,3 @@ zig-zag-prop (comb x) = refl≈ refl
 -- trace : {s t u : U} {c : s ⟷ s} → (f : s ⊗ # c ⟷ s ⊗ # c) → t ⟷ u
 -- trace {s} {t} {u} {c = c} f =
 --   Prim (uniti⋆r {t}) ◎ (Prim id⟷ ⊗ η+ c) ◎ {!!} ◎ (Prim id⟷ ⊗ ε+ c) ◎ Prim unite⋆r
-
