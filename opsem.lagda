@@ -19,8 +19,8 @@ open import Data.Integer
   renaming (-_ to ℤ-; suc to ℤsuc; _+_ to _ℤ+_)
 open import Relation.Binary.PropositionalEquality
   using (_≡_; refl; trans; subst; cong; sym; cong₂)-- ; inspect; [_])
-open import Categories.Groupoid.Sum using () renaming (Sum to GSum)
 open import Categories.Groupoid.Product using () renaming (Product to GProduct)
+open import Categories.Groupoid.Coproduct using () renaming (Coproduct to GCoproduct)
 open import Function using (case_of_)
 
 open import pifrac

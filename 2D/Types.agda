@@ -300,7 +300,7 @@ open import Data.Product
 
 open import Categories.Category
 open import Categories.Groupoid
-open import Categories.Groupoid.Sum
+open import Categories.Groupoid.Coproduct
 open import Level
 
 El : U → Set₁
