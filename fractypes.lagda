@@ -19,6 +19,8 @@
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Amr says: #1}\end{minipage}}}
 \newcommand{\vic}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Vikraman says: #1}\end{minipage}}}
 
+\newcommand{\hide}[1]{}
+
 \newcommand{\pifrac}{\ensuremath{\Pi^/}}
 \newcommand{\iso}{\leftrightarrow}
 \newcommand{\isotwo}{\Leftrightarrow}
@@ -245,6 +247,7 @@ formalized in Agda.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+\hide{
 In Homotopy Type Theory (HoTT)~\cite{hottbook}, types have the
 structure of \emph{weak $\omega$-groupoids}. As a first approximation,
 we can think of such structures as sets with points (objects) and
@@ -514,7 +517,9 @@ perspective and conclude.
 % we will consider computations between types $T_1$ and $T_2$ (finite
 % sets or groupoids) such that the cardinality of $T_1$ is the same as
 % the cardinality of $T_2$.
+}
 
+\hide{
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Examples}
 
@@ -857,6 +862,7 @@ in which case no backtracking would have been needed. The setup
 generalizes to arbitrary reversible programs $p$ with finite order:
 the back-and-forth negotiation is guaranteed to terminate as there
 are only a finite number of possible choices for each value.
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Body of the paper split into smaller files

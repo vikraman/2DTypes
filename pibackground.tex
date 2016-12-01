@@ -217,21 +217,19 @@ described in detail:
 \end{array}\]
 
 \noindent Both classes of programs, 1-combinators $c$, and
-2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT
-sense. The elements $c$ of 1-combinators denote type isomorphisms. The
-elements $\alpha$ of 2-combinators denote equivalences between these
-type isomorphisms which are sound and complete 1-combinator program
-transformations. Using the 1-combinators, it is possible to write any
-reversible boolean function and hence encode arbitrary boolean
-functions by a technique that goes back to \cite{Toffoli:1980}. The
-2-combinators provide a layer of programs that computes
-semantics-preserving transformations of 1-combinators. As a small
-example, let us abbreviate $\ot \oplus \ot$ as the type $\mathbb{2}$
-of booleans and examine two possible implementations of boolean
-negation. The first directly uses the primitive combinator
-$\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to swap the
-two values of type $\mathbb{2}$; the second use three consecutive
-copies of $\swapp$ to achieve the same effect:
+2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT sense. The
+elements $c$ of 1-combinators denote type isomorphisms. The elements $\alpha$ of
+2-combinators denote the set of sound and complete equivalences between these
+type isomorphisms. Using the 1-combinators, it is possible to write any
+reversible boolean function and hence encode arbitrary boolean functions by a
+technique that goes back to Toffoli~\cite{Toffoli:1980}. The 2-combinators
+provide a layer of programs that computes semantics-preserving transformations
+of 1-combinators. As a small example, let us abbreviate $\ot \oplus \ot$ as the
+type $\mathbb{2}$ of booleans and examine two possible implementations of
+boolean negation. The first directly uses the primitive combinator
+$\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to exchange the two
+values of type $\mathbb{2}$; the second use three consecutive copies of $\swapp$
+to achieve the same effect:
 \[\begin{array}{rcl}
 \mathsf{not_1} &=& \swapp \\
 \mathsf{not_2} &=& (\swapp \odot \swapp) \odot \swapp
@@ -239,10 +237,13 @@ copies of $\swapp$ to achieve the same effect:
 We can write a 2-combinator whose \emph{type} is $\mathsf{not_2}
 \isotwo \mathsf{not_1}$:
 \[
-(\idldl ~\respstwo~ \idisotwo)~\transtwo~\idldl
+(\linvdl ~\respstwo~ \idisotwo)~\transtwo~\idldl
 \]
-which not only shows the equivalence of the two implementations of
-negation but also shows \emph{how} to transform one to the other.
+which not only shows the equivalence of the two implementations of negation but
+also shows \emph{how} to transform one to the other. In this example, we focus
+on the first two occurrences of $\swapp$ and use $\linvdl$ to reduce them to
+$\idiso$ since they are inverses. We then use $\idldl$ to simplify the
+composition of $\idiso$ with $\swapp$ to just $\swapp$.
 
 Fig.~\ref{pi-combinators} lists all the 1-combinators which consist of
 base combinators (on the left) and compositions (on the right). Each
@@ -381,7 +382,7 @@ power of combinators and their order.
   $k = \ord{p}$.
 \end{lemma}
 
-\paragraph{Intermezzo.} For an information-theoretic perspective on
+\paragraph*{Intermezzo.} For an information-theoretic perspective on
 the language $\Pi$, we think of a type containing $N$ values as an
 abstract system that has~$N$ distinguishable states. According to the
 conventional theory of information~\cite{Shannon1948}, the amount of
