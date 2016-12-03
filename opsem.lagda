@@ -205,6 +205,34 @@ To keep these synchronized and yet to achieve the given type, the only choice
 We implement two examples that are similar to the credit card example
 from the introduction.
 
+\begin{figure}
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \node at (0.5,1) {$\textsf{unit}_\times$};
+  \path (-1.1,1) edge node[above] {${\textsf{\#c}}$} (0,1);
+  \path (1,1.75) edge node[above] {$\mathbb{1}$} (1.6,1.75);
+  \path (1,0.25) edge node[above] {${\textsf{\#c}}$} (4,0.25);
+  \draw (1.6,1) -- (2.6,1) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
+  \node at (2.1,1.9) {$\eta_{\textsf{c}}$};
+  \draw[dashed] (2.8,2.6) -- (2.8,1.25);
+  \path (2.6,2.6) edge node[above] {${\textsf{\#c}}$} (4,2.6);
+  \path (2.6,1.25) edge node[above] {$1/\textsf{\#c}$} (4,1.25);
+  \draw (4,0) -- (5.5,0) -- (5.5,3) -- (4,3) -- cycle;
+  \node at (4.75,1.5) {$synch_{\textsf{c}}$};
+  \path (5.5,1.25) edge node[above] {$1/\#c$} (7,1.25);
+  \path (5.5,2.6) edge node[above] {$\#c$} (9,2.6);
+  \draw (7,0) -- (8,0) -- (8,1.6) -- (7,1.6) -- cycle;
+  \node at (7.5,0.8) {$\epsilon_c$};
+  \draw[dashed] (6.8,0.2) -- (6.8,1.25);
+  \path (8,1) edge node[above] {$\mathbb{1}$} (9,1);
+  \path (5.5,0.2) edge node[above] {$\#c$} (7,0.2);
+  \draw (9,0.8) -- (10,0.8) -- (10,2.8) -- (9,2.8) -- cycle;
+  \node at (9.5,1.8) {$\textsf{unit}_\times$};
+  \path (10,1.8) edge node [above] {$\#c$} (11,1.8);
+\end{tikzpicture}
+\caption{\label{fig:zigzag} Zig-zag}
+\end{figure}
+
 \AgdaHide{
 \begin{code}
 refl≈ : ∀ {t} {v w : Val t} → v ≡ w → v ≈ w
@@ -252,6 +280,5 @@ cc₁ cc₂ : Val (# NOT)
 cc₁ = 𝓐𝓹 cc v₀ -- evaluates to v₀, on the nose
 cc₂ = 𝓐𝓹 cc v₁ -- evaluates to v₁, on the nose
 \end{code}}}}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
