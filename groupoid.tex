@@ -125,7 +125,50 @@ objects (or classes of isomorphic objects). The key insights are that the
 1-combinators are precisely the automorphisms and that their equivalence (and
 hence ``distinctness'') is precisely captured by the 2-combinators.
 
-equivalences between
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{$\Pi$-Combinators as Automorphism Classes}
+
+Recall the type $\mathbb{3}$ with its three elements $ll=\inl{\inl{\unitv}}$,
+$lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. Iterating the 1-combinator $a_2$
+on the elements 0 or 1 times shuffles the elements as follows:
+\[\begin{array}{l}
+ll \stackrel{a_2^0}{\longrightarrow} ll \qquad
+lr \stackrel{a_2^0}{\longrightarrow} lr \qquad
+r \stackrel{a_2^0}{\longrightarrow} r
+\\
+ll \stackrel{a_2^1}{\longrightarrow} lr \qquad
+lr \stackrel{a_2^1}{\longrightarrow} ll \qquad
+r \stackrel{a_2^1}{\longrightarrow} r
+\end{array}\]
+Since the order of the 1-combinator $a_2$ is 2, these are the only two distinct
+automorphisms induced by $a_2$. Formally for any automorphism $a_2^k$ where $k$
+is even we have a 2-combinator that proves $a_2^k \isotwo a_2^0=\idiso$ and for
+any automorphism $a_2^k$ where $k$ is odd we have a 2-combinator that proves
+$a_2^k \isotwo a_2^1=a_2$. We can put these facts together to construct a
+groupoid whose objects are the elements of $\mathbb{3}$ and where there is a
+morphism between $v_i$ and~$v_j$, if applying some number of iterations of $a_2$
+to $v_i$ produces~$v_j$. Furthermore the various iterations of $a_2$ that are
+equivalent under 2-combinators are identified. Such a construction produces
+the following groupoid (which is essentially groupoid $G_2$ in Fig.~\ref{fig:groupoids2}):
+
+\begin{center}
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
+  \node[below] (A) at (-2,0) {$ll$};
+  \node[below] (B) at (0,0) {$lr$};
+  \node[below] (C) at (1.5,0) {$r$};
+  \path (A) edge [bend left=50] node[above] {$a_2$} (B);
+  \path (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$}  (C);
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+\end{tikzpicture}
+\end{center}
+
+As explained above, the groupoid has cardinality $\frac{3}{2}$ which corresponds
+to the quotient of the cardinality of the set $\mathbb{3}$ divided by the order
+of $a_2$. This example groupoid is an instance of a groupoid construction known
+as an \emph{action groupoid} explained next.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Action Groupoids $\ag{\tau}{p}$}
