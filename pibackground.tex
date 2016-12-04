@@ -142,7 +142,9 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \end{figure}
 
 \begin{figure}[ht]
-\[\begin{array}{rlcl}
+{\footnotesize
+\[\begin{array}{cc}
+\begin{array}[t]{rlcl}
 %% \evalone{\unitepl}{&(\inl{()})} \\
 \evalone{\unitepl}{&(\inr{v})} &=& v \\
 \evalone{\unitipl}{&v} &=& \inr{v} \\
@@ -156,16 +158,19 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \evalone{\assoclp}{&(\inr{(\inr{v})})} &=& \inr{v} \\
 \evalone{\assocrp}{&(\inl{(\inl{v})})} &=& \inl{v} \\
 \evalone{\assocrp}{&(\inl{(\inr{v})})} &=& \inr{(\inl{v})} \\
-\evalone{\assocrp}{&(\inr{v})} &=& \inr{(\inr{v})} \\
-\\
+\evalone{\assocrp}{&(\inr{v})} &=& \inr{(\inr{v})}
+\end{array} &
+\begin{array}[t]{rlcl}
 \evalone{\unitetl}{&(\unitv,v)} &=& v \\
 \evalone{\unititl}{&v} &=& (\unitv,v) \\
 \evalone{\unitetr}{&(v,\unitv)} &=& v \\
 \evalone{\unititr}{&v} &=& (v,\unitv) \\
 \evalone{\swapt}{&(v_1,v_2)} &=& (v_2,v_1) \\
 \evalone{\assoclt}{&(v_1,(v_2,v_3))} &=& ((v_1,v_2),v_3) \\
-\evalone{\assocrt}{&((v_1,v_2),v_3)} &=& (v_1,(v_2,v_3)) \\
+\evalone{\assocrt}{&((v_1,v_2),v_3)} &=& (v_1,(v_2,v_3))
+\end{array} \\
 \\
+\begin{array}[t]{rlcl}
 \evalone{\absorbr}{&(v,\_)} &=& v \\
 \evalone{\absorbl}{&(\_,v)} &=& v \\
 %% \evalone{\factorzl}{&()} \\
@@ -177,8 +182,9 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \evalone{\distl}{&(v_1,\inl{v_3})} &=& \inl{(v_1,v_3)} \\
 \evalone{\distl}{&(v_2,\inr{v_3})} &=& \inr{(v_2,v_3)} \\
 \evalone{\factorl}{&\inl{(v_1,v_3)}} &=& (v_1,\inl{v_3}) \\
-\evalone{\factorl}{&\inr{(v_2,v_3)}} &=& (v_2,\inr{v_3}) \\
-\\
+\evalone{\factorl}{&\inr{(v_2,v_3)}} &=& (v_2,\inr{v_3})
+\end{array} &
+\begin{array}[t]{rlcl}
 \evalone{\idiso}{&v} &=& v \\
 \evalone{(c_1 \odot c_2)}{&v} &=&
   \evalone{c_2}{(\evalone{c_1}{v})} \\
@@ -188,8 +194,10 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
   \inr{(\evalone{c_2}{v})} \\
 \evalone{(c_1 \otimes c_2)}{&(v_1,v_2)} &=&
   (\evalone{c_1}v_1, \evalone{c_2}v_2)
+\end{array}
 \end{array}\]
 \caption{\label{opsem}$\Pi$ operational semantics}
+}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%
