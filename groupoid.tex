@@ -1,20 +1,18 @@
 \section{From Sets to Groupoids}
 \label{sec:groupoids}
 
-From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite
-set and a $\Pi$ 1-combinator denotes a permutation on finite
-sets. This semantics can be generalized by enriching $\Pi$ types so
-that they denote more general groupoids and correspondingly enriching
-1-combinators so that they denote ``information-preserving''
-transformations on groupoids. The generalization depends on one
-crucial insight which is the subject of this section. Briefly
-speaking, 1-combinators, their properties, and their operational
-behavior are themselves data that can be manipulated by other
-programs. Depending on the precise setup, we can use a 1-combinator
-$p$ to build one of several kinds of non-trivial groupoids: an action
-groupoid $\ag{\tau}{p}$, an iteration groupoid $\order{p}$, or an
-inverse order groupoid $\iorder{p}$. We explain these constructions
-and then generalize them to a division groupoid $\divg{p}{q}$.
+From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite set and a
+$\Pi$ 1-combinator denotes a permutation on finite sets. This semantics can be
+generalized by enriching $\Pi$ types so that they denote more general groupoids
+and correspondingly enriching 1-combinators so that they denote
+``information-preserving'' transformations on groupoids. The generalization
+depends on one crucial insight which is the subject of this section. Briefly
+speaking, 1-combinators, their properties, and their operational behavior are
+themselves data that can be manipulated by other programs. Depending on the
+precise setup, we can use a 1-combinator~$p$ to build one of several kinds of
+non-trivial groupoids: an action groupoid $\ag{\tau}{p}$, an iteration groupoid
+$\order{p}$, or an inverse order groupoid $\iorder{p}$. We explain these
+constructions and then generalize them to a division groupoid $\divg{p}{q}$.
 
 %%%%%
 \subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
@@ -28,32 +26,28 @@ Each $\Pi$ type $\tau$ denotes a finite set $\sem{\tau}$ as follows:
 \sem{\tau_1 \otimes \tau_2} &=& \sem{\tau_1} \times \sem{\tau_2}
 \end{array}\]
 
-\noindent where we use $\bot$ to denote the empty set, $\top$ to
-denote a set with one element, and $\uplus$ and $\times$ to denote the
-disjoint union of sets and the cartesian product of sets
-respectively. Each set can be viewed as a groupoid whose objects are
-the set elements and with only identity morphisms on each object. By
-only being able to express types whose denotations are trivial
-groupoids, $\Pi$ leaves untapped an enormous amount of combinatorial
-structure that should be within reach. Indeed, as we show next, it is
-possible with a small but deep technical insight to extend $\Pi$ with
-types whose denotations are non-trivial groupoids such as the ones
-illustrated in Fig.~\ref{fig:groupoids}.
+\noindent where we use $\bot$ to denote the empty set, $\top$ to denote a set
+with one element, and $\uplus$ and~$\times$ to denote the disjoint union of sets
+and the cartesian product of sets respectively. Each set can be viewed as a
+groupoid whose objects are the set elements and with only identity morphisms on
+each object. By only being able to express types whose denotations are trivial
+groupoids, $\Pi$ leaves untapped an enormous amount of combinatorial structure
+that is expressible in type theory. We show that with a small but deep technical
+insight it is possible to extend~$\Pi$ with types whose denotations are
+non-trivial ``fractional'' groupoids.
 
 %%%%%
 \subsection{Groupoids and Groupoid Cardinality}
 
-There are many definitions of groupoids that provide complimentary
-perspectives and insights. Perhaps the simplest definition is that a
-groupoid is a category in which every morphism has an inverse. Such a
-category generally consists of clusters of connected objects. Each
-cluster is equivalent (in the category-theoretic sense) to a
-group. Thus an alternative definition of a groupoid is as a
-generalization of a group that allows for individual elements to have
-``internal
-symmetries''~\cite{groupoidintro}. \cite{2009arXiv0908.4305B}
-associate with each groupoid a cardinality that counts the elements up
-to these ``internal symmetries.''
+There are many definitions of groupoids that provide complimentary perspectives
+and insights. Perhaps the simplest definition is that a groupoid is a category
+in which every morphism has an inverse. Such a category generally consists of
+clusters of connected objects. Each cluster is equivalent (in the
+category-theoretic sense) to a group. Thus an alternative definition of a
+groupoid is as a generalization of a group that allows for individual elements
+to have ``internal symmetries''~\cite{groupoidintro}. Baez et
+al.~\cite{2009arXiv0908.4305B} associate with each groupoid a cardinality that
+counts the elements up to these ``internal symmetries.''
 
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
   The cardinality of a groupoid $G$ is the real number:
@@ -67,16 +61,16 @@ to these ``internal symmetries.''
 
 \begin{figure}[t]
 \begin{center}
-\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (1.2cm and 2.1cm);
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (1.5cm and 2.1cm);
   \node[below] (A) at (-0.5,0) {$a$};
   \node[below] (C) at (0.5,0) {$c$};
   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
   \path (C) edge [out=140, in=40, looseness=4] (C);
 \end{tikzpicture}
-\qquad
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+\qquad \qquad \qquad
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
   \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
   \node[below] (A) at (-2,0) {$a$};
   \node[below] (B) at (0,0) {$b$};
@@ -87,8 +81,8 @@ to these ``internal symmetries.''
   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
-\qquad
-\begin{tikzpicture}[scale=0.4,every node/.style={scale=0.8}]
+\qquad \qquad \qquad
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
   \draw[dashed] (0,-0.3) ellipse (2.8cm and 2.5cm);
   \node[below] (A) at (-1.6,0) {$a$};
   \node[below] (B) at (0,0) {$b$};
@@ -108,7 +102,7 @@ For plain sets, the definition just counts the elements as each
 element is its own equivalence class and has exactly one automorphism
 (the identity). For the groupoids $G_1$, $G_2$, and $G_3$ in
 Fig.~\ref{fig:groupoids2}, the cardinality of each groupoid is
-$\frac{3}{2}$ but for a different reason. Groupoid $G_1$ consists of
+$\frac{3}{2}$ but for a different reason. Groupoid~$G_1$ consists of
 two isomorphism classes: class~$a$ has one object with one
 automorphism (the identity) and class~$c$ has one object with two
 distinct automorphisms; the cardinality is
@@ -119,11 +113,19 @@ identity and the loop going from $a$ to $b$ and back. By the groupoid
 axioms, this loop is equivalent to the identity which means that the
 class containing $a$ has just one distinct automorphism. The
 isomorphism class of $c$ has two non-equivalent automorphisms on it
-and hence the cardinality of $G_2$ is
+and hence the cardinality of $G_2$ is also
 $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For $G_3$, we have three
 isomorphism classes, each with two non-equivalent automorphisms, and
 hence the cardinality of $G_3$ is
 $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
+
+The counting in these examples is rather informal. To formalize it, we need, in
+the context of $\Pi$, precise definitions of ``distinct'' automorphisms on
+objects (or classes of isomorphic objects). The key insights are that the
+1-combinators are precisely the automorphisms and that their equivalence (and
+hence ``distinctness'') is precisely captured by the 2-combinators.
+
+equivalences between
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Action Groupoids $\ag{\tau}{p}$}
