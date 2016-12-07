@@ -34,15 +34,15 @@ each object. By only being able to express types whose denotations are trivial
 groupoids, $\Pi$ leaves untapped an enormous amount of combinatorial structure
 that is expressible in type theory. We show that with a small but deep technical
 insight it is possible to extend~$\Pi$ with types whose denotations are
-non-trivial ``fractional'' groupoids.
+non-trivial ``fractional groupoids''.
 
 %%%%%
 \subsection{Groupoids and Groupoid Cardinality}
 
 There are many definitions of groupoids that provide complimentary perspectives
 and insights. Perhaps the simplest definition is that a groupoid is a category
-in which every morphism has an inverse. Such a category generally consists of
-clusters of connected objects. Each cluster is equivalent (in the
+in which every morphism has an inverse. Intuitively, such a category consists of
+clusters of connected objects where each cluster is equivalent (in the
 category-theoretic sense) to a group. Thus an alternative definition of a
 groupoid is as a generalization of a group that allows for individual elements
 to have ``internal symmetries''~\cite{groupoidintro}. Baez et
@@ -54,9 +54,9 @@ counts the elements up to these ``internal symmetries.''
   \[
     |G| = \sum_{[x]} \frac{1}{|\textsf{Aut}(x)|}
   \]
-  provided the sum converges. The summation is over \emph{isomorphism
-    classes $[x]$ of objects $x$} and $|\textsf{Aut}(x)|$ is the
-  number of {\emph distinct} automorphisms of $x$.
+  provided the sum converges. The summation is over \emph{isomorphism classes}
+  $[x]$ of objects $x$ and $|\textsf{Aut}(x)|$ is the number of \emph{distinct}
+  automorphisms of $x$.
 \end{definition}
 
 \begin{figure}[t]
@@ -98,58 +98,56 @@ counts the elements up to these ``internal symmetries.''
 \caption{\label{fig:groupoids2}Example groupoids $G_1$, $G_2$, and $G_3$.}
 \end{figure}
 
-For plain sets, the definition just counts the elements as each
-element is its own equivalence class and has exactly one automorphism
-(the identity). For the groupoids $G_1$, $G_2$, and $G_3$ in
-Fig.~\ref{fig:groupoids2}, the cardinality of each groupoid is
-$\frac{3}{2}$ but for a different reason. Groupoid~$G_1$ consists of
-two isomorphism classes: class~$a$ has one object with one
-automorphism (the identity) and class~$c$ has one object with two
-distinct automorphisms; the cardinality is
-$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid $G_2$, we also
-have two isomorphism classes with representatives $a$ and $c$; the
-class containing $a$ has two automorphisms starting from $a$: the
-identity and the loop going from $a$ to $b$ and back. By the groupoid
-axioms, this loop is equivalent to the identity which means that the
-class containing $a$ has just one distinct automorphism. The
-isomorphism class of $c$ has two non-equivalent automorphisms on it
-and hence the cardinality of $G_2$ is also
-$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For $G_3$, we have three
-isomorphism classes, each with two non-equivalent automorphisms, and
-hence the cardinality of $G_3$ is
-$\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
-
-The counting in these examples is rather informal. To formalize it, we need, in
-the context of $\Pi$, precise definitions of ``distinct'' automorphisms on
-objects (or classes of isomorphic objects). The key insights are that the
-1-combinators are precisely the automorphisms and that their equivalence (and
-hence ``distinctness'') is precisely captured by the 2-combinators.
+For plain sets, the definition just counts the elements as each element is its
+own equivalence class and has exactly one automorphism (the identity). Without
+quite formalizing them and relying on the informal diagrams until the next
+section, we argue that each of the groupoids $G_1$, $G_2$, and $G_3$ in
+Fig.~\ref{fig:groupoids2} has cardinality $\frac{3}{2}$. Groupoid~$G_1$ consists
+of two isomorphism classes: class~$a$ has one object with one automorphism (the
+identity) and class~$c$ has one object with two distinct automorphisms; the
+cardinality is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid $G_2$, we
+also have two isomorphism classes with representatives $a$ and $c$; the class
+containing $a$ has two automorphisms starting from $a$: the identity and the
+loop going from $a$ to $b$ and back. By the groupoid axioms, this loop is
+equivalent to the identity which means that the class containing $a$ has just
+one distinct automorphism. The isomorphism class of $c$ has two non-equivalent
+automorphisms on it and hence the cardinality of $G_2$ is also
+$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For $G_3$, we have three isomorphism
+classes, each with two non-equivalent automorphisms, and hence the cardinality
+of $G_3$ is $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{$\Pi$-Combinators as Automorphism Classes}
 
+To formalize the counting above, we need, in the context of $\Pi$, a precise
+definition of what it means for automorhisms to be ``distinct''. The key
+insights are that the 1-combinators are precisely the automorphisms and that
+their equivalence (and hence ``distinctness'') is precisely captured by the
+2-combinators.
+
 Recall the type $\mathbb{3}$ with its three elements $ll=\inl{\inl{\unitv}}$,
-$lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. Iterating the 1-combinator $a_2$
-on the elements 0 or 1 times shuffles the elements as follows:
-\[\begin{array}{l}
-ll \stackrel{a_2^0}{\longrightarrow} ll \qquad
-lr \stackrel{a_2^0}{\longrightarrow} lr \qquad
-r \stackrel{a_2^0}{\longrightarrow} r
+$lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. Observing the results of applying
+the iterates of $(a_2)^k$ for $k \in \Z$ on the three elements we find:
+\[\begin{array}{l@{\qquad\qquad}l@{\qquad\qquad}l}
+\evalone{(a_2)^{2k}}{ll} = ll &
+\evalone{(a_2)^{2k}}{lr} = lr &
+\evalone{(a_2)^{2k}}{r} = r \\
 \\
-ll \stackrel{a_2^1}{\longrightarrow} lr \qquad
-lr \stackrel{a_2^1}{\longrightarrow} ll \qquad
-r \stackrel{a_2^1}{\longrightarrow} r
+\evalone{(a_2)^{2k+1}}{ll} = lr &
+\evalone{(a_2)^{2k+1}}{lr} = ll &
+\evalone{(a_2)^{2k+1}}{r} = r
 \end{array}\]
-Since the order of the 1-combinator $a_2$ is 2, these are the only two distinct
-automorphisms induced by $a_2$. Formally for any automorphism $a_2^k$ where $k$
-is even we have a 2-combinator that proves $a_2^k \isotwo a_2^0=\idiso$ and for
-any automorphism $a_2^k$ where $k$ is odd we have a 2-combinator that proves
-$a_2^k \isotwo a_2^1=a_2$. We can put these facts together to construct a
-groupoid whose objects are the elements of $\mathbb{3}$ and where there is a
-morphism between $v_i$ and~$v_j$, if applying some number of iterations of $a_2$
-to $v_i$ produces~$v_j$. Furthermore the various iterations of $a_2$ that are
-equivalent under 2-combinators are identified. Such a construction produces
-the following groupoid (which is essentially groupoid $G_2$ in Fig.~\ref{fig:groupoids2}):
+
+Lemma~\ref{lem:ordertwo} gives us the following families of 2-combinators
+$\alpha_{2k} : \idiso \isotwo (a_2)^{2k}$ and
+$\alpha_{2k+1} : a_2 \isotwo (a_2)^{2k+1}$. We can put these facts together to
+construct a groupoid whose objects are the elements of $\mathbb{3}$, whose
+1-morphisms relate $v_i$ and~$v_j$ if $\evalone{(a_2)^k}{v_i} = v_j$ for some
+$k \in \Z$, and whose 2-morphisms are the families $\alpha_{2k}$ and
+$\alpha_{2k+1}$ above. Such a construction produces the following groupoid where
+each family of 1-morphisms that are identified by a family of 2-morphisms is
+drawn using a thick line. The resulting groupoid is essentially a reconstruction
+of $G_2$ in Fig.~\ref{fig:groupoids2} using $\Pi$ types and combinators:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
@@ -157,11 +155,11 @@ the following groupoid (which is essentially groupoid $G_2$ in Fig.~\ref{fig:gro
   \node[below] (A) at (-2,0) {$ll$};
   \node[below] (B) at (0,0) {$lr$};
   \node[below] (C) at (1.5,0) {$r$};
-  \path (A) edge [bend left=50] node[above] {$a_2$} (B);
-  \path (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$}  (C);
-  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$a_2$} (B);
+  \path[ultra  thick] (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$}  (C);
+  \path[ultra  thick] (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path[ultra  thick] (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path[ultra  thick] (C) edge [loop below] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
 \end{center}
 
