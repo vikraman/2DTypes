@@ -294,14 +294,14 @@ $r=\inr{\unitv}$. There are, up to equivalence, six combinators of type
 $\mathbb{3} \iso \mathbb{3}$, each representing a different permutation of three
 elements, which could be written as follows:
 \[\begin{array}{rcl}
-a_1 &=& \idiso \\
-a_2 &=& \swapp \oplus \idiso \\
-a_3 &=& \assocrp \odot (\idiso \oplus \swapp) \odot \assoclp \\
-a_4 &=& a_2 \odot a_3 \\
-a_5 &=& a_3 \odot a_2 \\
-a_6 &=& a_4 \odot a_2
+\permone &=& \idiso \\
+\permtwo &=& \swapp \oplus \idiso \\
+\permthree &=& \assocrp \odot (\idiso \oplus \swapp) \odot \assoclp \\
+\permfour &=& \permtwo \odot \permthree \\
+\permfive &=& \permthree \odot \permtwo \\
+\permsix &=& \permfour \odot \permtwo
 \end{array}\]
-Tracing the evaluation of $a_2$ on each of the possible inputs yields:
+Tracing the evaluation of $\permtwo$ on each of the possible inputs yields:
 \[\begin{array}{rcl}
 \evalone{(\swapp\oplus\idiso)}{\inl{\inl{\unitv}}} &=& \inl{\evalone{\swapp}{\inl{\unitv}}} \\
 &=& \inl{\inr{\unitv}} \\
@@ -312,13 +312,13 @@ Tracing the evaluation of $a_2$ on each of the possible inputs yields:
 \evalone{(\swapp\oplus\idiso)}{\inr{\unitv}} &=& \inr{\evalone{\idiso}{\unitv}} \\
 &=& \inr{\unitv}
 \end{array}\]
-Thus the effect of combinator $a_2$ is to swap the values
+Thus the effect of combinator $\permtwo$ is to swap the values
 $\inl{\inl{\unitv}}$ and $\inl{\inr{\unitv}}$ leaving the value
-$\inr{\unitv}$ intact. Iterating $a_2$ again is therefore equivalent
+$\inr{\unitv}$ intact. Iterating $\permtwo$ again is therefore equivalent
 to the identity permutation, which can be verified using the
 2-combinators:
 \[\begin{array}{rcl}
-a_2 \odot a_2 &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
+\permtwo \odot \permtwo &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
 &\isotwo& (\swapp \odot \swapp) \oplus (\idiso \odot \idiso) \\
 &\isotwo& \idiso \oplus \idiso \\
 &=& \idiso
@@ -348,14 +348,14 @@ permutation.
   $p^k \isotwo \idiso$.
 \end{definition}
 
-For our example combinators on the type $\mathbb{3}$, simple traces
-using the operational semantics show the combinator $a_1$ is the
-identity permutation; the combinators $a_3$ and $a_6$ swap two of the
-three elements leaving the third intact; and the combinators $a_4$ and
-$a_5$ rotate the three elements. We therefore have
-$\mathit{order}(a_1)=1$,
-$\mathit{order}(a_2)=\mathit{order}(a_3)=\mathit{order}(a_6)=2$, and
-$\mathit{order}(a_4)=\mathit{order}(a_5)=3$.
+For our example combinators on the type $\mathbb{3}$, simple traces using the
+operational semantics show the combinator $\permone$ is the identity
+permutation; the combinators $\permthree$ and $\permsix$ swap two of the three
+elements leaving the third intact; and the combinators $\permfour$ and
+$\permfive$ rotate the three elements. We therefore have
+$\mathit{order}(\permone)=1$,
+$\mathit{order}(\permtwo)=\mathit{order}(\permthree)=\mathit{order}(\permsix)=2$,
+and $\mathit{order}(\permfour)=\mathit{order}(\permfive)=3$.
 
 % \begin{lemma}
 %   Every $p : \tau \iso \tau$ has an order.

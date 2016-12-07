@@ -127,27 +127,28 @@ their equivalence (and hence ``distinctness'') is precisely captured by the
 
 Recall the type $\mathbb{3}$ with its three elements $ll=\inl{\inl{\unitv}}$,
 $lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. Observing the results of applying
-the iterates of $(a_2)^k$ for $k \in \Z$ on the three elements we find:
-\[\begin{array}{l@{\qquad\qquad}l@{\qquad\qquad}l}
-\evalone{(a_2)^{2k}}{ll} = ll &
-\evalone{(a_2)^{2k}}{lr} = lr &
-\evalone{(a_2)^{2k}}{r} = r \\
-\\
-\evalone{(a_2)^{2k+1}}{ll} = lr &
-\evalone{(a_2)^{2k+1}}{lr} = ll &
-\evalone{(a_2)^{2k+1}}{r} = r
+the iterates $(\permtwo)^k$ for $k \in \Z$ on the three elements we find:
+\[\begin{array}{c@{\qquad\qquad}c}
+\begin{array}{rcl}
+\evalone{(\permtwo)^{2k}}{ll} &=& ll \\
+\evalone{(\permtwo)^{2k}}{lr} &=& lr \\
+\evalone{(\permtwo)^{2k}}{r} &=& r
+\end{array} &
+\begin{array}{rcl}
+\evalone{(\permtwo)^{2k+1}}{ll} &=& lr \\
+\evalone{(\permtwo)^{2k+1}}{lr} &=& ll \\
+\evalone{(\permtwo)^{2k+1}}{r} &=& r
+\end{array}
 \end{array}\]
-
-Lemma~\ref{lem:ordertwo} gives us the following families of 2-combinators
-$\alpha_{2k} : \idiso \isotwo (a_2)^{2k}$ and
-$\alpha_{2k+1} : a_2 \isotwo (a_2)^{2k+1}$. We can put these facts together to
+Furthermore, Lemma~\ref{lem:ordertwo} gives us the following families of 2-combinators
+$\alpha_{2k} : \idiso \isotwo (\permtwo)^{2k}$ and
+$\alpha_{2k+1} : \permtwo \isotwo (\permtwo)^{2k+1}$. We can put these facts together to
 construct a groupoid whose objects are the elements of $\mathbb{3}$, whose
-1-morphisms relate $v_i$ and~$v_j$ if $\evalone{(a_2)^k}{v_i} = v_j$ for some
+1-morphisms relate $v_i$ and~$v_j$ if $\evalone{(\permtwo)^k}{v_i} = v_j$ for some
 $k \in \Z$, and whose 2-morphisms are the families $\alpha_{2k}$ and
 $\alpha_{2k+1}$ above. Such a construction produces the following groupoid where
 each family of 1-morphisms that are identified by a family of 2-morphisms is
-drawn using a thick line. The resulting groupoid is essentially a reconstruction
-of $G_2$ in Fig.~\ref{fig:groupoids2} using $\Pi$ types and combinators:
+drawn using a thick line:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
@@ -155,18 +156,21 @@ of $G_2$ in Fig.~\ref{fig:groupoids2} using $\Pi$ types and combinators:
   \node[below] (A) at (-2,0) {$ll$};
   \node[below] (B) at (0,0) {$lr$};
   \node[below] (C) at (1.5,0) {$r$};
-  \path[ultra  thick] (A) edge [bend left=50] node[above] {$a_2$} (B);
-  \path[ultra  thick] (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$}  (C);
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\permtwo$} (B);
+  \path[ultra  thick] (C) edge [out=140, in=40, looseness=4] node[above] {$\permtwo$}  (C);
   \path[ultra  thick] (A) edge [loop below] node[below] {\texttt{id}} (A);
   \path[ultra  thick] (B) edge [loop below] node[below] {\texttt{id}} (B);
   \path[ultra  thick] (C) edge [loop below] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
 \end{center}
 
-As explained above, the groupoid has cardinality $\frac{3}{2}$ which corresponds
-to the quotient of the cardinality of the set $\mathbb{3}$ divided by the order
-of $a_2$. This example groupoid is an instance of a groupoid construction known
-as an \emph{action groupoid} explained next.
+Clearly, the resulting groupoid is a reconstruction of $G_2$ in
+Fig.~\ref{fig:groupoids2} using $\Pi$ types and combinators. As analyzed
+earlier, this groupoid has cardinality $\frac{3}{2}$. From the perspective of
+$\Pi$, this cardinality corresponds to the number of elements in the underlying
+set which is $\mathbb{3}$ divided by the order of the combinator $\permtwo$ in
+question which is 2.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Action Groupoids $\ag{\tau}{p}$}
@@ -185,17 +189,17 @@ groupoid $\ag{\tau}{p}$ defined as follows. The objects of
 $\ag{\tau}{p}$ are the elements~$v_i$ of the set $\sem{\tau}$ and there
 is a morphism between $v_i$ and~$v_j$, if applying some number of
 iterations of $p$ to $v_i$ produces~$v_j$. For example, consider the
-type $\mathbb{3}$ and the 1-combinator $a_2$ from
-Sec.~\ref{sec:pisem}. Since $a_2$ has order 2, we have that $a_2 ^ k$
+type $\mathbb{3}$ and the 1-combinator $\permtwo$ from
+Sec.~\ref{sec:pisem}. Since $\permtwo$ has order 2, we have that $\permtwo ^ k$
 for any integer~$k$ is, up to equivalence, either $\texttt{id}$ or
-$a_2$. Therefore, the groupoid $\ag{\mathbb{3}}{a_2}$ looks exactly like
+$\permtwo$. Therefore, the groupoid $\ag{\mathbb{3}}{\permtwo}$ looks exactly like
 $G_2$ in Fig.~\ref{fig:groupoids2} with the names of the objects
 relabeled to $\inl{(\inl{\unitv})}$, $\inl{(\inr{\unitv})}$, and
-$\inr{\unitv}$ and the non-identity morphisms labeled $a_2$. As
+$\inr{\unitv}$ and the non-identity morphisms labeled $\permtwo$. As
 explained above, the groupoid has cardinality $\frac{3}{2}$ which
 corresponds to the quotient of the cardinality of the set $\mathbb{3}$
-divided by the order of $a_2$. Note that in the calculation of
-cardinality, we use the fact that the loop $a_2 \odot a_2$ going from
+divided by the order of $\permtwo$. Note that in the calculation of
+cardinality, we use the fact that the loop $\permtwo \odot \permtwo$ going from
 $\inl{(\inl{\unitv})}$ to $\inl{(\inr{\unitv})}$ and back is equivalent
 to the identity.
 
@@ -224,8 +228,8 @@ $\frac{5}{6}$ which is a proper fraction.
 %   \node[below] (A) at (-3,0) {$\inl{(\inl{\unitv})}$};
 %   \node[below] (B) at (0,0) {$\inl{(\inr{\unitv})}$};
 %   \node[below] (C) at (3,0) {$\inr{\unitv}$};
-%   \path (A) edge [bend left=50] node[above] {$a_2$} (B);
-%   \path (C) edge [out=140, in=40, looseness=4] node[above] {$a_2$} (C);
+%   \path (A) edge [bend left=50] node[above] {$\permtwo$} (B);
+%   \path (C) edge [out=140, in=40, looseness=4] node[above] {$\permtwo$} (C);
 %   \path (A) edge [loop below] node[below] {\texttt{id}} (A);
 %   \path (B) edge [loop below] node[below] {\texttt{id}} (B);
 %   \path (C) edge [loop below] node[below] {\texttt{id}} (C);
@@ -236,17 +240,17 @@ $\frac{5}{6}$ which is a proper fraction.
 $G_2$ and how to compute its cardinality in an alternative,
 compositional, way by viewing $G_2$ as being equivalent to the product
 of two independent subsystems consisting of $\mathbb{3}$ and
-$\iorder{a_2}$. Because the cardinality of $\mathbb{3}$ is 3 and the
+$\iorder{\permtwo}$. Because the cardinality of $\mathbb{3}$ is 3 and the
 final cardinality of $G_2$ is $\frac{3}{2}$, it must be that, using
-$a_2$ to define $\iorder{a_2}$ produces a groupoid with
+$\permtwo$ to define $\iorder{\permtwo}$ produces a groupoid with
 cardinality~$\frac{1}{2}$. From the information-theoretic perspective,
 each state of the system represented by the type $\mathbb{3}$ has
 $\log 3$ bits; after combining the type $\mathbb{3}$ with the type
-$\iorder{a_2}$, the information contained in each state is reduced to
+$\iorder{\permtwo}$, the information contained in each state is reduced to
 $\log \frac{3}{2} = \log 3 - \log 2$ bits. It must therefore be the case
-that each state of the system represented by $\iorder{a_2}$ has a
+that each state of the system represented by $\iorder{\permtwo}$ has a
 negative amount of information $- \log 2 = \log \frac{1}{2}$ which
-agrees with our observation that this use of $a_2$ must have cardinality
+agrees with our observation that this use of $\permtwo$ must have cardinality
 $\frac{1}{2}$. Intuitively speaking, imposing an equivalence relation on
 a type translates as the inability to distinguish previously
 distinguishable states. This indistinguishability subtracts knowledge
@@ -272,14 +276,14 @@ $\iter{p}$ whose elements are triples consisting of an integer $k$, a
 1-combinator $q : \tau\iso\tau$ and a 2-combinator
 $\alpha : q \isotwo p^k$.  For example, we have:
 \[\begin{array}{rcl}
-\iter{a_2} &=& \{ \triple{0}{\idiso}{\idisotwo},\triple{1}{a_2}{\idrdr}, \triple{-1}{a_2}{\idisotwo}, \ldots \}
+\iter{\permtwo} &=& \{ \triple{0}{\idiso}{\idisotwo},\triple{1}{\permtwo}{\idrdr}, \triple{-1}{\permtwo}{\idisotwo}, \ldots \}
 \end{array}\]
-The idea is that $\iter{a_2}$ is, up to equivalence, the set of all
-distinct iterates $(a_2)^k$ of $a_2$.  Because of the underlying group
+The idea is that $\iter{\permtwo}$ is, up to equivalence, the set of all
+distinct iterates $(\permtwo)^k$ of $\permtwo$.  Because of the underlying group
 structure of automorphisms, there are, up to equivalence, only
-$\ord{a_2}$ distinct iterates in $\iter{a_2}$.  We emphasize that, in
+$\ord{\permtwo}$ distinct iterates in $\iter{\permtwo}$.  We emphasize that, in
 our proof-relevant setting, it is critical not to collapse
-$\iter{a_2}$ to just $\{ \idiso, a_2 \}$. In the next two sections, we
+$\iter{\permtwo}$ to just $\{ \idiso, \permtwo \}$. In the next two sections, we
 will use the elements of $\iter{p}$ as either objects (emphasizing
 their ``data'' aspect) or morphisms (emphasizing their ``program''
 aspect) in various groupoid constructions.

@@ -56,6 +56,13 @@
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
 \newcommand{\distiterplus}[3]{\mathsf{dist}~#1~#2~#3}
 
+\newcommand{\permone}{\mathit{perm}_{...}}
+\newcommand{\permtwo}{\mathit{perm}_{\times\!\times.}}
+\newcommand{\permthree}{\mathit{perm}_{.\times\!\times}}
+\newcommand{\permfour}{\mathit{perm}_{\rightarrow}}
+\newcommand{\permfive}{\mathit{perm}_{\leftarrow}}
+\newcommand{\permsix}{\mathit{perm}_{\times.\times}}
+
 \newcommand{\Rule}[4]{
 \makebox{{\rm #1}
 $\displaystyle
