@@ -21,10 +21,18 @@ products of these groupoids behave as expected which ensures that a sensible
 compositional programming language can be designed around these division
 groupoids.
 
+\noindent\jc{I still despise the name ``division groupoid''.  After thinking
+about it for a while, I think that ``up to groupoid'' might be better,
+as in ``p up to q''.  I would be fine with ``conjugation groupoid'' or even
+``coset groupoid'' (coset from group theory).  I am
+very afraid that ``division groupoid'' will set up all sorts of potentially
+incorrect connotations in the readers' mind, and will lead them astray (and
+thence potentially to reject the paper).}
+
 %%%%%
 \subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
 
-Each $\Pi$ type $\tau$ denotes a finite set $\sem{\tau}$ as follows:
+Each $\Pi$ type $\tau$ denotes a (structured) finite set $\sem{\tau}$ as follows:
 
 \[\begin{array}{rcl}
 \sem{\zt} &=& \bot \\
@@ -37,21 +45,27 @@ Each $\Pi$ type $\tau$ denotes a finite set $\sem{\tau}$ as follows:
 with one element, and $\uplus$ and~$\times$ to denote the disjoint union of sets
 and the cartesian product of sets respectively. Each set can be viewed as a
 groupoid whose objects are the set elements and with only identity morphisms on
-each object. By only being able to express types whose denotations are trivial
+each object. Nevertheless, the denotations of $\ot \oplus (\ot \oplus \ot)$ of
+$(\ot \oplus \ot) \oplus \ot$ are not in fact equal, although they are
+trivially isomorphic.
+
+By only being able to express types whose denotations are trivial
 groupoids, $\Pi$ leaves untapped an enormous amount of combinatorial structure
 that is expressible in type theory. We show that with a small but deep technical
-insight it is possible to extend~$\Pi$ with types whose denotations are
-non-trivial ``division groupoids''.
+insight, it is possible to extend~$\Pi$ with types whose denotations are
+not discrete.
 
 %%%%%
 \subsection{Groupoids and Groupoid Cardinality}
 
-There are many definitions of groupoids that provide complimentary perspectives
-and insights. Perhaps the simplest definition is that a groupoid is a category
+There are many definitions of groupoids that provide complementary perspectives
+and insights. Perhaps the simplest definition to state, and the one which is
+most immediately useful for our work, is that a groupoid is a category
 in which every morphism has an inverse. Intuitively, such a category consists of
 clusters of connected objects where each cluster is equivalent (in the
-category-theoretic sense) to a group. Thus an alternative definition of a
-groupoid is as a generalization of a group that allows for individual elements
+category-theoretic sense) to a group, viewed as a $1$-object category. Thus an
+alternative definition of a groupoid is as a generalization of a group that
+allows for individual elements
 to have ``internal symmetries''~\cite{groupoidintro}. Baez et
 al.~\cite{2009arXiv0908.4305B} associate with each groupoid a cardinality that
 counts the elements up to these ``internal symmetries.''
@@ -117,11 +131,16 @@ also have two isomorphism classes with representatives $a$ and $c$; the class
 containing $a$ has two automorphisms starting from $a$: the identity and the
 loop going from $a$ to $b$ and back. By the groupoid axioms, this loop is
 equivalent to the identity which means that the class containing $a$ has just
-one distinct automorphism. The isomorphism class of $c$ has two non-equivalent
+one automorphism. The isomorphism class of $c$ has two non-equivalent
 automorphisms on it and hence the cardinality of $G_2$ is also
 $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For~$G_3$, we have three isomorphism
 classes, each with two non-equivalent automorphisms, and hence the cardinality
 of $G_3$ is $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
+It is important to note that $G_1$ and $G_2$ are (categorically) equivalent
+groupoids, but that $G_3$ is not equivalent to either $G_1$ or $G_2$.
+Roughly speaking this is because the number of connected components is also
+an invariant of a Groupoid, and here $G_1$ and $G_2$ have $2$ whilst $G_3$ has
+$3$.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{$\Pi$-Combinators as Automorphism Classes}
