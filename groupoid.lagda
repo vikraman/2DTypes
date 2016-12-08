@@ -139,7 +139,7 @@ of $G_3$ is $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
 It is important to note that $G_1$ and $G_2$ are (categorically) equivalent
 groupoids, but that $G_3$ is not equivalent to either $G_1$ or $G_2$.
 Roughly speaking this is because the number of connected components is also
-an invariant of a Groupoid, and here $G_1$ and $G_2$ have $2$ whilst $G_3$ has
+an invariant of a groupoid, and here $G_1$ and $G_2$ have $2$ whilst $G_3$ has
 $3$.
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -345,7 +345,7 @@ $(r_1 \odot r_k) \isotwo (r_k \odot r_2)$.
 Lastly, we must identify 
 morphisms if their $q$ components are related by $\isotwo$. This is the first
 groupoid we define which has a non-trivial identification of morphism, and
-thus is a \emph{weak} Groupoid.  The important parts of this can be
+thus is a \emph{weak} groupoid.  The important parts of this can be
 rendered in Agda as
 
 \begin{code}
