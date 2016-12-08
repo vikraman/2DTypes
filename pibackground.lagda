@@ -389,6 +389,15 @@ $\mathit{order}(\permone)=1$,
 $\mathit{order}(\permtwo)=\mathit{order}(\permthree)=\mathit{order}(\permsix)=2$,
 and $\mathit{order}(\permfour)=\mathit{order}(\permfive)=3$.
 
+We should note that the above definition is the only one in this
+paper which is not \emph{effective};  in other words, we do not have an
+algorithm for computing it.  While there is an obvious method to
+compute it using the action of a 1-combinator on the elements of the
+type it acts on, this is extremely inefficient.  What we mean is that
+we know of no effective algorithm which works on the syntax of
+combinators.  The (only) difficulty is $\odot$, which can have an
+arbitrary effect on the order.
+
 % \begin{lemma}
 %   Every $p : \tau \iso \tau$ has an order.
 % \end{lemma}
@@ -411,17 +420,18 @@ power of combinators and their order.
 %   Trivial.
 % \end{proof}
 
-\noindent\jc{I believe these lemmas, but we don't actually have proofs
-for them in our code.  We've been seriously bit by that before, where we
-made mistakes in the statement of ``obvious'' results.  I don't think we
-should put in any formal-looking result in the paper without a having a
-proof.}
+% This lemma is 2D.Power.lower.
+% All lemmas should indicate where they come from in our code.
 \begin{lemma}
 \label{lem:distiterplus}
   For $p : \tau\iso\tau$, $m,n\in\Z$, we have a 2-combinator
   $\distiterplus{p}{m}{n} : (p^m \odot p^n) \isotwo p ^{m + n}$.
 \end{lemma}
 
+% This lemma is 2D.Order.lemma4.
+% We should learn our lesson though: there should be no lemma (or
+% other result!) in the paper which has no proof in our code.  We
+% got bit badly by that mistake before.
 \begin{lemma}
 \label{lem:ordertwo}
   For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
