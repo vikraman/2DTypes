@@ -164,8 +164,8 @@ elements we find:
 \evalone{(\permtwo)^{2k+1}}{r} &=& r
 \end{array}
 \end{array}\]
-Furthermore, Lem.~\ref{lem:ordertwo} gives us the following families of 2-combinators
-$\alpha_{2k} : \idiso \isotwo (\permtwo)^{2k}$ and
+Furthermore, Lem.~\ref{lem:ordercancel} gives us the following families of
+2-combinators $\alpha_{2k} : \idiso \isotwo (\permtwo)^{2k}$ and
 $\alpha_{2k+1} : \permtwo \isotwo (\permtwo)^{2k+1}$. We can put these facts together to
 construct a groupoid whose objects are the elements of $\mathbb{3}$, whose
 1-morphisms relate $v_i$ and~$v_j$ if $\evalone{(\permtwo)^k}{v_i} = v_j$ for some
@@ -198,10 +198,11 @@ calculation of the order of a 1-combinator is defined up to the equivalence
 induced by 2-combinators.
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Division Groupoids $\divg{p}{r}$}
+\subsection{Iteration Groupoids $\order{p}$}
 
 The key ingredient in the construction of division groupoids is the set of
-iterates of a combinator that was used in the example above. Formally:
+iterates of a combinator, as used in the example above. We can thus
+define the $k^{\text{th}}$ iterate of $p$ as
 
 \AgdaHide{
 \begin{code}
@@ -247,13 +248,16 @@ infixr 60 _●_
 \end{code}}
 
 \begin{code}
--- iterating a 1-combinator k-times
 _^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0)             = Prim id⟷
 p ^ (+ (suc k))       = p ◎ (p ^ (+ k))
 p ^ -[1+ 0 ]          = ! p
 p ^ (-[1+ (suc k) ])  = (! p) ◎ (p ^ -[1+ k ])
+\end{code}
 
+\noindent and then collect all such iterates into a type
+
+\begin{code}
 record Iter {τ : U} (p : τ ⟷ τ) : Set where
   constructor <_,_,_>
   field
@@ -262,7 +266,7 @@ record Iter {τ : U} (p : τ ⟷ τ) : Set where
     α : q ⇔ p ^ k
 \end{code}
 
-\noindent For example, the zeroth and first iterate of a combinator are represented as follows:
+\noindent For example, the zeroth and first iterate of a combinator are represented as
 
 \begin{code}
 zeroth iter : {τ : U} → (p : τ ⟷ τ) → Iter p
@@ -270,15 +274,23 @@ zeroth p  = < + 0 , Prim id⟷ , id⇔ >
 iter p    = < + 1 , p , idr◎r >
 \end{code}
 
-We can easily construct a groupoid $\order{p}$ from the iterates of a
-1-combinator $p : \tau\iso\tau$ as follows. The objects will be the triples
-$\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators $q :
-\tau\iso\tau$, and 2-combinators $\alpha : q \isotwo p^k$. The morphisms will
-identify iterates related by 2-combinators: if $p$ has order $o$, then the
-iterate $\triple{i}{q_i}{\alpha_i}$ and the iterate
-$\triple{i+o}{q_j}{\alpha_j}$ must be equivalent in the sense that there must be
-a 2-combinator relating $p^i \isotwo p^{i+o}$ and hence $q_i \isotwo
-q_j$. Formally, the underlying category is defined as follows in Agda:
+These ingredients are sufficient to construct a groupoid $\order{p}$ from the
+iterates of a 1-combinator $p : \tau\iso\tau$. The objects will be
+the triples $\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators $q :
+\tau\iso\tau$, and 2-combinators $\alpha : q \isotwo p^k$. This triple encodes
+our knowledge that we have some (arbitrary) iterate $q$ of $p$; we do not have
+any a priori knowledge of the actual syntactic structure of $q$, but we do
+know that it is equivalent to $p ^ k$.
+
+We then add (reversible!) morphisms between any iterates related by
+2-combinators; categorically, this will make any such objects equivalent.
+If $p$ has order $o$, Lemma~\ref{lem:ordercancel} gives us a
+2-combinator $\alpha$ which witnesses that $p^i \isotwo p^{i+o}$.  
+Thus given two iterates $\triple{i}{q_i}{\alpha_i}$ and
+$\triple{i+o}{q_j}{\alpha_j}$, they must be equivalent since
+$\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.  
+In other words $p^j$ will be equivalent to $p^k$ exactly when $j$ and $k$
+differ by $o$.  This informal description formalizes straightforwardly:
 
 \begin{code}
 iterationC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
@@ -297,6 +309,7 @@ iterationC {τ} p = record {
 Despite its involved internal structure, the groupoid $\order{p}$ is essentially
 a set of cardinality $\ord{p}$.
 
+% This lemma is, as far as I can tell, not provable in Agda.
 \begin{lemma}
   $|\order{p}| = \ord{p}$
 \end{lemma}
@@ -309,19 +322,31 @@ a set of cardinality $\ord{p}$.
   $|\order{p}| = \sum\limits_{1}^{o}\frac{1}{1} = o$.
 \end{proof}
 
-By combining the iterates of \emph{two} combinators $p$ and $r$ of the same
-type, we can turn the above construction to a groupoid $\divg{p}{r}$ whose
-cardinality will be $\frac{\ord{p}}{\ord{r}}$. The objects of this groupoid will
-be the same as the objects of $\ord{p}$. For the morphisms, instead of just
-having a morphism between objects of the form $\triple{i}{q_i}{\alpha_i}$ and
-$\triple{i+\order{p}}{q_j}{\alpha_j}$, we will relate arbitrary objects
-$\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if there exists
-an iterate $\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
-$(q_1 \odot q) \isotwo (q \odot q_2)$. In the case $r$ is the identity
-permutation, this reduces to the previous situation, i.e., we expect
-$\divg{p}{\idiso}$ to be equivalent to $\ord{p}$. Naturally, we identify
-morphisms if their $q$ components are related by $\isotwo$. In Agda, this gives
-us the following:
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Division Groupoids $\divg{p}{q}$}
+
+By considering \emph{two} combinators $p$ and $q$ of the same type, we can
+modify the above construction to give a groupoid $\divg{p}{q}$ whose
+cardinality will be $\frac{\ord{p}}{\ord{q}}$. The basic idea is to consider
+the iterates of $p$ \emph{modulo} those of $q$.  Above, we considered
+$p^i$ and $p^j$ equivalent exactly when $p^i \Leftrightarrow p^j$.
+Now we consider $p^i$ equivalent to $p^j$ whenever there exists a $k$
+such that $p^i \circledcirc q^k \Leftrightarrow q^k \circledcirc p^j$.
+In other words, we can use some iterate of $q$ to ``mediate'' the equivalence.
+Of course, if we pick $q$ to be the identity, this reduces to the previous
+definition.
+
+A bit more formally, the objects of this groupoid will
+be the same as the objects of $\ord{p}$. 
+Then given two arbitrary objects
+$\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$, if there exists
+an iterate $\triple{k}{r_k}{\alpha}$ in $\iter{q}$, such that
+$(r_1 \odot r_k) \isotwo (r_k \odot r_2)$.
+Lastly, we must identify 
+morphisms if their $q$ components are related by $\isotwo$. This is the first
+groupoid we define which has a non-trivial identification of morphism, and
+thus is a \emph{weak} Groupoid.  The important parts of this can be
+rendered in Agda as
 
 \begin{code}
 divC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
