@@ -259,7 +259,7 @@ identify iterates related by 2-combinators: if $p$ has order $o$, then the
 iterate $\triple{i}{q_i}{\alpha_i}$ and the iterate
 $\triple{i+o}{q_j}{\alpha_j}$ must be equivalent in the sense that there must be
 a 2-combinator relating $p^i \isotwo p^{i+o}$ and hence $q_i \isotwo
-q_j$. Formally, in Agda:
+q_j$. Formally, the underlying category is defined as follows in Agda:
 
 \begin{code}
 iterationC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
@@ -290,53 +290,74 @@ a set of cardinality $\ord{p}$.
   $|\order{p}| = \sum\limits_{1}^{o}\frac{1}{1} = o$.
 \end{proof}
 
-
-\newpage
+By combining the iterates of \emph{two} combinators $p$ and $r$ of the same
+type, we can turn the above construction to a groupoid $\divg{p}{r}$ whose
+cardinality will be $\frac{\ord{p}}{\ord{r}}$. The objects of this groupoid will
+be the same as the objects of $\ord{p}$. For the morphisms, instead of just
+having a morphism between objects of the form $\triple{i}{q_i}{\alpha_i}$ and
+$\triple{i+\order{p}}{q_j}{\alpha_j}$, we will relate arbitrary objects
+$\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ if there exists
+an iterate $\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
+$(q_1 \odot q) \isotwo (q \odot q_2)$. In the case $r$ is the identity
+permutation, this reduces to the previous situation, i.e., we expect
+$\divg{p}{\idiso}$ to be equivalent to $\ord{p}$. Naturally, we identify
+morphisms if their $q$ components are related by $\isotwo$. In Agda, this gives
+us the following:
 
 \begin{code}
 divC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
 divC {τ} p q = record {
     Obj = Iter p
  ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
-            ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
+          ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
  ; id = λ {A} → zeroth q , idr◎l ● idl◎r
- ; _∘_ = {!!} -- elided
- ; assoc = {!!} -- elided
- ; identityˡ = {!!} -- elided
- ; identityʳ = {!!} -- elided
+ ; _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!} -- elided
  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
  ; ∘-resp-≡ = {!!} -- elided
  }
 \end{code}
 
 
+% The groupoid $\order{p}$ can be thought of as
+% $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
+% of as $\divg{\idiso}{p}$. The two previous constructions can therefore
+% be generalized to allow arbitrary combinators in both the numerator
+% and denominator.
 
+% Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
+% of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
+% is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
+% $\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
+% $\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
+% $(q_1 \odot q) \isotwo (q \odot q_2)$. As before, the morphisms are
+% not all independent: two morphisms are identified if their $q$
+% components are related by $\isotwo$.
 
-The groupoid $\order{p}$ can be thought of as
-$\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
-of as $\divg{\idiso}{p}$. The two previous constructions can therefore
-be generalized to allow arbitrary combinators in both the numerator
-and denominator.
-
-Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
-of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
-is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
-$\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
-$\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
-$(q_1 \odot q) \isotwo (q \odot q_2)$. As before, the morphisms are
-not all independent: two morphisms are identified if their $q$
-components are related by $\isotwo$.
-
-When $r$ is $\idiso$, this construction reduces to $\order{p}$. When $p$
-is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
-cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
-for the Agda construction.)
-
-\amr{wavefront}
+% When $r$ is $\idiso$, this construction reduces to $\order{p}$. When $p$
+% is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
+% cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
+% for the Agda construction.)
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sums and Products of Division Groupoids}
+
+\amr{want to prove/implement a couple of those}
+
+Groupoids, viewed as categories, come associated with natural notions
+of sums and products. Applying these definitions to division groupoids
+gives us the following...
+
+\begin{verbatim}
+(#p / #r) + (#q / #r) == (#p + #q) / #r
+
+(#p / #r) * (#r / #s) == #p / #s
+
+etc.
+
+\end{verbatim}
+
+
 
 % %%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Expanded Unit Groupoids $\oneg{p}$}
