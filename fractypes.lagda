@@ -151,6 +151,14 @@ $\displaystyle
 \DeclareUnicodeCharacter{120016}{$\mathcal{A}$}
 \DeclareUnicodeCharacter{120057}{$p$}
 
+\makeatletter
+\tikzset{my loop/.style =  {to path={
+  \pgfextra{\let\tikztotarget=\tikztostart}
+  [looseness=8,min distance=5mm, in=240,out=300]
+  \tikz@to@curve@path}
+  }}
+\makeatletter
+
 \AgdaHide{
 \begin{code}
 {-# OPTIONS --without-K #-}

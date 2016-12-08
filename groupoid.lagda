@@ -163,9 +163,9 @@ drawn using a thick line:
   \node[below] (C) at (1.5,0) {$r$};
   \path[ultra  thick] (A) edge [bend left=50] node[above] {$\permtwo$} (B);
   \path[ultra  thick] (C) edge [out=140, in=40, looseness=4] node[above] {$\permtwo$}  (C);
-  \path[ultra  thick] (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path[ultra  thick] (B) edge [loop below] node[below] {\texttt{id}} (B);
-  \path[ultra  thick] (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path[ultra  thick] (A) edge [my loop] node[below] {\texttt{id}} (A);
+  \path[ultra  thick] (B) edge [my loop] node[below] {\texttt{id}} (B);
+  \path[ultra  thick] (C) edge [my loop] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
 \end{center}
 
@@ -220,7 +220,7 @@ data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set whe
   -- rest elided
 
 2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
-2! = {!!} -- definition elided 
+2! = {!!} -- definition elided
 
 infix 40 _^_
 infixr 60 _●_
