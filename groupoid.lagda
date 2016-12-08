@@ -7,8 +7,8 @@ denote coherence conditions on these permutations~\cite{Carette2016}. Formally,
 the language $\Pi$ is a \emph{categorification}~\cite{math/9802029} of the
 natural numbers as a \emph{symmetric rig groupoid}~\cite{nlabrig}. This
 structure is a \emph{symmetric bimonoidal category} or a \emph{commutative rig
-  category} in which every morphism is invertible. The underlying categories
-themselves consist of two symmetric monoidal structures~\cite{nla.cat-vn1051288}
+  category} in which every morphism is invertible. The underlying category
+consists of two symmetric monoidal structures~\cite{nla.cat-vn1051288}
 separately induced by the properties of addition and multiplication of the
 natural numbers. The monoidal structures are then augmented with distributivity
 and absorption natural isomorphisms~\cite{laplaza} to model the full commutative
@@ -18,7 +18,8 @@ with no interesting structure. In this section we introduce, in the denotation
 of $\Pi$, some non-trivial groupoids which we call ``division groupoids'' as
 they naturally correspond to the categorification of rational numbers. Sums and
 products of these groupoids behave as expected which ensures that a sensible
-compositional programming language can be designed around fractional types.
+compositional programming language can be designed around these division
+groupoids.
 
 %%%%%
 \subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
@@ -40,7 +41,7 @@ each object. By only being able to express types whose denotations are trivial
 groupoids, $\Pi$ leaves untapped an enormous amount of combinatorial structure
 that is expressible in type theory. We show that with a small but deep technical
 insight it is possible to extend~$\Pi$ with types whose denotations are
-non-trivial ``fractional groupoids''.
+non-trivial ``division groupoids''.
 
 %%%%%
 \subsection{Groupoids and Groupoid Cardinality}
@@ -144,7 +145,7 @@ elements we find:
 \evalone{(\permtwo)^{2k+1}}{r} &=& r
 \end{array}
 \end{array}\]
-Furthermore, Lemma~\ref{lem:ordertwo} gives us the following families of 2-combinators
+Furthermore, Lem.~\ref{lem:ordertwo} gives us the following families of 2-combinators
 $\alpha_{2k} : \idiso \isotwo (\permtwo)^{2k}$ and
 $\alpha_{2k+1} : \permtwo \isotwo (\permtwo)^{2k+1}$. We can put these facts together to
 construct a groupoid whose objects are the elements of $\mathbb{3}$, whose
@@ -172,15 +173,58 @@ Clearly, the resulting groupoid is a reconstruction of $G_2$ in
 Fig.~\ref{fig:groupoids2} using $\Pi$ types and combinators. As analyzed
 earlier, this groupoid has cardinality $\frac{3}{2}$. From the perspective
 of~$\Pi$, this cardinality corresponds to the number of elements in the
-underlying set which is $3$ divided by the order of the combinator $\permtwo$ in
-question which is 2. It is important to note that, as Def.~\ref{def:order}
-states, the calculation of the order of a 1-combinator is defined up to the
-equivalence induced by 2-combinators.
+underlying set which is $3$ divided by the order of the combinator $\permtwo$
+which is 2. It is important to note that, as Def.~\ref{def:order} states, the
+calculation of the order of a 1-combinator is defined up to the equivalence
+induced by 2-combinators.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Division Groupoids $\divg{p}{r}$}
 
-\amr{wavefront}
+The key ingredient in the construction of division groupoids is the set of
+iterates of a combinator that was used in the example above. Formally
+
+\AgdaHide{
+\begin{code}
+open import Data.Nat using (ℕ; suc)
+open import Data.Integer as ℤ
+infix 40 _^_
+\end{code}}
+
+\begin{code}
+data U : Set where
+  𝟘 : U
+  𝟙 : U
+  _⊕_ : U → U → U
+  _⊗_ : U → U → U
+
+data Prim⟷ : U → U → Set where
+  id⟷ :  {t : U} → Prim⟷ t t
+
+data _⟷_ : U → U → Set where
+  Prim : {t₁ t₂ : U} → (Prim⟷ t₁ t₂) → (t₁ ⟷ t₂)
+  _◎_ :  {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
+  -- rest elided
+
+! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
+! = {!!}
+
+data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
+  -- elided
+
+_^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
+p ^ (+ 0) = Prim id⟷
+p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
+p ^ -[1+ 0 ] = ! p
+p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+
+record Iter {τ : U} (p : τ ⟷ τ) : Set where
+  constructor <_,_,_>
+  field
+    k : ℤ
+    q : τ ⟷ τ
+    α : q ⇔ p ^ k
+\end{code}
 
 Action groupoids $\ag{\tau}{p}$ allow us to build groupoids with
 fractional cardinality by taking the quotient of a simple finite type
@@ -259,7 +303,9 @@ is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
 cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
 for the Agda construction.)
 
-% %%%%%%%%%%%%%%%%%%%%%%%
+\amr{wavefront}
+
+%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sums and Products of Division Groupoids}
 
 % %%%%%%%%%%%%%%%%%%%%%%%

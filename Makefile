@@ -14,6 +14,9 @@ fractypes.tex : fractypes.lagda pibackground.tex groupoid.tex pifrac.tex opsem.t
 pifrac.tex : pifrac.lagda
 	$(AGDA) $(OPTS) pifrac.lagda
 
+groupoid.tex : groupoid.lagda
+	$(AGDA) $(OPTS) groupoid.lagda
+
 opsem.tex : opsem.lagda
 	$(AGDA) $(OPTS) opsem.lagda
 
