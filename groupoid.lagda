@@ -282,7 +282,7 @@ divC {τ} p q = record {
  ; _∘_ = {!!} -- elided
  ; assoc = {!!} -- elided
  ; identityˡ = {!!} -- elided
- ; identityʳ = ? -- elided
+ ; identityʳ = {!!} -- elided
  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
  ; ∘-resp-≡ = {!!} -- elided
  }
