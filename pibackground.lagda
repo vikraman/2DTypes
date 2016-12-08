@@ -2,12 +2,12 @@
 \section{Programming with Equivalences}
 \label{sec:pi}
 
-The main syntactic vehicle for the technical developments in this
-paper is the language $\Pi$ whose only computations are isomorphisms
+The main syntactic vehicle for the technical developments
+is the language $\Pi$ whose only computations are isomorphisms
 between finite types and equivalences between these
-isomorphisms~\cite{James:2012:IE:2103656.2103667,Carette2016}. We
+isomorphisms~\cite{Carette2016,James:2012:IE:2103656.2103667}. We
 present the syntax and operational semantics of the parts of the
-language relevant to our development.
+language relevant to our work.
 
 \begin{figure}[ht]
 \[\begin{array}{rrcll}
@@ -236,7 +236,7 @@ of 1-combinators. As a small example, let us abbreviate $\ot \oplus \ot$ as the
 type $\mathbb{2}$ of booleans and examine two possible implementations of
 boolean negation. The first directly uses the primitive combinator
 $\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to exchange the two
-values of type $\mathbb{2}$; the second use three consecutive copies of $\swapp$
+values of type $\mathbb{2}$; the second use three consecutive uses of $\swapp$
 to achieve the same effect:
 \[\begin{array}{rcl}
 \mathsf{not_1} &=& \swapp \\
@@ -254,7 +254,7 @@ $\idiso$ since they are inverses. We then use $\idldl$ to simplify the
 composition of $\idiso$ with $\swapp$ to just $\swapp$.
 
 Fig.~\ref{pi-combinators} lists all the 1-combinators which consist of
-base combinators (on the left) and compositions (on the right). Each
+base combinators (top) and compositions (bottom). Each
 line of the base combinators introduces a pair of dual
 constants\footnote{where $\swapp$ and $\swapt$ are self-dual.} that
 witness the type isomorphism in the middle. This set of isomorphisms
@@ -264,7 +264,8 @@ lists a few of the 2-combinators that we use in this paper. Each
 2-combinator relates two 1-combinators of the same type and witnesses
 their equivalence. Both 1-combinators and 2-combinators are invertible
 and the 2-combinators behave as expected with respect to inverses of
-1-combinators as shown below.
+1-combinators.  As the full set of 2-combinators has $113$ entries, we
+only show a few of them here.
 
 \begin{proposition}
 For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
@@ -272,7 +273,7 @@ For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
 
 \begin{proposition}
 For any $c_1,c_2 : \tau_1 \iso \tau_2$, we have $c_1 \isotwo c_2$ implies
-$!c_1 \isotwo ~!c_2$.
+$!~c_1 \isotwo ~!~c_2$.
 \end{proposition}
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -281,11 +282,39 @@ $!c_1 \isotwo ~!c_2$.
 
 We give an operational semantics for the 1-combinators of $\Pi$ which
 represent the conventional layer of programs.  Operationally, the
-semantics consists of a pair of mutually recursive evaluators that
+semantics consists of a pair of evaluators that
 take a combinator and a value and propagate the value in the forward
 direction~$\triangleright$ or in the backward
 direction~$\triangleleft$. We show the complete forward evaluator in
 Fig.~\ref{opsem}; the backward evaluator is easy to infer.
+
+\noindent\jc{To me, the most perspicuous representation of $\mathbb{3}$ is as a
+\textbf{left-leaning tree}.  The elements of $\mathbb{3}$ are then names
+of paths from the root to the leaves.  We can then abbreviate these names by
+associating names to the leaves.  The action of permutations is then easy to
+picture: it leaves the shape of the tree invariant -- which is quite important
+as (1+1)+1 is isomorphism but not equal to 1+(1+1) -- and permutes the labels.
+Which is also exactly what the code below does: it permutes the names of paths
+from the root to the leaves.  But this allows one to illustrate the action
+of $\permtwo$ as
+\begin{tikzpicture}[level distance=0.5cm]
+  \node {$\cdot$}
+    child {node {$\cdot$}
+      child {node {a}}
+      child {node {b}}
+    }
+    child {node {c}} ;
+\end{tikzpicture}
+going to
+\begin{tikzpicture}[level distance=0.5cm]
+  \node {$\cdot$}
+    child {node {$\cdot$}
+      child {node {b}}
+      child {node {a}}
+    }
+    child {node {c}} ;
+\end{tikzpicture}
+}
 
 As an example, let $\mathbb{3}$ abbreviate the type
 $(\ot \oplus \ot) \oplus \ot$. There are three values of type $\mathbb{3}$ which
@@ -323,6 +352,8 @@ to the identity permutation, which can be verified using the
 &\isotwo& \idiso \oplus \idiso \\
 &=& \idiso
 \end{array}\]
+\jc{should we annotate the above with the names of the 2-combinators that perform
+these?}
 
 More generally we can iterate 1-combinators to produce different
 reversible functions between finite sets, eventually wrapping around
@@ -380,6 +411,11 @@ power of combinators and their order.
 %   Trivial.
 % \end{proof}
 
+\noindent\jc{I believe these lemmas, but we don't actually have proofs
+for them in our code.  We've been seriously bit by that before, where we
+made mistakes in the statement of ``obvious'' results.  I don't think we
+should put in any formal-looking result in the paper without a having a
+proof.}
 \begin{lemma}
 \label{lem:distiterplus}
   For $p : \tau\iso\tau$, $m,n\in\Z$, we have a 2-combinator
@@ -415,6 +451,9 @@ preserve cardinality, they are also information-preserving.
 %%%%%
 \subsection{Agda Formalization}
 
+\jc{This feels like this serves no purpuse to the text.  Perhaps this
+part of the Agda could be relegated to an appendix?  If it is crucial to the
+story, then this shouldn't just be ``parked'' here, but explained.}
 For future we show the Agda version of the main definitions and signatures of
 the concepts introduced in this section.
 
