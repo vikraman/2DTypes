@@ -437,6 +437,8 @@ data U : Set where
   _⊕_  : U → U → U
   _⊗_  : U → U → U
 
+-- 1-combinators
+
 data Prim⟷ : U → U → Set where
   id⟷ :  {t : U} → Prim⟷ t t
   -- rest elided
@@ -449,11 +451,14 @@ data _⟷_ : U → U → Set where
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! = {!!} -- definition elided
 
+-- 2-combinators
+
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   id⇔ : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ c
   _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   idl◎r : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ (Prim id⟷ ◎ c)
   idr◎l : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → (c ◎ Prim id⟷) ⇔ c
+  idr◎r   : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ (c ◎ Prim id⟷)
   -- rest elided
 
 2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
