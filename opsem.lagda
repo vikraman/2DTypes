@@ -67,10 +67,9 @@ prim⁻¹ = {!!}
 \end{code}
 }
 
-The interesting combinators operationally are the unit/counit
-combinators $\eta$ and $\epsilon$ and the synchronization
-combinators. Their semantics is defined in the following pair of
-mutually recursive interpreters:
+The interesting combinators operationally are the unit/counit combinators $\eta$
+and $\epsilon$, and the synchronization combinators. Their semantics is defined
+by the following pair of mutually recursive interpreters:
 
 {\setlength{\mathindent}{0cm}
 \medskip
@@ -106,17 +105,16 @@ mutual
   𝓐𝓹⁻¹ synchl⋆ [ tangr w , v ] = [ v , tangl w ]
 \end{code}}}}
 
-The unit combinators $\eta$ simply generate unit tangles, and since
-unit tangles are equivalent to the identity they can be freely
-eliminated by the counit combinators $\epsilon$. The two
-synchronization operations exchange the tangled product with an
-iterate. The two interpreters satisfy several properties described
-below: First they are congruences for the equivalence $≈$ on values.
-We can further prove that both are \emph{reversible}.  Furthermore, we
-can show two further coherence conditions: first, that the reverse
-interpreter give equivalent results to the forward interpreter applied
-to a reverse combinator, and second, that two equivalent combinators
-(as given by a 2-combinator) will evaluate to equivalent values.
+The unit combinators $\eta$ simply generate unit tangles, and since unit tangles
+are equivalent to the \emph{identity}, they can be freely eliminated by the
+counit combinators $\epsilon$. The two synchronization operations exchange the
+tangled product with an iterate. The two interpreters satisfy several properties
+described below: First they are congruences for the equivalence $≈$ on values.
+We can further prove that both are \emph{reversible}.  Furthermore, we can show
+two coherence conditions: first, that the reverse interpreter gives equivalent
+results to the forward interpreter applied to a reverse combinator, and second,
+that two equivalent combinators (as given by a 2-combinator) will evaluate to
+equivalent values.
 
 \newcommand{\textpi}{$\pi$}
 
