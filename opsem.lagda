@@ -205,7 +205,7 @@ To keep these synchronized and yet to achieve the given type, the only choice
 We implement two examples that are similar to the credit card example
 from the introduction.
 
-\begin{figure}
+\begin{figure}[bht]
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \node at (0.5,1) {$\textsf{unit}_\times$};
