@@ -195,45 +195,41 @@ module fractypes where
 
 \begin{abstract}
 
-\begin{verbatim}
-Important dates
-----------------
-
-* Abstract submission:            28 November 2016
-* Paper submission:               12 December 2016
-* Notification of acceptance: 12 June 2017
-
-Ok, a plan then:
-
-- we motivate the paper by saying that we sought exactly what we got:
-  using the (now) established definition of 'groupoid cardinality', as
-  well as an (essentially!) standard interpretation of types as
-  groupoids, we exhibit the first types whose natural cardinality is
-  fractional. Which has the advantage of being true!
-
-- admit that we don't quite know what these are useful for (yet). But
-  we can speculate a bit here - perhaps at the end, rather than the
-  start.
-
-- cut out all the stuff that isn't directly a contribution.
-
-- explain the heck out of what we do have.  Be very precise about the
-  background material (on groupoids).  What we have now is a little
-  too fuzzy.
-
-Open questions:
-
-- Agda in the paper or not?
-
-- which way to draw the 'zig-zag' example?  [I have a suggestion, no
-  time to do it right now]
-
-- when do we get the students back in?
-
-- We use ``value'' and ``term'' interchangeably. Values are canonical
-terms. How do we define canonical terms, esp. for fractional types?
-
-\end{verbatim}
+%\begin{verbatim}
+%Important dates
+%----------------
+%
+%* Abstract submission:            28 November 2016
+%* Paper submission:               12 December 2016
+%* Notification of acceptance: 12 June 2017
+%
+%Ok, a plan then:
+%
+%- we motivate the paper by saying that we sought exactly what we got:
+%  using the (now) established definition of 'groupoid cardinality', as
+%  well as an (essentially!) standard interpretation of types as
+%  groupoids, we exhibit the first types whose natural cardinality is
+%  fractional. Which has the advantage of being true!
+%
+%- admit that we don't quite know what these are useful for (yet). But
+%  we can speculate a bit here - perhaps at the end, rather than the
+%  start.
+%
+%- cut out all the stuff that isn't directly a contribution.
+%
+%- explain the heck out of what we do have.  Be very precise about the
+%  background material (on groupoids).  What we have now is a little
+%  too fuzzy.
+%
+%Open questions:
+%
+%- which way to draw the 'zig-zag' example?  [I have a suggestion, no
+%  time to do it right now]
+%
+%- We use ``value'' and ``term'' interchangeably. Values are canonical
+%terms. How do we define canonical terms, esp. for fractional types?
+%
+%\end{verbatim}
 
 We exhibit types whose natural cardinality is fractional.  More
 precisely, we show that the groupoid cardinality (as defined by
