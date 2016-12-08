@@ -433,7 +433,7 @@ power of combinators and their order.
 % other result!) in the paper which has no proof in our code.  We
 % got bit badly by that mistake before.
 \begin{lemma}
-\label{lem:ordertwo}
+\label{lem:ordercancel}
   For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
   $k = \ord{p}$.
 \end{lemma}
