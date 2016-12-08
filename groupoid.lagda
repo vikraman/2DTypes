@@ -188,18 +188,21 @@ iterates of a combinator that was used in the example above. Formally
 \begin{code}
 open import Data.Nat using (ℕ; suc)
 open import Data.Integer as ℤ
-infix 40 _^_
-\end{code}}
+open import Data.Unit
+open import Data.Product hiding (<_,_>;,_)
+open import Function
+open import Categories.Category
+open import Categories.Groupoid
 
-\begin{code}
 data U : Set where
-  𝟘 : U
-  𝟙 : U
-  _⊕_ : U → U → U
-  _⊗_ : U → U → U
+  𝟘    : U
+  𝟙    : U
+  _⊕_  : U → U → U
+  _⊗_  : U → U → U
 
 data Prim⟷ : U → U → Set where
   id⟷ :  {t : U} → Prim⟷ t t
+  -- rest elided
 
 data _⟷_ : U → U → Set where
   Prim : {t₁ t₂ : U} → (Prim⟷ t₁ t₂) → (t₁ ⟷ t₂)
@@ -207,11 +210,23 @@ data _⟷_ : U → U → Set where
   -- rest elided
 
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
-! = {!!}
+! = {!!} -- definition elided
 
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
-  -- elided
+  id⇔ : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ c
+  _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+  idl◎r : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ (Prim id⟷ ◎ c)
+  idr◎l : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → (c ◎ Prim id⟷) ⇔ c
+  -- rest elided
 
+2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+2! = {!!} -- definition elided 
+
+infix 40 _^_
+infixr 60 _●_
+\end{code}}
+
+\begin{code}
 _^_ : {τ : U} → (p : τ ⟷ τ) → (k : ℤ) → (τ ⟷ τ)
 p ^ (+ 0) = Prim id⟷
 p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
@@ -224,7 +239,56 @@ record Iter {τ : U} (p : τ ⟷ τ) : Set where
     k : ℤ
     q : τ ⟷ τ
     α : q ⇔ p ^ k
+
+-- zeroth iteration of any combinator
+zeroth : {τ : U} → (p : τ ⟷ τ) → Iter p
+zeroth p = < + 0 , Prim id⟷ , id⇔ >
 \end{code}
+
+\begin{code}
+iterationC : {τ : U} → (p : τ ⟷ τ) → Category _ _ _
+iterationC {τ} p = record {
+     Obj = Iter p
+  ;  _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
+  ;  _≡_ = λ _ _ → ⊤
+  ;  id  = id⇔
+  ;  _∘_ = flip _●_
+  ;  assoc = tt
+  ;  identityˡ = tt
+  ;  identityʳ = tt
+  ;  equiv = record
+     { refl = tt
+     ; sym = λ _ → tt
+     ; trans = λ _ _ → tt
+     }
+  ;  ∘-resp-≡ = λ _ _ → tt
+  }
+
+iterationG : {τ : U} → (p : τ ⟷ τ) → Groupoid (iterationC p)
+iterationG {τ} p = record {
+    _⁻¹ = 2!
+ ;  iso = λ {a} {b} {f} → record { isoˡ = tt; isoʳ = tt }
+ }
+\end{code}
+
+\begin{code}
+divC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+divC {τ} p q = record {
+    Obj = Iter p
+ ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
+            ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
+ ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
+ ; id = λ {A} → zeroth q , idr◎l ● idl◎r
+ ; _∘_ = {!!} -- elided
+ ; assoc = {!!} -- elided
+ ; identityˡ = {!!} -- elided
+ ; identityʳ = ? -- elided
+ ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+ ; ∘-resp-≡ = {!!} -- elided
+ }
+\end{code}
+
+
 
 Action groupoids $\ag{\tau}{p}$ allow us to build groupoids with
 fractional cardinality by taking the quotient of a simple finite type

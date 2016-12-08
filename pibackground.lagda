@@ -412,4 +412,53 @@ $\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
 information contained in each subsystem. Since all the combinators
 preserve cardinality, they are also information-preserving.
 
+%%%%%
+\subsection{Agda Formalization}
+
+For future we show the Agda version of the main definitions and signatures of
+the concepts introduced in this section.
+
+\AgdaHide{\begin{code}
+infix 50 _⊕_
+infix 60 _⊗_
+-- infix 60 _//_
+-- infix 60 _\\_
+infix  30 _⟷_
+infix  30 _⇔_
+infixr 50 _◎_
+-- infixr 70 _⊡_
+infixr 60 _●_
+\end{code}}
+
+\begin{code}
+data U : Set where
+  𝟘    : U
+  𝟙    : U
+  _⊕_  : U → U → U
+  _⊗_  : U → U → U
+
+data Prim⟷ : U → U → Set where
+  id⟷ :  {t : U} → Prim⟷ t t
+  -- rest elided
+
+data _⟷_ : U → U → Set where
+  Prim : {t₁ t₂ : U} → (Prim⟷ t₁ t₂) → (t₁ ⟷ t₂)
+  _◎_ :  {t₁ t₂ t₃ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
+  -- rest elided
+
+! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
+! = {!!} -- definition elided
+
+data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
+  id⇔ : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ c
+  _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+  idl◎r : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ (Prim id⟷ ◎ c)
+  idr◎l : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → (c ◎ Prim id⟷) ⇔ c
+  -- rest elided
+
+2! : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+2! = ? -- definition elided
+\end{code}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
