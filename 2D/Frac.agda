@@ -15,6 +15,7 @@ import Categories.Coproduct as C
 open import Categories.Groupoid
 import Categories.Groupoid.Product as G
 import Categories.Groupoid.Coproduct as G
+open import Categories.Functor hiding (_≡_)
 open import Level hiding (lower)
 
 open import Relation.Binary.PropositionalEquality
@@ -22,7 +23,6 @@ open import Function
 open import 2D.Power
 -- open import 2D.Sing
 open import 2D.Iter
-open import 2D.ProgMorphisms
 
 discreteC : Set → Category zero zero zero
 discreteC S = record {
@@ -95,17 +95,15 @@ orderG {τ} p = record {
   ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
   }
 
-divC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
-divC {τ} p q = record {
+divrC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+divrC {τ} p q = record {
     Obj = Iter p
-  ; _⇒_ = λ s t → Σ[ iq ∈ Iter q ] ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
+  ; _⇒_ = λ s t → Σ[ iq ∈ Iter q ] (Iter.q s ⇔ (Iter.q t ◎ Iter.q iq))
   ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
-  ; id = λ {A} → zeroth q , idr◎l ● idl◎r
+  ; id = λ {A} → zeroth q , idr◎r
   ; _∘_ = λ { ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
                   ( < j , q , αq > ∘i < k , r , αr > ,
-                  id⇔ ⊡ ( αq ⊡ αr ● comm-i-j j k) ● assoc◎l ●
-                  (id⇔ ⊡ 2! αr ● pf₂) ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ (id⇔ ⊡ 2! αq ● pf₁) ●
-                  (assoc◎l ● (αr ⊡ αq ● comm-i-j k j ● 2! (αq ⊡ αr)) ⊡ id⇔)  ) }
+                   pf₂ ● pf₁ ⊡ id⇔ ● assoc◎r   ) }
   ; assoc = assoc◎r
   ; identityˡ = idl◎l
   ; identityʳ = idr◎l
@@ -113,14 +111,38 @@ divC {τ} p q = record {
   ; ∘-resp-≡ = _⊡_
   }
 
-divG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divC p q)
-divG {τ} p q = record {
-    _⁻¹ = λ { {A} (q , pf) → inv q , (2! !aab⇔b ⊡ id⇔ ● assoc◎r) ●
-            id⇔ {c = ! (Iter.q q)} ⊡ 2! pf ⊡ id⇔ {c = ! (Iter.q q)} ● id⇔ ⊡ (assoc◎r ● ab!b⇔a)  }
+divlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+divlC {τ} p q = record {
+    Obj = Iter p
+  ; _⇒_ = λ s t → Σ[ iq ∈ Iter q ] (Iter.q s ⇔ Iter.q iq ◎ Iter.q t)
+  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
+  ; id = λ {A} → zeroth q ,  idl◎r
+  ; _∘_ = λ { ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
+                  ( < j , q , αq > ∘i < k , r , αr > ,
+                   pf₂ ● id⇔ ⊡ pf₁ ● assoc◎l ● ((αr ⊡ αq) ● comm-i-j k j ● 2! (αq ⊡ αr)) ⊡ id⇔  ) }
+  ; assoc = assoc◎r
+  ; identityˡ = idl◎l
+  ; identityʳ = idr◎l
+  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+  ; ∘-resp-≡ = _⊡_
+  }
+
+divrG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divrC p q)
+divrG {τ} p q = record {
+    _⁻¹ = λ { {A} (q , pf) → inv q , invert-flip-right {q = Iter.q q} pf }
   ; iso = record { isoˡ = rinv◎l
                  ; isoʳ = linv◎l
                  }
   }
+
+divlG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divlC p q)
+divlG {τ} p q = record {
+    _⁻¹ = λ { {A} (q , pf) → inv q , invert-flip-left pf }
+  ; iso = record { isoˡ = rinv◎l
+                 ; isoʳ = linv◎l
+                 }
+  }
+
 
 ⟦_⟧ : (τ : U) → El τ
 ⟦ 𝟘 ⟧ = discreteC ⊥ , discreteG ⊥
@@ -130,8 +152,8 @@ divG {τ} p q = record {
 ⟦ t₁ ⊗ t₂ ⟧ with ⟦ t₁ ⟧ | ⟦ t₂ ⟧
 ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
 ⟦ # p ⟧ = _ , orderG p
-⟦ p // q ⟧ = _ , divG p q
-⟦ q \\ p ⟧ = _ , divG p q
+⟦ p // q ⟧ = _ , divrG p q
+⟦ q \\ p ⟧ = _ , divlG p q
 
 open import Data.Nat as ℕ
 open import Rational+ as ℚ
@@ -155,3 +177,18 @@ open import 2D.Order
 
 V : (T : U) → Set
 V T = Category.Obj (proj₁ ⟦ T ⟧)
+
+------------------------------------------------------------------------------
+-- Some coherence lemmas
+factor// : (τ : U) (p q r : τ ⟷ τ) → Functor (proj₁ ⟦ (p // q) ⊗ (r \\ q) ⟧) (proj₁ ⟦ (p // r) ⊗ (q \\ q) ⟧ )
+factor// τ p q r = record
+  { F₀ = λ x → x
+  ; F₁ = λ { {< k₁ , p₁ , α₁ > , < k₂ , q₂ , α₂ >}
+             {< k₃ , p₃ , α₃ > , < k₄ , q₄ , α₄ >}
+             ((< k₅ , q₅ , α₅ > , α) , < k₆ , r₆ , α₆ > , β) →
+           (< {!!} , {!!} , {!!} > , {!!} ) ,
+            < k₂ ℤ.- k₄ , q₂ ◎ ! q₄ , α₂ ⊡ (⇔! α₄ ● (2! (^⇔! k₄))) ● 2! (lower k₂ (ℤ.- k₄)) > , idr◎r ● id⇔ ⊡ rinv◎r ● assoc◎l }
+  ; identity = {!!}
+  ; homomorphism = {!!}
+  ; F-resp-≡ = {!!}
+  }
