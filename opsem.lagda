@@ -220,6 +220,9 @@ to synchronize the \emph{tangled} values created by $\eta$ and $\epsilon$.
 The circuit of zig-zag is shown in figure \ref{fig:zigzag} which
 shows how the input of type $\#c$ is swapped by \AgdaInductiveConstructor{synchr⋆}.
 
+{\setlength{\mathindent}{0cm}
+\medskip
+{\footnotesize{
 \begin{code}
 
 -- coherence of unit and counit
@@ -230,7 +233,7 @@ zig-zag {_} {c} =
 
 zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
 zig-zag-prop (comb x) = refl≈ refl
-\end{code}
+\end{code}}}}
 
 \begin{figure}[bht]
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9},highlight/.style={line width=4pt,orange!70}]
