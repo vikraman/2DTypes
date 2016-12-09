@@ -287,6 +287,12 @@ inverse⇒⇔ {p = p} {q} pf = idr◎r {c = p} ● (id⇔ ⊡ rinv◎r {c = q}) 
 ab!b⇔a : {s t u : U} {a : s ⟷ t} {b : t ⟷ u} → a ◎ b ◎ ! b ⇔ a
 ab!b⇔a = id⇔ ⊡ linv◎l ● idr◎l
 
+invert-flip-right : {s t u : U} {a : s ⟷ t} {b : s ⟷ u} {q : u ⟷ t} → a ⇔ b ◎ q → b ⇔ a ◎ ! q
+invert-flip-right {a = a} {b} {q} c = idr◎r ● id⇔ ⊡ linv◎r ● assoc◎l ● 2! c ⊡ id⇔
+
+invert-flip-left : {s t u : U} {a : s ⟷ t} {b : u ⟷ t} {q : s ⟷ u} → a ⇔ q ◎ b → b ⇔ ! q ◎ a
+invert-flip-left c = idl◎r ● rinv◎r ⊡ id⇔ ● assoc◎r ● id⇔ ⊡ 2! c
+
 -----------------------
 -- name : {t : U} {c d : t ⟷ t} (f : # c ⟷ # d) → (𝟙 ⟷ c \\ d)
 -- name {_} {c} f = η- c ◎ app-num\\ f
