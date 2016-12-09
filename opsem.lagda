@@ -198,31 +198,66 @@ To keep these synchronized and yet to achieve the given type, the only choice
 (operationally) is to swap.  This is where the ``action at a distance'' occurs.
 
 %%%%%%%
-\subsection{Examples}
+%\subsection{Examples}
 
-We implement two examples that are similar to the credit card example
-from the introduction.
+\AgdaHide{
+\begin{code}
+refl≈ : ∀ {t} {v w : Val t} → v ≡ w → v ≈ w
+refl≈ {v = ⋆} refl = ⋆≈
+refl≈ {v = inl v} refl = inj≈ (refl≈ refl)
+refl≈ {v = inr v} refl = inj≈ (refl≈ refl)
+refl≈ {v = [ v , v₁ ]} refl = [,]≈ (refl≈ refl) (refl≈ refl)
+refl≈ {v = comb x} refl = #p≈ id⇔
+refl≈ {v = tangr x} refl = tangr≈ {!!}
+refl≈ {v = tangl x} refl = tangl≈ {!!}
+\end{code}}
+
+%We implement two examples that are similar to the credit card example
+%from the introduction.
+
+We implement an example zig-zag, which use \AgdaInductiveConstructor{synchr⋆}
+to synchronize the \emph{tangled} values created by $\eta$ and $\epsilon$.
+The circuit of zig-zag is shown in figure \ref{fig:zigzag} which
+shows how the input of type $\#c$ is swapped by \AgdaInductiveConstructor{synchr⋆}.
+
+\begin{code}
+
+-- coherence of unit and counit
+zig-zag : ∀ {t : U} {c : t ⟷ t} → # c ⟷ # c
+zig-zag {_} {c} =
+  Prim uniti⋆l ◎ η+ c ⊗ id⟷ ◎
+  synchr⋆ ◎ (id⟷ ⊗ ε- c) ◎ Prim unite⋆r
+
+zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
+zig-zag-prop (comb x) = refl≈ refl
+\end{code}
 
 \begin{figure}[bht]
-\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9},highlight/.style={line width=4pt,orange!70}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \node at (0.5,1) {$\textsf{unit}_\times$};
   \path (-1.1,1) edge node[above] {${\textsf{\#c}}$} (0,1);
   \path (1,1.75) edge node[above] {$\mathbb{1}$} (1.6,1.75);
+  \path [highlight] (1,0.25) edge node[above] {} (4,0.25);
   \path (1,0.25) edge node[above] {${\textsf{\#c}}$} (4,0.25);
   \draw (1.6,1) -- (2.6,1) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
   \node at (2.1,1.9) {$\eta_{\textsf{c}}$};
   \draw[dashed] (2.8,2.6) -- (2.8,1.25);
+  \path [highlight] (2.6,2.6) edge node[above] {} (4,2.6);
   \path (2.6,2.6) edge node[above] {${\textsf{\#c}}$} (4,2.6);
+  \path [highlight] (2.6,1.25) edge node[above] {} (4,1.25);
   \path (2.6,1.25) edge node[above] {$1/\textsf{\#c}$} (4,1.25);
   \draw (4,0) -- (5.5,0) -- (5.5,3) -- (4,3) -- cycle;
   \node at (4.75,1.5) {$synch_{\textsf{c}}$};
+  \path [highlight] (5.5,1.25) edge node[above] {} (7,1.25);
   \path (5.5,1.25) edge node[above] {$1/\#c$} (7,1.25);
+  \path [highlight] (5.5,2.6) edge node[above] {} (9,2.6);
   \path (5.5,2.6) edge node[above] {$\#c$} (9,2.6);
   \draw (7,0) -- (8,0) -- (8,1.6) -- (7,1.6) -- cycle;
   \node at (7.5,0.8) {$\epsilon_c$};
   \draw[dashed] (6.8,0.2) -- (6.8,1.25);
   \path (8,1) edge node[above] {$\mathbb{1}$} (9,1);
+  \path [highlight] (5.5,0.2) edge node[above] {} (7,0.2);
   \path (5.5,0.2) edge node[above] {$\#c$} (7,0.2);
   \draw (9,0.8) -- (10,0.8) -- (10,2.8) -- (9,2.8) -- cycle;
   \node at (9.5,1.8) {$\textsf{unit}_\times$};
@@ -231,25 +266,13 @@ from the introduction.
 \caption{\label{fig:zigzag} Zig-zag}
 \end{figure}
 
-\AgdaHide{
-\begin{code}
-refl≈ : ∀ {t} {v w : Val t} → v ≡ w → v ≈ w
-refl≈ = {!!}
-\end{code}}
+The following is an example usage of zig-zag, which uses
+\AgdaInductiveConstructor{NOT} combinator.
 
 {\setlength{\mathindent}{0cm}
 \medskip
 {\footnotesize{
 \begin{code}
--- coherence of unit and counit
-
-zig-zag : ∀ {t : U} {c : t ⟷ t} → # c ⟷ # c
-zig-zag {_} {c} =
-  Prim uniti⋆l ◎ η+ c ⊗ id⟷ ◎
-  synchr⋆ ◎ (id⟷ ⊗ ε- c) ◎ Prim unite⋆r
-
-zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
-zig-zag-prop (comb x) = refl≈ refl
 
 -- credit card like
 
@@ -260,11 +283,7 @@ NOT : BOOL ⟷ BOOL
 NOT = Prim swap₊
 
 cc : # NOT ⟷ # NOT
-cc = Prim uniti⋆l ◎
-     (((η+ NOT) ⊗ id⟷) ◎
-     ((synchr⋆ ◎
-     ((id⟷ ⊗ (ε- NOT)) )))) ◎
-     Prim unite⋆r
+cc = zig-zag
 
 i₀ i₁ : Iter NOT
 i₀ = < + 0 , id⟷ , id⇔ >
