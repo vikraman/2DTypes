@@ -76,33 +76,33 @@ by the following pair of mutually recursive interpreters:
 {\footnotesize{
 \begin{code}
 mutual
-  𝓐𝓹 : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → Val τ₁ → Val τ₂
-  𝓐𝓹 (Prim c) v = prim c v
-  𝓐𝓹 id⟷ v = v
-  𝓐𝓹 (c₁ ◎ c₂) v = 𝓐𝓹 c₂ (𝓐𝓹 c₁ v)
-  𝓐𝓹 (c₁ ⊕ c₂) (inl v) = inl (𝓐𝓹 c₁ v)
-  𝓐𝓹 (c₁ ⊕ c₂) (inr v) = inr (𝓐𝓹 c₂ v)
-  𝓐𝓹 (c₁ ⊗ c₂) [ v , w ] = [ 𝓐𝓹 c₁ v , 𝓐𝓹 c₂ w ]
-  𝓐𝓹 (η- c) ⋆ = tangl (c÷c c)
-  𝓐𝓹 (η+ c) ⋆ = tangr (c÷c c)
-  𝓐𝓹 (ε+ c) (tangr v) = ⋆
-  𝓐𝓹 (ε- c) (tangl v) = ⋆
-  𝓐𝓹 synchr⋆ [ tangr w , v ] = [ v , tangl w ]
-  𝓐𝓹 synchl⋆ [ v , tangl w ] = [ tangr w , v ]
+  ap : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → Val τ₁ → Val τ₂
+  ap (Prim c) v = prim c v
+  ap id⟷ v = v
+  ap (c₁ ◎ c₂) v = ap c₂ (ap c₁ v)
+  ap (c₁ ⊕ c₂) (inl v) = inl (ap c₁ v)
+  ap (c₁ ⊕ c₂) (inr v) = inr (ap c₂ v)
+  ap (c₁ ⊗ c₂) [ v , w ] = [ ap c₁ v , ap c₂ w ]
+  ap (η- c) ⋆ = tangl (c÷c c)
+  ap (η+ c) ⋆ = tangr (c÷c c)
+  ap (ε+ c) (tangr v) = ⋆
+  ap (ε- c) (tangl v) = ⋆
+  ap synchr⋆ [ tangr w , v ] = [ v , tangl w ]
+  ap synchl⋆ [ v , tangl w ] = [ tangr w , v ]
 
-  𝓐𝓹⁻¹ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → Val τ₂ → Val τ₁
-  𝓐𝓹⁻¹ (Prim c) v = prim⁻¹ c v
-  𝓐𝓹⁻¹ id⟷ v = v
-  𝓐𝓹⁻¹ (c₁ ◎ c₂) v = 𝓐𝓹⁻¹ c₁ (𝓐𝓹⁻¹ c₂ v)
-  𝓐𝓹⁻¹ (c₁ ⊕ c₂) (inl v) = inl (𝓐𝓹⁻¹ c₁ v)
-  𝓐𝓹⁻¹ (c₁ ⊕ c₂) (inr v) = inr (𝓐𝓹⁻¹ c₂ v)
-  𝓐𝓹⁻¹ (c₁ ⊗ c₂) [ v , w ] = [ (𝓐𝓹⁻¹ c₁ v) , (𝓐𝓹⁻¹ c₂ w) ]
-  𝓐𝓹⁻¹ (η- c) (tangl v) = ⋆
-  𝓐𝓹⁻¹ (η+ c) (tangr v) = ⋆
-  𝓐𝓹⁻¹ (ε+ c) ⋆ = tangr (c÷c c)
-  𝓐𝓹⁻¹ (ε- c) ⋆ = tangl (c÷c c)
-  𝓐𝓹⁻¹ synchr⋆ [ v , tangl w ] = [ tangr w , v ]
-  𝓐𝓹⁻¹ synchl⋆ [ tangr w , v ] = [ v , tangl w ]
+  ap⁻¹ : {τ₁ τ₂ : U} → (τ₁ ⟷ τ₂) → Val τ₂ → Val τ₁
+  ap⁻¹ (Prim c) v = prim⁻¹ c v
+  ap⁻¹ id⟷ v = v
+  ap⁻¹ (c₁ ◎ c₂) v = ap⁻¹ c₁ (ap⁻¹ c₂ v)
+  ap⁻¹ (c₁ ⊕ c₂) (inl v) = inl (ap⁻¹ c₁ v)
+  ap⁻¹ (c₁ ⊕ c₂) (inr v) = inr (ap⁻¹ c₂ v)
+  ap⁻¹ (c₁ ⊗ c₂) [ v , w ] = [ (ap⁻¹ c₁ v) , (ap⁻¹ c₂ w) ]
+  ap⁻¹ (η- c) (tangl v) = ⋆
+  ap⁻¹ (η+ c) (tangr v) = ⋆
+  ap⁻¹ (ε+ c) ⋆ = tangr (c÷c c)
+  ap⁻¹ (ε- c) ⋆ = tangl (c÷c c)
+  ap⁻¹ synchr⋆ [ v , tangl w ] = [ tangr w , v ]
+  ap⁻¹ synchl⋆ [ tangr w , v ] = [ v , tangl w ]
 \end{code}}}}
 
 The unit combinators $\eta$ simply generate unit tangles, and since unit tangles
@@ -145,7 +145,7 @@ mutual
               Σ.proj₁ (get\\ f x y) ⇔ Σ.proj₁ (get\\ g x y)) → f ≈ g
 
 cong≈ :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) {v w : Val τ₁} →
-         v ≈ w → 𝓐𝓹 c v ≈ 𝓐𝓹 c w
+         v ≈ w → ap c v ≈ ap c w
 \end{code}}}}
 \AgdaHide{
 \begin{code}
@@ -157,7 +157,7 @@ cong≈ = {!!} -- omitted
 {\footnotesize{
 \begin{code}
 fwd◎bwd≈id :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) →
-              𝓐𝓹 c (𝓐𝓹⁻¹ c v) ≈ v
+              ap c (ap⁻¹ c v) ≈ v
 \end{code}}}}
 \AgdaHide{
 \begin{code}
@@ -169,7 +169,7 @@ fwd◎bwd≈id = {!!} -- omitted
 {\footnotesize{
 \begin{code}
 bwd-coherence :  {τ₁ τ₂ : U} → (c : τ₁ ⟷ τ₂) → (v : Val τ₂) →
-                 𝓐𝓹⁻¹ c v ≈ 𝓐𝓹 (! c) v
+                 ap⁻¹ c v ≈ ap (! c) v
 \end{code}}}}
 \AgdaHide{
 \begin{code}
@@ -182,7 +182,7 @@ bwd-coherence = {!!} -- omitted
 \begin{code}
 fwd-2-coherence :  {τ₁ τ₂ : U} → (c₁ c₂ : τ₁ ⟷ τ₂) →
                    (α : c₁ ⇔ c₂) →
-                   (v : Val τ₁) → 𝓐𝓹 c₁ v ≈ 𝓐𝓹 c₂ v
+                   (v : Val τ₁) → ap c₁ v ≈ ap c₂ v
 \end{code}}}}
 \AgdaHide{
 \begin{code}
@@ -231,7 +231,7 @@ zig-zag {_} {c} =
   Prim uniti⋆l ◎ η+ c ⊗ id⟷ ◎
   synchr⋆ ◎ (id⟷ ⊗ ε- c) ◎ Prim unite⋆r
 
-zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → 𝓐𝓹 zig-zag v ≈ v
+zig-zag-prop : {t : U} {c : t ⟷ t} (v : Val (# c)) → ap zig-zag v ≈ v
 zig-zag-prop (comb x) = refl≈ refl
 \end{code}}}}
 
@@ -297,8 +297,8 @@ v₀ = comb i₀
 v₁ = comb i₁
 
 cc₁ cc₂ : Val (# NOT)
-cc₁ = 𝓐𝓹 cc v₀ -- evaluates to v₀, on the nose
-cc₂ = 𝓐𝓹 cc v₁ -- evaluates to v₁, on the nose
+cc₁ = ap cc v₀ -- evaluates to v₀, on the nose
+cc₂ = ap cc v₁ -- evaluates to v₁, on the nose
 \end{code}}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
