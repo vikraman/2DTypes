@@ -3,6 +3,9 @@ OPTS ?= --allow-unsolved-metas --latex -i . --latex-dir=.
 
 all : fractypes.pdf
 
+continuous:
+	while inotifywait -e close_write *.agda *.lagda *.tex ; do $(MAKE) ; done
+
 fractypes.pdf : fractypes.tex
 	latexmk -pdf fractypes.tex
 
@@ -35,4 +38,4 @@ clean:
 	*.{lot,nlg,nlo,nls,pdf_tex,ptb,pyg,out,run.xml,toc} \
 	*-{blx.bib}
 
-.PHONY: all clean
+.PHONY: all clean continuous
