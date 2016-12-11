@@ -47,19 +47,16 @@ We begin by defining two mutually recursive syntactic categories
 \AgdaDatatype{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
 definition of types is identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of type constructors for
-building non-trivial groupoids. In principle, we just need one type
-constructor whose denotation is a division groupoid. For convenience,
-we add more type constructors: \AgdaInductiveConstructor{\#},
+building non-trivial groupoids. Then
+we add three type constructors: \AgdaInductiveConstructor{\#},
 \AgdaInductiveConstructor{//}, and
 \AgdaInductiveConstructor{\textbackslash\textbackslash} such that
 $\AgdaInductiveConstructor{\#}~\AgdaBound{p}$ denotes an iteration
 groupoid, and both
 $\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ and
 $\AgdaBound{q}~\AgdaInductiveConstructor{\textbackslash\textbackslash}~\AgdaBound{p}$
-denote the division groupoid $\divg{p}{q}$. Having both versions
-simplifies some of the code by avoiding series of swaps. There is no
-primitive that denotes $\iorder{p}$ but this groupoid can be denoted
-using
+denote the \dg{s} $\divgl{p}{q}$ and $\divgr{p}{q}$ respectively. There is no
+primitive that denotes $\iorder{p}$ but this groupoid can be built using
 $\AgdaInductiveConstructor{id⟷}~\AgdaInductiveConstructor{//}~\AgdaBound{p}$
 for example.
 
