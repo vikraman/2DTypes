@@ -35,9 +35,9 @@ We are now ready to turn the semantic treatment of groupoids from the
 previous section into an actual programming language. The language
 $\Pi^/$ will be an extension of $\Pi$ with new type constructors and
 new combinators for creating and manipulating fractional types. Every
-computation in $\Pi^/$ will also be information preserving but with
-the added expressiveness of being able to create and annihilate
-negative information. We use Agda as the appropriate metalanguage in
+computation in $\Pi^/$ will also be reversible but with
+the added combinators for creating and eliminating fractional values.
+We use Agda as the appropriate metalanguage in
 which to define $\Pi^/$.
 
 %%%%%%%%%%%
@@ -381,6 +381,7 @@ indistinguishable. The treatment in our setting is similar but richer
 as in some cases the equivalence relation is not external but is
 itself part of the value and the resulting count may be fractional.
 
+\hide{
 As motivated in the previous section, we will first need to consider
 the type $\iter{p}$ of all the combinators equivalent to iterates
 $p^k$:
@@ -482,6 +483,7 @@ iterates. The first four iterates are all equivalent to $(a_2)^0$
 which is equivalent \AgdaInductiveConstructor{id⟷}. The last two are
 both equivalent to $(a_2)^1$ which is equivalent to $a_2$. The
 equivalences are explicit in the construction.
+}
 
 Formally we define values as follows:
 
