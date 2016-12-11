@@ -1,33 +1,35 @@
 \section{From Sets to Groupoids}
 \label{sec:groupoids}
 
-From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite set, a
-$\Pi$ 1-combinator denotes a permutation on finite sets, and the 2-combinators
-denote coherence conditions on these permutations~\cite{Carette2016}. Formally,
-the language $\Pi$ is a \emph{categorification}~\cite{math/9802029} of the
-natural numbers as a \emph{symmetric rig groupoid}~\cite{nlabrig}. This
-structure is a \emph{symmetric bimonoidal category} or a \emph{commutative rig
-  category} in which every morphism is invertible. The underlying category
-consists of two symmetric monoidal structures~\cite{nla.cat-vn1051288}
-separately induced by the properties of addition and multiplication of the
-natural numbers. The monoidal structures are then augmented with distributivity
-and absorption natural isomorphisms~\cite{laplaza} to model the full commutative
-semiring (aka, commutative rig) of the natural numbers. Despite this rich
-structure, the individual objects in the category for $\Pi$ are just plain sets
-with no interesting structure. In this section we introduce, in the denotation
-of $\Pi$, some non-trivial groupoids which we call ``division groupoids'' as
-they naturally correspond to the categorification of rational numbers. Sums and
-products of these groupoids behave as expected which ensures that a sensible
-compositional programming language can be designed around these division
-groupoids.
+From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite
+set, a $\Pi$ 1-combinator denotes a permutation on finite sets, and
+the 2-combinators denote coherence conditions on these
+permutations~\cite{Carette2016}. Formally, the language $\Pi$ is a
+\emph{categorification}~\cite{math/9802029} of the natural numbers as
+a \emph{symmetric rig groupoid}~\cite{nlabrig}. This structure is a
+\emph{symmetric bimonoidal category} or a \emph{commutative rig
+  category} in which every morphism is invertible. The underlying
+category consists of two symmetric monoidal
+structures~\cite{nla.cat-vn1051288} separately induced by the
+properties of addition and multiplication of the natural numbers. The
+monoidal structures are then augmented with distributivity and
+absorption natural isomorphisms~\cite{laplaza} to model the full
+commutative semiring (aka, commutative rig) of the natural
+numbers. Despite this rich structure, the individual objects in the
+category for $\Pi$ are just plain sets with no interesting
+structure. In this section we introduce, in the denotation of $\Pi$,
+some non-trivial groupoids which we call ``\dg{s}''. Under certain
+conditions, sums and products of these groupoids behave as expected
+which ensures that a sensible compositional programming language can
+be designed around these \dg{s}.
 
-\noindent\jc{I still despise the name ``division groupoid''.  After thinking
-about it for a while, I think that ``up to groupoid'' might be better,
-as in ``p up to q''.  I would be fine with ``conjugation groupoid'' or even
-``coset groupoid'' (coset from group theory).  I am
-very afraid that ``division groupoid'' will set up all sorts of potentially
-incorrect connotations in the readers' mind, and will lead them astray (and
-thence potentially to reject the paper).}
+% \noindent\jc{I still despise the name ``division groupoid''.  After thinking
+% about it for a while, I think that ``up to groupoid'' might be better,
+% as in ``p up to q''.  I would be fine with ``conjugation groupoid'' or even
+% ``coset groupoid'' (coset from group theory).  I am
+% very afraid that ``division groupoid'' will set up all sorts of potentially
+% incorrect connotations in the readers' mind, and will lead them astray (and
+% thence potentially to reject the paper).}
 
 %%%%%
 \subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
@@ -126,10 +128,10 @@ section, we argue that each of the groupoids $G_1$, $G_2$, and $G_3$ in
 Fig.~\ref{fig:groupoids2} has cardinality $\frac{3}{2}$. Groupoid~$G_1$ consists
 of two isomorphism classes: class~$a$ has one object with one automorphism (the
 identity) and class~$c$ has one object with two distinct automorphisms; the
-cardinality is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid $G_2$, we
+cardinality is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid~$G_2$, we
 also have two isomorphism classes with representatives $a$ and $c$; the class
 containing $a$ has two automorphisms starting from $a$: the identity and the
-loop going from $a$ to $b$ and back. By the groupoid axioms, this loop is
+loop going from $a$ to~$b$ and back. By the groupoid axioms, this loop is
 equivalent to the identity which means that the class containing $a$ has just
 one automorphism. The isomorphism class of $c$ has two non-equivalent
 automorphisms on it and hence the cardinality of $G_2$ is also
@@ -200,8 +202,8 @@ induced by 2-combinators.
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Iteration Groupoids $\order{p}$}
 
-The key ingredient in the construction of division groupoids is the set of
-iterates of a combinator, as used in the example above. We can thus
+The key ingredient in our construction of \dg{s} is the set of
+iterates of a combinator, as used in the example above. We thus
 define the $k^{\text{th}}$ iterate of $p$ as
 
 \AgdaHide{
@@ -284,11 +286,11 @@ know that it is equivalent to $p ^ k$.
 
 We then add (reversible!) morphisms between any iterates related by
 2-combinators; categorically, this will make any such objects equivalent.
-If $p$ has order $o$, Lemma~\ref{lem:ordercancel} gives us a
-2-combinator $\alpha$ which witnesses that $p^i \isotwo p^{i+o}$.  
+If $p$ has order $o$, Lem.~\ref{lem:ordercancel} gives us a
+2-combinator $\alpha$ which witnesses that $p^i \isotwo p^{i+o}$.
 Thus given two iterates $\triple{i}{q_i}{\alpha_i}$ and
 $\triple{i+o}{q_j}{\alpha_j}$, they must be equivalent since
-$\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.  
+$\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.
 In other words $p^j$ will be equivalent to $p^k$ exactly when $j$ and $k$
 differ by $o$.  This informal description formalizes straightforwardly:
 
@@ -323,7 +325,7 @@ a set of cardinality $\ord{p}$.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Division Groupoids $\divg{p}{q}$}
+\subsection{\DG{s} $\divg{p}{q}$}
 
 By considering \emph{two} combinators $p$ and $q$ of the same type, we can
 modify the above construction to give a groupoid $\divg{p}{q}$ whose
@@ -336,21 +338,18 @@ In other words, we can use some iterate of $q$ to ``mediate'' the equivalence.
 Of course, if we pick $q$ to be the identity, this reduces to the previous
 definition.
 
-A bit more formally, the objects of this groupoid will
-be the same as the objects of $\ord{p}$. 
-Then given two arbitrary objects
-$\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$, if there exists
-an iterate $\triple{k}{r_k}{\alpha}$ in $\iter{q}$, such that
-$(r_1 \odot r_k) \isotwo (r_k \odot r_2)$.
-Lastly, we must identify 
-morphisms if their $q$ components are related by $\isotwo$. This is the first
-groupoid we define which has a non-trivial identification of morphism, and
-thus is a \emph{weak} groupoid.  The important parts of this can be
-rendered in Agda as
+A bit more formally, the objects of this groupoid will be the same as
+the objects of~$\order{p}$.  Then two such arbitrary objects
+$\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$ will
+be related if there exists an iterate $\triple{k}{r_k}{\alpha}$ in
+$\iter{q}$, such that $(r_1 \odot r_k) \isotwo (r_k \odot r_2)$.  This
+is the first groupoid we define which has a non-trivial identification
+of morphisms, and thus is a \emph{weak} groupoid.  The important parts
+of this can be rendered in Agda as follows.
 
 \begin{code}
-divC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
-divC {τ} p q = record {
+conjC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+conjC {τ} p q = record {
     Obj = Iter p
  ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
           ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
@@ -384,24 +383,19 @@ divC {τ} p q = record {
 % for the Agda construction.)
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Sums and Products of Division Groupoids}
+\subsection{Sums and Products of \DG{s}}
 
-\amr{want to prove/implement a couple of those}
-
-Groupoids, viewed as categories, come associated with natural notions
-of sums and products. Applying these definitions to division groupoids
-gives us the following...
-
-\begin{verbatim}
-(#p / #r) + (#q / #r) == (#p + #q) / #r
-
-(#p / #r) * (#r / #s) == #p / #s
-
-etc.
-
-\end{verbatim}
-
-
+If we are to build a compositional programming language around \dg{s},
+we need to ensure that they compose sensibly with the existing type
+formers. Groupoids, viewed as categories, come associated with natural
+notions of sums and products, and one might expect or hope identities
+such as:
+\[\begin{array}{rcl}
+\divg{p}{r} \oplus \divg{q}{r} &\simeq& \divg{(p \oplus q)}{r} \\
+\divg{p}{r} \otimes \divg{r}{s} &\simeq& \divg{p}{s} 
+\end{array}\]
+The situation is however not that simple and is explained in detail in  
+the next section.  
 
 % %%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Expanded Unit Groupoids $\oneg{p}$}

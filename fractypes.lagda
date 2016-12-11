@@ -23,6 +23,8 @@
 
 \newcommand{\hide}[1]{}
 
+\newcommand{\dg}{conjugation groupoid}
+\newcommand{\DG}{Conjugation Groupoid}
 \newcommand{\pifrac}{\ensuremath{\Pi^/}}
 \newcommand{\iso}{\leftrightarrow}
 \newcommand{\isotwo}{\Leftrightarrow}
