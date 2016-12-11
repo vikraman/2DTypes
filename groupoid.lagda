@@ -391,11 +391,11 @@ formers. Groupoids, viewed as categories, come associated with natural
 notions of sums and products, and one might expect or hope identities
 such as:
 \[\begin{array}{rcl}
-\divg{p}{r} \oplus \divg{q}{r} &\simeq& \divg{(p \oplus q)}{r} \\
-\divg{p}{r} \otimes \divg{r}{s} &\simeq& \divg{p}{s} 
+(\divg{p}{r}) \oplus (\divg{q}{r}) &\simeq& \divg{(p \oplus q)}{r} \\
+(\divg{p}{r}) \otimes (\divg{r}{s}) &\simeq& \divg{p}{s}
 \end{array}\]
-The situation is however not that simple and is explained in detail in  
-the next section.  
+The situation is however not that simple and is explained in detail in
+the next section.
 
 % %%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Expanded Unit Groupoids $\oneg{p}$}
