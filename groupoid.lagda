@@ -361,6 +361,12 @@ conjC {τ} p q = record {
  }
 \end{code}
 
+\begin{lemma}
+  $|\divg{p}{q}∣ = \frac{\ord{p}}{\ord{q}}$
+\end{lemma}
+\begin{proof}
+  Let $m = \ord{p}$ and $n = \ord{q}$. \amr{sketch proof}
+\end{proof}
 
 % The groupoid $\order{p}$ can be thought of as
 % $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
