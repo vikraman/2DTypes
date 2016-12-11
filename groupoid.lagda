@@ -73,7 +73,7 @@ al.~\cite{2009arXiv0908.4305B} associate with each groupoid a cardinality that
 counts the elements up to these ``internal symmetries.''
 
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
-  The cardinality of a groupoid $G$ is the real number:
+  The cardinality of a groupoid $G$ is the (positive) real number:
   \[
     |G| = \sum_{[x]} \frac{1}{|\textsf{Aut}(x)|}
   \]
@@ -394,8 +394,9 @@ conjC {τ} p q = record {
 If we are to build a compositional programming language around \dg{s},
 we need to ensure that they compose sensibly with the existing type
 formers. Groupoids, viewed as categories, come associated with natural
-notions of sums and products, and one might expect or hope identities
-such as:
+notions of sums and products, and one might expect or hope that
+identities which hold for rational numbers lift to identities
+in our situation, such as:
 \[\begin{array}{rcl}
 (\divg{p}{r}) \oplus (\divg{q}{r}) &\simeq& \divg{(p \oplus q)}{r} \\
 (\divg{p}{r}) \otimes (\divg{r}{s}) &\simeq& \divg{p}{s}
