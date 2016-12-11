@@ -260,15 +260,13 @@ formalized in Agda.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-\hide{
 In Homotopy Type Theory (HoTT)~\cite{hottbook}, types have the
 structure of \emph{weak $\omega$-groupoids}. As a first approximation,
 we can think of such structures as sets with points (objects) and
 paths (equivalences) between the points and higher paths between these
 paths and so on. Here are two simple but non-trivial examples:
 
-\medskip
-\begin{figure}[h]
+\begin{center}
 \begin{tabular}{c@{\kern -4pt}c}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
   \draw[dashed] (0,0) ellipse (3cm and 1.2cm);
@@ -308,10 +306,9 @@ paths and so on. Here are two simple but non-trivial examples:
   \path (-1,0.4) edge[double, bend left] node[left] {$\alpha$} (-1,1.0);
 \end{tikzpicture}
 \end{tabular}
-\caption{\label{fig:groupoids}(a) The groupoid $\ag{6}{3}$ \qquad (b) The groupoid $\frac{1}{3}$}
-\end{figure}
+\end{center}
 
-\medskip\noindent \cite{groupoidcard} assign to each groupoid a
+\medskip\noindent Baez and Dolan~\cite{groupoidcard} assign to each groupoid a
 \emph{cardinality} that counts the objects up to equivalences. The
 groupoid on the left has six points \texttt{a}, \texttt{b}, \texttt{c},
 \texttt{d}, \texttt{e}, and \texttt{f} with two groups of three
@@ -322,19 +319,19 @@ equivalences $q$ and $q'$ are however identified by~$\alpha$ leaving
 only three distinct equivalence classes and hence making the
 cardinality $\frac{1}{3}$.
 
-Both groupoids illustrated in Fig.~\ref{fig:groupoids} involve some
-notion of ``division'' that can be captured at the level of types
-using a syntactic notion of \emph{fractional types}. In this
-introduction, we loosely write $\frac{1}{n}$ for the fractional type
-with that cardinality and defer the discussion of the precise syntax
-to the technical parts of the paper. The existence of fractional types
-that denote groupoids such as the ones depicted in
-Fig.~\ref{fig:groupoids} raises an intriguing question about their
-applicability to programming practice. In this introduction, we
-present, in the context of a new language~$\pifrac$, several
-inter-related motivations and applications of fractional types that
-are formalized and justified in the remainder of the paper.
+Both groupoids involve some notion of ``division'' that can be captured at the
+level of types using a syntactic notion of \emph{fractional types}. Our aim is
+to explore this notion in the context of a programming language. The remainder
+of the paper is organized as follows. We start by reviewing the necessary
+background consisting of the language $\Pi$ for programming in a reversible
+information-preserving way. Sec.~4 explains the main novel semantic ideas of
+using $\Pi$ programs to generate non-trivial groupoids with fractional
+cardinality. Sec.~5 translates the semantic ideas into an extension of $\Pi$
+with new type constructors denoting non-trivial groupoids and new programs that
+manipulate such types. Sec.~6 presents the operational semantics of the extended
+language. The last two sections put our work in perspective and conclude.
 
+\hide{
 \paragraph*{Quotient Types.} Groupoids similar to $\ag{6}{3}$ in
 Fig.~\ref{fig:groupoids}(a) intuitively correspond to conventional
 \emph{quotient types}. Traditionally~\cite {quotient}, a quotient
