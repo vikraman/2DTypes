@@ -288,14 +288,7 @@ direction~$\triangleright$ or in the backward
 direction~$\triangleleft$. We show the complete forward evaluator in
 Fig.~\ref{opsem}; the backward evaluator is easy to infer.
 
-% \noindent\jc{To me, the most perspicuous representation of $\mathbb{3}$ is as a
-% \textbf{left-leaning tree}.  The elements of $\mathbb{3}$ are then names
-% of paths from the root to the leaves.  We can then abbreviate these names by
-% associating names to the leaves.  The action of permutations is then easy to
-% picture: it leaves the shape of the tree invariant -- which is quite important
-% as (1+1)+1 is isomorphism but not equal to 1+(1+1) -- and permutes the labels.
-% Which is also exactly what the code below does: it permutes the names of paths
-% from the root to the leaves.  But this allows one to illustrate the action
+%  But this allows one to illustrate the action
 % of $\permtwo$ as
 % \begin{tikzpicture}[level distance=0.5cm]
 %   \node {$\cdot$}
@@ -322,19 +315,24 @@ type~$\mathbb{3}$ which are $ll=\inl{\inl{\unitv}}$,
 $lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. Pictorially, the type
 $\mathbb{3}$ with its three inhabitants can be represented as the
 left-leaning tree:
-\begin{center} 
+\begin{center}
 \begin{tikzpicture}[level distance=0.5cm]
   \node {$\cdot$}
     child {node {$\cdot$}
-      child {node {$ll$}}
-      child {node {$lr$}}
+      child {node {$0$}}
+      child {node {$1$}}
     }
-    child {node {$r$}} ;
+    child {node {$2$}} ;
 \end{tikzpicture}
 \end{center}
+Note that the values of type $\mathbb{3}$ are the names of
+the paths from the root to each of the leaves.  We use
+$0$, $1$ and $2$ as ordinals, to give an order to each
+of the values.
+
 There are, up to equivalence, six combinators of type
 $\mathbb{3} \iso \mathbb{3}$, each representing a different
-permutation of three elements that leave the shape of the three
+permutation of three elements that leave the \emph{shape} of the three
 unchanged. The six permutations on $\mathbb{3}$ can be written as
 $\Pi$-terms:
 \[\begin{array}{rcl}
@@ -358,8 +356,33 @@ Tracing the evaluation of $\permtwo$ on each of the possible inputs yields:
 \end{array}\]
 Thus the effect of combinator $\permtwo$ is to swap the values
 $\inl{\inl{\unitv}}$ and $\inl{\inr{\unitv}}$ leaving the value
-$\inr{\unitv}$ intact. Iterating $\permtwo$ again is therefore equivalent
-to the identity permutation, which can be verified using the
+$\inr{\unitv}$ intact. In other words, the effect of $\permtwo$
+can be visualized are giving the tree
+\begin{center}
+\begin{tikzpicture}[level distance=0.5cm]
+  \node {$\cdot$}
+    child {node {$\cdot$}
+      child {node {$1$}}
+      child {node {$0$}}
+    }
+    child {node {$2$}} ;
+\end{tikzpicture}
+\end{center}
+
+These trees should also make it clear why mathematicians shorten
+their notation to
+\[
+\begin{pmatrix}
+0 & 1 & 2 \\
+1 & 0 & 2 \\
+\end{pmatrix}
+\]
+for the same permutation.  We will not do so, as this
+notation is \emph{untyped}, as it does not enforce that
+the shape of the tree is preserved.
+
+Iterating $\permtwo$ again is therefore equivalent
+to the identity permutation, which can be verified using
 2-combinators:
 \[\begin{array}{rcl}
 \permtwo \odot \permtwo &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
@@ -367,8 +390,6 @@ to the identity permutation, which can be verified using the
 &\isotwo& \idiso \oplus \idiso \\
 &=& \idiso
 \end{array}\]
-% \jc{should we annotate the above with the names of the 2-combinators that perform
-% these?} Too messy I think at this point.
 
 More generally we can iterate 1-combinators to produce different
 reversible functions between finite sets, eventually wrapping around
@@ -482,7 +503,7 @@ preserve cardinality, they are also information-preserving.
 
 As we will use Agda for explain some of the more subtle concepts later
 in the remainder we rephrase the main definitions and signatures of
-the concepts introduced in this section in Agda. 
+the concepts introduced in this section in Agda.
 
 \AgdaHide{\begin{code}
 infix 50 _⊕_
