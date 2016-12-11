@@ -302,9 +302,7 @@ iterationC {τ} p = record {
   ;  _≡_ = λ _ _ → ⊤
   ;  id  = id⇔
   ;  _∘_ = flip _●_
-  ;  assoc = tt; identityˡ = tt; identityʳ = tt
-  ;  equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
-  ;  ∘-resp-≡ = λ _ _ → tt
+  -- rest elided
   }
 \end{code}
 
@@ -360,9 +358,8 @@ conjlC {τ} p q = record {
           (Iter.q s ⇔ (Iter.q iq ◎ Iter.q t))
  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
  ; id = λ {A} → zeroth q , idl◎r
- ; _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!} -- elided
- ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
- ; ∘-resp-≡ = {!!} -- elided
+ ; _∘_ = {!!}
+ -- rest elided
  }
 \end{code}
 \noindent and right conjugacy is similar.
