@@ -321,15 +321,16 @@ cardinality $\frac{1}{3}$.
 
 Both groupoids involve some notion of ``division'' that can be captured at the
 level of types using a syntactic notion of \emph{fractional types}. Our aim is
-to explore this notion in the context of a programming language. The remainder
-of the paper is organized as follows. We start by reviewing the necessary
-background consisting of the language $\Pi$ for programming in a reversible
-information-preserving way. Sec.~4 explains the main novel semantic ideas of
-using $\Pi$ programs to generate non-trivial groupoids with fractional
-cardinality. Sec.~5 translates the semantic ideas into an extension of $\Pi$
-with new type constructors denoting non-trivial groupoids and new programs that
-manipulate such types. Sec.~6 presents the operational semantics of the extended
-language. The last two sections put our work in perspective and conclude.
+to explore this notion of types and its associated operational semantics. The
+remainder of the paper is organized as follows. We start by reviewing the
+necessary background consisting of the language $\Pi$ for programming with
+isomorphisms or equivalences in a reversible information-preserving way. Sec.~4
+explains the main novel semantic ideas of using $\Pi$ programs to generate
+non-trivial groupoids with fractional cardinality. Sec.~5 translates the
+semantic ideas into an extension of $\Pi$ with new type constructors denoting
+non-trivial groupoids and new programs that manipulate such types. Sec.~6
+presents the operational semantics of the extended language. The last two
+sections put our work in perspective and conclude.
 
 \hide{
 \paragraph*{Quotient Types.} Groupoids similar to $\ag{6}{3}$ in

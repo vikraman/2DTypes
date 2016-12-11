@@ -288,40 +288,55 @@ direction~$\triangleright$ or in the backward
 direction~$\triangleleft$. We show the complete forward evaluator in
 Fig.~\ref{opsem}; the backward evaluator is easy to infer.
 
-\noindent\jc{To me, the most perspicuous representation of $\mathbb{3}$ is as a
-\textbf{left-leaning tree}.  The elements of $\mathbb{3}$ are then names
-of paths from the root to the leaves.  We can then abbreviate these names by
-associating names to the leaves.  The action of permutations is then easy to
-picture: it leaves the shape of the tree invariant -- which is quite important
-as (1+1)+1 is isomorphism but not equal to 1+(1+1) -- and permutes the labels.
-Which is also exactly what the code below does: it permutes the names of paths
-from the root to the leaves.  But this allows one to illustrate the action
-of $\permtwo$ as
-\begin{tikzpicture}[level distance=0.5cm]
-  \node {$\cdot$}
-    child {node {$\cdot$}
-      child {node {a}}
-      child {node {b}}
-    }
-    child {node {c}} ;
-\end{tikzpicture}
-going to
-\begin{tikzpicture}[level distance=0.5cm]
-  \node {$\cdot$}
-    child {node {$\cdot$}
-      child {node {b}}
-      child {node {a}}
-    }
-    child {node {c}} ;
-\end{tikzpicture}
-}
+% \noindent\jc{To me, the most perspicuous representation of $\mathbb{3}$ is as a
+% \textbf{left-leaning tree}.  The elements of $\mathbb{3}$ are then names
+% of paths from the root to the leaves.  We can then abbreviate these names by
+% associating names to the leaves.  The action of permutations is then easy to
+% picture: it leaves the shape of the tree invariant -- which is quite important
+% as (1+1)+1 is isomorphism but not equal to 1+(1+1) -- and permutes the labels.
+% Which is also exactly what the code below does: it permutes the names of paths
+% from the root to the leaves.  But this allows one to illustrate the action
+% of $\permtwo$ as
+% \begin{tikzpicture}[level distance=0.5cm]
+%   \node {$\cdot$}
+%     child {node {$\cdot$}
+%       child {node {a}}
+%       child {node {b}}
+%     }
+%     child {node {c}} ;
+% \end{tikzpicture}
+% going to
+% \begin{tikzpicture}[level distance=0.5cm]
+%   \node {$\cdot$}
+%     child {node {$\cdot$}
+%       child {node {b}}
+%       child {node {a}}
+%     }
+%     child {node {c}} ;
+% \end{tikzpicture}
+% }
 
 As an example, let $\mathbb{3}$ abbreviate the type
-$(\ot \oplus \ot) \oplus \ot$. There are three values of type $\mathbb{3}$ which
-are $ll=\inl{\inl{\unitv}}$, $lr=\inl{\inr{\unitv}}$, and
-$r=\inr{\unitv}$. There are, up to equivalence, six combinators of type
-$\mathbb{3} \iso \mathbb{3}$, each representing a different permutation of three
-elements, which could be written as follows:
+$(\ot \oplus \ot) \oplus \ot$. There are three values of
+type~$\mathbb{3}$ which are $ll=\inl{\inl{\unitv}}$,
+$lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. Pictorially, the type
+$\mathbb{3}$ with its three inhabitants can be represented as the
+left-leaning tree:
+\begin{center} 
+\begin{tikzpicture}[level distance=0.5cm]
+  \node {$\cdot$}
+    child {node {$\cdot$}
+      child {node {$ll$}}
+      child {node {$lr$}}
+    }
+    child {node {$r$}} ;
+\end{tikzpicture}
+\end{center}
+There are, up to equivalence, six combinators of type
+$\mathbb{3} \iso \mathbb{3}$, each representing a different
+permutation of three elements that leave the shape of the three
+unchanged. The six permutations on $\mathbb{3}$ can be written as
+$\Pi$-terms:
 \[\begin{array}{rcl}
 \permone &=& \idiso \\
 \permtwo &=& \swapp \oplus \idiso \\
@@ -352,8 +367,8 @@ to the identity permutation, which can be verified using the
 &\isotwo& \idiso \oplus \idiso \\
 &=& \idiso
 \end{array}\]
-\jc{should we annotate the above with the names of the 2-combinators that perform
-these?}
+% \jc{should we annotate the above with the names of the 2-combinators that perform
+% these?} Too messy I think at this point.
 
 More generally we can iterate 1-combinators to produce different
 reversible functions between finite sets, eventually wrapping around
@@ -461,11 +476,13 @@ preserve cardinality, they are also information-preserving.
 %%%%%
 \subsection{Agda Formalization}
 
-\jc{This feels like this serves no purpuse to the text.  Perhaps this
-part of the Agda could be relegated to an appendix?  If it is crucial to the
-story, then this shouldn't just be ``parked'' here, but explained.}
-For future we show the Agda version of the main definitions and signatures of
-the concepts introduced in this section.
+% \jc{This feels like this serves no purpuse to the text.  Perhaps this
+% part of the Agda could be relegated to an appendix?  If it is crucial to the
+% story, then this shouldn't just be ``parked'' here, but explained.}
+
+As we will use Agda for explain some of the more subtle concepts later
+in the remainder we rephrase the main definitions and signatures of
+the concepts introduced in this section in Agda. 
 
 \AgdaHide{\begin{code}
 infix 50 _⊕_
@@ -480,14 +497,14 @@ infixr 60 _●_
 \end{code}}
 
 \begin{code}
+-- First we introduce codes for the universe of types we consider
 data U : Set where
   𝟘    : U
   𝟙    : U
   _⊕_  : U → U → U
   _⊗_  : U → U → U
 
--- 1-combinators
-
+-- Then we introduce the 1-combinators and their inverses
 data Prim⟷ : U → U → Set where
   id⟷ :  {t : U} → Prim⟷ t t
   -- rest elided
@@ -500,8 +517,7 @@ data _⟷_ : U → U → Set where
 ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
 ! = {!!} -- definition elided
 
--- 2-combinators
-
+-- And finally the 2-combinators and their inverses
 data _⇔_ : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   id⇔ : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ c
   _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
