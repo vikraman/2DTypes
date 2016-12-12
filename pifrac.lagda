@@ -34,15 +34,17 @@ infixr 60 _●_
 We are now ready to turn the semantic treatment of groupoids from the
 previous section into an actual programming language. The language
 $\Pi^/$ will be an extension of $\Pi$ with new type constructors and
-new combinators for creating and manipulating fractional types. Every
-computation in $\Pi^/$ will also be information preserving but with
-the added expressiveness of being able to create and annihilate
-negative information. We use Agda as the appropriate metalanguage in
-which to define $\Pi^/$.
+new combinators for creating and manipulating syntactic counterparts
+to $\divg{p}{q}$. Every computation in $\Pi^/$ will also be reversible
+and information preserving but with the added expressiveness of being
+able to create and annihilate ``negative information''. 
 
 %%%%%%%%%%%
+\subsection{Multiplicative Inverses} 
+ 
+%%%%%%%%%%%
 \subsection{Types and Combinators}
-
+ 
 We begin by defining two mutually recursive syntactic categories
 \AgdaDatatype{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
 definition of types is identical to the presentation of $\Pi$ in
