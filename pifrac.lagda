@@ -37,31 +37,28 @@ $\Pi^/$ will be an extension of $\Pi$ with new type constructors and
 new combinators for creating and manipulating syntactic counterparts
 to $\divg{p}{q}$. Every computation in $\Pi^/$ will also be reversible
 and information preserving but with the added expressiveness of being
-able to create and annihilate ``negative information''. 
+able to create and annihilate ``negative information''.
 
 %%%%%%%%%%%
-\subsection{Multiplicative Inverses} 
- 
+\subsection{Multiplicative Inverses}
+
 %%%%%%%%%%%
 \subsection{Types and Combinators}
- 
+
 We begin by defining two mutually recursive syntactic categories
 \AgdaDatatype{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
 definition of types is identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of type constructors for
-building non-trivial groupoids. In principle, we just need one type
-constructor whose denotation is a division groupoid. For convenience,
-we add more type constructors: \AgdaInductiveConstructor{\#},
+building non-trivial groupoids. Then
+we add three type constructors: \AgdaInductiveConstructor{\#},
 \AgdaInductiveConstructor{//}, and
 \AgdaInductiveConstructor{\textbackslash\textbackslash} such that
 $\AgdaInductiveConstructor{\#}~\AgdaBound{p}$ denotes an iteration
 groupoid, and both
 $\AgdaBound{p}~\AgdaInductiveConstructor{//}~\AgdaBound{q}$ and
 $\AgdaBound{q}~\AgdaInductiveConstructor{\textbackslash\textbackslash}~\AgdaBound{p}$
-denote the division groupoid $\divg{p}{q}$. Having both versions
-simplifies some of the code by avoiding series of swaps. There is no
-primitive that denotes $\iorder{p}$ but this groupoid can be denoted
-using
+denote the \dg{s} $\divgl{p}{q}$ and $\divgr{p}{q}$ respectively. There is no
+primitive that denotes $\iorder{p}$ but this groupoid can be built using
 $\AgdaInductiveConstructor{id⟷}~\AgdaInductiveConstructor{//}~\AgdaBound{p}$
 for example.
 
@@ -383,6 +380,7 @@ indistinguishable. The treatment in our setting is similar but richer
 as in some cases the equivalence relation is not external but is
 itself part of the value and the resulting count may be fractional.
 
+\hide{
 As motivated in the previous section, we will first need to consider
 the type $\iter{p}$ of all the combinators equivalent to iterates
 $p^k$:
@@ -484,6 +482,7 @@ iterates. The first four iterates are all equivalent to $(a_2)^0$
 which is equivalent \AgdaInductiveConstructor{id⟷}. The last two are
 both equivalent to $(a_2)^1$ which is equivalent to $a_2$. The
 equivalences are explicit in the construction.
+}
 
 Formally we define values as follows:
 

@@ -95,8 +95,8 @@ orderG {τ} p = record {
   ; iso = record { isoˡ = rinv◎l ; isoʳ = linv◎l }
   }
 
-divrC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
-divrC {τ} p q = record {
+conjrC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+conjrC {τ} p q = record {
     Obj = Iter p
   ; _⇒_ = λ s t → Σ[ iq ∈ Iter q ] (Iter.q s ⇔ (Iter.q t ◎ Iter.q iq))
   ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
@@ -111,8 +111,8 @@ divrC {τ} p q = record {
   ; ∘-resp-≡ = _⊡_
   }
 
-divlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
-divlC {τ} p q = record {
+conjlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+conjlC {τ} p q = record {
     Obj = Iter p
   ; _⇒_ = λ s t → Σ[ iq ∈ Iter q ] (Iter.q s ⇔ Iter.q iq ◎ Iter.q t)
   ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
@@ -127,16 +127,16 @@ divlC {τ} p q = record {
   ; ∘-resp-≡ = _⊡_
   }
 
-divrG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divrC p q)
-divrG {τ} p q = record {
+conjrG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (conjrC p q)
+conjrG {τ} p q = record {
     _⁻¹ = λ { {A} (q , pf) → inv q , invert-flip-right {q = Iter.q q} pf }
   ; iso = record { isoˡ = rinv◎l
                  ; isoʳ = linv◎l
                  }
   }
 
-divlG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (divlC p q)
-divlG {τ} p q = record {
+conjlG : {τ : U} → (p q : τ ⟷ τ) → Groupoid (conjlC p q)
+conjlG {τ} p q = record {
     _⁻¹ = λ { {A} (q , pf) → inv q , invert-flip-left pf }
   ; iso = record { isoˡ = rinv◎l
                  ; isoʳ = linv◎l
@@ -152,8 +152,8 @@ divlG {τ} p q = record {
 ⟦ t₁ ⊗ t₂ ⟧ with ⟦ t₁ ⟧ | ⟦ t₂ ⟧
 ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
 ⟦ # p ⟧ = _ , orderG p
-⟦ p // q ⟧ = _ , divrG p q
-⟦ q \\ p ⟧ = _ , divlG p q
+⟦ p // q ⟧ = _ , conjlG p q
+⟦ q \\ p ⟧ = _ , conjrG p q
 
 open import Data.Nat as ℕ
 open import Rational+ as ℚ
@@ -177,18 +177,3 @@ open import 2D.Order
 
 V : (T : U) → Set
 V T = Category.Obj (proj₁ ⟦ T ⟧)
-
-------------------------------------------------------------------------------
--- Some coherence lemmas
-factor// : (τ : U) (p q r : τ ⟷ τ) → Functor (proj₁ ⟦ (p // q) ⊗ (r \\ q) ⟧) (proj₁ ⟦ (p // r) ⊗ (q \\ q) ⟧ )
-factor// τ p q r = record
-  { F₀ = λ x → x
-  ; F₁ = λ { {< k₁ , p₁ , α₁ > , < k₂ , q₂ , α₂ >}
-             {< k₃ , p₃ , α₃ > , < k₄ , q₄ , α₄ >}
-             ((< k₅ , q₅ , α₅ > , α) , < k₆ , r₆ , α₆ > , β) →
-           (< {!!} , {!!} , {!!} > , {!!} ) ,
-            < k₂ ℤ.- k₄ , q₂ ◎ ! q₄ , α₂ ⊡ (⇔! α₄ ● (2! (^⇔! k₄))) ● 2! (lower k₂ (ℤ.- k₄)) > , idr◎r ● id⇔ ⊡ rinv◎r ● assoc◎l }
-  ; identity = {!!}
-  ; homomorphism = {!!}
-  ; F-resp-≡ = {!!}
-  }

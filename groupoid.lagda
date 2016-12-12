@@ -325,15 +325,19 @@ a set of cardinality $\ord{p}$.
 \end{proof}
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\DG{s} $\divg{p}{q}$}
+\subsection{\DG{s} $\divgl{p}{q}$ and $\divgr{p}{q}$}
 
 By considering \emph{two} combinators $p$ and $q$ of the same type, we can
-modify the above construction to give a groupoid $\divg{p}{q}$ whose
+modify the above construction to construct a groupoid whose
 cardinality will be $\frac{\ord{p}}{\ord{q}}$. The basic idea is to consider
 the iterates of $p$ \emph{modulo} those of $q$.  Above, we considered
 $p^i$ and $p^j$ equivalent exactly when $p^i \Leftrightarrow p^j$.
 Now we consider $p^i$ equivalent to $p^j$ whenever there exists a $k$
-such that $p^i \circledcirc q^k \Leftrightarrow q^k \circledcirc p^j$.
+such that $p^i$ is equivalent to $p^j$ up to an iterate of $q$.  This
+concept naturally comes in two versions, a left-handed conjugate,
+$\divgl{p}{q}$ where $p^i \Leftrightarrow q^k \circledcirc p^j$; and
+a right-handed conjugate,
+$\divgr{p}{q}$ where $p^i \Leftrightarrow p^j \circledcirc q^k$.
 In other words, we can use some iterate of $q$ to ``mediate'' the equivalence.
 Of course, if we pick $q$ to be the identity, this reduces to the previous
 definition.
@@ -341,28 +345,30 @@ definition.
 A bit more formally, the objects of this groupoid will be the same as
 the objects of~$\order{p}$.  Then two such arbitrary objects
 $\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$ will
-be related if there exists an iterate $\triple{k}{r_k}{\alpha}$ in
-$\iter{q}$, such that $(r_1 \odot r_k) \isotwo (r_k \odot r_2)$.  This
+be (left) related if there exists an iterate $\triple{k}{r_k}{\alpha}$ in
+$\iter{q}$, such that $r_1 \isotwo (r_k \odot r_2)$, and right related
+if $r_1 \isotwo (r_2 \odot r_k)$.  This
 is the first groupoid we define which has a non-trivial identification
 of morphisms, and thus is a \emph{weak} groupoid.  The important parts
 of this can be rendered in Agda as follows.
 
 \begin{code}
-conjC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
-conjC {τ} p q = record {
+conjlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+conjlC {τ} p q = record {
     Obj = Iter p
  ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
-          ((Iter.q s ◎ Iter.q iq) ⇔ (Iter.q iq ◎ Iter.q t))
+          (Iter.q s ⇔ (Iter.q iq ◎ Iter.q t))
  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
- ; id = λ {A} → zeroth q , idr◎l ● idl◎r
+ ; id = λ {A} → zeroth q , idl◎r
  ; _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!} -- elided
  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
  ; ∘-resp-≡ = {!!} -- elided
  }
 \end{code}
+\noindent and right conjugacy is similar.
 
 \begin{lemma}
-  $|\divg{p}{q}∣ = \frac{\ord{p}}{\ord{q}}$
+  $|\divgl{p}{q}∣ = \frac{\ord{p}}{\ord{q}}$
 \end{lemma}
 \begin{proof}
   Let $m = \ord{p}$ and $n = \ord{q}$. \amr{sketch proof}
@@ -398,8 +404,8 @@ notions of sums and products, and one might expect or hope that
 identities which hold for rational numbers lift to identities
 in our situation, such as:
 \[\begin{array}{rcl}
-(\divg{p}{r}) \oplus (\divg{q}{r}) &\simeq& \divg{(p \oplus q)}{r} \\
-(\divg{p}{r}) \otimes (\divg{r}{s}) &\simeq& \divg{p}{s}
+(\divgl{p}{r}) \oplus (\divgl{q}{r}) &\simeq& \divgl{(p \oplus q)}{r} \\
+(\divgl{p}{r}) \otimes (\divgl{r}{s}) &\simeq& \divgl{p}{s}
 \end{array}\]
 The situation is however not that simple and is explained in detail in
 the next section.
