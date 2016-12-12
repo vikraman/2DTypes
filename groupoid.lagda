@@ -324,6 +324,29 @@ a set of cardinality $\ord{p}$.
   $|\order{p}| = \sum\limits_{1}^{o}\frac{1}{1} = o$.
 \end{proof}
 
+As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. Up to equivalence, this groupoid is indeed equivalent to a set with two elements $\idiso$ and $\permtwo$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+
+  \node[below] at (-8,0) {$\ldots$};
+  \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
+  \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
+  \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
+  \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
+  \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
+  \node[below] at (8,0) {$\ldots$};
+
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
+  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+  \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
+
+
+\end{tikzpicture}
+\end{center}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{\DG{s} $\divgl{p}{q}$ and $\divgr{p}{q}$}
 
@@ -373,6 +396,29 @@ conjlC {τ} p q = record {
 \begin{proof}
   Let $m = \ord{p}$ and $n = \ord{q}$. \amr{sketch proof}
 \end{proof}
+
+As an example, the groupoid $\divgl{\permtwo}{\permfive}$ can be represented as follows:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+
+  \node[below] at (-8,0) {$\ldots$};
+  \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
+  \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
+  \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
+  \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
+  \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
+  \node[below] at (8,0) {$\ldots$};
+
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
+  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+  \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
+
+
+\end{tikzpicture}
+\end{center}
+
 
 % The groupoid $\order{p}$ can be thought of as
 % $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought

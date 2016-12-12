@@ -31,13 +31,13 @@ infixr 60 _●_
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Types, Values, and Combinators}
 
-We are now ready to turn the semantic treatment of groupoids from the
-previous section into an actual programming language. The language
-$\Pi^/$ will be an extension of $\Pi$ with new type constructors and
-new combinators for creating and manipulating syntactic counterparts
-to $\divg{p}{q}$. Every computation in $\Pi^/$ will also be reversible
-and information preserving but with the added expressiveness of being
-able to create and annihilate ``negative information''.
+We are now ready to turn the semantic treatment of groupoids from the previous
+section into an actual programming language. The language $\Pi^/$ will be an
+extension of $\Pi$ with new type constructors and new combinators for creating
+and manipulating syntactic counterparts to $\divgl{p}{q}$ and
+$\divgr{p}{q}$. Every computation in $\Pi^/$ will also be reversible and
+information preserving but with the added expressiveness of being able to create
+and annihilate ``negative information''.
 
 %%%%%%%%%%%
 \subsection{Multiplicative Inverses}

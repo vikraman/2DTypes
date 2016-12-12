@@ -371,12 +371,10 @@ can be visualized are giving the tree
 
 These trees should also make it clear why mathematicians shorten
 their notation to
-\[
-\begin{pmatrix}
+$\begin{pmatrix}
 0 & 1 & 2 \\
 1 & 0 & 2 \\
-\end{pmatrix}
-\]
+\end{pmatrix}$
 for the same permutation.  We will not do so, as this
 notation is \emph{untyped}, as it does not enforce that
 the shape of the tree is preserved.
@@ -420,11 +418,12 @@ For our example combinators on the type $\mathbb{3}$, simple traces using the
 operational semantics show the combinator $\permone$ is the identity
 permutation; the combinators $\permthree$ and $\permsix$ swap two of the three
 elements leaving the third intact; and the combinators $\permfour$ and
-$\permfive$ rotate the three elements. We therefore have
-$\mathit{order}(\permone)=1$,
-$\mathit{order}(\permtwo)=\mathit{order}(\permthree)=\mathit{order}(\permsix)=2$,
-and $\mathit{order}(\permfour)=\mathit{order}(\permfive)=3$.
-
+$\permfive$ rotate the three elements. We therefore have:
+\[\begin{array}{rcl}
+\mathit{order}(\permone) &=& 1 \\
+\mathit{order}(\permtwo) = \mathit{order}(\permthree) = \mathit{order}(\permsix) &=& 2 \\
+\mathit{order}(\permfour) = \mathit{order}(\permfive) &=& 3
+\end{array}\]
 We should note that the above definition is the only one in this
 paper which is not \emph{effective};  in other words, we do not have an
 algorithm for computing it.  While there is an obvious method to
