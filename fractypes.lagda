@@ -928,6 +928,23 @@ term goal of our research is to find natural type constructors
 inspired by the rich combinatorial structure of weak
 $\omega$-groupoids and that provide novel programming abstractions.
 
+For an information-theoretic perspective on the language $\Pi$, we think of a
+type containing $N$ values as an abstract system that has~$N$ distinguishable
+states. According to the conventional theory of information~\cite{Shannon1948},
+the amount of information contained in each state of a system with $N$
+distinguishable states is $(\log N)$ bits of information. For example, the type
+$\mathbb{2}$ can be thought of as an abstract system with two distinguishable
+states labeled $\mathsf{true}$ and $\mathsf{false}$ each containing $\log 2 = 1$
+bit. Similarly, the type $\mathbb{3}$ can be thought of as an abstract system
+with three distinguishable states each containing $\log 3$ bits. The logarithmic
+map implies that information contained in a composite state is the sum of the
+information contained in its constituents. For example, the type $\mathbb{2}
+\otimes \mathbb{3}$ can be thought of a composite system consisting of two
+independent unrelated subsystems. Each state of the composite system therefore
+contains $\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
+information contained in each subsystem. Since all the combinators preserve
+cardinality, they are also information-preserving.
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \input{appendix.tex}

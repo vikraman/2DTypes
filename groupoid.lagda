@@ -1,27 +1,24 @@
 \section{From Sets to Groupoids}
 \label{sec:groupoids}
 
-From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite
-set, a $\Pi$ 1-combinator denotes a permutation on finite sets, and
-the 2-combinators denote coherence conditions on these
-permutations~\cite{Carette2016}. Formally, the language $\Pi$ is a
-\emph{categorification}~\cite{math/9802029} of the natural numbers as
-a \emph{symmetric rig groupoid}~\cite{nlabrig}. This structure is a
-\emph{symmetric bimonoidal category} or a \emph{commutative rig
-  category} in which every morphism is invertible. The underlying
-category consists of two symmetric monoidal
-structures~\cite{nla.cat-vn1051288} separately induced by the
-properties of addition and multiplication of the natural numbers. The
-monoidal structures are then augmented with distributivity and
-absorption natural isomorphisms~\cite{laplaza} to model the full
-commutative semiring (aka, commutative rig) of the natural
-numbers. Despite this rich structure, the individual objects in the
-category for $\Pi$ are just plain sets with no interesting
-structure. In this section we introduce, in the denotation of $\Pi$,
-some non-trivial groupoids which we call ``\dg{s}''. Under certain
-conditions, sums and products of these groupoids behave as expected
-which ensures that a sensible compositional programming language can
-be designed around these \dg{s}.
+From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite set, a
+$\Pi$ 1-combinator denotes a permutation on finite sets, and the 2-combinators
+denote coherence conditions on these permutations~\cite{Carette2016}. Formally,
+the language $\Pi$ is a \emph{categorification}~\cite{math/9802029} of the
+natural numbers as a \emph{symmetric rig groupoid}~\cite{nlabrig}. This
+structure is a \emph{symmetric bimonoidal category} or a \emph{commutative rig
+category} in which every morphism is invertible. The underlying category
+consists of two symmetric monoidal structures~\cite{nla.cat-vn1051288}
+separately induced by the properties of addition and multiplication of the
+natural numbers. The monoidal structures are then augmented with distributivity
+and absorption natural isomorphisms~\cite{laplaza} to model the full commutative
+semiring (aka, commutative rig) of the natural numbers. Despite this rich
+structure, the individual objects in the category for $\Pi$ are just plain sets
+with no interesting structure. In this section we introduce, in the denotation
+of $\Pi$, some non-trivial groupoids which we call \emph{iteration groupoids}
+and \emph{symmetry groupoids}. Under certain conditions, sums and products of
+these groupoids behave as expected which ensures that a sensible compositional
+programming language can be designed around them.
 
 % \noindent\jc{I still despise the name ``division groupoid''.  After thinking
 % about it for a while, I think that ``up to groupoid'' might be better,
@@ -70,7 +67,7 @@ alternative definition of a groupoid is as a generalization of a group that
 allows for individual elements
 to have ``internal symmetries''~\cite{groupoidintro}. Baez et
 al.~\cite{2009arXiv0908.4305B} associate with each groupoid a cardinality that
-counts the elements up to these ``internal symmetries.''
+counts the elements up to these ``internal symmetries''.
 
 \begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
   The cardinality of a groupoid $G$ is the (positive) real number:
@@ -202,9 +199,23 @@ induced by 2-combinators.
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Iteration Groupoids $\order{p}$}
 
-The key ingredient in our construction of \dg{s} is the set of
-iterates of a combinator, as used in the example above. We thus
-define the $k^{\text{th}}$ iterate of $p$ as
+The previous construction is quite useful: it allows us to take a set of
+cardinality $N$ and a permutation on that set of order $P$ to construct a
+groupoid of cardinality $\frac{N}{P}$. Although this idea allows us to construct
+a groupoid of cardinality $\frac{3}{2}$ as shown above, it is not expressive
+enough to construct a groupoid of cardinality $\frac{1}{3}$. Indeed if the
+underlying set has only one element, the only permutation is the identity and
+$P$ must be 1. The construction, however, already contains the main ingredient
+needed for the construction of more general groupoids with fractional
+cardinality. This key piece is the set of iterates of a combinator which we will
+use in two different ways: (i) a perspective of combinators-as-data in which the
+iterates of a combinator $p$ become the objects of groupoid $\order{p}$ of
+cardinality $\ord{p}$, and (ii) a perspective of combinators-as-symmetries in
+which the iterates of a combinator $p$ become the internal symmetries of a
+one-element groupoid $\iorder{p}$ of cardinality $\frac{1}{\ord{p}}$. We explain
+these two perspectives in this section and the next.
+
+We define the $k^{\text{th}}$ iterate of $p$ as:
 
 \AgdaHide{
 \begin{code}
@@ -346,115 +357,120 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
 \end{tikzpicture}
 \end{center}
 
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Symmetry Groupoids $\iorder{p}$}
+
+
+-- %%%%%%%%%%%%%%%%%%%%%%%
+-- \subsection{\DG{s} $\divgl{p}{q}$ and $\divgr{p}{q}$}
+
+-- By considering \emph{two} combinators $p$ and $q$ of the same type, we can
+-- modify the above construction to construct a groupoid whose
+-- cardinality will be $\frac{\ord{p}}{\ord{q}}$. The basic idea is to consider
+-- the iterates of $p$ \emph{modulo} those of $q$.  Above, we considered
+-- $p^i$ and $p^j$ equivalent exactly when $p^i \Leftrightarrow p^j$.
+-- Now we consider $p^i$ equivalent to $p^j$ whenever there exists a $k$
+-- such that $p^i$ is equivalent to $p^j$ up to an iterate of $q$.  This
+-- concept naturally comes in two versions, a left-handed conjugate,
+-- $\divgl{p}{q}$ where $p^i \Leftrightarrow q^k \circledcirc p^j$; and
+-- a right-handed conjugate,
+-- $\divgr{p}{q}$ where $p^i \Leftrightarrow p^j \circledcirc q^k$.
+-- In other words, we can use some iterate of $q$ to ``mediate'' the equivalence.
+-- Of course, if we pick $q$ to be the identity, this reduces to the previous
+-- definition.
+
+-- A bit more formally, the objects of this groupoid will be the same as
+-- the objects of~$\order{p}$.  Then two such arbitrary objects
+-- $\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$ will
+-- be (left) related if there exists an iterate $\triple{k}{r_k}{\alpha}$ in
+-- $\iter{q}$, such that $r_1 \isotwo (r_k \odot r_2)$, and right related
+-- if $r_1 \isotwo (r_2 \odot r_k)$.  This
+-- is the first groupoid we define which has a non-trivial identification
+-- of morphisms, and thus is a \emph{weak} groupoid.  The important parts
+-- of this can be rendered in Agda as follows.
+
+-- \begin{code}
+-- conjlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+-- conjlC {τ} p q = record {
+--     Obj = Iter p
+--  ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
+--           (Iter.q s ⇔ (Iter.q iq ◎ Iter.q t))
+--  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
+--  ; id = λ {A} → zeroth q , idl◎r
+--  ; _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!} -- elided
+--  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+--  ; ∘-resp-≡ = {!!} -- elided
+--  }
+-- \end{code}
+-- \noindent and right conjugacy is similar.
+
+-- \begin{lemma}
+--   $|\divgl{p}{q}∣ = \frac{\ord{p}}{\ord{q}}$
+-- \end{lemma}
+-- \begin{proof}
+--   Let $m = \ord{p}$ and $n = \ord{q}$. \amr{sketch proof}
+-- \end{proof}
+
+-- As an example, the groupoid $\divgl{\permtwo}{\permfive}$ can be represented as follows:
+
+-- \begin{center}
+-- \begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
+--   \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+
+--   \node[below] at (-8,0) {$\ldots$};
+--   \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
+--   \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
+--   \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
+--   \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
+--   \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
+--   \node[below] at (8,0) {$\ldots$};
+
+--   \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
+--   \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+--   \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
+
+
+-- \end{tikzpicture}
+-- \end{center}
+
+
+-- % The groupoid $\order{p}$ can be thought of as
+-- % $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
+-- % of as $\divg{\idiso}{p}$. The two previous constructions can therefore
+-- % be generalized to allow arbitrary combinators in both the numerator
+-- % and denominator.
+
+-- % Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
+-- % of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
+-- % is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
+-- % $\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
+-- % $\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
+-- % $(q_1 \odot q) \isotwo (q \odot q_2)$. As before, the morphisms are
+-- % not all independent: two morphisms are identified if their $q$
+-- % components are related by $\isotwo$.
+
+-- % When $r$ is $\idiso$, this construction reduces to $\order{p}$. When $p$
+-- % is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
+-- % cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
+-- % for the Agda construction.)
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{\DG{s} $\divgl{p}{q}$ and $\divgr{p}{q}$}
+\subsection{Sums and Products of Iteration and Symmetry Groupoids}
 
-By considering \emph{two} combinators $p$ and $q$ of the same type, we can
-modify the above construction to construct a groupoid whose
-cardinality will be $\frac{\ord{p}}{\ord{q}}$. The basic idea is to consider
-the iterates of $p$ \emph{modulo} those of $q$.  Above, we considered
-$p^i$ and $p^j$ equivalent exactly when $p^i \Leftrightarrow p^j$.
-Now we consider $p^i$ equivalent to $p^j$ whenever there exists a $k$
-such that $p^i$ is equivalent to $p^j$ up to an iterate of $q$.  This
-concept naturally comes in two versions, a left-handed conjugate,
-$\divgl{p}{q}$ where $p^i \Leftrightarrow q^k \circledcirc p^j$; and
-a right-handed conjugate,
-$\divgr{p}{q}$ where $p^i \Leftrightarrow p^j \circledcirc q^k$.
-In other words, we can use some iterate of $q$ to ``mediate'' the equivalence.
-Of course, if we pick $q$ to be the identity, this reduces to the previous
-definition.
-
-A bit more formally, the objects of this groupoid will be the same as
-the objects of~$\order{p}$.  Then two such arbitrary objects
-$\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$ will
-be (left) related if there exists an iterate $\triple{k}{r_k}{\alpha}$ in
-$\iter{q}$, such that $r_1 \isotwo (r_k \odot r_2)$, and right related
-if $r_1 \isotwo (r_2 \odot r_k)$.  This
-is the first groupoid we define which has a non-trivial identification
-of morphisms, and thus is a \emph{weak} groupoid.  The important parts
-of this can be rendered in Agda as follows.
-
-\begin{code}
-conjlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
-conjlC {τ} p q = record {
-    Obj = Iter p
- ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
-          (Iter.q s ⇔ (Iter.q iq ◎ Iter.q t))
- ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
- ; id = λ {A} → zeroth q , idl◎r
- ; _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!} -- elided
- ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
- ; ∘-resp-≡ = {!!} -- elided
- }
-\end{code}
-\noindent and right conjugacy is similar.
-
-\begin{lemma}
-  $|\divgl{p}{q}∣ = \frac{\ord{p}}{\ord{q}}$
-\end{lemma}
-\begin{proof}
-  Let $m = \ord{p}$ and $n = \ord{q}$. \amr{sketch proof}
-\end{proof}
-
-As an example, the groupoid $\divgl{\permtwo}{\permfive}$ can be represented as follows:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
-  \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
-
-  \node[below] at (-8,0) {$\ldots$};
-  \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
-  \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
-  \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
-  \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
-  \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
-  \node[below] at (8,0) {$\ldots$};
-
-  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
-  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
-  \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
-
-
-\end{tikzpicture}
-\end{center}
-
-
-% The groupoid $\order{p}$ can be thought of as
-% $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
-% of as $\divg{\idiso}{p}$. The two previous constructions can therefore
-% be generalized to allow arbitrary combinators in both the numerator
-% and denominator.
-
-% Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
-% of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
-% is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
-% $\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
-% $\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
-% $(q_1 \odot q) \isotwo (q \odot q_2)$. As before, the morphisms are
-% not all independent: two morphisms are identified if their $q$
-% components are related by $\isotwo$.
-
-% When $r$ is $\idiso$, this construction reduces to $\order{p}$. When $p$
-% is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
-% cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
-% for the Agda construction.)
-
-%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Sums and Products of \DG{s}}
-
-If we are to build a compositional programming language around \dg{s},
-we need to ensure that they compose sensibly with the existing type
-formers. Groupoids, viewed as categories, come associated with natural
-notions of sums and products, and one might expect or hope that
-identities which hold for rational numbers lift to identities
-in our situation, such as:
+If we are to build a compositional programming language around iteration and
+symmetry groupoids, we need to ensure that they compose sensibly with the
+existing type formers. Groupoids, viewed as categories, come associated with
+natural notions of sums and products, and one might expect or hope that
+identities which hold for rational numbers lift to identities in our situation,
+such as:
 \[\begin{array}{rcl}
-(\divgl{p}{r}) \oplus (\divgl{q}{r}) &\simeq& \divgl{(p \oplus q)}{r} \\
-(\divgl{p}{r}) \otimes (\divgl{r}{s}) &\simeq& \divgl{p}{s}
+(\order{p} \otimes \iorder{r}) \oplus (\order{q} \otimes \iorder{r}) &\simeq&
+  (\order{p} \oplus \order{q}) \otimes \iorder{r} \\
+(\order{p} \otimes \iorder{r}) \otimes (\order{r} \otimes \iorder{s}) &\simeq&
+  \order{p} \otimes \iorder{s}
 \end{array}\]
-The situation is however not that simple and is explained in detail in
-the next section.
+This situation is almost right but it is not that simple and is explained in
+detail in the next section.
 
 % %%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{Expanded Unit Groupoids $\oneg{p}$}
