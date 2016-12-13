@@ -361,98 +361,98 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
 \subsection{Symmetry Groupoids $\iorder{p}$}
 
 
--- %%%%%%%%%%%%%%%%%%%%%%%
--- \subsection{\DG{s} $\divgl{p}{q}$ and $\divgr{p}{q}$}
+% %%%%%%%%%%%%%%%%%%%%%%%
+% \subsection{\DG{s} $\divgl{p}{q}$ and $\divgr{p}{q}$}
 
--- By considering \emph{two} combinators $p$ and $q$ of the same type, we can
--- modify the above construction to construct a groupoid whose
--- cardinality will be $\frac{\ord{p}}{\ord{q}}$. The basic idea is to consider
--- the iterates of $p$ \emph{modulo} those of $q$.  Above, we considered
--- $p^i$ and $p^j$ equivalent exactly when $p^i \Leftrightarrow p^j$.
--- Now we consider $p^i$ equivalent to $p^j$ whenever there exists a $k$
--- such that $p^i$ is equivalent to $p^j$ up to an iterate of $q$.  This
--- concept naturally comes in two versions, a left-handed conjugate,
--- $\divgl{p}{q}$ where $p^i \Leftrightarrow q^k \circledcirc p^j$; and
--- a right-handed conjugate,
--- $\divgr{p}{q}$ where $p^i \Leftrightarrow p^j \circledcirc q^k$.
--- In other words, we can use some iterate of $q$ to ``mediate'' the equivalence.
--- Of course, if we pick $q$ to be the identity, this reduces to the previous
--- definition.
+% By considering \emph{two} combinators $p$ and $q$ of the same type, we can
+% modify the above construction to construct a groupoid whose
+% cardinality will be $\frac{\ord{p}}{\ord{q}}$. The basic idea is to consider
+% the iterates of $p$ \emph{modulo} those of $q$.  Above, we considered
+% $p^i$ and $p^j$ equivalent exactly when $p^i \Leftrightarrow p^j$.
+% Now we consider $p^i$ equivalent to $p^j$ whenever there exists a $k$
+% such that $p^i$ is equivalent to $p^j$ up to an iterate of $q$.  This
+% concept naturally comes in two versions, a left-handed conjugate,
+% $\divgl{p}{q}$ where $p^i \Leftrightarrow q^k \circledcirc p^j$; and
+% a right-handed conjugate,
+% $\divgr{p}{q}$ where $p^i \Leftrightarrow p^j \circledcirc q^k$.
+% In other words, we can use some iterate of $q$ to ``mediate'' the equivalence.
+% Of course, if we pick $q$ to be the identity, this reduces to the previous
+% definition.
 
--- A bit more formally, the objects of this groupoid will be the same as
--- the objects of~$\order{p}$.  Then two such arbitrary objects
--- $\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$ will
--- be (left) related if there exists an iterate $\triple{k}{r_k}{\alpha}$ in
--- $\iter{q}$, such that $r_1 \isotwo (r_k \odot r_2)$, and right related
--- if $r_1 \isotwo (r_2 \odot r_k)$.  This
--- is the first groupoid we define which has a non-trivial identification
--- of morphisms, and thus is a \emph{weak} groupoid.  The important parts
--- of this can be rendered in Agda as follows.
+% A bit more formally, the objects of this groupoid will be the same as
+% the objects of~$\order{p}$.  Then two such arbitrary objects
+% $\triple{k_1}{r_1}{\alpha_1}$ and $\triple{k_2}{r_2}{\alpha_2}$ will
+% be (left) related if there exists an iterate $\triple{k}{r_k}{\alpha}$ in
+% $\iter{q}$, such that $r_1 \isotwo (r_k \odot r_2)$, and right related
+% if $r_1 \isotwo (r_2 \odot r_k)$.  This
+% is the first groupoid we define which has a non-trivial identification
+% of morphisms, and thus is a \emph{weak} groupoid.  The important parts
+% of this can be rendered in Agda as follows.
 
--- \begin{code}
--- conjlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
--- conjlC {τ} p q = record {
---     Obj = Iter p
---  ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
---           (Iter.q s ⇔ (Iter.q iq ◎ Iter.q t))
---  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
---  ; id = λ {A} → zeroth q , idl◎r
---  ; _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!} -- elided
---  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
---  ; ∘-resp-≡ = {!!} -- elided
---  }
--- \end{code}
--- \noindent and right conjugacy is similar.
+% \begin{code}
+% conjlC : {τ : U} → (p q : τ ⟷ τ) → Category _ _ _
+% conjlC {τ} p q = record {
+%     Obj = Iter p
+%  ; _⇒_ =  λ s t → Σ[ iq ∈ Iter q ]
+%           (Iter.q s ⇔ (Iter.q iq ◎ Iter.q t))
+%  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
+%  ; id = λ {A} → zeroth q , idl◎r
+%  ; _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!} -- elided
+%  ; equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+%  ; ∘-resp-≡ = {!!} -- elided
+%  }
+% \end{code}
+% \noindent and right conjugacy is similar.
 
--- \begin{lemma}
---   $|\divgl{p}{q}∣ = \frac{\ord{p}}{\ord{q}}$
--- \end{lemma}
--- \begin{proof}
---   Let $m = \ord{p}$ and $n = \ord{q}$. \amr{sketch proof}
--- \end{proof}
+% \begin{lemma}
+%   $|\divgl{p}{q}∣ = \frac{\ord{p}}{\ord{q}}$
+% \end{lemma}
+% \begin{proof}
+%   Let $m = \ord{p}$ and $n = \ord{q}$. \amr{sketch proof}
+% \end{proof}
 
--- As an example, the groupoid $\divgl{\permtwo}{\permfive}$ can be represented as follows:
+% As an example, the groupoid $\divgl{\permtwo}{\permfive}$ can be represented as follows:
 
--- \begin{center}
--- \begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
---   \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+% \begin{center}
+% \begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
+%   \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
 
---   \node[below] at (-8,0) {$\ldots$};
---   \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
---   \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
---   \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
---   \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
---   \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
---   \node[below] at (8,0) {$\ldots$};
+%   \node[below] at (-8,0) {$\ldots$};
+%   \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
+%   \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
+%   \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
+%   \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
+%   \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
+%   \node[below] at (8,0) {$\ldots$};
 
---   \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
---   \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
---   \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
-
-
--- \end{tikzpicture}
--- \end{center}
+%   \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
+%   \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+%   \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
 
 
--- % The groupoid $\order{p}$ can be thought of as
--- % $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
--- % of as $\divg{\idiso}{p}$. The two previous constructions can therefore
--- % be generalized to allow arbitrary combinators in both the numerator
--- % and denominator.
+% \end{tikzpicture}
+% \end{center}
 
--- % Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
--- % of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
--- % is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
--- % $\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
--- % $\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
--- % $(q_1 \odot q) \isotwo (q \odot q_2)$. As before, the morphisms are
--- % not all independent: two morphisms are identified if their $q$
--- % components are related by $\isotwo$.
 
--- % When $r$ is $\idiso$, this construction reduces to $\order{p}$. When $p$
--- % is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
--- % cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
--- % for the Agda construction.)
+% % The groupoid $\order{p}$ can be thought of as
+% % $\divg{p}{\idiso}$. Similarly the groupoid $\iorder{p}$ can be thought
+% % of as $\divg{\idiso}{p}$. The two previous constructions can therefore
+% % be generalized to allow arbitrary combinators in both the numerator
+% % and denominator.
+
+% % Formally, given two 1-combinators $p, r : \tau\iso\tau$, the objects
+% % of $\divg{p}{r}$ are all the iterates $\iter{p}$, the numerator. There
+% % is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and
+% % $\triple{k_2}{q_2}{\alpha_2}$ if there exists an iterate
+% % $\triple{k}{q}{\alpha}$ in $\iter{r}$, the denominator, such that
+% % $(q_1 \odot q) \isotwo (q \odot q_2)$. As before, the morphisms are
+% % not all independent: two morphisms are identified if their $q$
+% % components are related by $\isotwo$.
+
+% % When $r$ is $\idiso$, this construction reduces to $\order{p}$. When $p$
+% % is $\idiso$, this construction reduces to $\iorder{r}$. Generally, the
+% % cardinality of $\divg{p}{r}$ is $\frac{\ord{p}}{\ord{r}}$. (See Appendix
+% % for the Agda construction.)
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Sums and Products of Iteration and Symmetry Groupoids}
