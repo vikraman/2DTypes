@@ -349,10 +349,15 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
   \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
   \node[below] at (8,0) {$\ldots$};
 
+  \path[ultra  thick] (A) edge [my loop] node[below] {\texttt{id}} (A);
+  \path[ultra  thick] (B) edge [my loop] node[above] {\texttt{id}} (B);
+  \path[ultra  thick] (C) edge [my loop] node[below] {\texttt{id}} (C);
+  \path[ultra  thick] (D) edge [my loop] node[above] {\texttt{id}} (D);
+  \path[ultra  thick] (E) edge [my loop] node[below] {\texttt{id}} (E);
+
   \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
   \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
   \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
-
 
 \end{tikzpicture}
 \end{center}
@@ -387,7 +392,7 @@ symC τ pp = record {
  ;  _⇒_ = λ _ _ → Iter pp
  ;  _≡_ = λ p q  → Iter.q p ⇔ Iter.q q
  ;  id = zeroth pp
- ;  _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = ?
+ ;  _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = {!!}
  ;  equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
  ;  ∘-resp-≡ = {!!}
  }
@@ -416,17 +421,19 @@ choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
 
   \node[below] at (-8,0) {$\ldots$};
   \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
-  \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
+  \node[below] (B) at (-3,0) {$< -1 , \idiso , \ldots >$};
   \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
-  \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
+  \node[below] (D) at (3,0) {$< 1 , \idiso , \ldots >$};
   \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
   \node[below] at (8,0) {$\ldots$};
 
-  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
-  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
-  \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
+  \path[ultra  thick] (A) edge [my loop] node[below] {$\idiso$} (A);
+  \path[ultra  thick] (A) edge [out=-140, in=-40, looseness=20] node[below] {$\permtwo$} (A);
 
-
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (B);
+  \path[ultra  thick] (B) edge [bend left=50] node[above] {$\alpha_{0,2}$} (C);
+  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (D);
+  \path[ultra  thick] (D) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
 \end{tikzpicture}
 \end{center}
 
