@@ -338,7 +338,7 @@ a set of cardinality $\ord{p}$.
 As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. Up to equivalence, this groupoid is indeed equivalent to a set with two elements $\idiso$ and $\permtwo$.
 
 \begin{center}
-\begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.6}]
   \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
 
   \node[below] at (-8,0) {$\ldots$};
@@ -361,11 +361,11 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
 \subsection{Symmetry Groupoids $\iorder{p}$}
 
 The elements of $\iter{p}$ form a group under the following operation:
-\[\begin{array}{l}
-\triple{k_1}{p_1}{\alpha_1} ~\circ~ \triple{k_2}{p_2}{\alpha_2} = \\
-\qquad  \triple{k_1+k_2}{p_1 \odot p_2}{(\alpha_1 ~\respstwo~
+\[
+\triple{k_1}{p_1}{\alpha_1} ~\circ~ \triple{k_2}{p_2}{\alpha_2} = 
+ \triple{k_1+k_2}{p_1 \odot p_2}{(\alpha_1 ~\respstwo~
     \alpha_2)~\transtwo~(\distiterplus{p}{k_1}{k_2})}
-\end{array}\]
+\]
 where $\distiterplus{p}{k_1}{k_2}$ is defined in
 Lem.~\ref{lem:distiterplus}. The common categorical representation of
 a group is a category with one trivial object and the group elements
@@ -378,8 +378,20 @@ $\iorder{p}$ is the groupoid (2-groupoid technically) whose objects
 are the iterates in $\iter{\idiso_{\top}}$. Every pair of objects is
 connected by the morphisms in $\iter{p}$. To capture the relationship
 between these morphisms, we also have 2-morphisms relating the
-distinct iterates as in the previous section. (See Appendix for the
-Agda construction.)
+distinct iterates as in the previous section. 
+
+\begin{code}
+symC : (τ : U) → (τ ⟷ τ) → Category _ _ _
+symC τ pp = record {
+    Obj = Iter {τ} (Prim id⟷)
+ ;  _⇒_ = λ _ _ → Iter pp
+ ;  _≡_ = λ p q  → Iter.q p ⇔ Iter.q q
+ ;  id = zeroth pp
+ ;  _∘_ = {!!}; assoc = {!!}; identityˡ = {!!}; identityʳ = ?
+ ;  equiv = record { refl = id⇔ ; sym = 2! ; trans = _●_ }
+ ;  ∘-resp-≡ = {!!}
+ }
+\end{code}
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$
@@ -397,6 +409,27 @@ Note that for each power $p ^ i$ of $p$, there is a morphism
 $\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$
 to the identity. Note also that everything is well-defined even if we
 choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.6}]
+  \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+
+  \node[below] at (-8,0) {$\ldots$};
+  \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
+  \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
+  \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
+  \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
+  \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
+  \node[below] at (8,0) {$\ldots$};
+
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
+  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+  \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
+
+
+\end{tikzpicture}
+\end{center}
+
 
 % %%%%%%%%%%%%%%%%%%%%%%%
 % \subsection{\DG{s} $\divgl{p}{q}$ and $\divgr{p}{q}$}
