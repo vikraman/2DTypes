@@ -39,24 +39,50 @@ manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
 %%%%%%%%%%%
 \subsection{Types and Combinators}
 
-We begin by defining two new syntactic categories to the definition of $\Pi$ in
-Sec.~\ref{opsempi}.
+We begin by adding two new syntactic categories to the definition of $\Pi$ in
+Sec.~\ref{opsempi}:
 
+\newcommand{\ft}{\mathbb{T}}
 
 \[\begin{array}{lrcl}
 (\textrm{Types}) & \tau &::=& \ldots \\
 (\textrm{Values}) & v &::=& \ldots \\
-(\textrm{1-combinators}) & c &::=& \ldots \\
-(\textrm{2-combinators}) & \alpha &::=& \ldots \\
+(\textrm{1-combinators}) & c &:& \tau_1 \iso \tau_2 ~::= \ldots \\
+(\textrm{2-combinators}) & \alpha &:& c_1 \isotwo c_2 \mbox{~where~}
+  c_1, c_2 : \tau_1 \iso \tau_2 ~::= \ldots \\
 \\
 (\textrm{Fractional Types}) & \mathbb{T} &::=&
-  \order{c} \alt \iorder{c} \alt \mathbb{T} \circledast \mathbb{T} \\
-(\textrm{Frac-combinators}) & \rho : \mathbb{T} \leftrightsquigarrow \mathbb{T} &::=&
-     \idiso/ \alt (\rho \circledcirc \rho) \alt (\rho \circledast \rho) \\
+  \order{c} \alt \iorder{c} \alt \mathbb{T}_1 \circledast \mathbb{T}_2 \\
+(\textrm{/-combinators}) & \rho &:& \mathbb{T}_1 \leftrightsquigarrow \mathbb{T}_2 ~::= \\
+& &&     \idiso/ \alt \rho \circledcirc \rho \alt \rho \circledast \rho \\
 & &\alt& \unitetl/ \alt \unititl/ \alt \unitetr/ \alt \unititr/ \\
 & &\alt& \swapt/ \alt \assoclt/ \alt \assocrt/ \\
-& &\alt& \order{\alpha} \alt \eta \alt \epsilon
+& &\alt& \order{\alpha} \alt \eta_{\ft} \alt \epsilon_{\ft}
 \end{array}\]
+
+The syntactic category $\ft$ of fractional types introduces type expressions for
+iteration groupoids, symmetry groupoids, and their products. The combinators
+that relate these fractional types fall into several groups. The first line
+ensure that the combinators include the identity and sequential composition
+$\circledcirc$, and can be applied anywhere inside a product $\circledast$. The
+next two lines ensure that $\circledast$ carries a symmetric monoidal structure
+with combinators witnessing unit, commutativity, and associativity. The last
+line relates two types $\order{c_1}$ and $\order{c_2}$ via $\order{\alpha}$
+whenever $\alpha : c_1 \isotwo c_2$. Indeed if $c_1$ and $c_2$ are considered
+equivalent via a 2-combinator then we also consider their iteration groupoids to
+be equivalent. The last two combinators $\eta_{\ft}$ and $\epsilon_{\ft}$ are
+inspired from the definition of compact closed categories~\cite{ccc} which are
+symmetric monoidal categories in which every object has a dual. In that setting,
+the dual $A^*$ of an object $A$ comes equipped with two morphisms:
+\begin{itemize}
+\item a \emph{unit} $\eta_A : \ot \rightarrow A^* \otimes A$, and
+\item a \emph{counit} $\epsilon_A : A \otimes A^* \rightarrow \ot$
+\end{itemize}
+that satisfy appropriate coherence conditions.
+
+
+
+
 
 \amr{wavefront}
 
