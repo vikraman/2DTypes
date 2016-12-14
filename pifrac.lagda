@@ -39,7 +39,7 @@ manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
 %%%%%%%%%%%
 \subsection{Types and Combinators}
 
-We begin by adding two new syntactic categories to the definition of $\Pi$ in
+We begin by adding three new syntactic categories to the definition of $\Pi$ in
 Sec.~\ref{opsempi}:
 
 \newcommand{\ft}{\mathbb{T}}
@@ -53,11 +53,13 @@ Sec.~\ref{opsempi}:
 \\
 (\textrm{Fractional Types}) & \mathbb{T} &::=&
   \order{c} \alt \iorder{c} \alt \mathbb{T}_1 \circledast \mathbb{T}_2 \\
-(\textrm{/-combinators}) & \rho &:& \mathbb{T}_1 \leftrightsquigarrow \mathbb{T}_2 ~::= \\
+(\textrm{/-combinators}) & \rho &:& \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::= \\
 & &&     \idiso/ \alt \rho \circledcirc \rho \alt \rho \circledast \rho \\
 & &\alt& \unitetl/ \alt \unititl/ \alt \unitetr/ \alt \unititr/ \\
 & &\alt& \swapt/ \alt \assoclt/ \alt \assocrt/ \\
-& &\alt& \order{\alpha} \alt \eta_{\ft} \alt \epsilon_{\ft}
+& &\alt& \order{\alpha} \alt \eta_{\ft} \alt \epsilon_{\ft} \\
+(\textrm{//-combinators}) & \varrho &:& \rho_1 \leftrightblackspoon \rho_2 \mbox{~where~}
+  \rho_1, \rho_2 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::= \ldots
 \end{array}\]
 
 The syntactic category $\ft$ of fractional types introduces type expressions for
@@ -75,10 +77,11 @@ inspired from the definition of compact closed categories~\cite{ccc} which are
 symmetric monoidal categories in which every object has a dual. In that setting,
 the dual $A^*$ of an object $A$ comes equipped with two morphisms:
 \begin{itemize}
-\item a \emph{unit} $\eta_A : \ot \rightarrow A^* \otimes A$, and
-\item a \emph{counit} $\epsilon_A : A \otimes A^* \rightarrow \ot$
+\item a \emph{unit} $\eta_A : 1 \rightarrow A^* \otimes A$, and
+\item a \emph{counit} $\epsilon_A : A \otimes A^* \rightarrow 1$
 \end{itemize}
-that satisfy appropriate coherence conditions.
+that satisfy appropriate coherence conditions. These conherence conditions are
+added as terms in the $\varrho$ syntactic category.
 
 
 

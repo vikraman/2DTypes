@@ -9,13 +9,14 @@
 \usepackage{multicol}
 \usepackage{proof}
 \usepackage{stmaryrd}
-\usepackage{mathrsfs}
-\usepackage{mathabx}
+%% \usepackage{mathrsfs}
+%% \usepackage{mathabx}
 \usepackage{bussproofs}
 \usepackage{tikz}
 \usepackage{tikz-cd}
 \usetikzlibrary{quotes}
 \usepackage[section]{placeins}
+\usepackage{fdsymbol}
 
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Amr says: #1}\end{minipage}}}
 \newcommand{\vic}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Vikraman says: #1}\end{minipage}}}
@@ -23,6 +24,7 @@
 
 \newcommand{\hide}[1]{}
 
+\newcommand{\hash}{\#}
 \newcommand{\dg}{conjugation groupoid}
 \newcommand{\DG}{Conjugation Groupoid}
 \newcommand{\pifrac}{\ensuremath{\Pi^/}}
