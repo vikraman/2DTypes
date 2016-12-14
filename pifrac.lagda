@@ -65,8 +65,8 @@ Sec.~\ref{opsempi}:
 The syntactic category $\ft$ of fractional types introduces type expressions for
 iteration groupoids, symmetry groupoids, and their products. The combinators
 that relate these fractional types fall into several groups. The first line
-ensure that the combinators include the identity and sequential composition
-$\circledcirc$, and can be applied anywhere inside a product $\circledast$. The
+ensures that the combinators include the identity and sequential composition
+$\circledcirc$ and can be applied anywhere inside a product $\circledast$. The
 next two lines ensure that $\circledast$ carries a symmetric monoidal structure
 with combinators witnessing unit, commutativity, and associativity. The last
 line relates two types $\order{c_1}$ and $\order{c_2}$ via $\order{\alpha}$
