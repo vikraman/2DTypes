@@ -29,23 +29,36 @@ infixr 60 _●_
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$: Types, Values, and Combinators}
+\section{$\Pi^/$ and its Compact Closed Category}
 
-We are now ready to turn the semantic treatment of groupoids from the previous
-section into an actual programming language. The language $\Pi^/$ will be an
-extension of $\Pi$ with new type constructors and new combinators for creating
-and manipulating syntactic counterparts to $\divgl{p}{q}$ and
-$\divgr{p}{q}$. Every computation in $\Pi^/$ will also be reversible and
-information preserving but with the added expressiveness of being able to create
-and annihilate ``negative information''.
-
-%%%%%%%%%%%
-\subsection{Multiplicative Inverses}
+We are now ready to turn the groupoid constructions from the previous section
+into an actual programming language. The language $\Pi^/$ will be an extension
+of $\Pi$ with new type constructors and combinators for creating and
+manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
 
 %%%%%%%%%%%
 \subsection{Types and Combinators}
 
-We begin by defining two mutually recursive syntactic categories
+We begin by defining two new syntactic categories to the definition of $\Pi$ in
+Sec.~\ref{opsempi}.
+
+
+\[\begin{array}{lrcl}
+(\textrm{Types}) & \tau &::=& \ldots \\
+(\textrm{Values}) & v &::=& \ldots \\
+(\textrm{1-combinators}) & c &::=& \ldots \\
+(\textrm{2-combinators}) & \alpha &::=& \ldots \\
+\\
+(\textrm{Fractional Types}) & \tau &::=& \order{c} \alt \iorder{c} \alt \tau \times \tau \\
+(\textrm{Frac-combinators}) & \rho : \tau \isotwo \tau &::=&
+     \idiso \alt (\rho \odot \rho) \alt (\rho \times \rho) \\
+& && \unitetl \alt \unititl \alt \unitetr \alt \unititr \alt \swapt \alt \assoclt \alt \assocrt \\
+& && \eta \alt \epsilon
+\end{array}\]
+
+\amr{wavefront}
+
+mutually recursive syntactic categories
 \AgdaDatatype{U} and \AgdaDatatype{⟷} of types and 1-combinators. The
 definition of types is identical to the presentation of $\Pi$ in
 Sec.~\ref{sec:pi} except for the addition of type constructors for
