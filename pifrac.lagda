@@ -55,7 +55,7 @@ Sec.~\ref{opsempi}.
      \idiso/ \alt (\rho \circledcirc \rho) \alt (\rho \circledast \rho) \\
 & &\alt& \unitetl/ \alt \unititl/ \alt \unitetr/ \alt \unititr/ \\
 & &\alt& \swapt/ \alt \assoclt/ \alt \assocrt/ \\
-& &\alt& \eta \alt \epsilon
+& &\alt& \order{\alpha} \alt \eta \alt \epsilon
 \end{array}\]
 
 \amr{wavefront}
