@@ -49,11 +49,13 @@ Sec.~\ref{opsempi}.
 (\textrm{1-combinators}) & c &::=& \ldots \\
 (\textrm{2-combinators}) & \alpha &::=& \ldots \\
 \\
-(\textrm{Fractional Types}) & \tau &::=& \order{c} \alt \iorder{c} \alt \tau \times \tau \\
-(\textrm{Frac-combinators}) & \rho : \tau \isotwo \tau &::=&
-     \idiso \alt (\rho \odot \rho) \alt (\rho \times \rho) \\
-& && \unitetl \alt \unititl \alt \unitetr \alt \unititr \alt \swapt \alt \assoclt \alt \assocrt \\
-& && \eta \alt \epsilon
+(\textrm{Fractional Types}) & \mathbb{T} &::=&
+  \order{c} \alt \iorder{c} \alt \mathbb{T} \circledast \mathbb{T} \\
+(\textrm{Frac-combinators}) & \rho : \mathbb{T} \leftrightsquigarrow \mathbb{T} &::=&
+     \idiso/ \alt (\rho \circledcirc \rho) \alt (\rho \circledast \rho) \\
+& &\alt& \unitetl/ \alt \unititl/ \alt \unitetr/ \alt \unititr/ \\
+& &\alt& \swapt/ \alt \assoclt/ \alt \assocrt/ \\
+& &\alt& \eta \alt \epsilon
 \end{array}\]
 
 \amr{wavefront}
