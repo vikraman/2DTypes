@@ -607,8 +607,8 @@ reversible functions between finite sets, eventually wrapping around
 at some number which represents the \emph{order} of the underlying
 permutation.
 
-\begin{definition}[Power of a 1-combinator]
-  The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
+\begin{definition}[Iterated Power of a 1-combinator]
+  The $k^{th}$ iterated power of a 1-combinator $p : \tau \iso \tau$, for
   $k \in \Z$ is
   \[
     p^k =
@@ -659,24 +659,7 @@ power of combinators and their order.
 \section{From Sets to Groupoids}
 \label{sec:groupoids}
 
-From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite set, a
-$\Pi$ 1-combinator denotes a permutation on finite sets, and the 2-combinators
-denote coherence conditions on these permutations~\cite{Carette2016}. Formally,
-the language $\Pi$ is a \emph{categorification}~\cite{math/9802029} of the
-natural numbers as a \emph{symmetric rig groupoid}~\cite{nlabrig}. This
-structure is a \emph{symmetric bimonoidal category} or a \emph{commutative rig
-category} in which every morphism is invertible. The underlying category
-consists of two symmetric monoidal structures~\cite{nla.cat-vn1051288}
-separately induced by the properties of addition and multiplication of the
-natural numbers. The monoidal structures are then augmented with distributivity
-and absorption natural isomorphisms~\cite{laplaza} to model the full commutative
-semiring (aka, commutative rig) of the natural numbers. Despite this rich
-structure, the individual objects in the category for $\Pi$ are just plain sets
-with no interesting structure. In this section we introduce, in the denotation
-of $\Pi$, some non-trivial groupoids which we call \emph{iteration groupoids}
-and \emph{symmetry groupoids}. Under certain conditions, sums and products of
-these groupoids behave as expected which ensures that a sensible compositional
-programming language can be designed around them.
+From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite set, a $\Pi$ 1-combinator denotes a permutation on finite sets, and the 2-combinators denote coherence conditions on these permutations~\cite{Carette2016}. Formally, the language $\Pi$ is a \emph{categorification}~\cite{math/9802029} of the natural numbers as a \emph{symmetric rig groupoid}~\cite{nlabrig}. This structure is a \emph{symmetric bimonoidal category} or a \emph{commutative rig category} in which every morphism is invertible. The underlying category consists of two symmetric monoidal structures~\cite{nla.cat-vn1051288} separately induced by the properties of addition and multiplication of the natural numbers. The monoidal structures are then augmented with distributivity and absorption natural isomorphisms~\cite{laplaza} to model the full commutative semiring (aka, commutative rig) of the natural numbers. Despite this rich structure, the individual objects in the category for $\Pi$ are just plain sets with no interesting structure. In this section we introduce, in the denotation of $\Pi$, some non-trivial groupoids which we call \emph{iteration groupoids} and \emph{symmetry groupoids}. Products of these groupoids behave as expected which ensures that a sensible compositional programming language can be designed around them.
 
 %%%%%
 \subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
@@ -853,41 +836,29 @@ The previous construction is quite useful: it allows us to take a set of
 cardinality $N$ and a permutation on that set of order $P$ to construct a
 groupoid of cardinality $\frac{N}{P}$. Although this idea allows us to construct
 a groupoid of cardinality $\frac{3}{2}$ as shown above, it is not expressive
-enough to construct a groupoid of cardinality $\frac{1}{3}$. Indeed if the
+enough to construct a groupoid of cardinality, say, $\frac{1}{3}$. Indeed if the
 underlying set has only one element, the only permutation is the identity and
-$P$ must be 1. The construction, however, already contains the main ingredient
-needed for the construction of more general groupoids with fractional
-cardinality. This key piece is the set of iterates of a combinator which we will
-use in two different ways: (i) a perspective of combinators-as-data in which the
-iterates of a combinator $p$ become the objects of groupoid $\order{p}$ of
-cardinality $\ord{p}$, and (ii) a perspective of combinators-as-symmetries in
-which the iterates of a combinator $p$ become the internal symmetries of a
-one-element groupoid $\iorder{p}$ of cardinality $\frac{1}{\ord{p}}$. We explain
-these two perspectives in this section and the next.
+$P$ must be 1.
 
-We define the $k^{\text{th}}$ iterate of $p$ as:
+The construction, however, already contains the main ingredient needed for the construction of more general groupoids with fractional cardinality. This key piece is the set of iterates of a combinator which we formally define as follows.
 
-and then collect all such iterates into a type
+\begin{definition}[$\iter{p}$]
+For each 1-combinator $p : \tau\iso\tau$, we form the set $\iter{p}$ whose elements are triples consisting of an integer $k$, a 1-combinator $q : \tau\iso\tau$ and a 2-combinator $\alpha : q \isotwo p^k$.
+\end{definition}
+Each triple encodes our knowledge that we have some (arbitrary) iterate $q$ of $p$; we do not have any a priori knowledge of the actual syntactic structure of $q$, but we do know that it is equivalent to $p^k$. For example, we have:
+\[\begin{array}{rcl}
+ \iter{\permtwo} &=& \{ \triple{0}{\idiso}{\idisotwo},\triple{1}{\permtwo}{\idrdr}, \triple{-1}{\permtwo}{\idisotwo}, \ldots \}
+\end{array}\]
+The idea is that $\iter{\permtwo}$ is, up to equivalence, the set of all distinct iterates $(\permtwo)^k$ of $\permtwo$.  Because of the underlying group structure of automorphisms, there are, up to equivalence, only $\ord{\permtwo}$ distinct iterates in $\iter{\permtwo}$.  In a proof-irrelevant setting, $\iter{\permtwo}$ is simply $\{ \idiso, \permtwo \}$. In this section and the next, we will use the elements of $\iter{p}$ in two groupoid constructions as either objects (emphasizing their ``data'' aspect) or morphisms (emphasizing their ``symmetry'' aspect).
 
-\noindent For example, the zeroth and first iterate of a combinator are represented as
+Given a 1-combinator $p : \tau\iso\tau$, we define the groupoid $\order{p}$ as follows. The objects are the elements of $\iter{p}$, i.e., the triples $\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators $q : \tau\iso\tau$, and 2-combinators $\alpha : q \isotwo p^k$. We then add (reversible) morphisms between any iterates related by 2-combinators; categorically, this will make any such objects equivalent.  If $p$ has order $o$, Lem.~\ref{lem:ordercancel} gives us a 2-combinator $\alpha$ which witnesses that $p^i \isotwo p^{i+o}$.  Thus given two iterates $\triple{i}{q_i}{\alpha_i}$ and $\triple{i+o}{q_j}{\alpha_j}$, they must be equivalent since $\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.  In other words $p^j$ will be equivalent to $p^k$ exactly when $j$ and $k$ differ by $o$.  This informal description formalizes straightforwardly.
 
-These ingredients are sufficient to construct a groupoid $\order{p}$ from the
-iterates of a 1-combinator $p : \tau\iso\tau$. The objects will be
-the triples $\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators $q :
-\tau\iso\tau$, and 2-combinators $\alpha : q \isotwo p^k$. This triple encodes
-our knowledge that we have some (arbitrary) iterate $q$ of $p$; we do not have
-any a priori knowledge of the actual syntactic structure of $q$, but we do
-know that it is equivalent to $p ^ k$.
-
-We then add (reversible!) morphisms between any iterates related by
-2-combinators; categorically, this will make any such objects equivalent.
-If $p$ has order $o$, Lem.~\ref{lem:ordercancel} gives us a
-2-combinator $\alpha$ which witnesses that $p^i \isotwo p^{i+o}$.
-Thus given two iterates $\triple{i}{q_i}{\alpha_i}$ and
-$\triple{i+o}{q_j}{\alpha_j}$, they must be equivalent since
-$\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.
-In other words $p^j$ will be equivalent to $p^k$ exactly when $j$ and $k$
-differ by $o$.  This informal description formalizes straightforwardly:
+\begin{definition}[$\order{p}$] For each 1-combinator $p : \tau\iso\tau$, we form the groupoid $\order{p}$ as follows:
+\begin{itemize}
+\item objects are the elements $\triple{k}{q}{\alpha}$ of $\iter{p}$;
+\item there is a morphism between $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ for each $\alpha : q_1 \isotwo q_2$
+\end{itemize}
+\end{definition}
 
 Despite its involved internal structure, the groupoid $\order{p}$ is essentially
 a set of cardinality $\ord{p}$.
@@ -919,9 +890,9 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
   \node[below] at (8,0) {$\ldots$};
 
   \path[ultra  thick] (A) edge [my loop] node[below] {\texttt{id}} (A);
-  \path[ultra  thick] (B) edge [my loop] node[above] {\texttt{id}} (B);
+  \path[ultra  thick] (B) edge [my loop] node[below] {\texttt{id}} (B);
   \path[ultra  thick] (C) edge [my loop] node[below] {\texttt{id}} (C);
-  \path[ultra  thick] (D) edge [my loop] node[above] {\texttt{id}} (D);
+  \path[ultra  thick] (D) edge [my loop] node[below] {\texttt{id}} (D);
   \path[ultra  thick] (E) edge [my loop] node[below] {\texttt{id}} (E);
 
   \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
@@ -940,19 +911,17 @@ The elements of $\iter{p}$ form a group under the following operation:
  \triple{k_1+k_2}{p_1 \odot p_2}{(\alpha_1 ~\respstwo~
     \alpha_2)~\transtwo~(\distiterplus{p}{k_1}{k_2})}
 \]
-where $\distiterplus{p}{k_1}{k_2}$ is defined in
-Lem.~\ref{lem:distiterplus}. The common categorical representation of
-a group is a category with one trivial object and the group elements
-as morphisms on that trivial object. Our construction is essentially
-the same except that the trivial object is represented as the iterates
-of the identity over a singleton type.
+where $\distiterplus{p}{k_1}{k_2}$ is defined in Lem.~\ref{lem:distiterplus}. The common categorical representation of a group is a category with one trivial object and the group elements as morphisms on that trivial object. Our construction of the groupoid $\iorder{p}$ is essentially the same.
 
-Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
-$\iorder{p}$ is the groupoid (2-groupoid technically) whose objects
-are the iterates in $\iter{\idiso_{\top}}$. Every pair of objects is
-connected by the morphisms in $\iter{p}$. To capture the relationship
-between these morphisms, we also have 2-morphisms relating the
-distinct iterates as in the previous section.
+\begin{definition}[$\iorder{p}$] For each 1-combinator $p : \tau\iso\tau$, we form the 2-groupoid $\iorder{p}$ as follows:
+\begin{itemize}
+\item the objects are the iterates of the identity combinator on $\tau$;
+\item the morphisms between every pair of objects are the elements of $\iter{p}$;
+\item there is a 2-morphisms between between 1-morphisms $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ for each $\alpha : q_1 \isotwo q_2$ for every $\alpha : q_1 \isotwo q_2$
+\end{itemize}
+\end{definition}
+
+Note that for each power $p ^ i$ of $p$, there is a morphism $\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$ to the identity. Note also that everything is well-defined even if we choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$
@@ -966,14 +935,11 @@ distinct iterates as in the previous section.
   $\frac{1}{o}$.
 \end{proof}
 
-Note that for each power $p ^ i$ of $p$, there is a morphism
-$\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$
-to the identity. Note also that everything is well-defined even if we
-choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
+As an example, the groupoid $\iorder{(\permtwo)}$ can be represented as follows.
 
 \begin{center}
 \begin{tikzpicture}[scale=0.6,every node/.style={scale=0.6}]
-  \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+  \draw[dashed] (0,-0.3) ellipse (9cm and 3cm);
 
   \node[below] at (-8,0) {$\ldots$};
   \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
@@ -984,18 +950,27 @@ choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
   \node[below] at (8,0) {$\ldots$};
 
   \path[ultra  thick] (A) edge [my loop] node[below] {$\idiso$} (A);
-  \path[ultra  thick] (A) edge [out=-140, in=-40, looseness=20] node[below] {$\permtwo$} (A);
+  \path[ultra  thick] (B) edge [my loop] node[below] {$\idiso$} (B);
+  \path[ultra  thick] (C) edge [my loop] node[below] {$\idiso$} (C);
+  \path[ultra  thick] (D) edge [my loop] node[below] {$\idiso$} (D);
+  \path[ultra  thick] (E) edge [my loop] node[below] {$\idiso$} (E);
 
   \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (B);
   \path[ultra  thick] (B) edge [bend left=50] node[above] {$\alpha_{0,2}$} (C);
   \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (D);
   \path[ultra  thick] (D) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+
+  \path[ultra  thick] (A) edge [out=-140, in=-40, looseness=10] node[below] {$\permtwo$} (A);
+  \path[ultra  thick] (B) edge [out=-140, in=-40, looseness=10] node[below] {$\permtwo$} (B);
+  \path[ultra  thick] (C) edge [out=-140, in=-40, looseness=10] node[below] {$\permtwo$} (C);
+  \path[ultra  thick] (D) edge [out=-140, in=-40, looseness=10] node[below] {$\permtwo$} (D);
+  \path[ultra  thick] (E) edge [out=-140, in=-40, looseness=10] node[below] {$\permtwo$} (E);
 \end{tikzpicture}
 \end{center}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Sums and Products of Iteration and Symmetry Groupoids}
+\subsection{Products of Iteration and Symmetry Groupoids}
 
 If we are to build a compositional programming language around iteration and
 symmetry groupoids, we need to ensure that they compose sensibly with the
@@ -1007,14 +982,12 @@ such as:
 \[
 \order{p} \otimes \iorder{p} \simeq \mathbb{1}
 \]
-The groupoids on either side are not categorically equivalent but they
-do have the same cardinality. Thus if we focus on
-cardinality-preserving morphisms, it is sensible to consider them
-equivalent. The situation is subtle, however, and studied in detail in
-the next section.
+The groupoids on either side are not categorically equivalent but they do have the same cardinality. Thus if we focus on some notion of cardinality-preserving morphisms, it is sensible to consider them equivalent. The situation is however subtle and does not directly support a notion of sums. It is studied in detail in the next section.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
+
+***WAVEFRONT***
 
 We are now ready to turn the groupoid constructions from the previous section
 into an actual programming language. The language $\Pi^/$ will be an extension
