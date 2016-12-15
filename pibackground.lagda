@@ -236,7 +236,7 @@ of 1-combinators. As a small example, let us abbreviate $\ot \oplus \ot$ as the
 type $\mathbb{2}$ of booleans and examine two possible implementations of
 boolean negation. The first directly uses the primitive combinator
 $\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to exchange the two
-values of type $\mathbb{2}$; the second use three consecutive uses of $\swapp$
+values of type~$\mathbb{2}$; the second use three consecutive uses of $\swapp$
 to achieve the same effect:
 \[\begin{array}{rcl}
 \mathsf{not_1} &=& \swapp \\
@@ -248,24 +248,22 @@ We can write a 2-combinator whose \emph{type} is $\mathsf{not_2}
 (\linvdl ~\respstwo~ \idisotwo)~\transtwo~\idldl
 \]
 which not only shows the equivalence of the two implementations of negation but
-also shows \emph{how} to transform one to the other. In this example, we focus
-on the first two occurrences of $\swapp$ and use $\linvdl$ to reduce them to
-$\idiso$ since they are inverses. We then use $\idldl$ to simplify the
+also shows \emph{how} to transform one to the other. This rewriting focuses
+on the first two occurrences of $\swapp$ and uses $\linvdl$ to reduce them to
+$\idiso$ since they are inverses. It then uses $\idldl$ to simplify the
 composition of $\idiso$ with $\swapp$ to just $\swapp$.
 
-Fig.~\ref{pi-combinators} lists all the 1-combinators which consist of
-base combinators (top) and compositions (bottom). Each
-line of the base combinators introduces a pair of dual
-constants\footnote{where $\swapp$ and $\swapt$ are self-dual.} that
-witness the type isomorphism in the middle. This set of isomorphisms
-is known to be sound and
-complete~\cite{Fiore:2004,fiore-remarks}. Fig.~\ref{pi-combinators2}
-lists a few of the 2-combinators that we use in this paper. Each
-2-combinator relates two 1-combinators of the same type and witnesses
-their equivalence. Both 1-combinators and 2-combinators are invertible
-and the 2-combinators behave as expected with respect to inverses of
-1-combinators.  As the full set of 2-combinators has $113$ entries, we
-only show a few of them here.
+Fig.~\ref{pi-combinators} lists all the 1-combinators which consist of base
+combinators (top) and compositions (bottom). Each line of the base combinators
+introduces a pair of dual constants\footnote{where $\swapp$ and $\swapt$ are
+self-dual.} that witness the type isomorphism in the middle. This set of
+isomorphisms is known to be sound and
+complete~\cite{Fiore:2004,fiore-remarks}. As the full set of 2-combinators has
+$113$ entries, Fig.~\ref{pi-combinators2} lists a few of the 2-combinators that
+we use in this paper. Each 2-combinator relates two 1-combinators of the same
+type and witnesses their equivalence. Both 1-combinators and 2-combinators are
+invertible and the 2-combinators behave as expected with respect to inverses of
+1-combinators.
 
 \begin{proposition}
 For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
@@ -357,7 +355,7 @@ Tracing the evaluation of $\permtwo$ on each of the possible inputs yields:
 Thus the effect of combinator $\permtwo$ is to swap the values
 $\inl{\inl{\unitv}}$ and $\inl{\inr{\unitv}}$ leaving the value
 $\inr{\unitv}$ intact. In other words, the effect of $\permtwo$
-can be visualized are giving the tree
+can be visualized as giving the tree:
 \begin{center}
 \begin{tikzpicture}[level distance=0.5cm]
   \node {$\cdot$}
@@ -371,25 +369,19 @@ can be visualized are giving the tree
 
 These trees should also make it clear why mathematicians shorten
 their notation to
-\[
-\begin{pmatrix}
+$\begin{pmatrix}
 0 & 1 & 2 \\
 1 & 0 & 2 \\
-\end{pmatrix}
-\]
+\end{pmatrix}$
 for the same permutation.  We will not do so, as this
 notation is \emph{untyped}, as it does not enforce that
 the shape of the tree is preserved.
 
-Iterating $\permtwo$ again is therefore equivalent
-to the identity permutation, which can be verified using
-2-combinators:
-\[\begin{array}{rcl}
-\permtwo \odot \permtwo &=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\
-&\isotwo& (\swapp \odot \swapp) \oplus (\idiso \odot \idiso) \\
-&\isotwo& \idiso \oplus \idiso \\
-&=& \idiso
-\end{array}\]
+Iterating $\permtwo$ again is equivalent to the identity permutation, which can
+be verified using 2-combinators: \[\begin{array}{rcl} \permtwo \odot \permtwo
+&=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\ &\isotwo& (\swapp
+\odot \swapp) \oplus (\idiso \odot \idiso) \\ &\isotwo& \idiso \oplus \idiso \\
+&=& \idiso \end{array}\]
 
 More generally we can iterate 1-combinators to produce different
 reversible functions between finite sets, eventually wrapping around
@@ -420,11 +412,12 @@ For our example combinators on the type $\mathbb{3}$, simple traces using the
 operational semantics show the combinator $\permone$ is the identity
 permutation; the combinators $\permthree$ and $\permsix$ swap two of the three
 elements leaving the third intact; and the combinators $\permfour$ and
-$\permfive$ rotate the three elements. We therefore have
-$\mathit{order}(\permone)=1$,
-$\mathit{order}(\permtwo)=\mathit{order}(\permthree)=\mathit{order}(\permsix)=2$,
-and $\mathit{order}(\permfour)=\mathit{order}(\permfive)=3$.
-
+$\permfive$ rotate the three elements. We therefore have:
+\[\begin{array}{rcl}
+\mathit{order}(\permone) &=& 1 \\
+\mathit{order}(\permtwo) = \mathit{order}(\permthree) = \mathit{order}(\permsix) &=& 2 \\
+\mathit{order}(\permfour) = \mathit{order}(\permfive) &=& 3
+\end{array}\]
 We should note that the above definition is the only one in this
 paper which is not \emph{effective};  in other words, we do not have an
 algorithm for computing it.  While there is an obvious method to
@@ -474,26 +467,6 @@ power of combinators and their order.
   $k = \ord{p}$.
 \end{lemma}
 
-\paragraph*{Intermezzo.} For an information-theoretic perspective on
-the language $\Pi$, we think of a type containing $N$ values as an
-abstract system that has~$N$ distinguishable states. According to the
-conventional theory of information~\cite{Shannon1948}, the amount of
-information contained in each state of a system with $N$
-distinguishable states is $(\log N)$ bits of information. For example,
-the type $\mathbb{2}$ can be thought of as an abstract system with
-two distinguishable states labeled $\mathsf{true}$ and
-$\mathsf{false}$ each containing $\log 2 = 1$ bit. Similarly, the type
-$\mathbb{3}$ can be thought of as an abstract system with three
-distinguishable states each containing $\log 3$ bits. The logarithmic
-map implies that information contained in a composite state is the sum
-of the information contained in its constituents. For example, the
-type $\mathbb{2} \otimes \mathbb{3}$ can be thought of a composite
-system consisting of two independent unrelated subsystems. Each state
-of the composite system therefore contains
-$\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
-information contained in each subsystem. Since all the combinators
-preserve cardinality, they are also information-preserving.
-
 %%%%%
 \subsection{Agda Formalization}
 
@@ -501,9 +474,9 @@ preserve cardinality, they are also information-preserving.
 % part of the Agda could be relegated to an appendix?  If it is crucial to the
 % story, then this shouldn't just be ``parked'' here, but explained.}
 
-As we will use Agda for explain some of the more subtle concepts later
-in the remainder we rephrase the main definitions and signatures of
-the concepts introduced in this section in Agda.
+As we will use Agda to explain some of the more subtle concepts in the remainder
+of the paper we rephrase the main definitions and signatures of the concepts
+introduced in this section in Agda.
 
 \AgdaHide{\begin{code}
 infix 50 _⊕_

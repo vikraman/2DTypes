@@ -28,7 +28,7 @@ looping/delooping process to future work.
 A second more immediate concern is to discover the abstract monadic and/or
 comonadic structure underlying the operational semantics. It is clear that the
 operational interpretation of fractional types involves a computational effect
-that requires synchronization with the ``future.'' Implementing this effect
+that requires synchronization with the ``future''. Implementing this effect
 using backtracking, reference cells, or dataflow constraints is possible but
 each implementation choice is ad hoc. We conjecture that with the right monadic
 and/or comonadic abstraction, the operational semantics will be simpler and
