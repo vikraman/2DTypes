@@ -2,6 +2,7 @@
 
 \usepackage{amsthm,amstext,amssymb,amsmath}
 \usepackage{datetime}
+\usepackage{fdsymbol} %% must be loaded before bbold because it interferes with numbers
 \usepackage{bbold}
 \usepackage{url}
 \usepackage{xcolor}
@@ -13,19 +14,10 @@
 \usepackage{tikz-cd}
 \usetikzlibrary{quotes}
 \usepackage[section]{placeins}
-\usepackage{fdsymbol}
-
-\newcommand{\amr}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Amr says: #1}\end{minipage}}}
-\newcommand{\vic}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Vikraman says: #1}\end{minipage}}}
-\newcommand{\jc}[1]{\fbox{\begin{minipage}{\textwidth}\color{purple}{Jacques says: #1}\end{minipage}}}
-
-\newcommand{\hide}[1]{}
 
 \newcommand{\textpi}{$\pi$}
 \newcommand{\ft}{\mathbb{T}}
 \newcommand{\hash}{\#}
-\newcommand{\dg}{conjugation groupoid}
-\newcommand{\DG}{Conjugation Groupoid}
 \newcommand{\pifrac}{\ensuremath{\Pi^/}}
 \newcommand{\iso}{\leftrightarrow}
 \newcommand{\isotwo}{\Leftrightarrow}
@@ -155,13 +147,9 @@ $\displaystyle
 
 \Copyright{Jacques Carette, Chao-Hong Chen, Vikraman Choudhury and Amr Sabry}
 
-\keywords{dummy}
-\subjclass{dummy}
-
 \maketitle
 
 \begin{abstract}
-
 We exhibit types whose natural cardinality is fractional.  More
 precisely, we show that the groupoid cardinality (as defined by
 Baez-Dolan) of the denotation of the type of a singleton reversible
@@ -177,7 +165,6 @@ functions as well as some natural analogues of operations coming from
 compact closed categories.  We emphasize that the key ingredients are
 reversibility and proof relevance: cardinality $1/k$ arises from
 having exactly $k$ proofs of reversibility.
-
 \end{abstract}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -190,9 +177,9 @@ paths (equivalences) between the points and higher paths between these
 paths and so on. Here are two simple but non-trivial examples:
 
 \begin{center}
-\begin{tabular}{c@{\kern -4pt}c}
+\begin{tabular}{c@{\qquad\qquad}c}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
-  \draw[dashed] (0,0) ellipse (3cm and 1.2cm);
+  \draw[dashed] (0,0) ellipse (3cm and 1.5cm);
   \node[below] (A) at (-1.7,0.3) {\texttt{a}};
   \node[below] (B) at (-1.1,0.3) {\texttt{b}};
   \node[below] (C) at (-0.5,0.3) {\texttt{c}};
@@ -211,18 +198,18 @@ paths and so on. Here are two simple but non-trivial examples:
   \draw (0.5,0.3) -- (1.1,0.3);
   \draw (1.1,0.3) -- (1.7,0.3);
   \draw (0.5,0.3) to[bend left] (1.7,0.3) ;
-  \path (A) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (D) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (E) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (F) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (A) edge [my loop] node[below] {\texttt{id}} (B);
+  \path (B) edge [my loop] node[below] {\texttt{id}} (B);
+  \path (C) edge [my loop] node[below] {\texttt{id}} (B);
+  \path (D) edge [my loop] node[below] {\texttt{id}} (B);
+  \path (E) edge [my loop] node[below] {\texttt{id}} (B);
+  \path (F) edge [my loop] node[below] {\texttt{id}} (B);
 \end{tikzpicture}
 &
-\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
-  \draw[dashed] (0,0) ellipse (2cm and 2.4cm);
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.6}]
+  \draw[dashed] (0,0) ellipse (2cm and 2.6cm);
   \node[below] (B) at (0,-1.1) {\texttt{*}};
-  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (B) edge [my loop] node[below] {\texttt{id}} (B);
   \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p$} (B);
   \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$q$} (B);
   \path (B) edge [loop above, looseness=40, in=32, out=148] node[above] {$q'$} (B);
@@ -235,7 +222,7 @@ paths and so on. Here are two simple but non-trivial examples:
 \emph{cardinality} that counts the objects up to equivalences. The
 groupoid on the left has six points \texttt{a}, \texttt{b}, \texttt{c},
 \texttt{d}, \texttt{e}, and \texttt{f} with two groups of three
-points clustered in an equivalence class and hence the groupoid has
+points each clustered in an equivalence class and hence the groupoid has
 cardinality~2. The (2-)groupoid on the right has one point $\ast$ with
 four equivalences \texttt{id}, $p$, $q$, and~$q'$ on it. The
 equivalences $q$ and $q'$ are however identified by~$\alpha$ leaving
@@ -650,14 +637,7 @@ $\permfive$ rotate the three elements. We therefore have:
 \mathit{order}(\permtwo) = \mathit{order}(\permthree) = \mathit{order}(\permsix) &=& 2 \\
 \mathit{order}(\permfour) = \mathit{order}(\permfive) &=& 3
 \end{array}\]
-We should note that the above definition is the only one in this
-paper which is not \emph{effective};  in other words, we do not have an
-algorithm for computing it.  While there is an obvious method to
-compute it using the action of a 1-combinator on the elements of the
-type it acts on, this is extremely inefficient.  What we mean is that
-we know of no effective algorithm which works on the syntax of
-combinators.  The (only) difficulty is $\odot$, which can have an
-arbitrary effect on the order.
+We should note that the above definition is the only one in this paper which is not \emph{effective}. While there is an obvious method to compute it using the action of a 1-combinator on the elements of the type it acts on, this is extremely inefficient. We do not have an effective algorithm for computing it that works on the syntax of combinators.  The (only) difficulty is $\odot$, which can have an arbitrary effect on the order.
 
 The 2-combinators, being complete equivalences between
 1-combinators~\cite{Carette2016}, also capture equivalences regarding
@@ -755,8 +735,8 @@ counts the elements up to these ``internal symmetries''.
   \draw[dashed] (0,-0.3) ellipse (1.5cm and 2.1cm);
   \node[below] (A) at (-0.5,0) {$a$};
   \node[below] (C) at (0.5,0) {$c$};
-  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (A) edge [my loop] node[below] {\texttt{id}} (A);
+  \path (C) edge [my loop] node[below] {\texttt{id}} (C);
   \path (C) edge [out=140, in=40, looseness=4] (C);
 \end{tikzpicture}
 \qquad \qquad \qquad
@@ -767,9 +747,9 @@ counts the elements up to these ``internal symmetries''.
   \node[below] (C) at (1.5,0) {$c$};
   \path (A) edge [bend left=50] (B);
   \path (C) edge [out=140, in=40, looseness=4] (C);
-  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (A) edge [my loop] node[below] {\texttt{id}} (A);
+  \path (B) edge [my loop] node[below] {\texttt{id}} (B);
+  \path (C) edge [my loop] node[below] {\texttt{id}} (C);
 \end{tikzpicture}
 \qquad \qquad \qquad
 \begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
@@ -777,9 +757,9 @@ counts the elements up to these ``internal symmetries''.
   \node[below] (A) at (-1.6,0) {$a$};
   \node[below] (B) at (0,0) {$b$};
   \node[below] (C) at (1.6,0) {$c$};
-  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
-  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
-  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (A) edge [my loop] node[below] {\texttt{id}} (A);
+  \path (B) edge [my loop] node[below] {\texttt{id}} (B);
+  \path (C) edge [my loop] node[below] {\texttt{id}} (C);
   \path (A) edge [loop above, looseness=3, in=48, out=132] (A);
   \path (B) edge [loop above, looseness=3, in=48, out=132] (B);
   \path (C) edge [loop above, looseness=3, in=48, out=132] (C);
