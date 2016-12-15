@@ -282,18 +282,18 @@ language relevant to our work.
 {}
 \qquad\qquad
 \Rule{}
-{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_2 \iso \tau_3}
+{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad c_2 : \tau_2 \iso \tau_3}
 {\jdg{}{}{c_1 \odot c_2 : \tau_1 \iso \tau_3}}
 {}
 \\
 \\
 \Rule{}
-{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
+{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad c_2 : \tau_3 \iso \tau_4}
 {\jdg{}{}{c_1 \oplus c_2 : \tau_1 \oplus \tau_3 \iso \tau_2 \oplus \tau_4}}
 {}
 \qquad\qquad
 \Rule{}
-{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
+{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad c_2 : \tau_3 \iso \tau_4}
 {\jdg{}{}{c_1 \otimes c_2 : \tau_1 \otimes \tau_3 \iso \tau_2 \otimes \tau_4}}
 {}
 \end{array}\]
@@ -451,7 +451,11 @@ $\otimes$ types. The values classified by these types are the
 conventional ones: $\unitv$ of type~$\ot$, $\inl{v}$ and $\inr{v}$ for
 injections into sum types, and $(v_1,v_2)$ for product types. The
 language has two other syntactic categories of programs to be
-described in detail:
+described in detail.
+
+\begin{definition}[$\Pi$]
+\label{def:pi}
+The syntax of $\Pi$ is given by the following categories:
 \[\begin{array}{lrcl}
 (\textrm{Types}) &
   \tau &::=& \zt \alt \ot \alt \tau_1 \oplus \tau_2 \alt \tau_1 \otimes \tau_2 \\
@@ -463,6 +467,7 @@ described in detail:
   \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2
   ~[\textit{see Fig.~\ref{pi-combinators2}}]
 \end{array}\]
+\end{definition}
 
 \noindent Both classes of programs, 1-combinators $c$, and
 2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT sense. The
@@ -987,36 +992,71 @@ The groupoids on either side are not categorically equivalent but they do have t
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
 
-***WAVEFRONT***
+We are now ready to turn the groupoid constructions from the previous section into an extension of $\Pi$ with new type constructors and combinators for creating and manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
 
-We are now ready to turn the groupoid constructions from the previous section
-into an actual programming language. The language $\Pi^/$ will be an extension
-of $\Pi$ with new type constructors and combinators for creating and
-manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
+\begin{figure}[ht]
+\[\begin{array}{rrcll}
+\unitetl/ :&  \order{\idiso} \circledast \mathbb{T} & \leftrightspoon & \mathbb{T} &: \unititl/ \\
+\unitetr/ :&  \mathbb{T} \circledast \order{\idiso} & \leftrightspoon & \mathbb{T} &: \unititr/ \\
+\swapt/ :&  \mathbb{T}_1 \circledast \mathbb{T}_2 & \leftrightspoon & \mathbb{T}_2 \circledast \mathbb{T}_1 &: \swapt/ \\
+\assoclt/ :&  \mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3) & \leftrightspoon & (\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3
+  &: \assocrt/ \\
+\\
+\eta- :& \order{\idiso} & \leftrightspoon & \iorder{c} \circledast \order{c} &: \epsilon- \\
+\eta+ :& \order{\idiso} & \leftrightspoon & \order{c} \circledast \iorder{c} &: \epsilon+ \\
+\end{array}\]
 
-We begin by adding four new syntactic categories to the definition of $\Pi$ in
-Sec.~\ref{opsempi}:
+\[\begin{array}{c}
+\Rule{}
+{}
+{\jdg{}{}{\idiso/ : \mathbb{T} \leftrightspoon \mathbb{T}}}
+{}
+\qquad
+\Rule{}
+{\jdg{}{}{\rho_1 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2} \quad \rho_2 : \mathbb{T}_2 \leftrightspoon \mathbb{T}_3}
+{\jdg{}{}{\rho_1 \circledcirc \rho_2 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_3}}
+{}
+\\
+\\
+\Rule{}
+{\jdg{}{}{\alpha : c_1 \isotwo c_2}}
+{\jdg{}{}{\order{\alpha} : \order{c_1}  \leftrightspoon \order{c_2}}}
+{}
+\qquad
+\Rule{}
+{\jdg{}{}{\rho_1 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2} \quad \rho_2 : \mathbb{T}_3 \leftrightspoon \mathbb{T}_4}
+{\jdg{}{}{\rho_1 \circledast \rho_2 : \mathbb{T}_1 \circledast \mathbb{T}_3 \leftrightspoon \mathbb{T}_2 \circledast \mathbb{T}_4}}
+{}
+\end{array}\]
 
+Each combinator $\rho$ has an inverse.
+\caption{$\Pi^/$ fractional combinators}
+\label{pifrac:comb}
+\end{figure}
+
+We call the new extension $\Pi^/$. We begin by adding four new syntactic categories to the definition of $\Pi$ in Sec.~\ref{opsempi}:
+
+\begin{definition}[$\Pi^/$]
+\label{def:pifrac}
+The syntax of $\Pi^/$ is given by the following categories:
 \[\begin{array}{lrcl}
-(\textrm{Types}) & \tau &::=& \ldots \\
-(\textrm{Values}) & v &::=& \ldots \\
-(\textrm{1-combinators}) & c &:& \tau_1 \iso \tau_2 ~::= \ldots \\
+(\textrm{Types}) & \tau &::=& [\textit{see Def.~\ref{def:pi}}] \\
+(\textrm{Values}) & v &::=& [\textit{see Def.~\ref{def:pi}}] \\
+(\textrm{1-combinators}) & c &:& \tau_1 \iso \tau_2 ~::= [\textit{see Def.~\ref{def:pi}}] \\
 (\textrm{2-combinators}) & \alpha &:& c_1 \isotwo c_2 \mbox{~where~}
-  c_1, c_2 : \tau_1 \iso \tau_2 ~::= \ldots \\
+  c_1, c_2 : \tau_1 \iso \tau_2 ~::= [\textit{see Def.~\ref{def:pi}}] \\
 \\
 (\textrm{Fractional Types}) & \mathbb{T} &::=&
   \order{c} \alt \iorder{c} \alt \mathbb{T}_1 \circledast \mathbb{T}_2 \\
-  \order{c} \alt \iorder{c} \alt \mathbb{T}_1 \circledast \mathbb{T}_2 \\
  (\textrm{Fractional Values}) & \mathbb{V} &::=&
-  c^k \alt \alpha^k \alt \langle \mathbb{V},\mathbb{V} \rangle \\
- (\textrm{/-combinators}) & \rho &:& \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::= \\
-& &&     \idiso/ \alt \rho \circledcirc \rho \alt \rho \circledast \rho \\
-& &\alt& \unitetl/ \alt \unititl/ \alt \unitetr/ \alt \unititr/ \\
-& &\alt& \swapt/ \alt \assoclt/ \alt \assocrt/ \\
-& &\alt& \order{\alpha} \alt \eta- \alt \eta+ \alt \epsilon+ \alt \epsilon- \\
+  c^k \alt 1/c^k \alt \langle \mathbb{V},\mathbb{V} \rangle \\
+ (\textrm{/-combinators}) & \rho &:& \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::=
+  [\textit{see Fig.~\ref{pifrac:comb}}] \\
 (\textrm{//-combinators}) & \varrho &:& \rho_1 \leftrightblackspoon \rho_2 \mbox{~where~}
-  \rho_1, \rho_2 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::= \ldots
+  \rho_1, \rho_2 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::=
+  [\textit{see Fig.~\ref{pifrac:twocomb}}]
 \end{array}\]
+\end{definition}
 
 The syntactic category $\ft$ of fractional types introduces type expressions for
 iteration groupoids, symmetry groupoids, and their products. The combinators
