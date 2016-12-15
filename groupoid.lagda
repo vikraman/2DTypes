@@ -313,9 +313,7 @@ iterationC {τ} p = record {
   ;  _≡_ = λ _ _ → ⊤
   ;  id  = id⇔
   ;  _∘_ = flip _●_
-  ;  assoc = tt; identityˡ = tt; identityʳ = tt
-  ;  equiv = record { refl = tt; sym = λ _ → tt; trans = λ _ _ → tt }
-  ;  ∘-resp-≡ = λ _ _ → tt
+  -- rest elided
   }
 \end{code}
 
@@ -367,7 +365,7 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
 
 The elements of $\iter{p}$ form a group under the following operation:
 \[
-\triple{k_1}{p_1}{\alpha_1} ~\circ~ \triple{k_2}{p_2}{\alpha_2} = 
+\triple{k_1}{p_1}{\alpha_1} ~\circ~ \triple{k_2}{p_2}{\alpha_2} =
  \triple{k_1+k_2}{p_1 \odot p_2}{(\alpha_1 ~\respstwo~
     \alpha_2)~\transtwo~(\distiterplus{p}{k_1}{k_2})}
 \]
@@ -383,7 +381,7 @@ $\iorder{p}$ is the groupoid (2-groupoid technically) whose objects
 are the iterates in $\iter{\idiso_{\top}}$. Every pair of objects is
 connected by the morphisms in $\iter{p}$. To capture the relationship
 between these morphisms, we also have 2-morphisms relating the
-distinct iterates as in the previous section. 
+distinct iterates as in the previous section.
 
 \begin{code}
 symC : (τ : U) → (τ ⟷ τ) → Category _ _ _
@@ -541,7 +539,7 @@ natural notions of sums and products, and one might expect or hope that
 identities which hold for rational numbers lift to identities in our
 situation. The most prominent and important identity we seek is:
 such as:
-\[ 
+\[
 \order{p} \otimes \iorder{p} \simeq \mathbb{1}
 \]
 The groupoids on either side are not categorically equivalent but they
