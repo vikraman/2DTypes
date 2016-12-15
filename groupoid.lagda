@@ -358,7 +358,9 @@ conjlC {τ} p q = record {
           (Iter.q s ⇔ (Iter.q iq ◎ Iter.q t))
  ; _≡_ = λ { (iter₁ , _) (iter₂ , _) → Iter.q iter₁ ⇔ Iter.q iter₂ }
  ; id = λ {A} → zeroth q , idl◎r
- ; _∘_ = {!!}
+ ; _∘_ = {!λ { ( < j , q , αq > , pf₁)  ( < k , r , αr > , pf₂) →
+                  ( < j , q , αq > ∘i < k , r , αr > ,
+                   pf₂ ● id⇔ ⊡ pf₁ ● assoc◎l ● ((αr ⊡ αq) ● comm-i-j k j ● 2! (αq ⊡ αr)) ⊡ id⇔  ) }!}
  -- rest elided
  }
 \end{code}
