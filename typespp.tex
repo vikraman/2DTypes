@@ -1,0 +1,1260 @@
+\documentclass[a4paper,USenglish]{lipics-v2016-utf8x}
+
+\usepackage{amsthm,amstext,amssymb,amsmath}
+\usepackage{datetime}
+\usepackage{bbold}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{multicol}
+\usepackage{proof}
+\usepackage{stmaryrd}
+\usepackage{bussproofs}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{quotes}
+\usepackage[section]{placeins}
+\usepackage{fdsymbol}
+
+\newcommand{\amr}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Amr says: #1}\end{minipage}}}
+\newcommand{\vic}[1]{\fbox{\begin{minipage}{0.4\textwidth}\color{purple}{Vikraman says: #1}\end{minipage}}}
+\newcommand{\jc}[1]{\fbox{\begin{minipage}{\textwidth}\color{purple}{Jacques says: #1}\end{minipage}}}
+
+\newcommand{\hide}[1]{}
+
+\newcommand{\textpi}{$\pi$}
+\newcommand{\ft}{\mathbb{T}}
+\newcommand{\hash}{\#}
+\newcommand{\dg}{conjugation groupoid}
+\newcommand{\DG}{Conjugation Groupoid}
+\newcommand{\pifrac}{\ensuremath{\Pi^/}}
+\newcommand{\iso}{\leftrightarrow}
+\newcommand{\isotwo}{\Leftrightarrow}
+\newcommand{\alt}{~|~}
+\newcommand{\ag}[2]{#1 \sslash #2}
+\newcommand{\agp}[3]{#1 \sslash_{#3} #2}
+\newcommand{\order}[1]{\hash #1}
+\newcommand{\iorder}[1]{1/\hash #1}
+\newcommand{\oneg}[1]{\mathbb{1}_{#1}}
+\newcommand{\divgl}[2]{\hash{#1} \div_{l} \hash{#2}}
+\newcommand{\divgr}[2]{\hash{#1} \div_{r} \hash{#2}}
+\newcommand{\ord}[1]{\ensuremath{\mathsf{order}(#1)}}
+\newcommand{\inl}[1]{\textsf{inl}(#1)}
+\newcommand{\inr}[1]{\textsf{inr}(#1)}
+\newcommand{\zt}{\mathbb{0}}
+\newcommand{\ot}{\mathbb{1}}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Zn}{\mathbb{Z}_n}
+\newcommand{\Zvn}{\mathbb{Z}^v_n}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\cycle}{\textsf{cycle}}
+\newcommand{\twod}{\mathbb{T}}
+\newcommand{\fract}[2]{#1/#2}
+\newcommand{\fv}[2]{\fcolorbox{black}{white}{\strut $#1$}\fcolorbox{black}{gray!20}{$\strut #2$}}
+\newcommand{\pt}[2]{\bullet[#1,#2]}
+\newcommand{\sing}[1]{\textsc{Sing}(#1)}
+\newcommand{\singi}[2]{\textsc{SingI}_{{#1}}(#2)}
+\newcommand{\iter}[1]{\textsc{Iter}(#1)}
+\newcommand{\pair}[2]{\langle #1,#2 \rangle}
+\newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
+\newcommand{\distiterplus}[3]{\mathsf{dist}~#1~#2~#3}
+
+\newcommand{\permone}{\mathit{perm}_{...}}
+\newcommand{\permtwo}{\mathit{perm}_{\times\!\times.}}
+\newcommand{\permthree}{\mathit{perm}_{.\times\!\times}}
+\newcommand{\permfour}{\mathit{perm}_{\rightarrow}}
+\newcommand{\permfive}{\mathit{perm}_{\leftarrow}}
+\newcommand{\permsix}{\mathit{perm}_{\times.\times}}
+
+\newcommand{\Rule}[4]{
+\makebox{{\rm #1}
+$\displaystyle
+\frac{\begin{array}{l}#2\\\end{array}}
+{\begin{array}{l}#3\\\end{array}}$
+ #4}}
+\newcommand{\proves}{\vdash}
+\newcommand{\jdg}[3]{{#1} #3}
+\newcommand{\evalone}[2]{#1~\triangleright~#2}
+\newcommand{\evaloneb}[2]{#1~\triangleleft~#2}
+\newcommand{\unitv}{()}
+\newcommand{\unitepl}{\mathsf{{unite_+l}}}
+\newcommand{\unitipl}{\mathsf{{uniti_+l}}}
+\newcommand{\unitepr}{\mathsf{{unite_+r}}}
+\newcommand{\unitipr}{\mathsf{{uniti_+r}}}
+\newcommand{\swapp}{\mathsf{{swap_+}}}
+\newcommand{\assoclp}{\mathsf{{assocl_+}}}
+\newcommand{\assocrp}{\mathsf{{assocr_+}}}
+\newcommand{\unitetl}{\mathsf{{unite_{\star}l}}}
+\newcommand{\unititl}{\mathsf{{uniti_{\star}l}}}
+\newcommand{\unitetr}{\mathsf{{unite_{\star}r}}}
+\newcommand{\unititr}{\mathsf{{uniti_{\star}r}}}
+\newcommand{\swapt}{\mathsf{{swap_{\star}}}}
+\newcommand{\assoclt}{\mathsf{{assocl_{\star}}}}
+\newcommand{\assocrt}{\mathsf{{assocr_{\star}}}}
+\newcommand{\absorbr}{\mathsf{{absorbr}}}
+\newcommand{\absorbl}{\mathsf{{absorbl}}}
+\newcommand{\factorzr}{\mathsf{{factorzr}}}
+\newcommand{\factorzl}{\mathsf{{factorzl}}}
+\newcommand{\dist}{\mathsf{{dist}}}
+\newcommand{\factor}{\mathsf{{factor}}}
+\newcommand{\distl}{\mathsf{{distl}}}
+\newcommand{\factorl}{\mathsf{{factorl}}}
+\newcommand{\idiso}{\mathsf{{id}}}
+
+\newcommand{\assocdl}{\mathsf{{assoc_{\odot}l}}}
+\newcommand{\assocdr}{\mathsf{{assoc_{\odot}r}}}
+\newcommand{\idldl}{\mathsf{{idl_{\odot}l}}}
+\newcommand{\idldr}{\mathsf{{idl_{\odot}r}}}
+\newcommand{\idrdl}{\mathsf{{idr_{\odot}l}}}
+\newcommand{\idrdr}{\mathsf{{idr_{\odot}r}}}
+\newcommand{\rinvdl}{\mathsf{{rinv_{\odot}l}}}
+\newcommand{\rinvdr}{\mathsf{{rinv_{\odot}r}}}
+\newcommand{\linvdl}{\mathsf{{linv_{\odot}l}}}
+\newcommand{\linvdr}{\mathsf{{linv_{\odot}r}}}
+\newcommand{\idisotwo}{\mathsf{{id}}}
+\newcommand{\transtwo}{\bullet}
+\newcommand{\respstwo}{\mathsf{{\boxdot}}}
+\newcommand{\respptwo}{\mathsf{{resp_{\oplus\Leftrightarrow}}}}
+\newcommand{\respttwo}{\mathsf{{resp_{\otimes\Leftrightarrow}}}}
+\newcommand{\sumid}{\mathsf{sumid}}
+\newcommand{\splitid}{\mathsf{splitid}}
+\newcommand{\homps}{\mathsf{hom_{\oplus\odot}}}
+\newcommand{\homsp}{\mathsf{hom_{\odot\oplus}}}
+
+\newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+
+\newtheorem{proposition}{Proposition}
+
+\makeatletter
+\tikzset{my loop/.style =  {to path={
+  \pgfextra{\let\tikztotarget=\tikztostart}
+  [looseness=8,min distance=5mm, in=240,out=300]
+  \tikz@to@curve@path}
+  }}
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{Fractional Types}
+\titlerunning{Fractional Types}
+\author[1]{Jacques Carette}
+\author[2]{Chao-Hong Chen}
+\author[3]{Vikraman Choudhury}
+\author[4]{Amr Sabry}
+\affil[1]{Computing and Software Department, McMaster University,
+  Hamilton, Ontario, Canada \\ \texttt{carette@mcmaster.ca}}
+\affil[2]{Computer Science Department, Indiana University,
+  Bloomington, Indiana, USA \\ \texttt{chen464@indiana.edu}}
+\affil[3]{Computer Science Department, Indiana University,
+  Bloomington, Indiana, USA \\ \texttt{vikraman@indiana.edu}}
+\affil[4]{Computer Science Department, Indiana University,
+  Bloomington, Indiana, USA \\ \texttt{sabry@indiana.edu}}
+
+\authorrunning{J. Carette, C.-H. Chen, V. Choudhury and A. Sabry}
+
+\Copyright{Jacques Carette, Chao-Hong Chen, Vikraman Choudhury and Amr Sabry}
+
+\keywords{dummy}
+\subjclass{dummy}
+
+\maketitle
+
+\begin{abstract}
+
+We exhibit types whose natural cardinality is fractional.  More
+precisely, we show that the groupoid cardinality (as defined by
+Baez-Dolan) of the denotation of the type of a singleton reversible
+program $p$ with exactly $k$ distinct proofs of reversibility has
+cardinality $1/k$.  We further show that this type is naturally a
+multiplicative inverse to the type of all iterates $p ^ i$ of that
+reversible program.
+
+We situate this work as an extension of a larger reversible
+programming language ($\Pi$), and show that this extension is also
+reversible.  Interestingly, this extension supports first-class
+functions as well as some natural analogues of operations coming from
+compact closed categories.  We emphasize that the key ingredients are
+reversibility and proof relevance: cardinality $1/k$ arises from
+having exactly $k$ proofs of reversibility.
+
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+In Homotopy Type Theory (HoTT)~\cite{hottbook}, types have the
+structure of \emph{weak $\omega$-groupoids}. As a first approximation,
+we can think of such structures as sets with points (objects) and
+paths (equivalences) between the points and higher paths between these
+paths and so on. Here are two simple but non-trivial examples:
+
+\begin{center}
+\begin{tabular}{c@{\kern -4pt}c}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]
+  \draw[dashed] (0,0) ellipse (3cm and 1.2cm);
+  \node[below] (A) at (-1.7,0.3) {\texttt{a}};
+  \node[below] (B) at (-1.1,0.3) {\texttt{b}};
+  \node[below] (C) at (-0.5,0.3) {\texttt{c}};
+  \node[below] (D) at (0.5,0.3) {\texttt{d}};
+  \node[below] (E) at (1.1,0.3) {\texttt{e}};
+  \node[below] (F) at (1.7,0.3) {\texttt{f}};
+  \draw[fill] (-1.7,0.3) circle [radius=0.05];
+  \draw[fill] (-1.1,0.3) circle [radius=0.05];
+  \draw[fill] (-0.5,0.3) circle [radius=0.05];
+  \draw[fill] (0.5,0.3) circle [radius=0.05];
+  \draw[fill] (1.1,0.3) circle [radius=0.05];
+  \draw[fill] (1.7,0.3) circle [radius=0.05];
+  \draw (-1.7,0.3) -- (-1.1,0.3);
+  \draw (-1.1,0.3) -- (-0.5,0.3);
+  \draw (-1.7,0.3) to[bend left] (-0.5,0.3) ;
+  \draw (0.5,0.3) -- (1.1,0.3);
+  \draw (1.1,0.3) -- (1.7,0.3);
+  \draw (0.5,0.3) to[bend left] (1.7,0.3) ;
+  \path (A) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (D) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (E) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (F) edge [loop below] node[below] {\texttt{id}} (B);
+\end{tikzpicture}
+&
+\begin{tikzpicture}[scale=0.5,every node/.style={scale=0.5}]
+  \draw[dashed] (0,0) ellipse (2cm and 2.4cm);
+  \node[below] (B) at (0,-1.1) {\texttt{*}};
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (B) edge [loop above, looseness=15, in=48, out=132] node[above] {$p$} (B);
+  \path (B) edge [loop above, looseness=25, in=40, out=140] node[above] {$q$} (B);
+  \path (B) edge [loop above, looseness=40, in=32, out=148] node[above] {$q'$} (B);
+  \path (-1,0.4) edge[double, bend left] node[left] {$\alpha$} (-1,1.0);
+\end{tikzpicture}
+\end{tabular}
+\end{center}
+
+\medskip\noindent Baez and Dolan~\cite{groupoidcard} assign to each groupoid a
+\emph{cardinality} that counts the objects up to equivalences. The
+groupoid on the left has six points \texttt{a}, \texttt{b}, \texttt{c},
+\texttt{d}, \texttt{e}, and \texttt{f} with two groups of three
+points clustered in an equivalence class and hence the groupoid has
+cardinality~2. The (2-)groupoid on the right has one point $\ast$ with
+four equivalences \texttt{id}, $p$, $q$, and~$q'$ on it. The
+equivalences $q$ and $q'$ are however identified by~$\alpha$ leaving
+only three distinct equivalence classes and hence making the
+cardinality $\frac{1}{3}$.
+
+Both groupoids involve some notion of ``division'' that can be captured at the
+level of types using a syntactic notion of \emph{fractional types}. Our aim is
+to explore this notion of types and its associated operational semantics. The
+remainder of the paper is organized as follows. We start by reviewing the
+necessary background consisting of the language $\Pi$ for programming with
+isomorphisms or equivalences in a reversible information-preserving way. Sec.~4
+explains the main novel semantic ideas of using $\Pi$ programs to generate
+non-trivial groupoids with fractional cardinality. Sec.~5 translates the
+semantic ideas into an extension of $\Pi$ with new type constructors denoting
+non-trivial groupoids and new programs that manipulate such types. Sec.~6
+presents the operational semantics of the extended language. The last two
+sections put our work in perspective and conclude.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Programming with Equivalences}
+\label{sec:pi}
+
+The main syntactic vehicle for the technical developments
+is the language $\Pi$ whose only computations are isomorphisms
+between finite types and equivalences between these
+isomorphisms~\cite{Carette2016,James:2012:IE:2103656.2103667}. We
+present the syntax and operational semantics of the parts of the
+language relevant to our work.
+
+\begin{figure}[ht]
+\[\begin{array}{rrcll}
+\unitepl :&  \zt \oplus \tau & \iso & \tau &: \unitipl \\
+\unitepr :&  \tau \oplus \zt & \iso & \tau &: \unitipr \\
+\swapp :&  \tau_1 \oplus \tau_2 & \iso & \tau_2 \oplus \tau_1 &: \swapp \\
+\assoclp :&  \tau_1 \oplus (\tau_2 \oplus \tau_3) & \iso & (\tau_1 \oplus \tau_2) \oplus \tau_3
+  &: \assocrp \\
+\\
+\unitetl :&  \ot \otimes \tau & \iso & \tau &: \unititl \\
+\unitetr :&  \tau \otimes \ot & \iso & \tau &: \unititr \\
+\swapt :&  \tau_1 \otimes \tau_2 & \iso & \tau_2 \otimes \tau_1 &: \swapt \\
+\assoclt :&  \tau_1 \otimes (\tau_2 \otimes \tau_3) & \iso & (\tau_1 \otimes \tau_2) \otimes \tau_3
+  &: \assocrt \\
+\\
+\absorbr :&~ \zt \otimes \tau & \iso & \zt &: \factorzl \\
+\absorbl :&~ \tau \otimes \zt & \iso & \zt &: \factorzr \\
+\dist :&~ (\tau_1 \oplus \tau_2) \otimes \tau_3 &
+  \iso & (\tau_1 \otimes \tau_3) \oplus (\tau_2 \otimes \tau_3)~ &: \factor \\
+\distl :&~ \tau_1 \otimes (\tau_2 \oplus \tau_3) &
+  \iso & (\tau_1 \otimes \tau_2) \oplus (\tau_1 \otimes \tau_3)~ &: \factorl
+\end{array}\]
+
+\[\begin{array}{c}
+\Rule{}
+{}
+{\jdg{}{}{\idiso : \tau \iso \tau}}
+{}
+\qquad\qquad
+\Rule{}
+{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_2 \iso \tau_3}
+{\jdg{}{}{c_1 \odot c_2 : \tau_1 \iso \tau_3}}
+{}
+\\
+\\
+\Rule{}
+{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
+{\jdg{}{}{c_1 \oplus c_2 : \tau_1 \oplus \tau_3 \iso \tau_2 \oplus \tau_4}}
+{}
+\qquad\qquad
+\Rule{}
+{\jdg{}{}{c_1 : \tau_1 \iso \tau_2} \quad \vdash c_2 : \tau_3 \iso \tau_4}
+{\jdg{}{}{c_1 \otimes c_2 : \tau_1 \otimes \tau_3 \iso \tau_2 \otimes \tau_4}}
+{}
+\end{array}\]
+
+Each 1-combinator $c$ has an inverse $!~c$, e.g, $!~\unitepl=\unitipl$,
+$!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
+\caption{$\Pi$ 1-combinators~\cite{James:2012:IE:2103656.2103667}
+\label{pi-combinators}}
+\end{figure}
+
+\begin{figure}[ht]
+\[\begin{array}{c}
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\idisotwo : c \isotwo c}}
+{}
+~
+\Rule{}
+{c_1,c_2,c_3 : \tau_1 \iso \tau_2 \quad \alpha_1 : c_1 \isotwo c_2 \quad \alpha_2 : c_2 \isotwo c_3}
+{\jdg{}{}{\alpha_1~\transtwo~\alpha_2 : c_1 \isotwo c_3}}
+{}
+\\
+\\
+\Rule{}
+{c_1 : \tau_1 \iso \tau_2 \quad c_2 : \tau_2 \iso \tau_3 \quad c_3 : \tau_3 \iso \tau_4}
+{\jdg{}{}{\assocdl : c_1 \odot (c_2 \odot c_3) \isotwo (c_1 \odot c_2) \odot c_3 : \assocdr}}
+{}
+\\
+\\
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\idldl : \idiso \odot c \isotwo c : \idldr}}
+{}
+~
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\idrdl : c \odot \idiso \isotwo c : \idrdr}}
+{}
+\\
+\\
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\rinvdl : ~! c \odot c \isotwo \idiso : \rinvdr}}
+{}
+~
+\Rule{}
+{c : \tau_1 \iso \tau_2}
+{\jdg{}{}{\linvdl : c ~\odot ~! c \isotwo \idiso : \linvdr}}
+{}
+\\
+\\
+\Rule{}
+{}
+{\jdg{}{}{\sumid : \idiso\oplus\idiso \isotwo \idiso : \splitid}}
+{}
+\\
+\\
+\Rule{}
+{c_1 : \tau_5\iso\tau_1 \quad c_2 : \tau_6\iso\tau_2 \quad c_3 :
+    \tau_1\iso\tau_3 \quad c_4 : \tau_2\iso\tau_4}
+{\jdg{}{}{\homps : (c_1\odot c_3)\oplus(c_2\odot c_4) \isotwo
+    (c_1\oplus c_2) \odot (c_3\oplus c_4) : \homsp }}
+{}
+\\
+\\
+\Rule{}
+{c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
+  \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
+{\jdg{}{}{\alpha_1 ~\respstwo~ \alpha_2 : c_1 \odot c_2 \isotwo c_3 \odot c_4}}
+{}
+\\
+\\
+\Rule{}
+{c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
+  \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
+{\jdg{}{}{\respptwo ~\alpha_1 ~\alpha_2 : c_1 \oplus c_2 \isotwo c_3 \oplus c_4}}
+{}
+\\
+\\
+\Rule{}
+{c_1,c_3 : \tau_1 \iso \tau_2 \quad c_2,c_4 : \tau_2 \iso \tau_3 \quad
+  \alpha_1 : c_1 \isotwo c_3 \quad \alpha_2 : c_2 \isotwo c_4}
+{\jdg{}{}{\respttwo ~\alpha_1 ~\alpha_2 : c_1 \otimes c_2 \isotwo c_3 \otimes c_4}}
+{}
+\end{array}\]
+Each 2-combinator $\alpha$ has an inverse $2!~\alpha$, e.g, $2!~\assocdl=\assocdr$,
+$2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
+\caption{$\Pi$ 2-combinators (excerpt)~\cite{Carette2016}
+\label{pi-combinators2}}
+\end{figure}
+
+\begin{figure}[ht]
+{\footnotesize
+\[\begin{array}{cc}
+\begin{array}[t]{rlcl}
+\evalone{\unitepl}{&(\inr{v})} &=& v \\
+\evalone{\unitipl}{&v} &=& \inr{v} \\
+\evalone{\unitepr}{&(\inl{v})} &=& v \\
+\evalone{\unitipr}{&v} &=& \inl{v} \\
+\evalone{\swapp}{&(\inl{v})} &=& \inr{v} \\
+\evalone{\swapp}{&(\inr{v})} &=& \inl{v} \\
+\evalone{\assoclp}{&(\inl{v})} &=& \inl{(\inl{v})} \\
+\evalone{\assoclp}{&(\inr{(\inl{v})})} &=& \inl{(\inr{v})} \\
+\evalone{\assoclp}{&(\inr{(\inr{v})})} &=& \inr{v} \\
+\evalone{\assocrp}{&(\inl{(\inl{v})})} &=& \inl{v} \\
+\evalone{\assocrp}{&(\inl{(\inr{v})})} &=& \inr{(\inl{v})} \\
+\evalone{\assocrp}{&(\inr{v})} &=& \inr{(\inr{v})}
+\end{array} &
+\begin{array}[t]{rlcl}
+\evalone{\unitetl}{&(\unitv,v)} &=& v \\
+\evalone{\unititl}{&v} &=& (\unitv,v) \\
+\evalone{\unitetr}{&(v,\unitv)} &=& v \\
+\evalone{\unititr}{&v} &=& (v,\unitv) \\
+\evalone{\swapt}{&(v_1,v_2)} &=& (v_2,v_1) \\
+\evalone{\assoclt}{&(v_1,(v_2,v_3))} &=& ((v_1,v_2),v_3) \\
+\evalone{\assocrt}{&((v_1,v_2),v_3)} &=& (v_1,(v_2,v_3))
+\end{array} \\
+\\
+\begin{array}[t]{rlcl}
+\evalone{\absorbr}{&(v,\_)} &=& v \\
+\evalone{\absorbl}{&(\_,v)} &=& v \\
+\evalone{\dist}{&(\inl{v_1},v_3)} &=& \inl{(v_1,v_3)} \\
+\evalone{\dist}{&(\inr{v_2},v_3)} &=& \inr{(v_2,v_3)} \\
+\evalone{\factor}{&\inl{(v_1,v_3)}} &=& (\inl{v_1},v_3) \\
+\evalone{\factor}{&\inr{(v_2,v_3)}} &=& (\inr{v_2},v_3) \\
+\evalone{\distl}{&(v_1,\inl{v_3})} &=& \inl{(v_1,v_3)} \\
+\evalone{\distl}{&(v_2,\inr{v_3})} &=& \inr{(v_2,v_3)} \\
+\evalone{\factorl}{&\inl{(v_1,v_3)}} &=& (v_1,\inl{v_3}) \\
+\evalone{\factorl}{&\inr{(v_2,v_3)}} &=& (v_2,\inr{v_3})
+\end{array} &
+\begin{array}[t]{rlcl}
+\evalone{\idiso}{&v} &=& v \\
+\evalone{(c_1 \odot c_2)}{&v} &=&
+  \evalone{c_2}{(\evalone{c_1}{v})} \\
+\evalone{(c_1 \oplus c_2)}{&(\inl{v})} &=&
+  \inl{(\evalone{c_1}{v})} \\
+\evalone{(c_1 \oplus c_2)}{&(\inr{v})} &=&
+  \inr{(\evalone{c_2}{v})} \\
+\evalone{(c_1 \otimes c_2)}{&(v_1,v_2)} &=&
+  (\evalone{c_1}v_1, \evalone{c_2}v_2)
+\end{array}
+\end{array}\]
+\caption{\label{opsem}$\Pi$ operational semantics}
+}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Syntax of $\Pi$}
+\label{opsempi}
+
+The $\Pi$ family of languages is based on type isomorphisms. In the
+variant we consider, the set of types $\tau$ includes the empty
+type~$\zt$, the unit type $\ot$, and sum $\oplus$ and product
+$\otimes$ types. The values classified by these types are the
+conventional ones: $\unitv$ of type~$\ot$, $\inl{v}$ and $\inr{v}$ for
+injections into sum types, and $(v_1,v_2)$ for product types. The
+language has two other syntactic categories of programs to be
+described in detail:
+\[\begin{array}{lrcl}
+(\textrm{Types}) &
+  \tau &::=& \zt \alt \ot \alt \tau_1 \oplus \tau_2 \alt \tau_1 \otimes \tau_2 \\
+(\textrm{Values}) &
+  v &::=& \unitv \alt \inl{v} \alt \inr{v} \alt (v_1,v_2) \\
+(\textrm{1-combinators}) &
+  c &:& \tau_1 \iso \tau_2 ~ [\textit{see Fig.~\ref{pi-combinators}}] \\
+(\textrm{2-combinators}) &
+  \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2
+  ~[\textit{see Fig.~\ref{pi-combinators2}}]
+\end{array}\]
+
+\noindent Both classes of programs, 1-combinators $c$, and
+2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT sense. The
+elements $c$ of 1-combinators denote type isomorphisms. The elements $\alpha$ of
+2-combinators denote the set of sound and complete equivalences between these
+type isomorphisms. Using the 1-combinators, it is possible to write any
+reversible boolean function and hence encode arbitrary boolean functions by a
+technique that goes back to Toffoli~\cite{Toffoli:1980}. The 2-combinators
+provide a layer of programs that computes semantics-preserving transformations
+of 1-combinators. As a small example, let us abbreviate $\ot \oplus \ot$ as the
+type $\mathbb{2}$ of booleans and examine two possible implementations of
+boolean negation. The first directly uses the primitive combinator
+$\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to exchange the two
+values of type~$\mathbb{2}$; the second use three consecutive uses of $\swapp$
+to achieve the same effect:
+\[\begin{array}{rcl}
+\mathsf{not_1} &=& \swapp \\
+\mathsf{not_2} &=& (\swapp \odot \swapp) \odot \swapp
+\end{array}\]
+We can write a 2-combinator whose \emph{type} is $\mathsf{not_2}
+\isotwo \mathsf{not_1}$:
+\[
+(\linvdl ~\respstwo~ \idisotwo)~\transtwo~\idldl
+\]
+which not only shows the equivalence of the two implementations of negation but
+also shows \emph{how} to transform one to the other. This rewriting focuses
+on the first two occurrences of $\swapp$ and uses $\linvdl$ to reduce them to
+$\idiso$ since they are inverses. It then uses $\idldl$ to simplify the
+composition of $\idiso$ with $\swapp$ to just $\swapp$.
+
+Fig.~\ref{pi-combinators} lists all the 1-combinators which consist of base
+combinators (top) and compositions (bottom). Each line of the base combinators
+introduces a pair of dual constants\footnote{where $\swapp$ and $\swapt$ are
+self-dual.} that witness the type isomorphism in the middle. This set of
+isomorphisms is known to be sound and
+complete~\cite{Fiore:2004,fiore-remarks}. As the full set of 2-combinators has
+$113$ entries, Fig.~\ref{pi-combinators2} lists a few of the 2-combinators that
+we use in this paper. Each 2-combinator relates two 1-combinators of the same
+type and witnesses their equivalence. Both 1-combinators and 2-combinators are
+invertible and the 2-combinators behave as expected with respect to inverses of
+1-combinators.
+
+\begin{proposition}
+For any $c : \tau_1 \iso \tau_2$, we have $c \isotwo ~!~(!~c)$.
+\end{proposition}
+
+\begin{proposition}
+For any $c_1,c_2 : \tau_1 \iso \tau_2$, we have $c_1 \isotwo c_2$ implies
+$!~c_1 \isotwo ~!~c_2$.
+\end{proposition}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Semantics}
+\label{sec:pisem}
+
+We give an operational semantics for the 1-combinators of $\Pi$ which
+represent the conventional layer of programs.  Operationally, the
+semantics consists of a pair of evaluators that
+take a combinator and a value and propagate the value in the forward
+direction~$\triangleright$ or in the backward
+direction~$\triangleleft$. We show the complete forward evaluator in
+Fig.~\ref{opsem}; the backward evaluator is easy to infer.
+
+As an example, let $\mathbb{3}$ abbreviate the type
+$(\ot \oplus \ot) \oplus \ot$. There are three values of
+type~$\mathbb{3}$ which are $ll=\inl{\inl{\unitv}}$,
+$lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. Pictorially, the type
+$\mathbb{3}$ with its three inhabitants can be represented as the
+left-leaning tree:
+\begin{center}
+\begin{tikzpicture}[level distance=0.5cm]
+  \node {$\cdot$}
+    child {node {$\cdot$}
+      child {node {$0$}}
+      child {node {$1$}}
+    }
+    child {node {$2$}} ;
+\end{tikzpicture}
+\end{center}
+Note that the values of type $\mathbb{3}$ are the names of
+the paths from the root to each of the leaves.  We use
+$0$, $1$ and $2$ as ordinals, to give an order to each
+of the values.
+
+There are, up to equivalence, six combinators of type
+$\mathbb{3} \iso \mathbb{3}$, each representing a different
+permutation of three elements that leave the \emph{shape} of the three
+unchanged. The six permutations on $\mathbb{3}$ can be written as
+$\Pi$-terms:
+\[\begin{array}{rcl}
+\permone &=& \idiso \\
+\permtwo &=& \swapp \oplus \idiso \\
+\permthree &=& \assocrp \odot (\idiso \oplus \swapp) \odot \assoclp \\
+\permfour &=& \permtwo \odot \permthree \\
+\permfive &=& \permthree \odot \permtwo \\
+\permsix &=& \permfour \odot \permtwo
+\end{array}\]
+Tracing the evaluation of $\permtwo$ on each of the possible inputs yields:
+\[\begin{array}{rcl}
+\evalone{(\swapp\oplus\idiso)}{\inl{\inl{\unitv}}} &=& \inl{\evalone{\swapp}{\inl{\unitv}}} \\
+&=& \inl{\inr{\unitv}} \\
+\\
+\evalone{(\swapp\oplus\idiso)}{\inl{\inr{\unitv}}} &=& \inl{\evalone{\swapp}{\inr{\unitv}}} \\
+&=& \inl{\inl{\unitv}} \\
+\\
+\evalone{(\swapp\oplus\idiso)}{\inr{\unitv}} &=& \inr{\evalone{\idiso}{\unitv}} \\
+&=& \inr{\unitv}
+\end{array}\]
+Thus the effect of combinator $\permtwo$ is to swap the values
+$\inl{\inl{\unitv}}$ and $\inl{\inr{\unitv}}$ leaving the value
+$\inr{\unitv}$ intact. In other words, the effect of $\permtwo$
+can be visualized as giving the tree:
+\begin{center}
+\begin{tikzpicture}[level distance=0.5cm]
+  \node {$\cdot$}
+    child {node {$\cdot$}
+      child {node {$1$}}
+      child {node {$0$}}
+    }
+    child {node {$2$}} ;
+\end{tikzpicture}
+\end{center}
+
+These trees should also make it clear why mathematicians shorten
+their notation to
+$\begin{pmatrix}
+0 & 1 & 2 \\
+1 & 0 & 2 \\
+\end{pmatrix}$
+for the same permutation.  We will not do so, as this
+notation is \emph{untyped}, as it does not enforce that
+the shape of the tree is preserved.
+
+Iterating $\permtwo$ again is equivalent to the identity permutation, which can
+be verified using 2-combinators: \[\begin{array}{rcl} \permtwo \odot \permtwo
+&=& (\swapp \oplus \idiso) \odot (\swapp \oplus \idiso) \\ &\isotwo& (\swapp
+\odot \swapp) \oplus (\idiso \odot \idiso) \\ &\isotwo& \idiso \oplus \idiso \\
+&=& \idiso \end{array}\]
+
+More generally we can iterate 1-combinators to produce different
+reversible functions between finite sets, eventually wrapping around
+at some number which represents the \emph{order} of the underlying
+permutation.
+
+\begin{definition}[Power of a 1-combinator]
+  The $k^{th}$ power of a 1-combinator $p : \tau \iso \tau$, for
+  $k \in \Z$ is
+  \[
+    p^k =
+  \begin{cases}
+    \idiso & k = 0 \\
+    p \odot p^{k - 1} & k > 0 \\
+    (!~p) \odot p^{k + 1} & k < 0 \\
+  \end{cases}
+  \]
+\end{definition}
+
+\begin{definition}[Order of a 1-combinator]
+\label{def:order}
+  The order of a 1-combinator $p : \tau \iso \tau$, $\ord{p}$, is the
+  least postitive natural number $k \in \N^+$ such that
+  $p^k \isotwo \idiso$.
+\end{definition}
+
+For our example combinators on the type $\mathbb{3}$, simple traces using the
+operational semantics show the combinator $\permone$ is the identity
+permutation; the combinators $\permthree$ and $\permsix$ swap two of the three
+elements leaving the third intact; and the combinators $\permfour$ and
+$\permfive$ rotate the three elements. We therefore have:
+\[\begin{array}{rcl}
+\mathit{order}(\permone) &=& 1 \\
+\mathit{order}(\permtwo) = \mathit{order}(\permthree) = \mathit{order}(\permsix) &=& 2 \\
+\mathit{order}(\permfour) = \mathit{order}(\permfive) &=& 3
+\end{array}\]
+We should note that the above definition is the only one in this
+paper which is not \emph{effective};  in other words, we do not have an
+algorithm for computing it.  While there is an obvious method to
+compute it using the action of a 1-combinator on the elements of the
+type it acts on, this is extremely inefficient.  What we mean is that
+we know of no effective algorithm which works on the syntax of
+combinators.  The (only) difficulty is $\odot$, which can have an
+arbitrary effect on the order.
+
+The 2-combinators, being complete equivalences between
+1-combinators~\cite{Carette2016}, also capture equivalences regarding
+power of combinators and their order.
+
+\begin{lemma}
+\label{lem:distiterplus}
+  For $p : \tau\iso\tau$, $m,n\in\Z$, we have a 2-combinator
+  $\distiterplus{p}{m}{n} : (p^m \odot p^n) \isotwo p ^{m + n}$.
+\end{lemma}
+
+\begin{lemma}
+\label{lem:ordercancel}
+  For $p : \tau \iso \tau$, $n \in \Z$, $p^{k + n} \isotwo p^n$ where
+  $k = \ord{p}$.
+\end{lemma}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{From Sets to Groupoids}
+\label{sec:groupoids}
+
+From a denotational perspective, a $\Pi$ type $\tau$ denotes a finite set, a
+$\Pi$ 1-combinator denotes a permutation on finite sets, and the 2-combinators
+denote coherence conditions on these permutations~\cite{Carette2016}. Formally,
+the language $\Pi$ is a \emph{categorification}~\cite{math/9802029} of the
+natural numbers as a \emph{symmetric rig groupoid}~\cite{nlabrig}. This
+structure is a \emph{symmetric bimonoidal category} or a \emph{commutative rig
+category} in which every morphism is invertible. The underlying category
+consists of two symmetric monoidal structures~\cite{nla.cat-vn1051288}
+separately induced by the properties of addition and multiplication of the
+natural numbers. The monoidal structures are then augmented with distributivity
+and absorption natural isomorphisms~\cite{laplaza} to model the full commutative
+semiring (aka, commutative rig) of the natural numbers. Despite this rich
+structure, the individual objects in the category for $\Pi$ are just plain sets
+with no interesting structure. In this section we introduce, in the denotation
+of $\Pi$, some non-trivial groupoids which we call \emph{iteration groupoids}
+and \emph{symmetry groupoids}. Under certain conditions, sums and products of
+these groupoids behave as expected which ensures that a sensible compositional
+programming language can be designed around them.
+
+%%%%%
+\subsection{$\Pi$ Types as Sets (Discrete Groupoids)}
+
+Each $\Pi$ type $\tau$ denotes a (structured) finite set $\sem{\tau}$ as follows:
+
+\[\begin{array}{rcl}
+\sem{\zt} &=& \bot \\
+\sem{\ot} &=& \top \\
+\sem{\tau_1 \oplus \tau_2} &=& \sem{\tau_1} \uplus \sem{\tau_2} \\
+\sem{\tau_1 \otimes \tau_2} &=& \sem{\tau_1} \times \sem{\tau_2}
+\end{array}\]
+
+\noindent where we use $\bot$ to denote the empty set, $\top$ to denote a set
+with one element, and $\uplus$ and~$\times$ to denote the disjoint union of sets
+and the cartesian product of sets respectively. Each set can be viewed as a
+groupoid whose objects are the set elements and with only identity morphisms on
+each object. Nevertheless, the denotations of $\ot \oplus (\ot \oplus \ot)$ of
+$(\ot \oplus \ot) \oplus \ot$ are not in fact equal, although they are
+trivially isomorphic.
+
+By only being able to express types whose denotations are trivial
+groupoids, $\Pi$ leaves untapped an enormous amount of combinatorial structure
+that is expressible in type theory. We show that with a small but deep technical
+insight, it is possible to extend~$\Pi$ with types whose denotations are
+not discrete.
+
+%%%%%
+\subsection{Groupoids and Groupoid Cardinality}
+
+There are many definitions of groupoids that provide complementary perspectives
+and insights. Perhaps the simplest definition to state, and the one which is
+most immediately useful for our work, is that a groupoid is a category
+in which every morphism has an inverse. Intuitively, such a category consists of
+clusters of connected objects where each cluster is equivalent (in the
+category-theoretic sense) to a group, viewed as a $1$-object category. Thus an
+alternative definition of a groupoid is as a generalization of a group that
+allows for individual elements
+to have ``internal symmetries''~\cite{groupoidintro}. Baez et
+al.~\cite{2009arXiv0908.4305B} associate with each groupoid a cardinality that
+counts the elements up to these ``internal symmetries''.
+
+\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
+  The cardinality of a groupoid $G$ is the (positive) real number:
+  \[
+    |G| = \sum_{[x]} \frac{1}{|\textsf{Aut}(x)|}
+  \]
+  provided the sum converges. The summation is over \emph{isomorphism classes}
+  $[x]$ of objects $x$ and $|\textsf{Aut}(x)|$ is the number of \emph{distinct}
+  automorphisms of $x$.
+\end{definition}
+
+\begin{figure}[t]
+\begin{center}
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (1.5cm and 2.1cm);
+  \node[below] (A) at (-0.5,0) {$a$};
+  \node[below] (C) at (0.5,0) {$c$};
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (C) edge [out=140, in=40, looseness=4] (C);
+\end{tikzpicture}
+\qquad \qquad \qquad
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
+  \node[below] (A) at (-2,0) {$a$};
+  \node[below] (B) at (0,0) {$b$};
+  \node[below] (C) at (1.5,0) {$c$};
+  \path (A) edge [bend left=50] (B);
+  \path (C) edge [out=140, in=40, looseness=4] (C);
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+\end{tikzpicture}
+\qquad \qquad \qquad
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (2.8cm and 2.5cm);
+  \node[below] (A) at (-1.6,0) {$a$};
+  \node[below] (B) at (0,0) {$b$};
+  \node[below] (C) at (1.6,0) {$c$};
+  \path (A) edge [loop below] node[below] {\texttt{id}} (A);
+  \path (B) edge [loop below] node[below] {\texttt{id}} (B);
+  \path (C) edge [loop below] node[below] {\texttt{id}} (C);
+  \path (A) edge [loop above, looseness=3, in=48, out=132] (A);
+  \path (B) edge [loop above, looseness=3, in=48, out=132] (B);
+  \path (C) edge [loop above, looseness=3, in=48, out=132] (C);
+\end{tikzpicture}
+\end{center}
+\caption{\label{fig:groupoids2}Example groupoids $G_1$, $G_2$, and $G_3$.}
+\end{figure}
+
+For plain sets, the definition just counts the elements as each element is its
+own equivalence class and has exactly one automorphism (the identity). Without
+quite formalizing them and relying on the informal diagrams until the next
+section, we argue that each of the groupoids $G_1$, $G_2$, and $G_3$ in
+Fig.~\ref{fig:groupoids2} has cardinality $\frac{3}{2}$. Groupoid~$G_1$ consists
+of two isomorphism classes: class~$a$ has one object with one automorphism (the
+identity) and class~$c$ has one object with two distinct automorphisms; the
+cardinality is $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For groupoid~$G_2$, we
+also have two isomorphism classes with representatives $a$ and $c$; the class
+containing $a$ has two automorphisms starting from $a$: the identity and the
+loop going from $a$ to~$b$ and back. By the groupoid axioms, this loop is
+equivalent to the identity which means that the class containing $a$ has just
+one automorphism. The isomorphism class of $c$ has two non-equivalent
+automorphisms on it and hence the cardinality of $G_2$ is also
+$\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For~$G_3$, we have three isomorphism
+classes, each with two non-equivalent automorphisms, and hence the cardinality
+of $G_3$ is $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
+It is important to note that $G_1$ and $G_2$ are (categorically) equivalent
+groupoids, but that $G_3$ is not equivalent to either $G_1$ or $G_2$.
+Roughly speaking this is because the number of connected components is also
+an invariant of a groupoid, and here $G_1$ and $G_2$ have $2$ whilst $G_3$ has
+$3$.
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{$\Pi$-Combinators as Automorphism Classes}
+
+To formalize the counting above, we need, in the context of $\Pi$, a precise
+definition of what it means for automorphisms to be ``distinct''. We start with
+an example. Recall the type $\mathbb{3}$ with its three elements
+$ll=\inl{\inl{\unitv}}$, $lr=\inl{\inr{\unitv}}$, and $r=\inr{\unitv}$. One of
+the combinators of type $\mathbb{3} \iso \mathbb{3}$ is $\permtwo$. Observing
+the results of applying the iterates $(\permtwo)^k$ for $k \in \Z$ on the three
+elements we find:
+\[\begin{array}{c@{\qquad\qquad}c}
+\begin{array}{rcl}
+\evalone{(\permtwo)^{2k}}{ll} &=& ll \\
+\evalone{(\permtwo)^{2k}}{lr} &=& lr \\
+\evalone{(\permtwo)^{2k}}{r} &=& r
+\end{array} &
+\begin{array}{rcl}
+\evalone{(\permtwo)^{2k+1}}{ll} &=& lr \\
+\evalone{(\permtwo)^{2k+1}}{lr} &=& ll \\
+\evalone{(\permtwo)^{2k+1}}{r} &=& r
+\end{array}
+\end{array}\]
+Furthermore, Lem.~\ref{lem:ordercancel} gives us the following families of
+2-combinators $\alpha_{2k} : \idiso \isotwo (\permtwo)^{2k}$ and
+$\alpha_{2k+1} : \permtwo \isotwo (\permtwo)^{2k+1}$. We can put these facts together to
+construct a groupoid whose objects are the elements of $\mathbb{3}$, whose
+1-morphisms relate $v_i$ and~$v_j$ if $\evalone{(\permtwo)^k}{v_i} = v_j$ for some
+$k \in \Z$, and whose 2-morphisms are the families $\alpha_{2k}$ and
+$\alpha_{2k+1}$ above. Such a construction produces the following groupoid where
+each family of 1-morphisms that are identified by a family of 2-morphisms is
+drawn using a thick line:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]
+  \draw[dashed] (0,-0.3) ellipse (3cm and 2.5cm);
+  \node[below] (A) at (-2,0) {$ll$};
+  \node[below] (B) at (0,0) {$lr$};
+  \node[below] (C) at (1.5,0) {$r$};
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\permtwo$} (B);
+  \path[ultra  thick] (C) edge [out=140, in=40, looseness=4] node[above] {$\permtwo$}  (C);
+  \path[ultra  thick] (A) edge [my loop] node[below] {\texttt{id}} (A);
+  \path[ultra  thick] (B) edge [my loop] node[below] {\texttt{id}} (B);
+  \path[ultra  thick] (C) edge [my loop] node[below] {\texttt{id}} (C);
+\end{tikzpicture}
+\end{center}
+
+Clearly, the resulting groupoid is a reconstruction of $G_2$ in
+Fig.~\ref{fig:groupoids2} using $\Pi$ types and combinators. As analyzed
+earlier, this groupoid has cardinality $\frac{3}{2}$. From the perspective
+of~$\Pi$, this cardinality corresponds to the number of elements in the
+underlying set which is $3$ divided by the order of the combinator $\permtwo$
+which is 2. It is important to note that, as Def.~\ref{def:order} states, the
+calculation of the order of a 1-combinator is defined up to the equivalence
+induced by 2-combinators.
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Iteration Groupoids $\order{p}$}
+
+The previous construction is quite useful: it allows us to take a set of
+cardinality $N$ and a permutation on that set of order $P$ to construct a
+groupoid of cardinality $\frac{N}{P}$. Although this idea allows us to construct
+a groupoid of cardinality $\frac{3}{2}$ as shown above, it is not expressive
+enough to construct a groupoid of cardinality $\frac{1}{3}$. Indeed if the
+underlying set has only one element, the only permutation is the identity and
+$P$ must be 1. The construction, however, already contains the main ingredient
+needed for the construction of more general groupoids with fractional
+cardinality. This key piece is the set of iterates of a combinator which we will
+use in two different ways: (i) a perspective of combinators-as-data in which the
+iterates of a combinator $p$ become the objects of groupoid $\order{p}$ of
+cardinality $\ord{p}$, and (ii) a perspective of combinators-as-symmetries in
+which the iterates of a combinator $p$ become the internal symmetries of a
+one-element groupoid $\iorder{p}$ of cardinality $\frac{1}{\ord{p}}$. We explain
+these two perspectives in this section and the next.
+
+We define the $k^{\text{th}}$ iterate of $p$ as:
+
+and then collect all such iterates into a type
+
+\noindent For example, the zeroth and first iterate of a combinator are represented as
+
+These ingredients are sufficient to construct a groupoid $\order{p}$ from the
+iterates of a 1-combinator $p : \tau\iso\tau$. The objects will be
+the triples $\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators $q :
+\tau\iso\tau$, and 2-combinators $\alpha : q \isotwo p^k$. This triple encodes
+our knowledge that we have some (arbitrary) iterate $q$ of $p$; we do not have
+any a priori knowledge of the actual syntactic structure of $q$, but we do
+know that it is equivalent to $p ^ k$.
+
+We then add (reversible!) morphisms between any iterates related by
+2-combinators; categorically, this will make any such objects equivalent.
+If $p$ has order $o$, Lem.~\ref{lem:ordercancel} gives us a
+2-combinator $\alpha$ which witnesses that $p^i \isotwo p^{i+o}$.
+Thus given two iterates $\triple{i}{q_i}{\alpha_i}$ and
+$\triple{i+o}{q_j}{\alpha_j}$, they must be equivalent since
+$\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.
+In other words $p^j$ will be equivalent to $p^k$ exactly when $j$ and $k$
+differ by $o$.  This informal description formalizes straightforwardly:
+
+Despite its involved internal structure, the groupoid $\order{p}$ is essentially
+a set of cardinality $\ord{p}$.
+
+\begin{lemma}
+  $|\order{p}| = \ord{p}$
+\end{lemma}
+\begin{proof}
+  Let $o = \ord{p}$. There are $o$ isomorphism classes of
+  objects. Consider an object $x = \triple{k}{q}{\alpha}$, its
+  isomorphism class $[x] = \triple{k+io}{q_i}{\alpha_i}$ where
+  $i \in \Z$. The group $\textsf{Aut}(x)$ is the group generated by
+  $\idisotwo$ and has order 1. Hence
+  $|\order{p}| = \sum\limits_{1}^{o}\frac{1}{1} = o$.
+\end{proof}
+
+As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. Up to equivalence, this groupoid is indeed equivalent to a set with two elements $\idiso$ and $\permtwo$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.6}]
+  \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+
+  \node[below] at (-8,0) {$\ldots$};
+  \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
+  \node[below] (B) at (-3,0) {$< -1 , \permtwo , \ldots >$};
+  \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
+  \node[below] (D) at (3,0) {$< 1 , \permtwo , \ldots >$};
+  \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
+  \node[below] at (8,0) {$\ldots$};
+
+  \path[ultra  thick] (A) edge [my loop] node[below] {\texttt{id}} (A);
+  \path[ultra  thick] (B) edge [my loop] node[above] {\texttt{id}} (B);
+  \path[ultra  thick] (C) edge [my loop] node[below] {\texttt{id}} (C);
+  \path[ultra  thick] (D) edge [my loop] node[above] {\texttt{id}} (D);
+  \path[ultra  thick] (E) edge [my loop] node[below] {\texttt{id}} (E);
+
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (C);
+  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+  \path[ultra  thick] (B) edge [bend left=-50] node[below] {$\alpha_{-1,1}$} (D);
+
+\end{tikzpicture}
+\end{center}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Symmetry Groupoids $\iorder{p}$}
+
+The elements of $\iter{p}$ form a group under the following operation:
+\[
+\triple{k_1}{p_1}{\alpha_1} ~\circ~ \triple{k_2}{p_2}{\alpha_2} =
+ \triple{k_1+k_2}{p_1 \odot p_2}{(\alpha_1 ~\respstwo~
+    \alpha_2)~\transtwo~(\distiterplus{p}{k_1}{k_2})}
+\]
+where $\distiterplus{p}{k_1}{k_2}$ is defined in
+Lem.~\ref{lem:distiterplus}. The common categorical representation of
+a group is a category with one trivial object and the group elements
+as morphisms on that trivial object. Our construction is essentially
+the same except that the trivial object is represented as the iterates
+of the identity over a singleton type.
+
+Formally, given a 1-combinator $p : \tau\iso\tau$, the groupoid
+$\iorder{p}$ is the groupoid (2-groupoid technically) whose objects
+are the iterates in $\iter{\idiso_{\top}}$. Every pair of objects is
+connected by the morphisms in $\iter{p}$. To capture the relationship
+between these morphisms, we also have 2-morphisms relating the
+distinct iterates as in the previous section.
+
+\begin{lemma}
+  $|\iorder{p}| = \frac{1}{\ord{p}}$
+\end{lemma}
+\begin{proof}
+  Let $o = \ord{p}$. The objects form one isomorphism class
+  $[p]$. There are, up to equivalence, exactly $\ord{p}$ distinct
+  morphisms on this equivalence class. Hence, the group
+  $\textsf{Aut}([p])$ is the group generated by
+  $p^0, p^1 \dots p^{o-1}$, and the cardinality $|\iorder{p}|$ is
+  $\frac{1}{o}$.
+\end{proof}
+
+Note that for each power $p ^ i$ of $p$, there is a morphism
+$\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$
+to the identity. Note also that everything is well-defined even if we
+choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.6,every node/.style={scale=0.6}]
+  \draw[dashed] (0,-0.3) ellipse (9cm and 2.5cm);
+
+  \node[below] at (-8,0) {$\ldots$};
+  \node[below] (A) at (-6,0) {$< -2 , \idiso , \ldots >$};
+  \node[below] (B) at (-3,0) {$< -1 , \idiso , \ldots >$};
+  \node[below] (C) at (0,0) {$< 0, \idiso, \idisotwo >$};
+  \node[below] (D) at (3,0) {$< 1 , \idiso , \ldots >$};
+  \node[below] (E) at (6,0) {$< 2 , \idiso , \ldots >$};
+  \node[below] at (8,0) {$\ldots$};
+
+  \path[ultra  thick] (A) edge [my loop] node[below] {$\idiso$} (A);
+  \path[ultra  thick] (A) edge [out=-140, in=-40, looseness=20] node[below] {$\permtwo$} (A);
+
+  \path[ultra  thick] (A) edge [bend left=50] node[above] {$\alpha_{-2,0}$} (B);
+  \path[ultra  thick] (B) edge [bend left=50] node[above] {$\alpha_{0,2}$} (C);
+  \path[ultra  thick] (C) edge [bend left=50] node[above] {$\alpha_{0,2}$} (D);
+  \path[ultra  thick] (D) edge [bend left=50] node[above] {$\alpha_{0,2}$} (E);
+\end{tikzpicture}
+\end{center}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Sums and Products of Iteration and Symmetry Groupoids}
+
+If we are to build a compositional programming language around iteration and
+symmetry groupoids, we need to ensure that they compose sensibly with the
+existing type formers. Groupoids, viewed as categories, come associated with
+natural notions of sums and products, and one might expect or hope that
+identities which hold for rational numbers lift to identities in our
+situation. The most prominent and important identity we seek is:
+such as:
+\[
+\order{p} \otimes \iorder{p} \simeq \mathbb{1}
+\]
+The groupoids on either side are not categorically equivalent but they
+do have the same cardinality. Thus if we focus on
+cardinality-preserving morphisms, it is sensible to consider them
+equivalent. The situation is subtle, however, and studied in detail in
+the next section.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{$\Pi^/$}
+
+We are now ready to turn the groupoid constructions from the previous section
+into an actual programming language. The language $\Pi^/$ will be an extension
+of $\Pi$ with new type constructors and combinators for creating and
+manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
+
+We begin by adding four new syntactic categories to the definition of $\Pi$ in
+Sec.~\ref{opsempi}:
+
+\[\begin{array}{lrcl}
+(\textrm{Types}) & \tau &::=& \ldots \\
+(\textrm{Values}) & v &::=& \ldots \\
+(\textrm{1-combinators}) & c &:& \tau_1 \iso \tau_2 ~::= \ldots \\
+(\textrm{2-combinators}) & \alpha &:& c_1 \isotwo c_2 \mbox{~where~}
+  c_1, c_2 : \tau_1 \iso \tau_2 ~::= \ldots \\
+\\
+(\textrm{Fractional Types}) & \mathbb{T} &::=&
+  \order{c} \alt \iorder{c} \alt \mathbb{T}_1 \circledast \mathbb{T}_2 \\
+  \order{c} \alt \iorder{c} \alt \mathbb{T}_1 \circledast \mathbb{T}_2 \\
+ (\textrm{Fractional Values}) & \mathbb{V} &::=&
+  c^k \alt \alpha^k \alt \langle \mathbb{V},\mathbb{V} \rangle \\
+ (\textrm{/-combinators}) & \rho &:& \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::= \\
+& &&     \idiso/ \alt \rho \circledcirc \rho \alt \rho \circledast \rho \\
+& &\alt& \unitetl/ \alt \unititl/ \alt \unitetr/ \alt \unititr/ \\
+& &\alt& \swapt/ \alt \assoclt/ \alt \assocrt/ \\
+& &\alt& \order{\alpha} \alt \eta- \alt \eta+ \alt \epsilon+ \alt \epsilon- \\
+(\textrm{//-combinators}) & \varrho &:& \rho_1 \leftrightblackspoon \rho_2 \mbox{~where~}
+  \rho_1, \rho_2 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2 ~::= \ldots
+\end{array}\]
+
+The syntactic category $\ft$ of fractional types introduces type expressions for
+iteration groupoids, symmetry groupoids, and their products. The combinators
+that relate these fractional types fall into several groups. The first line
+ensures that the combinators include the identity and sequential composition
+$\circledcirc$ and can be applied anywhere inside a product $\circledast$. The
+next two lines ensure that $\circledast$ carries a symmetric monoidal structure
+with combinators witnessing unit, commutativity, and associativity. The last
+line relates two types $\order{c_1}$ and $\order{c_2}$ via $\order{\alpha}$
+whenever $\alpha : c_1 \isotwo c_2$. Indeed if $c_1$ and $c_2$ are considered
+equivalent via a 2-combinator then we also consider their iteration groupoids to
+be equivalent. The last two combinators $\eta_{\ft}$ and $\epsilon_{\ft}$ are
+inspired from the definition of compact closed categories~\cite{ccc} which are
+symmetric monoidal categories in which every object has a dual. In that setting,
+the dual $A^*$ of an object $A$ comes equipped with two morphisms:
+\begin{itemize}
+\item a \emph{unit} $\eta_A : 1 \rightarrow A^* \otimes A$, and
+\item a \emph{counit} $\epsilon_A : A \otimes A^* \rightarrow 1$
+\end{itemize}
+that satisfy appropriate coherence conditions. These conherence conditions are
+added as terms in the $\varrho$ syntactic category.
+
+\paragraph*{Values.} When the types denote sets, it is evident what it means to have a
+value of a given type: it is just an element of the set. When types
+denote groupoids, it is less clear what it means to have a value,
+especially when the total number of values, as reported by the
+groupoid cardinality, is a proper fraction. We obviously cannot list
+``half a value'' but what we \emph{can} do is to list an integral
+number of values and provide an equivalence relation that specifies
+which values are distinguishable such that the ultimate counting of
+distinguishable values is a fractional amount. The idea is not
+uncommon: in the conventional $\lambda$-calculus, we list $\lambda
+x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow
+\tau$ and then provide a separate equivalence relation
+($\alpha$-equivalence) to express the fact that these two values are
+indistinguishable. The treatment in our setting is similar but richer
+as in some cases the equivalence relation is not external but is
+itself part of the value and the resulting count may be fractional.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{$\Pi^/$: Operational Semantics}
+
+The operational semantics for all the primitive combinators is a
+simple transliteration of Fig.~\ref{opsem}. We omit the
+straightforward implementation of prim and its inverse
+below:
+
+The interesting combinators operationally are the unit/counit combinators $\eta$
+and $\epsilon$, and the synchronization combinators. Their semantics is defined
+by the following pair of mutually recursive interpreters:
+
+The unit combinators $\eta$ simply generate unit tangles, and since unit tangles
+are equivalent to the \emph{identity}, they can be freely eliminated by the
+counit combinators $\epsilon$. The two synchronization operations exchange the
+tangled product with an iterate. The two interpreters satisfy several properties
+described below: First they are congruences for the equivalence $≈$ on values.
+We can further prove that both are \emph{reversible}.  Furthermore, we can show
+two coherence conditions: first, that the reverse interpreter gives equivalent
+results to the forward interpreter applied to a reverse combinator, and second,
+that two equivalent combinators (as given by a 2-combinator) will evaluate to
+equivalent values.
+
+The operational definition of synchr⋆ might seem at odds with our claim that it is related to associativity while it looks like commutativity.  The way to understand it is as follows: if indeed all values were indepedendent, it would be associativity.  However, in this case, $p // q$ is really two \emph{tangled} values, which we do not have access to.  To keep these synchronized and yet to achieve the given type, the only choice (operationally) is to swap.  This is where the ``action at a distance'' occurs.
+
+We implement an example zig-zag, which use synchr⋆
+to synchronize the \emph{tangled} values created by $\eta$ and $\epsilon$.
+The circuit of zig-zag is shown in figure \ref{fig:zigzag} which
+shows how the input of type $\#c$ is swapped by synchr⋆.
+
+\begin{figure}[bht]
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9},highlight/.style={line width=4pt,orange!70}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \node at (0.5,1) {$\textsf{unit}_\times$};
+  \path (-1.1,1) edge node[above] {${\textsf{\#c}}$} (0,1);
+  \path (1,1.75) edge node[above] {$\mathbb{1}$} (1.6,1.75);
+  \path [highlight] (1,0.25) edge node[above] {} (4,0.25);
+  \path (1,0.25) edge node[above] {${\textsf{\#c}}$} (4,0.25);
+  \draw (1.6,1) -- (2.6,1) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
+  \node at (2.1,1.9) {$\eta_{\textsf{c}}$};
+  \draw[dashed] (2.8,2.6) -- (2.8,1.25);
+  \path [highlight] (2.6,2.6) edge node[above] {} (4,2.6);
+  \path (2.6,2.6) edge node[above] {${\textsf{\#c}}$} (4,2.6);
+  \path [highlight] (2.6,1.25) edge node[above] {} (4,1.25);
+  \path (2.6,1.25) edge node[above] {$1/\textsf{\#c}$} (4,1.25);
+  \draw (4,0) -- (5.5,0) -- (5.5,3) -- (4,3) -- cycle;
+  \node at (4.75,1.5) {$synch_{\textsf{c}}$};
+  \path [highlight] (5.5,1.25) edge node[above] {} (7,1.25);
+  \path (5.5,1.25) edge node[above] {$1/\#c$} (7,1.25);
+  \path [highlight] (5.5,2.6) edge node[above] {} (9,2.6);
+  \path (5.5,2.6) edge node[above] {$\#c$} (9,2.6);
+  \draw (7,0) -- (8,0) -- (8,1.6) -- (7,1.6) -- cycle;
+  \node at (7.5,0.8) {$\epsilon_c$};
+  \draw[dashed] (6.8,0.2) -- (6.8,1.25);
+  \path (8,1) edge node[above] {$\mathbb{1}$} (9,1);
+  \path [highlight] (5.5,0.2) edge node[above] {} (7,0.2);
+  \path (5.5,0.2) edge node[above] {$\#c$} (7,0.2);
+  \draw (9,0.8) -- (10,0.8) -- (10,2.8) -- (9,2.8) -- cycle;
+  \node at (9.5,1.8) {$\textsf{unit}_\times$};
+  \path (10,1.8) edge node [above] {$\#c$} (11,1.8);
+\end{tikzpicture}
+\caption{\label{fig:zigzag} Zig-zag}
+\end{figure}
+
+The following is an example usage of zig-zag, which uses NOT combinator.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Limitations}
+
+Given any non-negative rational number, we can form a type whose cardinality is
+that number. And yet, our types do not capture the full structure of the
+non-negative rational numbers, as these form a commutative semifield. There are
+a number of operations and properties which need to be added to complete this.
+Most seem quite straightforward.  We can however single one out which may not
+be: what we are missing is a multiplicative inverse for every type, and not just
+$\order{p}$. In particular, we would like to form the type
+$\iorder{(\iorder{p})}$ and have it be equivalent to $\order{p}$.  The
+relationship between $\order{p}$ and $\iorder{p}$ in $\Pi^/$ reveals a pattern
+that can be exploited to achieve this generalization. The multiplicative inverse
+of $\order{p}$ is obtained by promoting the objects in $\order{p}$ to morphisms
+in $1/\hash p$, which is a general process called \emph{delooping}. It is clear
+we can go in the inverse direction by demoting morphisms to objects which is a
+process called \emph{looping}. We leave a possible extension with a general
+looping/delooping process to future work.
+
+A second more immediate concern is to discover the abstract monadic and/or
+comonadic structure underlying the operational semantics. It is clear that the
+operational interpretation of fractional types involves a computational effect
+that requires synchronization with the ``future''. Implementing this effect
+using backtracking, reference cells, or dataflow constraints is possible but
+each implementation choice is ad hoc. We conjecture that with the right monadic
+and/or comonadic abstraction, the operational semantics will be simpler and
+expose still richer properties.  We chose the dependently-typed dataflow
+semantics because we are able to prove that it is reversible and coherent,
+unlike our previous attempts with explicit effects, none of which were provably
+reversible and/or coherent.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+
+We have presented a natural notion of \emph{fractional types} that
+enriches a class of reversible programming languages in several
+dimensions.  Further research might show how to use fractional
+types in a conventional (i.e., irreversible) programming language, their full
+potential is only achieved when the ambient language guarantees that
+no information is created or erased.
+
+The key semantic insight is that iterating a reversible program $p$ on
+a finite type must eventually reach the identity in $\ord{p}$
+steps. By being careful not to collapse proofs, each such reversible
+program has $\ord{p}$ distinct proofs of reversibility and hence gives
+rise to a groupoid with cardinality $\frac{1}{\ord{p}}$. Going from
+this observation to a full programming language required several
+difficult and subtle design choices which we have explored to produce
+$\Pi^/$. The latter language has a natural denotational semantics
+where types denote groupoids. Its operational semantics requires a
+mechanism to express a computational effect which enables spatially
+separated parts of the program to communicate in a way that is
+reminiscent of entanglement in quantum mechanics. It is possible to
+realize such an operational semantics using global reference cells,
+backtracking, or other conventional technique. A more enlightening and
+less ad hoc implementation encodes the required dependency in dataflow
+constraints encoded in dependent types. The key idea is to generalize
+the usual cartesian product to a \emph{tangled product} that allows the
+components to interact at synchronization points.
+
+Our fractional types extend the natural denotation of types from sets
+to non-trivial groupoids but they only scratch the surface of the
+tower of weak $\omega$-groupoids that is expressible in HoTT. A long
+term goal of our research is to find natural type constructors
+inspired by the rich combinatorial structure of weak
+$\omega$-groupoids and that provide novel programming abstractions.
+
+For an information-theoretic perspective on the language $\Pi$, we think of a
+type containing $N$ values as an abstract system that has~$N$ distinguishable
+states. According to the conventional theory of information~\cite{Shannon1948},
+the amount of information contained in each state of a system with $N$
+distinguishable states is $(\log N)$ bits of information. For example, the type
+$\mathbb{2}$ can be thought of as an abstract system with two distinguishable
+states labeled $\mathsf{true}$ and $\mathsf{false}$ each containing $\log 2 = 1$
+bit. Similarly, the type $\mathbb{3}$ can be thought of as an abstract system
+with three distinguishable states each containing $\log 3$ bits. The logarithmic
+map implies that information contained in a composite state is the sum of the
+information contained in its constituents. For example, the type $\mathbb{2}
+\otimes \mathbb{3}$ can be thought of a composite system consisting of two
+independent unrelated subsystems. Each state of the composite system therefore
+contains $\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
+information contained in each subsystem. Since all the combinators preserve
+cardinality, they are also information-preserving.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{plainurl}
+\bibliography{cites}
+
+\end{document}
