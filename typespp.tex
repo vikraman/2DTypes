@@ -989,6 +989,11 @@ such as:
 \]
 The groupoids on either side are not categorically equivalent but they do have the same cardinality. Thus if we focus on some notion of cardinality-preserving morphisms, it is sensible to consider them equivalent. The situation is however subtle and does not directly support a notion of sums. It is studied in detail in the next section.
 
+%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Looping and Delooping}
+
+add here
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
 
@@ -1063,6 +1068,8 @@ The last new syntactic category in $\Pi^/$ is that of values which deserves some
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
 
+Only non-trivial pairs are created by eta; they create ``synchronized'' uses combinators $c^k$ and $1/c^k$. The rest of the combinators can only replace these combinators by $\isotwo$-equivalent ones. Assoc is subtle: what if we have $\langle \order{c_1} , \langle \iorder{c_2} , \order{c_2} \rangle \rangle$; naive assoc would allow us to create a pair with unrelated combinators which cannot be eliminated using epsilon. But if assoc is constrained to maintain the invariant that only ``synchronized'' uses of combinators are ever paired together, everything works great.
+
 The operational semantics for all the primitive combinators is a
 simple transliteration of Fig.~\ref{opsem}. We omit the
 straightforward implementation of prim and its inverse
@@ -1125,6 +1132,8 @@ shows how the input of type $\#c$ is swapped by synchr⋆.
 \end{figure}
 
 The following is an example usage of zig-zag, which uses NOT combinator.
+
+ccc have a notion of higher-order functions, trace, etc. Talk about these examples.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Limitations}
