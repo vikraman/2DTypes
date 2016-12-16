@@ -992,7 +992,9 @@ The groupoids on either side are not categorically equivalent but they do have t
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Looping and Delooping}
 
-add here
+Our constructions of $\order{p}$ and $\iorder{p}$ are instances of a general pattern that we have instantiated to the setting of $\Pi$ and adapted to explicitly refer to weak (i.e., up to $\isotwo$ in our case) equivalences. In the general construction~\cite{looping}, a group $G$ is known to induce two groupoids, a looping groupoid $LG$ and a delooping groupoid $BG$. These are defined as follows.
+
+The looping groupoid $LG$ has the group elements as objects and, for every group elements~$g$ and $h$, there is a morphism between $g$ and $h^-1 \cdot g \cdot h$. If we fix a type $\tau$ and a particular 1-combinator $p : \tau \iso \tau$, we get a group whose elements are the iterates $p^k$. The corresponding looping groupoid would have all the iterates as objects and morphisms between $p^{k_1}$ and $p^{k_2}$ whenever there exists an integer $j$ such that $p^{k_2}$ is equivalent to $p^{-j} \odot p^{k_1} \odot p^{j}$. By Lem.~\ref{lem:distiterplus}, the latter term is $\isotwo$-equivalent to $p^{-j+k_1+j}$ which is $\isotwo$-equivalent to $p{k_1}$. In other words, we have a morphism between $p^{k_1}$ and $p^{k_2}$ whenever they are $\isotwo$-equivalent which is consistent with our definition of iteration groupoids. The delooping groupoid $BG$ has one trivial element and for each group element $g$ a morphism from that element to itself. Modulo $\isotwo$-equivalences, this is consistent with our definition of symmetry groupoids.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
