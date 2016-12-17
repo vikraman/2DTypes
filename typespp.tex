@@ -252,7 +252,7 @@ isomorphisms~\cite{Carette2016,James:2012:IE:2103656.2103667}. We
 present the syntax and operational semantics of the parts of the
 language relevant to our work.
 
-\begin{figure}[ht]
+\begin{figure}[t]
 \[\begin{array}{rrcll}
 \unitepl :&  \zt \oplus \tau & \iso & \tau &: \unitipl \\
 \unitepr :&  \tau \oplus \zt & \iso & \tau &: \unitipr \\
@@ -303,7 +303,7 @@ $!(c_1 \odot c_2) = ~!c_2 \odot~ !c_1$, etc.
 \label{pi-combinators}}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[t]
 \[\begin{array}{c}
 \Rule{}
 {c : \tau_1 \iso \tau_2}
@@ -384,7 +384,7 @@ $2!(\alpha_1~\transtwo~\alpha_2) = (2!~\alpha_2)~\transtwo~(2!~\alpha_1)$, etc.
 \label{pi-combinators2}}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[t]
 {\footnotesize
 \[\begin{array}{cc}
 \begin{array}[t]{rlcl}
@@ -996,6 +996,7 @@ The looping groupoid $LG$ has the group elements as objects and, for every group
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Products of Iteration and Symmetry Groupoids}
+\label{sub:products}
 
 If we are to build a compositional programming language around iteration and
 symmetry groupoids, we need to ensure that they compose sensibly with the
@@ -1040,7 +1041,7 @@ somehow combines the local and global aspects of the equivalence.
 
 We are now ready to turn the groupoid constructions from the previous section into an extension of $\Pi$ with new type constructors and combinators for creating and manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
 
-\begin{figure}[ht]
+\begin{figure}[t]
 \[\begin{array}{rrcll}
 \unitetl/ :&  \order{\idiso} \circledast \mathbb{T} & \leftrightspoon & \mathbb{T} &: \unititl/ \\
 \unitetr/ :&  \mathbb{T} \circledast \order{\idiso} & \leftrightspoon & \mathbb{T} &: \unititr/ \\
@@ -1076,15 +1077,19 @@ We are now ready to turn the groupoid constructions from the previous section in
 \end{array}\]
 
 Each combinator $\rho$ has an inverse.
-\caption{$\Pi^/$ fractional combinators}
+\caption{$\Pi^/$ fractional combinators (non-dependent version)}
 \label{pifrac:comb}
 \end{figure}
 
-We call the new extension $\Pi^/$. We begin by adding three new syntactic categories to the definition of $\Pi$ in Sec.~\ref{opsempi}:
+%%%%%
+\subsection{Non-Dependent Version}
 
-\begin{definition}[$\Pi^/$]
+As a first approximation to the language we seek, we consider adding three new
+syntactic categories to the definition of $\Pi$ in Sec.~\ref{opsempi}:
+
+\begin{definition}[Non-dependent $\Pi^/$]
 \label{def:pifrac}
-The syntax of $\Pi^/$ is given by the following categories:
+The syntax of (non-dependent) $\Pi^/$ is given by the following categories:
 \[\begin{array}{lrcl}
 (\textrm{Types}) & \tau &::=& [\textit{see Def.~\ref{def:pi}}] \\
 (\textrm{Values}) & v &::=& [\textit{see Def.~\ref{def:pi}}] \\
@@ -1101,10 +1106,97 @@ The syntax of $\Pi^/$ is given by the following categories:
 \end{array}\]
 \end{definition}
 
-The syntactic category $\ft$ of fractional types introduces type expressions for iteration groupoids, symmetry groupoids, and their products. The combinators that relate these fractional types are in Fig.~\ref{pifrac:comb}. The bottom group includes identity and sequential composition~$\circledcirc$ combinators and ensures that the combinators can be applied anywhere inside a product $\circledast$. There is also a combinator that relates two types $\order{c_1}$ and $\order{c_2}$ via $\order{\alpha}$ whenever $\alpha : c_1 \isotwo c_2$. Indeed if $c_1$ and $c_2$ are considered equivalent via a 2-combinator then we also consider their iteration groupoids to be equivalent. The top group ensures that $\circledast$ carries a symmetric monoidal structure with combinators witnessing the unit, commutativity, and associativity properties. The last two pairs combinators $\eta-/\epsilon-$ and $\eta+/\epsilon+$ are inspired from the definition of compact closed categories~\cite{ccc} which are
-symmetric monoidal categories in which every object has a dual. They are the ones that witness the ``fractional'' nature of symmetry groupoids: they are indeed the multiplicative inverses of iteration groupoids.
+The syntactic category $\ft$ of fractional types introduces type expressions for
+iteration groupoids, symmetry groupoids, and their products. The combinators
+that relate these fractional types are in Fig.~\ref{pifrac:comb}. The bottom
+group includes identity and sequential composition~$\circledcirc$ combinators
+and ensures that the combinators can be applied anywhere inside a product
+$\circledast$. There is also a combinator that relates two types $\order{c_1}$
+and $\order{c_2}$ via $\order{\alpha}$ whenever $\alpha : c_1 \isotwo
+c_2$.
+Indeed if $c_1$ and $c_2$ are considered equivalent via a 2-combinator then we
+also consider their iteration groupoids to be equivalent. The top group ensures
+that $\circledast$ carries a symmetric monoidal structure with combinators
+witnessing the unit, commutativity, and associativity properties. The last two
+pairs combinators $\eta-/\epsilon-$ and $\eta+/\epsilon+$ are inspired from the
+definition of compact closed categories~\cite{ccc} which are symmetric monoidal
+categories in which every object has a dual. They are the ones that witness the
+``fractional'' nature of symmetry groupoids as motivated in Sec.~\ref{sub:products}.
 
-The last new syntactic category in $\Pi^/$ is that of values which deserves some background discussion. When the types denote sets, it is evident what it means to have a value of a given type: it is just an element of the set. When types denote groupoids, it is less clear what it means to have a value, especially when the total number of values, as reported by the groupoid cardinality, is a proper fraction. In that case we the values up to an equivalence relation. The idea is not uncommon: in the conventional $\lambda$-calculus, we list $\lambda x.x$ and $\lambda y.y$ as separate values of type $\tau \rightarrow \tau$ and then provide a separate equivalence relation ($\alpha$-equivalence) to express the fact that these two values are indistinguishable. The treatment in our setting is similar: for iteration groupoids $\order{c}$, every distinct iterate $c^k$ is a listed as a separate value with the understanding that some iterates are $\isotwo$-equivalent. Similarly for symmetry groupoids $\iorder{c}$, every morphism is listed as a value $1/c^k$ with the same understanding that that some of these morphisms are $\isotwo$-equivalent.
+The last new syntactic category in $\Pi^/$ is that of values which deserves some
+background discussion. When the types denote sets, it is evident what it means
+to have a value of a given type: it is just an element of the set. When types
+denote groupoids, it is less clear what it means to have a value, especially
+when the total number of values, as reported by the groupoid cardinality, is a
+proper fraction. In that case we the values up to an equivalence relation. The
+idea is not uncommon: in the conventional $\lambda$-calculus, we list
+$\lambda x.x$ and $\lambda y.y$ as separate values of type
+$\tau \rightarrow \tau$ and then provide a separate equivalence relation
+($\alpha$-equivalence) to express the fact that these two values are
+indistinguishable. The treatment in our setting is similar: for iteration
+groupoids $\order{c}$, every distinct iterate $c^k$ is a listed as a separate
+value with the understanding that some iterates are
+$\isotwo$-equivalent. Similarly for symmetry groupoids $\iorder{c}$, every
+morphism is listed as a value $1/c^k$ with the same understanding that that some
+of these morphisms are $\isotwo$-equivalent.
+
+%%%%%
+\subsection{Pointed Types}
+
+To understand the challenge in designing an operational semantics for $\eta$ and
+$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
+Fig.~\ref{fig:zigzag}. Let the combinator $c$ to be of order greater than or
+equal to 2, i.e., the type $\order{c}$ has at least two distinct values $c^i$
+and $c^j$ and the type $\iorder{c}$ has at least two distinct values $1/c^i$ and
+$1/c^j$. The use of $\eta+$ has then at least four choices; as discussed at the
+end of Sec.~\ref{sub:products}, $\eta+$ will internalize some arbitrary but
+fixed choice and might for example generate the pair
+$\langle c^i , 1/c^i \rangle$. No matter what choice is internalized in $\eta+$,
+there is at least one different incoming value $c^j$ of type $\order{c}$. In
+that case, the combinator $\epsilon-$ encounters $\langle 1/c^i , c^j
+\rangle$. If our operational semantics allows $\epsilon-$ to annihilate
+arbitrary pairs, the net effect of the circuit would be to map $c^j$ to $c^i$
+for arbitrary $i$ and $j$.
+
+\begin{figure}[bht]
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+  \node at (0.5,1) {\footnotesize{$\unitetl/$}};
+  \path (-1.1,1) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (0,1);
+  \path (1,1.75) edge node[above] {\footnotesize{$\order{\idiso}$}} (1.6,1.75);
+  \path [highlight] (1,0.25) edge node[above] {} (4,0.25);
+  \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (4,0.25);
+  \draw (1.6,1) -- (2.6,1) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
+  \node at (2.1,1.9) {\footnotesize{$\eta+$}};
+  \draw[dashed] (2.8,2.6) -- (2.8,1.25);
+  \path [highlight] (2.6,2.6) edge node[above] {} (4,2.6);
+  \path (2.6,2.6) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (4,2.6);
+  \path [highlight] (2.6,1.25) edge node[above] {} (4,1.25);
+  \path (2.6,1.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.25);
+  \draw (4,0) -- (5.5,0) -- (5.5,3) -- (4,3) -- cycle;
+  \node at (4.75,1.5) {$\footnotesize{\assocrt/}$};
+  \path [highlight] (5.5,1.25) edge node[above] {} (7,1.25);
+  \path (5.5,1.25) edge node[above] {$\footnotesize{1/\#c}$} (7,1.25);
+  \path [highlight] (5.5,2.6) edge node[above] {} (9,2.6);
+  \path (5.5,2.6) edge node[above] {\footnotesize{$\#c$}} (9,2.6);
+  \draw (7,0) -- (8,0) -- (8,1.6) -- (7,1.6) -- cycle;
+  \node at (7.5,0.8) {\footnotesize{$\epsilon-$}};
+  \draw[dashed] (6.8,0.2) -- (6.8,1.25);
+  \path (8,1) edge node[above] {\footnotesize{$\order{\idiso}$}} (9,1);
+  \path [highlight] (5.5,0.2) edge node[above] {} (7,0.2);
+  \path (5.5,0.2) edge node[above] {\footnotesize{$\#c$}} (7,0.2);
+  \draw (9,0.8) -- (10,0.8) -- (10,2.8) -- (9,2.8) -- cycle;
+  \node at (9.5,1.8) {\footnotesize{$\unitetr/$}};
+  \path (10,1.8) edge node [above] {\footnotesize{$\#c$}} (11,1.8);
+\end{tikzpicture}
+\caption{\label{fig:zigzag} Zig-zag}
+\end{figure}
+
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
@@ -1148,44 +1240,6 @@ equivalent values.
 
 The operational definition of synchr⋆ might seem at odds with our claim that it is related to associativity while it looks like commutativity.  The way to understand it is as follows: if indeed all values were indepedendent, it would be associativity.  However, in this case, $p // q$ is really two \emph{tangled} values, which we do not have access to.  To keep these synchronized and yet to achieve the given type, the only choice (operationally) is to swap.  This is where the ``action at a distance'' occurs.
 
-We implement an example zig-zag, which use synchr⋆
-to synchronize the \emph{tangled} values created by $\eta$ and $\epsilon$.
-The circuit of zig-zag is shown in figure \ref{fig:zigzag} which
-shows how the input of type $\#c$ is swapped by synchr⋆.
-
-\begin{figure}[bht]
-\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9},highlight/.style={line width=4pt,orange!70}]
-  \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-  \node at (0.5,1) {$\textsf{unit}_\times$};
-  \path (-1.1,1) edge node[above] {${\textsf{\#c}}$} (0,1);
-  \path (1,1.75) edge node[above] {$\mathbb{1}$} (1.6,1.75);
-  \path [highlight] (1,0.25) edge node[above] {} (4,0.25);
-  \path (1,0.25) edge node[above] {${\textsf{\#c}}$} (4,0.25);
-  \draw (1.6,1) -- (2.6,1) -- (2.6,2.8) -- (1.6,2.8) -- cycle;
-  \node at (2.1,1.9) {$\eta_{\textsf{c}}$};
-  \draw[dashed] (2.8,2.6) -- (2.8,1.25);
-  \path [highlight] (2.6,2.6) edge node[above] {} (4,2.6);
-  \path (2.6,2.6) edge node[above] {${\textsf{\#c}}$} (4,2.6);
-  \path [highlight] (2.6,1.25) edge node[above] {} (4,1.25);
-  \path (2.6,1.25) edge node[above] {$1/\textsf{\#c}$} (4,1.25);
-  \draw (4,0) -- (5.5,0) -- (5.5,3) -- (4,3) -- cycle;
-  \node at (4.75,1.5) {$synch_{\textsf{c}}$};
-  \path [highlight] (5.5,1.25) edge node[above] {} (7,1.25);
-  \path (5.5,1.25) edge node[above] {$1/\#c$} (7,1.25);
-  \path [highlight] (5.5,2.6) edge node[above] {} (9,2.6);
-  \path (5.5,2.6) edge node[above] {$\#c$} (9,2.6);
-  \draw (7,0) -- (8,0) -- (8,1.6) -- (7,1.6) -- cycle;
-  \node at (7.5,0.8) {$\epsilon_c$};
-  \draw[dashed] (6.8,0.2) -- (6.8,1.25);
-  \path (8,1) edge node[above] {$\mathbb{1}$} (9,1);
-  \path [highlight] (5.5,0.2) edge node[above] {} (7,0.2);
-  \path (5.5,0.2) edge node[above] {$\#c$} (7,0.2);
-  \draw (9,0.8) -- (10,0.8) -- (10,2.8) -- (9,2.8) -- cycle;
-  \node at (9.5,1.8) {$\textsf{unit}_\times$};
-  \path (10,1.8) edge node [above] {$\#c$} (11,1.8);
-\end{tikzpicture}
-\caption{\label{fig:zigzag} Zig-zag}
-\end{figure}
 
 The following is an example usage of zig-zag, which uses NOT combinator.
 
