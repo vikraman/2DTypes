@@ -219,15 +219,14 @@ paths and so on. Here are two simple but non-trivial examples:
 \end{center}
 
 \medskip\noindent Baez and Dolan~\cite{groupoidcard} assign to each groupoid a
-\emph{cardinality} that counts the objects up to equivalences. The
-groupoid on the left has six points \texttt{a}, \texttt{b}, \texttt{c},
-\texttt{d}, \texttt{e}, and \texttt{f} with two groups of three
-points each clustered in an equivalence class and hence the groupoid has
-cardinality~2. The (2-)groupoid on the right has one point $\ast$ with
-four equivalences \texttt{id}, $p$, $q$, and~$q'$ on it. The
-equivalences $q$ and $q'$ are however identified by~$\alpha$ leaving
-only three distinct equivalence classes and hence making the
-cardinality $\frac{1}{3}$.
+\emph{cardinality} that counts the objects up to equivalences. The groupoid on
+the left has six points \texttt{a}, \texttt{b}, \texttt{c}, \texttt{d},
+\texttt{e}, and \texttt{f} with two groups of three points each clustered in an
+equivalence class and hence the groupoid has cardinality~2. The (2-)groupoid on
+the right has one point $\ast$ with four equivalences \texttt{id}, $p$, $q$,
+and~$q'$ on it. The equivalences $q$ and $q'$ are however identified by~$\alpha$
+leaving only three distinct isomorphism classes and hence making the cardinality
+$\frac{1}{3}$.
 
 Both groupoids involve some notion of ``division'' that can be captured at the
 level of types using a syntactic notion of \emph{fractional types}. Our aim is
@@ -1005,24 +1004,36 @@ natural notions of sums and products, and one might expect or hope that
 identities which hold for rational numbers lift to identities in our
 situation. The most prominent and important identity we seek is:
 \[
-\order{p} \otimes \iorder{p} \simeq \order{\idiso}
+\order{p} \circledast \iorder{p} \simeq \order{\idiso}
 \]
 The left hand side is the categorical product of the iteration groupoid and
 symmetry groupoid for some arbitrary 1-combinator $p$. The cardinality of this
 groupoid is 1. The right hand side is the iteration groupoid for the identity
-1-combinator which also has cardinality 1. The groupoids on either side are not
-categorically equivalent and hence $\simeq$ cannot be categorical equivalence.
-There are however other notions of groupoid equivalence such as Morita
-equivalence~\cite{looping} that identifies the two groupoids above.  Although
-the notion of equivalence we use in the next section appears novel, it is
-related ``in spirit'' to Morita equivalence and we find it useful to give a
-small motivating example instantitating $p$ above to $\permfive$ (which has
-order 3). Essentially we are verifying that the product of the groupoid
+1-combinator which also has cardinality 1. The groupoids on either side are
+however not categorically equivalent and hence $\simeq$ cannot be categorical
+equivalence.  There are however other notions of groupoid equivalence, such as
+Morita equivalence~\cite{looping}, that identify the two groupoids above.
+Although the notion of equivalence we use in the next section appears novel, it
+is related ``in spirit'' to Morita equivalence and we find it useful to give a
+small example. We will verify that the product of the groupoid
 $\order{\permfive}$ of cardinality 3 and the groupoid $\iorder{\permfive}$ of
 cardinality $\frac{1}{3}$ is the trivial groupoid with only one distinct object
-with one trivial automorphism.
-
-
+and one trivial automorphism. To avoid clutter we assume the groupoids are
+strict, e.g., that the groupoid $\order{\permfive}$ has three elements (instead
+of 3 isomorphism classes of elements). The definition of Morita equivalence in
+this case reduces to to finding a Morita morphism from $\order{\idiso}$ to
+$\order{\permfive} \circledast \iorder{\permfive}$. This is a functor from the
+first groupoid to the next with an additional condition that it is a
+\emph{pullback}. The intuition is that the codomain consists of three objects
+with associated morphisms, each of them counting as a ``third.'' The functor
+from $\order{\idiso}$ to $\order{\permfive} \circledast \iorder{\permfive}$ must
+include an arbitrary choice of ``which third'' to target and the pullback
+condition ensures that the choice is ultimately insignificant as it leads to the
+same result as every other possible functor. To summarize the equivalence
+between the two groupoids requires a \emph{local} map that chooses a target and
+a \emph{global} condition ensuring that the choice ultimately annhilates. The
+challenge we are facing is to turn this idea into an operational semantics that
+somehow combines the local and global aspects of the equivalence.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
