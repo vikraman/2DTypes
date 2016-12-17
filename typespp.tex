@@ -772,12 +772,11 @@ one automorphism. The isomorphism class of $c$ has two non-equivalent
 automorphisms on it and hence the cardinality of $G_2$ is also
 $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For~$G_3$, we have three isomorphism
 classes, each with two non-equivalent automorphisms, and hence the cardinality
-of $G_3$ is $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.
-It is important to note that $G_1$ and $G_2$ are (categorically) equivalent
-groupoids, but that $G_3$ is not equivalent to either $G_1$ or $G_2$.
-Roughly speaking this is because the number of connected components is also
-an invariant of a groupoid, and here $G_1$ and $G_2$ have $2$ whilst $G_3$ has
-$3$.
+of $G_3$ is $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.  It is
+important to note that $G_1$ and $G_2$ are (categorically) equivalent groupoids,
+but that $G_3$ is not equivalent to either $G_1$ or $G_2$.  Roughly speaking
+this is because the number of connected components is also a categorical
+invariant of a groupoid, and here $G_1$ and $G_2$ have $2$ whilst $G_3$ has $3$.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{$\Pi$-Combinators as Automorphism Classes}
@@ -856,7 +855,18 @@ Each triple encodes our knowledge that we have some (arbitrary) iterate $q$ of $
 \end{array}\]
 The idea is that $\iter{\permtwo}$ is, up to equivalence, the set of all distinct iterates $(\permtwo)^k$ of $\permtwo$.  Because of the underlying group structure of automorphisms, there are, up to equivalence, only $\ord{\permtwo}$ distinct iterates in $\iter{\permtwo}$.  In a proof-irrelevant setting, $\iter{\permtwo}$ is simply $\{ \idiso, \permtwo \}$. In this section and the next, we will use the elements of $\iter{p}$ in two groupoid constructions as either objects (emphasizing their ``data'' aspect) or morphisms (emphasizing their ``symmetry'' aspect).
 
-Given a 1-combinator $p : \tau\iso\tau$, we define the groupoid $\order{p}$ as follows. The objects are the elements of $\iter{p}$, i.e., the triples $\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators $q : \tau\iso\tau$, and 2-combinators $\alpha : q \isotwo p^k$. We then add (reversible) morphisms between any iterates related by 2-combinators; categorically, this will make any such objects equivalent.  If $p$ has order $o$, Lem.~\ref{lem:ordercancel} gives us a 2-combinator $\alpha$ which witnesses that $p^i \isotwo p^{i+o}$.  Thus given two iterates $\triple{i}{q_i}{\alpha_i}$ and $\triple{i+o}{q_j}{\alpha_j}$, they must be equivalent since $\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.  In other words $p^j$ will be equivalent to $p^k$ exactly when $j$ and $k$ differ by $o$.  This informal description formalizes straightforwardly.
+Given a 1-combinator $p : \tau\iso\tau$, we define the groupoid $\order{p}$ as
+follows. The objects are the elements of $\iter{p}$, i.e., the triples
+$\triple{k}{q}{\alpha}$ indexed by integers $k$, 1-combinators
+$q : \tau\iso\tau$, and 2-combinators $\alpha : q \isotwo p^k$. We then add
+(reversible) morphisms between any iterates related by 2-combinators;
+categorically, this will make any such objects equivalent.  If $p$ has order
+$o$, Lem.~\ref{lem:ordercancel} gives us a 2-combinator $\alpha$ which witnesses
+that $p^i \isotwo p^{i+o}$.  Thus given two iterates $\triple{i}{q_i}{\alpha_i}$
+and $\triple{i+o}{q_j}{\alpha_j}$, they must be equivalent since
+$\alpha_i~\bullet~\alpha~\bullet~!\,\alpha_j$ shows that $q_i \isotwo q_j$.  In
+other words $p^j$ will be equivalent to $p^k$ exactly when $j$ and $k$ differ by
+$o$.  This informal description formalizes straightforwardly.
 
 \begin{definition}[$\order{p}$] For each 1-combinator $p : \tau\iso\tau$, we form the groupoid $\order{p}$ as follows:
 \begin{itemize}
@@ -916,7 +926,11 @@ The elements of $\iter{p}$ form a group under the following operation:
  \triple{k_1+k_2}{p_1 \odot p_2}{(\alpha_1 ~\respstwo~
     \alpha_2)~\transtwo~(\distiterplus{p}{k_1}{k_2})}
 \]
-where $\distiterplus{p}{k_1}{k_2}$ is defined in Lem.~\ref{lem:distiterplus}. The common categorical representation of a group is a category with one trivial object and the group elements as morphisms on that trivial object. Our construction of the groupoid $\iorder{p}$ is essentially the same.
+where $\distiterplus{p}{k_1}{k_2}$ is defined in
+Lem.~\ref{lem:distiterplus}. The common categorical representation of a group is
+a category with one trivial object and the group elements as morphisms on that
+trivial object. Our construction of the groupoid $\iorder{p}$ is essentially the
+same.
 
 \begin{definition}[$\iorder{p}$] For each 1-combinator $p : \tau\iso\tau$, we form the 2-groupoid $\iorder{p}$ as follows:
 \begin{itemize}
@@ -991,9 +1005,24 @@ natural notions of sums and products, and one might expect or hope that
 identities which hold for rational numbers lift to identities in our
 situation. The most prominent and important identity we seek is:
 \[
-\order{p} \otimes \iorder{p} \simeq \mathbb{1}
+\order{p} \otimes \iorder{p} \simeq \order{\idiso}
 \]
-for some appropriate unit object $\mathbb{1}$. The groupoids on either side are not categorically equivalent but they do have the same cardinality. Furthermore the iteration groupoid and the symmetry groupoid naturally ``cancel out'' in the sense that the iteration groupoid introduces the iterates of a combinator $c$ as separate objects while the symmetry groupoid uses these same iterates to express internal symmetries. Thus if we focus on the right notion of morphisms, it is sensible to consider them equivalent. The situation is however subtle and does not directly support a notion of sums. It is studied in detail in the next section.
+The left hand side is the categorical product of the iteration groupoid and
+symmetry groupoid for some arbitrary 1-combinator $p$. The cardinality of this
+groupoid is 1. The right hand side is the iteration groupoid for the identity
+1-combinator which also has cardinality 1. The groupoids on either side are not
+categorically equivalent and hence $\simeq$ cannot be categorical equivalence.
+There are however other notions of groupoid equivalence such as Morita
+equivalence~\cite{looping} that identifies the two groupoids above.  Although
+the notion of equivalence we use in the next section appears novel, it is
+related ``in spirit'' to Morita equivalence and we find it useful to give a
+small motivating example instantitating $p$ above to $\permfive$ (which has
+order 3). Essentially we are verifying that the product of the groupoid
+$\order{\permfive}$ of cardinality 3 and the groupoid $\iorder{\permfive}$ of
+cardinality $\frac{1}{3}$ is the trivial groupoid with only one distinct object
+with one trivial automorphism.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
