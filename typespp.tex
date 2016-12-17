@@ -1069,6 +1069,12 @@ The last new syntactic category in $\Pi^/$ is that of values which deserves some
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
 
+at end of previous section; add a new subsection explaining functor showing
+equivalence of 1 and #p x 1/#p. Morita functor. Pullback condition. there is a
+choice for eta but there is an extra condition that the choices are all
+consistent. The big question is how to encode this global condition; side
+effect; synchronization; etc. so naturally lead to pointed types and revise types
+
 Only non-trivial pairs are created by eta; they create ``synchronized'' uses combinators $c^k$ and $1/c^k$. The rest of the combinators can only replace these combinators by $\isotwo$-equivalent ones. Assoc is subtle: what if we have $\langle \order{c_1} , \langle \iorder{c_2} , \order{c_2} \rangle \rangle$; naive assoc would allow us to create a pair with unrelated combinators which cannot be eliminated using epsilon. But if assoc is constrained to maintain the invariant that only ``synchronized'' uses of combinators are ever paired together, everything works great.
 
 Idea is to change the types to be of the form $\Sigma_{\overline{k}}\mathbb{T}$
