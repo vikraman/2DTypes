@@ -51,6 +51,8 @@
 \newcommand{\pair}[2]{\langle #1,#2 \rangle}
 \newcommand{\triple}[3]{\langle #1,#2,#3 \rangle}
 \newcommand{\distiterplus}[3]{\mathsf{dist}~#1~#2~#3}
+\newcommand{\looping}[1]{\mathcal{L}{#1}}
+\newcommand{\delooping}[1]{\mathcal{B}{#1}}
 
 \newcommand{\permone}{\mathit{perm}_{...}}
 \newcommand{\permtwo}{\mathit{perm}_{\times\!\times.}}
@@ -990,10 +992,31 @@ As an example, the groupoid $\iorder{(\permtwo)}$ can be represented as follows.
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Looping and Delooping}
 
-Our constructions of $\order{p}$ and $\iorder{p}$ are instances of a general pattern that we have instantiated to the setting of $\Pi$ and adapted to explicitly refer to weak (i.e., up to $\isotwo$ in our case) equivalences. In the general construction~\cite{looping}, a group $G$ is known to induce two groupoids, a looping groupoid $LG$ and a delooping groupoid $BG$. These are defined as follows.
+Our constructions of $\order{p}$ and $\iorder{p}$ are instances of a general
+pattern that we have instantiated to the setting of $\Pi$ and adapted to
+explicitly refer to weak (i.e., up to $\isotwo$ in our case) equivalences. In
+the general construction~\cite{looping}, a group $G$ is known to induce two
+groupoids, a looping groupoid $\looping{G}$ and a delooping groupoid
+$\delooping{G}$. These are defined as follows.
 
-The looping groupoid $LG$ has the group elements as objects and, for every group elements~$g$ and $h$, there is a morphism between $g$ and $h^-1 \cdot g \cdot h$. If we fix a type $\tau$ and a particular 1-combinator $p : \tau \iso \tau$, we get a group whose elements are the iterates $p^k$. The corresponding looping groupoid would have all the iterates as objects and morphisms between $p^{k_1}$ and $p^{k_2}$ whenever there exists an integer $j$ such that $p^{k_2}$ is equivalent to $p^{-j} \odot p^{k_1} \odot p^{j}$. By Lem.~\ref{lem:distiterplus}, the latter term is $\isotwo$-equivalent to $p^{-j+k_1+j}$ which is $\isotwo$-equivalent to $p{k_1}$. In other words, we have a morphism between $p^{k_1}$ and $p^{k_2}$ whenever they are $\isotwo$-equivalent which is consistent with our definition of iteration groupoids. The delooping groupoid $BG$ has one trivial element and for each group element $g$ a morphism from that element to itself. Modulo $\isotwo$-equivalences, this is consistent with our definition of symmetry groupoids.
+The looping groupoid $\looping{G}$ has the group elements as objects and
+morphisms between elements in the same conjugacy class, that is, there is a
+morphism between elements $g$ and $h$ iff there exists a $x \in G$ such that
+$g = x^{-1} \cdot g \cdot x$. Fixing a type $\tau$ and a particular 1-combinator
+$p : \tau \iso \tau$, we get a group whose elements are the iterates $p^k$. The
+corresponding looping groupoid has all the iterates as objects and morphisms
+between $p^{k_1}$ and $p^{k_2}$ whenever there exists an integer $j$ such that
+$p^{k_2}$ is equivalent to $p^{-j} \odot p^{k_1} \odot p^{j}$. By
+Lem.~\ref{lem:distiterplus}, the latter term is $\isotwo$-equivalent to
+$p^{-j+k_1+j}$ which is $\isotwo$-equivalent to $p^{k_1}$. In other words, we
+have a morphism between $p^{k_1}$ and $p^{k_2}$ whenever they are
+$\isotwo$-equivalent which is consistent with our definition of iteration
+groupoids.
 
+The delooping groupoid $\delooping{G}$ has one trivial element $\ast$, and for
+each group element $g$ a morphism (loop) from $\ast$ to $\ast$. Modulo
+$\isotwo$-equivalences, this is consistent with our definition of symmetry
+groupoids.
 
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Products of Iteration and Symmetry Groupoids}
