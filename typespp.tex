@@ -1238,37 +1238,6 @@ of these morphisms are $\isotwo$-equivalent.
 \caption{\label{fig:zigzag} Zig-zag}
 \end{figure}
 
-%%%%%
-\subsection{Dependent Pointed Types}\label{sec:deppointedtypes}
-
-To understand the challenge in designing an operational semantics for $\eta$ and
-$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
-Fig.~\ref{fig:zigzag}. Algebraically this circuit corresponds to the following
-manipulation on types:
-\[
-x \mapsto (1 \times x) \mapsto ((x \times 1/x) \times x)
-\mapsto (x \times (1/x \times x)) \mapsto (x \times 1) \mapsto x
-\]
-and by the coherence conditions of compact closed categories, we expect this
-circuit, when run in either direction, to be equivalent to the
-identity. Consider now the case of a combinator $c$ whose order is greater than
-or equal to 2, i.e., the type $\order{c}$ has at least two distinct values
-$\idiso$ and $c$ and the type $\iorder{c}$ has at least two distinct values
-$1/\idiso$ and $1/c$. We require this circuit to produce $\idiso$ when given
-$\idiso$ from either end, and similarly to produce $c$ when given $c$ from
-either end. The problem becomes apparent when one observes that the uses of
-$\eta+$ in the left-to-right execution and the use of $\epsilon-$ in the
-right-to-left execution must behave differently depending on the incoming
-value. But the ``local'' information available to either of these combinators
-does not include the ``global'' information about the incoming value and there
-is no way for them to make consistent guesses locally. It is possible to modify
-the operational semantics to use a mechanism to express a computational effect
-which enables spatially separated parts of the program to communicate in a way
-that is reminiscent of entanglement in quantum mechanics. Possibilities to
-realize this communication are global reference cells, backtracking, or logical
-variables with unification. Instead, we choose a more abstract approach that
-encodes the required dependency in dataflow constraints using dependent types.
-
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
@@ -1357,7 +1326,7 @@ Each combinator $\rho_\bullet$ has an inverse.
 \end{figure}
 
 %%%%%
-\subsection{Dependent Pointed Types}
+\subsection{Dependent Pointed Types}\label{sec:deppointedtypes}
 
 To understand the challenge in designing an operational semantics for $\eta$ and
 $\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
