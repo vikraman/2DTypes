@@ -72,6 +72,7 @@ $\displaystyle
 \newcommand{\evalone}[2]{#1~\triangleright~#2}
 \newcommand{\evaloneb}[2]{#1~\triangleleft~#2}
 \newcommand{\unitv}{()}
+\newcommand{\synch}{\mathsf{{synch}}}
 \newcommand{\unitepl}{\mathsf{{unite_+l}}}
 \newcommand{\unitipl}{\mathsf{{uniti_+l}}}
 \newcommand{\unitepr}{\mathsf{{unite_+r}}}
@@ -1221,42 +1222,86 @@ of these morphisms are $\isotwo$-equivalent.
 \end{figure}
 
 \begin{figure}[t]
+{\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :&  \order{\idiso} \circledast \mathbb{T} & \leftrightspoon & \mathbb{T} &: \unititl/ \\
-\unitetr/ :&  \mathbb{T} \circledast \order{\idiso} & \leftrightspoon & \mathbb{T} &: \unititr/ \\
-\swapt/ :&  \mathbb{T}_1 \circledast \mathbb{T}_2 & \leftrightspoon & \mathbb{T}_2 \circledast \mathbb{T}_1 &: \swapt/ \\
-\assoclt/ :&  \mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3) & \leftrightspoon & (\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3
+\unitetl/ :&  \exists\overline{k}.[\order{\idiso} \circledast \mathbb{T},
+                                                   \langle \idiso,v \rangle]
+  & \leftrightblackspoon &
+                    \exists\overline{k}.[\mathbb{T},v]
+  &: \unititl/ \\
+\unitetr/ :&  \exists\overline{k}.[\mathbb{T} \circledast \order{\idiso},
+                                                    \langle v,\idiso]
+  & \leftrightblackspoon &
+                    \exists\overline{k}.[\mathbb{T},v]
+  &: \unititr/ \\
+\swapt/ :&  \exists\overline{k}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
+                                                   \langle v_1,v_2 \rangle]
+ & \leftrightblackspoon &
+                   \exists\overline{k}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
+                                                  \langle v_2,v_1 \rangle]
+  &: \swapt/ \\
+  \assoclt/ :&  \exists\overline{k}.[\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
+                                        \langle v_1,\langle v_2,v_3 \rangle]
+  & \leftrightblackspoon &
+                       \exists\overline{k}.[(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
+                                       \langle \langle v_1,v_2 \rangle , v_3 \rangle]
   &: \assocrt/ \\
 \\
-\eta-_k :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  [\iorder{c},1/c^k] \circledast [\order{c},c^k] &: \epsilon-_k \\
-\eta+ :& \order{\idiso} & \leftrightspoon & \order{c} \circledast \iorder{c} &: \epsilon+ \\
+\eta- :& [\order{\idiso},\idiso] & \leftrightblackspoon &
+  \exists{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] &: \epsilon- \\
+\eta+ :& [\order{\idiso},\idiso] & \leftrightblackspoon &
+  \exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] &: \epsilon+ \\
 \end{array}\]
-
 \[\begin{array}{c}
 \Rule{}
 {}
-{\jdg{}{}{\idiso/ : \mathbb{T} \leftrightspoon \mathbb{T}}}
+{\jdg{}{}{\idiso/ : \exists\overline{k}.[\mathbb{T},v] \leftrightblackspoon
+  \exists\overline{k}.[\mathbb{T},v]}}
 {}
-\qquad
-\Rule{}
-{\jdg{}{}{\rho_1 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2} \quad \rho_2 : \mathbb{T}_2 \leftrightspoon \mathbb{T}_3}
-{\jdg{}{}{\rho_1 \circledcirc \rho_2 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_3}}
-{}
-\\
-\\
+~~
 \Rule{}
 {\jdg{}{}{\alpha : c_1 \isotwo c_2}}
-{\jdg{}{}{\order{\alpha} : \order{c_1}  \leftrightspoon \order{c_2}}}
+{\jdg{}{}{(\order{\alpha})_k :
+ [\order{c_1},c_1^k]  \leftrightblackspoon
+ [\order{c_2}.c_2^k]}}
 {}
-\qquad
+\\
+\\
 \Rule{}
-{\jdg{}{}{\rho_1 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2} \quad \rho_2 : \mathbb{T}_3 \leftrightspoon \mathbb{T}_4}
-{\jdg{}{}{\rho_1 \circledast \rho_2 : \mathbb{T}_1 \circledast \mathbb{T}_3 \leftrightspoon \mathbb{T}_2 \circledast \mathbb{T}_4}}
+{\jdg{}{}{\rho_1 : \exists{\overline{k_1}}.
+  [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_2,v_2]} \quad
+  \rho_2 : \exists{\overline{k_2}}.
+  [\mathbb{T}_2,v_2] \leftrightblackspoon [\mathbb{T}_3,v_3]}
+{\jdg{}{}{\rho_1 \circledcirc \rho_2 :
+ \exists{\overline{k_1}\overline{k_2}}.
+ [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_3},v_3]}
+{}
+\\
+\\
+\Rule{}
+{\jdg{}{}{\rho_1 :
+  \exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+  \exists{\overline{k_2}}.[\mathbb{T}_2,v_2]}
+ \qquad \rho_2 :
+  \exists{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
+  \exists{\overline{k_4}}.[\mathbb{T}_4,v_4]}
+{\jdg{}{}{\rho_1 \circledast \rho_2 :
+  \exists{\overline{k_1k_2k_3k_4}}.
+  [\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
+  \leftrightblackspoon
+  [\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
+{}
+\\
+\\
+\Rule{}
+{\jdg{}{}{}}
+{\jdg{}{}{\synch : \exists{\overline{k}k'}.[\mathbb{T},v]
+  \leftrightblackspoon
+   [\mathbb{T},v[k'\mapsto ??]]}}
 {}
 \end{array}\]
-
-Each combinator $\rho$ has an inverse.
+Each combinator $\rho_\bullet$ has an inverse.
+}
 \caption{$\Pi^/$ fractional combinators (dependent version)}
 \label{pifracd:comb}
 \end{figure}
@@ -1313,7 +1358,56 @@ $\mathbb{T}$. We then allow indices of values $k$ to be range over a collection
 of types. In particular, the type
 $\exists k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
-$\iorder{c}$; they must be ``synchronized'' sharing the same $k$.
+$\iorder{c}$; they must be ``synchronized'' sharing the same $k$. In general, a
+pointed type will be of the form $\exists\overline{k}.[\mathbb{T},v]$ for some
+sequence of integers $\overline{k}$ and some value $v$ in $\mathbb{T}$ which
+might of course refer to the integers $\overline{k}$ to enforce some
+synchronization among its sub-values.
+
+Here is how the circuit in Fig.~\ref{fig:zigzag} evaluates in the forward and
+backwards directions:
+\[\begin{array}{rcl}
+[\order{c},c^i]
+&\stackrel{\unitetl/}{\longmapsto}&
+  [\order{id}\circledast\order{c}, \langle \idiso,c^i \rangle] \\
+&\stackrel{\eta+\circledast\idiso/}{\longmapsto}&
+  \exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
+&\stackrel{\assocrt/}{\longmapsto}&
+  \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \langle c^k, \langle 1/c^k,c^i \rangle\rangle] \\
+&\stackrel{\synch}{\longmapsto}&
+  [\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
+&\stackrel{\idiso/\circledast\epsilon-}{\longmapsto}&
+  [\order{c}\circledast\order{\idiso},
+  \langle c^i, \idiso \rangle] \\
+&\stackrel{\unitetr/}{\longmapsto}&
+  [\order{c}, c^i]
+\end{array}\]
+
+
+\[\begin{array}{rcl}
+  [\order{c}, c^i]
+&\stackrel{\unitetr/}{\longmapsfrom}&
+  [\order{c}\circledast\order{\idiso},
+  \langle c^i, \idiso \rangle] \\
+&\stackrel{\idiso/\circledast\epsilon-}{\longmapsfrom}&
+  \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
+&\stackrel{\synch}{\longmapsfrom}&
+ [\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
+&\stackrel{\assocrt/}{\longmapsfrom}&
+  [(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
+&\stackrel{\eta+\circledast\idiso/}{\longmapsfrom}&
+  [\order{c}\circledast\order{\idiso}, \langle c^i, \idiso] \\
+&\stackrel{\unitetl/}{\longmapsfrom}&
+  [\order{c},c^i]
+\end{array}\]
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
