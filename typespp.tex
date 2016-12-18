@@ -707,7 +707,7 @@ to have ``internal symmetries''~\cite{groupoidintro}. Baez et
 al.~\cite{2009arXiv0908.4305B} associate with each groupoid a cardinality that
 counts the elements up to these ``internal symmetries''.
 
-\begin{definition}[Groupoid Cardinality~\cite{2009arXiv0908.4305B}]
+\begin{definition}[Groupoid cardinality~\cite{2009arXiv0908.4305B}]
   The cardinality of a groupoid $G$ is the (positive) real number:
   \[
     |G| = \sum_{[x]} \frac{1}{|\textsf{Aut}(x)|}
@@ -1026,20 +1026,19 @@ of 3 isomorphism classes of elements). The definition of \emph{Morita
   equivalence} in this case reduces to to finding a \emph{Morita morphism} from
 $\order{\idiso}$ to $\order{\permfive} \circledast \iorder{\permfive}$. This is
 a functor $\psi$ from the unit groupoid to the product groupoid, say $G$, with
-an additional condition that the commutative diagram in figure~\ref{fig:morita}
-is a \emph{pullback}. The intuition is that the codomain consists of three
-objects with associated morphisms, each of them counting as a ``third.'' The
-functor from $\order{\idiso}$ to
-$\order{\permfive} \circledast \iorder{\permfive}$ must include an arbitrary
-choice of ``which third'' to target and the universality condition of the
-pullback ensures that the choice is ultimately insignificant as it leads to the
-same result as every other possible functor. To summarize the equivalence
-between the two groupoids requires a \emph{local} map that chooses a target and
-a \emph{global} condition ensuring that the choice ultimately annhilates. The
-challenge we are facing is to turn this idea into an operational semantics that
-somehow combines the local and global aspects of the equivalence.
+an additional condition that the commutative diagram in Fig.~\ref{fig:morita} is
+a \emph{pullback}. The intuition is that the codomain consists of three objects
+with associated morphisms, each of them counting as a ``third.'' The functor
+from $\order{\idiso}$ to $\order{\permfive} \circledast \iorder{\permfive}$ must
+include an arbitrary choice of ``which third'' to target and the universality
+condition of the pullback ensures that the choice is ultimately insignificant as
+it leads to the same result as every other possible functor. To summarize the
+equivalence between the two groupoids requires a \emph{local} map that chooses a
+target and a \emph{global} condition ensuring that the choice ultimately
+annihilates. The challenge we are facing is to turn this idea into an operational
+semantics that somehow combines the local and global aspects of the equivalence.
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
   \begin{tikzcd}
     Q
@@ -1163,25 +1162,7 @@ $\isotwo$-equivalent. Similarly for symmetry groupoids $\iorder{c}$, every
 morphism is listed as a value $1/c^k$ with the same understanding that that some
 of these morphisms are $\isotwo$-equivalent.
 
-%%%%%
-\subsection{Pointed Types}
-
-To understand the challenge in designing an operational semantics for $\eta$ and
-$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
-Fig.~\ref{fig:zigzag}. Let the combinator $c$ to be of order greater than or
-equal to 2, i.e., the type $\order{c}$ has at least two distinct values $c^i$
-and $c^j$ and the type $\iorder{c}$ has at least two distinct values $1/c^i$ and
-$1/c^j$. The use of $\eta+$ has then at least four choices; as discussed at the
-end of Sec.~\ref{sub:products}, $\eta+$ will internalize some arbitrary but
-fixed choice and might for example generate the pair
-$\langle c^i , 1/c^i \rangle$. No matter what choice is internalized in $\eta+$,
-there is at least one different incoming value $c^j$ of type $\order{c}$. In
-that case, the combinator $\epsilon-$ encounters $\langle 1/c^i , c^j
-\rangle$. If our operational semantics allows $\epsilon-$ to annihilate
-arbitrary pairs, the net effect of the circuit would be to map $c^j$ to $c^i$
-for arbitrary $i$ and $j$.
-
-\begin{figure}[bht]
+\begin{figure}[t]
 \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
   \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
   \node at (0.5,1) {\footnotesize{$\unitetl/$}};
@@ -1215,10 +1196,89 @@ for arbitrary $i$ and $j$.
 \caption{\label{fig:zigzag} Zig-zag}
 \end{figure}
 
+\begin{figure}[t]
+\[\begin{array}{rrcll}
+\unitetl/ :&  \order{\idiso} \circledast \mathbb{T} & \leftrightspoon & \mathbb{T} &: \unititl/ \\
+\unitetr/ :&  \mathbb{T} \circledast \order{\idiso} & \leftrightspoon & \mathbb{T} &: \unititr/ \\
+\swapt/ :&  \mathbb{T}_1 \circledast \mathbb{T}_2 & \leftrightspoon & \mathbb{T}_2 \circledast \mathbb{T}_1 &: \swapt/ \\
+\assoclt/ :&  \mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3) & \leftrightspoon & (\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3
+  &: \assocrt/ \\
+\\
+\eta- :& \order{\idiso} & \leftrightspoon & \iorder{c} \circledast \order{c} &: \epsilon- \\
+\eta+ :& \order{\idiso} & \leftrightspoon & \order{c} \circledast \iorder{c} &: \epsilon+ \\
+\end{array}\]
 
+\[\begin{array}{c}
+\Rule{}
+{}
+{\jdg{}{}{\idiso/ : \mathbb{T} \leftrightspoon \mathbb{T}}}
+{}
+\qquad
+\Rule{}
+{\jdg{}{}{\rho_1 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2} \quad \rho_2 : \mathbb{T}_2 \leftrightspoon \mathbb{T}_3}
+{\jdg{}{}{\rho_1 \circledcirc \rho_2 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_3}}
+{}
+\\
+\\
+\Rule{}
+{\jdg{}{}{\alpha : c_1 \isotwo c_2}}
+{\jdg{}{}{\order{\alpha} : \order{c_1}  \leftrightspoon \order{c_2}}}
+{}
+\qquad
+\Rule{}
+{\jdg{}{}{\rho_1 : \mathbb{T}_1 \leftrightspoon \mathbb{T}_2} \quad \rho_2 : \mathbb{T}_3 \leftrightspoon \mathbb{T}_4}
+{\jdg{}{}{\rho_1 \circledast \rho_2 : \mathbb{T}_1 \circledast \mathbb{T}_3 \leftrightspoon \mathbb{T}_2 \circledast \mathbb{T}_4}}
+{}
+\end{array}\]
 
+Each combinator $\rho$ has an inverse.
+\caption{$\Pi^/$ fractional combinators with pointed types (dependent version)}
+\label{pifracd:comb}
+\end{figure}
 
+%%%%%
+\subsection{Pointed Types}
 
+To understand the challenge in designing an operational semantics for $\eta$ and
+$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
+Fig.~\ref{fig:zigzag}. Algebraically this circuit corresponds to the following
+manipulation on types:
+\[
+x \mapsto (1 \times x) \mapsto ((x \times 1/x) \times x)
+\mapsto (x \times (1/x \times x)) \mapsto (x \times 1) \mapsto x
+\]
+and by the coherence conditions of compact closed categories, we expect this
+circuit, when run in either direction, to be equivalent to the
+identity. Consider now the case of a combinator $c$ whose order is greater than
+or equal to 2, i.e., the type $\order{c}$ has at least two distinct values
+$\idiso$ and $c$ and the type $\iorder{c}$ has at least two distinct values
+$1/\idiso$ and $1/c$. We require this circuit to produce $\idiso$ when given
+$\idiso$ from either end, and similarly to produce $c$ when given $c$ from
+either end. The problem becomes apparent when one observes that the uses of
+$\eta+$ in the left-to-right execution and the use of $\epsilon-$ in the
+right-to-left execution must behave differently depending on the incoming
+value. But the ``local'' information available to either of these combinators
+does not include the ``global'' information about the incoming value and there
+is no way for them to make consistent guesses locally. It is possible to modify
+the operational semantics to use a mechanism to express a computational effect
+which enables spatially separated parts of the program to communicate in a way
+that is reminiscent of entanglement in quantum mechanics. Possibilities to
+realize this communication are global reference cells, backtracking, logical
+variables with unification. We choose a more abstract and enlightening approach
+that encodes the required dependency in dataflow constraints using dependent
+types.
+
+\begin{definition}[Dependent $\Pi^/$ with pointed types]
+\label{def:pifracd}
+The syntax of dependent $\Pi^/$ with pointed types differs from
+Def.~\ref{def:pifrac} as follows:
+\[\begin{array}{lrcl}
+(\textrm{Pointed Fractional Types}) & \mathbb{T_\bullet} &::=& [\mathbb{T},v] \\
+ (\textrm{Pointed /-combinators}) & \rho_\bullet &:&
+  [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_2,v_2] ~::=
+  [\textit{see Fig.~\ref{pifracd:comb}}]
+\end{array}\]
+\end{definition}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1261,7 +1321,7 @@ results to the forward interpreter applied to a reverse combinator, and second,
 that two equivalent combinators (as given by a 2-combinator) will evaluate to
 equivalent values.
 
-The operational definition of synchr⋆ might seem at odds with our claim that it is related to associativity while it looks like commutativity.  The way to understand it is as follows: if indeed all values were indepedendent, it would be associativity.  However, in this case, $p // q$ is really two \emph{tangled} values, which we do not have access to.  To keep these synchronized and yet to achieve the given type, the only choice (operationally) is to swap.  This is where the ``action at a distance'' occurs.
+The operational definition of synchr⋆ might seem at odds with our claim that it is related to associativity while it looks like commutativity.  The way to understand it is as follows: if indeed all values were independent, it would be associativity.  However, in this case, $p // q$ is really two \emph{tangled} values, which we do not have access to.  To keep these synchronized and yet to achieve the given type, the only choice (operationally) is to swap.  This is where the ``action at a distance'' occurs.
 
 
 The following is an example usage of zig-zag, which uses NOT combinator.
