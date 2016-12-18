@@ -1362,6 +1362,31 @@ The following is an example usage of zig-zag, which uses NOT combinator.
 
 ccc have a notion of higher-order functions, trace, etc. Talk about these examples.
 
+\begin{figure}[t]
+{\footnotesize
+\[\begin{array}{cc}
+\begin{array}[t]{rlcl}
+  \evalone{\unitetl/}{&\langle id^{k},\mathbb{V} \rangle} &=& \mathbb{V} \\
+  \evalone{\unititl/}{& \mathbb{V}} &=& \langle id^{k_1},\mathbb{V} \rangle \\
+  \evalone{\unitetr/}{&\langle \mathbb{V},id^{k} \rangle} &=& \mathbb{V} \\
+  \evalone{\unititr/}{& \mathbb{V}} &=& \langle \mathbb{V},id^{k} \rangle\\
+  \evalone{\swapt}{&\langle \mathbb{V}_1, \mathbb{V}_2 \rangle} &=& \langle \mathbb{V}_2, \mathbb{V}_1 \rangle \\
+  \evalone{\assoclt/}{&\langle c^k , \langle 1/c^{k}, c^{k} \rangle\rangle} &=& \langle \langle c^k , 1/c^{k} \rangle, c^{k} \rangle \\
+  \evalone{\assocrt/}{&\langle \langle c^k , 1/c^{k} \rangle, c^{k} \rangle} &=& \langle c^k , \langle 1/c^{k}, c^{k} \rangle\rangle \\
+\end{array}
+&
+\begin{array}[t]{rlcl}
+  \evalone{\eta-}{& id^{k_1}} &=& \langle 1/c^{k_2},c^{k_2} \rangle\\
+  \evalone{\eta+}{& id^{k_1}} &=& \langle c^{k_2},1/c^{k_2} \rangle\\
+  \evalone{\epsilon-}{& \langle 1/c^{k_1},c^{k_1} \rangle} &=& id^{k_2} \\
+  \evalone{\epsilon+}{& \langle c^{k_1},1/c^{k_1} \rangle} &=& id^{k_2} \\
+\end{array}
+
+\end{array}\]
+\caption{\label{opsem}$\Pi^/$ operational semantics}
+}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Limitations}
 
