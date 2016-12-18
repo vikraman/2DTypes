@@ -945,8 +945,10 @@ same.
 
 Note that for each power $p ^ i$ of $p$, there is a morphism
 $\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$ to the
-identity. Note also that everything is well-defined even if we choose $p :
-\zt\iso\zt$. In that case, the cardinality is 1.
+identity.
+
+\paragraph*{Remark.} Note also that everything is well-defined even if we choose
+$p : \zt\iso\zt$. In that case, the cardinality is 1.
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$
@@ -1267,26 +1269,28 @@ dependent types.
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :& [\order{\idiso} \circledast \mathbb{T},
+\unitetl/ :& \forall\exists{\overline{k}}.[\order{\idiso} \circledast \mathbb{T},
                                                    \langle \idiso,v \rangle]
   & \leftrightblackspoon &
-                   [\mathbb{T},v]
+                   \forall\exists{\overline{k}}.[\mathbb{T},v]
   &: \unititl/ \\
-\unitetr/ :& [\mathbb{T} \circledast \order{\idiso},
+\unitetr/ :& \forall\exists{\overline{k}}.[\mathbb{T} \circledast \order{\idiso},
                                                     \langle v,\idiso]
   & \leftrightblackspoon &
-                   [\mathbb{T},v]
+                   \forall\exists{\overline{k}}.[\mathbb{T},v]
   &: \unititr/ \\
-\swapt/ :& [\mathbb{T}_1 \circledast \mathbb{T}_2,
+\swapt/ :& \forall\exists{\overline{k}}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
                                                    \langle v_1,v_2 \rangle]
  & \leftrightblackspoon &
-                  [\mathbb{T}_2 \circledast \mathbb{T}_1,
+                  \forall\exists{\overline{k}}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
                                                   \langle v_2,v_1 \rangle]
   &: \swapt/ \\
-  \assoclt/ :& [\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
+  \assoclt/ :& \forall\exists{\overline{k}}.
+               [\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
                                         \langle v_1,\langle v_2,v_3 \rangle]
   & \leftrightblackspoon &
-                      [(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
+                      \forall\exists{\overline{k}}.
+               [(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
                                        \langle \langle v_1,v_2 \rangle , v_3 \rangle]
   &: \assocrt/ \\
 \\
@@ -1300,8 +1304,8 @@ dependent types.
 \[\begin{array}{c}
 \Rule{}
 {}
-{\jdg{}{}{\idiso/ :[\mathbb{T},v] \leftrightblackspoon
- [\mathbb{T},v]}}
+{\jdg{}{}{\idiso/ : \forall\exists{\overline{k}}.[\mathbb{T},v] \leftrightblackspoon
+   \forall\exists{\overline{k}}.[\mathbb{T},v]}}
 {}
 ~~
 \Rule{}
@@ -1314,25 +1318,28 @@ dependent types.
 \\
 \Rule{}
 {\jdg{}{}{\rho_1 :
-  [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_2,v_2]} \quad
+  \forall\exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+  \forall\exists{\overline{k_2}}.[\mathbb{T}_2,v_2]} \quad
   \rho_2 :
-  [\mathbb{T}_2,v_2] \leftrightblackspoon [\mathbb{T}_3,v_3]}
+  \forall\exists{\overline{k_2}}.[\mathbb{T}_2,v_2] \leftrightblackspoon
+  \forall\exists{\overline{k_3}}.[\mathbb{T}_3,v_3]}
 {\jdg{}{}{\rho_1 \circledcirc \rho_2 :
- [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_3},v_3]}
+ \forall\exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+ \forall\exists{\overline{k_3}}.[\mathbb{T}_3},v_3]}
 {}
 \\
 \\
 \Rule{}
 {\jdg{}{}{\rho_1 :
- [\mathbb{T}_1,v_1] \leftrightblackspoon
- [\mathbb{T}_2,v_2]}
+ \forall\exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+ \forall\exists{\overline{k_2}}.[\mathbb{T}_2,v_2]}
  \qquad \rho_2 :
- [\mathbb{T}_3,v_3] \leftrightblackspoon
- [\mathbb{T}_4,v_4]}
+ \forall\exists{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
+ \forall\exists{\overline{k_4}}.[\mathbb{T}_4,v_4]}
 {\jdg{}{}{\rho_1 \circledast \rho_2 :
-  [\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
+  \forall\exists{\overline{k_1k_3}}.[\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
   \leftrightblackspoon
-  [\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
+  \forall\exists{\overline{k_2k_4}}.[\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
 {}
 % \\
 % \\
@@ -1357,18 +1364,18 @@ direction and uses the $\exists$ in the right-to-left direction.
 
 The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
 where each type $\mathbb{T}$ refers to a particular value $v$ in
-$\mathbb{T}$. We recall that, as all fractional types are inhabited (see remark
+$\mathbb{T}$. We recall that, as all fractional types are inhabited (see Remark
 in Sec.~\ref{sec:symmetryg}), and thus there is no loss in generality in going
 to pointed types. We then allow universal quantification over indices $k$
 associated to values, over a collection of types.  In particular, the type
 $\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
 $\iorder{c}$; they must be ``synchronized'' by sharing the same~$k$ but are
-otherwise arbitrary. Once we introduce a universal quantifier in one direction of
-execution, we are led to also include an existential quantifier for the reverse
-execution. Intuitively, a forward evaluation step that is at liberty to choose a
-$k$ will, when reversed encounter a particular, i.e., existentially quantified,
-$k$. The syntax is therefore as follows.
+otherwise arbitrary. Once we introduce a universal quantifier in one direction
+of execution, we are led to also include an existential quantifier for the
+reverse execution. Intuitively, a forward evaluation step that is at liberty to
+choose a $k$ will, when reversed encounter a particular, i.e., existentially
+quantified, $k$. The syntax is therefore as follows.
 
 \begin{definition}[Dependent $\Pi^/$]
 \label{def:pifracd}
@@ -1385,43 +1392,50 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
 \end{array}\]
 \end{definition}
 
+A type $\mathbb{T}_\bullet$ is generally of the form
+$\forall\exists{\overline{k}}.[\mathbb{T},v]$ where all the quantifiers are
+lifted to the top leaving a non-dependent type and a value in that type. The
+combinators in Fig.~\ref{pifracd:comb} also serve as the operational semantics
+for the language as they explain how the value currently in focus changes during
+evaluation.
+
 Here is how the circuit in Fig.~\ref{fig:zigzag} evaluates in the forward and
 backwards directions where we diambiguate the uses of $\forall$ and $\exists$
 for clarity.
 
 \[\begin{array}{rcl}
 [\order{c},c^i]
-&\stackrel{\unitetl/}{\longmapsto}&
+&\stackrel{\unitetl/}{\leftrightblackspoon}&
   [\order{id}\circledast\order{c}, \langle \idiso,c^i \rangle] \\
-&\stackrel{\eta+\circledast\idiso/}{\longmapsto}&
+&\stackrel{\eta+\circledast\idiso/}{\leftrightblackspoon}&
   \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
-&\stackrel{\assocrt/}{\longmapsto}&
+&\stackrel{\assocrt/}{\leftrightblackspoon}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^k, \langle 1/c^k,c^i \rangle\rangle] \\
-%% &\stackrel{\synch_i}{\longmapsto}&
+%% &\stackrel{\synch_i}{\leftrightblackspoon}&
 &k\mapsto i&
   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
 &\exists&
   \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
-&\stackrel{\idiso/\circledast\epsilon-}{\longmapsto}&
+&\stackrel{\idiso/\circledast\epsilon-}{\leftrightblackspoon}&
   [\order{c}\circledast\order{\idiso},
   \langle c^i, \idiso \rangle] \\
-&\stackrel{\unitetr/}{\longmapsto}&
+&\stackrel{\unitetr/}{\leftrightblackspoon}&
   [\order{c}, c^i]
 \end{array}\]
 
 \[\begin{array}{rcl}
   [\order{c}, c^i]
-&\stackrel{\unitetr/}{\longmapsfrom}&
+&\stackrel{\unitetr/}{\leftrightblackspoon}&
   [\order{c}\circledast\order{\idiso},
   \langle c^i, \idiso \rangle] \\
-&\stackrel{\idiso/\circledast\epsilon-}{\longmapsfrom}&
+&\stackrel{\idiso/\circledast\epsilon-}{\leftrightblackspoon}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
-&\stackrel{\assocrt/}{\longmapsfrom}&
+&\stackrel{\assocrt/}{\leftrightblackspoon}&
   \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^i,1/c^k \rangle,c^k \rangle] \\
 &k\mapsto i&
@@ -1430,9 +1444,9 @@ for clarity.
 &\exists&
   \exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
-&\stackrel{\eta+\circledast\idiso/}{\longmapsfrom}&
+&\stackrel{\eta+\circledast\idiso/}{\leftrightblackspoon}&
   [\order{\idiso}\circledast\order{c}, \langle \idiso,c^i\rangle] \\
-&\stackrel{\unitetl/}{\longmapsfrom}&
+&\stackrel{\unitetl/}{\leftrightblackspoon}&
   [\order{c},c^i]
 \end{array}\]
 
