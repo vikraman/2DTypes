@@ -921,7 +921,7 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
 \end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Symmetry Groupoids $\iorder{p}$}
+\subsection{Symmetry Groupoids $\iorder{p}$}\label{sec:symmetryg}
 
 The elements of $\iter{p}$ form a group under the following operation:
 \[
@@ -943,7 +943,10 @@ same.
 \end{itemize}
 \end{definition}
 
-Note that for each power $p ^ i$ of $p$, there is a morphism $\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$ to the identity. Note also that everything is well-defined even if we choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
+Note that for each power $p ^ i$ of $p$, there is a morphism
+$\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$ to the
+identity. Note also that everything is well-defined even if we choose $p :
+\zt\iso\zt$. In that case, the cardinality is 1.
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$
@@ -1055,7 +1058,7 @@ $\order{\permfive} \circledast \iorder{\permfive}$. This is a functor $\psi$
 from the unit groupoid to the product groupoid, say $G$, with an additional
 condition that the commutative diagram in figure~\ref{fig:morita} is a
 \emph{pullback}, where $s,t$ are the \emph{source} and \emph{target} maps,
-and $\mathbb{1}$, $\mathbb{3}$ are the $1$- and $3$-point discrete groupoids
+and $\ot$, $\mathbb{3}$ are the $1$- and $3$-point discrete groupoids
 defined previously.
 The intuition is that the codomain consists of three objects
 with associated morphisms, each of them counting as a ``third.'' The functor
@@ -1081,7 +1084,7 @@ section.
     \arrow[dr, dotted] & & \\
     & \order{\idiso} \arrow[r, "{\psi_1}"] \arrow[d, "{(s,t)}"]
     & G \arrow[d, "{(s,t)}"] \\
-    & \mathbb{1} \times \mathbb{1} \arrow[r, "{\psi_0 \times \psi_0}"]
+    & \ot \times \ot \arrow[r, "{\psi_0 \times \psi_0}"]
     & \mathbb{3} \times \mathbb{3}
   \end{tikzcd}
   \caption{
@@ -1262,9 +1265,9 @@ is no way for them to make consistent guesses locally. It is possible to modify
 the operational semantics to use a mechanism to express a computational effect
 which enables spatially separated parts of the program to communicate in a way
 that is reminiscent of entanglement in quantum mechanics. Possibilities to
-realize this communication are global reference cells, backtracking, logical
-variables with unification. We choose a more abstract approach that encodes the
-required dependency in dataflow constraints using dependent types.
+realize this communication are global reference cells, backtracking, or logical
+variables with unification. Instead, we choose a more abstract approach that
+encodes the required dependency in dataflow constraints using dependent types.
 
 \begin{definition}[Dependent $\Pi^/$]
 \label{def:pifracd}
@@ -1368,15 +1371,19 @@ Each combinator $\rho_\bullet$ has an inverse.
 
 The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
 where each type $\mathbb{T}$ refers to a particular value $v$ in
-$\mathbb{T}$. We then allow indices of values $k$ to be range over a collection
-of types. In particular, the type
+$\mathbb{T}$. We then allow universal quantification over indices $k$
+associated to values, over a collection of types.
+In particular, the type
 $\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
-$\iorder{c}$; they must be ``synchronized'' sharing the same $k$. In general, a
-pointed type will be of the form $\forall\overline{k}.[\mathbb{T},v]$ for some
-sequence of integers $\overline{k}$ and some value $v$ in $\mathbb{T}$ which
-might of course refer to the integers $\overline{k}$ to enforce some
-synchronization among its sub-values.
+$\iorder{c}$; they must be ``synchronized'' by sharing the same $k$. In
+general, a pointed type will be of the form
+$\forall\overline{k}.[\mathbb{T},v]$ for some sequence of integers
+$\overline{k}$ and some value $v$ in $\mathbb{T}$, which might of course refer
+to the integers of $\overline{k}$ to enforce some synchronization among its
+sub-values.  It is good to remember that there is no loss in generality
+in going to pointed types, as all fractional types are inhabited (see
+remark in Sec.~\cite{sec:symmetryg}.
 
 Here is how the circuit in Fig.~\ref{fig:zigzag} evaluates in the forward and
 backwards directions:
