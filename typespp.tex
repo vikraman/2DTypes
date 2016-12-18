@@ -999,17 +999,23 @@ the general construction~\cite{looping}, a group $G$ is known to induce two
 groupoids, a looping groupoid $\looping{G}$ and a delooping groupoid
 $\delooping{G}$. These are defined as follows.
 
-The looping groupoid $LG$ has the group elements as objects and, for every
-group elements~$g$ and $h$, there is a morphism between $g$ and $h^{-1} \cdot g
-\cdot h$. If we fix a type $\tau$ and a particular 1-combinator $p : \tau \iso
-\tau$, we get a group whose elements are the iterates $p^k$. The corresponding
-looping groupoid would have all the iterates as objects and morphisms between
-$p^{k_1}$ and $p^{k_2}$ whenever there exists an integer $j$ such that
+The looping groupoid $\looping{G}$ has the group elements as objects and
+morphisms between elements in the same conjugacy class, that is, there is a
+morphism between elements $g$ and $h$ iff there exists a $x \in G$ such that
+$g = x^{-1} \cdot g \cdot x$. Fixing a type $\tau$ and a particular 1-combinator
+$p : \tau \iso \tau$, we get a group whose elements are the iterates $p^k$. The
+corresponding looping groupoid has all the iterates as objects and morphisms
+between $p^{k_1}$ and $p^{k_2}$ whenever there exists an integer $j$ such that
 $p^{k_2}$ is equivalent to $p^{-j} \odot p^{k_1} \odot p^{j}$. By
 Lem.~\ref{lem:distiterplus}, the latter term is $\isotwo$-equivalent to
 $p^{-j+k_1+j}$ which is $\isotwo$-equivalent to $p^{k_1}$. In other words, we
 have a morphism between $p^{k_1}$ and $p^{k_2}$ whenever they are
 $\isotwo$-equivalent which is consistent with our definition of iteration
+groupoids.
+
+The delooping groupoid $\delooping{G}$ has one trivial element $\ast$, and for
+each group element $g$ a morphism (loop) from $\ast$ to $\ast$. Modulo
+$\isotwo$-equivalences, this is consistent with our definition of symmetry
 groupoids.
 
 %%%%%%%%%%%%%%%%%%%%%%%
