@@ -1205,7 +1205,8 @@ of these morphisms are $\isotwo$-equivalent.
 \assoclt/ :&  \mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3) & \leftrightspoon & (\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3
   &: \assocrt/ \\
 \\
-\eta- :& \order{\idiso} & \leftrightspoon & \iorder{c} \circledast \order{c} &: \epsilon- \\
+\eta-_k :& [\order{\idiso},\idiso] & \leftrightblackspoon &
+  [\iorder{c},1/c^k] \circledast [\order{c},c^k] &: \epsilon-_k \\
 \eta+ :& \order{\idiso} & \leftrightspoon & \order{c} \circledast \iorder{c} &: \epsilon+ \\
 \end{array}\]
 
@@ -1233,12 +1234,12 @@ of these morphisms are $\isotwo$-equivalent.
 \end{array}\]
 
 Each combinator $\rho$ has an inverse.
-\caption{$\Pi^/$ fractional combinators with pointed types (dependent version)}
+\caption{$\Pi^/$ fractional combinators (dependent version)}
 \label{pifracd:comb}
 \end{figure}
 
 %%%%%
-\subsection{Pointed Types}
+\subsection{Dependent Pointed Types}
 
 To understand the challenge in designing an operational semantics for $\eta$ and
 $\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
@@ -1265,22 +1266,31 @@ the operational semantics to use a mechanism to express a computational effect
 which enables spatially separated parts of the program to communicate in a way
 that is reminiscent of entanglement in quantum mechanics. Possibilities to
 realize this communication are global reference cells, backtracking, logical
-variables with unification. We choose a more abstract and enlightening approach
-that encodes the required dependency in dataflow constraints using dependent
-types.
+variables with unification. We choose a more abstract approach that encodes the
+required dependency in dataflow constraints using dependent types.
 
-\begin{definition}[Dependent $\Pi^/$ with pointed types]
+\begin{definition}[Dependent $\Pi^/$]
 \label{def:pifracd}
-The syntax of dependent $\Pi^/$ with pointed types differs from
-Def.~\ref{def:pifrac} as follows:
+The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
 \[\begin{array}{lrcl}
-(\textrm{Pointed Fractional Types}) & \mathbb{T_\bullet} &::=& [\mathbb{T},v] \\
- (\textrm{Pointed /-combinators}) & \rho_\bullet &:&
-  [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_2,v_2] ~::=
+(\textrm{Fractional Types}) & \mathbb{T_\bullet} &::=&
+  [\order{c},c^k] \alt
+  [\iorder{c},1/c^k] \alt
+  [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
+  \exists k.\mathbb{T_\bullet} \\
+ (\textrm{/-combinators}) & \rho_\bullet &:&
+  \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
   [\textit{see Fig.~\ref{pifracd:comb}}]
 \end{array}\]
 \end{definition}
 
+The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
+where each type $\mathbb{T}$ refers to a particular value $v$ in
+$\mathbb{T}$. We then allow indices of values $k$ to be range over a collection
+of types. In particular, the type
+$\exists k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
+imposes a constraint on the two values associated with the types $\order{c}$ and
+$\iorder{c}$; they must be ``synchronized'' sharing the same $k$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
