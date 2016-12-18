@@ -921,7 +921,7 @@ As an example, the groupoid $\order{(\permtwo)}$ can be represented as follows. 
 \end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Symmetry Groupoids $\iorder{p}$}
+\subsection{Symmetry Groupoids $\iorder{p}$}\label{sec:symmetryg}
 
 The elements of $\iter{p}$ form a group under the following operation:
 \[
@@ -943,7 +943,10 @@ same.
 \end{itemize}
 \end{definition}
 
-Note that for each power $p ^ i$ of $p$, there is a morphism $\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$ to the identity. Note also that everything is well-defined even if we choose $p : \zt\iso\zt$. In that case, the cardinality is 1.
+Note that for each power $p ^ i$ of $p$, there is a morphism
+$\triple{k}{q}{\alpha}$ in $\iter{p}$ such that $q$ annihilates $p^i$ to the
+identity. Note also that everything is well-defined even if we choose $p :
+\zt\iso\zt$. In that case, the cardinality is 1.
 
 \begin{lemma}
   $|\iorder{p}| = \frac{1}{\ord{p}}$
@@ -1000,12 +1003,13 @@ the general construction~\cite{looping}, a group $G$ is known to induce two
 groupoids, a looping groupoid $\looping{G}$ and a delooping groupoid
 $\delooping{G}$. These are defined as follows.
 
-The looping groupoid $\looping{G}$ has the group elements as objects and
-morphisms between elements in the same conjugacy class, that is, there is a
+The looping groupoid $\looping{G}$ has the elements $g$ of the group $G$ as
+objects and morphisms between elements in the same conjugacy class; that is,
+there is a
 morphism between elements $g$ and $h$ iff there exists a $x \in G$ such that
 $g = x^{-1} \cdot g \cdot x$. Fixing a type $\tau$ and a particular 1-combinator
 $p : \tau \iso \tau$, we get a group whose elements are the iterates $p^k$. The
-corresponding looping groupoid has all the iterates as objects and morphisms
+corresponding looping groupoid has all the iterates as objects, and morphisms
 between $p^{k_1}$ and $p^{k_2}$ whenever there exists an integer $j$ such that
 $p^{k_2}$ is equivalent to $p^{-j} \odot p^{k_1} \odot p^{j}$. By
 Lem.~\ref{lem:distiterplus}, the latter term is $\isotwo$-equivalent to
@@ -1043,7 +1047,8 @@ identify the two groupoids above.  Although the notion of equivalence we use in
 the next section appears novel, it is related ``in spirit'' to Morita
 equivalence and we find it useful to give a small example. We will verify that
 the product of the groupoid $\order{\permfive}$ of cardinality 3 and the
-groupoid $\iorder{\permfive}$ of cardinality $\frac{1}{3}$ is the trivial
+groupoid $\iorder{\permfive}$ of cardinality $\frac{1}{3}$ is equivalent
+to the trivial
 groupoid with only one distinct object and one trivial automorphism. To avoid
 clutter we assume the groupoids are strict, e.g., that the groupoid
 $\order{\permfive}$ has three elements (instead of 3 isomorphism classes of
@@ -1052,7 +1057,10 @@ to finding a \emph{Morita morphism} from $\order{\idiso}$ to
 $\order{\permfive} \circledast \iorder{\permfive}$. This is a functor $\psi$
 from the unit groupoid to the product groupoid, say $G$, with an additional
 condition that the commutative diagram in figure~\ref{fig:morita} is a
-\emph{pullback}. The intuition is that the codomain consists of three objects
+\emph{pullback}, where $s,t$ are the \emph{source} and \emph{target} maps,
+and $\ot$, $\mathbb{3}$ are the $1$- and $3$-point discrete groupoids
+defined previously.
+The intuition is that the codomain consists of three objects
 with associated morphisms, each of them counting as a ``third.'' The functor
 from $\order{\idiso}$ to $\order{\permfive} \circledast \iorder{\permfive}$ must
 include an arbitrary choice of ``which third'' to target and the universality
@@ -1063,7 +1071,9 @@ target and a \emph{global} condition ensuring that the choice ultimately
 annihilates. The challenge we are facing is to turn this idea into an operational
 semantics that somehow combines the local and global aspects of the
 equivalence. We will be inspired by the folklore result that ``substitution into a
-dependent type is a pullback''~\cite{subpullback} as explained in the next section.
+dependent type is a pullback''~\cite{subpullback} (but which turns out to have
+been fully explained in~\cite{practicalfoundations}) as explained in the next
+section.
 
 \begin{figure}[h]
   \centering
@@ -1072,10 +1082,10 @@ dependent type is a pullback''~\cite{subpullback} as explained in the next secti
     \arrow[drr, bend left, "{\xi_1}"]
     \arrow[ddr, bend right, "{(s,t)}"]
     \arrow[dr, dotted] & & \\
-    & \set{\idiso} \arrow[r, "{\psi_1}"] \arrow[d, "{(s,t)}"]
-    & G_1 \arrow[d, "{(s,t)}"] \\
-    & \set{\ast} \times \set{\ast} \arrow[r, "{\psi_0 \times \psi_0}"]
-    & G_0 \times G_0
+    & \order{\idiso} \arrow[r, "{\psi_1}"] \arrow[d, "{(s,t)}"]
+    & G \arrow[d, "{(s,t)}"] \\
+    & \ot \times \ot \arrow[r, "{\psi_0 \times \psi_0}"]
+    & \mathbb{3} \times \mathbb{3}
   \end{tikzcd}
   \caption{
     \label{fig:morita}
@@ -1088,7 +1098,13 @@ dependent type is a pullback''~\cite{subpullback} as explained in the next secti
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
 
-We are now ready to turn the groupoid constructions from the previous section into an extension of $\Pi$ with new type constructors and combinators for creating and manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
+We are now ready to turn the groupoid constructions from the previous section
+into an extension of $\Pi$ with new type constructors and combinators for
+creating and manipulating syntactic counterparts to $\order{p}$ and
+$\iorder{p}$.  Just adding the ``obvious'' types and combinators does
+not work; however, as the failures are quite informative, we nevertheless go
+through this first attempt.  This will help illustrate why we need extra
+machinery in Sec.~\ref{sec:deppointedtypes}.
 
 \begin{figure}[t]
 \[\begin{array}{rrcll}
@@ -1131,7 +1147,7 @@ Each combinator $\rho$ has an inverse.
 \end{figure}
 
 %%%%%
-\subsection{Non-Dependent Version}
+\subsection{First attempt}
 
 As a first approximation to the language we seek, we consider adding three new
 syntactic categories to the definition of $\Pi$ in Sec.~\ref{opsempi}:
@@ -1155,30 +1171,29 @@ The syntax of (non-dependent) $\Pi^/$ is given by the following categories:
 \end{array}\]
 \end{definition}
 
-The syntactic category $\ft$ of fractional types introduces type expressions for
-iteration groupoids, symmetry groupoids, and their products. The combinators
-that relate these fractional types are in Fig.~\ref{pifrac:comb}. The bottom
-group includes identity and sequential composition~$\circledcirc$ combinators
-and ensures that the combinators can be applied anywhere inside a product
-$\circledast$. There is also a combinator that relates two types $\order{c_1}$
-and $\order{c_2}$ via $\order{\alpha}$ whenever $\alpha : c_1 \isotwo
-c_2$.
-Indeed if $c_1$ and $c_2$ are considered equivalent via a 2-combinator then we
-also consider their iteration groupoids to be equivalent. The top group ensures
-that $\circledast$ carries a symmetric monoidal structure with combinators
-witnessing the unit, commutativity, and associativity properties. The last two
-pairs combinators $\eta-/\epsilon-$ and $\eta+/\epsilon+$ are inspired from the
-definition of compact closed categories~\cite{ccc} which are symmetric monoidal
-categories in which every object has a dual. They are the ones that witness the
-``fractional'' nature of symmetry groupoids as motivated in Sec.~\ref{sub:products}.
+The syntactic category $\ft$ of fractional types introduces type expressions
+for iteration groupoids, symmetry groupoids, and their products. The
+combinators that relate these fractional types are in Fig.~\ref{pifrac:comb}.
+The bottom group includes identity and sequential composition~$\circledcirc$
+combinators and ensures that the combinators can be applied anywhere inside a
+product $\circledast$. There is also a combinator that relates two types
+$\order{c_1}$ and $\order{c_2}$ via $\order{\alpha}$ whenever $\alpha : c_1
+\isotwo c_2$.  Indeed if $c_1$ and $c_2$ are considered equivalent via a
+$2$-combinator then we also consider their iteration groupoids to be equivalent.
+The top group ensures that $\circledast$ carries a symmetric monoidal structure
+with combinators witnessing the unit, commutativity, and associativity
+properties. The last two pairs of combinators $\eta\!- / \epsilon-$ and
+$\eta\!+ / \epsilon+$ are inspired from the definition of compact closed
+categories~\cite{ccc} which are symmetric monoidal categories in which every
+object has a dual. They are the ones that witness the ``fractional'' nature of
+symmetry groupoids as motivated in Sec.~\ref{sub:products}.
 
 The last new syntactic category in $\Pi^/$ is that of values which deserves some
-background discussion. When the types denote sets, it is evident what it means
-to have a value of a given type: it is just an element of the set. When types
-denote groupoids, it is less clear what it means to have a value, especially
-when the total number of values, as reported by the groupoid cardinality, is a
-proper fraction. In that case we the values up to an equivalence relation. The
-idea is not uncommon: in the conventional $\lambda$-calculus, we list
+additional discussion. When types denote sets, values of a type are clear:
+they are just the elements of the set.  In the case when types are groupoids,
+this is less clear, especially when the groupoid cardinality is a proper
+fraction.  What we get instead are equivalence classes of values.
+The idea is not uncommon: in the conventional $\lambda$-calculus, we list
 $\lambda x.x$ and $\lambda y.y$ as separate values of type
 $\tau \rightarrow \tau$ and then provide a separate equivalence relation
 ($\alpha$-equivalence) to express the fact that these two values are
@@ -1222,6 +1237,52 @@ of these morphisms are $\isotwo$-equivalent.
 \end{tikzpicture}
 \caption{\label{fig:zigzag} Zig-zag}
 \end{figure}
+
+%%%%%
+\subsection{Dependent Pointed Types}\label{sec:deppointedtypes}
+
+To understand the challenge in designing an operational semantics for $\eta$ and
+$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
+Fig.~\ref{fig:zigzag}. Algebraically this circuit corresponds to the following
+manipulation on types:
+\[
+x \mapsto (1 \times x) \mapsto ((x \times 1/x) \times x)
+\mapsto (x \times (1/x \times x)) \mapsto (x \times 1) \mapsto x
+\]
+and by the coherence conditions of compact closed categories, we expect this
+circuit, when run in either direction, to be equivalent to the
+identity. Consider now the case of a combinator $c$ whose order is greater than
+or equal to 2, i.e., the type $\order{c}$ has at least two distinct values
+$\idiso$ and $c$ and the type $\iorder{c}$ has at least two distinct values
+$1/\idiso$ and $1/c$. We require this circuit to produce $\idiso$ when given
+$\idiso$ from either end, and similarly to produce $c$ when given $c$ from
+either end. The problem becomes apparent when one observes that the uses of
+$\eta+$ in the left-to-right execution and the use of $\epsilon-$ in the
+right-to-left execution must behave differently depending on the incoming
+value. But the ``local'' information available to either of these combinators
+does not include the ``global'' information about the incoming value and there
+is no way for them to make consistent guesses locally. It is possible to modify
+the operational semantics to use a mechanism to express a computational effect
+which enables spatially separated parts of the program to communicate in a way
+that is reminiscent of entanglement in quantum mechanics. Possibilities to
+realize this communication are global reference cells, backtracking, or logical
+variables with unification. Instead, we choose a more abstract approach that
+encodes the required dependency in dataflow constraints using dependent types.
+
+\begin{definition}[Dependent $\Pi^/$]
+\label{def:pifracd}
+The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
+\[\begin{array}{lrcl}
+(\textrm{Fractional Types}) & \mathbb{T_\bullet} &::=&
+  [\order{c},c^k] \alt
+  [\iorder{c},1/c^k] \alt
+  [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
+  \forall k.\mathbb{T_\bullet} \\
+ (\textrm{/-combinators}) & \rho_\bullet &:&
+  \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
+  [\textit{see Fig.~\ref{pifracd:comb}}]
+\end{array}\]
+\end{definition}
 
 \begin{figure}[t]
 {\footnotesize
@@ -1358,11 +1419,15 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
 
 The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
 where each type $\mathbb{T}$ refers to a particular value $v$ in
-$\mathbb{T}$. We then allow indices of values $k$ to be range over a collection
-of types. In particular, the type
+$\mathbb{T}$. We then allow universal quantification over indices $k$
+associated to values, over a collection of types.
+In particular, the type
 $\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
 $\iorder{c}$; they must be ``synchronized'' sharing the same $k$.
+It is important to remember that there is no loss in generality
+in going to pointed types, as all fractional types are inhabited (see
+remark in Sec.~\ref{sec:symmetryg}.
 
 Here is how the circuit in Fig.~\ref{fig:zigzag} evaluates in the forward and
 backwards directions:
