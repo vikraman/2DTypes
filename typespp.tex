@@ -72,7 +72,10 @@ $\displaystyle
 \newcommand{\evalone}[2]{#1~\triangleright~#2}
 \newcommand{\evaloneb}[2]{#1~\triangleleft~#2}
 \newcommand{\unitv}{()}
-\newcommand{\synch}{\mathsf{{synch}}}
+\newcommand{\synchl}{\mathsf{{synchl}}}
+\newcommand{\synchr}{\mathsf{{synchr}}}
+\newcommand{\packl}{\mathsf{{packl}}}
+\newcommand{\packr}{\mathsf{{packr}}}
 \newcommand{\unitepl}{\mathsf{{unite_+l}}}
 \newcommand{\unitipl}{\mathsf{{uniti_+l}}}
 \newcommand{\unitepr}{\mathsf{{unite_+r}}}
@@ -1299,7 +1302,19 @@ dependent types.
   & : \epsilon- \\
 \eta+ :& [\order{\idiso},\idiso] & \leftrightblackspoon &
   \forall\exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle]
-  & : \epsilon+
+  & : \epsilon+ \\
+\synchl :& \forall\exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^k,1/c^k \rangle, c^i]
+  & \leftrightblackspoon &
+  [(\order{c}\circledast\iorder{c})\circledast\order{c},
+    \langle \langle c^i,1/c^i \rangle, c^i]
+  & : \packl \\
+\synchr :& \forall\exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \langle c^i, \langle 1/c^k, c^k \rangle \rangle]
+  & \leftrightblackspoon &
+   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
+   \langle c^i, \langle 1/c^i, c^i \rangle \rangle]
+  & : \packr
 \end{array}\]
 \[\begin{array}{c}
 \Rule{}
@@ -1341,19 +1356,14 @@ dependent types.
   \leftrightblackspoon
   \forall\exists{\overline{k_2k_4}}.[\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
 {}
-% \\
-% \\
-% \Rule{}
-% {\jdg{}{}{}}
-% {\jdg{}{}{\synch_i : \forall{\overline{k}k'}.[\mathbb{T},v]
-%   \leftrightblackspoon
-%    \forall{\overline{k}}.[\mathbb{T},v[k'\mapsto i]]}}
-% {}
 \end{array}\]
 \\
 Each combinator $\rho_\bullet$ has an inverse. A rule $\mathbb{T_1}_\bullet \leftrightblackspoon
-\forall\exists{k}.\mathbb{T_2}_\bullet$ uses the $\forall$ in the left-to-right
-direction and uses the $\exists$ in the right-to-left direction.
+\forall\exists{k}.\mathbb{T_2}_\bullet$ introduces a $\forall$ in the left-to-right
+direction and eliminates an $\exists$ in the right-to-left direction. A rule
+$\forall\exists{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
+\mathbb{T_2}_\bullet$ eliminates a $\forall$ in the left-to-right direction and
+introduces an $\exists$ in the right-to-left direction.
 }
 \caption{$\Pi^/$ fractional combinators (dependent version)}
 \label{pifracd:comb}
@@ -1397,12 +1407,12 @@ $\forall\exists{\overline{k}}.[\mathbb{T},v]$ where all the quantifiers are
 lifted to the top leaving a non-dependent type and a value in that type. The
 combinators in Fig.~\ref{pifracd:comb} also serve as the operational semantics
 for the language as they explain how the value currently in focus changes during
-evaluation.
+evaluation. Given the new combinators, we can modify the the circuit in
+Fig.~\ref{fig:zigzag} by adding explicit synchronization primitives. The
+evaluation proceeds as follows where we diambiguate the uses of $\forall$ and
+$\exists$ for clarity.
 
-Here is how the circuit in Fig.~\ref{fig:zigzag} evaluates in the forward and
-backwards directions where we diambiguate the uses of $\forall$ and $\exists$
-for clarity.
-
+Forward execution:
 \[\begin{array}{rcl}
 [\order{c},c^i]
 &\stackrel{\unitetl/}{\leftrightblackspoon}&
@@ -1410,14 +1420,12 @@ for clarity.
 &\stackrel{\eta+\circledast\idiso/}{\leftrightblackspoon}&
   \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
+&\stackrel{\synchl}{\leftrightblackspoon}&
+  \langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
 &\stackrel{\assocrt/}{\leftrightblackspoon}&
-  \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
-  \langle c^k, \langle 1/c^k,c^i \rangle\rangle] \\
-%% &\stackrel{\synch_i}{\leftrightblackspoon}&
-&k\mapsto i&
   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
-&\exists&
+&\stackrel{\packr}{\leftrightblackspoon}&
   \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
 &\stackrel{\idiso/\circledast\epsilon-}{\leftrightblackspoon}&
@@ -1427,6 +1435,7 @@ for clarity.
   [\order{c}, c^i]
 \end{array}\]
 
+Reverse execution:
 \[\begin{array}{rcl}
   [\order{c}, c^i]
 &\stackrel{\unitetr/}{\leftrightblackspoon}&
@@ -1435,13 +1444,13 @@ for clarity.
 &\stackrel{\idiso/\circledast\epsilon-}{\leftrightblackspoon}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
+&\stackrel{\synchr}{\leftrightblackspoon}&
+ [(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
 &\stackrel{\assocrt/}{\leftrightblackspoon}&
-  \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
-  \langle \langle c^i,1/c^k \rangle,c^k \rangle] \\
-&k\mapsto i&
   [(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
-&\exists&
+&\stackrel{\packl}{\leftrightblackspoon}&
   \exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
 &\stackrel{\eta+\circledast\idiso/}{\leftrightblackspoon}&
@@ -1449,11 +1458,6 @@ for clarity.
 &\stackrel{\unitetl/}{\leftrightblackspoon}&
   [\order{c},c^i]
 \end{array}\]
-
-Rules for moving quantifiers?
-
-Combinators for packing (creating an existential) and synchronization
-(instantiating a universal)??
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
