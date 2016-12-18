@@ -10,6 +10,9 @@
 *.fot
 *.cb
 *.cb2
+# these might belong below somewhere rather than here?
+*.vtc
+*.ptb
 
 ## Intermediate documents:
 *.dvi
@@ -210,3 +213,6 @@ TSWLatexianTemp*
 # agda
 *.agdai
 MAlonzo
+
+# Mac stuff
+.DS_Store
