@@ -1297,9 +1297,9 @@ of these morphisms are $\isotwo$-equivalent.
 \\
 \Rule{}
 {\jdg{}{}{}}
-{\jdg{}{}{\synch : \forall{\overline{k}k'}.[\mathbb{T},v]
+{\jdg{}{}{\synch_i : \forall{\overline{k}k'}.[\mathbb{T},v]
   \leftrightblackspoon
-   [\mathbb{T},v[k'\mapsto ??]]}}
+   \forall{\overline{k}}.[\mathbb{T},v[k'\mapsto i]]}}
 {}
 \end{array}\]
 Each combinator $\rho_\bullet$ has an inverse.
@@ -1378,7 +1378,7 @@ backwards directions:
 &\stackrel{\assocrt/}{\longmapsto}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^k, \langle 1/c^k,c^i \rangle\rangle] \\
-&\stackrel{\synch}{\longmapsto}&
+&\stackrel{\synch_i}{\longmapsto}&
   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
 &\stackrel{\idiso/\circledast\epsilon-}{\longmapsto}&
@@ -1397,7 +1397,7 @@ backwards directions:
 &\stackrel{\idiso/\circledast\epsilon-}{\longmapsfrom}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
-&\stackrel{\synch}{\longmapsfrom}&
+&\stackrel{\synch_i}{\longmapsfrom}&
  [\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
 &\stackrel{\assocrt/}{\longmapsfrom}&
