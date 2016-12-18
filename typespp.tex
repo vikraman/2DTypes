@@ -1061,7 +1061,9 @@ it leads to the same result as every other possible functor. To summarize the
 equivalence between the two groupoids requires a \emph{local} map that chooses a
 target and a \emph{global} condition ensuring that the choice ultimately
 annihilates. The challenge we are facing is to turn this idea into an operational
-semantics that somehow combines the local and global aspects of the equivalence.
+semantics that somehow combines the local and global aspects of the
+equivalence. We will be inspired by the folklore result that ``substitution into a
+dependent type is a pullback''~\cite{subpullback} as explained in the next section.
 
 \begin{figure}[h]
   \centering
@@ -1224,39 +1226,39 @@ of these morphisms are $\isotwo$-equivalent.
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :&  \exists\overline{k}.[\order{\idiso} \circledast \mathbb{T},
+\unitetl/ :&  \forall\overline{k}.[\order{\idiso} \circledast \mathbb{T},
                                                    \langle \idiso,v \rangle]
   & \leftrightblackspoon &
-                    \exists\overline{k}.[\mathbb{T},v]
+                    \forall\overline{k}.[\mathbb{T},v]
   &: \unititl/ \\
-\unitetr/ :&  \exists\overline{k}.[\mathbb{T} \circledast \order{\idiso},
+\unitetr/ :&  \forall\overline{k}.[\mathbb{T} \circledast \order{\idiso},
                                                     \langle v,\idiso]
   & \leftrightblackspoon &
-                    \exists\overline{k}.[\mathbb{T},v]
+                    \forall\overline{k}.[\mathbb{T},v]
   &: \unititr/ \\
-\swapt/ :&  \exists\overline{k}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
+\swapt/ :&  \forall\overline{k}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
                                                    \langle v_1,v_2 \rangle]
  & \leftrightblackspoon &
-                   \exists\overline{k}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
+                   \forall\overline{k}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
                                                   \langle v_2,v_1 \rangle]
   &: \swapt/ \\
-  \assoclt/ :&  \exists\overline{k}.[\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
+  \assoclt/ :&  \forall\overline{k}.[\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
                                         \langle v_1,\langle v_2,v_3 \rangle]
   & \leftrightblackspoon &
-                       \exists\overline{k}.[(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
+                       \forall\overline{k}.[(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
                                        \langle \langle v_1,v_2 \rangle , v_3 \rangle]
   &: \assocrt/ \\
 \\
 \eta- :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \exists{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] &: \epsilon- \\
+  \forall{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] &: \epsilon- \\
 \eta+ :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] &: \epsilon+ \\
+  \forall{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] &: \epsilon+ \\
 \end{array}\]
 \[\begin{array}{c}
 \Rule{}
 {}
-{\jdg{}{}{\idiso/ : \exists\overline{k}.[\mathbb{T},v] \leftrightblackspoon
-  \exists\overline{k}.[\mathbb{T},v]}}
+{\jdg{}{}{\idiso/ : \forall\overline{k}.[\mathbb{T},v] \leftrightblackspoon
+  \forall\overline{k}.[\mathbb{T},v]}}
 {}
 ~~
 \Rule{}
@@ -1268,25 +1270,25 @@ of these morphisms are $\isotwo$-equivalent.
 \\
 \\
 \Rule{}
-{\jdg{}{}{\rho_1 : \exists{\overline{k_1}}.
+{\jdg{}{}{\rho_1 : \forall{\overline{k_1}}.
   [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_2,v_2]} \quad
-  \rho_2 : \exists{\overline{k_2}}.
+  \rho_2 : \forall{\overline{k_2}}.
   [\mathbb{T}_2,v_2] \leftrightblackspoon [\mathbb{T}_3,v_3]}
 {\jdg{}{}{\rho_1 \circledcirc \rho_2 :
- \exists{\overline{k_1}\overline{k_2}}.
+ \forall{\overline{k_1}\overline{k_2}}.
  [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_3},v_3]}
 {}
 \\
 \\
 \Rule{}
 {\jdg{}{}{\rho_1 :
-  \exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
-  \exists{\overline{k_2}}.[\mathbb{T}_2,v_2]}
+  \forall{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+  \forall{\overline{k_2}}.[\mathbb{T}_2,v_2]}
  \qquad \rho_2 :
-  \exists{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
-  \exists{\overline{k_4}}.[\mathbb{T}_4,v_4]}
+  \forall{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
+  \forall{\overline{k_4}}.[\mathbb{T}_4,v_4]}
 {\jdg{}{}{\rho_1 \circledast \rho_2 :
-  \exists{\overline{k_1k_2k_3k_4}}.
+  \forall{\overline{k_1k_2k_3k_4}}.
   [\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
   \leftrightblackspoon
   [\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
@@ -1295,7 +1297,7 @@ of these morphisms are $\isotwo$-equivalent.
 \\
 \Rule{}
 {\jdg{}{}{}}
-{\jdg{}{}{\synch : \exists{\overline{k}k'}.[\mathbb{T},v]
+{\jdg{}{}{\synch : \forall{\overline{k}k'}.[\mathbb{T},v]
   \leftrightblackspoon
    [\mathbb{T},v[k'\mapsto ??]]}}
 {}
@@ -1345,7 +1347,7 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
   [\order{c},c^k] \alt
   [\iorder{c},1/c^k] \alt
   [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
-  \exists k.\mathbb{T_\bullet} \\
+  \forall k.\mathbb{T_\bullet} \\
  (\textrm{/-combinators}) & \rho_\bullet &:&
   \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
   [\textit{see Fig.~\ref{pifracd:comb}}]
@@ -1356,10 +1358,10 @@ The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
 where each type $\mathbb{T}$ refers to a particular value $v$ in
 $\mathbb{T}$. We then allow indices of values $k$ to be range over a collection
 of types. In particular, the type
-$\exists k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
+$\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
 $\iorder{c}$; they must be ``synchronized'' sharing the same $k$. In general, a
-pointed type will be of the form $\exists\overline{k}.[\mathbb{T},v]$ for some
+pointed type will be of the form $\forall\overline{k}.[\mathbb{T},v]$ for some
 sequence of integers $\overline{k}$ and some value $v$ in $\mathbb{T}$ which
 might of course refer to the integers $\overline{k}$ to enforce some
 synchronization among its sub-values.
@@ -1371,10 +1373,10 @@ backwards directions:
 &\stackrel{\unitetl/}{\longmapsto}&
   [\order{id}\circledast\order{c}, \langle \idiso,c^i \rangle] \\
 &\stackrel{\eta+\circledast\idiso/}{\longmapsto}&
-  \exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
 &\stackrel{\assocrt/}{\longmapsto}&
-  \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^k, \langle 1/c^k,c^i \rangle\rangle] \\
 &\stackrel{\synch}{\longmapsto}&
   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
@@ -1393,7 +1395,7 @@ backwards directions:
   [\order{c}\circledast\order{\idiso},
   \langle c^i, \idiso \rangle] \\
 &\stackrel{\idiso/\circledast\epsilon-}{\longmapsfrom}&
-  \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
 &\stackrel{\synch}{\longmapsfrom}&
  [\order{c}\circledast(\iorder{c}\circledast\order{c}),
