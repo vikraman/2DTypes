@@ -1095,7 +1095,13 @@ section.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$}
 
-We are now ready to turn the groupoid constructions from the previous section into an extension of $\Pi$ with new type constructors and combinators for creating and manipulating syntactic counterparts to $\order{p}$ and $\iorder{p}$.
+We are now ready to turn the groupoid constructions from the previous section
+into an extension of $\Pi$ with new type constructors and combinators for
+creating and manipulating syntactic counterparts to $\order{p}$ and
+$\iorder{p}$.  Just adding the ``obvious'' types and combinators does
+not work; however, as the failures are quite informative, we nevertheless go
+through this first attempt.  This will help illustrate why we need extra
+machinery in Sec.~\ref{sec:deppointedtypes}.
 
 \begin{figure}[t]
 \[\begin{array}{rrcll}
@@ -1138,7 +1144,7 @@ Each combinator $\rho$ has an inverse.
 \end{figure}
 
 %%%%%
-\subsection{Non-Dependent Version}
+\subsection{First attempt}
 
 As a first approximation to the language we seek, we consider adding three new
 syntactic categories to the definition of $\Pi$ in Sec.~\ref{opsempi}:
@@ -1162,30 +1168,29 @@ The syntax of (non-dependent) $\Pi^/$ is given by the following categories:
 \end{array}\]
 \end{definition}
 
-The syntactic category $\ft$ of fractional types introduces type expressions for
-iteration groupoids, symmetry groupoids, and their products. The combinators
-that relate these fractional types are in Fig.~\ref{pifrac:comb}. The bottom
-group includes identity and sequential composition~$\circledcirc$ combinators
-and ensures that the combinators can be applied anywhere inside a product
-$\circledast$. There is also a combinator that relates two types $\order{c_1}$
-and $\order{c_2}$ via $\order{\alpha}$ whenever $\alpha : c_1 \isotwo
-c_2$.
-Indeed if $c_1$ and $c_2$ are considered equivalent via a 2-combinator then we
-also consider their iteration groupoids to be equivalent. The top group ensures
-that $\circledast$ carries a symmetric monoidal structure with combinators
-witnessing the unit, commutativity, and associativity properties. The last two
-pairs combinators $\eta-/\epsilon-$ and $\eta+/\epsilon+$ are inspired from the
-definition of compact closed categories~\cite{ccc} which are symmetric monoidal
-categories in which every object has a dual. They are the ones that witness the
-``fractional'' nature of symmetry groupoids as motivated in Sec.~\ref{sub:products}.
+The syntactic category $\ft$ of fractional types introduces type expressions
+for iteration groupoids, symmetry groupoids, and their products. The
+combinators that relate these fractional types are in Fig.~\ref{pifrac:comb}.
+The bottom group includes identity and sequential composition~$\circledcirc$
+combinators and ensures that the combinators can be applied anywhere inside a
+product $\circledast$. There is also a combinator that relates two types
+$\order{c_1}$ and $\order{c_2}$ via $\order{\alpha}$ whenever $\alpha : c_1
+\isotwo c_2$.  Indeed if $c_1$ and $c_2$ are considered equivalent via a
+$2$-combinator then we also consider their iteration groupoids to be equivalent.
+The top group ensures that $\circledast$ carries a symmetric monoidal structure
+with combinators witnessing the unit, commutativity, and associativity
+properties. The last two pairs of combinators $\eta\!- / \epsilon-$ and
+$\eta\!+ / \epsilon+$ are inspired from the definition of compact closed
+categories~\cite{ccc} which are symmetric monoidal categories in which every
+object has a dual. They are the ones that witness the ``fractional'' nature of
+symmetry groupoids as motivated in Sec.~\ref{sub:products}.
 
 The last new syntactic category in $\Pi^/$ is that of values which deserves some
-background discussion. When the types denote sets, it is evident what it means
-to have a value of a given type: it is just an element of the set. When types
-denote groupoids, it is less clear what it means to have a value, especially
-when the total number of values, as reported by the groupoid cardinality, is a
-proper fraction. In that case we the values up to an equivalence relation. The
-idea is not uncommon: in the conventional $\lambda$-calculus, we list
+additional discussion. When types denote sets, values of a type are clear:
+they are just the elements of the set.  In the case when types are groupoids,
+this is less clear, especially when the groupoid cardinality is a proper
+fraction.  What we get instead are equivalence classes of values.
+The idea is not uncommon: in the conventional $\lambda$-calculus, we list
 $\lambda x.x$ and $\lambda y.y$ as separate values of type
 $\tau \rightarrow \tau$ and then provide a separate equivalence relation
 ($\alpha$-equivalence) to express the fact that these two values are
@@ -1229,6 +1234,52 @@ of these morphisms are $\isotwo$-equivalent.
 \end{tikzpicture}
 \caption{\label{fig:zigzag} Zig-zag}
 \end{figure}
+
+%%%%%
+\subsection{Dependent Pointed Types}\label{sec:deppointedtypes}
+
+To understand the challenge in designing an operational semantics for $\eta$ and
+$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
+Fig.~\ref{fig:zigzag}. Algebraically this circuit corresponds to the following
+manipulation on types:
+\[
+x \mapsto (1 \times x) \mapsto ((x \times 1/x) \times x)
+\mapsto (x \times (1/x \times x)) \mapsto (x \times 1) \mapsto x
+\]
+and by the coherence conditions of compact closed categories, we expect this
+circuit, when run in either direction, to be equivalent to the
+identity. Consider now the case of a combinator $c$ whose order is greater than
+or equal to 2, i.e., the type $\order{c}$ has at least two distinct values
+$\idiso$ and $c$ and the type $\iorder{c}$ has at least two distinct values
+$1/\idiso$ and $1/c$. We require this circuit to produce $\idiso$ when given
+$\idiso$ from either end, and similarly to produce $c$ when given $c$ from
+either end. The problem becomes apparent when one observes that the uses of
+$\eta+$ in the left-to-right execution and the use of $\epsilon-$ in the
+right-to-left execution must behave differently depending on the incoming
+value. But the ``local'' information available to either of these combinators
+does not include the ``global'' information about the incoming value and there
+is no way for them to make consistent guesses locally. It is possible to modify
+the operational semantics to use a mechanism to express a computational effect
+which enables spatially separated parts of the program to communicate in a way
+that is reminiscent of entanglement in quantum mechanics. Possibilities to
+realize this communication are global reference cells, backtracking, logical
+variables with unification. We choose a more abstract approach that encodes the
+required dependency in dataflow constraints using dependent types.
+
+\begin{definition}[Dependent $\Pi^/$]
+\label{def:pifracd}
+The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
+\[\begin{array}{lrcl}
+(\textrm{Fractional Types}) & \mathbb{T_\bullet} &::=&
+  [\order{c},c^k] \alt
+  [\iorder{c},1/c^k] \alt
+  [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
+  \forall k.\mathbb{T_\bullet} \\
+ (\textrm{/-combinators}) & \rho_\bullet &:&
+  \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
+  [\textit{see Fig.~\ref{pifracd:comb}}]
+\end{array}\]
+\end{definition}
 
 \begin{figure}[t]
 {\footnotesize
@@ -1314,52 +1365,6 @@ Each combinator $\rho_\bullet$ has an inverse.
 \caption{$\Pi^/$ fractional combinators (dependent version)}
 \label{pifracd:comb}
 \end{figure}
-
-%%%%%
-\subsection{Dependent Pointed Types}
-
-To understand the challenge in designing an operational semantics for $\eta$ and
-$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
-Fig.~\ref{fig:zigzag}. Algebraically this circuit corresponds to the following
-manipulation on types:
-\[
-x \mapsto (1 \times x) \mapsto ((x \times 1/x) \times x)
-\mapsto (x \times (1/x \times x)) \mapsto (x \times 1) \mapsto x
-\]
-and by the coherence conditions of compact closed categories, we expect this
-circuit, when run in either direction, to be equivalent to the
-identity. Consider now the case of a combinator $c$ whose order is greater than
-or equal to 2, i.e., the type $\order{c}$ has at least two distinct values
-$\idiso$ and $c$ and the type $\iorder{c}$ has at least two distinct values
-$1/\idiso$ and $1/c$. We require this circuit to produce $\idiso$ when given
-$\idiso$ from either end, and similarly to produce $c$ when given $c$ from
-either end. The problem becomes apparent when one observes that the uses of
-$\eta+$ in the left-to-right execution and the use of $\epsilon-$ in the
-right-to-left execution must behave differently depending on the incoming
-value. But the ``local'' information available to either of these combinators
-does not include the ``global'' information about the incoming value and there
-is no way for them to make consistent guesses locally. It is possible to modify
-the operational semantics to use a mechanism to express a computational effect
-which enables spatially separated parts of the program to communicate in a way
-that is reminiscent of entanglement in quantum mechanics. Possibilities to
-realize this communication are global reference cells, backtracking, logical
-variables with unification. We choose a more abstract approach that encodes the
-required dependency in dataflow constraints using dependent types.
-
-\begin{definition}[Dependent $\Pi^/$]
-\label{def:pifracd}
-The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
-\[\begin{array}{lrcl}
-(\textrm{Fractional Types}) & \mathbb{T_\bullet} &::=&
-  [\order{c},c^k] \alt
-  [\iorder{c},1/c^k] \alt
-  [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
-  \forall k.\mathbb{T_\bullet} \\
- (\textrm{/-combinators}) & \rho_\bullet &:&
-  \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
-  [\textit{see Fig.~\ref{pifracd:comb}}]
-\end{array}\]
-\end{definition}
 
 The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
 where each type $\mathbb{T}$ refers to a particular value $v$ in
