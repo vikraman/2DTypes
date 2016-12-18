@@ -1099,7 +1099,7 @@ section.
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$}
+\section{$\Pi^/$: Syntax and Semantics}
 
 We are now ready to turn the groupoid constructions from the previous section
 into an extension of $\Pi$ with new type constructors and combinators for
@@ -1460,160 +1460,103 @@ Reverse execution:
 \end{array}\]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$: Operational Semantics}
-
-at end of previous section; add a new subsection explaining functor showing
-equivalence of 1 and $\order{p} \times \iorder{p}$. Morita functor. Pullback condition. there is a
-choice for eta but there is an extra condition that the choices are all
-consistent. The big question is how to encode this global condition; side
-effect; synchronization; etc. so naturally lead to pointed types and revise types
-
-Only non-trivial pairs are created by eta; they create ``synchronized'' uses combinators $c^k$ and $1/c^k$. The rest of the combinators can only replace these combinators by $\isotwo$-equivalent ones. Assoc is subtle: what if we have $\langle \order{c_1} , \langle \iorder{c_2} , \order{c_2} \rangle \rangle$; naive assoc would allow us to create a pair with unrelated combinators which cannot be eliminated using epsilon. But if assoc is constrained to maintain the invariant that only ``synchronized'' uses of combinators are ever paired together, everything works great.
-
-Idea is to change the types to be of the form $\Sigma_{\overline{k}}\mathbb{T}$
-where we keep track of the values (pointed types). When we take a product we
-concatenate the two sequences of integers.
-\[
-(\textrm{Fractional Types})  \mathbb{T} ::=
-  \Sigma_k\order{c} \alt \Sigma_k\iorder{c} \alt
-  \Sigma_{\overline{j},\overline{k}}\mathbb{T}_1 \circledast \mathbb{T}_2
-\]
-
-The operational semantics for all the primitive combinators is a
-simple transliteration of Fig.~\ref{fig:opsem}. We omit the
-straightforward implementation of prim and its inverse
-below:
-
-The interesting combinators operationally are the unit/counit combinators $\eta$
-and $\epsilon$, and the synchronization combinators. Their semantics is defined
-by the following pair of mutually recursive interpreters:
-
-The unit combinators $\eta$ simply generate unit tangles, and since unit tangles
-are equivalent to the \emph{identity}, they can be freely eliminated by the
-counit combinators $\epsilon$. The two synchronization operations exchange the
-tangled product with an iterate. The two interpreters satisfy several properties
-described below: First they are congruences for the equivalence $≈$ on values.
-We can further prove that both are \emph{reversible}.  Furthermore, we can show
-two coherence conditions: first, that the reverse interpreter gives equivalent
-results to the forward interpreter applied to a reverse combinator, and second,
-that two equivalent combinators (as given by a 2-combinator) will evaluate to
-equivalent values.
-
-The operational definition of synchr⋆ might seem at odds with our claim that it is related to associativity while it looks like commutativity.  The way to understand it is as follows: if indeed all values were independent, it would be associativity.  However, in this case, $p // q$ is really two \emph{tangled} values, which we do not have access to.  To keep these synchronized and yet to achieve the given type, the only choice (operationally) is to swap.  This is where the ``action at a distance'' occurs.
-
-
-The following is an example usage of zig-zag, which uses NOT combinator.
+\section{$\Pi^/$: Additional Examples}
 
 ccc have a notion of higher-order functions, trace, etc. Talk about these examples.
-
-\begin{figure}[t]
-{\footnotesize
-\[\begin{array}{cc}
-\begin{array}[t]{rlcl}
-  \evalone{\unitetl/}{&\langle id^{k},\mathbb{V} \rangle} &=& \mathbb{V} \\
-  \evalone{\unititl/}{& \mathbb{V}} &=& \langle id^{k_1},\mathbb{V} \rangle \\
-  \evalone{\unitetr/}{&\langle \mathbb{V},id^{k} \rangle} &=& \mathbb{V} \\
-  \evalone{\unititr/}{& \mathbb{V}} &=& \langle \mathbb{V},id^{k} \rangle\\
-  \evalone{\swapt}{&\langle \mathbb{V}_1, \mathbb{V}_2 \rangle} &=& \langle \mathbb{V}_2, \mathbb{V}_1 \rangle \\
-  \evalone{\assoclt/}{&\langle c^k , \langle 1/c^{k}, c^{k} \rangle\rangle} &=& \langle \langle c^k , 1/c^{k} \rangle, c^{k} \rangle \\
-  \evalone{\assocrt/}{&\langle \langle c^k , 1/c^{k} \rangle, c^{k} \rangle} &=& \langle c^k , \langle 1/c^{k}, c^{k} \rangle\rangle \\
-\end{array}
-&
-\begin{array}[t]{rlcl}
-  \evalone{\eta-}{& id^{k_1}} &=& \langle 1/c^{k_2},c^{k_2} \rangle\\
-  \evalone{\eta+}{& id^{k_1}} &=& \langle c^{k_2},1/c^{k_2} \rangle\\
-  \evalone{\epsilon-}{& \langle 1/c^{k_1},c^{k_1} \rangle} &=& id^{k_2} \\
-  \evalone{\epsilon+}{& \langle c^{k_1},1/c^{k_1} \rangle} &=& id^{k_2} \\
-\end{array}
-
-\end{array}\]
-\caption{\label{fig:opsem-frac}$\Pi^/$ operational semantics}
-}
-\end{figure}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Limitations}
-
-Given any non-negative rational number, we can form a type whose cardinality is
-that number. And yet, our types do not capture the full structure of the
-non-negative rational numbers, as these form a commutative semifield. There are
-a number of operations and properties which need to be added to complete this.
-Most seem quite straightforward.  We can however single one out which may not
-be: what we are missing is a multiplicative inverse for every type, and not just
-$\order{p}$. In particular, we would like to form the type
-$\iorder{(\iorder{p})}$ and have it be equivalent to $\order{p}$.  The
-relationship between $\order{p}$ and $\iorder{p}$ in $\Pi^/$ reveals a pattern
-that can be exploited to achieve this generalization. The multiplicative inverse
-of $\order{p}$ is obtained by promoting the objects in $\order{p}$ to morphisms
-in $1/\hash p$, which is a general process called \emph{delooping}. It is clear
-we can go in the inverse direction by demoting morphisms to objects which is a
-process called \emph{looping}. We leave a possible extension with a general
-looping/delooping process to future work.
-
-A second more immediate concern is to discover the abstract monadic and/or
-comonadic structure underlying the operational semantics. It is clear that the
-operational interpretation of fractional types involves a computational effect
-that requires synchronization with the ``future''. Implementing this effect
-using backtracking, reference cells, or dataflow constraints is possible but
-each implementation choice is ad hoc. We conjecture that with the right monadic
-and/or comonadic abstraction, the operational semantics will be simpler and
-expose still richer properties.  We chose the dependently-typed dataflow
-semantics because we are able to prove that it is reversible and coherent,
-unlike our previous attempts with explicit effects, none of which were provably
-reversible and/or coherent.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
-We have presented a natural notion of \emph{fractional types} that
-enriches a class of reversible programming languages in several
-dimensions.  Further research might show how to use fractional
-types in a conventional (i.e., irreversible) programming language, their full
-potential is only achieved when the ambient language guarantees that
-no information is created or erased.
+We have presented a natural notion of \emph{fractional types} that enriches a
+class of reversible programming languages in several dimensions.  Further
+research might show how to use fractional types in a conventional (i.e.,
+irreversible) programming language, their full potential is only achieved when
+the ambient language guarantees that no information is created or erased. The
+key semantic insight is that iterating a reversible program $p$ on a finite type
+must eventually reach the identity in $\ord{p}$ steps. By being careful not to
+collapse proofs, each such reversible program has $\ord{p}$ distinct proofs of
+reversibility and hence gives rise to a groupoid with cardinality
+$\frac{1}{\ord{p}}$. Going from this observation to a full programming language
+required several difficult and subtle design choices which we have explored to
+produce $\Pi^/$. The latter language has a natural denotational semantics where
+types denote groupoids. Its operational semantics requires a mechanism to
+express a computational effect which enables spatially separated parts of the
+program to communicate in a way that is reminiscent of entanglement in quantum
+mechanics. It appears possible to realize such an operational semantics using
+global reference cells, backtracking, or other conventional technique.
 
-The key semantic insight is that iterating a reversible program $p$ on
-a finite type must eventually reach the identity in $\ord{p}$
-steps. By being careful not to collapse proofs, each such reversible
-program has $\ord{p}$ distinct proofs of reversibility and hence gives
-rise to a groupoid with cardinality $\frac{1}{\ord{p}}$. Going from
-this observation to a full programming language required several
-difficult and subtle design choices which we have explored to produce
-$\Pi^/$. The latter language has a natural denotational semantics
-where types denote groupoids. Its operational semantics requires a
-mechanism to express a computational effect which enables spatially
-separated parts of the program to communicate in a way that is
-reminiscent of entanglement in quantum mechanics. It is possible to
-realize such an operational semantics using global reference cells,
-backtracking, or other conventional technique. A more enlightening and
-less ad hoc implementation encodes the required dependency in dataflow
-constraints encoded in dependent types. The key idea is to generalize
-the usual cartesian product to a \emph{tangled product} that allows the
-components to interact at synchronization points.
+Our fractional types extend the natural denotation of types from sets to
+non-trivial groupoids but they only scratch the surface of the tower of weak
+$\omega$-groupoids that is expressible in HoTT. A long term goal of our research
+is to find natural type constructors inspired by the rich combinatorial
+structure of weak $\omega$-groupoids and that provide novel programming
+abstractions. We conclude by outlining several interesting connections and
+potential avenues for future work.
 
-Our fractional types extend the natural denotation of types from sets
-to non-trivial groupoids but they only scratch the surface of the
-tower of weak $\omega$-groupoids that is expressible in HoTT. A long
-term goal of our research is to find natural type constructors
-inspired by the rich combinatorial structure of weak
-$\omega$-groupoids and that provide novel programming abstractions.
+\paragraph*{Quotient Types.} Certain groupoids naturally correspond to
+conventional \emph{quotient types}. Traditionally~\cite{quotient}, a quotient
+type $\ag{T}{E}$ combines a type $T$ with an equivalence relation $E$ that
+serves as the equality relation on the elements of $T$. Our notion of fractional
+types in $\pifrac$ appears to subsume conventional quotient types and their
+applications~\cite{Cohen2013} (e.g., defining fractions, multivariate
+polynomials, field extensions, algebraic numbers, etc.) and it would interesting
+to explicitly formalize this connection.
 
-For an information-theoretic perspective on the language $\Pi$, we think of a
-type containing $N$ values as an abstract system that has~$N$ distinguishable
-states. According to the conventional theory of information~\cite{Shannon1948},
-the amount of information contained in each state of a system with $N$
-distinguishable states is $(\log N)$ bits of information. For example, the type
-$\mathbb{2}$ can be thought of as an abstract system with two distinguishable
-states labeled $\mathsf{true}$ and $\mathsf{false}$ each containing $\log 2 = 1$
-bit. Similarly, the type $\mathbb{3}$ can be thought of as an abstract system
-with three distinguishable states each containing $\log 3$ bits. The logarithmic
-map implies that information contained in a composite state is the sum of the
-information contained in its constituents. For example, the type $\mathbb{2}
-\otimes \mathbb{3}$ can be thought of a composite system consisting of two
-independent unrelated subsystems. Each state of the composite system therefore
-contains $\log (2 * 3) = \log 2 + \log 3$ bits which is the sum of the
-information contained in each subsystem. Since all the combinators preserve
-cardinality, they are also information-preserving.
+\paragraph*{Conservation of Information and Negative Entropy.} According to the
+conventional theory of communication~\cite{Shannon1948}, a type with~$N$ values
+is viewed as an abstract system that has~$N$ distinguishable states where the
+amount of information contained in each state is $(\log{N})$. This entropy is a
+measure of information which materializes itself in memory or bandwidth
+requirements when storing or transmitting elements of this type. Thus a type
+with 8 elements needs 3 bits of memory for storage or 3 bits of bandwidth for
+communication. The logarithmic map implies that information contained in a
+composite state is the sum of the information contained in its constituents. For
+example, the type $\mathbb{2} \otimes \mathbb{3}$ can be thought of a composite
+system consisting of two independent unrelated subsystems. Each state of the
+composite system therefore contains $\log (2 * 3) = \log 2 + \log 3$ bits which
+is the sum of the information contained in each subsystem. If quantum field
+theory is correct (as it so far seems to be) then information, during any
+physical process, is neither created nor
+destroyed. Landauer~\cite{Landauer:1961,bennett1985fundamental,Landauer},
+Bennet~\cite{Bennett:1973:LRC,bennett2003notes,bennett2010notes},
+Fredkin~\cite{fredkin1982conservative} and others made compelling arguments that
+this physical principle induces a corresponding computational principle of
+``conservation of information.'' In the context of finite types, generated from
+the empty type $\zt$, the unit type $\ot$, and sums and products $\oplus$ and
+$\otimes$, this principle states that the foundational (i.e., physical) notion
+of computation is computation via type
+isomorphisms~\cite{James:2012:IE:2103656.2103667} or type
+equivalences~\cite{Carette2016}, which are both sound and complete with respect
+to cardinality-preserving maps. The introduction, in $\pifrac$, of types
+(groupoids) with fractional cardinalities introduces types with \emph{negative
+  entropy}. For example, a type with cardinality $\frac{1}{8}$ has entropy
+$\log{\frac{1}{8}} = -3$. It is natural to interpret this negative entropy just
+like we interpret ``negative money,'' as a debt to be repaid by some other part
+of the system. In fact, the zig-zag example can be viewed as modeling a credit
+card transaction where the money is produced at the output site by generating a
+corresponding debt that is reconciled at the input site.
+
+\paragraph*{Correspondence with Commutative Semifields.} Computations over
+finite types naturally emerge from viewing types as syntax for semiring
+elements, semiring identities as type isomorphisms, and justifications for
+semiring identities as program transformations and
+optimizations~\cite{Carette2016}. This correspondence provides a rich
+proof-relevant version of the Curry-Howard correspondence between algebra and
+reversible programming languages. The addition of full fractional types to the
+mix would enrich the correspondence to commutative semifields, providing a
+categorification~\cite{math/9802029} of the non-negative rational numbers in a
+computational setting. This correspondence in $\Pi^/$ is still lacking,
+however. Given any non-negative rational number, we can form a type whose
+cardinality is that number. And yet, our types do not capture the full structure
+of the non-negative rational numbers, as these form a commutative
+semifield. There are a number of operations and properties which need to be
+added to complete this.  Most seem quite straightforward.  We can however single
+one out which may not be: what we are missing is a multiplicative inverse for
+every type, and not just $\order{p}$. In particular, we would like to form the
+type $\iorder{(\iorder{p})}$ and have it be equivalent to $\order{p}$.  As
+explained in Sec.~\ref{sec:groupoids}, this would require a futher
+generalization of looping and delooping that can be iterated. We leave a
+possible extension with a general looping/delooping process to future work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{plainurl}
