@@ -1363,8 +1363,8 @@ to pointed types. We then allow universal quantification over indices $k$
 associated to values, over a collection of types.  In particular, the type
 $\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
-$\iorder{c}$; they must be ``synchronized'' by sharing the same $k$ but are
-otherwise arbitrary. Once introduce a universal quantifier in one direction of
+$\iorder{c}$; they must be ``synchronized'' by sharing the same~$k$ but are
+otherwise arbitrary. Once we introduce a universal quantifier in one direction of
 execution, we are led to also include an existential quantifier for the reverse
 execution. Intuitively, a forward evaluation step that is at liberty to choose a
 $k$ will, when reversed encounter a particular, i.e., existentially quantified,
@@ -1380,13 +1380,15 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
   [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
   \forall k.\mathbb{T_\bullet} \alt \exists k.\mathbb{T_\bullet} \\
  (\textrm{/-combinators}) & \rho_\bullet &:&
-  \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
+  \mathbb{T_1}_{\bullet} \leftrightblackspoon \mathbb{T_2}_{\bullet} ~::=
   [\textit{see Fig.~\ref{pifracd:comb}}]
 \end{array}\]
 \end{definition}
 
 Here is how the circuit in Fig.~\ref{fig:zigzag} evaluates in the forward and
-backwards directions:
+backwards directions where we diambiguate the uses of $\forall$ and $\exists$
+for clarity.
+
 \[\begin{array}{rcl}
 [\order{c},c^i]
 &\stackrel{\unitetl/}{\longmapsto}&
@@ -1433,9 +1435,6 @@ backwards directions:
 &\stackrel{\unitetl/}{\longmapsfrom}&
   [\order{c},c^i]
 \end{array}\]
-
-Need to explain that a $\forall$ in the forward direction is a choice and
-becomes $\exists$ in the backwards direction.
 
 Rules for moving quantifiers?
 
