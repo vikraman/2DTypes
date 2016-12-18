@@ -1269,21 +1269,6 @@ realize this communication are global reference cells, backtracking, or logical
 variables with unification. Instead, we choose a more abstract approach that
 encodes the required dependency in dataflow constraints using dependent types.
 
-\begin{definition}[Dependent $\Pi^/$]
-\label{def:pifracd}
-The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
-\[\begin{array}{lrcl}
-(\textrm{Fractional Types}) & \mathbb{T_\bullet} &::=&
-  [\order{c},c^k] \alt
-  [\iorder{c},1/c^k] \alt
-  [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
-  \forall k.\mathbb{T_\bullet} \\
- (\textrm{/-combinators}) & \rho_\bullet &:&
-  \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
-  [\textit{see Fig.~\ref{pifracd:comb}}]
-\end{array}\]
-\end{definition}
-
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
