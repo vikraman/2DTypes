@@ -1291,13 +1291,11 @@ dependent types.
   &: \assocrt/ \\
 \\
 \eta- :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] \\
-\epsilon-: & \exists{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle]
-  & \leftrightblackspoon & [\order{\idiso},\idiso] \\
+  \forall\exists{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k  \rangle]
+  & : \epsilon- \\
 \eta+ :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] \\
-\epsilon+ : & \exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle]
-    & \leftrightblackspoon & [\order{\idiso},\idiso]
+  \forall\exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle]
+  & : \epsilon+
 \end{array}\]
 \[\begin{array}{c}
 \Rule{}
@@ -1345,7 +1343,10 @@ dependent types.
 %    \forall{\overline{k}}.[\mathbb{T},v[k'\mapsto i]]}}
 % {}
 \end{array}\]
-Each combinator $\rho_\bullet$ has an inverse.
+\\
+Each combinator $\rho_\bullet$ has an inverse. A rule $\mathbb{T_1}_\bullet \leftrightblackspoon
+\forall\exists{k}.\mathbb{T_2}_\bullet$ uses the $\forall$ in the left-to-right
+direction and uses the $\exists$ in the right-to-left direction.
 }
 \caption{$\Pi^/$ fractional combinators (dependent version)}
 \label{pifracd:comb}
@@ -1354,24 +1355,20 @@ Each combinator $\rho_\bullet$ has an inverse.
 %%%%%
 \subsection{Dependent Pointed Types}\label{sec:deppointedtypes}
 
-
 The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
 where each type $\mathbb{T}$ refers to a particular value $v$ in
-$\mathbb{T}$. We then allow universal quantification over indices $k$
-associated to values, over a collection of types.
-In particular, the type
+$\mathbb{T}$. We recall that, as all fractional types are inhabited (see remark
+in Sec.~\ref{sec:symmetryg}), and thus there is no loss in generality in going
+to pointed types. We then allow universal quantification over indices $k$
+associated to values, over a collection of types.  In particular, the type
 $\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
-$\iorder{c}$; they must be ``synchronized'' by sharing the same $k$. In
-general, a pointed type will be of the form
-$\forall\overline{k}.[\mathbb{T},v]$ for some sequence of integers
-$\overline{k}$ and some value $v$ in $\mathbb{T}$, which might of course refer
-to the integers of $\overline{k}$ to enforce some synchronization among its
-sub-values.  The resulting combinators are shown in Fig.~\ref{pifrac:comb}.
-We omit the quantifier from the notation when it is over the empty sequence
-integers.  We recall that, as all fractional types are inhabited (see remark in
-Sec.~\ref{sec:symmetryg}), and thus there is no loss in generality in going to
-pointed types.
+$\iorder{c}$; they must be ``synchronized'' by sharing the same $k$ but are
+otherwise arbitrary. Once introduce a universal quantifier in one direction of
+execution, we are led to also include an existential quantifier for the reverse
+execution. Intuitively, a forward evaluation step that is at liberty to choose a
+$k$ will, when reversed encounter a particular, i.e., existentially quantified,
+$k$. The syntax is therefore as follows.
 
 \begin{definition}[Dependent $\Pi^/$]
 \label{def:pifracd}
