@@ -1287,39 +1287,43 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :&  \forall\overline{k}.[\order{\idiso} \circledast \mathbb{T},
+\unitetl/ :& [\order{\idiso} \circledast \mathbb{T},
                                                    \langle \idiso,v \rangle]
   & \leftrightblackspoon &
-                    \forall\overline{k}.[\mathbb{T},v]
+                   [\mathbb{T},v]
   &: \unititl/ \\
-\unitetr/ :&  \forall\overline{k}.[\mathbb{T} \circledast \order{\idiso},
+\unitetr/ :& [\mathbb{T} \circledast \order{\idiso},
                                                     \langle v,\idiso]
   & \leftrightblackspoon &
-                    \forall\overline{k}.[\mathbb{T},v]
+                   [\mathbb{T},v]
   &: \unititr/ \\
-\swapt/ :&  \forall\overline{k}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
+\swapt/ :& [\mathbb{T}_1 \circledast \mathbb{T}_2,
                                                    \langle v_1,v_2 \rangle]
  & \leftrightblackspoon &
-                   \forall\overline{k}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
+                  [\mathbb{T}_2 \circledast \mathbb{T}_1,
                                                   \langle v_2,v_1 \rangle]
   &: \swapt/ \\
-  \assoclt/ :&  \forall\overline{k}.[\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
+  \assoclt/ :& [\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
                                         \langle v_1,\langle v_2,v_3 \rangle]
   & \leftrightblackspoon &
-                       \forall\overline{k}.[(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
+                      [(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
                                        \langle \langle v_1,v_2 \rangle , v_3 \rangle]
   &: \assocrt/ \\
 \\
 \eta- :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] &: \epsilon- \\
+  \forall{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] \\
+\epsilon-: & \exists{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle]
+  & \leftrightblackspoon & [\order{\idiso},\idiso] \\
 \eta+ :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] &: \epsilon+ \\
+  \forall{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] \\
+\epsilon+ : & \exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle]
+    & \leftrightblackspoon & [\order{\idiso},\idiso]
 \end{array}\]
 \[\begin{array}{c}
 \Rule{}
 {}
-{\jdg{}{}{\idiso/ : \forall\overline{k}.[\mathbb{T},v] \leftrightblackspoon
-  \forall\overline{k}.[\mathbb{T},v]}}
+{\jdg{}{}{\idiso/ :[\mathbb{T},v] \leftrightblackspoon
+ [\mathbb{T},v]}}
 {}
 ~~
 \Rule{}
@@ -1331,43 +1335,87 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
 \\
 \\
 \Rule{}
-{\jdg{}{}{\rho_1 : \forall{\overline{k_1}}.
+{\jdg{}{}{\rho_1 :
   [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_2,v_2]} \quad
-  \rho_2 : \forall{\overline{k_2}}.
+  \rho_2 :
   [\mathbb{T}_2,v_2] \leftrightblackspoon [\mathbb{T}_3,v_3]}
 {\jdg{}{}{\rho_1 \circledcirc \rho_2 :
- \forall{\overline{k_1}\overline{k_2}}.
  [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_3},v_3]}
 {}
 \\
 \\
 \Rule{}
 {\jdg{}{}{\rho_1 :
-  \forall{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
-  \forall{\overline{k_2}}.[\mathbb{T}_2,v_2]}
+ [\mathbb{T}_1,v_1] \leftrightblackspoon
+ [\mathbb{T}_2,v_2]}
  \qquad \rho_2 :
-  \forall{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
-  \forall{\overline{k_4}}.[\mathbb{T}_4,v_4]}
+ [\mathbb{T}_3,v_3] \leftrightblackspoon
+ [\mathbb{T}_4,v_4]}
 {\jdg{}{}{\rho_1 \circledast \rho_2 :
-  \forall{\overline{k_1k_2k_3k_4}}.
   [\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
   \leftrightblackspoon
   [\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
 {}
-\\
-\\
-\Rule{}
-{\jdg{}{}{}}
-{\jdg{}{}{\synch_i : \forall{\overline{k}k'}.[\mathbb{T},v]
-  \leftrightblackspoon
-   \forall{\overline{k}}.[\mathbb{T},v[k'\mapsto i]]}}
-{}
+% \\
+% \\
+% \Rule{}
+% {\jdg{}{}{}}
+% {\jdg{}{}{\synch_i : \forall{\overline{k}k'}.[\mathbb{T},v]
+%   \leftrightblackspoon
+%    \forall{\overline{k}}.[\mathbb{T},v[k'\mapsto i]]}}
+% {}
 \end{array}\]
 Each combinator $\rho_\bullet$ has an inverse.
 }
 \caption{$\Pi^/$ fractional combinators (dependent version)}
 \label{pifracd:comb}
 \end{figure}
+
+%%%%%
+\subsection{Dependent Pointed Types}
+
+To understand the challenge in designing an operational semantics for $\eta$ and
+$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
+Fig.~\ref{fig:zigzag}. Algebraically this circuit corresponds to the following
+manipulation on types:
+\[
+x \mapsto (1 \times x) \mapsto ((x \times 1/x) \times x)
+\mapsto (x \times (1/x \times x)) \mapsto (x \times 1) \mapsto x
+\]
+and by the coherence conditions of compact closed categories, we expect this
+circuit, when run in either direction, to be equivalent to the
+identity. Consider now the case of a combinator $c$ whose order is greater than
+or equal to 2, i.e., the type $\order{c}$ has at least two distinct values
+$\idiso$ and $c$ and the type $\iorder{c}$ has at least two distinct values
+$1/\idiso$ and $1/c$. We require this circuit to produce $\idiso$ when given
+$\idiso$ from either end, and similarly to produce $c$ when given $c$ from
+either end. The problem becomes apparent when one observes that the uses of
+$\eta+$ in the left-to-right execution and the use of $\epsilon-$ in the
+right-to-left execution must behave differently depending on the incoming
+value. But the ``local'' information available to either of these combinators
+does not include the ``global'' information about the incoming value and there
+is no way for them to make consistent guesses locally. It is possible to modify
+the operational semantics to use a mechanism to express a computational effect
+which enables spatially separated parts of the program to communicate in a way
+that is reminiscent of entanglement in quantum mechanics. Possibilities to
+realize this communication are global reference cells, backtracking, logical
+variables with unification. We choose a more abstract approach that encodes the
+required dependency in dataflow constraints using dependent types.
+
+\begin{definition}[Dependent $\Pi^/$]
+\label{def:pifracd}
+The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
+\[\begin{array}{lrcl}
+(\textrm{Fractional Types}) & \mathbb{T_\bullet} &::=&
+  [\order{c},c^k] \alt
+  [\iorder{c},1/c^k] \alt
+  [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
+  \forall k.\mathbb{T_\bullet} \alt \exists k.\mathbb{T_\bullet} \\
+ (\textrm{/-combinators}) & \rho_\bullet &:&
+  \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
+  [\textit{see Fig.~\ref{pifracd:comb}}]
+\end{array}\]
+\end{definition}
 
 The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
 where each type $\mathbb{T}$ refers to a particular value $v$ in
@@ -1399,9 +1447,13 @@ backwards directions:
 &\stackrel{\assocrt/}{\longmapsto}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^k, \langle 1/c^k,c^i \rangle\rangle] \\
-&\stackrel{\synch_i}{\longmapsto}&
+%% &\stackrel{\synch_i}{\longmapsto}&
+&k\mapsto i&
   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
+&\exists&
+  \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
 &\stackrel{\idiso/\circledast\epsilon-}{\longmapsto}&
   [\order{c}\circledast\order{\idiso},
   \langle c^i, \idiso \rangle] \\
@@ -1418,19 +1470,20 @@ backwards directions:
 &\stackrel{\idiso/\circledast\epsilon-}{\longmapsfrom}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
-&\stackrel{\synch_i}{\longmapsfrom}&
- [\order{c}\circledast(\iorder{c}\circledast\order{c}),
-  \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
 &\stackrel{\assocrt/}{\longmapsfrom}&
+  \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^i,1/c^k \rangle,c^k \rangle] \\
+&k\mapsto i&
   [(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
+&\exists&
+  \exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
 &\stackrel{\eta+\circledast\idiso/}{\longmapsfrom}&
-  [\order{c}\circledast\order{\idiso}, \langle c^i, \idiso] \\
+  [\order{\idiso}\circledast\order{c}, \langle \idiso,c^i\rangle] \\
 &\stackrel{\unitetl/}{\longmapsfrom}&
   [\order{c},c^i]
 \end{array}\]
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
