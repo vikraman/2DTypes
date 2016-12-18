@@ -1226,39 +1226,43 @@ of these morphisms are $\isotwo$-equivalent.
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :&  \forall\overline{k}.[\order{\idiso} \circledast \mathbb{T},
+\unitetl/ :& [\order{\idiso} \circledast \mathbb{T},
                                                    \langle \idiso,v \rangle]
   & \leftrightblackspoon &
-                    \forall\overline{k}.[\mathbb{T},v]
+                   [\mathbb{T},v]
   &: \unititl/ \\
-\unitetr/ :&  \forall\overline{k}.[\mathbb{T} \circledast \order{\idiso},
+\unitetr/ :& [\mathbb{T} \circledast \order{\idiso},
                                                     \langle v,\idiso]
   & \leftrightblackspoon &
-                    \forall\overline{k}.[\mathbb{T},v]
+                   [\mathbb{T},v]
   &: \unititr/ \\
-\swapt/ :&  \forall\overline{k}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
+\swapt/ :& [\mathbb{T}_1 \circledast \mathbb{T}_2,
                                                    \langle v_1,v_2 \rangle]
  & \leftrightblackspoon &
-                   \forall\overline{k}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
+                  [\mathbb{T}_2 \circledast \mathbb{T}_1,
                                                   \langle v_2,v_1 \rangle]
   &: \swapt/ \\
-  \assoclt/ :&  \forall\overline{k}.[\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
+  \assoclt/ :& [\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
                                         \langle v_1,\langle v_2,v_3 \rangle]
   & \leftrightblackspoon &
-                       \forall\overline{k}.[(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
+                      [(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
                                        \langle \langle v_1,v_2 \rangle , v_3 \rangle]
   &: \assocrt/ \\
 \\
 \eta- :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] &: \epsilon- \\
+  \forall{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle] \\
+\epsilon-: & \exists{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k \rangle]
+  & \leftrightblackspoon & [\order{\idiso},\idiso] \\
 \eta+ :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] &: \epsilon+ \\
+  \forall{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle] \\
+\epsilon+ : & \exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle]
+    & \leftrightblackspoon & [\order{\idiso},\idiso]
 \end{array}\]
 \[\begin{array}{c}
 \Rule{}
 {}
-{\jdg{}{}{\idiso/ : \forall\overline{k}.[\mathbb{T},v] \leftrightblackspoon
-  \forall\overline{k}.[\mathbb{T},v]}}
+{\jdg{}{}{\idiso/ :[\mathbb{T},v] \leftrightblackspoon
+ [\mathbb{T},v]}}
 {}
 ~~
 \Rule{}
@@ -1270,37 +1274,35 @@ of these morphisms are $\isotwo$-equivalent.
 \\
 \\
 \Rule{}
-{\jdg{}{}{\rho_1 : \forall{\overline{k_1}}.
+{\jdg{}{}{\rho_1 :
   [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_2,v_2]} \quad
-  \rho_2 : \forall{\overline{k_2}}.
+  \rho_2 :
   [\mathbb{T}_2,v_2] \leftrightblackspoon [\mathbb{T}_3,v_3]}
 {\jdg{}{}{\rho_1 \circledcirc \rho_2 :
- \forall{\overline{k_1}\overline{k_2}}.
  [\mathbb{T}_1,v_1] \leftrightblackspoon [\mathbb{T}_3},v_3]}
 {}
 \\
 \\
 \Rule{}
 {\jdg{}{}{\rho_1 :
-  \forall{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
-  \forall{\overline{k_2}}.[\mathbb{T}_2,v_2]}
+ [\mathbb{T}_1,v_1] \leftrightblackspoon
+ [\mathbb{T}_2,v_2]}
  \qquad \rho_2 :
-  \forall{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
-  \forall{\overline{k_4}}.[\mathbb{T}_4,v_4]}
+ [\mathbb{T}_3,v_3] \leftrightblackspoon
+ [\mathbb{T}_4,v_4]}
 {\jdg{}{}{\rho_1 \circledast \rho_2 :
-  \forall{\overline{k_1k_2k_3k_4}}.
   [\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
   \leftrightblackspoon
   [\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
 {}
-\\
-\\
-\Rule{}
-{\jdg{}{}{}}
-{\jdg{}{}{\synch_i : \forall{\overline{k}k'}.[\mathbb{T},v]
-  \leftrightblackspoon
-   \forall{\overline{k}}.[\mathbb{T},v[k'\mapsto i]]}}
-{}
+% \\
+% \\
+% \Rule{}
+% {\jdg{}{}{}}
+% {\jdg{}{}{\synch_i : \forall{\overline{k}k'}.[\mathbb{T},v]
+%   \leftrightblackspoon
+%    \forall{\overline{k}}.[\mathbb{T},v[k'\mapsto i]]}}
+% {}
 \end{array}\]
 Each combinator $\rho_\bullet$ has an inverse.
 }
@@ -1347,7 +1349,7 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
   [\order{c},c^k] \alt
   [\iorder{c},1/c^k] \alt
   [\mathbb{T}_1 \circledast \mathbb{T}_2,\langle v_1,v_2 \rangle] \alt
-  \forall k.\mathbb{T_\bullet} \\
+  \forall k.\mathbb{T_\bullet} \alt \exists k.\mathbb{T_\bullet} \\
  (\textrm{/-combinators}) & \rho_\bullet &:&
   \mathbb{T}_{\bullet 1} \leftrightblackspoon \mathbb{T}_{\bullet 2} ~::=
   [\textit{see Fig.~\ref{pifracd:comb}}]
@@ -1360,11 +1362,7 @@ $\mathbb{T}$. We then allow indices of values $k$ to be range over a collection
 of types. In particular, the type
 $\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
 imposes a constraint on the two values associated with the types $\order{c}$ and
-$\iorder{c}$; they must be ``synchronized'' sharing the same $k$. In general, a
-pointed type will be of the form $\forall\overline{k}.[\mathbb{T},v]$ for some
-sequence of integers $\overline{k}$ and some value $v$ in $\mathbb{T}$ which
-might of course refer to the integers $\overline{k}$ to enforce some
-synchronization among its sub-values.
+$\iorder{c}$; they must be ``synchronized'' sharing the same $k$.
 
 Here is how the circuit in Fig.~\ref{fig:zigzag} evaluates in the forward and
 backwards directions:
@@ -1378,9 +1376,13 @@ backwards directions:
 &\stackrel{\assocrt/}{\longmapsto}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^k, \langle 1/c^k,c^i \rangle\rangle] \\
-&\stackrel{\synch_i}{\longmapsto}&
+%% &\stackrel{\synch_i}{\longmapsto}&
+&k\mapsto i&
   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
+&\exists&
+  \exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+  \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
 &\stackrel{\idiso/\circledast\epsilon-}{\longmapsto}&
   [\order{c}\circledast\order{\idiso},
   \langle c^i, \idiso \rangle] \\
@@ -1397,19 +1399,20 @@ backwards directions:
 &\stackrel{\idiso/\circledast\epsilon-}{\longmapsfrom}&
   \forall{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k,c^k \rangle\rangle] \\
-&\stackrel{\synch_i}{\longmapsfrom}&
- [\order{c}\circledast(\iorder{c}\circledast\order{c}),
-  \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
 &\stackrel{\assocrt/}{\longmapsfrom}&
+  \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^i,1/c^k \rangle,c^k \rangle] \\
+&k\mapsto i&
   [(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
+&\exists&
+  \exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+  \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
 &\stackrel{\eta+\circledast\idiso/}{\longmapsfrom}&
-  [\order{c}\circledast\order{\idiso}, \langle c^i, \idiso] \\
+  [\order{\idiso}\circledast\order{c}, \langle \idiso,c^i\rangle] \\
 &\stackrel{\unitetl/}{\longmapsfrom}&
   [\order{c},c^i]
 \end{array}\]
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Operational Semantics}
