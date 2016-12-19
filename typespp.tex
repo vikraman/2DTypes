@@ -1472,6 +1472,29 @@ Reverse execution:
 
 ccc have a notion of higher-order functions, trace, etc. Talk about these examples.
 
+\begin{figure}[t]
+  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7}]
+    \path (-1.1,1) edge node[above] {\footnotesize{${\textsf{[\#id,id]}}$}} (0,1);
+
+    \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+    \node at (0.5,1) {\footnotesize{$\eta -$}};
+
+    \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
+    \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
+    \draw[dashed] (1.25,1.75) -- (1.25,0.25);
+
+    \draw (2,0) -- (3,0) -- (3,2) -- (2,2) -- cycle;
+    \node at (2.5,1) {\footnotesize{$cong$}};
+
+    \path (3,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.75);
+    \path (3,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0.25);
+    \draw[dashed] (3.25,1.75) -- (3.25,0.25);
+
+    \path (2.5,0) edge node[right] {\footnotesize{$f : \#c \leftrightarrow \#d$}} (2.5,-0.5);
+\end{tikzpicture}
+\caption{\label{fig:cong} cong}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
