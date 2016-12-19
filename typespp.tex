@@ -625,7 +625,7 @@ at some number which represents the \emph{order} of the underlying
 permutation.
 
 \begin{definition}[Iterated Power of a 1-combinator]
-  The $k^{th}$ iterated power of a 1-combinator $p : \tau \iso \tau$, for
+  The $k^{\mbox{th}}$ iterated power of a 1-combinator $p : \tau \iso \tau$, for
   $k \in \Z$ is
   \[
     p^k =
@@ -1372,7 +1372,12 @@ Each combinator $\rho_\bullet$ has an inverse. A rule $\mathbb{T_1}_\bullet \lef
 direction and eliminates an $\exists$ in the right-to-left direction. A rule
 $\forall\exists{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
 \mathbb{T_2}_\bullet$ eliminates a $\forall$ in the left-to-right direction and
-introduces an $\exists$ in the right-to-left direction.
+introduces an $\exists$ in the right-to-left direction. A rule
+$\forall\exists{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
+\forall\exists{k}.\mathbb{T_2}_\bullet$ maintains (think of elimination then
+introduction) the universal quantifier in the left-to-right direction and
+the existential quantifier in the right-to-left direction. We omit the
+quantifiers when the sequence of bound variables is empty.
 }
 \caption{$\Pi^/$ fractional combinators (dependent version)}
 \label{pifracd:comb}
@@ -1418,7 +1423,7 @@ combinators in Fig.~\ref{pifracd:comb} also serve as the operational semantics
 for the language as they explain how the value currently in focus changes during
 evaluation. Given the new combinators, we can modify the the circuit in
 Fig.~\ref{fig:zigzag} by adding explicit synchronization primitives. The
-evaluation proceeds as follows where we diambiguate the uses of $\forall$ and
+evaluation proceeds as follows where we disambiguate the uses of $\forall$ and
 $\exists$ for clarity.
 
 Forward execution:
@@ -1688,7 +1693,7 @@ added to complete this.  Most seem quite straightforward.  We can however single
 one out which may not be: what we are missing is a multiplicative inverse for
 every type, and not just $\order{p}$. In particular, we would like to form the
 type $\iorder{(\iorder{p})}$ and have it be equivalent to $\order{p}$.  As
-explained in Sec.~\ref{sec:groupoids}, this would require a futher
+explained in Sec.~\ref{sec:groupoids}, this would require a further
 generalization of looping and delooping that can be iterated. We leave a
 possible extension with a general looping/delooping process to future work.
 
