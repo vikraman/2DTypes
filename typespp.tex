@@ -1281,7 +1281,7 @@ dependent types.
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :& \mbox{\AE}{\overline{k}}.[\order{\idiso} \circledast \mathbb{T},
+\unitetl/ :& \forall\exists{\overline{k}}.[\order{\idiso} \circledast \mathbb{T},
                                                    \langle \idiso,v \rangle]
   & \leftrightblackspoon &
                    \forall\exists{\overline{k}}.[\mathbb{T},v]
@@ -1492,7 +1492,8 @@ in each direction for clarity:
 Compact closed categories support various interesting constructions, such as
 duals, name and coname, and trace, which eventually lead to a certain notion of
 recursive higher-order functions~\cite{abramsky-2008}.  We illustrate the
-expressiveness of $\Pi^/$ by defining these constructions.
+expressiveness of $\Pi^/$ by defining duals, name and coname, and a higher-order
+\emph{apply} combinator.
 
 %%%%%%%%%%
 \subsection{\texttt{dual}}
