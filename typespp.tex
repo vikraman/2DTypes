@@ -1471,6 +1471,18 @@ Reverse execution:
 ccc have a notion of higher-order functions, trace, etc. Talk about these
 examples.
 
+\begin{lemma}
+  \label{lem:cong}
+  For $\mathbb{v} : \mathbb{T}_1 \circledast \mathbb{T}_2$,
+  $p : \mathbb{T}_1 \leftrightblackspoon \mathbb{T}$, we have
+  $\texttt{cong}^{l}_{p}(\mathbb{v}) : \mathbb{T} \circledast \mathbb{T}_2$, and
+  for $q : \mathbb{T}_2 \leftrightblackspoon \mathbb{T}$, we have
+  $\texttt{cong}^{r}_{q}(\mathbb{v}) : \mathbb{T}_1 \circledast \mathbb{T}$.
+  \begin{proof}
+    It follows from the fact that $\circledast$ is an endo-bi-functor.
+  \end{proof}
+\end{lemma}
+
 \subsection{\texttt{name} and \texttt{coname}}
 
 Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$ which is a
@@ -1494,7 +1506,7 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
       \draw[dashed] (1.25,1.75) -- (1.25,0.25);
 
       \draw (2,0) -- (3,0) -- (3,2) -- (2,2) -- cycle;
-      \node at (2.5,1) {\footnotesize{$\texttt{cong}$}};
+      \node at (2.5,1) {\footnotesize{$\texttt{cong}^{r}$}};
 
       \path (3,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.75);
       \path (3,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0.25);
@@ -1510,7 +1522,7 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
       \path (-1.1,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (0,0.25);
 
       \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-      \node at (0.5,1) {\footnotesize{\texttt{cong}}};
+      \node at (0.5,1) {\footnotesize{$\texttt{cong}^{r}$}};
 
       \path (0.5,0) edge node[right] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (0.5,-0.5);
 
