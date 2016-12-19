@@ -1604,6 +1604,31 @@ Fig.~\ref{fig:name-coname}.  Like with dual, we need to insert a combinator $p$
 \end{figure}
 
 
+\begin{figure}[htb]
+  \centering
+  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+    \path (-1,2) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,2);
+    \path (-1,0.5) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,0.5);
+
+    \draw (0,-0.25) -- (1,-0.25) -- (1,1.5) -- (0,1.5) -- cycle;
+    \node at (0.5,0.6) {\footnotesize{$\textsf{name}_p$}};
+
+    \path (1,1.25) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (2,1.25);
+    \path (1,0) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0);
+
+    \draw (2,1) -- (3,1) -- (3,2.25) -- (2,2.25) -- cycle;
+    \node at (2.5,1.625) {\footnotesize{$\epsilon +$}};
+
+    \path (3,1.625) edge node[above] {\footnotesize{$\textsf{\#id}$}} (4,1.625);
+
+    \draw (4,-0.25) -- (5,-0.25) -- (5,2) -- (4,2) -- cycle;
+    \node at (4.5,0.85) {\footnotesize{$\unititl/$}};
+
+    \path (5,0.85) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,0.85);
+  \end{tikzpicture}
+  \caption{\label{fig:apply} apply}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
