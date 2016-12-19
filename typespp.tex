@@ -473,7 +473,7 @@ The syntax of $\Pi$ is given by the following categories:
 (\textrm{Values}) &
   v &::=& \unitv \alt \inl{v} \alt \inr{v} \alt (v_1,v_2) \\
 (\textrm{1-combinators}) &
-  c &:& \tau_1 \iso \tau_2 ~ [\textit{see Fig.~\ref{pi-combinators}}] \\
+  c,p &:& \tau_1 \iso \tau_2 ~ [\textit{see Fig.~\ref{pi-combinators}}] \\
 (\textrm{2-combinators}) &
   \alpha &:& c_1 \isotwo c_2 \mbox{~where~} c_1, c_2 : \tau_1 \iso \tau_2
   ~[\textit{see Fig.~\ref{pi-combinators2}}]
@@ -481,20 +481,20 @@ The syntax of $\Pi$ is given by the following categories:
 \end{definition}
 
 \noindent Both classes of programs, 1-combinators $c$, and
-2-combinators~$\alpha$, denote \emph{equivalences} in the Homotopy Type
-Theory (HoTT) sense~\cite{hottbook}. The
-elements $c$ of 1-combinators denote type isomorphisms. The elements $\alpha$ of
-2-combinators denote the set of sound and complete equivalences between these
-type isomorphisms. Using the 1-combinators, it is possible to write any
-reversible boolean function and hence encode arbitrary boolean functions by a
-technique that goes back to Toffoli~\cite{Toffoli:1980}. The 2-combinators
-provide a layer of programs that computes semantics-preserving transformations
-of 1-combinators. As a small example, let us abbreviate $\ot \oplus \ot$ as the
-type $\mathbb{2}$ of booleans and examine two possible implementations of
-boolean negation. The first directly uses the primitive combinator
+2-combinators~$\alpha$, denote \emph{equivalences} in the Homotopy Type Theory
+(HoTT) sense~\cite{hottbook}. The elements $c$ or $p$ of 1-combinators denote
+type isomorphisms. The elements $\alpha$ of 2-combinators denote the set of
+sound and complete equivalences between these type isomorphisms. Using the
+1-combinators, it is possible to write any reversible boolean function and hence
+encode arbitrary boolean functions by a technique that goes back to
+Toffoli~\cite{Toffoli:1980}. The 2-combinators provide a layer of programs that
+computes semantics-preserving transformations of 1-combinators. As a small
+example, let us abbreviate $\ot \oplus \ot$ as the type $\mathbb{2}$ of booleans
+and examine two possible implementations of boolean negation. The first directly
+uses the primitive combinator
 $\swapp : \tau_1 \oplus \tau_2 \iso \tau_2 \oplus \tau_1$ to exchange the two
-values of type~$\mathbb{2}$; the second use three consecutive uses of $\swapp$
-to achieve the same effect:
+values of type~$\mathbb{2}$; the second uses three consecutive $\swapp$s to
+achieve the same effect:
 \[\begin{array}{rcl}
 \mathsf{not_1} &=& \swapp \\
 \mathsf{not_2} &=& (\swapp \odot \swapp) \odot \swapp
@@ -785,8 +785,8 @@ automorphisms on it and hence the cardinality of $G_2$ is also
 $\frac{1}{1} + \frac{1}{2} = \frac{3}{2}$. For~$G_3$, we have three isomorphism
 classes, each with two non-equivalent automorphisms, and hence the cardinality
 of $G_3$ is $\frac{1}{2} + \frac{1}{2} + \frac{1}{2} = \frac{3}{2}$.  It is
-important to note that $G_1$ and $G_2$ are (categorically) equivalent groupoids,
-but that $G_3$ is not equivalent to either $G_1$ or $G_2$.  Roughly speaking
+important to note that $G_1$ and $G_2$ are categorically equivalent groupoids,
+but that $G_3$ is not categorically equivalent to either $G_1$ or $G_2$.  Roughly speaking
 this is because the number of connected components is also a categorical
 invariant of a groupoid, and here $G_1$ and $G_2$ have $2$ whilst $G_3$ has $3$.
 
@@ -848,13 +848,14 @@ induced by 2-combinators.
 %%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Iteration Groupoids $\order{p}$}
 
-The previous construction is quite useful: it allows us to take a set of
+The previous construction known in the literature as an \emph{action
+  groupoid}~\cite{groupoidintro} is quite useful: it allows us to take a set of
 cardinality $N$ and a permutation on that set of order $P$ to construct a
 groupoid of cardinality $\frac{N}{P}$. Although this idea allows us to construct
 a groupoid of cardinality $\frac{3}{2}$ as shown above, it is not expressive
-enough to construct a groupoid of cardinality, say, $\frac{1}{3}$. Indeed if the
-underlying set has only one element, the only permutation is the identity and
-$P$ must be 1.
+enough to construct a groupoid of cardinality, say, $\frac{1}{3}$. Indeed, if the
+underlying set has only one element ($N=1$) the only permutation is the identity
+and $P$ must be 1.
 
 The construction, however, already contains the main ingredient needed for the construction of more general groupoids with fractional cardinality. This key piece is the set of iterates of a combinator which we formally define as follows.
 
@@ -948,7 +949,7 @@ same.
 \begin{itemize}
 \item the objects are the iterates of the identity combinator on $\tau$;
 \item the morphisms between every pair of objects are the elements of $\iter{p}$;
-\item there is a 2-morphisms between between 1-morphisms $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ for each $\alpha : q_1 \isotwo q_2$ for every $\alpha : q_1 \isotwo q_2$
+\item there is a 2-morphism between 1-morphisms $\triple{k_1}{q_1}{\alpha_1}$ and $\triple{k_2}{q_2}{\alpha_2}$ for every $\alpha : q_1 \isotwo q_2$.
 \end{itemize}
 \end{definition}
 
@@ -1017,8 +1018,8 @@ $\delooping{G}$. These are defined as follows.
 The looping groupoid $\looping{G}$ has the elements $g$ of the group $G$ as
 objects and morphisms between elements in the same conjugacy class; that is,
 there is a
-morphism between elements $g$ and $h$ iff there exists a $x \in G$ such that
-$g = x^{-1} \cdot g \cdot x$. Fixing a type $\tau$ and a particular 1-combinator
+morphism between elements~$g$ and $h$ iff there exists an $x \in G$ such that
+$h = x^{-1} \cdot g \cdot x$. Fixing a type $\tau$ and a particular 1-combinator
 $p : \tau \iso \tau$, we get a group whose elements are the iterates $p^k$. The
 corresponding looping groupoid has all the iterates as objects, and morphisms
 between $p^{k_1}$ and $p^{k_2}$ whenever there exists an integer $j$ such that
@@ -1043,7 +1044,9 @@ symmetry groupoids, we need to ensure that they compose sensibly with the
 existing type formers. Groupoids, viewed as categories, come associated with
 natural notions of sums and products, and one might expect or hope that
 identities which hold for rational numbers lift to identities in our
-situation. The most prominent and important identity we seek is:
+situation. The integration of these groupoids with the categorical sum is
+complicated and left for future work. For products, the most prominent identity,
+from which many other identities follow, is:
 \[
 \order{p} \circledast \iorder{p} \simeq \order{\idiso}
 \]
@@ -1055,7 +1058,7 @@ however not isomorphic, there do not exist full and faithful functors between
 them, and hence $\simeq$ cannot be categorical equivalence.
 
 There are however weaker notions of groupoid equivalence, such as \emph{Morita
-  equivalence}~\cite[C5.3]{johnstone2002sketches}~\cite{looping}, that identify
+  equivalence}~\cite{looping}\cite[C5.3]{johnstone2002sketches}, that identify
 the two groupoids above.  Although the notion of equivalence we use in the next
 section appears novel, it is related ``in spirit'' to Morita equivalence and we
 find it useful to give a small example. We will verify that the product of the
@@ -1064,32 +1067,19 @@ $\iorder{\permfive}$ of cardinality $\frac{1}{3}$ is Morita equivalent to the
 trivial groupoid with only one distinct object and one trivial automorphism. To
 avoid clutter, we assume the groupoids are strict, e.g., that the groupoid
 $\order{\permfive}$ has three elements (instead of 3 isomorphism classes of
-elements). Getting an equivalence in this case reduces to finding a \emph{Morita
-  morphism} from $\order{\idiso}$ to
-$\order{\permfive} \circledast \iorder{\permfive}$. This is a functor $\psi$
-from the unit groupoid to the product groupoid, say $G$, with an additional
-condition that the commutative diagram in figure~\ref{fig:morita} is a
+elements).
+
+Getting an equivalence in this case reduces to finding a \emph{Morita morphism}
+from $\order{\idiso}$ to $\order{\permfive} \circledast
+\iorder{\permfive}$.
+This is a functor $\psi$ from the unit groupoid to the product groupoid, say
+$G$, with an additional condition that the commutative diagram below is a
 \emph{pullback}, where $s,t$ are the \emph{source} and \emph{target} maps, and
 $\ot$, $\mathbb{3}$ are the $1$- and $3$-point discrete groupoids defined
-previously.  The intuition is that the codomain consists of three objects with
-associated morphisms, each of them counting as a ``third.'' The functor from
-$\order{\idiso}$ to $\order{\permfive} \circledast \iorder{\permfive}$ must
-include an arbitrary choice of ``which third'' to target and the universality
-condition of the pullback ensures that the choice is ultimately insignificant as
-it leads to the same result as every other possible functor.
+previously.
 
-To summarize, the equivalence between the two groupoids requires a \emph{local}
-map that chooses a target and a \emph{global} condition ensuring that the choice
-ultimately annihilates. The challenge we are facing is to turn this idea into an
-operational semantics that somehow combines the local and global aspects of the
-equivalence. We will be inspired by the folklore result in categorical semantics
-of dependent type theory, that ``substitution into a dependent type is a
-pullback''~\cite{subpullback}, (but which turns out to have been fully explained
-in~\cite{practicalfoundations}) as explained in the next section.
-
-\begin{figure}[h]
-  \centering
-  \begin{tikzcd}
+\begin{center}
+\begin{tikzcd}
     Q
     \arrow[drr, bend left, "{\xi_1}"]
     \arrow[ddr, bend right, "{(s,t)}"]
@@ -1098,14 +1088,24 @@ in~\cite{practicalfoundations}) as explained in the next section.
     & G \arrow[d, "{(s,t)}"] \\
     & \ot \times \ot \arrow[r, "{\psi_0 \times \psi_0}"]
     & \mathbb{3} \times \mathbb{3}
-  \end{tikzcd}
-  \caption{
-    \label{fig:morita}
-    Pullback diagram for a Morita morphism,
-    $\order{\idiso} \rightarrow \order{\permfive} \circledast
-    \iorder{\permfive}$
-  }
-\end{figure}
+\end{tikzcd}
+\end{center}
+
+\medskip\noindent The intuition is that the codomain consists of three objects
+with associated morphisms, each of them counting as a ``third.'' The functor
+from $\order{\idiso}$ to $\order{\permfive} \circledast \iorder{\permfive}$ must
+include an arbitrary choice of ``which third'' to target and the universality
+condition of the pullback ensures that the choice is ultimately insignificant as
+it leads to the same result as every other possible functor.
+
+To summarize, the equivalence between the two groupoids requires a \emph{local}
+map that chooses a target and a \emph{global} condition ensuring that the choice
+ultimately annihilates. The challenge we aim to solve in the next section is to
+turn this idea into an operational semantics that somehow combines the local and
+global aspects of the equivalence. We will be inspired by the folklore result in
+the categorical semantics of dependent type theory~\cite{subpullback}, first
+explained by Paul Taylor~\cite{practicalfoundations}, that ``substitution into a
+dependent type is a pullback''.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Syntax and Semantics}
@@ -1159,7 +1159,7 @@ Each combinator $\rho$ has an inverse.
 \end{figure}
 
 %%%%%
-\subsection{First attempt}
+\subsection{First attempt: non-dependent version}
 
 As a first approximation to the language we seek, we consider adding three new
 syntactic categories to the definition of $\Pi$ in Sec.~\ref{opsempi}:
@@ -1216,7 +1216,7 @@ morphism is listed as a value $1/c^k$ with the same understanding that some of
 these morphisms are $\isotwo$-equivalent.
 
 To understand the challenge in designing an operational semantics for $\eta$ and
-$\epsilon$ in the non-dependent setting, we consider the ``zig-zag'' circuit in
+$\epsilon$ in the non-dependent setting, we consider the ``zigzag'' circuit in
 Fig.~\ref{fig:zigzag}. Algebraically this circuit corresponds to the following
 manipulation on types:
 \[
@@ -1235,12 +1235,12 @@ $\eta+$ in the left-to-right execution and the use of $\epsilon-$ in the
 right-to-left execution must behave differently depending on the incoming
 value. But the ``local'' information available to either of these combinators
 does not include the ``global'' information about the incoming value and there
-is no way for them to make consistent guesses locally. It is possible to modify
-the operational semantics to use a mechanism to express a computational effect
-which enables spatially separated parts of the program to communicate in a way
-that is reminiscent of entanglement in quantum mechanics. Possibilities to
-realize this communication are global reference cells, backtracking, logical
-variables with unification. We present in the next section a more abstract
+is no way for them to make consistent guesses locally. It is possible to design
+an operational semantics that uses computational effects to enable spatially
+separated parts of the program to communicate in a way that is reminiscent of
+entanglement in quantum mechanics. Possibilities to realize this communication
+are global reference cells, backtracking, and logical variables with
+unification. We choose however to present in the next section a more abstract
 approach that encodes the required dependency in dataflow constraints using
 dependent types.
 
@@ -1275,7 +1275,7 @@ dependent types.
   \node at (9.5,1.8) {\footnotesize{$\unitetr/$}};
   \path (10,1.8) edge node [above] {\footnotesize{$\#c$}} (11,1.8);
 \end{tikzpicture}
-\caption{\label{fig:zigzag} Zig-zag}
+\caption{\label{fig:zigzag} Zigzag}
 \end{figure}
 
 \begin{figure}[t]
@@ -1386,20 +1386,7 @@ quantifiers when the sequence of bound variables is empty.
 %%%%%
 \subsection{Dependent Pointed Types}\label{sec:deppointedtypes}
 
-The first step is to enrich the types to pointed types $\mathbb{T_\bullet}$
-where each type $\mathbb{T}$ refers to a particular value $v$ in
-$\mathbb{T}$. As all fractional types are inhabited (see Remark
-in Sec.~\ref{sec:symmetryg}), there is no loss in generality in going
-to pointed types. We then allow universal quantification over indices $k$
-associated to values, over a collection of types.  In particular, the type
-$\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
-imposes a constraint on the two values associated with the types $\order{c}$ and
-$\iorder{c}$; they must be ``synchronized'' by sharing the same~$k$ but are
-otherwise arbitrary. Once we introduce a universal quantifier in one direction
-of execution, we are led to also include an existential quantifier for the
-reverse execution. Intuitively, a forward evaluation step that is at liberty to
-choose a $k$ will, when reversed encounter a particular, i.e., existentially
-quantified, $k$. The syntax is therefore as follows.
+We modify the syntax of $\Pi^/$ as follows.
 
 \begin{definition}[Dependent $\Pi^/$]
 \label{def:pifracd}
@@ -1416,17 +1403,42 @@ The syntax of dependent $\Pi^/$ differs from Def.~\ref{def:pifrac} as follows:
 \end{array}\]
 \end{definition}
 
-A type $\mathbb{T}_\bullet$ is generally of the form
+In the new definition, we enrich the types to pointed types $\mathbb{T_\bullet}$
+where each type $\mathbb{T}$ refers to a particular value $v$ in
+$\mathbb{T}$. As all fractional types are inhabited (see Remark in
+Sec.~\ref{sec:symmetryg}), there is no loss in generality in going to pointed
+types. We then allow universal quantification over indices $k$ associated to
+values, over a collection of types.  In particular, the type
+$\forall k.[\order{c} \circledast \iorder{c}, \langle c^k, 1/c^k \rangle]$
+imposes a constraint on the two values associated with the types $\order{c}$ and
+$\iorder{c}$; they must be ``synchronized'' by sharing the same~$k$ but are
+otherwise arbitrary. Once we introduce a universal quantifier in one direction
+of execution, we are led to also include an existential quantifier for the
+reverse execution. Intuitively, a forward evaluation step that is at liberty to
+choose a $k$ will, when reversed encounter a particular, i.e., existentially
+quantified, $k$. A type $\mathbb{T}_\bullet$ is therefore generally of the form
 $\forall\exists{\overline{k}}.[\mathbb{T},v]$ where all the quantifiers are
-lifted to the top leaving a non-dependent type and a value in that type. The
-combinators in Fig.~\ref{pifracd:comb} also serve as the operational semantics
-for the language as they explain how the value currently in focus changes during
-evaluation. Given the new combinators, we can modify the the circuit in
-Fig.~\ref{fig:zigzag} by adding explicit synchronization primitives. The
-evaluation proceeds as follows where we disambiguate the uses of $\forall$ and
-$\exists$ for clarity.
+lifted to the top followed by a non-dependent type and a value in that type.
 
-Forward execution:
+The adaptation of the combinators to the pointed dependent setting in Fig .~\ref
+{pifracd:comb} is relatively straightforward. First, the types of the
+combinators must keep track of how the value currently in focus changes during
+evaluation, and hence directly encode the operational semantics of the
+language. As suggested above, the quantifiers are interpreted differently
+depending on which direction the rule is used. We use a $\forall\exists$
+notation to express the presence of \emph{one} quantifier that is interpreted
+ddifferently in each direction. The notation has the advantage of being compact,
+avoiding duplication, and making the symmetry of the rules explicit. We also
+include two new pairs of combinators $\synchl/packl$ and $\synchr/packr$ that
+serve as explicit quantifier introduction and elimination rules: they serve as
+explicit ``synchronization'' points as illustrated in the example below.
+
+The example revisits the zigzag circuit in Fig.~\ref{fig:zigzag} using the
+dependent types and the new explicit synchronization primitives. The evaluation
+proceeds as follows where we disambiguate the uses of $\forall$ and $\exists$
+in each direction for clarity:
+
+\paragraph*{Forward execution of zigzag circuit with synchronization.}
 \[\begin{array}{rcl}
 [\order{c},c^i]
 &\stackrel{\unitetl/}{\leftrightblackspoon}&
@@ -1449,7 +1461,7 @@ Forward execution:
   [\order{c}, c^i]
 \end{array}\]
 
-Reverse execution:
+\paragraph*{Reverse execution of zigzag circuit with synchronization.}
 \[\begin{array}{rcl}
   [\order{c}, c^i]
 &\stackrel{\unitetr/}{\leftrightblackspoon}&
@@ -1496,7 +1508,7 @@ examples.
 Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$ which is a
 morphism in the compact closed category, we have a dual morphism
 $p^{\ast} : 1/\#d \leftrightblackspoon 1/\#c$. This is shown by building a
-reversible circuit in figure~\ref{fig:dual}.
+reversible circuit in Fig.~\ref{fig:dual}.
 
 \begin{figure}[htb]
   \centering
@@ -1545,7 +1557,7 @@ reversible circuit in figure~\ref{fig:dual}.
 
 We also show circuits that construct the \texttt{name} $\ulcorner{p}\urcorner$
 and \texttt{coname} $\llcorner{p}\lrcorner$ of $p$, in
-figure~\ref{fig:name-coname}.
+Fig.~\ref{fig:name-coname}.
 
 \begin{figure}[htb]
   \begin{subfigure}{.5\textwidth}
@@ -1625,12 +1637,14 @@ constraints via dataflow.  Of our various attempts at an operational semantics,
 this one turned out simplest.
 
 Our fractional types have natural denotations which are non-trivial groupoids,
-but they only scratch the surface of the tower of weak $\omega$-groupoids that
-is expressible in HoTT~\cite{hottbook}. A long term goal of our research
-is to find natural type constructors inspired by the rich combinatorial
-structure of weak $\omega$-groupoids that provide novel programming
-abstractions. We conclude by outlining several interesting connections and
-potential avenues for future work.
+but they cannot be composed with sums and they only scratch the surface of the
+tower of weak $\omega$-groupoids that is expressible in HoTT~\cite{hottbook}. A
+long term goal of our research is to find natural type constructors inspired by
+the rich combinatorial structure of weak $\omega$-groupoids that provide novel
+programming abstractions.
+
+We conclude by outlining several interesting connections and potential avenues
+for future work.
 
 \paragraph*{Quotient Types.} Certain groupoids naturally correspond to
 conventional \emph{quotient types}. Traditionally~\cite{quotient}, a quotient
@@ -1671,7 +1685,7 @@ to cardinality-preserving maps. The introduction, in $\pifrac$, of types
   entropy}. For example, a type with cardinality $\frac{1}{8}$ has entropy
 $\log{\frac{1}{8}} = -3$. It is natural to interpret this negative entropy just
 like we interpret ``negative money,'' as a debt to be repaid by some other part
-of the system. In fact, the zig-zag example can be viewed as modeling a credit
+of the system. In fact, the zigzag example can be viewed as modeling a credit
 card transaction where the money is produced at the output site by generating a
 corresponding debt that is reconciled at the input site.
 
