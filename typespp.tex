@@ -1483,14 +1483,63 @@ examples.
   \end{proof}
 \end{lemma}
 
-\subsection{\texttt{name} and \texttt{coname}}
+\subsection{\texttt{dual}}
 
 Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$ which is a
-morphism in the compact closed category, we can build circuits that construct
-the \texttt{name} $\ulcorner{p}\urcorner$ and \texttt{coname}
-$\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
+morphism in the compact closed category, we have a dual morphism
+$p^{\ast} : 1/\#d \leftrightblackspoon 1/\#c$. This is shown by building a
+reversible circuit in figure~\ref{fig:dual}.
 
-\begin{figure}[ht]
+\begin{figure}[htb]
+  \centering
+  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+    \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (0,1);
+
+    \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+    \node at (0.5,1) {\footnotesize{$\unitetl/$}};
+
+    \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
+    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (4,0.25);
+
+    \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
+    \node at (2.5,1.75) {\footnotesize{$\eta +$}};
+
+    \draw[dashed] (3.2,1.25) -- (3.2,2.25);
+    \path [highlight] (3,2.25) edge node[above] {} (8,2.25);
+    \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
+    \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
+    \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
+
+    \draw (4,-0.25) -- (5,-0.25) -- (5,1.75) -- (4,1.75) -- cycle;
+    \node at (4.5,0.75) {\footnotesize{$\texttt{cong}^{l}$}};
+    \path (4.5,-0.25) edge node[left] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (4.5,-0.75);
+
+    \draw[dashed] (5.8,0.25) -- (5.8,1.25);
+    \path [highlight] (5,0.25) edge node[above] {} (6,0.25);
+    \path (5,0.25) edge node[above] {\footnotesize{$1/\textsf{\#d}$}} (6,0.25);
+    \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
+    \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
+
+    \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
+    \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
+
+    \path (7,0.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (8,0.75);
+
+    \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
+    \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
+
+    \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
+  \end{tikzpicture}
+  \caption{\label{fig:dual} Dual}
+\end{figure}
+
+\subsection{\texttt{name} and \texttt{coname}}
+
+We also show circuits that construct the \texttt{name} $\ulcorner{p}\urcorner$
+and \texttt{coname} $\llcorner{p}\lrcorner$ of $p$, in
+figure~\ref{fig:name-coname}.
+
+\begin{figure}[htb]
   \begin{subfigure}{.5\textwidth}
     \centering
     \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
@@ -1541,42 +1590,7 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
   \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname}}
 \end{figure}
 
-\begin{figure}
-  \centering
-  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-    \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (0,1);
 
-    \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-    \node at (0.5,1) {\footnotesize{$\unitetl/$}};
-
-    \path (1,1.75) edge node[above] {\footnotesize{${\#id}$}} (2,1.75);
-    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (4,0.25);
-
-    \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
-    \node at (2.5,1.75) {\footnotesize{$\eta +$}};
-
-    \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
-    \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
-
-    \draw (4,-0.25) -- (5,-0.25) -- (5,1.75) -- (4,1.75) -- cycle;
-    \node at (4.5,0.75) {\footnotesize{$\texttt{cong}^{l}$}};
-    \path (4.5,-0.25) edge node[right] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (4.5,-0.75);
-
-    \path (5,0.25) edge node[above] {\footnotesize{$1/\textsf{\#d}$}} (6,0.25);
-    \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
-
-    \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
-    \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
-
-    \path (7,0.75) edge node[above] {\footnotesize{${\#id}$}} (8,0.75);
-
-    \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
-    \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
-
-    \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
-  \end{tikzpicture}
-  \caption{\label{fig:dual} Dual}
-\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
 
