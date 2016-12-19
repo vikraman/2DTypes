@@ -1281,7 +1281,7 @@ dependent types.
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :& \forall\exists{\overline{k}}.[\order{\idiso} \circledast \mathbb{T},
+\unitetl/ :& \mbox{\AE}{\overline{k}}.[\order{\idiso} \circledast \mathbb{T},
                                                    \langle \idiso,v \rangle]
   & \leftrightblackspoon &
                    \forall\exists{\overline{k}}.[\mathbb{T},v]
@@ -1628,6 +1628,63 @@ $\order{c} \leftrightblackspoon \order{d}$ and given a value of type
 $\order{c}$, we can produce a value of type $\order{d}$ effectively ``applying''
 the morphism.
 
+%%%
+\subsection{Trace}
+
+Traced categories~\cite{joyal1996traced} have proved useful for modeling
+recursion~\cite{Hasegawa:1997:RCS:645893.671607}. It is interesting that every
+compact closed category admits a trace which we can implement as shown below. In
+the figure, we show that given a combinator
+$\rho_\bullet : \order{c} \circledast \order{d} \leftrightblackspoon \order{c}
+\circledast \order{e}$
+we can construct a circuit of type $\order{d} \leftrightblackspoon \order{e}$
+that typechecks iff we have a fixed point for $f$ for the argument of type
+$\order{c}$.
+
+FIX TRACE
+
+\begin{figure}[htb]
+  \centering
+  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+    \path [highlight] (-1,1) edge node[above] {} (0,1);
+    \path (-1,1) edge node[above] {\footnotesize{$\order{d}$}} (0,1);
+
+    \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+    \node at (0.5,1) {\footnotesize{$\unitetl/$}};
+
+    \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
+
+    \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
+    \node at (2.5,1.75) {\footnotesize{$\eta +$}};
+
+    \draw[dashed] (3.2,1.25) -- (3.2,2.25);
+    \path [highlight] (3,2.25) edge node[above] {} (8,2.25);
+    \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
+    \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
+    \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
+
+    \draw (4,0.75) -- (5,0.75) -- (5,1.75) -- (4,1.75) -- cycle;
+    \node at (4.5,1.25) {\footnotesize{$p$}};
+
+    \draw[dashed] (5.8,0.25) -- (5.8,1.25);
+    \path [highlight] (1,0.25) edge node[above] {} (6,0.25);
+    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (6,0.25);
+    \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
+    \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
+
+    \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
+    \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
+
+    \path (7,0.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (8,0.75);
+
+    \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
+    \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
+
+    \path [highlight] (9,1.5) edge node[above] {} (10,1.5);
+    \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
+  \end{tikzpicture}
+  \caption{\label{fig:trace} Trace}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
