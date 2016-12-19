@@ -1367,7 +1367,8 @@ dependent types.
 {}
 \end{array}\]
 \\
-Each combinator $\rho_\bullet$ has an inverse. A rule $\mathbb{T_1}_\bullet \leftrightblackspoon
+Each combinator $\rho_\bullet$ has an inverse $\rho_\bullet^{-1}$.
+A rule $\mathbb{T_1}_\bullet \leftrightblackspoon
 \forall\exists{k}.\mathbb{T_2}_\bullet$ introduces a $\forall$ in the left-to-right
 direction and eliminates an $\exists$ in the right-to-left direction. A rule
 $\forall\exists{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
@@ -1488,11 +1489,12 @@ in each direction for clarity:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Additional Examples}
 
-Compact closed categories have various interesting notions, such as
-duals, name and coname, which eventually lead to a certain notion of
-higher order functions.  Here we show that the first three (duals,
-name and coname) are definable circuits in $\Pi^/$.
+Compact closed categories support various interesting constructions, such as
+duals, name and coname, and trace, which eventually lead to a certain notion of
+recursive higher-order functions~\cite{abramsky-2008}.  We illustrate the
+expressiveness of $\Pi^/$ by defining these constructions.
 
+%%%%%%%%%%
 \subsection{\texttt{dual}}
 
 Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$,
@@ -1545,12 +1547,21 @@ context with at least one quantifier being present.
   \caption{\label{fig:dual} Dual}
 \end{figure}
 
+%%%
 \subsection{\texttt{name} and \texttt{coname}}
 
-We also show circuits that construct the \texttt{name} $\ulcorner{p}\urcorner$
-and \texttt{coname} $\llcorner{p}\lrcorner$ of $p$, in
-Fig.~\ref{fig:name-coname}.  Like with dual, we need to insert a combinator $p$
-\emph{under} a quantifier.
+Each morphism $\rho_\bullet : \order{c} \leftrightblackspoon \order{d}$ can be
+given a \emph{name} and a \emph{coname}. As shown in Fig.~\ref{fig:name-coname}.
+the name of $\rho_\bullet$ denoted $\ulcorner{\rho_\bullet}\urcorner$ has type
+$\order{\idiso} \leftrightblackspoon \iorder{c} \circledast \order{d}$ and the
+coname of $\rho_\bullet$ denoted $\llcorner{\rho_\bullet}\lrcorner$ has type
+$\iorder{c} \circledast \order{d} \leftrightblackspoon \order{\idiso}$.
+Intuitively, this means that for each morphism of type
+$\order{c} \leftrightblackspoon \order{d}$, it is possible to construct from
+``nothing'' an object $\iorder{c} \circledast \order{d}$ in the category that
+denotes this morphism and dually to eliminate this object. Like with the case
+for the dual construction, we need to insert a combinator \emph{under} a
+quantifier.
 
 \begin{figure}[htb]
   \begin{subfigure}{.5\textwidth}
@@ -1569,7 +1580,7 @@ Fig.~\ref{fig:name-coname}.  Like with dual, we need to insert a combinator $p$
       \draw[dashed] (1.25,1.75) -- (1.25,0.25);
 
       \draw (2,0) -- (3,0) -- (3,0.5) -- (2,0.5) -- cycle;
-      \node at (2.5,0.25) {\footnotesize{$p$}};
+      \node at (2.5,0.25) {\footnotesize{$\rho_\bullet$}};
 
       \path [highlight] (3,0.25) edge node[above] {} (4,0.25);
       \path (3,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0.25);
@@ -1587,7 +1598,7 @@ Fig.~\ref{fig:name-coname}.  Like with dual, we need to insert a combinator $p$
       \path (-1.1,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (0,0.25);
 
       \draw (0,0) -- (1,0) -- (1,0.5) -- (0,0.5) -- cycle;
-      \node at (0.50,0.25) {\footnotesize{$p^{-1}$}};
+      \node at (0.50,0.25) {\footnotesize{$\rho_\bullet^{-1}$}};
 
       \path [highlight] (1,0.25) edge node[above] {} (2,0.25);
       \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
@@ -1602,6 +1613,21 @@ Fig.~\ref{fig:name-coname}.  Like with dual, we need to insert a combinator $p$
   \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname},
   where $p : \#c \leftrightblackspoon \#d$}
 \end{figure}
+
+%%%
+\subsection{Higher-Order Functions}
+
+As shown above, names and conames encode a morphism of type
+$\order{c} \leftrightblackspoon \order{d}$ using morphisms between $\order{id}$
+and $\iorder{c} \circledast \order{d}$. These names and conames give rise to a
+notion of higher-order function that can be composed and applied. Given two
+morphisms of types $\order{c} \leftrightblackspoon \order{d}$ and
+$\order{d} \leftrightblackspoon \order{d}$, we can compose their names to get
+the name of their sequential composition. Given the name of a morphism
+$\order{c} \leftrightblackspoon \order{d}$ and given a value of type
+$\order{c}$, we can produce a value of type $\order{d}$ effectively ``applying''
+the morphism.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
