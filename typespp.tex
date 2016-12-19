@@ -1544,26 +1544,26 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
 \begin{figure}
   \centering
   \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-    \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (0,1);
+    \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (0,1);
 
     \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
     \node at (0.5,1) {\footnotesize{$\unitetl/$}};
 
     \path (1,1.75) edge node[above] {\footnotesize{${\#id}$}} (2,1.75);
-    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#c}}$}} (4,0.25);
+    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (4,0.25);
 
     \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
     \node at (2.5,1.75) {\footnotesize{$\eta +$}};
 
-    \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#d}$}} (8,2.25);
-    \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#d}$}} (4,1.25);
+    \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
+    \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
 
     \draw (4,-0.25) -- (5,-0.25) -- (5,1.75) -- (4,1.75) -- cycle;
-    \node at (4.5,0.75) {\footnotesize{\texttt{cong}}};
-    \path (4.5,-0.25) edge node[right] {\footnotesize{$p : \#d \leftrightblackspoon \#c$}} (4.5,-0.75);
+    \node at (4.5,0.75) {\footnotesize{$\texttt{cong}^{l}$}};
+    \path (4.5,-0.25) edge node[right] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (4.5,-0.75);
 
-    \path (5,0.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (6,0.25);
-    \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (6,1.25);
+    \path (5,0.25) edge node[above] {\footnotesize{$1/\textsf{\#d}$}} (6,0.25);
+    \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
 
     \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
     \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
@@ -1573,7 +1573,7 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
     \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
     \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
 
-    \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (10,1.5);
+    \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
   \end{tikzpicture}
   \caption{\label{fig:dual} Dual}
 \end{figure}
