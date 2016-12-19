@@ -249,9 +249,7 @@ Sec.~4 explains the main novel semantic ideas of using $\Pi$ programs to
 generate non-trivial groupoids with fractional cardinality, as well as
 translating the semantic ideas into an extension of $\Pi$ with new type
 constructors denoting non-trivial groupoids and new programs that manipulate
-such types.  Sec.~5 presents some example programs to illustrate the
-expressiveness of the language.  The last section puts our work in perspective
-and concludes.
+such types. The last section puts our work in perspective and concludes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Programming with Equivalences}
@@ -1486,268 +1484,324 @@ in each direction for clarity:
   [\order{c},c^i]
 \end{array}\]
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{$\Pi^/$: Additional Examples}
-
-Compact closed categories support various interesting constructions, such as
-duals, name and coname, and trace, which eventually lead to a certain notion of
-recursive higher-order functions~\cite{abramsky-2008}.  We illustrate the
-expressiveness of $\Pi^/$ by defining duals, name and coname, and a higher-order
-\emph{apply} combinator.
-
-%%%%%%%%%%
-\subsection{\texttt{dual}}
-
-Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$,
-we can define a \emph{dual morphism}
-$p^{\ast} : 1/\#d \leftrightblackspoon 1/\#c$. This is shown by building a
-reversible circuit in Fig.~\ref{fig:dual}.  The highlights that seem to
-``escape'' the circuit indicate that \emph{dual} can only be used in a
-context with at least one quantifier being present.
-
-\begin{figure}[htb]
-  \centering
-  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-    \path [highlight] (-1,1) edge node[above] {} (0,1);
-    \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (0,1);
-
-    \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-    \node at (0.5,1) {\footnotesize{$\unitetl/$}};
-
-    \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
-
-    \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
-    \node at (2.5,1.75) {\footnotesize{$\eta +$}};
-
-    \draw[dashed] (3.2,1.25) -- (3.2,2.25);
-    \path [highlight] (3,2.25) edge node[above] {} (8,2.25);
-    \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
-    \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
-    \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
-
-    \draw (4,0.75) -- (5,0.75) -- (5,1.75) -- (4,1.75) -- cycle;
-    \node at (4.5,1.25) {\footnotesize{$p$}};
-
-    \draw[dashed] (5.8,0.25) -- (5.8,1.25);
-    \path [highlight] (1,0.25) edge node[above] {} (6,0.25);
-    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (6,0.25);
-    \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
-    \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
-
-    \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
-    \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
-
-    \path (7,0.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (8,0.75);
-
-    \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
-    \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
-
-    \path [highlight] (9,1.5) edge node[above] {} (10,1.5);
-    \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
-  \end{tikzpicture}
-  \caption{\label{fig:dual} Dual}
-\end{figure}
-
-%%%
-\subsection{\texttt{name} and \texttt{coname}}
-
-Each morphism $\rho_\bullet : \order{c} \leftrightblackspoon \order{d}$ can be
-given a \emph{name} and a \emph{coname}. As shown in Fig.~\ref{fig:name-coname}.
-the name of $\rho_\bullet$ denoted $\ulcorner{\rho_\bullet}\urcorner$ has type
-$\order{\idiso} \leftrightblackspoon \iorder{c} \circledast \order{d}$ and the
-coname of $\rho_\bullet$ denoted $\llcorner{\rho_\bullet}\lrcorner$ has type
-$\iorder{c} \circledast \order{d} \leftrightblackspoon \order{\idiso}$.
-Intuitively, this means that for each morphism of type
-$\order{c} \leftrightblackspoon \order{d}$, it is possible to construct from
-``nothing'' an object $\iorder{c} \circledast \order{d}$ in the category that
-denotes this morphism and dually to eliminate this object. Like with the case
-for the dual construction, we need to insert a combinator \emph{under} a
-quantifier.
-
-\begin{figure}[htb]
-  \begin{subfigure}{.5\textwidth}
-    \centering
-    \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-      \path (-1.1,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,1);
-
-      \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-      \node at (0.5,1) {\footnotesize{$\eta -$}};
-
-      \path [highlight] (1,1.75) edge node[above] {} (4,1.75);
-      \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.75);
-
-      \path [highlight] (1,0.25) edge node[above] {} (2,0.25);
-      \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
-      \draw[dashed] (1.25,1.75) -- (1.25,0.25);
-
-      \draw (2,0) -- (3,0) -- (3,0.5) -- (2,0.5) -- cycle;
-      \node at (2.5,0.25) {\footnotesize{$\rho_\bullet$}};
-
-      \path [highlight] (3,0.25) edge node[above] {} (4,0.25);
-      \path (3,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0.25);
-
-    \end{tikzpicture}
-  \end{subfigure}
-  \begin{subfigure}{.5\textwidth}
-    \centering
-    \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-
-      \path [highlight] (-1.1,1.75) edge node[above] {} (2,1.75);
-      \path (-1.1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
-
-      \path [highlight] (-1.1,0.25) edge node[above] {} (0,0.25);
-      \path (-1.1,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (0,0.25);
-
-      \draw (0,0) -- (1,0) -- (1,0.5) -- (0,0.5) -- cycle;
-      \node at (0.50,0.25) {\footnotesize{$\rho_\bullet^{-1}$}};
-
-      \path [highlight] (1,0.25) edge node[above] {} (2,0.25);
-      \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
-      \draw[dashed] (1.75,1.75) -- (1.75,0.25);
-
-      \draw (2,0) -- (3,0) -- (3,2) -- (2,2) -- cycle;
-      \node at (2.5,1) {\footnotesize{$\epsilon +$}};
-
-      \path (3,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (4,1);
-    \end{tikzpicture}
-  \end{subfigure}
-  \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname},
-  where $p : \#c \leftrightblackspoon \#d$}
-\end{figure}
-
-%%%
-\subsection{Higher-Order Functions}
-
-As shown above, names and conames encode a morphism of type
-$\order{c} \leftrightblackspoon \order{d}$ using morphisms between $\order{id}$
-and $\iorder{c} \circledast \order{d}$. These names and conames give rise to a
-notion of higher-order function that can be composed and applied. Given two
-morphisms of types $\order{c} \leftrightblackspoon \order{d}$ and
-$\order{d} \leftrightblackspoon \order{d}$, we can compose their names to get
-the name of their sequential composition. Given the name of a morphism
-$\order{c} \leftrightblackspoon \order{d}$ and given a value of type
-$\order{c}$, we can produce a value of type $\order{d}$ effectively ``applying''
-the morphism.
-
-%%%
-\subsection{Trace}
-
-Traced categories~\cite{joyal1996traced} have proved useful for modeling
-recursion~\cite{Hasegawa:1997:RCS:645893.671607}. It is interesting that every
-compact closed category admits a trace which we can implement as shown below. In
-the figure, we show that given a combinator
-$\rho_\bullet : \order{c} \circledast \order{d} \leftrightblackspoon \order{c}
-\circledast \order{e}$
-we can construct a circuit of type $\order{d} \leftrightblackspoon \order{e}$
-that typechecks iff we have a fixed point for $f$ for the argument of type
-$\order{c}$.
+%%%%
+\subsection{Additional Examples}
+
+Compact closed categories support various interesting
+constructions~\cite{abramsky-2008}, such as duals, name and coname, and
+trace~\cite{joyal1996traced,Hasegawa:1997:RCS:645893.671607}, which eventually
+lead to a certain notion of recursive higher-order functions. These
+constructions do not immediately transfer to the context of $\Pi^/$ as we have
+explicit quantifiers and synchronization primitives that are not present in the
+conventional setting. Resolving these subtleties will provide the first
+operational interpretation known to us of multiplicative higher-order recursive
+functions.
+
+% \begin{figure}[htb]
+%   \centering
+%   \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+%     \path [highlight] (-1,1) edge node[above] {} (0,1);
+%     \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (0,1);
+
+%     \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+%     \node at (0.5,1) {\footnotesize{$\unitetl/$}};
+
+%     \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
+
+%     \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
+%     \node at (2.5,1.75) {\footnotesize{$\eta +$}};
+
+%     \draw[dashed] (3.2,1.25) -- (3.2,2.25);
+%     \path [highlight] (3,2.25) edge node[above] {} (8,2.25);
+%     \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
+%     \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
+%     \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
+
+%     \draw (4,0.75) -- (5,0.75) -- (5,1.75) -- (4,1.75) -- cycle;
+%     \node at (4.5,1.25) {\footnotesize{$p$}};
+
+%     \draw[dashed] (5.8,0.25) -- (5.8,1.25);
+%     \path [highlight] (1,0.25) edge node[above] {} (6,0.25);
+%     \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (6,0.25);
+%     \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
+%     \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
+
+%     \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
+%     \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
+
+%     \path (7,0.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (8,0.75);
+
+%     \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
+%     \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
+
+%     \path [highlight] (9,1.5) edge node[above] {} (10,1.5);
+%     \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
+%   \end{tikzpicture}
+%   \caption{\label{fig:dual} Dual}
+% \end{figure}
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{$\Pi^/$: Additional Examples}
+
+% Compact closed categories support various interesting constructions, such as
+% duals, name and coname, and trace, which eventually lead to a certain notion of
+% recursive higher-order functions~\cite{abramsky-2008}.  We illustrate the
+% expressiveness of $\Pi^/$ by defining duals, name and coname, and a higher-order
+% \emph{apply} combinator.
+
+% %%%%%%%%%%
+% \subsection{\texttt{dual}}
+
+% Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$,
+% we can define a \emph{dual morphism}
+% $p^{\ast} : 1/\#d \leftrightblackspoon 1/\#c$. This is shown by building a
+% reversible circuit in Fig.~\ref{fig:dual}.  The highlights that seem to
+% ``escape'' the circuit indicate that \emph{dual} can only be used in a
+% context with at least one quantifier being present.
+
+% \begin{figure}[htb]
+%   \centering
+%   \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+%     \path [highlight] (-1,1) edge node[above] {} (0,1);
+%     \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (0,1);
+
+%     \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+%     \node at (0.5,1) {\footnotesize{$\unitetl/$}};
+
+%     \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
+
+%     \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
+%     \node at (2.5,1.75) {\footnotesize{$\eta +$}};
+
+%     \draw[dashed] (3.2,1.25) -- (3.2,2.25);
+%     \path [highlight] (3,2.25) edge node[above] {} (8,2.25);
+%     \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
+%     \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
+%     \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
+
+%     \draw (4,0.75) -- (5,0.75) -- (5,1.75) -- (4,1.75) -- cycle;
+%     \node at (4.5,1.25) {\footnotesize{$p$}};
+
+%     \draw[dashed] (5.8,0.25) -- (5.8,1.25);
+%     \path [highlight] (1,0.25) edge node[above] {} (6,0.25);
+%     \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (6,0.25);
+%     \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
+%     \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
+
+%     \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
+%     \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
+
+%     \path (7,0.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (8,0.75);
+
+%     \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
+%     \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
+
+%     \path [highlight] (9,1.5) edge node[above] {} (10,1.5);
+%     \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
+%   \end{tikzpicture}
+%   \caption{\label{fig:dual} Dual}
+% \end{figure}
+
+% %%%
+% \subsection{\texttt{name} and \texttt{coname}}
+
+% Each morphism $\rho_\bullet : \order{c} \leftrightblackspoon \order{d}$ can be
+% given a \emph{name} and a \emph{coname}. As shown in Fig.~\ref{fig:name-coname}.
+% the name of $\rho_\bullet$ denoted $\ulcorner{\rho_\bullet}\urcorner$ has type
+% $\order{\idiso} \leftrightblackspoon \iorder{c} \circledast \order{d}$ and the
+% coname of $\rho_\bullet$ denoted $\llcorner{\rho_\bullet}\lrcorner$ has type
+% $\iorder{c} \circledast \order{d} \leftrightblackspoon \order{\idiso}$.
+% Intuitively, this means that for each morphism of type
+% $\order{c} \leftrightblackspoon \order{d}$, it is possible to construct from
+% ``nothing'' an object $\iorder{c} \circledast \order{d}$ in the category that
+% denotes this morphism and dually to eliminate this object. Like with the case
+% for the dual construction, we need to insert a combinator \emph{under} a
+% quantifier.
+
+% \begin{figure}[htb]
+%   \begin{subfigure}{.5\textwidth}
+%     \centering
+%     \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+%       \path (-1.1,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,1);
+
+%       \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+%       \node at (0.5,1) {\footnotesize{$\eta -$}};
+
+%       \path [highlight] (1,1.75) edge node[above] {} (4,1.75);
+%       \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.75);
+
+%       \path [highlight] (1,0.25) edge node[above] {} (2,0.25);
+%       \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
+%       \draw[dashed] (1.25,1.75) -- (1.25,0.25);
+
+%       \draw (2,0) -- (3,0) -- (3,0.5) -- (2,0.5) -- cycle;
+%       \node at (2.5,0.25) {\footnotesize{$\rho_\bullet$}};
+
+%       \path [highlight] (3,0.25) edge node[above] {} (4,0.25);
+%       \path (3,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0.25);
+
+%     \end{tikzpicture}
+%   \end{subfigure}
+%   \begin{subfigure}{.5\textwidth}
+%     \centering
+%     \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+
+%       \path [highlight] (-1.1,1.75) edge node[above] {} (2,1.75);
+%       \path (-1.1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
+
+%       \path [highlight] (-1.1,0.25) edge node[above] {} (0,0.25);
+%       \path (-1.1,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (0,0.25);
+
+%       \draw (0,0) -- (1,0) -- (1,0.5) -- (0,0.5) -- cycle;
+%       \node at (0.50,0.25) {\footnotesize{$\rho_\bullet^{-1}$}};
+
+%       \path [highlight] (1,0.25) edge node[above] {} (2,0.25);
+%       \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
+%       \draw[dashed] (1.75,1.75) -- (1.75,0.25);
+
+%       \draw (2,0) -- (3,0) -- (3,2) -- (2,2) -- cycle;
+%       \node at (2.5,1) {\footnotesize{$\epsilon +$}};
+
+%       \path (3,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (4,1);
+%     \end{tikzpicture}
+%   \end{subfigure}
+%   \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname},
+%   where $p : \#c \leftrightblackspoon \#d$}
+% \end{figure}
+
+% %%%
+% \subsection{Higher-Order Functions}
+
+% As shown above, names and conames encode a morphism of type
+% $\order{c} \leftrightblackspoon \order{d}$ using morphisms between $\order{id}$
+% and $\iorder{c} \circledast \order{d}$. These names and conames give rise to a
+% notion of higher-order function that can be composed and applied. Given two
+% morphisms of types $\order{c} \leftrightblackspoon \order{d}$ and
+% $\order{d} \leftrightblackspoon \order{d}$, we can compose their names to get
+% the name of their sequential composition. Given the name of a morphism
+% $\order{c} \leftrightblackspoon \order{d}$ and given a value of type
+% $\order{c}$, we can produce a value of type $\order{d}$ effectively ``applying''
+% the morphism.
+
+% %%%
+% \subsection{Trace}
+
+% Traced categories~\cite{joyal1996traced} have proved useful for modeling
+% recursion~\cite{Hasegawa:1997:RCS:645893.671607}. It is interesting that every
+% compact closed category admits a trace which we can implement as shown below. In
+% the figure, we show that given a combinator
+% $\rho_\bullet : \order{c} \circledast \order{d} \leftrightblackspoon \order{c}
+% \circledast \order{e}$
+% we can construct a circuit of type $\order{d} \leftrightblackspoon \order{e}$
+% that typechecks iff we have a fixed point for $f$ for the argument of type
+% $\order{c}$.
 
-FIX TRACE
-
-\begin{figure}[htb]
-  \centering
-  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-    \path [highlight] (-1,1) edge node[above] {} (0,1);
-    \path (-1,1) edge node[above] {\footnotesize{$\order{d}$}} (0,1);
-
-    \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-    \node at (0.5,1) {\footnotesize{$\unitetl/$}};
-
-    \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
-
-    \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
-    \node at (2.5,1.75) {\footnotesize{$\eta +$}};
-
-    \draw[dashed] (3.2,1.25) -- (3.2,2.25);
-    \path [highlight] (3,2.25) edge node[above] {} (8,2.25);
-    \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
-    \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
-    \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
-
-    \draw (4,0.75) -- (5,0.75) -- (5,1.75) -- (4,1.75) -- cycle;
-    \node at (4.5,1.25) {\footnotesize{$p$}};
-
-    \draw[dashed] (5.8,0.25) -- (5.8,1.25);
-    \path [highlight] (1,0.25) edge node[above] {} (6,0.25);
-    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (6,0.25);
-    \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
-    \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
-
-    \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
-    \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
-
-    \path (7,0.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (8,0.75);
-
-    \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
-    \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
-
-    \path [highlight] (9,1.5) edge node[above] {} (10,1.5);
-    \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
-  \end{tikzpicture}
-  \caption{\label{fig:trace} Trace}
-\end{figure}
-
-
-\begin{figure}[htb]
-  \centering
-  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-    \path (-1,2) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,2);
-    \path (-1,0.5) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,0.5);
-
-    \draw (0,-0.25) -- (1,-0.25) -- (1,1.5) -- (0,1.5) -- cycle;
-    \node at (0.5,0.6) {\footnotesize{$\textsf{name}_p$}};
-
-    \path (1,1.25) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (2,1.25);
-    \path (1,0) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0);
-
-    \draw (2,1) -- (3,1) -- (3,2.25) -- (2,2.25) -- cycle;
-    \node at (2.5,1.625) {\footnotesize{$\epsilon +$}};
-
-    \path (3,1.625) edge node[above] {\footnotesize{$\textsf{\#id}$}} (4,1.625);
-
-    \draw (4,-0.25) -- (5,-0.25) -- (5,2) -- (4,2) -- cycle;
-    \node at (4.5,0.85) {\footnotesize{$\unititl/$}};
-
-    \path (5,0.85) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,0.85);
-  \end{tikzpicture}
-  \caption{\label{fig:apply} apply}
-\end{figure}
-
-\begin{figure}[htb]
-  \centering
-  \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-    \path (-1,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,1);
-
-    \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-    \node at (0.5,1) {\footnotesize{$\unitetl/$}};
-
-    \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
-    \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,0.25);
-
-    \draw (2,1.25) -- (3,1.25) -- (3,2.25) -- (2,2.25) -- cycle;
-    \node at (2.5,1.75) {\footnotesize{$\textsf{name}_{p_1}$}};
-
-    \path (3,2.125) edge node[above] {\footnotesize{${1/\textsf{\#c}}$}} (8,2.125);
-    \path (3,1.375) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,1.375);
-
-    \draw (2,0.75) -- (3,0.75) -- (3,-0.25) -- (2,-0.25) -- cycle;
-    \node at (2.5,0.25) {\footnotesize{$\textsf{name}_{p_2}$}};
-
-    \path (3,0.625) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (4,0.625);
-    \path (3,-0.125) edge node[above] {\footnotesize{${\textsf{\#e}}$}} (6,-0.125);
-
-    \draw (4,1.5) -- (5,1.5) -- (5,0.5) -- (4,0.5) -- cycle;
-    \node at (4.5,1) {\footnotesize{$\epsilon +$}};
-
-    \path (5,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (6,1);
-
-    \draw (6,1.125) -- (7,1.125) -- (7,-0.25) -- (6,-0.25) -- cycle;
-    \node at (6.5,0.5) {\footnotesize{$\unititl/$}};
-
-    \path (7,0.5) edge node[above] {\footnotesize{${\textsf{\#e}}$}} (8,0.5);
-  \end{tikzpicture}
-  \caption{\label{fig:compose} compose}
-\end{figure}
+% FIX TRACE
+
+% \begin{figure}[htb]
+%   \centering
+%   \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+%     \path [highlight] (-1,1) edge node[above] {} (0,1);
+%     \path (-1,1) edge node[above] {\footnotesize{$\order{d}$}} (0,1);
+
+%     \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+%     \node at (0.5,1) {\footnotesize{$\unitetl/$}};
+
+%     \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
+
+%     \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
+%     \node at (2.5,1.75) {\footnotesize{$\eta +$}};
+
+%     \draw[dashed] (3.2,1.25) -- (3.2,2.25);
+%     \path [highlight] (3,2.25) edge node[above] {} (8,2.25);
+%     \path (3,2.25) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (8,2.25);
+%     \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
+%     \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
+
+%     \draw (4,0.75) -- (5,0.75) -- (5,1.75) -- (4,1.75) -- cycle;
+%     \node at (4.5,1.25) {\footnotesize{$p$}};
+
+%     \draw[dashed] (5.8,0.25) -- (5.8,1.25);
+%     \path [highlight] (1,0.25) edge node[above] {} (6,0.25);
+%     \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (6,0.25);
+%     \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
+%     \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
+
+%     \draw (6,-0.25) -- (7,-0.25) -- (7,1.75) -- (6,1.75) -- cycle;
+%     \node at (6.5,0.75) {\footnotesize{$\epsilon +$}};
+
+%     \path (7,0.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (8,0.75);
+
+%     \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
+%     \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
+
+%     \path [highlight] (9,1.5) edge node[above] {} (10,1.5);
+%     \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
+%   \end{tikzpicture}
+%   \caption{\label{fig:trace} Trace}
+% \end{figure}
+
+
+% \begin{figure}[htb]
+%   \centering
+%   \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+%     \path (-1,2) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,2);
+%     \path (-1,0.5) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,0.5);
+
+%     \draw (0,-0.25) -- (1,-0.25) -- (1,1.5) -- (0,1.5) -- cycle;
+%     \node at (0.5,0.6) {\footnotesize{$\textsf{name}_p$}};
+
+%     \path (1,1.25) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (2,1.25);
+%     \path (1,0) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0);
+
+%     \draw (2,1) -- (3,1) -- (3,2.25) -- (2,2.25) -- cycle;
+%     \node at (2.5,1.625) {\footnotesize{$\epsilon +$}};
+
+%     \path (3,1.625) edge node[above] {\footnotesize{$\textsf{\#id}$}} (4,1.625);
+
+%     \draw (4,-0.25) -- (5,-0.25) -- (5,2) -- (4,2) -- cycle;
+%     \node at (4.5,0.85) {\footnotesize{$\unititl/$}};
+
+%     \path (5,0.85) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,0.85);
+%   \end{tikzpicture}
+%   \caption{\label{fig:apply} apply}
+% \end{figure}
+
+% \begin{figure}[htb]
+%   \centering
+%   \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+%     \path (-1,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,1);
+
+%     \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
+%     \node at (0.5,1) {\footnotesize{$\unitetl/$}};
+
+%     \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
+%     \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,0.25);
+
+%     \draw (2,1.25) -- (3,1.25) -- (3,2.25) -- (2,2.25) -- cycle;
+%     \node at (2.5,1.75) {\footnotesize{$\textsf{name}_{p_1}$}};
+
+%     \path (3,2.125) edge node[above] {\footnotesize{${1/\textsf{\#c}}$}} (8,2.125);
+%     \path (3,1.375) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,1.375);
+
+%     \draw (2,0.75) -- (3,0.75) -- (3,-0.25) -- (2,-0.25) -- cycle;
+%     \node at (2.5,0.25) {\footnotesize{$\textsf{name}_{p_2}$}};
+
+%     \path (3,0.625) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (4,0.625);
+%     \path (3,-0.125) edge node[above] {\footnotesize{${\textsf{\#e}}$}} (6,-0.125);
+
+%     \draw (4,1.5) -- (5,1.5) -- (5,0.5) -- (4,0.5) -- cycle;
+%     \node at (4.5,1) {\footnotesize{$\epsilon +$}};
+
+%     \path (5,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (6,1);
+
+%     \draw (6,1.125) -- (7,1.125) -- (7,-0.25) -- (6,-0.25) -- cycle;
+%     \node at (6.5,0.5) {\footnotesize{$\unititl/$}};
+
+%     \path (7,0.5) edge node[above] {\footnotesize{${\textsf{\#e}}$}} (8,0.5);
+%   \end{tikzpicture}
+%   \caption{\label{fig:compose} compose}
+% \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
