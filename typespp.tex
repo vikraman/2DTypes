@@ -1476,9 +1476,17 @@ Reverse execution:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Additional Examples}
 
-ccc have a notion of higher-order functions, trace, etc. Talk about these examples.
+ccc have a notion of higher-order functions, trace, etc. Talk about these
+examples.
 
-\begin{figure}[t]
+\subsection{\texttt{name} and \texttt{coname}}
+
+Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$ which is a
+morphism in the compact closed category, we can build circuits that construct
+the \texttt{name} $\ulcorner{p}\urcorner$ and \texttt{coname}
+$\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
+
+\begin{figure}[ht]
   \begin{subfigure}{.5\textwidth}
     \centering
     \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
@@ -1499,9 +1507,8 @@ ccc have a notion of higher-order functions, trace, etc. Talk about these exampl
       \path (3,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.75);
       \path (3,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0.25);
 
-      \path (2.5,0) edge node[left] {\footnotesize{$p : \#c \leftrightarrow \#d$}} (2.5,-0.5);
+      \path (2.5,0) edge node[left] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (2.5,-0.5);
     \end{tikzpicture}
-    \caption{\label{fig:name} \texttt{name}}
   \end{subfigure}
   \begin{subfigure}{.5\textwidth}
     \centering
@@ -1513,7 +1520,7 @@ ccc have a notion of higher-order functions, trace, etc. Talk about these exampl
       \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
       \node at (0.5,1) {\footnotesize{\texttt{cong}}};
 
-      \path (0.5,0) edge node[right] {\footnotesize{$p : \#c \leftrightarrow \#d$}} (0.5,-0.5);
+      \path (0.5,0) edge node[right] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (0.5,-0.5);
 
       \path [highlight] (1,1.75) edge node[above] {} (2,1.75);
       \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
@@ -1522,13 +1529,12 @@ ccc have a notion of higher-order functions, trace, etc. Talk about these exampl
       \draw[dashed] (1.75,1.75) -- (1.75,0.25);
 
       \draw (2,0) -- (3,0) -- (3,2) -- (2,2) -- cycle;
-      \node at (2.5,1) {\footnotesize{$\eta -$}};
+      \node at (2.5,1) {\footnotesize{$\epsilon +$}};
 
       \path (3,1) edge node[above] {\footnotesize{${\textsf{[\#id,id]}}$}} (4,1);
     \end{tikzpicture}
-    \caption{\label{fig:coname} \texttt{coname}}
   \end{subfigure}
-  \caption{\label{fig:name} \texttt{name} and \texttt{coname}}
+  \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname}}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
