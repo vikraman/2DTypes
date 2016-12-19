@@ -1494,7 +1494,7 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
   \begin{subfigure}{.5\textwidth}
     \centering
     \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
-      \path (-1.1,1) edge node[above] {\footnotesize{${\textsf{[\#id,id]}}$}} (0,1);
+      \path (-1.1,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (0,1);
 
       \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
       \node at (0.5,1) {\footnotesize{$\eta -$}};
@@ -1524,7 +1524,7 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
       \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
       \node at (0.5,1) {\footnotesize{$\texttt{cong}^{r}$}};
 
-      \path (0.5,0) edge node[right] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (0.5,-0.5);
+      \path (0.5,0) edge node[right] {\footnotesize{$p^{-1} : \#d \leftrightblackspoon \#c$}} (0.5,-0.5);
 
       \path [highlight] (1,1.75) edge node[above] {} (2,1.75);
       \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
@@ -1535,7 +1535,7 @@ $\llcorner{p}\lrcorner$ of $p$. These are shown in figure~\ref{fig:name-coname}.
       \draw (2,0) -- (3,0) -- (3,2) -- (2,2) -- cycle;
       \node at (2.5,1) {\footnotesize{$\epsilon +$}};
 
-      \path (3,1) edge node[above] {\footnotesize{${\textsf{[\#id,id]}}$}} (4,1);
+      \path (3,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (4,1);
     \end{tikzpicture}
   \end{subfigure}
   \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname}}
