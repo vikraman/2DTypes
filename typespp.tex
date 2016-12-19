@@ -177,7 +177,7 @@ having exactly $k$ proofs of reversibility.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In Homotopy Type Theory (HoTT)~\cite{hottbook}, types have the
+In modern treatments of type theory, types have the
 structure of \emph{weak $\omega$-groupoids}. As a first approximation,
 we can think of such structures as sets with points (objects) and
 paths (equivalences) between the points and higher paths between these
@@ -235,18 +235,23 @@ and~$q'$ on it. The equivalences $q$ and $q'$ are however identified by~$\alpha$
 leaving only three distinct isomorphism classes and hence making the cardinality
 $\frac{1}{3}$.
 
-Both groupoids involve some notion of ``division'' that can be captured at the
-level of types using a syntactic notion of \emph{fractional types}. Our aim is
-to explore this notion of types and its associated operational semantics. The
-remainder of the paper is organized as follows. We start by reviewing the
-necessary background consisting of the language $\Pi$ for programming with
-isomorphisms or equivalences in a reversible information-preserving way. Sec.~4
-explains the main novel semantic ideas of using $\Pi$ programs to generate
-non-trivial groupoids with fractional cardinality. Sec.~5 translates the
-semantic ideas into an extension of $\Pi$ with new type constructors denoting
-non-trivial groupoids and new programs that manipulate such types. Sec.~6
-presents the operational semantics of the extended language. The last section
-puts our work in perspective and concludes.
+Both groupoids involve some notion of (semantic) ``equivalence'', which we
+would like to capture as first-class entities in a programming language.
+In other words, we would like to have some syntactic notion of a type, whose
+denotation would be a groupoid with fractional cardinality.  In other words,
+a syntactic notion of \emph{fractional types}. Our aim then is to create a
+language which possesses ``fractional types'', explore this notion of types,
+and its associated operational semantics.
+
+The remainder of the paper is organized as follows. We start by reviewing
+necessary background material, consisting of the language $\Pi$ for programming
+with isomorphisms or equivalences in a reversible information-preserving way.
+Sec.~4 explains the main novel semantic ideas of using $\Pi$ programs to
+generate non-trivial groupoids with fractional cardinality, as well as
+translating the semantic ideas into an extension of $\Pi$ with new type
+constructors denoting non-trivial groupoids and new programs that manipulate
+such types.  Sec.~5 presents some example programs.  The last section puts our
+work in perspective and concludes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Programming with Equivalences}
