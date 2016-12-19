@@ -1428,7 +1428,7 @@ evaluation, and hence directly encode the operational semantics of the
 language. As suggested above, the quantifiers are interpreted differently
 depending on which direction the rule is used. We use a $\forall\exists$
 notation to express the presence of \emph{one} quantifier that is interpreted
-ddifferently in each direction. The notation has the advantage of being compact,
+differently in each direction. The notation has the advantage of being compact,
 avoiding duplication, and making the symmetry of the rules explicit. We also
 include two new pairs of combinators $\synchl/packl$ and $\synchr/packr$ that
 serve as explicit quantifier introduction and elimination rules: they serve as
@@ -1448,7 +1448,7 @@ in each direction for clarity:
   \forall{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^k,1/c^k \rangle,c^i \rangle] \\
 &\stackrel{\synchl}{\leftrightblackspoon}&
-  \langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
+  [\langle \langle c^i,1/c^i \rangle,c^i \rangle] \\
 &\stackrel{\assocrt/}{\leftrightblackspoon}&
   [\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^i,c^i \rangle\rangle] \\
