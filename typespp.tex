@@ -177,7 +177,7 @@ having exactly $k$ proofs of reversibility.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-In Homotopy Type Theory (HoTT)~\cite{hottbook}, types have the
+In modern treatments of type theory, types have the
 structure of \emph{weak $\omega$-groupoids}. As a first approximation,
 we can think of such structures as sets with points (objects) and
 paths (equivalences) between the points and higher paths between these
@@ -235,18 +235,23 @@ and~$q'$ on it. The equivalences $q$ and $q'$ are however identified by~$\alpha$
 leaving only three distinct isomorphism classes and hence making the cardinality
 $\frac{1}{3}$.
 
-Both groupoids involve some notion of ``division'' that can be captured at the
-level of types using a syntactic notion of \emph{fractional types}. Our aim is
-to explore this notion of types and its associated operational semantics. The
-remainder of the paper is organized as follows. We start by reviewing the
-necessary background consisting of the language $\Pi$ for programming with
-isomorphisms or equivalences in a reversible information-preserving way. Sec.~4
-explains the main novel semantic ideas of using $\Pi$ programs to generate
-non-trivial groupoids with fractional cardinality. Sec.~5 translates the
-semantic ideas into an extension of $\Pi$ with new type constructors denoting
-non-trivial groupoids and new programs that manipulate such types. Sec.~6
-presents the operational semantics of the extended language. The last section
-puts our work in perspective and concludes.
+Both groupoids involve some notion of (semantic) ``equivalence'', which we
+would like to capture as first-class entities in a programming language.
+In other words, we would like to have some syntactic notion of a type, whose
+denotation would be a groupoid with fractional cardinality.  In other words,
+a syntactic notion of \emph{fractional types}. Our aim then is to create a
+language which possesses ``fractional types'', explore this notion of types,
+and its associated operational semantics.
+
+The remainder of the paper is organized as follows. We start by reviewing
+necessary background material, consisting of the language $\Pi$ for programming
+with isomorphisms or equivalences in a reversible information-preserving way.
+Sec.~4 explains the main novel semantic ideas of using $\Pi$ programs to
+generate non-trivial groupoids with fractional cardinality, as well as
+translating the semantic ideas into an extension of $\Pi$ with new type
+constructors denoting non-trivial groupoids and new programs that manipulate
+such types.  Sec.~5 presents some example programs.  The last section puts our
+work in perspective and concludes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Programming with Equivalences}
@@ -476,7 +481,8 @@ The syntax of $\Pi$ is given by the following categories:
 \end{definition}
 
 \noindent Both classes of programs, 1-combinators $c$, and
-2-combinators~$\alpha$, denote \emph{equivalences} in the HoTT sense. The
+2-combinators~$\alpha$, denote \emph{equivalences} in the Homotopy Type
+Theory (HoTT) sense~\cite{hottbook}. The
 elements $c$ of 1-combinators denote type isomorphisms. The elements $\alpha$ of
 2-combinators denote the set of sound and complete equivalences between these
 type isomorphisms. Using the 1-combinators, it is possible to write any
@@ -1499,7 +1505,7 @@ ccc have a notion of higher-order functions, trace, etc. Talk about these exampl
 \section{Conclusion}
 
 We have presented a natural notion of \emph{fractional types} that enriches a
-class of reversible programming languages in several dimensions.  Further
+class of reversible programming languages in several dimensions.  While further
 research might show how to use fractional types in a conventional (i.e.,
 irreversible) programming language, their full potential is only achieved when
 the ambient language guarantees that no information is created or erased. The
@@ -1509,18 +1515,22 @@ collapse proofs, each such reversible program has $\ord{p}$ distinct proofs of
 reversibility and hence gives rise to a groupoid with cardinality
 $\frac{1}{\ord{p}}$. Going from this observation to a full programming language
 required several difficult and subtle design choices which we have explored to
-produce $\Pi^/$. The latter language has a natural denotational semantics where
+produce $\Pi^/$. As with most functional languages, it has 
+a natural denotational semantics where
 types denote groupoids. Its operational semantics requires a mechanism to
 express a computational effect which enables spatially separated parts of the
 program to communicate in a way that is reminiscent of entanglement in quantum
 mechanics. It appears possible to realize such an operational semantics using
-global reference cells, backtracking, or other conventional technique.
+global reference cells, backtracking, or other conventional technique.  Rather
+than going via effects, we chose dependent types to track the required
+constraints via dataflow.  Of our various attempts at an operational semantics,
+this one turned out simplest.
 
-Our fractional types extend the natural denotation of types from sets to
-non-trivial groupoids but they only scratch the surface of the tower of weak
-$\omega$-groupoids that is expressible in HoTT. A long term goal of our research
+Our fractional types have natural denotations which are non-trivial groupoids,
+but they only scratch the surface of the tower of weak $\omega$-groupoids that
+is expressible in HoTT~\cite{hottbook}. A long term goal of our research
 is to find natural type constructors inspired by the rich combinatorial
-structure of weak $\omega$-groupoids and that provide novel programming
+structure of weak $\omega$-groupoids that provide novel programming
 abstractions. We conclude by outlining several interesting connections and
 potential avenues for future work.
 
@@ -1539,8 +1549,8 @@ is viewed as an abstract system that has~$N$ distinguishable states where the
 amount of information contained in each state is $(\log{N})$. This entropy is a
 measure of information which materializes itself in memory or bandwidth
 requirements when storing or transmitting elements of this type. Thus a type
-with 8 elements needs 3 bits of memory for storage or 3 bits of bandwidth for
-communication. The logarithmic map implies that information contained in a
+with $8$ elements needs $3$ bits of memory for storage or $3$ bits of bandwidth
+for communication. The logarithmic map implies that information contained in a
 composite state is the sum of the information contained in its constituents. For
 example, the type $\mathbb{2} \otimes \mathbb{3}$ can be thought of a composite
 system consisting of two independent unrelated subsystems. Each state of the
@@ -1557,7 +1567,7 @@ the empty type $\zt$, the unit type $\ot$, and sums and products $\oplus$ and
 $\otimes$, this principle states that the foundational (i.e., physical) notion
 of computation is computation via type
 isomorphisms~\cite{James:2012:IE:2103656.2103667} or type
-equivalences~\cite{Carette2016}, which are both sound and complete with respect
+equivalences~\cite{Carette2016}; these are both sound and complete with respect
 to cardinality-preserving maps. The introduction, in $\pifrac$, of types
 (groupoids) with fractional cardinalities introduces types with \emph{negative
   entropy}. For example, a type with cardinality $\frac{1}{8}$ has entropy
