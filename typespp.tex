@@ -1476,38 +1476,30 @@ Reverse execution:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{$\Pi^/$: Additional Examples}
 
-ccc have a notion of higher-order functions, trace, etc. Talk about these
-examples.
-
-\begin{lemma}
-  \label{lem:cong}
-  For $\mathbb{v} : \mathbb{T}_1 \circledast \mathbb{T}_2$,
-  $p : \mathbb{T}_1 \leftrightblackspoon \mathbb{T}$, we have
-  $\texttt{cong}^{l}_{p}(\mathbb{v}) : \mathbb{T} \circledast \mathbb{T}_2$, and
-  for $q : \mathbb{T}_2 \leftrightblackspoon \mathbb{T}$, we have
-  $\texttt{cong}^{r}_{q}(\mathbb{v}) : \mathbb{T}_1 \circledast \mathbb{T}$.
-  \begin{proof}
-    It follows from the fact that $\circledast$ is an endo-bi-functor.
-  \end{proof}
-\end{lemma}
+Compact closed categories have various interesting notions, such as
+duals, name and coname, which eventually lead to a certain notion of 
+higher order functions.  Here we show that the first three (duals,
+name and coname) are definable circuits in $\Pi^/$.
 
 \subsection{\texttt{dual}}
 
-Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$ which is a
-morphism in the compact closed category, we have a dual morphism
+Given a \textrm{/-combinator} $p : \#c \leftrightblackspoon \#d$,
+we can define a \emph{dual morphism}
 $p^{\ast} : 1/\#d \leftrightblackspoon 1/\#c$. This is shown by building a
-reversible circuit in figure~\ref{fig:dual}.
+reversible circuit in Figure~\ref{fig:dual}.  The highlights that seem to
+``escape'' the circuit indicate that \emph{dual} can only be used in a
+context with at least one quantifier being present.
 
 \begin{figure}[htb]
   \centering
   \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
+    \path [highlight] (-1,1) edge node[above] {} (0,1);
     \path (-1,1) edge node[above] {\footnotesize{$1/{\textsf{\#d}}$}} (0,1);
 
     \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
     \node at (0.5,1) {\footnotesize{$\unitetl/$}};
 
     \path (1,1.75) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (2,1.75);
-    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (4,0.25);
 
     \draw (2,0.75) -- (3,0.75) -- (3,2.75) -- (2,2.75) -- cycle;
     \node at (2.5,1.75) {\footnotesize{$\eta +$}};
@@ -1518,13 +1510,12 @@ reversible circuit in figure~\ref{fig:dual}.
     \path [highlight] (3,1.25) edge node[above] {} (4,1.25);
     \path (3,1.25) edge node[above] {\footnotesize{$\textsf{\#c}$}} (4,1.25);
 
-    \draw (4,-0.25) -- (5,-0.25) -- (5,1.75) -- (4,1.75) -- cycle;
-    \node at (4.5,0.75) {\footnotesize{$\texttt{cong}^{l}$}};
-    \path (4.5,-0.25) edge node[left] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (4.5,-0.75);
+    \draw (4,0.75) -- (5,0.75) -- (5,1.75) -- (4,1.75) -- cycle;
+    \node at (4.5,1.25) {\footnotesize{$p$}};
 
     \draw[dashed] (5.8,0.25) -- (5.8,1.25);
-    \path [highlight] (5,0.25) edge node[above] {} (6,0.25);
-    \path (5,0.25) edge node[above] {\footnotesize{$1/\textsf{\#d}$}} (6,0.25);
+    \path [highlight] (1,0.25) edge node[above] {} (6,0.25);
+    \path (1,0.25) edge node[above] {\footnotesize{${1/\textsf{\#d}}$}} (6,0.25);
     \path [highlight] (5,1.25) edge node[above] {} (6,1.25);
     \path (5,1.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (6,1.25);
 
@@ -1536,6 +1527,7 @@ reversible circuit in figure~\ref{fig:dual}.
     \draw (8,0.5) -- (9,0.5) -- (9,2.5) -- (8,2.5) -- cycle;
     \node at (8.5,1.5) {\footnotesize{$\unititl/$}};
 
+    \path [highlight] (9,1.5) edge node[above] {} (10,1.5);
     \path (9,1.5) edge node[above] {\footnotesize{$1/{\textsf{\#c}}$}} (10,1.5);
   \end{tikzpicture}
   \caption{\label{fig:dual} Dual}
@@ -1545,7 +1537,8 @@ reversible circuit in figure~\ref{fig:dual}.
 
 We also show circuits that construct the \texttt{name} $\ulcorner{p}\urcorner$
 and \texttt{coname} $\llcorner{p}\lrcorner$ of $p$, in
-figure~\ref{fig:name-coname}.
+Figure~\ref{fig:name-coname}.  Like with dual, we need to insert a combinator
+$p$ \emph{under} a quantifier.
 
 \begin{figure}[htb]
   \begin{subfigure}{.5\textwidth}
@@ -1556,35 +1549,34 @@ figure~\ref{fig:name-coname}.
       \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
       \node at (0.5,1) {\footnotesize{$\eta -$}};
 
-      \path [highlight] (1,1.75) edge node[above] {} (2,1.75);
-      \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
+      \path [highlight] (1,1.75) edge node[above] {} (4,1.75);
+      \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.75);
+
       \path [highlight] (1,0.25) edge node[above] {} (2,0.25);
       \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
       \draw[dashed] (1.25,1.75) -- (1.25,0.25);
 
-      \draw (2,0) -- (3,0) -- (3,2) -- (2,2) -- cycle;
-      \node at (2.5,1) {\footnotesize{$\texttt{cong}^{r}$}};
+      \draw (2,0) -- (3,0) -- (3,0.5) -- (2,0.5) -- cycle;
+      \node at (2.5,0.25) {\footnotesize{$p$}};
 
-      \path (3,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (4,1.75);
+      \path [highlight] (3,0.25) edge node[above] {} (4,0.25);
       \path (3,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (4,0.25);
 
-      \path (2.5,0) edge node[left] {\footnotesize{$p : \#c \leftrightblackspoon \#d$}} (2.5,-0.5);
     \end{tikzpicture}
   \end{subfigure}
   \begin{subfigure}{.5\textwidth}
     \centering
     \begin{tikzpicture}[scale=0.9,every node/.style={scale=0.7},highlight/.style={line width=4pt,orange!70}]
 
-      \path (-1.1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (0,1.75);
+      \path [highlight] (-1.1,1.75) edge node[above] {} (2,1.75);
+      \path (-1.1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
+
+      \path [highlight] (-1.1,0.25) edge node[above] {} (0,0.25);
       \path (-1.1,0.25) edge node[above] {\footnotesize{${\textsf{\#d}}$}} (0,0.25);
 
-      \draw (0,0) -- (1,0) -- (1,2) -- (0,2) -- cycle;
-      \node at (0.5,1) {\footnotesize{$\texttt{cong}^{r}$}};
+      \draw (0,0) -- (1,0) -- (1,0.5) -- (0,0.5) -- cycle;
+      \node at (0.50,0.25) {\footnotesize{$p^{-1}$}};
 
-      \path (0.5,0) edge node[right] {\footnotesize{$p^{-1} : \#d \leftrightblackspoon \#c$}} (0.5,-0.5);
-
-      \path [highlight] (1,1.75) edge node[above] {} (2,1.75);
-      \path (1,1.75) edge node[above] {\footnotesize{$1/\textsf{\#c}$}} (2,1.75);
       \path [highlight] (1,0.25) edge node[above] {} (2,0.25);
       \path (1,0.25) edge node[above] {\footnotesize{${\textsf{\#c}}$}} (2,0.25);
       \draw[dashed] (1.75,1.75) -- (1.75,0.25);
@@ -1595,7 +1587,8 @@ figure~\ref{fig:name-coname}.
       \path (3,1) edge node[above] {\footnotesize{${\textsf{\#id}}$}} (4,1);
     \end{tikzpicture}
   \end{subfigure}
-  \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname}}
+  \caption{\label{fig:name-coname} \texttt{name} and \texttt{coname},
+  where $p : \#c \leftrightblackspoon \#d$}
 \end{figure}
 
 
