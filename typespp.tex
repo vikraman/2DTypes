@@ -15,6 +15,7 @@
 \usetikzlibrary{quotes}
 \usepackage[section]{placeins}
 \usepackage{braket}
+\usepackage{mathtools}
 
 \newcommand{\textpi}{$\pi$}
 \newcommand{\ft}{\mathbb{T}}
@@ -60,6 +61,8 @@
 \newcommand{\permfour}{\mathit{perm}_{\rightarrow}}
 \newcommand{\permfive}{\mathit{perm}_{\leftarrow}}
 \newcommand{\permsix}{\mathit{perm}_{\times.\times}}
+
+\newcommand{\quant}[0]{\mbox{\ensuremath{\mathrlap{\diamond}\square}}}
 
 \newcommand{\Rule}[4]{
 \makebox{{\rm #1}
@@ -1281,44 +1284,44 @@ dependent types.
 \begin{figure}[t]
 {\footnotesize
 \[\begin{array}{rrcll}
-\unitetl/ :& \mbox{\AE}{\overline{k}}.[\order{\idiso} \circledast \mathbb{T},
+\unitetl/ :& \quant{\overline{k}}.[\order{\idiso} \circledast \mathbb{T},
                                                    \langle \idiso,v \rangle]
   & \leftrightblackspoon &
-                   \forall\exists{\overline{k}}.[\mathbb{T},v]
+                   {\overline{k}}.[\mathbb{T},v]
   &: \unititl/ \\
-\unitetr/ :& \forall\exists{\overline{k}}.[\mathbb{T} \circledast \order{\idiso},
+\unitetr/ :& \quant{\overline{k}}.[\mathbb{T} \circledast \order{\idiso},
                                                     \langle v,\idiso]
   & \leftrightblackspoon &
-                   \forall\exists{\overline{k}}.[\mathbb{T},v]
+                   \quant{\overline{k}}.[\mathbb{T},v]
   &: \unititr/ \\
-\swapt/ :& \forall\exists{\overline{k}}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
+\swapt/ :& \quant{\overline{k}}.[\mathbb{T}_1 \circledast \mathbb{T}_2,
                                                    \langle v_1,v_2 \rangle]
  & \leftrightblackspoon &
-                  \forall\exists{\overline{k}}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
+                  \quant{\overline{k}}.[\mathbb{T}_2 \circledast \mathbb{T}_1,
                                                   \langle v_2,v_1 \rangle]
   &: \swapt/ \\
-  \assoclt/ :& \forall\exists{\overline{k}}.
+  \assoclt/ :& \quant{\overline{k}}.
                [\mathbb{T}_1 \circledast (\mathbb{T}_2 \circledast \mathbb{T}_3),
                                         \langle v_1,\langle v_2,v_3 \rangle]
   & \leftrightblackspoon &
-                      \forall\exists{\overline{k}}.
+                      \quant{\overline{k}}.
                [(\mathbb{T}_1 \circledast \mathbb{T}_2) \circledast \mathbb{T}_3,
                                        \langle \langle v_1,v_2 \rangle , v_3 \rangle]
   &: \assocrt/ \\
 \\
 \eta- :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall\exists{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k  \rangle]
+  \quant{k}.[\iorder{c} \circledast \order{c}, \langle 1/c^k, c^k  \rangle]
   & : \epsilon- \\
 \eta+ :& [\order{\idiso},\idiso] & \leftrightblackspoon &
-  \forall\exists{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle]
+  \quant{k}.[\order{c} \circledast \iorder{c}, \langle c^k,1/c^k \rangle]
   & : \epsilon+ \\
-\synchl :& \forall\exists{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
+\synchl :& \quant{k}.[(\order{c}\circledast\iorder{c})\circledast\order{c},
   \langle \langle c^k,1/c^k \rangle, c^i]
   & \leftrightblackspoon &
   [(\order{c}\circledast\iorder{c})\circledast\order{c},
     \langle \langle c^i,1/c^i \rangle, c^i]
   & : \packl \\
-\synchr :& \forall\exists{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
+\synchr :& \quant{k}.[\order{c}\circledast(\iorder{c}\circledast\order{c}),
   \langle c^i, \langle 1/c^k, c^k \rangle \rangle]
   & \leftrightblackspoon &
    [\order{c}\circledast(\iorder{c}\circledast\order{c}),
@@ -1328,8 +1331,8 @@ dependent types.
 \[\begin{array}{c}
 \Rule{}
 {}
-{\jdg{}{}{\idiso/ : \forall\exists{\overline{k}}.[\mathbb{T},v] \leftrightblackspoon
-   \forall\exists{\overline{k}}.[\mathbb{T},v]}}
+{\jdg{}{}{\idiso/ : \quant{\overline{k}}.[\mathbb{T},v] \leftrightblackspoon
+   \quant{\overline{k}}.[\mathbb{T},v]}}
 {}
 ~~
 \Rule{}
@@ -1342,40 +1345,40 @@ dependent types.
 \\
 \Rule{}
 {\jdg{}{}{\rho_1 :
-  \forall\exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
-  \forall\exists{\overline{k_2}}.[\mathbb{T}_2,v_2]} \quad
+  \quant{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+  \quant{\overline{k_2}}.[\mathbb{T}_2,v_2]} \quad
   \rho_2 :
-  \forall\exists{\overline{k_2}}.[\mathbb{T}_2,v_2] \leftrightblackspoon
-  \forall\exists{\overline{k_3}}.[\mathbb{T}_3,v_3]}
+  \quant{\overline{k_2}}.[\mathbb{T}_2,v_2] \leftrightblackspoon
+  \quant{\overline{k_3}}.[\mathbb{T}_3,v_3]}
 {\jdg{}{}{\rho_1 \circledcirc \rho_2 :
- \forall\exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
- \forall\exists{\overline{k_3}}.[\mathbb{T}_3},v_3]}
+ \quant{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+ \quant{\overline{k_3}}.[\mathbb{T}_3},v_3]}
 {}
 \\
 \\
 \Rule{}
 {\jdg{}{}{\rho_1 :
- \forall\exists{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
- \forall\exists{\overline{k_2}}.[\mathbb{T}_2,v_2]}
+ \quant{\overline{k_1}}.[\mathbb{T}_1,v_1] \leftrightblackspoon
+ \quant{\overline{k_2}}.[\mathbb{T}_2,v_2]}
  \qquad \rho_2 :
- \forall\exists{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
- \forall\exists{\overline{k_4}}.[\mathbb{T}_4,v_4]}
+ \quant{\overline{k_3}}.[\mathbb{T}_3,v_3] \leftrightblackspoon
+ \quant{\overline{k_4}}.[\mathbb{T}_4,v_4]}
 {\jdg{}{}{\rho_1 \circledast \rho_2 :
-  \forall\exists{\overline{k_1k_3}}.[\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
+  \quant{\overline{k_1k_3}}.[\mathbb{T}_1 \circledast \mathbb{T}_3, \langle v_1,v_3 \rangle]
   \leftrightblackspoon
-  \forall\exists{\overline{k_2k_4}}.[\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
+  \quant{\overline{k_2k_4}}.[\mathbb{T}_2 \circledast \mathbb{T}_4}, \langle v_2,v_4 \rangle]}
 {}
 \end{array}\]
 \\
 Each combinator $\rho_\bullet$ has an inverse $\rho_\bullet^{-1}$.
 A rule $\mathbb{T_1}_\bullet \leftrightblackspoon
-\forall\exists{k}.\mathbb{T_2}_\bullet$ introduces a $\forall$ in the left-to-right
+\quant{k}.\mathbb{T_2}_\bullet$ introduces a $\forall$ in the left-to-right
 direction and eliminates an $\exists$ in the right-to-left direction. A rule
-$\forall\exists{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
+$\quant{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
 \mathbb{T_2}_\bullet$ eliminates a $\forall$ in the left-to-right direction and
 introduces an $\exists$ in the right-to-left direction. A rule
-$\forall\exists{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
-\forall\exists{k}.\mathbb{T_2}_\bullet$ maintains (think of elimination then
+$\quant{k}.\mathbb{T_1}_\bullet \leftrightblackspoon
+\quant{k}.\mathbb{T_2}_\bullet$ maintains (think of elimination then
 introduction) the universal quantifier in the left-to-right direction and
 the existential quantifier in the right-to-left direction. We omit the
 quantifiers when the sequence of bound variables is empty.
@@ -1418,7 +1421,7 @@ of execution, we are led to also include an existential quantifier for the
 reverse execution. Intuitively, a forward evaluation step that is at liberty to
 choose a $k$ will, when reversed encounter a particular, i.e., existentially
 quantified, $k$. A type $\mathbb{T}_\bullet$ is therefore generally of the form
-$\forall\exists{\overline{k}}.[\mathbb{T},v]$ where all the quantifiers are
+$\quant{\overline{k}}.[\mathbb{T},v]$ where all the quantifiers are
 lifted to the top followed by a non-dependent type and a value in that type.
 
 The adaptation of the combinators to the pointed dependent setting in Fig .~\ref
@@ -1426,7 +1429,7 @@ The adaptation of the combinators to the pointed dependent setting in Fig .~\ref
 combinators must keep track of how the value currently in focus changes during
 evaluation, and hence directly encode the operational semantics of the
 language. As suggested above, the quantifiers are interpreted differently
-depending on which direction the rule is used. We use a $\forall\exists$
+depending on which direction the rule is used. We use a $\quant$
 notation to express the presence of \emph{one} quantifier that is interpreted
 differently in each direction. The notation has the advantage of being compact,
 avoiding duplication, and making the symmetry of the rules explicit. We also
