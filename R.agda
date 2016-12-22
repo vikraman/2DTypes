@@ -170,8 +170,19 @@ TT-univ : Indexed-universe _ _ _
 TT-univ = record {
             I = Σ[ t₁ ∈ τ ] Σ[ t₂ ∈ τ ] (t₁ ⟷ t₂) × (t₁ ⟷ t₂)
           ; U = λ { (t₁ , t₂ , c₁ , c₂) → c₁ ⇔ c₂ }
-          ; El = λ { {(t₁ , t₂ , c₁ , c₂)} α → c₁ ⇔ c₂ }
+          ; El = λ { {(t₁ , t₂ , c₁ , c₂)} α →
+                   _≃₁_ {Universe.El τ-univ t₁}
+                        {Universe.El τ-univ t₂}
+                        {Universe.El τ-univ t₁}
+                        {Universe.El τ-univ t₂}
+                   (Indexed-universe.El T-univ {(t₁ , t₂)} c₁)
+                   (Indexed-universe.El T-univ {(t₁ , t₂)} c₂) }
           }
+
+⟦_⟧₁ : {t₁ t₂ : τ} {c₁ c₂ : t₁ ⟷ t₂} → (α : c₁ ⇔ c₂) →
+      Indexed-universe.El TT-univ {(t₁ , t₂ , c₁ , c₂)} α
+⟦ id⇔ ⟧₁ = ?
+⟦ α₁ ● α₂ ⟧₁ = {!!}
 
 -- once we complete the entire set of _⟷_ we will have the following situation:
 -- the space A ⊕ A ≃ A ⊕ A contains the following elements:
