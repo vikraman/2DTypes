@@ -181,7 +181,7 @@ TT-univ = record {
 
 ⟦_⟧₁ : {t₁ t₂ : τ} {c₁ c₂ : t₁ ⟷ t₂} → (α : c₁ ⇔ c₂) →
       Indexed-universe.El TT-univ {(t₁ , t₂ , c₁ , c₂)} α
-⟦ id⇔ ⟧₁ = ?
+⟦ id⇔ ⟧₁ = {!!}
 ⟦ α₁ ● α₂ ⟧₁ = {!!}
 
 -- once we complete the entire set of _⟷_ we will have the following situation:
