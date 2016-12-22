@@ -16,7 +16,7 @@ open import Level renaming (zero to lzero)
 open import Data.Nat
 open import Data.Integer as ℤ
 
-infix  4  _≃_
+infix 4 _≃_
 infix 4 _≋_
 infix 40 _^_
 infixr 50 _◎_
@@ -158,16 +158,6 @@ _≃₁_ {A} {B} {C} {D} A≃B C≃D = Σ (A ≃ B → C ≃ D) isequiv₁
 ------------------------------------------------------------------------------
 -- codes for equivalences of equivalences
 
--- once we complete the entire set of _⟷_ we will have the following situation:
--- the space A ⊕ A ≃ A ⊕ A contains the following elements:
--- id≃
--- swap≃
--- these two elements should not be identified
--- in the world of codes these elements are represented by different codes
--- id⟷ and swap₊
--- the relation ⇔ tells us which codes can be identified and it does NOT identify
--- id⟷ and swap₊
-
 data _⇔_ : {t₁ t₂ : τ} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   id⇔ : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ c
   _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
@@ -177,7 +167,21 @@ data _⇔_ : {t₁ t₂ : τ} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set wh
 2! (α ● β) = (2! β) ● (2! α)
 
 TT-univ : Indexed-universe _ _ _
-TT-univ = ?
+TT-univ = record {
+            I = Σ[ t₁ ∈ τ ] Σ[ t₂ ∈ τ ] (t₁ ⟷ t₂) × (t₁ ⟷ t₂)
+          ; U = λ { (t₁ , t₂ , c₁ , c₂) → c₁ ⇔ c₂ }
+          ; El = λ { {(t₁ , t₂ , c₁ , c₂)} α → c₁ ⇔ c₂ }
+          }
+
+-- once we complete the entire set of _⟷_ we will have the following situation:
+-- the space A ⊕ A ≃ A ⊕ A contains the following elements:
+-- id≃
+-- swap≃
+-- these two elements should not be identified
+-- in the world of codes these elements are represented by different codes
+-- id⟷ and swap₊
+-- the relation ⇔ tells us which codes can be identified and it does NOT identify
+-- id⟷ and swap₊
 
 ------------------------------------------------------------------------------
 -- fractionals
