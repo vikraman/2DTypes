@@ -17,6 +17,7 @@ open import Data.Nat
 open import Data.Integer as ℤ
 
 infix  4  _≃_
+infix 4 _≋_
 infix 40 _^_
 infixr 50 _◎_
 infix 50 _⊕_
@@ -88,6 +89,9 @@ A⊎⊥≃A {A} = f , mkisequiv g α g β
     β (inj₁ a) = refl (inj₁ a)
     β (inj₂ ())
 
+idequiv : {A : Set} → A ≃ A
+idequiv = (id , mkisequiv id refl id refl)
+
 transequiv : {A B C : Set} → A ≃ B → B ≃ C → A ≃ C
 transequiv (f , feq) (g , geq) = {!!}
 
@@ -123,6 +127,37 @@ T-univ = record {
 ⟦ unite₊r ⟧ = A⊎⊥≃A
 ⟦ c₁ ◎ c₂ ⟧ = {!!}
 
+-- now we need to specify what it means for two equivalences to be the same
+
+record _≋_ {A B : Set} (eq₁ eq₂ : A ≃ B) : Set where
+  constructor eq
+  open isequiv (proj₂ eq₁) renaming (g to g₁)
+  open isequiv (proj₂ eq₂) renaming (g to g₂)
+  field
+    f≡ : proj₁ eq₁ ∼ proj₁ eq₂
+    g≡ : g₁ ∼ g₂
+
+-- homotopy at level 1
+
+_∼₁_ : {A B C D : Set} → (f g : A ≃ B → C ≃ D) → Set
+_∼₁_ {A} {B} {C} {D} f g = (eq : A ≃ B) → f eq ≋ g eq
+
+-- equivalences at level 1
+
+record isequiv₁ {A B C D : Set} (f : A ≃ B → C ≃ D) : Set where
+  constructor mkisequiv₁
+  field
+    g : C ≃ D → A ≃ B
+    α : (f ○ g) ∼₁ id
+    h : C ≃ D → A ≃ B
+    β : (h ○ f) ∼ id
+
+_≃₁_ : {A B C D : Set} → (A≃B C≃D : Set) → Set
+_≃₁_ {A} {B} {C} {D} A≃B C≃D = Σ (A ≃ B → C ≃ D) isequiv₁
+
+------------------------------------------------------------------------------
+-- codes for equivalences of equivalences
+
 -- once we complete the entire set of _⟷_ we will have the following situation:
 -- the space A ⊕ A ≃ A ⊕ A contains the following elements:
 -- id≃
@@ -140,6 +175,9 @@ data _⇔_ : {t₁ t₂ : τ} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set wh
 2! : {t₁ t₂ : τ} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! id⇔ = id⇔
 2! (α ● β) = (2! β) ● (2! α)
+
+TT-univ : Indexed-universe _ _ _
+TT-univ = ?
 
 ------------------------------------------------------------------------------
 -- fractionals
