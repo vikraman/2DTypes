@@ -150,7 +150,7 @@ record isequiv₁ {A B C D : Set} (f : A ≃ B → C ≃ D) : Set where
     g : C ≃ D → A ≃ B
     α : (f ○ g) ∼₁ id
     h : C ≃ D → A ≃ B
-    β : (h ○ f) ∼ id
+    β : (h ○ f) ∼₁ id
 
 _≃₁_ : {A B C D : Set} → (A≃B C≃D : Set) → Set
 _≃₁_ {A} {B} {C} {D} A≃B C≃D = Σ (A ≃ B → C ≃ D) isequiv₁
@@ -181,7 +181,16 @@ TT-univ = record {
 
 ⟦_⟧₁ : {t₁ t₂ : τ} {c₁ c₂ : t₁ ⟷ t₂} → (α : c₁ ⇔ c₂) →
       Indexed-universe.El TT-univ {(t₁ , t₂ , c₁ , c₂)} α
-⟦ id⇔ ⟧₁ = {!!}
+⟦ id⇔ ⟧₁ = id ,
+           mkisequiv₁
+             id
+             (λ { (f , mkisequiv g α h β) →
+                eq (λ x → refl (f x))
+                   (λ x → refl (g x)) })
+             id
+             ((λ { (f , mkisequiv g α h β) →
+               eq (λ x → refl (f x))
+                  (λ x → refl (g x))}))
 ⟦ α₁ ● α₂ ⟧₁ = {!!}
 
 -- once we complete the entire set of _⟷_ we will have the following situation:
