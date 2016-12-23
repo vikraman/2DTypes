@@ -178,8 +178,38 @@ module UNIV1 where
   c₁ ≃₁ c₂ = Σ (EL1 c₁ → EL1 c₂) (isequiv₁ {c₁ = c₁} {c₂ = c₂})
 
   -- univalence: relates level 0 equivalences with level 1 codes for these
-  -- equivalences; we need a cross-level equivalence first
-  -- univalence₀₁ :
+  -- equivalences; El₁ takes us from codes to equivalences; we need a function
+  -- to take us from equivalences to codes and then we need to show these two
+  -- functions are inverses
+
+  embed₀₁ : {A B : U₀} → (A ≃₀ B) → (A ⟷ B)
+  embed₀₁ eq = {!!}
+
+  record _≡₀₁_ {A B : U₀} (eq₁ eq₂ : A ≃₀ B) : Set where
+    open isequiv₀ (proj₂ eq₁) renaming (g to g₁)
+    open isequiv₀ (proj₂ eq₂) renaming (g to g₂)
+    field
+      f≡ : proj₁ eq₁ ∼₀ proj₁ eq₂
+      g≡ : g₁ ∼₀ g₂
+
+  _∼₀₁_ : {A B C D : U₀} → (f g : A ≃₀ B → C ≃₀ D) → Set
+  _∼₀₁_ {A} {B} {C} {D} f g =
+    (eq₁ : A ≃₀ B) → (f eq₁) ≡₀₁ (g eq₁)
+
+  record isequiv₀₁ {A B C D : U₀} (f : A ≃₀ B → C ≃₀ D) : Set where
+    constructor mkisequiv₀₁
+    field
+      g : C ≃₀ D → A ≃₀ B
+      α : (f ○ g) ∼₀₁ id
+      β : (g ○ f) ∼₀₁ id
+
+  _≃₀₁_ : {A B C D : U₀} → A ≃₀ B → C ≃₀ D → Set
+  _≃₀₁_ {A} {B} {C} {D} eq₁ eq₂ = Σ (A ≃₀ B → C ≃₀ D) isequiv₀₁
+
+  record univalence₀₁ {A B : U₀} : Set where
+    field
+      α : (c : A ⟷ B) → embed₀₁ (El₁ c) ≃₁ c
+      β : (eq : A ≃₀ B) → El₁ (embed₀₁ eq) ≃₀₁ eq
 
   -- example level 1 equivalences
 
@@ -245,6 +275,10 @@ module UNIV2 where
   _≃₂_ : {A B C D : U₀} {c₁ c₂ : A ⟷ B} {d₁ d₂ : C ⟷ D}
          (Α : c₁ ⇔ c₂) (Β : d₁ ⇔ d₂) → Set
   Α ≃₂ Β = Σ (EL2 Α → EL2 Β) (isequiv₂ {Α = Α} {Β = Β})
+
+  -- univalence for level 2: relates level 1 equivalences with level 2 codes for
+  -- these equivalences
+  -- ??
 
   -- (2) semantic quotients on types
 
