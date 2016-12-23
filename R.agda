@@ -28,8 +28,9 @@ open import Data.Integer as ℤ
 
 -- Each universe has:
 --   * code U for types
---   * an interpretation of these codes as sets El
---   * a semantic notion of equivalence on El
+--   * an interpretation El of these codes as semantics
+--   * a semantic notion of equivalence on the interpretations
+--   * possibly other semantic notions like fractional groupoids
 
 -- The first universe (level 0) is fairly obvious
 
@@ -65,7 +66,8 @@ module UNIV0 where
   Univ₀ : Universe _ _
   Univ₀ = record { U = U₀ ; El = El₀ }
 
-  -- semantic equivalence on Univ₀
+  -- semantic notions on Univ₀:
+  -- when are interpretations equivalent
 
   data _≡₀_ {A : U₀} : (a b : El₀ A) → Set where
     refl₀ : (a : El₀ A) → (a ≡₀ a)
@@ -83,7 +85,7 @@ module UNIV0 where
   _≃₀_ : (A B : U₀) → Set
   A ≃₀ B = Σ (El₀ A → El₀ B) isequiv₀
 
-  -- example of actual equivalences
+  -- example of actual equivalence of interpretations
 
   A⊎⊥≃A : {A : U₀} → A ⊕ 𝟘 ≃₀ A
   A⊎⊥≃A {A} = f , mkisequiv₀ g α β
@@ -110,7 +112,7 @@ module UNIV0 where
     g ○ f , mkisequiv₀ (f⁻ ○ g⁻) {!!} {!!}
 
 ------------------------------------------------------------------------------
--- level 1 universe
+-- level 1 universe: codes for level 0 semantic equivalence
 
 open UNIV0
 
@@ -133,48 +135,47 @@ module UNIV1 where
   Univ₁ = record {
              I = U₀ × U₀
            ; U = λ { (A , B) → A ⟷ B }
-           ; El = λ { { (A , B) } c → Σ[ c' ∈ A ⟷ B ] (A ≃₀ B) }
+           ; El = λ { { (A , B) } c → A ≃₀ B }
            }
 
   open Indexed-universe Univ₁ renaming (El to EL1)
 
-  El₁ : {A B : U₀} → (c : A ⟷ B) → EL1 {(A , B)} c
+  El₁ : {A B : U₀} → (c : A ⟷ B) → EL1 c
   El₁ id⟷ = {!!}
   El₁ uniti₊r = {!!}
-  El₁ unite₊r = unite₊r , A⊎⊥≃A
+  El₁ unite₊r = A⊎⊥≃A
   El₁ (c₁ ◎ c₂) = {!!}
 
-  -- semantic equivalence on Univ₁
+  -- semantic notions on Univ₁:
+  -- when are two interpretations equivalent
 
   record _≡₁_ {A B : U₀} {c₁ c₂ : A ⟷ B}
               (eq₁ : EL1 c₁) (eq₂ : EL1 c₂)  : Set where
-    open isequiv₀ (proj₂ (proj₂ eq₁)) renaming (g to g₁)
-    open isequiv₀ (proj₂ (proj₂ eq₂)) renaming (g to g₂)
+    open isequiv₀ (proj₂ eq₁) renaming (g to g₁)
+    open isequiv₀ (proj₂ eq₂) renaming (g to g₂)
     field
-      f≡ : proj₁ (proj₂ eq₁) ∼₀ proj₁ (proj₂ eq₂)
+      f≡ : proj₁ eq₁ ∼₀ proj₁ eq₂
       g≡ : g₁ ∼₀ g₂
 
   _∼₁_ : {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} →
          (f g : EL1 c₁ → EL1 c₂) → Set
-  _∼₁_ {A} {B} {C} {D} {c₁} {c₂} f g =
-    (eq : EL1 c₁) →
-      let c₁' , eq₁ = f eq
-          c₂' , eq₂ = g eq
-       in _≡₁_ {c₁ = c₁'} {c₂ = c₂'} (c₁' , eq₁) (c₂' , eq₂)
+  _∼₁_ {c₁ = c₁} {c₂ = c₂} f g =
+         (eq₁ : EL1 c₁) → _≡₁_ {c₁ = c₂} {c₂ = c₂} (f eq₁) (g eq₁)
 
-
-{--
-  record isequiv₁ {A B C D : U₀} (f : A ≃₀ B → C ≃₀ D) : Set where
+  record isequiv₁ {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D}
+                  (f : EL1 c₁ → EL1 c₂) : Set where
     constructor mkisequiv₁
     field
-      g : C ≃₀ D → A ≃₀ B
-      α : (f ○ g) ∼₁ id
-      β : (g ○ f) ∼₁ id
+      g : EL1 c₂ → EL1 c₁
+      α : _∼₁_ {c₁ = c₂} {c₂ = c₂} (f ○ g) id
+      β : _∼₁_ {c₁ = c₁} {c₂ = c₁} (g ○ f) id
 
-  _≃₁_ : {A B C D : U₀} → (A≃₀B C≃₀D : Set) → Set
-  _≃₁_ {A} {B} {C} {D} A≃₀B C≃₀D = Σ (A ≃₀ B → C ≃₀ D) isequiv₁
+  _≃₁_ : {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} → Set
+  _≃₁_ {c₁ = c₁} {c₂ = c₂} =
+    Σ (EL1 c₁ → EL1 c₂) (isequiv₁ {c₁ = c₁} {c₂ = c₂})
 
 ------------------------------------------------------------------------------
+{--
 
 -- codes for equivalences of equivalences
 
