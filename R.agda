@@ -16,13 +16,6 @@ open import Level renaming (zero to lzero)
 open import Data.Nat
 open import Data.Integer as ℤ
 
--- infix 4 _≃_
--- infix 4 _≋_
--- infix 40 _^_
--- infixr 50 _◎_
--- infix 50 _⊠_
--- infixr 60 _●_
-
 ------------------------------------------------------------------------------
 -- Featherweight HoTT !
 
@@ -222,7 +215,7 @@ module UNIV2 where
   El₂ (α₁ ● α₂) = {!!}
 
   -- semantic notions on Univ₂:
-  -- when are two interpretations equivalent
+  -- (1) when are two interpretations equivalent
 
   record _≡₂_ {A B : U₀} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂}
               (eq₁ : EL2 α) (eq₂ : EL2 β) : Set where
@@ -249,79 +242,78 @@ module UNIV2 where
          (Α : c₁ ⇔ c₂) (Β : d₁ ⇔ d₂) → Set
   Α ≃₂ Β = Σ (EL2 Α → EL2 Β) (isequiv₂ {Α = Α} {Β = Β})
 
+  -- (2) semantic quotients on types
+
+  infix 40 _^_
+
+  _^_ : {t : U₀} → (p : t ⟷ t) → (k : ℤ) → (t ⟷ t)
+  p ^ (+ 0) = id⟷
+  p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
+  p ^ -[1+ 0 ] = ! p
+  p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+
+  record Iter {t : U₀} (p : t ⟷ t) : Set where
+    constructor <_,_,_>
+    field
+      k : ℤ
+      q : t ⟷ t
+      α : q ⇔ p ^ k
+
+  orderC : {t : U₀} → (t ⟷ t) → Category lzero lzero lzero
+  orderC p = record {
+     Obj = Iter p
+   ; _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
+   ; _≡_ = λ _ _ → ⊤
+   ; id  = id⇔
+   ; _∘_ = flip _●_
+   ; assoc = tt
+   ; identityˡ = tt
+   ; identityʳ = tt
+   ; equiv = record
+     { refl = tt
+     ; sym = λ _ → tt
+     ; trans = λ _ _ → tt
+     }
+   ; ∘-resp-≡ = λ _ _ → tt
+   }
+
+  orderG : {t : U₀} → (p : t ⟷ t) → Groupoid (orderC p)
+  orderG {U₀} p = record {
+      _⁻¹ = 2!
+    ; iso = λ {a} {b} {f} → record {
+          isoˡ = tt
+        ; isoʳ = tt
+        }
+    }
+
 ------------------------------------------------------------------------------
 -- fractionals
+-- level 3 universe: codes for level 2 quotients
 
-{--
+open UNIV2
 
--- fractionals; refers to ⇔ so must live in this universe
+module UNIV3 where
 
-_^_ : {t : U₀} → (p : t ⟷ t) → (k : ℤ) → (t ⟷ t)
-p ^ (+ 0) = id⟷
-p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
-p ^ -[1+ 0 ] = ! p
-p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+  data U₃ : Set where
+    # : {t : U₀} → (t ⟷ t) → U₃
+    1/# : {t : U₀} → (c : t ⟷ t) → U₃
+    _⊠_ : U₃ → U₃ → U₃
 
-record Iter {t : U₀} (p : t ⟷ t) : Set where
-  constructor <_,_,_>
-  field
-    k : ℤ
-    q : t ⟷ t
-    α : q ⇔ p ^ k
+  Univ₃ : Universe _ _
+  Univ₃ = record {
+              U = U₃
+            ; El = λ A → Σ[ C ∈ Category lzero lzero lzero ] (Groupoid C)
+            }
 
-orderC : {t : U₀} → (t ⟷ t) → Category lzero lzero lzero
-orderC p = record {
-   Obj = Iter p
- ; _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
- ; _≡_ = λ _ _ → ⊤
- ; id  = id⇔
- ; _∘_ = flip _●_
- ; assoc = tt
- ; identityˡ = tt
- ; identityʳ = tt
- ; equiv = record
-   { refl = tt
-   ; sym = λ _ → tt
-   ; trans = λ _ _ → tt
-   }
- ; ∘-resp-≡ = λ _ _ → tt
- }
+  open Universe.Universe Univ₃ renaming (El to EL3)
 
-orderG : {t : U₀} → (p : t ⟷ t) → Groupoid (orderC p)
-orderG {U₀} p = record {
-    _⁻¹ = 2!
-  ; iso = λ {a} {b} {f} → record {
-        isoˡ = tt
-      ; isoʳ = tt
-      }
-  }
+  El₃ : (A : U₃) → EL3 A
+  El₃ (# c) = _ , orderG c
+  El₃ (1/# c) = {!!}
+  El₃ (A ⊠ B) with El₃ A | El₃ B
+  ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
 
-⟦_⟧/ : (t/ : U₀/) → Universe.El U₀/-univ t/
-⟦ # c ⟧/ = _ , orderG c
-⟦ 1/# c ⟧/ = {!!}
-⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
-... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
-
--- once we complete the entire set of _⟷_ we will have the following situation:
--- the space A ⊕ A ≃ A ⊕ A contains the following elements:
--- id≃
--- swap≃
--- these two elements should not be identified
--- in the world of codes these elements are represented by different codes
--- id⟷ and swap₊
--- the relation ⇔ tells us which codes can be identified and it does NOT identify
--- id⟷ and swap₊
-
-data U₀/ : Set where
-  # : {t : U₀} → (t ⟷ t) → U₀/
-  1/# : {t : U₀} → (c : t ⟷ t) → U₀/
-  _⊠_ : U₀/ → U₀/ → U₀/
-
-U₀/-univ : Universe _ _
-U₀/-univ = record {
-            U = U₀/
-          ; El = λ t/ → Σ[ C ∈ Category lzero lzero lzero ] (Groupoid C)
-          }
+  -- semantic notions on Univ₃
+  -- ??
 
 ------------------------------------------------------------------------------
---}
