@@ -127,6 +127,14 @@ T-univ = record {
 ⟦ unite₊r ⟧ = A⊎⊥≃A
 ⟦ c₁ ◎ c₂ ⟧ = {!!}
 
+-- fractionals
+
+_^_ : {t : τ} → (p : t ⟷ t) → (k : ℤ) → (t ⟷ t)
+p ^ (+ 0) = id⟷
+p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
+p ^ -[1+ 0 ] = ! p
+p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+
 -- now we need to specify what it means for two equivalences to be the same
 
 record _≋_ {A B : Set} (eq₁ eq₂ : A ≃ B) : Set where
@@ -162,9 +170,20 @@ data _⇔_ : {t₁ t₂ : τ} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set wh
   id⇔ : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ c
   _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
 
+data τ/ : Set where
+  # : {t : τ} → (t ⟷ t) → τ/
+  1/# : {t : τ} → (c : t ⟷ t) → τ/
+  _⊠_ : τ/ → τ/ → τ/
+
 2! : {t₁ t₂ : τ} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! id⇔ = id⇔
 2! (α ● β) = (2! β) ● (2! α)
+
+τ/-univ : Universe _ _
+τ/-univ = record {
+            U = τ/
+          ; El = λ t/ → Σ[ C ∈ Category lzero lzero lzero ] (Groupoid C)
+          }
 
 TT-univ : Indexed-universe _ _ _
 TT-univ = record {
@@ -193,24 +212,7 @@ TT-univ = record {
                   (λ x → refl (g x))}))
 ⟦ α₁ ● α₂ ⟧₁ = {!!}
 
--- once we complete the entire set of _⟷_ we will have the following situation:
--- the space A ⊕ A ≃ A ⊕ A contains the following elements:
--- id≃
--- swap≃
--- these two elements should not be identified
--- in the world of codes these elements are represented by different codes
--- id⟷ and swap₊
--- the relation ⇔ tells us which codes can be identified and it does NOT identify
--- id⟷ and swap₊
-
-------------------------------------------------------------------------------
--- fractionals
-
-_^_ : {t : τ} → (p : t ⟷ t) → (k : ℤ) → (t ⟷ t)
-p ^ (+ 0) = id⟷
-p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
-p ^ -[1+ 0 ] = ! p
-p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+-- fractionals; refers to ⇔ so must live in this universe
 
 record Iter {t : τ} (p : t ⟷ t) : Set where
   constructor <_,_,_>
@@ -218,11 +220,6 @@ record Iter {t : τ} (p : t ⟷ t) : Set where
     k : ℤ
     q : t ⟷ t
     α : q ⇔ p ^ k
-
-data τ/ : Set where
-  # : {t : τ} → (t ⟷ t) → τ/
-  1/# : {t : τ} → (c : t ⟷ t) → τ/
-  _⊠_ : τ/ → τ/ → τ/
 
 orderC : {t : τ} → (t ⟷ t) → Category lzero lzero lzero
 orderC p = record {
@@ -251,16 +248,24 @@ orderG {τ} p = record {
       }
   }
 
-τ/-univ : Universe _ _
-τ/-univ = record {
-            U = τ/
-          ; El = λ t/ → Σ[ C ∈ Category lzero lzero lzero ] (Groupoid C)
-          }
-
 ⟦_⟧/ : (t/ : τ/) → Universe.El τ/-univ t/
 ⟦ # c ⟧/ = _ , orderG c
 ⟦ 1/# c ⟧/ = {!!}
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
 ... | (C₁ , G₁) | (C₂ , G₂) = C.Product C₁ C₂ , G.Product G₁ G₂
+
+-- once we complete the entire set of _⟷_ we will have the following situation:
+-- the space A ⊕ A ≃ A ⊕ A contains the following elements:
+-- id≃
+-- swap≃
+-- these two elements should not be identified
+-- in the world of codes these elements are represented by different codes
+-- id⟷ and swap₊
+-- the relation ⇔ tells us which codes can be identified and it does NOT identify
+-- id⟷ and swap₊
+
+------------------------------------------------------------------------------
+-- fractionals
+
 
 ------------------------------------------------------------------------------
