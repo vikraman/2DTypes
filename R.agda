@@ -6,7 +6,7 @@ open import Data.Empty
 open import Data.Unit
 open import Data.Sum
 open import Data.Product
-open import Universe
+open import Universe using (Universe; Indexed-universe)
 open import Function renaming (_∘_ to _○_)
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
@@ -16,189 +16,201 @@ open import Level renaming (zero to lzero)
 open import Data.Nat
 open import Data.Integer as ℤ
 
-infix 4 _≃_
-infix 4 _≋_
-infix 40 _^_
-infixr 50 _◎_
-infix 50 _⊕_
-infix 50 _⊠_
-infix 60 _⊗_
-infixr 60 _●_
+-- infix 4 _≃_
+-- infix 4 _≋_
+-- infix 40 _^_
+-- infixr 50 _◎_
+-- infix 50 _⊠_
+-- infixr 60 _●_
 
 ------------------------------------------------------------------------------
--- level 0 types: codes, universe, homotopies, and equivalences
+-- Featherweight HoTT !
 
--- codes for level 0 types
+-- Each universe has:
+--   * code U for types
+--   * an interpretation of these codes as sets El
+--   * a semantic notion of equivalence on El
 
-data τ : Set where
-  𝟘 : τ
-  𝟙 : τ
-  _⊕_ : τ → τ → τ
-  _⊗_ : τ → τ → τ
+-- The first universe (level 0) is fairly obvious
 
--- level 0 types are discrete groupoids
+-- Once we have that level 0 universe, we can define a new universe (level 1)
+-- whose codes are the equivalences at level 0. As outlined above, we then
+-- define a notion of equivalence at level 1 that relates the level 0
+-- equivalences.
 
-τ-univ : Universe _ _
-τ-univ = record { U = τ ; El = ⟦_⟧ }
-  where ⟦_⟧ : τ → Set
-        ⟦ 𝟘 ⟧ = ⊥
-        ⟦ 𝟙 ⟧ = ⊤
-        ⟦ t₁ ⊕ t₂ ⟧ = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
-        ⟦ t₁ ⊗ t₂ ⟧ = ⟦ t₁ ⟧ × ⟦ t₂ ⟧
-
--- the only relation on elements of discrete groupoids is ≡
-
-data _≡_ {A : Set} : (a b : A) → Set where
-  refl : (a : A) → (a ≡ a)
-
--- homotopy: functions between level 0 types are not dependent
--- equality of elements is trivial
-
-_∼_ : {A B : Set} → (f g : A → B) → Set
-_∼_ {A} {B} f g = (x : A) → f x ≡ g x
-
--- equivalence of level 0 types
-
-record isequiv {A B : Set} (f : A → B) : Set where
-  constructor mkisequiv
-  field
-    g : B → A
-    α : (f ○ g) ∼ id
-    h : B → A
-    β : (h ○ f) ∼ id
-
-_≃_ : (A B : Set) → Set
-A ≃ B = Σ (A → B) isequiv
-
--- example of actual equivalences
-
-A⊎⊥≃A : {A : Set} → (A ⊎ ⊥) ≃ A
-A⊎⊥≃A {A} = f , mkisequiv g α g β
-  where
-    f : (A ⊎ ⊥) → A
-    f (inj₁ a) = a
-    f (inj₂ ())
-
-    g : A → (A ⊎ ⊥)
-    g a = inj₁ a
-
-    α : (f ○ g) ∼ id
-    α a = refl a
-
-    β : (g ○ f) ∼ id
-    β (inj₁ a) = refl (inj₁ a)
-    β (inj₂ ())
-
-idequiv : {A : Set} → A ≃ A
-idequiv = (id , mkisequiv id refl id refl)
-
-transequiv : {A B C : Set} → A ≃ B → B ≃ C → A ≃ C
-transequiv (f , feq) (g , geq) = {!!}
+-- We can now define a level 2 universe whose codes are the level 1
+-- equivalences. We then repeat and define a notion of eqiuvalence at level 2
+-- that relates the level 1 equivalences.
 
 ------------------------------------------------------------------------------
--- codes for equivalences; univalence
-
--- we have a higher universe whose elements are codes for equivalences in the
 -- level 0 universe
 
-data _⟷_ : τ → τ → Set where
-  id⟷ : {t : τ} → t ⟷ t
-  uniti₊r : {t : τ} → t ⟷ (t ⊕ 𝟘)
-  unite₊r : {t : τ} → t ⊕ 𝟘 ⟷ t
-  _◎_ :  {t₁ t₂ t₃ : τ} → (t₁ ⟷ t₂) → (t₂ ⟷ t₃) → (t₁ ⟷ t₃)
-  -- elided
+module UNIV0 where
 
-! : {t₁ t₂ : τ} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
-! unite₊r = uniti₊r
-! uniti₊r = unite₊r
-! id⟷ = id⟷
-! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
+  infix 50 _⊕_
+  infix 60 _⊗_
 
-T-univ : Indexed-universe _ _ _
-T-univ = record {
-           I = τ × τ
-         ; U = λ { (t₁ , t₂) → t₁ ⟷ t₂ }
-         ; El = λ { {(t₁ , t₂)} c → Universe.El τ-univ t₁ ≃ Universe.El τ-univ t₂ }
-         }
+  data U₀ : Set where
+    𝟘   : U₀
+    𝟙   : U₀
+    _⊕_ : U₀ → U₀ → U₀
+    _⊗_ : U₀ → U₀ → U₀
 
-⟦_⟧ : {t₁ t₂ : τ} → (c : t₁ ⟷ t₂) → Indexed-universe.El T-univ {(t₁ , t₂)} c
-⟦ id⟷ ⟧ = {!!}
-⟦ uniti₊r ⟧ = {!!}
-⟦ unite₊r ⟧ = A⊎⊥≃A
-⟦ c₁ ◎ c₂ ⟧ = {!!}
+  El₀ : U₀ → Set
+  El₀ 𝟘         = ⊥
+  El₀ 𝟙         = ⊤
+  El₀ (t₁ ⊕ t₂) = El₀ t₁ ⊎ El₀ t₂
+  El₀ (t₁ ⊗ t₂) = El₀ t₁ × El₀ t₂
 
--- fractionals
+  Univ₀ : Universe _ _
+  Univ₀ = record { U = U₀ ; El = El₀ }
 
-_^_ : {t : τ} → (p : t ⟷ t) → (k : ℤ) → (t ⟷ t)
-p ^ (+ 0) = id⟷
-p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
-p ^ -[1+ 0 ] = ! p
-p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+  -- semantic equivalence on Univ₀
 
--- now we need to specify what it means for two equivalences to be the same
+  data _≡₀_ {A : U₀} : (a b : El₀ A) → Set where
+    refl₀ : (a : El₀ A) → (a ≡₀ a)
 
-record _≋_ {A B : Set} (eq₁ eq₂ : A ≃ B) : Set where
-  constructor eq
-  open isequiv (proj₂ eq₁) renaming (g to g₁)
-  open isequiv (proj₂ eq₂) renaming (g to g₂)
-  field
-    f≡ : proj₁ eq₁ ∼ proj₁ eq₂
-    g≡ : g₁ ∼ g₂
+  _∼₀_ : {A B : U₀} → (f g : El₀ A → El₀ B) → Set
+  _∼₀_ {A} {B} f g = (x : El₀ A) → f x ≡₀ g x
 
--- homotopy at level 1
+  record isequiv₀ {A B : U₀} (f : El₀ A → El₀ B) : Set where
+    constructor mkisequiv₀
+    field
+      g : El₀ B → El₀ A
+      α : (f ○ g) ∼₀ id
+      β : (g ○ f) ∼₀ id
 
-_∼₁_ : {A B C D : Set} → (f g : A ≃ B → C ≃ D) → Set
-_∼₁_ {A} {B} {C} {D} f g = (eq : A ≃ B) → f eq ≋ g eq
+  _≃₀_ : (A B : U₀) → Set
+  A ≃₀ B = Σ (El₀ A → El₀ B) isequiv₀
 
--- equivalences at level 1
+  -- example of actual equivalences
 
-record isequiv₁ {A B C D : Set} (f : A ≃ B → C ≃ D) : Set where
-  constructor mkisequiv₁
-  field
-    g : C ≃ D → A ≃ B
-    α : (f ○ g) ∼₁ id
-    h : C ≃ D → A ≃ B
-    β : (h ○ f) ∼₁ id
+  A⊎⊥≃A : {A : U₀} → A ⊕ 𝟘 ≃₀ A
+  A⊎⊥≃A {A} = f , mkisequiv₀ g α β
+    where
+      f : (El₀ A ⊎ ⊥) → El₀ A
+      f (inj₁ a) = a
+      f (inj₂ ())
 
-_≃₁_ : {A B C D : Set} → (A≃B C≃D : Set) → Set
-_≃₁_ {A} {B} {C} {D} A≃B C≃D = Σ (A ≃ B → C ≃ D) isequiv₁
+      g : El₀ A → (El₀ A ⊎ ⊥)
+      g a = inj₁ a
+
+      α : (f ○ g) ∼₀ id
+      α a = refl₀ a
+
+      β : (g ○ f) ∼₀ id
+      β (inj₁ a) = refl₀ (inj₁ a)
+      β (inj₂ ())
+
+  idequiv : {A : U₀} → A ≃₀ A
+  idequiv = (id , mkisequiv₀ id refl₀ refl₀)
+
+  transequiv : {A B C : U₀} → A ≃₀ B → B ≃₀ C → A ≃₀ C
+  transequiv (f , mkisequiv₀ f⁻ α₁ β₁) (g , mkisequiv₀ g⁻ α₂ β₂) =
+    g ○ f , mkisequiv₀ (f⁻ ○ g⁻) {!!} {!!}
 
 ------------------------------------------------------------------------------
+-- level 1 universe
+
+open UNIV0
+
+module UNIV1 where
+
+  data _⟷_ : U₀ → U₀ → Set where
+    id⟷ : {A : U₀} → A ⟷ A
+    uniti₊r : {A : U₀} → A ⟷ (A ⊕ 𝟘)
+    unite₊r : {A : U₀} → A ⊕ 𝟘 ⟷ A
+    _◎_ :  {A B C : U₀} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+    -- elided
+
+  ! : {A B : U₀} → (A ⟷ B) → (B ⟷ A)
+  ! unite₊r = uniti₊r
+  ! uniti₊r = unite₊r
+  ! id⟷ = id⟷
+  ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
+
+  Univ₁ : Indexed-universe _ _ _
+  Univ₁ = record {
+             I = U₀ × U₀
+           ; U = λ { (A , B) → A ⟷ B }
+           ; El = λ { { (A , B) } c → Σ[ c' ∈ A ⟷ B ] (A ≃₀ B) }
+           }
+
+  open Indexed-universe Univ₁ renaming (El to EL1)
+
+  El₁ : {A B : U₀} → (c : A ⟷ B) → EL1 {(A , B)} c
+  El₁ id⟷ = {!!}
+  El₁ uniti₊r = {!!}
+  El₁ unite₊r = unite₊r , A⊎⊥≃A
+  El₁ (c₁ ◎ c₂) = {!!}
+
+  -- semantic equivalence on Univ₁
+
+  record _≡₁_ {A B : U₀} {c₁ c₂ : A ⟷ B}
+              (eq₁ : EL1 c₁) (eq₂ : EL1 c₂)  : Set where
+    open isequiv₀ (proj₂ (proj₂ eq₁)) renaming (g to g₁)
+    open isequiv₀ (proj₂ (proj₂ eq₂)) renaming (g to g₂)
+    field
+      f≡ : proj₁ (proj₂ eq₁) ∼₀ proj₁ (proj₂ eq₂)
+      g≡ : g₁ ∼₀ g₂
+
+  _∼₁_ : {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} →
+         (f g : EL1 c₁ → EL1 c₂) → Set
+  _∼₁_ {A} {B} {C} {D} {c₁} {c₂} f g =
+    (eq : EL1 c₁) →
+      let c₁' , eq₁ = f eq
+          c₂' , eq₂ = g eq
+       in _≡₁_ {c₁ = c₁'} {c₂ = c₂'} (c₁' , eq₁) (c₂' , eq₂)
+
+
+{--
+  record isequiv₁ {A B C D : U₀} (f : A ≃₀ B → C ≃₀ D) : Set where
+    constructor mkisequiv₁
+    field
+      g : C ≃₀ D → A ≃₀ B
+      α : (f ○ g) ∼₁ id
+      β : (g ○ f) ∼₁ id
+
+  _≃₁_ : {A B C D : U₀} → (A≃₀B C≃₀D : Set) → Set
+  _≃₁_ {A} {B} {C} {D} A≃₀B C≃₀D = Σ (A ≃₀ B → C ≃₀ D) isequiv₁
+
+------------------------------------------------------------------------------
+
 -- codes for equivalences of equivalences
 
-data _⇔_ : {t₁ t₂ : τ} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
+data _⇔_ : {t₁ t₂ : U₀} → (t₁ ⟷ t₂) → (t₁ ⟷ t₂) → Set where
   id⇔ : ∀ {t₁ t₂} {c : t₁ ⟷ t₂} → c ⇔ c
   _●_  : ∀ {t₁ t₂} {c₁ c₂ c₃ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
 
-data τ/ : Set where
-  # : {t : τ} → (t ⟷ t) → τ/
-  1/# : {t : τ} → (c : t ⟷ t) → τ/
-  _⊠_ : τ/ → τ/ → τ/
+data U₀/ : Set where
+  # : {t : U₀} → (t ⟷ t) → U₀/
+  1/# : {t : U₀} → (c : t ⟷ t) → U₀/
+  _⊠_ : U₀/ → U₀/ → U₀/
 
-2! : {t₁ t₂ : τ} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+2! : {t₁ t₂ : U₀} {c₁ c₂ : t₁ ⟷ t₂} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
 2! id⇔ = id⇔
 2! (α ● β) = (2! β) ● (2! α)
 
-τ/-univ : Universe _ _
-τ/-univ = record {
-            U = τ/
+U₀/-univ : Universe _ _
+U₀/-univ = record {
+            U = U₀/
           ; El = λ t/ → Σ[ C ∈ Category lzero lzero lzero ] (Groupoid C)
           }
 
 TT-univ : Indexed-universe _ _ _
 TT-univ = record {
-            I = Σ[ t₁ ∈ τ ] Σ[ t₂ ∈ τ ] (t₁ ⟷ t₂) × (t₁ ⟷ t₂)
+            I = Σ[ t₁ ∈ U₀ ] Σ[ t₂ ∈ U₀ ] (t₁ ⟷ t₂) × (t₁ ⟷ t₂)
           ; U = λ { (t₁ , t₂ , c₁ , c₂) → c₁ ⇔ c₂ }
           ; El = λ { {(t₁ , t₂ , c₁ , c₂)} α →
-                   _≃₁_ {Universe.El τ-univ t₁}
-                        {Universe.El τ-univ t₂}
-                        {Universe.El τ-univ t₁}
-                        {Universe.El τ-univ t₂}
+                   _≃₁_ {Universe.El Univ₀ t₁}
+                        {Universe.El Univ₀ t₂}
+                        {Universe.El Univ₀ t₁}
+                        {Universe.El Univ₀ t₂}
                    (Indexed-universe.El T-univ {(t₁ , t₂)} c₁)
                    (Indexed-universe.El T-univ {(t₁ , t₂)} c₂) }
           }
 
-⟦_⟧₁ : {t₁ t₂ : τ} {c₁ c₂ : t₁ ⟷ t₂} → (α : c₁ ⇔ c₂) →
+⟦_⟧₁ : {t₁ t₂ : U₀} {c₁ c₂ : t₁ ⟷ t₂} → (α : c₁ ⇔ c₂) →
       Indexed-universe.El TT-univ {(t₁ , t₂ , c₁ , c₂)} α
 ⟦ id⇔ ⟧₁ = id ,
            mkisequiv₁
@@ -212,16 +224,51 @@ TT-univ = record {
                   (λ x → refl (g x))}))
 ⟦ α₁ ● α₂ ⟧₁ = {!!}
 
+-- equivalences at level 2
+
+record _≋₂_ {A B C D : Set} (e₁ e₂ : A ≃₁ B) : Set where
+  constructor eq₂
+  open isequiv₁ (proj₂ e₁) renaming (g to g₁)
+  open isequiv₁ (proj₂ e₂) renaming (g to g₂)
+  field
+    f≡ : proj₁ e₁ ∼₁ proj₁ e₂
+    g≡ : g₁ ∼₁ g₂
+
+-- homotopy at level 2
+
+_∼₂_ : {A B C D : Set} → (f g : A ≃₁ B → C ≃₁ D) → Set
+_∼₂_ {A} {B} {C} {D} f g = (eq : A ≃₁ B) → f eq ≋₂ g eq
+
+-- equivalences at level 2
+
+record isequiv₂ {A B C D : Set} (f : A ≃₁ B → C ≃₁ D) : Set where
+  constructor mkisequiv₂
+  field
+    g : C ≃₁ D → A ≃₁ B
+    α : (f ○ g) ∼₂ id
+    h : C ≃₁ D → A ≃₁ B
+    β : (h ○ f) ∼₂ id
+
+_≃₂_ : {A B C D : Set} → (A≃₁B C≃₁D : Set) → Set
+_≃₂_ {A} {B} {C} {D} A≃₁B C≃₁D = Σ (A ≃₁ B → C ≃₁ D) isequiv₂
+
+
 -- fractionals; refers to ⇔ so must live in this universe
 
-record Iter {t : τ} (p : t ⟷ t) : Set where
+_^_ : {t : U₀} → (p : t ⟷ t) → (k : ℤ) → (t ⟷ t)
+p ^ (+ 0) = id⟷
+p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
+p ^ -[1+ 0 ] = ! p
+p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
+
+record Iter {t : U₀} (p : t ⟷ t) : Set where
   constructor <_,_,_>
   field
     k : ℤ
     q : t ⟷ t
     α : q ⇔ p ^ k
 
-orderC : {t : τ} → (t ⟷ t) → Category lzero lzero lzero
+orderC : {t : U₀} → (t ⟷ t) → Category lzero lzero lzero
 orderC p = record {
    Obj = Iter p
  ; _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
@@ -239,8 +286,8 @@ orderC p = record {
  ; ∘-resp-≡ = λ _ _ → tt
  }
 
-orderG : {t : τ} → (p : t ⟷ t) → Groupoid (orderC p)
-orderG {τ} p = record {
+orderG : {t : U₀} → (p : t ⟷ t) → Groupoid (orderC p)
+orderG {U₀} p = record {
     _⁻¹ = 2!
   ; iso = λ {a} {b} {f} → record {
         isoˡ = tt
@@ -248,7 +295,7 @@ orderG {τ} p = record {
       }
   }
 
-⟦_⟧/ : (t/ : τ/) → Universe.El τ/-univ t/
+⟦_⟧/ : (t/ : U₀/) → Universe.El U₀/-univ t/
 ⟦ # c ⟧/ = _ , orderG c
 ⟦ 1/# c ⟧/ = {!!}
 ⟦ T₁ ⊠ T₂ ⟧/ with ⟦ T₁ ⟧/ | ⟦ T₂ ⟧/
@@ -269,3 +316,4 @@ orderG {τ} p = record {
 
 
 ------------------------------------------------------------------------------
+--}
