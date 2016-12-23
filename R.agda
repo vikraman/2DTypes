@@ -177,6 +177,10 @@ module UNIV1 where
   _≃₁_ : {A B C D : U₀} (c₁ : A ⟷ B) (c₂ : C ⟷ D) → Set
   c₁ ≃₁ c₂ = Σ (EL1 c₁ → EL1 c₂) (isequiv₁ {c₁ = c₁} {c₂ = c₂})
 
+  -- univalence: relates level 0 equivalences with level 1 codes for these
+  -- equivalences; we need a cross-level equivalence first
+  -- univalence₀₁ :
+
   -- example level 1 equivalences
 
   id≃₁ : {A B : U₀} (c : A ⟷ B) → c ≃₁ c
