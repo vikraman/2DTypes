@@ -230,15 +230,13 @@ module MOD1 where
     ; g≡ = MOD0.trans∼ g≡₁ g≡₂
     }
 
-  cong≡ : {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} {eq₁ eq₂ : El c₁} →
+  cong≡ : {A B : U₀} {c₁ c₂ : A ⟷ B} {eq₁ eq₂ : El c₁} →
     (f : El c₁ → El c₂) → _≡_ {c = c₁} eq₁ eq₂ → _≡_ {c = c₂} (f eq₁) (f eq₂)
   cong≡ {eq₁ = eq₁} {eq₂ = eq₂} f (record { f≡ = f≡ ; g≡ = g≡ }) =
-    let (hr₁ , MOD0.mkisequiv gr₁ αr₁ βr₁) = f eq₁
-        (hr₂ , MOD0.mkisequiv gr₂ αr₂ βr₂) = f eq₂
-    in record {
-         f≡ = λ x → MOD0.cong≡ {!!} (f≡ {!!})
-       ; g≡ = λ x → MOD0.cong≡ {!!} (g≡ {!!})
-       }
+    record {
+       f≡ = λ a → {!!}
+     ; g≡ = λ b → {!!}
+     }
 
   -- Homotopy
 
@@ -273,7 +271,7 @@ module MOD1 where
 
   trans≃ : {A B : U₀} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ≃ c₂) → (c₂ ≃ c₃) → (c₁ ≃ c₃)
   trans≃ {c₁ = c₁} {c₃ = c₃} (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
-    g ○ f , mkisequiv (f⁻ ○ g⁻) α β
+      g ○ f , mkisequiv (f⁻ ○ g⁻) α β
       where α : (x : El c₃) → (g (f (f⁻ (g⁻ x)))) ≡ x
             α x = trans≡ (cong≡ g (α₁ (g⁻ x))) (α₂ x)
             β : (x : El c₁) → (f⁻ (g⁻ (g (f x)))) ≡ x
