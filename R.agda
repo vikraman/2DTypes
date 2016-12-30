@@ -269,7 +269,8 @@ module MOD1 where
     (λ f → trans∼₀ (γ₂ (F₁ f)) (γ₁ f)) ,
     (λ g → trans∼₀ (δ₂ (G₁ g)) (δ₁ g))
 
-  -- Need associativity of compose
+  -- Need associativity of compose: see below where homotopy is
+  -- defined, as we need a notion of 'sameness' of Fun to express it.
 
   -- Identity
 
@@ -319,6 +320,14 @@ module MOD1 where
           _∼_ {c₁ = c} {c₂ = c} f f
   refl∼ {c = c} f eq = refl≡ (app {c₁ = c} {c₂ = c} f eq)
 
+  -- also need sym∼ and cong∼ and trans∼
+
+  -- now we can prove that compose is associative:
+  assoc-∘ : {A B : U₀} {c₁ c₂ c₃ c₄ : A ⟷ B} {f : Fun c₁ c₂} {g : Fun c₂ c₃} {h : Fun c₃ c₄} →
+    _∼_ {c₁ = c₁} {c₄} (compose {c₁ = c₁} {c₂} {c₄} f (compose {c₁ = c₂} {c₃} {c₄} g h))
+                       (compose {c₁ = c₁} {c₃} {c₄} (compose {c₁ = c₁} {c₂} {c₃} f g) h)
+  assoc-∘ = {!!}
+
   -- Equivalence
 
   record isequiv {A B : U₀} {c₁ c₂ : A ⟷ B}
@@ -345,13 +354,14 @@ module MOD1 where
             (refl∼ {c = c} (idF {c = c}))
             (refl∼ {c = c} (idF {c = c}))
 
+  -- the proofs below need trans∼ and inv∼, but then are straightforward.
   trans≃ : {A B : U₀} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ≃ c₂) → (c₂ ≃ c₃) → (c₁ ≃ c₃)
   trans≃ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}
     (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
     compose {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} f g ,
     mkisequiv (compose {c₁ = c₃} {c₂ = c₂} {c₃ = c₁} g⁻ f⁻)
-    {!!}
-    {!!}
+    (λ eq₁ → {!!})
+    (λ eq₂ → {!!})
 
   -- Universe 1
 
