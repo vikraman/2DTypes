@@ -6,116 +6,183 @@ open import Data.Empty
 open import Data.Unit
 open import Data.Sum
 open import Data.Product
-open import Universe using (Universe; Indexed-universe)
 open import Function renaming (_∘_ to _○_)
 open import Categories.Category using (Category)
 open import Categories.Groupoid using (Groupoid)
 open import Categories.Product as C
 open import Categories.Groupoid.Product as G
-open import Level renaming (zero to lzero)
-open import Data.Nat
-open import Data.Integer as ℤ
+open import Level using (_⊔_) renaming (zero to lzero; suc to lsuc)
+open import Data.Nat hiding (_⊔_)
+open import Data.Integer as ℤ hiding (_⊔_)
 
 ------------------------------------------------------------------------------
 -- Featherweight HoTT !
 
 -- Each universe has:
 --   * code U for types
---   * an interpretation El of these codes as semantics
+--   * an interpretation El of these codes as spaces
 --   * a semantic notion of equivalence on the interpretations
---   * possibly other semantic notions like fractional groupoids
 
--- The first universe (level 0) is fairly obvious
+-- The first universe (level 0) consists of just the finite types and
+-- isomorphisms between them.
 
 -- Once we have that level 0 universe, we can define a new universe (level 1)
--- whose codes are the equivalences at level 0. As outlined above, we then
--- define a notion of equivalence at level 1 that relates the level 0
--- equivalences.
+-- whose codes are the equivalences at level 0. We then define a notion of
+-- equivalence at level 1 that identifies some level 0 equivalences.
 
 -- We can now define a level 2 universe whose codes are the level 1
--- equivalences. We then repeat and define a notion of eqiuvalence at level 2
--- that relates the level 1 equivalences.
+-- equivalences. We then repeat and define a notion of equivalence at level 2
+-- that identifies some level 1 equivalences.
+
+-- Then we have some additional interesting things:
+
+--   * Univalence at the lowest levels identifies level 0 equivalences and level
+--     1 codes. The interesting direction verifies that the level 1 codes are
+--     complete with respect to the level 0 equivalences
+
+--   * Once we get to level 2, we can define additional interesting semantic
+--     notions like higher inductive types by using equivalences from lower
+--     levels. In particular we show at level 2 that an equivalence of order n
+--     induces a groupoid of cardinality 1/n. We can then at level 3 introduce
+--     codes for these fractional groupoids. Note that to define S¹ we would
+--     need an equivalence of infinite order but our toy language only includes
+--     finite types.
+
+------------------------------------------------------------------------------
+-- The type of universes.
+
+record UNIVERSE : Set₁ where
+  field
+    -- codes
+    U   : Set
+    -- decoding a code to a space
+    El  : U → Set
+    -- equivalence relation on points in a space
+    _≡_ : {A : U} (a b : El A) → Set
+    -- equivalence of functions from spaces to spaces
+    _∼_ : {A B : U} (f g : El A → El B) → Set
+    -- equivalence of spaces El A and El B
+    _≃_ : (A B : U) → Set
 
 ------------------------------------------------------------------------------
 -- level 0 universe
 
-module UNIV0 where
+module MOD0 where
+
+  -- Codes of finite types
 
   infix 50 _⊕_
   infix 60 _⊗_
 
-  data U₀ : Set where
-    𝟘   : U₀
-    𝟙   : U₀
-    _⊕_ : U₀ → U₀ → U₀
-    _⊗_ : U₀ → U₀ → U₀
+  data U : Set where
+    𝟘   : U
+    𝟙   : U
+    _⊕_ : U → U → U
+    _⊗_ : U → U → U
 
-  El₀ : U₀ → Set
-  El₀ 𝟘         = ⊥
-  El₀ 𝟙         = ⊤
-  El₀ (A ⊕ B) = El₀ A ⊎ El₀ B
-  El₀ (A ⊗ B) = El₀ A × El₀ B
+  -- Denotations of codes
 
-  Univ₀ : Universe _ _
-  Univ₀ = record { U = U₀ ; El = El₀ }
+  El : U → Set
+  El 𝟘       = ⊥
+  El 𝟙       = ⊤
+  El (A ⊕ B) = El A ⊎ El B
+  El (A ⊗ B) = El A × El B
 
-  -- semantic notions on Univ₀:
-  -- when are interpretations equivalent
+  -- Identity
 
-  data _≡₀_ {A : U₀} : (a b : El₀ A) → Set where
-    refl₀ : (a : El₀ A) → (a ≡₀ a)
+  data _≡_ {A : U} : (a b : El A) → Set where
+    refl : (a : El A) → (a ≡ a)
 
-  _∼₀_ : {A B : U₀} → (f g : El₀ A → El₀ B) → Set
-  _∼₀_ {A} {B} f g = (a : El₀ A) → f a ≡₀ g a
+  sym≡ : {A : U} {a b : El A} → a ≡ b → b ≡ a
+  sym≡ (refl a) = refl a
 
-  refl∼₀ : {A B : U₀} → (f : El₀ A → El₀ B) → (f ∼₀ f)
-  refl∼₀ f a = refl₀ (f a)
+  trans≡ : {A : U} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
+  trans≡ (refl a) (refl .a) = refl a
 
-  record isequiv₀ {A B : U₀} (f : El₀ A → El₀ B) : Set where
-    constructor mkisequiv₀
+  cong≡ : {A B : U} {a b : El A} → (f : El A → El B) (p : a ≡ b) →
+          f a ≡ f b
+  cong≡ f (refl a) = refl (f a)
+
+  -- Homotopy
+
+  _∼_ : {A B : U} → (f g : El A → El B) → Set
+  _∼_ {A} {B} f g = (a : El A) → f a ≡ g a
+
+  refl∼ : {A B : U} → (f : El A → El B) → (f ∼ f)
+  refl∼ f a = refl (f a)
+
+  trans∼ : {A B : U} {f g h : El A → El B} → f ∼ g → g ∼ h → f ∼ h
+  trans∼ p₁ p₂ a = trans≡ (p₁ a) (p₂ a)
+
+  -- Equivalence
+
+  record isequiv {A B : U} (f : El A → El B) : Set where
+    constructor mkisequiv
     field
-      g : El₀ B → El₀ A
-      α : (f ○ g) ∼₀ id
-      β : (g ○ f) ∼₀ id
+      g : El B → El A
+      α : (f ○ g) ∼ id
+      β : (g ○ f) ∼ id
 
-  _≃₀_ : (A B : U₀) → Set
-  A ≃₀ B = Σ (El₀ A → El₀ B) isequiv₀
+  _≃_ : (A B : U) → Set
+  A ≃ B = Σ (El A → El B) isequiv
 
-  -- example of actual equivalence of interpretations
+  -- Examples of equivalences
 
-  A⊎⊥≃A : {A : U₀} → A ⊕ 𝟘 ≃₀ A
-  A⊎⊥≃A {A} = f , mkisequiv₀ g refl₀ β
+  id≃ : {A : U} → A ≃ A
+  id≃ = (id , mkisequiv id refl refl)
+
+  sym≃ : {A B : U} → A ≃ B → B ≃ A
+  sym≃ (f , mkisequiv g α β) = (g , mkisequiv f β α)
+
+  trans≃ : {A B C : U} → A ≃ B → B ≃ C → A ≃ C
+  trans≃ {A} {B} {C} (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
+    g ○ f , mkisequiv (f⁻ ○ g⁻) α β
+      where α : (x : El C) → (g (f (f⁻ (g⁻ x)))) ≡ x
+            α x = trans≡ (cong≡ g (α₁ (g⁻ x))) (α₂ x)
+            β : (x : El A) → (f⁻ (g⁻ (g (f x)))) ≡ x
+            β x = trans≡ (cong≡ f⁻ (β₂ (f x))) (β₁ x)
+
+  A⊎⊥≃A : {A : U} → A ⊕ 𝟘 ≃ A
+  A⊎⊥≃A {A} = f , mkisequiv g refl β
     where
-      f : (El₀ A ⊎ ⊥) → El₀ A
+      f : (El A ⊎ ⊥) → El A
       f (inj₁ a) = a
       f (inj₂ ())
 
-      g : El₀ A → (El₀ A ⊎ ⊥)
+      g : El A → (El A ⊎ ⊥)
       g a = inj₁ a
 
-      β : (g ○ f) ∼₀ id
-      β (inj₁ a) = refl₀ (inj₁ a)
+      β : (g ○ f) ∼ id
+      β (inj₁ a) = refl (inj₁ a)
       β (inj₂ ())
 
-  id≃₀ : {A : U₀} → A ≃₀ A
-  id≃₀ = (id , mkisequiv₀ id refl₀ refl₀)
+  -- Universe 0
 
-  transequiv : {A B C : U₀} → A ≃₀ B → B ≃₀ C → A ≃₀ C
-  transequiv (f , mkisequiv₀ f⁻ α₁ β₁) (g , mkisequiv₀ g⁻ α₂ β₂) =
-    g ○ f , mkisequiv₀ (f⁻ ○ g⁻) {!!} {!!}
+  Univ : UNIVERSE
+  Univ = record {
+           U = U
+         ; El = El
+         ; _≡_ = _≡_
+         ; _∼_ = _∼_
+         ; _≃_ = _≃_
+         }
 
 ------------------------------------------------------------------------------
--- level 1 universe: codes for level 0 semantic equivalence
+-- level 1 universe: codes correspond to level 0 equivalences
 
-open UNIV0
+module MOD1 where
 
-module UNIV1 where
+  open MOD0
+    using    (𝟘; 𝟙; _⊕_; _⊗_)
+    renaming (U to U₀; _∼_ to _∼₀_; _≃_ to _≃₀_)
+
+  -- Codes for level 0 equivalences
 
   data _⟷_ : U₀ → U₀ → Set where
-    id⟷ : {A : U₀} → A ⟷ A
+    id⟷ :    {A : U₀} → A ⟷ A
     uniti₊r : {A : U₀} → A ⟷ (A ⊕ 𝟘)
     unite₊r : {A : U₀} → A ⊕ 𝟘 ⟷ A
-    _◎_ :  {A B C : U₀} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+    _◎_ :     {A B C : U₀} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
     -- elided
 
   ! : {A B : U₀} → (A ⟷ B) → (B ⟷ A)
@@ -124,108 +191,153 @@ module UNIV1 where
   ! id⟷ = id⟷
   ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
 
-  Univ₁ : Indexed-universe _ _ _
-  Univ₁ = record {
-             I = U₀ × U₀
-           ; U = λ { (A , B) → A ⟷ B }
-           ; El = λ { { (A , B) } c → A ≃₀ B }
-           }
+  -- Decoding a code to a space
 
-  open Indexed-universe Univ₁ renaming (El to EL1)
+  El : {A B : U₀} → (A ⟷ B) → Set
+  El {A} {B} _ = A ≃₀ B
 
-  El₁ : {A B : U₀} → (c : A ⟷ B) → EL1 c
-  El₁ id⟷ = {!!}
-  El₁ uniti₊r = {!!}
-  El₁ unite₊r = A⊎⊥≃A
-  El₁ (c₁ ◎ c₂) = {!!}
+  -- Every code at level 1 does correspond to a level 0 equivalence
+  -- Reverse direction is univalence; addressed below
 
-  -- semantic notions on Univ₁:
-  -- when are two interpretations equivalent
+  sound : {A B : U₀} → (c : A ⟷ B) → El c
+  sound id⟷ = MOD0.id≃
+  sound uniti₊r = MOD0.sym≃ MOD0.A⊎⊥≃A
+  sound unite₊r = MOD0.A⊎⊥≃A
+  sound (c₁ ◎ c₂) = MOD0.trans≃ (sound c₁) (sound c₂)
 
-  record _≡₁_ {A B : U₀} {c₁ c₂ : A ⟷ B}
-              (eq₁ : EL1 c₁) (eq₂ : EL1 c₂)  : Set where
-    open isequiv₀ (proj₂ eq₁) renaming (g to g₁)
-    open isequiv₀ (proj₂ eq₂) renaming (g to g₂)
+  -- Identity
+
+  record _≡_ {A B : U₀} {c : A ⟷ B} (eq₁ eq₂ : El c) : Set where
+    open MOD0.isequiv (proj₂ eq₁) renaming (g to g₁)
+    open MOD0.isequiv (proj₂ eq₂) renaming (g to g₂)
     field
       f≡ : proj₁ eq₁ ∼₀ proj₁ eq₂
       g≡ : g₁ ∼₀ g₂
 
-  refl≡₁ : {A B : U₀} {c : A ⟷ B} (eq : EL1 c) →
-           _≡₁_ {c₁ = c} {c₂ = c} eq eq
-  refl≡₁ (f , mkisequiv₀ g α β) = record {
-                                    f≡ = refl∼₀ f
-                                  ; g≡ = refl∼₀ g
-                                  }
+  refl≡ : {A B : U₀} {c : A ⟷ B} (eq : El c) → _≡_ {c = c} eq eq
+  refl≡ (f , MOD0.mkisequiv g α β) =
+    record {
+      f≡ = MOD0.refl∼ f
+    ; g≡ = MOD0.refl∼ g
+    }
 
-  _∼₁_ : {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} →
-         (f g : EL1 c₁ → EL1 c₂) → Set
-  _∼₁_ {c₁ = c₁} {c₂ = c₂} f g =
-         (eq₁ : EL1 c₁) → _≡₁_ {c₁ = c₂} {c₂ = c₂} (f eq₁) (g eq₁)
+  trans≡ : {A B : U₀} {c : A ⟷ B} {eq₁ eq₂ eq₃ : El c} →
+           (_≡_ {c = c} eq₁ eq₂) → (_≡_ {c = c} eq₂ eq₃) →
+           (_≡_ {c = c} eq₁ eq₃)
+  trans≡ (record { f≡ = f≡₁ ; g≡ = g≡₁ }) (record { f≡ = f≡₂ ; g≡ = g≡₂ }) =
+    record {
+      f≡ = MOD0.trans∼ f≡₁ f≡₂
+    ; g≡ = MOD0.trans∼ g≡₁ g≡₂
+    }
 
-  refl∼₁ : {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} →
-           (f : EL1 c₁ → EL1 c₂) → (_∼₁_ {c₁ = c₁} {c₂ = c₂} f f)
-  refl∼₁ f eq = refl≡₁ (f eq)
+  cong≡ : {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} {eq₁ eq₂ : El c₁} →
+    (f : El c₁ → El c₂) → _≡_ {c = c₁} eq₁ eq₂ → _≡_ {c = c₂} (f eq₁) (f eq₂)
+  cong≡ {eq₁ = eq₁} {eq₂ = eq₂} f (record { f≡ = f≡ ; g≡ = g≡ }) =
+    let (hr₁ , MOD0.mkisequiv gr₁ αr₁ βr₁) = f eq₁
+        (hr₂ , MOD0.mkisequiv gr₂ αr₂ βr₂) = f eq₂
+    in record {
+         f≡ = λ x → MOD0.cong≡ {!!} (f≡ {!!})
+       ; g≡ = λ x → MOD0.cong≡ {!!} (g≡ {!!})
+       }
 
-  record isequiv₁ {A B C D : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D}
-                  (f : EL1 c₁ → EL1 c₂) : Set where
-    constructor mkisequiv₁
+  -- Homotopy
+
+  _∼_ : {A B : U₀} {c₁ c₂ : A ⟷ B} → (f g : El c₁ → El c₂) → Set
+  _∼_ {c₁ = c₁} {c₂ = c₂} f g = (eq : El c₁) → _≡_ {c = c₂} (f eq) (g eq)
+
+  refl∼ : {A B : U₀} {c : A ⟷ B} → (f : El c → El c) →
+          _∼_ {c₁ = c} {c₂ = c} f f
+  refl∼ f eq = refl≡ (f eq)
+
+  -- Equivalence
+
+  record isequiv {A B : U₀} {c₁ c₂ : A ⟷ B}
+         (f : El c₁ → El c₂) : Set where
+    constructor mkisequiv
     field
-      g : EL1 c₂ → EL1 c₁
-      α : _∼₁_ {c₁ = c₂} {c₂ = c₂} (f ○ g) id
-      β : _∼₁_ {c₁ = c₁} {c₂ = c₁} (g ○ f) id
+      g : El c₂ → El c₁
+      α : _∼_ {c₁ = c₂} {c₂ = c₂} (f ○ g) id
+      β : _∼_ {c₁ = c₁} {c₂ = c₁} (g ○ f) id
 
-  _≃₁_ : {A B C D : U₀} (c₁ : A ⟷ B) (c₂ : C ⟷ D) → Set
-  c₁ ≃₁ c₂ = Σ (EL1 c₁ → EL1 c₂) (isequiv₁ {c₁ = c₁} {c₂ = c₂})
+  _≃_ : {A B : U₀} → (c₁ c₂ : A ⟷ B) → Set
+  _≃_ {A} {B} c₁ c₂ = Σ (El c₁ → El c₂) (isequiv {c₁ = c₁} {c₂ = c₂})
 
-  -- univalence: relates level 0 equivalences with level 1 codes for these
-  -- equivalences; El₁ takes us from codes to equivalences; we need a function
-  -- to take us from equivalences to codes and then we need to show these two
-  -- functions are inverses
+  -- Example level 1 equivalences
 
-  embed₀₁ : {A B : U₀} → (A ≃₀ B) → (A ⟷ B)
-  embed₀₁ eq = {!!}
+  id≃ : {A B : U₀} → (c : A ⟷ B) → c ≃ c
+  id≃ c = id ,
+          mkisequiv
+            id
+            (refl∼ {c = c} id)
+            (refl∼ {c = c} id)
 
-  record _≡₀₁_ {A B : U₀} (eq₁ eq₂ : A ≃₀ B) : Set where
-    open isequiv₀ (proj₂ eq₁) renaming (g to g₁)
-    open isequiv₀ (proj₂ eq₂) renaming (g to g₂)
+  trans≃ : {A B : U₀} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ≃ c₂) → (c₂ ≃ c₃) → (c₁ ≃ c₃)
+  trans≃ {c₁ = c₁} {c₃ = c₃} (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
+    g ○ f , mkisequiv (f⁻ ○ g⁻) α β
+      where α : (x : El c₃) → (g (f (f⁻ (g⁻ x)))) ≡ x
+            α x = trans≡ (cong≡ g (α₁ (g⁻ x))) (α₂ x)
+            β : (x : El c₁) → (f⁻ (g⁻ (g (f x)))) ≡ x
+            β x = trans≡ (cong≡ f⁻ (β₂ (f x))) (β₁ x)
+
+  -- Universe 1
+
+  Univ : (A B : U₀) → UNIVERSE
+  Univ A B = record {
+               U = A ⟷ B
+             ; El = λ _ → A ≃₀ B
+             ; _≡_ = λ { {c} → _≡_ {c = c}}
+             ; _∼_ = λ { {c₁} {c₂} → _∼_ {c₁ = c₁} {c₂ = c₂}}
+             ; _≃_ = _≃_
+             }
+
+------------------------------------------------------------------------------
+-- level 0-1 cross equivalences
+
+module MOD0x1 where
+
+  open MOD0
+    using    ()
+    renaming (U to U₀; _∼_ to _∼₀_; _≃_ to _≃₀_)
+
+  open MOD1
+    using    (_⟷_; id⟷; uniti₊r; unite₊r; _◎_; sound)
+    renaming (_≡_ to _≡₁_; _≃_ to _≃₁_)
+
+  -- We want to make sure that the level 1 codes are exactly the level 0
+  -- equivalences. We will define a cross-level equivalence between them: that
+  -- is univalence!
+
+  -- The two spaces in question are:
+  -- A ≃₀ B in level 0 universe, and
+  -- A ⟷ B in level 1 universe
+  -- We need functions going in both directions that are inverses
+  -- from A ⟷ B to A ≃₀ B we have the function sound in MOD1
+  -- from A ≃₀ B to A ⟷ B we have the function complete below
+
+  complete : {A B : U₀} → (A ≃₀ B) → (A ⟷ B)
+  complete {A} {B} (f , MOD0.mkisequiv g α β) = {!!}
+
+  -- Now we need to require inverses
+
+  record univalence {A B : U₀} : Set where
     field
-      f≡ : proj₁ eq₁ ∼₀ proj₁ eq₂
-      g≡ : g₁ ∼₀ g₂
-
-  _∼₀₁_ : {A B C D : U₀} → (f g : A ≃₀ B → C ≃₀ D) → Set
-  _∼₀₁_ {A} {B} {C} {D} f g =
-    (eq₁ : A ≃₀ B) → (f eq₁) ≡₀₁ (g eq₁)
-
-  record isequiv₀₁ {A B C D : U₀} (f : A ≃₀ B → C ≃₀ D) : Set where
-    constructor mkisequiv₀₁
-    field
-      g : C ≃₀ D → A ≃₀ B
-      α : (f ○ g) ∼₀₁ id
-      β : (g ○ f) ∼₀₁ id
-
-  _≃₀₁_ : {A B C D : U₀} → A ≃₀ B → C ≃₀ D → Set
-  _≃₀₁_ {A} {B} {C} {D} eq₁ eq₂ = Σ (A ≃₀ B → C ≃₀ D) isequiv₀₁
-
-  record univalence₀₁ {A B : U₀} : Set where
-    field
-      α : (c : A ⟷ B) → embed₀₁ (El₁ c) ≃₁ c
-      β : (eq : A ≃₀ B) → El₁ (embed₀₁ eq) ≃₀₁ eq
-
-  -- example level 1 equivalences
-
-  id≃₁ : {A B : U₀} (c : A ⟷ B) → c ≃₁ c
-  id≃₁ c = id ,
-           mkisequiv₁
-             id
-             (refl∼₁ {c₁ = c} {c₂ = c} id)
-             (refl∼₁ {c₁ = c} {c₂ = c} id)
+      α : (c : A ⟷ B) → complete (sound c) ≃₁ c
+      β : (eq : A ≃₀ B) → Σ[ c ∈ A ⟷ B ] _≡₁_ {c = c} (sound (complete eq)) eq
 
 ------------------------------------------------------------------------------
 -- level 2 universe: codes for level 1 equivalences
 
-open UNIV1
+module MOD2 where
 
-module UNIV2 where
+  open MOD0
+    using ()
+    renaming (U to U₀)
+
+  open MOD1
+    using (_⟷_)
+    renaming (_≃_ to _≃₁_; id≃ to id≃₁; trans≃ to trans≃₁)
+
+  -- Codes for level 1 equivalences
 
   data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
     id⇔ : ∀ {A B} {c : A ⟷ B} → c ⇔ c
@@ -235,26 +347,37 @@ module UNIV2 where
   2! id⇔ = id⇔
   2! (α ● β) = (2! β) ● (2! α)
 
-  Univ₂ : Indexed-universe _ _ _
-  Univ₂ = record {
-            I = Σ[ A ∈ U₀ ] Σ[ B ∈ U₀ ] (A ⟷ B) × (A ⟷ B)
-          ; U = λ { (A , B , c₁ , c₂) → c₁ ⇔ c₂ }
-          ; El = λ { {(A , B , c₁ , c₂)} α → c₁ ≃₁ c₂ }
-          }
+  -- Decoding a code to a space
 
-  open Indexed-universe Univ₂ renaming (El to EL2)
+  El : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → Set
+  El {c₁ = c₁} {c₂ = c₂} _ = c₁ ≃₁ c₂
 
-  El₂ : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → EL2 α
-  El₂ {c₁ = c} {c₂ = .c} id⇔ = id≃₁ c
-  El₂ (α₁ ● α₂) = {!!}
+  -- Every code at level 2 does correspond to a level 1 equivalence
+  -- Reverse direction is univalence; addressed below
 
+  sound : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → El α
+  sound {c₁ = c} {c₂ = .c} id⇔ = id≃₁ c
+  sound (α₁ ● α₂) = trans≃₁ (sound α₁) (sound α₂)
+
+  -- Universe 2
+
+  Univ : {A B : U₀} (c₁ c₂ : A ⟷ B) → UNIVERSE
+  Univ c₁ c₂ = record {
+             U = c₁ ⇔ c₂
+           ; El = {!!}
+           ; _≡_ = {!!}
+           ; _∼_ = {!!}
+           ; _≃_ = {!!}
+           }
+
+{--
   -- semantic notions on Univ₂:
   -- (1) when are two interpretations equivalent
 
   record _≡₂_ {A B : U₀} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂}
-              (eq₁ : EL2 α) (eq₂ : EL2 β) : Set where
-    open isequiv₁ (proj₂ eq₁) renaming (g to g₁)
-    open isequiv₁ (proj₂ eq₂) renaming (g to g₂)
+              (eq₁ : El α) (eq₂ : El β) : Set where
+    open MOD1.isequiv (proj₂ eq₁) renaming (g to g₁)
+    open MOD1.isequiv (proj₂ eq₂) renaming (g to g₂)
     field
       f≡ : _∼₁_ {c₁ = c₁} {c₂ = c₂} (proj₁ eq₁) (proj₁ eq₂)
       g≡ : _∼₁_ {c₁ = c₂} {c₂ = c₁} g₁ g₂
@@ -355,3 +478,4 @@ module UNIV3 where
   -- ??
 
 ------------------------------------------------------------------------------
+--}
