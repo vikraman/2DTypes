@@ -118,8 +118,11 @@ module MOD0 where
   Fun A B = El A → El B
 
   -- Functions can be applied
+
   app : {A B : U} → Fun A B → El A → El B
   app f a = f a
+
+  -- Composition is the usual one
 
   -- Identity
 
@@ -158,8 +161,10 @@ module MOD0 where
   ∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans≡ (cong≡ h (H₁ x)) (H₂ (g x))
 
   -- Equivalence
-  -- non-traditional packaging of an equivalence: rather than as
-  -- a property of a function, it is directly a type
+
+  -- Non-traditional packaging of an equivalence: rather than as a property of a
+  -- function, it is directly a type
+
   record _≃_ (A B : U) : Set where
     constructor eq
     field
@@ -169,6 +174,7 @@ module MOD0 where
       β : (g ○ f) ∼ id
 
   -- Fundamental equivalences
+
   id≃ : {A : U} → A ≃ A
   id≃ = eq id id refl refl
 
@@ -184,6 +190,7 @@ module MOD0 where
             β x = trans≡ (cong≡ f⁻ (β₂ (f x))) (β₁ x)
 
   -- Further examples
+
   A⊎⊥≃A : {A : U} → A ⊕ 𝟘 ≃ A
   A⊎⊥≃A {A} = eq f g refl β
     where
@@ -484,6 +491,13 @@ module MOD2 where
   Fun : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α β : c₁ ⇔ c₂) → Set
   Fun {A} {B} {c₁} {c₂} α β = {!!}
 
+  _≡_ : {A B : U₀} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂} →
+        (eq₁ eq₂ : El α) → Set
+  _≡_ = ?
+
+  _≃_ : {A B : U₀} {c₁ c₂ : A ⟷ B} (α β : c₁ ⇔ c₂) → Set
+  _≃_ = ?
+
 {--
   -- semantic notions on Univ₂:
   -- (1) when are two interpretations equivalent
@@ -587,7 +601,36 @@ module MOD2 where
            }
 
 ------------------------------------------------------------------------------
--- fractionals
+-- level 1-2 cross equivalences
+
+module MOD1x2 where
+
+  open MOD0
+    using    ()
+    renaming (U to U₀)
+
+  open MOD1
+    using    (_⟷_)
+    renaming (_≃_ to _≃₁_)
+
+  open MOD2
+    using    (_⇔_; sound)
+    renaming (_≡_ to _≡₂_; _≃_ to _≃₂_)
+
+  -- We want to make sure that the level 2 codes are exactly the level 1
+  -- equivalences. We will define a cross-level equivalence between them: that
+  -- is univalence!
+
+  complete : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ≃₁ c₂) → (c₁ ⇔ c₂)
+  complete = ?
+
+  record univalence {A B : U₀} {c₁ c₂ : A ⟷ B} : Set where
+    field
+      α : (α : c₁ ⇔ c₂) → complete (sound α) ≃₂ α
+      β : (eq : c₁ ≃₁ c₂) → Σ[ α ∈ c₁ ⇔ c₂ ] _≡₂_ (sound (complete eq)) eq
+
+------------------------------------------------------------------------------
+-- Fractionals
 -- level 3 universe: codes for level 2 quotients
 
 module MOD3 where
