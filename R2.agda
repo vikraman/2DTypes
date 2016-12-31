@@ -158,35 +158,34 @@ module MOD0 where
   ∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans≡ (cong≡ h (H₁ x)) (H₂ (g x))
 
   -- Equivalence
-
-  record isequiv {A B : U} (f : Fun A B) : Set where
-    constructor mkisequiv
+  -- non-traditional packaging of an equivalence: rather than as
+  -- a property of a function, it is directly a type
+  record _≃_ (A B : U) : Set where
+    constructor eq
     field
-      g : El B → El A
+      f : Fun A B
+      g : Fun B A
       α : (f ○ g) ∼ id
       β : (g ○ f) ∼ id
 
-  _≃_ : (A B : U) → Set
-  A ≃ B = Σ (Fun A B) isequiv
-
-  -- Examples of equivalences
-
+  -- Fundamental equivalences
   id≃ : {A : U} → A ≃ A
-  id≃ = (id , mkisequiv id refl refl)
+  id≃ = eq id id refl refl
 
   sym≃ : {A B : U} → A ≃ B → B ≃ A
-  sym≃ (f , mkisequiv g α β) = (g , mkisequiv f β α)
+  sym≃ (eq f g α β) = eq g f β α
 
   trans≃ : {A B C : U} → A ≃ B → B ≃ C → A ≃ C
-  trans≃ {A} {B} {C} (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
-    g ○ f , mkisequiv (f⁻ ○ g⁻) α β
+  trans≃ {A} {B} {C} (eq f f⁻ α₁ β₁) (eq g g⁻ α₂ β₂) =
+    eq (g ○ f) (f⁻ ○ g⁻) α β
       where α : (x : El C) → (g (f (f⁻ (g⁻ x)))) ≡ x
             α x = trans≡ (cong≡ g (α₁ (g⁻ x))) (α₂ x)
             β : (x : El A) → (f⁻ (g⁻ (g (f x)))) ≡ x
             β x = trans≡ (cong≡ f⁻ (β₂ (f x))) (β₁ x)
 
+  -- Further examples
   A⊎⊥≃A : {A : U} → A ⊕ 𝟘 ≃ A
-  A⊎⊥≃A {A} = f , mkisequiv g refl β
+  A⊎⊥≃A {A} = eq f g refl β
     where
       f : (El A ⊎ ⊥) → El A
       f (inj₁ a) = a
@@ -277,12 +276,11 @@ module MOD1 where
 
 
   app : {A B : U₀} {c₁ c₂ : A ⟷ B} → Fun c₁ c₂ → El c₁ → El c₂
-  app (F , G , γ , δ) (f , MOD0.mkisequiv g α β) =
-    F f ,
-    MOD0.mkisequiv
-      (G g)
-      (trans∼₀ (MOD0.∼○ (δ g) (γ f)) α)
-      (trans∼₀ (MOD0.∼○ (γ f) (δ g)) β)
+  app (F , G , γ , δ) (MOD0.eq f g α β) =
+    MOD0.eq (F f)
+            (G g)
+            (trans∼₀ (MOD0.∼○ (δ g) (γ f)) α)
+            (trans∼₀ (MOD0.∼○ (γ f) (δ g)) β)
 
   idF : {A B : U₀} {c : A ⟷ B} → Fun c c
   idF = (id , id , refl∼₀ , refl∼₀)
@@ -300,14 +298,14 @@ module MOD1 where
   -- Identity
 
   record _≡_ {A B : U₀} {c : A ⟷ B} (eq₁ eq₂ : El c) : Set where
-    open MOD0.isequiv (proj₂ eq₁) renaming (g to g₁)
-    open MOD0.isequiv (proj₂ eq₂) renaming (g to g₂)
+    open MOD0._≃_ eq₁ renaming (f to f₁; g to g₁)
+    open MOD0._≃_ eq₂ renaming (f to f₂; g to g₂)
     field
-      f≡ : proj₁ eq₁ ∼₀ proj₁ eq₂
+      f≡ : f₁ ∼₀ f₂
       g≡ : g₁ ∼₀ g₂
 
   refl≡ : {A B : U₀} {c : A ⟷ B} (eq : El c) → _≡_ {c = c} eq eq
-  refl≡ (f , MOD0.mkisequiv g α β) =
+  refl≡ (MOD0.eq f g α β) =
     record {
       f≡ = MOD0.refl∼ f
     ; g≡ = MOD0.refl∼ g
@@ -325,8 +323,8 @@ module MOD1 where
   cong≡ : {A B : U₀} {c₁ c₂ : A ⟷ B} {eq₁ eq₂ : El c₁} →
    (f : Fun c₁ c₂) → _≡_ {c = c₁} eq₁ eq₂ →
    _≡_ {c = c₂} (app {c₁ = c₁} {c₂ = c₂} f eq₁) (app {c₁ = c₁} {c₂ = c₂} f eq₂)
-  cong≡ {eq₁ = f₁ , MOD0.mkisequiv g₁ α₁ β₁}
-        {eq₂ = f₂ , MOD0.mkisequiv g₂ α₂ β₂}
+  cong≡ {eq₁ = (MOD0.eq f₁ g₁ α₁ β₁)}
+        {eq₂ = (MOD0.eq f₂ g₂ α₂ β₂)}
         (F , G , γ , δ)
         (record { f≡ = f≡ ; g≡ = g≡ }) =
     record {
@@ -407,9 +405,9 @@ module MOD1 where
              ; refl∼ = refl∼
              ; sym∼ = {!!}
              ; trans∼ = {!!}
-             ; id≃ = ?
-             ; sym≃ = ?
-             ; trans≃ = ?
+             ; id≃ = {!!}
+             ; sym≃ = {!!}
+             ; trans≃ = {!!}
              }
 
 ------------------------------------------------------------------------------
@@ -437,7 +435,7 @@ module MOD0x1 where
   -- from A ≃₀ B to A ⟷ B we have the function complete below
 
   complete : {A B : U₀} → (A ≃₀ B) → (A ⟷ B)
-  complete {A} {B} (f , MOD0.mkisequiv g α β) = {!!}
+  complete {A} {B} (MOD0.eq f g α β) = {!!}
 
   -- Now we need to require inverses
 
@@ -583,9 +581,9 @@ module MOD2 where
            ; refl∼ = {!!}
            ; sym∼ = {!!}
            ; trans∼ = {!!}
-           ; id≃ = ?
-           ; sym≃ = ?
-           ; trans≃ = ?
+           ; id≃ = {!!}
+           ; sym≃ = {!!}
+           ; trans≃ = {!!}
            }
 
 ------------------------------------------------------------------------------
@@ -652,9 +650,9 @@ module MOD3 where
           ; refl∼ = {!!}
           ; sym∼ = {!!}
           ; trans∼ = {!!}
-          ; id≃ = ?
-          ; sym≃ = ?
-          ; trans≃ = ?
+          ; id≃ = {!!}
+          ; sym≃ = {!!}
+          ; trans≃ = {!!}
           }
 
 ------------------------------------------------------------------------------
