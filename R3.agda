@@ -173,116 +173,104 @@ module MOD1 where
     ; F-resp-≡ = λ { {F = F} refl → refl}
     }
 
-{-
-
 ------------------------------------------------------------------------------
--- level 0-1 cross equivalences
+-- Note that univalence, which used to be in here, cannot be phrased
+-- properly until level 2.  This is correct and expected.
+-- completeness, on the other hand, does belong here.
 
 module MOD0x1 where
 
   open MOD0
     using    ()
-    renaming (U to U₀; _∼_ to _∼₀_; _≃_ to _≃₀_)
+    renaming (U to U₀; El to El₀)
 
   open MOD1
-    using    (_⟷_; id⟷; uniti₊r; unite₊r; _◎_; sound)
-    renaming (_≡_ to _≡₁_; _≃_ to _≃₁_)
+    using    (_⟷_; id⟷; uniti₊r; unite₊r; _◎_; Fun)
 
-  -- We want to make sure that the level 1 codes are exactly the level 0
-  -- equivalences. We will define a cross-level equivalence between them: that
-  -- is univalence!
+  -- We want to make sure that the level 1 codes are exactly the
+  -- equivalences.
 
-  -- The two spaces in question are:
-  -- A ≃₀ B in level 0 universe, and
-  -- A ⟷ B in level 1 universe
-  -- We need functions going in both directions that are inverses
-  -- from A ⟷ B to A ≃₀ B we have the function sound in MOD1
-  -- from A ≃₀ B to A ⟷ B we have the function complete below
-
-  complete : {A B : U₀} → (A ≃₀ B) → (A ⟷ B)
-  complete {A} {B} (MOD0.eq f g α β) = {!!}
-
-  -- Now we need to require inverses
-
-  record univalence {A B : U₀} : Set where
-    field
-      α : (c : A ⟷ B) → complete (sound c) ≃₁ c
-      β : (eq : A ≃₀ B) → Σ[ c ∈ A ⟷ B ] _≡₁_ {c = c} (sound (complete eq)) eq
+  complete : {A B : U₀} → (El₀ A ≃ El₀ B) → (A ⟷ B)
+  complete {A} {B} (qeq f g α β) = {!!}
 
 ------------------------------------------------------------------------------
--- level 2 universe: codes for level 1 equivalences
+-- level 2 universe: codes for equivalences between level 1 equivalences
 
 module MOD2 where
+  open import EquivEquiv
 
   open MOD0
     using ()
-    renaming (U to U₀)
+    renaming (U to U₀; El to El₀)
 
   open MOD1
-    using (_⟷_; id⟷; _◎_; !)
-    renaming (_≃_ to _≃₁_; id≃ to id≃₁; trans≃ to trans≃₁)
+    using (_⟷_; id⟷; _◎_; !; Fun)
+
+  open MOD0x1
+    using (complete)
 
   -- Codes in level 2 for level 1 equivalences
-
   data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
     id⇔ : ∀ {A B} {c : A ⟷ B} → c ⇔ c
-    _●_  : ∀ {A B} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+    _◍_  : ∀ {A B} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
 
   2! : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
   2! id⇔ = id⇔
-  2! (α ● β) = (2! β) ● (2! α)
+  2! (α ◍ β) = (2! β) ◍ (2! α)
 
-  -- Decoding a code to a space
-
-  El : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → Set
-  El {c₁ = c₁} {c₂ = c₂} _ = c₁ ≃₁ c₂
-
-  -- Every code at level 2 does correspond to a level 1 equivalence
+  -- Every code at level 2 does correspond to an equivalence of equivalences
   -- Reverse direction is univalence; addressed below
 
-  sound : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → El α
-  sound {c₁ = c} {c₂ = .c} id⇔ = id≃₁ c
-  sound (α₁ ● α₂) = trans≃₁ (sound α₁) (sound α₂)
-
-  -- Type of functions
-
-  Fun : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α β : c₁ ⇔ c₂) → Set
-  Fun {A} {B} {c₁} {c₂} α β = {!!}
-
-{--
-  -- semantic notions on Univ₂:
-  -- (1) when are two interpretations equivalent
-
-  record _≡₂_ {A B : U₀} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂}
-              (eq₁ : El α) (eq₂ : El β) : Set where
-    open MOD1.isequiv (proj₂ eq₁) renaming (g to g₁)
-    open MOD1.isequiv (proj₂ eq₂) renaming (g to g₂)
-    field
-      f≡ : _∼₁_ {c₁ = c₁} {c₂ = c₂} (proj₁ eq₁) (proj₁ eq₂)
-      g≡ : _∼₁_ {c₁ = c₂} {c₂ = c₁} g₁ g₂
-
-  _∼₂_ : {A B C D : U₀} {c₁ c₂ : A ⟷ B} {d₁ d₂ : C ⟷ D}
-         {α : c₁ ⇔ c₂} {β : d₁ ⇔ d₂} → (f g : EL2 α → EL2 β) → Set
-  _∼₂_ {α = α} {β = β} f g =
-    (eq : EL2 α) → _≡₂_ {α = β} {β = β} (f eq) (g eq)
-
-  record isequiv₂ {A B C D : U₀} {c₁ c₂ : A ⟷ B} {d₁ d₂ : C ⟷ D}
-         {Α : c₁ ⇔ c₂} {Β : d₁ ⇔ d₂} (f : EL2 Α → EL2 Β) : Set where
-    constructor mkisequiv₂
-    field
-      g : EL2 Β → EL2 Α
-      α : _∼₂_ {α = Β} {β = Β} (f ○ g) id
-      β : _∼₂_ {α = Α} {β = Α} (g ○ f) id
-
-  _≃₂_ : {A B C D : U₀} {c₁ c₂ : A ⟷ B} {d₁ d₂ : C ⟷ D}
-         (Α : c₁ ⇔ c₂) (Β : d₁ ⇔ d₂) → Set
-  Α ≃₂ Β = Σ (EL2 Α → EL2 Β) (isequiv₂ {Α = Α} {Β = Β})
---}
+  sound : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → Fun c₁ ≋ Fun c₂
+  sound {c₁ = c} {c₂ = .c} id⇔ = id≋
+  sound (α₁ ◍ α₂) = trans≋ (sound α₁) (sound α₂)
 
   -- univalence for level 2: relates level 1 equivalences with level 2 codes for
   -- these equivalences
-  -- ??
 
+  record univalence {A B : U₀} : Set where
+    field
+      α : (c : A ⟷ B) → complete (Fun c) ⇔ c
+      β : (eq : El₀ A ≃ El₀ B) → Fun (complete eq) ≋ eq
+
+  SynCat2 : Category _ _ _
+  SynCat2 = record
+    { Obj = U₀
+    ; _⇒_ = _⟷_
+    ; _≡_ = _⇔_
+    ; id = id⟷
+    ; _∘_ = λ x⟷y y⟷z → y⟷z _⟷_.◎ x⟷y
+    ; assoc = {!!}
+    ; identityˡ = {!!}
+    ; identityʳ = {!!}
+    ; equiv = {!!}
+    ; ∘-resp-≡ = {!!}
+    }
+
+  WeakSets : Category _ _ _
+  WeakSets = record
+    { Obj = Set
+    ; _⇒_ = _≃_
+    ; _≡_ = _≋_
+    ; id = id≃
+    ; _∘_ = _●_
+    ; assoc = {!!}
+    ; identityˡ = lid≋
+    ; identityʳ = rid≋
+    ; equiv = record { refl = id≋ ; sym = sym≋ ; trans = trans≋ }
+    ; ∘-resp-≡ = {!!}
+    }
+
+  Sem : Functor SynCat2 WeakSets
+  Sem = record
+    { F₀ = El₀
+    ; F₁ = Fun
+    ; identity = id≋
+    ; homomorphism = id≋
+    ; F-resp-≡ = sound
+    }
+
+{-
   -- (2) semantic quotients on types
 
   infix 40 _^_
@@ -327,29 +315,6 @@ module MOD2 where
         }
     }
 
-  -- Universe 2
-
-  Univ : {A B : U₀} (c₁ c₂ : A ⟷ B) → UNIVERSE
-  Univ c₁ c₂ = record {
-             U = c₁ ⇔ c₂
-           ; El = El
-           ; Fun = Fun
-           ; app = {!!}
-           ; _◎_ = {!!}
-           ; _≡_ = {!!}
-           ; _∼_ = {!!}
-           ; _≃_ = {!!}
-           ; id≡ = {!!}
-           ; sym≡ = {!!}
-           ; trans≡ = {!!}
-           ; cong≡ = {!!}
-           ; refl∼ = {!!}
-           ; sym∼ = {!!}
-           ; trans∼ = {!!}
-           ; id≃ = {!!}
-           ; sym≃ = {!!}
-           ; trans≃ = {!!}
-           }
 
 ------------------------------------------------------------------------------
 -- fractionals
