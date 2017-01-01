@@ -71,15 +71,16 @@ id≃ = qeq id id (λ _ → refl) (λ _ → refl)
 sym≃ : ∀ {ℓ ℓ′} {A : Set ℓ} {B : Set ℓ′} → (A ≃ B) → B ≃ A
 sym≃ (qeq f g α β) = qeq g f β α
 
-abstract
-  trans≃ :  ∀ {ℓ ℓ′ ℓ″} {A : Set ℓ} {B : Set ℓ′} {C : Set ℓ″} → A ≃ B → B ≃ C → A ≃ C
-  trans≃ {A = A} {B} {C} (qeq f f⁻¹ fα fβ) (qeq g g⁻¹ gα gβ) =
-    qeq (g ∘ f) (f⁻¹ ∘ g⁻¹) (λ x → trans (cong g (fα (g⁻¹ x))) (gα x))
-                            (λ x → trans (cong f⁻¹ (gβ (f x))) (fβ x))
-  -- more convenient infix version, flipped
-  _●_ : ∀ {ℓ ℓ′ ℓ″} {A : Set ℓ} {B : Set ℓ′} {C : Set ℓ″} → B ≃ C → A ≃ B → A ≃ C
-  _●_ = flip trans≃
 
+trans≃ :  ∀ {ℓ ℓ′ ℓ″} {A : Set ℓ} {B : Set ℓ′} {C : Set ℓ″} → A ≃ B → B ≃ C → A ≃ C
+trans≃ {A = A} {B} {C} (qeq f f⁻¹ fα fβ) (qeq g g⁻¹ gα gβ) =
+  qeq (g ∘ f) (f⁻¹ ∘ g⁻¹) (λ x → trans (cong g (fα (g⁻¹ x))) (gα x))
+                          (λ x → trans (cong f⁻¹ (gβ (f x))) (fβ x))
+-- more convenient infix version, flipped
+_●_ : ∀ {ℓ ℓ′ ℓ″} {A : Set ℓ} {B : Set ℓ′} {C : Set ℓ″} → B ≃ C → A ≃ B → A ≃ C
+_●_ = flip trans≃
+
+{-
   -- since we're abstract, these are all used to do restricted expansion
   β₁ : ∀ {ℓ ℓ′ ℓ″} {A : Set ℓ} {B : Set ℓ′} {C : Set ℓ″} {f : B ≃ C} {g : A ≃ B} →
     _≃_.f (f ● g) ∼ (_≃_.f f ∘ _≃_.f g)
@@ -88,6 +89,7 @@ abstract
   β₂ : ∀ {ℓ ℓ′ ℓ″} {A : Set ℓ} {B : Set ℓ′} {C : Set ℓ″} {f : B ≃ C} {g : A ≃ B} →
     _≃_.g (f ● g) ∼ _≃_.g g ∘ _≃_.g f
   β₂  x = refl
+-}
 
 ≃IsEquiv : IsEquivalence {Level.suc Level.zero} {Level.zero} {Set} _≃_
 ≃IsEquiv = record { refl = id≃ ; sym = sym≃ ; trans = trans≃ }
