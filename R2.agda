@@ -353,9 +353,12 @@ module MOD1 where
   -- also need sym∼ and cong∼ and trans∼
 
   -- now we can prove that compose is associative:
-  assoc-∘ : {A B : U₀} {c₁ c₂ c₃ c₄ : A ⟷ B} {f : Fun c₁ c₂} {g : Fun c₂ c₃} {h : Fun c₃ c₄} →
-    _∼_ {c₁ = c₁} {c₄} (compose {c₁ = c₁} {c₂} {c₄} f (compose {c₁ = c₂} {c₃} {c₄} g h))
-                       (compose {c₁ = c₁} {c₃} {c₄} (compose {c₁ = c₁} {c₂} {c₃} f g) h)
+
+  assoc-∘ : {A B : U₀} {c₁ c₂ c₃ c₄ : A ⟷ B}
+            {f : Fun c₁ c₂} {g : Fun c₂ c₃} {h : Fun c₃ c₄} →
+    _∼_ {c₁ = c₁} {c₄}
+      (compose {c₁ = c₁} {c₂} {c₄} f (compose {c₁ = c₂} {c₃} {c₄} g h))
+      (compose {c₁ = c₁} {c₃} {c₄} (compose {c₁ = c₁} {c₂} {c₃} f g) h)
   assoc-∘ = {!!}
 
   -- Equivalence
@@ -385,6 +388,7 @@ module MOD1 where
             (refl∼ {c = c} (idF {c = c}))
 
   -- the proofs below need trans∼ and inv∼, but then are straightforward.
+
   trans≃ : {A B : U₀} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ≃ c₂) → (c₂ ≃ c₃) → (c₁ ≃ c₃)
   trans≃ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}
     (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
@@ -462,7 +466,8 @@ module MOD2 where
 
   open MOD1
     using (_⟷_; id⟷; _◎_; !)
-    renaming (_≃_ to _≃₁_; id≃ to id≃₁; trans≃ to trans≃₁)
+    renaming (app to app₁; _∼_ to _∼₁_;
+              _≃_ to _≃₁_; id≃ to id≃₁; trans≃ to trans≃₁)
 
   -- Codes in level 2 for level 1 equivalences
 
@@ -491,42 +496,38 @@ module MOD2 where
   Fun : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α β : c₁ ⇔ c₂) → Set
   Fun {A} {B} {c₁} {c₂} α β = {!!}
 
-  _≡_ : {A B : U₀} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂} →
-        (eq₁ eq₂ : El α) → Set
-  _≡_ = ?
+  app : {A B : U₀} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂} → Fun α β → El α → El β
+  app {A} {B} {c₁} {c₂} {α} {β} f eq = {!!}
 
-  _≃_ : {A B : U₀} {c₁ c₂ : A ⟷ B} (α β : c₁ ⇔ c₂) → Set
-  _≃_ = ?
+  idF : {A B : U₀} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂} → Fun α α
+  idF = {!!}
 
-{--
+  compose : {A B : U₀} {c₁ c₂ : A ⟷ B} {α β γ : c₁ ⇔ c₂} →
+            (f : Fun α β) (g : Fun β γ) → Fun α γ
+  compose = {!!}
+
   -- semantic notions on Univ₂:
   -- (1) when are two interpretations equivalent
 
-  record _≡₂_ {A B : U₀} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂}
-              (eq₁ : El α) (eq₂ : El β) : Set where
+  record _≡_ {A B : U₀} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂}
+              (eq₁ eq₂ : El α) : Set where
     open MOD1.isequiv (proj₂ eq₁) renaming (g to g₁)
     open MOD1.isequiv (proj₂ eq₂) renaming (g to g₂)
     field
       f≡ : _∼₁_ {c₁ = c₁} {c₂ = c₂} (proj₁ eq₁) (proj₁ eq₂)
       g≡ : _∼₁_ {c₁ = c₂} {c₂ = c₁} g₁ g₂
 
-  _∼₂_ : {A B C D : U₀} {c₁ c₂ : A ⟷ B} {d₁ d₂ : C ⟷ D}
-         {α : c₁ ⇔ c₂} {β : d₁ ⇔ d₂} → (f g : EL2 α → EL2 β) → Set
-  _∼₂_ {α = α} {β = β} f g =
-    (eq : EL2 α) → _≡₂_ {α = β} {β = β} (f eq) (g eq)
+  _∼_ : {A B : U₀} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂} (f g : Fun α β) → Set
+  _∼_ {α = α} {β = β} f g =
+      (eq : El α) → _≡_ {α = β} (app f eq) (app g eq)
 
-  record isequiv₂ {A B C D : U₀} {c₁ c₂ : A ⟷ B} {d₁ d₂ : C ⟷ D}
-         {Α : c₁ ⇔ c₂} {Β : d₁ ⇔ d₂} (f : EL2 Α → EL2 Β) : Set where
-    constructor mkisequiv₂
+  record _≃_ {A B : U₀} {c₁ c₂ : A ⟷ B} (α β : c₁ ⇔ c₂) : Set where
+    constructor eq
     field
-      g : EL2 Β → EL2 Α
-      α : _∼₂_ {α = Β} {β = Β} (f ○ g) id
-      β : _∼₂_ {α = Α} {β = Α} (g ○ f) id
-
-  _≃₂_ : {A B C D : U₀} {c₁ c₂ : A ⟷ B} {d₁ d₂ : C ⟷ D}
-         (Α : c₁ ⇔ c₂) (Β : d₁ ⇔ d₂) → Set
-  Α ≃₂ Β = Σ (EL2 Α → EL2 Β) (isequiv₂ {Α = Α} {Β = Β})
---}
+      f : Fun α β
+      g : Fun β α
+      for : _∼_ {α = α} (compose g f) idF
+      bck : _∼_ {α = β} (compose f g) idF
 
   -- univalence for level 2: relates level 1 equivalences with level 2 codes for
   -- these equivalences
@@ -622,7 +623,7 @@ module MOD1x2 where
   -- is univalence!
 
   complete : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ≃₁ c₂) → (c₁ ⇔ c₂)
-  complete = ?
+  complete = {!!}
 
   record univalence {A B : U₀} {c₁ c₂ : A ⟷ B} : Set where
     field
