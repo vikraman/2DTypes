@@ -17,40 +17,19 @@ open import Data.Integer as ℤ hiding (_⊔_)
 
 ------------------------------------------------------------------------------
 -- Featherweight HoTT !
+-- A mini language for programming with equivalences, identity types, and
+-- univalence.
 
--- Each universe has:
---   * code U for types; morphisms between codes; etc; a category
---   * an interpretation El of these codes as spaces; a category of spaces
-
--- The first universe (level 0) consists of just the finite types and
--- isomorphisms between them.
-
--- Once we have that level 0 universe, we can define a new universe (level 1)
--- whose codes are the equivalences at level 0. We then define a notion of
--- equivalence at level 1 that identifies some level 0 equivalences.
-
--- We can now define a level 2 universe whose codes are the level 1
--- equivalences. We then repeat and define a notion of equivalence at level 2
--- that identifies some level 1 equivalences.
-
--- Then we have some additional interesting things:
-
---   * Univalence at the lowest levels identifies level 0 equivalences and level
---     1 codes. The interesting direction verifies that the level 1 codes are
---     complete with respect to the level 0 equivalences
-
---   * Once we get to level 2, we can define additional interesting semantic
---     notions like higher inductive types by using equivalences from lower
---     levels. In particular we show at level 2 that an equivalence of order n
---     induces a groupoid of cardinality 1/n. We can then at level 3 introduce
---     codes for these fractional groupoids. Note that to define S¹ we would
---     need an equivalence of infinite order but our toy language only includes
---     finite types.
+-- Technically we define a weak n-category with 0-cells (objects); 1-cells
+-- (morphisms between 0-cells); 2-cells (morphisms between the 1-cells);
+-- etc. Each collections of cells has:
+--   * code U for the cells
+--   * an interpretation El of these codes as spaces
 
 ------------------------------------------------------------------------------
--- The type of universes.
+-- The type of n-cells
 
-record UNIVERSE {u e : Level} : Set (lsuc (u ⊔ e)) where
+record N-CELLS {u e : Level} : Set (lsuc (u ⊔ e)) where
   field
     -- codes; morphisms on codes; code category
     U : Set u
@@ -79,7 +58,7 @@ record UNIVERSE {u e : Level} : Set (lsuc (u ⊔ e)) where
     trans≃ : {A B C : U} → A ≃ B → B ≃ C → A ≃ C
 
 ------------------------------------------------------------------------------
--- level 0 universe
+-- 0-cells
 
 module MOD0 where
 
@@ -210,7 +189,7 @@ module MOD0 where
 
   -- Universe 0
 
-  Univ : UNIVERSE
+  Univ : N-CELLS
   Univ = record {
            U = U
          ; _⟷_ = _⟷_
@@ -237,7 +216,7 @@ module MOD0 where
          }
 
 ------------------------------------------------------------------------------
--- level 1 universe for each A and B: codes correspond to level 0 equivalences
+-- for each pair of 0-cells A and B, a category of 1-cells
 
 module MOD1 (A B : MOD0.U) where
 
@@ -247,7 +226,7 @@ module MOD1 (A B : MOD0.U) where
               _∼_ to _∼₀_; refl∼ to refl∼₀; sym∼ to sym∼₀; trans∼ to trans∼₀;
               _≃_ to _≃₀_)
 
-  -- Codes in level 1 for level 0 equivalences
+  -- Codes in level 1
 
   U : Set
   U = A ⟷ B
@@ -255,6 +234,7 @@ module MOD1 (A B : MOD0.U) where
   data _⇔_ : U → U → Set where
     id⇔ : {c : U} → c ⇔ c
     _●_  : {c₁ c₂ c₃ : U} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+    -- elided
 
   2! : {c₁ c₂ : U} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
   2! id⇔ = id⇔
@@ -394,7 +374,7 @@ module MOD1 (A B : MOD0.U) where
 
   -- Universe 1
 
-  Univ : UNIVERSE
+  Univ : N-CELLS
   Univ = record {
                U = A ⟷ B
              ; _⟷_ = _⇔_
@@ -434,12 +414,9 @@ module MOD0x1 where
     using    ()
     renaming (U to U₁; El to El₁; _≡_ to _≡₁_; _≃_ to _≃₁_)
 
-  -- We want to make sure that the level 1 codes are exactly the level 0
-  -- equivalences. We will define a cross-level equivalence between them: that
-  -- is univalence!
-
-  -- Every code at level 1 does correspond to a level 0 equivalence
-  -- Reverse direction is univalence; addressed below
+  -- We want to make sure that the 1-cells are exactly the equivalences between
+  -- 0-cells. We will define a cross-level equivalence between them: that is
+  -- univalence!
 
   sound : {A B : U₀} → (c : U₁ A B) → El₁ A B c
   sound id⟷ = id≃₀
@@ -581,7 +558,7 @@ module MOD2 where
 
   -- Universe 2
 
-  Univ : {A B : U₀} (c₁ c₂ : A ⟷ B) → UNIVERSE
+  Univ : {A B : U₀} (c₁ c₂ : A ⟷ B) → N-CELLS
   Univ c₁ c₂ = record {
              U = c₁ ⇔ c₂
            ; El = El
@@ -679,7 +656,7 @@ module MOD3 where
 
   -- Equivalence
 
-  Univ₃ : UNIVERSE
+  Univ₃ : N-CELLS
   Univ₃ = record {
             U = U
           ; El = El
