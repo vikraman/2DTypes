@@ -39,6 +39,7 @@ record N-CELLS {u e : Level} : Set (lsuc (u ⊔ e)) where
     -- decoding a code to a space; morphisms on spaces
     El  : U → Set e
     Fun : (A B : U) → Set u
+    eval : {A B : U} → (A ⟷ B) → Fun A B
     app : {A B : U} → Fun A B → El A → El B
     idF : {A : U} → Fun A A
     _◎_ : {A B C : U} → Fun B C → Fun A B → Fun A C
@@ -124,6 +125,13 @@ module MOD0 where
           app f a ≡ app f b
   cong≡ f (refl a) = refl (f a)
 
+  eval : {A B : U} → (A ⟷ B) → Fun A B
+  eval id⟷ a = a
+  eval uniti₊r a = inj₁ a
+  eval unite₊r (inj₁ a) = a
+  eval unite₊r (inj₂ ())
+  eval (c₁ ◎ c₂) = (eval c₂) ○ (eval c₁)
+
   -- Homotopy
 
   _∼_ : {A B : U} → (f g : Fun A B) → Set
@@ -144,28 +152,27 @@ module MOD0 where
 
   -- Equivalence
 
-  -- Non-traditional packaging of an equivalence: rather than as a property of a
-  -- function, it is directly a type
-
-  record _≃_ (A B : U) : Set where
-    constructor eq
+  record isequiv {A B : U} (f : Fun A B) : Set where
+    constructor mkisequiv
     field
-      f : Fun A B
       g : Fun B A
       α : (f ○ g) ∼ id
       β : (g ○ f) ∼ id
 
+  _≃_ : (A B : U) → Set
+  A ≃ B = Σ[ f ∈ Fun A B ] (isequiv f)
+
   -- Fundamental equivalences
 
   id≃ : {A : U} → A ≃ A
-  id≃ = eq id id refl refl
+  id≃ = (id , mkisequiv id refl refl)
 
   sym≃ : {A B : U} → A ≃ B → B ≃ A
-  sym≃ (eq f g α β) = eq g f β α
+  sym≃ (f , mkisequiv g α β) = (g , mkisequiv f β α)
 
   trans≃ : {A B C : U} → A ≃ B → B ≃ C → A ≃ C
-  trans≃ {A} {B} {C} (eq f f⁻ α₁ β₁) (eq g g⁻ α₂ β₂) =
-    eq (g ○ f) (f⁻ ○ g⁻) α β
+  trans≃ {A} {B} {C} (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
+    g ○ f , mkisequiv (f⁻ ○ g⁻) α β
       where α : (x : El C) → (g (f (f⁻ (g⁻ x)))) ≡ x
             α x = trans≡ (cong≡ g (α₁ (g⁻ x))) (α₂ x)
             β : (x : El A) → (f⁻ (g⁻ (g (f x)))) ≡ x
@@ -174,7 +181,7 @@ module MOD0 where
   -- Further examples
 
   A⊎⊥≃A : {A : U} → A ⊕ 𝟘 ≃ A
-  A⊎⊥≃A {A} = eq f g refl β
+  A⊎⊥≃A {A} = f , mkisequiv g refl β
     where
       f : (El A ⊎ ⊥) → El A
       f (inj₁ a) = a
@@ -187,6 +194,8 @@ module MOD0 where
       β (inj₁ a) = refl (inj₁ a)
       β (inj₂ ())
 
+  -- Each morphism denotes an equivalence
+
   -- Universe 0
 
   Univ : N-CELLS
@@ -197,6 +206,7 @@ module MOD0 where
          ; _◎⟷_ = _◎_
          ; El = El
          ; Fun = Fun
+         ; eval = eval
          ; idF = id
          ; app = app
          ; _◎_ = _○_
@@ -221,10 +231,10 @@ module MOD0 where
 module MOD1 (A B : MOD0.U) where
 
   open MOD0
-    using    (𝟘; 𝟙; _⊕_; _⊗_; _⟷_)
-    renaming (U to U₀; Fun to Fun₀;
+    using    (_⟷_; ∼○)
+    renaming (Fun to Fun₀; eval to eval₀;
               _∼_ to _∼₀_; refl∼ to refl∼₀; sym∼ to sym∼₀; trans∼ to trans∼₀;
-              _≃_ to _≃₀_)
+              isequiv to isequiv₀; mkisequiv to mkisequiv₀; _≃_ to _≃₀_)
 
   -- Codes in level 1
 
@@ -243,7 +253,7 @@ module MOD1 (A B : MOD0.U) where
   -- Decoding a code to a space
 
   El : U → Set
-  El _ = A ≃₀ B
+  El c = isequiv₀ (eval₀ c)
 
   -- Functions between spaces (A ≃₀ B) and (A ≃₀ B). The elements of (A ≃₀ B)
   -- are functions back and forth and proofs. A function between the spaces will
@@ -258,11 +268,16 @@ module MOD1 (A B : MOD0.U) where
     ((g : Fun₀ B A) → (G g ∼₀ g))
 
   app : {c₁ c₂ : U} → Fun c₁ c₂ → El c₁ → El c₂
-  app (F , G , γ , δ) (MOD0.eq f g α β) =
-    MOD0.eq (F f)
-            (G g)
-            (trans∼₀ (MOD0.∼○ (δ g) (γ f)) α)
-            (trans∼₀ (MOD0.∼○ (γ f) (δ g)) β)
+  app (F , G , γ , δ) (mkisequiv₀ g α β) = {!!}
+
+{--
+  app (F , G , γ , δ) (f , mkisequiv₀ g α β) =
+    F f ,
+    mkisequiv₀
+        (G g)
+        (trans∼₀ (∼○ (δ g) (γ f)) α)
+        (trans∼₀ (∼○ (γ f) (δ g)) β)
+--}
 
   idF : {c : U} → Fun c c
   idF = (id , id , refl∼₀ , refl∼₀)
@@ -280,39 +295,49 @@ module MOD1 (A B : MOD0.U) where
   -- Identity
 
   record _≡_ {c : U} (eq₁ eq₂ : El c) : Set where
-    open MOD0._≃_ eq₁ renaming (f to f₁; g to g₁)
-    open MOD0._≃_ eq₂ renaming (f to f₂; g to g₂)
+{--
+    open isequiv₀ (proj₂ eq₁) renaming (g to g₁)
+    open isequiv₀ (proj₂ eq₂) renaming (g to g₂)
     field
-      f≡ : f₁ ∼₀ f₂
+      f≡ : proj₁ eq₁ ∼₀ proj₁ eq₂
       g≡ : g₁ ∼₀ g₂
+--}
 
-  refl≡ : {c : U} (eq : El c) → _≡_ {c = c} eq eq
-  refl≡ (MOD0.eq f g α β) =
+--  refl≡ : {c : U} (eq : El c) → _≡_ {c = c} eq eq
+  refl≡ : {c : U} (eq : El c) → _≡_ eq eq
+  refl≡ = {!!}
+{--
+  refl≡ (f , mkisequiv₀ g α β) =
     record {
-      f≡ = MOD0.refl∼ f
-    ; g≡ = MOD0.refl∼ g
+      f≡ = refl∼₀ f
+    ; g≡ = refl∼₀ g
     }
-
+--}
   trans≡ : {c : U} {eq₁ eq₂ eq₃ : El c} →
            (_≡_ {c = c} eq₁ eq₂) → (_≡_ {c = c} eq₂ eq₃) →
            (_≡_ {c = c} eq₁ eq₃)
+  trans≡ = {!!}
+{--
   trans≡ (record { f≡ = f≡₁ ; g≡ = g≡₁ }) (record { f≡ = f≡₂ ; g≡ = g≡₂ }) =
     record {
-      f≡ = MOD0.trans∼ f≡₁ f≡₂
-    ; g≡ = MOD0.trans∼ g≡₁ g≡₂
+      f≡ = trans∼₀ f≡₁ f≡₂
+    ; g≡ = trans∼₀ g≡₁ g≡₂
     }
-
+--}
   cong≡ : {c₁ c₂ : U} {eq₁ eq₂ : El c₁} →
    (f : Fun c₁ c₂) → _≡_ {c = c₁} eq₁ eq₂ →
    _≡_ {c = c₂} (app {c₁ = c₁} {c₂ = c₂} f eq₁) (app {c₁ = c₁} {c₂ = c₂} f eq₂)
-  cong≡ {eq₁ = (MOD0.eq f₁ g₁ α₁ β₁)}
-        {eq₂ = (MOD0.eq f₂ g₂ α₂ β₂)}
+  cong≡ = {!!}
+{--
+  cong≡ {eq₁ = (f₁ , mkisequiv₀ g₁ α₁ β₁)}
+        {eq₂ = (f₂ , mkisequiv₀ g₂ α₂ β₂)}
         (F , G , γ , δ)
         (record { f≡ = f≡ ; g≡ = g≡ }) =
     record {
        f≡ = trans∼₀ (γ f₁) (trans∼₀ f≡ (sym∼₀ (γ f₂)))
      ; g≡ = trans∼₀ (δ g₁) (trans∼₀ g≡ (sym∼₀ (δ g₂)))
      }
+--}
 
   -- Homotopy
 
@@ -383,16 +408,16 @@ module MOD1 (A B : MOD0.U) where
              ; El = λ _ → A ≃₀ B
              ; Fun = Fun
              ; idF = λ {c} → idF {c = c}
-             ; app = λ {c₁} {c₂} → app {c₁ = c₁} {c₂}
+             ; app = {!!} -- λ {c₁} {c₂} → app {c₁ = c₁} {c₂}
              ; _◎_ = λ {c₁} {c₂} {c₃} → flip (compose {c₁ = c₁} {c₂} {c₃})
-             ; _≡_ = λ { {c} → _≡_ {c = c}}
+             ; _≡_ = {!!} -- λ { {c} → _≡_ {c = c}}
              ; _∼_ = λ { {c₁} {c₂} → _∼_ {c₁ = c₁} {c₂ = c₂}}
              ; _≃_ = _≃_
-             ; id≡ = refl≡
+             ; id≡ = {!!} -- refl≡
              ; sym≡ = {!!}
-             ; trans≡ = trans≡
-             ; cong≡ = cong≡
-             ; refl∼ = refl∼
+             ; trans≡ = {!!} -- trans≡
+             ; cong≡ = {!!} -- cong≡
+             ; refl∼ = {!!} -- refl∼
              ; sym∼ = {!!}
              ; trans∼ = {!!}
              ; id≃ = {!!}
@@ -408,7 +433,8 @@ module MOD0x1 where
   open MOD0
     using (_⟷_; id⟷; uniti₊r; unite₊r; _◎_; A⊎⊥≃A)
     renaming (U to U₀; _∼_ to _∼₀_;
-              _≃_ to _≃₀_; id≃ to id≃₀; sym≃ to sym≃₀; trans≃ to trans≃₀)
+              _≃_ to _≃₀_; mkisequiv to mkisequiv₀;
+              id≃ to id≃₀; sym≃ to sym≃₀; trans≃ to trans≃₀)
 
   open MOD1
     using    ()
@@ -419,10 +445,10 @@ module MOD0x1 where
   -- univalence!
 
   sound : {A B : U₀} → (c : U₁ A B) → El₁ A B c
-  sound id⟷ = id≃₀
-  sound uniti₊r = sym≃₀ MOD0.A⊎⊥≃A
-  sound unite₊r = MOD0.A⊎⊥≃A
-  sound (c₁ ◎ c₂) = trans≃₀ (sound c₁) (sound c₂)
+  sound id⟷ = {!!} -- id≃₀
+  sound uniti₊r = {!!} -- sym≃₀ A⊎⊥≃A
+  sound unite₊r = {!!} -- A⊎⊥≃A
+  sound (c₁ ◎ c₂) = {!!} -- trans≃₀ (sound c₁) (sound c₂)
 
   -- The two spaces in question are:
   -- A ≃₀ B in level 0 universe, and
@@ -432,14 +458,14 @@ module MOD0x1 where
   -- from A ≃₀ B to A ⟷ B we have the function complete below
 
   complete : {A B : U₀} → (A ≃₀ B) → (A ⟷ B)
-  complete {A} {B} (MOD0.eq f g α β) = {!!}
+  complete {A} {B} (f , mkisequiv₀ g α β) = {!!}
 
   -- Now we need to require inverses
 
   record univalence {A B : U₀} : Set where
-    field
-      α : (c : A ⟷ B) → _≃₁_ A B (complete (sound c)) c
-      β : (eq : A ≃₀ B) → Σ[ c ∈ A ⟷ B ] _≡₁_ A B {c = c} (sound (complete eq)) eq
+--    field
+--      α : (c : A ⟷ B) → _≃₁_ A B (complete (sound c)) c
+--      β : (eq : A ≃₀ B) → Σ[ c ∈ A ⟷ B ] _≡₁_ A B {c = c} (sound (complete eq)) eq
 
 {--
 ------------------------------------------------------------------------------
