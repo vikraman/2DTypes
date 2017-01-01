@@ -3,18 +3,19 @@
 module Univ.Universe where
 
 open import Relation.Binary.PropositionalEquality renaming (_≡_ to _==_)
+open import Function using (id; _∘′_; flip)
 open import Univ.Cats
 
 instance
   SetIsCat : IsCategory Set (λ A B → A → B) _==_
   SetIsCat =
-    record { id = λ z → z
-           ; _∘_ = λ g f x → g (f x)
+    record { id = id
+           ; _∘_ = _∘′_
            ; assoc = refl
            ; identityˡ = refl
            ; identityʳ = refl
            ; equiv = isEquivalence
-           ; ∘-resp-≡ = λ { refl refl → refl }
+           ; ∘-resp-≡ = λ { {f = f} {.f} {g} {.g} refl refl → refl } -- must expand for 2.5.1.1
            }
 
 record Universe : Set where
