@@ -53,6 +53,7 @@ record N-CELLS {u e : Level} : Set (lsuc (u ⊔ e)) where
     refl∼ : {A B : U} → (f : Fun A B) → (f ∼ f)
     sym∼ : {A B : U} {f g : Fun A B} → (f ∼ g) → (g ∼ f)
     trans∼ : {A B : U} {f g h : Fun A B} → f ∼ g → g ∼ h → f ∼ h
+    isequiv : {A B : U} (f : Fun A B) → Set
     _≃_ : (A B : U) → Set e
     id≃ : {A : U} → A ≃ A
     sym≃ : {A B : U} → A ≃ B → B ≃ A
@@ -196,10 +197,10 @@ module MOD0 where
 
   -- Each morphism denotes an equivalence
 
-  -- Universe 0
+  -- 0-cells
 
-  Univ : N-CELLS
-  Univ = record {
+  0-cells : N-CELLS
+  0-cells = record {
            U = U
          ; _⟷_ = _⟷_
          ; id⟷ = id⟷
@@ -211,15 +212,16 @@ module MOD0 where
          ; app = app
          ; _◎_ = _○_
          ; _≡_ = _≡_
-         ; _∼_ = _∼_
-         ; _≃_ = _≃_
          ; id≡ = id≡
          ; sym≡ = sym≡
          ; trans≡ = trans≡
          ; cong≡ = cong≡
+         ; _∼_ = _∼_
          ; refl∼ = refl∼
          ; sym∼ = sym∼
          ; trans∼ = trans∼
+         ; isequiv = isequiv
+         ; _≃_ = _≃_
          ; id≃ = id≃
          ; sym≃ = sym≃
          ; trans≃ = trans≃
@@ -255,20 +257,21 @@ module MOD1 (A B : MOD0.U) where
   El : U → Set
   El c = isequiv₀ (eval₀ c)
 
-  -- Functions between spaces (A ≃₀ B) and (A ≃₀ B). The elements of (A ≃₀ B)
-  -- are functions back and forth and proofs. A function between the spaces will
-  -- map each pair of functions to another pair of functions while preserving
-  -- the proofs.
+  -- Functions between spaces (isequiv f₁) and (isequiv f₂). In general there
+  -- may be no connection between f₁ and f₂ other that they are both from El A
+  -- to El B. Ex. the types A and B might both be 1+1 and c₁ and c₂ might be id
+  -- and swap. The elements of (isequiv f) are an inverse g and two proofs. A
+  -- function between the spaces will map g₁ to g₂ while preserving the proofs.
 
   Fun : (c₁ c₂ : U) → Set
-  Fun _ _ =
-    Σ[ F ∈ (Fun₀ A B → Fun₀ A B) ]
-    Σ[ G ∈ (Fun₀ B A → Fun₀ B A) ]
-    ((f : Fun₀ A B) → (F f ∼₀ f)) ×
-    ((g : Fun₀ B A) → (G g ∼₀ g))
+  Fun c₁ c₂ = {!!}
 
   app : {c₁ c₂ : U} → Fun c₁ c₂ → El c₁ → El c₂
-  app (F , G , γ , δ) (mkisequiv₀ g α β) = {!!}
+  app F (mkisequiv₀ g₁ α₁ β₁) =
+    mkisequiv₀
+      {!!}
+      {!!}
+      {!!}
 
 {--
   app (F , G , γ , δ) (f , mkisequiv₀ g α β) =
@@ -280,14 +283,17 @@ module MOD1 (A B : MOD0.U) where
 --}
 
   idF : {c : U} → Fun c c
-  idF = (id , id , refl∼₀ , refl∼₀)
+  idF = {!!} -- (id , id , refl∼₀ , refl∼₀)
 
   compose : {c₁ c₂ c₃ : U} → Fun c₁ c₂ → Fun c₂ c₃ → Fun c₁ c₃
-  compose (F₁ , G₁ , γ₁ , δ₁) (F₂ , G₂ , γ₂ , δ₂) =
+  compose = {!!}
+{--
+  (F₁ , G₁ , γ₁ , δ₁) (F₂ , G₂ , γ₂ , δ₂) =
     F₂ ○ F₁ ,
     G₂ ○ G₁ ,
     (λ f → trans∼₀ (γ₂ (F₁ f)) (γ₁ f)) ,
     (λ g → trans∼₀ (δ₂ (G₁ g)) (δ₁ g))
+--}
 
   -- Need associativity of compose: see below where homotopy is
   -- defined, as we need a notion of 'sameness' of Fun to express it.
