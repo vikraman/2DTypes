@@ -19,10 +19,8 @@ open import Data.Integer as ℤ hiding (_⊔_)
 -- Featherweight HoTT !
 
 -- Each universe has:
---   * code U for types
---   * an interpretation El of these codes as spaces
---   * a semantic notion of equivalence on the interpretations
--- [Really we want codes for a category and an actual category.]
+--   * code U for types; morphisms between codes; etc; a category
+--   * an interpretation El of these codes as spaces; a category of spaces
 
 -- The first universe (level 0) consists of just the finite types and
 -- isomorphisms between them.
@@ -54,36 +52,28 @@ open import Data.Integer as ℤ hiding (_⊔_)
 
 record UNIVERSE {u e : Level} : Set (lsuc (u ⊔ e)) where
   field
-    -- codes
-    U   : Set u
-    -- decoding a code to a space
+    -- codes; morphisms on codes; code category
+    U : Set u
+    _⟷_ : U → U → Set
+    id⟷ : {A : U} → A ⟷ A
+    _◎⟷_ : {A B C : U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+    -- decoding a code to a space; morphisms on spaces
     El  : U → Set e
-    -- the type of functions from spaces to spaces
     Fun : (A B : U) → Set u
-    -- functions can be applied
     app : {A B : U} → Fun A B → El A → El B
-    -- and composed
+    idF : {A : U} → Fun A A
     _◎_ : {A B C : U} → Fun B C → Fun A B → Fun A C
-    -- identity relation on points in a space
+    -- identity of elements of spaces; homotopies; equivalences
     _≡_ : {A : U} (a b : El A) → Set e
-    -- homotopy of functions from spaces to spaces
-    _∼_ : {A B : U} (f g : Fun A B) → Set e
-    -- equivalence of spaces El A and El B
-    _≃_ : (A B : U) → Set e
-
-    -- we also need that the pieces of the universe satisfy certain laws
-    -- for identity relation on points:
     id≡ : {A : U} (a : El A) → a ≡ a
     sym≡ : {A : U} {a b : El A} → a ≡ b → b ≡ a
     trans≡ : {A : U} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
     cong≡ : {A B : U} {a b : El A} → (f : Fun A B) (p : a ≡ b) → app f a ≡ app f b
-
-    -- there are laws on homotopies:
+    _∼_ : {A B : U} (f g : Fun A B) → Set e
     refl∼ : {A B : U} → (f : Fun A B) → (f ∼ f)
     sym∼ : {A B : U} {f g : Fun A B} → (f ∼ g) → (g ∼ f)
     trans∼ : {A B : U} {f g h : Fun A B} → f ∼ g → g ∼ h → f ∼ h
-
-    -- and on equivalence of spaces:
+    _≃_ : (A B : U) → Set e
     id≃ : {A : U} → A ≃ A
     sym≃ : {A B : U} → A ≃ B → B ≃ A
     trans≃ : {A B C : U} → A ≃ B → B ≃ C → A ≃ C
@@ -104,6 +94,21 @@ module MOD0 where
     _⊕_ : U → U → U
     _⊗_ : U → U → U
 
+  -- Morphisms on code
+
+  data _⟷_ : U → U → Set where
+    id⟷ :    {A : U} → A ⟷ A
+    uniti₊r : {A : U} → A ⟷ (A ⊕ 𝟘)
+    unite₊r : {A : U} → A ⊕ 𝟘 ⟷ A
+    _◎_ :     {A B C : U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+    -- elided
+
+  ! : {A B : U} → (A ⟷ B) → (B ⟷ A)
+  ! unite₊r = uniti₊r
+  ! uniti₊r = unite₊r
+  ! id⟷ = id⟷
+  ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
+
   -- Denotations of codes
 
   El : U → Set
@@ -121,8 +126,6 @@ module MOD0 where
 
   app : {A B : U} → Fun A B → El A → El B
   app f a = f a
-
-  -- Composition is the usual one
 
   -- Identity
 
@@ -210,8 +213,12 @@ module MOD0 where
   Univ : UNIVERSE
   Univ = record {
            U = U
+         ; _⟷_ = _⟷_
+         ; id⟷ = id⟷
+         ; _◎⟷_ = _◎_
          ; El = El
          ; Fun = Fun
+         ; idF = id
          ; app = app
          ; _◎_ = _○_
          ; _≡_ = _≡_
@@ -230,71 +237,57 @@ module MOD0 where
          }
 
 ------------------------------------------------------------------------------
--- level 1 universe: codes correspond to level 0 equivalences
+-- level 1 universe for each A and B: codes correspond to level 0 equivalences
 
 module MOD1 (A B : MOD0.U) where
 
   open MOD0
-    using    (𝟘; 𝟙; _⊕_; _⊗_)
+    using    (𝟘; 𝟙; _⊕_; _⊗_; _⟷_)
     renaming (U to U₀; Fun to Fun₀;
               _∼_ to _∼₀_; refl∼ to refl∼₀; sym∼ to sym∼₀; trans∼ to trans∼₀;
               _≃_ to _≃₀_)
 
   -- Codes in level 1 for level 0 equivalences
 
-  data _⟷_ : U₀ → U₀ → Set where
-    id⟷ :    {A : U₀} → A ⟷ A
-    uniti₊r : {A : U₀} → A ⟷ (A ⊕ 𝟘)
-    unite₊r : {A : U₀} → A ⊕ 𝟘 ⟷ A
-    _◎_ :     {A B C : U₀} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
-    -- elided
+  U : Set
+  U = A ⟷ B
 
-  ! : {A B : U₀} → (A ⟷ B) → (B ⟷ A)
-  ! unite₊r = uniti₊r
-  ! uniti₊r = unite₊r
-  ! id⟷ = id⟷
-  ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
+  data _⇔_ : U → U → Set where
+    id⇔ : {c : U} → c ⇔ c
+    _●_  : {c₁ c₂ c₃ : U} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+
+  2! : {c₁ c₂ : U} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+  2! id⇔ = id⇔
+  2! (α ● β) = (2! β) ● (2! α)
 
   -- Decoding a code to a space
 
-  El : (A ⟷ B) → Set
+  El : U → Set
   El _ = A ≃₀ B
-
-{--
--- Every code at level 1 does correspond to a level 0 equivalence
-  -- Reverse direction is univalence; addressed below
-
-  sound : (c : A ⟷ B) → El c
-  sound id⟷ = MOD0.id≃
-  sound uniti₊r = MOD0.sym≃ MOD0.A⊎⊥≃A
-  sound unite₊r = MOD0.A⊎⊥≃A
-  sound (c₁ ◎ c₂) = MOD0.trans≃ (sound c₁) (sound c₂)
---}
 
   -- Functions between spaces (A ≃₀ B) and (A ≃₀ B). The elements of (A ≃₀ B)
   -- are functions back and forth and proofs. A function between the spaces will
   -- map each pair of functions to another pair of functions while preserving
   -- the proofs.
 
-  Fun : (c₁ c₂ : A ⟷ B) → Set
+  Fun : (c₁ c₂ : U) → Set
   Fun _ _ =
     Σ[ F ∈ (Fun₀ A B → Fun₀ A B) ]
     Σ[ G ∈ (Fun₀ B A → Fun₀ B A) ]
     ((f : Fun₀ A B) → (F f ∼₀ f)) ×
     ((g : Fun₀ B A) → (G g ∼₀ g))
 
-
-  app : {c₁ c₂ : A ⟷ B} → Fun c₁ c₂ → El c₁ → El c₂
+  app : {c₁ c₂ : U} → Fun c₁ c₂ → El c₁ → El c₂
   app (F , G , γ , δ) (MOD0.eq f g α β) =
     MOD0.eq (F f)
             (G g)
             (trans∼₀ (MOD0.∼○ (δ g) (γ f)) α)
             (trans∼₀ (MOD0.∼○ (γ f) (δ g)) β)
 
-  idF : {c : A ⟷ B} → Fun c c
+  idF : {c : U} → Fun c c
   idF = (id , id , refl∼₀ , refl∼₀)
 
-  compose : {c₁ c₂ c₃ : A ⟷ B} → Fun c₁ c₂ → Fun c₂ c₃ → Fun c₁ c₃
+  compose : {c₁ c₂ c₃ : U} → Fun c₁ c₂ → Fun c₂ c₃ → Fun c₁ c₃
   compose (F₁ , G₁ , γ₁ , δ₁) (F₂ , G₂ , γ₂ , δ₂) =
     F₂ ○ F₁ ,
     G₂ ○ G₁ ,
@@ -306,21 +299,21 @@ module MOD1 (A B : MOD0.U) where
 
   -- Identity
 
-  record _≡_ {c : A ⟷ B} (eq₁ eq₂ : El c) : Set where
+  record _≡_ {c : U} (eq₁ eq₂ : El c) : Set where
     open MOD0._≃_ eq₁ renaming (f to f₁; g to g₁)
     open MOD0._≃_ eq₂ renaming (f to f₂; g to g₂)
     field
       f≡ : f₁ ∼₀ f₂
       g≡ : g₁ ∼₀ g₂
 
-  refl≡ : {c : A ⟷ B} (eq : El c) → _≡_ {c = c} eq eq
+  refl≡ : {c : U} (eq : El c) → _≡_ {c = c} eq eq
   refl≡ (MOD0.eq f g α β) =
     record {
       f≡ = MOD0.refl∼ f
     ; g≡ = MOD0.refl∼ g
     }
 
-  trans≡ : {c : A ⟷ B} {eq₁ eq₂ eq₃ : El c} →
+  trans≡ : {c : U} {eq₁ eq₂ eq₃ : El c} →
            (_≡_ {c = c} eq₁ eq₂) → (_≡_ {c = c} eq₂ eq₃) →
            (_≡_ {c = c} eq₁ eq₃)
   trans≡ (record { f≡ = f≡₁ ; g≡ = g≡₁ }) (record { f≡ = f≡₂ ; g≡ = g≡₂ }) =
@@ -329,7 +322,7 @@ module MOD1 (A B : MOD0.U) where
     ; g≡ = MOD0.trans∼ g≡₁ g≡₂
     }
 
-  cong≡ : {c₁ c₂ : A ⟷ B} {eq₁ eq₂ : El c₁} →
+  cong≡ : {c₁ c₂ : U} {eq₁ eq₂ : El c₁} →
    (f : Fun c₁ c₂) → _≡_ {c = c₁} eq₁ eq₂ →
    _≡_ {c = c₂} (app {c₁ = c₁} {c₂ = c₂} f eq₁) (app {c₁ = c₁} {c₂ = c₂} f eq₂)
   cong≡ {eq₁ = (MOD0.eq f₁ g₁ α₁ β₁)}
@@ -343,12 +336,12 @@ module MOD1 (A B : MOD0.U) where
 
   -- Homotopy
 
-  _∼_ : {c₁ c₂ : A ⟷ B} → (f g : Fun c₁ c₂) → Set
+  _∼_ : {c₁ c₂ : U} → (f g : Fun c₁ c₂) → Set
   _∼_ {c₁ = c₁} {c₂ = c₂} f g =
     (eq : El c₁) →
     _≡_ {c = c₂} (app {c₁ = c₁} {c₂ = c₂} f eq) (app {c₁ = c₁} {c₂ = c₂} g eq)
 
-  refl∼ : {c : A ⟷ B} → (f : Fun c c) →
+  refl∼ : {c : U} → (f : Fun c c) →
           _∼_ {c₁ = c} {c₂ = c} f f
   refl∼ {c = c} f eq = refl≡ (app {c₁ = c} {c₂ = c} f eq)
 
@@ -356,7 +349,7 @@ module MOD1 (A B : MOD0.U) where
 
   -- now we can prove that compose is associative:
 
-  assoc-∘ : {c₁ c₂ c₃ c₄ : A ⟷ B}
+  assoc-∘ : {c₁ c₂ c₃ c₄ : U}
             {f : Fun c₁ c₂} {g : Fun c₂ c₃} {h : Fun c₃ c₄} →
     _∼_ {c₁ = c₁} {c₄}
       (compose {c₁ = c₁} {c₂} {c₄} f (compose {c₁ = c₂} {c₃} {c₄} g h))
@@ -365,7 +358,7 @@ module MOD1 (A B : MOD0.U) where
 
   -- Equivalence
 
-  record isequiv {c₁ c₂ : A ⟷ B}
+  record isequiv {c₁ c₂ : U}
          (f : Fun c₁ c₂) : Set where
     constructor mkisequiv
     field
@@ -377,12 +370,12 @@ module MOD1 (A B : MOD0.U) where
           (compose {c₁ = c₁} {c₂ = c₂} {c₃ = c₁} f g)
           (idF {c = c₁})
 
-  _≃_ : (c₁ c₂ : A ⟷ B) → Set
+  _≃_ : (c₁ c₂ : U) → Set
   _≃_ c₁ c₂ = Σ (Fun c₁ c₂) (isequiv {c₁ = c₁} {c₂ = c₂})
 
   -- Example level 1 equivalences
 
-  id≃ : (c : A ⟷ B) → c ≃ c
+  id≃ : (c : U) → c ≃ c
   id≃ c = idF {c = c},
           mkisequiv
             (idF {c = c})
@@ -391,7 +384,7 @@ module MOD1 (A B : MOD0.U) where
 
   -- the proofs below need trans∼ and inv∼, but then are straightforward.
 
-  trans≃ : {c₁ c₂ c₃ : A ⟷ B} → (c₁ ≃ c₂) → (c₂ ≃ c₃) → (c₁ ≃ c₃)
+  trans≃ : {c₁ c₂ c₃ : U} → (c₁ ≃ c₂) → (c₂ ≃ c₃) → (c₁ ≃ c₃)
   trans≃ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}
     (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
     compose {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} f g ,
@@ -404,8 +397,12 @@ module MOD1 (A B : MOD0.U) where
   Univ : UNIVERSE
   Univ = record {
                U = A ⟷ B
+             ; _⟷_ = _⇔_
+             ; id⟷ = id⇔
+             ; _◎⟷_ = _●_
              ; El = λ _ → A ≃₀ B
              ; Fun = Fun
+             ; idF = λ {c} → idF {c = c}
              ; app = λ {c₁} {c₂} → app {c₁ = c₁} {c₂}
              ; _◎_ = λ {c₁} {c₂} {c₃} → flip (compose {c₁ = c₁} {c₂} {c₃})
              ; _≡_ = λ { {c} → _≡_ {c = c}}
@@ -423,23 +420,32 @@ module MOD1 (A B : MOD0.U) where
              ; trans≃ = {!!}
              }
 
-{--
 ------------------------------------------------------------------------------
 -- level 0-1 cross equivalences
 
-module MOD0x1 (A B : MOD0.U) where
+module MOD0x1 where
 
   open MOD0
-    using    ()
-    renaming (U to U₀; _∼_ to _∼₀_; _≃_ to _≃₀_)
+    using (_⟷_; id⟷; uniti₊r; unite₊r; _◎_; A⊎⊥≃A)
+    renaming (U to U₀; _∼_ to _∼₀_;
+              _≃_ to _≃₀_; id≃ to id≃₀; sym≃ to sym≃₀; trans≃ to trans≃₀)
 
   open MOD1
-    using    (_⟷_; id⟷; uniti₊r; unite₊r; _◎_; sound)
-    renaming (_≡_ to _≡₁_; _≃_ to _≃₁_)
+    using    ()
+    renaming (U to U₁; El to El₁; _≡_ to _≡₁_; _≃_ to _≃₁_)
 
   -- We want to make sure that the level 1 codes are exactly the level 0
   -- equivalences. We will define a cross-level equivalence between them: that
   -- is univalence!
+
+  -- Every code at level 1 does correspond to a level 0 equivalence
+  -- Reverse direction is univalence; addressed below
+
+  sound : {A B : U₀} → (c : U₁ A B) → El₁ A B c
+  sound id⟷ = id≃₀
+  sound uniti₊r = sym≃₀ MOD0.A⊎⊥≃A
+  sound unite₊r = MOD0.A⊎⊥≃A
+  sound (c₁ ◎ c₂) = trans≃₀ (sound c₁) (sound c₂)
 
   -- The two spaces in question are:
   -- A ≃₀ B in level 0 universe, and
@@ -455,9 +461,10 @@ module MOD0x1 (A B : MOD0.U) where
 
   record univalence {A B : U₀} : Set where
     field
-      α : (c : A ⟷ B) → complete (sound c) ≃₁ c
-      β : (eq : A ≃₀ B) → Σ[ c ∈ A ⟷ B ] _≡₁_ {c = c} (sound (complete eq)) eq
+      α : (c : A ⟷ B) → _≃₁_ A B (complete (sound c)) c
+      β : (eq : A ≃₀ B) → Σ[ c ∈ A ⟷ B ] _≡₁_ A B {c = c} (sound (complete eq)) eq
 
+{--
 ------------------------------------------------------------------------------
 -- level 2 universe: codes for level 1 equivalences
 
@@ -473,14 +480,6 @@ module MOD2 where
               _≃_ to _≃₁_; id≃ to id≃₁; trans≃ to trans≃₁)
 
   -- Codes in level 2 for level 1 equivalences
-
-  data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
-    id⇔ : ∀ {A B} {c : A ⟷ B} → c ⇔ c
-    _●_  : ∀ {A B} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
-
-  2! : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
-  2! id⇔ = id⇔
-  2! (α ● β) = (2! β) ● (2! α)
 
   -- Decoding a code to a space
 
