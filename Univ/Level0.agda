@@ -6,7 +6,7 @@ open import Data.Empty
 open import Data.Unit
 open import Data.Sum
 open import Data.Product
-open import Function renaming (_∘_ to _○_)
+open import Function renaming (_∘′_ to _○_)
 open import Relation.Binary.PropositionalEquality renaming (_≡_ to _==_)
 
 open import Univ.Universe
@@ -30,8 +30,8 @@ Fun A B = El A → El B
 _∼_ : {A B : U} → (f g : Fun A B) → Set
 _∼_ {A} {B} f g = (a : El A) → f a == g a
 
-refl∼ : {A B : U} → (f : Fun A B) → (f ∼ f)
-refl∼ f a = refl
+refl∼ : {A B : U} → {f : Fun A B} → (f ∼ f)
+refl∼ a = refl
 
 sym∼ : {A B : U} {f g : Fun A B} → (f ∼ g) → (g ∼ f)
 sym∼ H b = sym (H b)
@@ -39,9 +39,9 @@ sym∼ H b = sym (H b)
 trans∼ : {A B : U} {f g h : Fun A B} → f ∼ g → g ∼ h → f ∼ h
 trans∼ p₁ p₂ a = trans (p₁ a) (p₂ a)
 
-∼○ : {A B C : U} {f g : Fun A B} {h k : Fun B C} →
-     (f ∼ g) → (h ∼ k) → ((h ○ f) ∼ (k ○ g))
-∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans (cong h (H₁ x)) (H₂ (g x))
+∼○ : {A B C : U} {f h : Fun B C} {g i : Fun A B} →
+     (f ∼ h) → (g ∼ i) → ((f ○ g) ∼ (h ○ i))
+∼○ {f = f} {i = i} H₁ H₂ x = trans (cong f (H₂ x)) (H₁ (i x))
 
 record isequiv {A B : U} (f : Fun A B) : Set where
   constructor mkisequiv
@@ -86,24 +86,22 @@ postulate
 
 Univ0 : Universe
 Univ0 = record
-            { U = U
-            ; El = El
-            ; Fun = Fun
-            ; _∼_ = _∼_
-            ; _≡_ = _==_
-            ; _≃_ = _≃_
-            ; SynCat = record
-                         { id = id
-                         ; _∘_ = λ g f → g ○ f
-                         ; assoc = λ _ → refl
-                         ; identityˡ = λ _ → refl
-                         ; identityʳ = λ _ → refl
-                         ; equiv = record { refl = λ _ → refl
-                                          ; sym = λ x a → sym (x a)
-                                          ; trans = λ x y a → trans (x a) (y a) }
-                         ; ∘-resp-≡ = λ {_} {_} {_} {f} {g} {h} {i} x y a → trans (cong f (y a)) (x (i a)) }
-            ; ElFunc = record { F = id
-                              ; identity = refl
-                              ; homomorphism = refl
-                              ; F-resp-≡ = funext }
-            }
+  { U = U
+  ; El = El
+  ; Fun = Fun
+  ; _∼_ = _∼_
+  ; _≡_ = _==_
+  ; _≃_ = _≃_
+  ; SynCat = record
+    { id = id
+    ; _∘_ = _○_
+    ; assoc = refl∼
+    ; identityˡ = refl∼
+    ; identityʳ = refl∼
+    ; equiv = record { refl = refl∼ ; sym = sym∼ ; trans = trans∼ }
+    ; ∘-resp-≡ = ∼○ }
+  ; ElFunc = record { F = id
+                    ; identity = refl
+                    ; homomorphism = refl
+                    ; F-resp-≡ = funext }
+  }
