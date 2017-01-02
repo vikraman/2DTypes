@@ -20,12 +20,142 @@ open import Data.Integer as ℤ hiding (_⊔_)
 -- A mini language for programming with equivalences, identity types, and
 -- univalence.
 
--- Technically we define a weak n-category with 0-cells (objects); 1-cells
--- (morphisms between 0-cells); 2-cells (morphisms between the 1-cells);
--- etc. Each collections of cells has:
---   * code U for the cells
---   * an interpretation El of these codes as spaces
+------------------------------------------------------------------------------
+-- Syntax and operational semantics
 
+infix 50 _⊕_
+infix 60 _⊗_
+
+-- Types
+
+data T : Set where
+  𝟘   : T
+  𝟙   : T
+  _⊕_ : T → T → T
+  _⊗_ : T → T → T
+
+-- Combinators
+
+data _⟷_ : T → T → Set where
+  refl⟷ :    {A : T} → A ⟷ A
+  uniti₊r : {A : T} → A ⟷ (A ⊕ 𝟘)
+  unite₊r : {A : T} → A ⊕ 𝟘 ⟷ A
+  _◎⟷_ :     {A B C : T} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+  assocl₊ : {A B C : T} → A ⊕ (B ⊕ C) ⟷ (A ⊕ B) ⊕ C
+  assocr₊ : {A B C : T} → (A ⊕ B) ⊕ C ⟷ A ⊕ (B ⊕ C)
+  _⊕_     : {A B C D : T} →
+            (A ⟷ C) → (B ⟷ D) → (A ⊕ B ⟷ C ⊕ D)
+  -- elided
+
+! : {A B : T} → (A ⟷ B) → (B ⟷ A)
+! unite₊r = uniti₊r
+! uniti₊r = unite₊r
+! refl⟷ = refl⟷
+! (c₁ ◎⟷ c₂) = ! c₂ ◎⟷ ! c₁
+! assocl₊ = assocr₊
+! assocr₊ = assocl₊
+! (c₁ ⊕ c₂) = ! c₁ ⊕ ! c₂
+
+-- Denotations of types
+
+El : T → Set
+El 𝟘       = ⊥
+El 𝟙       = ⊤
+El (A ⊕ B) = El A ⊎ El B
+El (A ⊗ B) = El A × El B
+
+-- Operational semantics
+
+eval : {A B : T} → (A ⟷ B) → El A → El B
+eval refl⟷ = id
+eval uniti₊r a = inj₁ a
+eval unite₊r (inj₁ a) = a
+eval unite₊r (inj₂ ())
+eval (c₁ ◎⟷ c₂) = (eval c₂) ○ (eval c₁)
+eval assocl₊ (inj₁ a) = inj₁ (inj₁ a)
+eval assocl₊ (inj₂ (inj₁ b)) = inj₁ (inj₂ b)
+eval assocl₊ (inj₂ (inj₂ c)) = inj₂ c
+eval assocr₊ (inj₁ (inj₁ a)) = inj₁ a
+eval assocr₊ (inj₁ (inj₂ b)) = inj₂ (inj₁ b)
+eval assocr₊ (inj₂ c) = inj₂ (inj₂ c)
+eval (c₁ ⊕ c₂) (inj₁ a) = inj₁ (eval c₁ a)
+eval (c₁ ⊕ c₂) (inj₂ b) = inj₂ (eval c₂ b)
+
+-- Combinators between combinators
+
+data _⇔_ : {A B : T} → (A ⟷ B) → (A ⟷ B) → Set where
+  refl⇔ : {A : T} {c : A ⟷ A} → (c ⇔ c)
+  _●_  : {A B : T} {c₁ c₂ c₃ : A ⟷ B} →
+         (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
+  idl◎l   : {A B : T} {c : A ⟷ B} → (refl⟷ ◎⟷ c) ⇔ c
+  idl◎r   : {A B : T} {c : A ⟷ B} → c ⇔ (refl⟷ ◎⟷ c)
+  assocl⊕l : {A B C D E F : T}
+          {c₁ : A ⟷ B} {c₂ : C ⟷ D} {c₃ : E ⟷ F} →
+          ((c₁ ⊕ (c₂ ⊕ c₃)) ◎⟷ assocl₊) ⇔ (assocl₊ ◎⟷ ((c₁ ⊕ c₂) ⊕ c₃))
+  assocl⊕r : {A B C D E F : T}
+          {c₁ : A ⟷ B} {c₂ : C ⟷ D} {c₃ : E ⟷ F} →
+          (assocl₊ ◎⟷ ((c₁ ⊕ c₂) ⊕ c₃)) ⇔ ((c₁ ⊕ (c₂ ⊕ c₃)) ◎⟷ assocl₊)
+  assocr⊕l : {A B C D E F : T}
+          {c₁ : A ⟷ B} {c₂ : C ⟷ D} {c₃ : E ⟷ F} →
+           (assocr₊ ◎⟷ (c₁ ⊕ (c₂ ⊕ c₃))) ⇔ (((c₁ ⊕ c₂) ⊕ c₃) ◎⟷ assocr₊)
+  assocr⊕r : {A B C D E F : T}
+          {c₁ : A ⟷ B} {c₂ : C ⟷ D} {c₃ : E ⟷ F} →
+          (((c₁ ⊕ c₂) ⊕ c₃) ◎⟷ assocr₊) ⇔ (assocr₊ ◎⟷ (c₁ ⊕ (c₂ ⊕ c₃)))
+  -- elided
+
+2! : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
+2! refl⇔ = refl⇔
+2! (α ● β) = (2! β) ● (2! α)
+2! idl◎l = idl◎r
+2! idl◎r = idl◎l
+2! assocl⊕l = assocl⊕r
+2! assocl⊕r = assocl⊕l
+2! assocr⊕l = assocr⊕r
+2! assocr⊕r = assocr⊕l
+
+-- Identity on values
+
+data _≡_ {A : T} : (a b : El A) → Set where
+  refl : (a : El A) → (a ≡ a)
+
+cong≡ : {A B : T} {a b : El A} → (f : El A → El B) (p : a ≡ b) →
+        f a ≡ f b
+cong≡ f (refl a) = refl (f a)
+
+-- Homotopy
+
+_∼_ : {A B : T} → (f g : El A → El B) → Set
+_∼_ {A} {B} f g = (a : El A) → f a ≡ g a
+
+-- Equivalence
+
+record isequiv {A B : T} (f : El A → El B) : Set where
+  constructor mkisequiv
+  field
+    g : El B → El A
+    α : (f ○ g) ∼ id
+    β : (g ○ f) ∼ id
+
+-- Operational semantics of 2-combinators
+
+El₂ : {A B : T} → (A ⟷ B) → Set
+El₂ c = isequiv (eval c)
+
+2eval : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El₂ c₁ → El₂ c₂
+2eval {c} refl⇔ = id
+2eval (α ● β) = 2eval β ○ 2eval α
+2eval idl◎l eq = eq
+2eval idl◎r eq = eq
+2eval assocl⊕l (mkisequiv g α β) =
+  mkisequiv {!!} {!!} {!!}
+2eval assocl⊕r (mkisequiv g α β) =
+  mkisequiv {!!} {!!} {!!}
+2eval assocr⊕l (mkisequiv g α β) =
+  mkisequiv {!!} {!!} {!!}
+2eval assocr⊕r (mkisequiv g α β) =
+  mkisequiv {!!} {!!} {!!}
+
+{--
 ------------------------------------------------------------------------------
 -- The type of n-cells
 
@@ -33,88 +163,54 @@ record N-CELLS {u e : Level} : Set (lsuc (u ⊔ e)) where
   field
     -- codes; morphisms on codes; code category
     U : Set u
-    _⟷_ : U → U → Set
-    id⟷ : {A : U} → A ⟷ A
-    _◎⟷_ : {A B C : U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+    _⟶_ : U → U → Set
+    refl⟶ : {A : U} → A ⟶ A
+    _◎⟶_ : {A B C : U} → (B ⟶ C) → (A ⟶ B) → (A ⟶ C)
     -- decoding a code to a space; morphisms on spaces
-    El  : U → Set e
     Fun : (A B : U) → Set u
-    eval : {A B : U} → (A ⟷ B) → Fun A B
-    app : {A B : U} → Fun A B → El A → El B
     idF : {A : U} → Fun A A
     _◎_ : {A B C : U} → Fun B C → Fun A B → Fun A C
+--    app : {A B : U} → Fun A B → El A → El B
     -- identity of elements of spaces; homotopies; equivalences
-    _≡_ : {A : U} (a b : El A) → Set e
-    id≡ : {A : U} (a : El A) → a ≡ a
-    sym≡ : {A : U} {a b : El A} → a ≡ b → b ≡ a
-    trans≡ : {A : U} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
-    cong≡ : {A B : U} {a b : El A} → (f : Fun A B) (p : a ≡ b) → app f a ≡ app f b
-    _∼_ : {A B : U} (f g : Fun A B) → Set e
-    refl∼ : {A B : U} → (f : Fun A B) → (f ∼ f)
-    sym∼ : {A B : U} {f g : Fun A B} → (f ∼ g) → (g ∼ f)
-    trans∼ : {A B : U} {f g h : Fun A B} → f ∼ g → g ∼ h → f ∼ h
-    isequiv : {A B : U} (f : Fun A B) → Set
-    _≃_ : (A B : U) → Set e
-    id≃ : {A : U} → A ≃ A
-    sym≃ : {A B : U} → A ≃ B → B ≃ A
-    trans≃ : {A B C : U} → A ≃ B → B ≃ C → A ≃ C
+--    refl≡ : {A : U} (a : El A) → a ≡ a
+--    sym≡ : {A : U} {a b : El A} → a ≡ b → b ≡ a
+--    trans≡ : {A : U} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
+--    cong≡ : {A B : U} {a b : El A} → (f : Fun A B) (p : a ≡ b) → app f a ≡ app f b
+    --
+--    refl∼ : {A B : U} → (f : Fun A B) → (f ∼ f)
+--    sym∼ : {A B : U} {f g : Fun A B} → (f ∼ g) → (g ∼ f)
+--    trans∼ : {A B : U} {f g h : Fun A B} → f ∼ g → g ∼ h → f ∼ h
+    --
+--    _≃_ : (A B : U) → Set e
+--    refl≃ : {A : U} → A ≃ A
+--    sym≃ : {A B : U} → A ≃ B → B ≃ A
+--    trans≃ : {A B C : U} → A ≃ B → B ≃ C → A ≃ C
 
 ------------------------------------------------------------------------------
 -- 0-cells
 
 module MOD0 where
 
-  -- Codes of finite types
+  U : Set
+  U = T
 
-  infix 50 _⊕_
-  infix 60 _⊗_
-
-  data U : Set where
-    𝟘   : U
-    𝟙   : U
-    _⊕_ : U → U → U
-    _⊗_ : U → U → U
-
-  -- Morphisms on code
-
-  data _⟷_ : U → U → Set where
-    id⟷ :    {A : U} → A ⟷ A
-    uniti₊r : {A : U} → A ⟷ (A ⊕ 𝟘)
-    unite₊r : {A : U} → A ⊕ 𝟘 ⟷ A
-    _◎_ :     {A B C : U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
-    -- elided
-
-  ! : {A B : U} → (A ⟷ B) → (B ⟷ A)
-  ! unite₊r = uniti₊r
-  ! uniti₊r = unite₊r
-  ! id⟷ = id⟷
-  ! (c₁ ◎ c₂) = ! c₂ ◎ ! c₁
+  _⟶_ : U → U → Set
+  _⟶_ = _⟷_
 
   -- Denotations of codes
-
-  El : U → Set
-  El 𝟘       = ⊥
-  El 𝟙       = ⊤
-  El (A ⊕ B) = El A ⊎ El B
-  El (A ⊗ B) = El A × El B
 
   -- The type of functions from spaces to spaces is the regular function space
 
   Fun : (A B : U) → Set
   Fun A B = El A → El B
 
-  -- Functions can be applied
-
   app : {A B : U} → Fun A B → El A → El B
   app f a = f a
 
   -- Identity
 
-  data _≡_ {A : U} : (a b : El A) → Set where
-    refl : (a : El A) → (a ≡ a)
-
-  id≡ : {A : U} (a : El A) → a ≡ a
-  id≡ a = refl a
+  refl≡ : {A : U} (a : El A) → a ≡ a
+  refl≡ a = refl a
 
   sym≡ : {A : U} {a b : El A} → a ≡ b → b ≡ a
   sym≡ (refl a) = refl a
@@ -122,21 +218,7 @@ module MOD0 where
   trans≡ : {A : U} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
   trans≡ (refl a) (refl .a) = refl a
 
-  cong≡ : {A B : U} {a b : El A} → (f : Fun A B) (p : a ≡ b) →
-          app f a ≡ app f b
-  cong≡ f (refl a) = refl (f a)
-
-  eval : {A B : U} → (A ⟷ B) → Fun A B
-  eval id⟷ a = a
-  eval uniti₊r a = inj₁ a
-  eval unite₊r (inj₁ a) = a
-  eval unite₊r (inj₂ ())
-  eval (c₁ ◎ c₂) = (eval c₂) ○ (eval c₁)
-
   -- Homotopy
-
-  _∼_ : {A B : U} → (f g : Fun A B) → Set
-  _∼_ {A} {B} f g = (a : El A) → f a ≡ g a
 
   refl∼ : {A B : U} → (f : Fun A B) → (f ∼ f)
   refl∼ f a = refl (f a)
@@ -153,20 +235,13 @@ module MOD0 where
 
   -- Equivalence
 
-  record isequiv {A B : U} (f : Fun A B) : Set where
-    constructor mkisequiv
-    field
-      g : Fun B A
-      α : (f ○ g) ∼ id
-      β : (g ○ f) ∼ id
-
   _≃_ : (A B : U) → Set
   A ≃ B = Σ[ f ∈ Fun A B ] (isequiv f)
 
   -- Fundamental equivalences
 
-  id≃ : {A : U} → A ≃ A
-  id≃ = (id , mkisequiv id refl refl)
+  refl≃ : {A : U} → A ≃ A
+  refl≃ = (id , mkisequiv id refl refl)
 
   sym≃ : {A B : U} → A ≃ B → B ≃ A
   sym≃ (f , mkisequiv g α β) = (g , mkisequiv f β α)
@@ -195,37 +270,41 @@ module MOD0 where
       β (inj₁ a) = refl (inj₁ a)
       β (inj₂ ())
 
-  -- Each morphism denotes an equivalence
-
   -- 0-cells
 
+{--
   0-cells : N-CELLS
   0-cells = record {
            U = U
-         ; _⟷_ = _⟷_
-         ; id⟷ = id⟷
-         ; _◎⟷_ = _◎_
+         ; _⟶_ = _⟷_
+         ; refl⟶ = refl⟷
+         ; _◎⟶_ = flip _◎⟷_
+         --
          ; El = El
          ; Fun = Fun
          ; eval = eval
-         ; idF = id
          ; app = app
+         ; idF = id
          ; _◎_ = _○_
+         --
          ; _≡_ = _≡_
-         ; id≡ = id≡
+         ; refl≡ = refl≡
          ; sym≡ = sym≡
          ; trans≡ = trans≡
          ; cong≡ = cong≡
+         --
          ; _∼_ = _∼_
          ; refl∼ = refl∼
          ; sym∼ = sym∼
          ; trans∼ = trans∼
+         --
          ; isequiv = isequiv
          ; _≃_ = _≃_
-         ; id≃ = id≃
+         ; refl≃ = refl≃
          ; sym≃ = sym≃
          ; trans≃ = trans≃
          }
+--}
 
 ------------------------------------------------------------------------------
 -- for each pair of 0-cells A and B, a category of 1-cells
@@ -233,81 +312,46 @@ module MOD0 where
 module MOD1 (A B : MOD0.U) where
 
   open MOD0
-    using    (_⟷_; ∼○)
-    renaming (Fun to Fun₀; eval to eval₀;
-              _∼_ to _∼₀_; refl∼ to refl∼₀; sym∼ to sym∼₀; trans∼ to trans∼₀;
-              isequiv to isequiv₀; mkisequiv to mkisequiv₀; _≃_ to _≃₀_)
+    using    (∼○)
+    renaming (Fun to Fun₀;
+              refl∼ to refl∼₀; sym∼ to sym∼₀; trans∼ to trans∼₀;
+              _≃_ to _≃₀_)
 
   -- Codes in level 1
 
   U : Set
   U = A ⟷ B
 
-  data _⇔_ : U → U → Set where
-    id⇔ : {c : U} → c ⇔ c
-    _●_  : {c₁ c₂ c₃ : U} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
-    -- elided
-
-  2! : {c₁ c₂ : U} → (c₁ ⇔ c₂) → (c₂ ⇔ c₁)
-  2! id⇔ = id⇔
-  2! (α ● β) = (2! β) ● (2! α)
-
-  -- Decoding a code to a space
-
-  El : U → Set
-  El c = isequiv₀ (eval₀ c)
+  -- Decoding a code to a space; the type El c is the space containing all
+  -- inverses of c
 
   -- Functions between spaces (isequiv f₁) and (isequiv f₂). In general there
   -- may be no connection between f₁ and f₂ other that they are both from El A
   -- to El B. Ex. the types A and B might both be 1+1 and c₁ and c₂ might be id
-  -- and swap. The elements of (isequiv f) are an inverse g and two proofs. A
-  -- function between the spaces will map g₁ to g₂ while preserving the proofs.
-
-  Fun : (c₁ c₂ : U) → Set
-  Fun c₁ c₂ = {!!}
-
-  app : {c₁ c₂ : U} → Fun c₁ c₂ → El c₁ → El c₂
-  app F (mkisequiv₀ g₁ α₁ β₁) =
-    mkisequiv₀
-      {!!}
-      {!!}
-      {!!}
+  -- and swap.
 
 {--
-  app (F , G , γ , δ) (f , mkisequiv₀ g α β) =
-    F f ,
-    mkisequiv₀
-        (G g)
-        (trans∼₀ (∼○ (δ g) (γ f)) α)
-        (trans∼₀ (∼○ (γ f) (δ g)) β)
---}
+  Fun : (c₁ c₂ : U) → Set
+  Fun c₁ c₂ = El c₁ → El c₂
 
   idF : {c : U} → Fun c c
-  idF = {!!} -- (id , id , refl∼₀ , refl∼₀)
+  idF = id
 
-  compose : {c₁ c₂ c₃ : U} → Fun c₁ c₂ → Fun c₂ c₃ → Fun c₁ c₃
-  compose = {!!}
+  _◎_ : {c₁ c₂ c₃ : U} → Fun c₂ c₃ → Fun c₁ c₂ → Fun c₁ c₃
+  _◎_ = _○_
+
+  app : {c₁ c₂ : U} → Fun c₁ c₂ → El c₁ → El c₂
+  app F eq = F eq
+
+  -- Identity: we have two things (g₁ , α₁ , β₁) and (g₂ , α₂ , β₂) that are
+  -- both inverses of (eval c); they are the same if g₁ ∼ g₂
+
 {--
-  (F₁ , G₁ , γ₁ , δ₁) (F₂ , G₂ , γ₂ , δ₂) =
-    F₂ ○ F₁ ,
-    G₂ ○ G₁ ,
-    (λ f → trans∼₀ (γ₂ (F₁ f)) (γ₁ f)) ,
-    (λ g → trans∼₀ (δ₂ (G₁ g)) (δ₁ g))
---}
-
-  -- Need associativity of compose: see below where homotopy is
-  -- defined, as we need a notion of 'sameness' of Fun to express it.
-
-  -- Identity
-
-  record _≡_ {c : U} (eq₁ eq₂ : El c) : Set where
-{--
-    open isequiv₀ (proj₂ eq₁) renaming (g to g₁)
-    open isequiv₀ (proj₂ eq₂) renaming (g to g₂)
-    field
-      f≡ : proj₁ eq₁ ∼₀ proj₁ eq₂
-      g≡ : g₁ ∼₀ g₂
---}
+  data _≡_ {c : U} (eq₁ eq₂ : El c) : Set where
+    refl :
+      let open isequiv₀ eq₁ renaming (g to g₁)
+          open isequiv₀ eq₂ renaming (g to g₂)
+      in (g₁ ∼₀ g₂) → (eq₁ ≡ eq₂)
 
 --  refl≡ : {c : U} (eq : El c) → _≡_ {c = c} eq eq
   refl≡ : {c : U} (eq : El c) → _≡_ eq eq
@@ -356,17 +400,6 @@ module MOD1 (A B : MOD0.U) where
           _∼_ {c₁ = c} {c₂ = c} f f
   refl∼ {c = c} f eq = refl≡ (app {c₁ = c} {c₂ = c} f eq)
 
-  -- also need sym∼ and cong∼ and trans∼
-
-  -- now we can prove that compose is associative:
-
-  assoc-∘ : {c₁ c₂ c₃ c₄ : U}
-            {f : Fun c₁ c₂} {g : Fun c₂ c₃} {h : Fun c₃ c₄} →
-    _∼_ {c₁ = c₁} {c₄}
-      (compose {c₁ = c₁} {c₂} {c₄} f (compose {c₁ = c₂} {c₃} {c₄} g h))
-      (compose {c₁ = c₁} {c₃} {c₄} (compose {c₁ = c₁} {c₂} {c₃} f g) h)
-  assoc-∘ = {!!}
-
   -- Equivalence
 
   record isequiv {c₁ c₂ : U}
@@ -374,20 +407,16 @@ module MOD1 (A B : MOD0.U) where
     constructor mkisequiv
     field
       g : Fun c₂ c₁
-      α : _∼_ {c₁ = c₂} {c₂ = c₂}
-          (compose {c₁ = c₂} {c₂ = c₁} {c₃ = c₂} g f)
-          (idF {c = c₂})
-      β : _∼_ {c₁ = c₁} {c₂ = c₁}
-          (compose {c₁ = c₁} {c₂ = c₂} {c₃ = c₁} f g)
-          (idF {c = c₁})
+      α : _∼_ {c₁ = c₂} {c₂ = c₂} (f ○ g) (idF {c = c₂})
+      β : _∼_ {c₁ = c₁} {c₂ = c₁} (g ○ f) idF
 
   _≃_ : (c₁ c₂ : U) → Set
   _≃_ c₁ c₂ = Σ (Fun c₁ c₂) (isequiv {c₁ = c₁} {c₂ = c₂})
 
   -- Example level 1 equivalences
 
-  id≃ : (c : U) → c ≃ c
-  id≃ c = idF {c = c},
+  refl≃ : (c : U) → c ≃ c
+  refl≃ c = idF {c = c},
           mkisequiv
             (idF {c = c})
             (refl∼ {c = c} (idF {c = c}))
@@ -398,8 +427,7 @@ module MOD1 (A B : MOD0.U) where
   trans≃ : {c₁ c₂ c₃ : U} → (c₁ ≃ c₂) → (c₂ ≃ c₃) → (c₁ ≃ c₃)
   trans≃ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}
     (f , mkisequiv f⁻ α₁ β₁) (g , mkisequiv g⁻ α₂ β₂) =
-    compose {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} f g ,
-    mkisequiv (compose {c₁ = c₃} {c₂ = c₂} {c₃ = c₁} g⁻ f⁻)
+    g ○ f , mkisequiv (f⁻ ○ g⁻)
     (λ eq₁ → {!!})
     (λ eq₂ → {!!})
 
@@ -409,24 +437,24 @@ module MOD1 (A B : MOD0.U) where
   Univ = record {
                U = A ⟷ B
              ; _⟷_ = _⇔_
-             ; id⟷ = id⇔
-             ; _◎⟷_ = _●_
+             ; refl⟷ = refl⇔
+             ; _◎⟷_ = flip _●_
              ; El = λ _ → A ≃₀ B
              ; Fun = Fun
              ; idF = λ {c} → idF {c = c}
              ; app = {!!} -- λ {c₁} {c₂} → app {c₁ = c₁} {c₂}
-             ; _◎_ = λ {c₁} {c₂} {c₃} → flip (compose {c₁ = c₁} {c₂} {c₃})
+             ; _◎_ = _○_
              ; _≡_ = {!!} -- λ { {c} → _≡_ {c = c}}
              ; _∼_ = λ { {c₁} {c₂} → _∼_ {c₁ = c₁} {c₂ = c₂}}
              ; _≃_ = _≃_
-             ; id≡ = {!!} -- refl≡
+             ; refl≡ = {!!} -- refl≡
              ; sym≡ = {!!}
              ; trans≡ = {!!} -- trans≡
              ; cong≡ = {!!} -- cong≡
              ; refl∼ = {!!} -- refl∼
              ; sym∼ = {!!}
              ; trans∼ = {!!}
-             ; id≃ = {!!}
+             ; refl≃ = {!!}
              ; sym≃ = {!!}
              ; trans≃ = {!!}
              }
@@ -437,10 +465,10 @@ module MOD1 (A B : MOD0.U) where
 module MOD0x1 where
 
   open MOD0
-    using (_⟷_; id⟷; uniti₊r; unite₊r; _◎_; A⊎⊥≃A)
+    using (A⊎⊥≃A)
     renaming (U to U₀; _∼_ to _∼₀_;
               _≃_ to _≃₀_; mkisequiv to mkisequiv₀;
-              id≃ to id≃₀; sym≃ to sym≃₀; trans≃ to trans≃₀)
+              refl≃ to refl≃₀; sym≃ to sym≃₀; trans≃ to trans≃₀)
 
   open MOD1
     using    ()
@@ -451,10 +479,12 @@ module MOD0x1 where
   -- univalence!
 
   sound : {A B : U₀} → (c : U₁ A B) → El₁ A B c
-  sound id⟷ = {!!} -- id≃₀
+  sound refl⟷ = {!!} -- refl≃₀
   sound uniti₊r = {!!} -- sym≃₀ A⊎⊥≃A
   sound unite₊r = {!!} -- A⊎⊥≃A
-  sound (c₁ ◎ c₂) = {!!} -- trans≃₀ (sound c₁) (sound c₂)
+  sound (c₁ ◎⟷ c₂) = {!!} -- trans≃₀ (sound c₁) (sound c₂)
+  sound assocl₊ = {!!}
+  sound assocr₊ = {!!}
 
   -- The two spaces in question are:
   -- A ≃₀ B in level 0 universe, and
@@ -484,9 +514,9 @@ module MOD2 where
     renaming (U to U₀)
 
   open MOD1
-    using (_⟷_; id⟷; _◎_; !)
+    using (_⟷_; refl⟷; _◎_; !)
     renaming (app to app₁; _∼_ to _∼₁_;
-              _≃_ to _≃₁_; id≃ to id≃₁; trans≃ to trans≃₁)
+              _≃_ to _≃₁_; refl≃ to refl≃₁; trans≃ to trans≃₁)
 
   -- Codes in level 2 for level 1 equivalences
 
@@ -499,7 +529,7 @@ module MOD2 where
   -- Reverse direction is univalence; addressed below
 
   sound : {A B : U₀} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → El α
-  sound {c₁ = c} {c₂ = .c} id⇔ = id≃₁ c
+  sound {c₁ = c} {c₂ = .c} refl⇔ = refl≃₁ c
   sound (α₁ ● α₂) = trans≃₁ (sound α₁) (sound α₂)
 
   -- Type of functions
@@ -549,7 +579,7 @@ module MOD2 where
   infix 40 _^_
 
   _^_ : {t : U₀} → (p : t ⟷ t) → (k : ℤ) → (t ⟷ t)
-  p ^ (+ 0) = id⟷
+  p ^ (+ 0) = refl⟷
   p ^ (+ (suc k)) = p ◎ (p ^ (+ k))
   p ^ -[1+ 0 ] = ! p
   p ^ (-[1+ (suc k) ]) = (! p) ◎ (p ^ -[1+ k ])
@@ -566,7 +596,7 @@ module MOD2 where
      Obj = Iter p
    ; _⇒_ = λ p^i p^j → Iter.q p^i ⇔ Iter.q p^j
    ; _≡_ = λ _ _ → ⊤
-   ; id  = id⇔
+   ; id  = refl⇔
    ; _∘_ = flip _●_
    ; assoc = tt
    ; identityˡ = tt
@@ -600,14 +630,14 @@ module MOD2 where
            ; _≡_ = {!!}
            ; _∼_ = {!!}
            ; _≃_ = {!!}
-           ; id≡ = {!!}
+           ; refl≡ = {!!}
            ; sym≡ = {!!}
            ; trans≡ = {!!}
            ; cong≡ = {!!}
            ; refl∼ = {!!}
            ; sym∼ = {!!}
            ; trans∼ = {!!}
-           ; id≃ = {!!}
+           ; refl≃ = {!!}
            ; sym≃ = {!!}
            ; trans≃ = {!!}
            }
@@ -698,17 +728,20 @@ module MOD3 where
           ; _≡_ = {!!}
           ; _∼_ = {!!}
           ; _≃_ = {!!}
-          ; id≡ = {!!}
+          ; refl≡ = {!!}
           ; sym≡ = {!!}
           ; trans≡ = {!!}
           ; cong≡ = {!!}
           ; refl∼ = {!!}
           ; sym∼ = {!!}
           ; trans∼ = {!!}
-          ; id≃ = {!!}
+          ; refl≃ = {!!}
           ; sym≃ = {!!}
           ; trans≃ = {!!}
           }
 
 ------------------------------------------------------------------------------
+--}
+--}
+--}
 --}
