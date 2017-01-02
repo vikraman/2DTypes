@@ -56,15 +56,13 @@ data _⟷_ : T → T → Set where
 ! assocr₊ = assocl₊
 ! (c₁ ⊕ c₂) = ! c₁ ⊕ ! c₂
 
--- Denotations of types
+-- Operational semantics
 
 El : T → Set
 El 𝟘       = ⊥
 El 𝟙       = ⊤
 El (A ⊕ B) = El A ⊎ El B
 El (A ⊗ B) = El A × El B
-
--- Operational semantics
 
 eval : {A B : T} → (A ⟷ B) → El A → El B
 eval refl⟷ = id
@@ -81,10 +79,12 @@ eval assocr₊ (inj₂ c) = inj₂ (inj₂ c)
 eval (c₁ ⊕ c₂) (inj₁ a) = inj₁ (eval c₁ a)
 eval (c₁ ⊕ c₂) (inj₂ b) = inj₂ (eval c₂ b)
 
--- Combinators between combinators
+-------------------------------------
+-- Combinators between combinators --
+-------------------------------------
 
 data _⇔_ : {A B : T} → (A ⟷ B) → (A ⟷ B) → Set where
-  refl⇔ : {A : T} {c : A ⟷ A} → (c ⇔ c)
+  refl⇔ : {A B : T} {c : A ⟷ B} → (c ⇔ c)
   _●_  : {A B : T} {c₁ c₂ c₃ : A ⟷ B} →
          (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
   idl◎l   : {A B : T} {c : A ⟷ B} → (refl⟷ ◎⟷ c) ⇔ c
@@ -154,9 +154,6 @@ record isequiv {A B : Set} (f : A → B) : Set where
     α : (f ○ g) ∼ id
     β : (g ○ f) ∼ id
 
-_≃_ : Set → Set → Set
-A ≃ B = Σ[ f ∈ (A → B) ] (isequiv f)
-
 -- Operational semantics of 2-combinators
 
 El₂ : {A B : T} → (A ⟷ B) → Set
@@ -192,10 +189,59 @@ hom-eq H (mkisequiv f⁻ α β) =
 2eval : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El₂ c₁ → El₂ c₂
 2eval = hom-eq ○ 2hom
 
-{--
 ------------------------------------------------------------------------------
--- The type of n-cells
+-- Package the above in a bicategory https://en.wikipedia.org/wiki/Bicategory
 
+-- Objects (also called 0-cells)
+
+0-cells : Set
+0-cells = T
+
+-- Morphisms with fixed source and target objects (also called 1-cells)
+
+1-cells : (A B : T) → Set
+1-cells A B = A ⟷ B
+
+-- Morphisms between morphisms with fixed source and target morphisms (which
+-- should have themselves the same source and the same target). These are also
+-- called 2-cells.
+
+2-cells : {A B : T} → (c₁ c₂ : A ⟷ B) → Set
+2-cells c₁ c₂ = c₁ ⇔ c₂
+
+-- Given two objects A and B there is a category whose objects are the 1-cells
+-- and morphisms are the 2-cells; the composition in this category is called
+-- vertical composition.
+
+_≣_ : {A B : T} {c₁ c₂ : A ⟷ B} → (α β : c₁ ⇔ c₂) → Set
+α ≣ β = 2eval α ∼ 2eval β
+
+refl≣ : {A B : T} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → α ≣ α
+refl≣ α eq = refl (hom-eq (2hom α) eq)
+
+sym≣ : {A B : T} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂} → α ≣ β → β ≣ α
+sym≣ E eq = {!!}
+
+trans≣ : {A B : T} {c₁ c₂ : A ⟷ B} {α β γ : c₁ ⇔ c₂} → α ≣ β → β ≣ γ → α ≣ γ
+trans≣ E₁ E₂ eq = {!!}
+
+𝔹 : (A B : T) → Category _ _ _
+𝔹 A B = record
+  { Obj = A ⟷ B
+  ; _⇒_ = _⇔_
+  ; _≡_ = _≣_
+  ; id = refl⇔
+  ; _∘_ = flip _●_
+  ; assoc = {!!}
+  ; identityˡ = {!!}
+  ; identityʳ = {!!}
+  ; equiv = record { refl = λ {α} → refl≣ α;
+                     sym = sym≣;
+                     trans = trans≣ }
+  ; ∘-resp-≡ = {!!}
+  }
+
+{--
 record N-CELLS {u e : Level} : Set (lsuc (u ⊔ e)) where
   field
     -- codes; morphisms on codes; code category
