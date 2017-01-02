@@ -115,45 +115,53 @@ data _⇔_ : {A B : T} → (A ⟷ B) → (A ⟷ B) → Set where
 
 -- Identity on values
 
-data _≡_ {A : T} : (a b : El A) → Set where
-  refl : (a : El A) → (a ≡ a)
+data _≡_ {A : Set} : (a b : A) → Set where
+  refl : (a : A) → (a ≡ a)
 
-cong≡ : {A B : T} {a b : El A} → (f : El A → El B) (p : a ≡ b) →
+cong≡ : {A B : Set} {a b : A} → (f : A → B) (p : a ≡ b) →
         f a ≡ f b
 cong≡ f (refl a) = refl (f a)
 
 -- Homotopy
 
-_∼_ : {A B : T} → (f g : El A → El B) → Set
-_∼_ {A} {B} f g = (a : El A) → f a ≡ g a
+_∼_ : {A B : Set} → (f g : A → B) → Set
+_∼_ {A} {B} f g = (a : A) → f a ≡ g a
 
 -- Equivalence
 
-record isequiv {A B : T} (f : El A → El B) : Set where
+record isequiv {A B : Set} (f : A → B) : Set where
   constructor mkisequiv
   field
-    g : El B → El A
+    g : B → A
     α : (f ○ g) ∼ id
     β : (g ○ f) ∼ id
 
+_≃_ : Set → Set → Set
+A ≃ B = Σ[ f ∈ (A → B) ] (isequiv f)
+
 -- Operational semantics of 2-combinators
 
-El₂ : {A B : T} → (A ⟷ B) → Set
-El₂ c = isequiv (eval c)
+El₂ : {A B : T} → (A ⟷ B) → El A ≃ El B
+El₂ c = (eval c) , mkisequiv (eval (! c)) {!!} {!!}
 
-2eval : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El₂ c₁ → El₂ c₂
-2eval {c} refl⇔ = id
-2eval (α ● β) = 2eval β ○ 2eval α
-2eval idl◎l eq = eq
-2eval idl◎r eq = eq
-2eval assocl⊕l (mkisequiv g α β) =
-  mkisequiv {!!} {!!} {!!}
-2eval assocl⊕r (mkisequiv g α β) =
-  mkisequiv {!!} {!!} {!!}
-2eval assocr⊕l (mkisequiv g α β) =
-  mkisequiv {!!} {!!} {!!}
-2eval assocr⊕r (mkisequiv g α β) =
-  mkisequiv {!!} {!!} {!!}
+infix 4 _≋_
+
+record _≋_ {A : Set} {B : Set} (eq₁ eq₂ : A ≃ B) : Set where
+  constructor eq
+  open isequiv
+  field
+    f≡ : proj₁ eq₁ ∼ proj₁ eq₂
+    g≡ : g (proj₂ eq₁) ∼ g (proj₂ eq₂)
+
+2eval : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El₂ c₁ ≋ El₂ c₂
+2eval refl⇔ = eq {!id∼!} {!!}
+2eval (α ● α₁) = {!!}
+2eval idl◎l = {!!}
+2eval idl◎r = {!!}
+2eval assocl⊕l = {!!}
+2eval assocl⊕r = {!!}
+2eval assocr⊕l = {!!}
+2eval assocr⊕r = {!!}
 
 {--
 ------------------------------------------------------------------------------
