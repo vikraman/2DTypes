@@ -59,6 +59,9 @@ record _≃_ {ℓ ℓ'} (A : Set ℓ) (B : Set ℓ') : Set (ℓ ⊔ ℓ') where
     g : B → A
     α : (f ∘ g) ∼ id
     β : (g ∘ f) ∼ id
+    -- to make it contractible, could add
+    -- τ : ∀ x → cong f (β x) P.≡ α (f x)
+
 
 -- We explicitly choose quasi-equivalences, even though these
 -- these are not a proposition.  This is fine for us, as we're
