@@ -118,10 +118,10 @@ data _⇔_ : {A B : T} → (A ⟷ B) → (A ⟷ B) → Set where
 data _≡_ {A : Set} : (a b : A) → Set where
   refl : (a : A) → (a ≡ a)
 
-sym≡ : {A : T} {a b : El A} → a ≡ b → b ≡ a
+sym≡ : {A : Set} {a b : A} → a ≡ b → b ≡ a
 sym≡ (refl a) = refl a
 
-trans≡ : {A : T} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
+trans≡ : {A : Set} {a b c : A} → a ≡ b → b ≡ c → a ≡ c
 trans≡ (refl a) (refl .a) = refl a
 
 cong≡ : {A B : Set} {a b : A} → (f : A → B) (p : a ≡ b) → f a ≡ f b
@@ -132,16 +132,16 @@ cong≡ f (refl a) = refl (f a)
 _∼_ : {A B : Set} → (f g : A → B) → Set
 _∼_ {A} {B} f g = (a : A) → f a ≡ g a
 
-refl∼ : {A B : T} → (f : El A → El B) → (f ∼ f)
+refl∼ : {A B : Set} → (f : A → B) → (f ∼ f)
 refl∼ f a = refl (f a)
 
-sym∼ : {A B : T} {f g : El A → El B} → (f ∼ g) → (g ∼ f)
+sym∼ : {A B : Set} {f g : A → B} → (f ∼ g) → (g ∼ f)
 sym∼ H b = sym≡ (H b)
 
-trans∼ : {A B : T} {f g h : El A → El B} → f ∼ g → g ∼ h → f ∼ h
+trans∼ : {A B : Set} {f g h : A → B} → f ∼ g → g ∼ h → f ∼ h
 trans∼ p₁ p₂ a = trans≡ (p₁ a) (p₂ a)
 
-∼○ : {A B C : T} {f g : El A → El B} {h k : El B → El C} →
+∼○ : {A B C : Set} {f g : A → B} {h k : B → C} →
      (f ∼ g) → (h ∼ k) → ((h ○ f) ∼ (k ○ g))
 ∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans≡ (cong≡ h (H₁ x)) (H₂ (g x))
 
@@ -180,7 +180,7 @@ El₂ c = isequiv (eval c)
 2hom (assocr⊕r {c₂ = c₂}) (inj₁ (inj₂ b)) = refl (inj₂ (inj₁ (eval c₂ b)))
 2hom (assocr⊕r {c₃ = c₃}) (inj₂ c) = refl (inj₂ (inj₂ (eval c₃ c)))
 
-hom-eq : {A B : T} {f g : El A → El B} → (f ∼ g) → isequiv f → isequiv g
+hom-eq : {A B : Set} {f g : A → B} → (f ∼ g) → isequiv f → isequiv g
 hom-eq H (mkisequiv f⁻ α β) =
   mkisequiv f⁻
     (trans∼ (∼○ (refl∼ f⁻) (sym∼ H)) α)
@@ -213,6 +213,7 @@ hom-eq H (mkisequiv f⁻ α β) =
 -- and morphisms are the 2-cells; the composition in this category is called
 -- vertical composition.
 
+-- This uses the semantics (via 2eval) to define 3-cells.
 _≣_ : {A B : T} {c₁ c₂ : A ⟷ B} → (α β : c₁ ⇔ c₂) → Set
 α ≣ β = 2eval α ∼ 2eval β
 
@@ -220,10 +221,10 @@ refl≣ : {A B : T} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → α ≣ α
 refl≣ α eq = refl (hom-eq (2hom α) eq)
 
 sym≣ : {A B : T} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂} → α ≣ β → β ≣ α
-sym≣ E eq = {!!}
+sym≣ E eq = sym≡ (E eq)
 
 trans≣ : {A B : T} {c₁ c₂ : A ⟷ B} {α β γ : c₁ ⇔ c₂} → α ≣ β → β ≣ γ → α ≣ γ
-trans≣ E₁ E₂ eq = {!!}
+trans≣ E₁ E₂ eq = trans≡ (E₁ eq) (E₂ eq)
 
 𝔹 : (A B : T) → Category _ _ _
 𝔹 A B = record
