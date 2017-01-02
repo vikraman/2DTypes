@@ -68,9 +68,9 @@ trans≋ (eq f≡ g≡) (eq h≡ i≡) =
    eq (λ a → P.trans (f≡ a) (h≡ a)) (λ b → P.trans (g≡ b) (i≡ b))
 
 
-_◎_ : {A B C : Set} {f h : B ≃ C} {g i : A ≃ B} → f ≋ h → g ≋ i →
+_◒_ : {A B C : Set} {f h : B ≃ C} {g i : A ≃ B} → f ≋ h → g ≋ i →
   (f ● g) ≋ (h ● i)
-_◎_ {f = f} {h} {g} {i}
+_◒_ {f = f} {h} {g} {i}
   (eq f≡ g≡) (eq h≡ i≡) = eq fwd bwd
   -- eq (λ x → {!!} ) -- P.trans (P.cong f (h≡ x)) (f≡ (i x)))
   --   (λ x → {!!} ) -- P.trans (P.cong g⁻¹ (g≡ x)) (i≡ (h⁻¹ x)))
