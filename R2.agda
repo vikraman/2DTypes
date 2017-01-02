@@ -118,14 +118,32 @@ data _⇔_ : {A B : T} → (A ⟷ B) → (A ⟷ B) → Set where
 data _≡_ {A : Set} : (a b : A) → Set where
   refl : (a : A) → (a ≡ a)
 
-cong≡ : {A B : Set} {a b : A} → (f : A → B) (p : a ≡ b) →
-        f a ≡ f b
+sym≡ : {A : T} {a b : El A} → a ≡ b → b ≡ a
+sym≡ (refl a) = refl a
+
+trans≡ : {A : T} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
+trans≡ (refl a) (refl .a) = refl a
+
+cong≡ : {A B : Set} {a b : A} → (f : A → B) (p : a ≡ b) → f a ≡ f b
 cong≡ f (refl a) = refl (f a)
 
 -- Homotopy
 
 _∼_ : {A B : Set} → (f g : A → B) → Set
 _∼_ {A} {B} f g = (a : A) → f a ≡ g a
+
+refl∼ : {A B : T} → (f : El A → El B) → (f ∼ f)
+refl∼ f a = refl (f a)
+
+sym∼ : {A B : T} {f g : El A → El B} → (f ∼ g) → (g ∼ f)
+sym∼ H b = sym≡ (H b)
+
+trans∼ : {A B : T} {f g h : El A → El B} → f ∼ g → g ∼ h → f ∼ h
+trans∼ p₁ p₂ a = trans≡ (p₁ a) (p₂ a)
+
+∼○ : {A B C : T} {f g : El A → El B} {h k : El B → El C} →
+     (f ∼ g) → (h ∼ k) → ((h ○ f) ∼ (k ○ g))
+∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans≡ (cong≡ h (H₁ x)) (H₂ (g x))
 
 -- Equivalence
 
@@ -141,27 +159,38 @@ A ≃ B = Σ[ f ∈ (A → B) ] (isequiv f)
 
 -- Operational semantics of 2-combinators
 
-El₂ : {A B : T} → (A ⟷ B) → El A ≃ El B
-El₂ c = (eval c) , mkisequiv (eval (! c)) {!!} {!!}
+El₂ : {A B : T} → (A ⟷ B) → Set
+El₂ c = isequiv (eval c)
 
-infix 4 _≋_
+-- We expect that whenever c₁ ⇔ c₂ that eval c₁ ∼ eval c₂ and hence that one can
+-- map from the space El₂ c₁ to El₂ c₂
 
-record _≋_ {A : Set} {B : Set} (eq₁ eq₂ : A ≃ B) : Set where
-  constructor eq
-  open isequiv
-  field
-    f≡ : proj₁ eq₁ ∼ proj₁ eq₂
-    g≡ : g (proj₂ eq₁) ∼ g (proj₂ eq₂)
+2hom : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → eval c₁ ∼ eval c₂
+2hom {c₁ = c} refl⇔ = refl∼ (eval c)
+2hom (α ● β) = trans∼ (2hom α) (2hom β)
+2hom {c₂ = c} idl◎l = refl∼ (eval c)
+2hom {c₁ = c} idl◎r = refl∼ (eval c)
+2hom (assocl⊕l {c₁ = c₁}) (inj₁ a) = refl (inj₁ (inj₁ (eval c₁ a)))
+2hom (assocl⊕l {c₂ = c₂}) (inj₂ (inj₁ b)) = refl (inj₁ (inj₂ (eval c₂ b)))
+2hom (assocl⊕l {c₃ = c₃}) (inj₂ (inj₂ c)) = refl (inj₂ (eval c₃ c))
+2hom (assocl⊕r {c₁ = c₁}) (inj₁ a) = refl (inj₁ (inj₁ (eval c₁ a)))
+2hom (assocl⊕r {c₂ = c₂}) (inj₂ (inj₁ b)) = refl (inj₁ (inj₂ (eval c₂ b)))
+2hom (assocl⊕r {c₃ = c₃}) (inj₂ (inj₂ c)) = refl (inj₂ (eval c₃ c))
+2hom (assocr⊕l {c₁ = c₁}) (inj₁ (inj₁ a)) = refl (inj₁ (eval c₁ a))
+2hom (assocr⊕l {c₂ = c₂}) (inj₁ (inj₂ b)) = refl (inj₂ (inj₁ (eval c₂ b)))
+2hom (assocr⊕l {c₃ = c₃}) (inj₂ c) = refl (inj₂ (inj₂ (eval c₃ c)))
+2hom (assocr⊕r {c₁ = c₁}) (inj₁ (inj₁ a)) = refl (inj₁ (eval c₁ a))
+2hom (assocr⊕r {c₂ = c₂}) (inj₁ (inj₂ b)) = refl (inj₂ (inj₁ (eval c₂ b)))
+2hom (assocr⊕r {c₃ = c₃}) (inj₂ c) = refl (inj₂ (inj₂ (eval c₃ c)))
 
-2eval : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El₂ c₁ ≋ El₂ c₂
-2eval refl⇔ = eq {!id∼!} {!!}
-2eval (α ● α₁) = {!!}
-2eval idl◎l = {!!}
-2eval idl◎r = {!!}
-2eval assocl⊕l = {!!}
-2eval assocl⊕r = {!!}
-2eval assocr⊕l = {!!}
-2eval assocr⊕r = {!!}
+hom-eq : {A B : T} {f g : El A → El B} → (f ∼ g) → isequiv f → isequiv g
+hom-eq H (mkisequiv f⁻ α β) =
+  mkisequiv f⁻
+    (trans∼ (∼○ (refl∼ f⁻) (sym∼ H)) α)
+    (trans∼ (∼○ (sym∼ H) (refl∼ f⁻)) β)
+
+2eval : {A B : T} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El₂ c₁ → El₂ c₂
+2eval = hom-eq ○ 2hom
 
 {--
 ------------------------------------------------------------------------------
@@ -236,10 +265,6 @@ module MOD0 where
 
   trans∼ : {A B : U} {f g h : Fun A B} → f ∼ g → g ∼ h → f ∼ h
   trans∼ p₁ p₂ a = trans≡ (p₁ a) (p₂ a)
-
-  ∼○ : {A B C : U} {f g : Fun A B} {h k : Fun B C} →
-       (f ∼ g) → (h ∼ k) → ((h ○ f) ∼ (k ○ g))
-  ∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans≡ (cong≡ h (H₁ x)) (H₂ (g x))
 
   -- Equivalence
 
