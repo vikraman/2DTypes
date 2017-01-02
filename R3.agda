@@ -239,7 +239,7 @@ module MOD2 where
     ; _⇒_ = _⟷_
     ; _≡_ = _⇔_
     ; id = id⟷
-    ; _∘_ = λ x⟷y y⟷z → y⟷z _⟷_.◎ x⟷y
+    ; _∘_ = λ x⟷y y⟷z → y⟷z ◎ x⟷y
     ; assoc = {!!}
     ; identityˡ = {!!}
     ; identityʳ = {!!}
@@ -268,6 +268,59 @@ module MOD2 where
     ; identity = id≋
     ; homomorphism = id≋
     ; F-resp-≡ = sound
+    }
+
+  open import Categories.Bicategory
+  open import Categories.Bifunctor
+  open import Categories.NaturalIsomorphism
+
+  -- a few helper functions, to make the actual definition below readable
+  ⟷Cat : U₀ → U₀ → Category _ _ _
+  ⟷Cat A B = record
+    { Obj = A ⟷ B
+    ; _⇒_ = _⇔_
+    ; _≡_ = λ _ _ → ⊤ -- because we don't have anything else available
+    ; id = id⇔
+    ; _∘_ = λ c₂⇔c₃ c₁⇔c₂ → c₁⇔c₂ ◍ c₂⇔c₃
+    ; assoc = tt
+    ; identityˡ = tt
+    ; identityʳ = tt
+    ; equiv = record { refl = tt ; sym = λ _ → tt ; trans = λ _ _ → tt }
+    ; ∘-resp-≡ = λ _ _ → tt
+    }
+
+  ⟷BiFunc : {A B C : U₀} → Bifunctor (⟷Cat B C) (⟷Cat A B) (⟷Cat A C)
+  ⟷BiFunc = record
+    { F₀ = λ { (b⟷c , a⟷b) → a⟷b ◎ b⟷c }
+    ; F₁ = λ { {(c₁ , c₂)} {(c₃ , c₄)} (c₁⇔c₃ , c₂⇔c₄) → {!!} }
+    ; identity = tt
+    ; homomorphism = tt
+    ; F-resp-≡ = λ _ → tt
+    }
+
+  SynWeakBicat : Bicategory _ _ _ _
+  SynWeakBicat = record
+    { Obj = U₀
+    ; _⇒_ = ⟷Cat
+    ; id = record
+             { F₀ = λ _ → id⟷
+             ; F₁ = λ _ → id⇔
+             ; identity = tt
+             ; homomorphism = tt
+             ; F-resp-≡ = λ _ → tt
+             }
+    ; —∘— = ⟷BiFunc
+    ; λᵤ = record { F⇒G = record { η = λ { (_ , c₁) → {!!}} ; commute = {!!} }
+                  ; F⇐G = record { η = λ {(_ , c₁) → {!!}} ; commute = {!!} }
+                  ; iso = λ X → record { isoˡ = tt ; isoʳ = tt } }
+    ; ρᵤ = record { F⇒G = record { η = λ {(c₁ , _) → {!!}} ; commute = {!!} }
+                  ; F⇐G = record { η = λ {(c₁ , _) → {!!}} ; commute = {!!} }
+                  ; iso = λ X → record { isoˡ = tt ; isoʳ = tt } }
+    ; α = record { F⇒G = record { η = λ {(c₁ , c₂ , c₃) → {!!}} ; commute = {!!} }
+                 ; F⇐G = record { η = λ {(c₁ , c₂ , c₃) → {!!}} ; commute = {!!} }
+                 ; iso = λ X → record { isoˡ = tt ; isoʳ = tt } }
+    ; triangle = λ _ _ → tt
+    ; pentagon = λ _ _ _ _ → tt
     }
 
 {-
