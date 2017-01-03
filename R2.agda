@@ -200,7 +200,7 @@ El₂ c = isequiv (eval c)
 2hom (assocr⊕r {c₂ = c₂}) (inj₁ (inj₂ b)) = refl -- (inj₂ (inj₁ (eval c₂ b)))
 2hom (assocr⊕r {c₃ = c₃}) (inj₂ c) = refl -- (inj₂ (inj₂ (eval c₃ c)))
 
-hom-eq : {A B : T} {f g : El A → El B} → (f ∼ g) → isequiv f → isequiv g
+hom-eq : {A B : Set} {f g : A → B} → (f ∼ g) → isequiv f → isequiv g
 hom-eq H (mkisequiv f⁻ α β) =
   mkisequiv f⁻
     (trans∼ (∼○ (refl∼ f⁻) (sym∼ H)) α)
