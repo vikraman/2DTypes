@@ -220,19 +220,63 @@ data U₁ where
   ⇑ : U₀ → U₁
   U0 : U₁
   ID1 : {A : U₁} → (a₁ a₂ : El₁ A) → U₁
+  # : {A : El₁ U0} → El₁ (ID1 {U0} A A) → U₁
 
 El₁ (⇑ A) = El₀ A
 El₁ U0 = U₀
 El₁ (ID1 {⇑ A} a₁ a₂) = a₁ ≡ a₂
+El₁ (ID1 {# {A} c} p q) = {!!}
 El₁ (ID1 {U0} A B) = A ⟷ B
 El₁ (ID1 {ID1 {⇑ A} _ _} a b) = a ≡ b
+El₁ (ID1 {ID1 {# {A} c} p q} P Q) = {!!}
 El₁ (ID1 {ID1 {U0} A B} c₁ c₂) = c₁ ⇔ c₂
 El₁ (ID1 {ID1 {ID1 {⇑ A} _ _} _ _} a b) = a ≡ b
+El₁ (ID1 {ID1 {ID1 {# {A} c} p q} P Q} X Y) = {!!}
 El₁ (ID1 {ID1 {ID1 {U0} A B} c₁ c₂} α β) = 2eval α ≋ 2eval β
 El₁ (ID1 {ID1 {ID1 {ID1 _ _} _ _} _ _} a b) = a ≡ b
+El₁ (# p) = {!!}
 
 TYPE₁ : Universe _ _
 TYPE₁ = record { U = U₁; El = El₁ }
+
+------------------------------------------------------------------------------
+-- Univalence
+
+idtoeqv : {A B : U₀} → El₁ (ID1 {U0} A B) → El₀ A ≃ El₀ B
+idtoeqv refl⟷ = id , mkisequiv id {!!} {!!}
+idtoeqv uniti₊r = {!!}
+idtoeqv unite₊r = {!!}
+idtoeqv (c₁ ◎⟷ c₂) = {!!}
+idtoeqv assocl₊ = {!!}
+idtoeqv assocr₊ = {!!}
+idtoeqv (c₁ ⊕ c₂) = {!!}
+
+univalence : (A B : U₀) → Set
+univalence A B =  isequiv (idtoeqv {A} {B})
+
+univalenceP : (A B : U₀) → univalence A B
+univalenceP A B = mkisequiv {!!} {!!} {!!}
+
+--
+
+{--
+idtoeqv2 : {A B : U₀} {P Q : El₁ (ID1 {U0} A B)} → El₁ (ID1 P Q) →
+  isequiv (eval P) ≃ isequiv (eval Q)
+idtoeqv2 refl⇔ = {!!}
+idtoeqv2 (α ● β) = {!!}
+idtoeqv2 idl◎l = {!!}
+idtoeqv2 idl◎r = {!!}
+idtoeqv2 assocl⊕l = {!!}
+idtoeqv2 assocl⊕r = {!!}
+idtoeqv2 assocr⊕l = {!!}
+idtoeqv2 assocr⊕r = {!!}
+
+univalence2 : {A B : U₀} (P Q : El₁ (ID1 A B)) → Set
+univalence2 {A} {B} P Q =  isequiv (idtoeqv2 {A} {B} {P} {Q})
+
+univalence2P : {A B : U₀} (P Q : El₁ (ID1 A B)) → univalence2 P Q
+univalence2P {A} {B} P Q = mkisequiv {!!} {!!} {!!}
+--}
 
 ------------------------------------------------------------------------------
 -- Categorical semantics: we have a bicategory
