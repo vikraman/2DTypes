@@ -137,7 +137,7 @@ TYPE₀ = record { U = U₀; El = El₀ }
 
 -- Example
 
-module Example₀ where
+module Refl-all-the-way where
 
   x : El₀ (ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₁ tt))
   x = refl
@@ -147,6 +147,16 @@ module Example₀ where
 
   z : El₀ (ID0 {ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₁ tt)} refl refl)
   z = refl
+
+------------------------------------------------------------------------------
+-- Univalence for U₀
+
+module Univalence0 where
+
+  -- we have no identity types between types yet; we cannot even state
+  -- univalence at this point. If we were to try we would need
+  -- idtoeqv : {A : U₀} {a b : El₀ A} → El₀ (ID0 {A} a b) → a ≃ b
+  -- but a ≃ b is non-sensical as a and b are not types
 
 ------------------------------------------------------------------------------
 -- Some notions defined in U₀ that are needed to define U₁
@@ -159,6 +169,7 @@ data _⟷_ : U₀ → U₀ → Set where
   assocl₊ : {A B C : U₀} → A ⊕ (B ⊕ C) ⟷ (A ⊕ B) ⊕ C
   assocr₊ : {A B C : U₀} → (A ⊕ B) ⊕ C ⟷ A ⊕ (B ⊕ C)
   _⊕_ : {A B C D : U₀} → (A ⟷ C) → (B ⟷ D) → (A ⊕ B ⟷ C ⊕ D)
+  -- new combinators for ID0; the following is not right though
   IDis𝟙 : {A : U₀} (a b : El₀ A) → ID0 {A} a b ⟷ 𝟙
   -- elided
 
@@ -178,6 +189,10 @@ eval (c₁ ⊕ c₂) (inj₁ a) = inj₁ (eval c₁ a)
 eval (c₁ ⊕ c₂) (inj₂ b) = inj₂ (eval c₂ b)
 eval (IDis𝟙 a .a) refl = tt
 
+evalB : {A B : U₀} → (A ⟷ B) → El₀ B → El₀ A
+evalB (IDis𝟙 a b) tt = {!!} -- obviously that is wrong
+evalB _ = {!!}
+
 data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
   refl⇔ : {A B : U₀} {c : A ⟷ B} → (c ⇔ c)
   _●_ : {A B : U₀} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
@@ -191,7 +206,7 @@ data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
     (assocr₊ ◎⟷ (c₁ ⊕ (c₂ ⊕ c₃))) ⇔ (((c₁ ⊕ c₂) ⊕ c₃) ◎⟷ assocr₊)
   assocr⊕r : {A B C D E F : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} {c₃ : E ⟷ F} →
     (((c₁ ⊕ c₂) ⊕ c₃) ◎⟷ assocr₊) ⇔ (assocr₊ ◎⟷ (c₁ ⊕ (c₂ ⊕ c₃)))
-  -- new new combinators for ID1
+  -- new combinators for ID1
   -- elided
 
 2eval : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) →
@@ -252,54 +267,58 @@ TYPE₁ : Universe _ _
 TYPE₁ = record { U = U₁; El = El₁ }
 
 ------------------------------------------------------------------------------
--- Univalence
+-- Univalence for U₁
 
-postulate
-  -- these are proved in pi-dual
-  uniti+r≃ : {A : Set} → A ≃ (A ⊎ ⊥)
-  assocl₊≃ : {A B C : Set} → (A ⊎ (B ⊎ C)) ≃ ((A ⊎ B) ⊎ C)
-  _⊕≃_ : {A B C D : Set} → (A ≃ B) → (C ≃ D) → ((A ⊎ C) ≃ (B ⊎ D))
+module Univalence1 where
 
-idtoeqv : {A B : U₀} → El₁ (ID1 {U0} A B) → El₀ A ≃ El₀ B
-idtoeqv refl⟷ = refl≃
-idtoeqv uniti₊r = uniti+r≃
-idtoeqv unite₊r = sym≃ uniti+r≃
-idtoeqv (c₁ ◎⟷ c₂) = trans≃ (idtoeqv c₁) (idtoeqv c₂)
-idtoeqv assocl₊ = assocl₊≃
-idtoeqv assocr₊ = sym≃ assocl₊≃
-idtoeqv (c₁ ⊕ c₂) = (idtoeqv c₁) ⊕≃ (idtoeqv c₂)
-idtoeqv (IDis𝟙 a b) = ?
+  postulate
+    -- these are proved in pi-dual
+    uniti+r≃ : {A : Set} → A ≃ (A ⊎ ⊥)
+    assocl₊≃ : {A B C : Set} → (A ⊎ (B ⊎ C)) ≃ ((A ⊎ B) ⊎ C)
+    _⊕≃_ : {A B C D : Set} → (A ≃ B) → (C ≃ D) → ((A ⊎ C) ≃ (B ⊎ D))
 
-univalence : (A B : U₀) → Set
-univalence A B =  isequiv (idtoeqv {A} {B})
+  idtoeqv : {A B : U₀} → El₁ (ID1 {U0} A B) → El₀ A ≃ El₀ B
+  idtoeqv refl⟷ = refl≃
+  idtoeqv uniti₊r = uniti+r≃
+  idtoeqv unite₊r = sym≃ uniti+r≃
+  idtoeqv (c₁ ◎⟷ c₂) = trans≃ (idtoeqv c₁) (idtoeqv c₂)
+  idtoeqv assocl₊ = assocl₊≃
+  idtoeqv assocr₊ = sym≃ assocl₊≃
+  idtoeqv (c₁ ⊕ c₂) = (idtoeqv c₁) ⊕≃ (idtoeqv c₂)
+  idtoeqv (IDis𝟙 a b) = {!!}
 
-univalenceP : (A B : U₀) → univalence A B
-univalenceP A B = mkisequiv comp {!!} {!!}
-  where comp : {A B : U₀} → (El₀ A ≃ El₀ B) → (A ⟷ B)
-        comp {𝟘} {𝟘} _ = refl⟷
-        comp {𝟙} {𝟙} _ = refl⟷
-        comp {ID0 {A} a₁ a₂} {ID0 {B} b₁ b₂} eq = {!!}
-        comp {_} {_} eq = {!!}
+  univalence : (A B : U₀) → Set
+  univalence A B =  isequiv (idtoeqv {A} {B})
 
-idtoeqv2 : {A B : U₀} {P Q : El₁ (ID1 {U0} A B)} → El₁ (ID1 {(ID1 {U0} A B)} P Q) →
-  isequiv (eval P) ≃ isequiv (eval Q)
-idtoeqv2 refl⇔ = refl≃
-idtoeqv2 (α ● β) = trans≃ (idtoeqv2 α) (idtoeqv2 β)
-idtoeqv2 idl◎l = {!!}
-idtoeqv2 idl◎r = {!!}
-idtoeqv2 assocl⊕l = {!!}
-idtoeqv2 assocl⊕r = {!!}
-idtoeqv2 assocr⊕l = {!!}
-idtoeqv2 assocr⊕r = {!!}
+  univalenceP : (A B : U₀) → univalence A B
+  univalenceP A B = mkisequiv comp {!!} {!!}
+    where comp : {A B : U₀} → (El₀ A ≃ El₀ B) → (A ⟷ B)
+          comp {𝟘} {𝟘} _ = refl⟷
+          comp {𝟙} {𝟙} _ = refl⟷
+          comp {ID0 {A} a₁ a₂} {ID0 {B} b₁ b₂} eq = {!!}
+          comp {_} {_} eq = {!!}
 
-univalence2 : {A B : U₀} (P Q : El₁ (ID1 {U0} A B)) → Set
-univalence2 {A} {B} P Q =  isequiv (idtoeqv2 {A} {B} {P} {Q})
+  idtoeqv2 : {A B : U₀} {P Q : El₁ (ID1 {U0} A B)} → El₁ (ID1 {(ID1 {U0} A B)} P Q) →
+    isequiv (eval P) ≃ isequiv (eval Q)
+  idtoeqv2 refl⇔ = refl≃
+  idtoeqv2 (α ● β) = trans≃ (idtoeqv2 α) (idtoeqv2 β)
+  idtoeqv2 idl◎l = {!!}
+  idtoeqv2 idl◎r = {!!}
+  idtoeqv2 assocl⊕l = {!!}
+  idtoeqv2 assocl⊕r = {!!}
+  idtoeqv2 assocr⊕l = {!!}
+  idtoeqv2 assocr⊕r = {!!}
 
-univalence2P : {A B : U₀} (P Q : El₁ (ID1 {U0} A B)) → univalence2 P Q
-univalence2P {A} {B} P Q = mkisequiv comp {!!} {!!}
-  where comp : {A B : U₀} {c₁ c₂ : El₁ (ID1 {U0} A B)} →
-               isequiv (eval c₁) ≃ isequiv (eval c₂) → c₁ ⇔ c₂
-        comp {A} {B} {c₁} {c₂} eq = {!!}
+  univalence2 : {A B : U₀} (P Q : El₁ (ID1 {U0} A B)) → Set
+  univalence2 {A} {B} P Q =  isequiv (idtoeqv2 {A} {B} {P} {Q})
+
+  univalence2P : {A B : U₀} (P Q : El₁ (ID1 {U0} A B)) → univalence2 P Q
+  univalence2P {A} {B} P Q = mkisequiv comp {!!} {!!}
+    where comp : {A B : U₀} {c₁ c₂ : El₁ (ID1 {U0} A B)} →
+                 isequiv (eval c₁) ≃ isequiv (eval c₂) → c₁ ⇔ c₂
+          comp {A} {B} {c₁} {c₂} eq = {!!}
+
+  -- idtoeqv3 as well
 
 ------------------------------------------------------------------------------
 -- HITs; fractionals as  an example
