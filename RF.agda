@@ -69,6 +69,20 @@ trans≈ = trans∼
 _≃_ : (A B : Set) → Set
 A ≃ B = Σ[ f ∈ (A → B) ] (isequiv f)
 
+refl≃ : {A : Set} → A ≃ A
+refl≃ = id , mkisequiv id (λ _ → refl) (λ _ → refl)
+
+sym≃ : {A B : Set} → (A ≃ B) → B ≃ A
+sym≃ (f , mkisequiv g α β) = g , mkisequiv f β α
+
+
+trans≃ : {A B C : Set} → A ≃ B → B ≃ C → A ≃ C
+trans≃ (f , mkisequiv f⁻¹ fα fβ) (g , mkisequiv g⁻¹ gα gβ) =
+  g ∘ f ,
+  mkisequiv (f⁻¹ ∘ g⁻¹)
+            (λ x → trans (cong g (fα (g⁻¹ x))) (gα x))
+            (λ x → trans (cong f⁻¹ (gβ (f x))) (fβ x))
+
 -- Higher homotopy between functions over isequiv
 
 _≋_ : {A B : Set} {f g : A → B} (F G : isequiv f → isequiv g) → Set
@@ -145,6 +159,7 @@ data _⟷_ : U₀ → U₀ → Set where
   assocl₊ : {A B C : U₀} → A ⊕ (B ⊕ C) ⟷ (A ⊕ B) ⊕ C
   assocr₊ : {A B C : U₀} → (A ⊕ B) ⊕ C ⟷ A ⊕ (B ⊕ C)
   _⊕_ : {A B C D : U₀} → (A ⟷ C) → (B ⟷ D) → (A ⊕ B ⟷ C ⊕ D)
+  -- need new combinators for ID0
   -- elided
 
 eval : {A B : U₀} → (A ⟷ B) → El₀ A → El₀ B
@@ -175,6 +190,7 @@ data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
     (assocr₊ ◎⟷ (c₁ ⊕ (c₂ ⊕ c₃))) ⇔ (((c₁ ⊕ c₂) ⊕ c₃) ◎⟷ assocr₊)
   assocr⊕r : {A B C D E F : U₀} {c₁ : A ⟷ B} {c₂ : C ⟷ D} {c₃ : E ⟷ F} →
     (((c₁ ⊕ c₂) ⊕ c₃) ◎⟷ assocr₊) ⇔ (assocr₊ ◎⟷ (c₁ ⊕ (c₂ ⊕ c₃)))
+  -- new new combinators for ID1
   -- elided
 
 2eval : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) →
@@ -220,21 +236,16 @@ data U₁ where
   ⇑ : U₀ → U₁
   U0 : U₁
   ID1 : {A : U₁} → (a₁ a₂ : El₁ A) → U₁
-  # : {A : El₁ U0} → El₁ (ID1 {U0} A A) → U₁
 
 El₁ (⇑ A) = El₀ A
 El₁ U0 = U₀
 El₁ (ID1 {⇑ A} a₁ a₂) = a₁ ≡ a₂
-El₁ (ID1 {# {A} c} p q) = {!!}
 El₁ (ID1 {U0} A B) = A ⟷ B
 El₁ (ID1 {ID1 {⇑ A} _ _} a b) = a ≡ b
-El₁ (ID1 {ID1 {# {A} c} p q} P Q) = {!!}
 El₁ (ID1 {ID1 {U0} A B} c₁ c₂) = c₁ ⇔ c₂
 El₁ (ID1 {ID1 {ID1 {⇑ A} _ _} _ _} a b) = a ≡ b
-El₁ (ID1 {ID1 {ID1 {# {A} c} p q} P Q} X Y) = {!!}
 El₁ (ID1 {ID1 {ID1 {U0} A B} c₁ c₂} α β) = 2eval α ≋ 2eval β
 El₁ (ID1 {ID1 {ID1 {ID1 _ _} _ _} _ _} a b) = a ≡ b
-El₁ (# p) = {!!}
 
 TYPE₁ : Universe _ _
 TYPE₁ = record { U = U₁; El = El₁ }
@@ -242,28 +253,36 @@ TYPE₁ = record { U = U₁; El = El₁ }
 ------------------------------------------------------------------------------
 -- Univalence
 
+postulate
+  -- these are proved in pi-dual
+  uniti+r≃ : {A : Set} → A ≃ (A ⊎ ⊥)
+  assocl₊≃ : {A B C : Set} → (A ⊎ (B ⊎ C)) ≃ ((A ⊎ B) ⊎ C)
+  _⊕≃_ : {A B C D : Set} → (A ≃ B) → (C ≃ D) → ((A ⊎ C) ≃ (B ⊎ D))
+
 idtoeqv : {A B : U₀} → El₁ (ID1 {U0} A B) → El₀ A ≃ El₀ B
-idtoeqv refl⟷ = id , mkisequiv id {!!} {!!}
-idtoeqv uniti₊r = {!!}
-idtoeqv unite₊r = {!!}
-idtoeqv (c₁ ◎⟷ c₂) = {!!}
-idtoeqv assocl₊ = {!!}
-idtoeqv assocr₊ = {!!}
-idtoeqv (c₁ ⊕ c₂) = {!!}
+idtoeqv refl⟷ = refl≃
+idtoeqv uniti₊r = uniti+r≃
+idtoeqv unite₊r = sym≃ uniti+r≃
+idtoeqv (c₁ ◎⟷ c₂) = trans≃ (idtoeqv c₁) (idtoeqv c₂)
+idtoeqv assocl₊ = assocl₊≃
+idtoeqv assocr₊ = sym≃ assocl₊≃
+idtoeqv (c₁ ⊕ c₂) = (idtoeqv c₁) ⊕≃ (idtoeqv c₂)
 
 univalence : (A B : U₀) → Set
 univalence A B =  isequiv (idtoeqv {A} {B})
 
 univalenceP : (A B : U₀) → univalence A B
-univalenceP A B = mkisequiv {!!} {!!} {!!}
+univalenceP A B = mkisequiv comp {!!} {!!}
+  where comp : {A B : U₀} → (El₀ A ≃ El₀ B) → (A ⟷ B)
+        comp {𝟘} {𝟘} _ = refl⟷
+        comp {𝟙} {𝟙} _ = refl⟷
+        comp {ID0 {A} a₁ a₂} {ID0 {B} b₁ b₂} eq = {!!}
+        comp {_} {_} eq = {!!}
 
---
-
-{--
-idtoeqv2 : {A B : U₀} {P Q : El₁ (ID1 {U0} A B)} → El₁ (ID1 P Q) →
+idtoeqv2 : {A B : U₀} {P Q : El₁ (ID1 {U0} A B)} → El₁ (ID1 {(ID1 {U0} A B)} P Q) →
   isequiv (eval P) ≃ isequiv (eval Q)
-idtoeqv2 refl⇔ = {!!}
-idtoeqv2 (α ● β) = {!!}
+idtoeqv2 refl⇔ = refl≃
+idtoeqv2 (α ● β) = trans≃ (idtoeqv2 α) (idtoeqv2 β)
 idtoeqv2 idl◎l = {!!}
 idtoeqv2 idl◎r = {!!}
 idtoeqv2 assocl⊕l = {!!}
@@ -271,15 +290,21 @@ idtoeqv2 assocl⊕r = {!!}
 idtoeqv2 assocr⊕l = {!!}
 idtoeqv2 assocr⊕r = {!!}
 
-univalence2 : {A B : U₀} (P Q : El₁ (ID1 A B)) → Set
+univalence2 : {A B : U₀} (P Q : El₁ (ID1 {U0} A B)) → Set
 univalence2 {A} {B} P Q =  isequiv (idtoeqv2 {A} {B} {P} {Q})
 
-univalence2P : {A B : U₀} (P Q : El₁ (ID1 A B)) → univalence2 P Q
-univalence2P {A} {B} P Q = mkisequiv {!!} {!!} {!!}
---}
+univalence2P : {A B : U₀} (P Q : El₁ (ID1 {U0} A B)) → univalence2 P Q
+univalence2P {A} {B} P Q = mkisequiv comp {!!} {!!}
+  where comp : {A B : U₀} {c₁ c₂ : El₁ (ID1 {U0} A B)} →
+               isequiv (eval c₁) ≃ isequiv (eval c₂) → c₁ ⇔ c₂
+        comp {A} {B} {c₁} {c₂} eq = {!!}
 
 ------------------------------------------------------------------------------
--- Categorical semantics: we have a bicategory
+-- HITs; fractionals as  an example
+
+------------------------------------------------------------------------------
+-- Categorical semantics: We have a weak rig groupoid as shown in pi-dual
+-- Here we show that we have a bicategory
 -- https://en.wikipedia.org/wiki/Bicategory
 
 -- Objects (also called 0-cells)
