@@ -23,53 +23,6 @@ open import Universe
 -- univalence.
 
 ------------------------------------------------------------------------------
--- The universe of small types which contains:
---   * the empty type
---   * the unit type
---   * coproducts
---   * products
---   * for any type A in U₀, and any two points in A, the identity type ID0 a₁
---     a₂. Note that this is recursive allowing A itself to be an identity
---     type. The identity types in this universe are all boring though.
-
-infix 50 _⊕_
-infix 60 _⊗_
-
--- Types: codes and interpretations
-
-data U₀ : Set
-El₀ : U₀ → Set
-
-data U₀ where
-  𝟘 : U₀
-  𝟙 : U₀
-  _⊕_ : U₀ → U₀ → U₀
-  _⊗_ : U₀ → U₀ → U₀
-  ID0 : {A : U₀} → (a₁ a₂ : El₀ A) → U₀
-
-El₀ 𝟘 = ⊥
-El₀ 𝟙 = ⊤
-El₀ (A ⊕ B) = El₀ A ⊎ El₀ B
-El₀ (A ⊗ B) = El₀ A × El₀ B
-El₀ (ID0 a₁ a₂) = a₁ ≡ a₂
-
-TYPE₀ : Universe _ _
-TYPE₀ = record { U = U₀; El = El₀ }
-
--- Example
-
-module Example₀ where
-
-  x : El₀ (ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₁ tt))
-  x = refl
-
-  -- y : El₀ (ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₂ tt))
-  -- ()
-
-  z : El₀ (ID0 {ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₁ tt)} refl refl)
-  z = refl
-
-------------------------------------------------------------------------------
 -- Some general semantic notions
 
 -- Homotopy
@@ -133,6 +86,55 @@ trans≋ {g = g} {F} {G} {H} E₁ E₂ eq =
   trans≈ {f = g} {eq₁ = F eq} {eq₂ = G eq} {eq₃ = H eq} (E₁ eq) (E₂ eq)
 
 ------------------------------------------------------------------------------
+-- Now we move to our language
+
+-- The universe U₀ of small types which contains:
+--   * the empty type
+--   * the unit type
+--   * coproducts
+--   * products
+--   * for any type A in U₀, and any two points a and b in A, the identity type
+--     ID0 a b. Note that this is recursive allowing A itself to be an identity
+--     type. The identity types in this universe are all boring though.
+
+infix 50 _⊕_
+infix 60 _⊗_
+
+-- Types: codes and interpretations
+
+data U₀ : Set
+El₀ : U₀ → Set
+
+data U₀ where
+  𝟘 : U₀
+  𝟙 : U₀
+  _⊕_ : U₀ → U₀ → U₀
+  _⊗_ : U₀ → U₀ → U₀
+  ID0 : {A : U₀} → (a₁ a₂ : El₀ A) → U₀
+
+El₀ 𝟘 = ⊥
+El₀ 𝟙 = ⊤
+El₀ (A ⊕ B) = El₀ A ⊎ El₀ B
+El₀ (A ⊗ B) = El₀ A × El₀ B
+El₀ (ID0 a₁ a₂) = a₁ ≡ a₂
+
+TYPE₀ : Universe _ _
+TYPE₀ = record { U = U₀; El = El₀ }
+
+-- Example
+
+module Example₀ where
+
+  x : El₀ (ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₁ tt))
+  x = refl
+
+  -- y : El₀ (ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₂ tt))
+  -- ()
+
+  z : El₀ (ID0 {ID0 {𝟙 ⊕ 𝟙} (inj₁ tt) (inj₁ tt)} refl refl)
+  z = refl
+
+------------------------------------------------------------------------------
 -- Some notions defined in U₀ that are needed to define U₁
 
 data _⟷_ : U₀ → U₀ → Set where
@@ -175,35 +177,33 @@ data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
     (((c₁ ⊕ c₂) ⊕ c₃) ◎⟷ assocr₊) ⇔ (assocr₊ ◎⟷ (c₁ ⊕ (c₂ ⊕ c₃)))
   -- elided
 
-⟦_⟧ : {A B : U₀} → (A ⟷ B) → Set
-⟦ c ⟧ = isequiv (eval c)
-
-2hom : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → eval c₁ ∼ eval c₂
-2hom {c₁ = c} refl⇔ = refl∼ (eval c)
-2hom (α ● β) = trans∼ (2hom α) (2hom β)
-2hom {c₂ = c} idl◎l = refl∼ (eval c)
-2hom {c₁ = c} idl◎r = refl∼ (eval c)
-2hom (assocl⊕l {c₁ = c₁}) (inj₁ a) = refl -- (inj₁ (inj₁ (eval c₁ a)))
-2hom (assocl⊕l {c₂ = c₂}) (inj₂ (inj₁ b)) = refl -- (inj₁ (inj₂ (eval c₂ b)))
-2hom (assocl⊕l {c₃ = c₃}) (inj₂ (inj₂ c)) = refl -- (inj₂ (eval c₃ c))
-2hom (assocl⊕r {c₁ = c₁}) (inj₁ a) = refl -- (inj₁ (inj₁ (eval c₁ a)))
-2hom (assocl⊕r {c₂ = c₂}) (inj₂ (inj₁ b)) = refl -- (inj₁ (inj₂ (eval c₂ b)))
-2hom (assocl⊕r {c₃ = c₃}) (inj₂ (inj₂ c)) = refl -- (inj₂ (eval c₃ c))
-2hom (assocr⊕l {c₁ = c₁}) (inj₁ (inj₁ a)) = refl -- (inj₁ (eval c₁ a))
-2hom (assocr⊕l {c₂ = c₂}) (inj₁ (inj₂ b)) = refl -- (inj₂ (inj₁ (eval c₂ b)))
-2hom (assocr⊕l {c₃ = c₃}) (inj₂ c) = refl -- (inj₂ (inj₂ (eval c₃ c)))
-2hom (assocr⊕r {c₁ = c₁}) (inj₁ (inj₁ a)) = refl -- (inj₁ (eval c₁ a))
-2hom (assocr⊕r {c₂ = c₂}) (inj₁ (inj₂ b)) = refl -- (inj₂ (inj₁ (eval c₂ b)))
-2hom (assocr⊕r {c₃ = c₃}) (inj₂ c) = refl -- (inj₂ (inj₂ (eval c₃ c)))
-
-hom-eq : {A B : Set} {f g : A → B} → (f ∼ g) → isequiv f → isequiv g
-hom-eq H (mkisequiv f⁻ α β) =
-  mkisequiv f⁻
-    (trans∼ (∼○ (refl∼ f⁻) (sym∼ H)) α)
-    (trans∼ (∼○ (sym∼ H) (refl∼ f⁻)) β)
-
-2eval : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → ⟦ c₁ ⟧ → ⟦ c₂ ⟧
+2eval : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) →
+        isequiv (eval c₁) → isequiv (eval c₂)
 2eval = hom-eq ○ 2hom
+  where
+  2hom : {A B : U₀} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → eval c₁ ∼ eval c₂
+  2hom {c₁ = c} refl⇔ = refl∼ (eval c)
+  2hom (α ● β) = trans∼ (2hom α) (2hom β)
+  2hom {c₂ = c} idl◎l = refl∼ (eval c)
+  2hom {c₁ = c} idl◎r = refl∼ (eval c)
+  2hom (assocl⊕l {c₁ = c₁}) (inj₁ a) = refl -- (inj₁ (inj₁ (eval c₁ a)))
+  2hom (assocl⊕l {c₂ = c₂}) (inj₂ (inj₁ b)) = refl -- (inj₁ (inj₂ (eval c₂ b)))
+  2hom (assocl⊕l {c₃ = c₃}) (inj₂ (inj₂ c)) = refl -- (inj₂ (eval c₃ c))
+  2hom (assocl⊕r {c₁ = c₁}) (inj₁ a) = refl -- (inj₁ (inj₁ (eval c₁ a)))
+  2hom (assocl⊕r {c₂ = c₂}) (inj₂ (inj₁ b)) = refl -- (inj₁ (inj₂ (eval c₂ b)))
+  2hom (assocl⊕r {c₃ = c₃}) (inj₂ (inj₂ c)) = refl -- (inj₂ (eval c₃ c))
+  2hom (assocr⊕l {c₁ = c₁}) (inj₁ (inj₁ a)) = refl -- (inj₁ (eval c₁ a))
+  2hom (assocr⊕l {c₂ = c₂}) (inj₁ (inj₂ b)) = refl -- (inj₂ (inj₁ (eval c₂ b)))
+  2hom (assocr⊕l {c₃ = c₃}) (inj₂ c) = refl -- (inj₂ (inj₂ (eval c₃ c)))
+  2hom (assocr⊕r {c₁ = c₁}) (inj₁ (inj₁ a)) = refl -- (inj₁ (eval c₁ a))
+  2hom (assocr⊕r {c₂ = c₂}) (inj₁ (inj₂ b)) = refl -- (inj₂ (inj₁ (eval c₂ b)))
+  2hom (assocr⊕r {c₃ = c₃}) (inj₂ c) = refl -- (inj₂ (inj₂ (eval c₃ c)))
+
+  hom-eq : {A B : Set} {f g : A → B} → (f ∼ g) → isequiv f → isequiv g
+  hom-eq H (mkisequiv f⁻ α β) =
+    mkisequiv f⁻
+      (trans∼ (∼○ (refl∼ f⁻) (sym∼ H)) α)
+      (trans∼ (∼○ (sym∼ H) (refl∼ f⁻)) β)
 
 ------------------------------------------------------------------------------
 -- The universe U₁ which contains:
@@ -230,5 +230,77 @@ El₁ (ID1 {ID1 {U0} A B} c₁ c₂) = c₁ ⇔ c₂
 El₁ (ID1 {ID1 {ID1 {⇑ A} _ _} _ _} a b) = a ≡ b
 El₁ (ID1 {ID1 {ID1 {U0} A B} c₁ c₂} α β) = 2eval α ≋ 2eval β
 El₁ (ID1 {ID1 {ID1 {ID1 _ _} _ _} _ _} a b) = a ≡ b
+
+TYPE₁ : Universe _ _
+TYPE₁ = record { U = U₁; El = El₁ }
+
+------------------------------------------------------------------------------
+-- Categorical semantics: we have a bicategory
+-- https://en.wikipedia.org/wiki/Bicategory
+
+-- Objects (also called 0-cells)
+
+0-cells : Set
+0-cells = U₀
+
+-- Morphisms with fixed source and target objects (also called 1-cells)
+
+1-cells : (A B : U₀) → Set
+1-cells A B = A ⟷ B
+
+-- Morphisms between morphisms with fixed source and target morphisms (which
+-- should have themselves the same source and the same target). These are also
+-- called 2-cells.
+
+2-cells : {A B : U₀} → (c₁ c₂ : A ⟷ B) → Set
+2-cells c₁ c₂ = c₁ ⇔ c₂
+
+-- Given two objects A and B there is a category whose objects are the 1-cells
+-- and morphisms are the 2-cells; the composition in this category is called
+-- vertical composition.
+
+𝔹 : (A B : U₀) → Category _ _ _
+𝔹 A B = record
+  { Obj = A ⟷ B
+  ; _⇒_ = _⇔_
+  ; _≡_ = λ α β → 2eval α ≋ 2eval β
+  ; id = refl⇔
+  ; _∘_ = flip _●_ -- vertical composition
+  ; assoc = λ {_} {_} {_} {_} {α} {β} {γ} → assoc {α = α} {β = β} {γ = γ}
+  ; identityˡ = λ {_} {_} {α} → idl {α = α}
+  ; identityʳ = λ {_} {_} {α} → idr {α = α}
+  ; equiv = record { refl = λ {α} → refl≋ (2eval α) ;
+                     sym = λ {α} {β} E → sym≋ {F = 2eval α} {G = 2eval β} E ;
+                     trans = λ {α} {β} {γ} E₁ E₂ →
+                             trans≋ {F = 2eval α} {G = 2eval β} {H = 2eval γ} E₁ E₂ }
+  ; ∘-resp-≡ = λ {_} {_} {_} {α} {β} {γ} {δ} E₁ E₂ →
+               resp {α = α} {β = β} {γ = γ} {δ = δ} E₁ E₂
+  }
+  where
+  idl : {A B : U₀} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂} → 2eval (α ● refl⇔) ≋ 2eval α
+  idl (mkisequiv g p q) b = refl
+
+  idr : {A B : U₀} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂} → 2eval (refl⇔ ● α) ≋ 2eval α
+  idr (mkisequiv g p q) b = refl
+
+  assoc : {A B : U₀} {c₁ c₂ c₃ c₄ : A ⟷ B}
+        {α : c₁ ⇔ c₂} {β : c₂ ⇔ c₃} {γ : c₃ ⇔ c₄} →
+        2eval (α ● (β ● γ)) ≋ 2eval ((α ● β) ● γ)
+  assoc (mkisequiv g p q) b = refl
+
+  resp : {A B : U₀} {c₁ c₂ c₃ : A ⟷ B} {α β : c₂ ⇔ c₃} {γ δ : c₁ ⇔ c₂} →
+       2eval α ≋ 2eval β → 2eval γ ≋ 2eval δ →
+       2eval (γ ● α) ≋ 2eval (δ ● β)
+  resp E₁ E₂ (mkisequiv g p q) b = refl
+
+-- given three objects A, B, and C there is a bifunctor * : 𝔹(B,C) × 𝔹(A,B) →
+-- 𝔹(A,C) called horizontal composition; the horizontal composition is required
+-- to be associative up to natural isomorphism between h*(g*f) and (h*g)*f
+
+-- TODO
+
+-- coherence conditions !!!
+
+-- TODO
 
 ------------------------------------------------------------------------------
