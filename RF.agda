@@ -159,7 +159,7 @@ data _⟷_ : U₀ → U₀ → Set where
   assocl₊ : {A B C : U₀} → A ⊕ (B ⊕ C) ⟷ (A ⊕ B) ⊕ C
   assocr₊ : {A B C : U₀} → (A ⊕ B) ⊕ C ⟷ A ⊕ (B ⊕ C)
   _⊕_ : {A B C D : U₀} → (A ⟷ C) → (B ⟷ D) → (A ⊕ B ⟷ C ⊕ D)
-  -- need new combinators for ID0
+  IDis𝟙 : {A : U₀} (a b : El₀ A) → ID0 {A} a b ⟷ 𝟙
   -- elided
 
 eval : {A B : U₀} → (A ⟷ B) → El₀ A → El₀ B
@@ -176,6 +176,7 @@ eval assocr₊ (inj₁ (inj₂ b)) = inj₂ (inj₁ b)
 eval assocr₊ (inj₂ c) = inj₂ (inj₂ c)
 eval (c₁ ⊕ c₂) (inj₁ a) = inj₁ (eval c₁ a)
 eval (c₁ ⊕ c₂) (inj₂ b) = inj₂ (eval c₂ b)
+eval (IDis𝟙 a .a) refl = tt
 
 data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
   refl⇔ : {A B : U₀} {c : A ⟷ B} → (c ⇔ c)
@@ -267,6 +268,7 @@ idtoeqv (c₁ ◎⟷ c₂) = trans≃ (idtoeqv c₁) (idtoeqv c₂)
 idtoeqv assocl₊ = assocl₊≃
 idtoeqv assocr₊ = sym≃ assocl₊≃
 idtoeqv (c₁ ⊕ c₂) = (idtoeqv c₁) ⊕≃ (idtoeqv c₂)
+idtoeqv (IDis𝟙 a b) = ?
 
 univalence : (A B : U₀) → Set
 univalence A B =  isequiv (idtoeqv {A} {B})
