@@ -14,11 +14,72 @@ open import Categories.Groupoid.Product as G
 open import Level using (Level; _⊔_) renaming (zero to lzero; suc to lsuc)
 open import Data.Nat hiding (_⊔_)
 open import Data.Integer as ℤ hiding (_⊔_)
+open import Relation.Binary.PropositionalEquality
 
 ------------------------------------------------------------------------------
 -- Featherweight HoTT !
 -- A mini language for programming with equivalences, identity types, and
 -- univalence.
+
+------------------------------------------------------------------------------
+-- Semantic notions
+
+-- Homotopy
+
+_∼_ : {A B : Set} → (f g : A → B) → Set
+_∼_ {A} f g = (a : A) → f a ≡ g a
+
+refl∼ : {A B : Set} → (f : A → B) → (f ∼ f)
+refl∼ f a = refl -- (f a)
+
+sym∼ : {A B : Set} {f g : A → B} → (f ∼ g) → (g ∼ f)
+sym∼ H b = sym (H b)
+
+trans∼ : {A B : Set} {f g h : A → B} → f ∼ g → g ∼ h → f ∼ h
+trans∼ p₁ p₂ a = trans (p₁ a) (p₂ a)
+
+∼○ : {A B C : Set} {f g : A → B} {h k : B → C} →
+     (f ∼ g) → (h ∼ k) → ((h ○ f) ∼ (k ○ g))
+∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans (cong h (H₁ x)) (H₂ (g x))
+
+-- Equivalence
+
+record isequiv {A B : Set} (f : A → B) : Set where
+  constructor mkisequiv
+  field
+    g : B → A
+    α : (f ○ g) ∼ id
+    β : (g ○ f) ∼ id
+
+_≈_ : {A B : Set} {f : A → B} → isequiv f → isequiv f → Set
+(mkisequiv g₁ _ _) ≈ (mkisequiv g₂ _ _) = g₁ ∼ g₂
+
+refl≈ : {A B : Set} {f : A → B} → (eq : isequiv f) → eq ≈ eq
+refl≈ (mkisequiv g _ _) = refl∼ g
+
+sym≈ : {A B : Set} {f : A → B} {eq₁ eq₂ : isequiv f} →
+       eq₁ ≈ eq₂ → eq₂ ≈ eq₁
+sym≈ = sym∼
+
+trans≈ : {A B : Set} {f : A → B} {eq₁ eq₂ eq₃ : isequiv f} →
+       eq₁ ≈ eq₂ → eq₂ ≈ eq₃ → eq₁ ≈ eq₃
+trans≈ = trans∼
+
+-- Higher homotopy between functions over isequiv
+
+_≋_ : {A B : Set} {f g : A → B} (F G : isequiv f → isequiv g) → Set
+_≋_ {f = f} {g = g} F G = (eq : isequiv f) → F eq ≈ G eq
+
+refl≋ : {A B : Set} {f g : A → B} (F : isequiv f → isequiv g) → F ≋ F
+refl≋ F eq = refl≈ (F eq)
+
+sym≋ : {A B : Set} {f g : A → B} {F G : isequiv f → isequiv g} → F ≋ G → G ≋ F
+sym≋ {g = g} {F} {G} E eq = sym≈ {f = g} {eq₁ = F eq} {eq₂ = G eq} (E eq)
+
+trans≋ : {A B : Set} {f g : A → B} {F G H : isequiv f → isequiv g} →
+         F ≋ G → G ≋ H → F ≋ H
+trans≋ {g = g} {F} {G} {H} E₁ E₂ eq =
+  trans≈ {f = g} {eq₁ = F eq} {eq₂ = G eq} {eq₃ = H eq} (E₁ eq) (E₂ eq)
 
 ------------------------------------------------------------------------------
 -- Syntax and operational semantics
@@ -113,47 +174,6 @@ data _⇔_ : {A B : T} → (A ⟷ B) → (A ⟷ B) → Set where
 2! assocr⊕l = assocr⊕r
 2! assocr⊕r = assocr⊕l
 
--- Identity on values
-
-data _≡_ {A : Set} : (a b : A) → Set where
-  refl : (a : A) → (a ≡ a)
-
-sym≡ : {A : T} {a b : El A} → a ≡ b → b ≡ a
-sym≡ (refl a) = refl a
-
-trans≡ : {A : T} {a b c : El A} → a ≡ b → b ≡ c → a ≡ c
-trans≡ (refl a) (refl .a) = refl a
-
-cong≡ : {A B : Set} {a b : A} → (f : A → B) (p : a ≡ b) → f a ≡ f b
-cong≡ f (refl a) = refl (f a)
-
--- Homotopy
-
-_∼_ : {A B : Set} → (f g : A → B) → Set
-_∼_ {A} {B} f g = (a : A) → f a ≡ g a
-
-refl∼ : {A B : T} → (f : El A → El B) → (f ∼ f)
-refl∼ f a = refl (f a)
-
-sym∼ : {A B : T} {f g : El A → El B} → (f ∼ g) → (g ∼ f)
-sym∼ H b = sym≡ (H b)
-
-trans∼ : {A B : T} {f g h : El A → El B} → f ∼ g → g ∼ h → f ∼ h
-trans∼ p₁ p₂ a = trans≡ (p₁ a) (p₂ a)
-
-∼○ : {A B C : T} {f g : El A → El B} {h k : El B → El C} →
-     (f ∼ g) → (h ∼ k) → ((h ○ f) ∼ (k ○ g))
-∼○ {f = f} {g = g} {h = h} H₁ H₂ x = trans≡ (cong≡ h (H₁ x)) (H₂ (g x))
-
--- Equivalence
-
-record isequiv {A B : Set} (f : A → B) : Set where
-  constructor mkisequiv
-  field
-    g : B → A
-    α : (f ○ g) ∼ id
-    β : (g ○ f) ∼ id
-
 -- Operational semantics of 2-combinators
 
 El₂ : {A B : T} → (A ⟷ B) → Set
@@ -167,18 +187,18 @@ El₂ c = isequiv (eval c)
 2hom (α ● β) = trans∼ (2hom α) (2hom β)
 2hom {c₂ = c} idl◎l = refl∼ (eval c)
 2hom {c₁ = c} idl◎r = refl∼ (eval c)
-2hom (assocl⊕l {c₁ = c₁}) (inj₁ a) = refl (inj₁ (inj₁ (eval c₁ a)))
-2hom (assocl⊕l {c₂ = c₂}) (inj₂ (inj₁ b)) = refl (inj₁ (inj₂ (eval c₂ b)))
-2hom (assocl⊕l {c₃ = c₃}) (inj₂ (inj₂ c)) = refl (inj₂ (eval c₃ c))
-2hom (assocl⊕r {c₁ = c₁}) (inj₁ a) = refl (inj₁ (inj₁ (eval c₁ a)))
-2hom (assocl⊕r {c₂ = c₂}) (inj₂ (inj₁ b)) = refl (inj₁ (inj₂ (eval c₂ b)))
-2hom (assocl⊕r {c₃ = c₃}) (inj₂ (inj₂ c)) = refl (inj₂ (eval c₃ c))
-2hom (assocr⊕l {c₁ = c₁}) (inj₁ (inj₁ a)) = refl (inj₁ (eval c₁ a))
-2hom (assocr⊕l {c₂ = c₂}) (inj₁ (inj₂ b)) = refl (inj₂ (inj₁ (eval c₂ b)))
-2hom (assocr⊕l {c₃ = c₃}) (inj₂ c) = refl (inj₂ (inj₂ (eval c₃ c)))
-2hom (assocr⊕r {c₁ = c₁}) (inj₁ (inj₁ a)) = refl (inj₁ (eval c₁ a))
-2hom (assocr⊕r {c₂ = c₂}) (inj₁ (inj₂ b)) = refl (inj₂ (inj₁ (eval c₂ b)))
-2hom (assocr⊕r {c₃ = c₃}) (inj₂ c) = refl (inj₂ (inj₂ (eval c₃ c)))
+2hom (assocl⊕l {c₁ = c₁}) (inj₁ a) = refl -- (inj₁ (inj₁ (eval c₁ a)))
+2hom (assocl⊕l {c₂ = c₂}) (inj₂ (inj₁ b)) = refl -- (inj₁ (inj₂ (eval c₂ b)))
+2hom (assocl⊕l {c₃ = c₃}) (inj₂ (inj₂ c)) = refl -- (inj₂ (eval c₃ c))
+2hom (assocl⊕r {c₁ = c₁}) (inj₁ a) = refl -- (inj₁ (inj₁ (eval c₁ a)))
+2hom (assocl⊕r {c₂ = c₂}) (inj₂ (inj₁ b)) = refl -- (inj₁ (inj₂ (eval c₂ b)))
+2hom (assocl⊕r {c₃ = c₃}) (inj₂ (inj₂ c)) = refl -- (inj₂ (eval c₃ c))
+2hom (assocr⊕l {c₁ = c₁}) (inj₁ (inj₁ a)) = refl -- (inj₁ (eval c₁ a))
+2hom (assocr⊕l {c₂ = c₂}) (inj₁ (inj₂ b)) = refl -- (inj₂ (inj₁ (eval c₂ b)))
+2hom (assocr⊕l {c₃ = c₃}) (inj₂ c) = refl -- (inj₂ (inj₂ (eval c₃ c)))
+2hom (assocr⊕r {c₁ = c₁}) (inj₁ (inj₁ a)) = refl -- (inj₁ (eval c₁ a))
+2hom (assocr⊕r {c₂ = c₂}) (inj₁ (inj₂ b)) = refl -- (inj₂ (inj₁ (eval c₂ b)))
+2hom (assocr⊕r {c₃ = c₃}) (inj₂ c) = refl -- (inj₂ (inj₂ (eval c₃ c)))
 
 hom-eq : {A B : T} {f g : El A → El B} → (f ∼ g) → isequiv f → isequiv g
 hom-eq H (mkisequiv f⁻ α β) =
@@ -213,33 +233,55 @@ hom-eq H (mkisequiv f⁻ α β) =
 -- and morphisms are the 2-cells; the composition in this category is called
 -- vertical composition.
 
-_≣_ : {A B : T} {c₁ c₂ : A ⟷ B} → (α β : c₁ ⇔ c₂) → Set
-α ≣ β = 2eval α ∼ 2eval β
+idl : {A B : T} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂} → 2eval (α ● refl⇔) ≋ 2eval α
+idl (mkisequiv g p q) b = refl
 
-refl≣ : {A B : T} {c₁ c₂ : A ⟷ B} → (α : c₁ ⇔ c₂) → α ≣ α
-refl≣ α eq = refl (hom-eq (2hom α) eq)
+idr : {A B : T} {c₁ c₂ : A ⟷ B} {α : c₁ ⇔ c₂} → 2eval (refl⇔ ● α) ≋ 2eval α
+idr (mkisequiv g p q) b = refl
 
-sym≣ : {A B : T} {c₁ c₂ : A ⟷ B} {α β : c₁ ⇔ c₂} → α ≣ β → β ≣ α
-sym≣ E eq = {!!}
+assoc : {A B : T} {c₁ c₂ c₃ c₄ : A ⟷ B}
+        {α : c₁ ⇔ c₂} {β : c₂ ⇔ c₃} {γ : c₃ ⇔ c₄} →
+        2eval (α ● (β ● γ)) ≋ 2eval ((α ● β) ● γ)
+assoc (mkisequiv g p q) b = refl
 
-trans≣ : {A B : T} {c₁ c₂ : A ⟷ B} {α β γ : c₁ ⇔ c₂} → α ≣ β → β ≣ γ → α ≣ γ
-trans≣ E₁ E₂ eq = {!!}
+resp : {A B : T} {c₁ c₂ c₃ : A ⟷ B} {α β : c₂ ⇔ c₃} {γ δ : c₁ ⇔ c₂} →
+       2eval α ≋ 2eval β → 2eval γ ≋ 2eval δ →
+       2eval (γ ● α) ≋ 2eval (δ ● β)
+resp E₁ E₂ (mkisequiv g p q) b = refl
 
 𝔹 : (A B : T) → Category _ _ _
 𝔹 A B = record
   { Obj = A ⟷ B
   ; _⇒_ = _⇔_
-  ; _≡_ = _≣_
+  ; _≡_ = λ α β → 2eval α ≋ 2eval β
   ; id = refl⇔
-  ; _∘_ = flip _●_
-  ; assoc = {!!}
-  ; identityˡ = {!!}
-  ; identityʳ = {!!}
-  ; equiv = record { refl = λ {α} → refl≣ α;
-                     sym = sym≣;
-                     trans = trans≣ }
-  ; ∘-resp-≡ = {!!}
+  ; _∘_ = flip _●_ -- vertical composition
+  ; assoc = λ {_} {_} {_} {_} {α} {β} {γ} → assoc {α = α} {β = β} {γ = γ}
+  ; identityˡ = λ {_} {_} {α} → idl {α = α}
+  ; identityʳ = λ {_} {_} {α} → idr {α = α}
+  ; equiv = record { refl = λ {α} → refl≋ (2eval α) ;
+                     sym = λ {α} {β} E → sym≋ {F = 2eval α} {G = 2eval β} E ;
+                     trans = λ {α} {β} {γ} E₁ E₂ →
+                             trans≋ {F = 2eval α} {G = 2eval β} {H = 2eval γ} E₁ E₂ }
+  ; ∘-resp-≡ = λ {_} {_} {_} {α} {β} {γ} {δ} E₁ E₂ →
+               resp {α = α} {β = β} {γ = γ} {δ = δ} E₁ E₂
   }
+
+-- given three objects A, B, and C there is a bifunctor * : 𝔹(B,C) × 𝔹(A,B) →
+-- 𝔹(A,C) called horizontal composition; the horizontal composition is required
+-- to be associative up to natural isomorphism between h*(g*f) and (h*g)*f
+
+-- TODO
+
+-- coherence conditions !!!
+
+-- TODO
+
+------------------------------------------------------------------------------
+
+
+
+
 
 {--
 record N-CELLS {u e : Level} : Set (lsuc (u ⊔ e)) where
@@ -351,7 +393,6 @@ module MOD0 where
 
   -- 0-cells
 
-{--
   0-cells : N-CELLS
   0-cells = record {
            U = U
@@ -383,7 +424,6 @@ module MOD0 where
          ; sym≃ = sym≃
          ; trans≃ = trans≃
          }
---}
 
 ------------------------------------------------------------------------------
 -- for each pair of 0-cells A and B, a category of 1-cells
@@ -409,7 +449,6 @@ module MOD1 (A B : MOD0.U) where
   -- to El B. Ex. the types A and B might both be 1+1 and c₁ and c₂ might be id
   -- and swap.
 
-{--
   Fun : (c₁ c₂ : U) → Set
   Fun c₁ c₂ = El c₁ → El c₂
 
@@ -425,7 +464,6 @@ module MOD1 (A B : MOD0.U) where
   -- Identity: we have two things (g₁ , α₁ , β₁) and (g₂ , α₂ , β₂) that are
   -- both inverses of (eval c); they are the same if g₁ ∼ g₂
 
-{--
   data _≡_ {c : U} (eq₁ eq₂ : El c) : Set where
     refl :
       let open isequiv₀ eq₁ renaming (g to g₁)
@@ -435,29 +473,24 @@ module MOD1 (A B : MOD0.U) where
 --  refl≡ : {c : U} (eq : El c) → _≡_ {c = c} eq eq
   refl≡ : {c : U} (eq : El c) → _≡_ eq eq
   refl≡ = {!!}
-{--
   refl≡ (f , mkisequiv₀ g α β) =
     record {
       f≡ = refl∼₀ f
     ; g≡ = refl∼₀ g
     }
---}
   trans≡ : {c : U} {eq₁ eq₂ eq₃ : El c} →
            (_≡_ {c = c} eq₁ eq₂) → (_≡_ {c = c} eq₂ eq₃) →
            (_≡_ {c = c} eq₁ eq₃)
   trans≡ = {!!}
-{--
   trans≡ (record { f≡ = f≡₁ ; g≡ = g≡₁ }) (record { f≡ = f≡₂ ; g≡ = g≡₂ }) =
     record {
       f≡ = trans∼₀ f≡₁ f≡₂
     ; g≡ = trans∼₀ g≡₁ g≡₂
     }
---}
   cong≡ : {c₁ c₂ : U} {eq₁ eq₂ : El c₁} →
    (f : Fun c₁ c₂) → _≡_ {c = c₁} eq₁ eq₂ →
    _≡_ {c = c₂} (app {c₁ = c₁} {c₂ = c₂} f eq₁) (app {c₁ = c₁} {c₂ = c₂} f eq₂)
   cong≡ = {!!}
-{--
   cong≡ {eq₁ = (f₁ , mkisequiv₀ g₁ α₁ β₁)}
         {eq₂ = (f₂ , mkisequiv₀ g₂ α₂ β₂)}
         (F , G , γ , δ)
@@ -466,7 +499,6 @@ module MOD1 (A B : MOD0.U) where
        f≡ = trans∼₀ (γ f₁) (trans∼₀ f≡ (sym∼₀ (γ f₂)))
      ; g≡ = trans∼₀ (δ g₁) (trans∼₀ g≡ (sym∼₀ (δ g₂)))
      }
---}
 
   -- Homotopy
 
@@ -582,7 +614,6 @@ module MOD0x1 where
 --      α : (c : A ⟷ B) → _≃₁_ A B (complete (sound c)) c
 --      β : (eq : A ≃₀ B) → Σ[ c ∈ A ⟷ B ] _≡₁_ A B {c = c} (sound (complete eq)) eq
 
-{--
 ------------------------------------------------------------------------------
 -- level 2 universe: codes for level 1 equivalences
 
@@ -820,7 +851,4 @@ module MOD3 where
           }
 
 ------------------------------------------------------------------------------
---}
---}
---}
 --}
