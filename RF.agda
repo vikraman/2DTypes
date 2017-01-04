@@ -170,7 +170,20 @@ data _⟷_ : U₀ → U₀ → Set where
   assocr₊ : {A B C : U₀} → (A ⊕ B) ⊕ C ⟷ A ⊕ (B ⊕ C)
   _⊕_ : {A B C D : U₀} → (A ⟷ C) → (B ⟷ D) → (A ⊕ B ⟷ C ⊕ D)
   -- new combinators for ID0; the following is not right though
-  IDis𝟙 : {A : U₀} (a b : El₀ A) → ID0 {A} a b ⟷ 𝟙
+  ID0-⊤ :  (a b : ⊤) → ID0 {𝟙} tt tt ⟷ 𝟙
+  ID0-⊕₁ : {A B : U₀} {a a' : El₀ A} →
+           (ID0 {A} a a' ⟷ 𝟙) → (ID0 {A ⊕ B} (inj₁ a) (inj₁ a') ⟷ 𝟙)
+  ID0-⊕₂ : {A B : U₀} {a : El₀ A} {b : El₀ B} →
+           (ID0 {A ⊕ B} (inj₂ b) (inj₁ a) ⟷ 𝟘)
+  ID0-⊕₃ : {A B : U₀} {a : El₀ A} {b : El₀ B} →
+           (ID0 {A ⊕ B} (inj₁ a) (inj₂ b) ⟷ 𝟘)
+  ID0-⊕₄ : {A B : U₀} → (b b' : El₀ B) →
+           (ID0 {B} b b' ⟷ 𝟙) → (ID0 {A ⊕ B} (inj₂ b) (inj₂ b') ⟷ 𝟙)
+  ID0-⊗ : {A B : U₀} {a a' : El₀ A} {b b' : El₀ B} →
+           (ID0 {A} a a' ⟷ 𝟙) → (ID0 {B} b b' ⟷ 𝟙) →
+           (ID0 {A ⊗ B} (a , b) (a' , b') ⟷ 𝟙)
+  ID0-ID : {A : U₀} {a a' : El₀ A} {p q : El₀ (ID0 {A} a a')} →
+           (ID0 {ID0 {A} a a'} p q ⟷ 𝟙)
   -- elided
 
 eval : {A B : U₀} → (A ⟷ B) → El₀ A → El₀ B
@@ -187,10 +200,9 @@ eval assocr₊ (inj₁ (inj₂ b)) = inj₂ (inj₁ b)
 eval assocr₊ (inj₂ c) = inj₂ (inj₂ c)
 eval (c₁ ⊕ c₂) (inj₁ a) = inj₁ (eval c₁ a)
 eval (c₁ ⊕ c₂) (inj₂ b) = inj₂ (eval c₂ b)
-eval (IDis𝟙 a .a) refl = tt
+eval x = {!!}
 
 evalB : {A B : U₀} → (A ⟷ B) → El₀ B → El₀ A
-evalB (IDis𝟙 a b) tt = {!!} -- obviously that is wrong
 evalB _ = {!!}
 
 data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
@@ -285,7 +297,7 @@ module Univalence1 where
   idtoeqv assocl₊ = assocl₊≃
   idtoeqv assocr₊ = sym≃ assocl₊≃
   idtoeqv (c₁ ⊕ c₂) = (idtoeqv c₁) ⊕≃ (idtoeqv c₂)
-  idtoeqv (IDis𝟙 a b) = {!!}
+  idtoeqv x = {!!}
 
   univalence : (A B : U₀) → Set
   univalence A B =  isequiv (idtoeqv {A} {B})
