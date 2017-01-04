@@ -200,7 +200,13 @@ eval assocr₊ (inj₁ (inj₂ b)) = inj₂ (inj₁ b)
 eval assocr₊ (inj₂ c) = inj₂ (inj₂ c)
 eval (c₁ ⊕ c₂) (inj₁ a) = inj₁ (eval c₁ a)
 eval (c₁ ⊕ c₂) (inj₂ b) = inj₂ (eval c₂ b)
-eval x = {!!}
+eval (ID0-⊤ tt tt) a = tt
+eval (ID0-⊕₁ x) a = tt
+eval ID0-⊕₂ ()
+eval ID0-⊕₃ ()
+eval (ID0-⊕₄ b b' x) a = tt
+eval (ID0-⊗ x x₁) a = tt
+eval ID0-ID a = tt
 
 evalB : {A B : U₀} → (A ⟷ B) → El₀ B → El₀ A
 evalB _ = {!!}
