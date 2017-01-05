@@ -381,6 +381,9 @@ module Universe₁ where
     -- univalence is NOT a postulate; we can prove it! The proof is essentially
     -- the completeness of ⟷ with respect to equivalence
 
+    ⊤≃Bool→⊥ : (⊤ ≃ Bool) → ⊥
+    ⊤≃Bool→⊥ (f , mkisequiv g α β) = {!!}
+
     univalenceP : (A B : U₀) → univalence A B
     univalenceP A B = mkisequiv comp {!!} {!!}
       where comp : {A B : U₀} → (El₀ A ≃ El₀ B) → (A ⟷ B)
@@ -390,10 +393,10 @@ module Universe₁ where
             comp {𝟘} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
             comp {𝟙} {𝟘} (f , _) = ⊥-elim (f tt)
             comp {𝟙} {𝟙} _ = refl⟷
-            comp {𝟙} {𝔹} (f , mkisequiv g α β) = {!!}
+            comp {𝟙} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ eq)
             comp {𝟙} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
             comp {𝔹} {𝟘} (f , _) = ⊥-elim (f false)
-            comp {𝔹} {𝟙} (f , mkisequiv g α β) = {!!}
+            comp {𝔹} {𝟙} eq = ⊥-elim (⊤≃Bool→⊥ (sym≃ eq))
             comp {𝔹} {𝔹} (f , mkisequiv g α β) = {!!}
             comp {𝔹} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
             comp {a₁ ⊜₀ a₂} {𝟘} (f , _) = {!!}
