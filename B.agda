@@ -177,8 +177,8 @@ module Universe₀ where
     ⊜-𝔹₃r : 𝟘 ⟷ true ⊜ false
     ⊜-𝔹₄l : false ⊜ false ⟷ 𝟙
     ⊜-𝔹₄r : 𝟙 ⟷ false ⊜ false
-    ⊜-IDl : {A : U} {a a' : El A} → (p q : El (a ⊜ a')) → (p ⊜ q ⟷ 𝟙)
-    ⊜-IDr : {A : U} {a a' : El A} → (p q : El (a ⊜ a')) → (𝟙 ⟷ p ⊜ q)
+    ⊜-⊜l : {A : U} {a a' : El A} → (p q : El (a ⊜ a')) → (p ⊜ q ⟷ 𝟙)
+    ⊜-⊜r : {A : U} {a a' : El A} → (p q : El (a ⊜ a')) → (𝟙 ⟷ p ⊜ q)
 
   ! : {t₁ t₂ : U} → (t₁ ⟷ t₂) → (t₂ ⟷ t₁)
   ! swap = swap
@@ -194,8 +194,8 @@ module Universe₀ where
   ! ⊜-𝔹₃r = ⊜-𝔹₃l
   ! ⊜-𝔹₄l = ⊜-𝔹₄r
   ! ⊜-𝔹₄r = ⊜-𝔹₄l
-  ! (⊜-IDl p q) = ⊜-IDr p q
-  ! (⊜-IDr p q) = ⊜-IDl p q
+  ! (⊜-⊜l p q) = ⊜-⊜r p q
+  ! (⊜-⊜r p q) = ⊜-⊜l p q
 
   eval : {A B : U} → (A ⟷ B) → El A → El B
   eval refl⟷ = id
@@ -211,16 +211,14 @@ module Universe₀ where
   eval ⊜-𝔹₃r ()
   eval ⊜-𝔹₄l refl = tt
   eval ⊜-𝔹₄r tt = refl
-  eval (⊜-IDl _ _) refl = tt
-  eval (⊜-IDr p q) tt = proof-irrelevance p q
+  eval (⊜-⊜l _ _) refl = tt
+  eval (⊜-⊜r p q) tt = proof-irrelevance p q
 
   data _⇔_ : {A B : U} → (A ⟷ B) → (A ⟷ B) → Set where
     refl⇔ : {A B : U} {c : A ⟷ B} → (c ⇔ c)
     _●_ : {A B : U} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
     idl◎l : {A B : U} {c : A ⟷ B} → (refl⟷ ◎⟷ c) ⇔ c
     idl◎r : {A B : U} {c : A ⟷ B} → c ⇔ (refl⟷ ◎⟷ c)
-    linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎⟷ ! c) ⇔ refl⟷
-    linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → refl⟷ ⇔ (c ◎⟷ ! c)
     -- rest of Laplaza axioms elided
     -- need new combinators for identity type
 
@@ -233,8 +231,6 @@ module Universe₀ where
     2hom (α ● β) = trans∼ (2hom α) (2hom β)
     2hom {c₂ = c} idl◎l = refl∼ (eval c)
     2hom {c₁ = c} idl◎r = refl∼ (eval c)
-    2hom linv◎l = {!!}
-    2hom linv◎r = {!!}
 
     hom-eq : {A B : Set} {f g : A → B} → (f ∼ g) → isequiv f → isequiv g
     hom-eq H (mkisequiv f⁻ α β) =
@@ -257,7 +253,9 @@ module Universe₁ where
     using (_⟷_; _⇔_; eval; 2eval;
            𝟘; 𝟙; 𝔹;
            refl⟷; swap; _◎⟷_;
-           refl⇔; idl◎l; idl◎r; _●_; linv◎r)
+           refl⇔; idl◎l; idl◎r; _●_;
+           ⊜-⊤l; ⊜-⊤r; ⊜-𝔹₁l; ⊜-𝔹₁r; ⊜-𝔹₂l; ⊜-𝔹₂r; ⊜-𝔹₃l; ⊜-𝔹₃r; ⊜-𝔹₄l; ⊜-𝔹₄r;
+           ⊜-⊜l; ⊜-⊜r)
     renaming (U to U₀; El to El₀; _⊜_ to _⊜₀_)
 
   data U : Set
@@ -316,9 +314,6 @@ module Universe₁ where
     α₁₃ = idl◎r
     α₁₃' = idl◎r ● refl⇔
 
-    α₁₄ : El (_⊜_ {_⊜_ {U0} 𝔹 𝔹} w₁ w₄)
-    α₁₄ = linv◎r
-
     -- identities between 2-combinators
 
     X Y : El (_⊜_ {_⊜_ {_⊜_ {U0} 𝔹 𝔹} w₁ w₃} α₁₃ α₁₃')
@@ -337,26 +332,48 @@ module Universe₁ where
     -- High-level structure: for each pair of types A and B such that A ⊜ B, we
     -- define a function idtoeqv and show it is an equivalence
 
+    tt≡tt≃⊤ : (tt ≡ tt) ≃ ⊤
+    tt≡tt≃⊤ = (λ _ → tt) ,
+              mkisequiv
+                (λ _ → refl)
+                (λ {tt → refl})
+                (λ {refl → refl})
+
+    b≡b≃⊤ : {b : Bool} → (b ≡ b) ≃ ⊤
+    b≡b≃⊤ {b} = (λ _ → tt) ,
+                mkisequiv
+                  (λ _ → refl)
+                  (λ {tt → refl})
+                  (λ {refl → refl})
+
+    p⊜q≃⊤ : {A : U₀} {a a' : El₀ A} → (p q : El₀ (a ⊜₀ a')) →
+            El₀ (p ⊜₀ q) ≃ ⊤
+    p⊜q≃⊤ refl q = (λ _ → tt) ,
+                mkisequiv
+                  (λ _ → proof-irrelevance refl q)
+                  (λ {tt → refl})
+                  (λ { p≡q → proof-irrelevance
+                               (proof-irrelevance refl q)
+                               p≡q})
+
     idtoeqv : {A B : U₀} → El (_⊜_ {U0} A B) → El₀ A ≃ El₀ B
     idtoeqv refl⟷ = refl≃
     idtoeqv swap = not , mkisequiv not
                            (λ { false → refl; true → refl})
                            (λ { false → refl; true → refl})
     idtoeqv (c₁ ◎⟷ c₂) = trans≃ (idtoeqv c₁) (idtoeqv c₂)
-    idtoeqv _⟷_.⊜-⊤l = (λ _ → tt) , mkisequiv (λ _ → refl)
-                           (λ _ → refl)
-                           {!!}
-    idtoeqv _⟷_.⊜-⊤r = {!!}
-    idtoeqv _⟷_.⊜-𝔹₁l = {!!}
-    idtoeqv _⟷_.⊜-𝔹₁r = {!!}
-    idtoeqv _⟷_.⊜-𝔹₂l = {!!}
-    idtoeqv _⟷_.⊜-𝔹₂r = {!!}
-    idtoeqv _⟷_.⊜-𝔹₃l = {!!}
-    idtoeqv _⟷_.⊜-𝔹₃r = {!!}
-    idtoeqv _⟷_.⊜-𝔹₄l = {!!}
-    idtoeqv _⟷_.⊜-𝔹₄r = {!!}
-    idtoeqv (_⟷_.⊜-IDl p q) = {!!}
-    idtoeqv (_⟷_.⊜-IDr p q) = {!!}
+    idtoeqv ⊜-⊤l = tt≡tt≃⊤
+    idtoeqv ⊜-⊤r = sym≃ tt≡tt≃⊤
+    idtoeqv ⊜-𝔹₁l = b≡b≃⊤ {true}
+    idtoeqv ⊜-𝔹₁r = sym≃ (b≡b≃⊤ {true})
+    idtoeqv ⊜-𝔹₂l = (λ ()) , mkisequiv (λ ()) (λ ()) (λ ())
+    idtoeqv ⊜-𝔹₂r = (λ ()) , mkisequiv (λ ()) (λ ()) (λ ())
+    idtoeqv ⊜-𝔹₃l = (λ ()) , mkisequiv (λ ()) (λ ()) (λ ())
+    idtoeqv ⊜-𝔹₃r = (λ ()) , mkisequiv (λ ()) (λ ()) (λ ())
+    idtoeqv ⊜-𝔹₄l = b≡b≃⊤ {false}
+    idtoeqv ⊜-𝔹₄r = sym≃ (b≡b≃⊤ {false})
+    idtoeqv (⊜-⊜l p q) = p⊜q≃⊤ p q
+    idtoeqv (⊜-⊜r p q) = sym≃ (p⊜q≃⊤ p q)
 
     univalence : (A B : U₀) → Set
     univalence A B =  isequiv (idtoeqv {A} {B})
@@ -370,18 +387,18 @@ module Universe₁ where
             comp {𝟘} {𝟘} _ = refl⟷
             comp {𝟘} {𝟙} (_ , mkisequiv g _ _) = ⊥-elim (g tt)
             comp {𝟘} {𝔹} (_ , mkisequiv g _ _) = ⊥-elim (g false)
-            comp {𝟘} {a₁ ⊜₀ a₂} (proj₁ , mkisequiv g α β) = {!!}
+            comp {𝟘} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
             comp {𝟙} {𝟘} (f , _) = ⊥-elim (f tt)
             comp {𝟙} {𝟙} _ = refl⟷
             comp {𝟙} {𝔹} (f , mkisequiv g α β) = {!!}
-            comp {𝟙} {a₁ ⊜₀ a₂} (proj₁ , proj₂) = {!!}
+            comp {𝟙} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
             comp {𝔹} {𝟘} (f , _) = ⊥-elim (f false)
-            comp {𝔹} {𝟙} (proj₁ , proj₂) = {!!}
-            comp {𝔹} {𝔹} (proj₁ , proj₂) = {!!}
-            comp {𝔹} {a₁ ⊜₀ a₂} (proj₁ , proj₂) = {!!}
+            comp {𝔹} {𝟙} (f , mkisequiv g α β) = {!!}
+            comp {𝔹} {𝔹} (f , mkisequiv g α β) = {!!}
+            comp {𝔹} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
             comp {a₁ ⊜₀ a₂} {𝟘} (f , _) = {!!}
-            comp {a₁ ⊜₀ a₂} {𝟙} (proj₁ , proj₂) = {!!}
-            comp {a₁ ⊜₀ a₂} {𝔹} (proj₁ , proj₂) = {!!}
-            comp {a₁ ⊜₀ a₂} {a₃ ⊜₀ a₄} (proj₁ , proj₂) = {!!}
+            comp {a₁ ⊜₀ a₂} {𝟙} (f , mkisequiv g α β) = {!!}
+            comp {a₁ ⊜₀ a₂} {𝔹} (f , mkisequiv g α β) = {!!}
+            comp {a₁ ⊜₀ a₂} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = {!!}
 
 ------------------------------------------------------------------------------
