@@ -169,22 +169,27 @@ data _⟷_ : U₀ → U₀ → Set where
   assocl₊ : {A B C : U₀} → A ⊕ (B ⊕ C) ⟷ (A ⊕ B) ⊕ C
   assocr₊ : {A B C : U₀} → (A ⊕ B) ⊕ C ⟷ A ⊕ (B ⊕ C)
   _⊕_ : {A B C D : U₀} → (A ⟷ C) → (B ⟷ D) → (A ⊕ B ⟷ C ⊕ D)
-  -- new combinators for ID0; the following is not right though
-  ID0-⊤ :  (a b : ⊤) → ID0 {𝟙} tt tt ⟷ 𝟙
+  -- new combinators for ID0; the exact list will be confirmed in the proof of
+  -- univalence below
+  ID0-⊤ :  ID0 {𝟙} tt tt ⟷ 𝟙
   ID0-⊕₁ : {A B : U₀} {a a' : El₀ A} →
            (ID0 {A} a a' ⟷ 𝟙) → (ID0 {A ⊕ B} (inj₁ a) (inj₁ a') ⟷ 𝟙)
   ID0-⊕₂ : {A B : U₀} {a : El₀ A} {b : El₀ B} →
            (ID0 {A ⊕ B} (inj₂ b) (inj₁ a) ⟷ 𝟘)
   ID0-⊕₃ : {A B : U₀} {a : El₀ A} {b : El₀ B} →
            (ID0 {A ⊕ B} (inj₁ a) (inj₂ b) ⟷ 𝟘)
-  ID0-⊕₄ : {A B : U₀} → (b b' : El₀ B) →
+  ID0-⊕₄ : {A B : U₀} {b b' : El₀ B} →
            (ID0 {B} b b' ⟷ 𝟙) → (ID0 {A ⊕ B} (inj₂ b) (inj₂ b') ⟷ 𝟙)
   ID0-⊗ : {A B : U₀} {a a' : El₀ A} {b b' : El₀ B} →
            (ID0 {A} a a' ⟷ 𝟙) → (ID0 {B} b b' ⟷ 𝟙) →
            (ID0 {A ⊗ B} (a , b) (a' , b') ⟷ 𝟙)
+  -- need to take structure of higher paths into account explicitly
   ID0-ID : {A : U₀} {a a' : El₀ A} {p q : El₀ (ID0 {A} a a')} →
            (ID0 {ID0 {A} a a'} p q ⟷ 𝟙)
   -- elided
+
+_∧_ : ⊤ → ⊤ → ⊤
+tt ∧ tt = tt
 
 eval : {A B : U₀} → (A ⟷ B) → El₀ A → El₀ B
 eval refl⟷ = id
@@ -200,16 +205,30 @@ eval assocr₊ (inj₁ (inj₂ b)) = inj₂ (inj₁ b)
 eval assocr₊ (inj₂ c) = inj₂ (inj₂ c)
 eval (c₁ ⊕ c₂) (inj₁ a) = inj₁ (eval c₁ a)
 eval (c₁ ⊕ c₂) (inj₂ b) = inj₂ (eval c₂ b)
-eval (ID0-⊤ tt tt) a = tt
-eval (ID0-⊕₁ x) a = tt
+eval ID0-⊤ refl = tt
+eval (ID0-⊕₁ r) refl = eval r refl
 eval ID0-⊕₂ ()
 eval ID0-⊕₃ ()
-eval (ID0-⊕₄ b b' x) a = tt
-eval (ID0-⊗ x x₁) a = tt
-eval ID0-ID a = tt
+eval (ID0-⊕₄ r) refl = eval r refl
+eval (ID0-⊗ r₁ r₂) refl = eval r₁ refl ∧ eval r₂ refl
+eval ID0-ID refl = tt
 
 evalB : {A B : U₀} → (A ⟷ B) → El₀ B → El₀ A
-evalB _ = {!!}
+evalB refl⟷ = id
+evalB uniti₊r (inj₁ a) = a
+evalB uniti₊r (inj₂ ())
+evalB unite₊r b = inj₁ b
+evalB (c₁ ◎⟷ c₂) = (evalB c₁) ○ (evalB c₂)
+evalB assocl₊ b = {!!}
+evalB assocr₊ b = {!!}
+evalB (c₁ ⊕ c₂) b = {!!}
+evalB ID0-⊤ tt = refl
+evalB (ID0-⊕₁ r) tt = ?
+evalB ID0-⊕₂ b₁ = {!!}
+evalB ID0-⊕₃ b₁ = {!!}
+evalB (ID0-⊕₄ r) b₁ = {!!}
+evalB (ID0-⊗ x x₁) b₁ = {!!}
+evalB ID0-ID b = {!!}
 
 data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
   refl⇔ : {A B : U₀} {c : A ⟷ B} → (c ⇔ c)
