@@ -213,23 +213,6 @@ eval (ID0-⊕₄ r) refl = eval r refl
 eval (ID0-⊗ r₁ r₂) refl = eval r₁ refl ∧ eval r₂ refl
 eval ID0-ID refl = tt
 
-evalB : {A B : U₀} → (A ⟷ B) → El₀ B → El₀ A
-evalB refl⟷ = id
-evalB uniti₊r (inj₁ a) = a
-evalB uniti₊r (inj₂ ())
-evalB unite₊r b = inj₁ b
-evalB (c₁ ◎⟷ c₂) = (evalB c₁) ○ (evalB c₂)
-evalB assocl₊ b = {!!}
-evalB assocr₊ b = {!!}
-evalB (c₁ ⊕ c₂) b = {!!}
-evalB ID0-⊤ tt = refl
-evalB (ID0-⊕₁ r) tt = ?
-evalB ID0-⊕₂ b₁ = {!!}
-evalB ID0-⊕₃ b₁ = {!!}
-evalB (ID0-⊕₄ r) b₁ = {!!}
-evalB (ID0-⊗ x x₁) b₁ = {!!}
-evalB ID0-ID b = {!!}
-
 data _⇔_ : {A B : U₀} → (A ⟷ B) → (A ⟷ B) → Set where
   refl⇔ : {A B : U₀} {c : A ⟷ B} → (c ⇔ c)
   _●_ : {A B : U₀} {c₁ c₂ c₃ : A ⟷ B} → (c₁ ⇔ c₂) → (c₂ ⇔ c₃) → (c₁ ⇔ c₃)
@@ -292,12 +275,17 @@ data U₁ where
 
 El₁ (⇑ A) = El₀ A
 El₁ U0 = U₀
+-- any identities lifted from U₀ are trivial
 El₁ (ID1 {⇑ A} a₁ a₂) = a₁ ≡ a₂
-El₁ (ID1 {U0} A B) = A ⟷ B
-El₁ (ID1 {ID1 {⇑ A} _ _} a b) = a ≡ b
-El₁ (ID1 {ID1 {U0} A B} c₁ c₂) = c₁ ⇔ c₂
 El₁ (ID1 {ID1 {ID1 {⇑ A} _ _} _ _} a b) = a ≡ b
+El₁ (ID1 {ID1 {⇑ A} _ _} a b) = a ≡ b
+-- identities between U₀ types are ⟷
+El₁ (ID1 {U0} A B) = A ⟷ B
+-- identities between ⟷ are ⇔
+El₁ (ID1 {ID1 {U0} A B} c₁ c₂) = c₁ ⇔ c₂
+-- identities of ⇔ is extensional
 El₁ (ID1 {ID1 {ID1 {U0} A B} c₁ c₂} α β) = 2eval α ≋ 2eval β
+-- after that identities are trivial again
 El₁ (ID1 {ID1 {ID1 {ID1 _ _} _ _} _ _} a b) = a ≡ b
 
 TYPE₁ : Universe _ _
@@ -307,6 +295,8 @@ TYPE₁ = record { U = U₁; El = El₁ }
 -- Univalence for U₁
 
 module Univalence1 where
+
+  -- first ⟷ is complete
 
   postulate
     -- these are proved in pi-dual
@@ -334,6 +324,8 @@ module Univalence1 where
           comp {𝟙} {𝟙} _ = refl⟷
           comp {ID0 {A} a₁ a₂} {ID0 {B} b₁ b₂} eq = {!!}
           comp {_} {_} eq = {!!}
+
+  -- then ⇔ is complete
 
   idtoeqv2 : {A B : U₀} {P Q : El₁ (ID1 {U0} A B)} → El₁ (ID1 {(ID1 {U0} A B)} P Q) →
     isequiv (eval P) ≃ isequiv (eval Q)
