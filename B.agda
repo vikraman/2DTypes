@@ -344,7 +344,7 @@ module Universe₁ where
                 mkisequiv
                   (λ _ → refl)
                   (λ {tt → refl})
-                  (λ {refl → refl})
+                  (λ {r → proof-irrelevance refl r})
 
     p⊜q≃⊤ : {A : U₀} {a a' : El₀ A} → (p q : El₀ (a ⊜₀ a')) →
             El₀ (p ⊜₀ q) ≃ ⊤
