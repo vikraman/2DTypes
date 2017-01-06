@@ -397,8 +397,11 @@ module Universe₁ where
             comp {𝟙} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
             comp {𝔹} {𝟘} (f , _) = ⊥-elim (f false)
             comp {𝔹} {𝟙} eq = ⊥-elim (⊤≃Bool→⊥ (sym≃ eq))
-            comp {𝔹} {𝔹} (f , mkisequiv g α β) = {!!}
-            comp {𝔹} {a₁ ⊜₀ a₂} (f , mkisequiv g α β) = {!!}
+            comp {𝔹} {𝔹} (f , mkisequiv g α β) = ?
+            comp {𝔹} {_⊜₀_ {𝟘} () ()}
+            comp {𝔹} {_⊜₀_ {𝟙} tt tt} (f , mkisequiv g α β) = {!!}
+            comp {𝔹} {_⊜₀_ {𝔹} a₁ a₂} (f , mkisequiv g α β) = {!!}
+            comp {𝔹} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) = {!!}
             comp {a₁ ⊜₀ a₂} {𝟘} (f , _) = {!!}
             comp {a₁ ⊜₀ a₂} {𝟙} (f , mkisequiv g α β) = {!!}
             comp {a₁ ⊜₀ a₂} {𝔹} (f , mkisequiv g α β) = {!!}
