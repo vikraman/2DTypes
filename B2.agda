@@ -6,6 +6,8 @@ open import Function
 open import Data.Bool
 open import Data.Product
 open import Relation.Binary.PropositionalEquality
+open import Data.Empty
+
 -- open import Equiv
 
 record IsEquiv {A B : Set} (f : A → B) : Set where
@@ -89,12 +91,24 @@ ua {`Bool} {`Bool} (f , isequiv g α β) with f false
 ... | false = idp
 ... | true = notp
 
+private
+  contr : (false ≡ true) → ⊥
+  contr ()
+
 α-eq : {A B : U} (eq : El A ≃ El B) → idtoequiv (ua eq) ≅ eq
-α-eq {`Bool} {`Bool} (f , isequiv g α β) with f false
-... | false = iseqequiv (λ { false → {!!} ; true → {!!} })
-                        (λ { false → {!!} ; true → {!!} })
-... | true  = iseqequiv (λ { false → {!!} ; true → {!!} })
-                        (λ { false → {!!} ; true → {!!} })
+α-eq {`Bool} {`Bool} (f , isequiv g α β) with f false | inspect f false
+... | false | [ f⊥≡⊥ ] with g false | inspect g false
+... | false | [ g⊥≡⊥ ] with f true  | inspect f true
+... | true | [ f⊤≡⊤ ] =
+  iseqequiv (λ { false → sym f⊥≡⊥ ; true → sym f⊤≡⊤ })
+            (λ { false → sym g⊥≡⊥ ; true → trans (sym (α true)) (cong g f⊤≡⊤) })
+... | false | [ f⊤≡⊥ ] =
+  ⊥-elim (contr (sym (trans (trans (sym (α true)) (cong g f⊤≡⊥)) g⊥≡⊥)))
+α-eq {`Bool} {`Bool} (f , isequiv g α β) | false | [ f⊥≡⊥ ] | true | [ g⊥≡⊥ ] =
+  ⊥-elim (contr (trans (sym (α false)) (trans (cong g f⊥≡⊥) g⊥≡⊥)))
+α-eq {`Bool} {`Bool} (f , isequiv g α β) | true | [ f⊥≡⊤ ] =
+  iseqequiv (λ { false → {!!} ; true → {!!} })
+            (λ { false → {!!} ; true → {!!} })
 
 β-eq : {A B : U} (p : A == B) → ua (idtoequiv p) ≡ p
 β-eq {`Bool} {`Bool} idp = refl
