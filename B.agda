@@ -457,6 +457,18 @@ module Universe₁ where
             comp {_⊜₀_ {𝔹} true false} {𝔹} (f , mkisequiv g α β) = ⊥-elim (true≡false→⊥ (g true))
             comp {_⊜₀_ {𝔹} true true} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤) eq))
             comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) eq))
-            comp {a₁ ⊜₀ a₂} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = {!!}
+            comp {_⊜₀_ {𝟘} a₁ a₂} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊥-elim a₁
+            comp {_⊜₀_ {𝟙} tt tt} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-⊤l ◎⟷ (comp ((λ _ → f refl) ,
+                                                                                   mkisequiv (λ _ → tt)
+                                                                                             (λ p → proof-irrelevance (f refl) p)
+                                                                                             (λ tt → refl)))
+            comp {_⊜₀_ {𝔹} false false} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-𝔹₄l ◎⟷ (comp ((λ _ → f refl) ,
+                                                                                          mkisequiv (λ _ → tt)
+                                                                                                    (λ p → proof-irrelevance (f refl) p)
+                                                                                                    (λ tt → refl)))
+            comp {_⊜₀_ {𝔹} false true} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-𝔹₂l ◎⟷ {!!}
+            comp {_⊜₀_ {𝔹} true false} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-𝔹₃l ◎⟷ {!!}
+            comp {_⊜₀_ {𝔹} true true} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-𝔹₁l ◎⟷ {!!}
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {a₅ ⊜₀ a₆} (f , mkisequiv g α β) = {!!}
 
 ------------------------------------------------------------------------------
