@@ -410,32 +410,36 @@ module Universe₁ where
             comp {𝟘} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) = ⊜-𝔹₂r
             comp {𝟘} {_⊜₀_ {𝔹} true true} (f , mkisequiv g α β) = ⊥-elim (g refl)
             comp {𝟘} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) =
-                                         let (f' , mkisequiv g' α' β') = (p⊜q≃⊤ a₃ a₄)
-                                         in ⊥-elim (g (g' tt))
+              let (f' , mkisequiv g' α' β') = (p⊜q≃⊤ a₃ a₄)
+              in ⊥-elim (g (g' tt))
             comp {𝟙} {𝟘} (f , _) = ⊥-elim (f tt)
             comp {𝟙} {𝟙} _ = refl⟷
             comp {𝟙} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ eq)
             comp {𝟙} {_⊜₀_ {𝟘} () ()} (f , mkisequiv g α β)
             comp {𝟙} {_⊜₀_ {𝟙} tt tt} (f , mkisequiv g α β) = ⊜-⊤r
             comp {𝟙} {_⊜₀_ {𝔹} false false} (f , mkisequiv g α β) = ⊜-𝔹₄r
-            comp {𝟙} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) = ⊥-elim (false≡true→⊥ (f tt))
-            comp {𝟙} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) = ⊥-elim (true≡false→⊥ (f tt))
+            comp {𝟙} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) =
+              ⊥-elim (false≡true→⊥ (f tt))
+            comp {𝟙} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) =
+              ⊥-elim (true≡false→⊥ (f tt))
             comp {𝟙} {_⊜₀_ {𝔹} true true} (f , mkisequiv g α β) = ⊜-𝔹₁r
             comp {𝟙} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) = ⊜-⊜r a₃ a₄
             comp {𝔹} {𝟘} (f , _) = ⊥-elim (f false)
             comp {𝔹} {𝟙} eq = ⊥-elim (⊤≃Bool→⊥ (sym≃ eq))
             comp {𝔹} {𝔹} (f , mkisequiv g α β) = refl⟷
             comp {𝔹} {_⊜₀_ {𝟘} () ()}
-            comp {𝔹} {_⊜₀_ {𝟙} tt tt} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ tt≡tt≃⊤)
-                                                            (sym≃ eq)))
-            comp {𝔹} {_⊜₀_ {𝔹} false false} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤)
-                                                                          (sym≃ eq)))
-            comp {𝔹} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) = ⊥-elim (false≡true→⊥ (f true))
-            comp {𝔹} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) = ⊥-elim (true≡false→⊥ (f true))
-            comp {𝔹} {_⊜₀_ {𝔹} true true} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤)
-                                                                        (sym≃ eq)))
-            comp {𝔹} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄))
-                                                                           (sym≃ eq)))
+            comp {𝔹} {_⊜₀_ {𝟙} tt tt} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ tt≡tt≃⊤) (sym≃ eq)))
+            comp {𝔹} {_⊜₀_ {𝔹} false false} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤) (sym≃ eq)))
+            comp {𝔹} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) =
+              ⊥-elim (false≡true→⊥ (f true))
+            comp {𝔹} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) =
+              ⊥-elim (true≡false→⊥ (f true))
+            comp {𝔹} {_⊜₀_ {𝔹} true true} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤) (sym≃ eq)))
+            comp {𝔹} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) (sym≃ eq)))
             comp {_⊜₀_ {𝟘} a₁ a₂} {𝟘} (f , mkisequiv g α β) = ⊥-elim a₁
             comp {_⊜₀_ {𝟙} tt tt} {𝟘} (f , mkisequiv g α β) = ⊥-elim (f refl)
             comp {_⊜₀_ {𝔹} false false} {𝟘} (f , mkisequiv g α β) = ⊥-elim (f refl)
@@ -443,58 +447,93 @@ module Universe₁ where
             comp {_⊜₀_ {𝔹} false true} {𝟘} (f , mkisequiv g α β) = ⊜-𝔹₂l
             comp {_⊜₀_ {𝔹} true true} {𝟘} (f , mkisequiv g α β) = ⊥-elim (f refl)
             comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {𝟘} (f , mkisequiv g α β) =
-                                         let (f' , mkisequiv g' α' β') = (p⊜q≃⊤ a₃ a₄)
-                                         in ⊥-elim (f (g' tt))
+              let (f' , mkisequiv g' α' β') = (p⊜q≃⊤ a₃ a₄)
+              in ⊥-elim (f (g' tt))
             comp {_⊜₀_ {𝟘} a₁ a₂} {𝟙} (f , mkisequiv g α β) = ⊥-elim a₁
             comp {_⊜₀_ {𝟙} tt tt} {𝟙} (f , mkisequiv g α β) = ⊜-⊤l
             comp {_⊜₀_ {𝔹} false false} {𝟙} (f , mkisequiv g α β) = ⊜-𝔹₄l
-            comp {_⊜₀_ {𝔹} false true} {𝟙} (f , mkisequiv g α β) = ⊥-elim (false≡true→⊥ (g tt))
-            comp {_⊜₀_ {𝔹} true false} {𝟙} (f , mkisequiv g α β) = ⊥-elim (true≡false→⊥ (g tt))
+            comp {_⊜₀_ {𝔹} false true} {𝟙} (f , mkisequiv g α β) =
+              ⊥-elim (false≡true→⊥ (g tt))
+            comp {_⊜₀_ {𝔹} true false} {𝟙} (f , mkisequiv g α β) =
+              ⊥-elim (true≡false→⊥ (g tt))
             comp {_⊜₀_ {𝔹} true true} {𝟙} (f , mkisequiv g α β) = ⊜-𝔹₁l
             comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {𝟙} (f , mkisequiv g α β) = ⊜-⊜l a₃ a₄
             comp {_⊜₀_ {𝟘} a₁ a₂} {𝔹} (f , mkisequiv g α β) = ⊥-elim a₁
-            comp {_⊜₀_ {𝟙} tt tt} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ tt≡tt≃⊤) eq))
-            comp {_⊜₀_ {𝔹} false false} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤) eq))
-            comp {_⊜₀_ {𝔹} false true} {𝔹} (f , mkisequiv g α β) = ⊥-elim (false≡true→⊥ (g true))
-            comp {_⊜₀_ {𝔹} true false} {𝔹} (f , mkisequiv g α β) = ⊥-elim (true≡false→⊥ (g true))
-            comp {_⊜₀_ {𝔹} true true} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤) eq))
-            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {𝔹} eq = ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) eq))
+            comp {_⊜₀_ {𝟙} tt tt} {𝔹} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ tt≡tt≃⊤) eq))
+            comp {_⊜₀_ {𝔹} false false} {𝔹} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤) eq))
+            comp {_⊜₀_ {𝔹} false true} {𝔹} (f , mkisequiv g α β) =
+              ⊥-elim (false≡true→⊥ (g true))
+            comp {_⊜₀_ {𝔹} true false} {𝔹} (f , mkisequiv g α β) =
+              ⊥-elim (true≡false→⊥ (g true))
+            comp {_⊜₀_ {𝔹} true true} {𝔹} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ b≡b≃⊤) eq))
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {𝔹} eq =
+              ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) eq))
             comp {_⊜₀_ {𝟘} a₁ a₂} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊥-elim a₁
-            comp {_⊜₀_ {𝟙} tt tt} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-⊤l ◎⟷ (comp (𝟙≃a₁⊜a₂ f))
-            comp {_⊜₀_ {𝔹} false false} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-𝔹₄l ◎⟷ (comp (𝟙≃a₁⊜a₂ f))
-            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝟘} a₃ a₄} (f , mkisequiv g α β) = ⊥-elim a₃
-            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝟙} tt tt} (f , mkisequiv g α β) = ⊥-elim (false≡true→⊥ (g refl))
-            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} false false} (f , mkisequiv g α β) = ⊥-elim (false≡true→⊥ (g refl))
-            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) = refl⟷
-            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) = ⊜-𝔹₂l ◎⟷ ⊜-𝔹₃r
-            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} true true} (f , mkisequiv g α β) = ⊥-elim (false≡true→⊥ (g refl))
-            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) = ⊜-𝔹₂l ◎⟷ (comp (⊥-elim ,
-                                                                                                      (mkisequiv (false≡true→⊥ ○ g)
-                                                                                                                 (λ p → proof-irrelevance (⊥-elim (false≡true→⊥ (g p))) p)
-                                                                                                                 (λ ⊥ → ⊥-elim ⊥))))
-            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝟘} a₃ a₄} (f , mkisequiv g α β) = ⊥-elim a₃
-            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝟙} tt tt} (f , mkisequiv g α β) = ⊜-𝔹₃l ◎⟷ ⊥-elim (true≡false→⊥ (g refl))
-            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} false false} (f , mkisequiv g α β) = ⊥-elim (true≡false→⊥ (g refl))
-            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) = ⊜-𝔹₃l ◎⟷ ⊜-𝔹₂r
-            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) = ⊜-𝔹₃l ◎⟷ ⊜-𝔹₃r
-            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} true true} (f , mkisequiv g α β) = ⊥-elim (true≡false→⊥ (g refl))
-            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) = ⊜-𝔹₃l ◎⟷ (comp (⊥-elim ,
-                                                                                                      (mkisequiv (true≡false→⊥ ○ g)
-                                                                                                                 (λ p → proof-irrelevance (⊥-elim (true≡false→⊥ (g p))) p)
-                                                                                                                 (λ ⊥ → ⊥-elim ⊥))))
-            comp {_⊜₀_ {𝔹} true true} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) = ⊜-𝔹₁l ◎⟷ (comp (𝟙≃a₁⊜a₂ f))
+            comp {_⊜₀_ {𝟙} tt tt} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) =
+              ⊜-⊤l ◎⟷ (comp (𝟙≃a₁⊜a₂ f))
+            comp {_⊜₀_ {𝔹} false false} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) =
+              ⊜-𝔹₄l ◎⟷ (comp (𝟙≃a₁⊜a₂ f))
+            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝟘} a₃ a₄} (f , mkisequiv g α β) =
+              ⊥-elim a₃
+            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝟙} tt tt} (f , mkisequiv g α β) =
+              ⊥-elim (false≡true→⊥ (g refl))
+            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} false false} (f , mkisequiv g α β) =
+              ⊥-elim (false≡true→⊥ (g refl))
+            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) =
+              refl⟷
+            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) =
+              ⊜-𝔹₂l ◎⟷ ⊜-𝔹₃r
+            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {𝔹} true true} (f , mkisequiv g α β) =
+              ⊥-elim (false≡true→⊥ (g refl))
+            comp {_⊜₀_ {𝔹} false true} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) =
+              ⊜-𝔹₂l ◎⟷ (comp (⊥-elim ,
+                (mkisequiv
+                  (false≡true→⊥ ○ g)
+                  (λ p → proof-irrelevance (⊥-elim (false≡true→⊥ (g p))) p)
+                  (λ ⊥ → ⊥-elim ⊥))))
+            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝟘} a₃ a₄} (f , mkisequiv g α β) =
+              ⊥-elim a₃
+            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝟙} tt tt} (f , mkisequiv g α β) =
+              ⊜-𝔹₃l ◎⟷ ⊥-elim (true≡false→⊥ (g refl))
+            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} false false} (f , mkisequiv g α β) =
+              ⊥-elim (true≡false→⊥ (g refl))
+            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} false true} (f , mkisequiv g α β) =
+              ⊜-𝔹₃l ◎⟷ ⊜-𝔹₂r
+            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} true false} (f , mkisequiv g α β) =
+              ⊜-𝔹₃l ◎⟷ ⊜-𝔹₃r
+            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {𝔹} true true} (f , mkisequiv g α β) =
+              ⊥-elim (true≡false→⊥ (g refl))
+            comp {_⊜₀_ {𝔹} true false} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) =
+              ⊜-𝔹₃l ◎⟷ (comp (⊥-elim ,
+                (mkisequiv
+                  (true≡false→⊥ ○ g)
+                  (λ p → proof-irrelevance (⊥-elim (true≡false→⊥ (g p))) p)
+                  (λ ⊥ → ⊥-elim ⊥))))
+            comp {_⊜₀_ {𝔹} true true} {a₃ ⊜₀ a₄} (f , mkisequiv g α β) =
+              ⊜-𝔹₁l ◎⟷ (comp (𝟙≃a₁⊜a₂ f))
             comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝟘} () a₆} eq
-            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝟙} tt tt} eq = (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ ⊜-⊤r
-            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} false false} eq = (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ ⊜-𝔹₄r
-            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} false true} eq = (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ comp (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) eq)
-            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} true false} eq = (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ comp (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) eq)
-            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} true true} eq = (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ ⊜-𝔹₁r
-            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {a₅ ⊜₀ a₆} a₇ a₈} eq = (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ (comp (sym≃ (p⊜q≃⊤ a₇ a₈)))
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝟙} tt tt} eq =
+              (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ ⊜-⊤r
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} false false} eq =
+              (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ ⊜-𝔹₄r
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} false true} eq =
+              (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ comp (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) eq)
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} true false} eq =
+              (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ comp (trans≃ (sym≃ (p⊜q≃⊤ a₃ a₄)) eq)
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {𝔹} true true} eq =
+              (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ ⊜-𝔹₁r
+            comp {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} {_⊜₀_ {a₅ ⊜₀ a₆} a₇ a₈} eq =
+              (comp (p⊜q≃⊤ a₃ a₄)) ◎⟷ (comp (sym≃ (p⊜q≃⊤ a₇ a₈)))
 
-            𝟙≃a₁⊜a₂ : {A B : U₀} {a : El₀ A} {a₃ a₄ : El₀ B} → (a ≡ a → a₃ ≡ a₄) → El₀ 𝟙 ≃ El₀ (a₃ ⊜₀ a₄)
+            𝟙≃a₁⊜a₂ : {A B : U₀} {a : El₀ A} {a₃ a₄ : El₀ B} →
+                      (a ≡ a → a₃ ≡ a₄) → El₀ 𝟙 ≃ El₀ (a₃ ⊜₀ a₄)
             𝟙≃a₁⊜a₂ f = ((λ _ → f refl) ,
-                         mkisequiv (λ _ → tt)
-                                   (λ p → proof-irrelevance (f refl) p)
-                                   (λ tt → refl))
+                         mkisequiv
+                           (λ _ → tt)
+                           (λ p → proof-irrelevance (f refl) p)
+                           (λ tt → refl))
 
 ------------------------------------------------------------------------------
