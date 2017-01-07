@@ -5,7 +5,7 @@ module B2 where
 open import Function
 open import Data.Bool
 open import Data.Product
-open import Relation.Binary.PropositionalEquality
+open import Relation.Binary.PropositionalEquality hiding (Reveal_·_is_ ; inspect)
 open import Data.Empty
 
 -- open import Equiv
@@ -92,23 +92,74 @@ ua {`Bool} {`Bool} (f , isequiv g α β) with f false
 ... | true = notp
 
 private
-  contr : (false ≡ true) → ⊥
+  contr : {A : Set} → (false ≡ true) → A
   contr ()
 
+  -- same as the one in stdlib but with the equality reversed
+  record Reveal_is_·_ {A B : Set} (x : B) (f : A → B) (y : A) : Set where
+    constructor [_]
+    field
+      eq : x ≡ f y
+
+  inspect : {A B : Set} (f : A → B) (x : A) → Reveal f x is f · x
+  inspect f x = [ refl ]
+
 α-eq : {A B : U} (eq : El A ≃ El B) → idtoequiv (ua eq) ≅ eq
-α-eq {`Bool} {`Bool} (f , isequiv g α β) with f false | inspect f false
-... | false | [ f⊥≡⊥ ] with g false | inspect g false
-... | false | [ g⊥≡⊥ ] with f true  | inspect f true
-... | true | [ f⊤≡⊤ ] =
-  iseqequiv (λ { false → sym f⊥≡⊥ ; true → sym f⊤≡⊤ })
-            (λ { false → sym g⊥≡⊥ ; true → trans (sym (α true)) (cong g f⊤≡⊤) })
-... | false | [ f⊤≡⊥ ] =
-  ⊥-elim (contr (sym (trans (trans (sym (α true)) (cong g f⊤≡⊥)) g⊥≡⊥)))
-α-eq {`Bool} {`Bool} (f , isequiv g α β) | false | [ f⊥≡⊥ ] | true | [ g⊥≡⊥ ] =
-  ⊥-elim (contr (trans (sym (α false)) (trans (cong g f⊥≡⊥) g⊥≡⊥)))
-α-eq {`Bool} {`Bool} (f , isequiv g α β) | true | [ f⊥≡⊤ ] =
-  iseqequiv (λ { false → {!!} ; true → {!!} })
-            (λ { false → {!!} ; true → {!!} })
+α-eq {`Bool} {`Bool} (f , isequiv g α β)
+  with f false | inspect f false | f true | inspect f true
+     | g true | inspect g true | g false | inspect g false
+... | false | [ ⊥≡f⊥ ] | false | [ ⊥≡f⊤ ] | false | [ ⊥≡g⊤ ] | false | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → ⊥≡f⊥ ; true → contr (trans (trans ⊥≡f⊥ (cong f ⊥≡g⊤)) (β true)) })
+            (λ { false → ⊥≡g⊥ ; true → contr (trans (trans ⊥≡g⊥ (cong g ⊥≡f⊤)) (α true)) })
+... | false | [ f⊥≡⊥ ] | false | [ ⊥≡f⊤ ] | false | [ ⊥≡g⊤ ] | true | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → f⊥≡⊥ ; true → contr (trans (trans f⊥≡⊥ (cong f ⊥≡g⊤)) (β true)) })
+            (λ { false → contr (trans (trans f⊥≡⊥ (cong f ⊥≡g⊤)) (β true))
+               ; true → contr (trans (trans f⊥≡⊥ (cong f ⊥≡g⊤)) (β true)) })
+... | false | [ ⊥≡f⊥ ] | false | [ ⊥≡f⊤ ] | true | [ ⊤≡g⊤ ] | false | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → ⊥≡f⊥ ; true → contr (trans (trans ⊥≡f⊤ (cong f ⊤≡g⊤)) (β true)) })
+            (λ { false → ⊥≡g⊥ ; true → ⊤≡g⊤ })
+... | false | [ ⊥≡f⊥ ] | false | [ ⊥≡f⊤ ] | true | [ ⊤≡g⊤ ] | true | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊥≡f⊥ ; true → contr (trans (trans ⊥≡f⊤ (cong f ⊤≡g⊤)) (β true)) })
+            (λ { false → contr (trans (trans ⊥≡f⊤ (cong f ⊤≡g⊤)) (β true)) ; true → ⊤≡g⊤ })
+... | false | [ ⊥≡f⊥ ] | true | [ ⊤≡f⊤ ] | false | [ ⊥≡g⊤ ] | false | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → ⊥≡f⊥ ; true → ⊤≡f⊤ })
+            (λ { false → ⊥≡g⊥ ; true → contr (trans (trans ⊥≡f⊥ (cong f ⊥≡g⊤)) (β true)) })
+... | false | [ ⊥≡f⊥ ] | true | [ ⊤≡f⊤ ] | false | [ ⊥≡g⊤ ] | true | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊥≡f⊥ ; true → ⊤≡f⊤ })
+            (λ { false → contr (trans (trans ⊥≡f⊥ (cong f ⊥≡g⊤)) (β true))
+               ; true → contr (trans (trans ⊥≡g⊤ (cong g ⊤≡f⊤)) (α true)) })
+... | false | [ ⊥≡f⊥ ] | true | [ ⊤≡f⊤ ] | true | [ ⊤≡g⊤ ] | false | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → ⊥≡f⊥ ; true → ⊤≡f⊤ })
+            (λ { false → ⊥≡g⊥ ; true → ⊤≡g⊤ })
+... | false | [ ⊥≡f⊥ ] | true | [ ⊤≡f⊤ ] | true | [ ⊤≡g⊤ ] | true | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊥≡f⊥ ; true → ⊤≡f⊤ })
+            (λ { false → contr (sym (trans (trans ⊤≡f⊤ (cong f ⊤≡g⊥)) (β false))) ; true → ⊤≡g⊤ })
+... | true | [ ⊤≡f⊥ ] | false | [ ⊥≡f⊤ ] | false | [ ⊥≡g⊤ ] | false | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → ⊥≡f⊤ })
+            (λ { false → sym (contr (trans (trans ⊥≡g⊥ (cong g ⊥≡f⊤)) (α true))) ; true → ⊥≡g⊤ })
+... | true | [ ⊤≡f⊥ ] | false | [ ⊥≡f⊤ ] | false | [ ⊥≡g⊤ ] | true | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → ⊥≡f⊤ })
+            (λ { false → ⊤≡g⊥ ; true → ⊥≡g⊤ })
+... | true | [ ⊤≡f⊥ ] | false | [ ⊥≡f⊤ ] | true | [ ⊤≡g⊤ ] | false | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → ⊥≡f⊤ })
+            (λ { false → sym (contr (trans (trans ⊥≡f⊤ (cong f ⊤≡g⊤)) (β true)))
+               ; true → sym (contr (trans (trans ⊥≡f⊤ (cong f ⊤≡g⊤)) (β true))) })
+... | true | [ ⊤≡f⊥ ] | false | [ ⊥≡f⊤ ] | true | [ ⊤≡g⊤ ] | true | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → ⊥≡f⊤ })
+            (λ { false → ⊤≡g⊥ ; true → sym (contr (trans (trans ⊥≡f⊤ (cong f ⊤≡g⊤)) (β true))) })
+... | true | [ ⊤≡f⊥ ] | true | [ ⊤≡f⊤ ] | false | [ ⊥≡g⊤ ] | false | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → sym (contr (trans (trans ⊥≡g⊤ (cong g ⊤≡f⊤)) (α true))) })
+            (λ { false → sym (contr (trans (trans ⊥≡g⊤ (cong g ⊤≡f⊤)) (α true))) ; true → ⊥≡g⊤ })
+... | true | [ ⊤≡f⊥ ] | true | [ ⊤≡f⊤ ] | false | [ ⊥≡g⊤ ] | true | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → sym (contr (trans (trans ⊥≡g⊤ (cong g ⊤≡f⊤)) (α true))) })
+            (λ { false → ⊤≡g⊥ ; true → ⊥≡g⊤ })
+... | true | [ ⊤≡f⊥ ] | true | [ ⊤≡f⊤ ] | true | [ ⊤≡g⊤ ] | false | [ ⊥≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → contr (sym (trans (trans ⊤≡f⊥ (cong f ⊥≡g⊥)) (β false))) })
+            (λ { false → contr (sym (trans (trans ⊤≡f⊥ (cong f ⊥≡g⊥)) (β false)))
+               ; true → contr (sym (trans (trans ⊤≡g⊤ (cong g ⊤≡f⊥)) (α false))) })
+... | true | [ ⊤≡f⊥ ] | true | [ ⊤≡f⊤ ] | true | [ ⊤≡g⊤ ] | true | [ ⊤≡g⊥ ] =
+  iseqequiv (λ { false → ⊤≡f⊥ ; true → contr (sym (trans (trans ⊤≡g⊤ (cong g ⊤≡f⊥)) (α false))) })
+            (λ { false → ⊤≡g⊥ ; true → contr (sym (trans (trans ⊤≡f⊤ (cong f ⊤≡g⊥)) (β false))) })
 
 β-eq : {A B : U} (p : A == B) → ua (idtoequiv p) ≡ p
 β-eq {`Bool} {`Bool} idp = refl
