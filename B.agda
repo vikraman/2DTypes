@@ -426,7 +426,9 @@ module Universe₁ where
             comp {𝟙} {_⊜₀_ {a₁ ⊜₀ a₂} a₃ a₄} (f , mkisequiv g α β) = ⊜-⊜r a₃ a₄
             comp {𝔹} {𝟘} (f , _) = ⊥-elim (f false)
             comp {𝔹} {𝟙} eq = ⊥-elim (⊤≃Bool→⊥ (sym≃ eq))
-            comp {𝔹} {𝔹} (f , mkisequiv g α β) = refl⟷
+            comp {𝔹} {𝔹} (f , mkisequiv g α β) with (f true)
+            comp {𝔹} {𝔹} (f , mkisequiv g α β) | false = swap
+            comp {𝔹} {𝔹} (f , mkisequiv g α β) | true = refl⟷
             comp {𝔹} {_⊜₀_ {𝟘} () ()}
             comp {𝔹} {_⊜₀_ {𝟙} tt tt} eq =
               ⊥-elim (⊤≃Bool→⊥ (trans≃ (sym≃ tt≡tt≃⊤) (sym≃ eq)))
