@@ -24,7 +24,8 @@
 \newcommand{\refl}{\mathtt{refl}}
 \newcommand{\idc}{\mathtt{id}}
 \newcommand{\swapc}{\mathtt{swap}}
-\newcommand{\iso}{\leftrightarrow}
+\newcommand{\iso}{\multimapdotboth}
+\newcommand{\piso}{\multimapdotbothB}
 \newcommand{\zt}{\mathbb{0}}
 \newcommand{\ot}{\mathbb{1}}
 \newcommand{\fc}{\mathtt{false}}
@@ -82,7 +83,8 @@ We consider two kinds of judgments. The $=$ is \emph{judgmental equality}.
 %%%%%
 \subsection{Universes}
 
-We postulate two universes $\uzero$ and $\uone$:
+We postulate two universes $\uzero$ and $\uone$ such that $\uzero$ is an element
+of $\uone$:
 
 \[
 \Rule{}{\jdg{}{\uzero}{\uone}}
@@ -92,13 +94,33 @@ We postulate two universes $\uzero$ and $\uone$:
 \subsection{(Reversible) Functions}
 
 \[\begin{array}{c}
+\Rule{\jdg{}{A}{\uzero}}
+        {\jdg{}{A\piso}{\uzero}}
+\quad
+\Rule{\jdg{}{f}{A \piso}
+         \quad\jdg{}{B}{\uzero}}
+        {\jdg{}{\evalone{f}{B}}{\uzero}}
+\quad
+\Rule{\jdg{}{f}{A \piso}
+         \quad\jdg{}{B}{\uzero}}
+        {\jdg{}{\evalone{f}{B} = A \iso B}{\uzero}}
+\\
+\\
 \Rule{\jdg{}{c}{A \iso B}
          \quad\jdg{}{a}{A}}
         {\jdg{}{\evalone{c}{a}}{B}}
 \quad
+\Rule{\jdg{}{c}{A \iso B}}
+        {\jdg{}{\;\invc{c}}{B \iso A}}
+\\
+\\
+\Rule{\jdg{}{c}{A \iso B}
+         \quad\jdg{}{a}{A}}
+        {\jdg{}{\evalone{\invc{c}}{\evalone{c}{a}} = a}{A}}
+\quad
 \Rule{\jdg{}{c}{A \iso B}
          \quad\jdg{}{b}{B}}
-        {\jdg{}{\evalbone{c}{b}}{A}}
+        {\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{B}}
 \end{array}\]
 
 %%%%%
@@ -110,6 +132,11 @@ We postulate two universes $\uzero$ and $\uone$:
 \Rule{}{\jdg{}{\fc}{\boolt}}
 \quad
 \Rule{}{\jdg{}{\tc}{\boolt}}
+\\
+\\
+\Rule{}{\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}}
+\quad
+\Rule{}{\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}}
 \\
 \\
 \Rule{\jdg{}{b}{\boolt}}
