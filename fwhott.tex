@@ -1,0 +1,183 @@
+\documentclass[format=acmlarge,review,natbib]{acmart}
+
+\usepackage{fdsymbol}
+\usepackage{bbold}
+\usepackage{proof}
+
+%% \usepackage{hyphenat}
+%% \usepackage{color}
+%% \usepackage{url}
+%% \usepackage{comment}
+%% \usepackage{amssymb}
+%% \usepackage{amsmath}
+%% \usepackage{mdwtab}
+%% \usepackage{mdwlist}
+%% \usepackage{listings}
+%% \lstMakeShortInline[columns=fullflexible]|
+%% \lstnewenvironment{code}{\lstset{basicstyle={\sffamily\footnotesize}}}{}
+
+\newcommand{\alt}{~\mid~}
+\newcommand{\invc}[1]{!#1}
+\newcommand{\compc}{\circ}
+\newcommand{\evalone}[2]{eval(#1,#2)}
+\newcommand{\evalbone}[2]{evalB(#1,#2)}
+\newcommand{\refl}{\mathtt{refl}}
+\newcommand{\idc}{\mathtt{id}}
+\newcommand{\swapc}{\mathtt{swap}}
+\newcommand{\iso}{\leftrightarrow}
+\newcommand{\zt}{\mathbb{0}}
+\newcommand{\ot}{\mathbb{1}}
+\newcommand{\fc}{\mathtt{false}}
+\newcommand{\tc}{\mathtt{true}}
+\newcommand{\boolt}{\mathbb{B}}
+\newcommand{\uzero}{\mathcal{U}_0}
+\newcommand{\uone}{\mathcal{U}_1}
+\newcommand{\Rule}[2]{
+\makebox{
+$\displaystyle
+\frac{\begin{array}{l}#1\\\end{array}}
+{\begin{array}{l}#2\\\end{array}}$}}
+\newcommand{\proves}{\vdash}
+\newcommand{\jdg}[3]{#1 \proves #2 : #3}
+%% codes
+%% denotations
+
+\newcommand{\amr}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Amr says: {#1}}\end{minipage}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{Featherweight HoTT}
+
+\author{X}
+\affiliation{
+  \institution{Y}
+  \country{Z}}
+\email{A@B.C}
+
+\begin{abstract}
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+HoTT development very specialized: a smaller collection of types and only
+reversible functions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Setup}
+
+%%%%%
+\subsection{Judgments}
+
+We consider two kinds of judgments. The $=$ is \emph{judgmental equality}.
+
+\[
+\jdg{}{a}{A} \qquad\qquad\qquad \jdg{}{a = b}{A}
+\]
+
+%%%%%
+\subsection{Universes}
+
+We postulate two universes $\uzero$ and $\uone$:
+
+\[
+\Rule{}{\jdg{}{\uzero}{\uone}}
+\]
+
+%%%%%
+\subsection{(Reversible) Functions}
+
+\[\begin{array}{c}
+\Rule{\jdg{}{c}{A \iso B}
+         \quad\jdg{}{a}{A}}
+        {\jdg{}{\evalone{c}{a}}{B}}
+\quad
+\Rule{\jdg{}{c}{A \iso B}
+         \quad\jdg{}{b}{B}}
+        {\jdg{}{\evalbone{c}{b}}{A}}
+\end{array}\]
+
+%%%%%
+\subsection{Booleans}
+
+\[\begin{array}{c}
+\Rule{}{\jdg{}{\boolt}{\uzero}}
+\quad
+\Rule{}{\jdg{}{\fc}{\boolt}}
+\quad
+\Rule{}{\jdg{}{\tc}{\boolt}}
+\\
+\\
+\Rule{\jdg{}{b}{\boolt}}
+        {\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}}
+\quad
+\Rule{}
+        {\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}}
+\quad
+\Rule{}
+        {\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}}
+\end{array}\]
+
+%%%%%
+\subsection{Identity Types}
+
+\[\begin{array}{c}
+\Rule{\jdg{}{A}{\uzero}
+         \quad\jdg{}{a}{A}
+         \quad\jdg{}{b}{A}}
+        {\jdg{}{a \iso b}{\uzero}}
+\quad
+\Rule{\jdg{}{A}{\uzero}
+          \quad\jdg{}{a}{A}}
+         {\jdg{}{\idc_{a}}{a \iso a}}
+\\
+\\
+\Rule{\jdg{}{A}{\uone}
+         \quad\jdg{}{a}{A}
+         \quad\jdg{}{b}{A}}
+        {\jdg{}{a \iso b}{\uone}}
+\quad
+\Rule{\jdg{}{A}{\uone}
+          \quad\jdg{}{a}{A}}
+         {\jdg{}{\idc_{a}}{a \iso a}}
+\\
+\Rule{\jdg{}{A}{\uzero}
+         \quad\jdg{}{B}{\uzero}
+         \quad\jdg{}{c}{A \iso B}}
+         {\jdg{}{\idc_{c:A\iso B}}{c \iso c}}
+\quad
+\Rule{}{\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}}
+\\
+\\
+\Rule{\jdg{}{c_1}{A \iso B}
+         \quad\jdg{}{c_2}{A \iso B}}
+         {}
+\\
+\\
+\mbox{Need to specialize the rules for } ind_{=A}
+\end{array}\]
+
+%%%%%
+\subsection{Function Extensionality and Univalence}
+
+\[\begin{array}{c}
+\mbox{Specialize the rule of univalence}
+\end{array}\]
+
+%%%%%
+\subsection{Higher-Inductive Types (Fractionals)}
+
+\[\begin{array}{c}
+\mbox{To think about}
+\end{array}\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{acm}
+{\footnotesize
+\bibliography{cites}
+}
+\end{document}
