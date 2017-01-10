@@ -25,7 +25,7 @@
 \newcommand{\idc}{\mathtt{id}}
 \newcommand{\swapc}{\mathtt{swap}}
 \newcommand{\iso}{\multimapdotboth}
-\newcommand{\piso}{\multimapdotbothB}
+\newcommand{\piso}{\multimapdotbothB~~}
 \newcommand{\zt}{\mathbb{0}}
 \newcommand{\ot}{\mathbb{1}}
 \newcommand{\fc}{\mathtt{false}}
@@ -96,6 +96,10 @@ of $\uone$:
 \[\begin{array}{c}
 \Rule{\jdg{}{A}{\uzero}}
         {\jdg{}{A\piso}{\uzero}}
+\quad
+\Rule{\jdg{}{A}{\uzero}
+         \quad \jdg{}{B}{\uzero}}
+        {\jdg{}{A\iso B}{\uzero}}
 \quad
 \Rule{\jdg{}{f}{A \piso}
          \quad\jdg{}{B}{\uzero}}
