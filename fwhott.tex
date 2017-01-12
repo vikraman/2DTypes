@@ -22,9 +22,9 @@
 \newcommand{\evalone}[2]{eval(#1,#2)}
 \newcommand{\evalbone}[2]{evalB(#1,#2)}
 \newcommand{\refl}{\mathtt{refl}}
-\newcommand{\reflh}{\mathtt{refl}_{\isotwo}}
-\newcommand{\symh}[1]{\mathtt{sym}_{\isotwo}~#1}
-\newcommand{\transh}[2]{\mathtt{trans}_{\isotwo}~#1~#2}
+\newcommand{\reflh}{\mathtt{refl}_{\sim}}
+\newcommand{\symh}[1]{\mathtt{sym}_{\sim}~#1}
+\newcommand{\transh}[2]{\mathtt{trans}_{\sim}~#1~#2}
 \newcommand{\isequiv}[1]{\mathtt{isequiv}(#1)}
 \newcommand{\idc}{\mathtt{id}}
 \newcommand{\swapc}{\mathtt{swap}}
@@ -144,14 +144,23 @@ two points $\fc$ and $\tc$.
         {\jdg{}{\transh{h_1}{h_2}}{c_1 \isotwo c_3}}
 \\
 \\
-\quad
-\Rule{}{\jdg{}{\swapswap}{\swapc_{\boolt} \compc \swapc_{\boolt} \isotwo \idc_{\boolt}}}
-\quad
 \Rule{}
         {\jdg{}{\idlc}{\idc_{\boolt} \compc c \isotwo c}}
 \quad
 \Rule{}
         {\jdg{}{\idrc}{c \compc \idc_{\boolt} \isotwo c}}
+\quad
+\Rule{}{\jdg{}{???}{c_1 \compc (c_2 \compc c_3) \isotwo (c_1 \compc c_2) \compc c_3}}
+\\
+\\
+\quad
+\Rule{}{\jdg{}{???}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}}
+\quad
+\Rule{}{\jdg{}{???}{\;\invc{\idc_{\boolt}} \isotwo \idc_{\boolt}}}
+\quad
+\Rule{}{\jdg{}{???}{\;\invc{\swapc_{\boolt}} \isotwo \swapc_{\boolt}}}
+\quad
+\Rule{}{\jdg{}{???}{\;\invc{(c_1\compc c_2)} \isotwo \;\invc{c_2} \;\compc \;\invc{c_1}}}
 \\
 \\
 \Rule{\jdg{}{h_1}{c_1 \isotwo c_2}
@@ -160,6 +169,9 @@ two points $\fc$ and $\tc$.
 \\
 \\
 \noalign{\textbf{Equivalences:}} \\
+\Rule{}{\jdg{}{???}{\isequiv{\idc_{\boolt}}}}
+\quad
+\Rule{}{\jdg{}{???}{\isequiv{\swapc_{\boolt}}}}
 \\
 \\
 ***HERE*** \\
