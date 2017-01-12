@@ -22,8 +22,16 @@
 \newcommand{\evalone}[2]{eval(#1,#2)}
 \newcommand{\evalbone}[2]{evalB(#1,#2)}
 \newcommand{\refl}{\mathtt{refl}}
+\newcommand{\reflh}{\mathtt{refl}_{\sim}}
+\newcommand{\symh}[1]{\mathtt{sym}_{\sim}~#1}
+\newcommand{\transh}[2]{\mathtt{trans}_{\sim}~#1~#2}
+\newcommand{\isequiv}[1]{\mathtt{isequiv}(#1)}
 \newcommand{\idc}{\mathtt{id}}
 \newcommand{\swapc}{\mathtt{swap}}
+\newcommand{\idlc}{\mathtt{idl}}
+\newcommand{\idrc}{\mathtt{idr}}
+\newcommand{\swapswap}{\swapc^2}
+\newcommand{\compsim}{\compc_{\sim}}
 \newcommand{\iso}{\multimapdotboth}
 \newcommand{\piso}{\multimapdotbothB~~}
 \newcommand{\zt}{\mathbb{0}}
@@ -31,6 +39,7 @@
 \newcommand{\fc}{\mathtt{false}}
 \newcommand{\tc}{\mathtt{true}}
 \newcommand{\boolt}{\mathbb{B}}
+\newcommand{\univ}{\mathcal{U}}
 \newcommand{\uzero}{\mathcal{U}_0}
 \newcommand{\uone}{\mathcal{U}_1}
 \newcommand{\Rule}[2]{
@@ -69,7 +78,7 @@ HoTT development very specialized: a smaller collection of types and only
 reversible functions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Setup}
+\section{Setup II}
 
 %%%%%
 \subsection{Judgments}
@@ -79,6 +88,131 @@ We consider two kinds of judgments. The $=$ is \emph{judgmental equality}.
 \[
 \jdg{}{a}{A} \qquad\qquad\qquad \jdg{}{a = b}{A}
 \]
+
+%%%%%
+\subsection{Points}
+
+We postulate a universe $\univ$ which contains a type $\boolt$ which itself contains
+two points $\fc$ and $\tc$.
+
+\[\begin{array}{c}
+\Rule{}{\jdg{}{\boolt}{\univ}}
+\quad
+\Rule{}{\jdg{}{\fc}{\boolt}}
+\quad
+\Rule{}{\jdg{}{\tc}{\boolt}}
+\end{array}\]
+
+%%%%%
+\subsection{Functions, Homotopies, and Equivalence}
+
+\[\begin{array}{c}
+\noalign{\textbf{Types of functions, homotopies, and equivalences:}} \\
+\Rule{}{\jdg{}{\boolt\iso\boolt}{\univ}}
+\quad
+\Rule{\jdg{}{c_1}{\boolt\iso\boolt}
+         \quad\jdg{}{c_2}{\boolt\iso\boolt}}
+        {\jdg{}{c_1 \sim c_2}{\univ}}
+\quad
+\Rule{\jdg{}{c}{\boolt\iso\boolt}}
+        {\jdg{}{\isequiv{c}}{\univ}}
+\\
+\\
+\noalign{\textbf{Functions:}} \\
+\Rule{}{\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}}
+\quad
+\Rule{}{\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}}
+\quad
+\Rule{\jdg{}{c}{\boolt\iso\boolt}}
+        {\jdg{}{\;\invc{c}}{\boolt\iso\boolt}}
+\quad
+\Rule{\jdg{}{c_1}{\boolt\iso\boolt}
+        \quad\jdg{}{c_2}{\boolt\iso\boolt}}
+        {\jdg{}{c_1 \compc c_2}{\boolt\iso\boolt}}
+\\
+\\
+\noalign{\textbf{Homotopies:}} \\
+\Rule{\jdg{}{c}{\boolt\iso\boolt}}
+         {\jdg{}{\reflh}{c \sim c}}
+\quad
+\Rule{\jdg{}{h}{c_1 \sim c_2}}
+        {\jdg{}{\symh{h}}{c_2 \sim c_1}}
+\quad
+\Rule{\jdg{}{h_1}{c_1 \sim c_2}
+         \quad\jdg{}{h_2}{c_2 \sim c_3}}
+        {\jdg{}{\transh{h_1}{h_2}}{c_1 \sim c_3}}
+\\
+\\
+\quad
+\Rule{}{\jdg{}{\swapswap}{\swapc_{\boolt} \compc \swapc_{\boolt} \sim \idc_{\boolt}}}
+\quad
+\Rule{\jdg{}{c}{\boolt\iso\boolt}}
+        {\jdg{}{\idlc}{\idc_{\boolt} \compc c \sim c}}
+\quad
+\Rule{\jdg{}{c}{\boolt\iso\boolt}}
+        {\jdg{}{\idrc}{c \sim \idc_{\boolt} \sim c}}
+\\
+\\
+\Rule{\jdg{}{c_1}{\boolt\iso\boolt}
+         \quad\jdg{}{c_2}{\boolt\iso\boolt}
+         \quad\jdg{}{c_3}{\boolt\iso\boolt}
+         \quad\jdg{}{c_4}{\boolt\iso\boolt}
+         \quad\jdg{}{h_1}{c_1 \sim c_2}
+         \quad\jdg{}{h_2}{c_3 \sim c_4}}
+        {\jdg{}{\compsim}{(c_1 \compc c_3) \sim (c_2 \compc c_4)}}
+\\
+\\
+\noalign{\textbf{Equivalences:}} \\
+\\
+\\
+***HERE*** \\
+*** Introduce type; elements of type; functions on type; computation rules *** \\
+\noalign{\textbf{Properties of functions:}} \\
+\quad
+\quad
+\Rule{\jdg{}{c}{\boolt\iso\boolt}
+         \quad\jdg{}{b}{\boolt}}
+        {\jdg{}{\evalone{c}{b}}{\boolt}}
+\\
+\\
+\Rule{\jdg{}{c}{\boolt\iso\boolt}
+         \quad\jdg{}{b}{\boolt}}
+        {\jdg{}{\evalone{\invc{c}}{\evalone{c}{b}} = b}{\boolt}}
+\quad
+\Rule{\jdg{}{c}{\boolt\iso\boolt}
+         \quad\jdg{}{b}{\boolt}}
+        {\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{\boolt}}
+\quad
+\Rule{\jdg{}{c}{\boolt\iso\boolt}}
+        {\jdg{}{\isequiv{c}}{}}
+\\
+\\
+\noalign{\textbf{Functions on $\boolt$:}} \\
+\Rule{}{\jdg{}{\invc{\idc_{\boolt} = \idc_{\boolt}}}{\boolt\iso\boolt}}
+\quad
+\Rule{}{\jdg{}{\invc{\swapc _{\boolt}} = \swapc _{\boolt}}{\boolt\iso\boolt}}
+\\
+\\
+\Rule{\jdg{}{b}{\boolt}}
+        {\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}}
+\quad
+\Rule{}
+        {\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}}
+\quad
+\Rule{}
+        {\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}}
+\end{array}\]
+
+%%%%%
+\subsection{Paths}
+
+%%%%%
+\subsection{Univalence}
+
+%%%%%
+\subsection{HITs}
+
+\newpage
 
 %%%%%
 \subsection{Universes}
@@ -176,12 +310,11 @@ of $\uone$:
           \quad\jdg{}{a}{A}}
          {\jdg{}{\idc_{a}}{a \iso a}}
 \\
+\\
 \Rule{\jdg{}{A}{\uzero}
          \quad\jdg{}{B}{\uzero}
          \quad\jdg{}{c}{A \iso B}}
          {\jdg{}{\idc_{c:A\iso B}}{c \iso c}}
-\quad
-\Rule{}{\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}}
 \\
 \\
 \Rule{\jdg{}{c_1}{A \iso B}
