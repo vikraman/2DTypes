@@ -22,17 +22,18 @@
 \newcommand{\evalone}[2]{eval(#1,#2)}
 \newcommand{\evalbone}[2]{evalB(#1,#2)}
 \newcommand{\refl}{\mathtt{refl}}
-\newcommand{\reflh}{\mathtt{refl}_{\sim}}
-\newcommand{\symh}[1]{\mathtt{sym}_{\sim}~#1}
-\newcommand{\transh}[2]{\mathtt{trans}_{\sim}~#1~#2}
+\newcommand{\reflh}{\mathtt{refl}_{\isotwo}}
+\newcommand{\symh}[1]{\mathtt{sym}_{\isotwo}~#1}
+\newcommand{\transh}[2]{\mathtt{trans}_{\isotwo}~#1~#2}
 \newcommand{\isequiv}[1]{\mathtt{isequiv}(#1)}
 \newcommand{\idc}{\mathtt{id}}
 \newcommand{\swapc}{\mathtt{swap}}
 \newcommand{\idlc}{\mathtt{idl}}
 \newcommand{\idrc}{\mathtt{idr}}
 \newcommand{\swapswap}{\swapc^2}
-\newcommand{\compsim}{\compc_{\sim}}
-\newcommand{\iso}{\multimapdotboth}
+\newcommand{\compsim}{\compc_{\isotwo}}
+\newcommand{\iso}{\leftrightarrow}
+\newcommand{\isotwo}{\Leftrightarrow}
 \newcommand{\piso}{\multimapdotbothB~~}
 \newcommand{\zt}{\mathbb{0}}
 \newcommand{\ot}{\mathbb{1}}
@@ -112,7 +113,7 @@ two points $\fc$ and $\tc$.
 \quad
 \Rule{\jdg{}{c_1}{\boolt\iso\boolt}
          \quad\jdg{}{c_2}{\boolt\iso\boolt}}
-        {\jdg{}{c_1 \sim c_2}{\univ}}
+        {\jdg{}{c_1 \isotwo c_2}{\univ}}
 \quad
 \Rule{\jdg{}{c}{\boolt\iso\boolt}}
         {\jdg{}{\isequiv{c}}{\univ}}
@@ -132,34 +133,30 @@ two points $\fc$ and $\tc$.
 \\
 \\
 \noalign{\textbf{Homotopies:}} \\
-\Rule{\jdg{}{c}{\boolt\iso\boolt}}
-         {\jdg{}{\reflh}{c \sim c}}
+\Rule{}
+         {\jdg{}{\reflh}{c \isotwo c}}
 \quad
-\Rule{\jdg{}{h}{c_1 \sim c_2}}
-        {\jdg{}{\symh{h}}{c_2 \sim c_1}}
+\Rule{\jdg{}{h}{c_1 \isotwo c_2}}
+        {\jdg{}{\symh{h}}{c_2 \isotwo c_1}}
 \quad
-\Rule{\jdg{}{h_1}{c_1 \sim c_2}
-         \quad\jdg{}{h_2}{c_2 \sim c_3}}
-        {\jdg{}{\transh{h_1}{h_2}}{c_1 \sim c_3}}
+\Rule{\jdg{}{h_1}{c_1 \isotwo c_2}
+         \quad\jdg{}{h_2}{c_2 \isotwo c_3}}
+        {\jdg{}{\transh{h_1}{h_2}}{c_1 \isotwo c_3}}
 \\
 \\
 \quad
-\Rule{}{\jdg{}{\swapswap}{\swapc_{\boolt} \compc \swapc_{\boolt} \sim \idc_{\boolt}}}
+\Rule{}{\jdg{}{\swapswap}{\swapc_{\boolt} \compc \swapc_{\boolt} \isotwo \idc_{\boolt}}}
 \quad
-\Rule{\jdg{}{c}{\boolt\iso\boolt}}
-        {\jdg{}{\idlc}{\idc_{\boolt} \compc c \sim c}}
+\Rule{}
+        {\jdg{}{\idlc}{\idc_{\boolt} \compc c \isotwo c}}
 \quad
-\Rule{\jdg{}{c}{\boolt\iso\boolt}}
-        {\jdg{}{\idrc}{c \sim \idc_{\boolt} \sim c}}
+\Rule{}
+        {\jdg{}{\idrc}{c \compc \idc_{\boolt} \isotwo c}}
 \\
 \\
-\Rule{\jdg{}{c_1}{\boolt\iso\boolt}
-         \quad\jdg{}{c_2}{\boolt\iso\boolt}
-         \quad\jdg{}{c_3}{\boolt\iso\boolt}
-         \quad\jdg{}{c_4}{\boolt\iso\boolt}
-         \quad\jdg{}{h_1}{c_1 \sim c_2}
-         \quad\jdg{}{h_2}{c_3 \sim c_4}}
-        {\jdg{}{\compsim}{(c_1 \compc c_3) \sim (c_2 \compc c_4)}}
+\Rule{\jdg{}{h_1}{c_1 \isotwo c_2}
+         \quad\jdg{}{h_2}{c_3 \isotwo c_4}}
+        {\jdg{}{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}}
 \\
 \\
 \noalign{\textbf{Equivalences:}} \\
