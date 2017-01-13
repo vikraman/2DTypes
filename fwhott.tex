@@ -89,7 +89,7 @@ $\displaystyle
 \section{Introduction}
 
 HoTT development very specialized: a smaller collection of types and only
-reversible functions.
+reversible functions. No dependent types!
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Setup}
@@ -249,9 +249,29 @@ two points $\fc$ and $\tc$.
   \AxiomC{}
   \UnaryInfC{$\jdg{\swapp}{\patht{\boolt}}$}
   \DisplayProof
+\\
+\\
+  \AxiomC{$\jdg{p}{\patht{\boolt}}$}
+  \UnaryInfC{$\jdg{(\boolt,p)}{\fpatht{\boolt}}$}
+  \DisplayProof
+\\
+\\
+  \AxiomC{$\jdg{(\boolt,\reflp)}{\fpatht{\boolt}}$}
+  \AxiomC{$\jdg{p}{\patht{\boolt}}$}
+  \BinaryInfC{$\jdg{(\boolt,p)}{\fpatht{\boolt}}$}
+  \DisplayProof
 \end{array}\]
 
+\newpage
+
 \begin{verbatim}
+The C in the J-rule is fpath(Bool)
+
+Now given (Bool,refl) : fpaths(Bool)
+    given p' : paths(Bool,Bool)
+
+We have:  (Bool,p') : fpaths(Bool)
+
   x : U    y : U
 ----------------
  paths(x,y) : U
@@ -308,9 +328,6 @@ p : paths(x,y)
 p1 == y
 
 \end{verbatim}
-
-
-\newpage
 
 ***HERE***
 
