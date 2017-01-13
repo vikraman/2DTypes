@@ -56,7 +56,9 @@ $\displaystyle
 \frac{\begin{array}{l}#1\\\end{array}}
 {\begin{array}{l}#2\\\end{array}}$}}
 \newcommand{\proves}{\vdash}
-\newcommand{\jdg}[3]{#1 \proves #2 : #3}
+\newcommand{\jdgg}[3]{#1 \proves #2 : #3}
+\newcommand{\jdg}[2]{\proves #1 : #2}
+\newcommand{\jdge}[3]{\proves #1 = #2 : #3}
 %% codes
 %% denotations
 
@@ -86,7 +88,7 @@ HoTT development very specialized: a smaller collection of types and only
 reversible functions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Setup II}
+\section{Setup}
 
 %%%%%
 \subsection{Judgments}
@@ -94,7 +96,7 @@ reversible functions.
 We consider two kinds of judgments. The $=$ is \emph{judgmental equality}.
 
 \[
-\jdg{}{a}{A} \qquad\qquad\qquad \jdg{}{a = b}{A}
+\jdg{a}{A} \qquad\qquad\qquad \jdge{a}{b}{A}
 \]
 
 %%%%%
@@ -105,146 +107,131 @@ two points $\fc$ and $\tc$.
 
 \[\begin{array}{c}
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\boolt}{\univ}$}
+    \UnaryInfC{$\jdg{\boolt}{\univ}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\fc}{\boolt}$}
+    \UnaryInfC{$\jdg{\fc}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\tc}{\boolt}$}
+    \UnaryInfC{$\jdg{\tc}{\boolt}$}
     \DisplayProof
 \end{array}\]
 
 %%%%%
-\subsection{Functions, Homotopies, and Equivalence}
+\subsection{Reversible Functions and Homotopies}
 
 \[\begin{array}{c}
-    \noalign{\textbf{Types of functions, homotopies, and equivalences:}} \\
+    \noalign{\textbf{Types of reversible functions and homotopies:}} \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\boolt\iso\boolt}{\univ}$}
+    \UnaryInfC{$\jdg{\boolt\iso\boolt}{\univ}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{c_1}{\boolt\iso\boolt}$}
-    \AxiomC{$\jdg{}{c_2}{\boolt\iso\boolt}$}
-    \BinaryInfC{$\jdg{}{c_1 \isotwo c_2}{\univ}$}
-    \DisplayProof
-    \quad
-    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
-    \UnaryInfC{$\jdg{}{\isequiv{c}}{\univ}$}
+    \AxiomC{$\jdg{c_1}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{c_2}{\boolt\iso\boolt}$}
+    \BinaryInfC{$\jdg{c_1 \isotwo c_2}{\univ}$}
     \DisplayProof
     \\
     \\
-    \noalign{\textbf{Functions:}} \\
+    \noalign{\textbf{Reversible functions:}} \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\idc_{\boolt}}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\swapc_{\boolt}}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{c_1}{\boolt\iso\boolt}$}
-    \AxiomC{$\jdg{}{c_2}{\boolt\iso\boolt}$}
-    \BinaryInfC{$\jdg{}{c_1 \compc c_2}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{c_1}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{c_2}{\boolt\iso\boolt}$}
+    \BinaryInfC{$\jdg{c_1 \compc c_2}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
-    \UnaryInfC{$\jdg{}{\;\invc{c}}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{c}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\;\invc{c}}{\boolt\iso\boolt}$}
     \DisplayProof
     \\
     \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\;\invc{\idc_{\boolt}}=\idc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdge{\;\invc{\idc_{\boolt}}}{\idc_{\boolt}}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\;\invc{\swapc_{\boolt}}=\swapc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdge{\;\invc{\swapc_{\boolt}}}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\;\invc{(c_1\compc c_2)} = \;\invc{c_2}\;\compc\;\invc{c_1}}
+    \UnaryInfC{$\jdge{\;\invc{(c_1\compc c_2)}}{\;\invc{c_2}\;\compc\;\invc{c_1}}
                         {\boolt\iso\boolt}$}
     \DisplayProof
     \\
     \\
     \noalign{\textbf{Homotopies:}} \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\reflh}{c \isotwo c}$}
+    \UnaryInfC{$\jdg{\reflh}{c \isotwo c}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{h}{c_1 \isotwo c_2}$}
-    \UnaryInfC{$\jdg{}{\symh{h}}{c_2 \isotwo c_1}$}
+    \AxiomC{$\jdg{h}{c_1 \isotwo c_2}$}
+    \UnaryInfC{$\jdg{\symh{h}}{c_2 \isotwo c_1}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{h_1}{c_1 \isotwo c_2}$}
-    \AxiomC{$\jdg{}{h_2}{c_2 \isotwo c_3}$}
-    \BinaryInfC{$\jdg{}{\transh{h_1}{h_2}}{c_1 \isotwo c_3}$}
+    \AxiomC{$\jdg{h_1}{c_1 \isotwo c_2}$}
+    \AxiomC{$\jdg{h_2}{c_2 \isotwo c_3}$}
+    \BinaryInfC{$\jdg{\transh{h_1}{h_2}}{c_1 \isotwo c_3}$}
     \DisplayProof
     \\
     \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\idlc}{\idc_{\boolt} \compc c \isotwo c}$}
+    \UnaryInfC{$\jdg{\idlc}{\idc_{\boolt} \compc c \isotwo c}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\idrc}{c \compc \idc_{\boolt} \isotwo c}$}
+    \UnaryInfC{$\jdg{\idrc}{c \compc \idc_{\boolt} \isotwo c}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\assocc}
+    \UnaryInfC{$\jdg{\assocc}
                      {c_1 \compc (c_2 \compc c_3) \isotwo (c_1 \compc c_2) \compc c_3}$}
     \DisplayProof
     \\
     \\
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\invr}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
+    \UnaryInfC{$\jdg{\invr}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\invl}{\;\invc{c} \compc c \isotwo \idc_{\boolt}}$}
+    \UnaryInfC{$\jdg{\invl}{\;\invc{c} \compc c \isotwo \idc_{\boolt}}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\invinv}{\;\invc{\invc{c}}  \isotwo c}$}
+    \UnaryInfC{$\jdg{\invinv}{\;\invc{\invc{c}}  \isotwo c}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{h_1}{c_1 \isotwo c_2}$}
-    \AxiomC{$\jdg{}{h_2}{c_3 \isotwo c_4}$}
-    \BinaryInfC{$\jdg{}{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}$}
+    \AxiomC{$\jdg{h_1}{c_1 \isotwo c_2}$}
+    \AxiomC{$\jdg{h_2}{c_3 \isotwo c_4}$}
+    \BinaryInfC{$\jdg{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}$}
     \DisplayProof
-    \\
-    \\
-    \noalign{\textbf{Equivalences:}} \\
-    \AxiomC{}
-    \UnaryInfC{$\jdg{}{\reflq}{???}$}
+\end{array}\]
+
+%%%%%
+\subsection{Equivalences}
+
+\[\begin{array}{c}
+    \AxiomC{$\jdg{h}{c_1\compc c_2 \isotwo \idc_{\boolt}}$}
+    \AxiomC{$\jdg{h}{c_2\compc c_1 \isotwo \idc_{\boolt}}$}
+    \BinaryInfC{$\jdg{\isequiv{c_1}}{\univ}$}
     \DisplayProof
-    \quad
-    \AxiomC{???}
-    \UnaryInfC{$\jdg{}{\symq{q}}{???}$}
-    \DisplayProof
-    \quad
-    \AxiomC{???}
-    \AxiomC{???}
-    \BinaryInfC{$\jdg{}{\transq{q_1}{q_2}}{???}$}
-    \DisplayProof
-    \\
-    \\
-    \AxiomC{}
-    \UnaryInfC{$\jdg{}{???}{\isequiv{\idc_{\boolt}}}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{}{???}{\isequiv{\swapc_{\boolt}}}$}
-    \DisplayProof
-  \end{array}
-\]
+\end{array}\]
 
 %%%%%
 \subsection{Identity Types}
+
+\[\begin{array}{c}
+???<
+\end{array}\]
 
 \newpage
 
@@ -256,47 +243,47 @@ two points $\fc$ and $\tc$.
     \noalign{\textbf{Properties of functions:}} \\
     \quad
     \quad
-    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
-    \AxiomC{$\jdg{}{b}{\boolt}$}
-    \BinaryInfC{$\jdg{}{\evalone{c}{b}}{\boolt}$}
+    \AxiomC{$\jdg{c}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{b}{\boolt}$}
+    \BinaryInfC{$\jdg{\evalone{c}{b}}{\boolt}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
-    \AxiomC{$\jdg{}{b}{\boolt}$}
-    \BinaryInfC{$\jdg{}{\evalone{\invc{c}}{\evalone{c}{b}} = b}{\boolt}$}
+    \AxiomC{$\jdg{c}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{b}{\boolt}$}
+    \BinaryInfC{$\jdg{\evalone{\invc{c}}{\evalone{c}{b}} = b}{\boolt}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
-    \AxiomC{$\jdg{}{b}{\boolt}$}
-    \BinaryInfC{$\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{\boolt}$}
+    \AxiomC{$\jdg{c}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{b}{\boolt}$}
+    \BinaryInfC{$\jdg{\evalone{c}{\evalone{\invc{c}}{b}} = b}{\boolt}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
-    \UnaryInfC{$\jdg{}{\isequiv{c}}{}$}
+    \AxiomC{$\jdg{c}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\isequiv{c}}{}$}
     \DisplayProof
     \\
     \\
     \noalign{\textbf{Functions on $\boolt$:}} \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\invc{\idc_{\boolt} = \idc_{\boolt}}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\invc{\idc_{\boolt} = \idc_{\boolt}}}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\invc{\swapc _{\boolt}} = \swapc _{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\invc{\swapc _{\boolt}} = \swapc _{\boolt}}{\boolt\iso\boolt}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{b}{\boolt}$}
-    \UnaryInfC{$\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
+    \AxiomC{$\jdg{b}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
     \DisplayProof
 \end{array}\]
 
@@ -319,7 +306,7 @@ of $\uone$:
 
 \[
   \AxiomC{}
-  \UnaryInfC{$\jdg{}{\uzero}{\uone}$}
+  \UnaryInfC{$\jdg{\uzero}{\uone}$}
   \DisplayProof
 \]
 
@@ -328,44 +315,44 @@ of $\uone$:
 
 \[
   \begin{array}{c}
-    \AxiomC{$\jdg{}{A}{\uzero}$}
-    \UnaryInfC{$\jdg{}{A\piso}{\uzero}$}
+    \AxiomC{$\jdg{A}{\uzero}$}
+    \UnaryInfC{$\jdg{A\piso}{\uzero}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{A}{\uzero}$}
-    \AxiomC{$\jdg{}{B}{\uzero}$}
-    \BinaryInfC{$\jdg{}{A\iso B}{\uzero}$}
+    \AxiomC{$\jdg{A}{\uzero}$}
+    \AxiomC{$\jdg{B}{\uzero}$}
+    \BinaryInfC{$\jdg{A\iso B}{\uzero}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{f}{A \piso}$}
-    \AxiomC{$\jdg{}{B}{\uzero}$}
-    \BinaryInfC{$\jdg{}{\evalone{f}{B}}{\uzero}$}
+    \AxiomC{$\jdg{f}{A \piso}$}
+    \AxiomC{$\jdg{B}{\uzero}$}
+    \BinaryInfC{$\jdg{\evalone{f}{B}}{\uzero}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{f}{A \piso}$}
-    \AxiomC{$\jdg{}{B}{\uzero}$}
-    \BinaryInfC{$\jdg{}{\evalone{f}{B} = A \iso B}{\uzero}$}
+    \AxiomC{$\jdg{f}{A \piso}$}
+    \AxiomC{$\jdg{B}{\uzero}$}
+    \BinaryInfC{$\jdg{\evalone{f}{B} = A \iso B}{\uzero}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{c}{A \iso B}$}
-    \AxiomC{$\jdg{}{a}{A}$}
-    \BinaryInfC{$\jdg{}{\evalone{c}{a}}{B}$}
+    \AxiomC{$\jdg{c}{A \iso B}$}
+    \AxiomC{$\jdg{a}{A}$}
+    \BinaryInfC{$\jdg{\evalone{c}{a}}{B}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{c}{A \iso B}$}
-    \UnaryInfC{$\jdg{}{\;\invc{c}}{B \iso A}$}
+    \AxiomC{$\jdg{c}{A \iso B}$}
+    \UnaryInfC{$\jdg{\;\invc{c}}{B \iso A}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{c}{A \iso B}$}
-    \AxiomC{$\jdg{}{a}{A}$}
-    \BinaryInfC{$\jdg{}{\evalone{\invc{c}}{\evalone{c}{a}} = a}{A}$}
+    \AxiomC{$\jdg{c}{A \iso B}$}
+    \AxiomC{$\jdg{a}{A}$}
+    \BinaryInfC{$\jdg{\evalone{\invc{c}}{\evalone{c}{a}} = a}{A}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{c}{A \iso B}$}
-    \AxiomC{$\jdg{}{b}{B}$}
-    \BinaryInfC{$\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{B}$}
+    \AxiomC{$\jdg{c}{A \iso B}$}
+    \AxiomC{$\jdg{b}{B}$}
+    \BinaryInfC{$\jdg{\evalone{c}{\evalone{\invc{c}}{b}} = b}{B}$}
     \DisplayProof
   \end{array}
 \]
@@ -376,37 +363,37 @@ of $\uone$:
 \[
   \begin{array}{c}
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\boolt}{\uzero}$}
+    \UnaryInfC{$\jdg{\boolt}{\uzero}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\fc}{\boolt}$}
+    \UnaryInfC{$\jdg{\fc}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\tc}{\boolt}$}
+    \UnaryInfC{$\jdg{\tc}{\boolt}$}
     \DisplayProof
     \\
     \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\idc_{\boolt}}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\swapc_{\boolt}}{\boolt\iso\boolt}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{b}{\boolt}$}
-    \UnaryInfC{$\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
+    \AxiomC{$\jdg{b}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
     \DisplayProof
   \end{array}
 \]
@@ -416,39 +403,39 @@ of $\uone$:
 
 \[
   \begin{array}{c}
-    \AxiomC{$\jdg{}{A}{\uzero}$}
-    \AxiomC{$\jdg{}{a}{A}$}
-    \AxiomC{$\jdg{}{b}{A}$}
-    \TrinaryInfC{$\jdg{}{a \iso b}{\uzero}$}
+    \AxiomC{$\jdg{A}{\uzero}$}
+    \AxiomC{$\jdg{a}{A}$}
+    \AxiomC{$\jdg{b}{A}$}
+    \TrinaryInfC{$\jdg{a \iso b}{\uzero}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{A}{\uzero}$}
-    \AxiomC{$\jdg{}{a}{A}$}
-    \BinaryInfC{$\jdg{}{\idc_{a}}{a \iso a}$}
+    \AxiomC{$\jdg{A}{\uzero}$}
+    \AxiomC{$\jdg{a}{A}$}
+    \BinaryInfC{$\jdg{\idc_{a}}{a \iso a}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{A}{\uone}$}
-    \AxiomC{$\jdg{}{a}{A}$}
-    \AxiomC{$\jdg{}{b}{A}$}
-    \TrinaryInfC{$\jdg{}{a \iso b}{\uone}$}
+    \AxiomC{$\jdg{A}{\uone}$}
+    \AxiomC{$\jdg{a}{A}$}
+    \AxiomC{$\jdg{b}{A}$}
+    \TrinaryInfC{$\jdg{a \iso b}{\uone}$}
     \DisplayProof
     \quad
-    \AxiomC{$\jdg{}{A}{\uone}$}
-    \AxiomC{$\jdg{}{a}{A}$}
-    \BinaryInfC{$\jdg{}{\idc_{a}}{a \iso a}$}
+    \AxiomC{$\jdg{A}{\uone}$}
+    \AxiomC{$\jdg{a}{A}$}
+    \BinaryInfC{$\jdg{\idc_{a}}{a \iso a}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{A}{\uzero}$}
-    \AxiomC{$\jdg{}{B}{\uzero}$}
-    \AxiomC{$\jdg{}{c}{A \iso B}$}
-    \TrinaryInfC{$\jdg{}{\idc_{c:A\iso B}}{c \iso c}$}
+    \AxiomC{$\jdg{A}{\uzero}$}
+    \AxiomC{$\jdg{B}{\uzero}$}
+    \AxiomC{$\jdg{c}{A \iso B}$}
+    \TrinaryInfC{$\jdg{\idc_{c:A\iso B}}{c \iso c}$}
     \DisplayProof
     \\
     \\
-    \AxiomC{$\jdg{}{c_1}{A \iso B}$}
-    \AxiomC{$\jdg{}{c_2}{A \iso B}$}
+    \AxiomC{$\jdg{c_1}{A \iso B}$}
+    \AxiomC{$\jdg{c_2}{A \iso B}$}
     \BinaryInfC{$???$}
     \DisplayProof
     \\
