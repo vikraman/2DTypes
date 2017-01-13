@@ -3,6 +3,7 @@
 % \usepackage{fdsymbol}
 \usepackage{bbold}
 \usepackage{bussproofs}
+\usepackage{keystroke}
 
 %% \usepackage{hyphenat}
 %% \usepackage{color}
@@ -17,26 +18,29 @@
 %% \lstnewenvironment{code}{\lstset{basicstyle={\sffamily\footnotesize}}}{}
 
 \newcommand{\alt}{~\mid~}
+\newcommand{\patht}[1]{#1 \Tab #1}
+\newcommand{\fpatht}[1]{#1 \LArrow}
 \newcommand{\invc}[1]{!#1}
 \newcommand{\compc}{\circ}
 \newcommand{\evalone}[2]{eval(#1,#2)}
 \newcommand{\evalbone}[2]{evalB(#1,#2)}
-\newcommand{\refl}{\mathtt{refl}}
-\newcommand{\reflh}{\mathtt{refl}_{\sim}}
-\newcommand{\symh}[1]{\mathtt{sym}_{\sim}~#1}
-\newcommand{\transh}[2]{\mathtt{trans}_{\sim}~#1~#2}
-\newcommand{\reflq}{\mathtt{refl}_{\simeq}}
-\newcommand{\symq}[1]{\mathtt{sym}_{\simeq}~#1}
-\newcommand{\transq}[2]{\mathtt{trans}_{\simeq}~#1~#2}
-\newcommand{\isequiv}[1]{\mathtt{isequiv}(#1)}
-\newcommand{\idc}{\mathtt{id}}
-\newcommand{\swapc}{\mathtt{swap}}
-\newcommand{\assocc}{\mathtt{assocl}}
-\newcommand{\invl}{\mathtt{invl}}
-\newcommand{\invr}{\mathtt{invr}}
-\newcommand{\invinv}{\mathtt{inv}^2}
-\newcommand{\idlc}{\mathtt{idl}}
-\newcommand{\idrc}{\mathtt{idr}}
+\newcommand{\reflp}{\textsc{refl}}
+\newcommand{\swapp}{\textsc{swap}}
+\newcommand{\reflh}{\mathit{refl}_{\sim}}
+\newcommand{\symh}[1]{\mathit{sym}_{\sim}~#1}
+\newcommand{\transh}[2]{\mathit{trans}_{\sim}~#1~#2}
+\newcommand{\reflq}{\mathit{refl}_{\simeq}}
+\newcommand{\symq}[1]{\mathit{sym}_{\simeq}~#1}
+\newcommand{\transq}[2]{\mathit{trans}_{\simeq}~#1~#2}
+\newcommand{\isequiv}[1]{\mathit{isequiv}(#1)}
+\newcommand{\idc}{\mathit{id}}
+\newcommand{\swapc}{\mathit{swap}}
+\newcommand{\assocc}{\mathit{assocl}}
+\newcommand{\invl}{\mathit{invl}}
+\newcommand{\invr}{\mathit{invr}}
+\newcommand{\invinv}{\mathit{inv}^2}
+\newcommand{\idlc}{\mathit{idl}}
+\newcommand{\idrc}{\mathit{idr}}
 \newcommand{\swapswap}{\swapc^2}
 \newcommand{\compsim}{\compc_{\isotwo}}
 \newcommand{\iso}{\leftrightarrow}
@@ -44,8 +48,8 @@
 \newcommand{\piso}{\multimapdotbothB~~}
 \newcommand{\zt}{\mathbb{0}}
 \newcommand{\ot}{\mathbb{1}}
-\newcommand{\fc}{\mathtt{false}}
-\newcommand{\tc}{\mathtt{true}}
+\newcommand{\fc}{\mathit{false}}
+\newcommand{\tc}{\mathit{true}}
 \newcommand{\boolt}{\mathbb{B}}
 \newcommand{\univ}{\mathcal{U}}
 \newcommand{\uzero}{\mathcal{U}_0}
@@ -106,132 +110,205 @@ We postulate a universe $\univ$ which contains a type $\boolt$ which itself cont
 two points $\fc$ and $\tc$.
 
 \[\begin{array}{c}
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\boolt}{\univ}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\fc}{\boolt}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\tc}{\boolt}$}
-    \DisplayProof
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\boolt}{\univ}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\fc}{\boolt}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\tc}{\boolt}$}
+  \DisplayProof
 \end{array}\]
 
 %%%%%
 \subsection{Reversible Functions and Homotopies}
 
 \[\begin{array}{c}
-    \noalign{\textbf{Types of reversible functions and homotopies:}} \\
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\boolt\iso\boolt}{\univ}$}
-    \DisplayProof
-    \quad
-    \AxiomC{$\jdg{c_1}{\boolt\iso\boolt}$}
-    \AxiomC{$\jdg{c_2}{\boolt\iso\boolt}$}
-    \BinaryInfC{$\jdg{c_1 \isotwo c_2}{\univ}$}
-    \DisplayProof
-    \\
-    \\
-    \noalign{\textbf{Reversible functions:}} \\
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\idc_{\boolt}}{\boolt\iso\boolt}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\swapc_{\boolt}}{\boolt\iso\boolt}$}
-    \DisplayProof
-    \quad
-    \AxiomC{$\jdg{c_1}{\boolt\iso\boolt}$}
-    \AxiomC{$\jdg{c_2}{\boolt\iso\boolt}$}
-    \BinaryInfC{$\jdg{c_1 \compc c_2}{\boolt\iso\boolt}$}
-    \DisplayProof
-    \quad
-    \AxiomC{$\jdg{c}{\boolt\iso\boolt}$}
-    \UnaryInfC{$\jdg{\;\invc{c}}{\boolt\iso\boolt}$}
-    \DisplayProof
-    \\
-    \\
-    \AxiomC{}
-    \UnaryInfC{$\jdge{\;\invc{\idc_{\boolt}}}{\idc_{\boolt}}{\boolt\iso\boolt}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdge{\;\invc{\swapc_{\boolt}}}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdge{\;\invc{(c_1\compc c_2)}}{\;\invc{c_2}\;\compc\;\invc{c_1}}
-                        {\boolt\iso\boolt}$}
-    \DisplayProof
-    \\
-    \\
-    \noalign{\textbf{Homotopies:}} \\
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\reflh}{c \isotwo c}$}
-    \DisplayProof
-    \quad
-    \AxiomC{$\jdg{h}{c_1 \isotwo c_2}$}
-    \UnaryInfC{$\jdg{\symh{h}}{c_2 \isotwo c_1}$}
-    \DisplayProof
-    \quad
-    \AxiomC{$\jdg{h_1}{c_1 \isotwo c_2}$}
-    \AxiomC{$\jdg{h_2}{c_2 \isotwo c_3}$}
-    \BinaryInfC{$\jdg{\transh{h_1}{h_2}}{c_1 \isotwo c_3}$}
-    \DisplayProof
-    \\
-    \\
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\idlc}{\idc_{\boolt} \compc c \isotwo c}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\idrc}{c \compc \idc_{\boolt} \isotwo c}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\assocc}
-                     {c_1 \compc (c_2 \compc c_3) \isotwo (c_1 \compc c_2) \compc c_3}$}
-    \DisplayProof
-    \\
-    \\
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\invr}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\invl}{\;\invc{c} \compc c \isotwo \idc_{\boolt}}$}
-    \DisplayProof
-    \quad
-    \AxiomC{}
-    \UnaryInfC{$\jdg{\invinv}{\;\invc{\invc{c}}  \isotwo c}$}
-    \DisplayProof
-    \\
-    \\
-    \AxiomC{$\jdg{h_1}{c_1 \isotwo c_2}$}
-    \AxiomC{$\jdg{h_2}{c_3 \isotwo c_4}$}
-    \BinaryInfC{$\jdg{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}$}
-    \DisplayProof
+  \noalign{\textbf{Types of reversible functions and homotopies:}} \\
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\boolt\iso\boolt}{\univ}$}
+  \DisplayProof
+\quad
+  \AxiomC{$\jdg{c_1}{\boolt\iso\boolt}$}
+  \AxiomC{$\jdg{c_2}{\boolt\iso\boolt}$}
+  \BinaryInfC{$\jdg{c_1 \isotwo c_2}{\univ}$}
+  \DisplayProof
+\\
+\\
+  \noalign{\textbf{Reversible functions:}} \\
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\idc_{\boolt}}{\boolt\iso\boolt}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+  \DisplayProof
+\quad
+  \AxiomC{$\jdg{c_1}{\boolt\iso\boolt}$}
+  \AxiomC{$\jdg{c_2}{\boolt\iso\boolt}$}
+  \BinaryInfC{$\jdg{c_1 \compc c_2}{\boolt\iso\boolt}$}
+  \DisplayProof
+\quad
+  \AxiomC{$\jdg{c}{\boolt\iso\boolt}$}
+  \UnaryInfC{$\jdg{\;\invc{c}}{\boolt\iso\boolt}$}
+  \DisplayProof
+\\
+\\
+  \AxiomC{}
+  \UnaryInfC{$\jdge{\;\invc{\idc_{\boolt}}}{\idc_{\boolt}}{\boolt\iso\boolt}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdge{\;\invc{\swapc_{\boolt}}}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdge{\;\invc{(c_1\compc c_2)}}{\;\invc{c_2}\;\compc\;\invc{c_1}}
+                      {\boolt\iso\boolt}$}
+  \DisplayProof
+\\
+\\
+  \noalign{\textbf{Homotopies:}} \\
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\reflh}{c \isotwo c}$}
+  \DisplayProof
+\quad
+  \AxiomC{$\jdg{h}{c_1 \isotwo c_2}$}
+  \UnaryInfC{$\jdg{\symh{h}}{c_2 \isotwo c_1}$}
+  \DisplayProof
+\quad
+  \AxiomC{$\jdg{h_1}{c_1 \isotwo c_2}$}
+  \AxiomC{$\jdg{h_2}{c_2 \isotwo c_3}$}
+  \BinaryInfC{$\jdg{\transh{h_1}{h_2}}{c_1 \isotwo c_3}$}
+  \DisplayProof
+\\
+\\
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\idlc}{\idc_{\boolt} \compc c \isotwo c}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\idrc}{c \compc \idc_{\boolt} \isotwo c}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\assocc}
+                   {c_1 \compc (c_2 \compc c_3) \isotwo (c_1 \compc c_2) \compc c_3}$}
+  \DisplayProof
+\\
+\\
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\invr}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\invl}{\;\invc{c} \compc c \isotwo \idc_{\boolt}}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\invinv}{\;\invc{\invc{c}}  \isotwo c}$}
+  \DisplayProof
+\\
+\\
+  \AxiomC{$\jdg{h_1}{c_1 \isotwo c_2}$}
+  \AxiomC{$\jdg{h_2}{c_3 \isotwo c_4}$}
+  \BinaryInfC{$\jdg{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}$}
+  \DisplayProof
 \end{array}\]
 
 %%%%%
 \subsection{Equivalences}
 
 \[\begin{array}{c}
-    \AxiomC{$\jdg{h}{c_1\compc c_2 \isotwo \idc_{\boolt}}$}
-    \AxiomC{$\jdg{h}{c_2\compc c_1 \isotwo \idc_{\boolt}}$}
-    \BinaryInfC{$\jdg{\isequiv{c_1}}{\univ}$}
-    \DisplayProof
+  \AxiomC{$\jdg{h}{c_1\compc c_2 \isotwo \idc_{\boolt}}$}
+  \AxiomC{$\jdg{h}{c_2\compc c_1 \isotwo \idc_{\boolt}}$}
+  \BinaryInfC{$\jdg{\isequiv{c_1}}{\univ}$}
+  \DisplayProof
 \end{array}\]
 
 %%%%%
 \subsection{Identity Types}
 
 \[\begin{array}{c}
-???<
+  \AxiomC{$\jdg{A}{\univ}$}
+  \UnaryInfC{$\jdg{\patht{A}}{\univ}$}
+  \DisplayProof
+\quad
+  \AxiomC{$\jdg{A}{\univ}$}
+  \UnaryInfC{$\jdg{\fpatht{A}}{\univ}$}
+  \DisplayProof
+\\
+\\
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\reflp}{\patht{\boolt}}$}
+  \DisplayProof
+\quad
+  \AxiomC{}
+  \UnaryInfC{$\jdg{\swapp}{\patht{\boolt}}$}
+  \DisplayProof
 \end{array}\]
+
+\begin{verbatim}
+  x : U    y : U
+----------------
+ paths(x,y) : U
+
+this builds paths(Bool,Bool)
+and paths(paths(Bool,Bool),paths(Bool,Bool))
+
+may be restrict to when x and y are the same
+in our case that's enough because the path
+space will be empty otherwise
+
+ -----------------------
+ not : paths(Bool,Bool)
+
+ path composition
+
+ unit : paths(paths(Bool,Bool),paths(Bool,Bool))
+
+ not o not is id which lives in the thing above
+
+ etc.
+
+      x : X
+----------------
+ paths(x,_) type
+
+
+   x : X   y : X
+   p : paths(x,y)
+  -----------------
+ (x,p) : paths(x,_)
+
+    x : X
+    w : paths(x,_)
+ ---------------------
+   ev(w) : paths(x,x)
+
+   x : X   y : X
+   p : paths(x,y)
+ -------------------------------
+   ev(x,p) = refl x : paths(x,x)
+
+  proposition eta
+  paths(w,(x,ev w))
+
+Also may be, evaluation on paths to extract endpoints etc
+
+p : paths(x,y)
+---------------
+p0 == x
+
+p : paths(x,y)
+---------------
+p1 == y
+
+\end{verbatim}
+
 
 \newpage
 
