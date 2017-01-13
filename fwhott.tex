@@ -25,9 +25,16 @@
 \newcommand{\reflh}{\mathtt{refl}_{\sim}}
 \newcommand{\symh}[1]{\mathtt{sym}_{\sim}~#1}
 \newcommand{\transh}[2]{\mathtt{trans}_{\sim}~#1~#2}
+\newcommand{\reflq}{\mathtt{refl}_{\simeq}}
+\newcommand{\symq}[1]{\mathtt{sym}_{\simeq}~#1}
+\newcommand{\transq}[2]{\mathtt{trans}_{\simeq}~#1~#2}
 \newcommand{\isequiv}[1]{\mathtt{isequiv}(#1)}
 \newcommand{\idc}{\mathtt{id}}
 \newcommand{\swapc}{\mathtt{swap}}
+\newcommand{\assocc}{\mathtt{assocl}}
+\newcommand{\invl}{\mathtt{invl}}
+\newcommand{\invr}{\mathtt{invr}}
+\newcommand{\invinv}{\mathtt{inv}^2}
 \newcommand{\idlc}{\mathtt{idl}}
 \newcommand{\idrc}{\mathtt{idr}}
 \newcommand{\swapswap}{\swapc^2}
@@ -96,8 +103,7 @@ We consider two kinds of judgments. The $=$ is \emph{judgmental equality}.
 We postulate a universe $\univ$ which contains a type $\boolt$ which itself contains
 two points $\fc$ and $\tc$.
 
-\[
-  \begin{array}{c}
+\[\begin{array}{c}
     \AxiomC{}
     \UnaryInfC{$\jdg{}{\boolt}{\univ}$}
     \DisplayProof
@@ -109,14 +115,12 @@ two points $\fc$ and $\tc$.
     \AxiomC{}
     \UnaryInfC{$\jdg{}{\tc}{\boolt}$}
     \DisplayProof
-  \end{array}
-\]
+\end{array}\]
 
 %%%%%
 \subsection{Functions, Homotopies, and Equivalence}
 
-\[
-  \begin{array}{c}
+\[\begin{array}{c}
     \noalign{\textbf{Types of functions, homotopies, and equivalences:}} \\
     \AxiomC{}
     \UnaryInfC{$\jdg{}{\boolt\iso\boolt}{\univ}$}
@@ -189,22 +193,22 @@ two points $\fc$ and $\tc$.
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{ASSOC}
+    \UnaryInfC{$\jdg{}{\assocc}
                      {c_1 \compc (c_2 \compc c_3) \isotwo (c_1 \compc c_2) \compc c_3}$}
     \DisplayProof
     \\
     \\
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{???}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
+    \UnaryInfC{$\jdg{}{\invr}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{}{???}{\;\invc{c} \compc c \isotwo \idc_{\boolt}}$}
+    \UnaryInfC{$\jdg{}{\invl}{\;\invc{c} \compc c \isotwo \idc_{\boolt}}$}
     \DisplayProof
     \quad
-    \AxiomC{provable}
-    \UnaryInfC{$\jdg{}{???}{\;\invc{\invc{c}}  \isotwo c}$}
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\invinv}{\;\invc{\invc{c}}  \isotwo c}$}
     \DisplayProof
     \\
     \\
@@ -216,16 +220,39 @@ two points $\fc$ and $\tc$.
     \\
     \noalign{\textbf{Equivalences:}} \\
     \AxiomC{}
+    \UnaryInfC{$\jdg{}{\reflq}{???}$}
+    \DisplayProof
+    \quad
+    \AxiomC{???}
+    \UnaryInfC{$\jdg{}{\symq{q}}{???}$}
+    \DisplayProof
+    \quad
+    \AxiomC{???}
+    \AxiomC{???}
+    \BinaryInfC{$\jdg{}{\transq{q_1}{q_2}}{???}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{}
     \UnaryInfC{$\jdg{}{???}{\isequiv{\idc_{\boolt}}}$}
     \DisplayProof
     \quad
     \AxiomC{}
     \UnaryInfC{$\jdg{}{???}{\isequiv{\swapc_{\boolt}}}$}
     \DisplayProof
-    \\
-    \\
-    ***HERE*** \\
-    *** Introduce type; elements of type; functions on type; computation rules *** \\
+  \end{array}
+\]
+
+%%%%%
+\subsection{Identity Types}
+
+\newpage
+
+***HERE***
+
+*** Introduce type; elements of type; functions on type; computation rules ***
+
+\[\begin{array}{c}
     \noalign{\textbf{Properties of functions:}} \\
     \quad
     \quad
@@ -271,8 +298,7 @@ two points $\fc$ and $\tc$.
     \AxiomC{}
     \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
     \DisplayProof
-  \end{array}
-\]
+\end{array}\]
 
 %%%%%
 \subsection{Paths}
