@@ -2,7 +2,7 @@
 
 % \usepackage{fdsymbol}
 \usepackage{bbold}
-\usepackage{proof}
+\usepackage{bussproofs}
 
 %% \usepackage{hyphenat}
 %% \usepackage{color}
@@ -96,121 +96,172 @@ We consider two kinds of judgments. The $=$ is \emph{judgmental equality}.
 We postulate a universe $\univ$ which contains a type $\boolt$ which itself contains
 two points $\fc$ and $\tc$.
 
-\[\begin{array}{c}
-\Rule{}{\jdg{}{\boolt}{\univ}}
-\quad
-\Rule{}{\jdg{}{\fc}{\boolt}}
-\quad
-\Rule{}{\jdg{}{\tc}{\boolt}}
-\end{array}\]
+\[
+  \begin{array}{c}
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\boolt}{\univ}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\fc}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\tc}{\boolt}$}
+    \DisplayProof
+  \end{array}
+\]
 
 %%%%%
 \subsection{Functions, Homotopies, and Equivalence}
 
-\[\begin{array}{c}
-\noalign{\textbf{Types of functions, homotopies, and equivalences:}} \\
-\Rule{}{\jdg{}{\boolt\iso\boolt}{\univ}}
-\quad
-\Rule{\jdg{}{c_1}{\boolt\iso\boolt}
-         \quad\jdg{}{c_2}{\boolt\iso\boolt}}
-        {\jdg{}{c_1 \isotwo c_2}{\univ}}
-\quad
-\Rule{\jdg{}{c}{\boolt\iso\boolt}}
-        {\jdg{}{\isequiv{c}}{\univ}}
-\\
-\\
-\noalign{\textbf{Functions:}} \\
-\Rule{}{\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}}
-\quad
-\Rule{}{\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}}
-\quad
-\Rule{\jdg{}{c}{\boolt\iso\boolt}}
-        {\jdg{}{\;\invc{c}}{\boolt\iso\boolt}}
-\quad
-\Rule{\jdg{}{c_1}{\boolt\iso\boolt}
-        \quad\jdg{}{c_2}{\boolt\iso\boolt}}
-        {\jdg{}{c_1 \compc c_2}{\boolt\iso\boolt}}
-\\
-\\
-\noalign{\textbf{Homotopies:}} \\
-\Rule{}
-         {\jdg{}{\reflh}{c \isotwo c}}
-\quad
-\Rule{\jdg{}{h}{c_1 \isotwo c_2}}
-        {\jdg{}{\symh{h}}{c_2 \isotwo c_1}}
-\quad
-\Rule{\jdg{}{h_1}{c_1 \isotwo c_2}
-         \quad\jdg{}{h_2}{c_2 \isotwo c_3}}
-        {\jdg{}{\transh{h_1}{h_2}}{c_1 \isotwo c_3}}
-\\
-\\
-\Rule{}
-        {\jdg{}{\idlc}{\idc_{\boolt} \compc c \isotwo c}}
-\quad
-\Rule{}
-        {\jdg{}{\idrc}{c \compc \idc_{\boolt} \isotwo c}}
-\quad
-\Rule{}{\jdg{}{???}{c_1 \compc (c_2 \compc c_3) \isotwo (c_1 \compc c_2) \compc c_3}}
-\\
-\\
-\quad
-\Rule{}{\jdg{}{???}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}}
-\quad
-\Rule{}{\jdg{}{???}{\;\invc{\idc_{\boolt}} \isotwo \idc_{\boolt}}}
-\quad
-\Rule{}{\jdg{}{???}{\;\invc{\swapc_{\boolt}} \isotwo \swapc_{\boolt}}}
-\quad
-\Rule{}{\jdg{}{???}{\;\invc{(c_1\compc c_2)} \isotwo \;\invc{c_2} \;\compc \;\invc{c_1}}}
-\\
-\\
-\Rule{\jdg{}{h_1}{c_1 \isotwo c_2}
-         \quad\jdg{}{h_2}{c_3 \isotwo c_4}}
-        {\jdg{}{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}}
-\\
-\\
-\noalign{\textbf{Equivalences:}} \\
-\Rule{}{\jdg{}{???}{\isequiv{\idc_{\boolt}}}}
-\quad
-\Rule{}{\jdg{}{???}{\isequiv{\swapc_{\boolt}}}}
-\\
-\\
-***HERE*** \\
-*** Introduce type; elements of type; functions on type; computation rules *** \\
-\noalign{\textbf{Properties of functions:}} \\
-\quad
-\quad
-\Rule{\jdg{}{c}{\boolt\iso\boolt}
-         \quad\jdg{}{b}{\boolt}}
-        {\jdg{}{\evalone{c}{b}}{\boolt}}
-\\
-\\
-\Rule{\jdg{}{c}{\boolt\iso\boolt}
-         \quad\jdg{}{b}{\boolt}}
-        {\jdg{}{\evalone{\invc{c}}{\evalone{c}{b}} = b}{\boolt}}
-\quad
-\Rule{\jdg{}{c}{\boolt\iso\boolt}
-         \quad\jdg{}{b}{\boolt}}
-        {\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{\boolt}}
-\quad
-\Rule{\jdg{}{c}{\boolt\iso\boolt}}
-        {\jdg{}{\isequiv{c}}{}}
-\\
-\\
-\noalign{\textbf{Functions on $\boolt$:}} \\
-\Rule{}{\jdg{}{\invc{\idc_{\boolt} = \idc_{\boolt}}}{\boolt\iso\boolt}}
-\quad
-\Rule{}{\jdg{}{\invc{\swapc _{\boolt}} = \swapc _{\boolt}}{\boolt\iso\boolt}}
-\\
-\\
-\Rule{\jdg{}{b}{\boolt}}
-        {\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}}
-\quad
-\Rule{}
-        {\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}}
-\quad
-\Rule{}
-        {\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}}
-\end{array}\]
+\[
+  \begin{array}{c}
+    \noalign{\textbf{Types of functions, homotopies, and equivalences:}} \\
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\boolt\iso\boolt}{\univ}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c_1}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{}{c_2}{\boolt\iso\boolt}$}
+    \BinaryInfC{$\jdg{}{c_1 \isotwo c_2}{\univ}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{}{\isequiv{c}}{\univ}$}
+    \DisplayProof
+    \\
+    \\
+    \noalign{\textbf{Functions:}} \\
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{}{\;\invc{c}}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c_1}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{}{c_2}{\boolt\iso\boolt}$}
+    \BinaryInfC{$\jdg{}{c_1 \compc c_2}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \\
+    \\
+    \noalign{\textbf{Homotopies:}} \\
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\reflh}{c \isotwo c}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{h}{c_1 \isotwo c_2}$}
+    \UnaryInfC{$\jdg{}{\symh{h}}{c_2 \isotwo c_1}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{h_1}{c_1 \isotwo c_2}$}
+    \AxiomC{$\jdg{}{h_2}{c_2 \isotwo c_3}$}
+    \BinaryInfC{$\jdg{}{\transh{h_1}{h_2}}{c_1 \isotwo c_3}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\idlc}{\idc_{\boolt} \compc c \isotwo c}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\idrc}{c \compc \idc_{\boolt} \isotwo c}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{???}{c_1 \compc (c_2 \compc c_3) \isotwo (c_1 \compc c_2) \compc c_3}$}
+    \DisplayProof
+    \\
+    \\
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{???}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{???}{\;\invc{\idc_{\boolt}} \isotwo \idc_{\boolt}}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{???}{\;\invc{\swapc_{\boolt}} \isotwo \swapc_{\boolt}}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{???}{\;\invc{(c_1\compc c_2)} \isotwo \;\invc{c_2} \;\compc \;\invc{c_1}}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{h_1}{c_1 \isotwo c_2}$}
+    \AxiomC{$\jdg{}{h_2}{c_3 \isotwo c_4}$}
+    \BinaryInfC{$\jdg{}{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}$}
+    \DisplayProof
+    \\
+    \\
+    \noalign{\textbf{Equivalences:}} \\
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{???}{\isequiv{\idc_{\boolt}}}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{???}{\isequiv{\swapc_{\boolt}}}$}
+    \DisplayProof
+    \\
+    \\
+    ***HERE*** \\
+    *** Introduce type; elements of type; functions on type; computation rules *** \\
+    \noalign{\textbf{Properties of functions:}} \\
+    \quad
+    \quad
+    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{}{b}{\boolt}$}
+    \BinaryInfC{$\jdg{}{\evalone{c}{b}}{\boolt}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{}{b}{\boolt}$}
+    \BinaryInfC{$\jdg{}{\evalone{\invc{c}}{\evalone{c}{b}} = b}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
+    \AxiomC{$\jdg{}{b}{\boolt}$}
+    \BinaryInfC{$\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{}{\isequiv{c}}{}$}
+    \DisplayProof
+    \\
+    \\
+    \noalign{\textbf{Functions on $\boolt$:}} \\
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\invc{\idc_{\boolt} = \idc_{\boolt}}}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\invc{\swapc _{\boolt}} = \swapc _{\boolt}}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{b}{\boolt}$}
+    \UnaryInfC{$\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
+    \DisplayProof
+  \end{array}
+\]
 
 %%%%%
 \subsection{Paths}
@@ -230,123 +281,162 @@ We postulate two universes $\uzero$ and $\uone$ such that $\uzero$ is an element
 of $\uone$:
 
 \[
-\Rule{}{\jdg{}{\uzero}{\uone}}
+  \AxiomC{}
+  \UnaryInfC{$\jdg{}{\uzero}{\uone}$}
+  \DisplayProof
 \]
 
 %%%%%
 \subsection{(Reversible) Functions}
 
-\[\begin{array}{c}
-\Rule{\jdg{}{A}{\uzero}}
-        {\jdg{}{A\piso}{\uzero}}
-\quad
-\Rule{\jdg{}{A}{\uzero}
-         \quad \jdg{}{B}{\uzero}}
-        {\jdg{}{A\iso B}{\uzero}}
-\quad
-\Rule{\jdg{}{f}{A \piso}
-         \quad\jdg{}{B}{\uzero}}
-        {\jdg{}{\evalone{f}{B}}{\uzero}}
-\quad
-\Rule{\jdg{}{f}{A \piso}
-         \quad\jdg{}{B}{\uzero}}
-        {\jdg{}{\evalone{f}{B} = A \iso B}{\uzero}}
-\\
-\\
-\Rule{\jdg{}{c}{A \iso B}
-         \quad\jdg{}{a}{A}}
-        {\jdg{}{\evalone{c}{a}}{B}}
-\quad
-\Rule{\jdg{}{c}{A \iso B}}
-        {\jdg{}{\;\invc{c}}{B \iso A}}
-\\
-\\
-\Rule{\jdg{}{c}{A \iso B}
-         \quad\jdg{}{a}{A}}
-        {\jdg{}{\evalone{\invc{c}}{\evalone{c}{a}} = a}{A}}
-\quad
-\Rule{\jdg{}{c}{A \iso B}
-         \quad\jdg{}{b}{B}}
-        {\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{B}}
-\end{array}\]
+\[
+  \begin{array}{c}
+    \AxiomC{$\jdg{}{A}{\uzero}$}
+    \UnaryInfC{$\jdg{}{A\piso}{\uzero}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{A}{\uzero}$}
+    \AxiomC{$\jdg{}{B}{\uzero}$}
+    \BinaryInfC{$\jdg{}{A\iso B}{\uzero}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{f}{A \piso}$}
+    \AxiomC{$\jdg{}{B}{\uzero}$}
+    \BinaryInfC{$\jdg{}{\evalone{f}{B}}{\uzero}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{f}{A \piso}$}
+    \AxiomC{$\jdg{}{B}{\uzero}$}
+    \BinaryInfC{$\jdg{}{\evalone{f}{B} = A \iso B}{\uzero}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{c}{A \iso B}$}
+    \AxiomC{$\jdg{}{a}{A}$}
+    \BinaryInfC{$\jdg{}{\evalone{c}{a}}{B}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c}{A \iso B}$}
+    \UnaryInfC{$\jdg{}{\;\invc{c}}{B \iso A}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{c}{A \iso B}$}
+    \AxiomC{$\jdg{}{a}{A}$}
+    \BinaryInfC{$\jdg{}{\evalone{\invc{c}}{\evalone{c}{a}} = a}{A}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{c}{A \iso B}$}
+    \AxiomC{$\jdg{}{b}{B}$}
+    \BinaryInfC{$\jdg{}{\evalone{c}{\evalone{\invc{c}}{b}} = b}{B}$}
+    \DisplayProof
+  \end{array}
+\]
 
 %%%%%
 \subsection{Booleans}
 
-\[\begin{array}{c}
-\Rule{}{\jdg{}{\boolt}{\uzero}}
-\quad
-\Rule{}{\jdg{}{\fc}{\boolt}}
-\quad
-\Rule{}{\jdg{}{\tc}{\boolt}}
-\\
-\\
-\Rule{}{\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}}
-\quad
-\Rule{}{\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}}
-\\
-\\
-\Rule{\jdg{}{b}{\boolt}}
-        {\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}}
-\quad
-\Rule{}
-        {\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}}
-\quad
-\Rule{}
-        {\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}}
-\end{array}\]
+\[
+  \begin{array}{c}
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\boolt}{\uzero}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\fc}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\tc}{\boolt}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\idc_{\boolt}}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{b}{\boolt}$}
+    \UnaryInfC{$\jdg{}{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
+    \DisplayProof
+    \quad
+    \AxiomC{}
+    \UnaryInfC{$\jdg{}{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
+    \DisplayProof
+  \end{array}
+\]
 
 %%%%%
 \subsection{Identity Types}
 
-\[\begin{array}{c}
-\Rule{\jdg{}{A}{\uzero}
-         \quad\jdg{}{a}{A}
-         \quad\jdg{}{b}{A}}
-        {\jdg{}{a \iso b}{\uzero}}
-\quad
-\Rule{\jdg{}{A}{\uzero}
-          \quad\jdg{}{a}{A}}
-         {\jdg{}{\idc_{a}}{a \iso a}}
-\\
-\\
-\Rule{\jdg{}{A}{\uone}
-         \quad\jdg{}{a}{A}
-         \quad\jdg{}{b}{A}}
-        {\jdg{}{a \iso b}{\uone}}
-\quad
-\Rule{\jdg{}{A}{\uone}
-          \quad\jdg{}{a}{A}}
-         {\jdg{}{\idc_{a}}{a \iso a}}
-\\
-\\
-\Rule{\jdg{}{A}{\uzero}
-         \quad\jdg{}{B}{\uzero}
-         \quad\jdg{}{c}{A \iso B}}
-         {\jdg{}{\idc_{c:A\iso B}}{c \iso c}}
-\\
-\\
-\Rule{\jdg{}{c_1}{A \iso B}
-         \quad\jdg{}{c_2}{A \iso B}}
-         {}
-\\
-\\
-\mbox{Need to specialize the rules for } ind_{=A}
-\end{array}\]
+\[
+  \begin{array}{c}
+    \AxiomC{$\jdg{}{A}{\uzero}$}
+    \AxiomC{$\jdg{}{a}{A}$}
+    \AxiomC{$\jdg{}{b}{A}$}
+    \TrinaryInfC{$\jdg{}{a \iso b}{\uzero}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{A}{\uzero}$}
+    \AxiomC{$\jdg{}{a}{A}$}
+    \BinaryInfC{$\jdg{}{\idc_{a}}{a \iso a}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{A}{\uone}$}
+    \AxiomC{$\jdg{}{a}{A}$}
+    \AxiomC{$\jdg{}{b}{A}$}
+    \TrinaryInfC{$\jdg{}{a \iso b}{\uone}$}
+    \DisplayProof
+    \quad
+    \AxiomC{$\jdg{}{A}{\uone}$}
+    \AxiomC{$\jdg{}{a}{A}$}
+    \BinaryInfC{$\jdg{}{\idc_{a}}{a \iso a}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{A}{\uzero}$}
+    \AxiomC{$\jdg{}{B}{\uzero}$}
+    \AxiomC{$\jdg{}{c}{A \iso B}$}
+    \TrinaryInfC{$\jdg{}{\idc_{c:A\iso B}}{c \iso c}$}
+    \DisplayProof
+    \\
+    \\
+    \AxiomC{$\jdg{}{c_1}{A \iso B}$}
+    \AxiomC{$\jdg{}{c_2}{A \iso B}$}
+    \BinaryInfC{$???$}
+    \DisplayProof
+    \\
+    \\
+    \mbox{Need to specialize the rules for } ind_{=A}
+  \end{array}
+\]
 
 %%%%%
 \subsection{Function Extensionality and Univalence}
 
-\[\begin{array}{c}
-\mbox{Specialize the rule of univalence}
-\end{array}\]
+\[
+  \begin{array}{c}
+    \mbox{Specialize the rule of univalence}
+  \end{array}
+\]
 
 %%%%%
 \subsection{Higher-Inductive Types (Fractionals)}
 
-\[\begin{array}{c}
-\mbox{To think about}
-\end{array}\]
+\[
+  \begin{array}{c}
+    \mbox{To think about}
+  \end{array}
+\]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{acm}
