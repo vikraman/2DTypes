@@ -18,8 +18,8 @@
 %% \lstnewenvironment{code}{\lstset{basicstyle={\sffamily\footnotesize}}}{}
 
 \newcommand{\alt}{~\mid~}
-\newcommand{\patht}[1]{#1 \Tab #1}
-\newcommand{\fpatht}[1]{#1 \LArrow}
+\newcommand{\patht}[1]{\textsc{PATHS}(#1,#1)}
+\newcommand{\fpatht}[1]{\textsc{FREEPATHS}(#1,\Box)}
 \newcommand{\invc}[1]{!#1}
 \newcommand{\compc}{\circ}
 \newcommand{\evalone}[2]{eval(#1,#2)}
@@ -242,8 +242,8 @@ two points $\fc$ and $\tc$.
   \DisplayProof
 \\
 \\
-  \AxiomC{}
-  \UnaryInfC{$\jdg{\reflp}{\patht{\boolt}}$}
+  \AxiomC{$\jdg{A}{\univ}$}
+  \UnaryInfC{$\jdg{\reflp}{\patht{A}}$}
   \DisplayProof
 \quad
   \AxiomC{}
@@ -251,14 +251,16 @@ two points $\fc$ and $\tc$.
   \DisplayProof
 \\
 \\
-  \AxiomC{$\jdg{p}{\patht{\boolt}}$}
-  \UnaryInfC{$\jdg{(\boolt,p)}{\fpatht{\boolt}}$}
+  \AxiomC{$\jdg{A}{\univ}$}
+  \AxiomC{$\jdg{p}{\patht{A}}$}
+  \BinaryInfC{$\jdg{(A,p)}{\fpatht{A}}$}
   \DisplayProof
 \\
 \\
-  \AxiomC{$\jdg{(\boolt,\reflp)}{\fpatht{\boolt}}$}
-  \AxiomC{$\jdg{p}{\patht{\boolt}}$}
-  \BinaryInfC{$\jdg{(\boolt,p)}{\fpatht{\boolt}}$}
+  \AxiomC{$\jdg{A}{\univ}$}
+  \AxiomC{$\jdg{(A,\reflp)}{\fpatht{A}}$}
+  \AxiomC{$\jdg{p}{\patht{A}}$}
+  \TrinaryInfC{$\jdg{(A,p)}{\fpatht{A}}$}
   \DisplayProof
 \end{array}\]
 
