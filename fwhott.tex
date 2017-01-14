@@ -20,6 +20,8 @@
 \newcommand{\alt}{~\mid~}
 \newcommand{\patht}[1]{\textsc{PATHS}(#1,#1)}
 \newcommand{\fpatht}[1]{\textsc{FREEPATHS}(#1,\Box)}
+\newcommand{\fpathp}[2]{\textsc{freepath}~#1~#2}
+\newcommand{\pathind}[2]{\textsc{pathind}~#1~#2}
 \newcommand{\invc}[1]{!#1}
 \newcommand{\compc}{\circ}
 \newcommand{\evalone}[2]{eval(#1,#2)}
@@ -33,9 +35,9 @@
 \newcommand{\symq}[1]{\mathit{sym}_{\simeq}~#1}
 \newcommand{\transq}[2]{\mathit{trans}_{\simeq}~#1~#2}
 \newcommand{\isequiv}[1]{\mathit{isequiv}(#1)}
-\newcommand{\idc}{\mathit{id}}
-\newcommand{\swapc}{\mathit{swap}}
-\newcommand{\assocc}{\mathit{assocl}}
+\newcommand{\idc}{\mathit{id}_{\boolt}}
+\newcommand{\swapc}{\mathit{swap}_{\boolt}}
+\newcommand{\assocc}{\mathit{assoc}}
 \newcommand{\invl}{\mathit{invl}}
 \newcommand{\invr}{\mathit{invr}}
 \newcommand{\invinv}{\mathit{inv}^2}
@@ -140,11 +142,11 @@ two points $\fc$ and $\tc$.
 \\
   \noalign{\textbf{Reversible functions:}} \\
   \AxiomC{}
-  \UnaryInfC{$\jdg{\idc_{\boolt}}{\boolt\iso\boolt}$}
+  \UnaryInfC{$\jdg{\idc}{\boolt\iso\boolt}$}
   \DisplayProof
 \quad
   \AxiomC{}
-  \UnaryInfC{$\jdg{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+  \UnaryInfC{$\jdg{\swapc}{\boolt\iso\boolt}$}
   \DisplayProof
 \quad
   \AxiomC{$\jdg{c_1}{\boolt\iso\boolt}$}
@@ -158,11 +160,11 @@ two points $\fc$ and $\tc$.
 \\
 \\
   \AxiomC{}
-  \UnaryInfC{$\jdge{\;\invc{\idc_{\boolt}}}{\idc_{\boolt}}{\boolt\iso\boolt}$}
+  \UnaryInfC{$\jdge{\;\invc{\idc}}{\idc}{\boolt\iso\boolt}$}
   \DisplayProof
 \quad
   \AxiomC{}
-  \UnaryInfC{$\jdge{\;\invc{\swapc_{\boolt}}}{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+  \UnaryInfC{$\jdge{\;\invc{\swapc}}{\swapc}{\boolt\iso\boolt}$}
   \DisplayProof
 \quad
   \AxiomC{}
@@ -187,11 +189,11 @@ two points $\fc$ and $\tc$.
 \\
 \\
   \AxiomC{}
-  \UnaryInfC{$\jdg{\idlc}{\idc_{\boolt} \compc c \isotwo c}$}
+  \UnaryInfC{$\jdg{\idlc}{\idc \compc c \isotwo c}$}
   \DisplayProof
 \quad
   \AxiomC{}
-  \UnaryInfC{$\jdg{\idrc}{c \compc \idc_{\boolt} \isotwo c}$}
+  \UnaryInfC{$\jdg{\idrc}{c \compc \idc \isotwo c}$}
   \DisplayProof
 \quad
   \AxiomC{}
@@ -201,11 +203,11 @@ two points $\fc$ and $\tc$.
 \\
 \\
   \AxiomC{}
-  \UnaryInfC{$\jdg{\invr}{c \;\compc \;\invc{c} \isotwo \idc_{\boolt}}$}
+  \UnaryInfC{$\jdg{\invr}{c \;\compc \;\invc{c} \isotwo \idc}$}
   \DisplayProof
 \quad
   \AxiomC{}
-  \UnaryInfC{$\jdg{\invl}{\;\invc{c} \compc c \isotwo \idc_{\boolt}}$}
+  \UnaryInfC{$\jdg{\invl}{\;\invc{c} \compc c \isotwo \idc}$}
   \DisplayProof
 \quad
   \AxiomC{}
@@ -215,7 +217,7 @@ two points $\fc$ and $\tc$.
 \\
   \AxiomC{$\jdg{h_1}{c_1 \isotwo c_2}$}
   \AxiomC{$\jdg{h_2}{c_3 \isotwo c_4}$}
-  \BinaryInfC{$\jdg{\compsim}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}$}
+  \BinaryInfC{$\jdg{h_1 \compsim h_2}{(c_1 \compc c_3) \isotwo (c_2 \compc c_4)}$}
   \DisplayProof
 \end{array}\]
 
@@ -223,8 +225,8 @@ two points $\fc$ and $\tc$.
 \subsection{Equivalences}
 
 \[\begin{array}{c}
-  \AxiomC{$\jdg{h}{c_1\compc c_2 \isotwo \idc_{\boolt}}$}
-  \AxiomC{$\jdg{h}{c_2\compc c_1 \isotwo \idc_{\boolt}}$}
+  \AxiomC{$\jdg{h}{c_1\compc c_2 \isotwo \idc}$}
+  \AxiomC{$\jdg{h}{c_2\compc c_1 \isotwo \idc}$}
   \BinaryInfC{$\jdg{\isequiv{c_1}}{\univ}$}
   \DisplayProof
 \end{array}\]
@@ -253,14 +255,14 @@ two points $\fc$ and $\tc$.
 \\
   \AxiomC{$\jdg{A}{\univ}$}
   \AxiomC{$\jdg{p}{\patht{A}}$}
-  \BinaryInfC{$\jdg{(A,p)}{\fpatht{A}}$}
+  \BinaryInfC{$\jdg{\fpathp{A}{p}}{\fpatht{A}}$}
   \DisplayProof
 \\
 \\
   \AxiomC{$\jdg{A}{\univ}$}
-  \AxiomC{$\jdg{(A,\reflp)}{\fpatht{A}}$}
+  \AxiomC{$\jdg{\fpathp{A}{\reflp}}{\fpatht{A}}$}
   \AxiomC{$\jdg{p}{\patht{A}}$}
-  \TrinaryInfC{$\jdg{(A,p)}{\fpatht{A}}$}
+  \TrinaryInfC{$\jdg{\pathind{A}{p}}{\fpatht{A}}$}
   \DisplayProof
 \end{array}\]
 
@@ -362,24 +364,24 @@ p1 == y
     \\
     \noalign{\textbf{Functions on $\boolt$:}} \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{\invc{\idc_{\boolt} = \idc_{\boolt}}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\invc{\idc = \idc}}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{\invc{\swapc _{\boolt}} = \swapc _{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\invc{\swapc } = \swapc }{\boolt\iso\boolt}$}
     \DisplayProof
     \\
     \\
     \AxiomC{$\jdg{b}{\boolt}$}
-    \UnaryInfC{$\jdg{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\idc}{b} = b}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc}{\fc} = \tc}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc}{\tc} = \fc}{\boolt}$}
     \DisplayProof
 \end{array}\]
 
@@ -472,24 +474,24 @@ of $\uone$:
     \\
     \\
     \AxiomC{}
-    \UnaryInfC{$\jdg{\idc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\idc}{\boolt\iso\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{\swapc_{\boolt}}{\boolt\iso\boolt}$}
+    \UnaryInfC{$\jdg{\swapc}{\boolt\iso\boolt}$}
     \DisplayProof
     \\
     \\
     \AxiomC{$\jdg{b}{\boolt}$}
-    \UnaryInfC{$\jdg{\evalone{\idc_{\boolt}}{b} = b}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\idc}{b} = b}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\fc} = \tc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc}{\fc} = \tc}{\boolt}$}
     \DisplayProof
     \quad
     \AxiomC{}
-    \UnaryInfC{$\jdg{\evalone{\swapc_{\boolt}}{\tc} = \fc}{\boolt}$}
+    \UnaryInfC{$\jdg{\evalone{\swapc}{\tc} = \fc}{\boolt}$}
     \DisplayProof
   \end{array}
 \]
@@ -507,7 +509,7 @@ of $\uone$:
     \quad
     \AxiomC{$\jdg{A}{\uzero}$}
     \AxiomC{$\jdg{a}{A}$}
-    \BinaryInfC{$\jdg{\idc_{a}}{a \iso a}$}
+    \BinaryInfC{$\jdg{\idc}{a \iso a}$}
     \DisplayProof
     \\
     \\
@@ -519,14 +521,14 @@ of $\uone$:
     \quad
     \AxiomC{$\jdg{A}{\uone}$}
     \AxiomC{$\jdg{a}{A}$}
-    \BinaryInfC{$\jdg{\idc_{a}}{a \iso a}$}
+    \BinaryInfC{$\jdg{\idc}{a \iso a}$}
     \DisplayProof
     \\
     \\
     \AxiomC{$\jdg{A}{\uzero}$}
     \AxiomC{$\jdg{B}{\uzero}$}
     \AxiomC{$\jdg{c}{A \iso B}$}
-    \TrinaryInfC{$\jdg{\idc_{c:A\iso B}}{c \iso c}$}
+    \TrinaryInfC{$\jdg{\idc}{c \iso c}$}
     \DisplayProof
     \\
     \\
