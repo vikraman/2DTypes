@@ -2,9 +2,10 @@
 
 module FW where
 
-open import Data.Bool using (Bool; not)
-open import Function using (id) renaming (_∘′_ to _○_)
-open import Relation.Binary.PropositionalEquality using (_≡_)
+open import Data.Bool using (Bool; not; true; false)
+open import Data.Product
+open import Function using (id; case_of_) renaming (_∘′_ to _○_)
+open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
 ------------------------------------------------------------------------------
 -- Everything is standard: functions, homotopies, equivalences, etc, etc.  The
@@ -39,6 +40,26 @@ El : U → Set
 El `𝟚 = Bool
 El (Path {A} `id) = isequiv {El A} id
 El (Path `not) = isequiv not
+
+_≅_ : Set → Set → Set
+A ≅ B = Σ[ f ∈ (A → B) ] isequiv f
+
+pathtoequiv : {A B : U} → A ⟷ B → El A ≅ El B
+pathtoequiv `id = id , mkisequiv id (λ _ → refl) (λ _ → refl)
+pathtoequiv `not = not , mkisequiv not (λ { false → refl ; true → refl }) (λ { false → refl ; true → refl })
+
+equivtopath : {A B : U} → El A ≅ El B → A ⟷ B
+equivtopath {`𝟚} {`𝟚} (f , mkisequiv g α β) =
+  case f true of (λ { false → `not ; true → `id })
+-- what about these cases?
+equivtopath {`𝟚} {Path `id} (f , mkisequiv g α β) = {!!}
+equivtopath {`𝟚} {Path `not} (f , mkisequiv g α β) = {!!}
+equivtopath {Path `id} {`𝟚} (f , mkisequiv g α β) = {!!}
+equivtopath {Path `not} {`𝟚} (f , mkisequiv g α β) = {!!}
+equivtopath {Path `id} {Path `id} (f , mkisequiv g α β) = {!!}
+equivtopath {Path `id} {Path `not} (f , mkisequiv g α β) = {!!}
+equivtopath {Path `not} {Path `id} (f , mkisequiv g α β) = {!!}
+equivtopath {Path `not} {Path `not} (f , mkisequiv g α β) = {!!}
 
 ------------------------------------------------------------------------------
 -- induction principle (J generalized)
