@@ -140,4 +140,32 @@ triv≡Equiv = record
 !! : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → triv≡ (! (! c)) c
 !! = tt
 
+!!2 : {t₁ t₂ : U} {c : t₁ ⟷ t₂} → ! (! c) ≡ c
+!!2 {c = unite₊l} = refl
+!!2 {c = uniti₊l} = refl
+!!2 {c = unite₊r} = refl
+!!2 {c = uniti₊r} = refl
+!!2 {c = swap₊} = refl
+!!2 {c = assocl₊} = refl
+!!2 {c = assocr₊} = refl
+!!2 {c = unite⋆l} = refl
+!!2 {c = uniti⋆l} = refl
+!!2 {c = unite⋆r} = refl
+!!2 {c = uniti⋆r} = refl
+!!2 {c = swap⋆} = refl
+!!2 {c = assocl⋆} = refl
+!!2 {c = assocr⋆} = refl
+!!2 {c = absorbr} = refl
+!!2 {c = absorbl} = refl
+!!2 {c = factorzr} = refl
+!!2 {c = factorzl} = refl
+!!2 {c = dist} = refl
+!!2 {c = factor} = refl
+!!2 {c = distl} = refl
+!!2 {c = factorl} = refl
+!!2 {c = id⟷} = refl
+!!2 {c = c ◎ c₁} = cong₂ _◎_ !!2 !!2
+!!2 {c = c ⊕ c₁} = cong₂ _⊕_ !!2 !!2
+!!2 {c = c ⊗ c₁} = cong₂ _⊗_ !!2 !!2
+
 ------------------------------------------------------------------------------

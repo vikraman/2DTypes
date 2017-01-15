@@ -1,144 +1,168 @@
+{-# OPTIONS --without-K #-}
+
 module FW where
 
-------------------------------------------------------------------------------
--- The LOGIC
-
--- Points and relations in universe
-
-data Univ : Set where
-  -- the universe itself
-  `U : Univ
-  -- points
-  `𝟚 : Univ
-  `f : Univ
-  `t : Univ
-  -- function and homotopy types
-  _⟷_ : Univ → Univ → Univ
-  _⇔_ : Univ → Univ → Univ
-  -- (reversible) functions
-  id : Univ
-  not : Univ
-  _∘_ : Univ → Univ → Univ
-  ! : Univ → Univ
-  -- homotopies
-  refl⇔ : Univ
-  sym⇔ : Univ → Univ
-  trans⇔ : Univ → Univ → Univ
-  idl : Univ
-  idr : Univ
-  assoc : Univ
-  invr : Univ
-  invl : Univ
-  inv² : Univ
-  ∘⇔ : Univ → Univ → Univ
-  -- equivalences
-  isequiv : Univ → Univ
-  -- identity types
-  Paths : Univ → Univ → Univ
-  Freepaths : Univ → Univ
-  refl : Univ
-  swap : Univ
-  freepath : Univ → Univ → Univ
-  pathind : Univ → Univ → Univ
+open import Data.Bool using (Bool; not)
+open import Function using (id) renaming (_∘′_ to _○_)
+open import Relation.Binary.PropositionalEquality using (_≡_)
 
 ------------------------------------------------------------------------------
--- Judgments
+-- Everything is standard: functions, homotopies, equivalences, etc, etc.  The
+-- only thing new is identity types and a generalized induction principle J for
+-- them. We define a small universe that has just the new concepts and inherit
+-- everything else from the ambient Agda environment.
 
--- Typability
+data U : Set
+data _⟷_ : U → U → Set
 
-data ⊢_∶_ : Univ → Univ → Set where
-  -- elementary points
-  𝟚i : ⊢ `𝟚 ∶ `U
-  fi : ⊢ `f ∶ `𝟚
-  ti : ⊢ `t ∶ `𝟚
-  -- types of reversible functions and homotopies
-  ⟷i : ⊢ (`𝟚 ⟷ `𝟚) ∶ `U
-  ⇔i : ∀ {c₁ c₂} → (⊢ c₁ ∶ (`𝟚 ⟷ `𝟚)) → (⊢ c₂ ∶ (`𝟚 ⟷ `𝟚)) →
-    (⊢ c₁ ⇔ c₂ ∶ `U)
-  -- reversible functions
-  idi : ⊢ id ∶ (`𝟚 ⟷ `𝟚)
-  noti : ⊢ not ∶ (`𝟚 ⟷ `𝟚)
-  ∘i : ∀ {c₁ c₂} → (⊢ c₁ ∶ (`𝟚 ⟷ `𝟚)) → (⊢ c₂ ∶ (`𝟚 ⟷ `𝟚)) →
-    (⊢ c₁ ∘ c₂ ∶ (`𝟚 ⟷ `𝟚))
-  !i : ∀ {c} → (⊢ c ∶ (`𝟚 ⟷ `𝟚)) → (⊢ ! c ∶ (`𝟚 ⟷ `𝟚))
-  -- homotopies
-  refl⇔i : ∀ {c} → ⊢ refl⇔ ∶ (c ⇔ c)
-  sym⇔i : ∀ {h c₁ c₂} → (⊢ h ∶ (c₁ ⇔ c₂)) → (⊢ sym⇔ h ∶ (c₂ ⇔ c₁))
-  trans⇔i : ∀ {h₁ h₂ c₁ c₂ c₃} →
-    (⊢ h₁ ∶ (c₁ ⇔ c₂)) → (⊢ h₂ ∶ (c₂ ⇔ c₃)) → (⊢ trans⇔ h₁ h₂ ∶ (c₁ ⇔ c₃))
-  idli : ∀ {c} → (⊢ idl ∶ ((id ∘ c) ⇔ c))
-  idri : ∀ {c} → (⊢ idl ∶ ((c ∘ id) ⇔ c))
-  associ : ∀ {c₁ c₂ c₃} → (⊢ assoc ∶ ((c₁ ∘ (c₂ ∘ c₃)) ⇔ ((c₁ ∘ c₂) ∘ c₃)))
-  invri : ∀ {c} → (⊢ invr ∶ ((c ∘ (! c)) ⇔ id))
-  invli : ∀ {c} → (⊢ invr ∶ (((! c) ∘ c) ⇔ id))
-  inv²i : ∀ {c} → (⊢ inv² ∶ ((! (! c)) ⇔ c))
-  ∘⇔i : ∀ {h₁ h₂ c₁ c₂ c₃ c₄} →
-    (⊢ h₁ ∶ (c₁ ⇔ c₂)) → (⊢ h₂ ∶ (c₃ ⇔ c₄)) →
-    (⊢ ∘⇔ h₁ h₂ ∶ ((c₁ ∘ c₃) ⇔ (c₂ ∘ c₄)))
-  -- type isequiv
-  isequivi : ∀ {h₁ h₂ c c₁ c₂} →
-    (⊢ h₁ ∶ ((c ∘ c₁) ⇔ id)) → (⊢ h₂ ∶ ((c₂ ∘ c) ⇔ id)) →
-    (⊢ isequiv c ∶ `U)
-  -- identity types
-  Pathsi : ∀ {A} → (⊢ A ∶ `U) → (⊢ Paths A A ∶ `U)
-  Freepathsi : ∀ {A} → (⊢ A ∶ `U) → (⊢ Freepaths A ∶ `U)
-  refli : ∀ {A} → (⊢ A ∶ `U) → (⊢ refl ∶ (Paths A A))
-  swapi : (⊢ swap ∶ (Paths `𝟚 `𝟚))
-  freepathi : ∀ {A p} → (⊢ A ∶ `U) → (⊢ p ∶ Paths A A) →
-    (⊢ freepath A p ∶ Freepaths A)
-  pathindi : ∀ {A p} → (⊢ A ∶ `U) → (⊢ freepath A refl ∶ Freepaths A) →
-    (⊢ p ∶ Paths A A) → (⊢ pathind A p ∶ Freepaths A)
+data U where
+  `𝟚 : U
+  Path : {A B : U} → (A ⟷ B) → U
 
--- Judgmental equalities
+data _⟷_ where
+  `id : {A : U} → A ⟷ A
+  `not : `𝟚 ⟷ `𝟚
 
-data ⊢▵_▵_∶_ : Univ → Univ → Univ → Set where
-  -- function inverses
-  !id : ⊢▵ ! id ▵ id ∶ (`𝟚 ⟷ `𝟚)
-  !not : ⊢▵ ! not ▵ not ∶ (`𝟚 ⟷ `𝟚)
-  !∘ : ∀ {c₁ c₂} → ⊢▵ ! (c₁ ∘ c₂) ▵ (! c₂ ∘ ! c₁) ∶ (`𝟚 ⟷ `𝟚)
+-- Interpretation
+
+_∼_ : {A B : Set} → (f g : A → B) → Set
+_∼_ {A} f g = (a : A) → f a ≡ g a
+
+record isequiv {A B : Set} (f : A → B) : Set where
+  constructor mkisequiv
+  field
+    g : B → A
+    α : (f ○ g) ∼ id
+    β : (g ○ f) ∼ id
+
+El : U → Set
+El `𝟚 = Bool
+El (Path {A} `id) = isequiv {El A} id
+El (Path `not) = isequiv not
 
 ------------------------------------------------------------------------------
--- The MODEL
+-- induction principle (J generalized)
 
-open import Level
-open import Data.Bool
+pathInd : ∀ {ℓ} →
+          (C : {A B : U} → A ⟷ B → Set ℓ) →
+          (cid : {A : U} → C (`id {A})) → (cnot : C `not) →
+          ({A B : U} (p : A ⟷ B) → C p)
+pathInd C cid cnot `id = cid
+pathInd C cid cnot `not = cnot
 
-_≃_ : Set₁ → Set₁ → Set₁
-A ≃ B = {!!}
+-- Lemma 2.1.1
 
-id≃ : ∀ {A : Set₁} → A ≃ A
-id≃ = {!!}
+_⁻¹ : {A B : U} → (A ⟷ B) → (B ⟷ A)
+_⁻¹ = pathInd
+        (λ {A} {B} _ → B ⟷ A)
+        `id
+        `not
 
-trans≃ : ∀ {A B C} → A ≃ B → B ≃ C → A ≃ C
-trans≃ = {!!}
+-- Will use pattern-matching instead of the explicit induction principle in the
+-- following
 
-El : Univ → Set₁
-El `U = Set
-El `𝟚 = Lift Bool
-El `f = {!!}
-El `t = {!!}
-El (A ⟷ B) = El A ≃ El B
-El (A ⇔ B) = {!!}
-El id = {!id≃!}
-El not = {!!}
-El (c₁ ∘ c₂) = {!trans≃ (El c₁) (El c₂) !}
-El (! X) = {!!}
-El refl⇔ = {!!}
-El (sym⇔ X) = {!!}
-El (trans⇔ X Y) = {!!}
-El idl = {!!}
-El idr = {!!}
-El assoc = {!!}
-El invr = {!!}
-El invl = {!!}
-El inv² = {!!}
-El (∘⇔ X X₁) = {!!}
-El (isequiv X) = {!!}
-El (Paths X X₁) = {!!}
-El (Freepaths X) = {!!}
-El refl = {!!}
-El swap = {!!}
-El (freepath X X₁) = {!!}
-El (pathind X X₁) = {!!}
+! : {A B : U} → (A ⟷ B) → (B ⟷ A)
+! `id = `id
+! `not = `not
 
-------------------------------------------------------------------------------
+-- Lemma 2.1.2
+_∘_ : {A B C : U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+`id ∘ `id = `id
+`id ∘ `not = `not
+`not ∘ `id = `not
+`not ∘ `not = `id
+
+-- Lemma 2.1.4
+
+-- p = p . refl
+
+unitTransR : {A B : U} → (p : A ⟷ B) → (Path p ⟷ Path (p ∘ `id))
+unitTransR `id = `id
+unitTransR `not = `id
+
+-- p = refl . p
+
+unitTransL : {A B : U} → (p : A ⟷ B) → (Path p ⟷ Path (`id ∘ p))
+unitTransL `id = `id
+unitTransL `not = `id
+
+
+-- ! p . p = refl
+
+invTransL : {A B : U} → (p : A ⟷ B) → (Path (! p ∘ p) ⟷ Path (`id {B}))
+invTransL `id = `id
+invTransL `not = `id
+
+-- p . ! p = refl
+
+invTransR : {A B : U} → (p : A ⟷ B) → (Path (p ∘ ! p) ⟷ Path (`id {A}))
+invTransR `id = `id
+invTransR `not = `id
+
+-- ! (! p) = p
+
+invId : {A B : U} → (p : A ⟷ B) → (Path (! (! p)) ⟷ Path p)
+invId `id = `id
+invId `not = `id
+
+-- p . (q . r) = (p . q) . r
+
+assocP : {A B C D : U} → (p : A ⟷ B) → (q : B ⟷ C) → (r : C ⟷ D) →
+         (Path (p ∘ (q ∘ r)) ⟷ Path ((p ∘ q) ∘ r))
+assocP `id `id `id = `id
+assocP `id `id `not = `id
+assocP `id `not `id = `id
+assocP `id `not `not = `id
+assocP `not `id `id = `id
+assocP `not `id `not = `id
+assocP `not `not `id = `id
+assocP `not `not `not = `id
+
+-- ! (p ∘ q) ≡ ! q ∘ ! p
+
+invComp : {A B C : U} → (p : A ⟷ B) → (q : B ⟷ C) →
+          Path (! (p ∘ q)) ⟷ Path (! q ∘ ! p)
+invComp `id `id = `id
+invComp `id `not = `id
+invComp `not `id = `id
+invComp `not `not = `id
+
+-- Lemma 2.2.1
+-- computation rule: ap f (refl x) = refl (f x)
+
+ap : {A B : U} → (f : U → U) → (A ⟷ B) → (f A ⟷ f B)
+ap {A} {.A} f `id = `id
+ap {`𝟚} {`𝟚} f `not with f `𝟚
+... | `𝟚 = `not
+... | Path `id = `id
+... | Path `not = `id
+
+-- Lemma 2.2.2
+
+apfTrans : {A B C : U} →
+  (f : U → U) → (p : A ⟷ B) → (q : B ⟷ C) →
+  Path (ap f (p ∘ q)) ⟷ Path ((ap f p) ∘ (ap f q))
+apfTrans f `id `id = `id
+apfTrans f `id `not = unitTransL (ap f `not)
+apfTrans f `not `id = unitTransR (ap f `not)
+apfTrans f `not `not with f `𝟚
+... | `𝟚 = ! (invTransL `not)
+... | Path `id = `id
+... | Path `not = `id
+
+-- transport
+
+transport : {A B : U} → (P : U → U) → (p : A ⟷ B) → El (P A) → El (P B)
+transport P `id = id
+transport P `not with P `𝟚
+... | `𝟚 = not
+... | Path `id = id
+... | Path `not = id
+
+-- Dependent ap
+
+--apd : ∀ {ℓ ℓ'} → {A : Set ℓ} {B : A → Set ℓ'} {x y : A} → (f : (a : A) → B a) →
+--  (p : x ≡ y) → (transport B p (f x) ≡ f y)
+--apd : {A B : U} {P : U → U} → (f : (u : U) → El (P u)) →
+--  (p : x ⟷ y) → (Path (transport P p (f x)) ⟷ Path (f y))
+--apd = {!!}
