@@ -2,10 +2,20 @@
 
 module FW where
 
-open import Data.Bool using (Bool; not; true; false)
+open import Data.Bool
 open import Data.Product
-open import Function using (id; case_of_) renaming (_∘′_ to _○_)
-open import Relation.Binary.PropositionalEquality using (_≡_; refl; cong₂)
+open import Function hiding (_∘_) renaming (_∘′_ to _○_)
+open import Relation.Nullary
+open import Relation.Binary.PropositionalEquality
+
+------------------------------------------------------------------------------
+-- Courtesy of Wolfram Kahl, a dependent cong₂
+
+cong₂D! : ∀ {a b c} {A : Set a} {B : A → Set b} {C : Set c}
+         (f : (x : A) → B x → C)
+       → {x₁ x₂ : A} {y₁ : B x₁} {y₂ : B x₂}
+       → (x₂≡x₁ : x₂ ≡ x₁) → subst B x₂≡x₁ y₂ ≡ y₁ → f x₁ y₁ ≡ f x₂ y₂
+cong₂D! f refl refl = refl
 
 ------------------------------------------------------------------------------
 -- Everything is standard: functions, homotopies, equivalences, etc, etc.  The
@@ -150,16 +160,19 @@ equivtopath : 𝟚 ≅ 𝟚 → 𝟚⟷𝟚
 equivtopath (f , mkisequiv g α β) =
   case f true of (λ { false → `not ; true → `id })
 
+postulate
+  funext : {f g : Bool → Bool} → (f ∼ g) → (f ≡ g)
+
 univalence : (𝟚⟷𝟚) ≅ (𝟚 ≅ 𝟚)
 univalence = pathtoequiv , mkisequiv equivtopath α β
-  where α : (pathtoequiv ○ equivtopath) ∼ id
-        α (f , mkisequiv g h₁ h₂) with equivtopath (f , mkisequiv g h₁ h₂)
-        ... | `id = {!!}
-        ... | `not = {!!}
-
-        β :  (equivtopath ○ pathtoequiv) ∼ id
+  where β :  (equivtopath ○ pathtoequiv) ∼ id
         β `id = refl
         β `not = refl
+
+        α : (pathtoequiv ○ equivtopath) ∼ id
+        α (f , mkisequiv g h₁ h₂) with equivtopath (f , mkisequiv g h₁ h₂)
+        ... | `id = cong₂D! _,_ (funext {!!}) {!!}
+        ... | `not = cong₂D! _,_ (funext {!!}) {!!}
 
 {--
 ------------------------------------------------------------------------------
