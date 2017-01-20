@@ -150,7 +150,16 @@ equivtopath : 𝟚 ≅ 𝟚 → 𝟚⟷𝟚
 equivtopath (f , mkisequiv g α β) =
   case f true of (λ { false → `not ; true → `id })
 
+univalence : (𝟚⟷𝟚) ≅ (𝟚 ≅ 𝟚)
+univalence = pathtoequiv , mkisequiv equivtopath α β
+  where α : (pathtoequiv ○ equivtopath) ∼ id
+        α (f , mkisequiv g h₁ h₂) with equivtopath (f , mkisequiv g h₁ h₂)
+        ... | `id = {!!}
+        ... | `not = {!!}
 
+        β :  (equivtopath ○ pathtoequiv) ∼ id
+        β `id = refl
+        β `not = refl
 
 {--
 ------------------------------------------------------------------------------
