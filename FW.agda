@@ -5,7 +5,7 @@ module FW where
 open import Data.Bool using (Bool; not; true; false)
 open import Data.Product
 open import Function using (id; case_of_) renaming (_∘′_ to _○_)
-open import Relation.Binary.PropositionalEquality using (_≡_; refl)
+open import Relation.Binary.PropositionalEquality using (_≡_; refl; cong₂)
 
 ------------------------------------------------------------------------------
 -- Everything is standard: functions, homotopies, equivalences, etc, etc.  The
