@@ -46,12 +46,16 @@ El (2-Paths c₁ c₂) = c₁ ⇔ c₂
 ------------------------------------------------------------------------------
 -- induction principle (J generalized)
 
+xx : ∀ {ℓ} → {C : (Bool⟷Bool) → Set ℓ} {p q : Bool⟷Bool} → C p → C q → C (p • q)
+xx a b = {!!}
+
 1pathInd : ∀ {ℓ} → (C : (Bool⟷Bool) → Set ℓ) →
           (cid : C `id) → (cnot : C `not) →
           (p : Bool⟷Bool) → C p
 1pathInd C cid cnot `id = cid
 1pathInd C cid cnot `not = cnot
-1pathInd C cid cnot (p • q) = {!!}
+1pathInd C cid cnot (p • q) =
+  xx {C = C} (1pathInd C cid cnot p) (1pathInd C cid cnot q)
 
 2pathInd : ∀ {ℓ} → (C : {c₁ c₂ : Bool⟷Bool} → c₁ ⇔ c₂ → Set ℓ) →
           (cid : (c : Bool⟷Bool) → C (`id2 c)) → (cnotnot : C `notnot) →
