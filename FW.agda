@@ -13,19 +13,32 @@ open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 -- them. We define a small universe that focuses on the new concepts specialized
 -- for Bool and inherit everything else from the ambient Agda environment.
 
-data `U : Set where
-  `𝟚 : `U
-  Paths : (`A `B : `U) → `U
-
+data `U : Set
+data Bool⟷Bool : Set
+data _⇔_ : (Bool⟷Bool) → (Bool⟷Bool) → Set
 El : `U → Set
-data _⟷_ : Set → Set → Set
 
+-- Syntax
+data `U where
+  `𝟚 : `U
+  1-Paths : `U
+  2-Paths : (c₁ c₂ : El 1-Paths) → `U
+
+-- 1-Paths
+data Bool⟷Bool where
+  `id : Bool⟷Bool
+  `not : Bool⟷Bool
+  _•_ : (Bool⟷Bool) → (Bool⟷Bool) → (Bool⟷Bool)
+
+-- 2-Paths
+data _⇔_ where
+  `id2 : (c : Bool⟷Bool) → (c ⇔ c)
+  `notnot : (`not • `not) ⇔ `id
+
+-- Interpretation
 El `𝟚 = Bool
-El (Paths A B) = El A ⟷ El B
-
-data _⟷_ where
-  `id : {`A : `U} → El `A ⟷ El `A
-  `not : Bool ⟷ Bool
+El 1-Paths = Bool⟷Bool
+El (2-Paths c₁ c₂) = c₁ ⇔ c₂
 
 -- So now we can use the Agda environment remembering to specialize all sets to
 -- things in the image of El
@@ -33,29 +46,18 @@ data _⟷_ where
 ------------------------------------------------------------------------------
 -- induction principle (J generalized)
 
-{--
-pathInd : ∀ {u ℓ} → {`A : `U} →
-          (C : {x y : El `A} → x ⟷ y → Set ℓ) →
-          (c : (x : `A) → C (refl x)) →
-          ({x y : `A} (p : x ⟷ y) → C p)
-pathInd C c (refl x) = c x
---}
+1pathInd : ∀ {ℓ} → (C : (Bool⟷Bool) → Set ℓ) →
+          (cid : C `id) → (cnot : C `not) →
+          (p : Bool⟷Bool) → C p
+1pathInd C cid cnot `id = cid
+1pathInd C cid cnot `not = cnot
+1pathInd C cid cnot (p • q) = {!!}
 
-
-{--
-pathInd : ∀ {u ℓ} → {A : Set u} →
-          (C : {x y : A} → x ≡ y → Set ℓ) →
-          (c : (x : A) → C (refl x)) →
-          ({x y : A} (p : x ≡ y) → C p)
-pathInd C c (refl x) = c x
-
-pathInd : ∀ {ℓ} →
-          (C : {A B : U} → A ⟷ B → Set ℓ) →
-          (cid : {A : U} → C (`id {A})) → (cnot : C `not) →
-          ({A B : U} (p : A ⟷ B) → C p)
-pathInd C cid cnot `id = cid
-pathInd C cid cnot `not = cnot
---}
+2pathInd : ∀ {ℓ} → (C : {c₁ c₂ : Bool⟷Bool} → c₁ ⇔ c₂ → Set ℓ) →
+          (cid : (c : Bool⟷Bool) → C (`id2 c)) → (cnotnot : C `notnot) →
+          ({c₁ c₂ : Bool⟷Bool} (p : c₁ ⇔ c₂) → C p)
+2pathInd C cid cnotnot (`id2 c) = cid c
+2pathInd C cid cnotnot `notnot = cnotnot
 
 
 
