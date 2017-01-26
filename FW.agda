@@ -1,8 +1,9 @@
 {-# OPTIONS --without-K #-}
+-- {-# OPTIONS --universe-polymorphism #-}
 
 module FW where
 
-import Level as L using (_⊔_)
+import Level as L using (_⊔_; zero; suc; lift; Lift)
 open import Data.Nat using (ℕ; suc)
 open import Data.Empty using (⊥)
 open import Data.Unit
@@ -545,89 +546,38 @@ noteq = not , equiv₁ (mkqinv not
 notpath : Bool ≡ Bool
 notpath = isequiv.g (proj₂ univalence) noteq
 
--- Now go back and look at what happens to notpath when
+-- Now go back and look at what happens to notpath
+
+!notpath : Bool ≡ Bool
+!notpath = ! notpath
+
+notnotpath : Bool ≡ Bool
+notnotpath = notpath ∘ notpath
+
+!notnotpath : Bool ≡ Bool
+!notnotpath = !notpath ∘ notpath
+
+⊤⊤path : (⊤ ⊎ ⊤) ≡ (⊤ ⊎ ⊤)
+⊤⊤path = ap (λ _ → ⊤ ⊎ ⊤) notpath
+
+⊤⊤fun : (⊤ ⊎ ⊤) → (⊤ ⊎ ⊤)
+⊤⊤fun = transport (λ _ → ⊤ ⊎ ⊤) notpath
+
+-- ⊤⊤fun (inj₁ tt) does not compute obviously
+
+notdetour : Bool → Bool
+notdetour = transport id notpath
+
+-- notdetour false does not compute obviously
 
 ------------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-{--
 ------------------------------------------------------------------------------
--- Courtesy of Wolfram Kahl, a dependent cong₂
-
-cong₂D! : ∀ {a b c} {A : Set a} {B : A → Set b} {C : Set c}
-         (f : (x : A) → B x → C)
-       → {x₁ x₂ : A} {y₁ : B x₁} {y₂ : B x₂}
-       → (x₂≡x₁ : x₂ ≡ x₁) → subst B x₂≡x₁ y₂ ≡ y₁ → f x₁ y₁ ≡ f x₂ y₂
-cong₂D! f refl refl = refl
+------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------
--- U0
-
--- Have:
--- Objects: 𝟚, false, true
--- Functions: id, not,
--- Identity Types: false≡false, false≡true, true≡false, true≡true
--- Paths: refl-false, refl-true
-
-data `U0 : Set where
-  `𝟚    : `U0
-  `fun  : `U0
-  `f≡f  : `U0
-  `f≡t  : `U0
-  `t≡f  : `U0
-  `t≡t  : `U0
-
-El0 : `U0 → Set
-El0 `𝟚 = Bool
-El0 `fun = Bool → Bool
-El0 `f≡f = false ≡ false
-El0 `f≡t = false ≡ true
-El0 `t≡f = true ≡ false
-El0 `t≡t = true ≡ true
 
 𝟚 : Set
 𝟚 = Bool
-
--- only C's we allow are the ones returning a set in `U0
-J0 : (C : (b₁ b₂ : 𝟚) → (b₁ ≡ b₂) → `U0) →
-     ((b : 𝟚) → El0 (C b b refl)) →
-     (b₁ b₂ : 𝟚) → (p : b₁ ≡ b₂) → El0 (C b₁ b₂ p)
-J0 C c b .b refl = c b
-
-! : (b₁ b₂ : 𝟚) → (p : b₁ ≡ b₂) → (b₂ ≡ b₁)
-! = J0 (λ {false false _ → {!!};
-           false true _ → {!!};
-           true false _ → {!!};
-           true true _ → ?})
-       (λ b → {!!})
-
-(λ { false false p → `f≡f;
-            false true p → `t≡f;
-            true false p → `f≡t;
-            true true p → `t≡t})
-       ? -- (λ {false → refl; true → refl})
-
-
 
 data `U : Set
 data 𝟚⟷𝟚 : Set
@@ -668,9 +618,32 @@ J𝟚 cid cnot `not = cnot
 _⁻¹ : 𝟚⟷𝟚 → 𝟚⟷𝟚
 _⁻¹ = 1pathInd (λ _ → 𝟚⟷𝟚) `id `not
 
+-- ap
+-- Only functions in our universe are the functions coming from equivalences/paths
+
+path2fun : (𝟚⟷𝟚) → 𝟚 → 𝟚
+path2fun `id = id
+path2fun `not = not
+
+AP : (f : 𝟚⟷𝟚) → (p : 𝟚⟷𝟚) → 𝟚⟷𝟚
+AP `id p = p
+AP `not `id = `not
+AP `not `not = `id
+
+-- Now we should be able to write AP using some version of J
+
+JJ : 𝟚⟷𝟚 → 𝟚⟷𝟚 → 𝟚⟷𝟚 → 𝟚⟷𝟚 → 𝟚⟷𝟚
+JJ `id cid cnot p = p
+JJ `not cid cnot `id = cnot
+JJ `not cid cnot `not = cid
+
+APJ : (f : 𝟚⟷𝟚) → (p : 𝟚⟷𝟚) → 𝟚⟷𝟚
+APJ f = JJ f `id `not
+
 -- Will use pattern-matching instead of the explicit induction principle in the
 -- following
 
+{--
 ! : 𝟚⟷𝟚 → 𝟚⟷𝟚
 ! `id = `id
 ! `not = `not
@@ -769,6 +742,7 @@ equivtopath (f , mkisequiv g α β) =
 postulate
   funext : {f g : Bool → Bool} → (f ∼ g) → (f ≡ g)
 
+{--
 univalence : (𝟚⟷𝟚) ≅ (𝟚 ≅ 𝟚)
 univalence = pathtoequiv , mkisequiv equivtopath α β
   where β :  (equivtopath ○ pathtoequiv) ∼ id
@@ -779,6 +753,14 @@ univalence = pathtoequiv , mkisequiv equivtopath α β
         α (f , mkisequiv g h₁ h₂) with equivtopath (f , mkisequiv g h₁ h₂)
         ... | `id = cong₂D! _,_ (funext {!!}) {!!}
         ... | `not = cong₂D! _,_ (funext {!!}) {!!}
+
+        -- Courtesy of Wolfram Kahl, a dependent cong₂
+        cong₂D! : ∀ {a b c} {A : Set a} {B : A → Set b} {C : Set c}
+                  (f : (x : A) → B x → C)
+                  → {x₁ x₂ : A} {y₁ : B x₁} {y₂ : B x₂}
+                  → (x₂≡x₁ : x₂ ≡ x₁) → subst B x₂≡x₁ y₂ ≡ y₁ → f x₁ y₁ ≡ f x₂ y₂
+        cong₂D! f refl refl = refl
+--}
 
 ------------------------------------------------------------------------------
 -- Lemma 2.2.1
