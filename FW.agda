@@ -12,7 +12,173 @@ open import Data.Product
 open import Data.Sum
 open import Data.Vec
 open import Function renaming (_∘_ to _○_)
+open import Relation.Binary.PropositionalEquality
 
+------------------------------------------------------------------------------
+-- For each entity, we first define the syntax in our little language and then
+-- the interpretation in conventional HoTT
+
+------------------------------------------------------------------------------
+-- Our universe contains just Bool
+
+data `U : Set where
+  `𝟚U : `U
+
+𝟚 : Set
+𝟚 = Bool
+
+ElU : `U → Set
+ElU `𝟚U = 𝟚
+
+------------------------------------------------------------------------------
+-- The type Bool
+
+data `𝟚 : Set where
+  `true : `𝟚
+  `false : `𝟚
+
+El𝟚 : `𝟚 → 𝟚
+El𝟚 `true = true
+El𝟚 `false = false
+
+------------------------------------------------------------------------------
+-- Functions
+
+data _⟶_ : `U → `U → Set where
+  `id⟶ : `𝟚U ⟶ `𝟚U
+  `not⟶ : `𝟚U ⟶ `𝟚U
+
+El⟶ : {A B : `U} → (A ⟶ B) → ElU A → ElU B
+El⟶ `id⟶ = id
+El⟶ `not⟶ = not
+
+------------------------------------------------------------------------------
+-- Identity type
+
+data _⟷_ : `U → `U → Set where
+  `id⟷ : {A : `U} → A ⟷ A -- `𝟚U ⟷ `𝟚U
+  `not⟷ : `𝟚U ⟷ `𝟚U
+
+_∼_ : ∀ {ℓ ℓ'} → {A : Set ℓ} {P : A → Set ℓ'} →
+      (f g : (x : A) → P x) → Set (L._⊔_ ℓ ℓ')
+_∼_ {ℓ} {ℓ'} {A} {P} f g = (x : A) → f x ≡ g x
+
+record qinv {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} (f : A → B) :
+  Set (L._⊔_ ℓ ℓ') where
+  constructor mkqinv
+  field
+    g : B → A
+    α : (f ○ g) ∼ id
+    β : (g ○ f) ∼ id
+
+record isequiv {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} (f : A → B) :
+  Set (L._⊔_ ℓ ℓ') where
+  constructor mkisequiv
+  field
+    g : B → A
+    α : (f ○ g) ∼ id
+    h : B → A
+    β : (h ○ f) ∼ id
+
+_≃_ : ∀ {ℓ ℓ'} (A : Set ℓ) (B : Set ℓ') → Set (L._⊔_ ℓ ℓ')
+A ≃ B = Σ (A → B) isequiv
+
+postulate
+  univalence : {A B : Set} → (A ≡ B) ≃ (A ≃ B)
+
+notequiv : Bool ≃ Bool
+notequiv = not , equiv₁ (mkqinv not
+                       (λ { false → refl; true → refl})
+                       (λ { false → refl; true → refl}))
+  where equiv₁ : ∀ {ℓ ℓ'} →
+                 {A : Set ℓ} {B : Set ℓ'} {f : A → B} → qinv f → isequiv f
+        equiv₁ (mkqinv qg qα qβ) = mkisequiv qg qα qg qβ
+
+notpath : Bool ≡ Bool
+notpath = isequiv.g (proj₂ univalence) notequiv
+
+El⟷ : {A B : `U} → (A ⟷ B) → ElU A ≡ ElU B
+El⟷ `id⟷ = refl
+El⟷ `not⟷ = notpath
+
+------------------------------------------------------------------------------
+-- Dependent functions
+
+data _⇒_ : {A B : `U} → (A ⟷ B) → `U → Set where
+  dep : {A B C : `U} {p : A ⟷ B} → p ⇒ C
+
+El⇒ : {A B : `U} → (p : A ⟷ B) → (C : `U) → Set
+El⇒ {A} {B} `c `C = ?
+
+------------------------------------------------------------------------------
+-- Families and J
+
+pathInd : (C : {x y : `U} → x ≡ y → Set) →
+          (c : (x : `U) → C {x} {x} refl) →
+          ({x y : `U} (p : x ≡ y) → C p)
+pathInd = {!!}
+
+{--
+data X : Set where
+  J : (C : {A B : `U} → (A ⟷ B) → `U) →
+      (c : (A : `U) → C {A} {A} `id⟷) →
+      ({A B : `U} (p : A ⟷ B) → C p) → X
+--}
+
+{--
+
+
+
+
+data `ℂ : `U → Set where
+  •⟷𝟚 : {A : `U} → `ℂ A
+
+Elℂ : {A : `U} → `ℂ A → Set
+Elℂ {A} •⟷𝟚 = A ⟷ `𝟚U
+
+J : (C : `ℂ `𝟚U) → (cid : `ℂ `𝟚U ⟷ `𝟚) → (cnot : `𝟚 ⟷ `𝟚) →
+    (p : `𝟚 ⟷ `𝟚) → C ..
+J = ?
+--}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{--
 infixr 8  _∘_   -- path composition
 infix  4  _≡_   -- propositional equality
 infix  4  _∼_   -- homotopy between two functions (the same as ≡ by univalence)
@@ -807,4 +973,5 @@ apfTrans f `not `not with f `𝟚
 2pathInd C cid2 cnotinv `notinv = cnotinv
 
 ------------------------------------------------------------------------------
+--}
 --}
