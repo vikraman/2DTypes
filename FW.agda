@@ -171,8 +171,11 @@ transport = J (λ {A} {B} _ → `ΣF A B) (λ {A} → id) g
         g `id⟷ = `not⟷
         g `not⟷ = `id⟷
 
-X : `𝟚U ⟷ `𝟚U
-X = transport `id⟷ `not⟷ -- ==> `not⟷
+X1 X2 X3 X4 : `𝟚U ⟷ `𝟚U
+X1 = transport `id⟷ `id⟷ -- ==> `id⟷
+X2 = transport `id⟷ `not⟷ -- ==> `not⟷
+X3 = transport `not⟷ `id⟷ -- ==> `not⟷
+X4 = transport `not⟷ `not⟷ -- ==> `id⟷
 
 ------------------------------------------------------------------------------
 -- HITs
