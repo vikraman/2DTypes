@@ -42,6 +42,15 @@ ElU : `U → Set
 ElU `𝟚U = 𝟚
 
 ------------------------------------------------------------------------------
+-- A higher universe that contains just `U
+
+data `U1 : Set where
+  `UU : `U1
+
+ElU1 : `U1 → Set
+ElU1 `UU = `U
+
+------------------------------------------------------------------------------
 -- Functions (only reversible ones)
 -- Might also need to include function composition, application, etc.
 
@@ -52,6 +61,12 @@ data _⟶_ : `U → `U → Set where
 El⟶ : {A B : `U} → (A ⟶ B) → ElU A → ElU B
 El⟶ `id⟶ = id
 El⟶ `not⟶ = not
+
+data _⟶u_ : `U1 → `U1 → Set where
+  `id⟶u : `UU ⟶u `UU
+
+El⟶u : `UU ⟶u `UU → `U → `U
+El⟶u `id⟶u = id
 
 ------------------------------------------------------------------------------
 -- Identity types
@@ -145,13 +160,13 @@ J C cid cnot `not⟷ = cnot
 ! : {A B : `U} → A ⟷ B → B ⟷ A
 ! = J (λ {A} {B} _ → B `⟷ A) `id⟷ `not⟷
 
-ap : {A B C : `U} → (f : `U → `U) → (A ⟷ B) → (f A ⟷ f B)
-ap f = J (λ {A} {B} p → f A `⟷ f B)
-         (λ {A} → `id⟷)
-         {!!}
+ap : (f : `UU ⟶u `UU) → (`𝟚U ⟷ `𝟚U) → (El⟶u f `𝟚U ⟷ El⟶u f `𝟚U)
+ap `id⟶u = J (λ {A} {B} p → `𝟚U `⟷ `𝟚U) `id⟷ `not⟷
+
+
+
 
 {--
-
 _∘_ : {A B C : `U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
 _∘_ {A} {B} {C} p =
   J {!λ {A} {B} p → C `⟶d ((B `⟷ C) `⟶dp (A `⟷ C))!}
