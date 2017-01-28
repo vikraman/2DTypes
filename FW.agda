@@ -145,9 +145,11 @@ El⇔ id⇔ = refl
 
 data `ℙ : Set where
   _`⟷_ : (A B : `U) → `ℙ
+  `ΣF : (A B : `U) → `ℙ
 
 Elℙ : `ℙ → Set
 Elℙ (A `⟷ B) = A ⟷ B
+Elℙ (`ΣF A B) = (A ⟷ `𝟚U) → (B ⟷ `𝟚U)
 
 J : (C : {A B : `U} → (A ⟷ B) → `ℙ) →
     (cid : {A : `U} → Elℙ (C {A} `id⟷)) → (cnot : Elℙ (C `not⟷)) →
@@ -161,30 +163,16 @@ J C cid cnot `not⟷ = cnot
 ! = J (λ {A} {B} _ → B `⟷ A) `id⟷ `not⟷
 
 ap : (f : `UU ⟶u `UU) → (`𝟚U ⟷ `𝟚U) → (El⟶u f `𝟚U ⟷ El⟶u f `𝟚U)
-ap `id⟶u = J (λ {A} {B} p → `𝟚U `⟷ `𝟚U) `id⟷ `not⟷
+ap `id⟶u = J (λ _ → `𝟚U `⟷ `𝟚U) `id⟷ `not⟷
 
+transport : {A B : `U} → (A ⟷ B) → (A ⟷ `𝟚U) → (B ⟷ `𝟚U)
+transport = J (λ {A} {B} _ → `ΣF A B) (λ {A} → id) g
+  where g : (`𝟚U ⟷ `𝟚U) → (`𝟚U ⟷ `𝟚U)
+        g `id⟷ = `not⟷
+        g `not⟷ = `id⟷
 
-
-
-{--
-_∘_ : {A B C : `U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
-_∘_ {A} {B} {C} p =
-  J {!λ {A} {B} p → C `⟶d ((B `⟷ C) `⟶dp (A `⟷ C))!}
-  {!!}
-  {!!}
-
-
-want
-transport id notpath => not
-transport : (`U → `U) → (`𝟚U ⟷ `𝟚U) → (`U → `U)
-
-transport F p =
-  J (λ x y p → F x → F y)
-    ...
-
-want Σ[ A ∈ `U ] (A ⟷ 𝟚) as a property
---}
-
+X : `𝟚U ⟷ `𝟚U
+X = transport `id⟷ `not⟷ -- ==> `not⟷
 
 ------------------------------------------------------------------------------
 -- HITs
