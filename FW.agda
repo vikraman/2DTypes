@@ -123,40 +123,43 @@ El⇔ id⇔ = refl
 ------------------------------------------------------------------------------
 -- Dependent pairs, dependent functions, and J
 
-data `ℂ : Set where
-  _`⟷_ : (A B : `U) → `ℂ
-  _`⟶d_ : `U → `ℂ → `ℂ
-  _`⟶dp_ : `ℂ → `ℂ → `ℂ
+-- We could in principle add syntax for all the dependent pairs and functions we
+-- want but it gets quite messy. So we will use Agda to express these entities
+-- but we will create a universe `ℙ that captures all the properties that we
+-- want to express using these dependent pairs and functions.
 
+data `ℙ : Set where
+  _`⟷_ : (A B : `U) → `ℙ
 
-Elℂ : `ℂ → Set
-Elℂ (A `⟷ B) = A ⟷ B
-Elℂ (A `⟶d X) = ElU A → Elℂ X
-Elℂ (X `⟶dp Y) = Elℂ X → Elℂ Y
+Elℙ : `ℙ → Set
+Elℙ (A `⟷ B) = A ⟷ B
 
-J : (C : {A B : `U} → (A ⟷ B) → `ℂ) →
-    (cid : {A : `U} → Elℂ (C {A} `id⟷)) → (cnot : Elℂ (C `not⟷)) →
-    ({A B : `U} (p : A ⟷ B) → Elℂ (C p))
+J : (C : {A B : `U} → (A ⟷ B) → `ℙ) →
+    (cid : {A : `U} → Elℙ (C {A} `id⟷)) → (cnot : Elℙ (C `not⟷)) →
+    ({A B : `U} (p : A ⟷ B) → Elℙ (C p))
 J C cid cnot `id⟷ = cid
 J C cid cnot `not⟷ = cnot
+
+--
 
 ! : {A B : `U} → A ⟷ B → B ⟷ A
 ! = J (λ {A} {B} _ → B `⟷ A) `id⟷ `not⟷
 
+ap : {A B C : `U} → (f : `U → `U) → (A ⟷ B) → (f A ⟷ f B)
+ap f = J (λ {A} {B} p → f A `⟷ f B)
+         (λ {A} → `id⟷)
+         {!!}
+
 {--
+
 _∘_ : {A B C : `U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
 _∘_ {A} {B} {C} p =
   J {!λ {A} {B} p → C `⟶d ((B `⟷ C) `⟶dp (A `⟷ C))!}
   {!!}
   {!!}
---}
 
 
-
-
-
-
-{-- want
+want
 transport id notpath => not
 transport : (`U → `U) → (`𝟚U ⟷ `𝟚U) → (`U → `U)
 
@@ -164,38 +167,9 @@ transport F p =
   J (λ x y p → F x → F y)
     ...
 
+want Σ[ A ∈ `U ] (A ⟷ 𝟚) as a property
 --}
 
-data _⇒_ : {A B : `U} → (A ⟷ B) → `U → Set where
-  dep : {A B C : `U} {p : A ⟷ B} → p ⇒ C
-
-El⇒ : {A B : `U} → (p : A ⟷ B) → (C : `U) → Set
-El⇒ {A} {B} `c `C = {!!}
-
-pathInd : (C : {x y : `U} → x ≡ y → Set) →
-          (c : (x : `U) → C {x} {x} refl) →
-          ({x y : `U} (p : x ≡ y) → C p)
-pathInd = {!!}
-
-{--
-data X : Set where
-  J : (C : {A B : `U} → (A ⟷ B) → `U) →
-      (c : (A : `U) → C {A} {A} `id⟷) →
-      ({A B : `U} (p : A ⟷ B) → C p) → X
---}
-
-{--
-
-data `ℂ : `U → Set where
-  •⟷𝟚 : {A : `U} → `ℂ A
-
-Elℂ : {A : `U} → `ℂ A → Set
-Elℂ {A} •⟷𝟚 = A ⟷ `𝟚U
-
-J : (C : `ℂ `𝟚U) → (cid : `ℂ `𝟚U ⟷ `𝟚) → (cnot : `𝟚 ⟷ `𝟚) →
-    (p : `𝟚 ⟷ `𝟚) → C ..
-J = ?
---}
 
 ------------------------------------------------------------------------------
 -- HITs
