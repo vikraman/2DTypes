@@ -19,30 +19,31 @@ open import Relation.Binary.PropositionalEquality
 -- the interpretation in conventional HoTT
 
 ------------------------------------------------------------------------------
--- Our universe contains just Bool
-
-data `U : Set where
-  `𝟚U : `U
-
-𝟚 : Set
-𝟚 = Bool
-
-ElU : `U → Set
-ElU `𝟚U = 𝟚
-
-------------------------------------------------------------------------------
 -- The type Bool
 
 data `𝟚 : Set where
   `true : `𝟚
   `false : `𝟚
 
+𝟚 : Set
+𝟚 = Bool
+
 El𝟚 : `𝟚 → 𝟚
 El𝟚 `true = true
 El𝟚 `false = false
 
 ------------------------------------------------------------------------------
--- Functions
+-- A universe that contains just Bool
+
+data `U : Set where
+  `𝟚U : `U
+
+ElU : `U → Set
+ElU `𝟚U = 𝟚
+
+------------------------------------------------------------------------------
+-- Functions (only reversible ones)
+-- Might also need to include function composition, application, etc.
 
 data _⟶_ : `U → `U → Set where
   `id⟶ : `𝟚U ⟶ `𝟚U
@@ -53,10 +54,20 @@ El⟶ `id⟶ = id
 El⟶ `not⟶ = not
 
 ------------------------------------------------------------------------------
--- Identity type
+-- Identity types
+
+data _=𝟚_ : `𝟚 → `𝟚 → Set where
+  `idtrue : `true =𝟚 `true
+  `idfalse : `false =𝟚 `false
+
+El=𝟚 : {a b : `𝟚} → a =𝟚 b → El𝟚 a ≡ El𝟚 b
+El=𝟚 `idtrue = refl
+El=𝟚 `idfalse = refl
+
+--
 
 data _⟷_ : `U → `U → Set where
-  `id⟷ : {A : `U} → A ⟷ A -- `𝟚U ⟷ `𝟚U
+  `id⟷ : {A : `U} → A ⟷ A
   `not⟷ : `𝟚U ⟷ `𝟚U
 
 _∼_ : ∀ {ℓ ℓ'} → {A : Set ℓ} {P : A → Set ℓ'} →
@@ -101,17 +112,65 @@ El⟷ : {A B : `U} → (A ⟷ B) → ElU A ≡ ElU B
 El⟷ `id⟷ = refl
 El⟷ `not⟷ = notpath
 
+--
+
+data _⇔_ : {A B : `U} → (A ⟷ B) → (A ⟷ B) → Set where
+  id⇔ : {A B : `U} {c : A ⟷ B} → c ⇔ c
+
+El⇔ : {A B : `U} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El⟷ c₁ ≡ El⟷ c₂
+El⇔ id⇔ = refl
+
 ------------------------------------------------------------------------------
--- Dependent functions
+-- Dependent pairs, dependent functions, and J
+
+data `ℂ : Set where
+  _`⟷_ : (A B : `U) → `ℂ
+  _`⟶d_ : `U → `ℂ → `ℂ
+  _`⟶dp_ : `ℂ → `ℂ → `ℂ
+
+
+Elℂ : `ℂ → Set
+Elℂ (A `⟷ B) = A ⟷ B
+Elℂ (A `⟶d X) = ElU A → Elℂ X
+Elℂ (X `⟶dp Y) = Elℂ X → Elℂ Y
+
+J : (C : {A B : `U} → (A ⟷ B) → `ℂ) →
+    (cid : {A : `U} → Elℂ (C {A} `id⟷)) → (cnot : Elℂ (C `not⟷)) →
+    ({A B : `U} (p : A ⟷ B) → Elℂ (C p))
+J C cid cnot `id⟷ = cid
+J C cid cnot `not⟷ = cnot
+
+! : {A B : `U} → A ⟷ B → B ⟷ A
+! = J (λ {A} {B} _ → B `⟷ A) `id⟷ `not⟷
+
+{--
+_∘_ : {A B C : `U} → (A ⟷ B) → (B ⟷ C) → (A ⟷ C)
+_∘_ {A} {B} {C} p =
+  J {!λ {A} {B} p → C `⟶d ((B `⟷ C) `⟶dp (A `⟷ C))!}
+  {!!}
+  {!!}
+--}
+
+
+
+
+
+
+{-- want
+transport id notpath => not
+transport : (`U → `U) → (`𝟚U ⟷ `𝟚U) → (`U → `U)
+
+transport F p =
+  J (λ x y p → F x → F y)
+    ...
+
+--}
 
 data _⇒_ : {A B : `U} → (A ⟷ B) → `U → Set where
   dep : {A B C : `U} {p : A ⟷ B} → p ⇒ C
 
 El⇒ : {A B : `U} → (p : A ⟷ B) → (C : `U) → Set
-El⇒ {A} {B} `c `C = ?
-
-------------------------------------------------------------------------------
--- Families and J
+El⇒ {A} {B} `c `C = {!!}
 
 pathInd : (C : {x y : `U} → x ≡ y → Set) →
           (c : (x : `U) → C {x} {x} refl) →
@@ -127,9 +186,6 @@ data X : Set where
 
 {--
 
-
-
-
 data `ℂ : `U → Set where
   •⟷𝟚 : {A : `U} → `ℂ A
 
@@ -140,6 +196,12 @@ J : (C : `ℂ `𝟚U) → (cid : `ℂ `𝟚U ⟷ `𝟚) → (cnot : `𝟚 ⟷ `�
     (p : `𝟚 ⟷ `𝟚) → C ..
 J = ?
 --}
+
+------------------------------------------------------------------------------
+-- HITs
+
+
+------------------------------------------------------------------------------
 
 
 
