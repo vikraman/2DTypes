@@ -191,7 +191,7 @@ El⟷ `not⟷ = notpath
 -- JC how is ⟶ different from ⟷ ?  They seem the same here, in that
 ⟶Proves≡ : {A B : `U} → (A ⟶ B) → ElU A ≡ ElU B
 ⟶Proves≡ `id⟶ = refl
-⟶Proves≡ `not⟶ = {!notpath!}
+⟶Proves≡ `not⟶ = notpath
 
 --
 data _⇔_ : {A B : `U} → (A ⟷ B) → (A ⟷ B) → Set where
