@@ -5,7 +5,7 @@ module FW where
 
 import Level as L using (_⊔_; zero; suc; lift; Lift)
 open import Data.Nat using (ℕ; suc)
-open import Data.Empty using (⊥)
+open import Data.Empty using (⊥; ⊥-elim)
 open import Data.Unit
 open import Data.Bool
 open import Data.Product
@@ -58,22 +58,21 @@ ElU1 `UU = `U
 
 ------------------------------------------------------------------------------
 -- Functions (only reversible ones)
--- Might also need to include function composition, application, etc.
 
 data _⟶_ : `U → `U → Set where
   `id⟶ : `𝟚U ⟶ `𝟚U
   `not⟶ : `𝟚U ⟶ `𝟚U
-
-ap⟶ : {A B : `U} → (A ⟶ B) → `𝟚 → `𝟚
-ap⟶ `id⟶ a = a
-ap⟶ `not⟶ `true = `false
-ap⟶ `not⟶ `false = `true
 
 comp⟶ : {A B C : `U} → (A ⟶ B) → (B ⟶ C) → (A ⟶ C)
 comp⟶ `id⟶ `id⟶ = `id⟶
 comp⟶ `id⟶ `not⟶ = `not⟶
 comp⟶ `not⟶ `id⟶ = `not⟶
 comp⟶ `not⟶ `not⟶ = `id⟶
+
+ap⟶ : {A B : `U} → (A ⟶ B) → `𝟚 → `𝟚
+ap⟶ `id⟶ a = a
+ap⟶ `not⟶ `true = `false
+ap⟶ `not⟶ `false = `true
 
 -- Semantic
 
@@ -98,6 +97,12 @@ data _=𝟚_ : `𝟚 → `𝟚 → Set where
   `idtrue : `true =𝟚 `true
   `idfalse : `false =𝟚 `false
 
+contra𝟚tf : `true =𝟚 `false → ⊥
+contra𝟚tf ()
+
+contra𝟚ft : `false =𝟚 `true → ⊥
+contra𝟚ft ()
+
 -- Semantic
 
 El=𝟚 : {a b : `𝟚} → a =𝟚 b → El𝟚 a ≡ El𝟚 b
@@ -121,6 +126,22 @@ hom `not⟶ `false = `idtrue
 _∼_ : ∀ {ℓ ℓ'} → {A : Set ℓ} {P : A → Set ℓ'} →
       (f g : (x : A) → P x) → Set (L._⊔_ ℓ ℓ')
 _∼_ {ℓ} {ℓ'} {A} {P} f g = (x : A) → f x ≡ g x
+
+refl∼ : {A B : Set} → (f : A → B) → f ∼ f
+refl∼ f x = refl
+
+Elap⟶ : {A B : `U} {f g : A ⟶ B} {x : `𝟚} →
+         (ap⟶ f x =𝟚 ap⟶ g x) → El⟶ f ∼ El⟶ g
+Elap⟶ {f = `id⟶} {`id⟶} h = refl∼ id
+Elap⟶ {f = `id⟶} {`not⟶} {`true} h = ⊥-elim (contra𝟚tf h)
+Elap⟶ {f = `id⟶} {`not⟶} {`false} h = ⊥-elim (contra𝟚ft h)
+Elap⟶ {f = `not⟶} {`id⟶} {`true} h = ⊥-elim (contra𝟚ft h)
+Elap⟶ {f = `not⟶} {`id⟶} {`false} h = ⊥-elim (contra𝟚tf h)
+Elap⟶ {f = `not⟶} {`not⟶} h = refl∼ not
+
+ElHom : {A B : `U} {f g : A ⟶ B} → Hom f g → El⟶ f ∼ El⟶ g
+ElHom {`𝟚U} {`𝟚U} {f} {g} h false = Elap⟶ {f = f} {g = g} (h `false) false
+ElHom {`𝟚U} {`𝟚U} {f} {g} h true = Elap⟶ {f = f} {g = g} (h `true) true
 
 ------------------------------------------------------------------------------
 -- Equivalences
