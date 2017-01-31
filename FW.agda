@@ -25,6 +25,8 @@ data `𝟚 : Set where
   `true : `𝟚
   `false : `𝟚
 
+-- Semantic
+
 𝟚 : Set
 𝟚 = Bool
 
@@ -38,6 +40,8 @@ El𝟚 `false = false
 data `U : Set where
   `𝟚U : `U
 
+-- Semantic
+
 ElU : `U → Set
 ElU `𝟚U = 𝟚
 
@@ -46,6 +50,8 @@ ElU `𝟚U = 𝟚
 
 data `U1 : Set where
   `UU : `U1
+
+-- Semantic
 
 ElU1 : `U1 → Set
 ElU1 `UU = `U
@@ -58,36 +64,80 @@ data _⟶_ : `U → `U → Set where
   `id⟶ : `𝟚U ⟶ `𝟚U
   `not⟶ : `𝟚U ⟶ `𝟚U
 
+ap⟶ : {A B : `U} → (A ⟶ B) → `𝟚 → `𝟚
+ap⟶ `id⟶ a = a
+ap⟶ `not⟶ `true = `false
+ap⟶ `not⟶ `false = `true
+
+comp⟶ : {A B C : `U} → (A ⟶ B) → (B ⟶ C) → (A ⟶ C)
+comp⟶ `id⟶ `id⟶ = `id⟶
+comp⟶ `id⟶ `not⟶ = `not⟶
+comp⟶ `not⟶ `id⟶ = `not⟶
+comp⟶ `not⟶ `not⟶ = `id⟶
+
+-- Semantic
+
 El⟶ : {A B : `U} → (A ⟶ B) → ElU A → ElU B
 El⟶ `id⟶ = id
 El⟶ `not⟶ = not
 
+--
+
 data _⟶u_ : `U1 → `U1 → Set where
   `id⟶u : `UU ⟶u `UU
+
+-- Semantic
 
 El⟶u : `UU ⟶u `UU → `U → `U
 El⟶u `id⟶u = id
 
 ------------------------------------------------------------------------------
--- Identity types
+-- Identity types I
 
 data _=𝟚_ : `𝟚 → `𝟚 → Set where
   `idtrue : `true =𝟚 `true
   `idfalse : `false =𝟚 `false
 
+-- Semantic
+
 El=𝟚 : {a b : `𝟚} → a =𝟚 b → El𝟚 a ≡ El𝟚 b
 El=𝟚 `idtrue = refl
 El=𝟚 `idfalse = refl
 
---
+------------------------------------------------------------------------------
+-- Homotopies
 
-data _⟷_ : `U → `U → Set where
-  `id⟷ : {A : `U} → A ⟷ A
-  `not⟷ : `𝟚U ⟷ `𝟚U
+Hom : {A B : `U} → (f g : A ⟶ B) → Set
+Hom {`𝟚U} {`𝟚U} f g = ∀ x → ap⟶ f x =𝟚 ap⟶ g x
+
+hom : {A B : `U} → (f : A ⟶ B) → Hom f f
+hom `id⟶ `true = `idtrue
+hom `id⟶ `false = `idfalse
+hom `not⟶ `true = `idfalse
+hom `not⟶ `false = `idtrue
+
+-- Semantic
 
 _∼_ : ∀ {ℓ ℓ'} → {A : Set ℓ} {P : A → Set ℓ'} →
       (f g : (x : A) → P x) → Set (L._⊔_ ℓ ℓ')
 _∼_ {ℓ} {ℓ'} {A} {P} f g = (x : A) → f x ≡ g x
+
+------------------------------------------------------------------------------
+-- Equivalences
+
+Equiv : `U → `U → Set
+Equiv `𝟚U `𝟚U = Σ[ f ∈ `𝟚U ⟶ `𝟚U ]
+                Σ[ g ∈ `𝟚U ⟶ `𝟚U ]
+                Σ[ h ∈ `𝟚U ⟶ `𝟚U ]
+                Hom (comp⟶ g f) `id⟶ × Hom (comp⟶ f h) `id⟶
+
+`notequiv : Equiv `𝟚U `𝟚U
+`notequiv = `not⟶ , `not⟶ , `not⟶ , hom `id⟶ , hom `id⟶
+
+`idequiv : Equiv `𝟚U `𝟚U
+`idequiv = `id⟶ , `id⟶ , `id⟶ , hom `id⟶ , hom `id⟶
+
+-- Semantic
 
 record qinv {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} (f : A → B) :
   Set (L._⊔_ ℓ ℓ') where
@@ -109,9 +159,6 @@ record isequiv {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} (f : A → B) :
 _≃_ : ∀ {ℓ ℓ'} (A : Set ℓ) (B : Set ℓ') → Set (L._⊔_ ℓ ℓ')
 A ≃ B = Σ (A → B) isequiv
 
-postulate
-  univalence : {A B : Set} → (A ≡ B) ≃ (A ≃ B)
-
 notequiv : Bool ≃ Bool
 notequiv = not , equiv₁ (mkqinv not
                        (λ { false → refl; true → refl})
@@ -119,6 +166,18 @@ notequiv = not , equiv₁ (mkqinv not
   where equiv₁ : ∀ {ℓ ℓ'} →
                  {A : Set ℓ} {B : Set ℓ'} {f : A → B} → qinv f → isequiv f
         equiv₁ (mkqinv qg qα qβ) = mkisequiv qg qα qg qβ
+
+------------------------------------------------------------------------------
+-- Identity types II
+
+data _⟷_ : `U → `U → Set where
+  `id⟷ : {A : `U} → A ⟷ A
+  `not⟷ : `𝟚U ⟷ `𝟚U
+
+-- Semantic
+
+postulate
+  univalence : {A B : Set} → (A ≡ B) ≃ (A ≃ B)
 
 notpath : Bool ≡ Bool
 notpath = isequiv.g (proj₂ univalence) notequiv
@@ -131,6 +190,8 @@ El⟷ `not⟷ = notpath
 
 data _⇔_ : {A B : `U} → (A ⟷ B) → (A ⟷ B) → Set where
   id⇔ : {A B : `U} {c : A ⟷ B} → c ⇔ c
+
+-- Semantic
 
 El⇔ : {A B : `U} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El⟷ c₁ ≡ El⟷ c₂
 El⇔ id⇔ = refl
@@ -178,8 +239,51 @@ X3 = transport `not⟷ `id⟷ -- ==> `not⟷
 X4 = transport `not⟷ `not⟷ -- ==> `id⟷
 
 ------------------------------------------------------------------------------
+-- Lemmas
+
+`univalence : {A B : `U} → (A ⟷ B) ≃ (Equiv A B)
+-- I think we might want something like 'Equiv (A ⟷ B) (Equiv A B)'
+`univalence {`𝟚U} {`𝟚U} =
+  f , mkisequiv
+      g (λ { (`id⟶ , G , H , α , β) → {!!} ;
+             (`not⟶ , G , H , α , β) → {!!} })
+      g (λ { `id⟷ → refl ; `not⟷ → refl })
+
+  where f : `𝟚U ⟷ `𝟚U → Equiv `𝟚U `𝟚U
+        f `id⟷ = `idequiv
+        f `not⟷ = `notequiv
+
+        g : Equiv `𝟚U `𝟚U → `𝟚U ⟷ `𝟚U
+        g (`id⟶ , _) = `id⟷
+        g (`not⟶ , _) = `not⟷
+
+------------------------------------------------------------------------------
 -- HITs
 
+data `Frac : Set where
+  -- generalize to pointed types [#c,cᵏ] ... add ∀ ∃
+  `# : {A B : `U} → A ⟷ B → `Frac
+  `1/# : {A B : `U} → A ⟷ B → `Frac
+  _⊠_ : `Frac → `Frac → `Frac
+
+ElFrac : `Frac → Set
+ElFrac (`# c) = {!!} -- c^k
+ElFrac (`1/# c) = {!!} -- 1/c^k
+ElFrac (T₁ ⊠ T₂) = ElFrac T₁ × ElFrac T₂
+
+data _⟪=⟫_ : `Frac → `Frac → Set where
+  unitel : {A : `U} {T : `Frac} → (`# (`id⟷ {A}) ⊠ T) ⟪=⟫ T
+  unitil : {A : `U} {T : `Frac} → T ⟪=⟫ (`# (`id⟷ {A}) ⊠ T)
+  uniter : {A : `U} {T : `Frac} → (T ⊠ (`# (`id⟷ {A}))) ⟪=⟫ T
+  unitir : {A : `U} {T : `Frac} → T ⟪=⟫ (T ⊠ (`# (`id⟷ {A})))
+  η- : {A B C : `U} {c : B ⟷ C} → (`# (`id⟷ {A})) ⟪=⟫ (`1/# c ⊠ `# c)
+  -- ε-
+  -- η+
+  -- ε+
+  -- id/
+  -- ◍
+  -- `#
+  -- ⊗
 
 ------------------------------------------------------------------------------
 
