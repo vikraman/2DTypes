@@ -265,7 +265,7 @@ EquivUF {A} {B} F G =
   Σ[ f ∈ F ⇒ G ]
   Σ[ g ∈ G ⇒ F ]
   Σ[ h ∈ G ⇒ F ]
-  ?
+  {!!}
 
 ------------------------------------------------------------------------------
 -- Dependent pairs, dependent functions, and J
