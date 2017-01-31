@@ -1,5 +1,4 @@
 {-# OPTIONS --without-K #-}
--- {-# OPTIONS --universe-polymorphism #-}
 
 module FW where
 
@@ -146,17 +145,17 @@ ElHom {`𝟚U} {`𝟚U} {f} {g} h true = Elap⟶ {f = f} {g = g} (h `true) true
 ------------------------------------------------------------------------------
 -- Equivalences
 
-Equiv : `U → `U → Set
-Equiv `𝟚U `𝟚U = Σ[ f ∈ `𝟚U ⟶ `𝟚U ]
-                Σ[ g ∈ `𝟚U ⟶ `𝟚U ]
-                Σ[ h ∈ `𝟚U ⟶ `𝟚U ]
-                Hom (comp⟶ g f) `id⟶ × Hom (comp⟶ f h) `id⟶
+EquivU : `U → `U → Set
+EquivU `𝟚U `𝟚U = Σ[ f ∈ `𝟚U ⟶ `𝟚U ]
+                 Σ[ g ∈ `𝟚U ⟶ `𝟚U ]
+                 Σ[ h ∈ `𝟚U ⟶ `𝟚U ]
+                 Hom (comp⟶ g f) `id⟶ × Hom (comp⟶ f h) `id⟶
 
-`notequiv : Equiv `𝟚U `𝟚U
-`notequiv = `not⟶ , `not⟶ , `not⟶ , hom `id⟶ , hom `id⟶
-
-`idequiv : Equiv `𝟚U `𝟚U
+`idequiv : EquivU `𝟚U `𝟚U
 `idequiv = `id⟶ , `id⟶ , `id⟶ , hom `id⟶ , hom `id⟶
+
+`notequiv : EquivU `𝟚U `𝟚U
+`notequiv = `not⟶ , `not⟶ , `not⟶ , hom `id⟶ , hom `id⟶
 
 -- Semantic
 
@@ -177,16 +176,22 @@ record isequiv {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} (f : A → B) :
     h : B → A
     β : (h ○ f) ∼ id
 
+equiv₁ : ∀ {ℓ ℓ'} →
+         {A : Set ℓ} {B : Set ℓ'} {f : A → B} → qinv f → isequiv f
+equiv₁ (mkqinv qg qα qβ) = mkisequiv qg qα qg qβ
+
 _≃_ : ∀ {ℓ ℓ'} (A : Set ℓ) (B : Set ℓ') → Set (L._⊔_ ℓ ℓ')
 A ≃ B = Σ (A → B) isequiv
+
+idequiv : Bool ≃ Bool
+idequiv = id , equiv₁ (mkqinv id
+                       (λ { false → refl; true → refl})
+                       (λ { false → refl; true → refl}))
 
 notequiv : Bool ≃ Bool
 notequiv = not , equiv₁ (mkqinv not
                        (λ { false → refl; true → refl})
                        (λ { false → refl; true → refl}))
-  where equiv₁ : ∀ {ℓ ℓ'} →
-                 {A : Set ℓ} {B : Set ℓ'} {f : A → B} → qinv f → isequiv f
-        equiv₁ (mkqinv qg qα qβ) = mkisequiv qg qα qg qβ
 
 ------------------------------------------------------------------------------
 -- Identity types II
@@ -209,10 +214,12 @@ El⟷ `not⟷ = notpath
 
 --
 
+-----------
 -- JC how is ⟶ different from ⟷ ?  They seem the same here, in that
 ⟶Proves≡ : {A B : `U} → (A ⟶ B) → ElU A ≡ ElU B
 ⟶Proves≡ `id⟶ = refl
 ⟶Proves≡ `not⟶ = notpath
+-----------
 
 --
 data _⇔_ : {A B : `U} → (A ⟷ B) → (A ⟷ B) → Set where
@@ -222,6 +229,43 @@ data _⇔_ : {A B : `U} → (A ⟷ B) → (A ⟷ B) → Set where
 
 El⇔ : {A B : `U} {c₁ c₂ : A ⟷ B} → (c₁ ⇔ c₂) → El⟷ c₁ ≡ El⟷ c₂
 El⇔ id⇔ = refl
+
+------------------------------------------------------------------------------
+-- Functions II
+
+data `UF : (A B : `U) → Set where
+  ID : {A : `U} → `UF A A
+  E : {A B : `U} → EquivU A B → `UF A B
+  P : {A B : `U} → (A ⟷ B) → `UF A B
+
+_⇒_ : {A B : `U} → `UF A B → `UF A B → Set
+_⇒_ {`𝟚U} {`𝟚U} (E (f₁ , g₁ , h₁ , α₁ , β₁)) (E (f₂ , g₂ , h₂ , α₂ , β₂)) = {!!}
+_⇒_ {`𝟚U} {`𝟚U} (E (f , g , h , α , β)) (P p) = {!!}
+_⇒_ {`𝟚U} {`𝟚U} (P p) (E (f , g , h , α , β)) = {!!}
+_⇒_ {A} {.A} (P `id⟷) (P `id⟷) = _⇔_ {A} `id⟷ `id⟷
+P `id⟷ ⇒ P `not⟷ = ⊥
+P `not⟷ ⇒ P `id⟷ = ⊥
+_⇒_ {`𝟚U} {`𝟚U} (P `not⟷) (P `not⟷) = _⇔_ `not⟷ `not⟷
+_⇒_ _ _ = {!!}
+
+comp⇒ : {A B : `U} {F G H : `UF A B} → F ⇒ G → G ⇒ H → F ⇒ H
+comp⇒ = {!!}
+
+------------------------------------------------------------------------------
+-- Homotopies II
+
+HomF : {A B : `U} → (F G : `UF A B) → Set
+HomF F G = {!!} -- ∀ x → ap⟶ f x =𝟚 ap⟶ g x
+
+------------------------------------------------------------------------------
+-- Equivalence II
+
+EquivUF : {A B : `U} → `UF A B → `UF A B → Set
+EquivUF {A} {B} F G =
+  Σ[ f ∈ F ⇒ G ]
+  Σ[ g ∈ G ⇒ F ]
+  Σ[ h ∈ G ⇒ F ]
+  ?
 
 ------------------------------------------------------------------------------
 -- Dependent pairs, dependent functions, and J
@@ -268,21 +312,8 @@ X4 = transport `not⟷ `not⟷ -- ==> `id⟷
 ------------------------------------------------------------------------------
 -- Lemmas
 
-`univalence : {A B : `U} → (A ⟷ B) ≃ (Equiv A B)
--- I think we might want something like 'Equiv (A ⟷ B) (Equiv A B)'
-`univalence {`𝟚U} {`𝟚U} =
-  f , mkisequiv
-      g (λ { (`id⟶ , G , H , α , β) → {!!} ;
-             (`not⟶ , G , H , α , β) → {!!} })
-      g (λ { `id⟷ → refl ; `not⟷ → refl })
-
-  where f : `𝟚U ⟷ `𝟚U → Equiv `𝟚U `𝟚U
-        f `id⟷ = `idequiv
-        f `not⟷ = `notequiv
-
-        g : Equiv `𝟚U `𝟚U → `𝟚U ⟷ `𝟚U
-        g (`id⟶ , _) = `id⟷
-        g (`not⟶ , _) = `not⟷
+`univalence : {A B : `U} {c : A ⟷ B} {eq : EquivU A B} → EquivUF (P c) (E eq)
+`univalence {`𝟚U} {`𝟚U} = {!!}
 
 ------------------------------------------------------------------------------
 -- HITs
