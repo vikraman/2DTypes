@@ -183,6 +183,9 @@ equiv₁ (mkqinv qg qα qβ) = mkisequiv qg qα qg qβ
 _≃_ : ∀ {ℓ ℓ'} (A : Set ℓ) (B : Set ℓ') → Set (L._⊔_ ℓ ℓ')
 A ≃ B = Σ (A → B) isequiv
 
+ElEquivU : {A B : `U} → EquivU A B → Set
+ElEquivU eq = {!!}
+
 idequiv : Bool ≃ Bool
 idequiv = id , equiv₁ (mkqinv id
                        (λ { false → refl; true → refl})
@@ -233,23 +236,44 @@ El⇔ id⇔ = refl
 ------------------------------------------------------------------------------
 -- Functions II
 
+-- Universe containing equivalences and paths
+
 data `UF : (A B : `U) → Set where
-  ID : {A : `U} → `UF A A
   E : {A B : `U} → EquivU A B → `UF A B
   P : {A B : `U} → (A ⟷ B) → `UF A B
 
-_⇒_ : {A B : `U} → `UF A B → `UF A B → Set
-_⇒_ {`𝟚U} {`𝟚U} (E (f₁ , g₁ , h₁ , α₁ , β₁)) (E (f₂ , g₂ , h₂ , α₂ , β₂)) = {!!}
-_⇒_ {`𝟚U} {`𝟚U} (E (f , g , h , α , β)) (P p) = {!!}
-_⇒_ {`𝟚U} {`𝟚U} (P p) (E (f , g , h , α , β)) = {!!}
-_⇒_ {A} {.A} (P `id⟷) (P `id⟷) = _⇔_ {A} `id⟷ `id⟷
-P `id⟷ ⇒ P `not⟷ = ⊥
-P `not⟷ ⇒ P `id⟷ = ⊥
-_⇒_ {`𝟚U} {`𝟚U} (P `not⟷) (P `not⟷) = _⇔_ `not⟷ `not⟷
-_⇒_ _ _ = {!!}
+ElUF : {A B : `U} → `UF A B → Set
+ElUF (E eq) = {!!}
+ElUF (P p) = {!!}
+
+-- Functions between equivalences and paths (should be reversible)
+
+data _⇒_ : {A B : `U} → `UF A B → `UF A B → Set where
+  ID : {A B : `U} {EP : `UF A B} → EP ⇒ EP
+  EE : {A B : `U} → (eq₁ eq₂ : EquivU A B) → E eq₁ ⇒ E eq₂
+  PE : {A B : `U} → (p : A ⟷ B) → (eq : EquivU A B) → P p ⇒ E eq
+  EP : {A B : `U} → (eq : EquivU A B) → (p : A ⟷ B) → E eq ⇒ P p
+  PP : {A B : `U} → (p q : A ⟷ B) → P p ⇒ P q
 
 comp⇒ : {A B : `U} {F G H : `UF A B} → F ⇒ G → G ⇒ H → F ⇒ H
-comp⇒ = {!!}
+comp⇒ ID Y = Y
+comp⇒ X ID = X
+comp⇒ (EE eq₁ eq₂) (EE .eq₂ eq₃) = EE eq₁ eq₃
+comp⇒ (EE eq₁ eq₂) (EP .eq₂ p) = EP eq₁ p
+comp⇒ (PE p eq₁) (EE .eq₁ eq₂) = PE p eq₂
+comp⇒ (PE p eq₁) (EP .eq₁ q) = PP p q
+comp⇒ (EP eq₁ p) (PE .p eq₂) = EE eq₁ eq₂
+comp⇒ (EP eq₁ p) (PP .p q) = EP eq₁ q
+comp⇒ (PP p q) (PE .q eq) = PE p eq
+comp⇒ (PP p q) (PP .q r) = PP p r
+
+--ap⇒ : {A B : `U} {F G : `UF A B} → F ⇒ G → {!!} → {!!}
+--ap⇒ = {!!}
+
+-- Semantic
+
+El⇒ : {A B : `U} {F G : `UF A B} → F ⇒ G → ElUF F → ElUF G
+El⇒ = {!!}
 
 ------------------------------------------------------------------------------
 -- Homotopies II
