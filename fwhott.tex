@@ -4,11 +4,11 @@
 \usepackage{bbold}
 \usepackage{bussproofs}
 \usepackage{keystroke}
+\usepackage{comment}
 
 %% \usepackage{hyphenat}
 %% \usepackage{color}
 %% \usepackage{url}
-%% \usepackage{comment}
 %% \usepackage{amssymb}
 %% \usepackage{amsmath}
 %% \usepackage{mdwtab}
@@ -16,6 +16,31 @@
 %% \usepackage{listings}
 %% \lstMakeShortInline[columns=fullflexible]|
 %% \lstnewenvironment{code}{\lstset{basicstyle={\sffamily\footnotesize}}}{}
+
+\newcommand{\unitepl}{\texttt{unitepl}}
+\newcommand{\unitipl}{\texttt{unitipl}}
+\newcommand{\unitepr}{\texttt{unitepr}}
+\newcommand{\unitipr}{\texttt{unitipr}}
+\newcommand{\swapp}{\texttt{swapp}}
+\newcommand{\assoclp}{\texttt{assoclp}}
+\newcommand{\assocrp}{\texttt{assocrp}}
+\newcommand{\unitetl}{\texttt{unitetl}}
+\newcommand{\unititl}{\texttt{unititl}}
+\newcommand{\unitetr}{\texttt{unitetr}}
+\newcommand{\unititr}{\texttt{unititr}}
+\newcommand{\swapt}{\texttt{swapt}}
+\newcommand{\assoclt}{\texttt{assoclt}}
+\newcommand{\assocrt}{\texttt{assocrt}}
+\newcommand{\absorbr}{\texttt{absorbr}}
+\newcommand{\absorbl}{\texttt{absorbl}}
+\newcommand{\factorzr}{\texttt{factorzr}}
+\newcommand{\factorzl}{\texttt{factorzl}}
+\newcommand{\factor}{\texttt{factor}}
+\newcommand{\distl}{\texttt{distl}}
+\newcommand{\dist}{\texttt{dist}}
+\newcommand{\factorl}{\texttt{factorl}}
+\newcommand{\id}{\texttt{id}}
+\newcommand{\comp}{\circ}
 
 \newcommand{\alt}{~\mid~}
 \newcommand{\patht}[1]{\textsc{PATHS}(#1,#1)}
@@ -27,7 +52,6 @@
 \newcommand{\evalone}[2]{eval(#1,#2)}
 \newcommand{\evalbone}[2]{evalB(#1,#2)}
 \newcommand{\reflp}{\textsc{refl}}
-\newcommand{\swapp}{\textsc{swap}}
 \newcommand{\reflh}{\mathit{refl}_{\sim}}
 \newcommand{\symh}[1]{\mathit{sym}_{\sim}~#1}
 \newcommand{\transh}[2]{\mathit{trans}_{\sim}~#1~#2}
@@ -86,6 +110,24 @@ $\displaystyle
 \end{abstract}
 
 \maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Pi with Dependent Functions}
+
+\[\begin{array}{rcl}
+\tau &::=& 0 \alt 1 \alt \tau + \tau \alt \tau * \tau \\
+c &::=& \unitepl \alt \unitipl \alt \unitepr \alt \unitipr \alt \swapp \alt
+        \assoclp \alt \assocrp \\
+  &\alt& \unitetl \alt \unititl \alt \unitetr \alt \unititr \alt \swapt \alt
+     \assoclt \alt \assocrt \\
+  &\alt& \absorbr \alt \absorbl \alt \factorzr \alt \factorzl \\
+  &\alt& \dist \alt \factor \alt \distl \alt \factorl \\
+  &\alt& \id \alt c \comp c \alt c + c \alt c * c
+\end{array}\]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -597,6 +639,8 @@ of $\uone$:
     \mbox{To think about}
   \end{array}
 \]
+
+\end{comment}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{acm}
