@@ -60,7 +60,10 @@ _≟_ {SIGMA A P} a b = {!!}
 _≟_ {PI A P} a b = {!!}
 _≟_ {EQ a b} c d = {!!}
 
--- Enum
+-- Questions:
+-- Should enum and ∣_∣ map to a flat result or a family of results indexed by a value?
+
+-- Enum: can tighten to a Vector later
 
 enum : (A : U) → List (El A)
 enum ZERO = []
@@ -80,7 +83,7 @@ enum (EQ a .a) | yes refl = refl ∷ []
 ∣ ONE ∣ = 1
 ∣ PLUS A B ∣ = ∣ A ∣ + ∣ B ∣
 ∣ TIMES A B ∣ = ∣ A ∣ * ∣ B ∣
-∣ SIGMA A P ∣ = {!!}
+∣ SIGMA A P ∣ = sum (map (λ a → ∣ P a ∣) (enum A))
 ∣ PI A P ∣ = {!!}
 ∣ EQ {A} a b ∣ with _≟_ {A} a b
 ... | yes _ = 1
