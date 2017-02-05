@@ -42,6 +42,15 @@ El (EQ a b)    = a ≡ b
 inj₁lem : {A B : Set} {x y : A} → _≡_ {A = A ⊎ B} (inj₁ x) (inj₁ y) → x ≡ y
 inj₁lem refl = refl
 
+inj₂lem : {A B : Set} {x y : B} → _≡_ {A = A ⊎ B} (inj₂ x) (inj₂ y) → x ≡ y
+inj₂lem refl = refl
+
+proj₁lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → x ≡ y
+proj₁lem refl = refl
+
+proj₂lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → z ≡ w
+proj₂lem refl = refl
+
 _≟_ : {A : U} → Decidable {A = El A} _≡_
 _≟_ {ZERO} ()
 _≟_ {ONE} tt tt = yes refl
@@ -50,15 +59,16 @@ _≟_ {PLUS A B} (inj₁ x) (inj₁ .x) | yes refl = yes refl
 ... | no ¬p = no (¬p ∘ inj₁lem)
 _≟_ {PLUS A B} (inj₁ x) (inj₂ y) = {!!}
 _≟_ {PLUS A B} (inj₂ x) (inj₁ y) = {!!}
-_≟_ {PLUS A B} (inj₂ x) (inj₂ y) = {!!}
+_≟_ {PLUS A B} (inj₂ x) (inj₂ y) with _≟_ {B} x y
+_≟_ {PLUS A B} (inj₂ x) (inj₂ .x) | yes refl = yes refl
+... | no ¬p = no (¬p ∘ inj₂lem)
 _≟_ {TIMES A B} (x , y) (z , w) with _≟_ {A} x z | _≟_ {B} y w
 _≟_ {TIMES A B} (x , y) (.x , .y) | yes refl | yes refl = yes refl
-_≟_ {TIMES A B} (x , y) (z , w) | no ¬p | yes p = {!!}
-_≟_ {TIMES A B} (x , y) (z , w) | yes p | no ¬p = {!!}
-_≟_ {TIMES A B} (x , y) (z , w) | no ¬p | no ¬q = {!!}
+_≟_ {TIMES A B} (x , y) (z , w) | no ¬p | _ = no (¬p ∘ proj₁lem)
+_≟_ {TIMES A B} (x , y) (z , w) | _ | no ¬p = no (¬p ∘ proj₂lem)
 _≟_ {SIGMA A P} a b = {!!}
 _≟_ {PI A P} a b = {!!}
-_≟_ {EQ a b} c d = {!!}
+_≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
 
 -- Questions:
 -- Should enum and ∣_∣ map to a flat result or a family of results indexed by a value?
