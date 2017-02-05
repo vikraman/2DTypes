@@ -11,6 +11,7 @@ open import Data.Product hiding (map)
 open import Data.Nat hiding (_≟_)
 open import Data.List
 open import Relation.Nullary
+open import Relation.Nullary.Decidable hiding (map)
 open import Relation.Binary
 open import Function
 open import Relation.Binary.PropositionalEquality
@@ -57,6 +58,9 @@ proj₁lem refl = refl
 proj₂lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → z ≡ w
 proj₂lem refl = refl
 
+proj₂dlem : {A : Set} {B : A → Set} {x : A} {z w : B x} → _≡_ {A = Σ A B} (x , z) (x , w) → z ≡ w
+proj₂dlem p = {!!}
+
 _≟_ : {A : U} → Decidable {A = El A} _≡_
 _≟_ {ZERO} ()
 _≟_ {ONE} tt tt = yes refl
@@ -75,7 +79,7 @@ _≟_ {TIMES A B} (x , y) (z , w) | _ | no ¬p = no (¬p ∘ proj₂lem)
 _≟_ {SIGMA A P} (x , y) (z , w) with _≟_ {A} x z
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
 _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | (yes refl) = yes refl
-_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | (no ¬p) = no {!!}
+_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | (no ¬p) = no {!!} -- needs K
 _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
 _≟_ {PI A P} a b = {!!} -- funext?
 _≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
@@ -89,9 +93,9 @@ enum : (A : U) → List (El A)
 enum ZERO = []
 enum ONE = tt ∷ []
 enum (PLUS A B)  = map inj₁ (enum A) ++ map inj₂ (enum B)
-enum (TIMES A B) = concat (map (λ b → map (λ a → (a , b)) (enum A)) (enum B))
+enum (TIMES A B) = concat (map (λ a → map (λ b → (a , b)) (enum B)) (enum A))
 enum (SIGMA A P) = concat (map (λ a → map (λ pa → a , pa) (enum (P a))) (enum A))
-enum (PI A P)    = {!!}
+enum (PI A P) = {!!}
 enum (EQ {A} a b) with _≟_ {A} a b
 enum (EQ a .a) | yes refl = refl ∷ []
 ... | no _ = []
@@ -142,7 +146,7 @@ a = false , refl
 
 c : El `B
 c (inj₁ _) = refl
-c (inj₂ _) = {!!} -- empty
+c (inj₂ tt) = {!!}
 
 -- University algebra (Altenkirch)
 
