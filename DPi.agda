@@ -45,6 +45,12 @@ inj₁lem refl = refl
 inj₂lem : {A B : Set} {x y : B} → _≡_ {A = A ⊎ B} (inj₂ x) (inj₂ y) → x ≡ y
 inj₂lem refl = refl
 
+inj₁lem' : {A B : Set} {x : A} {y : B} → _≡_ {A = A ⊎ B} (inj₁ x) (inj₂ y) → ⊥
+inj₁lem' ()
+
+inj₂lem' : {A B : Set} {x : B} {y : A} → _≡_ {A = A ⊎ B} (inj₂ x) (inj₁ y) → ⊥
+inj₂lem' ()
+
 proj₁lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → x ≡ y
 proj₁lem refl = refl
 
@@ -57,8 +63,8 @@ _≟_ {ONE} tt tt = yes refl
 _≟_ {PLUS A B} (inj₁ x) (inj₁ y) with _≟_ {A} x y
 _≟_ {PLUS A B} (inj₁ x) (inj₁ .x) | yes refl = yes refl
 ... | no ¬p = no (¬p ∘ inj₁lem)
-_≟_ {PLUS A B} (inj₁ x) (inj₂ y) = {!!}
-_≟_ {PLUS A B} (inj₂ x) (inj₁ y) = {!!}
+_≟_ {PLUS A B} (inj₁ x) (inj₂ y) = no inj₁lem'
+_≟_ {PLUS A B} (inj₂ x) (inj₁ y) = no inj₂lem'
 _≟_ {PLUS A B} (inj₂ x) (inj₂ y) with _≟_ {B} x y
 _≟_ {PLUS A B} (inj₂ x) (inj₂ .x) | yes refl = yes refl
 ... | no ¬p = no (¬p ∘ inj₂lem)
@@ -66,8 +72,12 @@ _≟_ {TIMES A B} (x , y) (z , w) with _≟_ {A} x z | _≟_ {B} y w
 _≟_ {TIMES A B} (x , y) (.x , .y) | yes refl | yes refl = yes refl
 _≟_ {TIMES A B} (x , y) (z , w) | no ¬p | _ = no (¬p ∘ proj₁lem)
 _≟_ {TIMES A B} (x , y) (z , w) | _ | no ¬p = no (¬p ∘ proj₂lem)
-_≟_ {SIGMA A P} a b = {!!}
-_≟_ {PI A P} a b = {!!}
+_≟_ {SIGMA A P} (x , y) (z , w) with _≟_ {A} x z
+_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
+_≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | (yes refl) = yes refl
+_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | (no ¬p) = no {!!}
+_≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
+_≟_ {PI A P} a b = {!!} -- funext?
 _≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
 
 -- Questions:
