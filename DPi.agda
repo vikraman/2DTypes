@@ -95,7 +95,7 @@ enum ONE = tt ∷ []
 enum (PLUS A B)  = map inj₁ (enum A) ++ map inj₂ (enum B)
 enum (TIMES A B) = concat (map (λ a → map (λ b → (a , b)) (enum B)) (enum A))
 enum (SIGMA A P) = concat (map (λ a → map (λ pa → a , pa) (enum (P a))) (enum A))
-enum (PI A P) = {!!}
+enum (PI A P) = concat (map (λ a → map (λ pa → λ b → {!!}) (enum (P a))) (enum A))
 enum (EQ {A} a b) with _≟_ {A} a b
 enum (EQ a .a) | yes refl = refl ∷ []
 ... | no _ = []
