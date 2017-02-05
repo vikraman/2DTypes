@@ -40,6 +40,9 @@ El (SIGMA A P) = Σ[ v ∈ El A ] El (P v)
 El (PI A P)    = (v : El A) → El (P v)
 El (EQ a b)    = a ≡ b
 
+postulate
+  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
+
 inj₁lem : {A B : Set} {x y : A} → _≡_ {A = A ⊎ B} (inj₁ x) (inj₁ y) → x ≡ y
 inj₁lem refl = refl
 
@@ -58,8 +61,9 @@ proj₁lem refl = refl
 proj₂lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → z ≡ w
 proj₂lem refl = refl
 
-proj₂dlem : {A : Set} {B : A → Set} {x : A} {z w : B x} → _≡_ {A = Σ A B} (x , z) (x , w) → z ≡ w
-proj₂dlem p = {!!} -- needs K ?
+proj₂dlem : {A : Set} {B : A → Set} {x : A} {z w : B x} →
+            _≡_ {A = Σ A B} (x , z) (x , w) → z ≡ w
+proj₂dlem {z = z} {w = w} p = {!!}
 
 _≟_ : {A : U} → Decidable {A = El A} _≡_
 _≟_ {ZERO} ()
@@ -81,7 +85,7 @@ _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
 _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | (yes refl) = yes refl
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | (no ¬p) = no (λ pf → ¬p (proj₂dlem pf))
 _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
-_≟_ {PI A P} a b = {!!} -- funext?
+_≟_ {PI A P} f g = {!!} -- funext?
 _≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
 
 -- Questions:
