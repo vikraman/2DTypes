@@ -68,10 +68,10 @@ _≟_ {EQ a b} c d = {!!}
 enum : (A : U) → List (El A)
 enum ZERO = []
 enum ONE = tt ∷ []
-enum (PLUS A B) = map inj₁ (enum A) ++ map inj₂ (enum B)
+enum (PLUS A B)  = map inj₁ (enum A) ++ map inj₂ (enum B)
 enum (TIMES A B) = concat (map (λ b → map (λ a → (a , b)) (enum A)) (enum B))
-enum (SIGMA A P) = {!!} -- concat (map (λ a → enum (P a)) (enum A))
-enum (PI A P) = {!!}
+enum (SIGMA A P) = concat (map (λ a → map (λ pa → a , pa) (enum (P a))) (enum A))
+enum (PI A P)    = {!!}
 enum (EQ {A} a b) with _≟_ {A} a b
 enum (EQ a .a) | yes refl = refl ∷ []
 ... | no _ = []
@@ -84,10 +84,22 @@ enum (EQ a .a) | yes refl = refl ∷ []
 ∣ PLUS A B ∣ = ∣ A ∣ + ∣ B ∣
 ∣ TIMES A B ∣ = ∣ A ∣ * ∣ B ∣
 ∣ SIGMA A P ∣ = sum (map (λ a → ∣ P a ∣) (enum A))
-∣ PI A P ∣ = {!!}
+∣ PI A P ∣ = product (map (λ a → ∣ P a ∣) (enum A))
 ∣ EQ {A} a b ∣ with _≟_ {A} a b
 ... | yes _ = 1
 ... | no _ = 0
+
+-- coherence
+size-enum : ∀ (u : U) → ∣ u ∣ ≡ length (enum u)
+size-enum ZERO = refl
+size-enum ONE = refl
+size-enum (PLUS u v) = {!!}
+size-enum (TIMES u v) = {!!}
+size-enum (SIGMA u P) = {!!}
+size-enum (PI u P) = {!!}
+size-enum (EQ {A} a b) with _≟_ {A} a b
+size-enum (EQ a .a) | yes refl = refl
+size-enum (EQ a b) | no ¬p = refl
 
 -- Examples
 
@@ -101,9 +113,9 @@ true = inj₂ tt
 `A : U
 `A = SIGMA `𝟚 (λ b → EQ {`𝟚} b false)
 
-a b : El `A
+a : El `A
 a = false , refl
-b = true , {!!} -- empty
+-- and of course if (proj₁ a = true, it is empty)
 
 `B : U
 `B = PI `𝟚 (λ b → EQ {`𝟚} b false)
