@@ -2,7 +2,7 @@
 
 module TypeEquiv where
 
-import Level using (zero; suc)
+import Level using (Level; zero; suc)
 open import Data.Empty using (⊥)
 open import Data.Unit using (⊤; tt)
 open import Data.Sum using (_⊎_; inj₁; inj₂)
@@ -27,17 +27,17 @@ open import Equiv
 
 -- swap₊
 
-swap₊ : {A B : Set} → A ⊎ B → B ⊎ A
+swap₊ : ∀ {ℓ} {A B : Set ℓ} → A ⊎ B → B ⊎ A
 swap₊ (inj₁ a) = inj₂ a
 swap₊ (inj₂ b) = inj₁ b
 
 abstract
 
-  swapswap₊ : {A B : Set} → swap₊ ○ swap₊ {A} {B} ∼ id
+  swapswap₊ : ∀ {ℓ} {A B : Set ℓ} → swap₊ ○ swap₊ {ℓ} {A} {B} ∼ id
   swapswap₊ (inj₁ a) = refl
   swapswap₊ (inj₂ b) = refl
 
-swap₊equiv : {A B : Set} → (A ⊎ B) ≃ (B ⊎ A)
+swap₊equiv : ∀ {ℓ} {A B : Set ℓ} → (A ⊎ B) ≃ (B ⊎ A)
 swap₊equiv = (qeq swap₊ swap₊ swapswap₊ swapswap₊)
 
 -- unite₊ and uniti₊
@@ -132,15 +132,15 @@ uniti⋆′equiv = sym≃ unite⋆′equiv
 
 -- swap⋆
 
-swap⋆ : {A B : Set} → A × B → B × A
+swap⋆ : ∀ {ℓ} {A B : Set ℓ} → A × B → B × A
 swap⋆ (a , b) = (b , a)
 
 abstract
 
-  swapswap⋆ : {A B : Set} → swap⋆ ○ swap⋆ ∼ id {A = A × B}
+  swapswap⋆ : ∀ {ℓ} {A B : Set ℓ} → swap⋆ ○ swap⋆ ∼ id {A = A × B}
   swapswap⋆ (a , b) = refl
 
-swap⋆equiv : {A B : Set} → (A × B) ≃ (B × A)
+swap⋆equiv : ∀ {ℓ} {A B : Set ℓ} → (A × B) ≃ (B × A)
 swap⋆equiv = qeq swap⋆ swap⋆ swapswap⋆ swapswap⋆
 
 -- assocl₊ and assocr₊
@@ -317,14 +317,14 @@ typesPlusIsCM : IsCommutativeMonoid _≃_ _⊎_ ⊥
 typesPlusIsCM = record {
   isSemigroup = typesPlusIsSG ;
   identityˡ = λ t → unite₊equiv {t} ;
-  comm = λ t₁ t₂ → swap₊equiv {t₁} {t₂}
+  comm = λ t₁ t₂ → swap₊equiv {A = t₁} {t₂}
   }
 
 typesTimesIsCM : IsCommutativeMonoid _≃_ _×_ ⊤
 typesTimesIsCM = record {
   isSemigroup = typesTimesIsSG ;
   identityˡ = λ t → unite⋆equiv {t} ;
-  comm = λ t₁ t₂ → swap⋆equiv {t₁} {t₂}
+  comm = λ t₁ t₂ → swap⋆equiv {A = t₁} {t₂}
   }
 
 typesIsCSR : IsCommutativeSemiring _≃_ _⊎_ _×_ ⊥ ⊤
