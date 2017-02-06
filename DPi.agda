@@ -116,8 +116,11 @@ happen to lie in the same fiber does not imply the existence of a path u = v
 lying entirely within that fiber.
 --}
 
+_∼_ : {A B : U} → (f g : El A → El B) → Set
+_∼_ {A} f g = (x : El A) → f x ≡ g x
+
 postulate
-  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
+  funext : {A B : U} {f g : El A → El B} → _∼_ {A} {B} f g → f ≡ g
 
 _≟_ : {A : U} → Decidable {A = El A} _≡_
 _≟_ {ZERO} ()
@@ -139,13 +142,10 @@ _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
 _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | yes refl = yes refl
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | no ¬p = no (¬p ∘ proj₂dlem)
-_≟_ {PI A P} f g = {!!} -- funext?
+_≟_ {PI A P} f g = {!!}
 _≟_ {EQ a .a} refl refl = yes refl -- uses K
 
--- Questions:
--- Should enum and ∣_∣ map to a flat result or a family of results indexed by a value?
-
--- Enum: can tighten to a Vector later
+-- Enum: can tighten to a Vector later or use size-enum lemma
 
 enum : (A : U) → List (El A)
 enum ZERO = []
