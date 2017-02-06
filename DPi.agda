@@ -20,6 +20,8 @@ infix  30 _⟷_
 infixr 50 _◎_
 
 ------------------------------------------------------------------------------
+-- The universe of types
+
 data U : Set
 El : U → Set
 
@@ -38,7 +40,55 @@ El (PLUS A B)  = El A ⊎ El B
 El (TIMES A B) = El A × El B
 El (SIGMA A P) = Σ[ v ∈ El A ] El (P v)
 El (PI A P)    = (v : El A) → El (P v)
-El (EQ a b)    = a ≡ b
+El (EQ {ZERO} () b)
+El (EQ {ONE} tt tt) = tt ≡ tt
+El (EQ {PLUS A B} (inj₁ x) (inj₁ y)) = x ≡ y
+El (EQ {PLUS A B} (inj₁ x) (inj₂ y)) = ⊥
+El (EQ {PLUS A B} (inj₂ x) (inj₁ y)) = ⊥
+El (EQ {PLUS A B} (inj₂ x) (inj₂ y)) = x ≡ y
+El (EQ {TIMES A B} (x , y) (z , w)) = x ≡ z × y ≡ w
+El (EQ {SIGMA A P} (x , y) (z , w)) = {!!} -- Sec. 2.7 in book ?
+El (EQ {PI A P} f g) = ∀ a → f a ≡ g a
+El (EQ {EQ a b} p q) = p ≡ q
+
+-- Examples
+
+`𝟚 : U
+`𝟚 = PLUS ONE ONE
+
+-- size of `𝟚 is 2 and here are the two values
+false true : El `𝟚
+false = inj₁ tt
+true = inj₂ tt
+
+`A : U
+`A = SIGMA `𝟚 (λ b → EQ {`𝟚} b false)
+
+-- size of `A is calculated as follows:
+--   for every value b in `𝟚, we calculate the size of EQ {`𝟚} b false
+--   if b is false, the type false ≡ false has one element (refl)
+--   if b is true, the type true ≡ false is empty
+--   we sum the sizes; the total size is 1 and here is the value
+a : El `A
+a = false , refl
+
+`B : U
+`B = PI `𝟚 (λ a → SIGMA `𝟚 (λ b → EQ {`𝟚} a b))
+
+-- size of `B is calculated as follows:
+--   first we calculate the size of each fiber that takes a particular a in `𝟚
+--   a function is defined is all its fibers are defined, if any fiber is empty
+--     the function cannot be defined
+--   so we multiply the number of fibers to get the total size
+--   in our case the fiber false can produce one value in SIGMA `𝟚 (λ b → EQ {`𝟚} false b)
+--   the fiber true can produce one value in SIGMA `𝟚 (λ b → EQ {`𝟚} true b)
+--   hence there is exactly one function in `B and here it is
+f : El `B
+f (inj₁ tt) = false , refl
+f (inj₂ tt) = true , refl
+
+------------------------------------------------------------------------------
+-- Some infrastructure (including some HoTT machinery)
 
 postulate
   funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
@@ -86,7 +136,8 @@ _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | (yes refl) = yes refl
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | (no ¬p) = no (λ pf → ¬p (proj₂dlem pf))
 _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
 _≟_ {PI A P} f g = {!!} -- funext?
-_≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
+-- _≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
+_≟_ _ = {!!}
 
 -- Questions:
 -- Should enum and ∣_∣ map to a flat result or a family of results indexed by a value?
@@ -100,9 +151,10 @@ enum (PLUS A B)  = map inj₁ (enum A) ++ map inj₂ (enum B)
 enum (TIMES A B) = concat (map (λ a → map (λ b → (a , b)) (enum B)) (enum A))
 enum (SIGMA A P) = concat (map (λ a → map (λ pa → a , pa) (enum (P a))) (enum A))
 enum (PI A P) = concat (map (λ a → map (λ pa → λ b → {!!}) (enum (P a))) (enum A))
-enum (EQ {A} a b) with _≟_ {A} a b
-enum (EQ a .a) | yes refl = refl ∷ []
-... | no _ = []
+--enum (EQ {A} a b) with _≟_ {A} a b
+--enum (EQ a .a) | yes refl = refl ∷ []
+--... | no _ = []
+enum _ = {!!}
 
 -- Size
 
@@ -128,29 +180,6 @@ size-enum (PI u P) = {!!}
 size-enum (EQ {A} a b) with _≟_ {A} a b
 size-enum (EQ a .a) | yes refl = refl
 size-enum (EQ a b) | no ¬p = refl
-
--- Examples
-
-`𝟚 : U
-`𝟚 = PLUS ONE ONE
-
-false true : El `𝟚
-false = inj₁ tt
-true = inj₂ tt
-
-`A : U
-`A = SIGMA `𝟚 (λ b → EQ {`𝟚} b false)
-
-a : El `A
-a = false , refl
--- and of course if (proj₁ a = true, it is empty)
-
-`B : U
-`B = PI `𝟚 (λ b → EQ {`𝟚} b false)
-
-c : El `B
-c (inj₁ _) = refl
-c (inj₂ tt) = {!!}
 
 -- University algebra (Altenkirch)
 
