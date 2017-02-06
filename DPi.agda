@@ -149,7 +149,7 @@ _≟_ {SIGMA A P} (x , y) (z , w) with _≟_ {A} x z
 _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
 _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | yes refl = yes refl
-_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | no ¬p = no ?
+_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | no ¬p = no {!!}
 _≟_ {PI A P} f g = {!!} -- funext?
 _≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
 
