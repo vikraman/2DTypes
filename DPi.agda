@@ -83,6 +83,9 @@ f (inj₂ tt) = true , refl
 ------------------------------------------------------------------------------
 -- Some infrastructure (including some HoTT machinery)
 
+postulate
+  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
+
 inj₁lem : {A B : Set} {x y : A} → _≡_ {A = A ⊎ B} (inj₁ x) (inj₁ y) → x ≡ y
 inj₁lem refl = refl
 
@@ -101,20 +104,22 @@ proj₁lem refl = refl
 proj₂lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → z ≡ w
 proj₂lem refl = refl
 
-postulate
-  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
+--
 
-  transport : ∀ {ℓ ℓ'} → {A : Set ℓ} {x y : A} →
-              (P : A → Set ℓ') → (p : x ≡ y) → P x → P y
+transport : ∀ {ℓ ℓ'} → {A : Set ℓ} {x y : A} →
+            (P : A → Set ℓ') → (p : x ≡ y) → P x → P y
+transport P refl = id
 
-  fsigma : ∀ {ℓ ℓ'} {A : Set ℓ} {P : A → Set ℓ'} {w w' : Σ A P} →
-           (w ≡ w') → (Σ (proj₁ w ≡ proj₁ w')
-                      (λ p → transport P p (proj₂ w) ≡ proj₂ w'))
+fsigma : ∀ {ℓ ℓ'} {A : Set ℓ} {P : A → Set ℓ'} {w w' : Σ A P} →
+         (w ≡ w') → (Σ (proj₁ w ≡ proj₁ w')
+                    (λ p → transport P p (proj₂ w) ≡ proj₂ w'))
+fsigma refl = refl , refl
 
-proj₂dlem : {A : Set} {B : A → Set} {x y : A} {z : B x} {w : B y} →
-            (p : _≡_ {A = Σ A B} (x , z) (y , w)) →
-            transport B (proj₁ (fsigma p)) z ≡ w
-proj₂dlem sp = proj₂ (fsigma sp)
+proj₂dlem : {A : Set} {B : A → Set} {x y : A} → (p : x ≡ y) →
+            {z : B x} {w : B y} →
+            (q : _≡_ {A = Σ A B} (x , z) (y , w)) →
+            transport B p z ≡ w
+proj₂dlem refl q = {!!}
 
 _≟_ : {A : U} → Decidable {A = El A} _≡_
 _≟_ {ZERO} ()
