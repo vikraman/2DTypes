@@ -40,16 +40,7 @@ El (PLUS A B)  = El A ⊎ El B
 El (TIMES A B) = El A × El B
 El (SIGMA A P) = Σ[ v ∈ El A ] El (P v)
 El (PI A P)    = (v : El A) → El (P v)
-El (EQ {ZERO} () b)
-El (EQ {ONE} tt tt) = tt ≡ tt
-El (EQ {PLUS A B} (inj₁ x) (inj₁ y)) = x ≡ y
-El (EQ {PLUS A B} (inj₁ x) (inj₂ y)) = ⊥
-El (EQ {PLUS A B} (inj₂ x) (inj₁ y)) = ⊥
-El (EQ {PLUS A B} (inj₂ x) (inj₂ y)) = x ≡ y
-El (EQ {TIMES A B} (x , y) (z , w)) = x ≡ z × y ≡ w
-El (EQ {SIGMA A P} (x , y) (z , w)) = {!!} -- Sec. 2.7 in book ?
-El (EQ {PI A P} f g) = ∀ a → f a ≡ g a
-El (EQ {EQ a b} p q) = p ≡ q
+El (EQ a b)    = a ≡ b
 
 -- Examples
 
@@ -60,6 +51,8 @@ El (EQ {EQ a b} p q) = p ≡ q
 false true : El `𝟚
 false = inj₁ tt
 true = inj₂ tt
+
+-- size of EQ a b is tentatively 1 or 0 depending on whether a ≡ b or not
 
 `A : U
 `A = SIGMA `𝟚 (λ b → EQ {`𝟚} b false)
@@ -90,9 +83,6 @@ f (inj₂ tt) = true , refl
 ------------------------------------------------------------------------------
 -- Some infrastructure (including some HoTT machinery)
 
-postulate
-  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
-
 inj₁lem : {A B : Set} {x y : A} → _≡_ {A = A ⊎ B} (inj₁ x) (inj₁ y) → x ≡ y
 inj₁lem refl = refl
 
@@ -111,9 +101,20 @@ proj₁lem refl = refl
 proj₂lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → z ≡ w
 proj₂lem refl = refl
 
-proj₂dlem : {A : Set} {B : A → Set} {x : A} {z w : B x} →
-            _≡_ {A = Σ A B} (x , z) (x , w) → z ≡ w
-proj₂dlem {z = z} {w = w} p = {!!}
+postulate
+  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
+
+  transport : ∀ {ℓ ℓ'} → {A : Set ℓ} {x y : A} →
+              (P : A → Set ℓ') → (p : x ≡ y) → P x → P y
+
+  fsigma : ∀ {ℓ ℓ'} {A : Set ℓ} {P : A → Set ℓ'} {w w' : Σ A P} →
+           (w ≡ w') → (Σ (proj₁ w ≡ proj₁ w')
+                      (λ p → transport P p (proj₂ w) ≡ proj₂ w'))
+
+proj₂dlem : {A : Set} {B : A → Set} {x y : A} {z : B x} {w : B y} →
+            (p : _≡_ {A = Σ A B} (x , z) (y , w)) →
+            transport B (proj₁ (fsigma p)) z ≡ w
+proj₂dlem sp = proj₂ (fsigma sp)
 
 _≟_ : {A : U} → Decidable {A = El A} _≡_
 _≟_ {ZERO} ()
@@ -133,11 +134,10 @@ _≟_ {TIMES A B} (x , y) (z , w) | _ | no ¬p = no (¬p ∘ proj₂lem)
 _≟_ {SIGMA A P} (x , y) (z , w) with _≟_ {A} x z
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
 _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | (yes refl) = yes refl
-_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | (no ¬p) = no (λ pf → ¬p (proj₂dlem pf))
+_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | (no ¬p) = no (λ pf → ¬p {!!})
 _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
 _≟_ {PI A P} f g = {!!} -- funext?
--- _≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
-_≟_ _ = {!!}
+_≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
 
 -- Questions:
 -- Should enum and ∣_∣ map to a flat result or a family of results indexed by a value?
@@ -151,10 +151,9 @@ enum (PLUS A B)  = map inj₁ (enum A) ++ map inj₂ (enum B)
 enum (TIMES A B) = concat (map (λ a → map (λ b → (a , b)) (enum B)) (enum A))
 enum (SIGMA A P) = concat (map (λ a → map (λ pa → a , pa) (enum (P a))) (enum A))
 enum (PI A P) = concat (map (λ a → map (λ pa → λ b → {!!}) (enum (P a))) (enum A))
---enum (EQ {A} a b) with _≟_ {A} a b
---enum (EQ a .a) | yes refl = refl ∷ []
---... | no _ = []
-enum _ = {!!}
+enum (EQ {A} a b) with _≟_ {A} a b
+enum (EQ a .a) | yes refl = refl ∷ []
+... | no _ = []
 
 -- Size
 
