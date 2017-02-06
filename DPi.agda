@@ -1,6 +1,5 @@
-{-# OPTIONS --without-K #-}
-
 -- Dependent Pi; want Σ and Π types
+-- Warning: K enabled and used below
 
 module DPi where
 
@@ -52,7 +51,8 @@ false true : El `𝟚
 false = inj₁ tt
 true = inj₂ tt
 
--- size of EQ a b is tentatively 1 or 0 depending on whether a ≡ b or not
+-- we are relying on K so the size of EQ a b is 1 or 0 depending on whether a ≡
+-- b or not
 
 `A : U
 `A = SIGMA `𝟚 (λ b → EQ {`𝟚} b false)
@@ -81,10 +81,7 @@ f (inj₁ tt) = false , refl
 f (inj₂ tt) = true , refl
 
 ------------------------------------------------------------------------------
--- Some infrastructure (including some HoTT machinery)
-
-postulate
-  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
+-- Some infrastructure
 
 inj₁lem : {A B : Set} {x y : A} → _≡_ {A = A ⊎ B} (inj₁ x) (inj₁ y) → x ≡ y
 inj₁lem refl = refl
@@ -104,23 +101,12 @@ proj₁lem refl = refl
 proj₂lem : {A B : Set} {x y : A} {z w : B} → (x , z) ≡ (y , w) → z ≡ w
 proj₂lem refl = refl
 
---
-
-transport : ∀ {ℓ ℓ'} → {A : Set ℓ} {x y : A} →
-            (P : A → Set ℓ') → (p : x ≡ y) → P x → P y
-transport P refl = id
-
-fsigma : ∀ {ℓ ℓ'} {A : Set ℓ} {P : A → Set ℓ'} {w w' : Σ A P} →
-         (w ≡ w') → (Σ (proj₁ w ≡ proj₁ w')
-                    (λ p → transport P p (proj₂ w) ≡ proj₂ w'))
-fsigma refl = refl , refl
-
 proj₂dlem : {A : Set} {B : A → Set} {x : A} {z w : B x} →
-            (q : _≡_ {A = Σ A B} (x , z) (x , w)) →
-            -- z ≡ w (bogus: see below)
-            Σ[ p ∈ (x ≡ x) ] transport B p z ≡ w
-proj₂dlem = fsigma
+            _≡_ {A = Σ A B} (x , z) (x , w) → z ≡ w
+proj₂dlem refl = refl
 {--
+Uses K.
+
 Remark 2.7.1. Note that if we have x : A and u,v : P(x) such that (x,u) = (x,v),
 it does not follow that u = v. All we can conclude is that there exists p : x =
 x such that p∗(u) = v. This is a well-known source of confusion for newcomers to
@@ -129,6 +115,9 @@ path (x, u) = (x, v) in the total space of a fibration between two points that
 happen to lie in the same fiber does not imply the existence of a path u = v
 lying entirely within that fiber.
 --}
+
+postulate
+  funext : {A B : Set} {f g : A → B} → ((x : A) → f x ≡ g x) → f ≡ g
 
 _≟_ : {A : U} → Decidable {A = El A} _≡_
 _≟_ {ZERO} ()
@@ -149,9 +138,9 @@ _≟_ {SIGMA A P} (x , y) (z , w) with _≟_ {A} x z
 _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
 _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | yes refl = yes refl
-_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | no ¬p = no {!!}
+_≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | no ¬p = no (¬p ∘ proj₂dlem)
 _≟_ {PI A P} f g = {!!} -- funext?
-_≟_ {EQ a .a} refl p = {!!} -- need refl ≡ p which would require K
+_≟_ {EQ a .a} refl refl = yes refl -- uses K
 
 -- Questions:
 -- Should enum and ∣_∣ map to a flat result or a family of results indexed by a value?
