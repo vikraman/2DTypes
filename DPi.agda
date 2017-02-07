@@ -116,13 +116,13 @@ happen to lie in the same fiber does not imply the existence of a path u = v
 lying entirely within that fiber.
 --}
 
-_∼_ : {A B : U} → (f g : El A → El B) → Set
-_∼_ {A} f g = (x : El A) → f x ≡ g x
-
-postulate
-  funext : {A B : U} {f g : El A → El B} → _∼_ {A} {B} f g → f ≡ g
+-- Decidable equqlity, enumeration
 
 _≟_ : {A : U} → Decidable {A = El A} _≡_
+_≟∀_ : {A : U} {P : El A → U} {as : List (El A)} →
+       Decidable {A = (v : El A) → El (P v)} _≡_
+enum : (A : U) → List (El A)
+
 _≟_ {ZERO} ()
 _≟_ {ONE} tt tt = yes refl
 _≟_ {PLUS A B} (inj₁ x) (inj₁ y) with _≟_ {A} x y
@@ -142,12 +142,20 @@ _≟_ {SIGMA A P} (x , y) (z , w) | no ¬p = no (¬p ∘ cong proj₁)
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl with _≟_ {P x} y w
 _≟_ {SIGMA A P} (x , y) (.x , .y) | yes refl | yes refl = yes refl
 _≟_ {SIGMA A P} (x , y) (.x , w) | yes refl | no ¬p = no (¬p ∘ proj₂dlem)
-_≟_ {PI A P} f g = {!!}
+_≟_ {PI A P} f g = _≟∀_ {A} {P} {enum A} f g
 _≟_ {EQ a .a} refl refl = yes refl -- uses K
+
+postulate
+  -- only invoked when enum A reaches []
+  funext : {A : U} {P : El A → U} → (f g : (v : El A) → El (P v)) → f ≡ g
+
+_≟∀_ {A} {P} {[]} f g = yes (funext {A} {P} f g)
+_≟∀_ {A} {P} {a ∷ as} f g with _≟_ {P a} (f a) (g a)
+... | yes p = _≟∀_ {A} {P} {as} f g
+... | no ¬p = no (¬p ∘ λ q → cong (λ h → h a) q)
 
 -- Enum: can tighten to a Vector later or use size-enum lemma
 
-enum : (A : U) → List (El A)
 enum ZERO = []
 enum ONE = tt ∷ []
 enum (PLUS A B)  = map inj₁ (enum A) ++ map inj₂ (enum B)
