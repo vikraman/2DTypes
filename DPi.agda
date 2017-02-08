@@ -154,6 +154,18 @@ _≟∀_ {A} {P} {a ∷ as} f g with _≟_ {P a} (f a) (g a)
 ... | yes p = _≟∀_ {A} {P} {as} f g
 ... | no ¬p = no (¬p ∘ λ q → cong (λ h → h a) q)
 
+-- Generate functions
+-- Not quite right but general idea
+
+Fun : (A : U) (P : El A → U) → Set
+Fun A P = List (Σ[ a ∈ El A ] El (P a))
+
+makeFuns : {A : U} {P : El A → U} → List (Fun A P)
+makeFuns {A} {P} =
+  concat (map (λ a → map (λ pa → (a , pa) ∷ []) (enum (P a))) (enum A))
+
+gg = makeFuns {`𝟚} {λ a → SIGMA `𝟚 (λ b → EQ {`𝟚} a b)}
+
 -- Enum: can tighten to a Vector later or use size-enum lemma
 
 enum ZERO = []
@@ -161,7 +173,7 @@ enum ONE = tt ∷ []
 enum (PLUS A B)  = map inj₁ (enum A) ++ map inj₂ (enum B)
 enum (TIMES A B) = concat (map (λ a → map (λ b → (a , b)) (enum B)) (enum A))
 enum (SIGMA A P) = concat (map (λ a → map (λ pa → a , pa) (enum (P a))) (enum A))
-enum (PI A P) = concat (map (λ a → map (λ pa → λ b → {!!}) (enum (P a))) (enum A))
+enum (PI A P) = {!!} -- makeFuns {A} {P} (enum A)
 enum (EQ {A} a b) with _≟_ {A} a b
 enum (EQ a .a) | yes refl = refl ∷ []
 ... | no _ = []
