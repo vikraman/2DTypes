@@ -175,10 +175,24 @@ The 2-combinators $\alpha$ also have inverses \ldots
 %%%%%
 \subsection{$\mathcal{U}$}
 
-The univalent universe is $\Sigma_{X:\mathbf{Type}} \| X \equiv \mathbb{2} \|_1$ where \ldots
+We assume an ambient univalent universe defined like in the HoTT book and including dependent pairs, a unit type, coproducts, identity types, and constants $\textsc{funext}$ and $\textsc{univalence}$. Our universe $\mathcal{U}$ is the subuniverse of this ambient universe defined as $\Sigma_{X:\mathbf{Type}} \| X \equiv \mathbb{2} \|_1$ where:
+
+\begin{itemize}
+
+\item $\Sigma$ is the type former for dependent pairs: it comes equipped with an introduction rule, an induction principle, and a computational rule.
+
+\item $\mathbb{2}$ is the type of booleans which comes with the two points, an induction principle, and computational rules.
+
+\item $\equiv$ is the identity type former which comes with $\reflp$, an induction principle $J$, and a computation rule.
+
+\item $\| A \|_1$ is the 1-truncation of $A$ defined as follows: for all $x,y:A$ and $p,q : x \equiv y$ and $\alpha,\beta : p \equiv q$, we have $\alpha=\beta$.
+
+\end{itemize}
 
 %%%%%
 \subsection{Equivalence}
+
+Now we claim that $\mathcal{U}_\Pi$ is equivalent to $\mathcal{U}$ where $\mathcal{U}_\Pi$ is a universe which includes types $\tau$ as a points, combinators $c : \tau_1 \iso \tau_2$ as 1-paths, and 2-combinators $\alpha : c_1 \isotwo c_2$ as 2-paths.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%
