@@ -1,5 +1,10 @@
 \documentclass[format=acmlarge,review,natbib]{acmart}
 
+%% Amr
+%% words to remember :-)
+%% sublime unfathomable
+%% ---
+
 % \usepackage{fdsymbol}
 \usepackage{bbold}
 \usepackage{bussproofs}
@@ -45,6 +50,7 @@
 \newcommand{\compcc}[2]{#1 \bullet #2}
 \newcommand{\respcomp}[2]{#1 \odot #2}
 
+\newcommand{\Typ}{\mathbf{Type}}
 \newcommand{\alt}{~\mid~}
 \newcommand{\patht}[1]{\textsc{PATHS}(#1,#1)}
 \newcommand{\fpatht}[1]{\textsc{FREEPATHS}(#1,\Box)}
@@ -100,7 +106,8 @@ $\displaystyle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\title{Univalent Universes and Completness of Reversible Programs}
+\title{Univalent Universes and Completness of Reversible Programs: \\
+  Featherweight HoTT}
 
 \author{X}
 \affiliation{
@@ -128,6 +135,58 @@ Our conjecture:
 \end{itemize}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Univalence}
+
+Let $X : \Typ$. We have:
+\[
+\textit{transport-equiv} : \Pi_{P : X \to \Typ}~ \Pi_{x,y:X}~
+    x \equiv y  \to P x \simeq P y
+\]
+For a fibration with base $X$, define:
+\[\begin{array}{l}
+\textit{is-univalent-fibration} : (X \to \Typ) \to \Typ \\
+\textit{is-univalent-fibration}~P =
+    \Pi_{x,y:X}~\textit{is-equiv} (\textit{transport-equiv}~P~x~y)
+\end{array}\]
+
+\noindent\paragraph*{Examples}
+\begin{itemize}
+\item Take $X = \Typ$ and $P = \mathit{Id}_{\Typ}$. The statement
+  $\textit{is-univalent-fibration}~P$ reduces to $\Pi_{x,y:\Typ}~x \equiv y \to
+  x \simeq y$ which is the usual definition of univalence.
+\item Take $X = \mathbb{1}$ with element $\star$ and
+  $P = \lambda \_. \mathbb{1}$. The statement
+  $\textit{is-univalent-fibration}~P$ reduces to
+  $(\star\equiv\star)\simeq(\mathbb{1}\simeq\mathbb{1})$ which is true.
+\item Take $X = \mathbb{1}$ and $P = \lambda \_. \mathbb{0}$. The statement
+  $\textit{is-univalent-fibration}~P$ reduces to
+  $(\star\equiv\star)\simeq(\mathbb{0}\simeq\mathbb{0})$ which is also true.
+\item Take $X = \mathbb{1}$. For no $P$ other than the above two instances will
+  we have a univalent fibration.
+\item Take $X = \mathbb{2}$ with elements $\fc$ and $\tc$ and
+  $P = \lambda \_. \mathbb{1}$. The statement
+  $\textit{is-univalent-fibration}~P$ reduces to $(\fc \equiv \tc) \simeq
+  (\mathbb{1}\simeq\mathbb{1})$ which is false.
+\item Take $X = \mathbb{2}$ with elements $\fc$ and $\tc$ and
+  $P = \lambda \{ \fc \to \mathbb{0}; \tc \to \mathbb{1} \}$ The statement
+  $\textit{is-univalent-fibration}~P$ reduces to $(\fc \equiv \tc) \simeq
+  (\mathbb{0}\simeq\mathbb{1})$ which is true. That is the only choice of $P$
+  that works (modulo symmetry).
+\item For any $n > 2$, taking $X$ as sum of $n$ copies of $\mathbb{1}$ can never
+  give a univalent fibration.
+\end{itemize}
+
+\begin{theorem}
+  Let $X$ be path-connected. Then $X$ is the base of a univalent fibration only
+  if there exists an $F$ such that $X \simeq \Sigma_{Y : \Typ} \| Y \equiv F \|$
+\end{theorem}
+
+\noindent In particular $\Sigma_{Y : \Typ} \| Y \equiv \mathbb{2} \|$ is the base of a
+univalent fibration. In some sense this is the simplest univalent universe, our
+featherweight HoTT that we aim to characterize as a reversible programming
+language based on type isomorphisms.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Bool Case}
 
 To get started let's look at the case of $\mathbb{2}$ instead of the entire set of finite types defined using $0$, $1$, $+$, and $*$.
@@ -148,11 +207,11 @@ v &::=& \begin{array}[t]{lrcl}
 c &::=& \begin{array}[t]{lrcl}
               & \id &:& \tau \iso \tau \\
                \alt & \swap &:& \mathbb{2} \iso \mathbb{2} \\
-               \alt & \circ &:& (\tau_1 \iso \tau_2) \rightarrow (\tau_2 \iso \tau_3)
-                              \rightarrow (\tau_1 \iso \tau_3)
+               \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3)
+                              \to (\tau_1 \iso \tau_3)
                \end{array} \\
 \\
-! &:& (\tau_1 \iso \tau_2) \rightarrow (\tau_2 \iso \tau_1) \\
+! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
 \invc{\id} &=& \id \\
 \invc{\swap} &=& \swap \\
 \invc{(\compc{c_1}{c_2})} &=& \compc{\invc{c_2}\;}{\;\invc{c_1}} \\
@@ -165,13 +224,15 @@ c &::=& \begin{array}[t]{lrcl}
                \alt & \idrc &:& \compc{c}{\id} \isotwo c \\
                \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
                \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
-               \alt & \bullet &:& (c_1 \isotwo c_2) \rightarrow (c_2 \isotwo c_3)
-                                            \rightarrow (c_1 \isotwo c_3) \\
-               \alt & \odot &:& (c_1 \isotwo c_1') \rightarrow (c_2 \isotwo c_2')
-                                            \rightarrow (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
+               \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3)
+                                            \to (c_1 \isotwo c_3) \\
+               \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2')
+                                            \to (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
              \end{array}
 \end{array}\]
-The 2-combinators $\alpha$ also have inverses \ldots
+
+The 2-combinators $\alpha$ also have inverses. The above forms a groupoid (see
+accompanying code).
 
 %%%%%
 \subsection{$\mathcal{U}$}
@@ -194,11 +255,22 @@ We assume an ambient univalent universe defined like in the HoTT book and includ
 %%%%%
 \subsection{Equivalence}
 
-Now we claim that $\mathcal{U}_\Pi$ is equivalent to $\mathcal{U}$ where $\mathcal{U}_\Pi$ is a universe which includes types $\tau$ as a points, combinators $c : \tau_1 \iso \tau_2$ as 1-paths, and 2-combinators $\alpha : c_1 \isotwo c_2$ as 2-paths.
+Now we claim that $\mathcal{U}_\Pi$ is equivalent to $\mathcal{U}$ where
+$\mathcal{U}_\Pi$ is a universe which includes types $\tau$ as a points,
+combinators $c : \tau_1 \iso \tau_2$ as 1-paths, and 2-combinators $\alpha : c_1
+\isotwo c_2$ as 2-paths. The proof is in a meta-logic which is itself univalent.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%
-\section{Generalizations}
+\section{Generalization I}
+
+Use all finite types instead of just Bool
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%
+\section{Generalization II}
+
+Add a HIT to the univalent universe, perhaps something to do with fractionals.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
