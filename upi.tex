@@ -60,6 +60,8 @@
 \newcommand{\evalone}[2]{eval(#1,#2)}
 \newcommand{\evalbone}[2]{evalB(#1,#2)}
 \newcommand{\reflp}{\textsc{refl}}
+\newcommand{\notp}{\textsc{not}}
+\newcommand{\gluep}{\textsc{glue}}
 \newcommand{\reflh}{\mathit{refl}_{\sim}}
 \newcommand{\symh}[1]{\mathit{sym}_{\sim}~#1}
 \newcommand{\transh}[2]{\mathit{trans}_{\sim}~#1~#2}
@@ -82,6 +84,7 @@
 \newcommand{\piso}{\multimapdotbothB~~}
 \newcommand{\zt}{\mathbb{0}}
 \newcommand{\ot}{\mathbb{1}}
+\newcommand{\bt}{\mathbb{2}}
 \newcommand{\fc}{\mathit{false}}
 \newcommand{\tc}{\mathit{true}}
 \newcommand{\boolt}{\mathbb{B}}
@@ -154,42 +157,50 @@ For a fibration with base $X$, define:
 \item Take $X = \Typ$ and $P = \mathit{Id}_{\Typ}$. The statement
   $\textit{is-univalent-fibration}~P$ reduces to $\Pi_{x,y:\Typ}~x \equiv y \to
   x \simeq y$ which is the usual definition of univalence.
-\item Take $X = \mathbb{1}$ with element $\star$ and
-  $P = \lambda \_. \mathbb{1}$. The statement
+\item Take $X = \ot$ with element $\star$ and $P = \lambda \_. \ot$. The
+  statement $\textit{is-univalent-fibration}~P$ reduces to
+  $(\star\equiv\star)\simeq(\ot\simeq\ot)$ which is true.
+\item Take $X = \ot$ and $P = \lambda \_. \zt$. The statement
   $\textit{is-univalent-fibration}~P$ reduces to
-  $(\star\equiv\star)\simeq(\mathbb{1}\simeq\mathbb{1})$ which is true.
-\item Take $X = \mathbb{1}$ and $P = \lambda \_. \mathbb{0}$. The statement
-  $\textit{is-univalent-fibration}~P$ reduces to
-  $(\star\equiv\star)\simeq(\mathbb{0}\simeq\mathbb{0})$ which is also true.
-\item Take $X = \mathbb{1}$. For no $P$ other than the above two instances will
+  $(\star\equiv\star)\simeq(\zt\simeq\zt)$ which is also true.
+\item Take $X = \ot$. For no $P$ other than the above two instances will
   we have a univalent fibration.
-\item Take $X = \mathbb{2}$ with elements $\fc$ and $\tc$ and
-  $P = \lambda \_. \mathbb{1}$. The statement
+\item Take $X = \bt$ with elements $\fc$ and $\tc$ and
+  $P = \lambda \_. \ot$. The statement
   $\textit{is-univalent-fibration}~P$ reduces to $(\fc \equiv \tc) \simeq
-  (\mathbb{1}\simeq\mathbb{1})$ which is false.
-\item Take $X = \mathbb{2}$ with elements $\fc$ and $\tc$ and
-  $P = \lambda \{ \fc \to \mathbb{0}; \tc \to \mathbb{1} \}$ The statement
+  (\ot\simeq\ot)$ which is false.
+\item Take $X = \bt$ with elements $\fc$ and $\tc$ and
+  $P = \lambda \{ \fc \to \zt; \tc \to \ot \}$ The statement
   $\textit{is-univalent-fibration}~P$ reduces to $(\fc \equiv \tc) \simeq
-  (\mathbb{0}\simeq\mathbb{1})$ which is true. That is the only choice of $P$
+  (\zt\simeq\ot)$ which is true. That is the only choice of $P$
   that works (modulo symmetry).
-\item For any $n > 2$, taking $X$ as sum of $n$ copies of $\mathbb{1}$ can never
+\item For any $n > 2$, taking $X$ as sum of $n$ copies of $\ot$ can never
   give a univalent fibration.
 \end{itemize}
 
 \begin{theorem}
   Let $X$ be path-connected. Then $X$ is the base of a univalent fibration only
-  if there exists an $F$ such that $X \simeq \Sigma_{Y : \Typ} \| Y \equiv F \|$
+  if there exists an $F$ such that $X \simeq \Sigma_{Y : \Typ} \| Y \equiv F
+  \|$. We will refer to this type as $\{F\}$.
 \end{theorem}
 
-\noindent In particular $\Sigma_{Y : \Typ} \| Y \equiv \mathbb{2} \|$ is the base of a
-univalent fibration. In some sense this is the simplest univalent universe, our
+\noindent In particular $\{\bt\}$, i.e.,
+$\Sigma_{Y : \Typ} \| Y \equiv \bt \|$ is the base of a univalent
+fibration. In some sense this is the simplest univalent universe, our
 featherweight HoTT that we aim to characterize as a reversible programming
 language based on type isomorphisms.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Some Simple Cases}
+
+Pick $F = \ot$. We have $\{\ot\} \simeq \ot$. Another
+simple but less trivial case is $F = S^1$. In that case we also have
+$\{S^1\} \simeq S^1$.p
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Bool Case}
 
-To get started let's look at the case of $\mathbb{2}$ instead of the entire set of finite types defined using $0$, $1$, $+$, and $*$.
+To get started let's look at the case of $\bt$ instead of the entire set of finite types defined using $0$, $1$, $+$, and $*$.
 
 %%%%%
 \subsection{$\Pi$}
@@ -197,16 +208,16 @@ To get started let's look at the case of $\mathbb{2}$ instead of the entire set 
 The restriction of $\Pi$ is the following:
 
 \[\begin{array}{rcl}
-\tau &::=& \mathbb{2} \\
+\tau &::=& \bt \\
 \\
 v &::=& \begin{array}[t]{lrcl}
-                    & \fc &:& \mathbb{2} \\
-              \alt & \tc &:& \mathbb{2}
+                    & \fc &:& \bt \\
+              \alt & \tc &:& \bt
                \end{array} \\
 \\
 c &::=& \begin{array}[t]{lrcl}
               & \id &:& \tau \iso \tau \\
-               \alt & \swap &:& \mathbb{2} \iso \mathbb{2} \\
+               \alt & \swap &:& \bt \iso \bt \\
                \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3)
                               \to (\tau_1 \iso \tau_3)
                \end{array} \\
@@ -231,24 +242,25 @@ c &::=& \begin{array}[t]{lrcl}
              \end{array}
 \end{array}\]
 
-The 2-combinators $\alpha$ also have inverses. The above forms a groupoid (see
-accompanying code).
+The 2-combinators $\alpha$ also have inverses. The above forms a 2-groupoid (see
+accompanying code once it is fixed).
 
 %%%%%
 \subsection{$\mathcal{U}$}
 
-We assume an ambient univalent universe defined like in the HoTT book and including dependent pairs, a unit type, coproducts, identity types, and constants $\textsc{funext}$ and $\textsc{univalence}$. Our universe $\mathcal{U}$ is the subuniverse of this ambient universe defined as $\Sigma_{X:\mathbf{Type}} \| X \equiv \mathbb{2} \|$ where:
+We assume an ambient univalent universe defined like in the HoTT book and including dependent pairs, a unit type, coproducts, identity types, and constants $\textsc{funext}$ and $\textsc{univalence}$. Our universe $\mathcal{U}$ is the subuniverse of this ambient universe defined as $\Sigma_{X:\mathbf{Type}} \| X \equiv \bt \|$ where:
 
 \begin{itemize}
 
 \item $\Sigma$ is the type former for dependent pairs: it comes equipped with an introduction rule, an induction principle, and a computational rule.
 
-\item $\mathbb{2}$ is the type of booleans which comes with the two points, an induction principle, and computational rules.
+\item $\bt$ is the type of booleans which comes with the two points, an induction principle, and computational rules.
 
 \item $\equiv$ is the identity type former which comes with $\reflp$, an induction principle $J$, and a computation rule.
 
 \item $\| A \|$ is the propositional truncation of $A$ defined as follows: for
-  any $x:A$ we have $|x| : \|A\|$, and for any $x,y : \|A\|$, we have $x \equiv y$.
+  any $x:A$ we have $|x| : \|A\|$, and for any $x,y : \|A\|$, we have
+  $\gluep : x \equiv y$.
 
 \end{itemize}
 
@@ -257,8 +269,36 @@ We assume an ambient univalent universe defined like in the HoTT book and includ
 
 Now we claim that $\mathcal{U}_\Pi$ is equivalent to $\mathcal{U}$ where
 $\mathcal{U}_\Pi$ is a universe which includes types $\tau$ as a points,
-combinators $c : \tau_1 \iso \tau_2$ as 1-paths, and 2-combinators $\alpha : c_1
-\isotwo c_2$ as 2-paths. The proof is in a meta-logic which is itself univalent.
+combinators $c : \tau_1 \iso \tau_2$ as 1-paths, and 2-combinators
+$\alpha : c_1 \isotwo c_2$ as 2-paths. The proof is in a meta-logic which is
+itself univalent.
+
+We begin by unpacking the objects, 1-paths, and 2-paths of $\{\bt\}$.
+
+\paragraph*{Objects in $\{\bt\}$.} The only term in $\{\bt\}$ is
+$(\bt,\|\reflp_{\bt}\|)$ which we call $`\bt$. Formally we can prove
+$\|(X,p) \equiv `\bt\|$ is inhabited for all $X$ and $p$.
+
+\paragraph*{1-Paths in $\{\bt\}$.} These are paths between $`\bt$ and
+$`\bt$. Generally speaking, paths between elements of a $\Sigma$-type are pairs
+of paths with a transport in the second component. If we have a type $A$ with
+points $a$ and $b$ and a path $p : a \equiv b$. Fix some $c$ and consider the
+dependent function $(x:A) \rightarrow (x \equiv c)$. This forms the types
+$a\equiv c$ and $b\equiv c$ with elements $ua$ and $ub$. Now a path between
+$(a,ua)$ and $(b,ub)$ is a pair $(p,\alpha)$ where $\alpha : p_* ua \equiv
+ub$. Hence paths between $`\bt$ and $`\bt$ are going to be for the form
+$(p,\alpha)$ where $p : \bt \equiv \bt$ and $\alpha$ is essentially $\gluep$
+from the definition of truncation. So we have two paths:
+\[\begin{array}{rcl}
+`\mathbf{id} &=& (\reflp,\gluep) \\
+`\mathbf{not} &=& (\notp,\gluep)
+\end{array}\]
+
+\paragraph*{2-Paths in $\{\bt\}$.} Now are considering paths between
+$`\mathbf{id}$ and $`\mathbf{id}$, and between $`\mathbf{not}$ and
+$`\mathbf{not}$. We have at least one path at this level which is
+$(\reflp,\gluep)$ but to show that that this is the only path we will have to
+first prove that $`\mathbf{not} \circ `\mathbf{not} \equiv `\mathbf{id}$.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%
