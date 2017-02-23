@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module Uni-fib where
 
 import Level as L using (_⊔_; suc)
@@ -38,7 +40,7 @@ postulate
          → ((x : A) → f x ≡ g x) → f ≡ g
 
 ⟪_⟫ : ∀ {ℓ} (F : Set ℓ) → Set _
-⟪_⟫ F = Σ[ Y ∈ (Set _) ] (∥ Y ≡ F ∥)
+⟪_⟫ F = Σ[ Y ∈ (Set _) ] (∥ Y ≃ F ∥)
 
 UA : ∀ {ℓ} {A : Set ℓ} → Set _
 UA {ℓ} {A} = IsUnivFib {ℓ₁ = L.suc ℓ} id
