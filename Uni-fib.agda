@@ -2,7 +2,7 @@
 
 module Uni-fib where
 
-import Level as L using (_⊔_; suc)
+import Level as L
 open import Data.Empty
 open import Data.Unit
 open import Data.Bool
@@ -119,3 +119,10 @@ module ex3 where
 
   PIsUnivFib : IsUnivFib P
   PIsUnivFib = (f⁻¹ , α) , (f⁻¹ , β)
+
+Ω : ∀ {ℓ} (A : Set ℓ) {a : A} → Set _
+Ω A {a} = a ≡ a
+
+Lemma : ∀ {ℓ ℓ'} (F : Set ℓ) → Σ[ P ∈ (F → Set ℓ') ] (IsUnivFib P)
+      → Ω ⟪ F ⟫ {F , ∣ (ω refl) ∣} ≃ L.Lift (F ≃ F)
+Lemma F (P , PIsUnivFib) = {!!}
