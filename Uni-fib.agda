@@ -36,8 +36,13 @@ data ∥_∥ {ℓ} (A : Set ℓ) : Set ℓ where
   ∣_∣ : A → ∥ A ∥
 postulate
   trunIsProp : ∀ {ℓ} {A : Set ℓ} → isProp ∥ A ∥
+  univalence : ∀ {ℓ} {A B : Set ℓ} → IsEquiv (ω {A = A} {B = B})
   funext : ∀ {ℓ ℓ'} {A : Set ℓ} {B : A → Set ℓ'} {f g : (x : A) → B x}
          → ((x : A) → f x ≡ g x) → f ≡ g
+
+ua : ∀ {ℓ} {A B : Set ℓ} → (A ≃ B) → (A ≡ B)
+ua {ℓ} {A} {B} with univalence {A = A} {B = B}
+ua {ℓ} {A} {B} | (g , α) , (h , β) = h
 
 ⟪_⟫ : ∀ {ℓ} (F : Set ℓ) → Set _
 ⟪_⟫ F = Σ[ Y ∈ (Set _) ] (∥ Y ≃ F ∥)
@@ -123,6 +128,11 @@ module ex3 where
 Ω : ∀ {ℓ} (A : Set ℓ) {a : A} → Set _
 Ω A {a} = a ≡ a
 
-Lemma : ∀ {ℓ ℓ'} (F : Set ℓ) → Σ[ P ∈ (F → Set ℓ') ] (IsUnivFib P)
-      → Ω ⟪ F ⟫ {F , ∣ (ω refl) ∣} ≃ L.Lift (F ≃ F)
-Lemma F (P , PIsUnivFib) = {!!}
+Lemma : ∀ {ℓ} (F : Set ℓ) → Ω ⟪ F ⟫ {F , ∣ (ω refl) ∣} ≃ L.Lift (F ≃ F)
+Lemma F = 𝒇 , (𝒇⁻¹ , {!!}) , (𝒇⁻¹ , {!!})
+  where
+  𝒇 : Ω ⟪ F ⟫ → L.Lift (F ≃ F)
+  𝒇 p = L.lift {!!}
+
+  𝒇⁻¹ : L.Lift (F ≃ F) → Ω ⟪ F ⟫
+  𝒇⁻¹ (L.lift (f , (g , α) , (h , β))) = {!!}
