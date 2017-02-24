@@ -44,6 +44,9 @@ ua : ∀ {ℓ} {A B : Set ℓ} → (A ≃ B) → (A ≡ B)
 ua {ℓ} {A} {B} with univalence {A = A} {B = B}
 ua {ℓ} {A} {B} | (g , α) , (h , β) = h
 
+pathConnected : ∀ {ℓ} (X : Set ℓ) → Set _
+pathConnected X = (x y : X) → ∥ x ≡ y ∥
+
 ⟪_⟫ : ∀ {ℓ} (F : Set ℓ) → Set _
 ⟪_⟫ F = Σ[ Y ∈ (Set _) ] (∥ Y ≃ F ∥)
 
@@ -136,3 +139,17 @@ Lemma F = 𝒇 , (𝒇⁻¹ , {!!}) , (𝒇⁻¹ , {!!})
 
   𝒇⁻¹ : L.Lift (F ≃ F) → Ω ⟪ F ⟫
   𝒇⁻¹ (L.lift (f , (g , α) , (h , β))) = {!!}
+
+α : ∀ {ℓ} {F : Set ℓ} → ⟪ F ⟫ → Set _
+α = proj₁
+
+Proposition : ∀ {ℓ} {F : Set ℓ} → IsUnivFib {A = ⟪ F ⟫} α
+Proposition = {!!}
+
+Theorem₁ : ∀ {ℓ} {A : Set ℓ} (B : A → Set ℓ) → pathConnected A
+         → (F : Set ℓ) → Σ[ f ∈ (A → ⟪ F ⟫) ] (IsEquiv f × (α ∘ f) ~ B)
+Theorem₁ = {!!}
+
+Theorem₂ : ∀ {ℓ₁ ℓ₂} (X : Set ℓ₁) → pathConnected X → (F : Set ℓ₁) → L.Lift X ≃ ⟪ F ⟫
+         → Σ[ P ∈ (X → Set ℓ₂) ] IsUnivFib P
+Theorem₂ = {!!}
