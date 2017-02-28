@@ -14,8 +14,18 @@ open import Relation.Binary.PropositionalEquality
 _~_ : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} (f g : A → B) → Set _
 _~_ {A = A} f g = (a : A) → f a ≡ g a
 
+IsQinv : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} (f : A → B) → Set _
+IsQinv {ℓ} {ℓ'} {A} {B} f = Σ[ g ∈ (B → A) ] ((f ∘ g) ~ id) × ((g ∘ f) ~ id)
+
 IsEquiv : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} → (A → B) → Set _
 IsEquiv {A = A} {B = B} f = (Σ[ g ∈ (B → A) ] ((f ∘ g) ~ id) ) × (Σ[ h ∈ (B → A) ] ((h ∘ f) ~ id) )
+
+IsEquiv→Qinv : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} {f : A → B} →
+               IsEquiv f → IsQinv f
+IsEquiv→Qinv {f = f} ((g , α) , (h , β)) =
+             let γ : g ~ h
+                 γ x = trans (sym (β (g x))) (cong h (α x))
+             in  g , (α , (λ x → trans (γ (f x)) (β x)))
 
 _≃_ : ∀ {ℓ} (A B : Set ℓ) → Set _
 A ≃ B = Σ[ f ∈ (A → B) ] (IsEquiv f)
@@ -40,9 +50,13 @@ postulate
   funext : ∀ {ℓ ℓ'} {A : Set ℓ} {B : A → Set ℓ'} {f g : (x : A) → B x}
          → ((x : A) → f x ≡ g x) → f ≡ g
 
+Σ≡ : ∀ {ℓ ℓ'} {A : Set ℓ} {P : A → Set ℓ'} {w w' : Σ[ x ∈ A ] P x}
+   → (p : (proj₁ w ≡ proj₁ w')) → (subst P p) (proj₂ w) ≡ (proj₂ w') → w ≡ w'
+Σ≡ refl refl = refl
+
 ua : ∀ {ℓ} {A B : Set ℓ} → (A ≃ B) → (A ≡ B)
-ua {ℓ} {A} {B} with univalence {A = A} {B = B}
-ua {ℓ} {A} {B} | (g , α) , (h , β) = h
+ua {ℓ} {A} {B} with IsEquiv→Qinv (univalence {A = A} {B = B})
+ua {ℓ} {A} {B} | (f⁻¹ , α , β) = f⁻¹
 
 pathConnected : ∀ {ℓ} (X : Set ℓ) → Set _
 pathConnected X = (x y : X) → ∥ x ≡ y ∥
@@ -132,13 +146,25 @@ module ex3 where
 Ω A {a} = a ≡ a
 
 Lemma : ∀ {ℓ} (F : Set ℓ) → Ω ⟪ F ⟫ {F , ∣ (ω refl) ∣} ≃ L.Lift (F ≃ F)
-Lemma F = 𝒇 , (𝒇⁻¹ , {!!}) , (𝒇⁻¹ , {!!})
+Lemma F = 𝒇 , (𝒇⁻¹ , α) , (𝒇⁻¹ , β)
   where
   𝒇 : Ω ⟪ F ⟫ → L.Lift (F ≃ F)
-  𝒇 p = L.lift {!!}
+  𝒇 p = L.lift (ω (cong proj₁ p))
 
   𝒇⁻¹ : L.Lift (F ≃ F) → Ω ⟪ F ⟫
-  𝒇⁻¹ (L.lift (f , (g , α) , (h , β))) = {!!}
+  𝒇⁻¹ (L.lift F≃F) = Σ≡ (ua F≃F) (trunIsProp _ _)
+
+  proj₁≡ : ∀ {ℓ ℓ'} {A : Set ℓ} {B : A → Set ℓ'}
+         → {a a' : A} {b : B a} {b' : B a'} {p : a ≡ a'} {q : subst B p b ≡ b'}
+         → (cong proj₁ (Σ≡ p q)) ≡ p
+  proj₁≡ {p = refl} {refl} = refl
+
+  α : (𝒇 ∘ 𝒇⁻¹) ~ id
+  α (L.lift F≃F) with (univalence {A = F} {B = F})
+  ... | (g , α) , (h , β) = cong L.lift (trans (cong ω proj₁≡) (α F≃F))
+
+  β : (𝒇⁻¹ ∘ 𝒇) ~ id
+  β p = {!!}
 
 α : ∀ {ℓ} {F : Set ℓ} → ⟪ F ⟫ → Set _
 α = proj₁
