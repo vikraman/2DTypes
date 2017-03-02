@@ -10,6 +10,7 @@
 \usepackage{bussproofs}
 \usepackage{keystroke}
 \usepackage{comment}
+\usepackage{tikz}
 
 %% \usepackage{hyphenat}
 %% \usepackage{color}
@@ -136,6 +137,45 @@ Our conjecture:
 \item Let $\Pi$ be the previously  described reversible programming with 1-paths and 2-paths
 \item We conjecture that $\Pi$ includes codes for \emph{all} paths in $\mathcal{U}$
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Preliminaries}
+
+[Following the HoTT book and the slides on ``A Characterization of Univalent
+Fibrations'' by Dan Christensen.]
+
+We think of a type family $P : A \to \mathcal{U}$ as a \emph{fibration} with
+base space $A$, with $P(x)$ being the fiber over $x$, and with
+$\Sigma_{(x:A)} P(x)$ being the \emph{total space} of the fibration, and with
+first projection $\Sigma_{(x:A)} P(x) \to A$. In the figure below, the pairs
+$(x,u)$ and $(y,p_*(y))$ are in the total space. A critical property of
+fibrations is that a path $p : x \equiv y$ in the base space $A$ and a point $u$
+in the fiber over $x$ induce a function that \emph{lifts} the path to the total
+space: the lifted path starts at $(x,u)$ and ends at $(y,p_*(u))$ for some point
+$p_*(u)$ in the fiber over $y$ that depends on $p$ and $u$.
+
+\begin{center}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
+  \draw (-3,0) ellipse (1.5cm and 3cm);
+  \draw (3,2) ellipse (0.5cm and 1cm);
+  \draw (3,-2) ellipse (0.5cm and 1cm);
+  \node[blue,ultra thick,above] at (-3,3) {$A$};
+  \node[blue,ultra thick,above] at (3,3) {$P(x)$ (fiber over $x$)};
+  \node[blue,ultra thick,below] at (3,-3) {$P(y)$ (fiber over $y$)};
+  \draw[fill] (-3,1.5) circle [radius=0.025];
+  \draw[fill] (-3,-1.5) circle [radius=0.025];
+  \draw[left,cyan,thick] (-3,1.5) -- (-3,-1.5);
+  \node[above] at (-3,1.5) {$x$};
+  \node[below] at (-3,-1.5) {$y$};
+  \draw[fill] (3,1.8) circle [radius=0.025];
+  \draw[fill] (3,-1.8) circle [radius=0.025];
+  \node[above] at (3,1.8) {$u$};
+  \node[below] at (3,-1.8) {$p_*(u)$};
+  \node[left,cyan] at (-3,0) {$p$};
+  \draw[->,red,dashed,ultra thick] (-3,1.5) to [out=45, in=135] (2.4,2.5);
+  \draw[->,red,dashed,ultra thick] (-3,-1.5) to [out=-45, in=-135] (2.4,-2.5);
+\end{tikzpicture}
+\end{center}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Univalence}
