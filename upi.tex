@@ -188,13 +188,25 @@ sometimes called a \emph{section} of the fibration $P$.
 \paragraph*{Univalent Type Family.} A type family $P : A \to \mathcal{U}$ is
 \emph{univalent} if the following function is an equivalence:
 \[\begin{array}{rcl}
-f & : & (x \equiv y) \to (P(x) \simeq P(y)) \\
+V_P & : & (x \equiv y) \to (P(x) \simeq P(y)) \\
+V_P &=& \lambda p. \mathit{idtoequiv}(\mathit{ap}_{P}(p))
 \end{array}\]
-where $x,y:A$.
+where $x,y:A$ and the standard constructions from the book
+$\mathit{ap} : (x \equiv y) \to (P(x) \equiv P(y)$ and
+$\mathit{idtoequiv} : (A \equiv B) \to (A \simeq B)$.
+
+\paragraph*{Example I.} Consider the type family
+$\mathit{Id} : \mathcal{U} \to \mathcal{U}$. In this case, the function
+$V_{\mathit{Id}}$ is $\mathit{idtoequiv}$ and the definition of univalent type
+family reduces to the conventional univalence axiom.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Univalence}
+
+
+
+
+
+\newpage
 
 Let $X : \Typ$. We have:
 \[
