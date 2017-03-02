@@ -144,15 +144,23 @@ Our conjecture:
 [Following the HoTT book and the slides on ``A Characterization of Univalent
 Fibrations'' by Dan Christensen.]
 
-We think of a type family $P : A \to \mathcal{U}$ as a \emph{fibration} with
-base space $A$, with $P(x)$ being the fiber over $x$, and with
-$\Sigma_{(x:A)} P(x)$ being the \emph{total space} of the fibration, and with
-first projection $\Sigma_{(x:A)} P(x) \to A$. In the figure below, the pairs
-$(x,u)$ and $(y,p_*(y))$ are in the total space. A critical property of
-fibrations is that a path $p : x \equiv y$ in the base space $A$ and a point $u$
-in the fiber over $x$ induce a function that \emph{lifts} the path to the total
-space: the lifted path starts at $(x,u)$ and ends at $(y,p_*(u))$ for some point
-$p_*(u)$ in the fiber over $y$ that depends on $p$ and $u$.
+\paragraph*{Type Family.} A dependent function $P : A \to \mathcal{U}$ defines a
+\emph{type family}, $P(x)$ indexed by $x:A$.
+
+\paragraph*{Transport.} Given a type family $P : A \to \mathcal{U}$, a path
+$p : x \equiv y$ in $A$ induces a function $p_* : P(x) \to P(y)$ which
+transports points in $P(x)$ to points in $P(y)$.
+
+\paragraph*{Fibration.} We think of a type family $P : A \to \mathcal{U}$ as a
+\emph{fibration} with base space $A$, with $P(x)$ being the fiber over $x$, and
+with $\Sigma_{(x:A)} P(x)$ being the \emph{total space} of the fibration, and
+with first projection $\Sigma_{(x:A)} P(x) \to A$. In the figure below, $p_*(u)$
+is the transport of $u$ along $p$ and both pairs $(x,u)$ and $(y,p_*(y))$ are in
+the total space. A critical property of fibrations is that a path
+$p : x \equiv y$ in the base space $A$ and a point $u$ in the fiber over $x$
+induce a function that \emph{lifts} the path to the total space: the lifted path
+starts at $(x,u)$ and ends at $(y,p_*(u))$. A function $f : \Pi_{(x:A)} P(x)$ is
+sometimes called a \emph{section} of the fibration $P$.
 
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
@@ -176,6 +184,14 @@ $p_*(u)$ in the fiber over $y$ that depends on $p$ and $u$.
   \draw[->,red,dashed,ultra thick] (-3,-1.5) to [out=-45, in=-135] (2.4,-2.5);
 \end{tikzpicture}
 \end{center}
+
+\paragraph*{Univalent Type Family.} A type family $P : A \to \mathcal{U}$ is
+\emph{univalent} if the following function is an equivalence:
+\[\begin{array}{rcl}
+f & : & (x \equiv y) \to (P(x) \simeq P(y)) \\
+\end{array}\]
+where $x,y:A$.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Univalence}
