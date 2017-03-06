@@ -12,15 +12,6 @@
 \usepackage{comment}
 \usepackage{tikz}
 
-\makeatletter
-\tikzset{my loop/.style =  {to path={
-  \pgfextra{\let\tikztotarget=\tikztostart}
-%%  [looseness=100, in=60,out=120]
-%%  [looseness=8,min distance=5mm, in=60,out=120]
-  \tikz@to@curve@path}
-  }}
-\makeatletter
-
 %% \usepackage{hyphenat}
 %% \usepackage{color}
 %% \usepackage{url}
@@ -207,13 +198,13 @@ such that $q_*(u) \equiv v$.
 \paragraph*{Univalent Type Family.}
 Given standard constructions in the book, we have a function:
 \[\begin{array}{rcl}
-\textit {transport-equiv} &:& \Pi_{P : A \to \mathcal{U}}~ \Pi_{x,y:A}~
+\textit {transport-equiv} &:& \Pi_{(P : A \to \mathcal{U})}~ \Pi_{(x,y:A)}~
     x \equiv y  \to P x \simeq P y \\
-\textit{transport-equiv}~P~x~y &=& \lambda p. \mathit{idtoequiv}(\mathit{ap}_{P}(p))
+\textit{transport-equiv}~P~x~y &=& \lambda p. \mathit{idtoeqv}(\mathit{ap}_{P}(p))
 \end{array}\]
 with the standard definitions for
 $\mathit{ap} : (x \equiv y) \to (P(x) \equiv P(y))$ and
-$\mathit{idtoequiv} : (A \equiv B) \to (A \simeq B)$. We say a type family
+$\mathit{idtoeqv} : (A \equiv B) \to (A \simeq B)$. We say a type family
 $P : A \to \mathcal{U}$ is \emph{univalent} if for all $x,y:A$
 the function $\textit{transport-equiv}~P~x~y$ is an equivalence. Formally:
 \[\begin{array}{l}
@@ -224,8 +215,9 @@ the function $\textit{transport-equiv}~P~x~y$ is an equivalence. Formally:
 \noindent\paragraph*{Examples}
 \begin{itemize}
 \item Take $A = \mathcal{U}$ and $P = \mathit{Id}_{\mathcal{U}}$. The statement
-  $\textit{is-univalent-fibration}~P$ reduces to $\Pi_{x,y:\mathcal{U}}~x \equiv y \to
-  x \simeq y$ which is the usual definition of univalence.
+  $\textit{is-univalent-fibration}~P$ reduces to
+  $\Pi_{(x,y:\mathcal{U})}~\textit{is-equiv}~\mathit {idtoeqv}$ which is the
+  usual definition of univalence.
 
 \newpage
 
