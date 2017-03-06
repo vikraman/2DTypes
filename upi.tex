@@ -175,9 +175,11 @@ sometimes called a \emph{section} of the fibration $P$.
   \draw[left,cyan,thick] (-3,1.5) -- (-3,-1.5);
   \node[above] at (-3,1.5) {$x$};
   \node[below] at (-3,-1.5) {$y$};
-  \draw[fill] (3,1.8) circle [radius=0.025];
+  \draw[fill] (3,1.5) circle [radius=0.025];
+  \draw[fill] (3,2.1) circle [radius=0.025];
   \draw[fill] (3,-1.8) circle [radius=0.025];
-  \node[above] at (3,1.8) {$u$};
+  \node[above] at (3,1.5) {$u$};
+  \node[above] at (3,2.1) {$v$};
   \node[below] at (3,-1.8) {$p_*(u)$};
   \node[left,cyan] at (-3,0) {$p$};
   \draw[->,red,dashed,ultra thick] (-3,1.5) to [out=45, in=135] (2.4,2.5);
@@ -185,46 +187,36 @@ sometimes called a \emph{section} of the fibration $P$.
 \end{tikzpicture}
 \end{center}
 
-\paragraph*{Univalent Type Family.} A type family $P : A \to \mathcal{U}$ is
-\emph{univalent} if the following function is an equivalence:
+It is worth repeating Remark 2.7.1 from the book. In the figure above, we could
+have $(x,u) \equiv (x,v)$ without having $u \equiv v$. The only thing we can
+conclude is that there is a (possibly non-trivial) path path $q : x \equiv x$
+such that $q_*(u) \equiv v$.
+
+\paragraph*{Univalent Type Family.}
+Given standard constructions in the book, we have a function:
 \[\begin{array}{rcl}
-V_P & : & (x \equiv y) \to (P(x) \simeq P(y)) \\
-V_P &=& \lambda p. \mathit{idtoequiv}(\mathit{ap}_{P}(p))
+\textit {transport-equiv} &:& \Pi_{P : A \to \mathcal{U}}~ \Pi_{x,y:A}~
+    x \equiv y  \to P x \simeq P y \\
+\textit{transport-equiv}~P~x~y &=& \lambda p. \mathit{idtoequiv}(\mathit{ap}_{P}(p))
 \end{array}\]
-where $x,y:A$ and the standard constructions from the book
-$\mathit{ap} : (x \equiv y) \to (P(x) \equiv P(y)$ and
-$\mathit{idtoequiv} : (A \equiv B) \to (A \simeq B)$.
-
-\paragraph*{Example I.} Consider the type family
-$\mathit{Id} : \mathcal{U} \to \mathcal{U}$. In this case, the function
-$V_{\mathit{Id}}$ is $\mathit{idtoequiv}$ and the definition of univalent type
-family reduces to the conventional univalence axiom.
-
-
-
-
-
-
-
-\newpage
-
-Let $X : \Typ$. We have:
-\[
-\textit{transport-equiv} : \Pi_{P : X \to \Typ}~ \Pi_{x,y:X}~
-    x \equiv y  \to P x \simeq P y
-\]
-For a fibration with base $X$, define:
+with the standard definitions for
+$\mathit{ap} : (x \equiv y) \to (P(x) \equiv P(y))$ and
+$\mathit{idtoequiv} : (A \equiv B) \to (A \simeq B)$. We say a type family
+$P : A \to \mathcal{U}$ is \emph{univalent} if for all $x,y:A$
+the function $\textit{transport-equiv}~P~x~y$ is an equivalence. Formally:
 \[\begin{array}{l}
-\textit{is-univalent-fibration} : (X \to \Typ) \to \Typ \\
-\textit{is-univalent-fibration}~P =
-    \Pi_{x,y:X}~\textit{is-equiv} (\textit{transport-equiv}~P~x~y)
+\textit{is-univalent-fibration} : (A \to \mathcal{U}) \to \mathcal{U} \\
+\textit{is-univalent-fibration}~P = \Pi_{(x,y:A)} \textit{is-equiv}~(\textit{transport-equiv}~P~x~y)
 \end{array}\]
 
 \noindent\paragraph*{Examples}
 \begin{itemize}
-\item Take $X = \Typ$ and $P = \mathit{Id}_{\Typ}$. The statement
-  $\textit{is-univalent-fibration}~P$ reduces to $\Pi_{x,y:\Typ}~x \equiv y \to
+\item Take $A = \mathcal{U}$ and $P = \mathit{Id}_{\mathcal{U}}$. The statement
+  $\textit{is-univalent-fibration}~P$ reduces to $\Pi_{x,y:\mathcal{U}}~x \equiv y \to
   x \simeq y$ which is the usual definition of univalence.
+
+\newpage
+
 \item Take $X = \ot$ with element $\star$ and $P = \lambda \_. \ot$. The
   statement $\textit{is-univalent-fibration}~P$ reduces to
   $(\star\equiv\star)\simeq(\ot\simeq\ot)$ which is true.
@@ -248,12 +240,12 @@ For a fibration with base $X$, define:
 
 \begin{theorem}
   Let $X$ be path-connected. Then $X$ is the base of a univalent fibration only
-  if there exists an $F$ such that $X \simeq \Sigma_{Y : \Typ} \| Y \equiv F
+  if there exists an $F$ such that $X \simeq \Sigma_{Y : \mathcal{U}} \| Y \equiv F
   \|$. We will refer to this type as $\{F\}$.
 \end{theorem}
 
 \noindent In particular $\{\bt\}$, i.e.,
-$\Sigma_{Y : \Typ} \| Y \equiv \bt \|$ is the base of a univalent
+$\Sigma_{Y : \mathcal{U}} \| Y \equiv \bt \|$ is the base of a univalent
 fibration. In some sense this is the simplest univalent universe, our
 featherweight HoTT that we aim to characterize as a reversible programming
 language based on type isomorphisms.
