@@ -142,7 +142,8 @@ Our conjecture:
 \section{Preliminaries}
 
 Following the HoTT book and the slides on ``A Characterization of Univalent
-Fibrations'' by Dan Christensen.
+Fibrations'' by Dan Christensen. All the definitions and most of the examples in
+this section are formalized in the accompanying Agda code.
 
 %%%%%
 \subsection{Definitions}
@@ -281,7 +282,7 @@ $\textit{transport-equiv}~P~x~y$.
   give a univalent fibration.
 
 \item For any type $F$ we define
-  $\{F\} = \Sigma_{A : \mathcal{U}} \| F \simeq A \|$. By a proposition of
+  $\{F\} = \Sigma_{(A : \mathcal{U})} \| F \simeq A \|$. By a proposition of
   Christensen, any fibration with base space $\{F\}$, i.e., any fibration
   $\{F\} \to \mathcal{U}$, is univalent. In particular, we can take the base
   space to be:
@@ -303,12 +304,40 @@ $\textit{transport-equiv}~P~x~y$.
 \section{Analyzing $\{\bt\}$ and its Connection to $\Pi$}
 
 %%%%%
-\subsection{$\{\bt\}$}
+\subsection{The Subuniverse $\{\bt\}$}
 
-Recall that $\{\bt\} = \Sigma_{(A:\mathcal{U})} \|A \simeq \bt\|$.
+Recall that $\{\bt\} = \Sigma_{(A:\mathcal{U})} \|A \simeq \bt\|$. We begin by
+unpacking the objects, 1-paths, and 2-paths of $\{\bt\}$.
+
+\paragraph*{Objects in $\{\bt\}$.} The only term in $\{\bt\}$ is
+$(\bt,\|\reflp_{\bt}\|)$ which we call $`\bt$. Formally we can prove
+$\|(X,p) \equiv `\bt\|$ is inhabited for all $X$ and $p$.
+
+\paragraph*{1-Paths in $\{\bt\}$.} These are paths between $`\bt$ and
+$`\bt$. Generally speaking, paths between elements of a $\Sigma$-type are pairs
+of paths with a transport in the second component. If we have a type $A$ with
+points $a$ and $b$ and a path $p : a \equiv b$. Fix some $c$ and consider the
+dependent function $(x:A) \rightarrow (x \equiv c)$. This forms the types
+$a\equiv c$ and $b\equiv c$ with elements $ua$ and $ub$. Now a path between
+$(a,ua)$ and $(b,ub)$ is a pair $(p,\alpha)$ where $\alpha : p_* ua \equiv
+ub$. Hence paths between $`\bt$ and $`\bt$ are going to be for the form
+$(p,\alpha)$ where $p : \bt \equiv \bt$ and $\alpha$ is essentially $\gluep$
+from the definition of truncation. So we have two paths:
+\[\begin{array}{rcl}
+`\mathbf{id} &=& (\reflp,\gluep) \\
+`\mathbf{not} &=& (\notp,\gluep)
+\end{array}\]
+
+\paragraph*{2-Paths in $\{\bt\}$.} Now are considering paths between
+$`\mathbf{id}$ and $`\mathbf{id}$, and between $`\mathbf{not}$ and
+$`\mathbf{not}$. We have at least one path at this level which is
+$(\reflp,\gluep)$ but to show that that this is the only path we will have to
+first prove that $`\mathbf{not} \circ `\mathbf{not} \equiv `\mathbf{id}$.
+
+
 
 %%%%%
-\subsection{$\Pi$}
+\subsection{The Language $\Pi$ of Type Isomorphisms}
 
 The restriction of $\Pi$ to the case of just booleans is the following:
 
@@ -359,33 +388,6 @@ $c : \tau_1 \iso \tau_2$ as 1-paths, and 2-combinators
 $\alpha : c_1 \isotwo c_2$ as 2-paths. The proof is in a meta-logic which is
 itself univalent.
 
-We begin by unpacking the objects, 1-paths, and 2-paths of $\{\bt\}$.
-
-\paragraph*{Objects in $\{\bt\}$.} The only term in $\{\bt\}$ is
-$(\bt,\|\reflp_{\bt}\|)$ which we call $`\bt$. Formally we can prove
-$\|(X,p) \equiv `\bt\|$ is inhabited for all $X$ and $p$.
-
-\paragraph*{1-Paths in $\{\bt\}$.} These are paths between $`\bt$ and
-$`\bt$. Generally speaking, paths between elements of a $\Sigma$-type are pairs
-of paths with a transport in the second component. If we have a type $A$ with
-points $a$ and $b$ and a path $p : a \equiv b$. Fix some $c$ and consider the
-dependent function $(x:A) \rightarrow (x \equiv c)$. This forms the types
-$a\equiv c$ and $b\equiv c$ with elements $ua$ and $ub$. Now a path between
-$(a,ua)$ and $(b,ub)$ is a pair $(p,\alpha)$ where $\alpha : p_* ua \equiv
-ub$. Hence paths between $`\bt$ and $`\bt$ are going to be for the form
-$(p,\alpha)$ where $p : \bt \equiv \bt$ and $\alpha$ is essentially $\gluep$
-from the definition of truncation. So we have two paths:
-\[\begin{array}{rcl}
-`\mathbf{id} &=& (\reflp,\gluep) \\
-`\mathbf{not} &=& (\notp,\gluep)
-\end{array}\]
-
-\paragraph*{2-Paths in $\{\bt\}$.} Now are considering paths between
-$`\mathbf{id}$ and $`\mathbf{id}$, and between $`\mathbf{not}$ and
-$`\mathbf{not}$. We have at least one path at this level which is
-$(\reflp,\gluep)$ but to show that that this is the only path we will have to
-first prove that $`\mathbf{not} \circ `\mathbf{not} \equiv `\mathbf{id}$.
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%
 \section{Generalization I}
@@ -397,7 +399,6 @@ Use all finite types instead of just Bool
 \section{Generalization II}
 
 Add a HIT to the univalent universe, perhaps something to do with fractionals.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{acm}

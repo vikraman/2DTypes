@@ -34,6 +34,8 @@ IsQinv→IsEquiv (g , α , β) = (g , α) , (g , β)
 _≃_ : ∀ {ℓ} (A B : Set ℓ) → Set _
 A ≃ B = Σ[ f ∈ (A → B) ] (IsEquiv f)
 
+
+
 ω : ∀ {ℓ} {A B : Set ℓ} → A ≡ B → A ≃ B
 ω refl = id , (id , (λ _ → refl)) , (id , (λ _ → refl))
 
@@ -169,6 +171,7 @@ module ex3 where
 Ω : ∀ {ℓ} (A : Set ℓ) {a : A} → Set _
 Ω A {a} = a ≡ a
 
+{--
 Lemma : ∀ {ℓ} (F : Set ℓ) → Ω ⟪ F ⟫ {F , ∣ (ω refl) ∣} ≃ L.Lift (F ≃ F)
 Lemma {ℓ} F = 𝒇 , (𝒇⁻¹ , α) , (𝒇⁻¹ , β)
   where
@@ -224,3 +227,53 @@ Theorem₁ = {!!}
 Theorem₂ : ∀ {ℓ₁ ℓ₂} (X : Set ℓ₁) → pathConnected X → (F : Set ℓ₁) → L.Lift X ≃ ⟪ F ⟫
          → Σ[ P ∈ (X → Set ℓ₂) ] IsUnivFib P
 Theorem₂ = {!!}
+--}
+
+------------------------------------------------------------------------------
+-- What does ⟪ 𝟚 ⟫ look like?
+
+-- There is a canonical element of ⟪ 𝟚 ⟫
+-- and it is the only element up to ≡
+
+`𝟚 : ⟪ 𝟚 ⟫
+`𝟚 = 𝟚 , ∣ ω refl ∣
+
+unique`𝟚 : (Xp : ⟪ 𝟚 ⟫) → ∥ Xp ≡ `𝟚 ∥
+unique`𝟚 (X , ∣ X≃𝟚 ∣) = ∣ Σ≡  (ua X≃𝟚) (trunIsProp _ _)  ∣
+
+-- 1-paths, i.e., elements of `𝟚 ≡ `𝟚; we have `id and `not and that's it
+
+`id : `𝟚 ≡ `𝟚
+`id = Σ≡ refl (trunIsProp _ _)
+
+not≡ : 𝟚 ≡ 𝟚
+not≡ = ua not≃
+  where not² : (not ∘ not) ~ id
+        not² false = refl
+        not² true = refl
+        not≃ : 𝟚 ≃ 𝟚
+        not≃ = not , (not , not²) , (not , not²)
+
+`not : `𝟚 ≡ `𝟚
+`not = Σ≡ not≡ (trunIsProp _ _)
+
+-- show every path is either id or not
+
+-- 2-paths, i.e., elements of `id ≡ `id, `id ≡ `not, `not ≡ `id,
+-- and `not ≡ `not
+
+αid : `id ≡ `id
+αid = refl
+
+αnot : `not ≡ `not
+αnot = refl
+
+αidnot : `id ≡ `not
+αidnot = {!!} -- empty but why
+
+αnotid : `not ≡ `id
+αnotid = {!!} -- empty but why
+
+-- uniqueness of these paths
+
+------------------------------------------------------------------------------
