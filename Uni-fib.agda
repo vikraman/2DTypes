@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --rewriting #-}
 
 module Uni-fib where
 
@@ -48,10 +48,15 @@ IsUnivFib {A = A} B = {a a' : A} → IsEquiv {A = (a ≡ a')} {B = (B a ≃ B a'
 isProp : ∀ {ℓ} (P : Set ℓ) → Set _
 isProp P = (x y : P) → x ≡ y
 
-data ∥_∥ {ℓ} (A : Set ℓ) : Set ℓ where
-  ∣_∣ : A → ∥ A ∥
 postulate
+  ∥_∥ : ∀ {ℓ} → Set ℓ → Set ℓ
+  ∣_∣ : ∀ {ℓ} {A : Set ℓ} → A → ∥ A ∥
   trunIsProp : ∀ {ℓ} {A : Set ℓ} → isProp ∥ A ∥
+  trunRec : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'}
+          → isProp B → (A → B) → ∥ A ∥ → B
+  rec-∣∣ : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'}
+         → (BisProp : isProp B) (f : A → B)
+         → (x : A) → trunRec BisProp f ∣ x ∣ ≡ f x
   univalence : ∀ {ℓ} {A B : Set ℓ} → IsEquiv (ω {A = A} {B = B})
   funext : ∀ {ℓ ℓ'} {A : Set ℓ} {B : A → Set ℓ'} {f g : (x : A) → B x}
          → ((x : A) → f x ≡ g x) → f ≡ g
@@ -214,11 +219,11 @@ Proposition {ℓ} {F} = IsQinv→IsEquiv (𝒈 , (𝒉₁ , 𝒉₂))
 
   𝒉₁ : {a a' : ⟪ F ⟫} → (eq : α a ≃ α a')
      → ((ω ∘ ap α {a = a} {a' = a'}) ∘ 𝒈) eq ≡ eq
-  𝒉₁ {X₁ , ∣ X₁≃F ∣} {X₂ , ∣ X₂≃F ∣} eq = {!!}
+  𝒉₁ {a} {a'} eq = {!!}
 
   𝒉₂ : {a a' : ⟪ F ⟫} → (p : a ≡ a')
      → (𝒈 ∘ (ω ∘ ap α {a = a} {a' = a'})) p ≡ p
-  𝒉₂ {X₁ , ∣ X₁≃F ∣} {X₂ , ∣ X₂≃F ∣} p = {!!}
+  𝒉₂ {a} {a'} p = {!!}
 
 Theorem₁ : ∀ {ℓ} {A : Set ℓ} (B : A → Set ℓ) → pathConnected A
          → (F : Set ℓ) → Σ[ f ∈ (A → ⟪ F ⟫) ] (IsEquiv f × (α ∘ f) ~ B)
@@ -239,7 +244,7 @@ Theorem₂ = {!!}
 `𝟚 = 𝟚 , ∣ ω refl ∣
 
 unique`𝟚 : (Xp : ⟪ 𝟚 ⟫) → ∥ Xp ≡ `𝟚 ∥
-unique`𝟚 (X , ∣ X≃𝟚 ∣) = ∣ Σ≡  (ua X≃𝟚) (trunIsProp _ _)  ∣
+unique`𝟚 (X , ∣X≃𝟚∣) = ∣ (Σ≡ {!!} (trunIsProp _ _)) ∣ --∣ Σ≡  (ua X≃𝟚) (trunIsProp _ _)  ∣
 
 -- 1-paths, i.e., elements of `𝟚 ≡ `𝟚; we have `id and `not and that's it
 
