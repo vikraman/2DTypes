@@ -27,6 +27,10 @@ IsEquiv→Qinv {f = f} ((g , α) , (h , β)) =
                  γ x = trans (sym (β (g x))) (cong h (α x))
              in  g , (α , (λ x → trans (γ (f x)) (β x)))
 
+IsQinv→IsEquiv : ∀ {ℓ ℓ'} {A : Set ℓ} {B : Set ℓ'} {f : A → B}
+               → IsQinv f → IsEquiv f
+IsQinv→IsEquiv (g , α , β) = (g , α) , (g , β)
+
 _≃_ : ∀ {ℓ} (A B : Set ℓ) → Set _
 A ≃ B = Σ[ f ∈ (A → B) ] (IsEquiv f)
 
@@ -50,9 +54,29 @@ postulate
   funext : ∀ {ℓ ℓ'} {A : Set ℓ} {B : A → Set ℓ'} {f g : (x : A) → B x}
          → ((x : A) → f x ≡ g x) → f ≡ g
 
+Σ≃ : ∀ {ℓ ℓ'} {A : Set ℓ} {P : A → Set ℓ'} {w w' : Σ[ x ∈ A ] P x}
+   → (w ≡ w') ≃ (Σ[ p ∈ (proj₁ w ≡ proj₁ w') ] ((subst P p) (proj₂ w) ≡ (proj₂ w')))
+Σ≃ {ℓ} {ℓ'} {A} {P} {w} {w'} = f , IsQinv→IsEquiv (g , f∘g~id {w} {w'} , g∘f~id)
+   where
+     f : {w w' : Σ[ x ∈ A ] P x} → (w ≡ w')
+       → (Σ[ p ∈ (proj₁ w ≡ proj₁ w') ] ((subst P p) (proj₂ w) ≡ (proj₂ w')))
+     f {w} {.w} refl = refl , refl
+
+     g : {w w' : Σ[ x ∈ A ] P x}
+       → (Σ[ p ∈ (proj₁ w ≡ proj₁ w') ] ((subst P p) (proj₂ w) ≡ (proj₂ w')))
+       → w ≡ w'
+     g (refl , refl) = refl
+
+     f∘g~id : {w w' : Σ[ x ∈ A ] P x} → ((f {w} {w'}) ∘ g) ~ id
+     f∘g~id (refl , refl) = refl
+
+     g∘f~id : {w w' : Σ[ x ∈ A ] P x} → ((g {w} {w'}) ∘ f) ~ id
+     g∘f~id refl = refl
+
 Σ≡ : ∀ {ℓ ℓ'} {A : Set ℓ} {P : A → Set ℓ'} {w w' : Σ[ x ∈ A ] P x}
    → (p : (proj₁ w ≡ proj₁ w')) → (subst P p) (proj₂ w) ≡ (proj₂ w') → w ≡ w'
-Σ≡ refl refl = refl
+Σ≡ {ℓ} {ℓ'} {A} {P} {w} {w'} p q with Σ≃ {w = w} {w' = w'}
+... | (_ , ((g , _) , _)) = g (p , q)
 
 ua : ∀ {ℓ} {A B : Set ℓ} → (A ≃ B) → (A ≡ B)
 ua {ℓ} {A} {B} with IsEquiv→Qinv (univalence {A = A} {B = B})
@@ -146,7 +170,7 @@ module ex3 where
 Ω A {a} = a ≡ a
 
 Lemma : ∀ {ℓ} (F : Set ℓ) → Ω ⟪ F ⟫ {F , ∣ (ω refl) ∣} ≃ L.Lift (F ≃ F)
-Lemma F = 𝒇 , (𝒇⁻¹ , α) , (𝒇⁻¹ , β)
+Lemma {ℓ} F = 𝒇 , (𝒇⁻¹ , α) , (𝒇⁻¹ , β)
   where
   𝒇 : Ω ⟪ F ⟫ → L.Lift (F ≃ F)
   𝒇 p = L.lift (ω (cong proj₁ p))
@@ -164,13 +188,34 @@ Lemma F = 𝒇 , (𝒇⁻¹ , α) , (𝒇⁻¹ , β)
   ... | (g , α) , (h , β) = cong L.lift (trans (cong ω proj₁≡) (α F≃F))
 
   β : (𝒇⁻¹ ∘ 𝒇) ~ id
-  β p = {!!}
+  β p with univalence {A = F} {B = F}
+  ... | (g , α) , (h , β) = trans (cong (λ x → Σ≡ x (trunIsProp _ _))
+                                        (trans (γ (ω (cong proj₁ p))) (β (cong proj₁ p))))
+                                  {!!}
+    where
+    γ : g ~ h
+    γ x = trans (sym (β (g x))) (cong h (α x))
 
 α : ∀ {ℓ} {F : Set ℓ} → ⟪ F ⟫ → Set _
 α = proj₁
 
 Proposition : ∀ {ℓ} {F : Set ℓ} → IsUnivFib {A = ⟪ F ⟫} α
-Proposition = {!!}
+Proposition {ℓ} {F} = IsQinv→IsEquiv (𝒈 , (𝒉₁ , 𝒉₂))
+  where
+  𝒈 : {a a' : ⟪ F ⟫} → α a ≃ α a' → a ≡ a'
+  𝒈 eq = Σ≡ (ua eq) (trunIsProp _ _)
+
+  α≡ : {X₁ X₂ : Set ℓ} (p : X₁ ≡ X₂) {q₁ : ∥ X₁ ≃ F ∥} {q₂ : ∥ X₂ ≃ F ∥}
+     → (q : subst (λ x → ∥ x ≃ F ∥) p q₁ ≡ q₂) → (ap α (Σ≡ p q)) ≡ p
+  α≡ refl refl = refl
+
+  𝒉₁ : {a a' : ⟪ F ⟫} → (eq : α a ≃ α a')
+     → ((ω ∘ ap α {a = a} {a' = a'}) ∘ 𝒈) eq ≡ eq
+  𝒉₁ {X₁ , ∣ X₁≃F ∣} {X₂ , ∣ X₂≃F ∣} eq = {!!}
+
+  𝒉₂ : {a a' : ⟪ F ⟫} → (p : a ≡ a')
+     → (𝒈 ∘ (ω ∘ ap α {a = a} {a' = a'})) p ≡ p
+  𝒉₂ {X₁ , ∣ X₁≃F ∣} {X₂ , ∣ X₂≃F ∣} p = {!!}
 
 Theorem₁ : ∀ {ℓ} {A : Set ℓ} (B : A → Set ℓ) → pathConnected A
          → (F : Set ℓ) → Σ[ f ∈ (A → ⟪ F ⟫) ] (IsEquiv f × (α ∘ f) ~ B)
