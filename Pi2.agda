@@ -2,8 +2,6 @@
 
 module Pi2 where
 
-open import Relation.Nullary
-
 infix 3 _⟷₁_ _⟷₂_ _⟷₃_
 infix 5 !₁_ !₂_
 infix 4 _◾₁_ _◾₂_
@@ -24,8 +22,8 @@ data _⟷₁_ : U → U → Set where
 !₁_ : {A B : U} → (p : A ⟷₁ B)
     ----------------------------
     → (B ⟷₁ A)
-!₁ `id = `not
-!₁ `not = `id
+!₁ `id = `id
+!₁ `not = `not
 
 _◾₁_ : {A B C : U} → (p : A ⟷₁ B) (q : B ⟷₁ C)
      --------------------------------------------
@@ -67,8 +65,8 @@ module Tests where
   !!₁ `id = `id `id
   !!₁ `not = `id `not
 
-  !not : ¬ (!₁ `not ⟷₂ `not)
-  !not ()
+  !not : !₁ `not ⟷₂ `not
+  !not = `id `not
 
   ◾₁-assoc : {A B C D : U} → (p : A ⟷₁ B) (q : B ⟷₁ C) (r : C ⟷₁ D)
            → (p ◾₁ q) ◾₁ r ⟷₂ p ◾₁ (q ◾₁ r)
