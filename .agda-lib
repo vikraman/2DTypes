@@ -3,4 +3,6 @@ depend:
   standard-library
 include:
   .
+  basic-hott/lib
+  basic-hott/scratch
   categories

@@ -1,3 +1,6 @@
 [submodule "categories"]
 	path = categories
 	url = https://github.com/vikraman/categories.git
+[submodule "basic-hott"]
+	path = basic-hott
+	url = https://github.com/vikraman/basic-hott.git
