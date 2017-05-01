@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K #-}
 
-module Pi2 where
+module Pi2.BadSyntax where
 
 infix 3 _⟷₁_ _⟷₂_ _⟷₃_
 infix 5 !₁_ !₂_
