@@ -33,6 +33,9 @@ open import Pi2.Syntax as S
 ⟦_⟧₂ (u ◾₂ u₁) = ⟦ u ⟧₂ ◾ ⟦ u₁ ⟧₂
 ⟦_⟧₂ (_□₂_ {u = u} {v}) = ⟦ u ⟧₂ [2,0,2] ⟦ v ⟧₂
 
+⟦_⟧₃ : {A B : U} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
+⟦ `trunc ⟧₃ = {!!}
+
 ------------------------------------------------------------------------------
 -- Completeness: mapping the model to syntax
 
@@ -47,11 +50,18 @@ quote₁ {U.`𝟚} {U.`𝟚} eq with M.OneDimensionalTerms.all-1-paths eq
 quote₂ : {A B : U} {p q : A ⟷₁ B} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → (p ⟷₂ q)
 quote₂ eq₂ = {!!}
 
+quote₃ : {A B : U} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → (u ⟷₃ v)
+quote₃ _ = `trunc
+
 ------------------------------------------------------------------------------
 -- Normalization by evaluation a la Altenkirch
 
 canonical₁ : {A B : U} → (p : A ⟷₁ B) → (A ⟷₁ B)
 canonical₁ p = quote₁ ⟦ p ⟧₁
+
+canonical-resp : {A B : U} {p q : A ⟷₁ B} → (⟦ p ⟧₁ == ⟦ q ⟧₁) →
+                 canonical₁ p ⟷₂ canonical₁ q
+canonical-resp eq = {!!}
 
 inversion₁ : {A B : U} → (p : A ⟷₁ B) → canonical₁ p ⟷₂ p
 inversion₁ {U.`𝟚} {.U.`𝟚} _⟷₁_.`id = `id₂
@@ -60,9 +70,7 @@ inversion₁ (!₁ u) = {!!}
 inversion₁ (u ◾₁ u₁) = {!!}
 
 completeness₁ : {A B : U} {p q : A ⟷₁ B} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ⟷₂ q
-completeness₁ {p = p} {q = q} u = {!!}
-{--
-p <=> canonical p <=> canonical q <=> q
---}
+completeness₁ {p = p} {q = q} u =
+  (!₂ (inversion₁ p)) ◾₂ (canonical-resp {p = p} {q = q} u ◾₂ (inversion₁ q))
 
 ------------------------------------------------------------------------------
