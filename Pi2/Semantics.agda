@@ -73,4 +73,8 @@ completeness₁ : {A B : U} {p q : A ⟷₁ B} → ⟦ p ⟧₁ == ⟦ q ⟧₁ 
 completeness₁ {p = p} {q = q} u =
   (!₂ (inversion₁ p)) ◾₂ (canonical-resp {p = p} {q = q} u ◾₂ (inversion₁ q))
 
+-- canonical 2
+
+-- canonical 3
+
 ------------------------------------------------------------------------------
