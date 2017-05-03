@@ -120,14 +120,13 @@ $\displaystyle
   isomorphisms in the programming language to paths in the univalent universe,
   and combinator optimizations in the programming language to 2-paths in the
   univalent universe. The result provides a simple computational interpretation
-  of paths, 2-paths, and univalence in terms of simple programming
-  constructs.
+  of paths, 2-paths, and univalence in terms of familiar programming constructs.
 \end{abstract}
 
 \maketitle
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Story and Conjecture}
+\section{Introduction}
 
 There is a cottage industry of reversible programming languages, reversible
 logic, programming applications of type isomorphisms, etc. This work seems it
@@ -144,6 +143,88 @@ precisely, our conjecture:
 \item Let $\Pi$ be the previously  described reversible programming with 1-paths and 2-paths
 \item We conjecture that $\Pi$ includes codes for \emph{all} paths in $\mathcal{U}$
 \end{itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{A Simple Reversible Programming Language}
+
+The practice of programming languages is replete with \emph{ad hoc} instances of
+reversible computations such as database transactions, mechanisms for data
+provenance, checkpoints, stack and exception traces, logs, backups, rollback
+recoveries, version control systems, reverse engineering, software transactional
+memories, continuations, backtracking search, and multiple-level ``undo''
+features in commercial applications. In the early nineties,
+Baker~\cite{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class,
+treatment of reversibility but intensive research in full-fledged reversible
+models of computations and reversible programming languages was only sparked by
+the discovery of deep connections between physics and
+computation~\cite{Landauer:1961, PhysRevA.32.3266,Toffoli:1980,
+  bennett1985fundamental,Frank:1999:REC:930275} and by the potential for
+efficient quantum computation~\cite{springerlink:10.1007/BF02650179}.
+
+The early developments of reversible programming languages started with a
+conventional programming language, e.g., extended $\lambda$-calculi, and either
+(i) extended the language with a history
+mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible} or
+(ii) imposed constraints on the control flow constructs to make them
+reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}. More modern approaches
+recognize that reversible programming languages require a fresh approach and
+should be designed from first principles without the detour via conventional
+irreversible languages~\cite{Yokoyama:2008:PRP, Mu:2004:ILRC,
+  abramsky2005structural, DiPierro:2006:RCL:1166042.1166047}.
+
+%%%%%
+\subsection{The $\Pi$ Family of Languages}
+
+In previous work, Carette, Bowman, James, and
+Sabry~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016} introduced
+the~$\Pi$ family of reversible languages based on type isomorphisms and
+commutative semiring identities. The fragment without recursive types is
+universal for reversible boolean
+circuits~\citep{James:2012:IE:2103656.2103667}. With the addition of recursive
+types and trace operators~\citep{Hasegawa:1997:RCS:645893.671607}, the variant
+of $\Pi$ becomes a Turing-complete reversible
+language~\citep{James:2012:IE:2103656.2103667,rc2011}. Before identifying a
+``featherweight'' representative to use for the formal development in this
+paper, we illustrate the main underlying ideas for the entire family of
+languages using some examples.
+
+\amr{EXAMPLES OF CIRCUITS}
+
+Although writing circuits using the raw syntax for combinators is tedious, the
+examples illustrate the programming language nature of this family of $\Pi$
+languages. In other work, one can find a compiler from a conventional functional
+language to circuits~\citep{James:2012:IE:2103656.2103667}, a systematic
+technique to translate abstract machines to $\Pi$~\citep{rc2012}, and a
+Haskell-like surface language~\citep{theseus} which can ease writing
+circuits. All that reinforces the claim that this is a practical approach to
+reversible programming.
+
+\amr{EXAMPLES OF OPTIMIZATIONS}
+
+
+\begin{verbatim}
+Pi... isos, recursion, finite types, Turing complete... nice blah popl 12
+
+ESOP shows a natural 2-layer structure
+
+Examples
+
+\end{verbatim}
+
+%%%%%
+\subsection{$\Pi_{\mathbb{2}}$}
+
+\begin{verbatim}
+
+conjecture it is related to HoTT
+
+study that language and formalize the connections between its combinators and
+between HoTT
+
+stud the smallest core that can explain the idea: restrict to just B; essence
+not losing anything really
+\end{verbatim}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Preliminaries}

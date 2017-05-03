@@ -25,30 +25,13 @@ open import Pi2.Syntax as S
 ⟦_⟧₂ (`!l p) = ◾invr ⟦ p ⟧₁
 ⟦_⟧₂ (`!r p) = ◾invl ⟦ p ⟧₁
 ⟦_⟧₂ `!id = refl M.`id
-⟦_⟧₂ `!not = {!!}
+⟦_⟧₂ `!not = M.OneDimensionalTerms.!not=not
 ⟦_⟧₂ (`!◾ {p = p} {q}) = !◾ ⟦ p ⟧₁ ⟦ q ⟧₁
-⟦_⟧₂ (`!! {p = q}) = !! ⟦ q ⟧₁
+⟦_⟧₂ `!! = !! _
 ⟦_⟧₂ (`assoc p q r) = ◾assoc _ _ _
 ⟦_⟧₂ (!₂ u) = ! ⟦ u ⟧₂
 ⟦_⟧₂ (u ◾₂ u₁) = ⟦ u ⟧₂ ◾ ⟦ u₁ ⟧₂
 ⟦_⟧₂ (_□₂_ {u = u} {v}) = ⟦ u ⟧₂ [2,0,2] ⟦ v ⟧₂
-
-{--
-⟦-⟧₁-resp-idl : {A B : U} {p : A ⟷₁ B} → ⟦ S.`id ◾₁ p ⟧₁ == ⟦ p ⟧₁
-⟦-⟧₁-resp-idl {p = `id} = {!!}
-⟦-⟧₁-resp-idl {p = `not} = {!!}
-⟦-⟧₁-resp-idl {p = !₁ p} = {!!}
-⟦-⟧₁-resp-idl {p = p ◾₁ q} = {!!}
-
-⟦-⟧₁-resp-idr : {A B : U} {p : A ⟷₁ B} → ⟦ p ◾₁ S.`id ⟧₁ == ⟦ p ⟧₁
-⟦-⟧₁-resp-idr {p = `id} = {!!}
-⟦-⟧₁-resp-idr {p = `not} = {!!}
-⟦-⟧₁-resp-idr {p = !₁ p} = {!!}
-⟦-⟧₁-resp-idr {p = p ◾₁ q} = {!!}
-
-⟦-⟧₁-resp-◾ : {A B C : U} {p : A ⟷₁ B} {q : B ⟷₁ C} → ⟦ p ◾₁ q ⟧₁ == ⟦ p ⟧₁ ◾ ⟦ q ⟧₁
-⟦-⟧₁-resp-◾ = {!!}
---}
 
 ------------------------------------------------------------------------------
 -- Completeness: mapping the model to syntax
