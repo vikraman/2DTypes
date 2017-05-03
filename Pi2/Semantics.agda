@@ -40,7 +40,9 @@ quote₀ : U[𝟚] → U
 quote₀ _ = U.`𝟚
 
 quote₁ : {A B : U} → ⟦ A ⟧ == ⟦ B ⟧ → A ⟷₁ B
-quote₁ eq = {!!}
+quote₁ {U.`𝟚} {U.`𝟚} eq with M.OneDimensionalTerms.all-1-paths eq
+quote₁ {U.`𝟚} {U.`𝟚} eq | i₁ x = _⟷₁_.`id
+quote₁ {U.`𝟚} {U.`𝟚} eq | i₂ x = _⟷₁_.`not
 
 quote₂ : {A B : U} {p q : A ⟷₁ B} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → (p ⟷₂ q)
 quote₂ eq₂ = {!!}
