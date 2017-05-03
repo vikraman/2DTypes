@@ -1,4 +1,7 @@
-\documentclass[format=acmlarge,review,natbib]{acmart}
+\documentclass{entcs}
+\usepackage{prentcsmacro}
+
+\def\lastname{Carette, Chen, Choudhury, Rose, and Sabry}
 
 %% Amr
 %% words to remember :-)
@@ -98,20 +101,16 @@ $\displaystyle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\title{From Reversible Programs to Univalent Universes and Back}
+\begin{frontmatter}
+\title{From Reversible Programs to \\ Univalent Universes and Back}
 \author{Jacques Carette}
-\affiliation{
-  \institution{McMaster University}
-  \country{Canada}}
-  \email{carette@mcmaster.ca}
+\address{McMaster University}
 \author{Chao-Hong Chen}
+\address{Indiana University}
 \author{Vikraman Choudhury}
 \author{Robert Rose}
 \author{Amr Sabry}
-\affiliation{
-  \institution{Indiana University}
-  \country{United States}}
-\email{\{chen464,vikraman,rrose1,sabry\}@indiana.edu}
+\address{Indiana University}
 
 \begin{abstract}
   We establish a close connection between a reversible programming language
@@ -123,7 +122,7 @@ $\displaystyle
   of paths, 2-paths, and univalence in terms of familiar programming constructs.
 \end{abstract}
 
-\maketitle
+\end{frontmatter}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
@@ -157,9 +156,9 @@ Baker~\cite{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class,
 treatment of reversibility but intensive research in full-fledged reversible
 models of computations and reversible programming languages was only sparked by
 the discovery of deep connections between physics and
-computation~\cite{Landauer:1961, PhysRevA.32.3266,Toffoli:1980,
-  bennett1985fundamental,Frank:1999:REC:930275} and by the potential for
-efficient quantum computation~\cite{springerlink:10.1007/BF02650179}.
+computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275}
+and by the potential for efficient quantum
+computation~\cite{springerlink:10.1007/BF02650179}.
 
 The early developments of reversible programming languages started with a
 conventional programming language, e.g., extended $\lambda$-calculi, and either
@@ -169,8 +168,7 @@ mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible} or
 reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}. More modern approaches
 recognize that reversible programming languages require a fresh approach and
 should be designed from first principles without the detour via conventional
-irreversible languages~\cite{Yokoyama:2008:PRP, Mu:2004:ILRC,
-  abramsky2005structural, DiPierro:2006:RCL:1166042.1166047}.
+irreversible languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}.
 
 %%%%%
 \subsection{The $\Pi$ Family of Languages}
@@ -180,10 +178,10 @@ Sabry~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016} introduced
 the~$\Pi$ family of reversible languages based on type isomorphisms and
 commutative semiring identities. The fragment without recursive types is
 universal for reversible boolean
-circuits~\citep{James:2012:IE:2103656.2103667}. With the addition of recursive
-types and trace operators~\citep{Hasegawa:1997:RCS:645893.671607}, the variant
+circuits~\cite{James:2012:IE:2103656.2103667}. With the addition of recursive
+types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607}, the variant
 of $\Pi$ becomes a Turing-complete reversible
-language~\citep{James:2012:IE:2103656.2103667,rc2011}. Before identifying a
+language~\cite{James:2012:IE:2103656.2103667,rc2011}. Before identifying a
 ``featherweight'' representative to use for the formal development in this
 paper, we illustrate the main underlying ideas for the entire family of
 languages using some examples.
@@ -193,9 +191,9 @@ languages using some examples.
 Although writing circuits using the raw syntax for combinators is tedious, the
 examples illustrate the programming language nature of this family of $\Pi$
 languages. In other work, one can find a compiler from a conventional functional
-language to circuits~\citep{James:2012:IE:2103656.2103667}, a systematic
-technique to translate abstract machines to $\Pi$~\citep{rc2012}, and a
-Haskell-like surface language~\citep{theseus} which can ease writing
+language to circuits~\cite{James:2012:IE:2103656.2103667}, a systematic
+technique to translate abstract machines to $\Pi$~\cite{rc2012}, and a
+Haskell-like surface language~\cite{theseus} which can ease writing
 circuits. All that reinforces the claim that this is a practical approach to
 reversible programming.
 
