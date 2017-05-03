@@ -18,6 +18,7 @@ open import Pi2.Syntax as S
 ⟦_⟧₁ (!₁ p) = ! ⟦ p ⟧₁
 ⟦_⟧₁ (p ◾₁ q) = ⟦ p ⟧₁ ◾ ⟦ q ⟧₁
 
+open OneDimensionalTerms
 ⟦_⟧₂ : {A B : U} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
 ⟦_⟧₂ {p = p} `id₂ = refl ⟦ p ⟧₁
 ⟦_⟧₂ (`idl p) = ◾unitl ⟦ p ⟧₁
@@ -25,7 +26,7 @@ open import Pi2.Syntax as S
 ⟦_⟧₂ (`!l p) = ◾invr ⟦ p ⟧₁
 ⟦_⟧₂ (`!r p) = ◾invl ⟦ p ⟧₁
 ⟦_⟧₂ `!id = refl M.`id
-⟦_⟧₂ `!not = M.OneDimensionalTerms.!not=not
+⟦_⟧₂ `!not = !not=not
 ⟦_⟧₂ (`!◾ {p = p} {q}) = !◾ ⟦ p ⟧₁ ⟦ q ⟧₁
 ⟦_⟧₂ `!! = !! _
 ⟦_⟧₂ (`assoc p q r) = ◾assoc _ _ _
@@ -34,8 +35,27 @@ open import Pi2.Syntax as S
 ⟦_⟧₂ (u □₂ v ) = ⟦ u ⟧₂ [2,0,2] ⟦ v ⟧₂
 ⟦_⟧₂ (`! α) = ap ! ⟦ α ⟧₂
 
+open TwoDimensionalTerms
+lem₃ : {p q r : M.`𝟚 == M.`𝟚} (p=r : p == r) (q=r : q == r) (u : p == q)
+     → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
+lem₃ p=r q=r u = (! (◾unitr u))
+               ◾ ap (λ x → u ◾ x) (! (◾invr q=r))
+               ◾ ! (◾unitl (u ◾ q=r ◾ ! q=r))
+               ◾ ap (λ x → x ◾ u ◾ q=r ◾ ! q=r) (! (◾invr p=r))
+               ◾ ◾assoc _ _ _
+               ◾ ap (λ x → p=r ◾ x) (! (◾assoc _ _ _))
+               ◾ ap (λ x → p=r ◾ x) (! (◾assoc _ _ _))
+               ◾ ap (λ x → p=r ◾ x ◾ ! q=r) (◾assoc _ _ _)
+
 ⟦_⟧₃ : {A B : U} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
-⟦ `trunc ⟧₃ = {!!}
+⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc
+     with all-1-paths ⟦ p ⟧₁ | all-1-paths ⟦ q ⟧₁
+⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₁ p=id  | (i₁ q=id)  =
+     lem₃ p=id q=id ⟦ u ⟧₂ ◾ ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-paths-id _ ◾ (! (all-2-paths-id _))) ◾ ! (lem₃ p=id q=id ⟦ v ⟧₂)
+⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₁ p=id  | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ ⟦ u ⟧₂ ◾ q=not))
+⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₂ p=not | (i₁ q=id)  = rec𝟘 _ (¬id=not ((! q=id) ◾ ! ⟦ u ⟧₂ ◾ p=not))
+⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₂ p=not | (i₂ q=not) =
+     lem₃ p=not q=not ⟦ u ⟧₂ ◾ ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-paths-not _ ◾ (! (all-2-paths-not _))) ◾ ! (lem₃ p=not q=not ⟦ v ⟧₂)
 
 -- One approach to completeness:
 module Altenkich where
