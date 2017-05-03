@@ -41,8 +41,8 @@ quote₀ _ = U.`𝟚
 
 quote₁ : {A B : U} → ⟦ A ⟧ == ⟦ B ⟧ → A ⟷₁ B
 quote₁ {U.`𝟚} {U.`𝟚} eq with M.OneDimensionalTerms.all-1-paths eq
-quote₁ {U.`𝟚} {U.`𝟚} eq | i₁ x = _⟷₁_.`id
-quote₁ {U.`𝟚} {U.`𝟚} eq | i₂ x = _⟷₁_.`not
+... | i₁ _ = _⟷₁_.`id
+... | i₂ _ = _⟷₁_.`not
 
 quote₂ : {A B : U} {p q : A ⟷₁ B} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → (p ⟷₂ q)
 quote₂ eq₂ = {!!}
@@ -54,7 +54,10 @@ canonical₁ : {A B : U} → (p : A ⟷₁ B) → (A ⟷₁ B)
 canonical₁ p = quote₁ ⟦ p ⟧₁
 
 inversion₁ : {A B : U} → (p : A ⟷₁ B) → canonical₁ p ⟷₂ p
-inversion₁ u = {!!}
+inversion₁ {U.`𝟚} {.U.`𝟚} _⟷₁_.`id = `id₂
+inversion₁ {U.`𝟚} {.U.`𝟚} _⟷₁_.`not = {!`id₂!} -- lack of evaluation blocks
+inversion₁ (!₁ u) = {!!}
+inversion₁ (u ◾₁ u₁) = {!!}
 
 completeness₁ : {A B : U} {p q : A ⟷₁ B} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ⟷₂ q
 completeness₁ {p = p} {q = q} u = {!!}
