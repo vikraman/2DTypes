@@ -121,4 +121,4 @@ module Direct where
   ... | ID  , α | ID  , β = ID , ((α □₂ β) ◾₂ `idl _⟷₁_.`id)
   ... | ID  , α | NOT , β = NOT , ((α □₂ β) ◾₂ `idl _⟷₁_.`not)
   ... | NOT , α | ID  , β = NOT , ((α □₂ β) ◾₂ `idr _⟷₁_.`not)
-  ... | NOT , α | NOT , β = ID , ((α □₂ β) ◾₂ {!`!!!})
+  ... | NOT , α | NOT , β = ID , ((α □₂ β) ◾₂ (((!₂ `!not) □₂ `id₂) ◾₂ (`!r _⟷₁_.`not)))
