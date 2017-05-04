@@ -118,3 +118,6 @@ module Tests where
   ◾₂-assoc u v w = `trunc
 
 ------------------------------------------------------------------------------
+
+not◾not⇔id : `not ◾₁ `not ⟷₂ `id
+not◾not⇔id = ((!₂ `!not) □₂ `id₂) ◾₂ (`!r _⟷₁_.`not)
