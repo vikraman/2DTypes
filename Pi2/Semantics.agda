@@ -122,3 +122,15 @@ module Direct where
   ... | ID  , α | NOT , β = NOT , ((α □₂ β) ◾₂ `idl _⟷₁_.`not)
   ... | NOT , α | ID  , β = NOT , ((α □₂ β) ◾₂ `idr _⟷₁_.`not)
   ... | NOT , α | NOT , β = ID , ((α □₂ β) ◾₂ (((!₂ `!not) □₂ `id₂) ◾₂ (`!r _⟷₁_.`not)))
+
+  ⟦_⟧₁⁻¹ : M.`𝟚 == M.`𝟚 → U.`𝟚 ⟷₁ U.`𝟚
+  ⟦ p ⟧₁⁻¹ with all-1-paths p
+  ⟦ p ⟧₁⁻¹ | i₁ p=id  = _⟷₁_.`id
+  ⟦ p ⟧₁⁻¹ | i₂ p=not = _⟷₁_.`not
+
+  ⟦_⟧₂⁻¹ : {p q : M.`𝟚 == M.`𝟚} → p == q → ⟦ p ⟧₁⁻¹ ⟷₂ ⟦ q ⟧₁⁻¹
+  ⟦_⟧₂⁻¹ {p} {q} u with all-1-paths p | all-1-paths q
+  ⟦_⟧₂⁻¹ {p} {q} u | i₁ p=id  | (i₁ q=id)  = `id₂
+  ⟦_⟧₂⁻¹ {p} {q} u | i₁ p=id  | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ u ◾ q=not))
+  ⟦_⟧₂⁻¹ {p} {q} u | i₂ p=not | (i₁ q=id)  = rec𝟘 _ (¬id=not ((! q=id) ◾ ! u ◾ p=not))
+  ⟦_⟧₂⁻¹ {p} {q} u | i₂ p=not | (i₂ q=not) = `id₂
