@@ -144,3 +144,10 @@ module Direct where
   ⟦⟦ p ⟧₁⟧₁⁻¹ | NOT , p⇔not | (i₁ p=id) = rec𝟘 _ (¬id=not ((! p=id) ◾ ⟦ p⇔not ⟧₂))
   ⟦⟦ p ⟧₁⟧₁⁻¹ | ID , p⇔id | (i₂ p=not) = rec𝟘 _ (¬id=not (! ((! p=not) ◾ ⟦ p⇔id ⟧₂)))
   ⟦⟦ p ⟧₁⟧₁⁻¹ | NOT , p⇔not | (i₂ p=not) = p⇔not
+
+  ⟦⟦_⟧₁⁻¹⟧₁ : (p : M.`𝟚 == M.`𝟚) → p == ⟦ ⟦ p ⟧₁⁻¹ ⟧₁
+  ⟦⟦ p ⟧₁⁻¹⟧₁ with all-1-paths p | canonical₁ ⟦ p ⟧₁⁻¹
+  ⟦⟦ p ⟧₁⁻¹⟧₁ | i₁ p=id | (ID , p⇔id) = p=id
+  ⟦⟦ p ⟧₁⁻¹⟧₁ | i₁ p=id | (NOT , p⇔not) = rec𝟘 _ (¬id=not ⟦ p⇔not ⟧₂)
+  ⟦⟦ p ⟧₁⁻¹⟧₁ | i₂ p=not | (ID , p⇔id) = rec𝟘 _ ((¬id=not (! ⟦ p⇔id ⟧₂)))
+  ⟦⟦ p ⟧₁⁻¹⟧₁ | i₂ p=not | (NOT , p⇔not) = p=not
