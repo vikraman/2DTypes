@@ -183,9 +183,7 @@ operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
 language~\cite{James:2012:IE:2103656.2103667,rc2011}. In this paper we will
 identify a ``featherweight'' representative to use for the formal
 development. But first, we illustrate the flavor of the family of languages with
-some examples written in a Haskell syntax.
-
-First consider the following program:
+some examples written in a Haskell syntax. First consider the following program:
 
 {\footnotesize
 \begin{verbatim}
@@ -198,7 +196,7 @@ addSub1 = CommuteTimes
       :.: (FoldN :*: Id)
 \end{verbatim}}
 %
-which takes a pair of natural numbers and processes them as follows depending on
+\noindent which takes a pair of natural numbers and processes them as follows depending on
 whether the second number is 0 or not. If the second number is 0, the evaluation
 proceeds as follows:
 $(n,0) \mapsto (0,n) \mapsto (\mathit{inj}_1(),n) \mapsto \mathit{inj}_1((),n)
@@ -212,14 +210,14 @@ second number maintaining the sum at all times. When the second number reaches
 0, the numbers are swapped.
 
 As another example, consider the following expressions culminating with the
-implementation of the Toffoli gate, whichi is universal for combinational
+implementation of the Toffoli gate, which is universal for combinational
 circuits. We have two implementations of simple boolean negation: a direct one
 and a more convoluted one. These two implementations are ``equivalent'' in the
 sense to be explained below. The expression \verb|cond| is the main reversible
 control flow mechanism: it allows for the conditional execution of one of two
-branches but retains the choice of which branch. This expression can be used
-twice to implement the Toffoli gate, which performs a conditional negation on
-one bit if two other bits are both true:
+branches but retains the choice of which branch was executed. This mechanism can
+be used twice to implement the Toffoli gate, which performs a conditional
+negation on one bit if two other bits are both true:
 
 {\footnotesize
 \begin{verbatim}
@@ -277,8 +275,8 @@ negOpt = (Id :>: AssocLeftEquiv)
     :..: (Id :>: InvInvEquivId)
     :..: IdElimR
 \end{verbatim}}
-
-This program, which can be thought of as an optimization or a proof, relates the
+%
+\noindent This program, which can be thought of as an optimization or a proof, relates the
 two implementations of boolean negation via a series of elementary
 optimizations of which the following are the most interesting:
 
@@ -293,16 +291,67 @@ SlideUnitI        ::   (UnitTimesI :.: (c1 :*: c2)) :<===> (c2 :.: UnitTimesI)
 %%%%%
 \subsection{$\Pi_{\mathbb{2}}$}
 
-\begin{verbatim}
+In previous work, on $\Pi$ we noted a possible connection with HoTT:
+\begin{quote}
+  It is, therefore, at least plausible that a variant of HoTT based exclusively
+  on reversible functions that directly correspond to equivalences would have
+  better computational properties. Our current result is a step, albeit
+  preliminary, in that direction as it only applies to finite
+  types~\cite{Carette2016}.
+\end{quote}
+Formalizing, in a precise sense, the connection between reversible programs
+based on combinators and paths in HoTT, as intuitive as it may seem, is however
+difficult. Paths in HoTT come equipped with principles like the
+``contractibility of singletons'', ``transport'', and ``path induction.'' None
+of these principles seems to have any direct counterpart in the world of
+reversible programming.
 
-conjecture it is related to HoTT
+We will however show, in a very clear sense, how a $\Pi$-based language is
+``equivalent'' to a univalent HoTT universe that possesses all the required
+properties of paths. The essence of the construction can be demonstrated with a
+tiny ``featherweight'' variant of $\Pi$ that includes just one type: booleans,
+and a tiny ``featherweight'' univalent universe to be formalized in the next
+section. Here we give a formalization of the small $\Pi$-based language which we
+will use in the formalization in the rest of the paper.
 
-study that language and formalize the connections between its combinators and
-between HoTT
+The restriction of $\Pi$ to the case of just booleans is the following:
 
-stud the smallest core that can explain the idea: restrict to just B; essence
-not losing anything really
-\end{verbatim}
+\[\begin{array}{rcl}
+\tau &::=& \bt \\
+\\
+v &::=& \begin{array}[t]{lrcl}
+                    & \fc &:& \bt \\
+              \alt & \tc &:& \bt
+               \end{array} \\
+\\
+c &::=& \begin{array}[t]{lrcl}
+              & \id &:& \tau \iso \tau \\
+               \alt & \swap &:& \bt \iso \bt \\
+               \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3)
+                              \to (\tau_1 \iso \tau_3)
+               \end{array} \\
+\\
+! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
+\invc{\id} &=& \id \\
+\invc{\swap} &=& \swap \\
+\invc{(\compc{c_1}{c_2})} &=& \compc{\invc{c_2}\;}{\;\invc{c_1}} \\
+\\
+\alpha &::=& \begin{array}[t]{lrcl}
+               & \id &:& c \isotwo c \\
+               \alt & \assocc &:& \compc{c_1}{(\compc{c_2}{c_3})} \isotwo
+                                              \compc{(\compc{c_1}{c_2})}{c_3} \\
+               \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
+               \alt & \idrc &:& \compc{c}{\id} \isotwo c \\
+               \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
+               \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
+               \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3)
+                                            \to (c_1 \isotwo c_3) \\
+               \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2')
+                                            \to (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
+             \end{array}
+\end{array}\]
+
+The 2-combinators $\alpha$ also have inverses. The above forms a 2-groupoid.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -502,49 +551,6 @@ $(\reflp,\gluep)$ but to show that that this is the only path we will have to
 first prove that $`\mathbf{not} \circ `\mathbf{not} \equiv `\mathbf{id}$.
 
 
-
-%%%%%
-\subsection{The Language $\Pi$ of Type Isomorphisms}
-
-The restriction of $\Pi$ to the case of just booleans is the following:
-
-\[\begin{array}{rcl}
-\tau &::=& \bt \\
-\\
-v &::=& \begin{array}[t]{lrcl}
-                    & \fc &:& \bt \\
-              \alt & \tc &:& \bt
-               \end{array} \\
-\\
-c &::=& \begin{array}[t]{lrcl}
-              & \id &:& \tau \iso \tau \\
-               \alt & \swap &:& \bt \iso \bt \\
-               \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3)
-                              \to (\tau_1 \iso \tau_3)
-               \end{array} \\
-\\
-! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
-\invc{\id} &=& \id \\
-\invc{\swap} &=& \swap \\
-\invc{(\compc{c_1}{c_2})} &=& \compc{\invc{c_2}\;}{\;\invc{c_1}} \\
-\\
-\alpha &::=& \begin{array}[t]{lrcl}
-               & \id &:& c \isotwo c \\
-               \alt & \assocc &:& \compc{c_1}{(\compc{c_2}{c_3})} \isotwo
-                                              \compc{(\compc{c_1}{c_2})}{c_3} \\
-               \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
-               \alt & \idrc &:& \compc{c}{\id} \isotwo c \\
-               \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
-               \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
-               \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3)
-                                            \to (c_1 \isotwo c_3) \\
-               \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2')
-                                            \to (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
-             \end{array}
-\end{array}\]
-
-The 2-combinators $\alpha$ also have inverses. The above forms a 2-groupoid (see
-accompanying code once it is fixed).
 
 %%%%%
 \subsection{Equivalence}
