@@ -137,3 +137,10 @@ module Direct where
 
   ⟦_⟧₃⁻¹ : {p q : M.`𝟚 == M.`𝟚} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹
   ⟦ α ⟧₃⁻¹ = `trunc
+
+  ⟦⟦_⟧₁⟧₁⁻¹ : (p : U.`𝟚 ⟷₁ U.`𝟚) → p ⟷₂ ⟦ ⟦ p ⟧₁ ⟧₁⁻¹
+  ⟦⟦ p ⟧₁⟧₁⁻¹ with canonical₁ p | all-1-paths ⟦ p ⟧₁
+  ⟦⟦ p ⟧₁⟧₁⁻¹ | ID , p⇔id | (i₁ p=id) = p⇔id
+  ⟦⟦ p ⟧₁⟧₁⁻¹ | NOT , p⇔not | (i₁ p=id) = rec𝟘 _ (¬id=not ((! p=id) ◾ ⟦ p⇔not ⟧₂))
+  ⟦⟦ p ⟧₁⟧₁⁻¹ | ID , p⇔id | (i₂ p=not) = rec𝟘 _ (¬id=not (! ((! p=not) ◾ ⟦ p⇔id ⟧₂)))
+  ⟦⟦ p ⟧₁⟧₁⁻¹ | NOT , p⇔not | (i₂ p=not) = p⇔not
