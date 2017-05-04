@@ -134,3 +134,6 @@ module Direct where
   ⟦_⟧₂⁻¹ {p} {q} u | i₁ p=id  | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ u ◾ q=not))
   ⟦_⟧₂⁻¹ {p} {q} u | i₂ p=not | (i₁ q=id)  = rec𝟘 _ (¬id=not ((! q=id) ◾ ! u ◾ p=not))
   ⟦_⟧₂⁻¹ {p} {q} u | i₂ p=not | (i₂ q=not) = `id₂
+
+  ⟦_⟧₃⁻¹ : {p q : M.`𝟚 == M.`𝟚} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹
+  ⟦ α ⟧₃⁻¹ = `trunc
