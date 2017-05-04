@@ -161,7 +161,7 @@ and by the potential for efficient quantum
 computation~\cite{springerlink:10.1007/BF02650179}.
 
 The early developments of reversible programming languages started with a
-conventional programming language, e.g., extended $\lambda$-calculi, and either
+conventional programming language, e.g., an extended $\lambda$-calculus, and either
 (i) extended the language with a history
 mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible} or
 (ii) imposed constraints on the control flow constructs to make them
@@ -177,27 +177,105 @@ In previous work, Carette, Bowman, James, and
 Sabry~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016} introduced
 the~$\Pi$ family of reversible languages based on type isomorphisms and
 commutative semiring identities. The fragment without recursive types is
-universal for reversible boolean
-circuits~\cite{James:2012:IE:2103656.2103667}. With the addition of recursive
-types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607}, the variant
-of $\Pi$ becomes a Turing-complete reversible
-language~\cite{James:2012:IE:2103656.2103667,rc2011}. Before identifying a
-``featherweight'' representative to use for the formal development in this
-paper, we illustrate the main underlying ideas for the entire family of
-languages using some examples.
+universal for reversible boolean circuits~\cite{James:2012:IE:2103656.2103667}
+and the extension with recursive types and trace
+operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
+language~\cite{James:2012:IE:2103656.2103667,rc2011}. In this paper we will
+identify a ``featherweight'' representative to use for the formal
+development. But first, we illustrate the flavor of the family of languages with
+some examples written in a Haskell syntax.
 
-\amr{EXAMPLES OF CIRCUITS}
+First consider the following program:
+\begin{verbatim}
+addSub1 :: (Int, Int) :<=> (Int, Int)
+addSub1 = CommuteTimes
+      :.: (UnfoldN :*: Id)
+      :.: Distribute
+      :.: (Id :+: CommuteTimes)
+      :.: Factor
+      :.: (FoldN :*: Id)
+\end{verbatim}
+which takes a pair of natural numbers and processes them as follows depending on
+whether the second number is 0 or not. If the second number is 0, the evaluation
+proceeds as follows:
+$(n,0) \mapsto (0,n) \mapsto (\mathit{inj}_1(),n) \mapsto \mathit{inj}_1((),n)
+\mapsto \mathit{inj}_1((),n) \mapsto (\mathit{inj}_1(),n) \mapsto (0,n)$. If the
+second number is $\mathit{suc}~m$, the evaluation proceeds as follows:
+$(n, \mathit{suc}~m) \mapsto (\mathit{suc}~m,n) \mapsto (\mathit{inj}_2m,n)
+\mapsto \mathit{inj}_2(m,n) \mapsto \mathit{inj}_2(n,m) \mapsto
+(\mathit{inj}_2n,m) \mapsto (\mathit{suc}~n,m)$. In summary, repeated
+applications of this program would increment the first number and decrement the
+second number maintaining the sum at all times. When the second number reaches
+0, the numbers are swapped.
 
-Although writing circuits using the raw syntax for combinators is tedious, the
-examples illustrate the programming language nature of this family of $\Pi$
+As another example, consider the following expressions culminating with the
+implementation of the Toffoli gate, whichi is universal for combinational
+circuits.
+
+\begin{verbatim}
+inot :: Bool :<=> Bool
+inot = UnfoldB :.: CommutePlus :.: FoldB
+
+cond :: (a :<=> b) -> (a :<=> b) -> ((Bool, a) :<=> (Bool, b))
+cond f g = (UnfoldB :*: Id)
+       :.: Distribute
+       :.: ((Id :*: f) :+: (Id :*: g))
+       :.: Factor
+       :.: (FoldB :*: Id)
+
+controlled :: (a :<=> a) -> ((Bool, a) :<=> (Bool, a))
+controlled f = cond f Id
+
+cnot :: (Bool, Bool) :<=> (Bool, Bool)
+cnot = controlled inot
+
+toffoli :: ((Bool,Bool),Bool) :<=> ((Bool,Bool),Bool)
+toffoli = AssocTimesR :.: controlled cnot :.: AssocTimesL
+\end{verbatim}
+
+Although writing circuits using the raw syntax for combinators above is tedious,
+the examples illustrate the programming language nature of this family of $\Pi$
 languages. In other work, one can find a compiler from a conventional functional
 language to circuits~\cite{James:2012:IE:2103656.2103667}, a systematic
 technique to translate abstract machines to $\Pi$~\cite{rc2012}, and a
 Haskell-like surface language~\cite{theseus} which can ease writing
-circuits. All that reinforces the claim that this is a practical approach to
+programs. All that reinforces the claim that this is a practical approach to
 reversible programming.
 
-\amr{EXAMPLES OF OPTIMIZATIONS}
+\begin{verbatim}
+neg₁ neg₂ neg₃ neg₄ neg₅ : BOOL ⟷ BOOL
+neg₁ = swap₊
+neg₂ = id⟷ ◎ swap₊
+neg₃ = swap₊ ◎ swap₊ ◎ swap₊
+neg₄ = swap₊ ◎ id⟷
+neg₅ = uniti⋆l ◎ swap⋆ ◎ (swap₊ ⊗ id⟷) ◎ swap⋆ ◎ unite⋆l
+neg₆ = uniti⋆r ◎ (swap₊ {ONE} {ONE} ⊗ id⟷) ◎ unite⋆r
+
+negEx : neg₅ ⇔ neg₁
+negEx = uniti⋆l ◎ (swap⋆ ◎ ((swap₊ ⊗ id⟷) ◎ (swap⋆ ◎ unite⋆l)))
+          ⇔⟨ id⇔ ⊡ assoc◎l ⟩
+        uniti⋆l ◎ ((swap⋆ ◎ (swap₊ ⊗ id⟷)) ◎ (swap⋆ ◎ unite⋆l))
+          ⇔⟨ id⇔ ⊡ (swapl⋆⇔ ⊡ id⇔) ⟩
+        uniti⋆l ◎ (((id⟷ ⊗ swap₊) ◎ swap⋆) ◎ (swap⋆ ◎ unite⋆l))
+          ⇔⟨ id⇔ ⊡ assoc◎r ⟩
+        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ (swap⋆ ◎ (swap⋆ ◎ unite⋆l)))
+          ⇔⟨ id⇔ ⊡ (id⇔ ⊡ assoc◎l) ⟩
+        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ ((swap⋆ ◎ swap⋆) ◎ unite⋆l))
+          ⇔⟨ id⇔ ⊡ (id⇔ ⊡ (linv◎l ⊡ id⇔)) ⟩
+        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ (id⟷ ◎ unite⋆l))
+          ⇔⟨ id⇔ ⊡ (id⇔ ⊡ idl◎l) ⟩
+        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ unite⋆l)
+          ⇔⟨ assoc◎l ⟩
+        (uniti⋆l ◎ (id⟷ ⊗ swap₊)) ◎ unite⋆l
+          ⇔⟨ unitil⋆⇔l ⊡ id⇔ ⟩
+        (swap₊ ◎ uniti⋆l) ◎ unite⋆l
+          ⇔⟨ assoc◎r ⟩
+        swap₊ ◎ (uniti⋆l ◎ unite⋆l)
+          ⇔⟨ id⇔ ⊡ linv◎l ⟩
+        swap₊ ◎ id⟷
+          ⇔⟨ idr◎l ⟩
+        swap₊ ▤
+\end{verbatim}
 
 
 \begin{verbatim}
