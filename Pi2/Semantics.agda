@@ -151,3 +151,15 @@ module Direct where
   ⟦⟦ p ⟧₁⁻¹⟧₁ | i₁ p=id | (NOT , p⇔not) = rec𝟘 _ (¬id=not ⟦ p⇔not ⟧₂)
   ⟦⟦ p ⟧₁⁻¹⟧₁ | i₂ p=not | (ID , p⇔id) = rec𝟘 _ ((¬id=not (! ⟦ p⇔id ⟧₂)))
   ⟦⟦ p ⟧₁⁻¹⟧₁ | i₂ p=not | (NOT , p⇔not) = p=not
+
+  ⟦⟦_⟧₂⟧₂⁻¹ : {p q : U.`𝟚 ⟷₁ U.`𝟚} (u : p ⟷₂ q)
+           → u ⟷₃ (⟦⟦ p ⟧₁⟧₁⁻¹ ◾₂ (⟦ ⟦ u ⟧₂ ⟧₂⁻¹ ◾₂ (!₂ ⟦⟦ q ⟧₁⟧₁⁻¹)))
+  ⟦⟦ u ⟧₂⟧₂⁻¹ = `trunc
+
+  ⟦⟦_⟧₂⁻¹⟧₂ : {p q : M.`𝟚 == M.`𝟚} (u : p == q)
+           → u == ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ ⟦ u ⟧₂⁻¹ ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
+  ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u with all-1-paths p | all-1-paths q
+  ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₁ p=id | (i₁ q=id) = (lem₃ p=id q=id u) ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-paths-id _))
+  ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₁ p=id | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ u ◾ q=not))
+  ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₂ p=not | (i₁ q=id) = rec𝟘 _ (¬id=not ((! q=id) ◾ ! u ◾ p=not))
+  ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₂ p=not | (i₂ q=not) = (lem₃ p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-paths-not _))
