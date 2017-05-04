@@ -186,6 +186,8 @@ development. But first, we illustrate the flavor of the family of languages with
 some examples written in a Haskell syntax.
 
 First consider the following program:
+
+{\footnotesize
 \begin{verbatim}
 addSub1 :: (Int, Int) :<=> (Int, Int)
 addSub1 = CommuteTimes
@@ -194,7 +196,8 @@ addSub1 = CommuteTimes
       :.: (Id :+: CommuteTimes)
       :.: Factor
       :.: (FoldN :*: Id)
-\end{verbatim}
+\end{verbatim}}
+%
 which takes a pair of natural numbers and processes them as follows depending on
 whether the second number is 0 or not. If the second number is 0, the evaluation
 proceeds as follows:
@@ -210,18 +213,30 @@ second number maintaining the sum at all times. When the second number reaches
 
 As another example, consider the following expressions culminating with the
 implementation of the Toffoli gate, whichi is universal for combinational
-circuits.
+circuits. We have two implementations of simple boolean negation: a direct one
+and a more convoluted one. These two implementations are ``equivalent'' in the
+sense to be explained below. The expression \verb|cond| is the main reversible
+control flow mechanism: it allows for the conditional execution of one of two
+branches but retains the choice of which branch. This expression can be used
+twice to implement the Toffoli gate, which performs a conditional negation on
+one bit if two other bits are both true:
 
+{\footnotesize
 \begin{verbatim}
 inot :: Bool :<=> Bool
-inot = UnfoldB :.: CommutePlus :.: FoldB
+inot = CommutePlus
+
+inot2 :: Bool :<=> Bool
+inot2 = UnitTimesI
+    :.: CommuteTimes
+    :.: (CommutePlus :*: Id)
+    :.: CommuteTimes
+    :.: UnitTimesE
 
 cond :: (a :<=> b) -> (a :<=> b) -> ((Bool, a) :<=> (Bool, b))
-cond f g = (UnfoldB :*: Id)
-       :.: Distribute
+cond f g = Distribute
        :.: ((Id :*: f) :+: (Id :*: g))
        :.: Factor
-       :.: (FoldB :*: Id)
 
 controlled :: (a :<=> a) -> ((Bool, a) :<=> (Bool, a))
 controlled f = cond f Id
@@ -231,7 +246,7 @@ cnot = controlled inot
 
 toffoli :: ((Bool,Bool),Bool) :<=> ((Bool,Bool),Bool)
 toffoli = AssocTimesR :.: controlled cnot :.: AssocTimesL
-\end{verbatim}
+\end{verbatim}}
 
 Although writing circuits using the raw syntax for combinators above is tedious,
 the examples illustrate the programming language nature of this family of $\Pi$
@@ -242,50 +257,38 @@ Haskell-like surface language~\cite{theseus} which can ease writing
 programs. All that reinforces the claim that this is a practical approach to
 reversible programming.
 
+The raw syntax for combinators has, however, a significant benefit: it allows
+algebraic manipulation of the programs using a second level of combinators. As
+an example it is possible to show the the two implementations of boolean
+negation are equivalent as follows:
+
+{\footnotesize
 \begin{verbatim}
-neg₁ neg₂ neg₃ neg₄ neg₅ : BOOL ⟷ BOOL
-neg₁ = swap₊
-neg₂ = id⟷ ◎ swap₊
-neg₃ = swap₊ ◎ swap₊ ◎ swap₊
-neg₄ = swap₊ ◎ id⟷
-neg₅ = uniti⋆l ◎ swap⋆ ◎ (swap₊ ⊗ id⟷) ◎ swap⋆ ◎ unite⋆l
-neg₆ = uniti⋆r ◎ (swap₊ {ONE} {ONE} ⊗ id⟷) ◎ unite⋆r
+negOpt :: inot2 :<===> inot
+negOpt = (Id :>: AssocLeftEquiv)
+    :..: (Id :>: (SlideCommuteTimes :>: Id))
+    :..: (Id :>: AssocRightEquiv)
+    :..: (Id :>: (Id :>: AssocLeftEquiv))
+    :..: (Id :>: (Id :>: (InvInvEquivId :>: Id)))
+    :..: (Id :>: (Id :>: IdElimL))
+    :..: AssocLeftEquiv
+    :..: (SlideUnitI :>: Id)
+    :..: AssocRightEquiv
+    :..: (Id :>: InvInvEquivId)
+    :..: IdElimR
+\end{verbatim}}
 
-negEx : neg₅ ⇔ neg₁
-negEx = uniti⋆l ◎ (swap⋆ ◎ ((swap₊ ⊗ id⟷) ◎ (swap⋆ ◎ unite⋆l)))
-          ⇔⟨ id⇔ ⊡ assoc◎l ⟩
-        uniti⋆l ◎ ((swap⋆ ◎ (swap₊ ⊗ id⟷)) ◎ (swap⋆ ◎ unite⋆l))
-          ⇔⟨ id⇔ ⊡ (swapl⋆⇔ ⊡ id⇔) ⟩
-        uniti⋆l ◎ (((id⟷ ⊗ swap₊) ◎ swap⋆) ◎ (swap⋆ ◎ unite⋆l))
-          ⇔⟨ id⇔ ⊡ assoc◎r ⟩
-        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ (swap⋆ ◎ (swap⋆ ◎ unite⋆l)))
-          ⇔⟨ id⇔ ⊡ (id⇔ ⊡ assoc◎l) ⟩
-        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ ((swap⋆ ◎ swap⋆) ◎ unite⋆l))
-          ⇔⟨ id⇔ ⊡ (id⇔ ⊡ (linv◎l ⊡ id⇔)) ⟩
-        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ (id⟷ ◎ unite⋆l))
-          ⇔⟨ id⇔ ⊡ (id⇔ ⊡ idl◎l) ⟩
-        uniti⋆l ◎ ((id⟷ ⊗ swap₊) ◎ unite⋆l)
-          ⇔⟨ assoc◎l ⟩
-        (uniti⋆l ◎ (id⟷ ⊗ swap₊)) ◎ unite⋆l
-          ⇔⟨ unitil⋆⇔l ⊡ id⇔ ⟩
-        (swap₊ ◎ uniti⋆l) ◎ unite⋆l
-          ⇔⟨ assoc◎r ⟩
-        swap₊ ◎ (uniti⋆l ◎ unite⋆l)
-          ⇔⟨ id⇔ ⊡ linv◎l ⟩
-        swap₊ ◎ id⟷
-          ⇔⟨ idr◎l ⟩
-        swap₊ ▤
-\end{verbatim}
+This program, which can be thought of as an optimization or a proof, relates the
+two implementations of boolean negation via a series of elementary
+optimizations of which the following are the most interesting:
 
-
+{\footnotesize
 \begin{verbatim}
-Pi... isos, recursion, finite types, Turing complete... nice blah popl 12
-
-ESOP shows a natural 2-layer structure
-
-Examples
-
-\end{verbatim}
+AssocLeftEquiv    ::           (c1 :.: (c2 :.: c3)) :<===> ((c1 :.: c2) :.: c3)
+SlideCommuteTimes :: (CommuteTimes :.: (c1 :*: c2)) :<===> ((c2 :*: c1) :.: CommuteTimes)
+IdElimL           ::                     (Id :.: c) :<===> c
+SlideUnitI        ::   (UnitTimesI :.: (c1 :*: c2)) :<===> (c2 :.: UnitTimesI)
+\end{verbatim}}
 
 %%%%%
 \subsection{$\Pi_{\mathbb{2}}$}
