@@ -15,7 +15,6 @@ open import TwoUniverse using (all-1-paths ; +fn)
 
 open import Pi2.Syntax hiding (_⟷₂_ ; _◾₂_ ; !₂_)
 
-
 module AdjustId where
   -- The `id and `ρ in TwoUniverse are not exactly the ones we want
 
