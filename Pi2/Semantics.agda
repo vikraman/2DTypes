@@ -163,3 +163,6 @@ module Direct where
   ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₁ p=id | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ u ◾ q=not))
   ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₂ p=not | (i₁ q=id) = rec𝟘 _ (¬id=not ((! q=id) ◾ ! u ◾ p=not))
   ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₂ p=not | (i₂ q=not) = (lem₃ p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-paths-not _))
+
+  completeness₁ : {p q : U.`𝟚 ⟷₁ U.`𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ⟷₂ q
+  completeness₁ {p = p} {q} u = ⟦⟦ p ⟧₁⟧₁⁻¹ ◾₂ (⟦ u ⟧₂⁻¹ ◾₂ !₂ ⟦⟦ q ⟧₁⟧₁⁻¹)
