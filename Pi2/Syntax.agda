@@ -2,6 +2,8 @@
 
 module Pi2.Syntax where
 
+open import Data.Bool
+
 infix 3 _⟷₁_ _⟷₂_ _⟷₃_
 infix 5 !₁_ !₂_
 infix 4 _◾₁_ _◾₂_
@@ -105,6 +107,47 @@ data _⟷₃_ {A B : U} {p q : A ⟷₁ B} (u v : p ⟷₂ q) : Set where
 
   `trunc : --------
            u ⟷₃ v
+
+------------------------------------------------------------------------------
+-- Op Semantics
+
+El : U → Set
+El `𝟚 = Bool
+
+evalF : {A B : U} → (c : A ⟷₁ B) → El A → El B
+evalB : {A B : U} → (c : A ⟷₁ B) → El B → El A
+
+evalF `id v = v
+evalF `not false = true
+evalF `not true = false
+evalF (!₁ c) v = evalB c v
+evalF (c₁ ◾₁ c₂) v = evalF c₂ (evalF c₁ v)
+
+evalB `id v = v
+evalB `not false = true
+evalB `not true = false
+evalB (!₁ c) v = evalF c v
+evalB (c₁ ◾₁ c₂) v = evalB c₁ (evalB c₂ v)
+
+eval2F : {A B : U} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → (El A → El B) → (El A → El B)
+eval2F `id₂ f = f
+eval2F (`idl p) f = f
+eval2F (`idr p) f = f
+eval2F (`!l p) f = {!!}
+eval2F (`!r p) f = {!!}
+eval2F `!id f = {!!}
+eval2F `!not f = {!!}
+eval2F `!◾ f = {!!}
+eval2F `!! f = {!!}
+eval2F (`assoc p q r) f = {!!}
+eval2F (`! u) f = {!!}
+eval2F (!₂ u) f = {!!}
+eval2F (u ◾₂ u₁) f = {!!}
+eval2F (u □₂ u₁) f = {!!}
+
+-- and so on and so forth??  Now the big question is how to connect this to the
+-- model One idea is: evalF c v = w means that one of the fibers of path ⟦ c ⟧
+-- starts at v and ends at w ????????
 
 ------------------------------------------------------------------------------
 module Tests where
