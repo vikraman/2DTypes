@@ -15,24 +15,6 @@ open import TwoUniverse using (all-1-paths ; +fn)
 
 open import Pi2.Syntax hiding (_⟷₂_ ; _◾₂_ ; !₂_)
 
-module AdjustId where
-  -- The `id and `ρ in TwoUniverse are not exactly the ones we want
-
-  adjust-id : ==' (Ω M (𝟚 , ∣ refl 𝟚 ∣))
-                  (dpair= (refl 𝟚 , identify _ _))
-                  (refl (𝟚 , ∣ refl 𝟚 ∣))
-  adjust-id = ap dpair= (dpair= (refl (refl 𝟚) , prop-is-set identify _ _ _ _)) ◾ dpair=-η _
-
-  ρ' : not-path ◾ not-path == refl (𝟚 , ∣ refl 𝟚 ∣)
-  ρ' = ρ ◾ adjust-id
-
-  all-1-paths' : (p : (𝟚 , ∣ refl 𝟚 ∣) == (𝟚 , ∣ refl 𝟚 ∣))
-                 → (p == refl (𝟚 , ∣ refl 𝟚 ∣)) + (p == not-path)
-  all-1-paths' = +fn (λ α → α ◾ adjust-id) id ∘ all-1-paths
-
-open AdjustId using (ρ' ; all-1-paths')
-
-
 module _ where
 
   infixr 3 _⟷₂_
@@ -86,7 +68,7 @@ module _ where
   ⟦ `!r p ⟧ᵗ₂ = ◾invr ⟦ p ⟧ᵗ₁
   ⟦ `!l p ⟧ᵗ₂ = ◾invl ⟦ p ⟧ᵗ₁
   ⟦ α □₂ β ⟧ᵗ₂ = ⟦ α ⟧ᵗ₂ [2,0,2] ⟦ β ⟧ᵗ₂
-  ⟦ `ρ ⟧ᵗ₂ = ρ'
+  ⟦ `ρ ⟧ᵗ₂ = ρ
 
 
 module CompletenessZero where
@@ -100,7 +82,7 @@ module CompletenessOne where
 
   cmpl1-Ω : (p : Ω M (𝟚 , ∣ refl 𝟚 ∣))
             → Σ (`𝟚 ⟷₁ `𝟚) (λ `p → ⟦ `p ⟧ᵗ₁ == p)
-  cmpl1-Ω p with (all-1-paths' p)
+  cmpl1-Ω p with (all-1-paths p)
   ...       | i₁ α = `id , ! α
   ...       | i₂ α = `not , ! α
 
