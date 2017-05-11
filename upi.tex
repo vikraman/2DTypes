@@ -325,34 +325,28 @@ v &::=& \begin{array}[t]{lrcl}
               \alt & \tc &:& \bt
                \end{array} \\
 \\
-c &::=& \begin{array}[t]{lrcl}
+c &::=& \begin{array}[t]{llcl}
               & \id &:& \tau \iso \tau \\
                \alt & \swap &:& \bt \iso \bt \\
-               \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3)
-                              \to (\tau_1 \iso \tau_3)
+               \alt & ! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
+               \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3) \to (\tau_1 \iso \tau_3)
                \end{array} \\
-\\
-! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
-\invc{\id} &=& \id \\
-\invc{\swap} &=& \swap \\
-\invc{(\compc{c_1}{c_2})} &=& \compc{\invc{c_2}\;}{\;\invc{c_1}} \\
 \\
 \alpha &::=& \begin{array}[t]{lrcl}
                & \id &:& c \isotwo c \\
-               \alt & \assocc &:& \compc{c_1}{(\compc{c_2}{c_3})} \isotwo
-                                              \compc{(\compc{c_1}{c_2})}{c_3} \\
-               \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
-               \alt & \idrc &:& \compc{c}{\id} \isotwo c \\
-               \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
-               \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
-               \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3)
-                                            \to (c_1 \isotwo c_3) \\
-               \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2')
-                                            \to (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
+            \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
+            \alt & \idrc &:& \compc{c}{\id} \isotwo c \\
+            \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
+            \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
+            \alt & \rho &:& \swap \circ \swap \isotwo \id \\
+            \alt & \assocc &:& \compc{(\compc{c_1}{c_2})}{c_3} \isotwo \compc{c_1}{(\compc{c_2}{c_3})} \\
+            \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2') \to (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
+            \alt & !! &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_1) \\
+            \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3) \to (c_1 \isotwo c_3)
              \end{array}
 \end{array}\]
 
-The 2-combinators $\alpha$ also have inverses. The above forms a 2-groupoid.
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
