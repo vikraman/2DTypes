@@ -350,7 +350,11 @@ c &::=& \begin{array}[t]{llcl}
 \section{Univalent Type Families}
 
 We will consider a general statement of \emph{univalence} for type families. We
-start with a some preliminaries.
+start with a some preliminaries. Fig.~\ref{fig:fib} depicts a general type
+family $P : A \rightarrow \mathcal{U}$ mapping each point $x : A$ to a space
+$P(x)$. As everything is continuous, we expect this type family to respect
+identities. In other words if $x:A$ and $y:A$ are identified, it must be the
+case that the spaces $P(x)$ and $P(y)$ are ``equivalent.''
 
 \begin{figure}
 \begin{tabular}{c@{\qquad\qquad}c}
@@ -374,12 +378,15 @@ start with a some preliminaries.
   \node[below] at (-1,-5) {$x$};
   \draw[fill] (1,-5) circle [radius=0.025];
   \node[below] at (1,-5) {$y$};
-  \draw (0,-2) ellipse (0.5cm and 2cm);
-  \draw (0.1,-2) ellipse (0.5cm and 2cm);
-  \node[left] at (-0.8,-2) {Fiber $P(x)$};
-  \node[right] at (0.8,-2) {Fiber $P(y)$};
+  \draw (-1.3,-2) ellipse (0.5cm and 2cm);
+  \node[left] at (-1.8,-2) {Fiber $P(x)$};
+  \draw (1.3,-2) ellipse (0.5cm and 2cm);
+  \node[right] at (1.8,-2) {Fiber $P(y)$};
   \draw[below,cyan,thick] (-1,-5) -- (1,-5);
   \node[below,cyan,thick] at (0,-5) {$p$};
+  \draw[->,red,ultra thick] (-0.8,-1.7) to [out=45, in=135] (0.8,-1.7);
+  \draw[->,red,ultra thick] (0.8,-2.3) to [out=-135, in=-45] (-0.8,-2.3);
+  \node[red,ultra thick] at (0,-2) {$\simeq$};
 \end{tikzpicture}
 \end{tabular}
 \caption{\label{fig:fib}(left)Type family $P : A \rightarrow \mathcal{U}$ as a
@@ -387,32 +394,10 @@ start with a some preliminaries.
   induces an equivalence between the spaces $P(x)$ and $P(y)$}
 \end{figure}
 
-
-
-
-  % \draw (-3,0) ellipse (1.5cm and 3cm);
-  % \draw (3,2) ellipse (0.8cm and 2cm);
-  % \draw (3,-2) ellipse (0.5cm and 1cm);
-  % \node[blue,ultra thick,above] at (-3,3) {$A$};
-  % \node[blue,ultra thick,above] at (3,3.9) {$P(x)$ (fiber over $x$)};
-  % \node[blue,ultra thick,below] at (3,-3) {$P(y)$ (fiber over $y$)};
-  % \draw[fill] (-3,1.5) circle [radius=0.025];
-  % \draw[fill] (-3,-1.5) circle [radius=0.025];
-  % \draw[left,cyan,thick] (-3,1.5) -- (-3,-1.5);
-  % \node[left] (X) at (-3,1.5) {$x$};
-  % \path[cyan,thick] (X) edge [loop above, looseness=8, in=40, out=140] node[above] {$q$} (X);
-  % \node[left] at (-3,-1.5) {$y$};
-  % \draw[fill] (3,-1.8) circle [radius=0.025];
-  % \draw[fill] (3,3) circle [radius=0.025];
-  % \node[above] at (3,3) {$u$};
-  % \draw[fill] (3,2.2) circle [radius=0.025];
-  % \node[below] at (3,2.2) {$q_*(u)$};
-  % \draw[fill] (3,1) circle [radius=0.025];
-  % \node[below] at (3,1) {$v$};
-  % \node[below] at (3,-1.8) {$p_*(u)$};
-  % \node[left,cyan] at (-3,0) {$p$};
-  % \draw[->,red,dashed,ultra thick] (-3,1.5) to [out=45, in=135] (2.2,2.5);
-  % \draw[->,red,dashed,ultra thick] (-3,-1.5) to [out=-45, in=-135] (2.5,-2.5);
+The converse statement is whether an equivalence between $P(x)$ and $P(y)$
+necessarily induces an identification $x \equiv y$. It is easy to construct
+several examples in which this converse statement fails and it instructive to
+examine such examples.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
