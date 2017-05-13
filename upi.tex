@@ -426,7 +426,6 @@ $Q = \lambda \_. \mathbb{1}$ illustrated below:
   \draw (0,-2.7) ellipse (0.5cm and 1cm);
   \node[right] at (0.5,-2.7) {Fiber $Q(\fc)$ = Fiber $Q(\tc)$ = $\mathbb{1}$};
   \draw[fill] (0,-2.7) circle [radius=0.025];
-  \node[below] at (0,-2.7) {$\star$};
 \end{tikzpicture}
 \end{tabular}
 
@@ -451,11 +450,11 @@ defined as $P(\fc) = \mathbb{0}$ and $P(\tc) = \mathbb{1}$ illustrated below:
   \node[below] at (-1,-5) {$\fc$};
   \draw[fill] (1,-5) circle [radius=0.025];
   \node[below] at (1,-5) {$\tc$};
-  \draw (-1.3,-2) ellipse (0.5cm and 2cm);
+  \draw (-1.3,-2) ellipse (0.5cm and 1cm);
   \node[left] at (-1.8,-2) {Fiber $P(\fc) = \mathbb{0}$};
-  \draw (1.3,-2) ellipse (0.5cm and 2cm);
+  \draw (1.3,-2) ellipse (0.5cm and 1cm);
+  \draw[fill] (1.3,-2) circle [radius=0.025];
   \node[right] at (1.8,-2) {Fiber $P(\tc) = \mathbb{1}$};
-  \draw[fill] (1.8,-2) circle [radius=0.025];
   \draw[below,cyan,dashed,thick] (-1,-5) -- (1,-5);
   \node[below,cyan,dashed,thick] at (0,-5) {$\equiv$};
   \draw[->,red,dashed,ultra thick] (-0.8,-1.7) to [out=45, in=135] (0.8,-1.7);
@@ -466,6 +465,16 @@ defined as $P(\fc) = \mathbb{0}$ and $P(\tc) = \mathbb{1}$ illustrated below:
 \medskip\noindent In this case, the space of equivalences
 $P(\fc) = \mathbb{0} \simeq \mathbb{1} = P(\tc)$ is empty and so is the space of
 paths $\fc \equiv \tc$ and hence these two spaces are vacuously equivalent.
+
+%%%
+\subsection{Special Class}
+
+Instead of guessing, there is a special class of univalent fibrations:
+\[\begin{array}{rcl}
+\{F\} &:& \Sigma_{A:\mathcal{U}} \| F \equiv A \| \rightarrow \mathcal{U} \\
+\{F\}(A,p) &=&
+\end{array}\]
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Preliminaries}
