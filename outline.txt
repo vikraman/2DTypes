@@ -1,0 +1,178 @@
+function conventional view is extensional
+
+f (5) = 7; it just is
+
+In CS, we have this operational view
+
+f(5) -> suc (suc 5) -> suc 6 -> 7
+
+or
+
+f(5) -> 5! - 113 -> (5 * 4!) - 113 -> ... -> 120 - 113 -> 7
+
+An equivalence is given using the extensional view of functions
+A path is given using the operational view of functions
+
+Univalence says these two views are equivalent
+
+
+
+
+
+--
+
+Obvious: computations are physical processes bounded in space, time,
+and energy.
+
+Foundational model of computation must not violate fundamental
+physical limits/laws. Turing understood that: quotes from
+Turing. Earlier Boole understood that: quote from Bool. Girard
+understands that: quote from Girard. In some sense we all understand
+that and we can all agree about that. But of course when we design
+abstractions we can disagree. Which is a good abstraction of a human:
+several pictures. But someone might step back and ask: why bother? 
+"business as usual seems to work". Aaronson's puzzle. Something is
+really really really wrong. The foundations of some major disciplines,
+all successful, all checked, and double checked, and verified
+empirically, are deeply incompatible. 
+
+Proposal: Foundational model of computation should be time symmetric,
+i.e., based on isomophisms, equivalences, injective functions,
+etc. Forces computation to respect resources, subsumes in some sense
+liner logic; compatible with quantum physics, quantum information,
+quantitative information flow, differential privacy, no duplication,
+no deletion, and of course compatible with the spirit of HoTT, with
+proofs being represented as reversible deformations of topological
+spaces. This connects with a fascinating approach to quantum
+computing, called topological quantum computing, that was pioneered by
+faculty at IU and is now at the heart of Microsoft's approach to QC. 
+
+Details: Information Effects; Rig Groupoids; may be Fractional Types 
+
+Future work, open problems, etc:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+
+Physics => information as resource; no focus on information
+processing; write physical processes in a way that is not obviously
+computable
+
+CS => information-processing; but write algorithms and computations in
+a way that does not obviously preserve the information resource
+
+Quantum computing: where these two meet and CLASH
+
+Aaronson three claims:
+  - if foundations of physics wrong, we can fix by making it
+  computational
+- if foundations of cs wrong, we should revisit and embrace extended
+  CT-thesis
+
+
+
+
+
+
+
+
+
+
+
+
+
+--
+
+Foundations of QM <= understanding information flow
+
+--
+
+Featherweight HoTT (or something cute)
+A personal journey first about HoTT
+Research in PL: man-made; beauty in studying nature;
+computing in nature and what can we learn from it
+Girard quote etc.
+
+Conservation of information
+Finite communicable evidence
+
+Aaronson three claims:
+  - if foundations of physics wrong, we can fix by making it
+  computational
+- if foundations of cs wrong, we should revisit and embrace extended
+  CT-thesis
+
+--
+
+Featherweight HoTT
+
+equivalences (iso) -- two levels at least for Pi
+identity types
+univalence
+HITs
+
+--
+
+A Confluence of Ideas
+  Quantum Computing
+  Homotopy Type Theory
+
+Is 3 = 3
+
+Is 2 + 1 = 7 - 4
+
+N = N x N
+
+E = M C^2
+  Nobel prize to explain the process
+
+When I hear process, I hear computation
+
+So when we see = let's think computation back and forth
+
+Sometimes trivial; sometimes kaboom
+
+
+;;
+
+Observational Equivalence Story ???
+
+;;
+
+computing: device + data
+
+used to be one device (centralized) and clean small data
+
+Data growing: dirty, inconsistent, evolving, huge, …
+
+Devices: getting smaller, more numerous, more distributed, more embedded
+
+Slides for talk :-)
+
+--
+
+MFPS: let's say Math foundations of computations
+What kind of math should be use for semantics of computations
+church: set theory; functions
+long story; cpos; full abstraction for pcf; sequential; a+b not the
+same as b+a; linear logic; resources; physics
+
+two principles: conservation of energy; finite communicable resources;
+leads to monoidal categories; HoTT; weak equivalences; etc.
+
