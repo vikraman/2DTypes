@@ -97,6 +97,7 @@ $\displaystyle
 %% denotations
 
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Amr says: {#1}}\end{minipage}}}
+\newcommand{\jacques}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Jacques says: {#1}}\end{minipage}}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
@@ -116,7 +117,7 @@ $\displaystyle
   We establish a close connection between a reversible programming language
   based on type isomorphisms and a formally presented univalent universe. The
   correspondence relates combinators witnessing type isomorphisms in the
-  programming language to paths in the univalent universe, and combinator
+  programming language to paths in the univalent universe; combinator
   optimizations in the programming language to 2-paths in the univalent
   universe. The result suggests a simple computational interpretation of paths
   and of univalence in terms of familiar programming constructs whenever the
@@ -129,11 +130,12 @@ $\displaystyle
 \section{Introduction}
 
 There is a cottage industry of reversible programming languages, reversible
-logic, programming applications of type isomorphisms, etc. This work seems it
-should be connected to HoTT and univalence but there aren't any precise
+logic, programming applications of type isomorphisms, etc. It seems that this
+work should be connected to HoTT and univalence, but there aren't any precise
 connections or theorems.
 
-We propose a featherweight very specialized version of HoTT: a smaller
+We propose a very specialized version of HoTT, which we dub
+``featherweight HoTT''; it sports a smaller
 collection of types and only reversible functions. No dependent types!  More
 precisely, our conjecture:
 
@@ -143,6 +145,9 @@ precisely, our conjecture:
 \item Let $\Pi$ be the previously  described reversible programming with 1-paths and 2-paths
 \item We conjecture that $\Pi$ includes codes for \emph{all} paths in $\mathcal{U}$
 \end{itemize}
+
+\jacques{Just to make sure: we're aiming to prove a much much smaller version of
+this here, right?  Where in fact the only type is Bool?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{A Simple Reversible Programming Language}
