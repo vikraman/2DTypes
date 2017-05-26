@@ -14,6 +14,7 @@
 \usepackage{keystroke}
 \usepackage{comment}
 \usepackage{tikz}
+\usepackage[inline]{enumitem}
 
 \newcommand{\unitepl}{\texttt{unitepl}}
 \newcommand{\unitipl}{\texttt{unitipl}}
@@ -153,28 +154,31 @@ this here, right?  Where in fact the only type is Bool?}
 \section{A Simple Reversible Programming Language}
 
 The practice of programming languages is replete with \emph{ad hoc} instances of
-reversible computations such as database transactions, mechanisms for data
+reversible computations: database transactions, mechanisms for data
 provenance, checkpoints, stack and exception traces, logs, backups, rollback
 recoveries, version control systems, reverse engineering, software transactional
 memories, continuations, backtracking search, and multiple-level ``undo''
 features in commercial applications. In the early nineties,
 Baker~\cite{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class,
-treatment of reversibility but intensive research in full-fledged reversible
+treatment of reversibility. But intensive research in full-fledged reversible
 models of computations and reversible programming languages was only sparked by
 the discovery of deep connections between physics and
-computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275}
+computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275},
 and by the potential for efficient quantum
 computation~\cite{springerlink:10.1007/BF02650179}.
 
 The early developments of reversible programming languages started with a
 conventional programming language, e.g., an extended $\lambda$-calculus, and either
-(i) extended the language with a history
-mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible} or
-(ii) imposed constraints on the control flow constructs to make them
-reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}. More modern approaches
-recognize that reversible programming languages require a fresh approach and
-should be designed from first principles without the detour via conventional
-irreversible languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}.
+\begin{enumerate*}[(i)]
+\item extended the language with a history
+mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
+\item imposed constraints on the control flow constructs to make them
+reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}. 
+\end{enumerate*}
+More modern approaches recognize that reversible programming languages require
+a fresh approach and should be designed from first principles without the
+detour via conventional irreversible
+languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}.
 
 %%%%%
 \subsection{The $\Pi$ Family of Languages}
@@ -186,7 +190,30 @@ commutative semiring identities. The fragment without recursive types is
 universal for reversible boolean circuits~\cite{James:2012:IE:2103656.2103667}
 and the extension with recursive types and trace
 operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
-language~\cite{James:2012:IE:2103656.2103667,rc2011}. In this paper we will
+language~\cite{James:2012:IE:2103656.2103667,rc2011}. While at first sight,
+$\Pi$ might appear \emph{ad hoc},~\cite{Carette2016} shows that it arises naturally
+from an ``extended'' view of the Curry-Howard Correspondance: rather than looking
+at mere \emph{inhabitation} as the main source of analogy between logic
+and computation, \emph{type equivalences} becomes the source of analogy.  This
+allows one to see an analogy between algebra and reversible computation.
+Furthermore, this works at multiple levels: that of $1$-algebra (types form a
+semiring under isomorphism), but also $2$-algebra (types and equivalences form a 
+weak Rig Groupoid).  In other words, by taking ``weak Rig Groupoid'' as the 
+starting semantics, one naturally gets $\Pi$ as the syntax for the language of
+proofs of isomorphisms -- in the same way that many terms of the
+$\lambda$-calculus arise from Cartesian Closed Categories.
+
+By restricting to finite types, two operational semantics emerge:
+\begin{enumerate*}{(i)}
+\item a (reversible) operational semantics of programs over finite types, and
+\item a (reversible) operational semantics of program transformers of such programs.
+\end{enumerate*}
+Such programs can be interpreted as generalized permutations, as they work on
+structure as well as the underlying skeleton of finite types, aka the natural numbers.
+Many of the transformers can be \emph{oriented}, and thus be interpreted as
+\emph{optimizations} in some sense.
+
+In this paper we will
 identify a ``featherweight'' representative to use for the formal
 development. But first, we illustrate the flavor of the family of languages with
 some examples written in a Haskell syntax. First consider the following program:
