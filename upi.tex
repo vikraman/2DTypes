@@ -173,7 +173,7 @@ conventional programming language, e.g., an extended $\lambda$-calculus, and eit
 \item extended the language with a history
 mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
 \item imposed constraints on the control flow constructs to make them
-reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}. 
+reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
 \end{enumerate*}
 More modern approaches recognize that reversible programming languages require
 a fresh approach and should be designed from first principles without the
@@ -197,8 +197,8 @@ at mere \emph{inhabitation} as the main source of analogy between logic
 and computation, \emph{type equivalences} becomes the source of analogy.  This
 allows one to see an analogy between algebra and reversible computation.
 Furthermore, this works at multiple levels: that of $1$-algebra (types form a
-semiring under isomorphism), but also $2$-algebra (types and equivalences form a 
-weak Rig Groupoid).  In other words, by taking ``weak Rig Groupoid'' as the 
+semiring under isomorphism), but also $2$-algebra (types and equivalences form a
+weak Rig Groupoid).  In other words, by taking ``weak Rig Groupoid'' as the
 starting semantics, one naturally gets $\Pi$ as the syntax for the language of
 proofs of isomorphisms -- in the same way that many terms of the
 $\lambda$-calculus arise from Cartesian Closed Categories.
@@ -515,6 +515,48 @@ $q : F \equiv B$ and hence $A \equiv B$ and by univalence $A \simeq B$. In the
 other direction \ldots
 
 Also explain base space has higher paths \ldots
+
+\begin{verbatim}
+Thm : Let P : Type -> Type such that for all X : Type, P(X) is a proposition. Then Σ(X,P) is the base of a univalent fibration.
+
+Furthermore, we have that *all* univalent fibrations over Type arise this way. We don't need this fact directly, but it may help in the explanation. (It's certainly cleaner than making the connection to classifying bundles in geometry).
+
+Here are some more examples.
+
+is-prop : Type -> Type has the property that is-prop(X) is a proposition for all types X. So Σ(X , is-prop) is the base of a univalent fibration. In other words, this is the subuniverse consisting of all and only propositions.
+
+is-set : Type -> Type has the property that is-set(X) is a proposition for all types X. So Σ(X , is-set) is the base of a univalent fibration. In other words, this is the subuniverse consisting of all and only sets.
+
+is-1-type : Type -> Type has the property that is-1-type(X) is a proposition for
+all types X. So Σ(X , is-1-type) is the base of a univalent fibration. In other
+words, this is the subuniverse consisting of all and only 1-types. (Externally,
+these are the 1-groupoids embedded in inf-groupoids.)
+
+
+
+But here's a summary of what I wrote last week, which I think should suffice for this project. Designating a collection of types as a univalent universe boils down to defining a mere predicate on the universe. One approach to defining such a predicate is to generate a set of names and an interpretation El (a type family over these names), and ask that the disjunction "is equal to the interpretation of a name" be exclusive (i.e., a proposition). This last step requires that the set of names be representatives of distinct normal forms. Repackage these data --- the collection of types, their names, and the proof that the predicate on the universe is a proposition -- as a semantic object admitting various presentations, which when computable, can be called a "reversible programming language".
+
+
+Because "the proof that the predicate on the universe is a proposition" (and univalence), we naturally get a family of equivalences arising.  At various levels.  When reflected syntactically, we get multiple presentations of the same semantic object (where 'same' is really up to things 1 level up).  Because all we can really talk about are equivalences, when this syntax is interpreted as a programming language, it is unavoidably reversible.
+
+Right, the predicate being a proposition suffices (and is necessary) to define an embedding into a univalent universe.
+
+(Univalence is used axiomatically, as is the rest of the type theory, to define the universe. But you're welcome to interpret ITT + univalence in simplicial sets and forget about univalence altogether: the univalent universe is a particular simplicial set defined in classical set theory, as are the rest of the subuniverses serving as denotational models.)
+
+By "admitting various presentations", I mean presentation in the sense of group presentation. For example, the real functions on R^2 which are symmetries of the square centered at the origin can be viewed as the dihedral group on 8 elements: but we're free to present this group in an infinite number of ways. These presentations can be taken to be syntax for a language. If a presentation has a decidable word problem, and you have the algorithm, then you could be said to have an operational semantics, and so a programming language of a sort. This is what, I take it, you and Amr did with Laplaza's work on presenting free distributive categories in the first place. There your semantic object is the syntactic category of his theory of distributive categories.
+
+What using HoTT as a metatheory facilitates here is the construction of models which admit presentations of infinity-groupoids. (You could do it without HoTT. But the results would likely be less general, say if the work was done directly in simplicial sets or cubical sets.) Using this approach, you have a lot more options now for cooking up reversible PLs now; just as many as you have decidable presentations of inf-groupoids.
+
+The 'exclusive disjunction' aspect of being a proposition seems to have more content: it's a sort of decidability / normal form property all rolled into one.
+
+Yes, I was struck by this too. At least insofar as we continue with this style of defining predicates on the universe to obtain the intended interpretation of the types in a rev PL, it seems that a decidable enumeration of normal forms of the types will already be needed. But this doesn't seem like a huge constraint to me; most of the action is at the level of the paths....
+
+I guess that you assumed in "This last step requires that the set of names be representatives of distinct normal forms" that these were also complete?  That we have a decidable enumeration of all normal forms?
+
+I haven't said anything about an actual presentation of the inf-groupoid which is the univalent universe of finite types. You want Pi to do this work. So to get started, we should define a function from the BNF grammar corresponding to a syntax for a semiring to the terms of that universe. As it stands, we already know that those terms are reflected in Names, so it would be sufficient to define that function into Names. Ah, is this what you meant by "complete"? Yes, we have a name for everything in the extension of that predicate (by construction).
+
+\end{verbatim}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Preliminaries}
