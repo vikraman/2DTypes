@@ -169,12 +169,12 @@ computation~\cite{springerlink:10.1007/BF02650179}.
 
 The early developments of reversible programming languages started with a
 conventional programming language, e.g., an extended $\lambda$-calculus, and either
-\begin{enumerate*}[(i)]
+\begin{enumerate}
 \item extended the language with a history
 mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
 \item imposed constraints on the control flow constructs to make them
 reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
-\end{enumerate*}
+\end{enumerate}
 More modern approaches recognize that reversible programming languages require
 a fresh approach and should be designed from first principles without the
 detour via conventional irreversible
@@ -204,10 +204,10 @@ proofs of isomorphisms -- in the same way that many terms of the
 $\lambda$-calculus arise from Cartesian Closed Categories.
 
 By restricting to finite types, two operational semantics emerge:
-\begin{enumerate*}{(i)}
+\begin{enumerate}
 \item a (reversible) operational semantics of programs over finite types, and
 \item a (reversible) operational semantics of program transformers of such programs.
-\end{enumerate*}
+\end{enumerate}
 Such programs can be interpreted as generalized permutations, as they work on
 structure as well as the underlying skeleton of finite types, aka the natural numbers.
 Many of the transformers can be \emph{oriented}, and thus be interpreted as
@@ -387,11 +387,11 @@ $P : A \rightarrow \mathcal{U}$ mapping each point $x : A$ to a space $P(x)$. As
 everything is continuous, we expect this type family to respect identities. In
 other words if $x:A$ and $y:A$ are identified using a path $x \equiv y$, it must
 be the case that the spaces $P(x)$ and $P(y)$ become equivalent
-$P(x) \simeq P(y)$ as a consequence. Generally speaking, there is however no
-reason to expect that the spaces $x \equiv y$ and $P(x) \simeq P(y)$ to be
-themselves equivalent, and indeed we will provide a few examples in which they
-are not. When they are indeed equivalent, the fibration is a \emph{univalent
-  fibration}.
+$P(x) \simeq P(y)$ as a consequence. Generally speaking, there is no reason to
+expect that the spaces $x \equiv y$ and $P(x) \simeq P(y)$ to be themselves
+equivalent for all $x$ and $y$. And indeed they are most frequently not
+equivalent. In the rare cases in which they are equivalent, the fibration is a
+\emph{univalent fibration}.
 
 \begin{figure}
 \begin{tabular}{c@{\qquad\qquad}c}
@@ -426,9 +426,9 @@ are not. When they are indeed equivalent, the fibration is a \emph{univalent
   \node[red,ultra thick] at (0,-2) {$\simeq$};
 \end{tikzpicture}
 \end{tabular}
-\caption{\label{fig:fib}(left)Type family $P : A \rightarrow \mathcal{U}$ as a
+\caption{\label{fig:fib}(left) Type family $P : A \rightarrow \mathcal{U}$ as a
   fibration with total space $\Sigma_{(x:A)} P(x)$; (right) a path $x \equiv y$
-  induces an equivalence between the spaces $P(x)$ and $P(y)$}
+  in the base space induces an equivalence between the spaces $P(x)$ and $P(y)$}
 \end{figure}
 
 As two simple examples of non-univalent fibrations consider
@@ -463,7 +463,7 @@ $Q = \lambda \_. \mathbb{1}$ illustrated below:
 
 \medskip\noindent The identity function and boolean negation induce two distinct
 equivalences in the space $P(\star) = \mathbb{2} \simeq \mathbb{2} =
-P(\star)$. As there is only one path $\star \equiv star$ in the base space, the
+P(\star)$. As there is only one path $\star \equiv \star$ in the base space, the
 fibration $P$ is not univalent. Similarly, there is one equivalence
 $Q(\fc) = \mathbb{1} \simeq \mathbb{1} = Q(\tc)$ but this certainly does not
 induce a path $\fc \equiv \tc$. As the examples illustrate there is a delicate
