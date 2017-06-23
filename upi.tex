@@ -130,6 +130,9 @@ $\displaystyle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
+POPL 2012: Information effects; Canonicity for 2-dimensional type theory; look
+different but we show are the ``same''.
+
 There is a cottage industry of reversible programming languages, reversible
 logic, programming applications of type isomorphisms, etc. It seems that this
 work should be connected to HoTT and univalence, but there aren't any precise
@@ -378,6 +381,12 @@ c &::=& \begin{array}[t]{llcl}
              \end{array}
 \end{array}\]
 
+Canonical forms: given a level 1 program p, the level 2 combinators are
+complete; they can transform p to either id or not:
+\begin{verbatim}
+cmpl2-lem : (p : B <->1 B) -> (p <->2 id) + (p <->2 not)
+\end{verbatim}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Univalent Type Families}
 
@@ -558,8 +567,25 @@ I haven't said anything about an actual presentation of the inf-groupoid which i
 \end{verbatim}
 
 
+That space {2} is a higher groupoid. Let's look at its objects; its 1-paths; its
+2-paths etc.
+
+Show Agda code
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Preliminaries}
+\section{Correspondence}
+
+Soundness; completeness; etc.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+~
+\newpage
+\section{Old}
 
 Following the HoTT book and the slides on ``A Characterization of Univalent
 Fibrations'' by Dan Christensen. All the definitions and most of the examples in
