@@ -211,11 +211,31 @@ By restricting to finite types, two operational semantics emerge:
 \item a (reversible) operational semantics of programs over finite types, and
 \item a (reversible) operational semantics of program transformers of such programs.
 \end{enumerate}
-Such programs can be interpreted as generalized permutations, as they work on
+$\Pi$ programs can be interpreted as generalized permutations, as they work on
 structure as well as the underlying skeleton of finite types, aka the natural numbers.
 Many of the transformers can be \emph{oriented}, and thus be interpreted as
-\emph{optimizations} in some sense.
+\emph{optimizations}.  As with traditional languages, there are different aspects
+we can optimize for (program size, number of steps to completion, etc); we will
+not touch on this further in this paper.
 
+We will later identify a ``featherweight'' version of $\Pi$ to use in our formal
+development.  But first we illustrate the flavor of the family of languages with
+some examples.
+
+\jacques{Example 1: using the combinators from pi-dual, some an equational
+derivation in type theory (which?), in equational-derivation style.  Point out
+that reading ``down'' the justifications is a $\Pi$ program which is also a
+constructive proof of the equivalence of the types.  As it is reversible, we
+can also read the reverse program by reading ``up''.}
+
+\jacques{Example 2: like example 1, but this time at the next level (i.e. a
+program equivalence).  Same remark old.  Refer to Shulmann notes, and point out
+that such equational proofs at this level can actually be interpreted in appropriate
+categories as commutative diagrams.}
+
+\jacques{Refer to some Sabry et al. papers regarding Toffoli gates.}
+
+\begin{comment}
 In this paper we will
 identify a ``featherweight'' representative to use for the formal
 development. But first, we illustrate the flavor of the family of languages with
@@ -312,8 +332,8 @@ negOpt = (Id :>: AssocLeftEquiv)
     :..: IdElimR
 \end{verbatim}}
 %
-\noindent This program, which can be thought of as an optimization or a proof, relates the
-two implementations of boolean negation via a series of elementary
+\noindent This program, which can be thought of as an optimization or a proof,
+relates the two implementations of boolean negation via a series of elementary
 optimizations of which the following are the most interesting:
 
 {\footnotesize
@@ -324,6 +344,7 @@ IdElimL           ::                     (Id :.: c) :<===> c
 SlideUnitI        ::   (UnitTimesI :.: (c1 :*: c2)) :<===> (c2 :.: UnitTimesI)
 \end{verbatim}}
 
+\end{comment}
 %%%%%
 \subsection{$\Pi_{\mathbb{2}}$}
 
