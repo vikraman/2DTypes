@@ -15,6 +15,7 @@
 \usepackage{comment}
 \usepackage{tikz}
 \usepackage[inline]{enumitem}
+\usepackage{agda}
 
 \newcommand{\unitepl}{\texttt{unitepl}}
 \newcommand{\unitipl}{\texttt{unitipl}}
@@ -163,11 +164,10 @@ information''~\cite{Hey:1999:FCE:304763,fredkin1982conservative}, James and
 Sabry~\cite{James:2012:IE:2103656.2103667} propose a family of programming
 languages $\Pi$ in which computation preserve information. Technically,
 computations are \emph{type isomorphisms} which, at least in the case of finite
-types, clearly preserve entropy in the information-theoretic sense.
-
-We will identify a ``featherweight'' version of $\Pi$ to use in our formal
-development.  But first we illustrate the flavor of the family of languages with
-some examples.
+types, clearly preserve entropy in the information-theoretic
+sense~\cite{James:2012:IE:2103656.2103667}. We will identify a ``featherweight''
+version of $\Pi$ to use in our formal development.  But first we illustrate the
+general flavor of the family of languages with some examples.
 
 %%%%%
 \subsection{Examples}
@@ -177,6 +177,27 @@ derivation in type theory (which?), in equational-derivation style.  Point out
 that reading ``down'' the justifications is a $\Pi$ program which is also a
 constructive proof of the equivalence of the types.  As it is reversible, we
 can also read the reverse program by reading ``up''.}
+
+\newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
+
+{\small
+\[\def\arraystretch{1.2}\begin{array}{rcl}
+\AgdaFunction{toffoli} &:& \bt \otimes (\bt \otimes \bt)
+                           \leftrightarrow  \bt \otimes (\bt \otimes \bt) \\
+\AgdaFunction{toffoli} &=&
+      \bt \otimes (\bt \otimes \bt) \\
+&& \qquad\byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
+&& (\ot \oplus \ot) \otimes (\bt \otimes \bt) \\
+&& \qquad\byiso{\AgdaFunction{dist}} \\
+&& (\ot \otimes (\bt \otimes \bt)) \oplus (\ot \otimes (\bt \otimes \bt)) \\
+&& \qquad\byiso{\AgdaFunction{id} \oplus (\AgdaFunction{id} \otimes \AgdaFunction{cnot})} \\
+&& (\ot \otimes (\bt \otimes \bt)) \oplus (\ot \otimes (\bt \otimes \bt)) \\
+&& \qquad\byiso{\AgdaFunction{factor}} \\
+&& (\ot \oplus \ot) \otimes (\bt \otimes \bt) \\
+&& \qquad\byiso{\AgdaFunction{foldBool} \otimes \AgdaFunction{id}} \\
+&& \bt \otimes (\bt \otimes \bt)
+\end{array}\]}
+
 
 \jacques{Example 2: like example 1, but this time at the next level (i.e. a
 program equivalence).  Same remark old.  Refer to Shulmann notes, and point out
