@@ -182,20 +182,31 @@ can also read the reverse program by reading ``up''.}
 
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcl}
+\AgdaFunction{controlled} &:& (a \leftrightarrow a) \rightarrow 
+                              \bt \otimes a \leftrightarrow \bt \otimes a \\
+\AgdaFunction{controlled}~\AgdaFunction{f} &=& 
+      \bt \otimes a \\
+&& \qquad\byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
+&& (\ot \oplus \ot) \otimes a \\
+&& \qquad\byiso{\AgdaFunction{dist}} \\
+&& (\ot \otimes a) \oplus (\ot \otimes a) \\
+&& \qquad\byiso{\AgdaFunction{id} \oplus (\AgdaFunction{id} \otimes \AgdaFunction{f})} \\
+&& (\ot \otimes a) \oplus (\ot \otimes a) \\
+&& \qquad\byiso{\AgdaFunction{factor}} \\
+&& (\ot \oplus \ot) \otimes a \\
+&& \qquad\byiso{\AgdaFunction{foldBool} \otimes \AgdaFunction{id}} \\
+&& \bt \otimes a \\
+\\ 
+\AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
+\AgdaFunction{not} &=& 
+  \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
+\\ 
+\AgdaFunction{cnot} &:& \bt \otimes \bt \leftrightarrow \bt \otimes \bt \\
+\AgdaFunction{cnot} &=& \AgdaFunction{controlled}~\AgdaFunction{not} \\
+\\ 
 \AgdaFunction{toffoli} &:& \bt \otimes (\bt \otimes \bt)
                            \leftrightarrow  \bt \otimes (\bt \otimes \bt) \\
-\AgdaFunction{toffoli} &=&
-      \bt \otimes (\bt \otimes \bt) \\
-&& \qquad\byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
-&& (\ot \oplus \ot) \otimes (\bt \otimes \bt) \\
-&& \qquad\byiso{\AgdaFunction{dist}} \\
-&& (\ot \otimes (\bt \otimes \bt)) \oplus (\ot \otimes (\bt \otimes \bt)) \\
-&& \qquad\byiso{\AgdaFunction{id} \oplus (\AgdaFunction{id} \otimes \AgdaFunction{cnot})} \\
-&& (\ot \otimes (\bt \otimes \bt)) \oplus (\ot \otimes (\bt \otimes \bt)) \\
-&& \qquad\byiso{\AgdaFunction{factor}} \\
-&& (\ot \oplus \ot) \otimes (\bt \otimes \bt) \\
-&& \qquad\byiso{\AgdaFunction{foldBool} \otimes \AgdaFunction{id}} \\
-&& \bt \otimes (\bt \otimes \bt)
+\AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot}
 \end{array}\]}
 
 
