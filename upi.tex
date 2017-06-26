@@ -136,84 +136,41 @@ Languages~\cite{Field:2012:2103656} included two apparently unrelated papers:
   2-dimensional type theory} by Licata and Harper. The first paper, motivated by
 the physical nature of
 computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275},
-proposed a reversible language $\Pi$ in which every program is a type
-isomorphism. The second paper, motivated by the topological nature of
-computation~\cite{vv06,hottbook}, proposed a judgmental formulation of
-intensional dependent type theory with a twice-iterated identity type. During
-the conference, it became apparent, at an intuitive and informal level, that the
-two papers had strong similarities. Formalizing the precise connection was far
-from obvious, however. In this paper we report on a formal connection between
-appropriately formulated reversible languages on one hand and univalent
-universes on the other.
+proposed, among other results, a reversible language $\Pi$ in which every
+program is a type isomorphism. The second paper, motivated by the connections
+between homotopy theory and type theory~\cite{vv06,hottbook}, proposed a
+judgmental formulation of intensional dependent type theory with a
+twice-iterated identity type. During the presentations and ensuing discussions
+at the conference, it became apparent, at an intuitive and informal level, that
+the two papers had strong similarities. Formalizing the precise connection was
+far from obvious, however.
+
+In this paper we report on a formal connection between appropriately formulated
+reversible languages on one hand and univalent universes on the other. In the
+next section, we give a rational reconstruction of $\Pi$ focusing on a small
+``featherweight'' fragment. In Sec.~\ref{sec:univalent}, we review
+\emph{univalent fibrations} which allow us to give formal presentations of
+``small'' univalent universes. In Sec.~\ref{sec:connection} we state and prove
+the formal connection between the systems presented in the preceding two
+sections. Sec.~\ref{sec:conclusion} puts our work in a larger context, discusses
+related and future work, and concludes.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{A Simple Reversible Programming Language}
 
-The practice of programming languages is replete with \emph{ad hoc} instances of
-reversible computations: database transactions, mechanisms for data
-provenance, checkpoints, stack and exception traces, logs, backups, rollback
-recoveries, version control systems, reverse engineering, software transactional
-memories, continuations, backtracking search, and multiple-level ``undo''
-features in commercial applications. In the early nineties,
-Baker~\cite{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class,
-treatment of reversibility. But intensive research in full-fledged reversible
-models of computations and reversible programming languages was only sparked by
-the discovery of deep connections between physics and
-computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275},
-and by the potential for efficient quantum
-computation~\cite{springerlink:10.1007/BF02650179}.
+Starting from the physical principle of ``conservation of
+information''~\cite{Hey:1999:FCE:304763,fredkin1982conservative}, James and
+Sabry~\cite{James:2012:IE:2103656.2103667} propose a family of programming
+languages $\Pi$ in which computation preserve information. Technically,
+computations are \emph{type isomorphisms} which, at least in the case of finite
+types, clearly preserve entropy in the information-theoretic sense.
 
-The early developments of reversible programming languages started with a
-conventional programming language, e.g., an extended $\lambda$-calculus, and either
-\begin{enumerate}
-\item extended the language with a history
-mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
-\item imposed constraints on the control flow constructs to make them
-reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
-\end{enumerate}
-More modern approaches recognize that reversible programming languages require
-a fresh approach and should be designed from first principles without the
-detour via conventional irreversible
-languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}.
-
-%%%%%
-\subsection{The $\Pi$ Family of Languages}
-
-In previous work, Carette, Bowman, James, and
-Sabry~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016} introduced
-the~$\Pi$ family of reversible languages based on type isomorphisms and
-commutative semiring identities. The fragment without recursive types is
-universal for reversible boolean circuits~\cite{James:2012:IE:2103656.2103667}
-and the extension with recursive types and trace
-operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
-language~\cite{James:2012:IE:2103656.2103667,rc2011}. While at first sight,
-$\Pi$ might appear \emph{ad hoc},~\cite{Carette2016} shows that it arises naturally
-from an ``extended'' view of the Curry-Howard Correspondance: rather than looking
-at mere \emph{inhabitation} as the main source of analogy between logic
-and computation, \emph{type equivalences} becomes the source of analogy.  This
-allows one to see an analogy between algebra and reversible computation.
-Furthermore, this works at multiple levels: that of $1$-algebra (types form a
-semiring under isomorphism), but also $2$-algebra (types and equivalences form a
-weak Rig Groupoid).  In other words, by taking ``weak Rig Groupoid'' as the
-starting semantics, one naturally gets $\Pi$ as the syntax for the language of
-proofs of isomorphisms -- in the same way that many terms of the
-$\lambda$-calculus arise from Cartesian Closed Categories.
-
-By restricting to finite types, two operational semantics emerge:
-\begin{enumerate}
-\item a (reversible) operational semantics of programs over finite types, and
-\item a (reversible) operational semantics of program transformers of such programs.
-\end{enumerate}
-$\Pi$ programs can be interpreted as generalized permutations, as they work on
-structure as well as the underlying skeleton of finite types, aka the natural numbers.
-Many of the transformers can be \emph{oriented}, and thus be interpreted as
-\emph{optimizations}.  As with traditional languages, there are different aspects
-we can optimize for (program size, number of steps to completion, etc); we will
-not touch on this further in this paper.
-
-We will later identify a ``featherweight'' version of $\Pi$ to use in our formal
+We will identify a ``featherweight'' version of $\Pi$ to use in our formal
 development.  But first we illustrate the flavor of the family of languages with
 some examples.
+
+%%%%%
+\subsection{Examples}
 
 \jacques{Example 1: using the combinators from pi-dual, some an equational
 derivation in type theory (which?), in equational-derivation style.  Point out
@@ -228,143 +185,123 @@ categories as commutative diagrams.}
 
 \jacques{Refer to some Sabry et al. papers regarding Toffoli gates.}
 
-\begin{comment}
-In this paper we will
-identify a ``featherweight'' representative to use for the formal
-development. But first, we illustrate the flavor of the family of languages with
-some examples written in a Haskell syntax. First consider the following program:
+% \begin{comment}
+% In this paper we will
+% identify a ``featherweight'' representative to use for the formal
+% development. But first, we illustrate the flavor of the family of languages with
+% some examples written in a Haskell syntax. First consider the following program:
 
-{\footnotesize
-\begin{verbatim}
-addSub1 :: (Int, Int) :<=> (Int, Int)
-addSub1 = CommuteTimes
-      :.: (UnfoldN :*: Id)
-      :.: Distribute
-      :.: (Id :+: CommuteTimes)
-      :.: Factor
-      :.: (FoldN :*: Id)
-\end{verbatim}}
-%
-\noindent which takes a pair of natural numbers and processes them as follows depending on
-whether the second number is 0 or not. If the second number is 0, the evaluation
-proceeds as follows:
-$(n,0) \mapsto (0,n) \mapsto (\mathit{inj}_1(),n) \mapsto \mathit{inj}_1((),n)
-\mapsto \mathit{inj}_1((),n) \mapsto (\mathit{inj}_1(),n) \mapsto (0,n)$. If the
-second number is $\mathit{suc}~m$, the evaluation proceeds as follows:
-$(n, \mathit{suc}~m) \mapsto (\mathit{suc}~m,n) \mapsto (\mathit{inj}_2m,n)
-\mapsto \mathit{inj}_2(m,n) \mapsto \mathit{inj}_2(n,m) \mapsto
-(\mathit{inj}_2n,m) \mapsto (\mathit{suc}~n,m)$. In summary, repeated
-applications of this program would increment the first number and decrement the
-second number maintaining the sum at all times. When the second number reaches
-0, the numbers are swapped.
+% {\footnotesize
+% \begin{verbatim}
+% addSub1 :: (Int, Int) :<=> (Int, Int)
+% addSub1 = CommuteTimes
+%       :.: (UnfoldN :*: Id)
+%       :.: Distribute
+%       :.: (Id :+: CommuteTimes)
+%       :.: Factor
+%       :.: (FoldN :*: Id)
+% \end{verbatim}}
+% %
+% \noindent which takes a pair of natural numbers and processes them as follows depending on
+% whether the second number is 0 or not. If the second number is 0, the evaluation
+% proceeds as follows:
+% $(n,0) \mapsto (0,n) \mapsto (\mathit{inj}_1(),n) \mapsto \mathit{inj}_1((),n)
+% \mapsto \mathit{inj}_1((),n) \mapsto (\mathit{inj}_1(),n) \mapsto (0,n)$. If the
+% second number is $\mathit{suc}~m$, the evaluation proceeds as follows:
+% $(n, \mathit{suc}~m) \mapsto (\mathit{suc}~m,n) \mapsto (\mathit{inj}_2m,n)
+% \mapsto \mathit{inj}_2(m,n) \mapsto \mathit{inj}_2(n,m) \mapsto
+% (\mathit{inj}_2n,m) \mapsto (\mathit{suc}~n,m)$. In summary, repeated
+% applications of this program would increment the first number and decrement the
+% second number maintaining the sum at all times. When the second number reaches
+% 0, the numbers are swapped.
 
-As another example, consider the following expressions culminating with the
-implementation of the Toffoli gate, which is universal for combinational
-circuits. We have two implementations of simple boolean negation: a direct one
-and a more convoluted one. These two implementations are ``equivalent'' in the
-sense to be explained below. The expression \verb|cond| is the main reversible
-control flow mechanism: it allows for the conditional execution of one of two
-branches but retains the choice of which branch was executed. This mechanism can
-be used twice to implement the Toffoli gate, which performs a conditional
-negation on one bit if two other bits are both true:
+% As another example, consider the following expressions culminating with the
+% implementation of the Toffoli gate, which is universal for combinational
+% circuits. We have two implementations of simple boolean negation: a direct one
+% and a more convoluted one. These two implementations are ``equivalent'' in the
+% sense to be explained below. The expression \verb|cond| is the main reversible
+% control flow mechanism: it allows for the conditional execution of one of two
+% branches but retains the choice of which branch was executed. This mechanism can
+% be used twice to implement the Toffoli gate, which performs a conditional
+% negation on one bit if two other bits are both true:
 
-{\footnotesize
-\begin{verbatim}
-inot :: Bool :<=> Bool
-inot = CommutePlus
+% {\footnotesize
+% \begin{verbatim}
+% inot :: Bool :<=> Bool
+% inot = CommutePlus
 
-inot2 :: Bool :<=> Bool
-inot2 = UnitTimesI
-    :.: CommuteTimes
-    :.: (CommutePlus :*: Id)
-    :.: CommuteTimes
-    :.: UnitTimesE
+% inot2 :: Bool :<=> Bool
+% inot2 = UnitTimesI
+%     :.: CommuteTimes
+%     :.: (CommutePlus :*: Id)
+%     :.: CommuteTimes
+%     :.: UnitTimesE
 
-cond :: (a :<=> b) -> (a :<=> b) -> ((Bool, a) :<=> (Bool, b))
-cond f g = Distribute
-       :.: ((Id :*: f) :+: (Id :*: g))
-       :.: Factor
+% cond :: (a :<=> b) -> (a :<=> b) -> ((Bool, a) :<=> (Bool, b))
+% cond f g = Distribute
+%        :.: ((Id :*: f) :+: (Id :*: g))
+%        :.: Factor
 
-controlled :: (a :<=> a) -> ((Bool, a) :<=> (Bool, a))
-controlled f = cond f Id
+% controlled :: (a :<=> a) -> ((Bool, a) :<=> (Bool, a))
+% controlled f = cond f Id
 
-cnot :: (Bool, Bool) :<=> (Bool, Bool)
-cnot = controlled inot
+% cnot :: (Bool, Bool) :<=> (Bool, Bool)
+% cnot = controlled inot
 
-toffoli :: ((Bool,Bool),Bool) :<=> ((Bool,Bool),Bool)
-toffoli = AssocTimesR :.: controlled cnot :.: AssocTimesL
-\end{verbatim}}
+% toffoli :: ((Bool,Bool),Bool) :<=> ((Bool,Bool),Bool)
+% toffoli = AssocTimesR :.: controlled cnot :.: AssocTimesL
+% \end{verbatim}}
 
-Although writing circuits using the raw syntax for combinators above is tedious,
-the examples illustrate the programming language nature of this family of $\Pi$
-languages. In other work, one can find a compiler from a conventional functional
-language to circuits~\cite{James:2012:IE:2103656.2103667}, a systematic
-technique to translate abstract machines to $\Pi$~\cite{rc2012}, and a
-Haskell-like surface language~\cite{theseus} which can ease writing
-programs. All that reinforces the claim that this is a practical approach to
-reversible programming.
+% Although writing circuits using the raw syntax for combinators above is tedious,
+% the examples illustrate the programming language nature of this family of $\Pi$
+% languages. In other work, one can find a compiler from a conventional functional
+% language to circuits~\cite{James:2012:IE:2103656.2103667}, a systematic
+% technique to translate abstract machines to $\Pi$~\cite{rc2012}, and a
+% Haskell-like surface language~\cite{theseus} which can ease writing
+% programs. All that reinforces the claim that this is a practical approach to
+% reversible programming.
 
-The raw syntax for combinators has, however, a significant benefit: it allows
-algebraic manipulation of the programs using a second level of combinators. As
-an example it is possible to show the the two implementations of boolean
-negation are equivalent as follows:
+% The raw syntax for combinators has, however, a significant benefit: it allows
+% algebraic manipulation of the programs using a second level of combinators. As
+% an example it is possible to show the the two implementations of boolean
+% negation are equivalent as follows:
 
-{\footnotesize
-\begin{verbatim}
-negOpt :: inot2 :<===> inot
-negOpt = (Id :>: AssocLeftEquiv)
-    :..: (Id :>: (SlideCommuteTimes :>: Id))
-    :..: (Id :>: AssocRightEquiv)
-    :..: (Id :>: (Id :>: AssocLeftEquiv))
-    :..: (Id :>: (Id :>: (InvInvEquivId :>: Id)))
-    :..: (Id :>: (Id :>: IdElimL))
-    :..: AssocLeftEquiv
-    :..: (SlideUnitI :>: Id)
-    :..: AssocRightEquiv
-    :..: (Id :>: InvInvEquivId)
-    :..: IdElimR
-\end{verbatim}}
-%
-\noindent This program, which can be thought of as an optimization or a proof,
-relates the two implementations of boolean negation via a series of elementary
-optimizations of which the following are the most interesting:
+% {\footnotesize
+% \begin{verbatim}
+% negOpt :: inot2 :<===> inot
+% negOpt = (Id :>: AssocLeftEquiv)
+%     :..: (Id :>: (SlideCommuteTimes :>: Id))
+%     :..: (Id :>: AssocRightEquiv)
+%     :..: (Id :>: (Id :>: AssocLeftEquiv))
+%     :..: (Id :>: (Id :>: (InvInvEquivId :>: Id)))
+%     :..: (Id :>: (Id :>: IdElimL))
+%     :..: AssocLeftEquiv
+%     :..: (SlideUnitI :>: Id)
+%     :..: AssocRightEquiv
+%     :..: (Id :>: InvInvEquivId)
+%     :..: IdElimR
+% \end{verbatim}}
+% %
+% \noindent This program, which can be thought of as an optimization or a proof,
+% relates the two implementations of boolean negation via a series of elementary
+% optimizations of which the following are the most interesting:
 
-{\footnotesize
-\begin{verbatim}
-AssocLeftEquiv    ::           (c1 :.: (c2 :.: c3)) :<===> ((c1 :.: c2) :.: c3)
-SlideCommuteTimes :: (CommuteTimes :.: (c1 :*: c2)) :<===> ((c2 :*: c1) :.: CommuteTimes)
-IdElimL           ::                     (Id :.: c) :<===> c
-SlideUnitI        ::   (UnitTimesI :.: (c1 :*: c2)) :<===> (c2 :.: UnitTimesI)
-\end{verbatim}}
+% {\footnotesize
+% \begin{verbatim}
+% AssocLeftEquiv    ::           (c1 :.: (c2 :.: c3)) :<===> ((c1 :.: c2) :.: c3)
+% SlideCommuteTimes :: (CommuteTimes :.: (c1 :*: c2)) :<===> ((c2 :*: c1) :.: CommuteTimes)
+% IdElimL           ::                     (Id :.: c) :<===> c
+% SlideUnitI        ::   (UnitTimesI :.: (c1 :*: c2)) :<===> (c2 :.: UnitTimesI)
+% \end{verbatim}}
 
-\end{comment}
+% \end{comment}
+
 %%%%%
 \subsection{$\Pi_{\mathbb{2}}$}
 
-In previous work, on $\Pi$ we noted a possible connection with HoTT:
-\begin{quote}
-  It is, therefore, at least plausible that a variant of HoTT based exclusively
-  on reversible functions that directly correspond to equivalences would have
-  better computational properties. Our current result is a step, albeit
-  preliminary, in that direction as it only applies to finite
-  types~\cite{Carette2016}.
-\end{quote}
-Formalizing, in a precise sense, the connection between reversible programs
-based on combinators and paths in HoTT, as intuitive as it may seem, is however
-difficult. Paths in HoTT come equipped with principles like the
-``contractibility of singletons'', ``transport'', and ``path induction.'' None
-of these principles seems to have any direct counterpart in the world of
-reversible programming.
-
-We will however show, in a very clear sense, how a $\Pi$-based language is
-``equivalent'' to a univalent HoTT universe that possesses all the required
-properties of paths. The essence of the construction can be demonstrated with a
-tiny ``featherweight'' variant of $\Pi$ that includes just one type: booleans,
-and a tiny ``featherweight'' univalent universe to be formalized in the next
-section. Here we give a formalization of the small $\Pi$-based language which we
-will use in the formalization in the rest of the paper.
-
-The restriction of $\Pi$ to the case of just booleans is the following:
+We present a small $\Pi$-based language which we will use in the formalization
+in the rest of the paper. The restriction of $\Pi$ to the case of just booleans
+is the following:
 
 \[\begin{array}{rcl}
 \tau &::=& \bt \\
@@ -402,7 +339,8 @@ cmpl2-lem : (p : B <->1 B) -> (p <->2 id) + (p <->2 not)
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Univalent Type Families}
+\section{Univalent Fibrations}
+\label{sec:univalent}
 
 We will consider a general statement of \emph{univalence} for type families. We
 start with a some preliminaries. Fig.~\ref{fig:fib} depicts a type family
@@ -540,43 +478,129 @@ other direction \ldots
 Also explain base space has higher paths \ldots
 
 \begin{verbatim}
-Thm : Let P : Type -> Type such that for all X : Type, P(X) is a proposition. Then Σ(X,P) is the base of a univalent fibration.
+Thm: Let P : Type -> Type such that for all X : Type, P(X)
+is a proposition. Then Σ(X,P) is the base of a univalent
+fibration.
 
-Furthermore, we have that *all* univalent fibrations over Type arise this way. We don't need this fact directly, but it may help in the explanation. (It's certainly cleaner than making the connection to classifying bundles in geometry).
+Furthermore, we have that *all* univalent fibrations
+over Type arise this way. We don't need this fact directly,
+but it may help in the explanation. (It's certainly cleaner
+than making the connection to classifying bundles in
+geometry).
 
 Here are some more examples.
 
-is-prop : Type -> Type has the property that is-prop(X) is a proposition for all types X. So Σ(X , is-prop) is the base of a univalent fibration. In other words, this is the subuniverse consisting of all and only propositions.
+is-prop : Type -> Type has the property that is-prop(X)
+is a proposition for all types X. So Σ(X , is-prop) is
+the base of a univalent fibration. In other words, this
+is the subuniverse consisting of all and only propositions.
 
-is-set : Type -> Type has the property that is-set(X) is a proposition for all types X. So Σ(X , is-set) is the base of a univalent fibration. In other words, this is the subuniverse consisting of all and only sets.
+is-set : Type -> Type has the property that is-set(X)
+is a proposition for all types X. So Σ(X , is-set) is
+the base of a univalent fibration. In other words, this
+is the subuniverse consisting of all and only sets.
 
-is-1-type : Type -> Type has the property that is-1-type(X) is a proposition for
-all types X. So Σ(X , is-1-type) is the base of a univalent fibration. In other
-words, this is the subuniverse consisting of all and only 1-types. (Externally,
-these are the 1-groupoids embedded in inf-groupoids.)
+is-1-type : Type -> Type has the property that
+is-1-type(X) is a proposition for all types X. So
+Σ(X , is-1-type) is the base of a univalent fibration.
+In other words, this is the subuniverse consisting of all
+and only 1-types. (Externally, these are the 1-groupoids
+embedded in inf-groupoids.)
 
+But here's a summary of what I wrote last week, which
+I think should suffice for this project. Designating a
+collection of types as a univalent universe boils down
+to defining a mere predicate on the universe. One approach
+to defining such a predicate is to generate a set of
+names and an interpretation El (a type family over
+these names), and ask that the disjunction "is equal
+to the interpretation of a name" be exclusive (i.e.,
+a proposition). This last step requires that the set
+of names be representatives of distinct normal forms.
+Repackage these data --- the collection of types, their
+names, and the proof that the predicate on the universe
+is a proposition -- as a semantic object admitting
+various presentations, which when computable, can be
+called a "reversible programming language".
 
+Because "the proof that the predicate on the universe
+is a proposition" (and univalence), we naturally get a
+family of equivalences arising.  At various levels.
+When reflected syntactically, we get multiple
+presentations of the same semantic object (where
+'same' is really up to things 1 level up).  Because
+all we can really talk about are equivalences, when
+this syntax is interpreted as a programming language,
+it is unavoidably reversible.
 
-But here's a summary of what I wrote last week, which I think should suffice for this project. Designating a collection of types as a univalent universe boils down to defining a mere predicate on the universe. One approach to defining such a predicate is to generate a set of names and an interpretation El (a type family over these names), and ask that the disjunction "is equal to the interpretation of a name" be exclusive (i.e., a proposition). This last step requires that the set of names be representatives of distinct normal forms. Repackage these data --- the collection of types, their names, and the proof that the predicate on the universe is a proposition -- as a semantic object admitting various presentations, which when computable, can be called a "reversible programming language".
+Right, the predicate being a proposition suffices
+(and is necessary) to define an embedding into a
+univalent universe.
 
+(Univalence is used axiomatically, as is the rest of
+the type theory, to define the universe. But you're
+welcome to interpret ITT + univalence in simplicial
+sets and forget about univalence altogether: the
+univalent universe is a particular simplicial set
+defined in classical set theory, as are the rest
+of the subuniverses serving as denotational models.)
 
-Because "the proof that the predicate on the universe is a proposition" (and univalence), we naturally get a family of equivalences arising.  At various levels.  When reflected syntactically, we get multiple presentations of the same semantic object (where 'same' is really up to things 1 level up).  Because all we can really talk about are equivalences, when this syntax is interpreted as a programming language, it is unavoidably reversible.
+By "admitting various presentations", I mean
+presentation in the sense of group presentation.
+For example, the real functions on R^2 which are
+symmetries of the square centered at the origin
+can be viewed as the dihedral group on 8 elements:
+but we're free to present this group in an infinite
+number of ways. These presentations can be taken to
+be syntax for a language. If a presentation has a
+decidable word problem, and you have the algorithm,
+then you could be said to have an operational
+semantics, and so a programming language of a sort.
+This is what, I take it, you and Amr did with Laplaza's
+work on presenting free distributive categories
+in the first place. There your semantic object is
+the syntactic category of his theory of distributive
+categories.
 
-Right, the predicate being a proposition suffices (and is necessary) to define an embedding into a univalent universe.
+What using HoTT as a metatheory facilitates here is
+the construction of models which admit presentations
+of infinity-groupoids. (You could do it without HoTT.
+But the results would likely be less general, say if
+the work was done directly in simplicial sets or
+cubical sets.) Using this approach, you have a lot
+more options now for cooking up reversible PLs now;
+just as many as you have decidable presentations of
+inf-groupoids.
 
-(Univalence is used axiomatically, as is the rest of the type theory, to define the universe. But you're welcome to interpret ITT + univalence in simplicial sets and forget about univalence altogether: the univalent universe is a particular simplicial set defined in classical set theory, as are the rest of the subuniverses serving as denotational models.)
+The 'exclusive disjunction' aspect of being a
+proposition seems to have more content: it's a
+sort of decidability / normal form property all
+rolled into one.
 
-By "admitting various presentations", I mean presentation in the sense of group presentation. For example, the real functions on R^2 which are symmetries of the square centered at the origin can be viewed as the dihedral group on 8 elements: but we're free to present this group in an infinite number of ways. These presentations can be taken to be syntax for a language. If a presentation has a decidable word problem, and you have the algorithm, then you could be said to have an operational semantics, and so a programming language of a sort. This is what, I take it, you and Amr did with Laplaza's work on presenting free distributive categories in the first place. There your semantic object is the syntactic category of his theory of distributive categories.
+Yes, I was struck by this too. At least insofar
+as we continue with this style of defining predicates
+on the universe to obtain the intended interpretation
+of the types in a rev PL, it seems that a decidable
+enumeration of normal forms of the types will already
+be needed. But this doesn't seem like a huge constraint
+to me; most of the action is at the level of the paths....
 
-What using HoTT as a metatheory facilitates here is the construction of models which admit presentations of infinity-groupoids. (You could do it without HoTT. But the results would likely be less general, say if the work was done directly in simplicial sets or cubical sets.) Using this approach, you have a lot more options now for cooking up reversible PLs now; just as many as you have decidable presentations of inf-groupoids.
+I guess that you assumed in "This last step requires
+that the set of names be representatives of distinct
+normal forms" that these were also complete?  That we
+have a decidable enumeration of all normal forms?
 
-The 'exclusive disjunction' aspect of being a proposition seems to have more content: it's a sort of decidability / normal form property all rolled into one.
-
-Yes, I was struck by this too. At least insofar as we continue with this style of defining predicates on the universe to obtain the intended interpretation of the types in a rev PL, it seems that a decidable enumeration of normal forms of the types will already be needed. But this doesn't seem like a huge constraint to me; most of the action is at the level of the paths....
-
-I guess that you assumed in "This last step requires that the set of names be representatives of distinct normal forms" that these were also complete?  That we have a decidable enumeration of all normal forms?
-
-I haven't said anything about an actual presentation of the inf-groupoid which is the univalent universe of finite types. You want Pi to do this work. So to get started, we should define a function from the BNF grammar corresponding to a syntax for a semiring to the terms of that universe. As it stands, we already know that those terms are reflected in Names, so it would be sufficient to define that function into Names. Ah, is this what you meant by "complete"? Yes, we have a name for everything in the extension of that predicate (by construction).
+I haven't said anything about an actual presentation
+of the inf-groupoid which is the univalent universe
+of finite types. You want Pi to do this work. So to
+get started, we should define a function from the
+BNF grammar corresponding to a syntax for a semiring
+to the terms of that universe. As it stands, we
+already know that those terms are reflected in Names,
+so it would be sufficient to define that function
+into Names. Ah, is this what you meant by "complete"?
+Yes, we have a name for everything in the extension of
+that predicate (by construction).
 
 \end{verbatim}
 
@@ -588,12 +612,90 @@ Show Agda code
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
+\label{sec:connection}
+
+In previous work, on $\Pi$ we noted a possible connection with HoTT:
+\begin{quote}
+  It is, therefore, at least plausible that a variant of HoTT based exclusively
+  on reversible functions that directly correspond to equivalences would have
+  better computational properties. Our current result is a step, albeit
+  preliminary, in that direction as it only applies to finite
+  types~\cite{Carette2016}.
+\end{quote}
+Formalizing, in a precise sense, the connection between reversible programs
+based on combinators and paths in HoTT, as intuitive as it may seem, is however
+difficult. Paths in HoTT come equipped with principles like the
+``contractibility of singletons'', ``transport'', and ``path induction.'' None
+of these principles seems to have any direct counterpart in the world of
+reversible programming.
 
 Soundness; completeness; etc.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion}
+\section{Discussion, Related Work, and Conclusion}
+\label{sec:conclusion}
+
+\paragraph*{Reversible Languages.}
+\noindent The practice of programming languages is replete with \emph{ad hoc}
+instances of reversible computations: database transactions, mechanisms for data
+provenance, checkpoints, stack and exception traces, logs, backups, rollback
+recoveries, version control systems, reverse engineering, software transactional
+memories, continuations, backtracking search, and multiple-level ``undo''
+features in commercial applications. In the early nineties,
+Baker~\cite{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class,
+treatment of reversibility. But intensive research in full-fledged reversible
+models of computations and reversible programming languages was only sparked by
+the discovery of deep connections between physics and
+computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275},
+and by the potential for efficient quantum
+computation~\cite{springerlink:10.1007/BF02650179}.
+
+The early developments of reversible programming languages started with a
+conventional programming language, e.g., an extended $\lambda$-calculus, and either
+\begin{enumerate}
+\item extended the language with a history
+mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
+\item imposed constraints on the control flow constructs to make them
+reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
+\end{enumerate}
+More modern approaches recognize that reversible programming languages require
+a fresh approach and should be designed from first principles without the
+detour via conventional irreversible
+languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}.
+
+\paragraph*{The $\Pi$ Family of Languages}
+\noindent In previous work, Carette, Bowman, James, and
+Sabry~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016} introduced
+the~$\Pi$ family of reversible languages based on type isomorphisms and
+commutative semiring identities. The fragment without recursive types is
+universal for reversible boolean circuits~\cite{James:2012:IE:2103656.2103667}
+and the extension with recursive types and trace
+operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
+language~\cite{James:2012:IE:2103656.2103667,rc2011}. While at first sight,
+$\Pi$ might appear \emph{ad hoc},~\cite{Carette2016} shows that it arises
+naturally from an ``extended'' view of the Curry-Howard correspondance: rather
+than looking at mere \emph{inhabitation} as the main source of analogy between
+logic and computation, \emph{type equivalences} becomes the source of analogy.
+This allows one to see an analogy between algebra and reversible computation.
+Furthermore, this works at multiple levels: that of $1$-algebra (types form a
+semiring under isomorphism), but also $2$-algebra (types and equivalences form a
+weak Rig Groupoid).  In other words, by taking ``weak Rig Groupoid'' as the
+starting semantics, one naturally gets $\Pi$ as the syntax for the language of
+proofs of isomorphisms -- in the same way that many terms of the
+$\lambda$-calculus arise from Cartesian Closed Categories.
+
+By restricting to finite types, two operational semantics emerge:
+\begin{enumerate}
+\item a (reversible) operational semantics of programs over finite types, and
+\item a (reversible) operational semantics of program transformers of such programs.
+\end{enumerate}
+$\Pi$ programs can be interpreted as generalized permutations, as they work on
+structure as well as the underlying skeleton of finite types, aka the natural numbers.
+Many of the transformers can be \emph{oriented}, and thus be interpreted as
+\emph{optimizations}.  As with traditional languages, there are different aspects
+we can optimize for (program size, number of steps to completion, etc); we will
+not touch on this further in this paper.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
