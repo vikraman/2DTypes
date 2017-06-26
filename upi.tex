@@ -17,6 +17,7 @@
 \usepackage[inline]{enumitem}
 \usepackage{agda}
 
+\newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
 \newcommand{\unitepl}{\texttt{unitepl}}
 \newcommand{\unitipl}{\texttt{unitipl}}
 \newcommand{\unitepr}{\texttt{unitepr}}
@@ -178,12 +179,10 @@ that reading ``down'' the justifications is a $\Pi$ program which is also a
 constructive proof of the equivalence of the types.  As it is reversible, we
 can also read the reverse program by reading ``up''.}
 
-\newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
-
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcl}
-\AgdaFunction{controlled} &:& (a \leftrightarrow a) \rightarrow 
-                              \bt \otimes a \leftrightarrow \bt \otimes a \\
+\AgdaFunction{controlled} &:& \forall a.~ (a \leftrightarrow a) \rightarrow 
+                              (\bt \otimes a \leftrightarrow \bt \otimes a) \\
 \AgdaFunction{controlled}~\AgdaFunction{f} &=& 
       \bt \otimes a \\
 && \qquad\byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
@@ -196,6 +195,20 @@ can also read the reverse program by reading ``up''.}
 && (\ot \oplus \ot) \otimes a \\
 && \qquad\byiso{\AgdaFunction{foldBool} \otimes \AgdaFunction{id}} \\
 && \bt \otimes a \\
+\\ 
+\AgdaFunction{not}~\AgdaFunction{not₁}~\AgdaFunction{not₂}~\AgdaFunction{not₃} &:& 
+     \bt \leftrightarrow \bt \\
+\AgdaFunction{not} &=& 
+  \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
+\AgdaFunction{not₁} &=& 
+  \AgdaFunction{id} \odot \AgdaFunction{not} \\
+\AgdaFunction{not₂} &=& 
+  \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
+\AgdaFunction{not₃} &=& 
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot
+                        \AgdaFunction{swap⋆} \odot
+                        \AgdaFunction{unite⋆} \\
 \\ 
 \AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
 \AgdaFunction{not} &=& 
