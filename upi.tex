@@ -23,7 +23,7 @@
 \newcommand{\unitipl}{\texttt{unitipl}}
 \newcommand{\unitepr}{\texttt{unitepr}}
 \newcommand{\unitipr}{\texttt{unitipr}}
-\newcommand{\swap}{\texttt{swap}}
+\newcommand{\swap}{\textit{swap}}
 \newcommand{\swapp}{\texttt{swapp}}
 \newcommand{\assoclp}{\texttt{assoclp}}
 \newcommand{\assocrp}{\texttt{assocrp}}
@@ -42,7 +42,7 @@
 \newcommand{\distl}{\texttt{distl}}
 \newcommand{\dist}{\texttt{dist}}
 \newcommand{\factorl}{\texttt{factorl}}
-\newcommand{\id}{\texttt{id}}
+\newcommand{\id}{\textit{id}}
 \newcommand{\compc}[2]{#1 \circ #2}
 \newcommand{\compcc}[2]{#1 \bullet #2}
 \newcommand{\respcomp}[2]{#1 \odot #2}
@@ -376,42 +376,52 @@ Having illustrated the general flavor of the $\Pi$ family of
 languages, we present in full detail a small $\Pi$-based language
 which we will use in the formalization in the rest of the paper. The
 language below is the restriction of $\Pi$ to the case of just one
-type, the type of booleans. 
+type, the type of booleans:
 
-\[\def\arraystretch{0.8}\begin{array}{rcl}
-\tau &::=& \bt \\
+\[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
+(\textit{Types}) & \tau &::=& \bt \\
 \\
-v &::=& \begin{array}[t]{lrcl}
-                    & \fc &:& \bt \\
-              \alt & \tc &:& \bt
-               \end{array} \\
+(\textit{Terms}) &  v &::=& \fc &:& \bt \\
+              && \alt & \tc &:& \bt \\
 \\
-c &::=& \begin{array}[t]{llcl}
-              & \id &:& \tau \iso \tau \\
-               \alt & \swap &:& \bt \iso \bt \\
-               \alt & ! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
-               \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3) \to (\tau_1 \iso \tau_3)
-               \end{array} \\
+ (\textit{1-combinators}) &  c &::=& \id &:& \tau \iso \tau \\
+               && \alt & \swap &:& \bt \iso \bt \\
+               && \alt & ! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
+               && \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3) \to (\tau_1 \iso \tau_3)  \\
 \\
-\alpha &::=& \begin{array}[t]{lrcl}
-               & \id &:& c \isotwo c \\
-            \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
-            \alt & \idrc &:& \compc{c}{\id} \isotwo c \\
-            \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
-            \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
-            \alt & \rho &:& \swap \circ \swap \isotwo \id \\
-            \alt & \assocc &:& \compc{(\compc{c_1}{c_2})}{c_3} \isotwo \compc{c_1}{(\compc{c_2}{c_3})} \\
-            \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2') \to (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
-            \alt & !! &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_1) \\
-            \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3) \to (c_1 \isotwo c_3)
-             \end{array}
+(\textit{2-combinators}) & \alpha &::=& \id &:& c \isotwo c \\
+            && \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
+            && \alt & \idrc &:& \compc{c}{\id} \isotwo c \\
+            && \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
+            && \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
+            && \alt & \rho &:& \swap \circ \swap \isotwo \id \\
+            && \alt & \assocc &:& 
+                                  \compc{(\compc{c_1}{c_2})}{c_3} \isotwo \compc{c_1}{(\compc{c_2}{c_3})} \\
+            && \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2') \to 
+                             (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
+            && \alt & !! &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_1) \\
+            && \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3) \to (c_1 \isotwo c_3)
 \end{array}\]
 
-Canonical forms: given a level 1 program p, the level 2 combinators are
-complete; they can transform p to either id or not:
-\begin{verbatim}
-cmpl2-lem : (p : B <->1 B) -> (p <->2 id) + (p <->2 not)
-\end{verbatim}
+The syntactic category $c$ is that of 1-combinators denoting
+reversible programs, type isomorphisms, permutations, or equivalences
+depending on one's favorite interpretation. There are two primitive
+combinators $\id$ and $\swap$ which are closed under inverses $!$ and
+sequential composition $\circ$. The syntactic category $\alpha$ is
+that of 2-combinators denoting reversible program transfomations,
+coherence conditions on type isomorphisms, equivalences between
+permutations, or program optimizations depending on one's favorite
+interpretation.
+
+It is relatively easy to think of a few sound program transformations
+to include in the category $\alpha$ of 2-combinators. The set above
+however is \emph{complete}. 
+
+\begin{lemma}[Canonical Forms]
+  Given a 1-combinator $c : \tau \leftrightarrow \tau$, we either have
+  a normalization $c \Leftrightarrow \id$ or a normalization
+  $c \Leftrightarrow \swap$.
+\end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Univalent Fibrations}
