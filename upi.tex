@@ -174,6 +174,80 @@ general flavor of the family of languages with some examples.
 %%%%%
 \subsection{Examples}
 
+The examples below assume a representation of the type of booleans
+$\bt$ as the disjoint union $\ot \oplus \ot$ with the left injection
+representing $\mathsf{false}$ and the right injection representing
+$\mathsf{true}$. Given an arbitrary reversible function
+$\AgdaFunction{f}$ of type $a \leftrightarrow a$, we can build the
+reversible function $\AgdaFunction{controlled}~\AgdaFunction{f}$ that
+takes a pair of type $\bt \otimes a$ and checks the incoming boolean;
+if it is false (i.e., we are in the left injection), the function
+behaves like the identity; otherwise the function applies
+$\AgdaFunction{f}$ to the second argument. In either case, the
+incoming boolean is reconstituted to maintain reversibility. Using the
+\AgdaFunction{controlled} building block, we can build a
+controlled-not $\AgdaFunction{cnot}$ gate and a
+controlled-controlled-not gate, also known as the
+\AgdaFunction{toffoli} gate. The latter gate is a universal function
+for combinational boolean circuits thus showing the expressiveness of
+the language:
+
+\begin{figure}
+\begin{center}
+\begin{tikzpicture}[scale=0.9,every node/.style={scale=0.9}]
+  \draw (1,2) ellipse (0.5cm and 0.5cm);
+  \draw[fill] (1,2) circle [radius=0.025];
+  \node[below] at (1,2) {*};
+
+  \draw (0,0) ellipse (0.5cm and 1cm);
+  \draw[fill] (0,0.5) circle [radius=0.025];
+  \node[below] at (0,0.5) {F};
+  \draw[fill] (0,-0.5) circle [radius=0.025];
+  \node[below] at (0,-0.5) {T};
+
+  \draw     (1,2)    -- (2,2)      ; %% ()
+  \draw     (0,0.5)  -- (2,0.5)    ; %% F
+  \draw     (0,-0.5) -- (2,-0.5)   ; %% T
+
+  \draw     (2,2)    -- (3,-0.5)   ;
+  \draw     (2,0.5)  -- (3,2)      ;
+  \draw     (2,-0.5) -- (3,1)      ;
+
+  \draw     (3,2)    -- (3.5,2)    ;
+  \draw     (3,1)    -- (3.5,1)    ;
+  \draw     (3,-0.5) -- (3.5,-0.5) ; 
+
+  \draw     (3.5,2)    -- (4.5,1)    ;
+  \draw     (3.5,1)    -- (4.5,2)    ;
+  \draw     (3.5,-0.5) -- (4.5,-0.5) ; 
+
+  \draw     (4.5,2)    -- (5,2)    ;
+  \draw     (4.5,1)    -- (5,1)    ;
+  \draw     (4.5,-0.5) -- (5,-0.5) ;
+
+  \draw     (5,2)    -- (6,0.5)  ;
+  \draw     (5,1)    -- (6,-0.5) ;
+  \draw     (5,-0.5) -- (6,2)    ; 
+
+  \draw     (6,2)    -- (7,2)    ;
+  \draw     (6,0.5)  -- (8,0.5)  ;
+  \draw     (6,-0.5) -- (8,-0.5) ; 
+
+  \draw (7,2) ellipse (0.5cm and 0.5cm);
+  \draw[fill] (7,2) circle [radius=0.025];
+  \node[below] at (7,2) {*};
+
+  \draw (8,0) ellipse (0.5cm and 1cm);
+  \draw[fill] (8,0.5) circle [radius=0.025];
+  \node[below] at (8,0.5) {F};
+  \draw[fill] (8,-0.5) circle [radius=0.025];
+  \node[below] at (8,-0.5) {T};
+
+\end{tikzpicture}
+\end{center}
+\caption{\label{fig:not}Graphical representation of \AgdaFunction{not₃}}
+\end{figure}
+
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcl}
 \AgdaFunction{controlled} &:& \forall a.~ (a \leftrightarrow a) \rightarrow 
@@ -182,7 +256,7 @@ general flavor of the family of languages with some examples.
       \bt \otimes a \\
 && \qquad\byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
 && (\ot \oplus \ot) \otimes a \\
-&& \qquad\byiso{\AgdaFunction{dist}} \\
+&& \qquad\byiso{\AgdaFunction{distribute}} \\
 && (\ot \otimes a) \oplus (\ot \otimes a) \\
 && \qquad\byiso{\AgdaFunction{id} \oplus (\AgdaFunction{id} \otimes \AgdaFunction{f})} \\
 && (\ot \otimes a) \oplus (\ot \otimes a) \\
@@ -190,20 +264,6 @@ general flavor of the family of languages with some examples.
 && (\ot \oplus \ot) \otimes a \\
 && \qquad\byiso{\AgdaFunction{foldBool} \otimes \AgdaFunction{id}} \\
 && \bt \otimes a \\
-\\ 
-\AgdaFunction{not}~\AgdaFunction{not₁}~\AgdaFunction{not₂}~\AgdaFunction{not₃} &:& 
-     \bt \leftrightarrow \bt \\
-\AgdaFunction{not} &=& 
-  \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
-\AgdaFunction{not₁} &=& 
-  \AgdaFunction{id} \odot \AgdaFunction{not} \\
-\AgdaFunction{not₂} &=& 
-  \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
-\AgdaFunction{not₃} &=& 
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
-                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
-                        \AgdaFunction{swap⋆} \odot 
-                        \AgdaFunction{unite⋆} \\
 \\ 
 \AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
 \AgdaFunction{not} &=& 
@@ -215,7 +275,51 @@ general flavor of the family of languages with some examples.
 \AgdaFunction{toffoli} &:& \bt \otimes (\bt \otimes \bt)
                            \leftrightarrow  \bt \otimes (\bt \otimes \bt) \\
 \AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot} \\
-\\
+\end{array}\]}
+%%%
+
+The code for $\AgdaFunction{controlled}~\AgdaFunction{f}$ provides
+constructive evidence (i.e., a program, a logic gate, or a hardware
+circuit) for an automorphism on $\bt \otimes a$: it can be read
+top-down or bottom-up to go back and forth. This perspective naturally
+raises the questions of when two programs are ``equivalent.'' Consider
+the six programs of type $\bt \leftrightarrow \bt$ below:
+ 
+{\small 
+\[\def\arraystretch{1.2}\begin{array}{rcl}
+\AgdaFunction{id₁}~\AgdaFunction{id₂}~\AgdaFunction{id₃}~ 
+  \AgdaFunction{not₁}~\AgdaFunction{not₂}~\AgdaFunction{not₃} &:& \bt \leftrightarrow \bt \\
+\AgdaFunction{id₁} &=& 
+  \AgdaFunction{id} \odot \AgdaFunction{id} \\
+\AgdaFunction{id₂} &=& 
+  \AgdaFunction{not} \odot \AgdaFunction{id} \odot \AgdaFunction{not} \\
+\AgdaFunction{id₃} &=& 
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
+                        (\AgdaFunction{id} \otimes \AgdaFunction{id}) \odot 
+                        \AgdaFunction{swap⋆} \odot 
+                        \AgdaFunction{unite⋆} \\
+\AgdaFunction{not₁} &=& 
+  \AgdaFunction{id} \odot \AgdaFunction{not} \\
+\AgdaFunction{not₂} &=& 
+  \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
+\AgdaFunction{not₃} &=& 
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
+                        \AgdaFunction{swap⋆} \odot 
+                        \AgdaFunction{unite⋆} 
+\end{array}\]}
+
+\noindent We neither expect, nor desire, that all these six programs
+be equivalent. However each group of three programs arguably
+represents ``the same'' program. Thinking extensionally, it is indeed
+easy to verify this fact but we can do better. We can provide
+\emph{evidence} (i.e., a program that manipulates programs) that can
+constructively transform one program to an equivalent one. We show
+such a level-2 program proving that $\AgdaFunction{not₃}$ is
+equivalent to $\AgdaFunction{not}$:
+
+{\small 
+\[\def\arraystretch{1.2}\begin{array}{rcl}
 \AgdaFunction{notOpt} &:& \AgdaFunction{not₃} \Leftrightarrow \AgdaFunction{not} \\
 \AgdaFunction{notOpt} &=& 
   \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot 
@@ -260,19 +364,18 @@ general flavor of the family of languages with some examples.
 && \AgdaFunction{not} 
 \end{array}\]}
 
-
-\jacques{Example 1: using the combinators from pi-dual, some an equational
-derivation in type theory (which?), in equational-derivation style.  Point out
-that reading ``down'' the justifications is a $\Pi$ program which is also a
-constructive proof of the equivalence of the types.  As it is reversible, we
-can also read the reverse program by reading ``up''.}
+%% \jacques{Example 1: using the combinators from pi-dual, some an equational
+%% derivation in type theory (which?), in equational-derivation style.  Point out
+%% that reading ``down'' the justifications is a $\Pi$ program which is also a
+%% constructive proof of the equivalence of the types.  As it is reversible, we
+%% can also read the reverse program by reading ``up''.}
 
 \jacques{Example 2: like example 1, but this time at the next level (i.e. a
 program equivalence).  Same remark old.  Refer to Shulmann notes, and point out
 that such equational proofs at this level can actually be interpreted in appropriate
 categories as commutative diagrams.}
 
-\jacques{Refer to some Sabry et al. papers regarding Toffoli gates.}
+%% \jacques{Refer to some Sabry et al. papers regarding Toffoli gates.}
 
 % \begin{comment}
 % In this paper we will
