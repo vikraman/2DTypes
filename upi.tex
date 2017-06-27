@@ -18,6 +18,7 @@
 \usepackage{agda}
 
 \newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
+\newcommand{\byisotwo}[1]{{\Leftrightarrow}{\langle} ~#1~ \rangle}
 \newcommand{\unitepl}{\texttt{unitepl}}
 \newcommand{\unitipl}{\texttt{unitipl}}
 \newcommand{\unitepr}{\texttt{unitepr}}
@@ -173,12 +174,6 @@ general flavor of the family of languages with some examples.
 %%%%%
 \subsection{Examples}
 
-\jacques{Example 1: using the combinators from pi-dual, some an equational
-derivation in type theory (which?), in equational-derivation style.  Point out
-that reading ``down'' the justifications is a $\Pi$ program which is also a
-constructive proof of the equivalence of the types.  As it is reversible, we
-can also read the reverse program by reading ``up''.}
-
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcl}
 \AgdaFunction{controlled} &:& \forall a.~ (a \leftrightarrow a) \rightarrow 
@@ -205,9 +200,9 @@ can also read the reverse program by reading ``up''.}
 \AgdaFunction{not₂} &=& 
   \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
 \AgdaFunction{not₃} &=& 
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot
-                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot
-                        \AgdaFunction{swap⋆} \odot
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
+                        \AgdaFunction{swap⋆} \odot 
                         \AgdaFunction{unite⋆} \\
 \\ 
 \AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
@@ -219,9 +214,58 @@ can also read the reverse program by reading ``up''.}
 \\ 
 \AgdaFunction{toffoli} &:& \bt \otimes (\bt \otimes \bt)
                            \leftrightarrow  \bt \otimes (\bt \otimes \bt) \\
-\AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot}
+\AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot} \\
+\\
+\AgdaFunction{notOpt} &:& \AgdaFunction{not₃} \Leftrightarrow \AgdaFunction{not} \\
+\AgdaFunction{notOpt} &=& 
+  \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot 
+                        ((\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}))) \\
+&& \qquad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocLeft}} \\
+&& \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot 
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id})) \odot 
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}) \\
+&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{swapLeft} 
+                                  \boxdot \AgdaFunction{id})} \\
+&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot \AgdaFunction{swap⋆}) \odot 
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}) \\
+&& \qquad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocRight}} \\
+&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot (\AgdaFunction{swap⋆} \odot 
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}))) \\
+&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
+                                  \boxdot \AgdaFunction{assocLeft})} \\
+&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot ((\AgdaFunction{swap⋆} \odot 
+                      \AgdaFunction{swap⋆}) \odot \AgdaFunction{unite⋆})) \\
+&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
+                                  \boxdot (\AgdaFunction{leftInv} \boxdot \AgdaFunction{id}))} \\
+&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot (\AgdaFunction{id} \odot \AgdaFunction{unite⋆})) \\
+&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
+                                  \boxdot \AgdaFunction{idLeft})} \\
+&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot \AgdaFunction{unite⋆}) \\
+&& \qquad\byisotwo{\AgdaFunction{assocLeft}} \\
+&& (\AgdaFunction{uniti⋆} \odot (\AgdaFunction{id} \otimes \AgdaFunction{not})) 
+                      \odot \AgdaFunction{unite⋆} \\
+&& \qquad\byisotwo{\AgdaFunction{unitiLeft} \boxdot \AgdaFunction{id}} \\
+&& (\AgdaFunction{not} \otimes \AgdaFunction{uniti⋆}) \odot \AgdaFunction{unite⋆} \\    
+&& \qquad\byisotwo{\AgdaFunction{assocRight}} \\
+&& \AgdaFunction{not} \otimes (\AgdaFunction{uniti⋆} \odot \AgdaFunction{unite⋆}) \\    
+&& \qquad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{leftInv}} \\
+&& \AgdaFunction{not} \otimes \AgdaFunction{id} \\
+&& \qquad\byisotwo{\AgdaFunction{idRight}} \\
+&& \AgdaFunction{not} 
 \end{array}\]}
 
+
+\jacques{Example 1: using the combinators from pi-dual, some an equational
+derivation in type theory (which?), in equational-derivation style.  Point out
+that reading ``down'' the justifications is a $\Pi$ program which is also a
+constructive proof of the equivalence of the types.  As it is reversible, we
+can also read the reverse program by reading ``up''.}
 
 \jacques{Example 2: like example 1, but this time at the next level (i.e. a
 program equivalence).  Same remark old.  Refer to Shulmann notes, and point out
