@@ -408,7 +408,7 @@ reversible programs, type isomorphisms, permutations, or equivalences
 depending on one's favorite interpretation. There are two primitive
 combinators $\id$ and $\swap$ which are closed under inverses $!$ and
 sequential composition $\circ$. The syntactic category $\alpha$ is
-that of 2-combinators denoting reversible program transfomations,
+that of 2-combinators denoting reversible program transformations,
 coherence conditions on type isomorphisms, equivalences between
 permutations, or program optimizations depending on one's favorite
 interpretation.
@@ -426,6 +426,37 @@ however is \emph{complete}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Univalent Fibrations}
 \label{sec:univalent}
+
+We now switch gear and focus on constructions of \emph{univalent
+  universes}. In order to state the definition of such universes we
+need to introduce two notions: propositional equality
+$\AgdaDatatype{≡}$ and equivalence $\AgdaDatatype{≃}$.
+
+Propositional equality, or identity types in intensional dependent
+type theory, or path types under the HoTT-interpretation come equipped
+with a single constructor \AgdaInductiveConstructor{refl} and an
+induction principle $\AgdaFunction{J}$. A peculiar aspect of
+$\AgdaFunction{J}$ is that it does \emph{not} enforce that every
+element of an identity type
+$\AgdaFunction{x}~\AgdaDatatype{≡}~\AgdaFunction{y}$ is
+\AgdaInductiveConstructor{refl}. This ``weakness'' has a beautiful
+consequence: instead of identifying all proofs and collapsing the
+structure of proofs in the process, it instead permits a rich
+combinatorial structure of proofs to emerge. The second notion we need
+is that of equivalence. We say that two types or spaces $A$ and $B$
+are equivalent if there exist functions $f : A \rightarrow B$ and
+$g : B \rightarrow A$ that compose to the identity function. A notable
+point is that equivalences do not come with an induction principle. We
+say a universe $\mathcal{U}$ is univalent if its space of identities
+$\AgdaFunction{A} ≡ \AgdaFunction{B}$ is equivalent to its space of
+equivalences $\AgdaFunction{A} ≃ \AgdaFunction{B}$.
+
+Instead of talking about univalent universes, we generalize the
+discussion to univalent type families which will allow the
+constructions of custom universes. 
+
+\newpage
+
 
 We will consider a general statement of \emph{univalence} for type families. We
 start with a some preliminaries. Fig.~\ref{fig:fib} depicts a type family
@@ -564,7 +595,7 @@ Also explain base space has higher paths \ldots
 
 \begin{verbatim}
 Thm: Let P : Type -> Type such that for all X : Type, P(X)
-is a proposition. Then Σ(X,P) is the base of a univalent
+is a proposition. Then Sigma(X,P) is the base of a univalent
 fibration.
 
 Furthermore, we have that *all* univalent fibrations
@@ -576,18 +607,18 @@ geometry).
 Here are some more examples.
 
 is-prop : Type -> Type has the property that is-prop(X)
-is a proposition for all types X. So Σ(X , is-prop) is
+is a proposition for all types X. So Sigma(X , is-prop) is
 the base of a univalent fibration. In other words, this
 is the subuniverse consisting of all and only propositions.
 
 is-set : Type -> Type has the property that is-set(X)
-is a proposition for all types X. So Σ(X , is-set) is
+is a proposition for all types X. So Sigma(X , is-set) is
 the base of a univalent fibration. In other words, this
 is the subuniverse consisting of all and only sets.
 
 is-1-type : Type -> Type has the property that
 is-1-type(X) is a proposition for all types X. So
-Σ(X , is-1-type) is the base of a univalent fibration.
+Sigma(X , is-1-type) is the base of a univalent fibration.
 In other words, this is the subuniverse consisting of all
 and only 1-types. (Externally, these are the 1-groupoids
 embedded in inf-groupoids.)
