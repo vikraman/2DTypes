@@ -184,13 +184,36 @@ takes a pair of type $\bt \otimes a$ and checks the incoming boolean;
 if it is false (i.e., we are in the left injection), the function
 behaves like the identity; otherwise the function applies
 $\AgdaFunction{f}$ to the second argument. In either case, the
-incoming boolean is reconstituted to maintain reversibility. Using the
+incoming boolean is reconstituted to maintain reversibility. 
+
+{\small
+\[\def\arraystretch{1.2}\begin{array}{rcll}
+\AgdaFunction{controlled}  &:& \forall a.~ (a \leftrightarrow a) \rightarrow 
+                            & (\bt \otimes a \leftrightarrow \bt \otimes a) \\
+\AgdaFunction{controlled}~\AgdaFunction{f} &=& 
+
+  \bt \otimes a 
+    & \byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
+&& (\ot \oplus \ot) \otimes a 
+    & \byiso{\AgdaFunction{distribute}} \\
+&& (\ot \otimes a) \oplus (\ot \otimes a) 
+    & \byiso{\AgdaFunction{id} \oplus (\AgdaFunction{id} \otimes \AgdaFunction{f})} \\
+&& (\ot \otimes a) \oplus (\ot \otimes a)
+    & \byiso{\AgdaFunction{factor}} \\
+&& (\ot \oplus \ot) \otimes a
+    & \byiso{\AgdaFunction{foldBool} \otimes \AgdaFunction{id}} \\
+&& \bt \otimes a & ~ \\
+\end{array}
+\]}
+
+The $\AgdaFunction{not}$ function is a simple lifting of
+\AgdaFunction{swap₊}. Using the
 \AgdaFunction{controlled} building block, we can build a
 controlled-not $\AgdaFunction{cnot}$ gate and a
 controlled-controlled-not gate, also known as the
 \AgdaFunction{toffoli} gate. The latter gate is a universal function
 for combinational boolean circuits thus showing the expressiveness of
-the language:
+the language.
 
 \begin{figure}
 \begin{center}
@@ -249,22 +272,7 @@ the language:
 \end{figure}
 
 {\small
-\[\def\arraystretch{1.2}\begin{array}{rcl}
-\AgdaFunction{controlled} &:& \forall a.~ (a \leftrightarrow a) \rightarrow 
-                              (\bt \otimes a \leftrightarrow \bt \otimes a) \\
-\AgdaFunction{controlled}~\AgdaFunction{f} &=& 
-      \bt \otimes a \\
-&& \qquad\byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
-&& (\ot \oplus \ot) \otimes a \\
-&& \qquad\byiso{\AgdaFunction{distribute}} \\
-&& (\ot \otimes a) \oplus (\ot \otimes a) \\
-&& \qquad\byiso{\AgdaFunction{id} \oplus (\AgdaFunction{id} \otimes \AgdaFunction{f})} \\
-&& (\ot \otimes a) \oplus (\ot \otimes a) \\
-&& \qquad\byiso{\AgdaFunction{factor}} \\
-&& (\ot \oplus \ot) \otimes a \\
-&& \qquad\byiso{\AgdaFunction{foldBool} \otimes \AgdaFunction{id}} \\
-&& \bt \otimes a \\
-\\ 
+\[\begin{array}{rcl}
 \AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
 \AgdaFunction{not} &=& 
   \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
@@ -277,6 +285,10 @@ the language:
 \AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot} \\
 \end{array}\]}
 %%%
+
+While we wrote \AgdaFunction{controlled} in equation-reasoning style,
+\AgdaFunction{not} is written in combinator style.  These are
+equivalent as $\byiso{-}$ is defined in terms of $\odot$.
 
 The code for $\AgdaFunction{controlled}~\AgdaFunction{f}$ provides
 constructive evidence (i.e., a program, a logic gate, or a hardware
