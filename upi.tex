@@ -100,6 +100,12 @@ $\displaystyle
 %% codes
 %% denotations
 
+% TODO: give this a better name!
+\newcommand{\bracket}[1]{\ensuremath{\{#1\}}}
+\newcommand{\ptrunc}[1]{\ensuremath{\| #1 \|}}
+
+\newcommand{\PiTwo}{\ensuremath{\Pi_{\mathbb{2}}}}
+
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Amr says: {#1}}\end{minipage}}}
 \newcommand{\jacques}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Jacques says: {#1}}\end{minipage}}}
 
@@ -386,7 +392,7 @@ $\byisotwo{-}$ as a $2$-arrow (and representing a natural isomorphism).
 See~\cite{Shulmann} for that interpretation.
 
 %%%%%
-\subsection{$\Pi_{\mathbb{2}}$}
+\subsection{\PiTwo}{\label{sec:pi2}}
 
 Having illustrated the general flavor of the $\Pi$ family of
 languages, we present in full detail a small $\Pi$-based language
@@ -641,23 +647,55 @@ $P : \mathbb{1} \rightarrow \mathbb{U}$, defined as
 $P(\star) = \mathbb{1}$. $P$ is univalent as both $\star \equiv \star$ and
 $\mathbb{1} \simeq \mathbb{1}$ each have a single inhabitant.
 
-\newpage
-
 %%%
 \subsection{A Special Class}
 
-Instead of guessing, there is a special class of univalent fibrations:
-\[\begin{array}{rcl}
-\{F\} &:& \Sigma_{A:\mathcal{U}} \| F \equiv A \| \rightarrow \mathcal{U} \\
-\{F\}(A,|p|) &=& A
+It turns out that there is a special class of fibrations.  For its
+definition, we need to first introduce the idea of
+\emph{propositional truncation}, and a special map from
+paths to equivalences.
+
+\begin{defn}
+Given a type $A : \mathcal{U}$, the type
+$\ptrunc{A}$ is the propositional truncation of $A$ defined as: 
+\begin{itemize}
+\item for $x : A$, we have $|x| : \ptrunc{A}$,
+\item for any $x,y : \ptrunc{A}$, we have $\gluep : x \equiv y$.
+\end{itemize}
+\end{defn}
+\noindent We can understand $\ptrunc{A}$ as a space which has
+$|a|$ for all $a : A$ as its points, but where all such points are
+(propositionally) identified via $\gluep$.  In other others,
+by continuity, $\ptrunc{A}$ behaves the same as $\mathbb{1}$,
+in that all inhabitants of $\ptrunc{A}$ give rise to the same
+behaviour in \emph{all} situations.
+
+\begin{defn}[Lemma 2.10.1 of~\cite{HoTT}]
+Given two types $A$ and $B$, there is a function
+$\mathit{idtoeqv} : (A \equiv B) \to (A \simeq B)$.
+\end{defn}
+
+For any type $F$, let us define $\bracket{F}$ via
+\[\begin{array}{rcllcl}
+\bracket{F} &:& \Sigma_{A:\mathcal{U}} & \ptrunc{F \equiv A} & \rightarrow & \mathcal{U} \\
+\bracket{F} & & (A, & |p|) &=& A
 \end{array}\]
 
-This construction is always a univalent fibration~\cite{XXX}. We can understand
+\newpage
+
+\jacques{The following is starting to be quite fuzzy}
+This construction always gives a univalent fibration~\cite{Christiansen},
+whenever the universe $\mathcal{U}$ is univalent. We can understand
 the basic idea as follows. Take two points $(A,|p|)$ and $(B,|q|)$ in the base
 space. We want to compare the space $A \simeq B$ with the space
-$(A,|p|) \equiv (B,|q|)$.  In one direction, we have $p : F \equiv A$ and
-$q : F \equiv B$ and hence $A \equiv B$ and by univalence $A \simeq B$. In the
-other direction \ldots
+$(A,|p|) \equiv (B,|q|)$.  
+\begin{itemize}
+\item Given $(A,|p|)$ and $(B,|q|)$, we have $p : F \equiv A$ and $q : F \equiv B$.
+By symmetry and transitivity of $\equiv$, we have $A \equiv B$; by
+$\mathit{ittoequiv}$, $A \simeq B$.
+\item Given $A \simeq B$, by univalence of $\mathcal{U}$, we get that
+$A \equiv B$.  
+\end{itemize}
 
 Also explain base space has higher paths \ldots
 
@@ -788,6 +826,36 @@ that predicate (by construction).
 
 \end{verbatim}
 
+\subsection{Looking at $\bracket{\bt}$}
+
+We claim that there is a link between $\PiTwo$ (defined in Sec.~\ref{sec:pi2})
+and $\bracket{\bt}$.  To see this, we begin by unpacking the points, 1-paths,
+and 2-paths of $\bracket{\bt}$.
+
+\paragraph*{Points in $\bracket{\bt}$.} The only term of type $\bracket{\bt}$ is
+$(\bt,\|\reflp_{\bt}\|)$ which we call $`\bt$. Formally we can prove that
+$\ptrunc{(X,p) \equiv `\bt}$ is inhabited for all $X$ and $p$.
+
+\paragraph*{1-Paths in $\{\bt\}$.} These are paths between $`\bt$ and
+$`\bt$. Generally speaking, paths between elements of a $\Sigma$-type are pairs
+of paths with a transport in the second component. If we have a type $A$ with
+points $a$ and $b$ and a path $p : a \equiv b$. Fix some $c$ and consider the
+dependent function $(x:A) \rightarrow (x \equiv c)$. This forms the types
+$a\equiv c$ and $b\equiv c$ with elements $ua$ and $ub$. Now a path between
+$(a,ua)$ and $(b,ub)$ is a pair $(p,\alpha)$ where $\alpha : p_* ua \equiv
+ub$. Hence paths between $`\bt$ and $`\bt$ are going to be for the form
+$(p,\alpha)$ where $p : \bt \equiv \bt$ and $\alpha$ is essentially $\gluep$
+from the definition of truncation. So we have two paths:
+\[\begin{array}{rcl}
+`\mathbf{id} &=& (\reflp,\gluep) \\
+`\mathbf{not} &=& (\notp,\gluep)
+\end{array}\]
+
+\paragraph*{2-Paths in $\{\bt\}$.} Now are considering paths between
+$`\mathbf{id}$ and $`\mathbf{id}$, and between $`\mathbf{not}$ and
+$`\mathbf{not}$. We have at least one path at this level which is
+$(\reflp,\gluep)$ but to show that that this is the only path we will have to
+first prove that $`\mathbf{not} \circ `\mathbf{not} \equiv `\mathbf{id}$.
 
 That space {2} is a higher groupoid. Let's look at its objects; its 1-paths; its
 2-paths etc.
