@@ -214,6 +214,55 @@ controlled-controlled-not gate, also known as the
 \AgdaFunction{toffoli} gate. The latter gate is a universal function
 for combinational boolean circuits thus showing the expressiveness of
 the language.
+{\small
+\[\begin{array}{rcl}
+\AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
+\AgdaFunction{not} &=& 
+  \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
+\\ 
+\AgdaFunction{cnot} &:& \bt \otimes \bt \leftrightarrow \bt \otimes \bt \\
+\AgdaFunction{cnot} &=& \AgdaFunction{controlled}~\AgdaFunction{not} \\
+\\ 
+\AgdaFunction{toffoli} &:& \bt \otimes (\bt \otimes \bt)
+                           \leftrightarrow  \bt \otimes (\bt \otimes \bt) \\
+\AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot} \\
+\end{array}\]}
+%%%
+
+While we wrote \AgdaFunction{controlled} in equation-reasoning style,
+\AgdaFunction{not} is written in combinator style.  These are
+equivalent as $\byiso{-}$ is defined in terms of $\odot$.
+
+The code for $\AgdaFunction{controlled}~\AgdaFunction{f}$ provides
+constructive evidence (i.e., a program, a logic gate, or a hardware
+circuit) for an automorphism on $\bt \otimes a$: it can be read
+top-down or bottom-up to go back and forth. This perspective naturally
+raises the question of when two programs are ``equivalent.'' Consider
+the follwing six programs of type~$\bt \leftrightarrow \bt$
+ 
+{\small 
+\[\def\arraystretch{1.2}\begin{array}{rcl}
+\AgdaFunction{id₁}~\AgdaFunction{id₂}~\AgdaFunction{id₃}~ 
+  \AgdaFunction{not₁}~\AgdaFunction{not₂}~\AgdaFunction{not₃} &:& \bt \leftrightarrow \bt \\
+\AgdaFunction{id₁} &=& 
+  \AgdaFunction{id} \odot \AgdaFunction{id} \\
+\AgdaFunction{id₂} &=& 
+  \AgdaFunction{not} \odot \AgdaFunction{id} \odot \AgdaFunction{not} \\
+\AgdaFunction{id₃} &=& 
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
+                        (\AgdaFunction{id} \otimes \AgdaFunction{id}) \odot 
+                        \AgdaFunction{swap⋆} \odot 
+                        \AgdaFunction{unite⋆} \\
+\AgdaFunction{not₁} &=& 
+  \AgdaFunction{id} \odot \AgdaFunction{not} \\
+\AgdaFunction{not₂} &=& 
+  \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
+\AgdaFunction{not₃} &=& 
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
+                        \AgdaFunction{swap⋆} \odot 
+                        \AgdaFunction{unite⋆} 
+\end{array}\]}
 
 \begin{figure}
 \begin{center}
@@ -271,62 +320,12 @@ the language.
 \caption{\label{fig:not}Graphical representation of \AgdaFunction{not₃}}
 \end{figure}
 
-{\small
-\[\begin{array}{rcl}
-\AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
-\AgdaFunction{not} &=& 
-  \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
-\\ 
-\AgdaFunction{cnot} &:& \bt \otimes \bt \leftrightarrow \bt \otimes \bt \\
-\AgdaFunction{cnot} &=& \AgdaFunction{controlled}~\AgdaFunction{not} \\
-\\ 
-\AgdaFunction{toffoli} &:& \bt \otimes (\bt \otimes \bt)
-                           \leftrightarrow  \bt \otimes (\bt \otimes \bt) \\
-\AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot} \\
-\end{array}\]}
-%%%
-
-While we wrote \AgdaFunction{controlled} in equation-reasoning style,
-\AgdaFunction{not} is written in combinator style.  These are
-equivalent as $\byiso{-}$ is defined in terms of $\odot$.
-
-The code for $\AgdaFunction{controlled}~\AgdaFunction{f}$ provides
-constructive evidence (i.e., a program, a logic gate, or a hardware
-circuit) for an automorphism on $\bt \otimes a$: it can be read
-top-down or bottom-up to go back and forth. This perspective naturally
-raises the question of when two programs are ``equivalent.'' Consider
-the six programs of type $\bt \leftrightarrow \bt$ below:
- 
-{\small 
-\[\def\arraystretch{1.2}\begin{array}{rcl}
-\AgdaFunction{id₁}~\AgdaFunction{id₂}~\AgdaFunction{id₃}~ 
-  \AgdaFunction{not₁}~\AgdaFunction{not₂}~\AgdaFunction{not₃} &:& \bt \leftrightarrow \bt \\
-\AgdaFunction{id₁} &=& 
-  \AgdaFunction{id} \odot \AgdaFunction{id} \\
-\AgdaFunction{id₂} &=& 
-  \AgdaFunction{not} \odot \AgdaFunction{id} \odot \AgdaFunction{not} \\
-\AgdaFunction{id₃} &=& 
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
-                        (\AgdaFunction{id} \otimes \AgdaFunction{id}) \odot 
-                        \AgdaFunction{swap⋆} \odot 
-                        \AgdaFunction{unite⋆} \\
-\AgdaFunction{not₁} &=& 
-  \AgdaFunction{id} \odot \AgdaFunction{not} \\
-\AgdaFunction{not₂} &=& 
-  \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
-\AgdaFunction{not₃} &=& 
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
-                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
-                        \AgdaFunction{swap⋆} \odot 
-                        \AgdaFunction{unite⋆} 
-\end{array}\]}
-
 \noindent We neither expect, nor desire, that all these programs of
-the same type to be be equivalent. In the case above, each group of
-three programs does represent ``the same'' program but the two groups
+the same type to be be equivalent. In the above, each group of
+three does represent ``the same'' program but the two groups
 represent distinct programs. Thinking extensionally, i.e., by looking
 at all possible input-output pairs, it is indeed easy to verify this
-fact but we can do better. We can provide \emph{evidence} (i.e., a
+fact, but we can do better. We can provide \emph{evidence} (i.e., a
 program that manipulates programs) that can constructively transform
 every program to an equivalent one. We show such a level-2 program
 proving that $\AgdaFunction{not₃}$ is equivalent to
@@ -336,48 +335,48 @@ the reader to map the steps below to manipulations on the diagram that
 would incrementally simplify it:
 
 {\small 
-\[\def\arraystretch{1.2}\begin{array}{rcl}
+\[\def\arraystretch{1.2}\begin{array}{rcll}
 \AgdaFunction{notOpt} &:& \AgdaFunction{not₃} \Leftrightarrow \AgdaFunction{not} \\
 \AgdaFunction{notOpt} &=& 
   \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot 
                         ((\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}))) \\
-&& \qquad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocLeft}} \\
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})))
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocLeft}} \\
 && \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot 
                         (\AgdaFunction{not} \otimes \AgdaFunction{id})) \odot 
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}) \\
-&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{swapLeft} 
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{swapLeft} 
                                   \boxdot \AgdaFunction{id})} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
                       \odot \AgdaFunction{swap⋆}) \odot 
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}) \\
-&& \qquad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocRight}} \\
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocRight}} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
                       \odot (\AgdaFunction{swap⋆} \odot 
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆}))) \\
-&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
+                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})))
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot \AgdaFunction{assocLeft})} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
                       \odot ((\AgdaFunction{swap⋆} \odot 
-                      \AgdaFunction{swap⋆}) \odot \AgdaFunction{unite⋆})) \\
-&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
+                      \AgdaFunction{swap⋆}) \odot \AgdaFunction{unite⋆}))
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot (\AgdaFunction{leftInv} \boxdot \AgdaFunction{id}))} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot (\AgdaFunction{id} \odot \AgdaFunction{unite⋆})) \\
-&& \qquad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
+                      \odot (\AgdaFunction{id} \odot \AgdaFunction{unite⋆}))
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot \AgdaFunction{idLeft})} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot \AgdaFunction{unite⋆}) \\
-&& \qquad\byisotwo{\AgdaFunction{assocLeft}} \\
+                      \odot \AgdaFunction{unite⋆})
+ & \quad\byisotwo{\AgdaFunction{assocLeft}} \\
 && (\AgdaFunction{uniti⋆} \odot (\AgdaFunction{id} \otimes \AgdaFunction{not})) 
-                      \odot \AgdaFunction{unite⋆} \\
-&& \qquad\byisotwo{\AgdaFunction{unitiLeft} \boxdot \AgdaFunction{id}} \\
-&& (\AgdaFunction{not} \otimes \AgdaFunction{uniti⋆}) \odot \AgdaFunction{unite⋆} \\    
-&& \qquad\byisotwo{\AgdaFunction{assocRight}} \\
-&& \AgdaFunction{not} \otimes (\AgdaFunction{uniti⋆} \odot \AgdaFunction{unite⋆}) \\    
-&& \qquad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{leftInv}} \\
-&& \AgdaFunction{not} \otimes \AgdaFunction{id} \\
-&& \qquad\byisotwo{\AgdaFunction{idRight}} \\
+                      \odot \AgdaFunction{unite⋆}
+ & \quad\byisotwo{\AgdaFunction{unitiLeft} \boxdot \AgdaFunction{id}} \\
+&& (\AgdaFunction{not} \otimes \AgdaFunction{uniti⋆}) \odot \AgdaFunction{unite⋆}
+ & \quad\byisotwo{\AgdaFunction{assocRight}} \\
+&& \AgdaFunction{not} \otimes (\AgdaFunction{uniti⋆} \odot \AgdaFunction{unite⋆})
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{leftInv}} \\
+&& \AgdaFunction{not} \otimes \AgdaFunction{id}
+ & \quad\byisotwo{\AgdaFunction{idRight}} \\
 && \AgdaFunction{not} 
 \end{array}\]}
 
