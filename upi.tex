@@ -447,13 +447,13 @@ however is \emph{complete}. We also have canonical forms (constructively).
 \section{Univalent Fibrations}
 \label{sec:univalent}
 
-We now switch gear and focus on constructions of \emph{univalent
+We now switch gear and focus on the construction of \emph{univalent
   universes}. In order to state the definition of such universes we
 need to introduce two notions: propositional equality
 $\AgdaDatatype{≡}$ and equivalence $\AgdaDatatype{≃}$.
 
 Propositional equality, or identity types in intensional dependent
-type theory, or path types under the HoTT-interpretation come equipped
+type theory, or path types under the HoTT-interpretation, come equipped
 with a single constructor \AgdaInductiveConstructor{refl} and an
 induction principle $\AgdaFunction{J}$. A peculiar aspect of
 $\AgdaFunction{J}$ is that it does \emph{not} enforce that every
@@ -462,29 +462,49 @@ $\AgdaFunction{x}~\AgdaDatatype{≡}~\AgdaFunction{y}$ is
 \AgdaInductiveConstructor{refl}. This ``weakness'' has a beautiful
 consequence: instead of identifying all proofs and collapsing the
 structure of proofs in the process, it instead permits a rich
-combinatorial structure of proofs to emerge. The second notion we need
+combinatorial structure to emerge. 
+
+The second notion we need
 is that of equivalence. We say that two types or spaces $A$ and $B$
 are equivalent if there exist functions $f : A \rightarrow B$ and
-$g : B \rightarrow A$ that compose to the identity function. A notable
-point is that equivalences do not come with an induction principle. We
-say a universe $\mathcal{U}$ is univalent if its space of identities
+$g : B \rightarrow A$ that compose to the identity function%
+\footnote{Strictly speaking, this is a \emph{quasi-equivalence}, an
+equivalence also requires a certain coherence between the compositions.}.
+A notable point is that equivalences do not come with an induction principle.
+We say a universe $\mathcal{U}$ is univalent if its space of identities
 $\AgdaFunction{A} ≡ \AgdaFunction{B}$ is equivalent to its space of
 equivalences $\AgdaFunction{A} ≃ \AgdaFunction{B}$.
 
-Instead of talking about univalent universes, we generalize the
-discussion to univalent type families which will allow the
-constructions of custom universes. 
+\jacques{We should probably be precise with our definition of 
+equivalence.}
+
+While univalent universes came first, it was later realised that
+the more general univalent type families are more convenient to
+work with, and allow the constructions of custom universes. 
+We thus need to build up some definitions for what this means.
+Note that below we will use ``point'' and ``member of a type'',
+``space'' and ``type'', ``path'' and ``equivalence'' as
+synonyms.  Furthermore our setting is an intuinistic type
+theory (with no classical axioms such a choice or excluded
+middle added); this implies that all mappings are
+\emph{continuous}.
+
+It is very important to remember that while $A$ and $B$ are spaces,
+so are $\AgdaFunction{A} ≡ \AgdaFunction{B}$ and
+$\AgdaFunction{A} ≃ \AgdaFunction{B}$.  Thus whatever meaningful
+questions we can ask of $A$, we can also ask about
+$\AgdaFunction{A} ≡ \AgdaFunction{B}$ and
+$\AgdaFunction{A} ≃ \AgdaFunction{B}$.
 
 \newpage
 
-
-We will consider a general statement of \emph{univalence} for type families. We
-start with a some preliminaries. Fig.~\ref{fig:fib} depicts a type family
-$P : A \rightarrow \mathcal{U}$ mapping each point $x : A$ to a space $P(x)$. As
-everything is continuous, we expect this type family to respect identities. In
-other words if $x:A$ and $y:A$ are identified using a path $x \equiv y$, it must
-be the case that the spaces $P(x)$ and $P(y)$ become equivalent
-$P(x) \simeq P(y)$ as a consequence. Generally speaking, there is no reason to
+Fig.~\ref{fig:fib} depicts a type family $P : A \rightarrow \mathcal{U}$
+mapping each member $x : A$ to a type $P(x)$. As everything is continuous,
+we expect this type family to
+respect identities. In other words if $x:A$ and $y:A$ are identified using a
+path $x \equiv y$, it must
+be the case that the spaces $P(x)$ and $P(y)$ are equivalent
+$P(x) \simeq P(y)$. Generally speaking, there is no reason to
 expect that the spaces $x \equiv y$ and $P(x) \simeq P(y)$ to be themselves
 equivalent for all $x$ and $y$. And indeed they are most frequently not
 equivalent. In the rare cases in which they are equivalent, the fibration is a
