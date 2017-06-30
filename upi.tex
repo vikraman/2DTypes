@@ -391,9 +391,13 @@ See~\cite{Shulmann} for that interpretation.
 Having illustrated the general flavor of the $\Pi$ family of
 languages, we present in full detail a small $\Pi$-based language
 which we will use in the formalization in the rest of the paper. The
-language below is the restriction of $\Pi$ to the case of just one
+language is the restriction of $\Pi$ to the case of just one
 type, the type of booleans:
 
+\jacques{the code above uses $\odot$ for 1-composition, 
+$\boxdot$ for parallel 2-composition of $\odot$, while the
+code below uses $\circ$ and $\odot$ respectively, which is 
+quite confusing.  We should pick one notation.}
 \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
 (\textit{Types}) & \tau &::=& \bt \\
 \\
@@ -431,7 +435,7 @@ interpretation.
 
 It is relatively easy to think of a few sound program transformations
 to include in the category $\alpha$ of 2-combinators. The set above
-however is \emph{complete}. 
+however is \emph{complete}. We also have canonical forms (constructively).
 
 \begin{lemma}[Canonical Forms]
   Given a 1-combinator $c : \tau \leftrightarrow \tau$, we either have
