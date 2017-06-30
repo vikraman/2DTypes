@@ -551,25 +551,41 @@ fibration is a \emph{univalent fibration}.
   in the base space induces an equivalence between the spaces $P(x)$ and $P(y)$}
 \end{figure}
 
-\newpage
+As is often the case when confronted with new definitions, it is
+instructive to disect \emph{non-examples}, as a means to understand
+what ``goes wrong''.  As a first example of a non-univalent fibration,
+consider $P : \mathbb{1} \rightarrow \mathbb{U}$ defined as $P =
+\lambda\_.\mathbb{2}$.
 
-As two simple examples of non-univalent fibrations consider
-$P : \mathbb{1} \rightarrow \mathbb{U}$ defined as $P = \lambda\_.\mathbb{2}$
-and $Q : \mathbb{2} \rightarrow \mathbb{U}$ defined as
-$Q = \lambda \_. \mathbb{1}$ illustrated below:
-
-\begin{tabular}{c@{\qquad\qquad}c}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
   \draw (0,-5) ellipse (2cm and 0.8cm);
   \node[below] at (0,-6) {Base Space $\mathbb{1}$};
   \draw[fill] (0,-5) circle [radius=0.025];
   \node[below] at (0,-5) {$\star$};
-  \draw (0,-2.7) ellipse (0.5cm and 1cm);
-  \node[right] at (0.5,-2.7) {Fiber $P(\star) = \mathbb{2}$};
-  \draw[fill] (-0.2,-2.7) circle [radius=0.025];
-  \draw[fill] (0.2,-2.7) circle [radius=0.025];
+  \draw (-1.3,-2.7) ellipse (0.5cm and 1cm);
+  \draw[fill] (-1.5,-2.7) circle [radius=0.025];
+  \draw[fill] (-1.1,-2.7) circle [radius=0.025];
+  \node[left] at (-1.8,-2.7) {Fiber $P(\star) = \mathbb{2}$};
+  \draw (1.3,-2.7) ellipse (0.5cm and 1cm);
+  \draw[fill] (1.1,-2.7) circle [radius=0.025];
+  \draw[fill] (1.5,-2.7) circle [radius=0.025];
+  \node[right] at (1.8,-2.7) {Fiber $P(\star) = \mathbb{2}$};
+  \node[below,cyan,dashed,thick] at (0,-5) {$\equiv$};
+  \draw[->,red,dashed,ultra thick] (-0.8,-2.3) to [out=45, in=135] (0.8,-2.3);
+  \draw[->,red,dashed,ultra thick] (0.8,-3.1) to [out=-135, in=-45] (-0.8,-3.1);
+  \node[red,ultra thick] at (0,-2.7) {$\simeq$};
 \end{tikzpicture}
-&
+
+\medskip\noindent There is actually \emph{a single fiber}, but
+the identity function and boolean negation induce \emph{two distinct
+equivalences} of the space $P(\star) = \mathbb{2}$ with itself.
+In other words, $\mathbb{2} \simeq \mathbb{2}$ has two distinct inhabitants.
+As there is only one path $\star \equiv \star$ in the base space, the
+fibration $P$ is not univalent. 
+
+Another example is given by $Q : \mathbb{2} \rightarrow \mathbb{U}$ defined as
+$Q = \lambda \_. \mathbb{1}$ illustrated below
+
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
   \draw (0,-5) ellipse (2cm and 0.8cm);
   \node[below] at (0,-6) {Base Space $\mathbb{2}$};
@@ -581,17 +597,18 @@ $Q = \lambda \_. \mathbb{1}$ illustrated below:
   \node[right] at (0.5,-2.7) {Fiber $Q(\fc)$ = Fiber $Q(\tc)$ = $\mathbb{1}$};
   \draw[fill] (0,-2.7) circle [radius=0.025];
 \end{tikzpicture}
-\end{tabular}
 
-\medskip\noindent The identity function and boolean negation induce two distinct
-equivalences in the space $P(\star) = \mathbb{2} \simeq \mathbb{2} =
-P(\star)$. As there is only one path $\star \equiv \star$ in the base space, the
-fibration $P$ is not univalent. Similarly, there is one equivalence
-$Q(\fc) = \mathbb{1} \simeq \mathbb{1} = Q(\tc)$ but this certainly does not
-induce a path $\fc \equiv \tc$. As the examples illustrate there is a delicate
+The situation here is different.  There is one equivalence
+$Q(\fc) = \mathbb{1} \simeq \mathbb{1} = Q(\tc)$ but it does not come
+from a path (such as $\fc \equiv \tc$, which does not exist).  And that
+equivalence does not ``induce'' such a path either.
+
+As the examples illustrate there is a delicate
 balance required for the fibration to be univalent; otherwise some distinct
 equivalences would be identified (like for $P$) or distinct points in the base
 space would be identified (like for $Q$).
+
+\newpage
 
 An example of a univalent fibration is $P : \mathbb{2} \rightarrow \mathbb{U}$
 defined as $P(\fc) = \mathbb{0}$ and $P(\tc) = \mathbb{1}$ illustrated below:
