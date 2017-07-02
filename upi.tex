@@ -190,19 +190,19 @@ takes a pair of type $\bt \otimes a$ and checks the incoming boolean;
 if it is false (i.e., we are in the left injection), the function
 behaves like the identity; otherwise the function applies
 $\AgdaFunction{f}$ to the second argument. In either case, the
-incoming boolean is reconstituted to maintain reversibility. 
+incoming boolean is reconstituted to maintain reversibility.
 
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcll}
-\AgdaFunction{controlled}  &:& \forall a.~ (a \leftrightarrow a) \rightarrow 
+\AgdaFunction{controlled}  &:& \forall a.~ (a \leftrightarrow a) \rightarrow
                             & (\bt \otimes a \leftrightarrow \bt \otimes a) \\
-\AgdaFunction{controlled}~\AgdaFunction{f} &=& 
+\AgdaFunction{controlled}~\AgdaFunction{f} &=&
 
-  \bt \otimes a 
+  \bt \otimes a
     & \byiso{\AgdaFunction{unfoldBool} \otimes \AgdaFunction{id}} \\
-&& (\ot \oplus \ot) \otimes a 
+&& (\ot \oplus \ot) \otimes a
     & \byiso{\AgdaFunction{distribute}} \\
-&& (\ot \otimes a) \oplus (\ot \otimes a) 
+&& (\ot \otimes a) \oplus (\ot \otimes a)
     & \byiso{\AgdaFunction{id} \oplus (\AgdaFunction{id} \otimes \AgdaFunction{f})} \\
 && (\ot \otimes a) \oplus (\ot \otimes a)
     & \byiso{\AgdaFunction{factor}} \\
@@ -223,12 +223,12 @@ the language.
 {\small
 \[\begin{array}{rcl}
 \AgdaFunction{not} &:& \bt \leftrightarrow \bt \\
-\AgdaFunction{not} &=& 
+\AgdaFunction{not} &=&
   \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
-\\ 
+\\
 \AgdaFunction{cnot} &:& \bt \otimes \bt \leftrightarrow \bt \otimes \bt \\
 \AgdaFunction{cnot} &=& \AgdaFunction{controlled}~\AgdaFunction{not} \\
-\\ 
+\\
 \AgdaFunction{toffoli} &:& \bt \otimes (\bt \otimes \bt)
                            \leftrightarrow  \bt \otimes (\bt \otimes \bt) \\
 \AgdaFunction{toffoli} &=& \AgdaFunction{controlled}~\AgdaFunction{cnot} \\
@@ -244,30 +244,30 @@ constructive evidence (i.e., a program, a logic gate, or a hardware
 circuit) for an automorphism on $\bt \otimes a$: it can be read
 top-down or bottom-up to go back and forth. This perspective naturally
 raises the question of when two programs are ``equivalent.'' Consider
-the follwing six programs of type~$\bt \leftrightarrow \bt$
- 
-{\small 
+the following six programs of type~$\bt \leftrightarrow \bt$
+
+{\small
 \[\def\arraystretch{1.2}\begin{array}{rcl}
-\AgdaFunction{id₁}~\AgdaFunction{id₂}~\AgdaFunction{id₃}~ 
+\AgdaFunction{id₁}~\AgdaFunction{id₂}~\AgdaFunction{id₃}~
   \AgdaFunction{not₁}~\AgdaFunction{not₂}~\AgdaFunction{not₃} &:& \bt \leftrightarrow \bt \\
-\AgdaFunction{id₁} &=& 
+\AgdaFunction{id₁} &=&
   \AgdaFunction{id} \odot \AgdaFunction{id} \\
-\AgdaFunction{id₂} &=& 
+\AgdaFunction{id₂} &=&
   \AgdaFunction{not} \odot \AgdaFunction{id} \odot \AgdaFunction{not} \\
-\AgdaFunction{id₃} &=& 
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
-                        (\AgdaFunction{id} \otimes \AgdaFunction{id}) \odot 
-                        \AgdaFunction{swap⋆} \odot 
+\AgdaFunction{id₃} &=&
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot
+                        (\AgdaFunction{id} \otimes \AgdaFunction{id}) \odot
+                        \AgdaFunction{swap⋆} \odot
                         \AgdaFunction{unite⋆} \\
-\AgdaFunction{not₁} &=& 
+\AgdaFunction{not₁} &=&
   \AgdaFunction{id} \odot \AgdaFunction{not} \\
-\AgdaFunction{not₂} &=& 
+\AgdaFunction{not₂} &=&
   \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
-\AgdaFunction{not₃} &=& 
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot 
-                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
-                        \AgdaFunction{swap⋆} \odot 
-                        \AgdaFunction{unite⋆} 
+\AgdaFunction{not₃} &=&
+  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot
+                        \AgdaFunction{swap⋆} \odot
+                        \AgdaFunction{unite⋆}
 \end{array}\]}
 
 \begin{figure}
@@ -293,11 +293,11 @@ the follwing six programs of type~$\bt \leftrightarrow \bt$
 
   \draw     (3,2)    -- (3.5,2)    ;
   \draw     (3,1)    -- (3.5,1)    ;
-  \draw     (3,-0.5) -- (3.5,-0.5) ; 
+  \draw     (3,-0.5) -- (3.5,-0.5) ;
 
   \draw     (3.5,2)    -- (4.5,1)    ;
   \draw     (3.5,1)    -- (4.5,2)    ;
-  \draw     (3.5,-0.5) -- (4.5,-0.5) ; 
+  \draw     (3.5,-0.5) -- (4.5,-0.5) ;
 
   \draw     (4.5,2)    -- (5,2)    ;
   \draw     (4.5,1)    -- (5,1)    ;
@@ -305,11 +305,11 @@ the follwing six programs of type~$\bt \leftrightarrow \bt$
 
   \draw     (5,2)    -- (6,0.5)  ;
   \draw     (5,1)    -- (6,-0.5) ;
-  \draw     (5,-0.5) -- (6,2)    ; 
+  \draw     (5,-0.5) -- (6,2)    ;
 
   \draw     (6,2)    -- (7,2)    ;
   \draw     (6,0.5)  -- (8,0.5)  ;
-  \draw     (6,-0.5) -- (8,-0.5) ; 
+  \draw     (6,-0.5) -- (8,-0.5) ;
 
   \draw (7,2) ellipse (0.5cm and 0.5cm);
   \draw[fill] (7,2) circle [radius=0.025];
@@ -327,7 +327,7 @@ the follwing six programs of type~$\bt \leftrightarrow \bt$
 \end{figure}
 
 \noindent We neither expect, nor desire, that all these programs of
-the same type to be be equivalent. In the above, each group of
+the same type to be equivalent. In the above, each group of
 three does represent ``the same'' program but the two groups
 represent distinct programs. Thinking extensionally, i.e., by looking
 at all possible input-output pairs, it is indeed easy to verify this
@@ -340,30 +340,30 @@ $\AgdaFunction{not₃}$ is depicted in Fig.~\ref{fig:not}. We encourage
 the reader to map the steps below to manipulations on the diagram that
 would incrementally simplify it:
 
-{\small 
+{\small
 \[\def\arraystretch{1.2}\begin{array}{rcll}
 \AgdaFunction{notOpt} &:& \AgdaFunction{not₃} \Leftrightarrow \AgdaFunction{not} \\
-\AgdaFunction{notOpt} &=& 
-  \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot 
-                        ((\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot 
+\AgdaFunction{notOpt} &=&
+  \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot
+                        ((\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot
                         (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})))
  & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocLeft}} \\
-&& \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot 
-                        (\AgdaFunction{not} \otimes \AgdaFunction{id})) \odot 
+&& \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id})) \odot
                         (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})
- & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{swapLeft} 
+ & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{swapLeft}
                                   \boxdot \AgdaFunction{id})} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot \AgdaFunction{swap⋆}) \odot 
+                      \odot \AgdaFunction{swap⋆}) \odot
                         (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})
  & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocRight}} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot (\AgdaFunction{swap⋆} \odot 
+                      \odot (\AgdaFunction{swap⋆} \odot
                         (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})))
  & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot \AgdaFunction{assocLeft})} \\
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot ((\AgdaFunction{swap⋆} \odot 
+                      \odot ((\AgdaFunction{swap⋆} \odot
                       \AgdaFunction{swap⋆}) \odot \AgdaFunction{unite⋆}))
  & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot (\AgdaFunction{leftInv} \boxdot \AgdaFunction{id}))} \\
@@ -374,7 +374,7 @@ would incrementally simplify it:
 && \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
                       \odot \AgdaFunction{unite⋆})
  & \quad\byisotwo{\AgdaFunction{assocLeft}} \\
-&& (\AgdaFunction{uniti⋆} \odot (\AgdaFunction{id} \otimes \AgdaFunction{not})) 
+&& (\AgdaFunction{uniti⋆} \odot (\AgdaFunction{id} \otimes \AgdaFunction{not}))
                       \odot \AgdaFunction{unite⋆}
  & \quad\byisotwo{\AgdaFunction{unitiLeft} \boxdot \AgdaFunction{id}} \\
 && (\AgdaFunction{not} \otimes \AgdaFunction{uniti⋆}) \odot \AgdaFunction{unite⋆}
@@ -383,10 +383,10 @@ would incrementally simplify it:
  & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{leftInv}} \\
 && \AgdaFunction{not} \otimes \AgdaFunction{id}
  & \quad\byisotwo{\AgdaFunction{idRight}} \\
-&& \AgdaFunction{not} 
+&& \AgdaFunction{not}
 \end{array}\]}
 
-It is worthwhile mentioning that the above derivation could also be drawn as 
+It is worthwhile mentioning that the above derivation could also be drawn as
 one (large!) commutative diagram in an appropriate category, with each
 $\byisotwo{-}$ as a $2$-arrow (and representing a natural isomorphism).
 See~\cite{Shulmann} for that interpretation.
@@ -400,9 +400,9 @@ which we will use in the formalization in the rest of the paper. The
 language is the restriction of $\Pi$ to the case of just one
 type, the type of booleans:
 
-\jacques{the code above uses $\odot$ for 1-composition, 
+\jacques{the code above uses $\odot$ for 1-composition,
 $\boxdot$ for parallel 2-composition of $\odot$, while the
-code below uses $\circ$ and $\odot$ respectively, which is 
+code below uses $\circ$ and $\odot$ respectively, which is
 quite confusing.  We should pick one notation.}
 \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
 (\textit{Types}) & \tau &::=& \bt \\
@@ -421,9 +421,9 @@ quite confusing.  We should pick one notation.}
             && \alt & \invl &:& \compc{c\;}{\;\invc{c}} \isotwo \id \\
             && \alt & \invr &:& \compc{\invc{c}}{c} \isotwo \id \\
             && \alt & \rho &:& \swap \circ \swap \isotwo \id \\
-            && \alt & \assocc &:& 
+            && \alt & \assocc &:&
                                   \compc{(\compc{c_1}{c_2})}{c_3} \isotwo \compc{c_1}{(\compc{c_2}{c_3})} \\
-            && \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2') \to 
+            && \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2') \to
                              (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
             && \alt & !! &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_1) \\
             && \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3) \to (c_1 \isotwo c_3)
@@ -468,29 +468,28 @@ $\AgdaFunction{x}~\AgdaDatatype{≡}~\AgdaFunction{y}$ is
 \AgdaInductiveConstructor{refl}. This ``weakness'' has a beautiful
 consequence: instead of identifying all proofs and collapsing the
 structure of proofs in the process, it instead permits a rich
-combinatorial structure to emerge. 
+combinatorial structure to emerge.
 
-The second notion we need
-is that of equivalence. We say that two types or spaces $A$ and $B$
-are equivalent if there exist functions $f : A \rightarrow B$ and
-$g : B \rightarrow A$ that compose to the identity function%
-\footnote{Strictly speaking, this is a \emph{quasi-equivalence}, an
-equivalence also requires a certain coherence between the compositions.}.
-A notable point is that equivalences do not come with an induction principle.
-We say a universe $\mathcal{U}$ is univalent if its space of identities
-$\AgdaFunction{A} ≡ \AgdaFunction{B}$ is equivalent to its space of
-equivalences $\AgdaFunction{A} ≃ \AgdaFunction{B}$.
+The second notion we need is that of equivalence. We say that two types or
+spaces $A$ and $B$ are equivalent if there exist functions $f : A \rightarrow B$
+and $g : B \rightarrow A$ that compose to the identity function.
+\footnote{Strictly speaking, this is a \emph{quasi-equivalence}, an equivalence
+  also requires a certain coherence between the compositions.}  A notable point
+is that equivalences do not come with an induction principle.  We say a universe
+$\mathcal{U}$ is univalent if its space of identities
+$\AgdaFunction{A} ≡ \AgdaFunction{B}$ is equivalent to its space of equivalences
+$\AgdaFunction{A} ≃ \AgdaFunction{B}$.
 
-\jacques{We should probably be precise with our definition of 
+\jacques{We should probably be precise with our definition of
 equivalence.}
 
-While univalent universes came first, it was later realised that
+While univalent universes came first, it was later realized that
 the more general univalent type families are more convenient to
-work with, and allow the constructions of custom universes. 
+work with, and allow the constructions of custom universes.
 We thus need to build up some definitions for what this means.
 Note that below we will use ``point'' and ``member of a type'',
 ``space'' and ``type'', ``path'' and ``equivalence'' as
-synonyms.  Furthermore our setting is an intuinistic type
+synonyms.  Furthermore our setting is an Intuitionistic type
 theory (with no classical axioms such a choice or excluded
 middle added); this implies that all mappings are
 \emph{continuous}.
@@ -558,7 +557,7 @@ fibration is a \emph{univalent fibration}.
 \end{figure}
 
 As is often the case when confronted with new definitions, it is
-instructive to disect \emph{non-examples}, as a means to understand
+instructive to dissect \emph{non-examples}, as a means to understand
 what ``goes wrong''.  As a first example of a non-univalent fibration,
 consider $P : \mathbb{1} \rightarrow \mathbb{U}$ defined as $P =
 \lambda\_.\mathbb{2}$.
@@ -587,7 +586,7 @@ the identity function and boolean negation induce \emph{two distinct
 equivalences} of the space $P(\star) = \mathbb{2}$ with itself.
 In other words, $\mathbb{2} \simeq \mathbb{2}$ has two distinct inhabitants.
 As there is only one path $\star \equiv \star$ in the base space, the
-fibration $P$ is not univalent. 
+fibration $P$ is not univalent.
 
 Another example is given by $Q : \mathbb{2} \rightarrow \mathbb{U}$ defined as
 $Q = \lambda \_. \mathbb{1}$ illustrated below
@@ -657,7 +656,7 @@ paths to equivalences.
 
 \begin{defn}
 Given a type $A : \mathcal{U}$, the type
-$\ptrunc{A}$ is the propositional truncation of $A$ defined as: 
+$\ptrunc{A}$ is the propositional truncation of $A$ defined as:
 \begin{itemize}
 \item for $x : A$, we have $|x| : \ptrunc{A}$,
 \item for any $x,y : \ptrunc{A}$, we have $\gluep : x \equiv y$.
@@ -688,13 +687,13 @@ This construction always gives a univalent fibration~\cite{Christiansen},
 whenever the universe $\mathcal{U}$ is univalent. We can understand
 the basic idea as follows. Take two points $(A,|p|)$ and $(B,|q|)$ in the base
 space. We want to compare the space $A \simeq B$ with the space
-$(A,|p|) \equiv (B,|q|)$.  
+$(A,|p|) \equiv (B,|q|)$.
 \begin{itemize}
 \item Given $(A,|p|)$ and $(B,|q|)$, we have $p : F \equiv A$ and $q : F \equiv B$.
 By symmetry and transitivity of $\equiv$, we have $A \equiv B$; by
 $\mathit{ittoequiv}$, $A \simeq B$.
 \item Given $A \simeq B$, by univalence of $\mathcal{U}$, we get that
-$A \equiv B$.  
+$A \equiv B$.
 \end{itemize}
 
 Also explain base space has higher paths \ldots
