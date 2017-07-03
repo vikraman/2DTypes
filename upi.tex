@@ -16,6 +16,7 @@
 \usepackage{tikz}
 \usepackage[inline]{enumitem}
 \usepackage{agda}
+\usepackage{stmaryrd}
 
 \newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
 \newcommand{\byisotwo}[1]{{\Leftrightarrow}{\langle} ~#1~ \rangle}
@@ -46,6 +47,7 @@
 \newcommand{\compc}[2]{#1 \circ #2}
 \newcommand{\compcc}[2]{#1 \bullet #2}
 \newcommand{\respcomp}[2]{#1 \odot #2}
+\newcommand{\trunc}{\textit{trunc}}
 
 \newcommand{\Typ}{\mathbf{Type}}
 \newcommand{\alt}{~\mid~}
@@ -78,6 +80,7 @@
 \newcommand{\compsim}{\compc_{\isotwo}}
 \newcommand{\iso}{\leftrightarrow}
 \newcommand{\isotwo}{\Leftrightarrow}
+\newcommand{\isothree}{\Lleftarrow \! \! \! \! \Rrightarrow}
 \newcommand{\piso}{\multimapdotbothB~~}
 \newcommand{\zt}{\mathbb{0}}
 \newcommand{\ot}{\mathbb{1}}
@@ -103,7 +106,7 @@ $\displaystyle
 % TODO: give this a better name!
 \newcommand{\bracket}[1]{\ensuremath{\{#1\}}}
 \newcommand{\ptrunc}[1]{\ensuremath{\| #1 \|}}
-
+\newcommand{\dbracket}[1]{\ensuremath{\llbracket \; #1 \; \rrbracket}}
 \newcommand{\PiTwo}{\ensuremath{\Pi_{\mathbb{2}}}}
 
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Amr says: {#1}}\end{minipage}}}
@@ -881,6 +884,22 @@ of these principles seems to have any direct counterpart in the world of
 reversible programming.
 
 Soundness; completeness; etc.
+
+We add a new level to $\{\PiTwo\}$ to prove the full correspondence of the first 2-levels of $\{\PiTwo\}$ and $\{\bt\}$:
+\[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
+(\textit{3-combinators}) & \xi &::=& \trunc &:& \alpha \isothree \alpha
+\end{array}\]
+
+
+\begin{theorem}[Soundness and completeness for $\{\PiTwo\}$]
+  There exist functions $\dbracket{ \_ }_n$ which map $n-$combinator in $\PiTwo$ to $n-$path in $\{\bt\}$,
+  such that for all $n-$combinators $p, q$, $p \leftrightarrow_n q$ iff $\dbracket{ p }_n = \dbracket{ q }_n$.
+\end{theorem}
+
+\begin{theorem}[Soundness and completeness for $\{\bt\}$]
+  There exist functions $\dbracket{ \_ }_n^{-1}$ which map $n-$path in $\{\bt\}$ to $n-$combinator in $\PiTwo$,
+  such that for all $n-$path $p, q$, $p \equiv q$ iff $\dbracket{ p }_n^{-1} \isotwo \dbracket{ q }_n^{-1}$.
+\end{theorem}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
