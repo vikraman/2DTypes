@@ -885,13 +885,13 @@ reversible programming.
 
 Soundness; completeness; etc.
 
-We add a new level to $\{\PiTwo\}$ to prove the full correspondence of the first 2-levels of $\{\PiTwo\}$ and $\{\bt\}$:
+We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-levels of $\PiTwo$ and $\{\bt\}$:
 \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
 (\textit{3-combinators}) & \xi &::=& \trunc &:& \alpha \isothree \alpha
 \end{array}\]
 
 
-\begin{theorem}[Soundness and completeness for $\{\PiTwo\}$]
+\begin{theorem}[Soundness and completeness for $\PiTwo$]
   There exist functions $\dbracket{ \_ }_n$ which map $n-$combinator in $\PiTwo$ to $n-$path in $\{\bt\}$,
   such that for all $n-$combinators $p, q$, $p \leftrightarrow_n q$ iff $\dbracket{ p }_n = \dbracket{ q }_n$.
 \end{theorem}
