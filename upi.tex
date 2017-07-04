@@ -887,20 +887,43 @@ Soundness; completeness; etc.
 
 We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-levels of $\PiTwo$ and $\{\bt\}$:
 \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
-(\textit{3-combinators}) & \xi &::=& \trunc &:& \alpha \isothree \alpha
+(\textit{3-combinators}) & \xi &::=& \trunc &:& (\alpha, \beta : c_1 \isotwo c_2) \to \alpha \isothree \beta
 \end{array}\]
 
 
 \begin{theorem}[Soundness and completeness for $\PiTwo$]
-  There exist functions $\dbracket{ \_ }_n$ which map $n-$combinator in $\PiTwo$ to $n-$path in $\{\bt\}$,
-  such that for all $n-$combinators $p, q$, $p \leftrightarrow_n q$ iff $\dbracket{ p }_n = \dbracket{ q }_n$.
+  There exist functions $\dbracket{ \_ }_n$ which map n-combinator in $\PiTwo$ to n-path in $\{\bt\}$,
+  such that
+  \begin{enumerate}
+  \item For all 1-combinators $p, q$, $p \iso q$ iff $\dbracket{ p }_1 = \dbracket{ q }_1$.
+  \item For all 2-combinators $\alpha, \beta$, $\alpha \isotwo \beta$ iff $\dbracket{ \alpha }_2 = \dbracket{ \beta }_2$.
+  \end{enumerate}
 \end{theorem}
 
 \begin{theorem}[Soundness and completeness for $\{\bt\}$]
-  There exist functions $\dbracket{ \_ }_n^{-1}$ which map $n-$path in $\{\bt\}$ to $n-$combinator in $\PiTwo$,
-  such that for all $n-$path $p, q$, $p \equiv q$ iff $\dbracket{ p }_n^{-1} \isotwo \dbracket{ q }_n^{-1}$.
+  There exist functions $\dbracket{ \_ }_n^{-1}$ which map n-path in $\{\bt\}$ to n-combinator in $\PiTwo$,
+  such that
+  \begin{enumerate}
+  \item For all 1-paths $p, q$, $p \equiv q$ iff $\dbracket{ p }_1^{-1} \isotwo \dbracket{ q }_1^{-1}$.
+  \item For all 2-paths $\alpha, \beta$, $\alpha \equiv \beta$ iff $\dbracket{ \alpha }_2^{-1} \isothree \dbracket{ \beta }_2^{-1}$.
+  \end{enumerate}
 \end{theorem}
 
+\begin{lemma}
+  For all 1-combinators $p$, $p \isotwo \dbracket{ \dbracket{ p }_1 }_1^{-1}$.
+\end{lemma}
+
+\begin{lemma}
+  For all 2-combinators $\alpha : p \isotwo q$, $\alpha \isothree \dbracket{ \dbracket{ p }_1 }_1^{-1} \bullet \dbracket{ \dbracket{ \alpha }_2 }_2^{-1} \bullet (!! \; \dbracket{ \dbracket{ q }_1 }_1^{-1})$.
+\end{lemma}
+
+\begin{lemma}
+  For all 1-path $p$, $p \equiv \dbracket{ \dbracket{ p }_1^{-1} }_1$.
+\end{lemma}
+
+\begin{lemma}
+  For all 2-path $\alpha : p \equiv q$, $\alpha \equiv \dbracket{ \dbracket{ p }_1^{-1} }_1 \circ \dbracket{ \dbracket{ \alpha }_2^{-1} }_2 \circ (\dbracket{ \dbracket{ q }_1^{-1} }_1)^{-1}$.
+\end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion, Related Work, and Conclusion}
