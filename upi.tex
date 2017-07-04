@@ -416,7 +416,7 @@ quite confusing.  We should pick one notation.}
  (\textit{1-combinators}) &  c &::=& \id &:& \tau \iso \tau \\
                && \alt & \swap &:& \bt \iso \bt \\
                && \alt & ! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
-               && \alt & \circ &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3) \to (\tau_1 \iso \tau_3)  \\
+               && \alt & \odot &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3) \to (\tau_1 \iso \tau_3)  \\
 \\
 (\textit{2-combinators}) & \alpha &::=& \id &:& c \isotwo c \\
             && \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
@@ -426,7 +426,7 @@ quite confusing.  We should pick one notation.}
             && \alt & \rho &:& \swap \circ \swap \isotwo \id \\
             && \alt & \assocc &:&
                                   \compc{(\compc{c_1}{c_2})}{c_3} \isotwo \compc{c_1}{(\compc{c_2}{c_3})} \\
-            && \alt & \odot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2') \to
+            && \alt & \boxdot &:& (c_1 \isotwo c_1') \to (c_2 \isotwo c_2') \to
                              (\compc{c_1}{c_2} \isotwo \compc{c_1'}{c_2'}) \\
             && \alt & !! &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_1) \\
             && \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3) \to (c_1 \isotwo c_3)
@@ -908,6 +908,17 @@ We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-l
   \item For all 2-paths $\alpha, \beta$, $\alpha \equiv \beta$ iff $\dbracket{ \alpha }_2^{-1} \isothree \dbracket{ \beta }_2^{-1}$.
   \end{enumerate}
 \end{theorem}
+
+{\small
+\[\def\arraystretch{1.2}\begin{array}{rcll}
+\AgdaFunction{$\dbracket{ \_ }_1$}  &:& (\bt \leftrightarrow \bt) \rightarrow `\bt \equiv `\bt \\
+\AgdaFunction{$\dbracket{ \id }_1$} &=& `\mathbf{id}\\
+\AgdaFunction{$\dbracket{ \swap }_1$} &=& `\mathbf{not}\\
+\AgdaFunction{$\dbracket{ ! p }_1$} &=& (\dbracket{ p }_1)^{-1} \\
+\AgdaFunction{$\dbracket{ p \odot q }_1$} &=& \dbracket{ p }_1 \circ \dbracket{ p }_1\\
+\end{array}
+\]}
+
 
 \begin{lemma}
   For all 1-combinators $p$, $p \isotwo \dbracket{ \dbracket{ p }_1 }_1^{-1}$.
