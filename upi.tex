@@ -396,7 +396,7 @@ to manipulations on the diagram that would incrementally simplify it:
 \noindent It is worthwhile mentioning that the above derivation could also be
 drawn as one (large!) commutative diagram in an appropriate category, with each
 $\byisotwo{-}$ as a $2$-arrow (and representing a natural isomorphism).  See
-Shulman's book~\cite{shulman} for that interpretation.
+Shulman's draft book~\cite{shulman} for that interpretation.
 
 %%%%%
 \subsection{\PiTwo}{\label{sec:pi2}}
@@ -651,7 +651,7 @@ obtain a univalent fibration.
 $\mathbb{0} \simeq \mathbb{1}$ is empty, as is the space of
 paths $\fc \equiv \tc$. These two are thus vacuously equivalent.
 
-Of course, we can obtain another (trivial) example from $\mathbb{1}$:
+Of course, we can obtain another (trivial) example from the unit type:
 $P : \mathbb{1} \rightarrow \mathbb{U}$, defined as
 $P(\star) = \mathbb{1}$. $P$ is univalent as both $\star \equiv \star$ and
 $\mathbb{1} \simeq \mathbb{1}$ each have a single inhabitant.
@@ -916,7 +916,6 @@ We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-l
   \end{enumerate}
 \end{theorem}
 
-{\small
 \[\def\arraystretch{1.2}\begin{array}{rcll}
 \AgdaFunction{$\dbracket{ \_ }_1$}  &:& (\bt \leftrightarrow \bt) \rightarrow `\bt \equiv `\bt \\
 \AgdaFunction{$\dbracket{ \id }_1$} &=& `\mathbf{id}\\
@@ -924,7 +923,7 @@ We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-l
 \AgdaFunction{$\dbracket{ ! p }_1$} &=& (\dbracket{ p }_1)^{-1} \\
 \AgdaFunction{$\dbracket{ p \odot q }_1$} &=& \dbracket{ p }_1 \circ \dbracket{ p }_1\\
 \end{array}
-\]}
+\]
 
 
 \begin{lemma}
