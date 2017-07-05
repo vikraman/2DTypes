@@ -943,8 +943,8 @@ We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-l
 \end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Discussion, Related Work, and Conclusion}
-\label{sec:conclusion}
+\section{Discussion and Related Work}
+\label{sec:discussion}
 
 \paragraph*{Reversible Languages.}
 \noindent The practice of programming languages is replete with \emph{ad hoc}
@@ -995,17 +995,32 @@ starting semantics, one naturally gets $\Pi$ as the syntax for the language of
 proofs of isomorphisms -- in the same way that many terms of the
 $\lambda$-calculus arise from Cartesian Closed Categories.
 
-By restricting to finite types, two operational semantics emerge:
-\begin{enumerate}
-\item a (reversible) operational semantics of programs over finite types, and
-\item a (reversible) operational semantics of program transformers of such programs.
-\end{enumerate}
-$\Pi$ programs can be interpreted as generalized permutations, as they work on
-structure as well as the underlying skeleton of finite types, aka the natural numbers.
-Many of the transformers can be \emph{oriented}, and thus be interpreted as
-\emph{optimizations}.  As with traditional languages, there are different aspects
-we can optimize for (program size, number of steps to completion, etc); we will
-not touch on this further in this paper.
+On can also flip this around, and use the $\lambda$-calculus as the
+internal language for Cartesian Closed Categories.  However, as Shulman
+explains well in his draft book~\cite{Shullman} on approaching Categorical
+Logic via Type Theory, this works for many other kinds of categories.  As
+we are interested in \emph{reversibility}, it is most natural to look at
+Groupoids.  Thus $\PiTwo$ represents the simplest non-trivial case of
+a (reversible) programming language distilled from such ideas.
+
+What is more surprising is how this also turns out to be a sound
+and complete language for describing the univalent universe $\bracket{\bt}$.
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+What is $\bracket{S^1}$?  Is it useful for programming?  What about $\bracket{\mathbb{N}}$?
+
+What is the ``right'' generalization of $\bracket{-}$ so that we may have all
+the usual finite types (such as the ones available in $\Pi$) properly
+represented?
+
+\jacques{It is not clear to me that just taking a disjoint union over all the
+  types gives the correct generalization.}
+
+Looking at this from the other end: given some ``exotic'' (but finitely
+presented) Groupoid $\mathfrak{G}$, is there always a programming language
+which is sound and complete for $\mathfrak{G}$ ?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newpage
