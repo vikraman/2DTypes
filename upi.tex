@@ -916,32 +916,6 @@ We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-l
   \end{enumerate}
 \end{theorem}
 
-\[\def\arraystretch{1.2}\begin{array}{rcll}
-\AgdaFunction{$\dbracket{ \_ }_1$}  &:& (\bt \leftrightarrow \bt) \rightarrow `\bt \equiv `\bt \\
-\AgdaFunction{$\dbracket{ \id }_1$} &=& `\mathbf{id}\\
-\AgdaFunction{$\dbracket{ \swap }_1$} &=& `\mathbf{not}\\
-\AgdaFunction{$\dbracket{ ! p }_1$} &=& (\dbracket{ p }_1)^{-1} \\
-\AgdaFunction{$\dbracket{ p \odot q }_1$} &=& \dbracket{ p }_1 \circ \dbracket{ p }_1\\
-\end{array}
-\]
-
-
-\begin{lemma}
-  For all 1-combinators $p$, $p \isotwo \dbracket{ \dbracket{ p }_1 }_1^{-1}$.
-\end{lemma}
-
-\begin{lemma}
-  For all 2-combinators $\alpha : p \isotwo q$, $\alpha \isothree \dbracket{ \dbracket{ p }_1 }_1^{-1} \bullet \dbracket{ \dbracket{ \alpha }_2 }_2^{-1} \bullet (!! \; \dbracket{ \dbracket{ q }_1 }_1^{-1})$.
-\end{lemma}
-
-\begin{lemma}
-  For all 1-path $p$, $p \equiv \dbracket{ \dbracket{ p }_1^{-1} }_1$.
-\end{lemma}
-
-\begin{lemma}
-  For all 2-path $\alpha : p \equiv q$, $\alpha \equiv \dbracket{ \dbracket{ p }_1^{-1} }_1 \circ \dbracket{ \dbracket{ \alpha }_2^{-1} }_2 \circ (\dbracket{ \dbracket{ q }_1^{-1} }_1)^{-1}$.
-\end{lemma}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion and Related Work}
 \label{sec:discussion}
