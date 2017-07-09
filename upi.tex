@@ -112,6 +112,11 @@ $\displaystyle
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Amr says: {#1}}\end{minipage}}}
 \newcommand{\jacques}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Jacques says: {#1}}\end{minipage}}}
 
+\newcommand{\newnote}[2]{{\sf {#1} $\clubsuit$ {#2} $\clubsuit$}}
+\newcommand{\VC}[1]{{\color{orange}{\newnote{VC}{#1}}}}
+
+\newcommand{\newtext}[1]{{\color{purple}{#1}}}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
@@ -468,30 +473,39 @@ We now switch gear and focus on the construction of \emph{univalent
 need to introduce two notions: propositional equality
 $\AgdaDatatype{≡}$ and equivalence $\AgdaDatatype{≃}$.
 
-Propositional equality, or identity types in intensional dependent
-type theory, or path types under the HoTT-interpretation, come equipped
-with a single constructor \AgdaInductiveConstructor{refl} and an
-induction principle $\AgdaFunction{J}$. A peculiar aspect of
-$\AgdaFunction{J}$ is that it does \emph{not} enforce that every
-element of an identity type
+Propositional equality \newtext{is embodied by} identity types in
+intensional dependent type theory, or path types under the
+HoTT-interpretation. The identity type comes equipped with a single
+constructor \AgdaInductiveConstructor{refl} and an induction principle
+$\AgdaFunction{J}$. A peculiar aspect of $\AgdaFunction{J}$ is that it
+does \emph{not} enforce that every element of an identity type
 $\AgdaFunction{x}~\AgdaDatatype{≡}~\AgdaFunction{y}$ is
-\AgdaInductiveConstructor{refl}. This ``weakness'' has a beautiful
-consequence: instead of identifying all proofs and collapsing the
-structure of proofs in the process, it instead permits a rich
-combinatorial structure to emerge.
+\AgdaInductiveConstructor{refl}. \VC{why is that peculiar?}
+\newtext{However, unlike other types, it is not necessary to have a
+  uniqueness principle ($K$) for it, which facilitates the homotopy
+  interpretation of intensional type theory.} This ``weakness'' has a
+beautiful consequence: instead of identifying all proofs and collapsing
+the structure of proofs in the process, it instead permits a rich
+combinatorial structure to emerge. \VC{cite Homotopy Theoretic Aspects
+  of Constructive Type Theory by Michael Warren}
 
-The second notion we need is that of equivalence. We say that two types or
-spaces $A$ and $B$ are equivalent if there exist functions $f : A \rightarrow B$
-and $g : B \rightarrow A$ that compose to the identity function.
-\footnote{Strictly speaking, this is a \emph{quasi-equivalence}, an equivalence
-  also requires a certain coherence between the compositions.}  A notable point
-is that equivalences do not come with an induction principle.  We say a universe
-$\mathcal{U}$ is univalent if its space of identities
-$\AgdaFunction{A} ≡ \AgdaFunction{B}$ is equivalent to its space of equivalences
-$\AgdaFunction{A} ≃ \AgdaFunction{B}$.
+The second notion we need is that of equivalence. We say that two types
+or spaces $A$ and $B$ are \newtext{(homotopy)} equivalent if there exist
+functions $f : A \rightarrow B$ and $g : B \rightarrow A$ that compose
+to the identity function. \footnote{Strictly speaking, this is a
+  \emph{quasi-equivalence}, an equivalence also requires a certain
+  coherence between the compositions.}  A notable point is that
+equivalences do not come with an induction principle. \VC{What does this
+  mean exactly? Maybe you're trying to say that it does not satisfy a
+  principle like path induction, but in a univalent universe, it will!}
+We say a universe $\mathcal{U}$ is univalent if its space of identities
+$\AgdaFunction{A} ≡ \AgdaFunction{B}$ is equivalent to its space of
+equivalences $\AgdaFunction{A} ≃ \AgdaFunction{B}$.
 
 \jacques{We should probably be precise with our definition of
-equivalence.}
+  equivalence.}
+
+\VC{Explain universal fibrations, object classifier?}
 
 While univalent universes came first, it was later realized that
 the more general univalent type families are more convenient to
