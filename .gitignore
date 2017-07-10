@@ -216,3 +216,7 @@ MAlonzo
 
 # Mac stuff
 .DS_Store
+
+# upi.lagda
+upi.tex
+upi.pdf
