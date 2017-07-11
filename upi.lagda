@@ -526,27 +526,23 @@ under propositional truncation.
 
 Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function \AgdaSymbol{f
 : A → B} is an quasi-inverse, if
-
+%
 \begin{code}
   is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
   is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
-
-The type of quasi-inverses is given by
-
-\begin{code}
-  qinv : (A B : 𝒰) → 𝒰
-  qinv A B = Σ[ f ∶ (A → B) ] is-qinv f
-\end{code}
-
-To make this type contractible, we need to adjointify it, and we use
-this definition for equivalences moving forward.
-
+%
+To make this type contractible, we need to adjointify it.
+%
 \begin{code}
   is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
   is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ]
                      Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
-
+\end{code}
+%
+Then we can define a type of equivalences between two types.
+%
+\begin{code}
   _≃_ : (A B : 𝒰) → 𝒰
   A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
 \end{code}
@@ -564,7 +560,7 @@ A type family \AgdaSymbol{P} over a type \AgdaSymbol{A} is a fibration
 with base space \AgdaSymbol{A}, and \AgdaSymbol{P x} the fiber over
 \AgdaSymbol{x}. The total space is given by \AgdaSymbol{Σ[ x ∶ A ] P
 x}. The path lifting property can be defined by path induction.
-
+%
 \begin{code}
   lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
        → (u : P x) (p : x == y)
