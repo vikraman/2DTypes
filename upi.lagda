@@ -15,8 +15,11 @@
 \usepackage{comment}
 \usepackage{tikz}
 \usepackage[inline]{enumitem}
-\usepackage[conor,references]{agda}
 \usepackage{stmaryrd}
+
+\usepackage[conor,references]{agda}
+\usepackage[mathscr]{euscript}
+\usepackage[euler]{textgreek}
 
 \newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
 \newcommand{\byisotwo}[1]{{\Leftrightarrow}{\langle} ~#1~ \rangle}
@@ -469,23 +472,107 @@ establishes, the above set is \emph{complete}:
 
 \AgdaHide{
 \begin{code}
-  open import Agda.Primitive public using (Level ; lsuc ; lzero ; _⊔_)
+  {-# OPTIONS --without-K --type-in-type --allow-unsolved-metas #-}
 
-  Type : (ℓ : Level) → Set (lsuc ℓ)
-  Type ℓ = Set ℓ
+  𝒰 = Set
 
-  Type₀ = Type lzero
-  Type₁ = Type (lsuc lzero)
+  record Σ (A : 𝒰) (B : A → 𝒰) : 𝒰 where
+    constructor _,_
+    field
+      pr₁ : A
+      pr₂ : B pr₁
+
+  open Σ public
+  infixr 4 _,_
+  syntax Σ A (λ x → B) = Σ[ x ∶ A ] B
+
+  infix 2 _×_
+  _×_ : (A B : 𝒰) → 𝒰
+  A × B = Σ A (λ _ → B)
+
+  id : {A : 𝒰} → A → A
+  id a = a
+
+  infix 4 _∘_
+  _∘_ : {A : 𝒰} {B : A → 𝒰} {C : {a : A} → B a → 𝒰}
+      → (g : {a : A} → (b : B a) → C b) (f : (a : A) → B a)
+      → (a : A) → C (f a)
+  g ∘ f = λ a → g (f a)
+
+  data _==_ {A : 𝒰} : A → A → 𝒰 where
+    refl : (a : A) → a == a
+
+  infix 3 _∼_
+  _∼_ : {A : 𝒰} {B : A → 𝒰} (f g : (a : A) → B a) → 𝒰
+  _∼_ {A} f g = (a : A) → f a == g a
+
+  ap : {A B : 𝒰} {x y : A} → (f : A → B) (p : x == y) → f x == f y
+  ap f (refl x) = refl (f x)
+
+  transport : {A : 𝒰} (P : A → 𝒰) {x y : A} → x == y → P x → P y
+  transport P (refl x) u = u
+
+  PathOver : {A : 𝒰} (P : A → 𝒰) {x y : A} (p : x == y) (u : P x) (v : P y) → 𝒰
+  PathOver P p u v = transport P p u == v
+
+  syntax PathOver P p u v = u == v [ P ↓ p ]
 \end{code}
 }
 
 We work in intensional type theory with one univalent universe closed
 under propositional truncation.
 
+\subsection{Equivalences}
+
+Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function \AgdaSymbol{f
+: A → B} is an quasi-inverse, if
+
 \begin{code}
-  data _==_ {ℓ} {A : Type ℓ} (a : A) : A → Type ℓ where
-    refl : a == a
+  is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
+  is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
+
+The type of quasi-inverses is given by
+
+\begin{code}
+  qinv : (A B : 𝒰) → 𝒰
+  qinv A B = Σ[ f ∶ (A → B) ] is-qinv f
+\end{code}
+
+To make this type contractible, we need to adjointify it, and we use
+this definition for equivalences moving forward.
+
+\begin{code}
+  is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
+  is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ]
+                     Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
+
+  _≃_ : (A B : 𝒰) → 𝒰
+  A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
+\end{code}
+
+\subsection{Paths to Equivalences}
+
+\begin{code}
+  idtoeqv : {A B : 𝒰} → A == B → A ≃ B
+  idtoeqv p = transport _ p , {!!}
+\end{code}
+
+\subsection{Type Families are Fibrations}
+
+A type family \AgdaSymbol{P} over a type \AgdaSymbol{A} is a fibration
+with base space \AgdaSymbol{A}, and \AgdaSymbol{P x} the fiber over
+\AgdaSymbol{x}. The total space is given by \AgdaSymbol{Σ[ x ∶ A ] P
+x}. The path lifting property can be defined by path induction.
+
+\begin{code}
+  lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
+       → (u : P x) (p : x == y)
+       → (x , u) == (y , transport P p u)
+  lift u (refl x) = refl (x , u)
+\end{code}
+
+\subsection{Univalent Fibrations}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
