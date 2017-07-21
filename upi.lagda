@@ -127,7 +127,6 @@ $\displaystyle
   \author{Jacques Carette}
   \address{McMaster University}
   \author{Chao-Hong Chen}
-  \address{Indiana University}
   \author{Vikraman Choudhury}
   \author{Amr Sabry}
   \address{Indiana University}
@@ -627,7 +626,7 @@ We can only eliminate a propositional truncation to a proposition.
 \begin{code}
   postulate
     rec-∥-∥ : {A : 𝒰} (P : 𝒰)
-            → (A → P) → is-prop P 
+            → (A → P) → is-prop P
             → ∥ A ∥ → P
     ind-∥-∥ : {A : 𝒰} (P : ∥ A ∥ → 𝒰)
             → ((a : A) → P ∣ a ∣)
