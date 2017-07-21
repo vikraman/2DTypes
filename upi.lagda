@@ -547,13 +547,6 @@ Then we can define a type of equivalences between two types.
   A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
 \end{code}
 
-\subsection{Paths to Equivalences}
-
-\begin{code}
-  idtoeqv : {A B : 𝒰} → A == B → A ≃ B
-  idtoeqv p = transport _ p , {!!}
-\end{code}
-
 \subsection{Type Families are Fibrations}
 
 A type family \AgdaSymbol{P} over a type \AgdaSymbol{A} is a fibration
@@ -568,7 +561,80 @@ x}. The path lifting property can be defined by path induction.
   lift u (refl x) = refl (x , u)
 \end{code}
 
+\subsection{Paths to Equivalences}
+
+The \AgdaSymbol{transport} operation lifts paths to equivalences. By
+transporting identity, we can convert a path to an equivalence.
+
+\begin{code}
+  idh : {A : 𝒰} {P : A → 𝒰} → (f : (a : A) → P a) → f ∼ f
+  idh f a = refl (f a)
+
+  ide : (A : 𝒰) → A ≃ A
+  ide A = id , id , idh id , idh id , idh (idh id)
+
+  tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
+  tpt-eqv P (refl a) = ide (P a)
+
+  idtoeqv : {A B : 𝒰} → A == B → A ≃ B
+  idtoeqv = tpt-eqv id
+\end{code}
+
 \subsection{Univalent Fibrations}
+
+A type family (fibration) \AgdaSymbol{P : A → 𝒰} is univalent, iff equivalences
+in the base space are \emph{equivalent} to equivalences in the fiber.
+
+\begin{code}
+  is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
+  is-univ-fib {A} P = (a b : A) → is-hae (tpt-eqv P {a} {b})
+\end{code}
+
+In particular, the univalence axiom is a specialization of this to the
+constant fibration. We say that a universe is univalent if it
+satisfies univalence. \VC{Tarski universes later}
+
+\begin{code}
+  is-univalent : 𝒰
+  is-univalent = is-univ-fib id
+\end{code}
+
+\subsection{Propositional Truncation as an HIT}
+
+We define propositional truncation as a higher inductive type as follows.
+
+\begin{code}
+  postulate
+    ∥_∥ : (A : 𝒰) → 𝒰
+    ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
+    ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
+\end{code}
+
+Truncating a type makes it a proposition.
+
+\begin{code}
+  is-contr : (A : 𝒰) → 𝒰
+  is-contr A = Σ A (λ a → (b : A) → (a == b))
+
+  is-prop : 𝒰 → 𝒰
+  is-prop A = (a b : A) → a == b
+
+  ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
+  ∥-∥-is-prop _ _ = ident
+\end{code}
+
+We can only eliminate a propositional truncation to a proposition.
+
+\begin{code}
+  postulate
+    rec-∥-∥ : {A : 𝒰} (P : 𝒰)
+            → (A → P) → is-prop P 
+            → ∥ A ∥ → P
+    ind-∥-∥ : {A : 𝒰} (P : ∥ A ∥ → 𝒰)
+            → ((a : A) → P ∣ a ∣)
+            → ((a : ∥ A ∥) → is-prop (P a))
+            → (a : ∥ A ∥) → P a
+\end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
