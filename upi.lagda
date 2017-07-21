@@ -522,7 +522,7 @@ module upi where
     syntax PathOver P p u v = u == v [ P ↓ p ]
 
     apd : {A : 𝒰} {P : A → 𝒰} {x y : A} (f : (a : A) → P a) (p : x == y) → f x == f y [ P ↓ p ]
-    apd f (refl x) = ?
+    apd f (refl x) = refl (f x)
 \end{code}
 }
 
@@ -602,14 +602,14 @@ identity fibration.
 \end{code}
 %
 We can define universes a lá Tarski by having a code for the universe
-\AgdaSymbol{Ũ} and an interpretation function \AgdaSymbol{El} into
+\AgdaSymbol{U} and an interpretation function \AgdaSymbol{El} into
 \AgdaSymbol{𝒰}. Then we define a univalent universe as follows.
 
 \begin{code}
-    U = Σ[ Ũ ∶ 𝒰 ] (Ũ → 𝒰)
+    Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
 
-    is-univalent : U → 𝒰
-    is-univalent (Ũ , El) = is-univ-fib El
+    is-univalent : Ũ → 𝒰
+    is-univalent (U , El) = is-univ-fib El
 \end{code}
 
 \subsection{Propositional Truncation as an HIT}
@@ -645,7 +645,30 @@ We can only eliminate a propositional truncation to a proposition.
         rec-∥-∥-β : ∀ {a} → rec-∥-∥ ∣ a ∣ == f a
 \end{code}
 
+\subsection{Singleton subuniverses}
 
+Given any type \AgdaSymbol{T}, we can build a propositional predicate that only
+picks out \AgdaSymbol{T}. This lets us build up a singleton ``subuniverse'' of
+\AgdaSymbol{𝒰}, which is only inhabited by \AgdaSymbol{T}.
+
+\begin{code}
+    is-type : (T : 𝒰) → 𝒰 → 𝒰
+    is-type T = λ X → ∥ X == T ∥
+
+    Ũ[_] : (T : 𝒰) → Ũ
+    Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
+\end{code}
+
+We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the next
+section. \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is a set with
+two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
+
+\begin{code}
+    data 𝟚 : 𝒰 where
+       0₂ 1₂ : 𝟚
+
+    U[𝟚] = pr₁ Ũ[ 𝟚 ]
+\end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
