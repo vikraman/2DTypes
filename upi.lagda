@@ -520,6 +520,9 @@ module upi where
     PathOver P p u v = transport P p u == v
 
     syntax PathOver P p u v = u == v [ P ↓ p ]
+
+    apd : {A : 𝒰} {P : A → 𝒰} {x y : A} (f : (a : A) → P a) (p : x == y) → f x == f y [ P ↓ p ]
+    apd f (refl x) = ?
 \end{code}
 }
 
@@ -586,21 +589,27 @@ transporting identity, we can convert a path to an equivalence.
 
 \subsection{Univalent Fibrations}
 
-A type family (fibration) \AgdaSymbol{P : A → 𝒰} is univalent, iff equivalences
-in the base space are \emph{equivalent} to equivalences in the fiber.
+A type family (fibration) \AgdaSymbol{P : A → 𝒰} is univalent if the map
+\AgdaSymbol{tpt-eqv p} is an equivalence, that is, paths in the base space are
+\emph{equivalent} to equivalences in the fiber. In general, univalent fibrations
+are defined by Kapulkin, Lumsdaine and Voevodsky in the SSet model. The
+univalence axiom (for \AgdaSymbol{𝒰}) is a specialization of this to the
+identity fibration.
 
 \begin{code}
     is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
     is-univ-fib {A} P = (a b : A) → is-hae (tpt-eqv P {a} {b})
 \end{code}
-
-In particular, the univalence axiom is a specialization of this to the
-constant fibration. We say that a universe is univalent if it
-satisfies univalence. \VC{Tarski universes later}
+%
+We can define universes a lá Tarski by having a code for the universe
+\AgdaSymbol{Ũ} and an interpretation function \AgdaSymbol{El} into
+\AgdaSymbol{𝒰}. Then we define a univalent universe as follows.
 
 \begin{code}
-    is-univalent : 𝒰
-    is-univalent = is-univ-fib id
+    U = Σ[ Ũ ∶ 𝒰 ] (Ũ → 𝒰)
+
+    is-univalent : U → 𝒰
+    is-univalent (Ũ , El) = is-univ-fib El
 \end{code}
 
 \subsection{Propositional Truncation as an HIT}
@@ -609,11 +618,11 @@ We define propositional truncation as a higher inductive type as follows.
 
 \begin{code}
     postulate
-        ∥_∥ : (A : 𝒰) → 𝒰
-        ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
-        ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
+      ∥_∥ : (A : 𝒰) → 𝒰
+      ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
+      ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
 \end{code}
-
+%
 Truncating a type makes it a proposition.
 
 \begin{code}
@@ -626,19 +635,17 @@ Truncating a type makes it a proposition.
     ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
     ∥-∥-is-prop _ _ = ident
 \end{code}
-
+%
 We can only eliminate a propositional truncation to a proposition.
 
 \begin{code}
-    postulate
-      rec-∥-∥ : {A : 𝒰} (P : 𝒰)
-              → (A → P) → is-prop P
-              → ∥ A ∥ → P
-      ind-∥-∥ : {A : 𝒰} (P : ∥ A ∥ → 𝒰)
-              → ((a : A) → P ∣ a ∣)
-              → ((a : ∥ A ∥) → is-prop (P a))
-              → (a : ∥ A ∥) → P a
+    module _ {A : 𝒰} (P : 𝒰) (f : A → P) (φ : is-prop P) where
+      postulate
+        rec-∥-∥ : ∥ A ∥ → P
+        rec-∥-∥-β : ∀ {a} → rec-∥-∥ ∣ a ∣ == f a
 \end{code}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
