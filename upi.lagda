@@ -20,6 +20,11 @@
 \usepackage[conor,references]{agda}
 \usepackage[mathscr]{euscript}
 \usepackage[euler]{textgreek}
+\usepackage{mathabx}
+
+\DeclareUnicodeCharacter {120794}{$\mathbb {2}$}
+\DeclareUnicodeCharacter {9726}{$\sqbullet$}
+\DeclareUnicodeCharacter {120792}{$\mathbb {0}$}
 
 \newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
 \newcommand{\byisotwo}[1]{{\Leftrightarrow}{\langle} ~#1~ \rangle}
@@ -470,50 +475,51 @@ establishes, the above set is \emph{complete}:
 
 \AgdaHide{
 \begin{code}
-  {-# OPTIONS --without-K --type-in-type --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --type-in-type --allow-unsolved-metas #-}
+module upi where
+  module sec3 where
+    𝒰 = Set
 
-  𝒰 = Set
+    record Σ (A : 𝒰) (B : A → 𝒰) : 𝒰 where
+      constructor _,_
+      field
+        pr₁ : A
+        pr₂ : B pr₁
 
-  record Σ (A : 𝒰) (B : A → 𝒰) : 𝒰 where
-    constructor _,_
-    field
-      pr₁ : A
-      pr₂ : B pr₁
+    open Σ public
+    infixr 4 _,_
+    syntax Σ A (λ x → B) = Σ[ x ∶ A ] B
 
-  open Σ public
-  infixr 4 _,_
-  syntax Σ A (λ x → B) = Σ[ x ∶ A ] B
+    infix 2 _×_
+    _×_ : (A B : 𝒰) → 𝒰
+    A × B = Σ A (λ _ → B)
 
-  infix 2 _×_
-  _×_ : (A B : 𝒰) → 𝒰
-  A × B = Σ A (λ _ → B)
+    id : {A : 𝒰} → A → A
+    id a = a
 
-  id : {A : 𝒰} → A → A
-  id a = a
+    infix 4 _∘_
+    _∘_ : {A : 𝒰} {B : A → 𝒰} {C : {a : A} → B a → 𝒰}
+        → (g : {a : A} → (b : B a) → C b) (f : (a : A) → B a)
+        → (a : A) → C (f a)
+    g ∘ f = λ a → g (f a)
 
-  infix 4 _∘_
-  _∘_ : {A : 𝒰} {B : A → 𝒰} {C : {a : A} → B a → 𝒰}
-      → (g : {a : A} → (b : B a) → C b) (f : (a : A) → B a)
-      → (a : A) → C (f a)
-  g ∘ f = λ a → g (f a)
+    data _==_ {A : 𝒰} : A → A → 𝒰 where
+      refl : (a : A) → a == a
 
-  data _==_ {A : 𝒰} : A → A → 𝒰 where
-    refl : (a : A) → a == a
+    infix 3 _∼_
+    _∼_ : {A : 𝒰} {B : A → 𝒰} (f g : (a : A) → B a) → 𝒰
+    _∼_ {A} f g = (a : A) → f a == g a
 
-  infix 3 _∼_
-  _∼_ : {A : 𝒰} {B : A → 𝒰} (f g : (a : A) → B a) → 𝒰
-  _∼_ {A} f g = (a : A) → f a == g a
+    ap : {A B : 𝒰} {x y : A} → (f : A → B) (p : x == y) → f x == f y
+    ap f (refl x) = refl (f x)
 
-  ap : {A B : 𝒰} {x y : A} → (f : A → B) (p : x == y) → f x == f y
-  ap f (refl x) = refl (f x)
+    transport : {A : 𝒰} (P : A → 𝒰) {x y : A} → x == y → P x → P y
+    transport P (refl x) u = u
 
-  transport : {A : 𝒰} (P : A → 𝒰) {x y : A} → x == y → P x → P y
-  transport P (refl x) u = u
+    PathOver : {A : 𝒰} (P : A → 𝒰) {x y : A} (p : x == y) (u : P x) (v : P y) → 𝒰
+    PathOver P p u v = transport P p u == v
 
-  PathOver : {A : 𝒰} (P : A → 𝒰) {x y : A} (p : x == y) (u : P x) (v : P y) → 𝒰
-  PathOver P p u v = transport P p u == v
-
-  syntax PathOver P p u v = u == v [ P ↓ p ]
+    syntax PathOver P p u v = u == v [ P ↓ p ]
 \end{code}
 }
 
@@ -526,23 +532,23 @@ Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function \AgdaSymbol{f
 : A → B} is an quasi-inverse, if
 %
 \begin{code}
-  is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
-  is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
+    is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
+    is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
 %
 To make this type contractible, we need to adjointify it.
 %
 \begin{code}
-  is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
-  is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ]
-                     Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
+    is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
+    is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ]
+                       Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
 \end{code}
 %
 Then we can define a type of equivalences between two types.
 %
 \begin{code}
-  _≃_ : (A B : 𝒰) → 𝒰
-  A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
+    _≃_ : (A B : 𝒰) → 𝒰
+    A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
 \end{code}
 
 \subsection{Type Families are Fibrations}
@@ -553,10 +559,10 @@ with base space \AgdaSymbol{A}, and \AgdaSymbol{P x} the fiber over
 x}. The path lifting property can be defined by path induction.
 %
 \begin{code}
-  lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
-       → (u : P x) (p : x == y)
-       → (x , u) == (y , transport P p u)
-  lift u (refl x) = refl (x , u)
+    lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
+         → (u : P x) (p : x == y)
+         → (x , u) == (y , transport P p u)
+    lift u (refl x) = refl (x , u)
 \end{code}
 
 \subsection{Paths to Equivalences}
@@ -565,17 +571,17 @@ The \AgdaSymbol{transport} operation lifts paths to equivalences. By
 transporting identity, we can convert a path to an equivalence.
 
 \begin{code}
-  idh : {A : 𝒰} {P : A → 𝒰} → (f : (a : A) → P a) → f ∼ f
-  idh f a = refl (f a)
+    idh : {A : 𝒰} {P : A → 𝒰} → (f : (a : A) → P a) → f ∼ f
+    idh f a = refl (f a)
 
-  ide : (A : 𝒰) → A ≃ A
-  ide A = id , id , idh id , idh id , idh (idh id)
+    ide : (A : 𝒰) → A ≃ A
+    ide A = id , id , idh id , idh id , idh (idh id)
 
-  tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
-  tpt-eqv P (refl a) = ide (P a)
+    tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
+    tpt-eqv P (refl a) = ide (P a)
 
-  idtoeqv : {A B : 𝒰} → A == B → A ≃ B
-  idtoeqv = tpt-eqv id
+    idtoeqv : {A B : 𝒰} → A == B → A ≃ B
+    idtoeqv = tpt-eqv id
 \end{code}
 
 \subsection{Univalent Fibrations}
@@ -584,8 +590,8 @@ A type family (fibration) \AgdaSymbol{P : A → 𝒰} is univalent, iff equivale
 in the base space are \emph{equivalent} to equivalences in the fiber.
 
 \begin{code}
-  is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
-  is-univ-fib {A} P = (a b : A) → is-hae (tpt-eqv P {a} {b})
+    is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
+    is-univ-fib {A} P = (a b : A) → is-hae (tpt-eqv P {a} {b})
 \end{code}
 
 In particular, the univalence axiom is a specialization of this to the
@@ -593,8 +599,8 @@ constant fibration. We say that a universe is univalent if it
 satisfies univalence. \VC{Tarski universes later}
 
 \begin{code}
-  is-univalent : 𝒰
-  is-univalent = is-univ-fib id
+    is-univalent : 𝒰
+    is-univalent = is-univ-fib id
 \end{code}
 
 \subsection{Propositional Truncation as an HIT}
@@ -602,36 +608,36 @@ satisfies univalence. \VC{Tarski universes later}
 We define propositional truncation as a higher inductive type as follows.
 
 \begin{code}
-  postulate
-    ∥_∥ : (A : 𝒰) → 𝒰
-    ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
-    ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
+    postulate
+        ∥_∥ : (A : 𝒰) → 𝒰
+        ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
+        ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
 \end{code}
 
 Truncating a type makes it a proposition.
 
 \begin{code}
-  is-contr : (A : 𝒰) → 𝒰
-  is-contr A = Σ A (λ a → (b : A) → (a == b))
+    is-contr : (A : 𝒰) → 𝒰
+    is-contr A = Σ A (λ a → (b : A) → (a == b))
 
-  is-prop : 𝒰 → 𝒰
-  is-prop A = (a b : A) → a == b
+    is-prop : 𝒰 → 𝒰
+    is-prop A = (a b : A) → a == b
 
-  ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
-  ∥-∥-is-prop _ _ = ident
+    ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
+    ∥-∥-is-prop _ _ = ident
 \end{code}
 
 We can only eliminate a propositional truncation to a proposition.
 
 \begin{code}
-  postulate
-    rec-∥-∥ : {A : 𝒰} (P : 𝒰)
-            → (A → P) → is-prop P
-            → ∥ A ∥ → P
-    ind-∥-∥ : {A : 𝒰} (P : ∥ A ∥ → 𝒰)
-            → ((a : A) → P ∣ a ∣)
-            → ((a : ∥ A ∥) → is-prop (P a))
-            → (a : ∥ A ∥) → P a
+    postulate
+      rec-∥-∥ : {A : 𝒰} (P : 𝒰)
+              → (A → P) → is-prop P
+              → ∥ A ∥ → P
+      ind-∥-∥ : {A : 𝒰} (P : ∥ A ∥ → 𝒰)
+              → ((a : A) → P ∣ a ∣)
+              → ((a : ∥ A ∥) → is-prop (P a))
+              → (a : ∥ A ∥) → P a
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -653,30 +659,175 @@ difficult. Paths in HoTT come equipped with principles like the
 of these principles seems to have any direct counterpart in the world of
 reversible programming.
 
-Soundness; completeness; etc.
-
 We add a new level to $\PiTwo$ to prove the full correspondence of the first 2-levels of $\PiTwo$ and $\{\bt\}$:
 \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
 (\textit{3-combinators}) & \xi &::=& \trunc &:& (\alpha, \beta : c_1 \isotwo c_2) \to \alpha \isothree \beta
 \end{array}\]
 
-\begin{theorem}[Soundness and completeness for $\PiTwo$]
-  There exist functions $\dbracket{ \_ }_n$ which map n-combinator in $\PiTwo$ to n-path in $\{\bt\}$,
-  such that
-  \begin{enumerate}
-  \item For all 1-combinators $p, q$, $p \iso q$ iff $\dbracket{ p }_1 = \dbracket{ q }_1$.
-  \item For all 2-combinators $\alpha, \beta$, $\alpha \isotwo \beta$ iff $\dbracket{ \alpha }_2 = \dbracket{ \beta }_2$.
-  \end{enumerate}
-\end{theorem}
+\AgdaHide{
+\begin{code}
+  module sec4 where
+    open import Pi2.Syntax
+    open import UnivalentTypeTheory
+    open import TwoUniverse as M
+    open OneDimensionalTerms
+    open TwoDimensionalTerms
 
-\begin{theorem}[Soundness and completeness for $\{\bt\}$]
-  There exist functions $\dbracket{ \_ }_n^{-1}$ which map n-path in $\{\bt\}$ to n-combinator in $\PiTwo$,
-  such that
-  \begin{enumerate}
-  \item For all 1-paths $p, q$, $p \equiv q$ iff $\dbracket{ p }_1^{-1} \isotwo \dbracket{ q }_1^{-1}$.
-  \item For all 2-paths $\alpha, \beta$, $\alpha \equiv \beta$ iff $\dbracket{ \alpha }_2^{-1} \isothree \dbracket{ \beta }_2^{-1}$.
-  \end{enumerate}
-\end{theorem}
+    lem : {p q r : M.`𝟚 == M.`𝟚} (p=r : p == r) (q=r : q == r) (u : p == q)
+        → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
+    lem p=r q=r u = (! (◾unitr u))
+                  ◾ ap (λ x → u ◾ x) (! (◾invr q=r))
+                  ◾ ! (◾unitl (u ◾ q=r ◾ ! q=r))
+                  ◾ ap (λ x → x ◾ u ◾ q=r ◾ ! q=r) (! (◾invr p=r))
+                  ◾ ◾assoc _ _ _
+                  ◾ ap (λ x → p=r ◾ x) (! (◾assoc _ _ _))
+                  ◾ ap (λ x → p=r ◾ x) (! (◾assoc _ _ _))
+                  ◾ ap (λ x → p=r ◾ x ◾ ! q=r) (◾assoc _ _ _)
+
+\end{code}
+}
+Level-1 :
+\begin{code}
+    ⟦_⟧ : U → U[𝟚]
+    ⟦ `𝟚 ⟧ = M.`𝟚
+
+    ⟦_⟧₁ : {A B : U} → A ⟷₁ B → ⟦ A ⟧ == ⟦ B ⟧
+
+    ⟦_⟧₁⁻¹ : M.`𝟚 == M.`𝟚 → U.`𝟚 ⟷₁ U.`𝟚
+\end{code}
+
+\AgdaHide{
+\begin{code}
+    ⟦_⟧₁ `id = M.`id
+    ⟦_⟧₁ `not = M.`not
+    ⟦_⟧₁ (!₁ p) = ! ⟦ p ⟧₁
+    ⟦_⟧₁ (p ⊙₁ q) = ⟦ p ⟧₁ ◾ ⟦ q ⟧₁
+
+    ⟦ p ⟧₁⁻¹ with all-1-paths p
+    ⟦ p ⟧₁⁻¹ | i₁ p=id  = _⟷₁_.`id
+    ⟦ p ⟧₁⁻¹ | i₂ p=not = _⟷₁_.`not
+\end{code}
+}
+Level-2:
+
+\begin{code}
+    ⟦_⟧₂ : {A B : U} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
+
+    ⟦_⟧₂⁻¹ : {p q : M.`𝟚 == M.`𝟚} → p == q → ⟦ p ⟧₁⁻¹ ⟷₂ ⟦ q ⟧₁⁻¹
+\end{code}
+
+\AgdaHide{
+\begin{code}
+    ⟦_⟧₂ {p = p} `id₂ = refl ⟦ p ⟧₁
+    ⟦_⟧₂ (`idl p) = ◾unitl ⟦ p ⟧₁
+    ⟦_⟧₂ (`idr p) = ◾unitr ⟦ p ⟧₁
+    ⟦_⟧₂ (`!l p) = ◾invr ⟦ p ⟧₁
+    ⟦_⟧₂ (`!r p) = ◾invl ⟦ p ⟧₁
+    ⟦_⟧₂ `!id = refl M.`id
+    ⟦_⟧₂ `!not = !not=not
+    ⟦_⟧₂ (`!◾ {p = p} {q}) = !◾ ⟦ p ⟧₁ ⟦ q ⟧₁
+    ⟦_⟧₂ `!! = !! _
+    ⟦_⟧₂ (`assoc p q r) = ◾assoc _ _ _
+    ⟦_⟧₂ (!₂ u) = ! ⟦ u ⟧₂
+    ⟦_⟧₂ (u ⊙₂ u₁) = ⟦ u ⟧₂ ◾ ⟦ u₁ ⟧₂
+    ⟦_⟧₂ (u □₂ v ) = ⟦ u ⟧₂ [2,0,2] ⟦ v ⟧₂
+    ⟦_⟧₂ (`! α) = ap ! ⟦ α ⟧₂
+
+
+    ⟦_⟧₂⁻¹ {p} {q} u with all-1-paths p | all-1-paths q
+    ⟦_⟧₂⁻¹ {p} {q} u | i₁ p=id  | (i₁ q=id)  = `id₂
+    ⟦_⟧₂⁻¹ {p} {q} u | i₁ p=id  | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ u ◾ q=not))
+    ⟦_⟧₂⁻¹ {p} {q} u | i₂ p=not | (i₁ q=id)  = rec𝟘 _ (¬id=not ((! q=id) ◾ ! u ◾ p=not))
+    ⟦_⟧₂⁻¹ {p} {q} u | i₂ p=not | (i₂ q=not) = `id₂
+\end{code}
+}
+
+Level-3:
+\begin{code}
+    ⟦_⟧₃ : {A B : U} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
+
+    ⟦_⟧₃⁻¹ : {p q : M.`𝟚 == M.`𝟚} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹
+\end{code}
+
+\AgdaHide{
+\begin{code}
+    ⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc
+         with all-1-paths ⟦ p ⟧₁ | all-1-paths ⟦ q ⟧₁
+    ⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₁ p=id  | (i₁ q=id)  =
+         lem p=id q=id ⟦ u ⟧₂ ◾ ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-paths-id _ ◾ (! (all-2-paths-id _))) ◾ ! (lem p=id q=id ⟦ v ⟧₂)
+    ⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₁ p=id  | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ ⟦ u ⟧₂ ◾ q=not))
+    ⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₂ p=not | (i₁ q=id)  = rec𝟘 _ (¬id=not ((! q=id) ◾ ! ⟦ u ⟧₂ ◾ p=not))
+    ⟦_⟧₃ {U.`𝟚} {U.`𝟚} {p} {q} {u} {v} `trunc | i₂ p=not | (i₂ q=not) =
+         lem p=not q=not ⟦ u ⟧₂ ◾ ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-paths-not _ ◾ (! (all-2-paths-not _))) ◾ ! (lem p=not q=not ⟦ v ⟧₂)
+
+    ⟦ α ⟧₃⁻¹ = `trunc
+
+    data Which : Set₀ where ID NOT : Which
+
+    refine : (w : Which) → U.`𝟚 ⟷₁ U.`𝟚
+    refine ID = _⟷₁_.`id
+    refine NOT = _⟷₁_.`not
+
+    canonical₁ : (p : U.`𝟚 ⟷₁ U.`𝟚) → Σ Which (λ c → p ⟷₂ (refine c))
+    canonical₁ `id = ID , `id₂
+    canonical₁ `not = NOT , `id₂
+    canonical₁ (!₁ p) with canonical₁ p
+    ... | ID  , α = ID  , (`! α ⊙₂ `!id)
+    ... | NOT , α = NOT , (`! α ⊙₂ `!not)
+    canonical₁ (_⊙₁_ {_} {U.`𝟚} p₀ p₁) with canonical₁ p₀ | canonical₁ p₁
+    ... | ID  , α | ID  , β = ID , ((α □₂ β) ⊙₂ `idl _⟷₁_.`id)
+    ... | ID  , α | NOT , β = NOT , ((α □₂ β) ⊙₂ `idl _⟷₁_.`not)
+    ... | NOT , α | ID  , β = NOT , ((α □₂ β) ⊙₂ `idr _⟷₁_.`not)
+    ... | NOT , α | NOT , β = ID , ((α □₂ β) ⊙₂ not◾not⇔id)
+
+    ⟦⟦_⟧₁⟧₁⁻¹ : (p : U.`𝟚 ⟷₁ U.`𝟚) → p ⟷₂ ⟦ ⟦ p ⟧₁ ⟧₁⁻¹
+    ⟦⟦ p ⟧₁⟧₁⁻¹ with canonical₁ p | all-1-paths ⟦ p ⟧₁
+    ⟦⟦ p ⟧₁⟧₁⁻¹ | ID , p⇔id | (i₁ p=id) = p⇔id
+    ⟦⟦ p ⟧₁⟧₁⁻¹ | NOT , p⇔not | (i₁ p=id) = rec𝟘 _ (¬id=not ((! p=id) ◾ ⟦ p⇔not ⟧₂))
+    ⟦⟦ p ⟧₁⟧₁⁻¹ | ID , p⇔id | (i₂ p=not) = rec𝟘 _ (¬id=not (! ((! p=not) ◾ ⟦ p⇔id ⟧₂)))
+    ⟦⟦ p ⟧₁⟧₁⁻¹ | NOT , p⇔not | (i₂ p=not) = p⇔not
+
+    ⟦⟦_⟧₁⁻¹⟧₁ : (p : M.`𝟚 == M.`𝟚) → p == ⟦ ⟦ p ⟧₁⁻¹ ⟧₁
+    ⟦⟦ p ⟧₁⁻¹⟧₁ with all-1-paths p | canonical₁ ⟦ p ⟧₁⁻¹
+    ⟦⟦ p ⟧₁⁻¹⟧₁ | i₁ p=id | (ID , p⇔id) = p=id
+    ⟦⟦ p ⟧₁⁻¹⟧₁ | i₁ p=id | (NOT , p⇔not) = rec𝟘 _ (¬id=not ⟦ p⇔not ⟧₂)
+    ⟦⟦ p ⟧₁⁻¹⟧₁ | i₂ p=not | (ID , p⇔id) = rec𝟘 _ ((¬id=not (! ⟦ p⇔id ⟧₂)))
+    ⟦⟦ p ⟧₁⁻¹⟧₁ | i₂ p=not | (NOT , p⇔not) = p=not
+
+    ⟦⟦_⟧₂⟧₂⁻¹ : {p q : U.`𝟚 ⟷₁ U.`𝟚} (u : p ⟷₂ q)
+              → u ⟷₃ (⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ ⟦ u ⟧₂ ⟧₂⁻¹ ⊙₂ (!₂ ⟦⟦ q ⟧₁⟧₁⁻¹)))
+    ⟦⟦ u ⟧₂⟧₂⁻¹ = `trunc
+
+    ⟦⟦_⟧₂⁻¹⟧₂ : {p q : M.`𝟚 == M.`𝟚} (u : p == q)
+              → u == ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ ⟦ u ⟧₂⁻¹ ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
+    ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u with all-1-paths p | all-1-paths q
+    ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₁ p=id | (i₁ q=id) = (lem p=id q=id u) ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-paths-id _))
+    ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₁ p=id | (i₂ q=not) = rec𝟘 _ (¬id=not ((! p=id) ◾ u ◾ q=not))
+    ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₂ p=not | (i₁ q=id) = rec𝟘 _ (¬id=not ((! q=id) ◾ ! u ◾ p=not))
+    ⟦⟦_⟧₂⁻¹⟧₂ {p} {q} u | i₂ p=not | (i₂ q=not) = (lem p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-paths-not _))
+\end{code}
+}
+\begin{code}
+    completeness₁ : {p q : U.`𝟚 ⟷₁ U.`𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ⟷₂ q
+
+    completeness₁⁻¹ : {p q : M.`𝟚 == M.`𝟚} → ⟦ p ⟧₁⁻¹ ⟷₂ ⟦ q ⟧₁⁻¹ → p == q
+
+    completeness₂ : {p q : U.`𝟚 ⟷₁ U.`𝟚} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ⟷₃ v
+
+    completeness₂⁻¹ : {p q : M.`𝟚 == M.`𝟚} {u v : p == q} → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹ → u == v
+\end{code}
+
+\AgdaHide{
+\begin{code}
+    completeness₁ {p} {q} u = ⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ u ⟧₂⁻¹ ⊙₂ !₂ ⟦⟦ q ⟧₁⟧₁⁻¹)
+
+    completeness₁⁻¹ {p} {q} u = ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ u ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
+
+    completeness₂ u = `trunc
+
+    completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⟦ u ⟧₂⁻¹⟧₂ ◾ ap (λ x → ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ x ◾ ! ⟦⟦ q ⟧₁⁻¹⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⟦ v ⟧₂⁻¹⟧₂)
+\end{code}
+}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion and Related Work}

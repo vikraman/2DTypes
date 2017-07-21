@@ -6,7 +6,7 @@ open import Data.Bool
 
 infix 3 _⟷₁_ _⟷₂_ _⟷₃_
 infix 5 !₁_ !₂_
-infix 4 _◾₁_ _◾₂_
+infix 4 _⊙₁_ _⊙₂_
 
 ------------------------------------------------------------------------------
 -- Objects
@@ -32,7 +32,7 @@ data _⟷₁_ : U → U → Set where
       ----------------------------
       → (B ⟷₁ A)
 
-  _◾₁_ : {A B C : U} → (p : A ⟷₁ B) (q : B ⟷₁ C)
+  _⊙₁_ : {A B C : U} → (p : A ⟷₁ B) (q : B ⟷₁ C)
         --------------------------------------------
         → (A ⟷₁ C)
 
@@ -47,19 +47,19 @@ data _⟷₂_ : {A B : U} (p q : A ⟷₁ B) → Set where
 
   `idl     : {A B : U} (p : A ⟷₁ B)
            ----------------------
-           → `id ◾₁ p ⟷₂ p
+           → `id ⊙₁ p ⟷₂ p
 
   `idr     : {A B : U} (p : A ⟷₁ B)
            ----------------------
-           → p ◾₁ `id ⟷₂ p
+           → p ⊙₁ `id ⟷₂ p
 
   `!l      : {A B : U} (p : A ⟷₁ B)
            ----------------------
-           → p ◾₁ !₁ p ⟷₂ `id
+           → p ⊙₁ !₁ p ⟷₂ `id
 
   `!r      : {A B : U} (p : B ⟷₁ A)
            ----------------------
-           → !₁ p ◾₁ p ⟷₂ `id
+           → !₁ p ⊙₁ p ⟷₂ `id
 
   `!id    : {A : U} →
            -----------------------
@@ -71,7 +71,7 @@ data _⟷₂_ : {A B : U} (p q : A ⟷₁ B) → Set where
 
   `!◾   : {A B C : U} {p : A ⟷₁ B} {q : B ⟷₁ C}
            -----------------------------------------
-           → !₁ (p ◾₁ q) ⟷₂ (!₁ q) ◾₁ (!₁ p)
+           → !₁ (p ⊙₁ q) ⟷₂ (!₁ q) ⊙₁ (!₁ p)
 
   `!!   : {A B : U} {p : A ⟷₁ B}
            -----------------------------------------
@@ -79,7 +79,7 @@ data _⟷₂_ : {A B : U} (p q : A ⟷₁ B) → Set where
 
   `assoc   : {A B C D : U} (p : A ⟷₁ B) (q : B ⟷₁ C) (r : C ⟷₁ D)
            ---------------------------------------------------------
-           → (p ◾₁ q) ◾₁ r ⟷₂ p ◾₁ (q ◾₁ r)
+           → (p ⊙₁ q) ⊙₁ r ⟷₂ p ⊙₁ (q ⊙₁ r)
 
   `!       : {A B : U} {p q : A ⟷₁ B}
            → p ⟷₂ q
@@ -91,14 +91,14 @@ data _⟷₂_ : {A B : U} (p q : A ⟷₁ B) → Set where
            --------------------------
            → q ⟷₂ p
 
-  _◾₂_   : {A B : U} {p q r : A ⟷₁ B}
+  _⊙₂_   : {A B : U} {p q r : A ⟷₁ B}
           → (u : p ⟷₂ q) (v : q ⟷₂ r)
           --------------------------------
           → (p ⟷₂ r)
 
   _□₂_ : {A B C : U} {p q : A ⟷₁ B} {r s : B ⟷₁ C} (u : p ⟷₂ q) (v : r ⟷₂ s)
          --------------------------------------------------------------------------
-         → (p ◾₁ r) ⟷₂ (q ◾₁ s)
+         → (p ⊙₁ r) ⟷₂ (q ⊙₁ s)
 
 ------------------------------------------------------------------------------
 -- n+3-paths for n ≥ 0
@@ -121,13 +121,13 @@ evalF `id v = v
 evalF `not false = true
 evalF `not true = false
 evalF (!₁ c) v = evalB c v
-evalF (c₁ ◾₁ c₂) v = evalF c₂ (evalF c₁ v)
+evalF (c₁ ⊙₁ c₂) v = evalF c₂ (evalF c₁ v)
 
 evalB `id v = v
 evalB `not false = true
 evalB `not true = false
 evalB (!₁ c) v = evalF c v
-evalB (c₁ ◾₁ c₂) v = evalB c₁ (evalB c₂ v)
+evalB (c₁ ⊙₁ c₂) v = evalB c₁ (evalB c₂ v)
 
 eval2F : {A B : U} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → (El A → El B) → (El A → El B)
 eval2F `id₂ f = f
@@ -142,7 +142,7 @@ eval2F `!! f = {!!}
 eval2F (`assoc p q r) f = {!!}
 eval2F (`! u) f = {!!}
 eval2F (!₂ u) f = {!!}
-eval2F (u ◾₂ u₁) f = {!!}
+eval2F (u ⊙₂ u₁) f = {!!}
 eval2F (u □₂ u₁) f = {!!}
 
 -- and so on and so forth??  Now the big question is how to connect this to the
@@ -157,10 +157,10 @@ module Tests where
 
   ◾₂-assoc : {A B : U} {p q r s : A ⟷₁ B}
            → (u : p ⟷₂ q) (v : q ⟷₂ r) (w : r ⟷₂ s)
-           → (u ◾₂ v) ◾₂ w ⟷₃ u ◾₂ (v ◾₂ w)
+           → (u ⊙₂ v) ⊙₂ w ⟷₃ u ⊙₂ (v ⊙₂ w)
   ◾₂-assoc u v w = `trunc
 
 ------------------------------------------------------------------------------
 
-not◾not⇔id : `not ◾₁ `not ⟷₂ `id
-not◾not⇔id = ((!₂ `!not) □₂ `id₂) ◾₂ (`!r _⟷₁_.`not)
+not◾not⇔id : `not ⊙₁ `not ⟷₂ `id
+not◾not⇔id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r _⟷₁_.`not)
