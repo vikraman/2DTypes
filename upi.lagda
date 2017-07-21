@@ -1,7 +1,7 @@
 \documentclass{entcs}
 \usepackage{prentcsmacro}
 
-\def\lastname{Carette, Chen, Choudhury, Rose, and Sabry}
+\def\lastname{Carette, Chen, Choudhury, and Sabry}
 
 %% Amr
 %% words to remember :-)
@@ -129,7 +129,6 @@ $\displaystyle
   \author{Chao-Hong Chen}
   \address{Indiana University}
   \author{Vikraman Choudhury}
-  \author{Robert Rose}
   \author{Amr Sabry}
   \address{Indiana University}
 
