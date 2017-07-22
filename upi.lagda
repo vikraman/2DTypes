@@ -480,6 +480,11 @@ module upi where
   module sec3 where
     𝒰 = Set
 
+    Π : (A : 𝒰) (B : A → 𝒰) → 𝒰
+    Π A B = (a : A) → B a
+
+    syntax Π A (λ a → B) = Π[ a ∶ A ] B
+
     record Σ (A : 𝒰) (B : A → 𝒰) : 𝒰 where
       constructor _,_
       field
@@ -488,7 +493,7 @@ module upi where
 
     open Σ public
     infixr 4 _,_
-    syntax Σ A (λ x → B) = Σ[ x ∶ A ] B
+    syntax Σ A (λ a → B) = Σ[ a ∶ A ] B
 
     infix 2 _×_
     _×_ : (A B : 𝒰) → 𝒰
@@ -574,7 +579,7 @@ The \AgdaSymbol{transport} operation lifts paths to equivalences. By
 transporting identity, we can convert a path to an equivalence.
 
 \begin{code}
-    idh : {A : 𝒰} {P : A → 𝒰} → (f : (a : A) → P a) → f ∼ f
+    idh : {A : 𝒰} {P : A → 𝒰} → (f : Π[ a ∶ A ] P a) → f ∼ f
     idh f a = refl (f a)
 
     ide : (A : 𝒰) → A ≃ A
@@ -619,7 +624,7 @@ all other terms of that type are connected to it by a path.
 
 \begin{code}
     is-contr : (A : 𝒰) → 𝒰
-    is-contr A = Σ[ a ∶ A ] ((b : A) → (a == b))
+    is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
 \end{code}
 %
 A type \AgdaSymbol{A} is a proposition, if all pairs of terms of that type are
@@ -627,7 +632,7 @@ connected by a path. Such a type can have at most one inhabitant.
 
 \begin{code}
     is-prop : (A : 𝒰) → 𝒰
-    is-prop A = (a b : A) → a == b
+    is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
 \end{code}
 %
 Any type can be truncated to a proposition by adding paths. We define the
@@ -654,7 +659,7 @@ truncation to a type that is a proposition.
     module _ {A : 𝒰} (P : 𝒰) (f : A → P) (φ : is-prop P) where
       postulate
         rec-∥-∥ : ∥ A ∥ → P
-        rec-∥-∥-β : ∀ {a} → rec-∥-∥ ∣ a ∣ == f a
+        rec-∥-∥-β : Π[ a ∶ A ] (rec-∥-∥ ∣ a ∣ == f a)
 \end{code}
 
 \subsection{Singleton subuniverses}
