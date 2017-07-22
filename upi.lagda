@@ -526,8 +526,8 @@ module upi where
 \end{code}
 }
 
-We work in intensional type theory with one univalent universe closed
-under propositional truncation.
+We work in intensional type theory with one univalent universe \AgdaSymbol{𝒰}
+closed under propositional truncation.
 
 \subsection{Equivalences}
 
@@ -556,10 +556,10 @@ Then we can define a type of equivalences between two types.
 
 \subsection{Type Families are Fibrations}
 
-A type family \AgdaSymbol{P} over a type \AgdaSymbol{A} is a fibration
-with base space \AgdaSymbol{A}, and \AgdaSymbol{P x} the fiber over
-\AgdaSymbol{x}. The total space is given by \AgdaSymbol{Σ[ x ∶ A ] P
-x}. The path lifting property can be defined by path induction.
+A type family \AgdaSymbol{P} over a type \AgdaSymbol{A} is a fibration with base
+space \AgdaSymbol{A}, and \AgdaSymbol{P x} the fiber over \AgdaSymbol{x}. The
+total space is given by \AgdaSymbol{Σ[ x ∶ A ] P x}. The path lifting property
+can be defined by path induction.
 %
 \begin{code}
     lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
@@ -612,31 +612,43 @@ We can define universes a lá Tarski by having a code for the universe
     is-univalent (U , El) = is-univ-fib El
 \end{code}
 
-\subsection{Propositional Truncation as an HIT}
+\subsection{Propositional Truncation}
 
-We define propositional truncation as a higher inductive type as follows.
+A type \AgdaSymbol{A} is contractible, if it has a center of contraction, and
+all other terms of that type are connected to it by a path.
+
+\begin{code}
+    is-contr : (A : 𝒰) → 𝒰
+    is-contr A = Σ[ a ∶ A ] ((b : A) → (a == b))
+\end{code}
+%
+A type \AgdaSymbol{A} is a proposition, if all pairs of terms of that type are
+connected by a path. Such a type can have at most one inhabitant.
+
+\begin{code}
+    is-prop : (A : 𝒰) → 𝒰
+    is-prop A = (a b : A) → a == b
+\end{code}
+%
+Any type can be truncated to a proposition by adding paths. We define the
+propositional truncation as a higher inductive type. The type constructor
+\AgdaSymbol{∥\_∥} takes a type \AgdaSymbol{A} as a parameter, and the point
+constructor \AgdaSymbol{∣\_∣} coerces terms of type \AgdaSymbol{A} to terms in
+the truncation. The path constructor \AgdaSymbol{ident} identifies any two
+points in the truncation, making it a proposition.
 
 \begin{code}
     postulate
       ∥_∥ : (A : 𝒰) → 𝒰
       ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
       ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
-\end{code}
-%
-Truncating a type makes it a proposition.
-
-\begin{code}
-    is-contr : (A : 𝒰) → 𝒰
-    is-contr A = Σ A (λ a → (b : A) → (a == b))
-
-    is-prop : 𝒰 → 𝒰
-    is-prop A = (a b : A) → a == b
 
     ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
     ∥-∥-is-prop _ _ = ident
 \end{code}
 %
-We can only eliminate a propositional truncation to a proposition.
+The recursion principle ensures that we can only eliminate a propositional
+truncation to a type that is a proposition.
 
 \begin{code}
     module _ {A : 𝒰} (P : 𝒰) (f : A → P) (φ : is-prop P) where
@@ -658,6 +670,12 @@ picks out \AgdaSymbol{T}. This lets us build up a singleton ``subuniverse'' of
     Ũ[_] : (T : 𝒰) → Ũ
     Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
 \end{code}
+%
+We now claim a characterization of univalent fibrations for type families that
+are propositions over any type. If \AgdaSymbol{P : A → 𝒰} is a type family such
+that...
+
+\subsection{The subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
 
 We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the next
 section. \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is a set with
@@ -669,6 +687,7 @@ two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
     U[𝟚] = pr₁ Ũ[ 𝟚 ]
 \end{code}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
