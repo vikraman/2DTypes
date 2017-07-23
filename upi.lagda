@@ -634,13 +634,14 @@ connected by a path. Such a type can have at most one inhabitant.
     is-prop : (A : 𝒰) → 𝒰
     is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
 \end{code}
-%
-Any type can be truncated to a proposition by adding paths. We define the
-propositional truncation as a higher inductive type. The type constructor
-\AgdaSymbol{∥\_∥} takes a type \AgdaSymbol{A} as a parameter, and the point
-constructor \AgdaSymbol{∣\_∣} coerces terms of type \AgdaSymbol{A} to terms in
-the truncation. The path constructor \AgdaSymbol{ident} identifies any two
-points in the truncation, making it a proposition.
+
+Any type can be truncated to a proposition by freely adding paths. This is the
+propositional truncation (or (-1)-truncation) which can be expressed as a higher
+inductive type. The type constructor \AgdaSymbol{∥\_∥} takes a type
+\AgdaSymbol{A} as a parameter, and the point constructor \AgdaSymbol{∣\_∣}
+coerces terms of type \AgdaSymbol{A} to terms in the truncation. The path
+constructor \AgdaSymbol{ident} identifies any two points in the truncation,
+making it a proposition.
 
 \begin{code}
     postulate
@@ -652,8 +653,10 @@ points in the truncation, making it a proposition.
     ∥-∥-is-prop _ _ = ident
 \end{code}
 %
-The recursion principle ensures that we can only eliminate a propositional
-truncation to a type that is a proposition.
+This makes \AgdaSymbol{∥ A ∥} the ``free'' proposition on any type
+\AgdaSymbol{A}. It can be viewed as the left adjoint to the forgetful functor
+from propositions to types. The recursion principle ensures that we can only
+eliminate a propositional truncation to a type that is a proposition.
 
 \begin{code}
     module _ {A : 𝒰} (P : 𝒰) (f : A → P) (φ : is-prop P) where
