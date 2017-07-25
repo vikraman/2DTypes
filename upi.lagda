@@ -829,12 +829,27 @@ fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
 \AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
 \AgdaSymbol{(T, ∣ refl T ∣)}.
 
+Towards proving that, we start by defining the automorphism group of a space in
+an $(∞, 1)$-topos. By working in the internal language, that is, in HoTT, we can
+define the type \AgdaSymbol{Aut T} for any type \AgdaSymbol{T : 𝒰} to be the
+type of automorphisms on \AgdaSymbol{T} which gives rise to an
+$∞$-group. Similarly, the delooping of this group is the type of connected
+components of \AgdaSymbol{T}, which is suggestively named \AgdaSymbol{BAut
+T}. The loopspace of any pointed type \AgdaSymbol{(T , t)} is the space of paths
+on \AgdaSymbol{t}, \AgdaSymbol{Ω (T , t)}.
+
 \begin{code}
+Aut : (T : 𝒰) → 𝒰
+Aut T = T ≃ T
+
 BAut : (T : 𝒰) → 𝒰
-BAut T = Σ[ X ∶ 𝒰 ] ∥ X == T ∥
+BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
 
 b₀ : {T : 𝒰} → BAut T
-b₀ {T} = T , ∣ refl T ∣
+b₀ {T} = T , ∣ ide T ∣
+
+Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
+Ω (T , t) = t == t
 
 tpt-eqv-pr₁ : {T : 𝒰} {v w : BAut T} (p : v == w)
             → pr₁ (tpt-eqv pr₁ p) == transport id (dpair=-e₁ p)
@@ -854,13 +869,11 @@ is-univ-fib-pr₁ (T , q) (T' , q') = qinv-is-hae (g , η , ε)
 \end{code}
 
 As a consequence, we have the following theorem:
+%
 \AgdaSymbol{Ω(BAut(T)) ≃ Aut(T)} for any type \AgdaSymbol{T : 𝒰}.
 
 \begin{code}
-Ω : {T : 𝒰} → (t : T) → 𝒰
-Ω t = t == t
-
-ΩBAut≃Aut[_] : (T : 𝒰) → (Ω b₀) ≃ (T ≃ T)
+ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
 ΩBAut≃Aut[ T ] = tpt-eqv pr₁ , is-univ-fib-pr₁ b₀ b₀
 \end{code}
 
@@ -917,7 +930,7 @@ reversible programming.
 \AgdaHide{
 \begin{code}
 postulate
-  lem : {p q r : Ω b₀} (p=r : p == r) (q=r : q == r) (u : p == q)
+  lem : {p q r : Ω (BAut 𝟚 , b₀)} (p=r : p == r) (q=r : q == r) (u : p == q)
       → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
 -- lem p=r q=r u = (! (◾unitr u))
 --               ◾ ap (λ x → u ◾ x) (! (◾invr q=r))
