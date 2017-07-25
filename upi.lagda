@@ -888,7 +888,7 @@ Instantiating the lemma from the previous section with \AgdaSymbol{𝟚}, we hav
 that \AgdaSymbol{U[𝟚]} is a univalent subuniverse, with \AgdaSymbol{pr₁} the
 univalent fibration. With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
 we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
-Pi2.
+\PiTwo.
 
 However, the problem is easier for \AgdaSymbol{𝟚}, because
 \AgdaSymbol{Aut(𝟚) ≃ 𝟚}, which gives the following easy lemmas for
