@@ -508,8 +508,18 @@ module upi where
         → (a : A) → C (f a)
     g ∘ f = λ a → g (f a)
 
+    infix 3 _==_
     data _==_ {A : 𝒰} : A → A → 𝒰 where
       refl : (a : A) → a == a
+
+    infix 3 !_
+    !_ : {A : 𝒰} {a b : A} → (a == b) → (b == a)
+    !_ (refl _) = refl _
+
+    infixr 4 _◾_
+    _◾_ : {A : 𝒰} {a b c : A} → (a == b) → (b == c) → (a == c)
+    _◾_ (refl _) (refl _) = refl _
+
 
     infix 3 _∼_
     _∼_ : {A : 𝒰} {B : A → 𝒰} (f g : (a : A) → B a) → 𝒰
@@ -573,6 +583,13 @@ can be defined by path induction.
     lift u (refl x) = refl (x , u)
 \end{code}
 
+\begin{code}
+    module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
+      dpair= : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ])
+             → (a , pa) == (b , pb)
+      dpair= (refl a , refl pa) = refl (a , pa)
+\end{code}
+
 \subsection{Paths to Equivalences}
 
 The \AgdaSymbol{transport} operation lifts paths to equivalences. By
@@ -588,8 +605,8 @@ transporting identity, we can convert a path to an equivalence.
     tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
     tpt-eqv P (refl a) = ide (P a)
 
-    idtoeqv : {A B : 𝒰} → A == B → A ≃ B
-    idtoeqv = tpt-eqv id
+    id-to-eqv : {A B : 𝒰} → A == B → A ≃ B
+    id-to-eqv = tpt-eqv id
 \end{code}
 
 \subsection{Univalent Fibrations}
@@ -604,6 +621,23 @@ identity fibration.
 \begin{code}
     is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
     is-univ-fib {A} P = (a b : A) → is-hae (tpt-eqv P {a} {b})
+\end{code}
+%
+We postulate the univalence axiom as follows.
+%
+\begin{code}
+    module _ {A B : 𝒰} where
+      postulate
+        univalence : {A B : 𝒰} → is-hae (id-to-eqv {A} {B})
+
+      ua : A ≃ B → A == B
+      ua = pr₁ univalence
+
+      ua-β : id-to-eqv ∘ ua ∼ id
+      ua-β = pr₁ (pr₂ (pr₂ univalence))
+
+      ua-η : ua ∘ id-to-eqv ∼ id
+      ua-η = pr₁ (pr₂ univalence)
 \end{code}
 %
 We can define universes a lá Tarski by having a code for the universe
@@ -678,10 +712,13 @@ picks out \AgdaSymbol{T}. This lets us build up a singleton ``subuniverse'' of
     Ũ[_] : (T : 𝒰) → Ũ
     Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
 \end{code}
-%
-We now claim a characterization of univalent fibrations for type families that
-are propositions over any type. If \AgdaSymbol{P : A → 𝒰} is a type family such
-that...
+
+The following lemma by Christensen gives a characterization of univalent
+fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
+\AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
+\AgdaSymbol{(T, ∣ refl T ∣)}.
+
+The following is a consequence: \AgdaSymbol{Ω(BAut(T)) ≃ Aut(T)}.
 
 \subsection{The subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
 
@@ -696,6 +733,15 @@ two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
     U[𝟚] = pr₁ Ũ[ 𝟚 ]
 \end{code}
 
+Instantiating the lemma from the previous section with \AgdaSymbol{𝟚}, we have
+that \AgdaSymbol{U[𝟚]} is a univalent subuniverse, with \AgdaSymbol{pr₁} the
+univalent fibration. With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
+we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
+Pi2.
+
+However, the problem is easier for \AgdaSymbol{𝟚}, because \AgdaSymbol{Aut(𝟚) ≃
+𝟚}, which gives the following easy lemmas for 1-paths and 2-paths on
+\AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and \AgdaSymbol{all-2-paths}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
