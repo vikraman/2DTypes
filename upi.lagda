@@ -525,11 +525,14 @@ module upi where
     _∼_ : {A : 𝒰} {B : A → 𝒰} (f g : (a : A) → B a) → 𝒰
     _∼_ {A} f g = (a : A) → f a == g a
 
+    coe : {A B : 𝒰} (p : A == B) → A → B
+    coe (refl A) = id
+
     ap : {A B : 𝒰} {x y : A} → (f : A → B) (p : x == y) → f x == f y
     ap f (refl x) = refl (f x)
 
     transport : {A : 𝒰} (P : A → 𝒰) {x y : A} → x == y → P x → P y
-    transport P (refl x) u = u
+    transport P (refl x) = id
 
     PathOver : {A : 𝒰} (P : A → 𝒰) {x y : A} (p : x == y) (u : P x) (v : P y) → 𝒰
     PathOver P p u v = transport P p u == v
@@ -560,6 +563,9 @@ To make this type contractible, we need to adjointify it.
     is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
     is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ]
                        Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
+
+    qinv-is-hae : {A B : 𝒰} {f : A → B} → is-qinv f → is-hae f
+    qinv-is-hae = {!!}
 \end{code}
 %
 Then we can define a type of equivalences between two types.
@@ -588,6 +594,15 @@ can be defined by path induction.
       dpair= : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ])
              → (a , pa) == (b , pb)
       dpair= (refl a , refl pa) = refl (a , pa)
+
+    module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
+      dpair=-β₁ : (w : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ]))
+                → (ap pr₁ ∘ dpair=) w == pr₁ w
+      dpair=-β₁ (refl a , refl pa) = refl (refl a)
+
+    module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
+      dpair=-e₁ : (a , pa) == (b , pb) → a == b
+      dpair=-e₁ = ap pr₁
 \end{code}
 
 \subsection{Paths to Equivalences}
@@ -630,14 +645,21 @@ We postulate the univalence axiom as follows.
       postulate
         univalence : {A B : 𝒰} → is-hae (id-to-eqv {A} {B})
 
+    module _ {A B : 𝒰} where
       ua : A ≃ B → A == B
       ua = pr₁ univalence
 
       ua-β : id-to-eqv ∘ ua ∼ id
       ua-β = pr₁ (pr₂ (pr₂ univalence))
 
+      ua-β₁ : transport id ∘ ua ∼ pr₁
+      ua-β₁ = {!!} -- dpair=-e₁ ∘ ua-β
+
       ua-η : ua ∘ id-to-eqv ∼ id
       ua-η = pr₁ (pr₂ univalence)
+
+    ua-ide : {A : 𝒰} → ua (ide A) == refl A
+    ua-ide {A} = ua-η (refl A)
 \end{code}
 %
 We can define universes a lá Tarski by having a code for the universe
@@ -659,6 +681,9 @@ all other terms of that type are connected to it by a path.
 \begin{code}
     is-contr : (A : 𝒰) → 𝒰
     is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
+
+    is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
+    is-hae-is-contr = {!!}
 \end{code}
 %
 A type \AgdaSymbol{A} is a proposition, if all pairs of terms of that type are
@@ -667,6 +692,18 @@ connected by a path. Such a type can have at most one inhabitant.
 \begin{code}
     is-prop : (A : 𝒰) → 𝒰
     is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
+
+    is-set : (A : 𝒰) → 𝒰
+    is-set A = Π[ a ∶ A ] Π[ b ∶ A ] is-prop (a == b)
+
+    prop-is-set : {A : 𝒰} → is-prop A → is-set A
+    prop-is-set φ a b p q = {!!}
+
+    is-hae-is-prop : {A B : 𝒰} {f : A → B} → is-prop (is-hae f)
+    is-hae-is-prop = {!!}
+
+    eqv= : {A B : 𝒰} {eqv eqv' : A ≃ B} → (pr₁ eqv == pr₁ eqv') → eqv == eqv'
+    eqv= φ = dpair= (φ , is-hae-is-prop _ _)
 \end{code}
 
 Any type can be truncated to a proposition by freely adding paths. This is the
@@ -718,13 +755,55 @@ fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
 \AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
 \AgdaSymbol{(T, ∣ refl T ∣)}.
 
-The following is a consequence: \AgdaSymbol{Ω(BAut(T)) ≃ Aut(T)}.
+\begin{code}
+    BAut : (T : 𝒰) → 𝒰
+    BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
+
+    b₀ : {T : 𝒰} → BAut T
+    b₀ {T} = T , ∣ ide T ∣
+
+    tpt-eqv-pr₁ : {T : 𝒰} {v w : BAut T} (p : v == w)
+                → pr₁ (tpt-eqv pr₁ p) == transport id (dpair=-e₁ p)
+    tpt-eqv-pr₁ (refl v) = refl id
+
+    is-univ-fib-pr₁ : {T : 𝒰} → is-univ-fib pr₁
+    is-univ-fib-pr₁ (T , q) (T' , q') = qinv-is-hae (g , η , ε)
+      where g : T ≃ T' → T , q == T' , q'
+            g eqv = dpair= (ua eqv , ident)
+            η : g ∘ tpt-eqv pr₁ ∼ id
+            η (refl ._) = ap dpair= ( dpair= (ua-ide
+                                    , prop-is-set (λ _ _ → ident) _ _ _ _))
+            ε : tpt-eqv pr₁ ∘ g ∼ id
+            ε eqv = eqv= ( tpt-eqv-pr₁ (dpair= (ua eqv , ident))
+                         ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
+                         ◾ ua-β₁ eqv )
+\end{code}
+
+As a consequence, we have the following theorem:
+\AgdaSymbol{Ω(BAut(T)) ≃ Aut(T)} for any type \AgdaSymbol{T : 𝒰}.
+
+\begin{code}
+    Ω : (T : 𝒰) → (t : T) → 𝒰
+    Ω T t = t == t
+
+    ΩBAut≃Aut[_] : (T : 𝒰) → (Ω (BAut T) b₀) ≃ (T ≃ T)
+    ΩBAut≃Aut[ T ] = tpt-eqv pr₁ , is-univ-fib-pr₁ b₀ b₀
+\end{code}
+
+It remains to check that \AgdaSymbol{BAut T} is the same as our
+singleton universe \AgdaSymbol{Ũ[ T ]}. This follows by univalence and
+the universal property of truncation.
+
+\begin{code}
+    BAut≃Ũ[_] : (T : 𝒰) → BAut T ≃ pr₁ Ũ[ T ]
+    BAut≃Ũ[ T ] = ?
+\end{code}
 
 \subsection{The subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
 
-We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the next
-section. \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is a set with
-two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
+We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the
+next section. \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
+a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
 \begin{code}
     data 𝟚 : 𝒰 where
@@ -739,9 +818,10 @@ univalent fibration. With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))
 we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
 Pi2.
 
-However, the problem is easier for \AgdaSymbol{𝟚}, because \AgdaSymbol{Aut(𝟚) ≃
-𝟚}, which gives the following easy lemmas for 1-paths and 2-paths on
-\AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and \AgdaSymbol{all-2-paths}.
+However, the problem is easier for \AgdaSymbol{𝟚}, because
+\AgdaSymbol{Aut(𝟚) ≃ 𝟚}, which gives the following easy lemmas for
+1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and
+\AgdaSymbol{all-2-paths}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
