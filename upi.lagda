@@ -563,10 +563,10 @@ data _↔₂_ : {A B : 𝑼} → (A ↔₁ B) → (A ↔₁ B) → 𝒰 where
   `!     : {A B : 𝑼} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q
   !₂_      : {A B : 𝑼} {p q : A ↔₁ B} → (u : p ↔₂ q) → q ↔₂ p
   _⊙₂_   : {A B : 𝑼} {p q r : A ↔₁ B} → (u : p ↔₂ q) (v : q ↔₂ r) → (p ↔₂ r)
-  _□₂_   : {A B C : 𝑼} {p q : A ↔₁ B} {r s : B ↔₁ C} 
+  _□₂_   : {A B C : 𝑼} {p q : A ↔₁ B} {r s : B ↔₁ C}
          → (u : p ↔₂ q) (v : r ↔₂ s) → (p ⊙₁ r) ↔₂ (q ⊙₁ s)
 
-data _↔₃_ {A B : 𝑼} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where  
+data _↔₃_ {A B : 𝑼} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
   `trunc : u ↔₃ v
 \end{code}
 
@@ -607,7 +607,7 @@ canonical `not = NOT , `id₂
 canonical (!₁ c) with canonical c
 ... | ID , c↔₂id = ID , (`! c↔₂id ⊙₂ `!id)
 ... | NOT , c↔₂not = NOT , (`! c↔₂not ⊙₂ `!not)
-canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂ 
+canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 ... | ID , c₁↔₂id | ID , c₂↔₂id = ID , ((c₁↔₂id □₂ c₂↔₂id) ⊙₂ `idl `id)
 ... | ID , c₁↔₂id | NOT , c₂↔₂not = NOT , ((c₁↔₂id □₂ c₂↔₂not) ⊙₂ `idl `not)
 ... | NOT , c₁↔₂not | ID , c₂↔₂id = NOT , ((c₁↔₂not □₂ c₂↔₂id) ⊙₂ `idr `not)
@@ -876,7 +876,7 @@ BAut≃Ũ[ T ] = {!!}
 \subsection{The subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
 
 We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the
-next section. 
+next section.
 % \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
 % a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
@@ -1066,22 +1066,22 @@ a (reversible) programming language distilled from such ideas.
 What is more surprising is how this also turns out to be a sound
 and complete language for describing the univalent universe $\bracket{\bt}$.
 
-\paragraph*{The infinite real projective space \AgdaSymbol{ℝP^∞}}
+\paragraph*{The infinite real projective space \AgdaSymbol{$ℝP^∞$}}
 
 In~\cite{buchholtz2017real}, Buchholtz and Rijke use the ``type of two element
-sets'', \AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == 𝕊^0 ∥}, where \AgdaSymbol{𝕊^0} is the
+sets'', \AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == $𝕊^0$ ∥}, where \AgdaSymbol{$𝕊^0$} is the
 0-sphere, or the 0-iterated suspension of \AgdaSymbol{𝟚}, that is,
 \AgdaSymbol{𝟚} itself. They construct the infinite real projective space
-\AgdaSymbol{ℝP^∞} using universal covering spaces, and show that it is homotopy
-equivalent to the Eilenberg-Maclane space \AgdaSymbol{K(ℤ/2ℤ,1)} which
+\AgdaSymbol{$ℝP^∞$} using universal covering spaces, and show that it is
+homotopy equivalent to the Eilenberg-Maclane space \AgdaSymbol{K(ℤ/2ℤ,1)} which
 classifies all the 0-sphere bundles. Our reversible programming language is
 exactly the syntactic presentation of this classifying space.
 
 If we extend our language to all finite types, we would get a representation of
 \AgdaSymbol{Σ[ n ∶ ℕ ] K(ℤ/nℤ, 1)}, which is not well studied classically. Also,
-if we choose \AgdaSymbol{𝕊^1} instead of \AgdaSymbol{𝕊^0}, we get the infinite
-complex projective space \AgdaSymbol{ℂP^∞}, but it remains to investigate what
-kind of reversible programming language this would lead to.
+if we choose \AgdaSymbol{$𝕊^1$} instead of \AgdaSymbol{$𝕊^0$}, we get the
+infinite complex projective space \AgdaSymbol{$ℂP^∞$}, but it remains to
+investigate what kind of reversible programming language this would lead to.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
