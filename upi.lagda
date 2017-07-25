@@ -1057,7 +1057,7 @@ $\lambda$-calculus arise from Cartesian Closed Categories.
 
 On can also flip this around, and use the $\lambda$-calculus as the
 internal language for Cartesian Closed Categories.  However, as Shulman
-explains well in his draft book~\cite{Shullman} on approaching Categorical
+explains well in his draft book~\cite{shulman} on approaching Categorical
 Logic via Type Theory, this works for many other kinds of categories.  As
 we are interested in \emph{reversibility}, it is most natural to look at
 Groupoids.  Thus $\PiTwo$ represents the simplest non-trivial case of
@@ -1065,6 +1065,23 @@ a (reversible) programming language distilled from such ideas.
 
 What is more surprising is how this also turns out to be a sound
 and complete language for describing the univalent universe $\bracket{\bt}$.
+
+\paragraph*{The infinite real projective space \AgdaSymbol{ℝP^∞}}
+
+In~\cite{buchholtz2017real}, Buchholtz and Rijke use the ``type of two element
+sets'', \AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == 𝕊^0 ∥}, where \AgdaSymbol{𝕊^0} is the
+0-sphere, or the 0-iterated suspension of \AgdaSymbol{𝟚}, that is,
+\AgdaSymbol{𝟚} itself. They construct the infinite real projective space
+\AgdaSymbol{ℝP^∞} using universal covering spaces, and show that it is homotopy
+equivalent to the Eilenberg-Maclane space \AgdaSymbol{K(ℤ/2ℤ,1)} which
+classifies all the 0-sphere bundles. Our reversible programming language is
+exactly the syntactic presentation of this classifying space.
+
+If we extend our language to all finite types, we would get a representation of
+\AgdaSymbol{Σ[ n ∶ ℕ ] K(ℤ/nℤ, 1)}, which is not well studied classically. Also,
+if we choose \AgdaSymbol{𝕊^1} instead of \AgdaSymbol{𝕊^0}, we get the infinite
+complex projective space \AgdaSymbol{ℂP^∞}, but it remains to investigate what
+kind of reversible programming language this would lead to.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Conclusion}
