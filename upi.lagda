@@ -248,15 +248,17 @@ at the conference, it became apparent, at an intuitive and informal level, that
 the two papers had strong similarities. Formalizing the precise connection was
 far from obvious, however.
 
-In this paper we report on a formal connection between appropriately formulated
+Here we report on a formal connection between appropriately formulated
 reversible languages on one hand and univalent universes on the other. In the
 next section, we give a rational reconstruction of $\Pi$ focusing on a small
 ``featherweight'' fragment. In Sec.~\ref{sec:univalent}, we review
 \emph{univalent fibrations} which allow us to give formal presentations of
 ``small'' univalent universes. In Sec.~\ref{sec:correspondence} we state and prove
 the formal connection between the systems presented in the preceding two
-sections. Sec.~\ref{sec:conclusion} puts our work in a larger context, discusses
-related and future work, and concludes.
+sections.  Sec.~\ref{sec:discussion} discusses the implications of our work
+and situates it into the broader context of the existing literature.
+%% Sec.~\ref{sec:conclusion} right now is a stub, and may not
+%% survive?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{A Simple Reversible Programming Languages}
@@ -497,14 +499,12 @@ languages, we present in full detail a small $\Pi$-based language
 which we will use in the formalization in the rest of the paper. The
 language is the restriction of $\Pi$ to the case of just one
 type $\mathbb{2}$
+{\small
 \begin{code}
 data 𝟚 : 𝒰 where 0₂ 1₂ : 𝟚
 \end{code}
+}
 The syntax of \PiTwo is given below:
-% \jacques{the code above uses $\odot$ for 1-composition,
-% $\boxdot$ for parallel 2-composition of $\odot$, while the
-% code below uses $\circ$ and $\odot$ respectively, which is
-% quite confusing.  We should pick one notation.}
 
 %% \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
 %% (\textit{Types}) & \tau &::=& \bt \\
@@ -539,6 +539,7 @@ infix 4 _⊙₁_ _⊙₂_
 \end{code}
 }
 
+{\small
 \begin{code}
 data 𝑼 : 𝒰 where `𝟚 : 𝑼
 
@@ -569,7 +570,11 @@ data _↔₂_ : {A B : 𝑼} → (A ↔₁ B) → (A ↔₁ B) → 𝒰 where
 data _↔₃_ {A B : 𝑼} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
   `trunc : u ↔₃ v
 \end{code}
-
+}
+\jacques{The text below doesn't make sense anymore as the
+``syntactic categories'' were named in the above
+commented out array, but have different names in the Agda
+code.}
 The syntactic category $c$ is that of 1-combinators denoting
 reversible programs, type isomorphisms, permutations, or equivalences
 depending on one's favorite interpretation. There are two primitive
@@ -591,16 +596,34 @@ establishes, the above set is \emph{complete}:
   representation as either $\AgdaFunction{`id}$ or $\AgdaFunction{`not}$ and the set of 2-combinators is rich
   enough to normalize $c$ to its canonical representation.
 \end{lemma}
+
+\noindent For example, composition of negation is equivalent to the identity:
+{\small
 \begin{code}
 not⊙₁not↔₂id : `not ⊙₁ `not ↔₂ `id
 not⊙₁not↔₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
+\end{code}
+}
 
+To achieve this, we need a type which encodes exactly this
+knowledge: \AgdaDatatype{Which} names the subset of
+\AgdaDatatype{↔₁} which are canonical forms.
+{\small
+\begin{code}
 data Which : 𝒰 where ID NOT : Which
 
 refine : (w : Which) → `𝟚 ↔₁ `𝟚
 refine ID = `id
 refine NOT = `not
+\end{code}
+}
 
+This in turn enables us to compute for any
+2-combinator $c$ (the name of) its canonical form, as
+well as a proof that $c$ is equivalent to its
+canonical form.
+{\small
+\begin{code}
 canonical : (c : `𝟚 ↔₁ `𝟚) → Σ[ c' ∶ Which ] (c ↔₂ (refine c'))
 canonical `id = ID , `id₂
 canonical `not = NOT , `id₂
@@ -613,6 +636,9 @@ canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 ... | NOT , c₁↔₂not | ID , c₂↔₂id = NOT , ((c₁↔₂not □₂ c₂↔₂id) ⊙₂ `idr `not)
 ... | NOT , c₁↔₂not | NOT , c₂↔₂not = ID , ((c₁↔₂not □₂ c₂↔₂not) ⊙₂ not⊙₁not↔₂id)
 \end{code}
+}
+It is worthwhile to note that the proof of \AgdaSymbol{canonical} does
+not use all the level 2 combinators.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Univalent Fibrations}
