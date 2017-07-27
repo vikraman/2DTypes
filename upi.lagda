@@ -848,17 +848,18 @@ eqv= φ = dpair= (φ , is-hae-is-prop _ _)
 }
 Any type can be truncated to a proposition by freely adding paths. This is the
 propositional truncation (or (-1)-truncation) which can be expressed as a higher
-inductive type. The type constructor \AgdaSymbol{∥\_∥} takes a type
+inductive type (HIT). The type constructor \AgdaSymbol{∥\_∥} takes a type
 \AgdaSymbol{A} as a parameter, and the point constructor \AgdaSymbol{∣\_∣}
 coerces terms of type \AgdaSymbol{A} to terms in the truncation. The path
 constructor \AgdaSymbol{ident} identifies any two points in the truncation,
-making it a proposition.
+making it a proposition.  We must do this as a \AgdaKeyword{postulate} as
+Agda does not yet support HITs.
 
 \begin{code}
 postulate
-  ∥_∥ : (A : 𝒰) → 𝒰
-  ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
-  ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
+    ∥_∥ : (A : 𝒰) → 𝒰
+    ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
+    ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
 
 ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
 ∥-∥-is-prop _ _ = ident
@@ -866,11 +867,11 @@ postulate
 %
 This makes \AgdaSymbol{∥ A ∥} the ``free'' proposition on any type
 \AgdaSymbol{A}. It can be viewed as the left adjoint to the forgetful functor
-from propositions to types. The recursion principle ensures that we can only
-eliminate a propositional truncation to a type that is a proposition.
+from propositions to types. The recursion principle (below) ensures that we can
+only eliminate a propositional truncation to a type that is a proposition.
 
 \begin{code}
-module _ {A : 𝒰} (P : 𝒰) (f : A → P) (φ : is-prop P) where
+module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
   postulate
     rec-∥-∥ : ∥ A ∥ → P
     rec-∥-∥-β : Π[ a ∶ A ] (rec-∥-∥ ∣ a ∣ == f a)
@@ -880,7 +881,8 @@ module _ {A : 𝒰} (P : 𝒰) (f : A → P) (φ : is-prop P) where
 
 Given any type \AgdaSymbol{T}, we can build a propositional predicate that only
 picks out \AgdaSymbol{T}. This lets us build up a singleton ``subuniverse'' of
-\AgdaSymbol{𝒰}, which is only inhabited by \AgdaSymbol{T}.
+\AgdaSymbol{𝒰}, which is only inhabited by \AgdaSymbol{T}.  We will eventually
+show that all such sub-universes are univalent.
 
 \begin{code}
 is-type : (T : 𝒰) → 𝒰 → 𝒰
@@ -894,6 +896,10 @@ The following lemma by Christensen gives a characterization of univalent
 fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
 \AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
 \AgdaSymbol{(T, ∣ refl T ∣)}.
+
+\jacques{Calling it pr₁, while technically correct, makes things hard to
+understand.  It's not ``first projection'' which is a univalent fibration,
+but rather ``code-of'' (or even ``code'').  Can we rename this?}
 
 Towards proving that, we start by defining the automorphism group of a space in
 an $(∞, 1)$-topos. By working in the internal language, that is, in HoTT, we can
@@ -920,7 +926,13 @@ b₀ {T} = T , ∣ ide T ∣
 tpt-eqv-pr₁ : {T : 𝒰} {v w : BAut T} (p : v == w)
             → pr₁ (tpt-eqv pr₁ p) == transport id (dpair=-e₁ p)
 tpt-eqv-pr₁ (refl v) = refl id
+\end{code}
 
+Putting these ingredients together, we can show that the
+code of a singleton universe \AgdaSymbol{Ũ[ T ]} is a
+univalent fibration.
+
+\begin{code}
 is-univ-fib-pr₁ : {T : 𝒰} → is-univ-fib pr₁
 is-univ-fib-pr₁ (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
@@ -934,9 +946,11 @@ is-univ-fib-pr₁ (T , q) (T' , q') = qinv-is-hae (g , η , ε)
                      ◾ ua-β₁ eqv )
 \end{code}
 
-As a consequence, we have the following theorem:
+As a consequence, we have that the loopspace of the delooping the group
+of automorphisms of a type \AgdaSymbol{T} is equivalent to the
+type \AgdaSymbol{Aut(T)}.
 %
-\AgdaSymbol{Ω(BAut(T)) ≃ Aut(T)} for any type \AgdaSymbol{T : 𝒰}.
+% \AgdaSymbol{Ω(BAut(T)) ≃ Aut(T)} for any type \AgdaSymbol{T : 𝒰}.
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
@@ -947,12 +961,16 @@ It remains to check that \AgdaSymbol{BAut T} is the same as our
 singleton universe \AgdaSymbol{Ũ[ T ]}. This follows by univalence and
 the universal property of truncation.
 
+\AgdaHide{
+% Only show this if you will provide the proof - otherwise the
+% statement is already in the paragraph above.
 \begin{code}
 BAut≃Ũ[_] : (T : 𝒰) → BAut T ≃ pr₁ Ũ[ T ]
 BAut≃Ũ[ T ] = {!!}
 \end{code}
-
+}
 \subsection{The subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
+\jacques{I find it confusing that this has no tilde on the U}.
 
 We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the
 next section.
@@ -965,47 +983,50 @@ U[𝟚] = pr₁ Ũ[ 𝟚 ]
 
 Instantiating the lemma from the previous section with \AgdaSymbol{𝟚}, we have
 that \AgdaSymbol{U[𝟚]} is a univalent subuniverse, with \AgdaSymbol{pr₁} the
-univalent fibration.
-By the property of univalent fibration we have \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}, where
+univalent fibration. By the property of being a univalent fibration we have
+that \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}, where
 \begin{code}
 𝟚₀ = (𝟚 , ∣ ide 𝟚 ∣)
 \end{code}
-Since \AgdaSymbol{(𝟚 ≃ 𝟚) ≃ 𝟚} (see~\cite{hottbook} exercise 2.13), so we have
+Since \AgdaSymbol{(𝟚 ≃ 𝟚) ≃ 𝟚} (see~\cite{hottbook} exercise 2.13), we have
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
 \begin{code}
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
-Therefore we know that there are only two distinct 1-path, let's call them
+Therefore we know that there are only two distinct 1-path. Calling them
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
 \begin{code}
   id𝟚 not𝟚 : 𝟚₀ == 𝟚₀
 \end{code}
-and we have
+we have this decomposition
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
 \begin{code}
   all-1-path : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
-For 2-path, since \AgdaSymbol{𝟚} is set so we have
+For 2-path, \AgdaSymbol{𝟚} is a set, with witness
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
 \begin{code}
   𝟚is-set : is-set 𝟚
 \end{code}
-It is easy to obtain
+From this, tt is easy to obtain that \AgdaSymbol{𝟚₀ == 𝟚₀} is a set
+and that 2-paths are contractible.
 \begin{code}
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
 Ω𝟚₀is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚is-set
 all-2-path : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
 all-2-path {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
-In section~\ref{sec:correspondence} we will use \AgdaSymbol{all-1-path} and \AgdaSymbol{all-2-path}
+
+In next section, we will use \AgdaSymbol{all-1-path}
+and \AgdaSymbol{all-2-path}
 to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \PiTwo.
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
 %% we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
