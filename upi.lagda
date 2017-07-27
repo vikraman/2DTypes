@@ -1073,24 +1073,38 @@ postulate
 --               ◾ ap (λ x → p=r ◾ x ◾ ! q=r) (◾assoc _ _ _)
 \end{code}
 }
-Level-1 :
+At level $0$, the correspondence is straightforward, as both
+\AgdaSymbol{𝑼} and \AgdaSymbol{BAut 𝟚} are singletons.
 \begin{code}
-
 ⟦_⟧ : 𝑼 → BAut 𝟚
 ⟦ `𝟚 ⟧ = 𝟚₀
 
+⟦_⟧⁻¹ : BAut 𝟚 → 𝑼
+⟦ 𝟚₀ ⟧⁻¹ = `𝟚
+\end{code}
+
+Level $1$ is the first non-trivial level. To each syntactic combinator
+$c$ of \AgdaSymbol{A ↔₁ B}, we can associate a path, and vice-versa.
+
+\begin{code}
 ⟦_⟧₁ : {A B : 𝑼} → A ↔₁ B → ⟦ A ⟧ == ⟦ B ⟧
 ⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ↔₁ `𝟚
 \end{code}
 
+Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-path} is
+key to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
 \AgdaHide{
 \begin{code}
 ⟦ p ⟧₁  = {!!}
 ⟦ p ⟧₁⁻¹ = {!!}
 \end{code}
 }
-Level-2:
 
+Level $2$ is tricky.  We know that all self-paths (through
+\AgdaSymbol{all-2-paths}) are trivial.  In fact, all of them are.
+Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of work.
+$\AgdaSymbol{⟦\_⟧₂⁻¹}$ proceeds by enumerating $1$-paths, which makes
+things straightforward.
 \begin{code}
 ⟦_⟧₂ : {A B : 𝑼} {p q : A ↔₁ B} → (u : p ↔₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
 ⟦_⟧₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⟦ p ⟧₁⁻¹ ↔₂ ⟦ q ⟧₁⁻¹
@@ -1103,27 +1117,50 @@ Level-2:
 \end{code}
 }
 
-Level-3:
+Level $3$ is trivial -- by fiat.
 \begin{code}
 ⟦_⟧₃ : {A B : 𝑼} {p q : A ↔₁ B} {u v : p ↔₂ q} → (α : u ↔₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
 ⟦_⟧₃⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ↔₃ ⟦ v ⟧₂⁻¹
 \end{code}
 
-\AgdaHide{
 \begin{code}
-⟦_⟧₃ = {!!}
-⟦ α ⟧₃⁻¹ = `trunc
+⟦ `trunc ⟧₃ = refl _
+⟦ _ ⟧₃⁻¹ = `trunc
 \end{code}
-}
+
+Naturally, all of the preceding work would be much less interesting if
+the correspondences were not coherent with each other.  First, they are
+sound:
 \begin{code}
 ⟦⟦_⟧₁⟧₁⁻¹ : (p : `𝟚 ↔₁ `𝟚) → p ↔₂ ⟦ ⟦ p ⟧₁ ⟧₁⁻¹
 ⟦⟦_⟧₁⁻¹⟧₁ : (p : 𝟚₀ == 𝟚₀) → p == ⟦ ⟦ p ⟧₁⁻¹ ⟧₁
-completeness₁ : {p q : `𝟚 ↔₁ `𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ↔₂ q
-completeness₁⁻¹ : {p q : 𝟚₀ == 𝟚₀} → ⟦ p ⟧₁⁻¹ ↔₂ ⟦ q ⟧₁⁻¹ → p == q
+\end{code}
 
+But also complete.  Normally, completeness is a rather difficult result to
+prove.  But in our case, all the infrastructure above means that these
+are straightforward.  Key is \emph{reversibility}.  In the first proof
+\AgdaSymbol{!₂} is essential, with \AgdaSymbol{!} being essential in
+the second.
+\begin{code}
+completeness₁ : {p q : `𝟚 ↔₁ `𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ↔₂ q
+completeness₁ {p} {q} u = ⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ u ⟧₂⁻¹ ⊙₂ !₂ ⟦⟦ q ⟧₁⟧₁⁻¹)
+
+completeness₁⁻¹ : {p q : 𝟚₀ == 𝟚₀} → ⟦ p ⟧₁⁻¹ ↔₂ ⟦ q ⟧₁⁻¹ → p == q
+completeness₁⁻¹ {p} {q} u = ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ u ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
+\end{code}
+
+Level $2$ soundness is trickier to state, mostly because the types involved in
+$\AgdaSymbol{⟦ ⟦ u ⟧₂ ⟧₂⁻¹}$ and $\AgdaSymbol{⟦ ⟦ u ⟧₂⁻¹ ⟧₂}$ are non-trivial.  For
+combinators, the result is trivial, again by fiat.  For paths, enumeration of
+1-paths reduces the complexity of the problem to ``unwinding'' complex expressions
+for identity paths.
+\begin{code}
 ⟦⟦_⟧₂⟧₂⁻¹ : {p q : `𝟚 ↔₁ `𝟚} (u : p ↔₂ q) → u ↔₃ (⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ ⟦ u ⟧₂ ⟧₂⁻¹ ⊙₂ (!₂ ⟦⟦ q ⟧₁⟧₁⁻¹)))
 ⟦⟦_⟧₂⁻¹⟧₂ : {p q : 𝟚₀ == 𝟚₀} (u : p == q) → u == ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ ⟦ u ⟧₂⁻¹ ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
+\end{code}
 
+Level $2$ completeness offers no new difficulties.
+\begin{code}
 completeness₂ : {p q : `𝟚 ↔₁ `𝟚} {u v : p ↔₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ↔₃ v
 completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⟦ u ⟧₂⁻¹ ↔₃ ⟦ v ⟧₂⁻¹ → u == v
 \end{code}
@@ -1136,9 +1173,6 @@ completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⟦ u ⟧�
 ⟦⟦ u ⟧₂⟧₂⁻¹ = `trunc
 
 ⟦⟦_⟧₂⁻¹⟧₂ = {!!}
-
-completeness₁ {p} {q} u = ⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ u ⟧₂⁻¹ ⊙₂ !₂ ⟦⟦ q ⟧₁⟧₁⁻¹)
-completeness₁⁻¹ {p} {q} u = ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ u ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
 
 completeness₂ u = `trunc
 completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⟦ u ⟧₂⁻¹⟧₂ ◾ ap (λ x → ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ x ◾ ! ⟦⟦ q ⟧₁⁻¹⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⟦ v ⟧₂⁻¹⟧₂)
