@@ -899,14 +899,58 @@ U[𝟚] = pr₁ Ũ[ 𝟚 ]
 
 Instantiating the lemma from the previous section with \AgdaSymbol{𝟚}, we have
 that \AgdaSymbol{U[𝟚]} is a univalent subuniverse, with \AgdaSymbol{pr₁} the
-univalent fibration. With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
-we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
-\PiTwo.
+univalent fibration.
+By the property of univalent fibration we have \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}, where
+\begin{code}
+𝟚₀ = (𝟚 , ∣ ide 𝟚 ∣)
+\end{code}
+Since \AgdaSymbol{(𝟚 ≃ 𝟚) ≃ 𝟚} (see~\cite{hottbook} exercise 2.13), so we have
+\AgdaHide{\begin{code}
+postulate
+\end{code}}
+\begin{code}
+  𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
+\end{code}
+Therefore we know that there are only two distinct 1-path, let's call them
+\AgdaHide{\begin{code}
+postulate
+\end{code}}
+\begin{code}
+  id𝟚 not𝟚 : 𝟚₀ == 𝟚₀
+\end{code}
+and we have
+\AgdaHide{\begin{code}
+postulate
+\end{code}}
+\begin{code}
+  all-1-path : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
+\end{code}
+For 2-path, since \AgdaSymbol{𝟚} is set so we have
+\AgdaHide{\begin{code}
+postulate
+\end{code}}
+\begin{code}
+  𝟚is-set : is-set 𝟚
+\end{code}
+It is easy to obtain
+\begin{code}
+Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
+Ω𝟚₀is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚is-set
+all-2-path : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
+all-2-path {p} γ = Ω𝟚₀is-set p p γ (refl p)
+\end{code}
+In section~\ref{sec:correspondence} we will use \AgdaSymbol{all-1-path} and \AgdaSymbol{all-2-path}
+to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \PiTwo.
+%% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
+%% we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
+%% \PiTwo.
 
-However, the problem is easier for \AgdaSymbol{𝟚}, because
-\AgdaSymbol{Aut(𝟚) ≃ 𝟚}, which gives the following easy lemmas for
-1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and
-\AgdaSymbol{all-2-paths}.
+%% However, the problem is easier for \AgdaSymbol{𝟚}, because
+%% \AgdaSymbol{Aut(𝟚) ≃ 𝟚}, which gives the following easy lemmas for
+%% 1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and
+%% \AgdaSymbol{all-2-paths}.
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
@@ -944,7 +988,6 @@ postulate
 }
 Level-1 :
 \begin{code}
-𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
 
 ⟦_⟧ : 𝑼 → BAut 𝟚
 ⟦ `𝟚 ⟧ = 𝟚₀
