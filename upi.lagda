@@ -227,9 +227,9 @@ syntax PathOver P p u v = u == v [ P ↓ p ]
 
 apd : {A : 𝒰} {P : A → 𝒰} {x y : A} (f : (a : A) → P a) (p : x == y) → f x == f y [ P ↓ p ]
 apd f (refl x) = refl (f x)
-
 \end{code}
 }
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
@@ -575,6 +575,7 @@ data _↔₃_ {A B : 𝑼} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
 ``syntactic categories'' were named in the above
 commented out array, but have different names in the Agda
 code.}
+
 The syntactic category $c$ is that of 1-combinators denoting
 reversible programs, type isomorphisms, permutations, or equivalences
 depending on one's favorite interpretation. There are two primitive
@@ -645,19 +646,26 @@ not use all the level 2 combinators.
 \label{sec:univalent}
 
 We work in intensional type theory with one univalent universe \AgdaSymbol{𝒰}
-closed under propositional truncation.
+closed under propositional truncation.  The rest of this section is
+devoted to explaining what that means.  We follow the terminology used
+in~\cite{hottbook}.  For brevity, we will often given just signatures and
+elide the body\footnote{The full code can be found in our github
+repository; for this section, our work is essentially isomorphic to
+the HoTT Agda library, also on github.}.
 
 \subsection{Equivalences}
 
-Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function \AgdaSymbol{f
-: A → B} is an quasi-inverse, if
+Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function
+\AgdaSymbol{f : A → B} is a quasi-inverse, if there is another
+function \AgdaSymbol{g : B → A} which acts as both a left and
+right inverse to \AgdaSymbol{f}.
 %
 \begin{code}
 is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
 is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
 %
-To make this type contractible, we need to adjointify it.
+To make this type contractible, we need to
 %
 \begin{code}
 is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
@@ -665,8 +673,12 @@ is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ]
                    Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
 
 qinv-is-hae : {A B : 𝒰} {f : A → B} → is-qinv f → is-hae f
+\end{code}
+\AgdaHide{
+\begin{code}
 qinv-is-hae = {!!}
 \end{code}
+}
 %
 Then we can define a type of equivalences between two types.
 %
@@ -681,7 +693,7 @@ A type family \AgdaSymbol{P} over a type \AgdaSymbol{A} is a fibration with base
 space \AgdaSymbol{A}, and \AgdaSymbol{P x} the fiber over \AgdaSymbol{x}. The
 total space is given by \AgdaSymbol{Σ[ x ∶ A ] P x}. The path lifting property
 can be defined by path induction.
-%
+
 \begin{code}
 lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
      → (u : P x) (p : x == y)
@@ -689,18 +701,21 @@ lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
 lift u (refl x) = refl (x , u)
 \end{code}
 
+Because the pattern \AgdaSymbol{transport P p u == v} recurs often, we define
+the syntax \AgdaSymbol{u == v [ P ↓ p ]} as a synonym.  It is important to
+note the ``flip'' in the syntax.  Such paths in the total space induce
+other paths:
+
 \begin{code}
 module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
   dpair= : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ])
          → (a , pa) == (b , pb)
   dpair= (refl a , refl pa) = refl (a , pa)
 
-module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
   dpair=-β₁ : (w : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ]))
             → (ap pr₁ ∘ dpair=) w == pr₁ w
   dpair=-β₁ (refl a , refl pa) = refl (refl a)
 
-module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
   dpair=-e₁ : (a , pa) == (b , pb) → a == b
   dpair=-e₁ = ap pr₁
 \end{code}
@@ -709,6 +724,13 @@ module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
 
 The \AgdaSymbol{transport} operation lifts paths to equivalences. By
 transporting identity, we can convert a path to an equivalence.
+
+\jacques{But transport does not occur below at all, not even
+implicitly.  In fact, the 4 functions below are so trivial that
+they could be collapsed into 1 without loss of comprehension.
+Compared to how complex a lot of the rest of this is (such as
+the previous sub-section), what's the point of taking so much
+space with this?}
 
 \begin{code}
 idh : {A : 𝒰} {P : A → 𝒰} → (f : Π[ a ∶ A ] P a) → f ∼ f
@@ -729,26 +751,30 @@ id-to-eqv = tpt-eqv id
 A type family (fibration) \AgdaSymbol{P : A → 𝒰} is univalent if the map
 \AgdaSymbol{tpt-eqv p} is an equivalence, that is, paths in the base space are
 \emph{equivalent} to equivalences in the fiber. In general, univalent fibrations
-are defined by Kapulkin, Lumsdaine and Voevodsky in the SSet model. The
-univalence axiom (for \AgdaSymbol{𝒰}) is a specialization of this to the
-identity fibration.
+are defined by Kapulkin and Lumsdaine~\cite{SimplicialModel} in the simplicial
+set model (SSet).
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
-is-univ-fib {A} P = (a b : A) → is-hae (tpt-eqv P {a} {b})
+is-univ-fib {A} P = ∀ (a b : A) → is-hae (tpt-eqv P {a} {b})
 \end{code}
 %
-We postulate the univalence axiom as follows.
+The univalence axiom (for \AgdaSymbol{𝒰}) is a specialization
+of \AgdaSymbol{is-univ-fib} to the identity fibration.  We
+postulate this as an axiom.  We also give a short-form
+\AgdaSymbol{ua} for getting a path from an equivalence.
 %
 \begin{code}
 module _ {A B : 𝒰} where
   postulate
-    univalence : {A B : 𝒰} → is-hae (id-to-eqv {A} {B})
+    univalence : is-hae (id-to-eqv {A} {B})
 
-module _ {A B : 𝒰} where
   ua : A ≃ B → A == B
   ua = pr₁ univalence
+\end{code}
 
+\AgdaHide{
+\begin{code}
   ua-β : id-to-eqv ∘ ua ∼ id
   ua-β = pr₁ (pr₂ (pr₂ univalence))
 
@@ -761,10 +787,11 @@ module _ {A B : 𝒰} where
 ua-ide : {A : 𝒰} → ua (ide A) == refl A
 ua-ide {A} = ua-η (refl A)
 \end{code}
+}
 %
-We can define universes a lá Tarski by having a code for the universe
-\AgdaSymbol{U} and an interpretation function \AgdaSymbol{El} into
-\AgdaSymbol{𝒰}. Then we define a univalent universe as follows.
+We can define universes a l\`{a} Tarski by having a code \AgdaSymbol{U}
+for the universe \AgdaSymbol{𝒰}, and an interpretation function \AgdaSymbol{El} into
+\AgdaSymbol{𝒰}. This enables us to define a univalent universe as follows.
 
 \begin{code}
 Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
@@ -781,13 +808,23 @@ all other terms of that type are connected to it by a path.
 \begin{code}
 is-contr : (A : 𝒰) → 𝒰
 is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
+\end{code}
 
+Equivalences are contractible (assuming univalence):
+\begin{code}
 is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
+\end{code}
+\AgdaHide{
+\begin{code}
 is-hae-is-contr = {!!}
 \end{code}
+}
 %
-A type \AgdaSymbol{A} is a proposition, if all pairs of terms of that type are
-connected by a path. Such a type can have at most one inhabitant.
+A type \AgdaSymbol{A} is a \emph{proposition} if all pairs of terms of that type are
+connected by a path. Such a type can have at most one inhabitant - in other
+words, it is contractible.  A type \AgdaSymbol{A} is a \emph{set} if for any
+two terms $a, b$ of \AgdaSymbol{A}, its type of paths \AgdaSymbol{a == b} is
+a proposition.
 
 \begin{code}
 is-prop : (A : 𝒰) → 𝒰
@@ -795,7 +832,10 @@ is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
 
 is-set : (A : 𝒰) → 𝒰
 is-set A = Π[ a ∶ A ] Π[ b ∶ A ] is-prop (a == b)
+\end{code}
 
+\AgdaHide{
+\begin{code}
 prop-is-set : {A : 𝒰} → is-prop A → is-set A
 prop-is-set φ a b p q = {!!}
 
@@ -805,7 +845,7 @@ is-hae-is-prop = {!!}
 eqv= : {A B : 𝒰} {eqv eqv' : A ≃ B} → (pr₁ eqv == pr₁ eqv') → eqv == eqv'
 eqv= φ = dpair= (φ , is-hae-is-prop _ _)
 \end{code}
-
+}
 Any type can be truncated to a proposition by freely adding paths. This is the
 propositional truncation (or (-1)-truncation) which can be expressed as a higher
 inductive type. The type constructor \AgdaSymbol{∥\_∥} takes a type
