@@ -159,7 +159,7 @@ $\displaystyle
 \begin{code}
 {-# OPTIONS --without-K --type-in-type --allow-unsolved-metas #-}
 module upi where
-import Level as L
+
 𝒰 = Set
 
 record Σ (A : 𝒰) (B : A → 𝒰) : 𝒰 where
@@ -176,7 +176,7 @@ infix 2 _×_
 _×_ : (A B : 𝒰) → 𝒰
 A × B = Σ A (λ _ → B)
 
-data _+_ {a b} (A : Set a) (B : Set b) : Set (a L.⊔ b) where
+data _+_ (A B : 𝒰) : 𝒰 where
   inl : (x : A) → A + B
   inr : (y : B) → A + B
 
