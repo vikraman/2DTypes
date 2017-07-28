@@ -499,7 +499,7 @@ languages, we present in full detail a small $\Pi$-based language
 which we will use in the formalization in the rest of the paper. The
 language is the restriction of $\Pi$ to the case of just one
 type $\mathbb{2}$
-{\small
+{
 \begin{code}
 data 𝟚 : 𝒰 where 0₂ 1₂ : 𝟚
 \end{code}
@@ -539,7 +539,7 @@ infix 4 _⊙₁_ _⊙₂_
 \end{code}
 }
 
-{\small
+{
 \begin{code}
 data 𝑼 : 𝒰 where `𝟚 : 𝑼
 
@@ -599,7 +599,7 @@ establishes, the above set is \emph{complete}:
 \end{lemma}
 
 \noindent For example, composition of negation is equivalent to the identity:
-{\small
+{
 \begin{code}
 not⊙₁not↔₂id : `not ⊙₁ `not ↔₂ `id
 not⊙₁not↔₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
@@ -609,7 +609,7 @@ not⊙₁not↔₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
 To achieve this, we need a type which encodes exactly this
 knowledge: \AgdaDatatype{Which} names the subset of
 \AgdaDatatype{↔₁} which are canonical forms.
-{\small
+{
 \begin{code}
 data Which : 𝒰 where ID NOT : Which
 
@@ -623,7 +623,7 @@ This in turn enables us to compute for any
 2-combinator $c$ (the name of) its canonical form, as
 well as a proof that $c$ is equivalent to its
 canonical form.
-{\small
+{
 \begin{code}
 canonical : (c : `𝟚 ↔₁ `𝟚) → Σ[ c' ∶ Which ] (c ↔₂ (refine c'))
 canonical `id = ID , `id₂
