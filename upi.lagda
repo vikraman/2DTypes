@@ -700,11 +700,14 @@ lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
      → (x , u) == (y , transport P p u)
 lift u (refl x) = refl (x , u)
 \end{code}
-
+%
 Because the pattern \AgdaSymbol{transport P p u == v} recurs often, we define
-the syntax \AgdaSymbol{u == v [ P ↓ p ]} as a synonym.  It is important to
-note the ``flip'' in the syntax.  Such paths in the total space induce
-other paths:
+the syntax \AgdaSymbol{u == v [ P ↓ p ]} as a synonym for it, which indicates
+the path in the fiber \AgdaSymbol{P} over \AgdaSymbol{u} and \AgdaSymbol{v},
+which lies over \AgdaSymbol{p}. This is essentially the \AgdaSymbol{PathOver}
+type pioneered by Licata and Brunerie in \cite{licata2015cubical}. It is
+important to note the ``flip'' in the syntax. Such paths in the total space
+induce other paths:
 
 \begin{code}
 module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
