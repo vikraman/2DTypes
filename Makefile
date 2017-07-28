@@ -9,7 +9,7 @@ upi.tex: upi.lagda
 cont: continuous
 
 continuous: upi.lagda
-	(while inotifywait -e close_write upi.lagda ; do agda --latex --latex-dir=. upi.lagda ; done &)
+	(while inotifywait upi.lagda ; do agda --latex --latex-dir=. upi.lagda ; done &)
 	latexmk -pvc -pdf -interaction=nonstopmode upi.tex
 
 clean:
