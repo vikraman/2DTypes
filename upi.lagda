@@ -805,14 +805,15 @@ is-univalent (U , El) = is-univ-fib El
 
 \subsection{Propositional Truncation}
 
-A type \AgdaSymbol{A} is contractible, if it has a center of contraction, and
-all other terms of that type are connected to it by a path.
+A type \AgdaSymbol{A} is \emph{contractible} (h-level 0, or (-2)-truncated), if
+it has a center of contraction, and all other terms of that type are connected
+to it by a path.
 
 \begin{code}
 is-contr : (A : 𝒰) → 𝒰
 is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
 \end{code}
-
+%
 Equivalences are contractible (assuming univalence):
 \begin{code}
 is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
@@ -823,11 +824,11 @@ is-hae-is-contr = {!!}
 \end{code}
 }
 %
-A type \AgdaSymbol{A} is a \emph{proposition} if all pairs of terms of that type are
-connected by a path. Such a type can have at most one inhabitant - in other
-words, it is contractible.  A type \AgdaSymbol{A} is a \emph{set} if for any
-two terms $a, b$ of \AgdaSymbol{A}, its type of paths \AgdaSymbol{a == b} is
-a proposition.
+A type \AgdaSymbol{A} is a \emph{proposition} (h-level 1, or (-1)-truncated) if
+all pairs of terms of that type are connected by a path. Such a type can have at
+most one inhabitant - in other words, it is ``contractible if inhabited''.  A
+type \AgdaSymbol{A} is a \emph{set} if for any two terms $a, b$ of
+\AgdaSymbol{A}, its type of paths \AgdaSymbol{a == b} is a proposition.
 
 \begin{code}
 is-prop : (A : 𝒰) → 𝒰
@@ -836,7 +837,7 @@ is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
 is-set : (A : 𝒰) → 𝒰
 is-set A = Π[ a ∶ A ] Π[ b ∶ A ] is-prop (a == b)
 \end{code}
-
+%
 \AgdaHide{
 \begin{code}
 prop-is-set : {A : 𝒰} → is-prop A → is-set A
