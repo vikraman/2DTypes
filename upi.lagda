@@ -901,10 +901,6 @@ fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
 \AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
 \AgdaSymbol{(T, ∣ refl T ∣)}.
 
-\jacques{Calling it pr₁, while technically correct, makes things hard to
-understand.  It's not ``first projection'' which is a univalent fibration,
-but rather ``code-of'' (or even ``code'').  Can we rename this?}
-
 Towards proving that, we start by defining the automorphism group of a space in
 an $(∞, 1)$-topos. By working in the internal language, that is, in HoTT, we can
 define the type \AgdaSymbol{Aut T} for any type \AgdaSymbol{T : 𝒰} to be the
@@ -927,9 +923,12 @@ b₀ {T} = T , ∣ ide T ∣
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
 Ω (T , t) = t == t
 
-tpt-eqv-pr₁ : {T : 𝒰} {v w : BAut T} (p : v == w)
-            → pr₁ (tpt-eqv pr₁ p) == transport id (dpair=-e₁ p)
-tpt-eqv-pr₁ (refl v) = refl id
+f : {T : 𝒰} → BAut T → 𝒰
+f = pr₁
+
+tpt-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
+          → pr₁ (tpt-eqv f p) == transport id (dpair=-e₁ p)
+tpt-eqv-f (refl v) = refl id
 \end{code}
 
 Putting these ingredients together, we can show that the
@@ -937,15 +936,15 @@ code of a singleton universe \AgdaSymbol{Ũ[ T ]} is a
 univalent fibration.
 
 \begin{code}
-is-univ-fib-pr₁ : {T : 𝒰} → is-univ-fib pr₁
-is-univ-fib-pr₁ (T , q) (T' , q') = qinv-is-hae (g , η , ε)
+is-univ-fib-f : {T : 𝒰} → is-univ-fib f
+is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
         g eqv = dpair= (ua eqv , ident)
-        η : g ∘ tpt-eqv pr₁ ∼ id
+        η : g ∘ tpt-eqv f ∼ id
         η (refl ._) = ap dpair= ( dpair= (ua-ide
-                                  , prop-is-set (λ _ _ → ident) _ _ _ _))
-        ε : tpt-eqv pr₁ ∘ g ∼ id
-        ε eqv = eqv= ( tpt-eqv-pr₁ (dpair= (ua eqv , ident))
+                                , prop-is-set (λ _ _ → ident) _ _ _ _))
+        ε : tpt-eqv f ∘ g ∼ id
+        ε eqv = eqv= ( tpt-eqv-f (dpair= (ua eqv , ident))
                      ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
                      ◾ ua-β₁ eqv )
 \end{code}
@@ -953,12 +952,10 @@ is-univ-fib-pr₁ (T , q) (T' , q') = qinv-is-hae (g , η , ε)
 As a consequence, we have that the loopspace of the delooping the group
 of automorphisms of a type \AgdaSymbol{T} is equivalent to the
 type \AgdaSymbol{Aut(T)}.
-%
-% \AgdaSymbol{Ω(BAut(T)) ≃ Aut(T)} for any type \AgdaSymbol{T : 𝒰}.
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
-ΩBAut≃Aut[ T ] = tpt-eqv pr₁ , is-univ-fib-pr₁ b₀ b₀
+ΩBAut≃Aut[ T ] = tpt-eqv f , is-univ-fib-f b₀ b₀
 \end{code}
 
 It remains to check that \AgdaSymbol{BAut T} is the same as our
