@@ -548,7 +548,7 @@ booleans. The next three definitions introduces the programs
 (combinators) in the language stratified by levels. The level-1
 programs of type $\iso$ map between types; the level-2 programs of
 type $\isotwo$ map between level-1 programs; and the level-3 programs
-of type $\isothree$ map between level-2 programs. 
+of type $\isothree$ map between level-2 programs.
 
 \AgdaHide{
 \begin{code}
@@ -576,12 +576,12 @@ data _↔₂_ : {A B : 𝑼} → (A ↔₁ B) → (A ↔₁ B) → 𝒰 where
 
   `idl   : {A B : 𝑼} (p : A ↔₁ B) → `id ⊙₁ p ↔₂ p
   `idr   : {A B : 𝑼} (p : A ↔₁ B) → p ⊙₁ `id ↔₂ p
-  `assoc :     {A B C D : 𝑼} (p : A ↔₁ B) (q : B ↔₁ C) (r : C ↔₁ D) → 
+  `assoc :     {A B C D : 𝑼} (p : A ↔₁ B) (q : B ↔₁ C) (r : C ↔₁ D) →
                (p ⊙₁ q) ⊙₁ r ↔₂ p ⊙₁ (q ⊙₁ r)
-  _□₂_   :     {A B C : 𝑼} {p q : A ↔₁ B} {r s : B ↔₁ C} → 
+  _□₂_   :     {A B C : 𝑼} {p q : A ↔₁ B} {r s : B ↔₁ C} →
                (u : p ↔₂ q) (v : r ↔₂ s) → (p ⊙₁ r) ↔₂ (q ⊙₁ s)
 
-  `!     : {A B : 𝑼} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q 
+  `!     : {A B : 𝑼} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q
   `!l    : {A B : 𝑼} (p : A ↔₁ B) → p ⊙₁ !₁ p ↔₂ `id
   `!r    : {A B : 𝑼} (p : B ↔₁ A) → !₁ p ⊙₁ p ↔₂ `id
   `!id   : {A : 𝑼} → !₁ `id {A} ↔₂ `id {A}
@@ -602,7 +602,7 @@ data _↔₃_ {A B : 𝑼} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
 In the previous presentations of $\Pi$, the level-3 programs,
 consisting of just one trivial program
 \AgdaInductiveConstructor{`trunc}, were not made explicit. The level-1
-and level-2 programs fo the full $\Pi$ language~\cite{Carette2016},
+and level-2 programs of the full $\Pi$ language~\cite{Carette2016},
 although much larger, are well-represented in our small language. For
 the level-1 constructors, denoting reversible programs, type
 isomorphisms, permutations, or equivalences depending on one's
@@ -617,7 +617,7 @@ following groups: (i) the first group contains the identity, inverses,
 and sequential composition; (ii) the second group establishes the
 coherence laws for level-1 sequential composition (e.g, it is
 associative); and (iii) finally the third group includes general rules
-for level-1 inversions. 
+for level-1 inversions.
 
 Each of the level-2 combinators of type $p \isotwo q$ is easily seen
 to establish an equivalence between level-1 programs $p$ and $q$ (as
@@ -640,7 +640,7 @@ or $p \isotwo \AgdaInductiveConstructor{`not}$.
 
 To prove this, we introduce a type which encodes the knowledge of
 which level-1 programs are canonical. The type \AgdaDatatype{Which}
-names the subset of \AgdaDatatype{↔₁} which are canonical forms.  
+names the subset of \AgdaDatatype{↔₁} which are canonical forms.
 {
 \begin{code}
 data Which : 𝒰 where ID NOT : Which
@@ -652,7 +652,7 @@ refine NOT = `not
 }
 This enables us to compute for any 2-combinator $c$ (the name of) its
 canonical form, as well as a proof that $c$ is equivalent to its
-canonical form.  
+canonical form.
 {
 \begin{code}
 canonical : (c : `𝟚 ↔₁ `𝟚) → Σ[ c' ∶ Which ] (c ↔₂ refine c')
@@ -671,7 +671,7 @@ canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 It is worthwhile to note that the proof of \AgdaSymbol{canonical} does
 not use all the level 2 combinators. The larger set of 2-combinators
 is useful to establish a more direct connection with the model
-presented in the next section. 
+presented in the next section.
 
 % \begin{lemma}[Canonical Forms]
 %   Given a 1-combinator $c : \tau \iso \tau$, we either have a
