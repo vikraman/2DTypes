@@ -265,7 +265,7 @@ and situates it into the broader context of the existing literature.
 
 Starting from the physical principle of ``conservation of
 information''~\cite{Hey:1999:FCE:304763,fredkin1982conservative}, James and
-Sabry~\cite{James:2012:IE:2103656.2103667} propose a family of programming
+Sabry~\cite{James:2012:IE:2103656.2103667} proposed a family of programming
 languages $\Pi$ in which computation preserve information. Technically,
 computations are \emph{type isomorphisms} which, at least in the case of finite
 types, clearly preserve entropy in the information-theoretic
@@ -276,16 +276,17 @@ version of $\Pi$ to use in our formal development.
 %%%%%
 \subsection{Examples}
 
-The examples below assume a representation of the type of booleans $\bt$ as the
-disjoint union $\ot \oplus \ot$ with the left injection representing
-$\mathsf{false}$ and the right injection representing $\mathsf{true}$. Given an
-arbitrary reversible function $\AgdaFunction{f}$ of type $a \leftrightarrow a$,
-we can build the reversible function
-$\AgdaFunction{controlled}~\AgdaFunction{f}$ that takes a pair of type
-$\bt \otimes a$ and checks the incoming boolean; if it is false (i.e., we are in
-the left injection), the function behaves like the identity; otherwise the
-function applies $\AgdaFunction{f}$ to the second argument. The incoming boolean
-is then reconstituted to maintain reversibility:
+The examples below assume a representation of the type of booleans
+$\bt$ as the disjoint union $\ot \oplus \ot$ with the left injection
+representing $\mathsf{false}$ and the right injection representing
+$\mathsf{true}$. Given an arbitrary reversible function
+$\AgdaFunction{f}$ of type $a \iso a$, we can build the reversible
+function $\AgdaFunction{controlled}~\AgdaFunction{f}$ that takes a
+pair of type $\bt \otimes a$ and checks the incoming boolean; if it is
+false (i.e., we are in the left injection), the function behaves like
+the identity; otherwise the function applies $\AgdaFunction{f}$ to the
+second argument. The incoming boolean is then reconstituted to
+maintain reversibility:
 
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcll}
@@ -307,17 +308,21 @@ is then reconstituted to maintain reversibility:
 \end{array}
 \]}
 
-\noindent The left column shows the sequence of types that are visited during
-the computation; the right column shows the names of the combinators\footnote{We
-  use names that are hopefully quite mnemonic; for the precise definitions of
-  the combinators see the $\Pi$-papers.} that witness the corresponding type
-isomorphism. The code for $\AgdaFunction{controlled}~\AgdaFunction{f}$ provides
-constructive evidence (i.e., a program, a logic gate, or a hardware circuit) for
-an automorphism on $\bt \otimes a$: it can be read top-down or bottom-up to go
-back and forth.
+\noindent The left column shows the sequence of types that are visited
+during the computation; the right column shows the names of the
+combinators\footnote{We use names that are hopefully quite mnemonic;
+  for the precise definitions of the combinators see the
+  $\Pi$-papers~\cite{James:2012:IE:2103656.2103667,rc2011,rc2012,theseus,Carette2016}
+  or the accompanying code at
+  \url{https://github.com/DreamLinuxer/Pi2}.} that witness the
+corresponding type isomorphism. The code for
+$\AgdaFunction{controlled}~\AgdaFunction{f}$ provides constructive
+evidence (i.e., a program, a logic gate, or a hardware circuit) for an
+automorphism on $\bt \otimes a$: it can be read top-down or bottom-up
+to go back and forth.
 
 The $\AgdaFunction{not}$ function below is a simple lifting of
-\AgdaFunction{swap₊} which swaps the left and right injections in a sum
+\AgdaFunction{swap₊} which swaps the left and right injections of a sum
 type. Using the \AgdaFunction{controlled} building block, we can build a
 controlled-not ($\AgdaFunction{cnot}$) gate and a controlled-controlled-not
 gate, also known as the \AgdaFunction{toffoli} gate. The latter gate is a
@@ -428,17 +433,21 @@ following six programs of type~$\bt \iso \bt$:
 \caption{\label{fig:not}Graphical representation of \AgdaFunction{not₃}}
 \end{figure}
 
-\noindent The programs are all of the same type but this is clearly not a
-sufficient condition for ``equivalence.'' Thinking extensionally, i.e., by
-looking at all possible input-output pairs, it is easy to verify that the six
-programs split into two classes: one equivalent to the identity function and one
-equivalent to the boolean negation. In the context of $\Pi$, we can better: we
-can provide \emph{evidence} (i.e., a program that manipulates programs) that can
-constructively transform every program to an equivalent one. We show such a
-level-2 program proving that $\AgdaFunction{not₃}$ is equivalent to
-$\AgdaFunction{not}$. For illustration, the program for $\AgdaFunction{not₃}$ is
-depicted in Fig.~\ref{fig:not}. We encourage the reader to map the steps below
-to manipulations on the diagram that would incrementally simplify it:
+\noindent The programs are all of the same type but this is clearly
+not a sufficient condition for ``equivalence.'' Thinking
+extensionally, i.e., by looking at all possible input-output pairs, it
+is easy to verify that the six programs split into two classes: one
+consisting of the first three programs and that is equivalent to the
+identity function and the other consisting of the remaining three
+programs and that is equivalent to boolean negation. In the context of
+$\Pi$, we can do better: we can provide \emph{evidence} (i.e., a
+reversible program of type $\isotwo$ that manipulates lower level
+reversible programs of type $\iso$ ) that can constructively transform
+programs to equivalent ones. We show such a level-2 program proving
+that $\AgdaFunction{not₃}$ is equivalent to $\AgdaFunction{not}$. For
+illustration, the program for $\AgdaFunction{not₃}$ is depicted in
+Fig.~\ref{fig:not}. We encourage the reader to map the steps below to
+manipulations on the diagram that would incrementally simplify it:
 
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcll}
@@ -477,11 +486,11 @@ to manipulations on the diagram that would incrementally simplify it:
 && (\AgdaFunction{uniti⋆} \odot (\AgdaFunction{id} \otimes \AgdaFunction{not}))
                       \odot \AgdaFunction{unite⋆}
  & \quad\byisotwo{\AgdaFunction{unitiLeft} \boxdot \AgdaFunction{id}} \\
-&& (\AgdaFunction{not} \otimes \AgdaFunction{uniti⋆}) \odot \AgdaFunction{unite⋆}
+&& (\AgdaFunction{not} \odot \AgdaFunction{uniti⋆}) \odot \AgdaFunction{unite⋆}
  & \quad\byisotwo{\AgdaFunction{assocRight}} \\
-&& \AgdaFunction{not} \otimes (\AgdaFunction{uniti⋆} \odot \AgdaFunction{unite⋆})
+&& \AgdaFunction{not} \odot (\AgdaFunction{uniti⋆} \odot \AgdaFunction{unite⋆})
  & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{leftInv}} \\
-&& \AgdaFunction{not} \otimes \AgdaFunction{id}
+&& \AgdaFunction{not} \odot \AgdaFunction{id}
  & \quad\byisotwo{\AgdaFunction{idRight}} \\
 && \AgdaFunction{not}
 \end{array}\]}
@@ -492,19 +501,13 @@ $\byisotwo{-}$ as a $2$-arrow (and representing a natural isomorphism).  See
 Shulman's draft book~\cite{shulman} for that interpretation.
 
 %%%%%
-\subsection{\PiTwo}{\label{sec:pi2}}
+\subsection{A Small Reversible Language of Booleans: \PiTwo}{\label{sec:pi2}}
 
 Having illustrated the general flavor of the $\Pi$ family of
-languages, we present in full detail a small $\Pi$-based language
-which we will use in the formalization in the rest of the paper. The
-language is the restriction of $\Pi$ to the case of just one
-type $\mathbb{2}$
-{
-\begin{code}
-data 𝟚 : 𝒰 where 0₂ 1₂ : 𝟚
-\end{code}
-}
-The syntax of \PiTwo is given below:
+languages, we present in full detail an Agda-based formalization of a
+small $\Pi$-based language which we will be used to establish the
+connection to an explicit univalent universe. The language is the restriction of
+$\Pi$ to the case of just one type $\mathbb{2}$.
 
 %% \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
 %% (\textit{Types}) & \tau &::=& \bt \\
@@ -531,6 +534,22 @@ The syntax of \PiTwo is given below:
 %%             && \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3) \to (c_1 \isotwo c_3)
 %% \end{array}\]
 
+{
+\begin{code}
+data 𝟚 : 𝒰 where 0₂ 1₂ : 𝟚
+\end{code}
+}
+
+\noindent The syntax of \PiTwo\ is given in the following four Agda
+definitions. The first definition~\AgdaDatatype{𝑼} introduces the set
+of types of the language: this set contains
+just~\AgdaInductiveConstructor{`𝟚} which is a name for the type of
+booleans. The next three definitions introduces the programs
+(combinators) in the language stratified by levels. The level-1
+programs of type $\iso$ map between types; the level-2 programs of
+type $\isotwo$ map between level-1 programs; and the level-3 programs
+of type $\isothree$ map between level-2 programs. 
+
 \AgdaHide{
 \begin{code}
 infix 3 _↔₁_ _↔₂_ _↔₃_
@@ -550,65 +569,78 @@ data _↔₁_ : 𝑼 → 𝑼 → 𝒰 where
   _⊙₁_ : {A B C : 𝑼} → (A ↔₁ B) → (B ↔₁ C) → (A ↔₁ C)
 
 data _↔₂_ : {A B : 𝑼} → (A ↔₁ B) → (A ↔₁ B) → 𝒰 where
+
   `id₂   : {A B : 𝑼} {p : A ↔₁ B} → p ↔₂ p
+  !₂_    : {A B : 𝑼} {p q : A ↔₁ B} → (u : p ↔₂ q) → q ↔₂ p
+  _⊙₂_   : {A B : 𝑼} {p q r : A ↔₁ B} → (u : p ↔₂ q) (v : q ↔₂ r) → (p ↔₂ r)
+
   `idl   : {A B : 𝑼} (p : A ↔₁ B) → `id ⊙₁ p ↔₂ p
   `idr   : {A B : 𝑼} (p : A ↔₁ B) → p ⊙₁ `id ↔₂ p
+  `assoc :     {A B C D : 𝑼} (p : A ↔₁ B) (q : B ↔₁ C) (r : C ↔₁ D) → 
+               (p ⊙₁ q) ⊙₁ r ↔₂ p ⊙₁ (q ⊙₁ r)
+  _□₂_   :     {A B C : 𝑼} {p q : A ↔₁ B} {r s : B ↔₁ C} → 
+               (u : p ↔₂ q) (v : r ↔₂ s) → (p ⊙₁ r) ↔₂ (q ⊙₁ s)
+
+  `!     : {A B : 𝑼} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q 
   `!l    : {A B : 𝑼} (p : A ↔₁ B) → p ⊙₁ !₁ p ↔₂ `id
   `!r    : {A B : 𝑼} (p : B ↔₁ A) → !₁ p ⊙₁ p ↔₂ `id
   `!id   : {A : 𝑼} → !₁ `id {A} ↔₂ `id {A}
   `!not  : !₁ `not ↔₂ `not
   `!◾    : {A B C : 𝑼} {p : A ↔₁ B} {q : B ↔₁ C} → !₁ (p ⊙₁ q) ↔₂ (!₁ q) ⊙₁ (!₁ p)
   `!!    : {A B : 𝑼} {p : A ↔₁ B} → !₁ (!₁ p) ↔₂ p
-  `assoc : {A B C D : 𝑼} (p : A ↔₁ B) (q : B ↔₁ C) (r : C ↔₁ D)
-         → (p ⊙₁ q) ⊙₁ r ↔₂ p ⊙₁ (q ⊙₁ r)
-  `!     : {A B : 𝑼} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q
-  !₂_      : {A B : 𝑼} {p q : A ↔₁ B} → (u : p ↔₂ q) → q ↔₂ p
-  _⊙₂_   : {A B : 𝑼} {p q r : A ↔₁ B} → (u : p ↔₂ q) (v : q ↔₂ r) → (p ↔₂ r)
-  _□₂_   : {A B C : 𝑼} {p q : A ↔₁ B} {r s : B ↔₁ C}
-         → (u : p ↔₂ q) (v : r ↔₂ s) → (p ⊙₁ r) ↔₂ (q ⊙₁ s)
 
 data _↔₃_ {A B : 𝑼} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
   `trunc : u ↔₃ v
 \end{code}
 }
-\jacques{The text below doesn't make sense anymore as the
-``syntactic categories'' were named in the above
-commented out array, but have different names in the Agda
-code.}
 
-The syntactic category $c$ is that of 1-combinators denoting
-reversible programs, type isomorphisms, permutations, or equivalences
-depending on one's favorite interpretation. There are two primitive
-combinators $\id$ and $\swap$ which are closed under inverses $!$ and
-sequential composition $\odot$. The syntactic category $\alpha$ is
-that of 2-combinators denoting reversible program transformations,
-coherence conditions on type isomorphisms, equivalences between
-permutations, or program optimizations depending on one's favorite
-interpretation.
+% \jacques{The text below doesn't make sense anymore as the
+% ``syntactic categories'' were named in the above
+% commented out array, but have different names in the Agda
+% code.}
 
-It is relatively easy to think of a few sound program transformations to include
-in the category $\alpha$ of 2-combinators. But, as the following lemma
-establishes, the above set is \emph{complete}:
+In the previous presentations of $\Pi$, the level-3 programs,
+consisting of just one trivial program
+\AgdaInductiveConstructor{`trunc}, were not made explicit. The level-1
+and level-2 programs fo the full $\Pi$ language~\cite{Carette2016},
+although much larger, are well-represented in our small language. For
+the level-1 constructors, denoting reversible programs, type
+isomorphisms, permutations, or equivalences depending on one's
+favorite interpretation, we have two canonical programs
+$\AgdaInductiveConstructor{`id}$ and $\AgdaInductiveConstructor{`not}$
+closed under inverses \AgdaInductiveConstructor{!₁} and sequential
+composition \AgdaInductiveConstructor{⊙₁}. For level-2 constructors,
+denoting reversible program transformations, coherence conditions on
+type isomorphisms, equivalences between permutations, or program
+optimizations depending on one's favorite interpretation, we have the
+following groups: (i) the first group contains the identity, inverses,
+and sequential composition; (ii) the second group establishes the
+coherence laws for level-1 sequential composition (e.g, it is
+associative); and (iii) finally the third group includes general rules
+for level-1 inversions. 
 
-\begin{lemma}[Canonical Forms]
-  Given a 1-combinator $c : \tau \iso \tau$, we either have a
-  2-combinator of type $c \isotwo \AgdaFunction{`id}$ or a 2-combinator of type
-  $c \isotwo \AgdaFunction{`not}$. In other words, every 1-combinator has a canonical
-  representation as either $\AgdaFunction{`id}$ or $\AgdaFunction{`not}$ and the set of 2-combinators is rich
-  enough to normalize $c$ to its canonical representation.
-\end{lemma}
-
-\noindent For example, composition of negation is equivalent to the identity:
-{
+Each of the level-2 combinators of type $p \isotwo q$ is easily seen
+to establish an equivalence between level-1 programs $p$ and $q$ (as
+shown in previous work~\cite{Carette2016} and in
+Sec.~\ref{sec:correspondence}). For example, composition of negation
+is equivalent to the identity: {
 \begin{code}
 not⊙₁not↔₂id : `not ⊙₁ `not ↔₂ `id
 not⊙₁not↔₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
 \end{code}
 }
+\noindent What is particularly interesting, however, is that the
+collection of level-2 combinators above is \emph{complete} in the
+sense that any equivalence between level-1 programs $p$ and $q$ can be
+proved using the level-2 combinators. Formally we have two canonical
+level-1 programs $\AgdaInductiveConstructor{`id}$ and
+$\AgdaInductiveConstructor{`not}$ and for any level-1 program $p$, we
+have evidence that either $p \isotwo \AgdaInductiveConstructor{`id}$
+or $p \isotwo \AgdaInductiveConstructor{`not}$.
 
-To achieve this, we need a type which encodes exactly this
-knowledge: \AgdaDatatype{Which} names the subset of
-\AgdaDatatype{↔₁} which are canonical forms.
+To prove this, we introduce a type which encodes the knowledge of
+which level-1 programs are canonical. The type \AgdaDatatype{Which}
+names the subset of \AgdaDatatype{↔₁} which are canonical forms.  
 {
 \begin{code}
 data Which : 𝒰 where ID NOT : Which
@@ -618,14 +650,12 @@ refine ID = `id
 refine NOT = `not
 \end{code}
 }
-
-This in turn enables us to compute for any
-2-combinator $c$ (the name of) its canonical form, as
-well as a proof that $c$ is equivalent to its
-canonical form.
+This enables us to compute for any 2-combinator $c$ (the name of) its
+canonical form, as well as a proof that $c$ is equivalent to its
+canonical form.  
 {
 \begin{code}
-canonical : (c : `𝟚 ↔₁ `𝟚) → Σ[ c' ∶ Which ] (c ↔₂ (refine c'))
+canonical : (c : `𝟚 ↔₁ `𝟚) → Σ[ c' ∶ Which ] (c ↔₂ refine c')
 canonical `id = ID , `id₂
 canonical `not = NOT , `id₂
 canonical (!₁ c) with canonical c
@@ -639,7 +669,17 @@ canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 \end{code}
 }
 It is worthwhile to note that the proof of \AgdaSymbol{canonical} does
-not use all the level 2 combinators.
+not use all the level 2 combinators. The larger set of 2-combinators
+is useful to establish a more direct connection with the model
+presented in the next section. 
+
+% \begin{lemma}[Canonical Forms]
+%   Given a 1-combinator $c : \tau \iso \tau$, we either have a
+%   2-combinator of type $c \isotwo \AgdaFunction{`id}$ or a 2-combinator of type
+%   $c \isotwo \AgdaFunction{`not}$. In other words, every 1-combinator has a canonical
+%   representation as either $\AgdaFunction{`id}$ or $\AgdaFunction{`not}$ and the set of 2-combinators is rich
+%   enough to normalize $c$ to its canonical representation.
+% \end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Univalent Fibrations}
