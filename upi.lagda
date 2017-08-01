@@ -768,12 +768,12 @@ module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
 The \AgdaSymbol{transport} operation lifts paths to equivalences. By
 transporting identity, we can convert a path to an equivalence.
 
--- \jacques{But transport does not occur below at all, not even
--- implicitly.  In fact, the 4 functions below are so trivial that
--- they could be collapsed into 1 without loss of comprehension.
--- Compared to how complex a lot of the rest of this is (such as
--- the previous sub-section), what's the point of taking so much
--- space with this?}
+% \jacques{But transport does not occur below at all, not even
+% implicitly.  In fact, the 4 functions below are so trivial that
+% they could be collapsed into 1 without loss of comprehension.
+% Compared to how complex a lot of the rest of this is (such as
+% the previous sub-section), what's the point of taking so much
+% space with this?}
 
 \AgdaHide{
 \begin{code}

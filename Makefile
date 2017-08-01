@@ -12,7 +12,7 @@ upi.tex: upi.lagda
 cont: continuous
 
 continuous: upi.lagda
-	(while inotifywait upi.lagda; \
+	(while inotifywait -e attrib -e modify -e close_write upi.lagda; \
 	 do agda $(AGDA_LATEX_OPTIONS) $(AGDA_QUICK_OPTIONS) -i. upi.lagda; \
 	 done &)
 	latexmk -pvc -pdf -interaction=nonstopmode upi.tex
