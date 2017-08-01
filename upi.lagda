@@ -261,7 +261,7 @@ and situates it into the broader context of the existing literature.
 %% survive?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{A Simple Reversible Programming Languages}
+\section{Simple Reversible Programming Languages}
 
 Starting from the physical principle of ``conservation of
 information''~\cite{Hey:1999:FCE:304763,fredkin1982conservative}, James and
@@ -281,7 +281,7 @@ $\bt$ as the disjoint union $\ot \oplus \ot$ with the left injection
 representing $\mathsf{false}$ and the right injection representing
 $\mathsf{true}$. Given an arbitrary reversible function
 $\AgdaFunction{f}$ of type $a \iso a$, we can build the reversible
-function $\AgdaFunction{controlled}~\AgdaFunction{f}$ that takes a
+function $`\AgdaFunction{controlled}~\AgdaFunction{f}'$ that takes a
 pair of type $\bt \otimes a$ and checks the incoming boolean; if it is
 false (i.e., we are in the left injection), the function behaves like
 the identity; otherwise the function applies $\AgdaFunction{f}$ to the
@@ -316,7 +316,7 @@ combinators\footnote{We use names that are hopefully quite mnemonic;
   or the accompanying code at
   \url{https://github.com/DreamLinuxer/Pi2}.} that witness the
 corresponding type isomorphism. The code for
-$\AgdaFunction{controlled}~\AgdaFunction{f}$ provides constructive
+$`\AgdaFunction{controlled}~\AgdaFunction{f}'$ provides constructive
 evidence (i.e., a program, a logic gate, or a hardware circuit) for an
 automorphism on $\bt \otimes a$: it can be read top-down or bottom-up
 to go back and forth.
@@ -333,7 +333,7 @@ expressiveness of the language:
 \[\begin{array}{rcl}
 \AgdaFunction{not} &:& \bt \iso \bt \\
 \AgdaFunction{not} &=&
-  \AgdaFunction{unfoldBool} \odot \AgdaFunction{swap₊} \odot \AgdaFunction{foldBool} \\
+  \AgdaFunction{unfoldBool} \odot_1 \AgdaFunction{swap₊} \odot_1 \AgdaFunction{foldBool} \\
 \\
 \AgdaFunction{cnot} &:& \bt \otimes \bt \iso \bt \otimes \bt \\
 \AgdaFunction{cnot} &=& \AgdaFunction{controlled}~\AgdaFunction{not} \\
@@ -347,7 +347,7 @@ expressiveness of the language:
 \noindent While we wrote \AgdaFunction{controlled} in equational-reasoning
 style, \AgdaFunction{not} is written in the point-free combinator style.  These
 are equivalent as $\byiso{-}$ is defined in terms of the sequential composition
-combinator $\odot$.
+combinator $\odot_1$.
 
 As is customary in any semantic perspective on programming languages, we are
 interested in the question of when two programs are ``equivalent.'' Consider the
@@ -358,22 +358,22 @@ following six programs of type~$\bt \iso \bt$:
 \AgdaFunction{id₁}~\AgdaFunction{id₂}~\AgdaFunction{id₃}~
   \AgdaFunction{not₁}~\AgdaFunction{not₂}~\AgdaFunction{not₃} &:& \bt \iso \bt \\
 \AgdaFunction{id₁} &=&
-  \AgdaFunction{id} \odot \AgdaFunction{id} \\
+  \AgdaFunction{id} \odot_1 \AgdaFunction{id} \\
 \AgdaFunction{id₂} &=&
-  \AgdaFunction{not} \odot \AgdaFunction{id} \odot \AgdaFunction{not} \\
+  \AgdaFunction{not} \odot_1 \AgdaFunction{id} \odot_1 \AgdaFunction{not} \\
 \AgdaFunction{id₃} &=&
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot
-                        (\AgdaFunction{id} \otimes \AgdaFunction{id}) \odot
-                        \AgdaFunction{swap⋆} \odot
+  \AgdaFunction{uniti⋆} \odot_1 \AgdaFunction{swap⋆} \odot_1
+                        (\AgdaFunction{id} \otimes \AgdaFunction{id}) \odot_1
+                        \AgdaFunction{swap⋆} \odot_1
                         \AgdaFunction{unite⋆} \\
 \AgdaFunction{not₁} &=&
-  \AgdaFunction{id} \odot \AgdaFunction{not} \\
+  \AgdaFunction{id} \odot_1 \AgdaFunction{not} \\
 \AgdaFunction{not₂} &=&
-  \AgdaFunction{not} \odot \AgdaFunction{not} \odot \AgdaFunction{not} \\
+  \AgdaFunction{not} \odot_1 \AgdaFunction{not} \odot_1 \AgdaFunction{not} \\
 \AgdaFunction{not₃} &=&
-  \AgdaFunction{uniti⋆} \odot \AgdaFunction{swap⋆} \odot
-                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot
-                        \AgdaFunction{swap⋆} \odot
+  \AgdaFunction{uniti⋆} \odot_1 \AgdaFunction{swap⋆} \odot_1
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot_1
+                        \AgdaFunction{swap⋆} \odot_1
                         \AgdaFunction{unite⋆}
 \end{array}\]}
 
@@ -453,44 +453,44 @@ manipulations on the diagram that would incrementally simplify it:
 \[\def\arraystretch{1.2}\begin{array}{rcll}
 \AgdaFunction{notOpt} &:& \AgdaFunction{not₃} \isotwo \AgdaFunction{not} \\
 \AgdaFunction{notOpt} &=&
-  \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot
-                        ((\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})))
+  \AgdaFunction{uniti⋆} \odot_1 (\AgdaFunction{swap⋆} \odot_1
+                        ((\AgdaFunction{not} \otimes \AgdaFunction{id}) \odot_1
+                        (\AgdaFunction{swap⋆} \odot_1 \AgdaFunction{unite⋆})))
  & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocLeft}} \\
-&& \AgdaFunction{uniti⋆} \odot (\AgdaFunction{swap⋆} \odot
-                        (\AgdaFunction{not} \otimes \AgdaFunction{id})) \odot
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})
+&& \AgdaFunction{uniti⋆} \odot_1 (\AgdaFunction{swap⋆} \odot_1
+                        (\AgdaFunction{not} \otimes \AgdaFunction{id})) \odot_1
+                        (\AgdaFunction{swap⋆} \odot_1 \AgdaFunction{unite⋆})
  & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{swapLeft}
                                   \boxdot \AgdaFunction{id})} \\
-&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot \AgdaFunction{swap⋆}) \odot
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})
+&& \AgdaFunction{uniti⋆} \odot_1 ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot_1 \AgdaFunction{swap⋆}) \odot_1
+                        (\AgdaFunction{swap⋆} \odot_1 \AgdaFunction{unite⋆})
  & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{assocRight}} \\
-&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot (\AgdaFunction{swap⋆} \odot
-                        (\AgdaFunction{swap⋆} \odot \AgdaFunction{unite⋆})))
+&& \AgdaFunction{uniti⋆} \odot_1 ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot_1 (\AgdaFunction{swap⋆} \odot_1
+                        (\AgdaFunction{swap⋆} \odot_1 \AgdaFunction{unite⋆})))
  & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot \AgdaFunction{assocLeft})} \\
-&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot ((\AgdaFunction{swap⋆} \odot
-                      \AgdaFunction{swap⋆}) \odot \AgdaFunction{unite⋆}))
+&& \AgdaFunction{uniti⋆} \odot_1 ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot_1 ((\AgdaFunction{swap⋆} \odot_1
+                      \AgdaFunction{swap⋆}) \odot_1 \AgdaFunction{unite⋆}))
  & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot (\AgdaFunction{leftInv} \boxdot \AgdaFunction{id}))} \\
-&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot (\AgdaFunction{id} \odot \AgdaFunction{unite⋆}))
+&& \AgdaFunction{uniti⋆} \odot_1 ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot_1 (\AgdaFunction{id} \odot_1 \AgdaFunction{unite⋆}))
  & \quad\byisotwo{\AgdaFunction{id} \boxdot (\AgdaFunction{id}
                                   \boxdot \AgdaFunction{idLeft})} \\
-&& \AgdaFunction{uniti⋆} \odot ((\AgdaFunction{id} \otimes \AgdaFunction{not})
-                      \odot \AgdaFunction{unite⋆})
+&& \AgdaFunction{uniti⋆} \odot_1 ((\AgdaFunction{id} \otimes \AgdaFunction{not})
+                      \odot_1 \AgdaFunction{unite⋆})
  & \quad\byisotwo{\AgdaFunction{assocLeft}} \\
-&& (\AgdaFunction{uniti⋆} \odot (\AgdaFunction{id} \otimes \AgdaFunction{not}))
-                      \odot \AgdaFunction{unite⋆}
+&& (\AgdaFunction{uniti⋆} \odot_1 (\AgdaFunction{id} \otimes \AgdaFunction{not}))
+                      \odot_1 \AgdaFunction{unite⋆}
  & \quad\byisotwo{\AgdaFunction{unitiLeft} \boxdot \AgdaFunction{id}} \\
-&& (\AgdaFunction{not} \odot \AgdaFunction{uniti⋆}) \odot \AgdaFunction{unite⋆}
+&& (\AgdaFunction{not} \odot_1 \AgdaFunction{uniti⋆}) \odot_1 \AgdaFunction{unite⋆}
  & \quad\byisotwo{\AgdaFunction{assocRight}} \\
-&& \AgdaFunction{not} \odot (\AgdaFunction{uniti⋆} \odot \AgdaFunction{unite⋆})
+&& \AgdaFunction{not} \odot_1 (\AgdaFunction{uniti⋆} \odot_1 \AgdaFunction{unite⋆})
  & \quad\byisotwo{\AgdaFunction{id} \boxdot \AgdaFunction{leftInv}} \\
-&& \AgdaFunction{not} \odot \AgdaFunction{id}
+&& \AgdaFunction{not} \odot_1 \AgdaFunction{id}
  & \quad\byisotwo{\AgdaFunction{idRight}} \\
 && \AgdaFunction{not}
 \end{array}\]}
@@ -505,9 +505,9 @@ Shulman's draft book~\cite{shulman} for that interpretation.
 
 Having illustrated the general flavor of the $\Pi$ family of
 languages, we present in full detail an Agda-based formalization of a
-small $\Pi$-based language which we will be used to establish the
-connection to an explicit univalent universe. The language is the restriction of
-$\Pi$ to the case of just one type $\mathbb{2}$.
+small $\Pi$-based language which we will use to establish the
+connection to an explicit univalent universe. The language is the
+restriction of $\Pi$ to the case of just one type $\mathbb{2}$:
 
 %% \[\def\arraystretch{0.8}\begin{array}{l@{\quad}rclrl}
 %% (\textit{Types}) & \tau &::=& \bt \\
@@ -518,7 +518,7 @@ $\Pi$ to the case of just one type $\mathbb{2}$.
 %%  (\textit{1-combinators}) &  c &::=& \id &:& \tau \iso \tau \\
 %%                && \alt & \swap &:& \bt \iso \bt \\
 %%                && \alt & ! &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_1) \\
-%%                && \alt & \odot &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3) \to (\tau_1 \iso \tau_3)  \\
+%%                && \alt & \odot_1 &:& (\tau_1 \iso \tau_2) \to (\tau_2 \iso \tau_3) \to (\tau_1 \iso \tau_3)  \\
 %% \\
 %% (\textit{2-combinators}) & \alpha &::=& \id &:& c \isotwo c \\
 %%             && \alt & \idlc &:& \compc{\id}{c} \isotwo c \\
@@ -540,7 +540,7 @@ data 𝟚 : 𝒰 where 0₂ 1₂ : 𝟚
 \end{code}
 }
 
-\noindent The syntax of \PiTwo\ is given in the following four Agda
+\noindent The syntax of \PiTwo\ is given by the following four Agda
 definitions. The first definition~\AgdaDatatype{𝑈} introduces the set
 of types of the language: this set contains
 just~\AgdaInductiveConstructor{`𝟚} which is a name for the type of
@@ -603,10 +603,10 @@ In the previous presentations of $\Pi$, the level-3 programs,
 consisting of just one trivial program
 \AgdaInductiveConstructor{`trunc}, were not made explicit. The level-1
 and level-2 programs of the full $\Pi$ language~\cite{Carette2016},
-although much larger, are well-represented in our small language. For
-the level-1 constructors, denoting reversible programs, type
-isomorphisms, permutations, or equivalences depending on one's
-favorite interpretation, we have two canonical programs
+although much larger, have been specialized to small language. For the
+level-1 constructors, denoting reversible programs, type isomorphisms,
+permutations between finite sets, or equivalences depending on
+one's favorite interpretation, we have two canonical programs
 $\AgdaInductiveConstructor{`id}$ and $\AgdaInductiveConstructor{`not}$
 closed under inverses \AgdaInductiveConstructor{!₁} and sequential
 composition \AgdaInductiveConstructor{⊙₁}. For level-2 constructors,
@@ -629,6 +629,7 @@ not⊙₁not↔₂id : `not ⊙₁ `not ↔₂ `id
 not⊙₁not↔₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
 \end{code}
 }
+
 \noindent What is particularly interesting, however, is that the
 collection of level-2 combinators above is \emph{complete} in the
 sense that any equivalence between level-1 programs $p$ and $q$ can be
@@ -640,7 +641,7 @@ or $p \isotwo \AgdaInductiveConstructor{`not}$.
 
 To prove this, we introduce a type which encodes the knowledge of
 which level-1 programs are canonical. The type \AgdaDatatype{Which}
-names the subset of \AgdaDatatype{↔₁} which are canonical forms.
+names the subset of \AgdaDatatype{↔₁} which are canonical forms:
 {
 \begin{code}
 data Which : 𝒰 where ID NOT : Which
@@ -650,9 +651,10 @@ refine ID = `id
 refine NOT = `not
 \end{code}
 }
-This enables us to compute for any 2-combinator $c$ (the name of) its
+
+\noindent This enables us to compute for any 2-combinator $c$ (the name of) its
 canonical form, as well as a proof that $c$ is equivalent to its
-canonical form.
+canonical form:
 {
 \begin{code}
 canonical : (c : `𝟚 ↔₁ `𝟚) → Σ[ c' ∶ Which ] (c ↔₂ refine c')
@@ -668,9 +670,10 @@ canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 ... | NOT , c₁↔₂not | NOT , c₂↔₂not = ID , ((c₁↔₂not □₂ c₂↔₂not) ⊙₂ not⊙₁not↔₂id)
 \end{code}
 }
-It is worthwhile to note that the proof of \AgdaSymbol{canonical} does
+
+\noindent It is worthwhile to note that the proof of \AgdaFunction{canonical} does
 not use all the level 2 combinators. The larger set of 2-combinators
-is useful to establish a more direct connection with the model
+is however useful to establish a more direct connection with the model
 presented in the next section.
 
 % \begin{lemma}[Canonical Forms]
@@ -685,32 +688,31 @@ presented in the next section.
 \section{Univalent Fibrations}
 \label{sec:univalent}
 
-We work in intensional type theory with one univalent universe \AgdaSymbol{𝒰}
-closed under propositional truncation.  The rest of this section is
-devoted to explaining what that means.  We follow the terminology used
-in~\cite{hottbook}.  For brevity, we will often given just signatures and
-elide the body\footnote{The full code can be found in our github
-repository; for this section, our work is essentially isomorphic to
-the HoTT Agda library, also on github.}.
+We work in intensional type theory with one univalent universe
+\AgdaPrimitiveType{𝒰} closed under propositional truncation.  The rest
+of this section is devoted to explaining what that means.  We follow
+the terminology used in the HoTT book~\cite{hottbook}.  For brevity,
+we will often given just signatures and elide the body. The details
+can be found in the accompanying code at
+\url{https://github.com/DreamLinuxer/Pi2}.
 
 \subsection{Equivalences}
 
 Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function
 \AgdaSymbol{f : A → B} is a quasi-inverse, if there is another
-function \AgdaSymbol{g : B → A} which acts as both a left and
-right inverse to \AgdaSymbol{f}.
+function \AgdaSymbol{g : B → A} which acts as both a left and right
+inverse to \AgdaSymbol{f}.
 %
 \begin{code}
 is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
 is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
 %
-To make this type contractible, we need to
+To make this type contractible, we need an additional coherence condition:
 %
 \begin{code}
 is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
-is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ]
-                   Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
+is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ] Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
 
 qinv-is-hae : {A B : 𝒰} {f : A → B} → is-qinv f → is-hae f
 \end{code}
@@ -720,43 +722,116 @@ qinv-is-hae = {!!}
 \end{code}
 }
 %
-Then we can define a type of equivalences between two types.
+Then we can define a type of equivalences between two types:
 %
 \begin{code}
 _≃_ : (A B : 𝒰) → 𝒰
 A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
 \end{code}
 
+\begin{figure}
+\begin{tabular}{c@{\qquad\qquad}c}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
+  \draw (0,-5) ellipse (2cm and 0.8cm);
+  \node[below] at (0,-6) {Base Space $A$};
+  \draw[fill] (-1,-5) circle [radius=0.025];
+  \node[below] at (-1,-5) {$x$};
+  \draw[fill] (1,-5) circle [radius=0.025];
+  \node[below] at (1,-5) {$y$};
+  \draw (-1,-2) ellipse (0.5cm and 2cm);
+  \node[left] at (-1.5,-2) {Fiber $P(x)$};
+  \draw (1,-2) ellipse (0.5cm and 2cm);
+  \node[right] at (1.5,-2) {Fiber $P(y)$};
+\end{tikzpicture}
+&
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
+  \draw (0,-5) ellipse (2cm and 0.8cm);
+  \node[below] at (0,-6) {Base Space $A$};
+  \draw[fill] (-1,-5) circle [radius=0.025];
+  \node[below] at (-1,-5) {$x$};
+  \draw[fill] (1,-5) circle [radius=0.025];
+  \node[below] at (1,-5) {$y$};
+  \draw (-1.3,-2) ellipse (0.5cm and 2cm);
+  \node[left] at (-1.8,-2) {Fiber $P(x)$};
+  \draw (1.3,-2) ellipse (0.5cm and 2cm);
+  \node[right] at (1.8,-2) {Fiber $P(y)$};
+  \draw[below,cyan,thick] (-1,-5) -- (1,-5);
+  \node[below,cyan,thick] at (0,-5) {$==$};
+  \draw[->,red,ultra thick] (-0.8,-1.7) to [out=45, in=135] (0.8,-1.7);
+  \draw[->,red,ultra thick] (0.8,-2.3) to [out=-135, in=-45] (-0.8,-2.3);
+  \node[red,ultra thick] at (0,-2) {$\simeq$};
+\end{tikzpicture}
+\end{tabular}
+\caption{\label{fig:fib}(left) Type family $P : A \rightarrow \mathcal{U}$ as a
+  fibration with total space $\Sigma_{(x:A)} P(x)$;\newline
+ (right) a path $x == y$
+  in the base space induces an equivalence between the spaces (fibers)
+  $P(x)$ and $P(y)$}
+\end{figure}
+
 \subsection{Type Families are Fibrations}
 
-A type family \AgdaSymbol{P} over a type \AgdaSymbol{A} is a fibration with base
-space \AgdaSymbol{A}, and \AgdaSymbol{P x} the fiber over \AgdaSymbol{x}. The
-total space is given by \AgdaSymbol{Σ[ x ∶ A ] P x}. The path lifting property
-can be defined by path induction.
+As illustrated in Fig.~\ref{fig:fib}, a type family \AgdaSymbol{P}
+over a type~\AgdaSymbol{A} is a fibration with base
+space~\AgdaSymbol{A}, with \AgdaSymbol{P x} the fiber over
+\AgdaSymbol{x}, and with total space \AgdaSymbol{Σ[ x ∶ A ] P x}. The
+path lifting property mapping a path in the base space to a path in
+the total space can be defined as follows:
 
 \begin{code}
-lift : {A : 𝒰} {P : A → 𝒰} {x y : A}
-     → (u : P x) (p : x == y)
-     → (x , u) == (y , transport P p u)
+lift : {A : 𝒰} {P : A → 𝒰} {x y : A} → (u : P x) (p : x == y) → (x , u) == (y , transport P p u)
 lift u (refl x) = refl (x , u)
 \end{code}
 %
-Because the pattern \AgdaSymbol{transport P p u == v} recurs often, we define
-the syntax \AgdaSymbol{u == v [ P ↓ p ]} as a synonym for it, which indicates
-the path in the fiber \AgdaSymbol{P} over \AgdaSymbol{u} and \AgdaSymbol{v},
-which lies over \AgdaSymbol{p}. This is essentially the \AgdaSymbol{PathOver}
-type pioneered by Licata and Brunerie in \cite{licata2015cubical}. It is
-important to note the ``flip'' in the syntax. Such paths in the total space
-induce other paths:
+
+\noindent As illustrated in the figure below, the point
+\AgdaSymbol{transport P p u} is in the space \AgdaSymbol{P y}. A path
+from that point to another point \AgdaSymbol{v} in \AgdaSymbol{P y}
+can be viewed as a path between \AgdaSymbol{u} and \AgdaSymbol{v} that
+``lies over'' \AgdaSymbol{p}. Following Licata and
+Brunerie~\cite{licata2015cubical}, we often use the syntax
+\AgdaSymbol{u == v [ P ↓ p ]} for the path \AgdaSymbol{transport P p u == v} to reinforce 
+this perspective. In other words the curved path between
+\AgdaSymbol{u} and \AgdaSymbol{v} below consists of first transporting
+\AgdaSymbol{u} to the space \AgdaSymbol{P y} along \AgdaSymbol{p} and
+then following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
+  \draw (-3,0) ellipse (1.5cm and 2.5cm);
+  \draw (3,2) ellipse (2cm and 1.5cm);
+  \draw (3,-2) ellipse (2cm and 1.5cm);
+  \node[blue,ultra thick,above] at (-3,3) {$A$};
+  \node[blue,ultra thick,above] at (3.3,3.7) {$P(x)$};
+  \node[blue,ultra thick,below] at (3.3,-3.7) {$P(y)$};
+  \draw[fill] (-3,1.5) circle [radius=0.025];
+  \draw[fill] (-3,-1.5) circle [radius=0.025];
+  \draw[left,cyan,thick] (-3,1.5) -- (-3,-1.5);
+  \node[left] (X) at (-3,1.5) {$x$};
+  \node[left] at (-3,-1.5) {$y$};
+  \draw[fill] (3,-1.7) circle [radius=0.025];
+  \draw[fill] (3,2) circle [radius=0.025];
+  \node[above] at (3,2) {$u$};
+  \draw[fill] (3,-2.8) circle [radius=0.025];
+  \node[below] at (3,-2.8) {$v$};
+  \node[above] at (3,-1.7) {$\AgdaFunction{transport}~\AgdaFunction{P}~\AgdaFunction{p}~\AgdaFunction{u}$};
+  \node[left,cyan] at (-3,0) {$p$};
+  \draw[->,red,dashed,ultra thick] (-3,1.5) to [out=45, in=135] (1.2,2.5);
+  \draw[->,red,dashed,ultra thick] (-3,-1.5) to [out=-45, in=-135] (1.15,-2.5);
+  %% 
+  \draw[cyan,dashed,ultra thick] (3,-1.7) to (3,-2.8); 
+  \draw[cyan,dashed,ultra thick] (3,2) to [out=-45, in=45] (3,-2.8); 
+\end{tikzpicture}
+\end{center}
+
+Such paths in the total space induce other paths:
 
 \begin{code}
 module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
-  dpair= : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ])
-         → (a , pa) == (b , pb)
+  dpair= : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ]) → (a , pa) == (b , pb)
   dpair= (refl a , refl pa) = refl (a , pa)
 
-  dpair=-β₁ : (w : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ]))
-            → (ap pr₁ ∘ dpair=) w == pr₁ w
+  dpair=-β₁ : (w : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ])) → (ap pr₁ ∘ dpair=) w == pr₁ w
   dpair=-β₁ (refl a , refl pa) = refl (refl a)
 
   dpair=-e₁ : (a , pa) == (b , pb) → a == b
@@ -1333,6 +1408,10 @@ represented?
 Looking at this from the other end: given some ``exotic'' (but finitely
 presented) Groupoid $\mathfrak{G}$, is there always a programming language
 which is sound and complete for $\mathfrak{G}$ ?
+
+\ack We would like to thank Robert Rose for developing the model based
+on univalent fibrations, for extensive contributions to the code, and for
+numerous discussions. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{acm}
