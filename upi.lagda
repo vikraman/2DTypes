@@ -768,22 +768,26 @@ module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
 The \AgdaSymbol{transport} operation lifts paths to equivalences. By
 transporting identity, we can convert a path to an equivalence.
 
-\jacques{But transport does not occur below at all, not even
-implicitly.  In fact, the 4 functions below are so trivial that
-they could be collapsed into 1 without loss of comprehension.
-Compared to how complex a lot of the rest of this is (such as
-the previous sub-section), what's the point of taking so much
-space with this?}
+-- \jacques{But transport does not occur below at all, not even
+-- implicitly.  In fact, the 4 functions below are so trivial that
+-- they could be collapsed into 1 without loss of comprehension.
+-- Compared to how complex a lot of the rest of this is (such as
+-- the previous sub-section), what's the point of taking so much
+-- space with this?}
 
+\AgdaHide{
 \begin{code}
 idh : {A : 𝒰} {P : A → 𝒰} → (f : Π[ a ∶ A ] P a) → f ∼ f
 idh f a = refl (f a)
 
 ide : (A : 𝒰) → A ≃ A
 ide A = id , id , idh id , idh id , idh (idh id)
+\end{code}
+}
 
+\begin{code}
 tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
-tpt-eqv P (refl a) = ide (P a)
+tpt-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
 
 id-to-eqv : {A B : 𝒰} → A == B → A ≃ B
 id-to-eqv = tpt-eqv id
