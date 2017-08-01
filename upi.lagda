@@ -939,31 +939,43 @@ is-type T = λ X → ∥ X == T ∥
 Ũ[_] : (T : 𝒰) → Ũ
 Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
 \end{code}
-
+%
 The following lemma by Christensen gives a characterization of univalent
 fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
 \AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
 \AgdaSymbol{(T, ∣ refl T ∣)}.
 
-Towards proving that, we start by defining the automorphism group of a space in
-an $(∞, 1)$-topos. By working in the internal language, that is, in HoTT, we can
-define the type \AgdaSymbol{Aut T} for any type \AgdaSymbol{T : 𝒰} to be the
-type of automorphisms on \AgdaSymbol{T} which gives rise to an
-$∞$-group. Similarly, the delooping of this group is the type of connected
-components of \AgdaSymbol{T}, which is suggestively named \AgdaSymbol{BAut
-T}. The loopspace of any pointed type \AgdaSymbol{(T , t)} is the space of paths
-on \AgdaSymbol{t}, \AgdaSymbol{Ω (T , t)}.
+Towards proving that, we start by defining the automorphism group for any type
+\AgdaSymbol{T : 𝒰}. The type \AgdaSymbol{Aut T} is simply the type of
+equivalences on T.
 
 \begin{code}
 Aut : (T : 𝒰) → 𝒰
 Aut T = T ≃ T
+\end{code}
+%
+In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos of
+$∞$-groupoids, of which HoTT is an internal language. For an object $T$, we can
+define an $∞$-groupoid of $T$s, with objects $T$s, morphisms equivalences
+between $T$s, and so on. This is a full sub-$∞$-groupoid of $∞$Grpd, and gives
+the classifying space for spaces equivalent to $T$s. This is denoted by the type
+\AgdaSymbol{BAut T}. The notation is suggestive of the fact that it corresponds
+classically to the delooping group of the automorphism group. We truncate to a
+``mere equivalence'' so that the choice of the specific equivalence is
+impertinent.
 
+\begin{code}
 BAut : (T : 𝒰) → 𝒰
 BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
 
 b₀ : {T : 𝒰} → BAut T
 b₀ {T} = T , ∣ ide T ∣
+\end{code}
+%
+The loopspace of any pointed type \AgdaSymbol{(T , t)} is the space of paths
+on \AgdaSymbol{t}, \AgdaSymbol{Ω (T , t)}.
 
+\begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
 Ω (T , t) = t == t
 
@@ -974,7 +986,7 @@ tpt-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
           → pr₁ (tpt-eqv f p) == transport id (dpair=-e₁ p)
 tpt-eqv-f (refl v) = refl id
 \end{code}
-
+%
 Putting these ingredients together, we can show that the
 code of a singleton universe \AgdaSymbol{Ũ[ T ]} is a
 univalent fibration.
@@ -992,7 +1004,7 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
                      ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
                      ◾ ua-β₁ eqv )
 \end{code}
-
+%
 As a consequence, we have that the loopspace of the delooping the group
 of automorphisms of a type \AgdaSymbol{T} is equivalent to the
 type \AgdaSymbol{Aut(T)}.
@@ -1001,7 +1013,7 @@ type \AgdaSymbol{Aut(T)}.
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
 ΩBAut≃Aut[ T ] = tpt-eqv f , is-univ-fib-f b₀ b₀
 \end{code}
-
+%
 It remains to check that \AgdaSymbol{BAut T} is the same as our
 singleton universe \AgdaSymbol{Ũ[ T ]}. This follows by univalence and
 the universal property of truncation.
