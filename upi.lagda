@@ -541,7 +541,7 @@ data 𝟚 : 𝒰 where 0₂ 1₂ : 𝟚
 }
 
 \noindent The syntax of \PiTwo\ is given in the following four Agda
-definitions. The first definition~\AgdaDatatype{𝑼} introduces the set
+definitions. The first definition~\AgdaDatatype{𝑈} introduces the set
 of types of the language: this set contains
 just~\AgdaInductiveConstructor{`𝟚} which is a name for the type of
 booleans. The next three definitions introduces the programs
@@ -560,36 +560,36 @@ infix 4 _⊙₁_ _⊙₂_
 
 {
 \begin{code}
-data 𝑼 : 𝒰 where `𝟚 : 𝑼
+data 𝑈 : 𝒰 where `𝟚 : 𝑈
 
-data _↔₁_ : 𝑼 → 𝑼 → 𝒰 where
-  `id  : {A : 𝑼} → A ↔₁ A
+data _↔₁_ : 𝑈 → 𝑈 → 𝒰 where
+  `id  : {A : 𝑈} → A ↔₁ A
   `not : `𝟚 ↔₁ `𝟚
-  !₁_  : {A B : 𝑼} → A ↔₁ B → (B ↔₁ A)
-  _⊙₁_ : {A B C : 𝑼} → (A ↔₁ B) → (B ↔₁ C) → (A ↔₁ C)
+  !₁_  : {A B : 𝑈} → A ↔₁ B → (B ↔₁ A)
+  _⊙₁_ : {A B C : 𝑈} → (A ↔₁ B) → (B ↔₁ C) → (A ↔₁ C)
 
-data _↔₂_ : {A B : 𝑼} → (A ↔₁ B) → (A ↔₁ B) → 𝒰 where
+data _↔₂_ : {A B : 𝑈} → (A ↔₁ B) → (A ↔₁ B) → 𝒰 where
 
-  `id₂   : {A B : 𝑼} {p : A ↔₁ B} → p ↔₂ p
-  !₂_    : {A B : 𝑼} {p q : A ↔₁ B} → (u : p ↔₂ q) → q ↔₂ p
-  _⊙₂_   : {A B : 𝑼} {p q r : A ↔₁ B} → (u : p ↔₂ q) (v : q ↔₂ r) → (p ↔₂ r)
+  `id₂   : {A B : 𝑈} {p : A ↔₁ B} → p ↔₂ p
+  !₂_    : {A B : 𝑈} {p q : A ↔₁ B} → (u : p ↔₂ q) → q ↔₂ p
+  _⊙₂_   : {A B : 𝑈} {p q r : A ↔₁ B} → (u : p ↔₂ q) (v : q ↔₂ r) → (p ↔₂ r)
 
-  `idl   : {A B : 𝑼} (p : A ↔₁ B) → `id ⊙₁ p ↔₂ p
-  `idr   : {A B : 𝑼} (p : A ↔₁ B) → p ⊙₁ `id ↔₂ p
-  `assoc :     {A B C D : 𝑼} (p : A ↔₁ B) (q : B ↔₁ C) (r : C ↔₁ D) →
+  `idl   : {A B : 𝑈} (p : A ↔₁ B) → `id ⊙₁ p ↔₂ p
+  `idr   : {A B : 𝑈} (p : A ↔₁ B) → p ⊙₁ `id ↔₂ p
+  `assoc :     {A B C D : 𝑈} (p : A ↔₁ B) (q : B ↔₁ C) (r : C ↔₁ D) →
                (p ⊙₁ q) ⊙₁ r ↔₂ p ⊙₁ (q ⊙₁ r)
-  _□₂_   :     {A B C : 𝑼} {p q : A ↔₁ B} {r s : B ↔₁ C} →
+  _□₂_   :     {A B C : 𝑈} {p q : A ↔₁ B} {r s : B ↔₁ C} →
                (u : p ↔₂ q) (v : r ↔₂ s) → (p ⊙₁ r) ↔₂ (q ⊙₁ s)
 
-  `!     : {A B : 𝑼} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q
-  `!l    : {A B : 𝑼} (p : A ↔₁ B) → p ⊙₁ !₁ p ↔₂ `id
-  `!r    : {A B : 𝑼} (p : B ↔₁ A) → !₁ p ⊙₁ p ↔₂ `id
-  `!id   : {A : 𝑼} → !₁ `id {A} ↔₂ `id {A}
+  `!     : {A B : 𝑈} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q
+  `!l    : {A B : 𝑈} (p : A ↔₁ B) → p ⊙₁ !₁ p ↔₂ `id
+  `!r    : {A B : 𝑈} (p : B ↔₁ A) → !₁ p ⊙₁ p ↔₂ `id
+  `!id   : {A : 𝑈} → !₁ `id {A} ↔₂ `id {A}
   `!not  : !₁ `not ↔₂ `not
-  `!◾    : {A B C : 𝑼} {p : A ↔₁ B} {q : B ↔₁ C} → !₁ (p ⊙₁ q) ↔₂ (!₁ q) ⊙₁ (!₁ p)
-  `!!    : {A B : 𝑼} {p : A ↔₁ B} → !₁ (!₁ p) ↔₂ p
+  `!◾    : {A B C : 𝑈} {p : A ↔₁ B} {q : B ↔₁ C} → !₁ (p ⊙₁ q) ↔₂ (!₁ q) ⊙₁ (!₁ p)
+  `!!    : {A B : 𝑈} {p : A ↔₁ B} → !₁ (!₁ p) ↔₂ p
 
-data _↔₃_ {A B : 𝑼} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
+data _↔₃_ {A B : 𝑈} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
   `trunc : u ↔₃ v
 \end{code}
 }
@@ -1115,12 +1115,12 @@ postulate
 \end{code}
 }
 At level $0$, the correspondence is straightforward, as both
-\AgdaSymbol{𝑼} and \AgdaSymbol{BAut 𝟚} are singletons.
+\AgdaSymbol{𝑈} and \AgdaSymbol{BAut 𝟚} are singletons.
 \begin{code}
-⟦_⟧ : 𝑼 → BAut 𝟚
+⟦_⟧ : 𝑈 → BAut 𝟚
 ⟦ `𝟚 ⟧ = 𝟚₀
 
-⟦_⟧⁻¹ : BAut 𝟚 → 𝑼
+⟦_⟧⁻¹ : BAut 𝟚 → 𝑈
 ⟦ 𝟚₀ ⟧⁻¹ = `𝟚
 \end{code}
 
@@ -1128,7 +1128,7 @@ Level $1$ is the first non-trivial level. To each syntactic combinator
 $c$ of \AgdaSymbol{A ↔₁ B}, we can associate a path, and vice-versa.
 
 \begin{code}
-⟦_⟧₁ : {A B : 𝑼} → A ↔₁ B → ⟦ A ⟧ == ⟦ B ⟧
+⟦_⟧₁ : {A B : 𝑈} → A ↔₁ B → ⟦ A ⟧ == ⟦ B ⟧
 ⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ↔₁ `𝟚
 \end{code}
 
@@ -1147,7 +1147,7 @@ Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of work.
 $\AgdaSymbol{⟦\_⟧₂⁻¹}$ proceeds by enumerating $1$-paths, which makes
 things straightforward.
 \begin{code}
-⟦_⟧₂ : {A B : 𝑼} {p q : A ↔₁ B} → (u : p ↔₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
+⟦_⟧₂ : {A B : 𝑈} {p q : A ↔₁ B} → (u : p ↔₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
 ⟦_⟧₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⟦ p ⟧₁⁻¹ ↔₂ ⟦ q ⟧₁⁻¹
 \end{code}
 
@@ -1160,7 +1160,7 @@ things straightforward.
 
 Level $3$ is trivial -- by fiat.
 \begin{code}
-⟦_⟧₃ : {A B : 𝑼} {p q : A ↔₁ B} {u v : p ↔₂ q} → (α : u ↔₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
+⟦_⟧₃ : {A B : 𝑈} {p q : A ↔₁ B} {u v : p ↔₂ q} → (α : u ↔₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
 ⟦_⟧₃⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ↔₃ ⟦ v ⟧₂⁻¹
 \end{code}
 
