@@ -569,6 +569,7 @@ infix 4 _⊙₁_ _⊙₂_
 data 𝑈 : 𝒰 where
   `𝟚 : 𝑈
 
+---------------
 data _⟷₁_ : (A B : 𝑈) → 𝒰 where
 
   `id  : ∀ {A} → A ⟷₁ A
@@ -577,6 +578,7 @@ data _⟷₁_ : (A B : 𝑈) → 𝒰 where
   !₁_  : ∀ {A B} → (A ⟷₁ B) → (B ⟷₁ A)
   _⊙₁_ : ∀ {A B C} → (A ⟷₁ B) → (B ⟷₁ C) → (A ⟷₁ C)
 
+---------------
 data _⟷₂_ : ∀ {A B} (p q : A ⟷₁ B) → 𝒰 where
 
   `id₂   : ∀ {A B} {p : A ⟷₁ B} → p ⟷₂ p
@@ -602,6 +604,7 @@ data _⟷₂_ : ∀ {A B} (p q : A ⟷₁ B) → 𝒰 where
          → !₁ (p ⊙₁ q) ⟷₂ (!₁ q) ⊙₁ (!₁ p)
   `!!    : ∀ {A B} {p : A ⟷₁ B} → !₁ (!₁ p) ⟷₂ p
 
+---------------
 data _⟷₃_ {A B} {p q : A ⟷₁ B} (u v : p ⟷₂ q) : 𝒰 where
   `trunc : u ⟷₃ v
 \end{code}
@@ -702,7 +705,7 @@ of this section is devoted to explaining what that means.  We follow
 the terminology used in the HoTT book~\cite{hottbook}.  For brevity,
 we will often given just signatures and elide the body. The details
 can be found in the accompanying code at
-\url{https://github.com/DreamLinuxer/Pi2}.
+{\small\url{https://github.com/DreamLinuxer/Pi2}}.
 
 \subsection{Equivalences}
 
@@ -797,7 +800,7 @@ the space \AgdaSymbol{P y}. A path from that point to another point
 \AgdaSymbol{u} and \AgdaSymbol{v} that ``lies over'' \AgdaSymbol{p}. Following
 Licata and Brunerie~\cite{licata2015cubical}, we often use the syntax
 \AgdaSymbol{u == v [ P ↓ p ]} for the path \AgdaSymbol{transport P p u == v} to
-reinforce this perspective. In other words the curved path between
+reinforce this perspective. In other words the curved ``path'' between
 \AgdaSymbol{u} and \AgdaSymbol{v} below consists of first transporting
 \AgdaSymbol{u} to the space \AgdaSymbol{P y} along \AgdaSymbol{p} and then
 following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
@@ -830,10 +833,12 @@ following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
 \end{tikzpicture}
 \end{center}
 
-\noindent Such paths in the total space induce other paths:
+\noindent The paths that lie over paths in the base space induce the
+following paths:
 
 \begin{code}
 module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
+
   dpair= : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ]) → (a , pa) == (b , pb)
   dpair= (refl a , refl pa) = refl (a , pa)
 
