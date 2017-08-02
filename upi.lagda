@@ -229,7 +229,7 @@ ap : {A B : 𝒰} {x y : A} → (f : A → B) (p : x == y) → f x == f y
 ap f (refl x) = refl (f x)
 
 transport : {A : 𝒰} (P : A → 𝒰) {x y : A} → x == y → P x → P y
-transport P (refl x) = id
+transport P (refl a) = id
 
 PathOver : {A : 𝒰} (P : A → 𝒰) {x y : A} (p : x == y) (u : P x) (v : P y) → 𝒰
 PathOver P p u v = transport P p u == v
@@ -934,24 +934,21 @@ this as an axiom. We also give a short-form {\small\AgdaFunction{ua}} for
 getting a path from an equivalence:
 
 \begin{code}
+postulate
+  univalence : (A B : 𝒰) → is-hae (id-to-eqv {A} {B})
+
 module _ {A B : 𝒰} where
-  postulate
-    univalence : is-hae (id-to-eqv {A} {B})
-
   ua : A ≃ B → A == B
-  ua = pr₁ univalence
-\end{code}
+  ua = pr₁ (univalence A B)
 
-\AgdaHide{
-\begin{code}
   ua-β : id-to-eqv ∘ ua ∼ id
-  ua-β = pr₁ (pr₂ (pr₂ univalence))
+  ua-β = pr₁ (pr₂ (pr₂ (univalence A B)))
 
   ua-β₁ : transport id ∘ ua ∼ pr₁
-  ua-β₁ = {!!} -- dpair=-e₁ ∘ ua-β
+  ua-β₁ = ? --dpair=-e₁ ∘ ua-β
 
   ua-η : ua ∘ id-to-eqv ∼ id
-  ua-η = pr₁ (pr₂ univalence)
+  ua-η = pr₁ (pr₂ (univalence A B))
 
 ua-ide : {A : 𝒰} → ua (ide A) == refl A
 ua-ide {A} = ua-η (refl A)
@@ -1172,7 +1169,7 @@ BAut≃Ũ[ T ] = {!!}
 \jacques{I find it confusing that this has no tilde on the U}.
 
 We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the
-next section.git 
+next section.git
 % \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
 % a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
