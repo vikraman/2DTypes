@@ -709,10 +709,11 @@ can be found in the accompanying code at
 
 \subsection{Equivalences}
 
-Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function
-\AgdaSymbol{f : A → B} is a quasi-inverse, if there is another
-function \AgdaSymbol{g : B → A} which acts as both a left and right
-inverse to \AgdaSymbol{f}.
+Given types \AgdaBound{A} and \AgdaBound{B}, a function
+\AgdaBound{f}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaBound{B}
+is a quasi-inverse, if there is another function
+\AgdaBound{g}~\AgdaSymbol{:}~\AgdaBound{B}~\AgdaSymbol{→}~\AgdaBound{A}
+which acts as both a left and right inverse to \AgdaBound{f}:
 
 \begin{code}
 is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
@@ -782,10 +783,11 @@ A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
 
 \subsection{Type Families are Fibrations}
 
-As illustrated in Fig.~\ref{fig:fib}, a type family \AgdaSymbol{P}
-over a type~\AgdaSymbol{A} is a fibration with base
-space~\AgdaSymbol{A}, with \AgdaSymbol{P x} the fiber over
-\AgdaSymbol{x}, and with total space \AgdaSymbol{Σ[ x ∶ A ] P x}. The
+As illustrated in Fig.~\ref{fig:fib}, a type family \AgdaBound{P} over
+a type~\AgdaBound{A} is a fibration with base space~\AgdaBound{A},
+with \AgdaBound{P}~\AgdaBound{x} the fiber over \AgdaBound{x}, and
+with total space
+\AgdaPrimitiveType{Σ[}~\AgdaBound{x}~\AgdaSymbol{∶}~\AgdaBound{A}~\AgdaSymbol{]}~\AgdaBound{P}~\AgdaBound{x}. The
 path lifting property mapping a path in the base space to a path in
 the total space can be defined as follows:
 
@@ -794,16 +796,23 @@ lift : {A : 𝒰} {P : A → 𝒰} {x y : A} → (u : P x) (p : x == y) → (x ,
 lift u (refl x) = refl (x , u)
 \end{code}
 
-As illustrated in the figure below, the point \AgdaSymbol{transport P p u} is in
-the space \AgdaSymbol{P y}. A path from that point to another point
-\AgdaSymbol{v} in \AgdaSymbol{P y} can be viewed as a path between
-\AgdaSymbol{u} and \AgdaSymbol{v} that ``lies over'' \AgdaSymbol{p}. Following
-Licata and Brunerie~\cite{licata2015cubical}, we often use the syntax
-\AgdaSymbol{u == v [ P ↓ p ]} for the path \AgdaSymbol{transport P p u == v} to
-reinforce this perspective. In other words the curved ``path'' between
-\AgdaSymbol{u} and \AgdaSymbol{v} below consists of first transporting
-\AgdaSymbol{u} to the space \AgdaSymbol{P y} along \AgdaSymbol{p} and then
-following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
+As illustrated in the figure below, the point
+\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u} is
+in the space \AgdaBound{P}~\AgdaBound{y}. A path from that point to
+another point \AgdaBound{v} in \AgdaBound{P}~\AgdaBound{y} can be
+viewed as a ``path'' between \AgdaBound{u} and \AgdaBound{v} that
+``lies over'' \AgdaBound{p}. Following Licata and
+Brunerie~\cite{licata2015cubical}, we often use the syntax
+\AgdaBound{u} \AgdaFunction{==} \AgdaBound{v} \AgdaFunction{[}
+\AgdaBound{P} \AgdaFunction{↓} \AgdaBound{p} \AgdaFunction{]} for the
+path
+\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}
+\AgdaFunction{==} \AgdaBound{v} to reinforce this perspective. In
+other words the curved ``path'' between \AgdaBound{u} and
+\AgdaBound{v} below consists of first transporting \AgdaBound{u} to
+the space \AgdaBound{P}~\AgdaBound{y} along \AgdaBound{p} and then
+following the straight path in \AgdaBound{P}~\AgdaBound{y} to
+\AgdaBound{v}:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
@@ -837,21 +846,21 @@ following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
 following paths:
 
 \begin{code}
-module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
+module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
 
-  dpair= : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ]) → (a , pa) == (b , pb)
-  dpair= (refl a , refl pa) = refl (a , pa)
+  dpair= : Σ[ p ∶ x == y ] (u == v [ P ↓ p ]) → (x , u) == (y , v)
+  dpair= (refl x , refl u) = refl (x , u)
 
-  dpair=-β₁ : (w : Σ[ p ∶ a == b ] (pa == pb [ P ↓ p ])) → (ap pr₁ ∘ dpair=) w == pr₁ w
-  dpair=-β₁ (refl a , refl pa) = refl (refl a)
+  dpair=-β₁ : (w : Σ[ p ∶ x == y ] (u == v [ P ↓ p ])) → (ap pr₁ ∘ dpair=) w == pr₁ w
+  dpair=-β₁ (refl x , refl u) = refl (refl x)
 
-  dpair=-e₁ : (a , pa) == (b , pb) → a == b
+  dpair=-e₁ : (x , u) == (y , v) → x == y
   dpair=-e₁ = ap pr₁
 \end{code}
 
 \subsection{Paths to Equivalences}
 
-The \AgdaSymbol{transport} operation lifts paths to equivalences. By
+The \AgdaFunction{transport} operation lifts paths to equivalences. By
 transporting identity, we can convert a path to an equivalence.
 
 % \jacques{But transport does not occur below at all, not even
@@ -881,21 +890,23 @@ id-to-eqv = tpt-eqv id
 
 \subsection{Univalent Fibrations}
 
-A type family (fibration) \AgdaSymbol{P : A → 𝒰} is univalent if the map
-\AgdaSymbol{tpt-eqv p} is an equivalence, that is, paths in the base space are
-\emph{equivalent} to equivalences in the fiber. In general, univalent fibrations
-are defined by Kapulkin and Lumsdaine~\cite{SimplicialModel} in the simplicial
-set model (SSet).
+A type family (fibration)
+\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}
+is univalent if the map \AgdaFunction{tpt-eqv}~\AgdaBound{p} is an
+equivalence, that is, paths in the base space are \emph{equivalent} to
+equivalences in the fiber. In general, univalent fibrations are
+defined by Kapulkin and Lumsdaine~\cite{SimplicialModel} in the
+simplicial set model (SSet).
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
 is-univ-fib {A} P = ∀ (a b : A) → is-hae (tpt-eqv P {a} {b})
 \end{code}
 
-The univalence axiom (for \AgdaSymbol{𝒰}) is a specialization of
-\AgdaSymbol{is-univ-fib} to the identity fibration. We postulate this as an
-axiom. We also give a short-form \AgdaSymbol{ua} for getting a path from an
-equivalence.
+The univalence axiom (for \AgdaFunction{𝒰}) is a specialization of
+\AgdaFunction{is-univ-fib} to the identity fibration. We postulate
+this as an axiom. We also give a short-form \AgdaFunction{ua} for
+getting a path from an equivalence:
 
 \begin{code}
 module _ {A B : 𝒰} where
@@ -922,9 +933,10 @@ ua-ide {A} = ua-η (refl A)
 \end{code}
 }
 
-We can define universes a l\`{a} Tarski by having a code \AgdaSymbol{U} for the
-universe \AgdaSymbol{𝒰}, and an interpretation function \AgdaSymbol{El} into
-\AgdaSymbol{𝒰}. This enables us to define a univalent universe as follows.
+We can define universes a l\`{a} Tarski by having a code
+\AgdaFunction{U} for the universe \AgdaFunction{𝒰}, and an
+interpretation function \AgdaFunction{El} into \AgdaFunction{𝒰}. This
+enables us to define a univalent universe as follows.
 
 \begin{code}
 Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
@@ -935,9 +947,9 @@ is-univalent (U , El) = is-univ-fib El
 
 \subsection{Propositional Truncation}
 
-A type \AgdaSymbol{A} is \emph{contractible} (h-level 0, or (-2)-truncated), if
-it has a center of contraction, and all other terms of that type are connected
-to it by a path.
+A type \AgdaBound{A} is \emph{contractible} (h-level 0, or
+(-2)-truncated), if it has a center of contraction, and all other
+terms of that type are connected to it by a path.
 
 \begin{code}
 is-contr : (A : 𝒰) → 𝒰
@@ -955,11 +967,12 @@ is-hae-is-contr = {!!}
 \end{code}
 }
 
-A type \AgdaSymbol{A} is a \emph{proposition} (h-level 1, or (-1)-truncated) if
-all pairs of terms of that type are connected by a path. Such a type can have at
-most one inhabitant - in other words, it is ``contractible if inhabited''. A
-type \AgdaSymbol{A} is a \emph{set} if for any two terms $a, b$ of
-\AgdaSymbol{A}, its type of paths \AgdaSymbol{a == b} is a proposition.
+A type \AgdaBound{A} is a \emph{proposition} (h-level 1, or
+(-1)-truncated) if all pairs of terms of that type are connected by a
+path. Such a type can have at most one inhabitant - in other words, it
+is ``contractible if inhabited''. A type \AgdaBound{A} is a \emph{set}
+if for any two terms $a, b$ of \AgdaBound{A}, its type of paths
+\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b} is a proposition.
 
 \begin{code}
 is-prop : (A : 𝒰) → 𝒰
@@ -982,14 +995,16 @@ eqv= φ = dpair= (φ , is-hae-is-prop _ _)
 \end{code}
 }
 
-Any type can be truncated to a proposition by freely adding paths. This is the
-propositional truncation (or (-1)-truncation) which can be expressed as a higher
-inductive type (HIT). The type constructor \AgdaSymbol{∥\_∥} takes a type
-\AgdaSymbol{A} as a parameter, and the point constructor \AgdaSymbol{∣\_∣}
-coerces terms of type \AgdaSymbol{A} to terms in the truncation. The path
-constructor \AgdaSymbol{ident} identifies any two points in the truncation,
-making it a proposition. We must do this as a \AgdaKeyword{postulate} as Agda
-does not yet support HITs.
+Any type can be truncated to a proposition by freely adding
+paths. This is the propositional truncation (or (-1)-truncation) which
+can be expressed as a higher inductive type (HIT). The type
+constructor \AgdaInductiveConstructor{∥\_∥} takes a type \AgdaBound{A}
+as a parameter, and the point constructor
+\AgdaInductiveConstructor{∣\_∣} coerces terms of type \AgdaBound{A} to
+terms in the truncation. The path constructor
+\AgdaInductiveConstructor{ident} identifies any two points in the
+truncation, making it a proposition. We must do this as a
+\AgdaKeyword{postulate} as Agda does not yet support HITs.
 
 \begin{code}
 postulate
@@ -1001,10 +1016,12 @@ postulate
 ∥-∥-is-prop _ _ = ident
 \end{code}
 
-This makes \AgdaSymbol{∥ A ∥} the ``free'' proposition on any type
-\AgdaSymbol{A}. It can be viewed as the left adjoint to the forgetful functor
-from propositions to types. The recursion principle (below) ensures that we can
-only eliminate a propositional truncation to a type that is a proposition.
+This makes
+\AgdaInductiveConstructor{∥}\AgdaBound{A}\AgdaInductiveConstructor{∥}
+the ``free'' proposition on any type \AgdaBound{A}. It can be viewed
+as the left adjoint to the forgetful functor from propositions to
+types. The recursion principle (below) ensures that we can only
+eliminate a propositional truncation to a type that is a proposition.
 
 \begin{code}
 module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
@@ -1015,10 +1032,11 @@ module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
 
 \subsection{Singleton subuniverses}
 
-Given any type \AgdaSymbol{T}, we can build a propositional predicate that only
-picks out \AgdaSymbol{T}. This lets us build up a singleton ``subuniverse'' of
-\AgdaSymbol{𝒰}, which is only inhabited by \AgdaSymbol{T}.  We will eventually
-show that all such sub-universes are univalent.
+Given any type \AgdaBound{T}, we can build a propositional predicate
+that only picks out \AgdaBound{T}. This lets us build up a singleton
+``subuniverse'' of \AgdaFunction{𝒰}, which is only inhabited by
+\AgdaBound{T}.  We will eventually show that all such sub-universes
+are univalent.
 
 \begin{code}
 is-type : (T : 𝒰) → 𝒰 → 𝒰
@@ -1028,29 +1046,33 @@ is-type T = λ X → ∥ X == T ∥
 Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
 \end{code}
 
-The following lemma by Christensen gives a characterization of univalent
-fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
-\AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
-\AgdaSymbol{(T, ∣ refl T ∣)}.
+The following lemma by Christensen gives a characterization of
+univalent fibrations for singleton subuniverses. If
+\AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰} is a type, then
+\AgdaFunction{pr₁}\AgdaSymbol{:}\AgdaFunction{Ũ[}~\AgdaBound{T}~\AgdaFunction{]}\AgdaSymbol{→}\AgdaFunction{𝒰}
+is a univalent fibration, with base
+\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}.
 
-Towards proving that, we start by defining the automorphism group for any type
-\AgdaSymbol{T : 𝒰}. The type \AgdaSymbol{Aut T} is simply the type of
-equivalences on T.
+Towards proving that, we start by defining the automorphism group for
+any type \AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰}. The type
+\AgdaFunction{Aut}\AgdaBound{T} is simply the type of equivalences on
+\AgdaBound{T}:
 
 \begin{code}
 Aut : (T : 𝒰) → 𝒰
 Aut T = T ≃ T
 \end{code}
 
-In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos of
-$∞$-groupoids, of which HoTT is an internal language. For an object $T$, we can
-define an $∞$-groupoid of $T$s, with objects $T$s, morphisms equivalences
-between $T$s, and so on. This is a full sub-$∞$-groupoid of $∞$Grpd, and gives
-the classifying space for spaces equivalent to $T$s. This is denoted by the type
-\AgdaSymbol{BAut T}. The notation is suggestive of the fact that it corresponds
-classically to the delooping group of the automorphism group. We truncate to a
-``mere equivalence'' so that the choice of the specific equivalence is
-impertinent.
+In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos
+of $∞$-groupoids, of which HoTT is an internal language. For an object
+$T$, we can define an $∞$-groupoid of $T$s, with objects $T$s,
+morphisms equivalences between $T$s, and so on. This is a full
+sub-$∞$-groupoid of $∞$Grpd, and gives the classifying space for
+spaces equivalent to $T$s. This is denoted by the type
+\AgdaFunction{BAut}\AgdaBound{T}. The notation is suggestive of the
+fact that it corresponds classically to the delooping group of the
+automorphism group. We truncate to a ``mere equivalence'' so that the
+choice of the specific equivalence is impertinent.
 
 \begin{code}
 BAut : (T : 𝒰) → 𝒰
@@ -1060,8 +1082,10 @@ b₀ : {T : 𝒰} → BAut T
 b₀ {T} = T , ∣ ide T ∣
 \end{code}
 
-The loopspace of any pointed type \AgdaSymbol{(T , t)} is the space of paths on
-\AgdaSymbol{t}, \AgdaSymbol{Ω (T , t)}.
+The loopspace of any pointed type
+\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}
+is the space of paths on \AgdaBound{t},
+\AgdaFunction{Ω}\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}:
 
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
@@ -1075,8 +1099,9 @@ tpt-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
 tpt-eqv-f (refl v) = refl id
 \end{code}
 
-Putting these ingredients together, we can show that the code of a singleton
-universe \AgdaSymbol{Ũ[ T ]} is a univalent fibration.
+Putting these ingredients together, we can show that the code of a
+singleton universe \AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]} is a
+univalent fibration:
 
 \begin{code}
 is-univ-fib-f : {T : 𝒰} → is-univ-fib f
@@ -1092,18 +1117,19 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
                      ◾ ua-β₁ eqv )
 \end{code}
 
-As a consequence, we have that the loopspace of the delooping the group of
-automorphisms of a type \AgdaSymbol{T} is equivalent to the type
-\AgdaSymbol{Aut(T)}.
+As a consequence, we have that the loopspace of the delooping the
+group of automorphisms of a type \AgdaBound{T} is equivalent to the
+type \AgdaFunction{Aut}\AgdaBound{T}:
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
 ΩBAut≃Aut[ T ] = tpt-eqv f , is-univ-fib-f b₀ b₀
 \end{code}
 
-It remains to check that \AgdaSymbol{BAut T} is the same as our singleton
-universe \AgdaSymbol{Ũ[ T ]}. This follows by univalence and the universal
-property of truncation.
+It remains to check that \AgdaFunction{BAut}\AgdaBound{T} is the same
+as our singleton universe
+\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}. This follows by
+univalence and the universal property of truncation.
 
 \AgdaHide{
 % Only show this if you will provide the proof - otherwise the
