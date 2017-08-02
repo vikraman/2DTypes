@@ -288,15 +288,16 @@ version of $\Pi$ to use in our formal development.
 \subsection{Examples}
 
 The examples below assume a representation of the type of booleans
-$\bt$ as the disjoint union $\ot \oplus \ot$ with the left injection
-representing $\mathsf{false}$ and the right injection representing
-$\mathsf{true}$. Given an arbitrary reversible function
-$\AgdaFunction{f}$ of type $a \iso a$, we can build the reversible
-function $\AgdaFunction{controlled}~\AgdaFunction{f}$ that takes a
-pair of type $\bt \otimes a$ and checks the incoming boolean; if it is
-false (i.e., we are in the left injection), the function behaves like
-the identity; otherwise the function applies $\AgdaFunction{f}$ to the
-second argument. The incoming boolean is then reconstituted to
+${\small\bt}$ as the disjoint union ${\small\ot \oplus \ot}$ with the
+left injection representing ${\small\mathsf{false}}$ and the right
+injection representing ${\small\mathsf{true}}$. Given an arbitrary
+reversible function {\small\AgdaFunction{f}} of type
+${\small a \iso a}$, we can build the reversible function
+${\small\AgdaFunction{controlled}~\AgdaFunction{f}}$ that takes a pair
+of type ${\small\bt \otimes a}$ and checks the incoming boolean; if it
+is false (i.e., we are in the left injection), the function behaves
+like the identity; otherwise the function applies {\small\AgdaFunction{f}}
+to the second argument. The incoming boolean is then reconstituted to
 maintain reversibility:
 
 {\small
@@ -327,16 +328,16 @@ combinators\footnote{We use names that are hopefully quite mnemonic;
   or the accompanying code at
   \url{https://github.com/DreamLinuxer/Pi2}.} that witness the
 corresponding type isomorphism. The code for
-$\AgdaFunction{controlled}~\AgdaFunction{f}$ provides constructive
-evidence (i.e., a program, a logic gate, or a hardware circuit) for an
-automorphism on $\bt \otimes a$: it can be read top-down or bottom-up
-to go back and forth.
+{\small\AgdaFunction{controlled}~\AgdaFunction{f}} provides
+constructive evidence (i.e., a program, a logic gate, or a hardware
+circuit) for an automorphism on ${\small\bt \otimes a}$: it can be read
+top-down or bottom-up to go back and forth.
 
-The $\AgdaFunction{not}$ function below is a simple lifting of
-\AgdaFunction{swap₊} which swaps the left and right injections of a sum
-type. Using the \AgdaFunction{controlled} building block, we can build a
-controlled-not ($\AgdaFunction{cnot}$) gate and a controlled-controlled-not
-gate, also known as the \AgdaFunction{toffoli} gate. The latter gate is a
+The {\small\AgdaFunction{not}} function below is a simple lifting of
+{\small\AgdaFunction{swap₊}} which swaps the left and right injections of a sum
+type. Using the {\small\AgdaFunction{controlled}} building block, we can build a
+controlled-not ({\small\AgdaFunction{cnot}}) gate and a controlled-controlled-not
+gate, also known as the {\small\AgdaFunction{toffoli}} gate. The latter gate is a
 universal function for combinational boolean circuits thus showing the
 expressiveness of the language:
 
@@ -355,14 +356,15 @@ expressiveness of the language:
 \end{array}\]}
 %%%
 
-\noindent While we wrote \AgdaFunction{controlled} in equational-reasoning
-style, \AgdaFunction{not} is written in the point-free combinator style.  These
-are equivalent as $\byiso{-}$ is defined in terms of the sequential composition
-combinator $\odot_1$.
+\noindent While we wrote {\small\AgdaFunction{controlled}} in
+equational-reasoning style, {\small\AgdaFunction{not}} is written in
+the point-free combinator style.  These are equivalent as $\byiso{-}$
+is defined in terms of the sequential composition combinator
+${\small\odot_1}$.
 
 As is customary in any semantic perspective on programming languages, we are
 interested in the question of when two programs are ``equivalent.'' Consider the
-following six programs of type~$\bt \iso \bt$:
+following six programs of type~${\small\bt \iso \bt}$:
 
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcl}
@@ -441,22 +443,25 @@ following six programs of type~$\bt \iso \bt$:
 
 \end{tikzpicture}
 \end{center}
-\caption{\label{fig:not}Graphical representation of \AgdaFunction{not₃}}
+\caption{\label{fig:not}Graphical representation of {\small\AgdaFunction{not₃}}}
 \end{figure}
 
-The programs are all of the same type but this is clearly not a sufficient
-condition for ``equivalence.'' Thinking extensionally, i.e., by looking at all
-possible input-output pairs, it is easy to verify that the six programs split
-into two classes: one consisting of the first three programs and that is
-equivalent to the identity function and the other consisting of the remaining
-three programs and that is equivalent to boolean negation. In the context of
-$\Pi$, we can do better: we can provide \emph{evidence} (i.e., a reversible
-program of type $\isotwo$ that manipulates lower level reversible programs of
-type $\iso$ ) that can constructively transform programs to equivalent ones. We
-show such a level-2 program proving that $\AgdaFunction{not₃}$ is equivalent to
-$\AgdaFunction{not}$. For illustration, the program for $\AgdaFunction{not₃}$ is
-depicted in Fig.~\ref{fig:not}. We encourage the reader to map the steps below
-to manipulations on the diagram that would incrementally simplify it:
+The programs are all of the same type but this is clearly not a
+sufficient condition for ``equivalence.'' Thinking extensionally,
+i.e., by looking at all possible input-output pairs, it is easy to
+verify that the six programs split into two classes: one consisting of
+the first three programs and that is equivalent to the identity
+function and the other consisting of the remaining three programs and
+that is equivalent to boolean negation. In the context of $\Pi$, we
+can do better: we can provide \emph{evidence} (i.e., a reversible
+program of type $\isotwo$ that manipulates lower level reversible
+programs of type $\iso$ ) that can constructively transform programs
+to equivalent ones. We show such a level-2 program proving that
+{\small\AgdaFunction{not₃}} is equivalent to
+{\small\AgdaFunction{not}}. For illustration, the program for
+{\small\AgdaFunction{not₃}} is depicted in Fig.~\ref{fig:not}. We
+encourage the reader to map the steps below to manipulations on the
+diagram that would incrementally simplify it:
 
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcll}
@@ -548,14 +553,15 @@ data 𝟚 : 𝒰 where
   0₂ 1₂ : 𝟚
 \end{code}
 
-The syntax of \PiTwo\ is given by the following four Agda definitions. The first
-definition~\AgdaDatatype{𝑈} introduces the set of types of the language: this
-set contains just~\AgdaInductiveConstructor{`𝟚} which is a name for the type of
-booleans. The next three definitions introduces the programs (combinators) in
-the language stratified by levels. The level-1 programs of type $\iso$ map
-between types; the level-2 programs of type $\isotwo$ map between level-1
-programs; and the level-3 programs of type $\isothree$ map between level-2
-programs.
+The syntax of \PiTwo\ is given by the following four Agda
+definitions. The first definition~{\small\AgdaFunction{𝑈}} introduces
+the set of types of the language: this set contains
+just~{\small\AgdaInductiveConstructor{`𝟚}} which is a name for the
+type of booleans. The next three definitions introduces the programs
+(combinators) in the language stratified by levels. The level-1
+programs of type $\iso$ map between types; the level-2 programs of
+type $\isotwo$ map between level-1 programs; and the level-3 programs
+of type $\isothree$ map between level-2 programs.
 
 \AgdaHide{
 \begin{code}
@@ -616,17 +622,18 @@ data _⟷₃_ {A B} {p q : A ⟷₁ B} (u v : p ⟷₂ q) : 𝒰 where
 
 In the previous presentations of $\Pi$, the level-3 programs,
 consisting of just one trivial program
-\AgdaInductiveConstructor{`trunc}, were not made explicit. The level-1
-and level-2 programs of the full $\Pi$ language~\cite{Carette2016},
-although much larger, have been specialized to small language. For the
-level-1 constructors, denoting reversible programs, type isomorphisms,
-permutations between finite sets, or equivalences depending on
-one's favorite interpretation, we have two canonical programs
-$\AgdaInductiveConstructor{`id}$ and $\AgdaInductiveConstructor{`not}$
-closed under inverses \AgdaInductiveConstructor{!₁} and sequential
-composition \AgdaInductiveConstructor{⊙₁}. For level-2 constructors,
-denoting reversible program transformations, coherence conditions on
-type isomorphisms, equivalences between permutations, or program
+{\small\AgdaInductiveConstructor{`trunc}}, were not made explicit. The
+level-1 and level-2 programs of the full $\Pi$
+language~\cite{Carette2016}, although much larger, have been
+specialized to small language. For the level-1 constructors, denoting
+reversible programs, type isomorphisms, permutations between finite
+sets, or equivalences depending on one's favorite interpretation, we
+have two canonical programs {\small\AgdaInductiveConstructor{`id}} and
+{\small\AgdaInductiveConstructor{`not}} closed under inverses
+{\small\AgdaInductiveConstructor{!₁}} and sequential composition
+{\small\AgdaInductiveConstructor{⊙₁}}. For level-2 constructors, denoting
+reversible program transformations, coherence conditions on type
+isomorphisms, equivalences between permutations, or program
 optimizations depending on one's favorite interpretation, we have the
 following groups: (i) the first group contains the identity, inverses,
 and sequential composition; (ii) the second group establishes the
@@ -645,17 +652,19 @@ not⊙₁not⟷₂id : `not ⊙₁ `not ⟷₂ `id
 not⊙₁not⟷₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
 \end{code}
 
-What is particularly interesting, however, is that the collection of level-2
-combinators above is \emph{complete} in the sense that any equivalence between
-level-1 programs $p$ and $q$ can be proved using the level-2
-combinators. Formally we have two canonical level-1 programs
-$\AgdaInductiveConstructor{`id}$ and $\AgdaInductiveConstructor{`not}$ and for
-any level-1 program $p$, we have evidence that either $p \isotwo
-\AgdaInductiveConstructor{`id}$ or $p \isotwo \AgdaInductiveConstructor{`not}$.
+What is particularly interesting, however, is that the collection of
+level-2 combinators above is \emph{complete} in the sense that any
+equivalence between level-1 programs $p$ and $q$ can be proved using
+the level-2 combinators. Formally we have two canonical level-1
+programs {\small\AgdaInductiveConstructor{`id}} and
+{\small\AgdaInductiveConstructor{`not}} and for any level-1 program
+${\small p}$, we have evidence that either
+${\small p \isotwo \AgdaInductiveConstructor{`id}}$ or
+${\small p \isotwo \AgdaInductiveConstructor{`not}}$.
 
 To prove this, we introduce a type which encodes the knowledge of
-which level-1 programs are canonical. The type \AgdaDatatype{Which}
-names the subset of \AgdaDatatype{⟷₁} which are canonical forms:
+which level-1 programs are canonical. The type {\small\AgdaDatatype{Which}}
+names the subset of {\small\AgdaDatatype{⟷₁}} which are canonical forms:
 
 \begin{code}
 data Which : 𝒰 where ID NOT : Which
@@ -682,10 +691,11 @@ canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 ... | NOT , c₁⟷₂not | NOT , c₂⟷₂not = ID , ((c₁⟷₂not □₂ c₂⟷₂not) ⊙₂ not⊙₁not⟷₂id)
 \end{code}
 
-It is worthwhile to note that the proof of \AgdaFunction{canonical} does not use
-all the level 2 combinators. The larger set of 2-combinators is however useful
-to establish a more direct connection with the model presented in the next
-section.
+It is worthwhile to note that the proof of
+{\small\AgdaFunction{canonical}} does not use all the level 2
+combinators. The larger set of 2-combinators is however useful to
+establish a more direct connection with the model presented in the
+next section.
 
 % \begin{lemma}[Canonical Forms]
 %   Given a 1-combinator $c : \tau \iso \tau$, we either have a
@@ -700,7 +710,7 @@ section.
 \label{sec:univalent}
 
 We work in intensional type theory with one univalent universe
-\AgdaPrimitiveType{𝒰} closed under propositional truncation.  The rest
+{\small\AgdaPrimitiveType{𝒰}} closed under propositional truncation.  The rest
 of this section is devoted to explaining what that means.  We follow
 the terminology used in the HoTT book~\cite{hottbook}.  For brevity,
 we will often given just signatures and elide the body. The details
@@ -709,11 +719,11 @@ can be found in the accompanying code at
 
 \subsection{Equivalences}
 
-Given types \AgdaBound{A} and \AgdaBound{B}, a function
-\AgdaBound{f}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaBound{B}
+Given types {\small\AgdaBound{A}} and {\small\AgdaBound{B}}, a function
+{\small\AgdaBound{f}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaBound{B}}
 is a quasi-inverse, if there is another function
-\AgdaBound{g}~\AgdaSymbol{:}~\AgdaBound{B}~\AgdaSymbol{→}~\AgdaBound{A}
-which acts as both a left and right inverse to \AgdaBound{f}:
+{\small\AgdaBound{g}~\AgdaSymbol{:}~\AgdaBound{B}~\AgdaSymbol{→}~\AgdaBound{A}}
+that acts as both a left and right inverse to {\small\AgdaBound{f}}:
 
 \begin{code}
 is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
@@ -783,11 +793,12 @@ A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
 
 \subsection{Type Families are Fibrations}
 
-As illustrated in Fig.~\ref{fig:fib}, a type family \AgdaBound{P} over
-a type~\AgdaBound{A} is a fibration with base space~\AgdaBound{A},
-with \AgdaBound{P}~\AgdaBound{x} the fiber over \AgdaBound{x}, and
-with total space
-\AgdaPrimitiveType{Σ[}~\AgdaBound{x}~\AgdaSymbol{∶}~\AgdaBound{A}~\AgdaSymbol{]}~\AgdaBound{P}~\AgdaBound{x}. The
+As illustrated in Fig.~\ref{fig:fib}, a type family
+{\small\AgdaBound{P}} over a type~{\small\AgdaBound{A}} is a fibration
+with base space~{\small\AgdaBound{A}}, with
+{\small\AgdaBound{P}~\AgdaBound{x}} the fiber over
+{\small\AgdaBound{x}}, and with total space
+{\small\AgdaPrimitiveType{Σ[}~\AgdaBound{x}~\AgdaSymbol{∶}~\AgdaBound{A}~\AgdaSymbol{]}~\AgdaSymbol{(}\AgdaBound{P}~\AgdaBound{x}\AgdaSymbol{)}}. The
 path lifting property mapping a path in the base space to a path in
 the total space can be defined as follows:
 
@@ -797,22 +808,22 @@ lift u (refl x) = refl (x , u)
 \end{code}
 
 As illustrated in the figure below, the point
-\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u} is
-in the space \AgdaBound{P}~\AgdaBound{y}. A path from that point to
-another point \AgdaBound{v} in \AgdaBound{P}~\AgdaBound{y} can be
-viewed as a ``path'' between \AgdaBound{u} and \AgdaBound{v} that
-``lies over'' \AgdaBound{p}. Following Licata and
+{\small\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}} is
+in the space {\small\AgdaBound{P}~\AgdaBound{y}}. A path from that point to
+another point {\small\AgdaBound{v}} in {\small\AgdaBound{P}~\AgdaBound{y}} can be
+viewed as a ``path'' between {\small\AgdaBound{u}} and {\small\AgdaBound{v}} that
+``lies over'' {\small\AgdaBound{p}}. Following Licata and
 Brunerie~\cite{licata2015cubical}, we often use the syntax
-\AgdaBound{u} \AgdaFunction{==} \AgdaBound{v} \AgdaFunction{[}
-\AgdaBound{P} \AgdaFunction{↓} \AgdaBound{p} \AgdaFunction{]} for the
+{\small\AgdaBound{u} \AgdaFunction{==} \AgdaBound{v} \AgdaFunction{[}
+\AgdaBound{P} \AgdaFunction{↓} \AgdaBound{p} \AgdaFunction{]}} for the
 path
-\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}
-\AgdaFunction{==} \AgdaBound{v} to reinforce this perspective. In
-other words the curved ``path'' between \AgdaBound{u} and
-\AgdaBound{v} below consists of first transporting \AgdaBound{u} to
-the space \AgdaBound{P}~\AgdaBound{y} along \AgdaBound{p} and then
-following the straight path in \AgdaBound{P}~\AgdaBound{y} to
-\AgdaBound{v}:
+{\small\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}
+\AgdaFunction{==} \AgdaBound{v}} to reinforce this perspective. In
+other words the curved ``path'' between {\small\AgdaBound{u}} and
+{\small\AgdaBound{v}} below consists of first transporting {\small\AgdaBound{u}} to
+the space {\small\AgdaBound{P}~\AgdaBound{y}} along {\small\AgdaBound{p}} and then
+following the straight path in {\small\AgdaBound{P}~\AgdaBound{y}} to
+{\small\AgdaBound{v}}:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
@@ -860,7 +871,7 @@ module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
 
 \subsection{Paths to Equivalences}
 
-The \AgdaFunction{transport} operation lifts paths to equivalences. By
+The {\small\AgdaFunction{transport}} operation lifts paths to equivalences. By
 transporting identity, we can convert a path to an equivalence.
 
 % \jacques{But transport does not occur below at all, not even
@@ -891,8 +902,8 @@ id-to-eqv = tpt-eqv id
 \subsection{Univalent Fibrations}
 
 A type family (fibration)
-\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}
-is univalent if the map \AgdaFunction{tpt-eqv}~\AgdaBound{p} is an
+{\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
+is univalent if the map {\small\AgdaFunction{tpt-eqv}~\AgdaBound{p}} is an
 equivalence, that is, paths in the base space are \emph{equivalent} to
 equivalences in the fiber. In general, univalent fibrations are
 defined by Kapulkin and Lumsdaine~\cite{SimplicialModel} in the
@@ -903,9 +914,9 @@ is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
 is-univ-fib {A} P = ∀ (a b : A) → is-hae (tpt-eqv P {a} {b})
 \end{code}
 
-The univalence axiom (for \AgdaFunction{𝒰}) is a specialization of
-\AgdaFunction{is-univ-fib} to the identity fibration. We postulate
-this as an axiom. We also give a short-form \AgdaFunction{ua} for
+The univalence axiom (for {\small\AgdaFunction{𝒰}}) is a specialization of
+{\small\AgdaFunction{is-univ-fib}} to the identity fibration. We postulate
+this as an axiom. We also give a short-form {\small\AgdaFunction{ua}} for
 getting a path from an equivalence:
 
 \begin{code}
@@ -934,9 +945,10 @@ ua-ide {A} = ua-η (refl A)
 }
 
 We can define universes a l\`{a} Tarski by having a code
-\AgdaFunction{U} for the universe \AgdaFunction{𝒰}, and an
-interpretation function \AgdaFunction{El} into \AgdaFunction{𝒰}. This
-enables us to define a univalent universe as follows.
+{\small\AgdaFunction{U}} for the universe {\small\AgdaFunction{𝒰}},
+and an interpretation function {\small\AgdaFunction{El}} into
+{\small\AgdaFunction{𝒰}}. This enables us to define a univalent
+universe as follows:
 
 \begin{code}
 Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
@@ -947,7 +959,7 @@ is-univalent (U , El) = is-univ-fib El
 
 \subsection{Propositional Truncation}
 
-A type \AgdaBound{A} is \emph{contractible} (h-level 0, or
+A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0, or
 (-2)-truncated), if it has a center of contraction, and all other
 terms of that type are connected to it by a path.
 
@@ -967,12 +979,13 @@ is-hae-is-contr = {!!}
 \end{code}
 }
 
-A type \AgdaBound{A} is a \emph{proposition} (h-level 1, or
+A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1, or
 (-1)-truncated) if all pairs of terms of that type are connected by a
 path. Such a type can have at most one inhabitant - in other words, it
-is ``contractible if inhabited''. A type \AgdaBound{A} is a \emph{set}
-if for any two terms $a, b$ of \AgdaBound{A}, its type of paths
-\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b} is a proposition.
+is ``contractible if inhabited''. A type {\small\AgdaBound{A}} is a
+\emph{set} if for any two terms $a, b$ of {\small\AgdaBound{A}}, its
+type of paths {\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is
+a proposition.
 
 \begin{code}
 is-prop : (A : 𝒰) → 𝒰
@@ -998,13 +1011,13 @@ eqv= φ = dpair= (φ , is-hae-is-prop _ _)
 Any type can be truncated to a proposition by freely adding
 paths. This is the propositional truncation (or (-1)-truncation) which
 can be expressed as a higher inductive type (HIT). The type
-constructor \AgdaInductiveConstructor{∥\_∥} takes a type \AgdaBound{A}
-as a parameter, and the point constructor
-\AgdaInductiveConstructor{∣\_∣} coerces terms of type \AgdaBound{A} to
-terms in the truncation. The path constructor
-\AgdaInductiveConstructor{ident} identifies any two points in the
-truncation, making it a proposition. We must do this as a
-\AgdaKeyword{postulate} as Agda does not yet support HITs.
+constructor {\small\AgdaInductiveConstructor{∥\_∥}} takes a type
+{\small\AgdaBound{A}} as a parameter, and the point constructor
+{\small\AgdaInductiveConstructor{∣\_∣}} coerces terms of type
+{\small\AgdaBound{A}} to terms in the truncation. The path constructor
+{\small\AgdaInductiveConstructor{ident}} identifies any two points in
+the truncation, making it a proposition. We must do this as a
+{\small\AgdaKeyword{postulate}} as Agda does not yet support HITs:
 
 \begin{code}
 postulate
@@ -1017,10 +1030,10 @@ postulate
 \end{code}
 
 This makes
-\AgdaInductiveConstructor{∥}\AgdaBound{A}\AgdaInductiveConstructor{∥}
-the ``free'' proposition on any type \AgdaBound{A}. It can be viewed
-as the left adjoint to the forgetful functor from propositions to
-types. The recursion principle (below) ensures that we can only
+{\small\AgdaInductiveConstructor{∥}\AgdaBound{A}\AgdaInductiveConstructor{∥}}
+the ``free'' proposition on any type {\small\AgdaBound{A}}. It can be
+viewed as the left adjoint to the forgetful functor from propositions
+to types. The recursion principle (below) ensures that we can only
 eliminate a propositional truncation to a type that is a proposition.
 
 \begin{code}
@@ -1032,11 +1045,11 @@ module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
 
 \subsection{Singleton subuniverses}
 
-Given any type \AgdaBound{T}, we can build a propositional predicate
-that only picks out \AgdaBound{T}. This lets us build up a singleton
-``subuniverse'' of \AgdaFunction{𝒰}, which is only inhabited by
-\AgdaBound{T}.  We will eventually show that all such sub-universes
-are univalent.
+Given any type {\small\AgdaBound{T}}, we can build a propositional
+predicate that only picks out {\small\AgdaBound{T}}. This lets us
+build up a singleton ``subuniverse'' of {\small\AgdaFunction{𝒰}},
+which is only inhabited by {\small\AgdaBound{T}}.  We will eventually
+show that all such sub-universes are univalent:
 
 \begin{code}
 is-type : (T : 𝒰) → 𝒰 → 𝒰
@@ -1048,15 +1061,15 @@ is-type T = λ X → ∥ X == T ∥
 
 The following lemma by Christensen gives a characterization of
 univalent fibrations for singleton subuniverses. If
-\AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰} is a type, then
-\AgdaFunction{pr₁}\AgdaSymbol{:}\AgdaFunction{Ũ[}~\AgdaBound{T}~\AgdaFunction{]}\AgdaSymbol{→}\AgdaFunction{𝒰}
+{\small\AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰}} is a type, then
+{\small\AgdaFunction{pr₁}\AgdaSymbol{:}\AgdaFunction{Ũ[}~\AgdaBound{T}~\AgdaFunction{]}\AgdaSymbol{→}\AgdaFunction{𝒰}}
 is a univalent fibration, with base
-\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}.
+{\small\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}.
 
 Towards proving that, we start by defining the automorphism group for
-any type \AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰}. The type
-\AgdaFunction{Aut}\AgdaBound{T} is simply the type of equivalences on
-\AgdaBound{T}:
+any type {\small\AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰}}. The type
+{\small\AgdaFunction{Aut}\AgdaBound{T}} is simply the type of equivalences on
+{\small\AgdaBound{T}}:
 
 \begin{code}
 Aut : (T : 𝒰) → 𝒰
@@ -1069,7 +1082,7 @@ $T$, we can define an $∞$-groupoid of $T$s, with objects $T$s,
 morphisms equivalences between $T$s, and so on. This is a full
 sub-$∞$-groupoid of $∞$Grpd, and gives the classifying space for
 spaces equivalent to $T$s. This is denoted by the type
-\AgdaFunction{BAut}\AgdaBound{T}. The notation is suggestive of the
+{\small\AgdaFunction{BAut}\AgdaBound{T}}. The notation is suggestive of the
 fact that it corresponds classically to the delooping group of the
 automorphism group. We truncate to a ``mere equivalence'' so that the
 choice of the specific equivalence is impertinent.
@@ -1083,9 +1096,9 @@ b₀ {T} = T , ∣ ide T ∣
 \end{code}
 
 The loopspace of any pointed type
-\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}
-is the space of paths on \AgdaBound{t},
-\AgdaFunction{Ω}\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}:
+{\small\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}}
+is the space of paths on {\small\AgdaBound{t}},
+{\small\AgdaFunction{Ω}\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}}:
 
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
@@ -1100,7 +1113,7 @@ tpt-eqv-f (refl v) = refl id
 \end{code}
 
 Putting these ingredients together, we can show that the code of a
-singleton universe \AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]} is a
+singleton universe {\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}} is a
 univalent fibration:
 
 \begin{code}
@@ -1118,17 +1131,17 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
 \end{code}
 
 As a consequence, we have that the loopspace of the delooping the
-group of automorphisms of a type \AgdaBound{T} is equivalent to the
-type \AgdaFunction{Aut}\AgdaBound{T}:
+group of automorphisms of a type {\small\AgdaBound{T}} is equivalent to the
+type {\small\AgdaFunction{Aut}\AgdaBound{T}}:
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
 ΩBAut≃Aut[ T ] = tpt-eqv f , is-univ-fib-f b₀ b₀
 \end{code}
 
-It remains to check that \AgdaFunction{BAut}\AgdaBound{T} is the same
+It remains to check that {\small\AgdaFunction{BAut}\AgdaBound{T}} is the same
 as our singleton universe
-\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}. This follows by
+{\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}}. This follows by
 univalence and the universal property of truncation.
 
 \AgdaHide{
@@ -1144,7 +1157,7 @@ BAut≃Ũ[ T ] = {!!}
 \jacques{I find it confusing that this has no tilde on the U}.
 
 We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the
-next section.
+next section.git 
 % \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
 % a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
