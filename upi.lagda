@@ -902,8 +902,7 @@ ide A = id , id , idh id , idh id , idh (idh id)
 
 \begin{code}
 tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
---tpt-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
-tpt-eqv P (refl x) = ide (P x)
+tpt-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
 
 id-to-eqv : {A B : 𝒰} → A == B → A ≃ B
 id-to-eqv = tpt-eqv id
