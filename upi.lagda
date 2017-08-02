@@ -940,21 +940,23 @@ module _ {A B : 𝒰} where
 
   ua : A ≃ B → A == B
   ua = pr₁ univalence
-\end{code}
 
-\AgdaHide{
-\begin{code}
   ua-β : id-to-eqv ∘ ua ∼ id
   ua-β = pr₁ (pr₂ (pr₂ univalence))
 
   ua-β₁ : transport id ∘ ua ∼ pr₁
-  ua-β₁ = {!!} -- dpair=-e₁ ∘ ua-β
+--  ua-β₁ = {!!} -- dpair=-e₁ ∘ ua-β
+  ua-β₁ = {!!}
 
   ua-η : ua ∘ id-to-eqv ∼ id
   ua-η = pr₁ (pr₂ univalence)
 
 ua-ide : {A : 𝒰} → ua (ide A) == refl A
 ua-ide {A} = ua-η (refl A)
+\end{code}
+
+\AgdaHide{
+\begin{code}
 \end{code}
 }
 
@@ -1171,8 +1173,8 @@ BAut≃Ũ[ T ] = {!!}
 \subsection{The Subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
 \jacques{I find it confusing that this has no tilde on the U}.
 
-We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the
-next section.git 
+We define a particular subuniverse \AgdaFunction{U[𝟚]} that we use in the
+next section:
 % \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
 % a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
