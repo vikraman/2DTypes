@@ -23,6 +23,17 @@
 \usepackage{mathabx}
 \usepackage{isomath}
 
+\usepackage{microtype}
+\usepackage{etoolbox}
+
+\makeatletter
+\newcommand*\NoIndentAfterEnv[1]{%
+  \AfterEndEnvironment{#1}{\par\@afterindentfalse\@afterheading}}
+\makeatother
+
+\NoIndentAfterEnv{code}
+\NoIndentAfterEnv{figure}
+
 \DeclareUnicodeCharacter {120794}{$\mathbb {2}$}
 \DeclareUnicodeCharacter {9726}{$\sqbullet$}
 \DeclareUnicodeCharacter {120792}{$\mathbb {0}$}
@@ -280,7 +291,7 @@ $\bt$ as the disjoint union $\ot \oplus \ot$ with the left injection
 representing $\mathsf{false}$ and the right injection representing
 $\mathsf{true}$. Given an arbitrary reversible function
 $\AgdaFunction{f}$ of type $a \iso a$, we can build the reversible
-function $`\AgdaFunction{controlled}~\AgdaFunction{f}'$ that takes a
+function $\AgdaFunction{controlled}~\AgdaFunction{f}$ that takes a
 pair of type $\bt \otimes a$ and checks the incoming boolean; if it is
 false (i.e., we are in the left injection), the function behaves like
 the identity; otherwise the function applies $\AgdaFunction{f}$ to the
@@ -315,7 +326,7 @@ combinators\footnote{We use names that are hopefully quite mnemonic;
   or the accompanying code at
   \url{https://github.com/DreamLinuxer/Pi2}.} that witness the
 corresponding type isomorphism. The code for
-$`\AgdaFunction{controlled}~\AgdaFunction{f}'$ provides constructive
+$\AgdaFunction{controlled}~\AgdaFunction{f}$ provides constructive
 evidence (i.e., a program, a logic gate, or a hardware circuit) for an
 automorphism on $\bt \otimes a$: it can be read top-down or bottom-up
 to go back and forth.
@@ -432,21 +443,19 @@ following six programs of type~$\bt \iso \bt$:
 \caption{\label{fig:not}Graphical representation of \AgdaFunction{not₃}}
 \end{figure}
 
-\noindent The programs are all of the same type but this is clearly
-not a sufficient condition for ``equivalence.'' Thinking
-extensionally, i.e., by looking at all possible input-output pairs, it
-is easy to verify that the six programs split into two classes: one
-consisting of the first three programs and that is equivalent to the
-identity function and the other consisting of the remaining three
-programs and that is equivalent to boolean negation. In the context of
-$\Pi$, we can do better: we can provide \emph{evidence} (i.e., a
-reversible program of type $\isotwo$ that manipulates lower level
-reversible programs of type $\iso$ ) that can constructively transform
-programs to equivalent ones. We show such a level-2 program proving
-that $\AgdaFunction{not₃}$ is equivalent to $\AgdaFunction{not}$. For
-illustration, the program for $\AgdaFunction{not₃}$ is depicted in
-Fig.~\ref{fig:not}. We encourage the reader to map the steps below to
-manipulations on the diagram that would incrementally simplify it:
+The programs are all of the same type but this is clearly not a sufficient
+condition for ``equivalence.'' Thinking extensionally, i.e., by looking at all
+possible input-output pairs, it is easy to verify that the six programs split
+into two classes: one consisting of the first three programs and that is
+equivalent to the identity function and the other consisting of the remaining
+three programs and that is equivalent to boolean negation. In the context of
+$\Pi$, we can do better: we can provide \emph{evidence} (i.e., a reversible
+program of type $\isotwo$ that manipulates lower level reversible programs of
+type $\iso$ ) that can constructively transform programs to equivalent ones. We
+show such a level-2 program proving that $\AgdaFunction{not₃}$ is equivalent to
+$\AgdaFunction{not}$. For illustration, the program for $\AgdaFunction{not₃}$ is
+depicted in Fig.~\ref{fig:not}. We encourage the reader to map the steps below
+to manipulations on the diagram that would incrementally simplify it:
 
 {\small
 \[\def\arraystretch{1.2}\begin{array}{rcll}
@@ -533,22 +542,19 @@ restriction of $\Pi$ to the case of just one type $\mathbb{2}$:
 %%             && \alt & \bullet &:& (c_1 \isotwo c_2) \to (c_2 \isotwo c_3) \to (c_1 \isotwo c_3)
 %% \end{array}\]
 
-{
 \begin{code}
 data 𝟚 : 𝒰 where
   0₂ 1₂ : 𝟚
 \end{code}
-}
 
-\noindent The syntax of \PiTwo\ is given by the following four Agda
-definitions. The first definition~\AgdaDatatype{𝑈} introduces the set
-of types of the language: this set contains
-just~\AgdaInductiveConstructor{`𝟚} which is a name for the type of
-booleans. The next three definitions introduces the programs
-(combinators) in the language stratified by levels. The level-1
-programs of type $\iso$ map between types; the level-2 programs of
-type $\isotwo$ map between level-1 programs; and the level-3 programs
-of type $\isothree$ map between level-2 programs.
+The syntax of \PiTwo\ is given by the following four Agda definitions. The first
+definition~\AgdaDatatype{𝑈} introduces the set of types of the language: this
+set contains just~\AgdaInductiveConstructor{`𝟚} which is a name for the type of
+booleans. The next three definitions introduces the programs (combinators) in
+the language stratified by levels. The level-1 programs of type $\iso$ map
+between types; the level-2 programs of type $\isotwo$ map between level-1
+programs; and the level-3 programs of type $\isothree$ map between level-2
+programs.
 
 \AgdaHide{
 \begin{code}
@@ -558,7 +564,6 @@ infix 4 _⊙₁_ _⊙₂_
 \end{code}
 }
 
-{
 \begin{code}
 data 𝑈 : 𝒰 where
   `𝟚 : 𝑈
@@ -599,7 +604,6 @@ data _⟷₂_ : ∀ {A B} (p q : A ⟷₁ B) → 𝒰 where
 data _⟷₃_ {A B} {p q : A ⟷₁ B} (u v : p ⟷₂ q) : 𝒰 where
   `trunc : u ⟷₃ v
 \end{code}
-}
 
 % \jacques{The text below doesn't make sense anymore as the
 % ``syntactic categories'' were named in the above
@@ -630,26 +634,25 @@ Each of the level-2 combinators of type $p \isotwo q$ is easily seen
 to establish an equivalence between level-1 programs $p$ and $q$ (as
 shown in previous work~\cite{Carette2016} and in
 Sec.~\ref{sec:correspondence}). For example, composition of negation
-is equivalent to the identity: {
+is equivalent to the identity:
+
 \begin{code}
 not⊙₁not⟷₂id : `not ⊙₁ `not ⟷₂ `id
 not⊙₁not⟷₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
 \end{code}
-}
 
-\noindent What is particularly interesting, however, is that the
-collection of level-2 combinators above is \emph{complete} in the
-sense that any equivalence between level-1 programs $p$ and $q$ can be
-proved using the level-2 combinators. Formally we have two canonical
-level-1 programs $\AgdaInductiveConstructor{`id}$ and
-$\AgdaInductiveConstructor{`not}$ and for any level-1 program $p$, we
-have evidence that either $p \isotwo \AgdaInductiveConstructor{`id}$
-or $p \isotwo \AgdaInductiveConstructor{`not}$.
+What is particularly interesting, however, is that the collection of level-2
+combinators above is \emph{complete} in the sense that any equivalence between
+level-1 programs $p$ and $q$ can be proved using the level-2
+combinators. Formally we have two canonical level-1 programs
+$\AgdaInductiveConstructor{`id}$ and $\AgdaInductiveConstructor{`not}$ and for
+any level-1 program $p$, we have evidence that either $p \isotwo
+\AgdaInductiveConstructor{`id}$ or $p \isotwo \AgdaInductiveConstructor{`not}$.
 
 To prove this, we introduce a type which encodes the knowledge of
 which level-1 programs are canonical. The type \AgdaDatatype{Which}
 names the subset of \AgdaDatatype{⟷₁} which are canonical forms:
-{
+
 \begin{code}
 data Which : 𝒰 where ID NOT : Which
 
@@ -657,12 +660,10 @@ refine : (w : Which) → `𝟚 ⟷₁ `𝟚
 refine ID = `id
 refine NOT = `not
 \end{code}
-}
 
-\noindent This enables us to compute for any 2-combinator $c$ (the name of) its
-canonical form, as well as a proof that $c$ is equivalent to its
-canonical form:
-{
+This enables us to compute for any 2-combinator $c$ (the name of) its canonical
+form, as well as a proof that $c$ is equivalent to its canonical form:
+
 \begin{code}
 canonical : (c : `𝟚 ⟷₁ `𝟚) → Σ[ c' ∶ Which ] (c ⟷₂ refine c')
 canonical `id = ID , `id₂
@@ -676,12 +677,11 @@ canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 ... | NOT , c₁⟷₂not | ID , c₂⟷₂id = NOT , ((c₁⟷₂not □₂ c₂⟷₂id) ⊙₂ `idr `not)
 ... | NOT , c₁⟷₂not | NOT , c₂⟷₂not = ID , ((c₁⟷₂not □₂ c₂⟷₂not) ⊙₂ not⊙₁not⟷₂id)
 \end{code}
-}
 
-\noindent It is worthwhile to note that the proof of \AgdaFunction{canonical} does
-not use all the level 2 combinators. The larger set of 2-combinators
-is however useful to establish a more direct connection with the model
-presented in the next section.
+It is worthwhile to note that the proof of \AgdaFunction{canonical} does not use
+all the level 2 combinators. The larger set of 2-combinators is however useful
+to establish a more direct connection with the model presented in the next
+section.
 
 % \begin{lemma}[Canonical Forms]
 %   Given a 1-combinator $c : \tau \iso \tau$, we either have a
@@ -709,14 +709,14 @@ Given types \AgdaSymbol{A} and \AgdaSymbol{B}, a function
 \AgdaSymbol{f : A → B} is a quasi-inverse, if there is another
 function \AgdaSymbol{g : B → A} which acts as both a left and right
 inverse to \AgdaSymbol{f}.
-%
+
 \begin{code}
 is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
 is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
-%
+
 To make this type contractible, we need an additional coherence condition:
-%
+
 \begin{code}
 is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
 is-hae {A} {B} f = Σ[ g ∶ (B → A) ] Σ[ η ∶ g ∘ f ∼ id ] Σ[ ε ∶ f ∘ g ∼ id ] (ap f ∘ η ∼ ε ∘ f)
@@ -728,9 +728,9 @@ qinv-is-hae : {A B : 𝒰} {f : A → B} → is-qinv f → is-hae f
 qinv-is-hae = {!!}
 \end{code}
 }
-%
+
 Then we can define a type of equivalences between two types:
-%
+
 \begin{code}
 _≃_ : (A B : 𝒰) → 𝒰
 A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
@@ -789,19 +789,17 @@ the total space can be defined as follows:
 lift : {A : 𝒰} {P : A → 𝒰} {x y : A} → (u : P x) (p : x == y) → (x , u) == (y , transport P p u)
 lift u (refl x) = refl (x , u)
 \end{code}
-%
 
-\noindent As illustrated in the figure below, the point
-\AgdaSymbol{transport P p u} is in the space \AgdaSymbol{P y}. A path
-from that point to another point \AgdaSymbol{v} in \AgdaSymbol{P y}
-can be viewed as a path between \AgdaSymbol{u} and \AgdaSymbol{v} that
-``lies over'' \AgdaSymbol{p}. Following Licata and
-Brunerie~\cite{licata2015cubical}, we often use the syntax
-\AgdaSymbol{u == v [ P ↓ p ]} for the path \AgdaSymbol{transport P p u == v} to reinforce
-this perspective. In other words the curved path between
+As illustrated in the figure below, the point \AgdaSymbol{transport P p u} is in
+the space \AgdaSymbol{P y}. A path from that point to another point
+\AgdaSymbol{v} in \AgdaSymbol{P y} can be viewed as a path between
+\AgdaSymbol{u} and \AgdaSymbol{v} that ``lies over'' \AgdaSymbol{p}. Following
+Licata and Brunerie~\cite{licata2015cubical}, we often use the syntax
+\AgdaSymbol{u == v [ P ↓ p ]} for the path \AgdaSymbol{transport P p u == v} to
+reinforce this perspective. In other words the curved path between
 \AgdaSymbol{u} and \AgdaSymbol{v} below consists of first transporting
-\AgdaSymbol{u} to the space \AgdaSymbol{P y} along \AgdaSymbol{p} and
-then following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
+\AgdaSymbol{u} to the space \AgdaSymbol{P y} along \AgdaSymbol{p} and then
+following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
@@ -831,7 +829,7 @@ then following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
 \end{tikzpicture}
 \end{center}
 
-Such paths in the total space induce other paths:
+\noindent Such paths in the total space induce other paths:
 
 \begin{code}
 module _ {A : 𝒰} {P : A → 𝒰} {a b : A} {pa : P a} {pb : P b} where
@@ -887,12 +885,12 @@ set model (SSet).
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
 is-univ-fib {A} P = ∀ (a b : A) → is-hae (tpt-eqv P {a} {b})
 \end{code}
-%
-The univalence axiom (for \AgdaSymbol{𝒰}) is a specialization
-of \AgdaSymbol{is-univ-fib} to the identity fibration.  We
-postulate this as an axiom.  We also give a short-form
-\AgdaSymbol{ua} for getting a path from an equivalence.
-%
+
+The univalence axiom (for \AgdaSymbol{𝒰}) is a specialization of
+\AgdaSymbol{is-univ-fib} to the identity fibration. We postulate this as an
+axiom. We also give a short-form \AgdaSymbol{ua} for getting a path from an
+equivalence.
+
 \begin{code}
 module _ {A B : 𝒰} where
   postulate
@@ -917,9 +915,9 @@ ua-ide : {A : 𝒰} → ua (ide A) == refl A
 ua-ide {A} = ua-η (refl A)
 \end{code}
 }
-%
-We can define universes a l\`{a} Tarski by having a code \AgdaSymbol{U}
-for the universe \AgdaSymbol{𝒰}, and an interpretation function \AgdaSymbol{El} into
+
+We can define universes a l\`{a} Tarski by having a code \AgdaSymbol{U} for the
+universe \AgdaSymbol{𝒰}, and an interpretation function \AgdaSymbol{El} into
 \AgdaSymbol{𝒰}. This enables us to define a univalent universe as follows.
 
 \begin{code}
@@ -939,8 +937,9 @@ to it by a path.
 is-contr : (A : 𝒰) → 𝒰
 is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
 \end{code}
-%
+
 Equivalences are contractible (assuming univalence):
+
 \begin{code}
 is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
 \end{code}
@@ -949,10 +948,10 @@ is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f
 is-hae-is-contr = {!!}
 \end{code}
 }
-%
+
 A type \AgdaSymbol{A} is a \emph{proposition} (h-level 1, or (-1)-truncated) if
 all pairs of terms of that type are connected by a path. Such a type can have at
-most one inhabitant - in other words, it is ``contractible if inhabited''.  A
+most one inhabitant - in other words, it is ``contractible if inhabited''. A
 type \AgdaSymbol{A} is a \emph{set} if for any two terms $a, b$ of
 \AgdaSymbol{A}, its type of paths \AgdaSymbol{a == b} is a proposition.
 
@@ -963,7 +962,7 @@ is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
 is-set : (A : 𝒰) → 𝒰
 is-set A = Π[ a ∶ A ] Π[ b ∶ A ] is-prop (a == b)
 \end{code}
-%
+
 \AgdaHide{
 \begin{code}
 prop-is-set : {A : 𝒰} → is-prop A → is-set A
@@ -976,14 +975,15 @@ eqv= : {A B : 𝒰} {eqv eqv' : A ≃ B} → (pr₁ eqv == pr₁ eqv') → eqv =
 eqv= φ = dpair= (φ , is-hae-is-prop _ _)
 \end{code}
 }
+
 Any type can be truncated to a proposition by freely adding paths. This is the
 propositional truncation (or (-1)-truncation) which can be expressed as a higher
 inductive type (HIT). The type constructor \AgdaSymbol{∥\_∥} takes a type
 \AgdaSymbol{A} as a parameter, and the point constructor \AgdaSymbol{∣\_∣}
 coerces terms of type \AgdaSymbol{A} to terms in the truncation. The path
 constructor \AgdaSymbol{ident} identifies any two points in the truncation,
-making it a proposition.  We must do this as a \AgdaKeyword{postulate} as
-Agda does not yet support HITs.
+making it a proposition. We must do this as a \AgdaKeyword{postulate} as Agda
+does not yet support HITs.
 
 \begin{code}
 postulate
@@ -994,7 +994,7 @@ postulate
 ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
 ∥-∥-is-prop _ _ = ident
 \end{code}
-%
+
 This makes \AgdaSymbol{∥ A ∥} the ``free'' proposition on any type
 \AgdaSymbol{A}. It can be viewed as the left adjoint to the forgetful functor
 from propositions to types. The recursion principle (below) ensures that we can
@@ -1021,7 +1021,7 @@ is-type T = λ X → ∥ X == T ∥
 Ũ[_] : (T : 𝒰) → Ũ
 Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
 \end{code}
-%
+
 The following lemma by Christensen gives a characterization of univalent
 fibrations for singleton subuniverses. If \AgdaSymbol{T : 𝒰} is a type, then
 \AgdaSymbol{pr₁ : Ũ[ T ] → 𝒰} is a univalent fibration, with base
@@ -1035,7 +1035,7 @@ equivalences on T.
 Aut : (T : 𝒰) → 𝒰
 Aut T = T ≃ T
 \end{code}
-%
+
 In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos of
 $∞$-groupoids, of which HoTT is an internal language. For an object $T$, we can
 define an $∞$-groupoid of $T$s, with objects $T$s, morphisms equivalences
@@ -1053,9 +1053,9 @@ BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
 b₀ : {T : 𝒰} → BAut T
 b₀ {T} = T , ∣ ide T ∣
 \end{code}
-%
-The loopspace of any pointed type \AgdaSymbol{(T , t)} is the space of paths
-on \AgdaSymbol{t}, \AgdaSymbol{Ω (T , t)}.
+
+The loopspace of any pointed type \AgdaSymbol{(T , t)} is the space of paths on
+\AgdaSymbol{t}, \AgdaSymbol{Ω (T , t)}.
 
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
@@ -1068,10 +1068,9 @@ tpt-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
           → pr₁ (tpt-eqv f p) == transport id (dpair=-e₁ p)
 tpt-eqv-f (refl v) = refl id
 \end{code}
-%
-Putting these ingredients together, we can show that the
-code of a singleton universe \AgdaSymbol{Ũ[ T ]} is a
-univalent fibration.
+
+Putting these ingredients together, we can show that the code of a singleton
+universe \AgdaSymbol{Ũ[ T ]} is a univalent fibration.
 
 \begin{code}
 is-univ-fib-f : {T : 𝒰} → is-univ-fib f
@@ -1086,19 +1085,19 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
                      ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
                      ◾ ua-β₁ eqv )
 \end{code}
-%
-As a consequence, we have that the loopspace of the delooping the group
-of automorphisms of a type \AgdaSymbol{T} is equivalent to the
-type \AgdaSymbol{Aut(T)}.
+
+As a consequence, we have that the loopspace of the delooping the group of
+automorphisms of a type \AgdaSymbol{T} is equivalent to the type
+\AgdaSymbol{Aut(T)}.
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
 ΩBAut≃Aut[ T ] = tpt-eqv f , is-univ-fib-f b₀ b₀
 \end{code}
-%
-It remains to check that \AgdaSymbol{BAut T} is the same as our
-singleton universe \AgdaSymbol{Ũ[ T ]}. This follows by univalence and
-the universal property of truncation.
+
+It remains to check that \AgdaSymbol{BAut T} is the same as our singleton
+universe \AgdaSymbol{Ũ[ T ]}. This follows by univalence and the universal
+property of truncation.
 
 \AgdaHide{
 % Only show this if you will provide the proof - otherwise the
@@ -1108,6 +1107,7 @@ BAut≃Ũ[_] : (T : 𝒰) → BAut T ≃ pr₁ Ũ[ T ]
 BAut≃Ũ[ T ] = {!!}
 \end{code}
 }
+
 \subsection{The subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
 \jacques{I find it confusing that this has no tilde on the U}.
 
@@ -1122,41 +1122,56 @@ U[𝟚] = pr₁ Ũ[ 𝟚 ]
 
 Instantiating the lemma from the previous section with \AgdaSymbol{𝟚}, we have
 that \AgdaSymbol{U[𝟚]} is a univalent subuniverse, with \AgdaSymbol{pr₁} the
-univalent fibration. By the property of being a univalent fibration we have
-that \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}, where
+univalent fibration. By the property of being a univalent fibration we have that
+\AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}, where
+
 \begin{code}
 𝟚₀ = (𝟚 , ∣ ide 𝟚 ∣)
 \end{code}
+
 Since \AgdaSymbol{(𝟚 ≃ 𝟚) ≃ 𝟚} (see~\cite{hottbook} exercise 2.13), we have
+
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
+
 \begin{code}
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
+
 Therefore we know that there are only two distinct 1-path. Calling them
+
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
+
 \begin{code}
   id𝟚 not𝟚 : 𝟚₀ == 𝟚₀
 \end{code}
+
 we have this decomposition
+
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
+
 \begin{code}
   all-1-path : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
+
 For 2-path, \AgdaSymbol{𝟚} is a set, with witness
+
 \AgdaHide{\begin{code}
 postulate
 \end{code}}
+
 \begin{code}
   𝟚is-set : is-set 𝟚
 \end{code}
-From this, tt is easy to obtain that \AgdaSymbol{𝟚₀ == 𝟚₀} is a set
-and that 2-paths are contractible.
+
+From this, tt is easy to obtain that \AgdaSymbol{𝟚₀ == 𝟚₀} is a set and that
+2-paths are contractible.
+
 \begin{code}
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
 Ω𝟚₀is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚is-set
@@ -1164,9 +1179,9 @@ all-2-path : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
 all-2-path {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
-In next section, we will use \AgdaSymbol{all-1-path}
-and \AgdaSymbol{all-2-path}
+In next section, we will use \AgdaSymbol{all-1-path} and \AgdaSymbol{all-2-path}
 to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \PiTwo.
+
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
 %% we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
 %% \PiTwo.
@@ -1175,7 +1190,6 @@ to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \Pi
 %% \AgdaSymbol{Aut(𝟚) ≃ 𝟚}, which gives the following easy lemmas for
 %% 1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and
 %% \AgdaSymbol{all-2-paths}.
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1212,8 +1226,10 @@ postulate
 --               ◾ ap (λ x → p=r ◾ x ◾ ! q=r) (◾assoc _ _ _)
 \end{code}
 }
-At level $0$, the correspondence is straightforward, as both
-\AgdaSymbol{𝑈} and \AgdaSymbol{BAut 𝟚} are singletons.
+
+At level $0$, the correspondence is straightforward, as both \AgdaSymbol{𝑈} and
+\AgdaSymbol{BAut 𝟚} are singletons.
+
 \begin{code}
 ⟦_⟧ : 𝑈 → BAut 𝟚
 ⟦ `𝟚 ⟧ = 𝟚₀
@@ -1222,16 +1238,17 @@ At level $0$, the correspondence is straightforward, as both
 ⟦ 𝟚₀ ⟧⁻¹ = `𝟚
 \end{code}
 
-Level $1$ is the first non-trivial level. To each syntactic combinator
-$c$ of \AgdaSymbol{A ⟷₁ B}, we can associate a path, and vice-versa.
+Level $1$ is the first non-trivial level. To each syntactic combinator $c$ of
+\AgdaSymbol{A ⟷₁ B}, we can associate a path, and vice-versa.
 
 \begin{code}
 ⟦_⟧₁ : {A B : 𝑈} → A ⟷₁ B → ⟦ A ⟧ == ⟦ B ⟧
 ⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ⟷₁ `𝟚
 \end{code}
 
-Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-path} is
-key to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
+Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-path} is key
+to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
+
 \AgdaHide{
 \begin{code}
 ⟦ p ⟧₁  = {!!}
@@ -1240,10 +1257,10 @@ key to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
 }
 
 Level $2$ is tricky.  We know that all self-paths (through
-\AgdaSymbol{all-2-paths}) are trivial.  In fact, all of them are.
-Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of work.
-$\AgdaSymbol{⟦\_⟧₂⁻¹}$ proceeds by enumerating $1$-paths, which makes
-things straightforward.
+\AgdaSymbol{all-2-paths}) are trivial.  In fact, all of them are.  Nevertheless
+$\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of work.  $\AgdaSymbol{⟦\_⟧₂⁻¹}$
+proceeds by enumerating $1$-paths, which makes things straightforward.
+
 \begin{code}
 ⟦_⟧₂ : {A B : 𝑈} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
 ⟦_⟧₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⟦ p ⟧₁⁻¹ ⟷₂ ⟦ q ⟧₁⁻¹
@@ -1257,6 +1274,7 @@ things straightforward.
 }
 
 Level $3$ is trivial -- by fiat.
+
 \begin{code}
 ⟦_⟧₃ : {A B : 𝑈} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
 ⟦_⟧₃⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹
@@ -1267,19 +1285,19 @@ Level $3$ is trivial -- by fiat.
 ⟦ _ ⟧₃⁻¹ = `trunc
 \end{code}
 
-Naturally, all of the preceding work would be much less interesting if
-the correspondences were not coherent with each other.  First, they are
-sound:
+Naturally, all of the preceding work would be much less interesting if the
+correspondences were not coherent with each other.  First, they are sound:
+
 \begin{code}
 ⟦⟦_⟧₁⟧₁⁻¹ : (p : `𝟚 ⟷₁ `𝟚) → p ⟷₂ ⟦ ⟦ p ⟧₁ ⟧₁⁻¹
 ⟦⟦_⟧₁⁻¹⟧₁ : (p : 𝟚₀ == 𝟚₀) → p == ⟦ ⟦ p ⟧₁⁻¹ ⟧₁
 \end{code}
 
 But also complete.  Normally, completeness is a rather difficult result to
-prove.  But in our case, all the infrastructure above means that these
-are straightforward.  Key is \emph{reversibility}.  In the first proof
-\AgdaSymbol{!₂} is essential, with \AgdaSymbol{!} being essential in
-the second.
+prove.  But in our case, all the infrastructure above means that these are
+straightforward.  Key is \emph{reversibility}.  In the first proof
+\AgdaSymbol{!₂} is essential, with \AgdaSymbol{!} being essential in the second.
+
 \begin{code}
 completeness₁ : {p q : `𝟚 ⟷₁ `𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ⟷₂ q
 completeness₁ {p} {q} u = ⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ u ⟧₂⁻¹ ⊙₂ !₂ ⟦⟦ q ⟧₁⟧₁⁻¹)
@@ -1289,16 +1307,18 @@ completeness₁⁻¹ {p} {q} u = ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ u ⟧₂ ◾
 \end{code}
 
 Level $2$ soundness is trickier to state, mostly because the types involved in
-$\AgdaSymbol{⟦ ⟦ u ⟧₂ ⟧₂⁻¹}$ and $\AgdaSymbol{⟦ ⟦ u ⟧₂⁻¹ ⟧₂}$ are non-trivial.  For
-combinators, the result is trivial, again by fiat.  For paths, enumeration of
-1-paths reduces the complexity of the problem to ``unwinding'' complex expressions
-for identity paths.
+$\AgdaSymbol{⟦ ⟦ u ⟧₂ ⟧₂⁻¹}$ and $\AgdaSymbol{⟦ ⟦ u ⟧₂⁻¹ ⟧₂}$ are non-trivial.
+For combinators, the result is trivial, again by fiat.  For paths, enumeration
+of 1-paths reduces the complexity of the problem to ``unwinding'' complex
+expressions for identity paths.
+
 \begin{code}
 ⟦⟦_⟧₂⟧₂⁻¹ : {p q : `𝟚 ⟷₁ `𝟚} (u : p ⟷₂ q) → u ⟷₃ (⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ ⟦ u ⟧₂ ⟧₂⁻¹ ⊙₂ (!₂ ⟦⟦ q ⟧₁⟧₁⁻¹)))
 ⟦⟦_⟧₂⁻¹⟧₂ : {p q : 𝟚₀ == 𝟚₀} (u : p == q) → u == ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ ⟦ u ⟧₂⁻¹ ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
 \end{code}
 
 Level $2$ completeness offers no new difficulties.
+
 \begin{code}
 completeness₂ : {p q : `𝟚 ⟷₁ `𝟚} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ⟷₃ v
 completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹ → u == v
