@@ -945,7 +945,7 @@ module _ {A B : 𝒰} where
   ua-β = pr₁ (pr₂ (pr₂ (univalence A B)))
 
   ua-β₁ : transport id ∘ ua ∼ pr₁
-  ua-β₁ = ? --dpair=-e₁ ∘ ua-β
+  ua-β₁ = {!!} --dpair=-e₁ ∘ ua-β
 
   ua-η : ua ∘ id-to-eqv ∼ id
   ua-η = pr₁ (pr₂ (univalence A B))
@@ -953,7 +953,6 @@ module _ {A B : 𝒰} where
 ua-ide : {A : 𝒰} → ua (ide A) == refl A
 ua-ide {A} = ua-η (refl A)
 \end{code}
-}
 
 We can define universes a l\`{a} Tarski by having a code
 {\small\AgdaFunction{U}} for the universe {\small\AgdaFunction{𝒰}},
