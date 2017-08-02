@@ -1170,12 +1170,13 @@ postulate
   𝟚is-set : is-set 𝟚
 \end{code}
 
-From this, tt is easy to obtain that \AgdaSymbol{𝟚₀ == 𝟚₀} is a set and that
+From this, it is easy to obtain that \AgdaSymbol{𝟚₀ == 𝟚₀} is a set and that
 2-paths are contractible.
 
 \begin{code}
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
 Ω𝟚₀is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚is-set
+
 all-2-path : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
 all-2-path {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
