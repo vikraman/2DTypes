@@ -552,7 +552,7 @@ of type $\isothree$ map between level-2 programs.
 
 \AgdaHide{
 \begin{code}
-infix 3 _↔₁_ _↔₂_ _↔₃_
+infix 3 _⟷₁_ _⟷₂_ _⟷₃_
 infix 5 !₁_ !₂_
 infix 4 _⊙₁_ _⊙₂_
 \end{code}
@@ -562,35 +562,35 @@ infix 4 _⊙₁_ _⊙₂_
 \begin{code}
 data 𝑈 : 𝒰 where `𝟚 : 𝑈
 
-data _↔₁_ : 𝑈 → 𝑈 → 𝒰 where
-  `id  : {A : 𝑈} → A ↔₁ A
-  `not : `𝟚 ↔₁ `𝟚
-  !₁_  : {A B : 𝑈} → A ↔₁ B → (B ↔₁ A)
-  _⊙₁_ : {A B C : 𝑈} → (A ↔₁ B) → (B ↔₁ C) → (A ↔₁ C)
+data _⟷₁_ : 𝑈 → 𝑈 → 𝒰 where
+  `id  : {A : 𝑈} → A ⟷₁ A
+  `not : `𝟚 ⟷₁ `𝟚
+  !₁_  : {A B : 𝑈} → A ⟷₁ B → (B ⟷₁ A)
+  _⊙₁_ : {A B C : 𝑈} → (A ⟷₁ B) → (B ⟷₁ C) → (A ⟷₁ C)
 
-data _↔₂_ : {A B : 𝑈} → (A ↔₁ B) → (A ↔₁ B) → 𝒰 where
+data _⟷₂_ : {A B : 𝑈} → (A ⟷₁ B) → (A ⟷₁ B) → 𝒰 where
 
-  `id₂   : {A B : 𝑈} {p : A ↔₁ B} → p ↔₂ p
-  !₂_    : {A B : 𝑈} {p q : A ↔₁ B} → (u : p ↔₂ q) → q ↔₂ p
-  _⊙₂_   : {A B : 𝑈} {p q r : A ↔₁ B} → (u : p ↔₂ q) (v : q ↔₂ r) → (p ↔₂ r)
+  `id₂   : {A B : 𝑈} {p : A ⟷₁ B} → p ⟷₂ p
+  !₂_    : {A B : 𝑈} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → q ⟷₂ p
+  _⊙₂_   : {A B : 𝑈} {p q r : A ⟷₁ B} → (u : p ⟷₂ q) (v : q ⟷₂ r) → (p ⟷₂ r)
 
-  `idl   : {A B : 𝑈} (p : A ↔₁ B) → `id ⊙₁ p ↔₂ p
-  `idr   : {A B : 𝑈} (p : A ↔₁ B) → p ⊙₁ `id ↔₂ p
-  `assoc :     {A B C D : 𝑈} (p : A ↔₁ B) (q : B ↔₁ C) (r : C ↔₁ D) →
-               (p ⊙₁ q) ⊙₁ r ↔₂ p ⊙₁ (q ⊙₁ r)
-  _□₂_   :     {A B C : 𝑈} {p q : A ↔₁ B} {r s : B ↔₁ C} →
-               (u : p ↔₂ q) (v : r ↔₂ s) → (p ⊙₁ r) ↔₂ (q ⊙₁ s)
+  `idl   : {A B : 𝑈} (p : A ⟷₁ B) → `id ⊙₁ p ⟷₂ p
+  `idr   : {A B : 𝑈} (p : A ⟷₁ B) → p ⊙₁ `id ⟷₂ p
+  `assoc :     {A B C D : 𝑈} (p : A ⟷₁ B) (q : B ⟷₁ C) (r : C ⟷₁ D) →
+               (p ⊙₁ q) ⊙₁ r ⟷₂ p ⊙₁ (q ⊙₁ r)
+  _□₂_   :     {A B C : 𝑈} {p q : A ⟷₁ B} {r s : B ⟷₁ C} →
+               (u : p ⟷₂ q) (v : r ⟷₂ s) → (p ⊙₁ r) ⟷₂ (q ⊙₁ s)
 
-  `!     : {A B : 𝑈} {p q : A ↔₁ B} → p ↔₂ q → !₁ p ↔₂ !₁ q
-  `!l    : {A B : 𝑈} (p : A ↔₁ B) → p ⊙₁ !₁ p ↔₂ `id
-  `!r    : {A B : 𝑈} (p : B ↔₁ A) → !₁ p ⊙₁ p ↔₂ `id
-  `!id   : {A : 𝑈} → !₁ `id {A} ↔₂ `id {A}
-  `!not  : !₁ `not ↔₂ `not
-  `!◾    : {A B C : 𝑈} {p : A ↔₁ B} {q : B ↔₁ C} → !₁ (p ⊙₁ q) ↔₂ (!₁ q) ⊙₁ (!₁ p)
-  `!!    : {A B : 𝑈} {p : A ↔₁ B} → !₁ (!₁ p) ↔₂ p
+  `!     : {A B : 𝑈} {p q : A ⟷₁ B} → p ⟷₂ q → !₁ p ⟷₂ !₁ q
+  `!l    : {A B : 𝑈} (p : A ⟷₁ B) → p ⊙₁ !₁ p ⟷₂ `id
+  `!r    : {A B : 𝑈} (p : B ⟷₁ A) → !₁ p ⊙₁ p ⟷₂ `id
+  `!id   : {A : 𝑈} → !₁ `id {A} ⟷₂ `id {A}
+  `!not  : !₁ `not ⟷₂ `not
+  `!◾    : {A B C : 𝑈} {p : A ⟷₁ B} {q : B ⟷₁ C} → !₁ (p ⊙₁ q) ⟷₂ (!₁ q) ⊙₁ (!₁ p)
+  `!!    : {A B : 𝑈} {p : A ⟷₁ B} → !₁ (!₁ p) ⟷₂ p
 
-data _↔₃_ {A B : 𝑈} {p q : A ↔₁ B} (u v : p ↔₂ q) : 𝒰 where
-  `trunc : u ↔₃ v
+data _⟷₃_ {A B : 𝑈} {p q : A ⟷₁ B} (u v : p ⟷₂ q) : 𝒰 where
+  `trunc : u ⟷₃ v
 \end{code}
 }
 
@@ -625,8 +625,8 @@ shown in previous work~\cite{Carette2016} and in
 Sec.~\ref{sec:correspondence}). For example, composition of negation
 is equivalent to the identity: {
 \begin{code}
-not⊙₁not↔₂id : `not ⊙₁ `not ↔₂ `id
-not⊙₁not↔₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
+not⊙₁not⟷₂id : `not ⊙₁ `not ⟷₂ `id
+not⊙₁not⟷₂id = ((!₂ `!not) □₂ `id₂) ⊙₂ (`!r `not)
 \end{code}
 }
 
@@ -641,12 +641,12 @@ or $p \isotwo \AgdaInductiveConstructor{`not}$.
 
 To prove this, we introduce a type which encodes the knowledge of
 which level-1 programs are canonical. The type \AgdaDatatype{Which}
-names the subset of \AgdaDatatype{↔₁} which are canonical forms:
+names the subset of \AgdaDatatype{⟷₁} which are canonical forms:
 {
 \begin{code}
 data Which : 𝒰 where ID NOT : Which
 
-refine : (w : Which) → `𝟚 ↔₁ `𝟚
+refine : (w : Which) → `𝟚 ⟷₁ `𝟚
 refine ID = `id
 refine NOT = `not
 \end{code}
@@ -657,17 +657,17 @@ canonical form, as well as a proof that $c$ is equivalent to its
 canonical form:
 {
 \begin{code}
-canonical : (c : `𝟚 ↔₁ `𝟚) → Σ[ c' ∶ Which ] (c ↔₂ refine c')
+canonical : (c : `𝟚 ⟷₁ `𝟚) → Σ[ c' ∶ Which ] (c ⟷₂ refine c')
 canonical `id = ID , `id₂
 canonical `not = NOT , `id₂
 canonical (!₁ c) with canonical c
-... | ID , c↔₂id = ID , (`! c↔₂id ⊙₂ `!id)
-... | NOT , c↔₂not = NOT , (`! c↔₂not ⊙₂ `!not)
+... | ID , c⟷₂id = ID , (`! c⟷₂id ⊙₂ `!id)
+... | NOT , c⟷₂not = NOT , (`! c⟷₂not ⊙₂ `!not)
 canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
-... | ID , c₁↔₂id | ID , c₂↔₂id = ID , ((c₁↔₂id □₂ c₂↔₂id) ⊙₂ `idl `id)
-... | ID , c₁↔₂id | NOT , c₂↔₂not = NOT , ((c₁↔₂id □₂ c₂↔₂not) ⊙₂ `idl `not)
-... | NOT , c₁↔₂not | ID , c₂↔₂id = NOT , ((c₁↔₂not □₂ c₂↔₂id) ⊙₂ `idr `not)
-... | NOT , c₁↔₂not | NOT , c₂↔₂not = ID , ((c₁↔₂not □₂ c₂↔₂not) ⊙₂ not⊙₁not↔₂id)
+... | ID , c₁⟷₂id | ID , c₂⟷₂id = ID , ((c₁⟷₂id □₂ c₂⟷₂id) ⊙₂ `idl `id)
+... | ID , c₁⟷₂id | NOT , c₂⟷₂not = NOT , ((c₁⟷₂id □₂ c₂⟷₂not) ⊙₂ `idl `not)
+... | NOT , c₁⟷₂not | ID , c₂⟷₂id = NOT , ((c₁⟷₂not □₂ c₂⟷₂id) ⊙₂ `idr `not)
+... | NOT , c₁⟷₂not | NOT , c₂⟷₂not = ID , ((c₁⟷₂not □₂ c₂⟷₂not) ⊙₂ not⊙₁not⟷₂id)
 \end{code}
 }
 
@@ -790,7 +790,7 @@ from that point to another point \AgdaSymbol{v} in \AgdaSymbol{P y}
 can be viewed as a path between \AgdaSymbol{u} and \AgdaSymbol{v} that
 ``lies over'' \AgdaSymbol{p}. Following Licata and
 Brunerie~\cite{licata2015cubical}, we often use the syntax
-\AgdaSymbol{u == v [ P ↓ p ]} for the path \AgdaSymbol{transport P p u == v} to reinforce 
+\AgdaSymbol{u == v [ P ↓ p ]} for the path \AgdaSymbol{transport P p u == v} to reinforce
 this perspective. In other words the curved path between
 \AgdaSymbol{u} and \AgdaSymbol{v} below consists of first transporting
 \AgdaSymbol{u} to the space \AgdaSymbol{P y} along \AgdaSymbol{p} and
@@ -818,9 +818,9 @@ then following the straight path in \AgdaSymbol{P y} to \AgdaSymbol{v}:
   \node[left,cyan] at (-3,0) {$p$};
   \draw[->,red,dashed,ultra thick] (-3,1.5) to [out=45, in=135] (1.2,2.5);
   \draw[->,red,dashed,ultra thick] (-3,-1.5) to [out=-45, in=-135] (1.15,-2.5);
-  %% 
-  \draw[cyan,dashed,ultra thick] (3,-1.7) to (3,-2.8); 
-  \draw[cyan,dashed,ultra thick] (3,2) to [out=-45, in=45] (3,-2.8); 
+  %%
+  \draw[cyan,dashed,ultra thick] (3,-1.7) to (3,-2.8);
+  \draw[cyan,dashed,ultra thick] (3,2) to [out=-45, in=45] (3,-2.8);
 \end{tikzpicture}
 \end{center}
 
@@ -1216,11 +1216,11 @@ At level $0$, the correspondence is straightforward, as both
 \end{code}
 
 Level $1$ is the first non-trivial level. To each syntactic combinator
-$c$ of \AgdaSymbol{A ↔₁ B}, we can associate a path, and vice-versa.
+$c$ of \AgdaSymbol{A ⟷₁ B}, we can associate a path, and vice-versa.
 
 \begin{code}
-⟦_⟧₁ : {A B : 𝑈} → A ↔₁ B → ⟦ A ⟧ == ⟦ B ⟧
-⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ↔₁ `𝟚
+⟦_⟧₁ : {A B : 𝑈} → A ⟷₁ B → ⟦ A ⟧ == ⟦ B ⟧
+⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ⟷₁ `𝟚
 \end{code}
 
 Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-path} is
@@ -1238,8 +1238,8 @@ Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of work.
 $\AgdaSymbol{⟦\_⟧₂⁻¹}$ proceeds by enumerating $1$-paths, which makes
 things straightforward.
 \begin{code}
-⟦_⟧₂ : {A B : 𝑈} {p q : A ↔₁ B} → (u : p ↔₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
-⟦_⟧₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⟦ p ⟧₁⁻¹ ↔₂ ⟦ q ⟧₁⁻¹
+⟦_⟧₂ : {A B : 𝑈} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
+⟦_⟧₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⟦ p ⟧₁⁻¹ ⟷₂ ⟦ q ⟧₁⁻¹
 \end{code}
 
 \AgdaHide{
@@ -1251,8 +1251,8 @@ things straightforward.
 
 Level $3$ is trivial -- by fiat.
 \begin{code}
-⟦_⟧₃ : {A B : 𝑈} {p q : A ↔₁ B} {u v : p ↔₂ q} → (α : u ↔₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
-⟦_⟧₃⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ↔₃ ⟦ v ⟧₂⁻¹
+⟦_⟧₃ : {A B : 𝑈} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
+⟦_⟧₃⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹
 \end{code}
 
 \begin{code}
@@ -1264,7 +1264,7 @@ Naturally, all of the preceding work would be much less interesting if
 the correspondences were not coherent with each other.  First, they are
 sound:
 \begin{code}
-⟦⟦_⟧₁⟧₁⁻¹ : (p : `𝟚 ↔₁ `𝟚) → p ↔₂ ⟦ ⟦ p ⟧₁ ⟧₁⁻¹
+⟦⟦_⟧₁⟧₁⁻¹ : (p : `𝟚 ⟷₁ `𝟚) → p ⟷₂ ⟦ ⟦ p ⟧₁ ⟧₁⁻¹
 ⟦⟦_⟧₁⁻¹⟧₁ : (p : 𝟚₀ == 𝟚₀) → p == ⟦ ⟦ p ⟧₁⁻¹ ⟧₁
 \end{code}
 
@@ -1274,10 +1274,10 @@ are straightforward.  Key is \emph{reversibility}.  In the first proof
 \AgdaSymbol{!₂} is essential, with \AgdaSymbol{!} being essential in
 the second.
 \begin{code}
-completeness₁ : {p q : `𝟚 ↔₁ `𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ↔₂ q
+completeness₁ : {p q : `𝟚 ⟷₁ `𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ⟷₂ q
 completeness₁ {p} {q} u = ⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ u ⟧₂⁻¹ ⊙₂ !₂ ⟦⟦ q ⟧₁⟧₁⁻¹)
 
-completeness₁⁻¹ : {p q : 𝟚₀ == 𝟚₀} → ⟦ p ⟧₁⁻¹ ↔₂ ⟦ q ⟧₁⁻¹ → p == q
+completeness₁⁻¹ : {p q : 𝟚₀ == 𝟚₀} → ⟦ p ⟧₁⁻¹ ⟷₂ ⟦ q ⟧₁⁻¹ → p == q
 completeness₁⁻¹ {p} {q} u = ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ u ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
 \end{code}
 
@@ -1287,14 +1287,14 @@ combinators, the result is trivial, again by fiat.  For paths, enumeration of
 1-paths reduces the complexity of the problem to ``unwinding'' complex expressions
 for identity paths.
 \begin{code}
-⟦⟦_⟧₂⟧₂⁻¹ : {p q : `𝟚 ↔₁ `𝟚} (u : p ↔₂ q) → u ↔₃ (⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ ⟦ u ⟧₂ ⟧₂⁻¹ ⊙₂ (!₂ ⟦⟦ q ⟧₁⟧₁⁻¹)))
+⟦⟦_⟧₂⟧₂⁻¹ : {p q : `𝟚 ⟷₁ `𝟚} (u : p ⟷₂ q) → u ⟷₃ (⟦⟦ p ⟧₁⟧₁⁻¹ ⊙₂ (⟦ ⟦ u ⟧₂ ⟧₂⁻¹ ⊙₂ (!₂ ⟦⟦ q ⟧₁⟧₁⁻¹)))
 ⟦⟦_⟧₂⁻¹⟧₂ : {p q : 𝟚₀ == 𝟚₀} (u : p == q) → u == ⟦⟦ p ⟧₁⁻¹⟧₁ ◾ ⟦ ⟦ u ⟧₂⁻¹ ⟧₂ ◾ (! ⟦⟦ q ⟧₁⁻¹⟧₁)
 \end{code}
 
 Level $2$ completeness offers no new difficulties.
 \begin{code}
-completeness₂ : {p q : `𝟚 ↔₁ `𝟚} {u v : p ↔₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ↔₃ v
-completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⟦ u ⟧₂⁻¹ ↔₃ ⟦ v ⟧₂⁻¹ → u == v
+completeness₂ : {p q : `𝟚 ⟷₁ `𝟚} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ⟷₃ v
+completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹ → u == v
 \end{code}
 
 \AgdaHide{
@@ -1411,7 +1411,7 @@ which is sound and complete for $\mathfrak{G}$ ?
 
 \ack We would like to thank Robert Rose for developing the model based
 on univalent fibrations, for extensive contributions to the code, and for
-numerous discussions. 
+numerous discussions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \bibliographystyle{acm}
