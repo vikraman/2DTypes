@@ -38,6 +38,7 @@
 \DeclareUnicodeCharacter {9726}{$\sqbullet$}
 \DeclareUnicodeCharacter {120792}{$\mathbb {0}$}
 \DeclareUnicodeCharacter {119932}{$\mathbfit{U}$}
+\DeclareUnicodeCharacter {119984}{$\mathcal{U}$}
 
 % \newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
 % \newcommand{\byisotwo}[1]{{\Leftrightarrow}{\langle} ~#1~ \rangle}
