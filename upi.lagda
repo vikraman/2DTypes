@@ -229,7 +229,7 @@ ap : {A B : 𝒰} {x y : A} → (f : A → B) (p : x == y) → f x == f y
 ap f (refl x) = refl (f x)
 
 transport : {A : 𝒰} (P : A → 𝒰) {x y : A} → x == y → P x → P y
-transport P (refl a) = id
+transport P = coe ∘ ap P
 
 PathOver : {A : 𝒰} (P : A → 𝒰) {x y : A} (p : x == y) (u : P x) (v : P y) → 𝒰
 PathOver P p u v = transport P p u == v
@@ -902,7 +902,8 @@ ide A = id , id , idh id , idh id , idh (idh id)
 
 \begin{code}
 tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
-tpt-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
+--tpt-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
+tpt-eqv P (refl x) = ide (P x)
 
 id-to-eqv : {A B : 𝒰} → A == B → A ≃ B
 id-to-eqv = tpt-eqv id
@@ -945,7 +946,7 @@ module _ {A B : 𝒰} where
   ua-β = pr₁ (pr₂ (pr₂ (univalence A B)))
 
   ua-β₁ : transport id ∘ ua ∼ pr₁
-  ua-β₁ = {!!} --dpair=-e₁ ∘ ua-β
+  ua-β₁ eqv = transport _ (ua-β eqv) (ap pr₁)
 
   ua-η : ua ∘ id-to-eqv ∼ id
   ua-η = pr₁ (pr₂ (univalence A B))
