@@ -358,7 +358,7 @@ expressiveness of the language:
 
 \noindent While we wrote {\small\AgdaFunction{controlled}} in
 equational-reasoning style, {\small\AgdaFunction{not}} is written in
-the point-free combinator style.  These are equivalent as $\byiso{-}$
+the point-free combinator style.  These are equivalent as ${\small\byiso{-}}$
 is defined in terms of the sequential composition combinator
 ${\small\odot_1}$.
 
@@ -450,9 +450,9 @@ The programs are all of the same type but this is clearly not a
 sufficient condition for ``equivalence.'' Thinking extensionally,
 i.e., by looking at all possible input-output pairs, it is easy to
 verify that the six programs split into two classes: one consisting of
-the first three programs and that is equivalent to the identity
-function and the other consisting of the remaining three programs and
-that is equivalent to boolean negation. In the context of $\Pi$, we
+the first three programs which are all equivalent to the identity
+function and the other consisting of the remaining three programs
+which all equivalent to boolean negation. In the context of $\Pi$, we
 can do better: we can provide \emph{evidence} (i.e., a reversible
 program of type $\isotwo$ that manipulates lower level reversible
 programs of type $\iso$ ) that can constructively transform programs
@@ -561,7 +561,7 @@ type of booleans. The next three definitions introduces the programs
 (combinators) in the language stratified by levels. The level-1
 programs of type $\iso$ map between types; the level-2 programs of
 type $\isotwo$ map between level-1 programs; and the level-3 programs
-of type $\isothree$ map between level-2 programs.
+of type $\isothree$ map between level-2 programs:
 
 \AgdaHide{
 \begin{code}
@@ -625,21 +625,22 @@ consisting of just one trivial program
 {\small\AgdaInductiveConstructor{`trunc}}, were not made explicit. The
 level-1 and level-2 programs of the full $\Pi$
 language~\cite{Carette2016}, although much larger, have been
-specialized to small language. For the level-1 constructors, denoting
-reversible programs, type isomorphisms, permutations between finite
-sets, or equivalences depending on one's favorite interpretation, we
-have two canonical programs {\small\AgdaInductiveConstructor{`id}} and
+specialized to our small language. For the level-1 constructors,
+denoting reversible programs, type isomorphisms, permutations between
+finite sets, or equivalences depending on one's favorite
+interpretation, we have two canonical programs
+{\small\AgdaInductiveConstructor{`id}} and
 {\small\AgdaInductiveConstructor{`not}} closed under inverses
-{\small\AgdaInductiveConstructor{!₁}} and sequential composition
-{\small\AgdaInductiveConstructor{⊙₁}}. For level-2 constructors, denoting
-reversible program transformations, coherence conditions on type
-isomorphisms, equivalences between permutations, or program
-optimizations depending on one's favorite interpretation, we have the
-following groups: (i) the first group contains the identity, inverses,
-and sequential composition; (ii) the second group establishes the
-coherence laws for level-1 sequential composition (e.g, it is
-associative); and (iii) finally the third group includes general rules
-for level-1 inversions.
+{\small\AgdaInductiveConstructor{!₁}} and sequential
+composition~{\small\AgdaInductiveConstructor{⊙₁}}. For level-2
+constructors, denoting reversible program transformations, coherence
+conditions on type isomorphisms, equivalences between permutations, or
+program optimizations depending on one's favorite interpretation, we
+have the following groups: (i) the first group contains the identity,
+inverses, and sequential composition; (ii) the second group
+establishes the coherence laws for level-1 sequential composition
+(e.g, it is associative); and (iii) finally the third group includes
+general rules for level-1 inversions.
 
 Each of the level-2 combinators of type $p \isotwo q$ is easily seen
 to establish an equivalence between level-1 programs $p$ and $q$ (as
@@ -853,8 +854,10 @@ following the straight path in {\small\AgdaBound{P}~\AgdaBound{y}} to
 \end{tikzpicture}
 \end{center}
 
-\noindent The paths that lie over paths in the base space induce the
-following paths:
+\noindent Given a fibration ${\small\AgdaBound{P}}$ and points
+{\small\AgdaBound{x}}, {\small\AgdaBound{y}}, {\small\AgdaBound{u}},
+and {\small\AgdaBound{v}} as above, we have the following functions on
+paths:
 
 \begin{code}
 module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
@@ -868,6 +871,12 @@ module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
   dpair=-e₁ : (x , u) == (y , v) → x == y
   dpair=-e₁ = ap pr₁
 \end{code}
+
+\noindent The first function builds a path in the total space given a
+path between {\small\AgdaBound{u}} and {\small\AgdaBound{v}} that lies
+over a path {\small\AgdaBound{p}} in the base space; the second
+function is a coherence condition for this path; and the third
+recovers a path in the base space from a path in the total space.
 
 \subsection{Paths to Equivalences}
 
@@ -901,13 +910,18 @@ id-to-eqv = tpt-eqv id
 
 \subsection{Univalent Fibrations}
 
-A type family (fibration)
+Univalent fibrations are defined by Kapulkin and
+Lumsdaine~\cite{SimplicialModel} in the simplicial set model (SSet).
+In our context, a type family (fibration)
 {\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
-is univalent if the map {\small\AgdaFunction{tpt-eqv}~\AgdaBound{p}} is an
-equivalence, that is, paths in the base space are \emph{equivalent} to
-equivalences in the fiber. In general, univalent fibrations are
-defined by Kapulkin and Lumsdaine~\cite{SimplicialModel} in the
-simplicial set model (SSet).
+is univalent if the map {\small\AgdaFunction{tpt-eqv}~\AgdaBound{p}}
+is an equivalence, that is, paths in the base space are
+\emph{equivalent} to equivalences between the corresponding
+fibers. Fig.~\ref{fig:fib} (right) illustrates that, for any
+fibration, a path in the base induces an equivalence between the
+fibers. For a fibration to be univalent, the reverse must also be
+true: every equivalence between the fibers must induce a path in the
+base space. Formally, we have the following definition:
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
@@ -961,7 +975,7 @@ is-univalent (U , El) = is-univ-fib El
 
 A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0, or
 (-2)-truncated), if it has a center of contraction, and all other
-terms of that type are connected to it by a path.
+terms of that type are connected to it by a path:
 
 \begin{code}
 is-contr : (A : 𝒰) → 𝒰
@@ -983,9 +997,10 @@ A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1, or
 (-1)-truncated) if all pairs of terms of that type are connected by a
 path. Such a type can have at most one inhabitant - in other words, it
 is ``contractible if inhabited''. A type {\small\AgdaBound{A}} is a
-\emph{set} if for any two terms $a, b$ of {\small\AgdaBound{A}}, its
-type of paths {\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is
-a proposition.
+\emph{set} if for any two terms {\small\AgdaBound{a}} and
+{\small\AgdaBound{b}} of {\small\AgdaBound{A}}, its type of paths
+{\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is a
+proposition:
 
 \begin{code}
 is-prop : (A : 𝒰) → 𝒰
@@ -1021,9 +1036,9 @@ the truncation, making it a proposition. We must do this as a
 
 \begin{code}
 postulate
-    ∥_∥ : (A : 𝒰) → 𝒰
-    ∣_∣ : {A : 𝒰} → (a : A) → ∥ A ∥
-    ident : {A : 𝒰} {a b : ∥ A ∥} → a == b
+    ∥_∥    : (A : 𝒰) → 𝒰
+    ∣_∣    : {A : 𝒰} → (a : A) → ∥ A ∥
+    ident  : {A : 𝒰} {a b : ∥ A ∥} → a == b
 
 ∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
 ∥-∥-is-prop _ _ = ident
@@ -1034,7 +1049,7 @@ This makes
 the ``free'' proposition on any type {\small\AgdaBound{A}}. It can be
 viewed as the left adjoint to the forgetful functor from propositions
 to types. The recursion principle (below) ensures that we can only
-eliminate a propositional truncation to a type that is a proposition.
+eliminate a propositional truncation to a type that is a proposition:
 
 \begin{code}
 module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
@@ -1043,7 +1058,7 @@ module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
     rec-∥-∥-β : Π[ a ∶ A ] (rec-∥-∥ ∣ a ∣ == f a)
 \end{code}
 
-\subsection{Singleton subuniverses}
+\subsection{Singleton Subuniverses}
 
 Given any type {\small\AgdaBound{T}}, we can build a propositional
 predicate that only picks out {\small\AgdaBound{T}}. This lets us
@@ -1059,16 +1074,17 @@ is-type T = λ X → ∥ X == T ∥
 Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
 \end{code}
 
-The following lemma by Christensen gives a characterization of
-univalent fibrations for singleton subuniverses. If
-{\small\AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰}} is a type, then
-{\small\AgdaFunction{pr₁}\AgdaSymbol{:}\AgdaFunction{Ũ[}~\AgdaBound{T}~\AgdaFunction{]}\AgdaSymbol{→}\AgdaFunction{𝒰}}
+The following lemma by Christensen~\cite{christensen} gives a
+characterization of univalent fibrations for singleton
+subuniverses. If {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}}
+is a type, then
+{\small\AgdaFunction{pr₁}~\AgdaSymbol{:}~\AgdaFunction{Ũ[}~\AgdaBound{T}~\AgdaFunction{]}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
 is a univalent fibration, with base
-{\small\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}.
+{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}.
 
 Towards proving that, we start by defining the automorphism group for
-any type {\small\AgdaBound{T}\AgdaSymbol{:}\AgdaFunction{𝒰}}. The type
-{\small\AgdaFunction{Aut}\AgdaBound{T}} is simply the type of equivalences on
+any type {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}}. The type
+{\small\AgdaFunction{Aut}~\AgdaBound{T}} is simply the type of equivalences on
 {\small\AgdaBound{T}}:
 
 \begin{code}
@@ -1082,7 +1098,7 @@ $T$, we can define an $∞$-groupoid of $T$s, with objects $T$s,
 morphisms equivalences between $T$s, and so on. This is a full
 sub-$∞$-groupoid of $∞$Grpd, and gives the classifying space for
 spaces equivalent to $T$s. This is denoted by the type
-{\small\AgdaFunction{BAut}\AgdaBound{T}}. The notation is suggestive of the
+{\small\AgdaFunction{BAut}~\AgdaBound{T}}. The notation is suggestive of the
 fact that it corresponds classically to the delooping group of the
 automorphism group. We truncate to a ``mere equivalence'' so that the
 choice of the specific equivalence is impertinent.
@@ -1095,8 +1111,8 @@ b₀ : {T : 𝒰} → BAut T
 b₀ {T} = T , ∣ ide T ∣
 \end{code}
 
-The loopspace of any pointed type
-{\small\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}}
+The loop space of any pointed type
+{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaBound{t}\AgdaSymbol{)}}
 is the space of paths on {\small\AgdaBound{t}},
 {\small\AgdaFunction{Ω}\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}}:
 
@@ -1107,8 +1123,7 @@ is the space of paths on {\small\AgdaBound{t}},
 f : {T : 𝒰} → BAut T → 𝒰
 f = pr₁
 
-tpt-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
-          → pr₁ (tpt-eqv f p) == transport id (dpair=-e₁ p)
+tpt-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w) → pr₁ (tpt-eqv f p) == transport id (dpair=-e₁ p)
 tpt-eqv-f (refl v) = refl id
 \end{code}
 
@@ -1122,24 +1137,24 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
         g eqv = dpair= (ua eqv , ident)
         η : g ∘ tpt-eqv f ∼ id
-        η (refl ._) = ap dpair= ( dpair= (ua-ide
-                                , prop-is-set (λ _ _ → ident) _ _ _ _))
+        η (refl ._) = ap dpair=   (dpair= (ua-ide
+                                  , prop-is-set (λ _ _ → ident) _ _ _ _))
         ε : tpt-eqv f ∘ g ∼ id
-        ε eqv = eqv= ( tpt-eqv-f (dpair= (ua eqv , ident))
-                     ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
-                     ◾ ua-β₁ eqv )
+        ε eqv = eqv=   (tpt-eqv-f (dpair= (ua eqv , ident))
+                       ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
+                       ◾ ua-β₁ eqv )
 \end{code}
 
-As a consequence, we have that the loopspace of the delooping the
-group of automorphisms of a type {\small\AgdaBound{T}} is equivalent to the
-type {\small\AgdaFunction{Aut}\AgdaBound{T}}:
+As a consequence, we have that the loop space of the delooping the
+group of automorphisms of a type {\small\AgdaBound{T}} is equivalent
+to the type {\small\AgdaFunction{Aut}~\AgdaBound{T}}:
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
 ΩBAut≃Aut[ T ] = tpt-eqv f , is-univ-fib-f b₀ b₀
 \end{code}
 
-It remains to check that {\small\AgdaFunction{BAut}\AgdaBound{T}} is the same
+It remains to check that {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the same
 as our singleton universe
 {\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}}. This follows by
 univalence and the universal property of truncation.
@@ -1153,7 +1168,7 @@ BAut≃Ũ[ T ] = {!!}
 \end{code}
 }
 
-\subsection{The subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
+\subsection{The Subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
 \jacques{I find it confusing that this has no tilde on the U}.
 
 We define a particular subuniverse \AgdaSymbol{U[𝟚]} that we use in the
