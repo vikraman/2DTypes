@@ -907,11 +907,11 @@ ide A = id , id , idh id , idh id , idh (idh id)
 }
 
 \begin{code}
-tpt-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
-tpt-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
+transport-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
+transport-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
 
 id-to-eqv : {A B : 𝒰} → A == B → A ≃ B
-id-to-eqv = tpt-eqv id
+id-to-eqv = transport-eqv id
 \end{code}
 
 \subsection{Univalent Fibrations}
@@ -920,7 +920,7 @@ Univalent fibrations are defined by Kapulkin and
 Lumsdaine~\cite{SimplicialModel} in the simplicial set model (SSet).
 In our context, a type family (fibration)
 {\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
-is univalent if the map {\small\AgdaFunction{tpt-eqv}~\AgdaBound{p}}
+is univalent if the map {\small\AgdaFunction{transport-eqv}~\AgdaBound{p}}
 is an equivalence, that is, paths in the base space are
 \emph{equivalent} to equivalences between the corresponding
 fibers. Fig.~\ref{fig:fib} (right) illustrates that, for any
@@ -931,7 +931,7 @@ base space. Formally, we have the following definition:
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
-is-univ-fib {A} P = ∀ (a b : A) → is-hae (tpt-eqv P {a} {b})
+is-univ-fib {A} P = ∀ (a b : A) → is-hae (transport-eqv P {a} {b})
 \end{code}
 
 The univalence axiom (for {\small\AgdaFunction{𝒰}}) is a specialization of
@@ -1121,8 +1121,9 @@ is the space of paths on {\small\AgdaBound{t}},
 f : {T : 𝒰} → BAut T → 𝒰
 f = pr₁
 
-tpt-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w) → pr₁ (tpt-eqv f p) == transport id (dpair=-e₁ p)
-tpt-eqv-f (refl v) = refl id
+transport-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
+                → pr₁ (transport-eqv f p) == transport id (dpair=-e₁ p)
+transport-eqv-f (refl v) = refl id
 \end{code}
 
 Putting these ingredients together, we can show that the code of a
@@ -1134,11 +1135,11 @@ is-univ-fib-f : {T : 𝒰} → is-univ-fib f
 is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
         g eqv = dpair= (ua eqv , ident)
-        η : g ∘ tpt-eqv f ∼ id
+        η : g ∘ transport-eqv f ∼ id
         η (refl ._) = ap dpair=   (dpair= (ua-η (refl _)
                                   , prop-is-set (λ _ _ → ident) _ _ _ _))
-        ε : tpt-eqv f ∘ g ∼ id
-        ε eqv = eqv=   (tpt-eqv-f (dpair= (ua eqv , ident))
+        ε : transport-eqv f ∘ g ∼ id
+        ε eqv = eqv=   (transport-eqv-f (dpair= (ua eqv , ident))
                        ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
                        ◾ ua-β₁ eqv )
 \end{code}
@@ -1149,7 +1150,7 @@ to the type {\small\AgdaFunction{Aut}~\AgdaBound{T}}:
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
-ΩBAut≃Aut[ T ] = tpt-eqv f , is-univ-fib-f b₀ b₀
+ΩBAut≃Aut[ T ] = transport-eqv f , is-univ-fib-f b₀ b₀
 \end{code}
 
 It remains to check that {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the same
