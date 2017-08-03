@@ -1110,6 +1110,15 @@ universe and analyze its points and path spaces.
 \section{The Subuniverse {\normalfont\AgdaFunction{Ũ[𝟚]}}}
 \label{sec:model}
 
+\newtext{
+  This is the chain of equivalences we prove:
+
+  Ω (Σ[X ∶ 𝒰] ∥ X == 𝟚 ∥) ≃ Ω (Σ[X ∶ 𝒰] ∥ X ≃ 𝟚 ∥) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
+
+  Since we can characterize the loopspace of Ũ[𝟚], we can characterize
+  all paths on it, and paths are preserved by equivalence of groupoids.
+}
+
 Towards proving that, we start by defining the automorphism group for
 any type {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}}. The type
 {\small\AgdaFunction{Aut}~\AgdaBound{T}} is simply the type of equivalences on
