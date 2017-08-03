@@ -1349,27 +1349,38 @@ reversible programming.
   2-functor out of it to Ũ[𝟚] and show that it is an equivalence.
 }
 
-At level $0$, the correspondence is straightforward, as both \AgdaSymbol{𝑈} and
-\AgdaSymbol{Ũ[𝟚]} are singletons.
+\newtext{
+  We construct mappings from \PiTwo{} to the model Ũ[𝟚], for points,
+  1-paths, 2-paths, 3-paths, and show that each map is
+  invertible. This gives a notion of soundness and completeness for
+  each level.
+}
+
+At level $0$, the correspondence is straightforward, as both
+\AgdaSymbol{𝑈} and \AgdaSymbol{Ũ[𝟚]} are singletons.
 
 \begin{code}
-⟦_⟧ : 𝑈 → Ũ[𝟚]
-⟦ `𝟚 ⟧ = 𝟚₀
+⟦_⟧₀ : 𝑈 → Ũ[𝟚]
+⟦ `𝟚 ⟧₀ = 𝟚₀
 
-⟦_⟧⁻¹ : Ũ[𝟚] → 𝑈
-⟦ 𝟚₀ ⟧⁻¹ = `𝟚
+⟦_⟧₀⁻¹ : Ũ[𝟚] → 𝑈
+⟦ 𝟚₀ ⟧₀⁻¹ = `𝟚
 \end{code}
 
-Level $1$ is the first non-trivial level. To each syntactic combinator $c$ of
-\AgdaSymbol{A ⟷₁ B}, we can associate a path, and vice-versa.
+\newtext{
+  Level $1$ is the first non-trivial level. We fix \AgdaSymbol{A} and
+  \AgdaSymbol{B} in \AgdaSymbol{𝑈}, and to each syntactic combinator
+  \AgdaSymbol{A ⟷₁ B}, we associate a path from \AgdaSymbol{⟦ A ⟧₀} to
+  \AgdaSymbol{⟦ B ⟧₀}.
+}
 
 \begin{code}
-⟦_⟧₁ : {A B : 𝑈} → A ⟷₁ B → ⟦ A ⟧ == ⟦ B ⟧
+⟦_⟧₁ : {A B : 𝑈} → A ⟷₁ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
 ⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ⟷₁ `𝟚
 \end{code}
 
-Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-paths} is key
-to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
+Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$;
+\AgdaSymbol{all-1-paths} is key to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
 
 \AgdaHide{
 \begin{code}
@@ -1378,10 +1389,11 @@ to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
 \end{code}
 }
 
-Level $2$ is tricky.  We know that all self-paths (through
-\AgdaSymbol{all-2-paths}) are trivial.  In fact, all of them are.  Nevertheless
-$\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of work.  $\AgdaSymbol{⟦\_⟧₂⁻¹}$
-proceeds by enumerating $1$-paths, which makes things straightforward.
+Level $2$ is tricky. We know that all self-paths (by lemma
+\AgdaSymbol{all-2-paths}) are trivial. In fact, all of them
+are. Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of work.
+$\AgdaSymbol{⟦\_⟧₂⁻¹}$ proceeds by enumerating $1$-paths, which makes
+things straightforward.
 
 \begin{code}
 ⟦_⟧₂ : {A B : 𝑈} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
