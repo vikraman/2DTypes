@@ -1074,8 +1074,8 @@ such a presented universe to be univalent:
 \begin{code}
 Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
 
-is-univalent : Ũ → 𝒰 
-is-univalent (U , El) = is-univ-fib El 
+is-univalent : Ũ → 𝒰
+is-univalent (U , El) = is-univ-fib El
 \end{code}
 
 %% \VC{We never use is-univalent later, so might as well just delete it}
@@ -1104,7 +1104,7 @@ is a univalent fibration, with base
 {\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}. In
 other words, all singleton subuniverses built as above as
 univalent. In the next section, we will construct a particular such
-universe and analyze its points and path spaces. 
+universe and analyze its points and path spaces.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{The Subuniverse {\normalfont\AgdaFunction{Ũ[𝟚]}}}
@@ -1344,35 +1344,19 @@ difficult. Paths in HoTT come equipped with principles like the
 of these principles seems to have any direct counterpart in the world of
 reversible programming.
 
-\AgdaHide{
-\begin{code}
-postulate
-  lem : {p q r : Ω (BAut 𝟚 , b₀)} (p=r : p == r) (q=r : q == r) (u : p == q)
-      → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
--- lem p=r q=r u = (! (◾unitr u))
---               ◾ ap (λ x → u ◾ x) (! (◾invr q=r))
---               ◾ ! (◾unitl (u ◾ q=r ◾ ! q=r))
---               ◾ ap (λ x → x ◾ u ◾ q=r ◾ ! q=r) (! (◾invr p=r))
---               ◾ ◾assoc _ _ _
---               ◾ ap (λ x → p=r ◾ x) (! (◾assoc _ _ _))
---               ◾ ap (λ x → p=r ◾ x) (! (◾assoc _ _ _))
---               ◾ ap (λ x → p=r ◾ x ◾ ! q=r) (◾assoc _ _ _)
-\end{code}
-}
-
 \newtext{
   The syntactic category of \PiTwo{} forms a 2-groupoid, we construct a
-  2-functor out of it to BAut 𝟚 and show that it is an equivalence.
+  2-functor out of it to Ũ[𝟚] and show that it is an equivalence.
 }
 
 At level $0$, the correspondence is straightforward, as both \AgdaSymbol{𝑈} and
-\AgdaSymbol{BAut 𝟚} are singletons.
+\AgdaSymbol{Ũ[𝟚]} are singletons.
 
 \begin{code}
-⟦_⟧ : 𝑈 → BAut 𝟚
+⟦_⟧ : 𝑈 → Ũ[𝟚]
 ⟦ `𝟚 ⟧ = 𝟚₀
 
-⟦_⟧⁻¹ : BAut 𝟚 → 𝑈
+⟦_⟧⁻¹ : Ũ[𝟚] → 𝑈
 ⟦ 𝟚₀ ⟧⁻¹ = `𝟚
 \end{code}
 
