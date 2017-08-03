@@ -861,9 +861,9 @@ following the straight path in {\small\AgdaBound{P}~\AgdaBound{y}} to
 \end{center}
 
 \noindent Given a fibration ${\small\AgdaBound{P}}$ and points
-{\small\AgdaBound{x}}, {\small\AgdaBound{y}}, {\small\AgdaBound{u}},
-and {\small\AgdaBound{v}} as above, we have the following functions on
-paths:
+{\small\AgdaBound{x}}, {\small\AgdaBound{y}}, {\small\AgdaBound{u}}, and
+{\small\AgdaBound{v}} as above, we have the following characterization of
+dependent paths in the total space:
 
 \begin{code}
 module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
@@ -871,18 +871,18 @@ module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
   dpair= : Σ[ p ∶ x == y ] (u == v [ P ↓ p ]) → (x , u) == (y , v)
   dpair= (refl x , refl u) = refl (x , u)
 
-  dpair=-β₁ : (w : Σ[ p ∶ x == y ] (u == v [ P ↓ p ])) → (ap pr₁ ∘ dpair=) w == pr₁ w
-  dpair=-β₁ (refl x , refl u) = refl (refl x)
+  dpair=-β : (w : Σ[ p ∶ x == y ] (u == v [ P ↓ p ])) → (ap pr₁ ∘ dpair=) w == pr₁ w
+  dpair=-β (refl x , refl u) = refl (refl x)
 
-  dpair=-e₁ : (x , u) == (y , v) → x == y
-  dpair=-e₁ = ap pr₁
+  dpair=-e : (x , u) == (y , v) → x == y
+  dpair=-e = ap pr₁
 \end{code}
 
-\noindent The first function builds a path in the total space given a
-path between {\small\AgdaBound{u}} and {\small\AgdaBound{v}} that lies
-over a path {\small\AgdaBound{p}} in the base space; the second
-function is a coherence condition for this path; and the third
-recovers a path in the base space from a path in the total space.
+The first function builds a path in the total space given a path between
+{\small\AgdaBound{u}} and {\small\AgdaBound{v}} that lies over a path
+{\small\AgdaBound{p}} in the base space; the second function is a computation
+rule for this path; and the third function eliminates a path in the total space
+to a path in the base space.
 
 \subsection{Paths to Equivalences}
 
@@ -1122,7 +1122,7 @@ f : {T : 𝒰} → BAut T → 𝒰
 f = pr₁
 
 transport-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
-                → pr₁ (transport-eqv f p) == transport id (dpair=-e₁ p)
+                → pr₁ (transport-eqv f p) == transport id (dpair=-e p)
 transport-eqv-f (refl v) = refl id
 \end{code}
 
@@ -1140,7 +1140,7 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
                                   , prop-is-set (λ _ _ → ident) _ _ _ _))
         ε : transport-eqv f ∘ g ∼ id
         ε eqv = eqv=   (transport-eqv-f (dpair= (ua eqv , ident))
-                       ◾ ap (transport id) (dpair=-β₁ (ua eqv , ident))
+                       ◾ ap (transport id) (dpair=-β (ua eqv , ident))
                        ◾ ua-β₁ eqv )
 \end{code}
 
