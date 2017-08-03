@@ -1111,14 +1111,14 @@ universe and analyze its points and path spaces.
 \section{The Subuniverse {\normalfont\AgdaFunction{U[𝟚]}}}
 \label{sec:model}
 
-\newtext{
-  This is the chain of equivalences we prove:
+% \newtext{
+%   This is the chain of equivalences we prove:
 
-  Ω (Σ[X ∶ 𝒰] ∥ X == 𝟚 ∥) ≃ Ω (Σ[X ∶ 𝒰] ∥ X ≃ 𝟚 ∥) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
+%   Ω (Σ[X ∶ 𝒰] ∥ X == 𝟚 ∥) ≃ Ω (Σ[X ∶ 𝒰] ∥ X ≃ 𝟚 ∥) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
 
-  Since we can characterize the loopspace of Ũ[𝟚], we can characterize
-  all paths on it, and paths are preserved by equivalence of groupoids.
-}
+%   Since we can characterize the loopspace of Ũ[𝟚], we can characterize
+%   all paths on it, and paths are preserved by equivalence of groupoids.
+% }
 
 Towards proving that, we start by defining the automorphism group for
 any type {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}}. The type
@@ -1207,51 +1207,55 @@ BAut≃Ũ[ T ] = {!!}
 \end{code}
 }
 
-We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use in the
-next section:
-% \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
-% a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
-
-\VC{This is confusing because the two identifiers only differ by a space!}
-
+We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use in our model:
 \begin{code}
 U[𝟚] = pr₁ Ũ[ 𝟚 ]
+\end{code}
+
+Since equivalence preserve over dependent sum and porpositional truncation, so we have
+{\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} where
+\begin{code}
+𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
 \end{code}
 
 Instantiating the lemma from the previous section with \AgdaFunction{𝟚}, we have
 that {\small\AgdaFunction{Ũ[𝟚]}} is a univalent subuniverse, with \AgdaFunction{pr₁} the
 univalent fibration. By the property of being a univalent fibration we have that
-{\small\AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}, where
+{\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
 
-\VC{But we hide the definition of ide}
+The type {\small\AgdaFunction{𝟚}} has two point constructors, and no path constructors,
+which means it has no non-trivial paths on its points except
+{\small\AgdaFunction{refl}}. In fact, we can prove in intensional type theory using
+large elimination, that the two constructors are disjoint. This is reflected
+in the absurd pattern when doing dependent pattern matching in Agda. More
+generally, {\small\AgdaFunction{𝟚 ≃ 𝟙 ⊎ 𝟙}} and the disjoint union of two sets is a set.
 
 \begin{code}
-𝟚₀ = (𝟚 , ∣ ide 𝟚 ∣)
+0₂≠1₂ : 0₂ == 1₂ → ⊥
+0₂≠1₂ p = transport code p tt
+  where code : 𝟚 → 𝒰
+        code 0₂ = ⊤
+        code 1₂ = ⊥
 \end{code}
 
-\VC{Reading this sentence doesn't tell me anything about how to prove it, and
-the word bijection is misleading. At least write down the maps? To show one of
-the equivalences we need to use funext, and then the fact that is-hae-is-prop.}
-
-Since there are exactly two different bijections between
-{\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}}, and for any function
-{\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a proposition so we
+By function extensionality (derivable from univalence) there are exactly two different equivalences between
+{\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}}.
+And for any equivalence {\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a proposition so we
 have exactly two inhabitants of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 
 \begin{code}
 id≃ not≃ : 𝟚 ≃ 𝟚
 id≃  = id  , qinv-is-hae (id , refl , refl)
-not≃ = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂})
-                              , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}))
+not≃ = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}) , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}))
   where
   not : 𝟚 → 𝟚
   not 0₂ = 1₂
   not 1₂ = 0₂
 \end{code}
 
-%% \AgdaSymbol{(𝟚 ≃ 𝟚) ≃ 𝟚} (see~\cite{hottbook} exercise 2.13), we have
 Hence we have an equivalence between {\small\AgdaFunction{𝟚 ≃ 𝟚}} and {\small\AgdaFunction{𝟚}}.
-By composing equivalences we obtain:
+By composing the chain of equivalences
+{\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚}} we obtain:
 
 \AgdaHide{\begin{code}
 postulate
@@ -1271,7 +1275,7 @@ postulate
   id𝟚 not𝟚 : 𝟚₀ == 𝟚₀
 \end{code}
 
-we have this decomposition
+and we have this decomposition
 
 \AgdaHide{\begin{code}
 postulate
@@ -1279,25 +1283,6 @@ postulate
 
 \begin{code}
   all-1-paths : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
-\end{code}
-
-\newtext{
-
-  The type \AgdaSymbol{𝟚} has two point constructors, and no path constructors,
-  which means it has no non-trivial paths on its points except
-  \AgdaSymbol{refl}. In fact, we can prove in intensional type theory using
-  large elimination, that the two constructors are disjoint. This is reflected
-  in the absurd pattern when doing dependent pattern matching in Agda. More
-  generally, \AgdaSymbol{𝟚 ≃ 𝟙 ⊎ 𝟙} and the disjoint union of two sets is a set.
-
-}
-
-\begin{code}
-0₂≠1₂ : 0₂ == 1₂ → ⊥
-0₂≠1₂ p = transport code p tt
-  where code : 𝟚 → 𝒰
-        code 0₂ = ⊤
-        code 1₂ = ⊥
 \end{code}
 
 %For 2-path, \AgdaSymbol{𝟚} is a set, with witness
@@ -1323,7 +1308,8 @@ all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
 In next section, we will use {\small\AgdaFunction{all-1-paths}} and {\small\AgdaFunction{all-2-paths}}
-to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \PiTwo.
+to show the correspondence between {\small\AgdaFunction{𝟚₀ == 𝟚₀}} and \PiTwo.
+
 
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
 %% we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
@@ -1333,7 +1319,6 @@ to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \Pi
 %% \AgdaSymbol{Aut(𝟚) ≃ 𝟚}, which gives the following easy lemmas for
 %% 1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and
 %% \AgdaSymbol{all-2-paths}.
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence}
