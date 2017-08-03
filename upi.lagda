@@ -134,8 +134,9 @@ $\displaystyle
 \newcommand{\bracket}[1]{\ensuremath{\{#1\}}}
 \newcommand{\ptrunc}[1]{\ensuremath{\| #1 \|}}
 \newcommand{\dbracket}[1]{\ensuremath{\llbracket \; #1 \; \rrbracket}}
-\newcommand{\PiTwo}{\ensuremath{\Pi_{\mathbb{2}}}}
-
+\let\oldPi\Pi
+\renewcommand{\Pi}{\mathrm\oldPi}
+\newcommand{\PiTwo}{\ensuremath{\mathrm\Pi_{\mathbb{2}}}}
 \newcommand{\amr}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Amr says: {#1}}\end{minipage}}}
 \newcommand{\jacques}[1]{\fbox{\begin{minipage}{0.8\textwidth}\color{red}{Jacques says: {#1}}\end{minipage}}}
 
@@ -563,7 +564,7 @@ data 𝟚 : 𝒰 where
 \end{code}
 
 The syntax of \PiTwo\ is given by the following four Agda
-definitions. The first definition~{\small\AgdaFunction{𝑈}} introduces
+definitions. The first definition~{\small\AgdaFunction{Π₂}} introduces
 the set of types of the language: this set contains
 just~{\small\AgdaInductiveConstructor{`𝟚}} which is a name for the
 type of booleans $\mathbb{2}$. The next three definitions introduce
@@ -581,11 +582,11 @@ infix 4 _⊙₁_ _⊙₂_
 }
 
 \begin{code}
-data 𝑈 : 𝒰 where
-  `𝟚 : 𝑈
+data Π₂ : 𝒰 where
+  `𝟚 : Π₂
 
 ---------------
-data _⟷₁_ : (A B : 𝑈) → 𝒰 where
+data _⟷₁_ : (A B : Π₂) → 𝒰 where
 
   `id  : ∀ {A} → A ⟷₁ A
   `not : `𝟚 ⟷₁ `𝟚
@@ -1366,25 +1367,25 @@ reversible programming.
 }
 
 At level $0$, the correspondence is straightforward, as both
-\AgdaSymbol{𝑈} and \AgdaSymbol{Ũ[𝟚]} are singletons.
+\AgdaSymbol{Π₂} and \AgdaSymbol{Ũ[𝟚]} are singletons.
 
 \begin{code}
-⟦_⟧₀ : 𝑈 → Ũ[𝟚]
+⟦_⟧₀ : Π₂ → Ũ[𝟚]
 ⟦ `𝟚 ⟧₀ = 𝟚₀
 
-⟦_⟧₀⁻¹ : Ũ[𝟚] → 𝑈
+⟦_⟧₀⁻¹ : Ũ[𝟚] → Π₂
 ⟦ 𝟚₀ ⟧₀⁻¹ = `𝟚
 \end{code}
 
 \newtext{
   Level $1$ is the first non-trivial level. We fix \AgdaSymbol{A} and
-  \AgdaSymbol{B} in \AgdaSymbol{𝑈}, and to each syntactic combinator
+  \AgdaSymbol{B} in \AgdaSymbol{Π₂}, and to each syntactic combinator
   \AgdaSymbol{A ⟷₁ B}, we associate a path from \AgdaSymbol{⟦ A ⟧₀} to
   \AgdaSymbol{⟦ B ⟧₀}.
 }
 
 \begin{code}
-⟦_⟧₁ : {A B : 𝑈} → A ⟷₁ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
+⟦_⟧₁ : {A B : Π₂} → A ⟷₁ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
 ⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ⟷₁ `𝟚
 \end{code}
 
@@ -1405,7 +1406,7 @@ $\AgdaSymbol{⟦\_⟧₂⁻¹}$ proceeds by enumerating $1$-paths, which makes
 things straightforward.
 
 \begin{code}
-⟦_⟧₂ : {A B : 𝑈} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
+⟦_⟧₂ : {A B : Π₂} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
 ⟦_⟧₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⟦ p ⟧₁⁻¹ ⟷₂ ⟦ q ⟧₁⁻¹
 \end{code}
 
@@ -1419,7 +1420,7 @@ things straightforward.
 Level $3$ is trivial -- by fiat.
 
 \begin{code}
-⟦_⟧₃ : {A B : 𝑈} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
+⟦_⟧₃ : {A B : Π₂} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
 ⟦_⟧₃⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⟦ u ⟧₂⁻¹ ⟷₃ ⟦ v ⟧₂⁻¹
 \end{code}
 
