@@ -949,9 +949,6 @@ module _ {A B : 𝒰} where
 
   ua-η : ua ∘ id-to-eqv ∼ id
   ua-η = pr₁ (pr₂ (univalence A B))
-
-ua-ide : {A : 𝒰} → ua (ide A) == refl A
-ua-ide {A} = ua-η (refl A)
 \end{code}
 
 We can define universes a l\`{a} Tarski by having a code
@@ -1042,10 +1039,9 @@ postulate
 
 This makes
 {\small\AgdaInductiveConstructor{∥}\AgdaBound{A}\AgdaInductiveConstructor{∥}}
-the ``free'' proposition on any type {\small\AgdaBound{A}}. It can be
-viewed as the left adjoint to the forgetful functor from propositions
-to types. The recursion principle (below) ensures that we can only
-eliminate a propositional truncation to a type that is a proposition:
+the ``free'' proposition on any type {\small\AgdaBound{A}}. The
+recursion principle (below) ensures that we can only eliminate a
+propositional truncation to a type that is a proposition:
 
 \begin{code}
 module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
@@ -1133,7 +1129,7 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
         g eqv = dpair= (ua eqv , ident)
         η : g ∘ tpt-eqv f ∼ id
-        η (refl ._) = ap dpair=   (dpair= (ua-ide
+        η (refl ._) = ap dpair=   (dpair= (ua-η (refl _)
                                   , prop-is-set (λ _ _ → ident) _ _ _ _))
         ε : tpt-eqv f ∘ g ∼ id
         ε eqv = eqv=   (tpt-eqv-f (dpair= (ua eqv , ident))
@@ -1210,7 +1206,7 @@ postulate
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
 
-Therefore we know that there are only two distinct 1-path. Calling them
+Therefore we know that there are only two distinct 1-paths. Calling them
 
 \AgdaHide{\begin{code}
 postulate
@@ -1227,8 +1223,9 @@ postulate
 \end{code}}
 
 \begin{code}
-  all-1-path : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
+  all-1-paths : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
+
 
 %For 2-path, \AgdaSymbol{𝟚} is a set, with witness
 By applying induction principle and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
@@ -1248,11 +1245,11 @@ From this, it is easy to obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} i
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
 Ω𝟚₀is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚is-set
 
-all-2-path : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
-all-2-path {p} γ = Ω𝟚₀is-set p p γ (refl p)
+all-2-paths : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
+all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
-In next section, we will use {\small\AgdaFunction{all-1-path}} and {\small\AgdaFunction{all-2-path}}
+In next section, we will use {\small\AgdaFunction{all-1-paths}} and {\small\AgdaFunction{all-2-paths}}
 to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \PiTwo.
 
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
@@ -1319,7 +1316,7 @@ Level $1$ is the first non-trivial level. To each syntactic combinator $c$ of
 ⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ⟷₁ `𝟚
 \end{code}
 
-Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-path} is key
+Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-paths} is key
 to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
 
 \AgdaHide{
