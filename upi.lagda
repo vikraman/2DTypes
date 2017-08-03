@@ -278,7 +278,7 @@ and situates it into the broader context of the existing literature.
 %% survive?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Simple Reversible Programming Languages}
+\section{Reversible Programming Languages}
 
 Starting from the physical principle of ``conservation of
 information''~\cite{Hey:1999:FCE:304763,fredkin1982conservative}, James and
@@ -563,11 +563,11 @@ The syntax of \PiTwo\ is given by the following four Agda
 definitions. The first definition~{\small\AgdaFunction{𝑈}} introduces
 the set of types of the language: this set contains
 just~{\small\AgdaInductiveConstructor{`𝟚}} which is a name for the
-type of booleans. The next three definitions introduces the programs
-(combinators) in the language stratified by levels. The level-1
-programs of type $\iso$ map between types; the level-2 programs of
-type $\isotwo$ map between level-1 programs; and the level-3 programs
-of type $\isothree$ map between level-2 programs:
+type of booleans $\mathbb{2}$. The next three definitions introduce
+the programs (combinators) in the language stratified by levels. The
+level-1 programs of type $\iso$ map between types; the level-2
+programs of type $\isotwo$ map between level-1 programs; and the
+level-3 programs of type $\isothree$ map between level-2 programs:
 
 \AgdaHide{
 \begin{code}
@@ -629,13 +629,12 @@ data _⟷₃_ {A B} {p q : A ⟷₁ B} (u v : p ⟷₂ q) : 𝒰 where
 In the previous presentations of $\Pi$, the level-3 programs,
 consisting of just one trivial program
 {\small\AgdaInductiveConstructor{`trunc}}, were not made explicit. The
-level-1 and level-2 programs of the full $\Pi$
-language~\cite{Carette2016}, although much larger, have been
-specialized to our small language. For the level-1 constructors,
-denoting reversible programs, type isomorphisms, permutations between
-finite sets, or equivalences depending on one's favorite
-interpretation, we have two canonical programs
-{\small\AgdaInductiveConstructor{`id}} and
+much larger level-1 and level-2 programs of the full $\Pi$
+language~\cite{Carette2016} have been specialized to our small
+language. For the level-1 constructors, denoting reversible programs,
+type isomorphisms, permutations between finite sets, or equivalences
+depending on one's favorite interpretation, we have two canonical
+programs {\small\AgdaInductiveConstructor{`id}} and
 {\small\AgdaInductiveConstructor{`not}} closed under inverses
 {\small\AgdaInductiveConstructor{!₁}} and sequential
 composition~{\small\AgdaInductiveConstructor{⊙₁}}. For level-2
@@ -725,6 +724,7 @@ can be found in the accompanying code at
 {\small\url{https://github.com/DreamLinuxer/Pi2}}.
 
 \subsection{Equivalences}
+\label{sec:eq}
 
 Given types {\small\AgdaBound{A}} and {\small\AgdaBound{B}}, a function
 {\small\AgdaBound{f}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaBound{B}}
@@ -737,10 +737,17 @@ is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
 is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
 
-\VC{Maybe we can split the explanation of contractible and propositions and move
-  it to 3.1?}
+% \VC{Maybe we can split the explanation of contractible and propositions and move
+%   it to 3.1?}
 
-To make this type contractible, we need an additional adjointness condition:
+In general, for a given ${\small\AgdaBound{f}}$, there could be several
+unequal inhabitants of the type
+${\small\AgdaFunction{is-qinv}~\AgdaBound{f}}$. As Ch.~4 of the HoTT
+book~\cite{hottbook} details, this is problematic in the
+proof-relevant setting of HoTT. To ensure that a function
+${\small\AgdaBound{f}}$ can be an equivalence in at most one way, an
+additional coherence addition is added to quasi-inverses to define
+\emph{half adjoint equivalences}:
 
 \begin{code}
 is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
@@ -754,11 +761,39 @@ qinv-is-hae = {!!}
 \end{code}
 }
 
-Then we can define a type of equivalences between two types:
+Using this latter notion, we can define a well-behaved notion of
+equivalences between two types:
 
 \begin{code}
 _≃_ : (A B : 𝒰) → 𝒰
-A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
+A ≃ B = Σ[ f ∶ (A → B) ] (is-hae f)
+\end{code}
+
+It is straightforward to lift paths to equivalences as shown below:
+
+% \jacques{But transport does not occur below at all, not even
+% implicitly.  In fact, the 4 functions below are so trivial that
+% they could be collapsed into 1 without loss of comprehension.
+% Compared to how complex a lot of the rest of this is (such as
+% the previous sub-section), what's the point of taking so much
+% space with this?}
+
+\AgdaHide{
+\begin{code}
+idh : {A : 𝒰} {P : A → 𝒰} → (f : Π[ a ∶ A ] P a) → f ∼ f
+idh f a = refl (f a)
+
+ide : (A : 𝒰) → A ≃ A
+ide A = id , id , idh id , idh id , idh (idh id)
+\end{code}
+}
+
+\begin{code}
+transport-equiv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
+transport-equiv P (refl a) = id , id , refl , refl , (refl ∘ refl)
+
+id-to-equiv : {A B : 𝒰} → A == B → A ≃ B
+id-to-equiv = transport-equiv id
 \end{code}
 
 \begin{figure}
@@ -801,7 +836,7 @@ A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
   $P(x)$ and $P(y)$}
 \end{figure}
 
-\subsection{Type families are Fibrations}
+\subsection{Type Families are Fibrations}
 
 As illustrated in Fig.~\ref{fig:fib}, a type family
 {\small\AgdaBound{P}} over a type~{\small\AgdaBound{A}} is a fibration
@@ -853,13 +888,13 @@ following the straight path in {\small\AgdaBound{P}~\AgdaBound{y}} to
   \node[above] at (3,2) {$u$};
   \draw[fill] (3,-2.8) circle [radius=0.025];
   \node[below] at (3,-2.8) {$v$};
-  \node[above] at (3,-1.7) {$\AgdaFunction{transport}~\AgdaFunction{P}~\AgdaFunction{p}~\AgdaFunction{u}$};
+  \node[left,above] at (3,-1.7) {$\!\!\!\AgdaFunction{transport}~\AgdaFunction{P}~\AgdaFunction{p}~\AgdaFunction{u}$};
   \node[left,cyan] at (-3,0) {$p$};
   \draw[->,red,dashed,ultra thick] (-3,1.5) to [out=45, in=135] (1.2,2.5);
   \draw[->,red,dashed,ultra thick] (-3,-1.5) to [out=-45, in=-135] (1.15,-2.5);
   %%
-  \draw[cyan,dashed,ultra thick] (3,-1.7) to (3,-2.8);
-  \draw[cyan,dashed,ultra thick] (3,2) to [out=-45, in=45] (3,-2.8);
+  \draw[cyan,ultra thick] (3,-1.7) to (3,-2.8);
+  \draw[cyan,dashed,ultra thick] (3,2) to [out=5, in=-5] (3,-2.8);
 \end{tikzpicture}
 \end{center}
 
@@ -887,50 +922,23 @@ The first function builds a path in the total space given a path between
 rule for this path; and the third function eliminates a path in the total space
 to a path in the base space.
 
-\subsection{Paths to Equivalences}
-
-The {\small\AgdaFunction{transport}} operation lifts paths to equivalences. By
-transporting identity, we can convert a path to an equivalence.
-
-% \jacques{But transport does not occur below at all, not even
-% implicitly.  In fact, the 4 functions below are so trivial that
-% they could be collapsed into 1 without loss of comprehension.
-% Compared to how complex a lot of the rest of this is (such as
-% the previous sub-section), what's the point of taking so much
-% space with this?}
-
-\AgdaHide{
-\begin{code}
-idh : {A : 𝒰} {P : A → 𝒰} → (f : Π[ a ∶ A ] P a) → f ∼ f
-idh f a = refl (f a)
-
-ide : (A : 𝒰) → A ≃ A
-ide A = id , id , idh id , idh id , idh (idh id)
-\end{code}
-}
-
-\begin{code}
-transport-equiv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
-transport-equiv P (refl a) = id , id , refl , refl , (refl ∘ refl)
-
-id-to-equiv : {A B : 𝒰} → A == B → A ≃ B
-id-to-equiv = transport-equiv id
-\end{code}
-
 \subsection{Univalent Fibrations}
 
 Univalent fibrations are defined by Kapulkin and
 Lumsdaine~\cite{SimplicialModel} in the simplicial set model (SSet).
 In our context, a type family (fibration)
 {\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
-is univalent if the map {\small\AgdaFunction{transport-equiv}~\AgdaBound{p}}
-is an equivalence, that is, paths in the base space are
-\emph{equivalent} to equivalences between the corresponding
-fibers. Fig.~\ref{fig:fib} (right) illustrates that, for any
-fibration, a path in the base induces an equivalence between the
-fibers. For a fibration to be univalent, the reverse must also be
-true: every equivalence between the fibers must induce a path in the
-base space. Formally, we have the following definition:
+is univalent if the map
+{\small\AgdaFunction{transport-equiv}~\AgdaBound{p}} defined in
+Sec.~\ref{sec:eq} is an equivalence, that is, if paths in the base
+space are \emph{equivalent} to equivalences between the corresponding
+fibers. Fig.~\ref{fig:fib} (right) illustrates the situation: we know
+that for any fibration {\small\AgdaBound{P}} that a path
+{\small\AgdaBound{p}} in the base space induces via
+{\small\AgdaFunction{transport-equiv}~\AgdaBound{p}} an equivalence
+between the fibers. For a fibration to be univalent, the reverse must
+also be true: every equivalence between the fibers must induce a path
+in the base space. Formally, we have the following definition:
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
@@ -964,7 +972,7 @@ module _ {A B : 𝒰} where
   ua-η = pr₁ (pr₂ (univalence A B))
 \end{code}
 
-We can define universes a l\`{a} Tarski by having a code
+We can define universes `{a} la Tarski by having a code
 {\small\AgdaFunction{U}} for the universe {\small\AgdaFunction{𝒰}},
 and an interpretation function {\small\AgdaFunction{El}} into
 {\small\AgdaFunction{𝒰}}. This enables us to define a univalent
@@ -973,11 +981,11 @@ universe as follows:
 \begin{code}
 Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
 
-is-univalent : Ũ → 𝒰
-is-univalent (U , El) = is-univ-fib El
+is-univalent : Ũ → 𝒰 
+is-univalent (U , El) = is-univ-fib El 
 \end{code}
 
-\VC{We never use is-univalent later, so might as well just delete it}
+%% \VC{We never use is-univalent later, so might as well just delete it}
 
 \subsection{Propositional Truncation}
 
@@ -1541,22 +1549,22 @@ if we choose \AgdaSymbol{$𝕊^1$} instead of \AgdaSymbol{$𝕊^0$}, we get the
 infinite complex projective space \AgdaSymbol{$ℂP^∞$}, but it remains to
 investigate what kind of reversible programming language this would lead to.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Conclusion}
-\label{sec:conclusion}
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Conclusion}
+% \label{sec:conclusion}
 
-What is $\bracket{S^1}$?  Is it useful for programming?  What about $\bracket{\mathbb{N}}$?
+% What is $\bracket{S^1}$?  Is it useful for programming?  What about $\bracket{\mathbb{N}}$?
 
-What is the ``right'' generalization of $\bracket{-}$ so that we may have all
-the usual finite types (such as the ones available in $\Pi$) properly
-represented?
+% What is the ``right'' generalization of $\bracket{-}$ so that we may have all
+% the usual finite types (such as the ones available in $\Pi$) properly
+% represented?
 
-\jacques{It is not clear to me that just taking a disjoint union over all the
-  types gives the correct generalization.}
+% \jacques{It is not clear to me that just taking a disjoint union over all the
+%   types gives the correct generalization.}
 
-Looking at this from the other end: given some ``exotic'' (but finitely
-presented) Groupoid $\mathfrak{G}$, is there always a programming language
-which is sound and complete for $\mathfrak{G}$ ?
+% Looking at this from the other end: given some ``exotic'' (but finitely
+% presented) Groupoid $\mathfrak{G}$, is there always a programming language
+% which is sound and complete for $\mathfrak{G}$ ?
 
 \ack We would like to thank Robert Rose for developing the model based
 on univalent fibrations, for extensive contributions to the code, and for
