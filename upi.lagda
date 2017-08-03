@@ -289,7 +289,7 @@ situates it into the broader context of the existing literature.
 Starting from the physical principle of ``conservation of
 information''~\cite{Hey:1999:FCE:304763,fredkin1982conservative}, James and
 Sabry~\cite{James:2012:IE:2103656.2103667} proposed a family of programming
-languages $\Pi$ in which computation preserve information. Technically,
+languages $\Pi$ in which computation preserves information. Technically,
 computations are \emph{type isomorphisms} which, at least in the case of finite
 types, clearly preserve entropy in the information-theoretic
 sense~\cite{James:2012:IE:2103656.2103667}. We illustrate the general flavor of
@@ -465,10 +465,10 @@ verify that the six programs split into two classes: one consisting of
 the first three programs which are all equivalent to the identity
 function and the other consisting of the remaining three programs
 which all equivalent to boolean negation. In the context of $\Pi$, we
-can do better: we can provide \emph{evidence} (i.e., a reversible
-program of type $\isotwo$ that manipulates lower level reversible
-programs of type $\iso$ ) that can constructively transform programs
-to equivalent ones. We show such a level-2 program proving that
+can provide \emph{evidence} (i.e., a reversible program of type
+$\isotwo$ that manipulates lower level reversible programs of type
+$\iso$ ) that can constructively identify programs in each equivalence
+class. We show such a level-2 program proving that
 {\small\AgdaFunction{not₃}} is equivalent to
 {\small\AgdaFunction{not}}. For illustration, the program for
 {\small\AgdaFunction{not₃}} is depicted in Fig.~\ref{fig:not}. We
@@ -752,7 +752,7 @@ ${\small\AgdaFunction{is-qinv}~\AgdaBound{f}}$. As Ch.~4 of the HoTT
 book~\cite{hottbook} details, this is problematic in the
 proof-relevant setting of HoTT. To ensure that a function
 ${\small\AgdaBound{f}}$ can be an equivalence in at most one way, an
-additional coherence addition is added to quasi-inverses to define
+additional coherence condition is added to quasi-inverses to define
 \emph{half adjoint equivalences}:
 
 \begin{code}
@@ -802,7 +802,7 @@ id-to-equiv : {A B : 𝒰} → A == B → A ≃ B
 id-to-equiv = transport-equiv id
 \end{code}
 
-Dually, univalence allows us to construct paths from an equivalence. We postulate
+Dually, univalence allows us to construct paths from equivalences. We postulate
 univalence as an axiom in our Agda library:
 
 \begin{code}
@@ -830,7 +830,7 @@ module _ {A B : 𝒰} where
 
 \subsection{Propositional Truncation}
 
-A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0, or
+A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0 or
 (-2)-truncated), if it has a center of contraction, and all other
 terms of that type are connected to it by a path:
 
@@ -854,7 +854,7 @@ is-hae-is-contr = {!!}
 \end{code}
 }
 
-A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1, or
+A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1 or
 (-1)-truncated) if all pairs of terms of that type are connected by a
 path. Such a type can have at most one inhabitant; it is
 ``contractible if inhabited.'' A type {\small\AgdaBound{A}} is a
@@ -877,10 +877,11 @@ can be expressed as a higher inductive type (HIT). The type
 constructor {\small\AgdaInductiveConstructor{∥\_∥}} takes a type
 {\small\AgdaBound{A}} as a parameter; the point constructor
 {\small\AgdaInductiveConstructor{∣\_∣}} coerces terms of type
-{\small\AgdaBound{A}} to terms in the truncation. The path constructor
-{\small\AgdaInductiveConstructor{ident}} identifies any two points in
-the truncation, making it a proposition. We must do this as a
-{\small\AgdaKeyword{postulate}} as Agda does not yet support HITs:
+{\small\AgdaBound{A}} to terms in the truncation; and the path
+constructor {\small\AgdaInductiveConstructor{ident}} identifies any
+two points in the truncation, making it a proposition. We must do this
+as a {\small\AgdaKeyword{postulate}} as Agda does not yet support
+HITs:
 
 \begin{code}
 postulate
@@ -933,9 +934,9 @@ module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
   \node[right] at (1.8,-2) {Fiber $P(y)$};
   \draw[below,cyan,thick] (-1,-5) -- (1,-5);
   \node[below,cyan,thick] at (0,-5) {$==$};
-  \draw[->,red,ultra thick] (-0.8,-1.7) to [out=45, in=135] (0.8,-1.7);
-  \draw[->,red,ultra thick] (0.8,-2.3) to [out=-135, in=-45] (-0.8,-2.3);
-  \node[red,ultra thick] at (0,-2) {$\simeq$};
+  \draw[->,red,thick] (-0.8,-1.7) to [out=45, in=135] (0.8,-1.7);
+  \draw[->,red,thick] (0.8,-2.3) to [out=-135, in=-45] (-0.8,-2.3);
+  \node[red,thick] at (0,-2) {$\simeq$};
 \end{tikzpicture}
 \end{tabular}
 \caption{\label{fig:fib}(left) Type family $P : A \rightarrow \mathcal{U}$ as a
@@ -949,12 +950,15 @@ module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
 
 As illustrated in Fig.~\ref{fig:fib}, a type family
 {\small\AgdaBound{P}} over a type~{\small\AgdaBound{A}} is a fibration
-with base space~{\small\AgdaBound{A}}, with
-{\small\AgdaBound{P}~\AgdaBound{x}} the fiber over
-{\small\AgdaBound{x}}, and with total space
-{\small\AgdaPrimitiveType{Σ[}~\AgdaBound{x}~\AgdaSymbol{∶}~\AgdaBound{A}~\AgdaSymbol{]}~\AgdaSymbol{(}\AgdaBound{P}~\AgdaBound{x}\AgdaSymbol{)}}. The
-path lifting property mapping a path in the base space to a path in
-the total space can be defined as follows:
+with base space~{\small\AgdaBound{A}}, with every
+{\small\AgdaBound{x}} in {\small\AgdaBound{A}} inducing a fiber
+{\small\AgdaBound{P}~\AgdaBound{x}}, and with total space
+{\small\AgdaPrimitiveType{Σ[}~\AgdaBound{x}~\AgdaSymbol{∶}~\AgdaBound{A}~\AgdaSymbol{]}~\AgdaSymbol{(}\AgdaBound{P}~\AgdaBound{x}\AgdaSymbol{)}}. In
+this and other following figures, we color paths in blue and functions
+in red.
+
+The path lifting property mapping a path in the base space to a path
+in the total space can be defined as follows:
 
 \begin{code}
 lift : {A : 𝒰} {P : A → 𝒰} {x y : A} → (u : P x) (p : x == y) → (x , u) == (y , transport P p u)
@@ -962,31 +966,32 @@ lift u (refl x) = refl (x , u)
 \end{code}
 
 As illustrated in the figure below, the point
-{\small\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}} is
-in the space {\small\AgdaBound{P}~\AgdaBound{y}}. A path from that point to
-another point {\small\AgdaBound{v}} in {\small\AgdaBound{P}~\AgdaBound{y}} can be
-viewed as a ``path'' between {\small\AgdaBound{u}} and {\small\AgdaBound{v}} that
+{\small\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}}
+is in the space {\small\AgdaBound{P}~\AgdaBound{y}}. A path from that
+point to another point {\small\AgdaBound{v}} in
+{\small\AgdaBound{P}~\AgdaBound{y}} can be viewed as a virtual
+``path'' between {\small\AgdaBound{u}} and {\small\AgdaBound{v}} that
 ``lies over'' {\small\AgdaBound{p}}. Following Licata and
 Brunerie~\cite{licata2015cubical}, we often use the syntax
 {\small\AgdaBound{u} \AgdaFunction{==} \AgdaBound{v} \AgdaFunction{[}
-\AgdaBound{P} \AgdaFunction{↓} \AgdaBound{p} \AgdaFunction{]}} for the
-path
+  \AgdaBound{P} \AgdaFunction{↓} \AgdaBound{p} \AgdaFunction{]}} for
+the path
 {\small\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}
-\AgdaFunction{==} \AgdaBound{v}} to reinforce this perspective. In
+  \AgdaFunction{==} \AgdaBound{v}} to reinforce this perspective. In
 other words the curved ``path'' between {\small\AgdaBound{u}} and
-{\small\AgdaBound{v}} below consists of first transporting {\small\AgdaBound{u}} to
-the space {\small\AgdaBound{P}~\AgdaBound{y}} along {\small\AgdaBound{p}} and then
-following the straight path in {\small\AgdaBound{P}~\AgdaBound{y}} to
-{\small\AgdaBound{v}}:
+{\small\AgdaBound{v}} below consists of first transporting
+{\small\AgdaBound{u}} to the space {\small\AgdaBound{P}~\AgdaBound{y}}
+along {\small\AgdaBound{p}} and then following the straight path in
+{\small\AgdaBound{P}~\AgdaBound{y}} to {\small\AgdaBound{v}}:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
   \draw (-3,0) ellipse (1.5cm and 2.5cm);
   \draw (3,2) ellipse (2cm and 1.5cm);
   \draw (3,-2) ellipse (2cm and 1.5cm);
-  \node[blue,ultra thick,above] at (-3,3) {$A$};
-  \node[blue,ultra thick,above] at (3.3,3.7) {$P(x)$};
-  \node[blue,ultra thick,below] at (3.3,-3.7) {$P(y)$};
+  \node[blue,thick,above] at (-3,3) {$A$};
+  \node[blue,thick,above] at (3.3,3.7) {$P(x)$};
+  \node[blue,thick,below] at (3.3,-3.7) {$P(y)$};
   \draw[fill] (-3,1.5) circle [radius=0.025];
   \draw[fill] (-3,-1.5) circle [radius=0.025];
   \draw[left,cyan,thick] (-3,1.5) -- (-3,-1.5);
@@ -999,11 +1004,12 @@ following the straight path in {\small\AgdaBound{P}~\AgdaBound{y}} to
   \node[below] at (3,-2.8) {$v$};
   \node[left,above] at (3,-1.7) {$\!\!\!\AgdaFunction{transport}~\AgdaFunction{P}~\AgdaFunction{p}~\AgdaFunction{u}$};
   \node[left,cyan] at (-3,0) {$p$};
-  \draw[->,red,dashed,ultra thick] (-3,1.5) to [out=45, in=135] (1.2,2.5);
-  \draw[->,red,dashed,ultra thick] (-3,-1.5) to [out=-45, in=-135] (1.15,-2.5);
+  \draw[->,red,thick] (3,1.8) -- (3,-1.2);
+  \draw[->,red,dashed,thick] (-3,1.5) to [out=45, in=135] (1.15,2.5);
+  \draw[->,red,dashed,thick] (-3,-1.5) to [out=-45, in=-135] (1.15,-2.5);
   %%
-  \draw[cyan,ultra thick] (3,-1.7) to (3,-2.8);
-  \draw[cyan,dashed,ultra thick] (3,2) to [out=5, in=-5] (3,-2.8);
+  \draw[cyan,thick] (3,-1.7) to (3,-2.8);
+  \draw[cyan,dashed,thick] (3,2) to [out=5, in=-5] (3,-2.8);
 \end{tikzpicture}
 \end{center}
 
@@ -1051,13 +1057,13 @@ Lumsdaine~\cite{SimplicialModel} in the simplicial set model (SSet).
 In our context, a type family (fibration)
 {\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
 is univalent if the map
-{\small\AgdaFunction{transport-equiv}~\AgdaBound{p}} defined in
+{\small\AgdaFunction{transport-equiv}~\AgdaBound{P}} defined in
 Sec.~\ref{sec:eq} is an equivalence, that is, if paths in the base
 space are \emph{equivalent} to equivalences between the corresponding
 fibers. Fig.~\ref{fig:fib} (right) illustrates the situation: we know
 that for any fibration {\small\AgdaBound{P}} that a path
 {\small\AgdaBound{p}} in the base space induces via
-{\small\AgdaFunction{transport-equiv}~\AgdaBound{p}} an equivalence
+{\small\AgdaFunction{transport-equiv}~\AgdaBound{P}~\AgdaBound{p}} an equivalence
 between the fibers. For a fibration to be univalent, the reverse must
 also be true: every equivalence between the fibers must induce a path
 in the base space. Formally, we have the following definition:
@@ -1067,12 +1073,13 @@ is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
 is-univ-fib {A} P = ∀ (a b : A) → is-hae (transport-equiv P {a} {b})
 \end{code}
 
-The univalence axiom (for {\small\AgdaFunction{𝒰}}) is a specialization of
-{\small\AgdaFunction{is-univ-fib}} to the identity fibration. We can define universes \`{a} la Tarski by having a code
-{\small\AgdaFunction{U}} for the universe {\small\AgdaFunction{𝒰}},
-and an interpretation function {\small\AgdaFunction{El}} into
-{\small\AgdaFunction{𝒰}}. This enables us to define what it means for
-such a presented universe to be univalent:
+We note that the univalence axiom (for {\small\AgdaFunction{𝒰}}) is a
+specialization of {\small\AgdaFunction{is-univ-fib}} to the identity
+fibration. More generally, we can define universes \`{a} la Tarski by
+having a code {\small\AgdaFunction{U}} for the universe and an
+interpretation function {\small\AgdaFunction{El}} into
+{\small\AgdaFunction{𝒰}}. Such a presented universe is univalent if
+{\small\AgdaFunction{El}} is a univalent fibration:
 
 \begin{code}
 Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
@@ -1083,22 +1090,57 @@ is-univalent (U , El) = is-univ-fib El
 
 %% \VC{We never use is-univalent later, so might as well just delete it}
 
-\subsection{Singleton Subuniverses}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Subuniverse {\normalfont\AgdaFunction{U[𝟚]}}}
+\label{sec:model}
 
-We now have all the ingredients to define our class of univalent
-subuniverses of interest. Given any type {\small\AgdaBound{T}}, we can
-build a propositional predicate that only picks
-out~{\small\AgdaBound{T}}. This lets us build up a singleton
-``subuniverse'' of {\small\AgdaFunction{𝒰}}, which is only inhabited
-by {\small\AgdaBound{T}}:
+We now have all the ingredients necessary to define our class of
+univalent subuniverses of interest. Given any type
+{\small\AgdaBound{T}}, we can build a propositional predicate that
+picks out~{\small\AgdaBound{T}} among all the types in the
+universe. This lets us build up a singleton subuniverse
+of~{\small\AgdaFunction{𝒰}} as follows:
 
 \begin{code}
-is-type : (T : 𝒰) → 𝒰 → 𝒰
-is-type T = λ X → ∥ X == T ∥
-
 Ũ[_] : (T : 𝒰) → Ũ
-Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
+Ũ[ T ] = U , El
+  where 
+    U   = Σ[ X ∶ 𝒰 ] ∥ X == T ∥ 
+    El  = λ _ → T
 \end{code}
+
+Pictorially we have the following situation:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]]
+  \draw (0,-5) ellipse (3.5cm and 1.2cm);
+  \node[below] at (0,-6.3) {Base Space \AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==} \AgdaBound{T} \AgdaPostulate{∥}};
+  \draw[fill] (-2,-5) circle [radius=0.025]; 
+  \node[below] at (-2,-5) {\AgdaSymbol{(}\AgdaBound{X₁}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₁}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
+  \draw[fill] (2,-5) circle [radius=0.025]; 
+  \node[below] at (2,-5) {\AgdaSymbol{(}\AgdaBound{X₂}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₂}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
+  \draw[below,cyan,thick] (-2,-5) -- (2,-5); 
+  \node[below,cyan,thick] at (0,-5) {$==$}; 
+
+  \draw (-2,-2) ellipse (0.5cm and 1cm);
+  \node[left] at (-2.5,-2) {\AgdaBound{T}};
+  \draw (2,-2) ellipse (0.5cm and 1cm);
+  \node[right] at (2.5,-2) {\AgdaBound{T}};
+  \draw[->,red,thick] (-1.5,-1.7) to [out=45, in=135] (1.5,-1.7);
+  \draw[->,red,thick] (1.5,-2.3) to [out=-135, in=-45] (-1.5,-2.3);
+  \node[red,thick] at (0,-2) {$\simeq$};
+\end{tikzpicture}
+\end{center}
+
+
+
+
+
+
+
+
+
+
 
 By a lemma proved by Christensen~\cite{christensen}, if
 {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}} is a type, then
@@ -1109,9 +1151,9 @@ other words, all singleton subuniverses built as above as
 univalent. In the next section, we will construct a particular such
 universe and analyze its points and path spaces.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The Subuniverse {\normalfont\AgdaFunction{U[𝟚]}}}
-\label{sec:model}
+
+
+
 
 % \newtext{
 %   This is the chain of equivalences we prove:
@@ -1176,7 +1218,7 @@ We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use i
 U[𝟚] = pr₁ Ũ[ 𝟚 ]
 \end{code}
 
-Since equivalences are preserved over dependent sum and porpositional truncation, so we have
+Since equivalences are preserved over dependent sum and propositional truncation, so we have
 {\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} where
 \begin{code}
 𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
@@ -1442,8 +1484,8 @@ sound:
 
 \AgdaHide{
 \begin{code}
-⌜⟦_⟧₁⌝₁ = ?
-⟦⌜_⌝₁⟧₁ = ?
+⌜⟦_⟧₁⌝₁ = {!!}
+⟦⌜_⌝₁⟧₁ = {!!}
 \end{code}
 }
 
