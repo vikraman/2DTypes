@@ -949,9 +949,6 @@ module _ {A B : 𝒰} where
 
   ua-η : ua ∘ id-to-eqv ∼ id
   ua-η = pr₁ (pr₂ (univalence A B))
-
-ua-ide : {A : 𝒰} → ua (ide A) == refl A
-ua-ide {A} = ua-η (refl A)
 \end{code}
 
 We can define universes a l\`{a} Tarski by having a code
@@ -1133,7 +1130,7 @@ is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
         g eqv = dpair= (ua eqv , ident)
         η : g ∘ tpt-eqv f ∼ id
-        η (refl ._) = ap dpair=   (dpair= (ua-ide
+        η (refl ._) = ap dpair=   (dpair= (ua-η (refl _)
                                   , prop-is-set (λ _ _ → ident) _ _ _ _))
         ε : tpt-eqv f ∘ g ∼ id
         ε eqv = eqv=   (tpt-eqv-f (dpair= (ua eqv , ident))
