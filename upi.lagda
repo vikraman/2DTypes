@@ -273,7 +273,7 @@ Sec.~\ref{sec:univalent}, we review \emph{univalent fibrations} which
 allow us to give formal presentations of ``small'' univalent
 universes. In Sec.~\ref{sec:model} we define and establish the basic
 properties of such a univalent subuniverse {\small\AgdaFunction{Ũ[𝟚]}}
-which we prove In Sec.~\ref{sec:correspondence} as sound and complete
+which we prove in Sec.~\ref{sec:correspondence} as sound and complete
 with respect to the reversible language $\PiTwo$.
 Sec.~\ref{sec:discussion} discusses the implications of our work and
 situates it into the broader context of the existing literature.
@@ -827,8 +827,8 @@ is-hae-is-contr = {!!}
 
 A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1, or
 (-1)-truncated) if all pairs of terms of that type are connected by a
-path. Such a type can have at most one inhabitant - in other words, it
-is ``contractible if inhabited.'' A type {\small\AgdaBound{A}} is a
+path. Such a type can have at most one inhabitant; it is
+``contractible if inhabited.'' A type {\small\AgdaBound{A}} is a
 \emph{set} if for any two terms {\small\AgdaBound{a}} and
 {\small\AgdaBound{b}} of {\small\AgdaBound{A}}, its type of paths
 {\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is a
@@ -846,7 +846,7 @@ Any type can be truncated to a proposition by freely adding
 paths. This is the propositional truncation (or (-1)-truncation) which
 can be expressed as a higher inductive type (HIT). The type
 constructor {\small\AgdaInductiveConstructor{∥\_∥}} takes a type
-{\small\AgdaBound{A}} as a parameter, and the point constructor
+{\small\AgdaBound{A}} as a parameter; the point constructor
 {\small\AgdaInductiveConstructor{∣\_∣}} coerces terms of type
 {\small\AgdaBound{A}} to terms in the truncation. The path constructor
 {\small\AgdaInductiveConstructor{ident}} identifies any two points in
@@ -1040,14 +1040,14 @@ is-univ-fib {A} P = ∀ (a b : A) → is-hae (transport-equiv P {a} {b})
 
 The univalence axiom (for {\small\AgdaFunction{𝒰}}) is a specialization of
 {\small\AgdaFunction{is-univ-fib}} to the identity fibration. We postulate
-this as an axiom.
+this as an axiom:
 
 \begin{code}
 postulate
   univalence : (A B : 𝒰) → is-hae (id-to-equiv {A} {B})
 \end{code}
 
-We also give a short-form {\small\AgdaFunction{ua}} for getting a path from an
+We also give a short form {\small\AgdaFunction{ua}} for getting a path from an
 equivalence, and prove some computation rules for it:
 
 \begin{code}
@@ -1065,11 +1065,11 @@ module _ {A B : 𝒰} where
   ua-η = pr₁ (pr₂ (univalence A B))
 \end{code}
 
-We can define universes `{a} la Tarski by having a code
+We can define universes \`{a} la Tarski by having a code
 {\small\AgdaFunction{U}} for the universe {\small\AgdaFunction{𝒰}},
 and an interpretation function {\small\AgdaFunction{El}} into
-{\small\AgdaFunction{𝒰}}. This enables us to define a univalent
-universe as follows:
+{\small\AgdaFunction{𝒰}}. This enables us to define what it means for
+such a presented universe to be univalent:
 
 \begin{code}
 Ũ = Σ[ U ∶ 𝒰 ] (U → 𝒰)
@@ -1082,11 +1082,12 @@ is-univalent (U , El) = is-univ-fib El
 
 \subsection{Singleton Subuniverses}
 
-We now have all the ingredient to define univalent subuniverses. Given
-any type {\small\AgdaBound{T}}, we can build a propositional predicate
-that only picks out {\small\AgdaBound{T}}. This lets us build up a
-singleton ``subuniverse'' of {\small\AgdaFunction{𝒰}}, which is only
-inhabited by {\small\AgdaBound{T}}:
+We now have all the ingredients to define our class of univalent
+subuniverses of interest. Given any type {\small\AgdaBound{T}}, we can
+build a propositional predicate that only picks out
+{\small\AgdaBound{T}}. This lets us build up a singleton
+``subuniverse'' of {\small\AgdaFunction{𝒰}}, which is only inhabited
+by {\small\AgdaBound{T}}:
 
 \begin{code}
 is-type : (T : 𝒰) → 𝒰 → 𝒰
