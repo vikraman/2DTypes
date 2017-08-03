@@ -1084,8 +1084,8 @@ is-univalent (U , El) = is-univ-fib El
 
 We now have all the ingredients to define our class of univalent
 subuniverses of interest. Given any type {\small\AgdaBound{T}}, we can
-build a propositional predicate that only picks out
-{\small\AgdaBound{T}}. This lets us build up a singleton
+build a propositional predicate that only picks
+out~{\small\AgdaBound{T}}. This lets us build up a singleton
 ``subuniverse'' of {\small\AgdaFunction{𝒰}}, which is only inhabited
 by {\small\AgdaBound{T}}:
 
