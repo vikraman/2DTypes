@@ -800,6 +800,32 @@ id-to-equiv : {A B : 𝒰} → A == B → A ≃ B
 id-to-equiv = transport-equiv id
 \end{code}
 
+Dually, univalence allows us to construct paths from an equivalence. We postulate
+univalence as an axiom in our Agda library:
+
+\begin{code}
+postulate
+  univalence : (A B : 𝒰) → is-hae (id-to-equiv {A} {B})
+\end{code}
+
+We also give a short form {\small\AgdaFunction{ua}} for getting a path from an
+equivalence, and prove some computation rules for it:
+
+\begin{code}
+module _ {A B : 𝒰} where
+  ua : A ≃ B → A == B
+  ua = pr₁ (univalence A B)
+
+  ua-β : id-to-equiv ∘ ua ∼ id
+  ua-β = pr₁ (pr₂ (pr₂ (univalence A B)))
+
+  ua-β₁ : transport id ∘ ua ∼ pr₁
+  ua-β₁ eqv = transport _ (ua-β eqv) (ap pr₁)
+
+  ua-η : ua ∘ id-to-equiv ∼ id
+  ua-η = pr₁ (pr₂ (univalence A B))
+\end{code}
+
 \subsection{Propositional Truncation}
 
 A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0, or
@@ -1040,33 +1066,7 @@ is-univ-fib {A} P = ∀ (a b : A) → is-hae (transport-equiv P {a} {b})
 \end{code}
 
 The univalence axiom (for {\small\AgdaFunction{𝒰}}) is a specialization of
-{\small\AgdaFunction{is-univ-fib}} to the identity fibration. We postulate
-this as an axiom:
-
-\begin{code}
-postulate
-  univalence : (A B : 𝒰) → is-hae (id-to-equiv {A} {B})
-\end{code}
-
-We also give a short form {\small\AgdaFunction{ua}} for getting a path from an
-equivalence, and prove some computation rules for it:
-
-\begin{code}
-module _ {A B : 𝒰} where
-  ua : A ≃ B → A == B
-  ua = pr₁ (univalence A B)
-
-  ua-β : id-to-equiv ∘ ua ∼ id
-  ua-β = pr₁ (pr₂ (pr₂ (univalence A B)))
-
-  ua-β₁ : transport id ∘ ua ∼ pr₁
-  ua-β₁ eqv = transport _ (ua-β eqv) (ap pr₁)
-
-  ua-η : ua ∘ id-to-equiv ∼ id
-  ua-η = pr₁ (pr₂ (univalence A B))
-\end{code}
-
-We can define universes \`{a} la Tarski by having a code
+{\small\AgdaFunction{is-univ-fib}} to the identity fibration. We can define universes \`{a} la Tarski by having a code
 {\small\AgdaFunction{U}} for the universe {\small\AgdaFunction{𝒰}},
 and an interpretation function {\small\AgdaFunction{El}} into
 {\small\AgdaFunction{𝒰}}. This enables us to define what it means for
