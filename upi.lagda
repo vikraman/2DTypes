@@ -1192,7 +1192,7 @@ postulate
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
 
-Therefore we know that there are only two distinct 1-path. Calling them
+Therefore we know that there are only two distinct 1-paths. Calling them
 
 \AgdaHide{\begin{code}
 postulate
@@ -1209,10 +1209,10 @@ postulate
 \end{code}}
 
 \begin{code}
-  all-1-path : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
+  all-1-paths : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
 
-For 2-path, \AgdaSymbol{𝟚} is a set, with witness
+For 2-paths, \AgdaSymbol{𝟚} is a set, with witness
 
 \AgdaHide{\begin{code}
 postulate
@@ -1229,11 +1229,11 @@ From this, it is easy to obtain that \AgdaSymbol{𝟚₀ == 𝟚₀} is a set an
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
 Ω𝟚₀is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚is-set
 
-all-2-path : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
-all-2-path {p} γ = Ω𝟚₀is-set p p γ (refl p)
+all-2-paths : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
+all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
-In next section, we will use \AgdaSymbol{all-1-path} and \AgdaSymbol{all-2-path}
+In next section, we will use \AgdaSymbol{all-1-paths} and \AgdaSymbol{all-2-paths}
 to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \PiTwo.
 
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
@@ -1300,7 +1300,7 @@ Level $1$ is the first non-trivial level. To each syntactic combinator $c$ of
 ⟦_⟧₁⁻¹ : 𝟚₀ == 𝟚₀ → `𝟚 ⟷₁ `𝟚
 \end{code}
 
-Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-path} is key
+Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$; \AgdaSymbol{all-1-paths} is key
 to $\AgdaSymbol{⟦\_⟧₁⁻¹}$.
 
 \AgdaHide{
