@@ -1159,7 +1159,31 @@ is the space of paths on {\small\AgdaBound{t₀}},
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
 Ω (T , t₀) = t₀ == t₀
+\end{code}
 
+
+\newtext{
+  This is the chain of equivalences we prove:
+
+  Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
+
+  Since we can characterize the loopspace of Ũ[𝟚], we can characterize
+  all paths on it, and paths are preserved by equivalence of groupoids.
+}
+
+We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use in our model:
+\begin{code}
+U[𝟚] = pr₁ Ũ[ 𝟚 ]
+\end{code}
+
+Since equivalences are preserved over dependent sum and porpositional truncation, so we have
+{\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} where
+\begin{code}
+𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
+\end{code}
+
+Now we prove a general property about univalent fibration.
+\begin{code}
 f : {T : 𝒰} → BAut T → 𝒰
 f = pr₁
 
@@ -1195,10 +1219,10 @@ As a consequence, we have that the loop space of
 ΩBAut≃Aut[ T ] = transport-equiv f , is-univ-fib-f b₀ b₀
 \end{code}
 
-It remains to check that {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the same
-as our singleton universe
-{\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}}. This follows by
-univalence and the universal property of truncation.
+%It remains to check that {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the same
+%as our singleton universe
+%{\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}}. This follows by
+%univalence and the universal property of truncation.
 
 \AgdaHide{
 % Only show this if you will provide the proof - otherwise the
@@ -1208,17 +1232,6 @@ BAut≃Ũ[_] : (T : 𝒰) → BAut T ≃ pr₁ Ũ[ T ]
 BAut≃Ũ[ T ] = {!!}
 \end{code}
 }
-
-We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use in our model:
-\begin{code}
-U[𝟚] = pr₁ Ũ[ 𝟚 ]
-\end{code}
-
-Since equivalence preserve over dependent sum and porpositional truncation, so we have
-{\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} where
-\begin{code}
-𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
-\end{code}
 
 Instantiating the lemma from the previous section with \AgdaFunction{𝟚}, we have
 that {\small\AgdaFunction{Ũ[𝟚]}} is a univalent subuniverse, with \AgdaFunction{pr₁} the
