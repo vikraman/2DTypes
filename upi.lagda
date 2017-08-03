@@ -266,14 +266,17 @@ the two papers had strong similarities. Formalizing the precise connection was
 far from obvious, however.
 
 Here we report on a formal connection between appropriately formulated
-reversible languages on one hand and univalent universes on the other. In the
-next section, we give a rational reconstruction of $\Pi$ focusing on a small
-``featherweight'' fragment. In Sec.~\ref{sec:univalent}, we review
-\emph{univalent fibrations} which allow us to give formal presentations of
-``small'' univalent universes. In Sec.~\ref{sec:correspondence} we state and prove
-the formal connection between the systems presented in the preceding two
-sections.  Sec.~\ref{sec:discussion} discusses the implications of our work
-and situates it into the broader context of the existing literature.
+reversible languages on one hand and univalent universes on the
+other. In the next section, we give a rational reconstruction of $\Pi$
+focusing on a small ``featherweight'' fragment $\PiTwo$. In
+Sec.~\ref{sec:univalent}, we review \emph{univalent fibrations} which
+allow us to give formal presentations of ``small'' univalent
+universes. In Sec.~\ref{sec:model} we define and establish the basic
+properties of such a univalent subuniverse {\small\AgdaFunction{Ũ[𝟚]}}
+which we prove In Sec.~\ref{sec:correspondence} as sound and complete
+with respect to the reversible language $\PiTwo$.
+Sec.~\ref{sec:discussion} discusses the implications of our work and
+situates it into the broader context of the existing literature.
 %% Sec.~\ref{sec:conclusion} right now is a stub, and may not
 %% survive?
 
@@ -796,6 +799,83 @@ id-to-equiv : {A B : 𝒰} → A == B → A ≃ B
 id-to-equiv = transport-equiv id
 \end{code}
 
+\subsection{Propositional Truncation}
+
+A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0, or
+(-2)-truncated), if it has a center of contraction, and all other
+terms of that type are connected to it by a path:
+
+%% \VC{FIXME: Σ and Π are rendered in different colors}
+%% \amr{one is a record and one is a function. Ok I guess}
+
+\begin{code}
+is-contr : (A : 𝒰) → 𝒰
+is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
+\end{code}
+
+As alluded to in the previous section, equivalences are contractible
+(assuming univalence):
+
+\begin{code}
+is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
+\end{code}
+\AgdaHide{
+\begin{code}
+is-hae-is-contr = {!!}
+\end{code}
+}
+
+A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1, or
+(-1)-truncated) if all pairs of terms of that type are connected by a
+path. Such a type can have at most one inhabitant - in other words, it
+is ``contractible if inhabited.'' A type {\small\AgdaBound{A}} is a
+\emph{set} if for any two terms {\small\AgdaBound{a}} and
+{\small\AgdaBound{b}} of {\small\AgdaBound{A}}, its type of paths
+{\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is a
+proposition:
+
+\begin{code}
+is-prop : (A : 𝒰) → 𝒰
+is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
+
+is-set : (A : 𝒰) → 𝒰
+is-set A = Π[ a ∶ A ] Π[ b ∶ A ] is-prop (a == b)
+\end{code}
+
+Any type can be truncated to a proposition by freely adding
+paths. This is the propositional truncation (or (-1)-truncation) which
+can be expressed as a higher inductive type (HIT). The type
+constructor {\small\AgdaInductiveConstructor{∥\_∥}} takes a type
+{\small\AgdaBound{A}} as a parameter, and the point constructor
+{\small\AgdaInductiveConstructor{∣\_∣}} coerces terms of type
+{\small\AgdaBound{A}} to terms in the truncation. The path constructor
+{\small\AgdaInductiveConstructor{ident}} identifies any two points in
+the truncation, making it a proposition. We must do this as a
+{\small\AgdaKeyword{postulate}} as Agda does not yet support HITs:
+
+\begin{code}
+postulate
+    ∥_∥    : (A : 𝒰) → 𝒰
+    ∣_∣    : {A : 𝒰} → (a : A) → ∥ A ∥
+    ident  : {A : 𝒰} {a b : ∥ A ∥} → a == b
+
+∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
+∥-∥-is-prop _ _ = ident
+\end{code}
+
+This makes
+{\small\AgdaInductiveConstructor{∥}\AgdaBound{A}\AgdaInductiveConstructor{∥}}
+the ``free'' proposition on any type {\small\AgdaBound{A}}. The
+recursion principle (below) ensures that we can only eliminate a
+propositional truncation to a type that is a proposition:
+
+\begin{code}
+module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
+  postulate
+    rec-∥-∥ : ∥ A ∥ → P
+    rec-∥-∥-β : Π[ a ∶ A ] (rec-∥-∥ ∣ a ∣ == f a)
+\end{code}
+
 \begin{figure}
 \begin{tabular}{c@{\qquad\qquad}c}
 \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.7}]]
@@ -916,6 +996,19 @@ module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
   dpair=-e = ap pr₁
 \end{code}
 
+\AgdaHide{
+\begin{code}
+prop-is-set : {A : 𝒰} → is-prop A → is-set A
+prop-is-set φ a b p q = {!!}
+
+is-hae-is-prop : {A B : 𝒰} {f : A → B} → is-prop (is-hae f)
+is-hae-is-prop = {!!}
+
+eqv= : {A B : 𝒰} {eqv eqv' : A ≃ B} → (pr₁ eqv == pr₁ eqv') → eqv == eqv'
+eqv= φ = dpair= (φ , is-hae-is-prop _ _)
+\end{code}
+}
+
 The first function builds a path in the total space given a path between
 {\small\AgdaBound{u}} and {\small\AgdaBound{v}} that lies over a path
 {\small\AgdaBound{p}} in the base space; the second function is a computation
@@ -987,101 +1080,13 @@ is-univalent (U , El) = is-univ-fib El
 
 %% \VC{We never use is-univalent later, so might as well just delete it}
 
-\subsection{Propositional Truncation}
-
-A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0, or
-(-2)-truncated), if it has a center of contraction, and all other
-terms of that type are connected to it by a path:
-
-\VC{FIXME: Σ and Π are rendered in different colors}
-
-\begin{code}
-is-contr : (A : 𝒰) → 𝒰
-is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
-\end{code}
-
-Equivalences are contractible (assuming univalence):
-
-\begin{code}
-is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
-\end{code}
-\AgdaHide{
-\begin{code}
-is-hae-is-contr = {!!}
-\end{code}
-}
-
-A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1, or
-(-1)-truncated) if all pairs of terms of that type are connected by a
-path. Such a type can have at most one inhabitant - in other words, it
-is ``contractible if inhabited''. A type {\small\AgdaBound{A}} is a
-\emph{set} if for any two terms {\small\AgdaBound{a}} and
-{\small\AgdaBound{b}} of {\small\AgdaBound{A}}, its type of paths
-{\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is a
-proposition:
-
-\begin{code}
-is-prop : (A : 𝒰) → 𝒰
-is-prop A = Π[ a ∶ A ] Π[ b ∶ A ] (a == b)
-
-is-set : (A : 𝒰) → 𝒰
-is-set A = Π[ a ∶ A ] Π[ b ∶ A ] is-prop (a == b)
-\end{code}
-
-\AgdaHide{
-\begin{code}
-prop-is-set : {A : 𝒰} → is-prop A → is-set A
-prop-is-set φ a b p q = {!!}
-
-is-hae-is-prop : {A B : 𝒰} {f : A → B} → is-prop (is-hae f)
-is-hae-is-prop = {!!}
-
-eqv= : {A B : 𝒰} {eqv eqv' : A ≃ B} → (pr₁ eqv == pr₁ eqv') → eqv == eqv'
-eqv= φ = dpair= (φ , is-hae-is-prop _ _)
-\end{code}
-}
-
-Any type can be truncated to a proposition by freely adding
-paths. This is the propositional truncation (or (-1)-truncation) which
-can be expressed as a higher inductive type (HIT). The type
-constructor {\small\AgdaInductiveConstructor{∥\_∥}} takes a type
-{\small\AgdaBound{A}} as a parameter, and the point constructor
-{\small\AgdaInductiveConstructor{∣\_∣}} coerces terms of type
-{\small\AgdaBound{A}} to terms in the truncation. The path constructor
-{\small\AgdaInductiveConstructor{ident}} identifies any two points in
-the truncation, making it a proposition. We must do this as a
-{\small\AgdaKeyword{postulate}} as Agda does not yet support HITs:
-
-\begin{code}
-postulate
-    ∥_∥    : (A : 𝒰) → 𝒰
-    ∣_∣    : {A : 𝒰} → (a : A) → ∥ A ∥
-    ident  : {A : 𝒰} {a b : ∥ A ∥} → a == b
-
-∥-∥-is-prop : {A : 𝒰} → is-prop ∥ A ∥
-∥-∥-is-prop _ _ = ident
-\end{code}
-
-This makes
-{\small\AgdaInductiveConstructor{∥}\AgdaBound{A}\AgdaInductiveConstructor{∥}}
-the ``free'' proposition on any type {\small\AgdaBound{A}}. The
-recursion principle (below) ensures that we can only eliminate a
-propositional truncation to a type that is a proposition:
-
-\begin{code}
-module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
-  postulate
-    rec-∥-∥ : ∥ A ∥ → P
-    rec-∥-∥-β : Π[ a ∶ A ] (rec-∥-∥ ∣ a ∣ == f a)
-\end{code}
-
 \subsection{Singleton Subuniverses}
 
-Given any type {\small\AgdaBound{T}}, we can build a propositional
-predicate that only picks out {\small\AgdaBound{T}}. This lets us
-build up a singleton ``subuniverse'' of {\small\AgdaFunction{𝒰}},
-which is only inhabited by {\small\AgdaBound{T}}.  We will eventually
-show that all such sub-universes are univalent:
+We now have all the ingredient to define univalent subuniverses. Given
+any type {\small\AgdaBound{T}}, we can build a propositional predicate
+that only picks out {\small\AgdaBound{T}}. This lets us build up a
+singleton ``subuniverse'' of {\small\AgdaFunction{𝒰}}, which is only
+inhabited by {\small\AgdaBound{T}}:
 
 \begin{code}
 is-type : (T : 𝒰) → 𝒰 → 𝒰
@@ -1091,13 +1096,18 @@ is-type T = λ X → ∥ X == T ∥
 Ũ[ T ] = Σ 𝒰 (is-type T) , λ _ → T
 \end{code}
 
-The following lemma by Christensen~\cite{christensen} gives a
-characterization of univalent fibrations for singleton
-subuniverses. If {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}}
-is a type, then
+By a lemma proved by Christensen~\cite{christensen}, if
+{\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}} is a type, then
 {\small\AgdaFunction{pr₁}~\AgdaSymbol{:}~\AgdaFunction{Ũ[}~\AgdaBound{T}~\AgdaFunction{]}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
 is a univalent fibration, with base
-{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}.
+{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}. In
+other words, all singleton subuniverses built as above as
+univalent. In the next section, we will construct a particular such
+universe and analyze its points and path spaces. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The Subuniverse {\normalfont\AgdaFunction{Ũ[𝟚]}}}
+\label{sec:model}
 
 Towards proving that, we start by defining the automorphism group for
 any type {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}}. The type
@@ -1185,9 +1195,6 @@ BAut≃Ũ[_] : (T : 𝒰) → BAut T ≃ pr₁ Ũ[ T ]
 BAut≃Ũ[ T ] = {!!}
 \end{code}
 }
-
-\subsection{The Subuniverse {\normalfont\AgdaFunction{Ũ[𝟚]}}}
-% \jacques{I find it confusing that this has no tilde on the U}.
 
 We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use in the
 next section:
