@@ -1230,12 +1230,12 @@ postulate
 %For 2-path, \AgdaSymbol{𝟚} is a set, with witness
 By applying induction principle and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
 
-\AgdaHide{\begin{code}
-postulate
-\end{code}}
-
 \begin{code}
-  𝟚is-set : is-set 𝟚
+𝟚is-set : is-set 𝟚
+𝟚is-set 0₂ 0₂ (refl .0₂) (refl .0₂) = refl (refl 0₂)
+𝟚is-set 0₂ 1₂ ()
+𝟚is-set 1₂ 0₂ ()
+𝟚is-set 1₂ 1₂ (refl .1₂) (refl .1₂) = refl (refl 1₂)
 \end{code}
 
 From this, it is easy to obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is a set by using
