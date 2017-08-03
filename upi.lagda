@@ -17,7 +17,7 @@
 \usepackage[inline]{enumitem}
 \usepackage{stmaryrd}
 
-\usepackage[conor,references]{agda}
+\usepackage[conor]{agda}
 \usepackage[mathscr]{euscript}
 \usepackage[euler]{textgreek}
 \usepackage{mathabx}
@@ -737,7 +737,10 @@ is-qinv : {A B : 𝒰} → (f : A → B) → 𝒰
 is-qinv {A} {B} f = Σ[ g ∶ (B → A) ] (g ∘ f ∼ id × f ∘ g ∼ id)
 \end{code}
 
-To make this type contractible, we need an additional coherence condition:
+\VC{Maybe we can split the explanation of contractible and propositions and move
+  it to 3.1?}
+
+To make this type contractible, we need an additional adjointness condition:
 
 \begin{code}
 is-hae : {A B : 𝒰} → (f : A → B) → 𝒰
@@ -798,7 +801,7 @@ A ≃ B = Σ[ f ∶ (A → B) ] is-hae f
   $P(x)$ and $P(y)$}
 \end{figure}
 
-\subsection{Type Families are Fibrations}
+\subsection{Type families are Fibrations}
 
 As illustrated in Fig.~\ref{fig:fib}, a type family
 {\small\AgdaBound{P}} over a type~{\small\AgdaBound{A}} is a fibration
@@ -907,11 +910,11 @@ ide A = id , id , idh id , idh id , idh (idh id)
 }
 
 \begin{code}
-transport-eqv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
-transport-eqv P (refl a) = id , id , refl , refl , (refl ∘ refl)
+transport-equiv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
+transport-equiv P (refl a) = id , id , refl , refl , (refl ∘ refl)
 
-id-to-eqv : {A B : 𝒰} → A == B → A ≃ B
-id-to-eqv = transport-eqv id
+id-to-equiv : {A B : 𝒰} → A == B → A ≃ B
+id-to-equiv = transport-equiv id
 \end{code}
 
 \subsection{Univalent Fibrations}
@@ -920,7 +923,7 @@ Univalent fibrations are defined by Kapulkin and
 Lumsdaine~\cite{SimplicialModel} in the simplicial set model (SSet).
 In our context, a type family (fibration)
 {\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
-is univalent if the map {\small\AgdaFunction{transport-eqv}~\AgdaBound{p}}
+is univalent if the map {\small\AgdaFunction{transport-equiv}~\AgdaBound{p}}
 is an equivalence, that is, paths in the base space are
 \emph{equivalent} to equivalences between the corresponding
 fibers. Fig.~\ref{fig:fib} (right) illustrates that, for any
@@ -931,29 +934,33 @@ base space. Formally, we have the following definition:
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
-is-univ-fib {A} P = ∀ (a b : A) → is-hae (transport-eqv P {a} {b})
+is-univ-fib {A} P = ∀ (a b : A) → is-hae (transport-equiv P {a} {b})
 \end{code}
 
 The univalence axiom (for {\small\AgdaFunction{𝒰}}) is a specialization of
 {\small\AgdaFunction{is-univ-fib}} to the identity fibration. We postulate
-this as an axiom. We also give a short-form {\small\AgdaFunction{ua}} for
-getting a path from an equivalence:
+this as an axiom.
 
 \begin{code}
 postulate
-  univalence : (A B : 𝒰) → is-hae (id-to-eqv {A} {B})
+  univalence : (A B : 𝒰) → is-hae (id-to-equiv {A} {B})
+\end{code}
 
+We also give a short-form {\small\AgdaFunction{ua}} for getting a path from an
+equivalence, and prove some computation rules for it:
+
+\begin{code}
 module _ {A B : 𝒰} where
   ua : A ≃ B → A == B
   ua = pr₁ (univalence A B)
 
-  ua-β : id-to-eqv ∘ ua ∼ id
+  ua-β : id-to-equiv ∘ ua ∼ id
   ua-β = pr₁ (pr₂ (pr₂ (univalence A B)))
 
   ua-β₁ : transport id ∘ ua ∼ pr₁
   ua-β₁ eqv = transport _ (ua-β eqv) (ap pr₁)
 
-  ua-η : ua ∘ id-to-eqv ∼ id
+  ua-η : ua ∘ id-to-equiv ∼ id
   ua-η = pr₁ (pr₂ (univalence A B))
 \end{code}
 
@@ -970,11 +977,15 @@ is-univalent : Ũ → 𝒰
 is-univalent (U , El) = is-univ-fib El
 \end{code}
 
+\VC{We never use is-univalent later, so might as well just delete it}
+
 \subsection{Propositional Truncation}
 
 A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0, or
 (-2)-truncated), if it has a center of contraction, and all other
 terms of that type are connected to it by a path:
+
+\VC{FIXME: Σ and Π are rendered in different colors}
 
 \begin{code}
 is-contr : (A : 𝒰) → 𝒰
@@ -1110,20 +1121,20 @@ b₀ {T} = T , ∣ ide T ∣
 \end{code}
 
 The loop space of any pointed type
-{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaBound{t}\AgdaSymbol{)}}
-is the space of paths on {\small\AgdaBound{t}},
-{\small\AgdaFunction{Ω}\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t}\AgdaSymbol{)}}:
+{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaBound{t₀}\AgdaSymbol{)}}
+is the space of paths on {\small\AgdaBound{t₀}},
+{\small\AgdaFunction{Ω}\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t₀}\AgdaSymbol{)}}:
 
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
-Ω (T , t) = t == t
+Ω (T , t₀) = t₀ == t₀
 
 f : {T : 𝒰} → BAut T → 𝒰
 f = pr₁
 
-transport-eqv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
-                → pr₁ (transport-eqv f p) == transport id (dpair=-e p)
-transport-eqv-f (refl v) = refl id
+transport-equiv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
+                  → pr₁ (transport-equiv f p) == transport id (dpair=-e p)
+transport-equiv-f (refl v) = refl id
 \end{code}
 
 Putting these ingredients together, we can show that the code of a
@@ -1135,22 +1146,22 @@ is-univ-fib-f : {T : 𝒰} → is-univ-fib f
 is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
         g eqv = dpair= (ua eqv , ident)
-        η : g ∘ transport-eqv f ∼ id
-        η (refl ._) = ap dpair=   (dpair= (ua-η (refl _)
-                                  , prop-is-set (λ _ _ → ident) _ _ _ _))
-        ε : transport-eqv f ∘ g ∼ id
-        ε eqv = eqv=   (transport-eqv-f (dpair= (ua eqv , ident))
-                       ◾ ap (transport id) (dpair=-β (ua eqv , ident))
-                       ◾ ua-β₁ eqv )
+        η : g ∘ transport-equiv f ∼ id
+        η (refl ._) = ap dpair= (dpair= ( ua-η (refl _)
+                                        , prop-is-set (λ _ _ → ident) _ _ _ _))
+        ε : transport-equiv f ∘ g ∼ id
+        ε eqv = eqv= ( transport-equiv-f (dpair= (ua eqv , ident))
+                     ◾ ap (transport id) (dpair=-β (ua eqv , ident))
+                     ◾ ua-β₁ eqv )
 \end{code}
 
-As a consequence, we have that the loop space of the delooping the
-group of automorphisms of a type {\small\AgdaBound{T}} is equivalent
-to the type {\small\AgdaFunction{Aut}~\AgdaBound{T}}:
+As a consequence, we have that the loop space of
+{\small\AgdaFunction{BAut}~\AgdaBound{T}} is equivalent to
+{\small\AgdaFunction{Aut}~\AgdaBound{T}}:
 
 \begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
-ΩBAut≃Aut[ T ] = transport-eqv f , is-univ-fib-f b₀ b₀
+ΩBAut≃Aut[ T ] = transport-equiv f , is-univ-fib-f b₀ b₀
 \end{code}
 
 It remains to check that {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the same
