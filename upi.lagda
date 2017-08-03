@@ -1104,9 +1104,9 @@ of~{\small\AgdaFunction{𝒰}} as follows:
 \begin{code}
 Ũ[_] : (T : 𝒰) → Ũ
 Ũ[ T ] = U , El
-  where 
-    U   = Σ[ X ∶ 𝒰 ] ∥ X == T ∥ 
-    El  = λ _ → T
+  where
+    U   = Σ[ X ∶ 𝒰 ] ∥ X == T ∥
+    El  = pr₁
 \end{code}
 
 Pictorially we have the following situation:
@@ -1115,12 +1115,12 @@ Pictorially we have the following situation:
 \begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]]
   \draw (0,-5) ellipse (3.5cm and 1.2cm);
   \node[below] at (0,-6.3) {Base Space \AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==} \AgdaBound{T} \AgdaPostulate{∥}};
-  \draw[fill] (-2,-5) circle [radius=0.025]; 
+  \draw[fill] (-2,-5) circle [radius=0.025];
   \node[below] at (-2,-5) {\AgdaSymbol{(}\AgdaBound{X₁}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₁}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
-  \draw[fill] (2,-5) circle [radius=0.025]; 
+  \draw[fill] (2,-5) circle [radius=0.025];
   \node[below] at (2,-5) {\AgdaSymbol{(}\AgdaBound{X₂}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₂}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
-  \draw[below,cyan,thick] (-2,-5) -- (2,-5); 
-  \node[below,cyan,thick] at (0,-5) {$==$}; 
+  \draw[below,cyan,thick] (-2,-5) -- (2,-5);
+  \node[below,cyan,thick] at (0,-5) {$==$};
 
   \draw (-2,-2) ellipse (0.5cm and 1cm);
   \node[left] at (-2.5,-2) {\AgdaBound{T}};
