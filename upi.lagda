@@ -1164,28 +1164,43 @@ BAut≃Ũ[ T ] = {!!}
 \end{code}
 }
 
-\subsection{The Subuniverse {\normalfont\AgdaSymbol{U[𝟚]}}}
-\jacques{I find it confusing that this has no tilde on the U}.
+\subsection{The Subuniverse {\normalfont\AgdaFunction{Ũ[𝟚]}}}
+% \jacques{I find it confusing that this has no tilde on the U}.
 
-We define a particular subuniverse \AgdaFunction{U[𝟚]} that we use in the
+We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use in the
 next section:
 % \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
 % a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
 \begin{code}
-U[𝟚] = pr₁ Ũ[ 𝟚 ]
+Ũ[𝟚] = pr₁ Ũ[ 𝟚 ]
 \end{code}
 
-Instantiating the lemma from the previous section with \AgdaSymbol{𝟚}, we have
-that \AgdaSymbol{U[𝟚]} is a univalent subuniverse, with \AgdaSymbol{pr₁} the
+Instantiating the lemma from the previous section with \AgdaFunction{𝟚}, we have
+that {\small\AgdaFunction{Ũ[𝟚]}} is a univalent subuniverse, with \AgdaFunction{pr₁} the
 univalent fibration. By the property of being a univalent fibration we have that
-\AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}, where
+{\small\AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}, where
 
 \begin{code}
 𝟚₀ = (𝟚 , ∣ ide 𝟚 ∣)
 \end{code}
 
-Since \AgdaSymbol{(𝟚 ≃ 𝟚) ≃ 𝟚} (see~\cite{hottbook} exercise 2.13), we have
+Since there are exactly two different bijections between {\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}},
+and for any function {\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is proposition so we have exactly
+two inhabitant of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
+\begin{code}
+id≃ not≃ : 𝟚 ≃ 𝟚
+id≃  = id  , (qinv-is-hae (id , refl , refl))
+not≃ = not , (qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}) , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂})))
+  where
+  not : 𝟚 → 𝟚
+  not 0₂ = 1₂
+  not 1₂ = 0₂
+\end{code}
+
+%% \AgdaSymbol{(𝟚 ≃ 𝟚) ≃ 𝟚} (see~\cite{hottbook} exercise 2.13), we have
+Hence we have an equivalence between {\small\AgdaFunction{𝟚 ≃ 𝟚}} and {\small\AgdaFunction{𝟚}}.
+By composing equivalences we obtain:
 
 \AgdaHide{\begin{code}
 postulate
@@ -1215,7 +1230,8 @@ postulate
   all-1-path : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
 
-For 2-path, \AgdaSymbol{𝟚} is a set, with witness
+%For 2-path, \AgdaSymbol{𝟚} is a set, with witness
+By applying induction principle and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
 
 \AgdaHide{\begin{code}
 postulate
@@ -1225,8 +1241,8 @@ postulate
   𝟚is-set : is-set 𝟚
 \end{code}
 
-From this, it is easy to obtain that \AgdaSymbol{𝟚₀ == 𝟚₀} is a set and that
-2-paths are contractible.
+From this, it is easy to obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is a set by using
+{\small\AgdaFunction{transport}} and that 2-paths are contractible.
 
 \begin{code}
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
@@ -1236,7 +1252,7 @@ all-2-path : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
 all-2-path {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
-In next section, we will use \AgdaSymbol{all-1-path} and \AgdaSymbol{all-2-path}
+In next section, we will use {\small\AgdaFunction{all-1-path}} and {\small\AgdaFunction{all-2-path}}
 to show the correspondence between \AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀)} and \PiTwo.
 
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
