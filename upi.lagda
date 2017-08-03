@@ -1039,10 +1039,9 @@ postulate
 
 This makes
 {\small\AgdaInductiveConstructor{∥}\AgdaBound{A}\AgdaInductiveConstructor{∥}}
-the ``free'' proposition on any type {\small\AgdaBound{A}}. It can be
-viewed as the left adjoint to the forgetful functor from propositions
-to types. The recursion principle (below) ensures that we can only
-eliminate a propositional truncation to a type that is a proposition:
+the ``free'' proposition on any type {\small\AgdaBound{A}}. The
+recursion principle (below) ensures that we can only eliminate a
+propositional truncation to a type that is a proposition:
 
 \begin{code}
 module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
