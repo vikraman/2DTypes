@@ -1107,7 +1107,7 @@ univalent. In the next section, we will construct a particular such
 universe and analyze its points and path spaces.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The Subuniverse {\normalfont\AgdaFunction{Ũ[𝟚]}}}
+\section{The Subuniverse {\normalfont\AgdaFunction{U[𝟚]}}}
 \label{sec:model}
 
 \newtext{
@@ -1214,7 +1214,7 @@ next section:
 \VC{This is confusing because the two identifiers only differ by a space!}
 
 \begin{code}
-Ũ[𝟚] = pr₁ Ũ[ 𝟚 ]
+U[𝟚] = pr₁ Ũ[ 𝟚 ]
 \end{code}
 
 Instantiating the lemma from the previous section with \AgdaFunction{𝟚}, we have
@@ -1369,10 +1369,10 @@ At level $0$, the correspondence is straightforward, as both
 \AgdaSymbol{𝑈} and \AgdaSymbol{Ũ[𝟚]} are singletons.
 
 \begin{code}
-⟦_⟧₀ : 𝑈 → Ũ[𝟚]
+⟦_⟧₀ : 𝑈 → U[𝟚]
 ⟦ `𝟚 ⟧₀ = 𝟚₀
 
-⟦_⟧₀⁻¹ : Ũ[𝟚] → 𝑈
+⟦_⟧₀⁻¹ : U[𝟚] → 𝑈
 ⟦ 𝟚₀ ⟧₀⁻¹ = `𝟚
 \end{code}
 
