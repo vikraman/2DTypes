@@ -34,11 +34,12 @@
 \NoIndentAfterEnv{code}
 \NoIndentAfterEnv{figure}
 
-\DeclareUnicodeCharacter {120794}{$\mathbb {2}$}
-\DeclareUnicodeCharacter {9726}{$\sqbullet$}
-\DeclareUnicodeCharacter {120792}{$\mathbb {0}$}
-\DeclareUnicodeCharacter {119932}{$\mathbfit{U}$}
-\DeclareUnicodeCharacter {119984}{$\mathcal{U}$}
+\DeclareUnicodeCharacter{120793}{$\mathbb{1}$}
+\DeclareUnicodeCharacter{120794}{$\mathbb{2}$}
+\DeclareUnicodeCharacter{9726}{$\sqbullet$}
+\DeclareUnicodeCharacter{120792}{$\mathbb{0}$}
+\DeclareUnicodeCharacter{119932}{$\mathbfit{U}$}
+\DeclareUnicodeCharacter{119984}{$\mathcal{U}$}
 
 % \newcommand{\byiso}[1]{{\leftrightarrow}{\langle} ~#1~ \rangle}
 % \newcommand{\byisotwo}[1]{{\Leftrightarrow}{\langle} ~#1~ \rangle}
@@ -173,6 +174,11 @@ $\displaystyle
 module upi where
 
 𝒰 = Set
+
+data ⊥ : 𝒰 where
+
+record ⊤ : 𝒰 where
+  constructor tt
 
 record Σ (A : 𝒰) (B : A → 𝒰) : 𝒰 where
   constructor _,_
@@ -1168,6 +1174,8 @@ next section:
 % \AgdaSymbol{𝟚} is the \AgdaSymbol{Bool} datatype, which is
 % a set with two distinct points \AgdaSymbol{0₂} and \AgdaSymbol{1₂}.
 
+\VC{This is confusing because the two identifiers only differ by a space!}
+
 \begin{code}
 Ũ[𝟚] = pr₁ Ũ[ 𝟚 ]
 \end{code}
@@ -1177,17 +1185,26 @@ that {\small\AgdaFunction{Ũ[𝟚]}} is a univalent subuniverse, with \AgdaFunct
 univalent fibration. By the property of being a univalent fibration we have that
 {\small\AgdaSymbol{Ω(BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}, where
 
+\VC{But we hide the definition of ide}
+
 \begin{code}
 𝟚₀ = (𝟚 , ∣ ide 𝟚 ∣)
 \end{code}
 
-Since there are exactly two different bijections between {\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}},
-and for any function {\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is proposition so we have exactly
-two inhabitant of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
+\VC{Reading this sentence doesn't tell me anything about how to prove it, and
+the word bijection is misleading. At least write down the maps? To show one of
+the equivalences we need to use funext, and then the fact that is-hae-is-prop.}
+
+Since there are exactly two different bijections between
+{\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}}, and for any function
+{\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a proposition so we
+have exactly two inhabitants of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
+
 \begin{code}
 id≃ not≃ : 𝟚 ≃ 𝟚
-id≃  = id  , (qinv-is-hae (id , refl , refl))
-not≃ = not , (qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}) , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂})))
+id≃  = id  , qinv-is-hae (id , refl , refl)
+not≃ = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂})
+                              , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}))
   where
   not : 𝟚 → 𝟚
   not 0₂ = 1₂
@@ -1226,6 +1243,24 @@ postulate
   all-1-paths : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
 
+\newtext{
+
+  The type \AgdaSymbol{𝟚} has two point constructors, and no path constructors,
+  which means it has no non-trivial paths on its points except
+  \AgdaSymbol{refl}. In fact, we can prove in intensional type theory using
+  large elimination, that the two constructors are disjoint. This is reflected
+  in the absurd pattern when doing dependent pattern matching in Agda. More
+  generally, \AgdaSymbol{𝟚 ≃ 𝟙 ⊎ 𝟙} and the disjoint union of two sets is a set.
+
+}
+
+\begin{code}
+0₂≠1₂ : 0₂ == 1₂ → ⊥
+0₂≠1₂ p = transport code p tt
+  where code : 𝟚 → 𝒰
+        code 0₂ = ⊤
+        code 1₂ = ⊥
+\end{code}
 
 %For 2-path, \AgdaSymbol{𝟚} is a set, with witness
 By applying induction principle and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
@@ -1295,6 +1330,11 @@ postulate
 --               ◾ ap (λ x → p=r ◾ x) (! (◾assoc _ _ _))
 --               ◾ ap (λ x → p=r ◾ x ◾ ! q=r) (◾assoc _ _ _)
 \end{code}
+}
+
+\newtext{
+  The syntactic category of \PiTwo{} forms a 2-groupoid, we construct a
+  2-functor out of it to BAut 𝟚 and show that it is an equivalence.
 }
 
 At level $0$, the correspondence is straightforward, as both \AgdaSymbol{𝑈} and
