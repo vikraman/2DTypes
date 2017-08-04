@@ -1524,7 +1524,9 @@ makes things straightforward.
 \end{code}
 }
 
-Level $3$ is trivial -- by fiat.
+%% Level $3$ is trivial -- by fiat.
+For level $3$, {\small\AgdaFunction{⌜\_⌝₃}} just maps to {\small\AgdaFunction{`trunc}}.
+And {\small\AgdaFunction{⟦\_⟧₃}} is obtained by using {\small\AgdaFunction{all-1-paths}} and {\small\AgdaFunction{all-2-paths}}.
 
 \begin{code}
 ⟦_⟧₃ : {A B : Π₂} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
