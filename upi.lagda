@@ -272,12 +272,13 @@ Here we report on a formal connection between appropriately formulated
 reversible languages on one hand and univalent universes on the
 other. In the next section, we give a rational reconstruction of $\Pi$
 focusing on a small ``featherweight'' fragment $\PiTwo$. In
-Sec.~\ref{sec:univalent}, we review \emph{univalent fibrations} which
-allow us to give formal presentations of ``small'' univalent
-universes. In Sec.~\ref{sec:model} we define and establish the basic
-properties of such a univalent subuniverse {\small\AgdaFunction{Ũ[𝟚]}}
-which we prove in Sec.~\ref{sec:correspondence} as sound and complete
-with respect to the reversible language $\PiTwo$.
+Sec.~\ref{sec:univalent}, we review basic homotopy type theory (HoTT)
+background leading to \emph{univalent fibrations} which allow us to
+give formal presentations of ``small'' univalent universes. In
+Sec.~\ref{sec:model} we define and establish the basic properties of
+such a univalent subuniverse {\small\AgdaFunction{Ũ[𝟚]}} which we
+prove in Sec.~\ref{sec:correspondence} as sound and complete with
+respect to the reversible language $\PiTwo$.
 Sec.~\ref{sec:discussion} discusses the implications of our work and
 situates it into the broader context of the existing literature.
 %% Sec.~\ref{sec:conclusion} right now is a stub, and may not
@@ -718,7 +719,7 @@ next section.
 % \end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Univalent Fibrations}
+\section{HoTT BackGround}
 \label{sec:univalent}
 
 We work in intensional type theory with one univalent universe
@@ -951,9 +952,9 @@ As illustrated in Fig.~\ref{fig:fib}, a type family
 with base space~{\small\AgdaBound{A}}, with every
 {\small\AgdaBound{x}} in {\small\AgdaBound{A}} inducing a fiber
 {\small\AgdaBound{P}~\AgdaBound{x}}, and with total space
-{\small\AgdaPrimitiveType{Σ[}~\AgdaBound{x}~\AgdaSymbol{∶}~\AgdaBound{A}~\AgdaSymbol{]}~\AgdaSymbol{(}\AgdaBound{P}~\AgdaBound{x}\AgdaSymbol{)}}. In
-this and other following figures, we color paths in blue and functions
-in red.
+{\small\AgdaPrimitiveType{Σ[}~\AgdaBound{x}~\AgdaSymbol{∶}~\AgdaBound{A}~\AgdaSymbol{]}~\AgdaSymbol{(}\AgdaBound{P}~\AgdaBound{x}\AgdaSymbol{)}}.\footnote{In
+this and following figures, we color paths in blue and functions
+in red.}
 
 The path lifting property mapping a path in the base space to a path
 in the total space can be defined as follows:
@@ -1051,20 +1052,22 @@ to a path in the base space.
 \subsection{Univalent Fibrations}
 
 Univalent fibrations are defined by Kapulkin and
-Lumsdaine~\cite{SimplicialModel} in the simplicial set model (SSet).
-In our context, a type family (fibration)
+Lumsdaine~\cite{SimplicialModel} in the simplicial set model.  In our
+context, a type family (fibration)
 {\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
 is univalent if the map
 {\small\AgdaFunction{transport-equiv}~\AgdaBound{P}} defined in
-Sec.~\ref{sec:eq} is an equivalence, that is, if paths in the base
-space are \emph{equivalent} to equivalences between the corresponding
-fibers. Fig.~\ref{fig:fib} (right) illustrates the situation: we know
-that for any fibration {\small\AgdaBound{P}} that a path
-{\small\AgdaBound{p}} in the base space induces via
-{\small\AgdaFunction{transport-equiv}~\AgdaBound{P}~\AgdaBound{p}} an equivalence
-between the fibers. For a fibration to be univalent, the reverse must
-also be true: every equivalence between the fibers must induce a path
-in the base space. Formally, we have the following definition:
+Sec.~\ref{sec:eq} is an equivalence, that is, if the space of paths in
+the base space is \emph{equivalent} to the space of equivalences
+between the corresponding fibers. Fig.~\ref{fig:fib} (right)
+illustrates the situation: we know that for any fibration
+{\small\AgdaBound{P}} that a path {\small\AgdaBound{p}} in the base
+space induces via
+{\small\AgdaFunction{transport-equiv}~\AgdaBound{P}~\AgdaBound{p}} an
+equivalence between the fibers. For a fibration to be univalent, the
+reverse must also be true: every equivalence between the fibers must
+induce a path in the base space. Formally, we have the following
+definition:
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
@@ -1089,15 +1092,15 @@ is-univalent (U , El) = is-univ-fib El
 %% \VC{We never use is-univalent later, so might as well just delete it}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{The Subuniverse {\normalfont\AgdaFunction{U[𝟚]}}}
+\section{The Subuniverse {\normalfont\AgdaFunction{Ũ[} \AgdaDatatype{𝟚} \AgdaFunction{]}}}
 \label{sec:model}
 
 We now have all the ingredients necessary to define our class of
 univalent subuniverses of interest. Given any type
 {\small\AgdaBound{T}}, we can build a propositional predicate that
-picks out all the types equivalent to~{\small\AgdaBound{T}} among all
-the types in the universe. This lets us build up a ``singleton''
-subuniverse of~{\small\AgdaFunction{𝒰}} as follows:
+picks out from among all the types in the universe just the types that
+are identified with~{\small\AgdaBound{T}}. This lets us build up a
+``singleton'' subuniverse of~{\small\AgdaFunction{𝒰}} as follows:
 
 \begin{code}
 Ũ[_] : (T : 𝒰) → Ũ
@@ -1110,18 +1113,36 @@ subuniverse of~{\small\AgdaFunction{𝒰}} as follows:
 We will prove in this section and the next that choosing
 {\small\AgdaBound{T}} to be {\small\AgdaDatatype{𝟚}} produces a
 universe that is sound and complete with respect the language
-$\PiTwo$. The proof outline proceeds as follows. We first prove that
-the first projection map
-{\small\AgdaFunction{El}~\AgdaSymbol{:}~\AgdaRecord{Σ[} \AgdaBound{X}
-  \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥}
-  \AgdaBound{X} \AgdaDatatype{==} \AgdaDatatype{𝟚}
-  \AgdaPostulate{∥}~\AgdaSymbol{→}~\AgdaPrimitiveType{𝒰}} is a
-univalent fibration. This fibration is illustrated below:
+$\PiTwo$. The bulk of the argument consists of establishing that
+{\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚} \AgdaFunction{]}} is a
+univalent universe. We focus on this argument in the first subsection.
+In the next two subsections, we then use this result to characterize the
+points and paths in the codes for this universe. In
+Sec.~\ref{sec:correspondence} this characterization of points and
+paths will be shown to match the types and combinators of $\PiTwo$.
+
+\subsection{The Fibration \AgdaFunction{El𝟚} is Univalent}
+
+Our subuniverse of interest {\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚}
+  \AgdaFunction{]}} consists of a base space
+{\small\AgdaFunction{U[𝟚]}} giving the codes for the elements and an
+interpretation function {\small\AgdaFunction{El𝟚}} defined as follows:
+
+\begin{code}
+U[𝟚] : 𝒰
+U[𝟚]  = pr₁ Ũ[ 𝟚 ]   -----  = Σ[ X ∶ 𝒰 ] ∥ X == 𝟚 ∥
+
+El𝟚  : Σ[ X ∶ 𝒰 ] ∥ X == 𝟚 ∥ → 𝒰
+El𝟚  = pr₁
+\end{code}
+
+The type family {\small\AgdaFunction{El𝟚}} defines a fibration with
+base space {\small\AgdaFunction{U[𝟚]}} as shown below:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]]
   \draw (0,-5) ellipse (3.5cm and 1.2cm);
-  \node[below] at (0,-6.3) {Base Space \AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==} \AgdaDatatype{𝟚} \AgdaPostulate{∥}};
+  \node[below] at (0,-6.3) {Base Space \AgdaFunction{U[𝟚]} = \AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==} \AgdaDatatype{𝟚} \AgdaPostulate{∥}};
   \draw[fill] (-2,-4.75) circle [radius=0.025];
   \node[below] at (-2,-4.75) {\AgdaSymbol{(}\AgdaDatatype{𝟚}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣refl}~\AgdaDatatype{𝟚}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
   \draw[fill] (2,-4.75) circle [radius=0.025];
@@ -1130,159 +1151,129 @@ univalent fibration. This fibration is illustrated below:
   \node[below,cyan,thick] at (0,-4.75) {\AgdaDatatype{==}};
 
   \draw (-2,-2) ellipse (0.5cm and 1cm);
-  \node[left] at (-2.5,-2) {\AgdaDatatype{𝟚}};
+  \node[left] at (-2.5,-2) {Fiber \AgdaDatatype{𝟚}};
   \draw (2,-2) ellipse (0.5cm and 1cm);
-  \node[right] at (2.5,-2) {\AgdaBound{X}};
+  \node[right] at (2.5,-2) {Fiber \AgdaBound{X}};
   \draw[->,red,thick] (-1.5,-1.7) to [out=45, in=135] (1.5,-1.7);
   \draw[->,red,thick] (1.5,-2.3) to [out=-135, in=-45] (-1.5,-2.3);
   \node[red,thick] at (0,-2) {$\simeq$};
 \end{tikzpicture}
 \end{center}
 
-We then characterize the points and paths of this base space. There is
-one canonical point
-{\small\AgdaSymbol{(}\AgdaDatatype{𝟚}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣refl}~\AgdaDatatype{𝟚}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
-to which every other point is path-connected. We then study the paths
-in the base space by characterizing the loop space. We prove the
-following chain of equivalences:
-\[
-\AgdaSymbol{Ω (Σ[X ∶ 𝒰] ∥ X == 𝟚 ∥) ≃ Ω (Σ[X ∶ 𝒰] ∥ X ≃ 𝟚 ∥) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚}
-\]
-
-
-
-The points in the base space are all of the form
-{\small\AgdaSymbol{(}\AgdaBound{X}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
-where {\small\AgdaBound{p}} is of type
-{\small\AgdaBound{X}\AgdaDatatype{==}\AgdaDatatype{𝟚}}. A canonical point
-in the base space is
-{\small\AgdaSymbol{(}\AgdaDatatype{𝟚}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣refl}~\AgdaDatatype{𝟚}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
-
-
-
-
-
-
-
-
-
-
-By a lemma proved by Christensen~\cite{christensen}, if
-{\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}} is a type, then
-{\small\AgdaFunction{pr₁}~\AgdaSymbol{:}~\AgdaFunction{Ũ[}~\AgdaBound{T}~\AgdaFunction{]}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
-is a univalent fibration, with base
-{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaInductiveConstructor{refl}\AgdaBound{T}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}. In
-other words, all singleton subuniverses built as above as
-univalent. In the next section, we will construct a particular such
-universe and analyze its points and path spaces.
-
-
-
-
-
-% \newtext{
-%   This is the chain of equivalences we prove:
-
-%   Ω (Σ[X ∶ 𝒰] ∥ X == 𝟚 ∥) ≃ Ω (Σ[X ∶ 𝒰] ∥ X ≃ 𝟚 ∥) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
-
-%   Since we can characterize the loopspace of Ũ[𝟚], we can characterize
-%   all paths on it, and paths are preserved by equivalence of groupoids.
-% }
-
-Towards proving that, we start by defining the automorphism group for
-any type {\small\AgdaBound{T}~\AgdaSymbol{:}~\AgdaFunction{𝒰}}. The type
-{\small\AgdaFunction{Aut}~\AgdaBound{T}} is simply the type of equivalences on
-{\small\AgdaBound{T}}:
-
-\begin{code}
-Aut : (T : 𝒰) → 𝒰
-Aut T = T ≃ T
-\end{code}
-
-In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos
-of $∞$-groupoids, of which HoTT is an internal language. For an object
-$T$, we can define an $∞$-groupoid of $T$s, with objects $T$s,
-morphisms equivalences between $T$s, and so on. This is a full
-sub-$∞$-groupoid of $∞$Grpd, and gives the classifying space for
-spaces equivalent to $T$s. This is denoted by the type
-{\small\AgdaFunction{BAut}~\AgdaBound{T}}. The notation is suggestive of the
-fact that it corresponds classically to the delooping group of the
-automorphism group. We truncate to a ``mere equivalence'' so that the
-choice of the specific equivalence is impertinent.
+Our goal is to show that {\small\AgdaFunction{El𝟚}} is a univalent
+fibration. We establish this by chaining two equivalences. The first
+equivalence is a simple appeal to univalence to establish that {\small
+  (\AgdaBound{X}~\AgdaFunction{==}~\AgdaDatatype{𝟚})
+  ~\AgdaFunction{≃}~
+  (\AgdaBound{X}~\AgdaFunction{≃}~\AgdaDatatype{𝟚})}, i.e., that the
+space {\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
+  ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥} ~\AgdaBound{X}
+  ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚} ~\AgdaPostulate{∥}} is
+equivalent to our base space. We name this space
+{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. The second equivalence
+consists of proving the lemma {\small\AgdaFunction{is-univ-fib-ElB}}
+below whose original formulation is due to Christensen~\cite{christensen}:
 
 \begin{code}
 BAut : (T : 𝒰) → 𝒰
 BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
 
-ide : (A : 𝒰) → A ≃ A
-ide A = id , id , refl , refl , (λ a → refl (refl a))
+ElB : {T : 𝒰} → BAut T → 𝒰
+ElB = pr₁
 
-b₀ : {T : 𝒰} → BAut T
-b₀ {T} = T , ∣ ide T ∣
+transport-equiv-ElB :  {T : 𝒰} {v w : BAut T} 
+                       (p : v == w) → pr₁ (transport-equiv ElB p) == transport id (dpair=-e p)
+transport-equiv-ElB (refl v) = refl id
+
+is-univ-fib-ElB : {T : 𝒰} → is-univ-fib ElB
+is-univ-fib-ElB (T , q) (T' , q') = qinv-is-hae (g , η , ε)
+  where  g : T ≃ T' → T , q == T' , q'
+         g eqv = dpair= (ua eqv , ident)
+
+         η : g ∘ transport-equiv ElB ∼ id
+         η (refl ._) = ap dpair=   (dpair= ( ua-η (refl _)
+                                   , prop-is-set (λ _ _ → ident) _ _ _ _))
+
+         ε : transport-equiv ElB ∘ g ∼ id
+         ε eqv = eqv=  (transport-equiv-ElB (dpair= (ua eqv , ident))
+                       ◾ ap (transport id) (dpair=-β (ua eqv , ident))
+                       ◾ ua-β₁ eqv )
 \end{code}
 
-The loop space of any pointed type
-{\small\AgdaSymbol{(}\AgdaBound{T}~\AgdaSymbol{,}~\AgdaBound{t₀}\AgdaSymbol{)}}
-is the space of paths on {\small\AgdaBound{t₀}},
-{\small\AgdaFunction{Ω}\AgdaSymbol{(}\AgdaBound{T}\AgdaSymbol{,}\AgdaBound{t₀}\AgdaSymbol{)}}:
+This establishes that {\small\AgdaFunction{El𝟚}} is a univalent
+fibration, giving us a characterization of paths in
+{\small\AgdaFunction{U[𝟚]}} in terms of equivalences on booleans which
+we exploit next. 
+
+\subsection{The Base Space \AgdaFunction{U[𝟚]}}
+
+The points in the base space {\small\AgdaFunction{U[𝟚]}} are all of
+the form
+{\small\AgdaSymbol{(}\AgdaBound{X}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
+where {\small\AgdaBound{p}} is of type
+{\small\AgdaBound{X}\AgdaDatatype{==}\AgdaDatatype{𝟚}}. We evidently
+have a canonical point {\small\AgdaFunction{𝟚₀}}:
+
+\begin{code}
+𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
+\end{code}
+
+\noindent which directly corresponds to the boolean type in
+$\PiTwo$. What remains is to characterize the 1-paths, 2-paths, and
+possibly higher paths in {\small\AgdaFunction{U[𝟚]}} and to relate
+them to the 1-combinators, 2-combinators, etc. in $\PiTwo$.
+
+To conveniently refer to the paths in {\small\AgdaFunction{U[𝟚]}}, we
+define the loop space on a (pointed) type:
 
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
 Ω (T , t₀) = t₀ == t₀
 \end{code}
 
-
-%% \newtext{
-%%   This is the chain of equivalences we prove:
-
-%%   Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
-
-%%   Since we can characterize the loopspace of Ũ[𝟚], we can characterize
-%%   all paths on it, and paths are preserved by equivalence of groupoids.
-%% }
-
-Since equivalences are preserved over dependent sum and propositional truncation, so we have
-{\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} where
-\begin{code}
-𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
-\end{code}
-is the base point of {\small\AgdaFunction{Ω (Ũ , 𝟚₀)}}.
-
-Now we prove that {\small\AgdaFunction{pr₁}} is univalent fibration:
-
-%% Putting these ingredients together, we can show that the code of a
-%% singleton universe {\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}} is a
-%% univalent fibration:
+We then show that the loop space on
+{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is equivalent to
+{\small\AgdaDatatype{𝟚}~\AgdaFunction{≃}~AgdaFunction{BAut}}:
 
 \begin{code}
-f : {T : 𝒰} → BAut T → 𝒰
-f = pr₁
+Aut : (T : 𝒰) → 𝒰
+Aut T = T ≃ T
+ 
+ide : (A : 𝒰) → A ≃ A
+ide A = id , id , refl , refl , (λ a → refl (refl a))
 
-transport-equiv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
-                  → pr₁ (transport-equiv f p) == transport id (dpair=-e p)
-transport-equiv-f (refl v) = refl id
+b₀ : {T : 𝒰} → BAut T
+b₀ {T} = T , ∣ ide T ∣
 
-is-univ-fib-f : {T : 𝒰} → is-univ-fib f
-is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
-  where g : T ≃ T' → T , q == T' , q'
-        g eqv = dpair= (ua eqv , ident)
-        η : g ∘ transport-equiv f ∼ id
-        η (refl ._) = ap dpair= (dpair= ( ua-η (refl _)
-                                        , prop-is-set (λ _ _ → ident) _ _ _ _))
-        ε : transport-equiv f ∘ g ∼ id
-        ε eqv = eqv= ( transport-equiv-f (dpair= (ua eqv , ident))
-                     ◾ ap (transport id) (dpair=-β (ua eqv , ident))
-                     ◾ ua-β₁ eqv )
-\end{code}
-
-As a consequence, we have that the loop space of
-{\small\AgdaFunction{BAut}~\AgdaBound{T}} is equivalent to
-{\small\AgdaFunction{Aut}~\AgdaBound{T}}:
-
-\begin{code}
 ΩBAut≃Aut[_] : (T : 𝒰) → Ω (BAut T , b₀) ≃ Aut T
-ΩBAut≃Aut[ T ] = transport-equiv f , is-univ-fib-f b₀ b₀
+ΩBAut≃Aut[ T ] = transport-equiv ElB , is-univ-fib-ElB b₀ b₀
 \end{code}
+
+In particular, it follows that
+{\small\AgdaFunction{Ω}~\AgdaSymbol{(}\AgdaFunction{BAut}~\AgdaDatatype{𝟚}
+  \AgdaInductiveConstructor{,} \AgdaFunction{𝟚₀}\AgdaSymbol{)}
+  \AgdaFunction{≃} \AgdaFunction{Aut} \AgdaDatatype{𝟚}} which reduces
+the problem of characterizing paths on {\small\AgdaFunction{U[𝟚]}} to
+the much simpler problem of characterizing automorphisms on the type
+of booleans which follows in the next subsection. 
+
+% In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos
+% of $∞$-groupoids, of which HoTT is an internal language. For an object
+% $T$, we can define an $∞$-groupoid of $T$s, with objects $T$s,
+% morphisms equivalences between $T$s, and so on. This is a full
+% sub-$∞$-groupoid of $∞$Grpd, and gives the classifying space for
+% spaces equivalent to $T$s. This is denoted by the type
+% {\small\AgdaFunction{BAut}~\AgdaBound{T}}. The notation is suggestive of the
+% fact that it corresponds classically to the delooping group of the
+% automorphism group. We truncate to a ``mere equivalence'' so that the
+% choice of the specific equivalence is impertinent.
+
+%% Since equivalences are preserved over dependent sum and propositional truncation, so we have
+%% {\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} 
+
+% As a consequence, we have that the loop space of
+% {\small\AgdaFunction{BAut}~\AgdaBound{T}} is equivalent to
+% {\small\AgdaFunction{Aut}~\AgdaBound{T}}:
 
 %It remains to check that {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the same
 %as our singleton universe
@@ -1302,14 +1293,17 @@ BAut≃Ũ[ T ] = {!!}
 %% that {\small\AgdaFunction{Ũ[𝟚]}} is a univalent subuniverse, with \AgdaFunction{pr₁} the
 %% univalent fibration. By the property of being a univalent fibration we have that
 %% {\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
-Hence {\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
 
-The type {\small\AgdaFunction{𝟚}} has two point constructors, and no path constructors,
-which means it has no non-trivial paths on its points except
-{\small\AgdaFunction{refl}}. In fact, we can prove in intensional type theory using
-large elimination, that the two constructors are disjoint. This is reflected
-in the absurd pattern when doing dependent pattern matching in Agda. More
-generally, {\small\AgdaFunction{𝟚 ≃ 𝟙 ⊎ 𝟙}} and the disjoint union of two sets is a set.
+\subsection{Automorphisms on \AgdaDatatype{𝟚}}
+
+The type {\small\AgdaFunction{𝟚}} has two point constructors, and no
+path constructors, which means it has no non-trivial paths on its
+points except {\small\AgdaFunction{refl}}. In fact, we can prove in
+intensional type theory using large elimination, that the two
+constructors are disjoint. This is reflected in the absurd pattern
+when doing dependent pattern matching in Agda. More generally,
+{\small\AgdaFunction{𝟚 ≃ 𝟙 ⊎ 𝟙}} and the disjoint union of two sets is
+a set.
 
 \begin{code}
 0₂≠1₂ : 0₂ == 1₂ → ⊥
@@ -1319,10 +1313,13 @@ generally, {\small\AgdaFunction{𝟚 ≃ 𝟙 ⊎ 𝟙}} and the disjoint union 
         code 1₂ = ⊥
 \end{code}
 
-Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality (derivable from univalence) we can prove that
-there are exactly two different equivalences between {\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}}.
-And for any equivalence {\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a proposition so we
-have exactly two inhabitants of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
+Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality
+(derivable from univalence) we can prove that there are exactly two
+different equivalences between {\small\AgdaFunction{𝟚}} and
+{\small\AgdaFunction{𝟚}}.  And for any equivalence
+{\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a
+proposition so we have exactly two inhabitants of
+{\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 
 \begin{code}
 id≃ not≃ : 𝟚 ≃ 𝟚
@@ -1390,7 +1387,7 @@ all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
 
 We will use the subuniverse {\small\AgdaFunction{U[𝟚]}} as our model for \PiTwo where
 \begin{code}
-U[𝟚] = pr₁ Ũ[ 𝟚 ]
+-- U[𝟚] = pr₁ Ũ[ 𝟚 ]
 \end{code}
 In next section, we will use {\small\AgdaFunction{all-1-paths}} and {\small\AgdaFunction{all-2-paths}}
 to show the correspondence between {\small\AgdaFunction{U[𝟚]}} and \PiTwo.
