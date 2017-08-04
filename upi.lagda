@@ -1177,7 +1177,10 @@ space {\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
   ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥} ~\AgdaBound{X}
   ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚} ~\AgdaPostulate{∥}} is
 equivalent to our base space. We name this space
-{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. The second equivalence
+{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generallly
+\AgdaFunction{BAut}~\AgdaBound{T} is the
+``classifying space'' of all types (merely) equivalent to
+\AgdaBound{T}.  The second equivalence
 consists of proving that the first projection is in fact a univalent
 fibration for all spaces with shape
 \mbox{\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
@@ -1232,7 +1235,8 @@ have a canonical point {\small\AgdaFunction{𝟚₀}}:
 \end{code}
 
 \noindent which directly corresponds to the boolean type in
-$\PiTwo$. What remains is to characterize the 1-paths, 2-paths, and
+$\PiTwo$. We remind the reader that, by construction, \AgdaFunction{U[𝟚]}
+is contractible.  What remains is to characterize the 1-paths, 2-paths, and
 possibly higher paths in {\small\AgdaFunction{U[𝟚]}} and to relate
 them to the 1-combinators, 2-combinators, etc. in $\PiTwo$.
 
@@ -1246,7 +1250,7 @@ define the loop space on a (pointed) type:
 
 We then show that the loop space on
 {\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is equivalent to
-{\small\AgdaDatatype{𝟚}~\AgdaFunction{≃}~AgdaFunction{BAut}}:
+{\small\AgdaDatatype{𝟚}~\AgdaFunction{≃}~\AgdaFunction{BAut}}:
 
 \begin{code}
 Aut : (T : 𝒰) → 𝒰
@@ -1262,13 +1266,16 @@ b₀ {T} = T , ∣ ide T ∣
 ΩBAut≃Aut[ T ] = transport-equiv ElB , is-univ-fib-ElB b₀ b₀
 \end{code}
 
+The above results that, in general, the loop space of the
+classifying space of a type \AgdaBound{T} is equivalent to
+the type of automorphisms of \AgdaBound{T}.
 In particular, it follows that
 {\small\AgdaFunction{Ω}~\AgdaSymbol{(}\AgdaFunction{BAut}~\AgdaDatatype{𝟚}
   \AgdaInductiveConstructor{,} \AgdaFunction{𝟚₀}\AgdaSymbol{)}
   \AgdaFunction{≃} \AgdaFunction{Aut} \AgdaDatatype{𝟚}} which reduces
 the problem of characterizing paths on {\small\AgdaFunction{U[𝟚]}} to
 the much simpler problem of characterizing automorphisms on the type
-of booleans which follows in the next subsection.
+of booleans.  We now turn our attention to solving that problem.
 
 % In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos
 % of $∞$-groupoids, of which HoTT is an internal language. For an object
@@ -1329,9 +1336,9 @@ a set.
 Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality
 (derivable from univalence) we can prove that there are exactly two
 different equivalences between {\small\AgdaFunction{𝟚}} and
-{\small\AgdaFunction{𝟚}}.  And for any equivalence
+{\small\AgdaFunction{𝟚}}.  Furthermore, for any equivalence
 {\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a
-proposition so we have exactly two inhabitants of
+proposition, showing that we have exactly two inhabitants of
 {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 
 \begin{code}
@@ -1344,7 +1351,14 @@ not≃ = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂})
   not 1₂ = 0₂
 \end{code}
 
-Hence we have an equivalence between {\small\AgdaFunction{𝟚 ≃ 𝟚}} and {\small\AgdaFunction{𝟚}}.
+Here something very special happens:  {\small\AgdaFunction{𝟚}} and
+{\small\AgdaFunction{𝟚 ≃ 𝟚}} are of the same size.  In general,
+the type formed by taking $n$ disjoint unions of {\small\AgdaFunction{𝟙}}
+has a space of automorphisms of size $n!$.
+
+In our situtation, this combinatorial accident can actually be lifted
+to show that there is
+an equivalence between {\small\AgdaFunction{𝟚 ≃ 𝟚}} and {\small\AgdaFunction{𝟚}}.
 By composing the chain of equivalences
 {\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚}} we obtain:
 
@@ -1356,7 +1370,7 @@ postulate
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
 
-Therefore we know that there are only two distinct 1-paths. Calling them
+Thus there are only two distinct 1-paths. Calling them
 
 \AgdaHide{\begin{code}
 postulate
@@ -1366,7 +1380,7 @@ postulate
   id𝟚 not𝟚 : 𝟚₀ == 𝟚₀
 \end{code}
 
-and we have this decomposition
+\noindent leads to a decomposition
 
 \AgdaHide{\begin{code}
 postulate
@@ -1377,7 +1391,8 @@ postulate
 \end{code}
 
 %For 2-path, \AgdaSymbol{𝟚} is a set, with witness
-By applying induction principle and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
+By applying induction principle for disjoint union
+and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
 
 \begin{code}
 𝟚is-set : is-set 𝟚
@@ -1387,8 +1402,9 @@ By applying induction principle and path induction we can prove {\small\AgdaFunc
 𝟚is-set 1₂ 1₂ (refl .1₂) (refl .1₂) = refl (refl 1₂)
 \end{code}
 
-From this, it is easy to obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is a set by using
-{\small\AgdaFunction{transport}} and that 2-paths are contractible.
+From this, we obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is also a set by using
+{\small\AgdaFunction{transport}} and univalence. This in turns shows
+the contractibility of 2-paths.
 
 \begin{code}
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
@@ -1398,13 +1414,16 @@ all-2-paths : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
 all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
-We will use the subuniverse {\small\AgdaFunction{U[𝟚]}} as our model for \PiTwo where
-\begin{code}
--- U[𝟚] = pr₁ Ũ[ 𝟚 ]
-\end{code}
-In next section, we will use {\small\AgdaFunction{all-1-paths}} and {\small\AgdaFunction{all-2-paths}}
-to show the correspondence between {\small\AgdaFunction{U[𝟚]}} and \PiTwo.
+We will use the subuniverse {\small\AgdaFunction{U[𝟚]}} as our model for \PiTwo.
 
+In next section, we use {\small\AgdaFunction{all-1-paths}} and
+{\small\AgdaFunction{all-2-paths}} as crucial ingredients for
+showing the correspondence between {\small\AgdaFunction{U[𝟚]}} and \PiTwo.
+
+Note that most of the results above are generic.  However when we move
+beyond \AgdaFunction{𝟚}, the combinatorial explosion of the path space
+is such that explicit enumeration quickly becomes impractical, and other
+techniques will become necessary.
 
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
 %% we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
