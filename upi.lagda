@@ -1179,15 +1179,15 @@ base space {\small\AgdaFunction{U[𝟚]}} as shown below:
 
 Our goal is to show that {\small\AgdaFunction{El𝟚}} is a univalent
 fibration. We establish this by chaining two equivalences. The first
-equivalence is a simple appeal to univalence to establish that {\small
+equivalence is a simple appeal to univalence in order to establish that {\small
   (\AgdaBound{X}~\AgdaFunction{==}~\AgdaDatatype{𝟚})
   ~\AgdaFunction{≃}~
-  (\AgdaBound{X}~\AgdaFunction{≃}~\AgdaDatatype{𝟚})}, i.e., that our
-base in equivalent to the space {\small\AgdaRecord{Σ[} ~\AgdaBound{X}
+  (\AgdaBound{X}~\AgdaFunction{≃}~\AgdaDatatype{𝟚})}, i.e., our
+base space is equivalent to the space \mbox{\small\AgdaRecord{Σ[} ~\AgdaBound{X}
   ~\AgdaRecord{∶} ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥}
   ~\AgdaBound{X} ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚}
   ~\AgdaPostulate{∥}}.  We name this space
-{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generally
+{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generally,
 {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the ``classifying space''
 of all types (merely) equivalent to {\small\AgdaBound{T}}.  The second
 equivalence consists of proving that the first projection on
