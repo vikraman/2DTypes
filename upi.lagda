@@ -719,7 +719,7 @@ next section.
 % \end{lemma}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{HoTT BackGround}
+\section{HoTT Background}
 \label{sec:univalent}
 
 We work in intensional type theory with one univalent universe
@@ -1440,7 +1440,7 @@ becomes impractical, and other techniques will become necessary.
 %% \AgdaSymbol{all-2-paths}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Correspondence between {\small\AgdaFunction{U[𝟚]}} and \PiTwo}
+\section{Correspondence between {\normalfont\AgdaFunction{U[𝟚]}} and \PiTwo}
 \label{sec:correspondence}
 
 In previous work on $\Pi$ we noted a possible connection with HoTT:
@@ -1685,15 +1685,15 @@ and complete language for describing the univalent universe
 {\small\AgdaFunction{U[𝟚]}}.
 
 \paragraph*{The infinite real projective space \AgdaSymbol{$ℝP^∞$}}
-
-In~\cite{buchholtz2017real}, Buchholtz and Rijke use the ``type of two element
-sets'', \mbox{\AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == $𝕊^0$ ∥}}, where \AgdaSymbol{$𝕊^0$} is the
-0-sphere, or the 0-iterated suspension of \AgdaSymbol{𝟚}, that is,
-\AgdaSymbol{𝟚} itself. They construct the infinite real projective space
-\AgdaSymbol{$ℝP^∞$} by using universal covering spaces, and show that it is
-homotopy equivalent to the Eilenberg-Maclane space \AgdaSymbol{K(ℤ/2ℤ,1)} which
-classifies all the 0-sphere bundles. Our reversible programming language is
-exactly the syntactic presentation of this classifying space.
+\noindent In~\cite{buchholtz2017real}, Buchholtz and Rijke use the ``type of two
+element sets'', \mbox{\AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == $𝕊^0$ ∥}}, where
+\AgdaSymbol{$𝕊^0$} is the 0-sphere, or the 0-iterated suspension of
+\AgdaSymbol{𝟚}, that is, \AgdaSymbol{𝟚} itself. They construct the infinite real
+projective space \AgdaSymbol{$ℝP^∞$} by using universal covering spaces, and
+show that it is homotopy equivalent to the Eilenberg-Maclane space
+\AgdaSymbol{K(ℤ/2ℤ,1)} which classifies all the 0-sphere bundles. Our reversible
+programming language is exactly the syntactic presentation of this classifying
+space.
 
 If we extend our language to all finite types, we should get a representation of
 \AgdaSymbol{Σ[ n ∶ ℕ ] K(ℤ/nℤ, 1)}, which is not well studied classically. Also,
