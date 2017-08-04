@@ -1181,7 +1181,7 @@ BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
 ElB : {T : 𝒰} → BAut T → 𝒰
 ElB = pr₁
 
-transport-equiv-ElB :  {T : 𝒰} {v w : BAut T} 
+transport-equiv-ElB :  {T : 𝒰} {v w : BAut T}
                        (p : v == w) → pr₁ (transport-equiv ElB p) == transport id (dpair=-e p)
 transport-equiv-ElB (refl v) = refl id
 
@@ -1203,7 +1203,7 @@ is-univ-fib-ElB (T , q) (T' , q') = qinv-is-hae (g , η , ε)
 This establishes that {\small\AgdaFunction{El𝟚}} is a univalent
 fibration, giving us a characterization of paths in
 {\small\AgdaFunction{U[𝟚]}} in terms of equivalences on booleans which
-we exploit next. 
+we exploit next.
 
 \subsection{The Base Space \AgdaFunction{U[𝟚]}}
 
@@ -1238,7 +1238,7 @@ We then show that the loop space on
 \begin{code}
 Aut : (T : 𝒰) → 𝒰
 Aut T = T ≃ T
- 
+
 ide : (A : 𝒰) → A ≃ A
 ide A = id , id , refl , refl , (λ a → refl (refl a))
 
@@ -1255,7 +1255,7 @@ In particular, it follows that
   \AgdaFunction{≃} \AgdaFunction{Aut} \AgdaDatatype{𝟚}} which reduces
 the problem of characterizing paths on {\small\AgdaFunction{U[𝟚]}} to
 the much simpler problem of characterizing automorphisms on the type
-of booleans which follows in the next subsection. 
+of booleans which follows in the next subsection.
 
 % In HoTT, types are higher groupoids, and $∞$Grpd is the $(∞,1)$-topos
 % of $∞$-groupoids, of which HoTT is an internal language. For an object
@@ -1269,7 +1269,7 @@ of booleans which follows in the next subsection.
 % choice of the specific equivalence is impertinent.
 
 %% Since equivalences are preserved over dependent sum and propositional truncation, so we have
-%% {\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} 
+%% {\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}}
 
 % As a consequence, we have that the loop space of
 % {\small\AgdaFunction{BAut}~\AgdaBound{T}} is equivalent to
