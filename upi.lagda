@@ -1092,7 +1092,7 @@ is-univalent (U , El) = is-univ-fib El
 {\small\AgdaBound{U}} is \emph{rarely} the base of a univalent
 fibration. Yet, in that same paper, Christensen characterizes a class
 of types that is always the base of univalent fibrations. We explain
-this point and exploit it to build a custom univalent subuniverse. 
+this point and exploit it to build a custom univalent subuniverse.
 
 %% \VC{We never use is-univalent later, so might as well just delete it}
 
@@ -1237,7 +1237,7 @@ where {\small\AgdaBound{p}} is of type
 have a canonical point {\small\AgdaFunction{𝟚₀}}:
 
 \begin{code}
-𝟚₀  : U[𝟚] 
+𝟚₀  : U[𝟚]
 𝟚₀  = (𝟚 , ∣ refl 𝟚 ∣)
 \end{code}
 
@@ -1572,7 +1572,6 @@ They are also complete.  In this case, this means
 related by a 2-path, the 1-combinators are related by a 2-combinator.
 \item for any two 1-paths which map to 1-combinators which are
 related by a 2-combinator these are related by a 2-path.
-\item
 \end{itemize}
 
 Normally, completeness is a rather difficult result
@@ -1673,7 +1672,7 @@ starting semantics, one naturally gets $\Pi$ as the syntax for the language of
 proofs of isomorphisms -- in the same way that many terms of the
 $\lambda$-calculus arise from Cartesian Closed Categories.
 
-On can also flip this around, and use the $\lambda$-calculus as the
+One can also flip this around, and use the $\lambda$-calculus as the
 internal language for Cartesian Closed Categories.  However, as Shulman
 explains well in his draft book~\cite{shulman} on approaching Categorical
 Logic via Type Theory, this works for many other kinds of categories.  As
@@ -1682,20 +1681,21 @@ Groupoids.  Thus $\PiTwo$ represents the simplest non-trivial case of
 a (reversible) programming language distilled from such ideas.
 
 What is more surprising is how this also turns out to be a sound
-and complete language for describing the univalent universe $\bracket{\bt}$.
+and complete language for describing the univalent universe
+{\small\AgdaFunction{U[𝟚]}}.
 
 \paragraph*{The infinite real projective space \AgdaSymbol{$ℝP^∞$}}
 
 In~\cite{buchholtz2017real}, Buchholtz and Rijke use the ``type of two element
-sets'', \AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == $𝕊^0$ ∥}, where \AgdaSymbol{$𝕊^0$} is the
+sets'', \mbox{\AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == $𝕊^0$ ∥}}, where \AgdaSymbol{$𝕊^0$} is the
 0-sphere, or the 0-iterated suspension of \AgdaSymbol{𝟚}, that is,
 \AgdaSymbol{𝟚} itself. They construct the infinite real projective space
-\AgdaSymbol{$ℝP^∞$} using universal covering spaces, and show that it is
+\AgdaSymbol{$ℝP^∞$} by using universal covering spaces, and show that it is
 homotopy equivalent to the Eilenberg-Maclane space \AgdaSymbol{K(ℤ/2ℤ,1)} which
 classifies all the 0-sphere bundles. Our reversible programming language is
 exactly the syntactic presentation of this classifying space.
 
-If we extend our language to all finite types, we would get a representation of
+If we extend our language to all finite types, we should get a representation of
 \AgdaSymbol{Σ[ n ∶ ℕ ] K(ℤ/nℤ, 1)}, which is not well studied classically. Also,
 if we choose \AgdaSymbol{$𝕊^1$} instead of \AgdaSymbol{$𝕊^0$}, we get the
 infinite complex projective space \AgdaSymbol{$ℂP^∞$}, but it remains to
