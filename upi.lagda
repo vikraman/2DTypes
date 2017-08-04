@@ -1232,27 +1232,28 @@ is the space of paths on {\small\AgdaBound{t₀}},
 \end{code}
 
 
-\newtext{
-  This is the chain of equivalences we prove:
+%% \newtext{
+%%   This is the chain of equivalences we prove:
 
-  Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
+%%   Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚
 
-  Since we can characterize the loopspace of Ũ[𝟚], we can characterize
-  all paths on it, and paths are preserved by equivalence of groupoids.
-}
-
-We define a particular subuniverse {\small\AgdaFunction{Ũ[𝟚]}} that we use in our model:
-\begin{code}
-U[𝟚] = pr₁ Ũ[ 𝟚 ]
-\end{code}
+%%   Since we can characterize the loopspace of Ũ[𝟚], we can characterize
+%%   all paths on it, and paths are preserved by equivalence of groupoids.
+%% }
 
 Since equivalences are preserved over dependent sum and propositional truncation, so we have
 {\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀)}} where
 \begin{code}
 𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
 \end{code}
+is the base point of {\small\AgdaFunction{Ω (Ũ , 𝟚₀)}}.
 
-Now we prove a general property about univalent fibration.
+Now we prove that {\small\AgdaFunction{pr₁}} is univalent fibration:
+
+%% Putting these ingredients together, we can show that the code of a
+%% singleton universe {\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}} is a
+%% univalent fibration:
+
 \begin{code}
 f : {T : 𝒰} → BAut T → 𝒰
 f = pr₁
@@ -1260,13 +1261,7 @@ f = pr₁
 transport-equiv-f : {T : 𝒰} {v w : BAut T} (p : v == w)
                   → pr₁ (transport-equiv f p) == transport id (dpair=-e p)
 transport-equiv-f (refl v) = refl id
-\end{code}
 
-Putting these ingredients together, we can show that the code of a
-singleton universe {\small\AgdaFunction{Ũ[}\AgdaBound{T}\AgdaFunction{]}} is a
-univalent fibration:
-
-\begin{code}
 is-univ-fib-f : {T : 𝒰} → is-univ-fib f
 is-univ-fib-f (T , q) (T' , q') = qinv-is-hae (g , η , ε)
   where g : T ≃ T' → T , q == T' , q'
@@ -1303,10 +1298,11 @@ BAut≃Ũ[ T ] = {!!}
 \end{code}
 }
 
-Instantiating the lemma from the previous section with \AgdaFunction{𝟚}, we have
-that {\small\AgdaFunction{Ũ[𝟚]}} is a univalent subuniverse, with \AgdaFunction{pr₁} the
-univalent fibration. By the property of being a univalent fibration we have that
-{\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
+%% Instantiating the lemma from the previous section with \AgdaFunction{𝟚}, we have
+%% that {\small\AgdaFunction{Ũ[𝟚]}} is a univalent subuniverse, with \AgdaFunction{pr₁} the
+%% univalent fibration. By the property of being a univalent fibration we have that
+%% {\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
+Hence {\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
 
 The type {\small\AgdaFunction{𝟚}} has two point constructors, and no path constructors,
 which means it has no non-trivial paths on its points except
@@ -1323,8 +1319,8 @@ generally, {\small\AgdaFunction{𝟚 ≃ 𝟙 ⊎ 𝟙}} and the disjoint union 
         code 1₂ = ⊥
 \end{code}
 
-By function extensionality (derivable from univalence) there are exactly two different equivalences between
-{\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}}.
+Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality (derivable from univalence) we can prove that
+there are exactly two different equivalences between {\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚}}.
 And for any equivalence {\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a proposition so we
 have exactly two inhabitants of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 
@@ -1392,8 +1388,12 @@ all-2-paths : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
 all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
+We will use the subuniverse {\small\AgdaFunction{U[𝟚]}} as our model for \PiTwo where
+\begin{code}
+U[𝟚] = pr₁ Ũ[ 𝟚 ]
+\end{code}
 In next section, we will use {\small\AgdaFunction{all-1-paths}} and {\small\AgdaFunction{all-2-paths}}
-to show the correspondence between {\small\AgdaFunction{𝟚₀ == 𝟚₀}} and \PiTwo.
+to show the correspondence between {\small\AgdaFunction{U[𝟚]}} and \PiTwo.
 
 
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
