@@ -772,8 +772,10 @@ Using this latter notion, we can define a well-behaved notion of
 equivalences between two types:
 
 \begin{code}
+is-equiv = is-hae
+
 _≃_ : (A B : 𝒰) → 𝒰
-A ≃ B = Σ[ f ∶ (A → B) ] (is-hae f)
+A ≃ B = Σ[ f ∶ (A → B) ] (is-equiv f)
 \end{code}
 
 It is straightforward to lift paths to equivalences as shown below:
@@ -808,7 +810,7 @@ univalence as an axiom in our Agda library:
 
 \begin{code}
 postulate
-  univalence : (A B : 𝒰) → is-hae (id-to-equiv {A} {B})
+  univalence : (A B : 𝒰) → is-equiv (id-to-equiv {A} {B})
 \end{code}
 
 We also give a short form {\small\AgdaFunction{ua}} for getting a path from an
@@ -847,11 +849,11 @@ As alluded to in the previous section, equivalences are contractible
 (4.2.13 in~\cite{hottbook}):
 
 \begin{code}
-is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
+is-equiv-is-contr : {A B : 𝒰} {f : A → B} → is-equiv f → is-contr (is-equiv f)
 \end{code}
 \AgdaHide{
 \begin{code}
-is-hae-is-contr = {!!}
+is-equiv-is-contr = {!!}
 \end{code}
 }
 
@@ -1037,11 +1039,11 @@ module _ {A : 𝒰} {P : A → 𝒰} {x y : A} {u : P x} {v : P y} where
 prop-is-set : {A : 𝒰} → is-prop A → is-set A
 prop-is-set φ a b p q = {!!}
 
-is-hae-is-prop : {A B : 𝒰} {f : A → B} → is-prop (is-hae f)
-is-hae-is-prop = {!!}
+is-equiv-is-prop : {A B : 𝒰} {f : A → B} → is-prop (is-equiv f)
+is-equiv-is-prop = {!!}
 
 eqv= : {A B : 𝒰} {eqv eqv' : A ≃ B} → (pr₁ eqv == pr₁ eqv') → eqv == eqv'
-eqv= φ = dpair= (φ , is-hae-is-prop _ _)
+eqv= φ = dpair= (φ , is-equiv-is-prop _ _)
 \end{code}
 }
 
@@ -1073,7 +1075,7 @@ definition:
 
 \begin{code}
 is-univ-fib : {A : 𝒰} (P : A → 𝒰) → 𝒰
-is-univ-fib {A} P = ∀ (a b : A) → is-hae (transport-equiv P {a} {b})
+is-univ-fib {A} P = ∀ (a b : A) → is-equiv (transport-equiv P {a} {b})
 \end{code}
 
 We note that the univalence axiom (for {\small\AgdaFunction{𝒰}}) is a
@@ -1342,7 +1344,7 @@ Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality
 different equivalences between {\small\AgdaFunction{𝟚}} and
 {\small\AgdaFunction{𝟚}}.  Furthermore, for any equivalence
 {\small\AgdaFunction{f}}, using the fact that
-{\small\AgdaFunction{is-hae f}} is a proposition, we can show that
+{\small\AgdaFunction{is-equiv f}} is a proposition, we can show that
 there are exactly two inhabitants of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 
 \begin{code}
