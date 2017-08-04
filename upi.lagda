@@ -789,7 +789,6 @@ It is straightforward to lift paths to equivalences as shown below:
 \begin{code}
 idh : {A : 𝒰} {P : A → 𝒰} → (f : Π[ a ∶ A ] P a) → f ∼ f
 idh f a = refl (f a)
-
 \end{code}
 }
 
@@ -1095,10 +1094,10 @@ is-univalent (U , El) = is-univ-fib El
 \section{The Subuniverse {\normalfont\AgdaFunction{Ũ[} \AgdaDatatype{𝟚} \AgdaFunction{]}}}
 \label{sec:model}
 
-We now have all the ingredients necessary to define our class of
-univalent subuniverses of interest. Given any type
+We now have all the ingredients necessary to define the class of
+univalent subuniverses we are interested in. Given any type
 {\small\AgdaBound{T}}, we can build a propositional predicate that
-picks out from among all the types in the universe just the types that
+picks out from among all the types in the universe exactly those which
 are identified with~{\small\AgdaBound{T}}. This lets us build up a
 ``singleton'' subuniverse of~{\small\AgdaFunction{𝒰}} as follows:
 
@@ -1116,17 +1115,25 @@ universe that is sound and complete with respect the language
 $\PiTwo$. The bulk of the argument consists of establishing that
 {\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚} \AgdaFunction{]}} is a
 univalent universe. We focus on this argument in the first subsection.
-In the next two subsections, we then use this result to characterize the
+In the next two subsections, we use this result to characterize the
 points and paths in the codes for this universe. In
 Sec.~\ref{sec:correspondence} this characterization of points and
 paths will be shown to match the types and combinators of $\PiTwo$.
 
 \subsection{The Fibration \AgdaFunction{El𝟚} is Univalent}
 
-Our subuniverse of interest {\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚}
+\jacques{Below is where we use the univalence of the universe
+𝒰, in a crucial way, to show that the fibration El𝟚 associated
+to the sub-universe is univalent.  This is indeed {\bf not}
+circular, but may appear un-interesting!  One of the things that
+we have lost in this paper is the text saying that most
+fibrations, even in a univalent universe, are not univalent.
+Without that, this result seems very hollow.}
+
+{\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚}
   \AgdaFunction{]}} consists of a base space
-{\small\AgdaFunction{U[𝟚]}} giving the codes for the elements and an
-interpretation function {\small\AgdaFunction{El𝟚}} defined as follows:
+{\small\AgdaFunction{U[𝟚]}} of the codes for the elements, and an
+interpretation function {\small\AgdaFunction{El𝟚}}, defined as follows:
 
 \begin{code}
 U[𝟚] : 𝒰
@@ -1171,7 +1178,13 @@ space {\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
   ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚} ~\AgdaPostulate{∥}} is
 equivalent to our base space. We name this space
 {\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. The second equivalence
-consists of proving the lemma {\small\AgdaFunction{is-univ-fib-ElB}}
+consists of proving that the first projection is in fact a univalent
+fibration for all spaces with shape
+\mbox{\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
+  ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥} ~\AgdaBound{X}
+  ~\AgdaFunction{≃}~ \AgdaDatatype{T} ~\AgdaPostulate{∥}} for
+any type \AgdaDatatype{T}.  This is
+the lemma {\small\AgdaFunction{is-univ-fib-ElB}}
 below whose original formulation is due to Christensen~\cite{christensen}:
 
 \begin{code}
