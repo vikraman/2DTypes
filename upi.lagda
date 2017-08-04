@@ -789,8 +789,6 @@ It is straightforward to lift paths to equivalences as shown below:
 idh : {A : 𝒰} {P : A → 𝒰} → (f : Π[ a ∶ A ] P a) → f ∼ f
 idh f a = refl (f a)
 
-ide : (A : 𝒰) → A ≃ A
-ide A = id , id , idh id , idh id , idh (idh id)
 \end{code}
 }
 
@@ -1215,6 +1213,9 @@ choice of the specific equivalence is impertinent.
 \begin{code}
 BAut : (T : 𝒰) → 𝒰
 BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
+
+ide : (A : 𝒰) → A ≃ A
+ide A = id , id , refl , refl , (λ a → refl (refl a))
 
 b₀ : {T : 𝒰} → BAut T
 b₀ {T} = T , ∣ ide T ∣
