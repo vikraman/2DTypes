@@ -271,7 +271,7 @@ far from obvious, however.
 Here we report on a formal connection between appropriately formulated
 reversible languages on one hand and univalent universes on the
 other. In the next section, we give a rational reconstruction of $\Pi$
-focusing on a small ``featherweight'' fragment $\PiTwo$. In
+focusing on a small ``featherweight'' fragment~$\PiTwo$. In
 Sec.~\ref{sec:univalent}, we review basic homotopy type theory (HoTT)
 background leading to \emph{univalent fibrations} which allow us to
 give formal presentations of ``small'' univalent universes. In
@@ -591,11 +591,11 @@ data Π₂ : 𝒰 where
 ---------------
 data _⟷₁_ : (A B : Π₂) → 𝒰 where
 
-  `id  : ∀ {A} → A ⟷₁ A
-  `not : `𝟚 ⟷₁ `𝟚
+  `id    : ∀ {A} → A ⟷₁ A
+  `not   : `𝟚 ⟷₁ `𝟚
 
-  !₁_  : ∀ {A B} → (A ⟷₁ B) → (B ⟷₁ A)
-  _⊙₁_ : ∀ {A B C} → (A ⟷₁ B) → (B ⟷₁ C) → (A ⟷₁ C)
+  !₁_    : ∀ {A B} → (A ⟷₁ B) → (B ⟷₁ A)
+  _⊙₁_   : ∀ {A B C} → (A ⟷₁ B) → (B ⟷₁ C) → (A ⟷₁ C)
 
 ---------------
 data _⟷₂_ : ∀ {A B} (p q : A ⟷₁ B) → 𝒰 where
@@ -708,7 +708,7 @@ It is worthwhile to note that the proof of
 {\small\AgdaFunction{canonical}} does not use all the level 2
 combinators. The larger set of 2-combinators is however useful to
 establish a more direct connection with the model presented in the
-next section.
+next sections.
 
 % \begin{lemma}[Canonical Forms]
 %   Given a 1-combinator $c : \tau \iso \tau$, we either have a
@@ -1063,7 +1063,7 @@ Sec.~\ref{sec:eq} is an equivalence, that is, if the space of paths in
 the base space is \emph{equivalent} to the space of equivalences
 between the corresponding fibers. Fig.~\ref{fig:fib} (right)
 illustrates the situation: we know that for any fibration
-{\small\AgdaBound{P}} that a path {\small\AgdaBound{p}} in the base
+{\small\AgdaBound{P}} that a path~{\small\AgdaBound{p}} in the base
 space induces via
 {\small\AgdaFunction{transport-equiv}~\AgdaBound{P}~\AgdaBound{p}} an
 equivalence between the fibers. For a fibration to be univalent, the
@@ -1095,7 +1095,8 @@ is-univalent (U , El) = is-univ-fib El
 {\small\AgdaBound{U}} is \emph{rarely} the base of a univalent
 fibration. Yet, in that same paper, Christensen characterizes a class
 of types that is always the base of univalent fibrations. We explain
-this point and exploit it to build a custom univalent subuniverse.
+this point and exploit it to build a custom univalent subuniverse in
+the next section.
 
 %% \VC{We never use is-univalent later, so might as well just delete it}
 
@@ -1125,7 +1126,7 @@ $\PiTwo$. The bulk of the argument consists of establishing that
 {\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚} \AgdaFunction{]}} is a
 univalent universe. We focus on this argument in the first subsection.
 In the next two subsections, we use this result to characterize the
-points and paths in the codes for this universe. In
+points and paths in the type of codes for this universe. In
 Sec.~\ref{sec:correspondence} this characterization of points and
 paths will be shown to match the types and combinators of $\PiTwo$.
 
@@ -1137,7 +1138,7 @@ paths will be shown to match the types and combinators of $\PiTwo$.
 % fibrations, even in a univalent universe, are not univalent.
 % Without that, this result seems very hollow.}
 
-\subsection{The Fibration \AgdaFunction{El𝟚} is Univalent}
+\subsection{The Fibration {\normalfont\AgdaFunction{El𝟚}} is Univalent}
 
 The universe {\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚}
   \AgdaFunction{]}} consists of a base space
@@ -1181,11 +1182,11 @@ fibration. We establish this by chaining two equivalences. The first
 equivalence is a simple appeal to univalence to establish that {\small
   (\AgdaBound{X}~\AgdaFunction{==}~\AgdaDatatype{𝟚})
   ~\AgdaFunction{≃}~
-  (\AgdaBound{X}~\AgdaFunction{≃}~\AgdaDatatype{𝟚})}, i.e., that the
-space {\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
-  ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥} ~\AgdaBound{X}
-  ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚} ~\AgdaPostulate{∥}} is
-equivalent to our base space. We name this space
+  (\AgdaBound{X}~\AgdaFunction{≃}~\AgdaDatatype{𝟚})}, i.e., that our
+base in equivalent to the space {\small\AgdaRecord{Σ[} ~\AgdaBound{X}
+  ~\AgdaRecord{∶} ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥}
+  ~\AgdaBound{X} ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚}
+  ~\AgdaPostulate{∥}}.  We name this space
 {\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generally
 {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the ``classifying space''
 of all types (merely) equivalent to {\small\AgdaBound{T}}.  The second
@@ -1230,7 +1231,7 @@ fibration, giving us a characterization of paths in
 {\small\AgdaFunction{U[𝟚]}} in terms of equivalences on booleans which
 we exploit next.
 
-\subsection{The Base Space \AgdaFunction{U[𝟚]}}
+\subsection{The Base Space {\normalfont\AgdaFunction{U[𝟚]}}}
 
 The points in the base space {\small\AgdaFunction{U[𝟚]}} are all of
 the form
@@ -1254,7 +1255,7 @@ characterize the 1-paths, 2-paths, and possibly higher paths in
 To conveniently refer to the paths in {\small\AgdaFunction{U[𝟚]}}, we
 define the loop space on a (pointed) type, and show that the loop
 space on {\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is equivalent to
-{\small\AgdaDatatype{𝟚}~\AgdaFunction{≃}~\AgdaFunction{BAut}}:
+{\small\AgdaDatatype{𝟚}~\AgdaFunction{≃}~\AgdaDatatype{𝟚}}:
 
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
@@ -1318,7 +1319,7 @@ BAut≃Ũ[ T ] = {!!}
 %% univalent fibration. By the property of being a univalent fibration we have that
 %% {\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
 
-\subsection{Automorphisms on \AgdaDatatype{𝟚}}
+\subsection{Automorphisms on {normalfont\AgdaDatatype{𝟚}}}
 
 The type {\small\AgdaFunction{𝟚}} has two point constructors, and no
 path constructors, which means it has no non-trivial paths on its
@@ -1341,8 +1342,8 @@ Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality
 (derivable from univalence) we can prove that there are exactly two
 different equivalences between {\small\AgdaFunction{𝟚}} and
 {\small\AgdaFunction{𝟚}}.  Furthermore, for any equivalence
-{\small\AgdaFunction{f}}, {\small\AgdaFunction{is-hae f}} is a
-proposition, showing that we have exactly two inhabitants of
+{\small\AgdaFunction{f}}, we have that {\small\AgdaFunction{is-hae f}}
+is a proposition, showing that we have exactly two inhabitants of
 {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 
 \begin{code}
@@ -1355,7 +1356,7 @@ not≃  = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}
 \end{code}
 
 Here something very special happens: although in general the type
-formed by taking $n$ disjoint unions of {\small\AgdaFunction{𝟙}} has a
+formed by taking~$n$ disjoint unions of {\small\AgdaFunction{𝟙}} has a
 space of automorphisms of size $n!$, in our case we have that
 {\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚 ≃ 𝟚}} are of the
 same size. This combinatorial accident can actually be lifted to show
