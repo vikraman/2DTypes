@@ -793,8 +793,11 @@ idh f a = refl (f a)
 }
 
 \begin{code}
+ide : (A : 𝒰) → A ≃ A
+ide A = id , id , refl , refl , (refl ∘ refl)
+
 transport-equiv : {A : 𝒰} (P : A → 𝒰) → {a b : A} → a == b → P a ≃ P b
-transport-equiv P (refl a) = id , id , refl , refl , (refl ∘ refl)
+transport-equiv P (refl a) = ide (P a)
 
 id-to-equiv : {A B : 𝒰} → A == B → A ≃ B
 id-to-equiv = transport-equiv id
@@ -1259,9 +1262,6 @@ space on {\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is equivalent to
 
 Aut : (T : 𝒰) → 𝒰
 Aut T = T ≃ T
-
-ide : (A : 𝒰) → A ≃ A
-ide A = id , id , refl , refl , (λ a → refl (refl a))
 
 b₀ : {T : 𝒰} → BAut T
 b₀ {T} = T , ∣ ide T ∣
