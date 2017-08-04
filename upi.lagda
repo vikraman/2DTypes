@@ -339,7 +339,7 @@ combinators\footnote{We use names that are hopefully quite mnemonic;
   for the precise definitions of the combinators see the
   $\Pi$-papers~\cite{James:2012:IE:2103656.2103667,rc2011,rc2012,theseus,Carette2016}
   or the accompanying code at
-  \url{https://github.com/DreamLinuxer/Pi2}.} that witness the
+  \url{https://git.io/v7wtW}.} that witness the
 corresponding type isomorphism. The code for
 {\small\AgdaFunction{controlled}~\AgdaFunction{f}} provides
 constructive evidence (i.e., a program, a logic gate, or a hardware
@@ -728,7 +728,7 @@ of this section is devoted to explaining what that means.  We follow
 the terminology used in the HoTT book~\cite{hottbook}.  For brevity,
 we will often given just signatures and elide the body. The details
 can be found in the accompanying code at
-{\small\url{https://github.com/DreamLinuxer/Pi2}}.
+{\small\url{https://git.io/v7wtW}}.
 
 \subsection{Equivalences}
 \label{sec:eq}
