@@ -1435,10 +1435,10 @@ techniques will become necessary.
 %% \AgdaSymbol{all-2-paths}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Correspondence}
+\section{Correspondence between {\small\AgdaFunction{U[𝟚]}} and \PiTwo}
 \label{sec:correspondence}
 
-In previous work, on $\Pi$ we noted a possible connection with HoTT:
+In previous work on $\Pi$ we noted a possible connection with HoTT:
 \begin{quote}
   It is, therefore, at least plausible that a variant of HoTT based exclusively
   on reversible functions that directly correspond to equivalences would have
@@ -1447,25 +1447,28 @@ In previous work, on $\Pi$ we noted a possible connection with HoTT:
   types~\cite{Carette2016}.
 \end{quote}
 Formalizing, in a precise sense, the connection between reversible programs
-based on combinators and paths in HoTT, as intuitive as it may seem, is however
+based on combinators and paths in HoTT, as intuitive as it may seem, is rather
 difficult. Paths in HoTT come equipped with principles like the
 ``contractibility of singletons'', ``transport'', and ``path induction.'' None
 of these principles seems to have any direct counterpart in the world of
 reversible programming.
 
-\newtext{
-  The syntactic category of \PiTwo{} forms a 2-groupoid, we construct a
-  2-functor out of it to Ũ[𝟚] and show that it is an equivalence.
-}
+%% JC: while the next sentence is ``true enough'', this isn't really
+%% carried out in full in the code.  So we shouldn't claim it in the
+%% paper.
+%%\newtext{
+%%  The syntactic category of \PiTwo{} forms a 2-groupoid, we construct a
+%%  2-functor out of it to Ũ[𝟚] and show that it is an equivalence.
+%%}
 
-\newtext{
-  We construct mappings from \PiTwo{} to the model Ũ[𝟚], for points,
-  1-paths, 2-paths, 3-paths, and show that each map is
-  invertible. This gives a notion of soundness and completeness for
-  each level.
-}
+We construct mappings from \PiTwo{} to Ũ[𝟚], for points,
+1-paths, 2-paths, 3-paths, and show that each map is
+invertible. This gives a notion of soundness and completeness for
+each ``level''.
 
-At level $0$, the correspondence is straightforward, as both
+\subsection{Mappings}
+
+Level $0$ is straightforward, as both
 \AgdaSymbol{Π₂} and \AgdaSymbol{Ũ[𝟚]} are singletons.
 
 \begin{code}
@@ -1476,12 +1479,12 @@ At level $0$, the correspondence is straightforward, as both
 ⌜ _ ⌝₀ = `𝟚
 \end{code}
 
-\newtext{
-  Level $1$ is the first non-trivial level. We fix \AgdaSymbol{A} and
-  \AgdaSymbol{B} in \AgdaSymbol{Π₂}, and to each syntactic combinator
-  \AgdaSymbol{A ⟷₁ B}, we associate a path from \AgdaSymbol{⟦ A ⟧₀} to
-  \AgdaSymbol{⟦ B ⟧₀}.
-}
+Level $1$ is the first non-trivial level. To each syntactic combinator
+\AgdaSymbol{A ⟷₁ B}, we associate a path from \AgdaSymbol{⟦ A ⟧₀} to
+\AgdaSymbol{⟦ B ⟧₀}.  We do not show the details for any of the mappings
+(they are available in the accompanying code) as these are not
+particularly informative.  We will indicate what parts of our
+infrastructure are used in a fundamental manner to obtain the results.
 
 \begin{code}
 ⟦_⟧₁ : {A B : Π₂} → A ⟷₁ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
@@ -1501,7 +1504,7 @@ Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$;
 Level $2$ is tricky. We know that all self-paths (by lemma
 \AgdaSymbol{all-2-paths}) are trivial. In fact, all of them
 are. Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of
-work. $\AgdaSymbol{⌜\_⌝₂}$ proceeds by enumerating $1$-paths, which
+(tedious) work. $\AgdaSymbol{⌜\_⌝₂}$ proceeds by enumerating $1$-paths, which
 makes things straightforward.
 
 \begin{code}
@@ -1530,15 +1533,27 @@ Level $3$ is trivial -- by fiat.
 \end{code}
 }
 
-Naturally, all of the preceding work would be much less interesting if
-the correspondences were not coherent with each other.  First, they are
-sound:
+\subsection{Coherence}
 
+Naturally, all of these mappings would be much less interesting if
+the correspondences were not coherent with each other.  We want to know
+that they are both sound and complete.
+
+At level 0, this is trivial.
+
+At level 1, \emph{soundness} means that the mappings are inverses:
+\begin{itemize}
+\item any combinator 1-combinator \AgdaBound{p} mapped to a 1-path
+and back is 2-equivalent to itself, and
+\item there is always a (2-)path between a 1-path \AgdaBound{p}
+sent to a 1-combinator and back.
+\end{itemize}
+This is rather more succinct in code:
 \begin{code}
 ⌜⟦_⟧₁⌝₁ : (p : `𝟚 ⟷₁ `𝟚) → p ⟷₂ ⌜ ⟦ p ⟧₁ ⌝₁
 ⟦⌜_⌝₁⟧₁ : (p : 𝟚₀ == 𝟚₀) → p == ⟦ ⌜ p ⌝₁ ⟧₁
 \end{code}
-
+We omit the proofs as they are straightforward.
 \AgdaHide{
 \begin{code}
 ⌜⟦_⟧₁⌝₁ = {!!}
@@ -1546,9 +1561,18 @@ sound:
 \end{code}
 }
 
-But also complete.  Normally, completeness is a rather difficult result
+They are also complete.  In this case, this means
+\begin{itemize}
+\item for any two 1-combinators which map to 1-paths which are
+related by a 2-path, the 1-combinators are related by a 2-combinator.
+\item for any two 1-paths which map to 1-combinators which are
+related by a 2-combinator these are related by a 2-path.
+\item
+\end{itemize}
+
+Normally, completeness is a rather difficult result
 to prove.  But in our case, all the infrastructure above means that
-these are straightforward.  Key is \emph{reversibility}.  In the first
+the hard work has already been done.  Key is \emph{reversibility}.  In the first
 proof \AgdaSymbol{!₂} is essential, with \AgdaSymbol{!} being essential
 in the second.
 
@@ -1560,10 +1584,12 @@ completeness₁⁻¹ : {p q : 𝟚₀ == 𝟚₀} → ⌜ p ⌝₁ ⟷₂ ⌜ q 
 completeness₁⁻¹ {p} {q} u = ⟦⌜ p ⌝₁⟧₁ ◾ ⟦ u ⟧₂ ◾ (! ⟦⌜ q ⌝₁⟧₁)
 \end{code}
 
-Level $2$ soundness is trickier to state, mostly because the types
+For level $2$, the statements are informally quite similar (with
+all levels bumped up by one).  However,
+level $2$ soundness is tricky to state correctly, mostly because the types
 involved in $\AgdaSymbol{⌜ ⟦ u ⟧₂ ⌝₂}$ and $\AgdaSymbol{⟦ ⌜ u ⌝₂ ⟧₂}$
-are non-trivial.  For combinators, the result is trivial, again by fiat.
-For paths, enumeration of 1-paths reduces the complexity of the problem
+are non-trivial.  For 2-combinators, the result is trivial, again by fiat.
+For 2-paths, enumeration of 1-paths reduces the complexity of the problem
 to ``unwinding'' complex expressions for identity paths.
 
 \begin{code}
