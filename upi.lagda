@@ -1109,29 +1109,56 @@ subuniverse of~{\small\AgdaFunction{𝒰}} as follows:
     El  = pr₁
 \end{code}
 
-Pictorially we have the following situation:
+We will prove in this section and the next that choosing
+{\small\AgdaBound{T}} to be {\small\AgdaDatatype{𝟚}} produces a
+universe that is sound and complete with respect the language
+$\PiTwo$. The proof outline proceeds as follows. We first prove that
+the first projection map
+{\small\AgdaFunction{El}~\AgdaSymbol{:}~\AgdaRecord{Σ[} \AgdaBound{X}
+  \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥}
+  \AgdaBound{X} \AgdaDatatype{==} \AgdaDatatype{𝟚}
+  \AgdaPostulate{∥}~\AgdaSymbol{→}~\AgdaPrimitiveType{𝒰}} is a
+univalent fibration. This fibration is illustrated below:
 
 \begin{center}
 \begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]]
   \draw (0,-5) ellipse (3.5cm and 1.2cm);
-  \node[below] at (0,-6.3) {Base Space \AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==} \AgdaBound{T} \AgdaPostulate{∥}};
+  \node[below] at (0,-6.3) {Base Space \AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==} \AgdaDatatype{𝟚} \AgdaPostulate{∥}};
   \draw[fill] (-2,-4.75) circle [radius=0.025];
-  \node[below] at (-2,-4.75) {\AgdaSymbol{(}\AgdaBound{X₁}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₁}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
+  \node[below] at (-2,-4.75) {\AgdaSymbol{(}\AgdaDatatype{𝟚}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣refl}~\AgdaDatatype{𝟚}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
   \draw[fill] (2,-4.75) circle [radius=0.025];
-  \node[below] at (2,-4.75) {\AgdaSymbol{(}\AgdaBound{X₂}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₂}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
+  \node[below] at (2,-4.75) {\AgdaSymbol{(}\AgdaBound{X}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
   \draw[below,cyan,thick] (-2,-4.75) -- (2,-4.75);
-  \node[below,cyan,thick] at (0,-4.75) {$==$};
+  \node[below,cyan,thick] at (0,-4.75) {\AgdaDatatype{==}};
 
   \draw (-2,-2) ellipse (0.5cm and 1cm);
-  \node[left] at (-2.5,-2) {\AgdaBound{X₁}};
+  \node[left] at (-2.5,-2) {\AgdaDatatype{𝟚}};
   \draw (2,-2) ellipse (0.5cm and 1cm);
-  \node[right] at (2.5,-2) {\AgdaBound{X₂}};
+  \node[right] at (2.5,-2) {\AgdaBound{X}};
   \draw[->,red,thick] (-1.5,-1.7) to [out=45, in=135] (1.5,-1.7);
   \draw[->,red,thick] (1.5,-2.3) to [out=-135, in=-45] (-1.5,-2.3);
   \node[red,thick] at (0,-2) {$\simeq$};
 \end{tikzpicture}
 \end{center}
 
+We then characterize the points and paths of this base space. There is
+one canonical point
+{\small\AgdaSymbol{(}\AgdaDatatype{𝟚}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣refl}~\AgdaDatatype{𝟚}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
+to which every other point is path-connected. We then study the paths
+in the base space by characterizing the loop space. We prove the
+following chain of equivalences:
+\[
+\AgdaSymbol{Ω (Σ[X ∶ 𝒰] ∥ X == 𝟚 ∥) ≃ Ω (Σ[X ∶ 𝒰] ∥ X ≃ 𝟚 ∥) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚}
+\]
+
+
+
+The points in the base space are all of the form
+{\small\AgdaSymbol{(}\AgdaBound{X}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
+where {\small\AgdaBound{p}} is of type
+{\small\AgdaBound{X}\AgdaDatatype{==}\AgdaDatatype{𝟚}}. A canonical point
+in the base space is
+{\small\AgdaSymbol{(}\AgdaDatatype{𝟚}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣refl}~\AgdaDatatype{𝟚}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
 
 
 
