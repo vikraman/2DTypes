@@ -1088,6 +1088,12 @@ is-univalent : Ũ → 𝒰
 is-univalent (U , El) = is-univ-fib El
 \end{code}
 
+\noindent As Christensen~\cite{christensen} explains, a type
+{\small\AgdaBound{U}} is \emph{rarely} the base of a univalent
+fibration. Yet, in that same paper, Christensen characterizes a class
+of types that is always the base of univalent fibrations. We explain
+this point and exploit it to build a custom univalent subuniverse. 
+
 %% \VC{We never use is-univalent later, so might as well just delete it}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1120,17 +1126,17 @@ points and paths in the codes for this universe. In
 Sec.~\ref{sec:correspondence} this characterization of points and
 paths will be shown to match the types and combinators of $\PiTwo$.
 
+% \jacques{Below is where we use the univalence of the universe
+% 𝒰, in a crucial way, to show that the fibration El𝟚 associated
+% to the sub-universe is univalent.  This is indeed {\bf not}
+% circular, but may appear un-interesting!  One of the things that
+% we have lost in this paper is the text saying that most
+% fibrations, even in a univalent universe, are not univalent.
+% Without that, this result seems very hollow.}
+
 \subsection{The Fibration \AgdaFunction{El𝟚} is Univalent}
 
-\jacques{Below is where we use the univalence of the universe
-𝒰, in a crucial way, to show that the fibration El𝟚 associated
-to the sub-universe is univalent.  This is indeed {\bf not}
-circular, but may appear un-interesting!  One of the things that
-we have lost in this paper is the text saying that most
-fibrations, even in a univalent universe, are not univalent.
-Without that, this result seems very hollow.}
-
-{\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚}
+The universe {\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚}
   \AgdaFunction{]}} consists of a base space
 {\small\AgdaFunction{U[𝟚]}} of the codes for the elements, and an
 interpretation function {\small\AgdaFunction{El𝟚}}, defined as follows:
@@ -1177,18 +1183,18 @@ space {\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
   ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥} ~\AgdaBound{X}
   ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚} ~\AgdaPostulate{∥}} is
 equivalent to our base space. We name this space
-{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generallly
-\AgdaFunction{BAut}~\AgdaBound{T} is the
-``classifying space'' of all types (merely) equivalent to
-\AgdaBound{T}.  The second equivalence
-consists of proving that the first projection is in fact a univalent
-fibration for all spaces with shape
-\mbox{\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
-  ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥} ~\AgdaBound{X}
-  ~\AgdaFunction{≃}~ \AgdaDatatype{T} ~\AgdaPostulate{∥}} for
-any type \AgdaDatatype{T}.  This is
-the lemma {\small\AgdaFunction{is-univ-fib-ElB}}
-below whose original formulation is due to Christensen~\cite{christensen}:
+{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generally
+{\small\AgdaFunction{BAut}~\AgdaBound{T}} is the ``classifying space''
+of all types (merely) equivalent to {\small\AgdaBound{T}}.  The second
+equivalence consists of proving that the first projection on
+{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is in fact a univalent
+fibration for all spaces with shape \mbox{\small\AgdaRecord{Σ[}
+  ~\AgdaBound{X} ~\AgdaRecord{∶} ~\AgdaFunction{𝒰}~ \AgdaRecord{]}
+  ~\AgdaPostulate{∥} ~\AgdaBound{X} ~\AgdaFunction{≃}~
+  \AgdaDatatype{T} ~\AgdaPostulate{∥}} for any type
+{\small\AgdaDatatype{T}}.  This is the lemma
+{\small\AgdaFunction{is-univ-fib-ElB}} below whose original
+formulation is due to Christensen~\cite{christensen}:
 
 \begin{code}
 BAut : (T : 𝒰) → 𝒰
@@ -1227,32 +1233,30 @@ The points in the base space {\small\AgdaFunction{U[𝟚]}} are all of
 the form
 {\small\AgdaSymbol{(}\AgdaBound{X}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}}
 where {\small\AgdaBound{p}} is of type
-{\small\AgdaBound{X}\AgdaDatatype{==}\AgdaDatatype{𝟚}}. We evidently
+{\small\AgdaBound{X}~\AgdaDatatype{==}~\AgdaDatatype{𝟚}}. We evidently
 have a canonical point {\small\AgdaFunction{𝟚₀}}:
 
 \begin{code}
-𝟚₀ = (𝟚 , ∣ refl 𝟚 ∣)
+𝟚₀  : U[𝟚] 
+𝟚₀  = (𝟚 , ∣ refl 𝟚 ∣)
 \end{code}
 
 \noindent which directly corresponds to the boolean type in
-$\PiTwo$. We remind the reader that, by construction, \AgdaFunction{U[𝟚]}
-is contractible.  What remains is to characterize the 1-paths, 2-paths, and
-possibly higher paths in {\small\AgdaFunction{U[𝟚]}} and to relate
-them to the 1-combinators, 2-combinators, etc. in $\PiTwo$.
+$\PiTwo$. We remind the reader that, by construction,
+{\small\AgdaFunction{U[𝟚]}} is contractible.  What remains is to
+characterize the 1-paths, 2-paths, and possibly higher paths in
+{\small\AgdaFunction{U[𝟚]}} and to relate them to the 1-combinators,
+2-combinators, etc. in $\PiTwo$.
 
 To conveniently refer to the paths in {\small\AgdaFunction{U[𝟚]}}, we
-define the loop space on a (pointed) type:
+define the loop space on a (pointed) type, and show that the loop
+space on {\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is equivalent to
+{\small\AgdaDatatype{𝟚}~\AgdaFunction{≃}~\AgdaFunction{BAut}}:
 
 \begin{code}
 Ω : Σ[ T ∶ 𝒰 ] T → 𝒰
 Ω (T , t₀) = t₀ == t₀
-\end{code}
 
-We then show that the loop space on
-{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is equivalent to
-{\small\AgdaDatatype{𝟚}~\AgdaFunction{≃}~\AgdaFunction{BAut}}:
-
-\begin{code}
 Aut : (T : 𝒰) → 𝒰
 Aut T = T ≃ T
 
@@ -1266,10 +1270,10 @@ b₀ {T} = T , ∣ ide T ∣
 ΩBAut≃Aut[ T ] = transport-equiv ElB , is-univ-fib-ElB b₀ b₀
 \end{code}
 
-The above results that, in general, the loop space of the
-classifying space of a type \AgdaBound{T} is equivalent to
-the type of automorphisms of \AgdaBound{T}.
-In particular, it follows that
+The above results states that, in general, the loop space of the
+classifying space of a type {\small\AgdaBound{T}} is equivalent to the
+type of automorphisms of {\small\AgdaBound{T}}.  In particular, it
+follows that
 {\small\AgdaFunction{Ω}~\AgdaSymbol{(}\AgdaFunction{BAut}~\AgdaDatatype{𝟚}
   \AgdaInductiveConstructor{,} \AgdaFunction{𝟚₀}\AgdaSymbol{)}
   \AgdaFunction{≃} \AgdaFunction{Aut} \AgdaDatatype{𝟚}} which reduces
@@ -1323,14 +1327,14 @@ intensional type theory using large elimination, that the two
 constructors are disjoint. This is reflected in the absurd pattern
 when doing dependent pattern matching in Agda. More generally,
 {\small\AgdaFunction{𝟚 ≃ 𝟙 ⊎ 𝟙}} and the disjoint union of two sets is
-a set.
+a set:
 
 \begin{code}
 0₂≠1₂ : 0₂ == 1₂ → ⊥
 0₂≠1₂ p = transport code p tt
-  where code : 𝟚 → 𝒰
-        code 0₂ = ⊤
-        code 1₂ = ⊥
+  where  code : 𝟚 → 𝒰
+         code 0₂ = ⊤
+         code 1₂ = ⊥
 \end{code}
 
 Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality
@@ -1343,24 +1347,22 @@ proposition, showing that we have exactly two inhabitants of
 
 \begin{code}
 id≃ not≃ : 𝟚 ≃ 𝟚
-id≃  = id  , qinv-is-hae (id , refl , refl)
-not≃ = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}) , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}))
-  where
-  not : 𝟚 → 𝟚
-  not 0₂ = 1₂
-  not 1₂ = 0₂
+id≃   = id  , qinv-is-hae (id , refl , refl)
+not≃  = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}) , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}))
+  where  not : 𝟚 → 𝟚
+         not 0₂ = 1₂
+         not 1₂ = 0₂
 \end{code}
 
-Here something very special happens:  {\small\AgdaFunction{𝟚}} and
-{\small\AgdaFunction{𝟚 ≃ 𝟚}} are of the same size.  In general,
-the type formed by taking $n$ disjoint unions of {\small\AgdaFunction{𝟙}}
-has a space of automorphisms of size $n!$.
-
-In our situtation, this combinatorial accident can actually be lifted
-to show that there is
-an equivalence between {\small\AgdaFunction{𝟚 ≃ 𝟚}} and {\small\AgdaFunction{𝟚}}.
-By composing the chain of equivalences
-{\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚}} we obtain:
+Here something very special happens: although in general the type
+formed by taking $n$ disjoint unions of {\small\AgdaFunction{𝟙}} has a
+space of automorphisms of size $n!$, in our case we have that
+{\small\AgdaFunction{𝟚}} and {\small\AgdaFunction{𝟚 ≃ 𝟚}} are of the
+same size. This combinatorial accident can actually be lifted to show
+that there is an equivalence between {\small\AgdaFunction{𝟚 ≃ 𝟚}} and
+{\small\AgdaFunction{𝟚}}.  By composing the chain of equivalences
+{\small\AgdaFunction{Ω (Ũ , 𝟚₀) ≃ Ω (BAut(𝟚) , b₀) ≃ (𝟚 ≃ 𝟚) ≃ 𝟚}} we
+obtain:
 
 \AgdaHide{\begin{code}
 postulate
@@ -1370,7 +1372,7 @@ postulate
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
 
-Thus there are only two distinct 1-paths. Calling them
+Thus there are only two distinct 1-paths in {\small\AgdaFunction{U[𝟚]}}. Calling them:
 
 \AgdaHide{\begin{code}
 postulate
@@ -1380,7 +1382,7 @@ postulate
   id𝟚 not𝟚 : 𝟚₀ == 𝟚₀
 \end{code}
 
-\noindent leads to a decomposition
+\noindent leads to a decomposition:
 
 \AgdaHide{\begin{code}
 postulate
@@ -1390,9 +1392,13 @@ postulate
   all-1-paths : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
 
-%For 2-path, \AgdaSymbol{𝟚} is a set, with witness
-By applying induction principle for disjoint union
-and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
+that every path in {\small\AgdaFunction{U[𝟚]}} is identifiable with
+either the identity of boolean negation.
+
+For 2-paths in {\small\AgdaFunction{U[𝟚]}} the following analysis
+shows that they are identifiable with the trivial path. First, by
+applying the induction principle for disjoint unions and path
+induction we can prove {\small\AgdaFunction{𝟚}} is a set:
 
 \begin{code}
 𝟚is-set : is-set 𝟚
@@ -1404,7 +1410,7 @@ and path induction we can prove {\small\AgdaFunction{𝟚}} is set:
 
 From this, we obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is also a set by using
 {\small\AgdaFunction{transport}} and univalence. This in turns shows
-the contractibility of 2-paths.
+the contractibility of 2-paths:
 
 \begin{code}
 Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
@@ -1414,16 +1420,15 @@ all-2-paths : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
 all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
 \end{code}
 
-We will use the subuniverse {\small\AgdaFunction{U[𝟚]}} as our model for \PiTwo.
+In the next section, we will use {\small\AgdaFunction{all-1-paths}}
+and {\small\AgdaFunction{all-2-paths}} as crucial ingredients for
+showing the correspondence between {\small\AgdaFunction{U[𝟚]}} and
+\PiTwo.
 
-In next section, we use {\small\AgdaFunction{all-1-paths}} and
-{\small\AgdaFunction{all-2-paths}} as crucial ingredients for
-showing the correspondence between {\small\AgdaFunction{U[𝟚]}} and \PiTwo.
-
-Note that most of the results above are generic.  However when we move
-beyond \AgdaFunction{𝟚}, the combinatorial explosion of the path space
-is such that explicit enumeration quickly becomes impractical, and other
-techniques will become necessary.
+Note that most of the results in this section are generic.  However
+when we move beyond {\small\AgdaFunction{𝟚}}, the combinatorial
+explosion of the path space is such that explicit enumeration quickly
+becomes impractical, and other techniques will become necessary.
 
 %% With a syntactic presentation of \AgdaSymbol{Ω(BAut(𝟚))},
 %% we get all the automorphisms on \AgdaSymbol{𝟚}, which gives a complete model for
