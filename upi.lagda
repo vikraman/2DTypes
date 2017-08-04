@@ -1474,7 +1474,7 @@ each ``level''.
 \subsection{Mappings}
 
 Level $0$ is straightforward, as both
-\AgdaSymbol{Π₂} and \AgdaSymbol{Ũ[𝟚]} are singletons.
+\AgdaSymbol{Π₂} and \AgdaSymbol{U[𝟚]} are singletons.
 
 \begin{code}
 ⟦_⟧₀ : Π₂ → U[𝟚]
