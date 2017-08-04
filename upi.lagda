@@ -844,7 +844,7 @@ is-contr A = Σ[ a ∶ A ] Π[ b ∶ A ] (a == b)
 \end{code}
 
 As alluded to in the previous section, equivalences are contractible
-(assuming univalence):
+(4.2.13 in~\cite{hottbook}):
 
 \begin{code}
 is-hae-is-contr : {A B : 𝒰} {f : A → B} → is-hae f → is-contr (is-hae f)
@@ -1245,12 +1245,11 @@ have a canonical point {\small\AgdaFunction{𝟚₀}}:
 𝟚₀  = (𝟚 , ∣ refl 𝟚 ∣)
 \end{code}
 
-\noindent which directly corresponds to the boolean type in
-$\PiTwo$. We remind the reader that, by construction,
-{\small\AgdaFunction{U[𝟚]}} is contractible.  What remains is to
-characterize the 1-paths, 2-paths, and possibly higher paths in
-{\small\AgdaFunction{U[𝟚]}} and to relate them to the 1-combinators,
-2-combinators, etc. in $\PiTwo$.
+which directly corresponds to the boolean type in $\PiTwo$. We remind
+the reader that, by construction, {\small\AgdaFunction{U[𝟚]}} is
+path-connected.  What remains is to characterize the 1-paths, 2-paths,
+and possibly higher paths in {\small\AgdaFunction{U[𝟚]}} and to relate
+them to the 1-combinators, 2-combinators, etc. in $\PiTwo$.
 
 To conveniently refer to the paths in {\small\AgdaFunction{U[𝟚]}}, we
 define the loop space on a (pointed) type, and show that the loop
