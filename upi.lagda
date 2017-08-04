@@ -1318,7 +1318,7 @@ BAut≃Ũ[ T ] = {!!}
 %% univalent fibration. By the property of being a univalent fibration we have that
 %% {\small\AgdaFunction{Ω (BAut(𝟚) , 𝟚₀) ≃ (𝟚 ≃ 𝟚)}}.
 
-\subsection{Automorphisms on {normalfont\AgdaDatatype{𝟚}}}
+\subsection{Automorphisms on {\normalfont\AgdaDatatype{𝟚}}}
 
 The type {\small\AgdaFunction{𝟚}} has two point constructors, and no
 path constructors, which means it has no non-trivial paths on its
