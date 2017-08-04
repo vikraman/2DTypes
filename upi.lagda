@@ -1097,9 +1097,9 @@ is-univalent (U , El) = is-univ-fib El
 We now have all the ingredients necessary to define our class of
 univalent subuniverses of interest. Given any type
 {\small\AgdaBound{T}}, we can build a propositional predicate that
-picks out~{\small\AgdaBound{T}} among all the types in the
-universe. This lets us build up a singleton subuniverse
-of~{\small\AgdaFunction{𝒰}} as follows:
+picks out all the types equivalent to~{\small\AgdaBound{T}} among all
+the types in the universe. This lets us build up a ``singleton''
+subuniverse of~{\small\AgdaFunction{𝒰}} as follows:
 
 \begin{code}
 Ũ[_] : (T : 𝒰) → Ũ
@@ -1115,17 +1115,17 @@ Pictorially we have the following situation:
 \begin{tikzpicture}[scale=0.8,every node/.style={scale=0.8}]]
   \draw (0,-5) ellipse (3.5cm and 1.2cm);
   \node[below] at (0,-6.3) {Base Space \AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==} \AgdaBound{T} \AgdaPostulate{∥}};
-  \draw[fill] (-2,-5) circle [radius=0.025];
-  \node[below] at (-2,-5) {\AgdaSymbol{(}\AgdaBound{X₁}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₁}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
-  \draw[fill] (2,-5) circle [radius=0.025];
-  \node[below] at (2,-5) {\AgdaSymbol{(}\AgdaBound{X₂}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₂}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
-  \draw[below,cyan,thick] (-2,-5) -- (2,-5);
-  \node[below,cyan,thick] at (0,-5) {$==$};
+  \draw[fill] (-2,-4.75) circle [radius=0.025];
+  \node[below] at (-2,-4.75) {\AgdaSymbol{(}\AgdaBound{X₁}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₁}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
+  \draw[fill] (2,-4.75) circle [radius=0.025];
+  \node[below] at (2,-4.75) {\AgdaSymbol{(}\AgdaBound{X₂}~\AgdaSymbol{,}~\AgdaInductiveConstructor{∣}\AgdaBound{p₂}\AgdaInductiveConstructor{∣}\AgdaSymbol{)}};
+  \draw[below,cyan,thick] (-2,-4.75) -- (2,-4.75);
+  \node[below,cyan,thick] at (0,-4.75) {$==$};
 
   \draw (-2,-2) ellipse (0.5cm and 1cm);
-  \node[left] at (-2.5,-2) {\AgdaBound{T}};
+  \node[left] at (-2.5,-2) {\AgdaBound{X₁}};
   \draw (2,-2) ellipse (0.5cm and 1cm);
-  \node[right] at (2.5,-2) {\AgdaBound{T}};
+  \node[right] at (2.5,-2) {\AgdaBound{X₂}};
   \draw[->,red,thick] (-1.5,-1.7) to [out=45, in=135] (1.5,-1.7);
   \draw[->,red,thick] (1.5,-2.3) to [out=-135, in=-45] (-1.5,-2.3);
   \node[red,thick] at (0,-2) {$\simeq$};
