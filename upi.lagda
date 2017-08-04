@@ -1207,8 +1207,8 @@ BAut T = Σ[ X ∶ 𝒰 ] ∥ X ≃ T ∥
 ElB : {T : 𝒰} → BAut T → 𝒰
 ElB = pr₁
 
-transport-equiv-ElB :  {T : 𝒰} {v w : BAut T}
-                       (p : v == w) → pr₁ (transport-equiv ElB p) == transport id (dpair=-e p)
+transport-equiv-ElB : {T : 𝒰} {v w : BAut T} (p : v == w)
+                    → pr₁ (transport-equiv ElB p) == transport id (dpair=-e p)
 transport-equiv-ElB (refl v) = refl id
 
 is-univ-fib-ElB : {T : 𝒰} → is-univ-fib ElB
