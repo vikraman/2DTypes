@@ -901,7 +901,7 @@ recursion principle (below) ensures that we can only eliminate a
 propositional truncation to a type that is a proposition:
 
 \begin{code}
-module _ {A : 𝒰} (P : 𝒰) (f : A → P) (_ : is-prop P) where
+module _ {A : 𝒰} (P : 𝒰) (f : A → P) (φ : is-prop P) where
   postulate
     rec-∥-∥ : ∥ A ∥ → P
     rec-∥-∥-β : Π[ a ∶ A ] (rec-∥-∥ ∣ a ∣ == f a)
@@ -1325,7 +1325,7 @@ path constructors, which means it has no non-trivial paths on its
 points except {\small\AgdaFunction{refl}}. In fact, we can prove in
 intensional type theory using large elimination, that the two
 constructors are disjoint. This is reflected in the absurd pattern
-when doing dependent pattern matching in Agda. More generally,
+when using dependent pattern matching in Agda. More generally,
 {\small\AgdaFunction{𝟚 ≃ 𝟙 ⊎ 𝟙}} and the disjoint union of two sets is
 a set:
 
@@ -1341,9 +1341,9 @@ Using {\small\AgdaFunction{0₂≠1₂}} and function extensionality
 (derivable from univalence) we can prove that there are exactly two
 different equivalences between {\small\AgdaFunction{𝟚}} and
 {\small\AgdaFunction{𝟚}}.  Furthermore, for any equivalence
-{\small\AgdaFunction{f}}, we have that {\small\AgdaFunction{is-hae f}}
-is a proposition, showing that we have exactly two inhabitants of
-{\small\AgdaFunction{𝟚 ≃ 𝟚}}:
+{\small\AgdaFunction{f}}, using the fact that
+{\small\AgdaFunction{is-hae f}} is a proposition, we can show that
+there are exactly two inhabitants of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 
 \begin{code}
 id≃ not≃ : 𝟚 ≃ 𝟚
@@ -1393,7 +1393,7 @@ postulate
 \end{code}
 
 that every path in {\small\AgdaFunction{U[𝟚]}} is identifiable with
-either the identity of boolean negation.
+either the identity or boolean negation.
 
 For 2-paths in {\small\AgdaFunction{U[𝟚]}} the following analysis
 shows that they are identifiable with the trivial path. First, by
@@ -1401,23 +1401,24 @@ applying the induction principle for disjoint unions and path
 induction we can prove {\small\AgdaFunction{𝟚}} is a set:
 
 \begin{code}
-𝟚is-set : is-set 𝟚
-𝟚is-set 0₂ 0₂ (refl .0₂) (refl .0₂) = refl (refl 0₂)
-𝟚is-set 0₂ 1₂ ()
-𝟚is-set 1₂ 0₂ ()
-𝟚is-set 1₂ 1₂ (refl .1₂) (refl .1₂) = refl (refl 1₂)
+𝟚-is-set : is-set 𝟚
+𝟚-is-set 0₂ 0₂ (refl .0₂) (refl .0₂) = refl (refl 0₂)
+𝟚-is-set 0₂ 1₂ ()
+𝟚-is-set 1₂ 0₂ ()
+𝟚-is-set 1₂ 1₂ (refl .1₂) (refl .1₂) = refl (refl 1₂)
 \end{code}
 
-From this, we obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is also a set by using
-{\small\AgdaFunction{transport}} and univalence. This in turns shows
-the contractibility of 2-paths:
+From this, we obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is also a
+set by using {\small\AgdaFunction{ua}} and
+{\small\AgdaFunction{transport}}. This in turns shows the
+contractibility of 2-paths:
 
 \begin{code}
-Ω𝟚₀is-set : is-set (𝟚₀ == 𝟚₀)
-Ω𝟚₀is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚is-set
+Ω𝟚₀-is-set : is-set (𝟚₀ == 𝟚₀)
+Ω𝟚₀-is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚-is-set
 
 all-2-paths : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
-all-2-paths {p} γ = Ω𝟚₀is-set p p γ (refl p)
+all-2-paths {p} γ = Ω𝟚₀-is-set p p γ (refl p)
 \end{code}
 
 In the next section, we will use {\small\AgdaFunction{all-1-paths}}
