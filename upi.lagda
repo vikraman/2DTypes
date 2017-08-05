@@ -1812,7 +1812,7 @@ What is more surprising is how this also turns out to be a sound
 and complete language for describing the univalent universe
 {\small\AgdaFunction{U[𝟚]}}.
 
-\paragraph*{The infinite real projective space \AgdaSymbol{$ℝP^∞$}}
+\paragraph*{The infinite real projective space $\mathbf{RP}^∞$}
 \noindent Buchholtz and Rijke~\cite{buchholtz2017real} use the ``type
 of two element sets,'' {\small\AgdaRecord{Σ[} \AgdaBound{X}
   \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥}
@@ -1832,7 +1832,7 @@ lead to.
 
 If we consider the $\Pi$ language over all finite types, we conjecture
 that we should get a representation of
-$\oplus_{n\in\mathbb{N}}K(S_n,1)$ where $S_n$ is a symmetric
+$\coprod_{n\in\mathbb{N}}K(S_n,1)$ where $S_n$ is the symmetric
 group. The idea is that the $n^\mathrm{th}$ homotopy group of an
 Eilenberg-Maclane space $K(G,n)$ is isomorphic to $G$ (and every other
 homotopy group is trivial). Thus, all necessary information about
