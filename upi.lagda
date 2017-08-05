@@ -1442,24 +1442,36 @@ becomes impractical, and other techniques will become necessary.
 %% 1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and
 %% \AgdaSymbol{all-2-paths}.
 
+% In previous work on $\Pi$ we noted a possible connection with HoTT:
+% \begin{quote}
+%   It is, therefore, at least plausible that a variant of HoTT based exclusively
+%   on reversible functions that directly correspond to equivalences would have
+%   better computational properties. Our current result is a step, albeit
+%   preliminary, in that direction as it only applies to finite
+%   types~\cite{Carette2016}.
+% \end{quote}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Correspondence between {\normalfont\AgdaFunction{U[𝟚]}} and \PiTwo}
 \label{sec:correspondence}
 
-In previous work on $\Pi$ we noted a possible connection with HoTT:
-\begin{quote}
-  It is, therefore, at least plausible that a variant of HoTT based exclusively
-  on reversible functions that directly correspond to equivalences would have
-  better computational properties. Our current result is a step, albeit
-  preliminary, in that direction as it only applies to finite
-  types~\cite{Carette2016}.
-\end{quote}
-Formalizing, in a precise sense, the connection between reversible programs
-based on combinators and paths in HoTT, as intuitive as it may seem, is rather
-difficult. Paths in HoTT come equipped with principles like the
-``contractibility of singletons'', ``transport'', and ``path induction.'' None
-of these principles seems to have any direct counterpart in the world of
-reversible programming.
+Formalizing, in a precise sense, the connection between reversible
+functions in a programming language and paths in a univalent universe,
+as intuitive as it may seem, is rather subtle. Paths in HoTT come
+equipped with principles like the ``contractibility of singletons'',
+``transport'', and ``path induction'' and none of these principles
+seems to have any direct counterpart in the world of reversible
+programming. We will however demonstrate how the semantics of an
+entire (but admittedly small) reversible programming language such as
+$\PiTwo$ can be captured by a specification as compact as
+{\small\AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰}
+  \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==}
+  \AgdaDatatype{𝟚} \AgdaPostulate{∥}}. Our precise correspondence will
+consist of mappings between~\PiTwo{} to and
+{\small{\AgdaFunction{Ũ[𝟚]}}}, for points, 1-paths, 2-paths, and
+3-paths, such that each map is invertible up to the appropriate notion
+of equality. This gives a notion of soundness and completeness for
+each level.
 
 %% JC: while the next sentence is ``true enough'', this isn't really
 %% carried out in full in the code.  So we shouldn't claim it in the
@@ -1469,15 +1481,11 @@ reversible programming.
 %%  2-functor out of it to Ũ[𝟚] and show that it is an equivalence.
 %%}
 
-We construct mappings from \PiTwo{} to Ũ[𝟚], for points,
-1-paths, 2-paths, 3-paths, and show that each map is
-invertible. This gives a notion of soundness and completeness for
-each ``level''.
-
 \subsection{Mappings}
 
-Level $0$ is straightforward, as both
-\AgdaSymbol{Π₂} and \AgdaSymbol{U[𝟚]} are singletons.
+The mappings for points (level-0) are straightforward, as both
+{\small\AgdaDatatype{Π₂}} and {\small\AgdaFunction{U[𝟚]}} are
+singletons:
 
 \begin{code}
 ⟦_⟧₀ : Π₂ → U[𝟚]
@@ -1487,27 +1495,28 @@ Level $0$ is straightforward, as both
 ⌜ _ ⌝₀ = `𝟚
 \end{code}
 
-Level $1$ is the first non-trivial level. To each syntactic combinator
-\AgdaSymbol{A ⟷₁ B}, we associate a path from \AgdaSymbol{⟦ A ⟧₀} to
-\AgdaSymbol{⟦ B ⟧₀}.  We do not show the details for any of the mappings
-(they are available in the accompanying code) as these are not
-particularly informative.  We will indicate what parts of our
-infrastructure are used in a fundamental manner to obtain the results.
+Level-1 is the first non-trivial level. To each syntactic combinator
+{\small\AgdaFunction{c}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaDatatype{⟷₁}~\AgdaBound{B}},
+we associate a path from
+{\small{\AgdaFunction{⟦}~\AgdaBound{A}~\AgdaFunction{⟧₀}}} to
+{\small{\AgdaFunction{⟦}~\AgdaBound{B}~\AgdaFunction{⟧₀}}} and
+vice-versa. The mapping from the univalent universe back to the syntax
+of the reversible language is only possible because we have a complete
+characterization of the paths in the universe (captured in
+{\small\AgdaFunction{all-1-paths}} defined in the previous section:
 
 \begin{code}
 ⟦_⟧₁ : {A B : Π₂} → A ⟷₁ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
+⟦_⟧₁ {`𝟚} `id  = id𝟚
+⟦ `not ⟧₁      = not𝟚 
+⟦ !₁ p ⟧₁      = ! ⟦ p ⟧₁
+⟦ p ⊙₁ q ⟧₁    = ⟦ p ⟧₁ ◾ ⟦ q ⟧₁
+
 ⌜_⌝₁ : 𝟚₀ == 𝟚₀ → ⌜ 𝟚₀ ⌝₀ ⟷₁ ⌜ 𝟚₀ ⌝₀
+⌜ p ⌝₁ with all-1-paths p 
+... | inl pid   = `id
+... | inr pnot  = `not
 \end{code}
-
-Canonical forms are key to $\AgdaSymbol{⟦\_⟧₁}$;
-\AgdaSymbol{all-1-paths} is key to $\AgdaSymbol{⌜\_⌝₁}$.
-
-\AgdaHide{
-\begin{code}
-⟦_⟧₁  = {!!}
-⌜_⌝₁ = {!!}
-\end{code}
-}
 
 Level $2$ is tricky. We know that all self-paths (by lemma
 \AgdaSymbol{all-2-paths}) are trivial. In fact, all of them
@@ -1658,53 +1667,66 @@ languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2
 
 \paragraph*{The $\Pi$ Family of Languages}
 \noindent In previous work, Carette, Bowman, James, and
-Sabry~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016} introduced
-the~$\Pi$ family of reversible languages based on type isomorphisms and
-commutative semiring identities. The fragment without recursive types is
-universal for reversible boolean circuits~\cite{James:2012:IE:2103656.2103667}
-and the extension with recursive types and trace
-operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
-language~\cite{James:2012:IE:2103656.2103667,rc2011}. While at first sight,
-$\Pi$ might appear \emph{ad hoc},~\cite{Carette2016} shows that it arises
-naturally from an ``extended'' view of the Curry-Howard correspondance: rather
-than looking at mere \emph{inhabitation} as the main source of analogy between
-logic and computation, \emph{type equivalences} becomes the source of analogy.
-This allows one to see an analogy between algebra and reversible computation.
-Furthermore, this works at multiple levels: that of $1$-algebra (types form a
-semiring under isomorphism), but also $2$-algebra (types and equivalences form a
-weak Rig Groupoid).  In other words, by taking ``weak Rig Groupoid'' as the
-starting semantics, one naturally gets $\Pi$ as the syntax for the language of
+Sabry~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016}
+introduced the~$\Pi$ family of reversible languages based on type
+isomorphisms and commutative semiring identities. The fragment without
+recursive types is universal for reversible boolean
+circuits~\cite{James:2012:IE:2103656.2103667} and the extension with
+recursive types and trace
+operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete
+reversible language~\cite{James:2012:IE:2103656.2103667,rc2011}. While
+at first sight, $\Pi$ might appear \emph{ad hoc}, it really arises
+naturally from an ``extended'' view of the Curry-Howard
+correspondence~\cite{Carette2016}: rather than looking at mere
+\emph{inhabitation} as the main source of analogy between logic and
+computation, \emph{type equivalences} becomes the source of analogy.
+This allows one to see an analogy between algebra and reversible
+computation.  Furthermore, this works at multiple levels: that of
+$1$-algebra (types form a semiring under isomorphism), but also
+$2$-algebra (types and equivalences form a weak Rig Groupoid).  In
+other words, by taking ``weak Rig Groupoid'' as the starting
+semantics, one naturally gets $\Pi$ as the syntax for the language of
 proofs of isomorphisms -- in the same way that many terms of the
 $\lambda$-calculus arise from Cartesian Closed Categories.
 
 One can also flip this around, and use the $\lambda$-calculus as the
-internal language for Cartesian Closed Categories.  However, as Shulman
-explains well in his draft book~\cite{shulman} on approaching Categorical
-Logic via Type Theory, this works for many other kinds of categories.  As
-we are interested in \emph{reversibility}, it is most natural to look at
-Groupoids.  Thus $\PiTwo$ represents the simplest non-trivial case of
-a (reversible) programming language distilled from such ideas.
+internal language for Cartesian Closed Categories.  However, as
+Shulman explains well in his draft book on approaching Categorical
+Logic via Type Theory~\cite{shulman}, this works for many other kinds
+of categories.  As we are interested in \emph{reversibility}, it is
+most natural to look at Groupoids.  Thus $\PiTwo$ represents the
+simplest non-trivial case of a (reversible) programming language
+distilled from such ideas.
 
 What is more surprising is how this also turns out to be a sound
 and complete language for describing the univalent universe
 {\small\AgdaFunction{U[𝟚]}}.
 
 \paragraph*{The infinite real projective space \AgdaSymbol{$ℝP^∞$}}
-\noindent In~\cite{buchholtz2017real}, Buchholtz and Rijke use the ``type of two
-element sets'', \mbox{\AgdaSymbol{Σ[ X ∶ 𝒰 ] ∥ X == $𝕊^0$ ∥}}, where
-\AgdaSymbol{$𝕊^0$} is the 0-sphere, or the 0-iterated suspension of
-\AgdaSymbol{𝟚}, that is, \AgdaSymbol{𝟚} itself. They construct the infinite real
-projective space \AgdaSymbol{$ℝP^∞$} by using universal covering spaces, and
-show that it is homotopy equivalent to the Eilenberg-Maclane space
-\AgdaSymbol{K(ℤ/2ℤ,1)} which classifies all the 0-sphere bundles. Our reversible
-programming language is exactly the syntactic presentation of this classifying
-space.
+\noindent Buchholtz and Rijke~\cite{buchholtz2017real} use the ``type
+of two element sets,'' {\small\AgdaRecord{Σ[} \AgdaBound{X}
+  \AgdaRecord{∶} \AgdaFunction{𝒰} \AgdaRecord{]} \AgdaPostulate{∥}
+  \AgdaBound{X} \AgdaDatatype{==} \AgdaDatatype{𝕊⁰}
+  \AgdaPostulate{∥}}, where~{\small\AgdaDatatype{𝕊⁰}} is the 0-sphere,
+or the 0-iterated suspension of {\small\AgdaDatatype{𝟚}}, that is,
+{\small\AgdaDatatype{𝟚}} itself. They construct the infinite real
+projective space $\mathbf{RP}^∞$ by using universal covering spaces,
+and show that it is homotopy equivalent to the Eilenberg-Maclane space
+$K(\mathbb{Z}/2\mathbb{Z},1)$ which classifies all the 0-sphere
+bundles. Our reversible programming language is exactly the syntactic
+presentation of this classifying space. If we choose
+{\small\AgdaDatatype{𝕊¹}} instead of {\small\AgdaDatatype{𝕊⁰}}, we get
+the infinite complex projective space $\mathbf{CP}^∞$, but it remains
+to investigate what kind of reversible programming language this would
+lead to.
 
-If we extend our language to all finite types, we should get a representation of
-\AgdaSymbol{Σ[ n ∶ ℕ ] K(ℤ/nℤ, 1)}, which is not well studied classically. Also,
-if we choose \AgdaSymbol{$𝕊^1$} instead of \AgdaSymbol{$𝕊^0$}, we get the
-infinite complex projective space \AgdaSymbol{$ℂP^∞$}, but it remains to
-investigate what kind of reversible programming language this would lead to.
+If we consider the $\Pi$ language over all finite types, we conjecture
+that we should get a representation of
+$\oplus_{n\in\mathbb{N}}K(S_n,1)$ where $S_n$ is a symmetric
+group. The idea is that the $n^\mathrm{th}$ homotopy group of an
+Eilenberg-Maclane space $K(G,n)$ is isomorphic to $G$ (and every other
+homotopy group is trivial). Thus, all necessary information about
+paths and equivalences between finite types is captured in this model.
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \section{Conclusion}
