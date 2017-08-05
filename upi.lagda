@@ -1543,8 +1543,9 @@ we associate a path from
 {\small{\AgdaFunction{⟦}~\AgdaBound{B}~\AgdaFunction{⟧₀}}} and
 vice-versa. The mapping from the univalent universe back to the syntax
 of the reversible language is only possible because we have a complete
-characterization of the paths in the universe (captured in
-{\small\AgdaFunction{all-1-paths}} defined in the previous section:
+characterization of the paths in the universe (captured in the
+construction of {\small\AgdaFunction{all-1-paths}} in the previous
+section):
 
 \begin{code}
 ⟦_⟧₁ : {A B : Π₂} → A ⟷₁ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
@@ -1559,21 +1560,17 @@ characterization of the paths in the universe (captured in
 ... | inr pnot  = `not
 \end{code}
 
-Level $2$ is tricky. We know that all self-paths (by lemma
-\AgdaSymbol{all-2-paths}) are trivial. In fact, all of them
-are. Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of
-(tedious) work. $\AgdaSymbol{⌜\_⌝₂}$ proceeds by enumerating $1$-paths, which
-makes things straightforward.
-
-\AgdaHide{
-\begin{code}
-
-\end{code}}
-
-\begin{code}
-⟦_⟧₂ : {A B : Π₂} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
-⌜_⌝₂ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
-\end{code}
+At level-2 we know by the construction of
+{\small\AgdaFunction{all-2-paths}} in the previous section that all
+self-paths in the univalent universe are trivial. Nevertheless the
+mappings back and forth require quite a bit of (tedious) work. We show
+below a few cases of the mapping from 2-combinators to 2-paths and the
+full definition of the reverse mapping. In the first direction, it is
+a matter of using the necessary properties of paths in the univalent
+universe (e.g, each path has an inverse). These properties are proved
+by path induction. The reverse direction crucially relies again on the
+characterization of 1-paths and the fact that the identity equivalence
+and the equivalence that swaps the two booleans are distinct:
 
 \AgdaHide{
 \begin{code}
@@ -1581,58 +1578,76 @@ postulate
   !not𝟚=not𝟚 : ! not𝟚 == not𝟚
   id𝟚≠not𝟚 : id𝟚 == not𝟚 → ⊥
 
-⟦_⟧₂ (`id₂ {p = p}) = refl ⟦ p ⟧₁
-⟦_⟧₂ (!₂ u) = ! ⟦ u ⟧₂
-⟦_⟧₂ (u₁ ⊙₂ u₂) = ⟦ u₁ ⟧₂ ◾ ⟦ u₂ ⟧₂
-⟦_⟧₂ (`idl p) = ◾unitl ⟦ p ⟧₁
-⟦_⟧₂ (`idr p) = ◾unitr ⟦ p ⟧₁
-⟦_⟧₂ (`assoc p q r) = ◾assoc _ _ _
-⟦_⟧₂ (u₁ □₂ u₂)  = ⟦ u₁ ⟧₂ [2,0,2] ⟦ u₂ ⟧₂
-⟦_⟧₂ (`! u) = ap !_ ⟦ u ⟧₂
-⟦_⟧₂ (`!l p) = ◾invl ⟦ p ⟧₁
-⟦_⟧₂ (`!r p) = ◾invr ⟦ p ⟧₁
-⟦_⟧₂ `!id = refl id𝟚
-⟦_⟧₂ `!not = !not𝟚=not𝟚
-⟦_⟧₂ (`!◾ {p = p} {q}) = !◾ ⟦ p ⟧₁ ⟦ q ⟧₁
-⟦_⟧₂ (`!! {p = p}) = !! ⟦ p ⟧₁
+-- ⟦_⟧₂ (`id₂ {p = p}) = refl ⟦ p ⟧₁
+-- ⟦_⟧₂ (!₂ u) = ! ⟦ u ⟧₂
+-- ⟦_⟧₂ (u₁ ⊙₂ u₂) = ⟦ u₁ ⟧₂ ◾ ⟦ u₂ ⟧₂
+-- ⟦_⟧₂ (`idl p) = ◾unitl ⟦ p ⟧₁
+-- ⟦_⟧₂ (`idr p) = ◾unitr ⟦ p ⟧₁
+-- ⟦_⟧₂ (`assoc p q r) = ◾assoc _ _ _
+-- ⟦_⟧₂ (u₁ □₂ u₂)  = ⟦ u₁ ⟧₂ [2,0,2] ⟦ u₂ ⟧₂
+-- ⟦_⟧₂ (`! u) = ap !_ ⟦ u ⟧₂
+-- ⟦_⟧₂ (`!l p) = ◾invl ⟦ p ⟧₁
+-- ⟦_⟧₂ (`!r p) = ◾invr ⟦ p ⟧₁
+-- ⟦_⟧₂ `!id = refl id𝟚
+-- ⟦_⟧₂ `!not = !not𝟚=not𝟚
+-- ⟦_⟧₂ (`!◾ {p = p} {q}) = !◾ ⟦ p ⟧₁ ⟦ q ⟧₁
+-- ⟦_⟧₂ (`!! {p = p}) = !! ⟦ p ⟧₁
 
-⌜_⌝₂ {p} {q} u with all-1-paths p | all-1-paths q
-... | inl p=id  | inl q=id  = `id₂
-... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
-... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! u ◾ p=not))
-... | inr p=not | inr q=not = `id₂
 \end{code}
 }
 
-%% Level $3$ is trivial -- by fiat.
-For level $3$, {\small\AgdaFunction{⌜\_⌝₃}} just maps to {\small\AgdaFunction{`trunc}}.
-And {\small\AgdaFunction{⟦\_⟧₃}} is obtained by using {\small\AgdaFunction{all-1-paths}} and {\small\AgdaFunction{all-2-paths}}.
-
 \begin{code}
-⟦_⟧₃ : {A B : Π₂} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
-⌜_⌝₃ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂
+⟦_⟧₂ : {A B : Π₂} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
+⟦ `id₂ {p = p} ⟧₂   = refl ⟦ p ⟧₁
+⟦ !₂ u ⟧₂           = ! ⟦ u ⟧₂
+⟦ u₁ ⊙₂ u₂ ⟧₂       = ⟦ u₁ ⟧₂ ◾ ⟦ u₂ ⟧₂
+⟦ `idl p ⟧₂         = ◾unitl ⟦ p ⟧₁
+⟦ `idr p ⟧₂         = ◾unitr ⟦ p ⟧₁
+⟦ `! u ⟧₂           = ap !_ ⟦ u ⟧₂
+⟦ _ ⟧₂              = {!!}               ----- omitted
+
+⌜_⌝₂ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
+⌜_⌝₂ {p} {q} u with all-1-paths p | all-1-paths q
+... | inl p=id   | inl q=id   = `id₂
+... | inl p=id   | inr q=not  = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
+... | inr p=not  | inl q=id   = ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! u ◾ p=not))
+... | inr p=not  | inr q=not  = `id₂
 \end{code}
+
+For the final level-3, mapping from the univalent universe to $\PiTwo$
+is trivial as the latter has only one constructor at level-3. The
+other direction requires some involved reasoning in the univalent
+universe to construct the required 3-path:
 
 \AgdaHide{
 \begin{code}
-postulate
-  lem : {p q r : 𝟚₀ == 𝟚₀} (p=r : p == r) (q=r : q == r) (u : p == q)
-      → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
-
-⟦_⟧₃ {`𝟚} {`𝟚} {p} {q} {u} {v} `trunc with all-1-paths ⟦ p ⟧₁ | all-1-paths ⟦ q ⟧₁
-... | inl p=id  | inl q=id  = lem p=id q=id ⟦ u ⟧₂
-                            ◾ ap (λ x → p=id ◾ x ◾ ! q=id) ( all-2-paths (! p=id ◾ ⟦ u ⟧₂ ◾ q=id)
-                                                           ◾ ! (all-2-paths (! p=id ◾ ⟦ v ⟧₂ ◾ q=id)))
-                            ◾ ! (lem p=id q=id ⟦ v ⟧₂)
-... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ u ⟧₂ ◾ q=not))
-... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! ⟦ u ⟧₂ ◾ p=not))
-... | inr p=not | inr q=not = lem p=not q=not ⟦ u ⟧₂
-                            ◾ ap (λ x → p=not ◾ x ◾ ! q=not) ( all-2-paths (! p=not ◾ ⟦ u ⟧₂ ◾ q=not)
-                                                             ◾ ! (all-2-paths (! p=not ◾ ⟦ v ⟧₂ ◾ q=not)))
-                            ◾ ! (lem p=not q=not ⟦ v ⟧₂)
-⌜ _ ⌝₃ = `trunc
 \end{code}
 }
+
+\begin{code}
+lem :  {p q r : 𝟚₀ == 𝟚₀} 
+       (p=r : p == r) (q=r : q == r) (u : p == q) → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
+lem = ? ----- omitted       
+
+⟦_⟧₃ : {A B : Π₂} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
+⟦_⟧₃ {`𝟚} {`𝟚} {p} {q} {u} {v} `trunc with all-1-paths ⟦ p ⟧₁ | all-1-paths ⟦ q ⟧₁
+... | inl p=id  | inl q=id  =  
+  lem p=id q=id ⟦ u ⟧₂
+  ◾ ap  (λ x → p=id ◾ x ◾ ! q=id)
+         (all-2-paths (! p=id ◾ ⟦ u ⟧₂ ◾ q=id) ◾ ! (all-2-paths (! p=id ◾ ⟦ v ⟧₂ ◾ q=id)))
+  ◾ ! (lem p=id q=id ⟦ v ⟧₂)
+... | inl p=id  | inr q=not =  ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ u ⟧₂ ◾ q=not))
+... | inr p=not | inl q=id  =  ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! ⟦ u ⟧₂ ◾ p=not))
+... | inr p=not | inr q=not =  
+  lem p=not q=not ⟦ u ⟧₂
+  ◾ ap  (λ x → p=not ◾ x ◾ ! q=not) 
+         (all-2-paths (! p=not ◾ ⟦ u ⟧₂ ◾ q=not) ◾ ! (all-2-paths (! p=not ◾ ⟦ v ⟧₂ ◾ q=not)))
+  ◾ ! (lem p=not q=not ⟦ v ⟧₂)
+
+⌜_⌝₃ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂
+⌜ _ ⌝₃ = `trunc 
+\end{code}
+
 
 \subsection{Coherence}
 
