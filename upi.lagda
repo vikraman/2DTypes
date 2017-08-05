@@ -1604,7 +1604,7 @@ postulate
 ⟦ `idl p ⟧₂         = ◾unitl ⟦ p ⟧₁
 ⟦ `idr p ⟧₂         = ◾unitr ⟦ p ⟧₁
 ⟦ `! u ⟧₂           = ap !_ ⟦ u ⟧₂
-⟦ _ ⟧₂              = {!!}               ----- omitted
+⟦ _ ⟧₂              = ?               ----- omitted
 
 ⌜_⌝₂ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
 ⌜_⌝₂ {p} {q} u with all-1-loops p | all-1-loops q
@@ -1651,40 +1651,33 @@ lem = ? ----- omitted
 
 \subsection{Coherence}
 
-Naturally, all of these mappings would be much less interesting if
-the correspondences were not coherent with each other.  We want to know
-that they are both sound and complete.
+It now remains to show that all these mapping are coherent with each
+other in the sense that each round trip produces a term that is
+identifiable with the original term. At level-0, this is trivial.
 
-At level 0, this is trivial.
-
-At level 1, \emph{soundness} means that the mappings are inverses:
+At level-1, \emph{soundness} means that the mappings are inverses:
 \begin{itemize}
-\item any combinator 1-combinator \AgdaBound{p} mapped to a 1-path
-and back is 2-equivalent to itself, and
-\item there is always a (2-)path between a 1-path \AgdaBound{p}
+\item any 1-combinator {\small\AgdaBound{p}} mapped to a 1-path and
+  back is 2-equivalent to itself, and
+\item there is always a 2-path between a 1-path {\small\AgdaBound{p}}
 sent to a 1-combinator and back.
 \end{itemize}
 This is rather more succinct in code:
 \begin{code}
 ⌜⟦_⟧₁⌝₁ : (p : `𝟚 ⟷₁ `𝟚) → p ⟷₂ ⌜ ⟦ p ⟧₁ ⌝₁
-⟦⌜_⌝₁⟧₁ : (p : 𝟚₀ == 𝟚₀) → p == ⟦ ⌜ p ⌝₁ ⟧₁
-\end{code}
-We omit the proofs as they are straightforward.
-\AgdaHide{
-\begin{code}
 ⌜⟦ p ⟧₁⌝₁ with canonical p | all-1-loops ⟦ p ⟧₁
-... | ID  , p⇔id  | inl p=id  = p⇔id
-... | ID  , p⇔id  | inr p=not = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ ⟦ p⇔id ⟧₂)))
-... | NOT , p⇔not | inl p=id  = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ p⇔not ⟧₂))
-... | NOT , p⇔not | inr p=not = p⇔not
+... | ID  , p⇔id   | inl p=id   = p⇔id
+... | ID  , p⇔id   | inr p=not  = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ ⟦ p⇔id ⟧₂)))
+... | NOT , p⇔not  | inl p=id   = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ p⇔not ⟧₂))
+... | NOT , p⇔not  | inr p=not  = p⇔not
 
+⟦⌜_⌝₁⟧₁ : (p : 𝟚₀ == 𝟚₀) → p == ⟦ ⌜ p ⌝₁ ⟧₁
 ⟦⌜ p ⌝₁⟧₁  with all-1-loops p | canonical ⌜ p ⌝₁
-... | inl p=id  | ID  , p⇔id  = p=id
-... | inl p=id  | NOT , p⇔not = ⊥-elim (id𝟚≠not𝟚 ⟦ p⇔not ⟧₂)
-... | inr p=not | ID  , p⇔id  = ⊥-elim (id𝟚≠not𝟚 (! ⟦ p⇔id ⟧₂))
-... | inr p=not | NOT , p⇔not = p=not
+... | inl p=id   | ID  , p⇔id   = p=id
+... | inl p=id   | NOT , p⇔not  = ⊥-elim (id𝟚≠not𝟚 ⟦ p⇔not ⟧₂)
+... | inr p=not  | ID  , p⇔id   = ⊥-elim (id𝟚≠not𝟚 (! ⟦ p⇔id ⟧₂))
+... | inr p=not  | NOT , p⇔not  = p=not
 \end{code}
-}
 
 They are also complete.  In this case, this means
 \begin{itemize}
@@ -1693,7 +1686,6 @@ related by a 2-path, the 1-combinators are related by a 2-combinator.
 \item for any two 1-paths which map to 1-combinators which are
 related by a 2-combinator these are related by a 2-path.
 \end{itemize}
-
 Normally, completeness is a rather difficult result
 to prove.  But in our case, all the infrastructure above means that
 the hard work has already been done.  Key is \emph{reversibility}.  In the first
@@ -1719,29 +1711,25 @@ to ``unwinding'' complex expressions for identity paths.
 \begin{code}
 ⌜⟦_⟧₂⌝₂ : {p q : `𝟚 ⟷₁ `𝟚} (u : p ⟷₂ q)
         → u ⟷₃ (⌜⟦ p ⟧₁⌝₁ ⊙₂ (⌜ ⟦ u ⟧₂ ⌝₂ ⊙₂ (!₂ ⌜⟦ q ⟧₁⌝₁)))
-⟦⌜_⌝₂⟧₂ : {p q : 𝟚₀ == 𝟚₀} (u : p == q) → u == ⟦⌜ p ⌝₁⟧₁ ◾ ⟦ ⌜ u ⌝₂ ⟧₂ ◾ (! ⟦⌜ q ⌝₁⟧₁)
-\end{code}
-
-Level $2$ completeness offers no new difficulties.
-
-\begin{code}
-completeness₂ : {p q : `𝟚 ⟷₁ `𝟚} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ⟷₃ v
-completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂ → u == v
-\end{code}
-
-\AgdaHide{
-\begin{code}
 ⌜⟦ u ⟧₂⌝₂ = `trunc
+
+⟦⌜_⌝₂⟧₂ : {p q : 𝟚₀ == 𝟚₀} (u : p == q) → u == ⟦⌜ p ⌝₁⟧₁ ◾ ⟦ ⌜ u ⌝₂ ⟧₂ ◾ (! ⟦⌜ q ⌝₁⟧₁)
 ⟦⌜_⌝₂⟧₂ {p} {q} u with all-1-loops p | all-1-loops q
 ... | inl p=id  | inl q=id  = (lem p=id q=id u) ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-loops (! p=id ◾ u ◾ q=id)))
 ... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
 ... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ u ◾ q=id)))
 ... | inr p=not | inr q=not = (lem p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-loops (! p=not ◾ u ◾ q=not)))
-
-completeness₂ u = `trunc
-completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⌜ u ⌝₂⟧₂ ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⌜ v ⌝₂⟧₂)
 \end{code}
-}
+
+Level-2 completeness offers no new difficulties.
+
+\begin{code}
+completeness₂ : {p q : `𝟚 ⟷₁ `𝟚} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ⟷₃ v
+completeness₂ u = `trunc
+ 
+completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂ → u == v
+completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⌜ u ⌝₂⟧₂ ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⌜ v ⌝₂⟧₂) 
+\end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion and Related Work}
