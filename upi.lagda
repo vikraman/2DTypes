@@ -247,6 +247,49 @@ syntax PathOver P p u v = u == v [ P ↓ p ]
 
 apd : {A : 𝒰} {P : A → 𝒰} {x y : A} (f : (a : A) → P a) (p : x == y) → f x == f y [ P ↓ p ]
 apd f (refl x) = refl (f x)
+
+⊥-elim : {C : 𝒰} → ⊥ → C
+⊥-elim ()
+
+module _ {X : 𝒰} where
+
+  ◾unitr : {x y : X} → (p : x == y) → p ◾ refl y == p
+  ◾unitr (refl x) = refl (refl x)
+
+  ◾unitl : {x y : X} → (p : x == y) → refl x ◾ p == p
+  ◾unitl (refl x) = refl (refl x)
+
+  ◾invr : {x y : X} → (p : x == y) → ! p ◾ p == refl y
+  ◾invr (refl x) = refl (refl x)
+
+  ◾invl : {x y : X} → (p : x == y) → p ◾ ! p == refl x
+  ◾invl (refl x) = refl (refl x)
+
+  !! : {x y : X} → (p : x == y) → ! (! p) == p
+  !! (refl x) = refl (refl x)
+
+  !◾ : {x y z : X} → (p : x == y) → (q : y == z) → ! (p ◾ q) == ! q ◾ ! p
+  !◾ (refl y) (refl .y) = refl (refl y)
+
+  infixr 80 _[1,0,2]_
+  _[1,0,2]_ : {x y z : X} → {r s : y == z}
+              → (p : x == y) → r == s → p ◾ r == p ◾ s
+  (refl y) [1,0,2] γ = ◾unitl _ ◾ γ ◾ ! (◾unitl _)
+
+  ◾assoc : {w x y z : X} → (p : w == x) → (q : x == y) → (r : y == z)
+           → (p ◾ q) ◾ r == p ◾ q ◾ r
+  ◾assoc p q (refl y) = ◾unitr _ ◾ (p [1,0,2] ! (◾unitr _))
+
+  infixr 80 _[2,0,1]_
+  _[2,0,1]_ : {x y z : X} → {p q : x == y}
+              → p == q → (r : y == z) → p ◾ r == q ◾ r
+  α [2,0,1] (refl y) = ◾unitr _ ◾ α ◾ ! (◾unitr _)
+
+  infixr 80 _[2,0,2]_
+  _[2,0,2]_ : {x y z : X} → {p q : x == y} → {r s : y == z}
+              → p == q → r == s → p ◾ r == q ◾ s
+  _[2,0,2]_ {q = q} {r} α β = (α [2,0,1] r) ◾ (q [1,0,2] β)
+
 \end{code}
 }
 
@@ -1374,19 +1417,17 @@ postulate
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
 
-Thus there are only two distinct 1-paths in {\small\AgdaFunction{U[𝟚]}}. Calling them:
-
-\AgdaHide{\begin{code}
-postulate
-\end{code}}
-
-\begin{code}
-  id𝟚 not𝟚 : 𝟚₀ == 𝟚₀
-\end{code}
+Thus there are only two distinct 1-paths in {\small\AgdaFunction{U[𝟚]}}. Calling them {\small\AgdaFunction{id𝟚}} and {\small\AgdaFunction{not𝟚}}
 
 \noindent leads to a decomposition:
 
 \AgdaHide{\begin{code}
+id𝟚 : {A : U[𝟚]} → A == A
+id𝟚 {A} = refl A
+
+not𝟚 : 𝟚₀ == 𝟚₀
+not𝟚 = dpair= (ua not≃ , ident)
+
 postulate
 \end{code}}
 
@@ -1507,13 +1548,13 @@ characterization of the paths in the universe (captured in
 
 \begin{code}
 ⟦_⟧₁ : {A B : Π₂} → A ⟷₁ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
-⟦_⟧₁ {`𝟚} `id  = id𝟚
-⟦ `not ⟧₁      = not𝟚 
+⟦ `id ⟧₁       = id𝟚
+⟦ `not ⟧₁      = not𝟚
 ⟦ !₁ p ⟧₁      = ! ⟦ p ⟧₁
 ⟦ p ⊙₁ q ⟧₁    = ⟦ p ⟧₁ ◾ ⟦ q ⟧₁
 
 ⌜_⌝₁ : 𝟚₀ == 𝟚₀ → ⌜ 𝟚₀ ⌝₀ ⟷₁ ⌜ 𝟚₀ ⌝₀
-⌜ p ⌝₁ with all-1-paths p 
+⌜ p ⌝₁ with all-1-paths p
 ... | inl pid   = `id
 ... | inr pnot  = `not
 \end{code}
@@ -1524,6 +1565,11 @@ are. Nevertheless $\AgdaSymbol{⟦\_⟧₂}$ requires quite a bit of
 (tedious) work. $\AgdaSymbol{⌜\_⌝₂}$ proceeds by enumerating $1$-paths, which
 makes things straightforward.
 
+\AgdaHide{
+\begin{code}
+
+\end{code}}
+
 \begin{code}
 ⟦_⟧₂ : {A B : Π₂} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
 ⌜_⌝₂ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
@@ -1531,8 +1577,30 @@ makes things straightforward.
 
 \AgdaHide{
 \begin{code}
-⟦_⟧₂ = {!!}
-⌜_⌝₂ = {!!}
+postulate
+  !not𝟚=not𝟚 : ! not𝟚 == not𝟚
+  id𝟚≠not𝟚 : id𝟚 == not𝟚 → ⊥
+
+⟦_⟧₂ (`id₂ {p = p}) = refl ⟦ p ⟧₁
+⟦_⟧₂ (!₂ u) = ! ⟦ u ⟧₂
+⟦_⟧₂ (u₁ ⊙₂ u₂) = ⟦ u₁ ⟧₂ ◾ ⟦ u₂ ⟧₂
+⟦_⟧₂ (`idl p) = ◾unitl ⟦ p ⟧₁
+⟦_⟧₂ (`idr p) = ◾unitr ⟦ p ⟧₁
+⟦_⟧₂ (`assoc p q r) = ◾assoc _ _ _
+⟦_⟧₂ (u₁ □₂ u₂)  = ⟦ u₁ ⟧₂ [2,0,2] ⟦ u₂ ⟧₂
+⟦_⟧₂ (`! u) = ap !_ ⟦ u ⟧₂
+⟦_⟧₂ (`!l p) = ◾invl ⟦ p ⟧₁
+⟦_⟧₂ (`!r p) = ◾invr ⟦ p ⟧₁
+⟦_⟧₂ `!id = refl id𝟚
+⟦_⟧₂ `!not = !not𝟚=not𝟚
+⟦_⟧₂ (`!◾ {p = p} {q}) = !◾ ⟦ p ⟧₁ ⟦ q ⟧₁
+⟦_⟧₂ (`!! {p = p}) = !! ⟦ p ⟧₁
+
+⌜_⌝₂ {p} {q} u with all-1-paths p | all-1-paths q
+... | inl p=id  | inl q=id  = `id₂
+... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
+... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! u ◾ p=not))
+... | inr p=not | inr q=not = `id₂
 \end{code}
 }
 
@@ -1547,7 +1615,21 @@ And {\small\AgdaFunction{⟦\_⟧₃}} is obtained by using {\small\AgdaFunction
 
 \AgdaHide{
 \begin{code}
-⟦ `trunc ⟧₃ = refl _
+postulate
+  lem : {p q r : 𝟚₀ == 𝟚₀} (p=r : p == r) (q=r : q == r) (u : p == q)
+      → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
+
+⟦_⟧₃ {`𝟚} {`𝟚} {p} {q} {u} {v} `trunc with all-1-paths ⟦ p ⟧₁ | all-1-paths ⟦ q ⟧₁
+... | inl p=id  | inl q=id  = lem p=id q=id ⟦ u ⟧₂
+                            ◾ ap (λ x → p=id ◾ x ◾ ! q=id) ( all-2-paths (! p=id ◾ ⟦ u ⟧₂ ◾ q=id)
+                                                           ◾ ! (all-2-paths (! p=id ◾ ⟦ v ⟧₂ ◾ q=id)))
+                            ◾ ! (lem p=id q=id ⟦ v ⟧₂)
+... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ u ⟧₂ ◾ q=not))
+... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! ⟦ u ⟧₂ ◾ p=not))
+... | inr p=not | inr q=not = lem p=not q=not ⟦ u ⟧₂
+                            ◾ ap (λ x → p=not ◾ x ◾ ! q=not) ( all-2-paths (! p=not ◾ ⟦ u ⟧₂ ◾ q=not)
+                                                             ◾ ! (all-2-paths (! p=not ◾ ⟦ v ⟧₂ ◾ q=not)))
+                            ◾ ! (lem p=not q=not ⟦ v ⟧₂)
 ⌜ _ ⌝₃ = `trunc
 \end{code}
 }
@@ -1575,8 +1657,17 @@ This is rather more succinct in code:
 We omit the proofs as they are straightforward.
 \AgdaHide{
 \begin{code}
-⌜⟦_⟧₁⌝₁ = {!!}
-⟦⌜_⌝₁⟧₁ = {!!}
+⌜⟦ p ⟧₁⌝₁ with canonical p | all-1-paths ⟦ p ⟧₁
+... | ID  , p⇔id  | inl p=id  = p⇔id
+... | ID  , p⇔id  | inr p=not = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ ⟦ p⇔id ⟧₂)))
+... | NOT , p⇔not | inl p=id  = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ p⇔not ⟧₂))
+... | NOT , p⇔not | inr p=not = p⇔not
+
+⟦⌜ p ⌝₁⟧₁  with all-1-paths p | canonical ⌜ p ⌝₁
+... | inl p=id  | ID  , p⇔id  = p=id
+... | inl p=id  | NOT , p⇔not = ⊥-elim (id𝟚≠not𝟚 ⟦ p⇔not ⟧₂)
+... | inr p=not | ID  , p⇔id  = ⊥-elim (id𝟚≠not𝟚 (! ⟦ p⇔id ⟧₂))
+... | inr p=not | NOT , p⇔not = p=not
 \end{code}
 }
 
@@ -1626,7 +1717,11 @@ completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⌜ u ⌝�
 \AgdaHide{
 \begin{code}
 ⌜⟦ u ⟧₂⌝₂ = `trunc
-⟦⌜_⌝₂⟧₂ = {!!}
+⟦⌜_⌝₂⟧₂ {p} {q} u with all-1-paths p | all-1-paths q
+... | inl p=id  | inl q=id  = (lem p=id q=id u) ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-paths (! p=id ◾ u ◾ q=id)))
+... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
+... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ u ◾ q=id)))
+... | inr p=not | inr q=not = (lem p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-paths (! p=not ◾ u ◾ q=not)))
 
 completeness₂ u = `trunc
 completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⌜ u ⌝₂⟧₂ ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⌜ v ⌝₂⟧₂)
