@@ -1417,9 +1417,9 @@ postulate
   𝟚≃Ω𝟚₀ : 𝟚 ≃ (𝟚₀ == 𝟚₀)
 \end{code}
 
-Thus there are only two distinct 1-paths in {\small\AgdaFunction{U[𝟚]}}. Calling them {\small\AgdaFunction{id𝟚}} and {\small\AgdaFunction{not𝟚}}
-
-\noindent leads to a decomposition:
+Thus there are only two distinct 1-loops in
+{\small\AgdaFunction{U[𝟚]}}. Calling them {\small\AgdaFunction{id𝟚}}
+and {\small\AgdaFunction{not𝟚}} leads to a decomposition:
 
 \AgdaHide{\begin{code}
 id𝟚 : {A : U[𝟚]} → A == A
@@ -1432,13 +1432,13 @@ postulate
 \end{code}}
 
 \begin{code}
-  all-1-paths : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
+  all-1-loops : (p : 𝟚₀ == 𝟚₀) → (p == id𝟚) + (p == not𝟚)
 \end{code}
 
-that every path in {\small\AgdaFunction{U[𝟚]}} is identifiable with
+that every loop in {\small\AgdaFunction{U[𝟚]}} is identifiable with
 either the identity or boolean negation.
 
-For 2-paths in {\small\AgdaFunction{U[𝟚]}} the following analysis
+For 2-loops in {\small\AgdaFunction{U[𝟚]}}, the following analysis
 shows that they are identifiable with the trivial path. First, by
 applying the induction principle for disjoint unions and path
 induction we can prove {\small\AgdaFunction{𝟚}} is a set:
@@ -1454,18 +1454,18 @@ induction we can prove {\small\AgdaFunction{𝟚}} is a set:
 From this, we obtain that {\small\AgdaFunction{𝟚₀ == 𝟚₀}} is also a
 set by using {\small\AgdaFunction{ua}} and
 {\small\AgdaFunction{transport}}. This in turns shows the
-contractibility of 2-paths:
+contractibility of 2-loops:
 
 \begin{code}
 Ω𝟚₀-is-set : is-set (𝟚₀ == 𝟚₀)
 Ω𝟚₀-is-set = transport is-set (ua 𝟚≃Ω𝟚₀) 𝟚-is-set
 
-all-2-paths : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
-all-2-paths {p} γ = Ω𝟚₀-is-set p p γ (refl p)
+all-2-loops : {p : 𝟚₀ == 𝟚₀} → (γ : p == p) → γ == refl p
+all-2-loops {p} γ = Ω𝟚₀-is-set p p γ (refl p)
 \end{code}
 
-In the next section, we will use {\small\AgdaFunction{all-1-paths}}
-and {\small\AgdaFunction{all-2-paths}} as crucial ingredients for
+In the next section, we will use {\small\AgdaFunction{all-1-loops}}
+and {\small\AgdaFunction{all-2-loops}} as crucial ingredients for
 showing the correspondence between {\small\AgdaFunction{U[𝟚]}} and
 \PiTwo.
 
@@ -1480,8 +1480,8 @@ becomes impractical, and other techniques will become necessary.
 
 %% However, the problem is easier for \AgdaSymbol{𝟚}, because
 %% \AgdaSymbol{Aut(𝟚) ≃ 𝟚}, which gives the following easy lemmas for
-%% 1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-paths} and
-%% \AgdaSymbol{all-2-paths}.
+%% 1-paths and 2-paths on \AgdaSymbol{𝟚}: \AgdaSymbol{all-1-loops} and
+%% \AgdaSymbol{all-2-loops}.
 
 % In previous work on $\Pi$ we noted a possible connection with HoTT:
 % \begin{quote}
@@ -1544,7 +1544,7 @@ we associate a path from
 vice-versa. The mapping from the univalent universe back to the syntax
 of the reversible language is only possible because we have a complete
 characterization of the paths in the universe (captured in the
-construction of {\small\AgdaFunction{all-1-paths}} in the previous
+construction of {\small\AgdaFunction{all-1-loops}} in the previous
 section):
 
 \begin{code}
@@ -1555,13 +1555,13 @@ section):
 ⟦ p ⊙₁ q ⟧₁    = ⟦ p ⟧₁ ◾ ⟦ q ⟧₁
 
 ⌜_⌝₁ : 𝟚₀ == 𝟚₀ → ⌜ 𝟚₀ ⌝₀ ⟷₁ ⌜ 𝟚₀ ⌝₀
-⌜ p ⌝₁ with all-1-paths p
+⌜ p ⌝₁ with all-1-loops p
 ... | inl pid   = `id
 ... | inr pnot  = `not
 \end{code}
 
 At level-2 we know by the construction of
-{\small\AgdaFunction{all-2-paths}} in the previous section that all
+{\small\AgdaFunction{all-2-loops}} in the previous section that all
 self-paths in the univalent universe are trivial. Nevertheless the
 mappings back and forth require quite a bit of (tedious) work. We show
 below a few cases of the mapping from 2-combinators to 2-paths and the
@@ -1569,7 +1569,7 @@ full definition of the reverse mapping. In the first direction, it is
 a matter of using the necessary properties of paths in the univalent
 universe (e.g, each path has an inverse). These properties are proved
 by path induction. The reverse direction crucially relies again on the
-characterization of 1-paths and the fact that the identity equivalence
+characterization of 1-loops and the fact that the identity equivalence
 and the equivalence that swaps the two booleans are distinct:
 
 \AgdaHide{
@@ -1607,7 +1607,7 @@ postulate
 ⟦ _ ⟧₂              = {!!}               ----- omitted
 
 ⌜_⌝₂ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
-⌜_⌝₂ {p} {q} u with all-1-paths p | all-1-paths q
+⌜_⌝₂ {p} {q} u with all-1-loops p | all-1-loops q
 ... | inl p=id   | inl q=id   = `id₂
 ... | inl p=id   | inr q=not  = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
 ... | inr p=not  | inl q=id   = ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! u ◾ p=not))
@@ -1625,27 +1625,27 @@ universe to construct the required 3-path:
 }
 
 \begin{code}
-lem :  {p q r : 𝟚₀ == 𝟚₀} 
+lem :  {p q r : 𝟚₀ == 𝟚₀}
        (p=r : p == r) (q=r : q == r) (u : p == q) → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
-lem = ? ----- omitted       
+lem = ? ----- omitted
 
 ⟦_⟧₃ : {A B : Π₂} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
-⟦_⟧₃ {`𝟚} {`𝟚} {p} {q} {u} {v} `trunc with all-1-paths ⟦ p ⟧₁ | all-1-paths ⟦ q ⟧₁
-... | inl p=id  | inl q=id  =  
+⟦_⟧₃ {`𝟚} {`𝟚} {p} {q} {u} {v} `trunc with all-1-loops ⟦ p ⟧₁ | all-1-loops ⟦ q ⟧₁
+... | inl p=id  | inl q=id  =
   lem p=id q=id ⟦ u ⟧₂
   ◾ ap  (λ x → p=id ◾ x ◾ ! q=id)
-         (all-2-paths (! p=id ◾ ⟦ u ⟧₂ ◾ q=id) ◾ ! (all-2-paths (! p=id ◾ ⟦ v ⟧₂ ◾ q=id)))
+         (all-2-loops (! p=id ◾ ⟦ u ⟧₂ ◾ q=id) ◾ ! (all-2-loops (! p=id ◾ ⟦ v ⟧₂ ◾ q=id)))
   ◾ ! (lem p=id q=id ⟦ v ⟧₂)
 ... | inl p=id  | inr q=not =  ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ u ⟧₂ ◾ q=not))
 ... | inr p=not | inl q=id  =  ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! ⟦ u ⟧₂ ◾ p=not))
-... | inr p=not | inr q=not =  
+... | inr p=not | inr q=not =
   lem p=not q=not ⟦ u ⟧₂
-  ◾ ap  (λ x → p=not ◾ x ◾ ! q=not) 
-         (all-2-paths (! p=not ◾ ⟦ u ⟧₂ ◾ q=not) ◾ ! (all-2-paths (! p=not ◾ ⟦ v ⟧₂ ◾ q=not)))
+  ◾ ap  (λ x → p=not ◾ x ◾ ! q=not)
+         (all-2-loops (! p=not ◾ ⟦ u ⟧₂ ◾ q=not) ◾ ! (all-2-loops (! p=not ◾ ⟦ v ⟧₂ ◾ q=not)))
   ◾ ! (lem p=not q=not ⟦ v ⟧₂)
 
 ⌜_⌝₃ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂
-⌜ _ ⌝₃ = `trunc 
+⌜ _ ⌝₃ = `trunc
 \end{code}
 
 
@@ -1672,13 +1672,13 @@ This is rather more succinct in code:
 We omit the proofs as they are straightforward.
 \AgdaHide{
 \begin{code}
-⌜⟦ p ⟧₁⌝₁ with canonical p | all-1-paths ⟦ p ⟧₁
+⌜⟦ p ⟧₁⌝₁ with canonical p | all-1-loops ⟦ p ⟧₁
 ... | ID  , p⇔id  | inl p=id  = p⇔id
 ... | ID  , p⇔id  | inr p=not = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ ⟦ p⇔id ⟧₂)))
 ... | NOT , p⇔not | inl p=id  = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ p⇔not ⟧₂))
 ... | NOT , p⇔not | inr p=not = p⇔not
 
-⟦⌜ p ⌝₁⟧₁  with all-1-paths p | canonical ⌜ p ⌝₁
+⟦⌜ p ⌝₁⟧₁  with all-1-loops p | canonical ⌜ p ⌝₁
 ... | inl p=id  | ID  , p⇔id  = p=id
 ... | inl p=id  | NOT , p⇔not = ⊥-elim (id𝟚≠not𝟚 ⟦ p⇔not ⟧₂)
 ... | inr p=not | ID  , p⇔id  = ⊥-elim (id𝟚≠not𝟚 (! ⟦ p⇔id ⟧₂))
@@ -1713,7 +1713,7 @@ all levels bumped up by one).  However,
 level $2$ soundness is tricky to state correctly, mostly because the types
 involved in $\AgdaSymbol{⌜ ⟦ u ⟧₂ ⌝₂}$ and $\AgdaSymbol{⟦ ⌜ u ⌝₂ ⟧₂}$
 are non-trivial.  For 2-combinators, the result is trivial, again by fiat.
-For 2-paths, enumeration of 1-paths reduces the complexity of the problem
+For 2-loops enumeration of 1-loops reduces the complexity of the problem
 to ``unwinding'' complex expressions for identity paths.
 
 \begin{code}
@@ -1732,11 +1732,11 @@ completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⌜ u ⌝�
 \AgdaHide{
 \begin{code}
 ⌜⟦ u ⟧₂⌝₂ = `trunc
-⟦⌜_⌝₂⟧₂ {p} {q} u with all-1-paths p | all-1-paths q
-... | inl p=id  | inl q=id  = (lem p=id q=id u) ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-paths (! p=id ◾ u ◾ q=id)))
+⟦⌜_⌝₂⟧₂ {p} {q} u with all-1-loops p | all-1-loops q
+... | inl p=id  | inl q=id  = (lem p=id q=id u) ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-loops (! p=id ◾ u ◾ q=id)))
 ... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
 ... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ u ◾ q=id)))
-... | inr p=not | inr q=not = (lem p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-paths (! p=not ◾ u ◾ q=not)))
+... | inr p=not | inr q=not = (lem p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-loops (! p=not ◾ u ◾ q=not)))
 
 completeness₂ u = `trunc
 completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⌜ u ⌝₂⟧₂ ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⌜ v ⌝₂⟧₂)
