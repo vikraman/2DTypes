@@ -1653,7 +1653,9 @@ lem = ? ----- omitted
 
 It now remains to show that all these mapping are coherent with each
 other in the sense that each round trip produces a term that is
-identifiable with the original term. At level-0, this is trivial.
+identifiable with the original term, effectively showing soundness and
+completness of the univalent universe with respect to $\PiTwo$. At
+level-0, this is trivial.
 
 At level-1, \emph{soundness} means that the mappings are inverses:
 \begin{itemize}
@@ -1679,18 +1681,19 @@ This is rather more succinct in code:
 ... | inr p=not  | NOT , p⇔not  = p=not
 \end{code}
 
-They are also complete.  In this case, this means
+They are also \emph{complete} in the following sense:
 \begin{itemize}
 \item for any two 1-combinators which map to 1-paths which are
-related by a 2-path, the 1-combinators are related by a 2-combinator.
+related by a 2-path, the 1-combinators are related by a 2-combinator, and
 \item for any two 1-paths which map to 1-combinators which are
 related by a 2-combinator these are related by a 2-path.
 \end{itemize}
-Normally, completeness is a rather difficult result
-to prove.  But in our case, all the infrastructure above means that
-the hard work has already been done.  Key is \emph{reversibility}.  In the first
-proof \AgdaSymbol{!₂} is essential, with \AgdaSymbol{!} being essential
-in the second.
+Normally, completeness is a rather difficult result to prove.  But in
+our case, the infrastructure from the previous section makes the proof
+immediate: For the first proof, the key is \emph{reversibility} of the
+level-2 combinators using {\small\AgdaInductiveConstructor{!₂}}; for
+the second proof it is the reversibility of paths in the univalent
+universe that is critical:
 
 \begin{code}
 completeness₁ : {p q : `𝟚 ⟷₁ `𝟚} → ⟦ p ⟧₁ == ⟦ q ⟧₁ → p ⟷₂ q
@@ -1700,35 +1703,40 @@ completeness₁⁻¹ : {p q : 𝟚₀ == 𝟚₀} → ⌜ p ⌝₁ ⟷₂ ⌜ q 
 completeness₁⁻¹ {p} {q} u = ⟦⌜ p ⌝₁⟧₁ ◾ ⟦ u ⟧₂ ◾ (! ⟦⌜ q ⌝₁⟧₁)
 \end{code}
 
-For level $2$, the statements are informally quite similar (with
-all levels bumped up by one).  However,
-level $2$ soundness is tricky to state correctly, mostly because the types
-involved in $\AgdaSymbol{⌜ ⟦ u ⟧₂ ⌝₂}$ and $\AgdaSymbol{⟦ ⌜ u ⌝₂ ⟧₂}$
-are non-trivial.  For 2-combinators, the result is trivial, again by fiat.
-For 2-loops enumeration of 1-loops reduces the complexity of the problem
-to ``unwinding'' complex expressions for identity paths.
+For level-2, the statements are informally quite similar (with all
+levels bumped up by one).  For 2-combinators, the result is
+trivial. For the other direction starting from 2-paths in the
+univalent universe soundness is tricky to even state, mostly because
+the types involved in {\small\AgdaFunction{⌜
+    ⟦}~\AgdaBound{u}~\AgdaFunction{⟧₂ ⌝₂}} and {\small\AgdaFunction{⟦
+    ⌜}~\AgdaBound{u}~\AgdaFunction{⌝₂ ⟧₂}} are non-trivial. But
+enumeration of 1-loops reduces the complexity of the problem to 
+``unwinding'' complex expressions for identity paths:
 
 \begin{code}
-⌜⟦_⟧₂⌝₂ : {p q : `𝟚 ⟷₁ `𝟚} (u : p ⟷₂ q)
-        → u ⟷₃ (⌜⟦ p ⟧₁⌝₁ ⊙₂ (⌜ ⟦ u ⟧₂ ⌝₂ ⊙₂ (!₂ ⌜⟦ q ⟧₁⌝₁)))
+⌜⟦_⟧₂⌝₂ :  {p q : `𝟚 ⟷₁ `𝟚} 
+           (u : p ⟷₂ q) → u ⟷₃ (⌜⟦ p ⟧₁⌝₁ ⊙₂ (⌜ ⟦ u ⟧₂ ⌝₂ ⊙₂ (!₂ ⌜⟦ q ⟧₁⌝₁)))
 ⌜⟦ u ⟧₂⌝₂ = `trunc
 
 ⟦⌜_⌝₂⟧₂ : {p q : 𝟚₀ == 𝟚₀} (u : p == q) → u == ⟦⌜ p ⌝₁⟧₁ ◾ ⟦ ⌜ u ⌝₂ ⟧₂ ◾ (! ⟦⌜ q ⌝₁⟧₁)
 ⟦⌜_⌝₂⟧₂ {p} {q} u with all-1-loops p | all-1-loops q
-... | inl p=id  | inl q=id  = (lem p=id q=id u) ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-loops (! p=id ◾ u ◾ q=id)))
-... | inl p=id  | inr q=not = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
-... | inr p=not | inl q=id  = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ u ◾ q=id)))
-... | inr p=not | inr q=not = (lem p=not q=not u) ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-loops (! p=not ◾ u ◾ q=not)))
+... | inl p=id   | inl q=id   =  (lem p=id q=id u) 
+                                 ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-loops (! p=id ◾ u ◾ q=id)))
+... | inl p=id   | inr q=not  = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
+... | inr p=not  | inl q=id   = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ u ◾ q=id)))
+... | inr p=not  | inr q=not  =  (lem p=not q=not u) 
+                                 ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-loops (! p=not ◾ u ◾ q=not)))
 \end{code}
 
-Level-2 completeness offers no new difficulties.
+Level-2 completeness offers no new difficulties:
 
 \begin{code}
 completeness₂ : {p q : `𝟚 ⟷₁ `𝟚} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ⟷₃ v
 completeness₂ u = `trunc
  
 completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂ → u == v
-completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⌜ u ⌝₂⟧₂ ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⌜ v ⌝₂⟧₂) 
+completeness₂⁻¹ {p} {q} {u} {v} α =  ⟦⌜ u ⌝₂⟧₂ 
+                                     ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⌜ v ⌝₂⟧₂) 
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
