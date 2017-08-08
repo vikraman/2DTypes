@@ -313,11 +313,12 @@ far from obvious, however.
 
 Here we report on a formal connection between appropriately formulated
 reversible languages on one hand and univalent universes on the
-other. In the next section, we give a rational reconstruction of $\Pi$
-focusing on a small ``featherweight'' fragment~$\PiTwo$. In
-Sec.~\ref{sec:univalent}, we review basic homotopy type theory (HoTT)
-background leading to \emph{univalent fibrations} which allow us to
-give formal presentations of ``small'' univalent universes. In
+other. In the next section, we give a rational reconstruction of the
+reversible programming language $\Pi$, focusing on a small
+``featherweight'' fragment~$\PiTwo$. In Sec.~\ref{sec:univalent}, we
+review basic homotopy type theory (HoTT) background leading to
+\emph{univalent fibrations} which allow us to give formal
+presentations of ``small'' univalent universes. In
 Sec.~\ref{sec:model} we define and establish the basic properties of
 such a univalent subuniverse {\small\AgdaFunction{Ũ[𝟚]}} which we
 prove in Sec.~\ref{sec:correspondence} as sound and complete with
@@ -338,7 +339,7 @@ computations are \emph{type isomorphisms} which, at least in the case of finite
 types, clearly preserve entropy in the information-theoretic
 sense~\cite{James:2012:IE:2103656.2103667}. We illustrate the general flavor of
 the family of languages with some examples and then identify a ``featherweight''
-version of $\Pi$ to use in our formal development.
+version of $\Pi$, called $\PiTwo$, to use in our formal development.
 
 %%%%%
 \subsection{Examples}
@@ -676,26 +677,26 @@ data _⟷₃_ {A B} {p q : A ⟷₁ B} (u v : p ⟷₂ q) : 𝒰 where
 % commented out array, but have different names in the Agda
 % code.}
 
-In the previous presentations of $\Pi$, the level-3 programs,
-consisting of just one trivial program
-{\small\AgdaInductiveConstructor{`trunc}}, were not made explicit. The
-much larger level-1 and level-2 programs of the full $\Pi$
-language~\cite{Carette2016} have been specialized to our small
-language. For the level-1 constructors, denoting reversible programs,
-type isomorphisms, permutations between finite sets, or equivalences
-depending on one's favorite interpretation, we have two canonical
-programs {\small\AgdaInductiveConstructor{`id}} and
+In the previous presentations of
+$\Pi$~\cite{rc2011,James:2012:IE:2103656.2103667,Carette2016}, the level-3
+programs, consisting of just one trivial program
+{\small\AgdaInductiveConstructor{`trunc}}, were not made explicit. The much
+larger level-1 and level-2 programs of the full $\Pi$
+language~\cite{Carette2016} have been specialized to our small language. For the
+level-1 constructors, denoting reversible programs, type isomorphisms,
+permutations between finite sets, or equivalences depending on one's favorite
+interpretation, we have two canonical programs
+{\small\AgdaInductiveConstructor{`id}} and
 {\small\AgdaInductiveConstructor{`not}} closed under inverses
 {\small\AgdaInductiveConstructor{!₁}} and sequential
-composition~{\small\AgdaInductiveConstructor{⊙₁}}. For level-2
-constructors, denoting reversible program transformations, coherence
-conditions on type isomorphisms, equivalences between permutations, or
-program optimizations depending on one's favorite interpretation, we
-have the following groups: (i) the first group contains the identity,
-inverses, and sequential composition; (ii) the second group
-establishes the coherence laws for level-1 sequential composition
-(e.g, it is associative); and (iii) finally the third group includes
-general rules for level-1 inversions.
+composition~{\small\AgdaInductiveConstructor{⊙₁}}. For level-2 constructors,
+denoting reversible program transformations, coherence conditions on type
+isomorphisms, equivalences between permutations, or program optimizations
+depending on one's favorite interpretation, we have the following groups: (i)
+the first group contains the identity, inverses, and sequential composition;
+(ii) the second group establishes the coherence laws for level-1 sequential
+composition (e.g, it is associative); and (iii) finally the third group includes
+general rules for inversions of level-1 constructors.
 
 Each of the level-2 combinators of type $p \isotwo q$ is easily seen
 to establish an equivalence between level-1 programs $p$ and $q$ (as
@@ -723,7 +724,8 @@ which level-1 programs are canonical. The type {\small\AgdaDatatype{Which}}
 names the subset of {\small\AgdaDatatype{⟷₁}} which are canonical forms:
 
 \begin{code}
-data Which : 𝒰 where ID NOT : Which
+data Which : 𝒰 where
+  ID NOT : Which
 
 refine : (w : Which) → `𝟚 ⟷₁ `𝟚
 refine ID = `id
@@ -748,7 +750,7 @@ canonical (_⊙₁_ {_} {`𝟚} c₁ c₂) with canonical c₁ | canonical c₂
 \end{code}
 
 It is worthwhile to note that the proof of
-{\small\AgdaFunction{canonical}} does not use all the level 2
+{\small\AgdaFunction{canonical}} does not use all the level-2
 combinators. The larger set of 2-combinators is however useful to
 establish a more direct connection with the model presented in the
 next sections.
@@ -769,7 +771,7 @@ We work in intensional type theory with one univalent universe
 {\small\AgdaPrimitiveType{𝒰}} closed under propositional truncation.  The rest
 of this section is devoted to explaining what that means.  We follow
 the terminology used in the HoTT book~\cite{hottbook}.  For brevity,
-we will often given just signatures and elide the body. The details
+we will often just give type signatures and elide the term. The details
 can be found in the accompanying code at
 {\small\url{https://git.io/v7wtW}}.
 
@@ -878,7 +880,7 @@ module _ {A B : 𝒰} where
 
 A type {\small\AgdaBound{A}} is \emph{contractible} (h-level 0 or
 (-2)-truncated), if it has a center of contraction, and all other
-terms of that type are connected to it by a path:
+terms of {\small\AgdaBound{A}} are connected to it by a path:
 
 %% \VC{FIXME: Σ and Π are rendered in different colors}
 %% \amr{one is a record and one is a function. Ok I guess}
@@ -901,13 +903,12 @@ is-equiv-is-contr = {!!}
 }
 
 A type {\small\AgdaBound{A}} is a \emph{proposition} (h-level 1 or
-(-1)-truncated) if all pairs of terms of that type are connected by a
-path. Such a type can have at most one inhabitant; it is
-``contractible if inhabited.'' A type {\small\AgdaBound{A}} is a
-\emph{set} if for any two terms {\small\AgdaBound{a}} and
+(-1)-truncated) if all pairs of terms of {\small\AgdaBound{A}} are
+connected by a path. Such a type can have at most one inhabitant; it is
+``contractible if inhabited.'' Finally, a type {\small\AgdaBound{A}} is
+a \emph{set} if for any two terms {\small\AgdaBound{a}} and
 {\small\AgdaBound{b}} of {\small\AgdaBound{A}}, its type of paths
-{\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is a
-proposition:
+{\small\AgdaBound{a}~\AgdaFunction{==}~\AgdaBound{b}} is a proposition:
 
 \begin{code}
 is-prop : (A : 𝒰) → 𝒰
@@ -1024,7 +1025,7 @@ Brunerie~\cite{licata2015cubical}, we often use the syntax
 the path
 {\small\AgdaFunction{transport}~\AgdaBound{P}~\AgdaBound{p}~\AgdaBound{u}
   \AgdaFunction{==} \AgdaBound{v}} to reinforce this perspective. In
-other words the curved ``path'' between {\small\AgdaBound{u}} and
+other words, the curved ``path'' between {\small\AgdaBound{u}} and
 {\small\AgdaBound{v}} below consists of first transporting
 {\small\AgdaBound{u}} to the space {\small\AgdaBound{P}~\AgdaBound{y}}
 along {\small\AgdaBound{p}} and then following the straight path in
@@ -1099,17 +1100,16 @@ to a path in the base space.
 \subsection{Univalent Fibrations}
 
 Univalent fibrations are defined by Kapulkin and
-Lumsdaine~\cite{SimplicialModel} in the simplicial set model.  In our
-context, a type family (fibration)
+Lumsdaine~\cite{SimplicialModel} in the simplicial set (sSet) model.  In
+our context, a type family (fibration)
 {\small\AgdaBound{P}~\AgdaSymbol{:}~\AgdaBound{A}~\AgdaSymbol{→}~\AgdaFunction{𝒰}}
 is univalent if the map
 {\small\AgdaFunction{transport-equiv}~\AgdaBound{P}} defined in
 Sec.~\ref{sec:eq} is an equivalence, that is, if the space of paths in
-the base space is \emph{equivalent} to the space of equivalences
-between the corresponding fibers. Fig.~\ref{fig:fib} (right)
-illustrates the situation: we know that for any fibration
-{\small\AgdaBound{P}} that a path~{\small\AgdaBound{p}} in the base
-space induces via
+the base space is \emph{equivalent} to the space of equivalences between
+the corresponding fibers. Fig.~\ref{fig:fib} (right) illustrates the
+situation: we know that for any fibration {\small\AgdaBound{P}} that a
+path~{\small\AgdaBound{p}} in the base space induces via
 {\small\AgdaFunction{transport-equiv}~\AgdaBound{P}~\AgdaBound{p}} an
 equivalence between the fibers. For a fibration to be univalent, the
 reverse must also be true: every equivalence between the fibers must
@@ -1123,10 +1123,10 @@ is-univ-fib {A} P = ∀ (a b : A) → is-equiv (transport-equiv P {a} {b})
 
 We note that the univalence axiom (for {\small\AgdaFunction{𝒰}}) is a
 specialization of {\small\AgdaFunction{is-univ-fib}} to the identity
-fibration. More generally, we can define universes \`{a} la Tarski by
-having a code {\small\AgdaFunction{U}} for the universe and an
-interpretation function {\small\AgdaFunction{El}} into
-{\small\AgdaFunction{𝒰}}. Such a presented universe is univalent if
+fibration, {\small\AgdaFunction{id}}. More generally, we can define
+universes \`{a} la Tarski by having a code {\small\AgdaFunction{U}} for
+the universe and an interpretation function {\small\AgdaFunction{El}}
+into {\small\AgdaFunction{𝒰}}. Such a presented universe is univalent if
 {\small\AgdaFunction{El}} is a univalent fibration:
 
 \begin{code}
@@ -1166,7 +1166,7 @@ are identified with~{\small\AgdaBound{T}}. This lets us build up a
 
 We will prove in this section and the next that choosing
 {\small\AgdaBound{T}} to be {\small\AgdaDatatype{𝟚}} produces a
-universe that is sound and complete with respect the language
+universe that is sound and complete with respect to the language
 $\PiTwo$. The bulk of the argument consists of establishing that
 {\small\AgdaFunction{Ũ[} \AgdaDatatype{𝟚} \AgdaFunction{]}} is a
 univalent universe. We focus on this argument in the first subsection.
@@ -1224,25 +1224,23 @@ base space {\small\AgdaFunction{U[𝟚]}} as shown below:
 
 Our goal is to show that {\small\AgdaFunction{El𝟚}} is a univalent
 fibration. We establish this by chaining two equivalences. The first
-equivalence is a simple appeal to univalence in order to establish that {\small
-  (\AgdaBound{X}~\AgdaFunction{==}~\AgdaDatatype{𝟚})
-  ~\AgdaFunction{≃}~
-  (\AgdaBound{X}~\AgdaFunction{≃}~\AgdaDatatype{𝟚})}, i.e., our
-base space is equivalent to the space \mbox{\small\AgdaRecord{Σ[} ~\AgdaBound{X}
-  ~\AgdaRecord{∶} ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥}
-  ~\AgdaBound{X} ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚}
-  ~\AgdaPostulate{∥}}.  We name this space
-{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generally,
+equivalence is a simple appeal to univalence in order to establish that
+{\small (\AgdaBound{X}~\AgdaFunction{==}~\AgdaDatatype{𝟚})
+  ~\AgdaFunction{≃}~ (\AgdaBound{X}~\AgdaFunction{≃}~\AgdaDatatype{𝟚})},
+i.e., our base space is equivalent to the space
+\mbox{\small\AgdaRecord{Σ[} ~\AgdaBound{X} ~\AgdaRecord{∶}
+  ~\AgdaFunction{𝒰}~ \AgdaRecord{]} ~\AgdaPostulate{∥} ~\AgdaBound{X}
+  ~\AgdaFunction{≃}~ \AgdaDatatype{𝟚} ~\AgdaPostulate{∥}}.  We name this
+space {\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}}. Generally,
 {\small\AgdaFunction{BAut}~\AgdaBound{T}} is the ``classifying space''
-of all types (merely) equivalent to {\small\AgdaBound{T}}.  The second
-equivalence consists of proving that the first projection on
-{\small\AgdaFunction{BAut}~\AgdaDatatype{𝟚}} is in fact a univalent
-fibration for all spaces with shape \mbox{\small\AgdaRecord{Σ[}
+of all types that are (merely) equivalent to {\small\AgdaBound{T}}.  The
+second equivalence consists of proving that the first projection on
+{\small\AgdaFunction{BAut}~\AgdaDatatype{T}} is in fact a univalent
+fibration, for all spaces with shape \mbox{\small\AgdaRecord{Σ[}
   ~\AgdaBound{X} ~\AgdaRecord{∶} ~\AgdaFunction{𝒰}~ \AgdaRecord{]}
-  ~\AgdaPostulate{∥} ~\AgdaBound{X} ~\AgdaFunction{≃}~
-  \AgdaDatatype{T} ~\AgdaPostulate{∥}} for any type
-{\small\AgdaDatatype{T}}.  This is the lemma
-{\small\AgdaFunction{is-univ-fib-ElB}} below whose original
+  ~\AgdaPostulate{∥} ~\AgdaBound{X} ~\AgdaFunction{≃}~ \AgdaDatatype{T}
+  ~\AgdaPostulate{∥}} for any type {\small\AgdaDatatype{T}}.  This is
+the lemma {\small\AgdaFunction{is-univ-fib-ElB}} below whose original
 formulation is due to Christensen~\cite{christensen}:
 
 \begin{code}
@@ -1393,7 +1391,8 @@ there are exactly two inhabitants of {\small\AgdaFunction{𝟚 ≃ 𝟚}}:
 \begin{code}
 id≃ not≃ : 𝟚 ≃ 𝟚
 id≃   = id  , qinv-is-hae (id , refl , refl)
-not≃  = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}) , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}))
+not≃  = not , qinv-is-hae (not , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂})
+                               , (λ {0₂ → refl 0₂ ; 1₂ → refl 1₂}))
   where  not : 𝟚 → 𝟚
          not 0₂ = 1₂
          not 1₂ = 0₂
@@ -1419,7 +1418,7 @@ postulate
 
 Thus there are only two distinct 1-loops in
 {\small\AgdaFunction{U[𝟚]}}. Calling them {\small\AgdaFunction{id𝟚}}
-and {\small\AgdaFunction{not𝟚}} leads to a decomposition:
+and {\small\AgdaFunction{not𝟚}}, we obtain a decomposition:
 
 \AgdaHide{\begin{code}
 id𝟚 : {A : U[𝟚]} → A == A
@@ -1438,10 +1437,10 @@ postulate
 that every loop in {\small\AgdaFunction{U[𝟚]}} is identifiable with
 either the identity or boolean negation.
 
-For 2-loops in {\small\AgdaFunction{U[𝟚]}}, the following analysis
-shows that they are identifiable with the trivial path. First, by
-applying the induction principle for disjoint unions and path
-induction we can prove {\small\AgdaFunction{𝟚}} is a set:
+For 2-loops in {\small\AgdaFunction{U[𝟚]}}, the following analysis shows
+that they are identifiable with the trivial path. First, by applying the
+induction principle for disjoint unions, and path induction, we can
+prove {\small\AgdaFunction{𝟚}} is a set:
 
 \begin{code}
 𝟚-is-set : is-set 𝟚
@@ -1501,14 +1500,14 @@ functions in a programming language and paths in a univalent universe,
 as intuitive as it may seem, is rather subtle. Paths in HoTT come
 equipped with principles like the ``contractibility of singletons'',
 ``transport'', and ``path induction'' and none of these principles
-seems to have any direct counterpart in the world of reversible
+seem to have any direct counterpart in the world of reversible
 programming. We will however demonstrate how the semantics of an
 entire (but admittedly small) reversible programming language such as
 $\PiTwo$ can be captured by a specification as compact as
 {\small\AgdaRecord{Σ[} \AgdaBound{X} \AgdaRecord{∶} \AgdaFunction{𝒰}
   \AgdaRecord{]} \AgdaPostulate{∥} \AgdaBound{X} \AgdaDatatype{==}
   \AgdaDatatype{𝟚} \AgdaPostulate{∥}}. Our precise correspondence will
-consist of mappings between~\PiTwo{} to and
+consist of building mappings between~\PiTwo{} and
 {\small{\AgdaFunction{Ũ[𝟚]}}}, for points, 1-paths, 2-paths, and
 3-paths, such that each map is invertible up to the appropriate notion
 of equality. This gives a notion of soundness and completeness for
@@ -1560,7 +1559,7 @@ section):
 ... | inr pnot  = `not
 \end{code}
 
-At level-2 we know by the construction of
+At level-2, we know by the construction of
 {\small\AgdaFunction{all-2-loops}} in the previous section that all
 self-paths in the univalent universe are trivial. Nevertheless the
 mappings back and forth require quite a bit of (tedious) work. We show
@@ -1577,25 +1576,10 @@ and the equivalence that swaps the two booleans are distinct:
 postulate
   !not𝟚=not𝟚 : ! not𝟚 == not𝟚
   id𝟚≠not𝟚 : id𝟚 == not𝟚 → ⊥
-
--- ⟦_⟧₂ (`id₂ {p = p}) = refl ⟦ p ⟧₁
--- ⟦_⟧₂ (!₂ u) = ! ⟦ u ⟧₂
--- ⟦_⟧₂ (u₁ ⊙₂ u₂) = ⟦ u₁ ⟧₂ ◾ ⟦ u₂ ⟧₂
--- ⟦_⟧₂ (`idl p) = ◾unitl ⟦ p ⟧₁
--- ⟦_⟧₂ (`idr p) = ◾unitr ⟦ p ⟧₁
--- ⟦_⟧₂ (`assoc p q r) = ◾assoc _ _ _
--- ⟦_⟧₂ (u₁ □₂ u₂)  = ⟦ u₁ ⟧₂ [2,0,2] ⟦ u₂ ⟧₂
--- ⟦_⟧₂ (`! u) = ap !_ ⟦ u ⟧₂
--- ⟦_⟧₂ (`!l p) = ◾invl ⟦ p ⟧₁
--- ⟦_⟧₂ (`!r p) = ◾invr ⟦ p ⟧₁
--- ⟦_⟧₂ `!id = refl id𝟚
--- ⟦_⟧₂ `!not = !not𝟚=not𝟚
--- ⟦_⟧₂ (`!◾ {p = p} {q}) = !◾ ⟦ p ⟧₁ ⟦ q ⟧₁
--- ⟦_⟧₂ (`!! {p = p}) = !! ⟦ p ⟧₁
-
 \end{code}
 }
 
+\begin{AgdaMultiCode}{2}
 \begin{code}
 ⟦_⟧₂ : {A B : Π₂} {p q : A ⟷₁ B} → (u : p ⟷₂ q) → ⟦ p ⟧₁ == ⟦ q ⟧₁
 ⟦ `id₂ {p = p} ⟧₂   = refl ⟦ p ⟧₁
@@ -1604,8 +1588,16 @@ postulate
 ⟦ `idl p ⟧₂         = ◾unitl ⟦ p ⟧₁
 ⟦ `idr p ⟧₂         = ◾unitr ⟦ p ⟧₁
 ⟦ `! u ⟧₂           = ap !_ ⟦ u ⟧₂
-⟦ _ ⟧₂              = ?               ----- omitted
+-- remaining cases are omitted
+\end{code}
+\AgdaHide{
+\begin{code}
+⟦ _ ⟧₂              = ?
+\end{code}
+}
+\end{AgdaMultiCode}
 
+\begin{code}
 ⌜_⌝₂ : {p q : 𝟚₀ == 𝟚₀} → p == q → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
 ⌜_⌝₂ {p} {q} u with all-1-loops p | all-1-loops q
 ... | inl p=id   | inl q=id   = `id₂
@@ -1619,35 +1611,34 @@ is trivial as the latter has only one constructor at level-3. The
 other direction requires some involved reasoning in the univalent
 universe to construct the required 3-path:
 
-\AgdaHide{
 \begin{code}
-\end{code}
-}
-
-\begin{code}
-lem :  {p q r : 𝟚₀ == 𝟚₀}
-       (p=r : p == r) (q=r : q == r) (u : p == q) → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
-lem = ? ----- omitted
+lemma : {p q r : 𝟚₀ == 𝟚₀} (p=r : p == r) (q=r : q == r) (u : p == q)
+      → u == p=r ◾ ((! p=r) ◾ u ◾ q=r) ◾ (! q=r)
 
 ⟦_⟧₃ : {A B : Π₂} {p q : A ⟷₁ B} {u v : p ⟷₂ q} → (α : u ⟷₃ v) → ⟦ u ⟧₂ == ⟦ v ⟧₂
 ⟦_⟧₃ {`𝟚} {`𝟚} {p} {q} {u} {v} `trunc with all-1-loops ⟦ p ⟧₁ | all-1-loops ⟦ q ⟧₁
 ... | inl p=id  | inl q=id  =
-  lem p=id q=id ⟦ u ⟧₂
+  lemma p=id q=id ⟦ u ⟧₂
   ◾ ap  (λ x → p=id ◾ x ◾ ! q=id)
          (all-2-loops (! p=id ◾ ⟦ u ⟧₂ ◾ q=id) ◾ ! (all-2-loops (! p=id ◾ ⟦ v ⟧₂ ◾ q=id)))
-  ◾ ! (lem p=id q=id ⟦ v ⟧₂)
+  ◾ ! (lemma p=id q=id ⟦ v ⟧₂)
 ... | inl p=id  | inr q=not =  ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ ⟦ u ⟧₂ ◾ q=not))
 ... | inr p=not | inl q=id  =  ⊥-elim (id𝟚≠not𝟚 ((! q=id) ◾ ! ⟦ u ⟧₂ ◾ p=not))
 ... | inr p=not | inr q=not =
-  lem p=not q=not ⟦ u ⟧₂
+  lemma p=not q=not ⟦ u ⟧₂
   ◾ ap  (λ x → p=not ◾ x ◾ ! q=not)
          (all-2-loops (! p=not ◾ ⟦ u ⟧₂ ◾ q=not) ◾ ! (all-2-loops (! p=not ◾ ⟦ v ⟧₂ ◾ q=not)))
-  ◾ ! (lem p=not q=not ⟦ v ⟧₂)
+  ◾ ! (lemma p=not q=not ⟦ v ⟧₂)
 
 ⌜_⌝₃ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → u == v → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂
 ⌜ _ ⌝₃ = `trunc
 \end{code}
 
+\AgdaHide{
+\begin{code}
+lemma = ?
+\end{code}
+}
 
 \subsection{Coherence}
 
@@ -1710,21 +1701,21 @@ univalent universe soundness is tricky to even state, mostly because
 the types involved in {\small\AgdaFunction{⌜
     ⟦}~\AgdaBound{u}~\AgdaFunction{⟧₂ ⌝₂}} and {\small\AgdaFunction{⟦
     ⌜}~\AgdaBound{u}~\AgdaFunction{⌝₂ ⟧₂}} are non-trivial. But
-enumeration of 1-loops reduces the complexity of the problem to 
+enumeration of 1-loops reduces the complexity of the problem to
 ``unwinding'' complex expressions for identity paths:
 
 \begin{code}
-⌜⟦_⟧₂⌝₂ :  {p q : `𝟚 ⟷₁ `𝟚} 
+⌜⟦_⟧₂⌝₂ :  {p q : `𝟚 ⟷₁ `𝟚}
            (u : p ⟷₂ q) → u ⟷₃ (⌜⟦ p ⟧₁⌝₁ ⊙₂ (⌜ ⟦ u ⟧₂ ⌝₂ ⊙₂ (!₂ ⌜⟦ q ⟧₁⌝₁)))
 ⌜⟦ u ⟧₂⌝₂ = `trunc
 
 ⟦⌜_⌝₂⟧₂ : {p q : 𝟚₀ == 𝟚₀} (u : p == q) → u == ⟦⌜ p ⌝₁⟧₁ ◾ ⟦ ⌜ u ⌝₂ ⟧₂ ◾ (! ⟦⌜ q ⌝₁⟧₁)
 ⟦⌜_⌝₂⟧₂ {p} {q} u with all-1-loops p | all-1-loops q
-... | inl p=id   | inl q=id   =  (lem p=id q=id u) 
+... | inl p=id   | inl q=id   =  (lemma p=id q=id u)
                                  ◾ (ap (λ x → p=id ◾ x ◾ ! q=id) (all-2-loops (! p=id ◾ u ◾ q=id)))
 ... | inl p=id   | inr q=not  = ⊥-elim (id𝟚≠not𝟚 ((! p=id) ◾ u ◾ q=not))
 ... | inr p=not  | inl q=id   = ⊥-elim (id𝟚≠not𝟚 (! ((! p=not) ◾ u ◾ q=id)))
-... | inr p=not  | inr q=not  =  (lem p=not q=not u) 
+... | inr p=not  | inr q=not  =  (lemma p=not q=not u)
                                  ◾ (ap (λ x → p=not ◾ x ◾ ! q=not) (all-2-loops (! p=not ◾ u ◾ q=not)))
 \end{code}
 
@@ -1733,10 +1724,11 @@ Level-2 completeness offers no new difficulties:
 \begin{code}
 completeness₂ : {p q : `𝟚 ⟷₁ `𝟚} {u v : p ⟷₂ q} → ⟦ u ⟧₂ == ⟦ v ⟧₂ → u ⟷₃ v
 completeness₂ u = `trunc
- 
+
 completeness₂⁻¹ : {p q : 𝟚₀ == 𝟚₀} {u v : p == q} → ⌜ u ⌝₂ ⟷₃ ⌜ v ⌝₂ → u == v
-completeness₂⁻¹ {p} {q} {u} {v} α =  ⟦⌜ u ⌝₂⟧₂ 
-                                     ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃ ◾ (! ⟦⌜ v ⌝₂⟧₂) 
+completeness₂⁻¹ {p} {q} {u} {v} α = ⟦⌜ u ⌝₂⟧₂
+                                  ◾ ap (λ x → ⟦⌜ p ⌝₁⟧₁ ◾ x ◾ ! ⟦⌜ q ⌝₁⟧₁) ⟦ α ⟧₃
+                                  ◾ (! ⟦⌜ v ⌝₂⟧₂)
 \end{code}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
