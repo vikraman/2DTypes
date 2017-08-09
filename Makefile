@@ -3,7 +3,7 @@ AGDA_QUICK_OPTIONS = --only-scope-checking
 
 all : upi.pdf
 
-upi.pdf: upi.tex upi.bbl entcs*
+upi.pdf: upi.tex entcs* cites.bib
 	latexmk -pdf upi.tex
 
 upi.tex: upi.lagda
