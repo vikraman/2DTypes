@@ -1,0 +1,39 @@
+sudo: false
+language: generic
+cache:
+  apt: true
+  directories:
+  - ${HOME}/.stack
+addons:
+  apt:
+    sources:
+    - sourceline: ppa:jonathonf/texlive-2016
+    packages:
+    - texlive
+    - texlive-latex-extra
+    - texlive-xetex
+    - latexmk
+before_install:
+- mkdir -p ~/.local/bin
+- export PATH=${HOME}/.local/bin:${PATH}
+- travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
+- stack setup
+- stack install Agda
+script:
+- make
+before_deploy:
+- git config --global user.email "builds@travis-ci.com"
+- git config --global user.name "Travis CI"
+- git tag -f -a draft -m "Build ${TRAVIS_BUILD_NUMBER} for commit ${TRAVIS_COMMIT}"
+- git push -f --tags https://${GITHUB_OAUTH_TOKEN}@github.com/vikraman/ci-release-pdf-test.git
+deploy:
+  provider: releases
+  api_key: ${GITHUB_OAUTH_TOKEN}
+  file: upi.pdf
+  overwrite: true
+  skip_cleanup: true
+  on:
+    branch: master
+env:
+  global:
+  - secure: VZxgqPri0FX07Q0Fr/GEzxgmRPf1B3WjP0D2j7ECtrwTNtXvqTemNJ37O/IA2L8b9di5f9atdpUKNSYXhikZSipOK62uMlqZcaqu6X97h0tc/ONlEpo+v+E9gTHKDd8NZsyHKTAOj+OjF8oeWzOfynkoCqUmp9fwE2fUeORwNwplVoEsbtE7VS7hvNuBbKUYEVJ84ndSKlUNfHngUtGhUKDYeZMASKMjJJ9ofGDQT/n15TYtbXoWAcy3uHfvkeh9tj0KFr3FQGH1rLrP/J3iWVSVxwCwrzP74wF6RcZFE/qDDmyQNiDhrhR6K+m24aepKbLAL2n01kaimEkhCEd79FEUONN38xCWaX5HWtK2qN5LVVvLbqFfUiJ/8I2F045HErOAci7P18BGDmGbG+CdPcAZ/6b7TtUj3sMBZy1ufeU/6ueXG8tv7p0RajwtvlstjC+pMe+QAMr8ZkoHb4qtig2RR8X7GfbiM+mRpSGhr0lY6sg3METlBn1+vvPTJICbaQJpI9mUkvq+CFvdzjxVL7k1IufQ98HEd3Lph1noDdybf9yPxVQSJzMO0HSQVOdb+zM/HU4tSTSUkWS+gxsBQ6DkeIEttXlAJBUFIljhSCHSrXYuGjclHXQ9sXEjVQ2fOO/vmLDjSybB3a/A5SWm8A118Q0Py0sYp3ZHgdkszpI=
