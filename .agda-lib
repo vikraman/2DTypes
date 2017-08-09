@@ -1,6 +1,4 @@
 name: 2DTypes
-depend:
-  standard-library
 include:
   .
   basic-hott/lib
