@@ -9,11 +9,7 @@ addons:
     sources:
     - sourceline: ppa:jonathonf/texlive-2016
     packages:
-    - texlive
-    - texlive-fonts-extra
-    - texlive-latex-extra
-    - texlive-xetex
-    - latexmk
+    - texlive-full
 before_install:
 - mkdir -p ~/.local/bin
 - export PATH=${HOME}/.local/bin:${PATH}
