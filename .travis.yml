@@ -19,6 +19,8 @@ before_install:
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
 - travis_wait 30 stack --no-terminal --install-ghc --resolver lts-9 install Agda
 script:
+- agda --version
+- set -o pipefail
 - make
 before_deploy:
 - git config --global user.email "builds@travis-ci.com"
