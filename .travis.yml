@@ -3,7 +3,7 @@ language: generic
 cache:
   apt: true
   directories:
-  - ${HOME}/.stack
+  - "${HOME}/.stack"
 addons:
   apt:
     sources:
@@ -23,10 +23,10 @@ before_deploy:
 - git config --global user.email "builds@travis-ci.com"
 - git config --global user.name "Travis CI"
 - git tag -f -a draft -m "Build ${TRAVIS_BUILD_NUMBER} for commit ${TRAVIS_COMMIT}"
-- git push -f --tags https://${GITHUB_OAUTH_TOKEN}@github.com/vikraman/ci-release-pdf-test.git
+- git push -f --tags https://${GITHUB_OAUTH_TOKEN}@github.com/vikraman/2DTypes.git
 deploy:
   provider: releases
-  api_key: ${GITHUB_OAUTH_TOKEN}
+  api_key: "${GITHUB_OAUTH_TOKEN}"
   file: upi.pdf
   overwrite: true
   skip_cleanup: true
@@ -34,4 +34,4 @@ deploy:
     branch: master
 env:
   global:
-  - secure: VZxgqPri0FX07Q0Fr/GEzxgmRPf1B3WjP0D2j7ECtrwTNtXvqTemNJ37O/IA2L8b9di5f9atdpUKNSYXhikZSipOK62uMlqZcaqu6X97h0tc/ONlEpo+v+E9gTHKDd8NZsyHKTAOj+OjF8oeWzOfynkoCqUmp9fwE2fUeORwNwplVoEsbtE7VS7hvNuBbKUYEVJ84ndSKlUNfHngUtGhUKDYeZMASKMjJJ9ofGDQT/n15TYtbXoWAcy3uHfvkeh9tj0KFr3FQGH1rLrP/J3iWVSVxwCwrzP74wF6RcZFE/qDDmyQNiDhrhR6K+m24aepKbLAL2n01kaimEkhCEd79FEUONN38xCWaX5HWtK2qN5LVVvLbqFfUiJ/8I2F045HErOAci7P18BGDmGbG+CdPcAZ/6b7TtUj3sMBZy1ufeU/6ueXG8tv7p0RajwtvlstjC+pMe+QAMr8ZkoHb4qtig2RR8X7GfbiM+mRpSGhr0lY6sg3METlBn1+vvPTJICbaQJpI9mUkvq+CFvdzjxVL7k1IufQ98HEd3Lph1noDdybf9yPxVQSJzMO0HSQVOdb+zM/HU4tSTSUkWS+gxsBQ6DkeIEttXlAJBUFIljhSCHSrXYuGjclHXQ9sXEjVQ2fOO/vmLDjSybB3a/A5SWm8A118Q0Py0sYp3ZHgdkszpI=
+  - secure: RSVBIv7ABCqZqw51TjPUDNTPOHyLxutpQE48t6nHcDOhMdBtCCzFgrckT4bB+Ez5jpC2vqtDlSD7m1Gz9/GqcEfF0t5Rk4nHqh0qdjHdE/UN2BY8NPRQWnGqJ1VJl4o3a1Jp53tnUwD8R2cCtgRmAQCi4lK4g3jTqoC3cKcpqupLvsMwYJGDIMLWiwrxHtP8Nsmr+/BBKmbnCgjQW1VBpPQA/RODi4iC3Ifsd0ACVA506f4PwSzM2954uZJrG8+lUNO17Kzu83AWkgA2v0L9U/yAHuE0x7/MTIn5Hx76u1gk8+SKHs0tuo3tFbQaxdPru62J/tfG0pboIiIswpjVkoLXI731SqOhxJHyyJnjQoDhSXMtv/hk4c/+SRAeLEZg1e40mqnVCKoojzc5qzPKRy/rQcUnycxzNJFx1QTaMYdqUvFxWon6QqJPSNtcGxnLerC50NX/8rOxS55ZP5JpiMcjM3kCCU8LMYEVGcE20pVYq2eR4BVNQS8voWd7puX6gjPgnfs5bJTkIXkEX3V1oXEgrrdLque8XEMXxoV5do9uXswgdGQpmZeeoq1Ff/2qDa1axK4GuZM2lprU5fWAEgf2EASlNwBcfq1XzLRBRjf7VSjC8iYpl1im/+sVG7AFq3J75QfXMHsSUxkOYrVkXjXthaEScQshTdEK+lmaXLQ=
