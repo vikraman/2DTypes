@@ -10,6 +10,7 @@ addons:
     - sourceline: ppa:jonathonf/texlive-2016
     packages:
     - texlive
+    - texlive-fonts-extra
     - texlive-latex-extra
     - texlive-xetex
     - latexmk
