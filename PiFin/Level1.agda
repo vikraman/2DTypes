@@ -52,7 +52,19 @@ postulate
 -- Need a level 2 analogue of normalizeC, which creates a coherence between a
 -- isomorphism and its..."normalized" version
 ⟦⟦_⟧₁⟧₁⁻¹' : {X Y : U} (c : X ⟷ Y) → ⟦ ⟦ c ⟧₁ ⟧₁⁻¹' ⇔ c
-⟦⟦ c ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ unite₊l ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ swap₊ ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ assocl₊ ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ unite⋆l ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ swap⋆ ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ assocl⋆ ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ absorbr ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ dist ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ id⟷ ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ ! c ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ c₁ ◎ c₂ ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ c₁ ⊕ c₂ ⟧₁⟧₁⁻¹' = {!!}
+⟦⟦ c₁ ⊗ c₂ ⟧₁⟧₁⁻¹' = {!!}
 
 -- TODO: This proof does not seem difficult, just annoying
 ⟦⟦_⟧₁⁻¹'⟧₁ : {X Y : U} (p : ⟦ X ⟧₀ == ⟦ Y ⟧₀) → ⟦ ⟦ p ⟧₁⁻¹' ⟧₁ == p
@@ -74,7 +86,7 @@ sound₁ c = ⟦ c ⟧₁ , ⟦⟦ c ⟧₁⟧₁⁻¹'
 ⟦ c ⟧₂ = {!!}
 
 ⟦_⟧₂⁻¹ : {X Y : U} {p q : ⟦ X ⟧₀ == ⟦ Y ⟧₀} → p == q → ⟦ p ⟧₁⁻¹' ⇔ ⟦ q ⟧₁⁻¹'
-⟦ refl _ ⟧₂⁻¹ = {!!}
+⟦ refl _ ⟧₂⁻¹ = id⇔
 
 -- TODO: Since #⟦_⟧₁⁻¹ is postulated, the type of `r` and `...` are not the same
 --⟦⟦_⟧₂⟧₂⁻¹ : {X Y : U} {p q : X ⟷ Y} (r : p ⇔ q) → r ⇌ ⟦ ⟦ r ⟧₂ ⟧₂⁻¹
