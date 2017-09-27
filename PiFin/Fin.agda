@@ -119,5 +119,17 @@ fin-el-equiv eq = (!e el-fin-equiv) ● eq ● el-fin-equiv
 
 open import Univalence
 
-fin-equiv : ∀ {n m} → Fin n ≃ Fin m → n == m
-fin-equiv {n} {m} eq = PathsInℕ.reflect n m (ua (fin-el-equiv eq))
+fin-equiv-out : ∀ {n m} → Fin n ≃ Fin m → n == m
+fin-equiv-out {n} {m} eq = PathsInℕ.reflect n m (ua (fin-el-equiv eq))
+
+fin-equiv-out-id : ∀ {n} → fin-equiv-out (ide (Fin n)) == refl n
+fin-equiv-out-id {zero} = refl (refl zero)
+fin-equiv-out-id {succ n} = {!!} -- times out when normalizing
+
+fin-equiv-in : ∀ {n m} → m == n → Fin m ≃ Fin n
+fin-equiv-in = tpt-eqv Fin
+
+fin-equiv-retr : ∀ {n m} → is-retract (n == m) (Fin n ≃ Fin m)
+fin-equiv-retr = fin-equiv-out , fin-equiv-in , ε
+  where ε : ∀ {n m} → (p : n == m) → fin-equiv-out (fin-equiv-in p) == p
+        ε (refl n) = fin-equiv-out-id
