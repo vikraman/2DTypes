@@ -3,7 +3,7 @@
 module Pi2.Semantics where
 
 open import UnivalentTypeTheory
-open import TwoUniverse as M
+open import Pi2.TwoUniverse as M
 open import Pi2.Syntax as S
 
 ------------------------------------------------------------------------------

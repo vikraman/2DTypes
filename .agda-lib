@@ -1,7 +1,6 @@
 name: 2DTypes
 include:
   .
-  agda-stdlib
+  agda-stdlib/src
   basic-hott/lib
-  basic-hott/scratch
   categories
