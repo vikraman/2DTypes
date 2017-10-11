@@ -4,3 +4,6 @@
 [submodule "basic-hott"]
 	path = basic-hott
 	url = https://github.com/vikraman/basic-hott.git
+[submodule "agda-stdlib"]
+	path = agda-stdlib
+	url = https://github.com/agda/agda-stdlib.git
