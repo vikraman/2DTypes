@@ -17,7 +17,7 @@ open import PropositionalTruncation using (∥_∥; ∣_∣; recTrunc; identify)
 open import Functions using (id)
 open import Univalence using (ua)
 
-open import EmbeddingsInUniverse using (module UnivalentUniverseOfFiniteTypes)
+open import PiFin.EmbeddingsInUniverse using (module UnivalentUniverseOfFiniteTypes)
 open UnivalentUniverseOfFiniteTypes using (El; finite-types-is-univ)
 
 open import PiFin.Syntax

@@ -16,7 +16,7 @@ open import PathsInSigma using (pair=; dpair=)
 open import Univalence using (ua; ua-β; ua-ide)
 open import PropositionalTruncation using (∥_∥; ∣_∣; recTrunc; identify)
 
-open import EmbeddingsInUniverse using (module UnivalentUniverseOfFiniteTypes)
+open import PiFin.EmbeddingsInUniverse using (module UnivalentUniverseOfFiniteTypes)
 open UnivalentUniverseOfFiniteTypes
 
 open import PiFin.Syntax
