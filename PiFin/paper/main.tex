@@ -1,0 +1,45 @@
+\documentclass{article}
+
+\usepackage{parskip}
+
+\usepackage{macros}
+
+\title{Reversible Programming with Finite Types}
+\author{}
+
+\begin{document}
+
+\maketitle
+
+We have the following type families:
+
+\begin{enumerate}
+  \item $Fin : \Nat \to \U$
+  \item $El : \Nat \to \U$
+  \item $CPerm : \Nat \to \Nat \to \U$
+\end{enumerate}
+
+We have the following equivalences:
+
+\begin{gather*}
+  \equiv{Fin(n)}{El(n)} \\
+  \equiv{(Fin(n) \to A)}{List(A, n)} \\
+  \equiv{CPerm(n,m)}({\equiv{El(n)}{El(m)}}) \text{ (unproven)} \\
+\end{gather*}
+
+We can characterize the path spaces of:
+
+\begin{gather*}
+  \Id{\U}{Fin(n)}{Fin(m)} \to \Id{\Nat}{m}{n}
+\end{gather*}
+
+We need to show that the subset of Tarski's high school algebra identities
+(without exponentials), that is, in the signature $(\Nat, +, \times)$ is
+complete.
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
