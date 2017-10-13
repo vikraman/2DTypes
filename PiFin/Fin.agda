@@ -10,7 +10,7 @@ fin-zero-n : ∀ n → ¬ (Fin 0 ≃ Fin (succ n))
 fin-zero-n n (f , g , _) with g fzero
 ... | ()
 
-open import EmbeddingsInUniverse
+open import PiFin.EmbeddingsInUniverse
 open UnivalentUniverseOfFiniteTypes
 
 el-in : ∀ {n} → Fin n → El n

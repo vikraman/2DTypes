@@ -200,57 +200,51 @@ module _ {ℓ} {X Y : Type ℓ} where
 
 
 module UnivalentUniverseOfFiniteTypes where
+  El : ℕ → Type₀
+  El 0 = 𝟘
+  El (succ X) = 𝟙 + (El X)
 
-  infixr 100 `1+
-  data Names : Type₀ where
-    `0  : Names
-    `1+ : Names → Names
+  module PathsInℕ where
 
-  El : Names → Type₀
-  El `0 = 𝟘
-  El (`1+ X) = 𝟙 + (El X)
+    code : ℕ → ℕ → Type₀
+    code 0 0 = 𝟙
+    code 0 (succ Y) = 𝟘
+    code (succ X) 0 = 𝟘
+    code (succ X) (succ Y) = code X Y
 
-  module PathsInNames where
+    code-rfl : (X : ℕ) → code X X
+    code-rfl 0 = 0₁
+    code-rfl (succ X) = code-rfl X
 
-    code : Names → Names → Type₀
-    code `0 `0 = 𝟙
-    code `0 (`1+ Y) = 𝟘
-    code (`1+ X) `0 = 𝟘
-    code (`1+ X) (`1+ Y) = code X Y
-
-    code-rfl : (X : Names) → code X X
-    code-rfl `0 = 0₁
-    code-rfl (`1+ X) = code-rfl X
-
-    enc : {X Y : Names} → X == Y → code X Y
+    enc : {X Y : ℕ} → X == Y → code X Y
     enc (refl X) = code-rfl X
 
-    enc-absorbs-1+ : {X Y : Names} → enc ∘ (ap `1+) ∼ enc {X} {Y}
+    enc-absorbs-1+ : {X Y : ℕ} → enc ∘ (ap succ) ∼ enc {X} {Y}
     enc-absorbs-1+ (refl X) = refl (code-rfl X)
 
-    dec : {X Y : Names} → code X Y → X == Y
-    dec {`0} {`0} 0₁ = refl `0
-    dec {`0} {`1+ Y} ()
-    dec {`1+ X} {`0} ()
-    dec {`1+ X} {`1+ Y} = ap `1+ ∘ dec {X} {Y}
+    dec : {X Y : ℕ} → code X Y → X == Y
+    dec {0} {0} 0₁ = refl 0
+    dec {0} {succ Y} ()
+    dec {succ X} {0} ()
+    dec {succ X} {succ Y} = ap succ ∘ dec {X} {Y}
 
-    dec-code-rfl : (X : Names) → dec (code-rfl X) == refl X
-    dec-code-rfl `0 = refl (refl `0)
-    dec-code-rfl (`1+ X) = ap (ap `1+) (dec-code-rfl X)
+    dec-code-rfl : (X : ℕ) → dec (code-rfl X) == refl X
+    dec-code-rfl 0 = refl (refl 0)
+    dec-code-rfl (succ X) = ap (ap succ) (dec-code-rfl X)
 
 
-    enc-η : {X Y : Names} → dec ∘ enc {X} {Y} ∼ id
+    enc-η : {X Y : ℕ} → dec ∘ enc {X} {Y} ∼ id
     enc-η (refl X) = dec-code-rfl X
 
-    enc-ε : {X Y : Names} → enc ∘ dec {X} {Y} ∼ id
-    enc-ε {`0} {`0} 0₁ = refl 0₁
-    enc-ε {`0} {`1+ Y} ()
-    enc-ε {`1+ X} {`0} ()
-    enc-ε {`1+ X} {`1+ Y} c = enc-absorbs-1+ (dec {X} {Y} c) ◾ enc-ε {X} {Y} c
+    enc-ε : {X Y : ℕ} → enc ∘ dec {X} {Y} ∼ id
+    enc-ε {0} {0} 0₁ = refl 0₁
+    enc-ε {0} {succ Y} ()
+    enc-ε {succ X} {0} ()
+    enc-ε {succ X} {succ Y} c = enc-absorbs-1+ (dec {X} {Y} c) ◾ enc-ε {X} {Y} c
 
-    enc-τ : {X Y : Names} → ap enc ∘ enc-η ∼ enc-ε {X} {Y} ∘ enc {X} {Y}
-    enc-τ (refl `0) = refl (refl 0₁)
-    enc-τ (refl (`1+ X)) = ! (ap∘ enc (ap `1+) (dec-code-rfl X))
+    enc-τ : {X Y : ℕ} → ap enc ∘ enc-η ∼ enc-ε {X} {Y} ∘ enc {X} {Y}
+    enc-τ (refl 0) = refl (refl 0₁)
+    enc-τ (refl (succ X)) = ! (ap∘ enc (ap succ) (dec-code-rfl X))
                            ◾ l₂=!l₁◾r (nat (!h enc-absorbs-1+) (dec-code-rfl X))
                            ◾ (!! (enc-absorbs-1+ (dec (code-rfl X)))
                               [2,0,1] ap enc (dec-code-rfl X) ◾ !h (enc-absorbs-1+) (refl X))
@@ -258,52 +252,52 @@ module UnivalentUniverseOfFiniteTypes where
                               [1,0,2] (◾unitr (ap enc (dec-code-rfl X))))
                            ◾ (enc-absorbs-1+ (dec (code-rfl X)) [1,0,2] enc-τ (refl X))
 
-    enc-eqv : (X Y : Names) → (X == Y) ≃ code X Y
+    enc-eqv : (X Y : ℕ) → (X == Y) ≃ code X Y
     enc-eqv X Y = enc , dec , enc-η , enc-ε {X} {Y} , enc-τ
 
     ---
 
-    code-is-prop : (X Y : Names) → is-prop(code X Y)
-    code-is-prop `0 `0 = contr-is-prop (𝟙-is-contr)
-    code-is-prop `0 (`1+ Y) = 𝟘-is-prop
-    code-is-prop (`1+ X) `0 = 𝟘-is-prop
-    code-is-prop (`1+ X) (`1+ Y) = code-is-prop X Y
+    code-is-prop : (X Y : ℕ) → is-prop(code X Y)
+    code-is-prop 0 0 = contr-is-prop (𝟙-is-contr)
+    code-is-prop 0 (succ Y) = 𝟘-is-prop
+    code-is-prop (succ X) 0 = 𝟘-is-prop
+    code-is-prop (succ X) (succ Y) = code-is-prop X Y
 
-    Names-is-set : is-set Names
-    Names-is-set X Y = retract-prsrv-prop (equiv-is-retract (!e (enc-eqv X Y)))
+    ℕ-is-set : is-set ℕ
+    ℕ-is-set X Y = retract-prsrv-prop (equiv-is-retract (!e (enc-eqv X Y)))
                                           (code-is-prop X Y)
 
     ----
 
-    reflect : (X Y : Names) → El X == El Y → X == Y
-    reflect `0 `0 p = refl `0
-    reflect `0 (`1+ Y) p = rec𝟘 _ (tpt id (! p) (i₁ 0₁))
-    reflect (`1+ X) `0 p = rec𝟘 _ (tpt id p (i₁ 0₁))
-    reflect (`1+ X) (`1+ Y) p = ap `1+ (reflect X Y (+cncl𝟙l {X = El X} p))
+    reflect : (X Y : ℕ) → El X == El Y → X == Y
+    reflect 0 0 p = refl 0
+    reflect 0 (succ Y) p = rec𝟘 _ (tpt id (! p) (i₁ 0₁))
+    reflect (succ X) 0 p = rec𝟘 _ (tpt id p (i₁ 0₁))
+    reflect (succ X) (succ Y) p = ap succ (reflect X Y (+cncl𝟙l {X = El X} p))
 
-  open PathsInNames using (Names-is-set ; reflect)
+  open PathsInℕ using (ℕ-is-set ; reflect)
 
 
   is-finite : Type₀ → Type₁
-  is-finite X = Σ Names (λ Y → ∥ X == El Y ∥)
+  is-finite X = Σ ℕ (λ Y → ∥ X == El Y ∥)
 
 
   module IsFiniteIsProp where
 
     ∥reflect∥ = λ X Y → recTrunc ∥ X == Y ∥ (∣_∣ ∘ reflect X Y) identify
-    ∥ap`1+∥ = λ {X} {Y} → recTrunc (`1+ X == `1+ Y) (ap `1+) (Names-is-set _ _)
+    ∥apsucc∥ = λ {X} {Y} → recTrunc (succ X == succ Y) (ap succ) (ℕ-is-set _ _)
 
     ∥+cncl𝟙l∥ : {ℓ : Level} → {X Y : Type ℓ} → ∥ 𝟙 + X == 𝟙 + Y ∥ → ∥ X == Y ∥
     ∥+cncl𝟙l∥ {X = X} {Y} = recTrunc (∥ X == Y ∥) (∣_∣ ∘ +cncl𝟙l {X = X} {Y}) identify
 
     is-finite-is-prop : (X : Type₀) → is-prop(is-finite X)
-    is-finite-is-prop X (`0 , p) (`0 , q) = dpair= (refl `0 , identify _ _)
-    is-finite-is-prop X (`0 , p) (`1+ Z , q) =
+    is-finite-is-prop X (0 , p) (0 , q) = dpair= (refl 0 , identify _ _)
+    is-finite-is-prop X (0 , p) (succ Z , q) =
       rec𝟘 _ (recTrunc 𝟘 (λ p → tpt id p (i₁ 0₁)) 𝟘-is-prop (∥!∥ q ∥◾∥ p))
-    is-finite-is-prop X (`1+ Y , p) (`0 , q) =
+    is-finite-is-prop X (succ Y , p) (0 , q) =
       rec𝟘 _ (recTrunc 𝟘 (λ p → tpt id p (i₁ 0₁)) 𝟘-is-prop (∥!∥ p ∥◾∥ q))
-    is-finite-is-prop X (`1+ Y , p) (`1+ Z , q) =
-      dpair= (∥ap`1+∥ (∥reflect∥ Y Z (∥+cncl𝟙l∥ (∥!∥ p ∥◾∥ q))) , identify _ _)
+    is-finite-is-prop X (succ Y , p) (succ Z , q) =
+      dpair= (∥apsucc∥ (∥reflect∥ Y Z (∥+cncl𝟙l∥ (∥!∥ p ∥◾∥ q))) , identify _ _)
 
   open IsFiniteIsProp using (is-finite-is-prop)
 

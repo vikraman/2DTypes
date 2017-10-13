@@ -12,7 +12,7 @@ open import Equivalences using (_≃_)
 
 open import NaturalNumbers
 
-open import EmbeddingsInUniverse using (module UnivalentUniverseOfFiniteTypes)
+open import PiFin.EmbeddingsInUniverse using (module UnivalentUniverseOfFiniteTypes)
 open UnivalentUniverseOfFiniteTypes using (El)
 
 open import PiFin.CPerm

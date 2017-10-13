@@ -34,5 +34,7 @@ fin-out-in : ∀ {A n} (xs : List A n) → fin-out (fin-in xs) == xs
 fin-out-in [] = refl []
 fin-out-in (x ∷ xs) = ap (_∷_ x) (fin-out-in xs)
 
+open import FunctionExtensionality
+
 fin-list-equiv : ∀ {A n} → (Fin n → A) ≃ List A n
 fin-list-equiv = fin-out , qinv-is-equiv (fin-in , (funext ∘ fin-in-out) , fin-out-in)
