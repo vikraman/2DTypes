@@ -275,6 +275,20 @@ module UnivalentUniverseOfFiniteTypes where
     reflect (succ X) 0 p = rec𝟘 _ (tpt id p (i₁ 0₁))
     reflect (succ X) (succ Y) p = ap succ (reflect X Y (+cncl𝟙l {X = El X} p))
 
+    ---
+
+    El-has-dec-eq : (X : ℕ) → has-dec-eq (El X)
+    El-has-dec-eq zero = λ ()
+    El-has-dec-eq (succ X) (i₁ 0₁) (i₁ 0₁) = i₁ (refl (i₁ 0₁))
+    El-has-dec-eq (succ X) (i₁ 0₁) (i₂ y) = i₂ (λ ())
+    El-has-dec-eq (succ X) (i₂ x) (i₁ 0₁) = i₂ (λ ())
+    El-has-dec-eq (succ X) (i₂ x) (i₂ y) with El-has-dec-eq X x y
+    ... | i₁ x=y = i₁ (ap i₂ x=y)
+    ... | i₂ x≠y = i₂ (λ p → x≠y (i₂-inj p))
+
+    El-is-set : (X : ℕ) → is-set (El X)
+    El-is-set X = hedberg (El X) (El-has-dec-eq X)
+
   open PathsInℕ using (reflect)
 
 
