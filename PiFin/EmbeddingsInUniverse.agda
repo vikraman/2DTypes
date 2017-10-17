@@ -263,9 +263,9 @@ module UnivalentUniverseOfFiniteTypes where
     code-is-prop (succ X) 0 = 𝟘-is-prop
     code-is-prop (succ X) (succ Y) = code-is-prop X Y
 
-    ℕ-is-set : is-set ℕ
-    ℕ-is-set X Y = retract-prsrv-prop (equiv-is-retract (!e (enc-eqv X Y)))
-                                          (code-is-prop X Y)
+    ℕ-is-set' : is-set ℕ
+    ℕ-is-set' X Y = retract-prsrv-prop (equiv-is-retract (!e (enc-eqv X Y)))
+                                        (code-is-prop X Y)
 
     ----
 
@@ -275,7 +275,7 @@ module UnivalentUniverseOfFiniteTypes where
     reflect (succ X) 0 p = rec𝟘 _ (tpt id p (i₁ 0₁))
     reflect (succ X) (succ Y) p = ap succ (reflect X Y (+cncl𝟙l {X = El X} p))
 
-  open PathsInℕ using (ℕ-is-set ; reflect)
+  open PathsInℕ using (reflect)
 
 
   is-finite : Type₀ → Type₁

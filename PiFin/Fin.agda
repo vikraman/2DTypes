@@ -10,6 +10,21 @@ fin-zero-n : ∀ n → ¬ (Fin 0 ≃ Fin (succ n))
 fin-zero-n n (f , g , _) with g fzero
 ... | ()
 
+fsucc-inj : {n : ℕ} → (f g : Fin n) → fsucc f == fsucc g → f == g
+fsucc-inj f .f (refl .(fsucc f)) = refl f
+
+fin-has-dec-eq : (n : ℕ) → has-dec-eq (Fin n)
+fin-has-dec-eq zero ()
+fin-has-dec-eq (succ n) fzero fzero = i₁ (refl fzero)
+fin-has-dec-eq (succ n) fzero (fsucc g) = i₂ (λ ())
+fin-has-dec-eq (succ n) (fsucc f) fzero = i₂ (λ ())
+fin-has-dec-eq (succ n) (fsucc f) (fsucc g) with fin-has-dec-eq n f g
+... | i₁ f=g = i₁ (ap fsucc f=g)
+... | i₂ f≠g = i₂ (λ p → f≠g (fsucc-inj f g p))
+
+fin-is-set : {n : ℕ} → is-set (Fin n)
+fin-is-set {n} = hedberg (Fin n) (fin-has-dec-eq n)
+
 open import PiFin.EmbeddingsInUniverse
 open UnivalentUniverseOfFiniteTypes
 
