@@ -1,0 +1,40 @@
+module syntax where
+
+import prelude
+
+data Pi
+ = ZERO
+ | ONE
+ | PLUS (A B : Pi)
+ | swap (A B : Pi) <i> [(i=0) -> PLUS A B, (i=1) -> PLUS B A]
+ | unitl (A : Pi) <i> [(i=0) -> PLUS ZERO A, (i=1) -> A]
+ | assoc (A B C : Pi) <i> [(i=0) -> PLUS A (PLUS B C), (i=1) -> PLUS (PLUS A B) C]
+
+-- data L0 = ZERO | ONE | PLUS (A B : L0)
+
+-- data nL1 = id    (A : L0)
+--          | swap  (A B : L0)
+--          | unitl (A : L0)
+--          | unitr (A : L0)
+--          | assoc (A B C : L0)
+
+-- pL1 : nL1 -> U = split
+--   id    A     -> Path L0 A A
+--   swap  A B   -> Path L0 (PLUS A B) (PLUS B A)
+--   unitl A     -> Path L0 (PLUS ZERO A) A
+--   unitr A     -> Path L0 (PLUS A ZERO) A
+--   assoc A B C -> Path L0 (PLUS A (PLUS B C)) (PLUS (PLUS A B) C)
+
+-- L1 : U = (p : nL1) * pL1 p
+
+-- pL1 : L0 -> L0 -> Prop =
+--   split
+--     ZERO -> split@(L0 -> Prop) with
+--       ZERO -> top
+--       ONE  -> bot
+--       PLUS A B -> bot
+--     ONE  -> split@(L0 -> Prop) with
+--       ZERO -> bot
+--       ONE -> top
+--       PLUS A B -> bot
+--     PLUS A B -> \(C : L0) -> bot

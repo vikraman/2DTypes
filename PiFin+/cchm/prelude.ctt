@@ -1,0 +1,67 @@
+module prelude where
+
+Path (A : U) (a b : A) : U = PathP (<_> A) a b
+
+refl (A : U) (a : A) : Path A a a = <_> a
+
+isContr (A : U) : U = (a : A) * (b : A) -> Path A a b
+isProp (A : U) : U = (a b : A) -> Path A a b
+isSet (A : U) : U = (a b : A) -> isProp (Path A a b)
+is1type (A : U) : U = (a b : A) -> isSet (Path A a b)
+
+Prop : U = (X : U) * isProp X
+Set : U = (X : U) * isSet X
+
+data Zero =
+
+isPropZero : isProp Zero = split {}
+bot : Prop = (Zero, isPropZero)
+
+data One = tt
+
+isPropOne : isProp One =
+  split
+    tt -> split@((b : One) -> Path One tt b) with
+    tt -> refl One tt
+top : Prop = (One, isPropOne)
+
+data Two = tt | ff
+
+data Nat = O | S (n : Nat)
+
+add (m : Nat) : Nat -> Nat = split
+  O -> m
+  S n -> S (add m n)
+
+addO : (n : Nat) -> Path Nat (add O n) n = split
+  O -> <_> O
+  S n -> <i> S (addO n @ i)
+
+addS (m : Nat) : (n : Nat) -> Path Nat (add (S m) n) (S (add m n)) = split
+  O -> <_> S m
+  S n -> <i> S (addS m n @ i)
+
+addComm (m : Nat) : (n : Nat) -> Path Nat (add m n) (add n m) = split
+  O -> <i> addO m @ -i
+  S n -> <i> comp (<_> Nat) (S (addComm m n @ i))
+                  [ (i = 0) -> <j> S (add m n)
+                  , (i = 1) -> <j> addS n m @ -j ]
+
+addAssoc (m n : Nat) : (o : Nat) -> Path Nat (add m (add n o)) (add (add m n) o) = split
+  O -> <_> add m n
+  S o -> <i> S (addAssoc m n o @ i)
+
+data Plus (A B : U) = inl (a : A) | inr (b : B)
+
+data pTrunc (A : U)
+  = inc (a : A)
+  | inh (a b : pTrunc A) <i> [(i=0) -> a, (i=1) -> b]
+
+pTruncIsProp (A : U) : isProp (pTrunc A) =
+  \(a b : pTrunc A) -> <i> inh {pTrunc A} a b @ i
+
+fiber (A B : U) (f : A -> B) (y : B) : U =
+  (x : A) * Path B y (f x)
+
+isEquiv (A B : U) (f : A -> B) : U = (y : B) -> isContr (fiber A B f y)
+equiv (A B : U) : U = (f : A -> B) * isEquiv A B f

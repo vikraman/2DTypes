@@ -1,0 +1,83 @@
+module semantics where
+
+import prelude
+import equiv
+import syntax
+
+El : Nat -> U = split
+  O -> Zero
+  S n -> Plus One (El n)
+
+isN (n : Nat) (X : U) : U = pTrunc (Path U X (El n))
+
+isFinite (X : U) : U = (n : Nat) * isN n X
+M : U = (X : U) * isFinite X
+
+isSizeN (n : Nat) : U = (X : U) * isN n X
+N : U = (n : Nat) * isSizeN n
+pN (n : Nat) : N = (n, El n, inc (<_> (El n)))
+
+f : Pi -> Nat = split
+  ZERO -> O
+  ONE  -> S O
+  PLUS A B -> add (f A) (f B)
+  swap A B @i -> addComm (f A) (f B) @i
+  unitl A @i -> addO (f A) @i
+  assoc A B C @i -> addAssoc (f A) (f B) (f C) @i
+
+ElPath (m n : Nat) (p : Path Nat m n) : Path U (El m) (El n) = <i> El (p @ i)
+
+g (A : Pi) : (n : Nat) * U = (f A, El (f A))
+
+NPath (m n : Nat) (p : Path Nat m n) : Path N (pN m) (pN n) = <i> pN (p @ i)
+
+h (A : Pi) : N = pN (f A)
+
+p : Nat -> Pi = split
+  O -> ZERO
+  S n -> PLUS ONE (p n)
+
+q (T : N) : Pi = p T.1
+r (A B : N) (x : Path N A B) : Path Pi (q A) (q B) = <i> q (x @ i)
+
+-- test
+one : Nat = S O
+two : Nat = S (S O)
+bool : N = pN two
+
+notaux : El one -> El two = split
+  inl x -> inl x
+  inr y -> inr (inr y)
+
+not : El two -> El two = split
+  inl x -> inr (inl x)
+  inr y -> notaux y
+
+notnotaux : (y : El one) -> Path (El two) (not (notaux y)) (inr y) = split
+  inl x -> <_> inr (inl x)
+  inr y -> <_> inr (inr y)
+
+notnot : (x : El two) -> Path (El two) (not (not x)) x = split
+  inl x -> <_> inl x
+  inr y -> notnotaux y
+
+x : Path Nat two two = <_> two
+y : Path U (El two) (El two) =
+  isoPath (El two) (El two) not not notnot notnot
+z : Path U (El two) (El two) = <_> (El two)
+w : Path (pTrunc (Path U (El two) (El two))) (inc z) (inc z) =
+  <i> inh {pTrunc (Path U (El two) (El two))} (inc z) (inc z) @ i
+
+idPath : Path N (pN two) (pN two) =
+  <i> (x @ i , z @ i , w @ i)
+
+-- ??
+-- notPath : Path N (pN two) (pN two) =
+--   <i> (x @ i , y @ i , w @ i)
+
+testPath : Path N (pN two) (pN two) =
+  NPath two two (addComm one one)
+
+-- but this will compute to refl
+test : Path Pi (q (pN two)) (q (pN two)) =
+  r (pN two) (pN two) testPath
