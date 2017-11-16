@@ -4,3 +4,5 @@ include:
   agda-stdlib/src
   basic-hott/lib
   categories
+  HoTT-Agda/core
+  HoTT-Agda/theorems

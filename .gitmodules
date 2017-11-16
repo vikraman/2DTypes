@@ -7,3 +7,6 @@
 [submodule "agda-stdlib"]
 	path = agda-stdlib
 	url = https://github.com/agda/agda-stdlib.git
+[submodule "HoTT-Agda"]
+	path = HoTT-Agda
+	url = https://github.com/HoTT/HoTT-Agda.git

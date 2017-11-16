@@ -317,3 +317,5 @@ module UnivalentUniverseOfFiniteTypes where
 
   finite-types-is-univ : is-univ-fib (p₁ {X = Type₀} {is-finite})
   finite-types-is-univ = pred-ext-is-univ is-finite is-finite-is-prop
+
+  finite-types = Σ Type₀ is-finite
