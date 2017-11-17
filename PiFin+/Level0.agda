@@ -13,7 +13,7 @@ open import HoTT
 ∣ PLUS A B ∣ = ∣ A ∣ + ∣ B ∣
 
 ⟦_⟧₀ : U → M
-⟦ T ⟧₀ = let n = ∣ T ∣ in  El n , n , [ idp ]
+⟦ T ⟧₀ = let n = ∣ T ∣ in  M₀ n
 -- pt (⊙BAut (El n))
 
 ⟪_⟫ : ℕ → U
