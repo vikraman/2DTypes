@@ -47,4 +47,4 @@ normC (PLUS A B) = (normC A ⊕ normC B) ◎ ⟪+⟫ ∣ A ∣ ∣ B ∣
 ⌜⟦_⟧⌝₀ : (T : U) → ⌜ ⟦ T ⟧₀ ⌝₀ ⟷ T
 ⌜⟦ ZERO ⟧⌝₀ = id⟷
 ⌜⟦ ONE ⟧⌝₀ = swap₊ ◎ unite₊l
-⌜⟦ PLUS T₁ T₂ ⟧⌝₀ = _⟷_.! (normC (PLUS T₁ T₂))
+⌜⟦ PLUS T₁ T₂ ⟧⌝₀ = !⟷ (normC (PLUS T₁ T₂))

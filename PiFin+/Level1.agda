@@ -14,9 +14,9 @@ open import HoTT
 ⟦_⟧₁′ : {A B : U} → A ⟷ B → ⟦ A ⟧₀′ == ⟦ B ⟧₀′
 ⟦ unite₊l ⟧₁′ = idp
 ⟦ swap₊ {A} {B} ⟧₁′ = N-in (+-comm ∣ A ∣ ∣ B ∣)
-⟦ assocl₊ {A} {B} {C} ⟧₁′ = N-in (HoTT.! (+-assoc (∣ A ∣) ∣ B ∣ ∣ C ∣))
+⟦ assocl₊ {A} {B} {C} ⟧₁′ = N-in (! (+-assoc (∣ A ∣) ∣ B ∣ ∣ C ∣))
 ⟦ id⟷ ⟧₁′ = idp
-⟦ _⟷_.! p ⟧₁′ = HoTT.! ⟦ p ⟧₁′
+⟦ !⟷ p ⟧₁′ = ! ⟦ p ⟧₁′
 ⟦ p₁ ◎ p₂ ⟧₁′ = ⟦ p₁ ⟧₁′ ∙ ⟦ p₂ ⟧₁′
 ⟦ p₁ ⊕ p₂ ⟧₁′ = let q₁ = fst= ⟦ p₁ ⟧₁′
                     q₂ = fst= ⟦ p₂ ⟧₁′
@@ -25,9 +25,9 @@ open import HoTT
 ⟦_⟧₁ : {A B : U} → A ⟷ B → ⟦ A ⟧₀ == ⟦ B ⟧₀
 ⟦ unite₊l ⟧₁ = idp
 ⟦ swap₊ {A} {B} ⟧₁ = M₀= (+-comm ∣ A ∣ ∣ B ∣)
-⟦ assocl₊ {A} {B} {C} ⟧₁ = M₀= (HoTT.! (+-assoc (∣ A ∣) ∣ B ∣ ∣ C ∣))
+⟦ assocl₊ {A} {B} {C} ⟧₁ = M₀= (! (+-assoc (∣ A ∣) ∣ B ∣ ∣ C ∣))
 ⟦ id⟷ ⟧₁ = idp
-⟦ _⟷_.! p ⟧₁ = HoTT.! ⟦ p ⟧₁
+⟦ !⟷ p ⟧₁ = ! ⟦ p ⟧₁
 ⟦ p₁ ◎ p₂ ⟧₁ = ⟦ p₁ ⟧₁ ∙ ⟦ p₂ ⟧₁
 ⟦ p₁ ⊕ p₂ ⟧₁ = let q₁ = M₀=-out ⟦ p₁ ⟧₁
                    q₂ = M₀=-out ⟦ p₂ ⟧₁
@@ -36,8 +36,14 @@ open import HoTT
 ⌜_⌝₁ : {X Y : M} → X == Y → ⌜ X ⌝₀ ⟷ ⌜ Y ⌝₀
 ⌜ idp ⌝₁ = id⟷
 
-⌜⟦_⟧⌝₁ : {A B : U} → (p : A ⟷ B) → ⌜ ⟦ p ⟧₁ ⌝₁ ⇔ ⌜⟦ A ⟧⌝₀ ◎ p ◎ _⟷_.! ⌜⟦ B ⟧⌝₀
-⌜⟦ p ⟧⌝₁ = {!!}
+⌜⟦_⟧⌝₁ : {A B : U} → (p : A ⟷ B) → ⌜ ⟦ p ⟧₁ ⌝₁ ⇔ ⌜⟦ A ⟧⌝₀ ◎ p ◎ !⟷ ⌜⟦ B ⟧⌝₀
+⌜⟦ unite₊l ⟧⌝₁ = {!!}
+⌜⟦ swap₊ ⟧⌝₁ = {!!}
+⌜⟦ assocl₊ ⟧⌝₁ = {!!}
+⌜⟦ id⟷ ⟧⌝₁ = trans⇔ linv◎r (id⇔ ⊡ idl◎r)
+⌜⟦ !⟷ p ⟧⌝₁ = {!!}
+⌜⟦ p₁ ◎ p₂ ⟧⌝₁ = {!!}
+⌜⟦ p₁ ⊕ p₂ ⟧⌝₁ = {!!}
 
-⟦⌜_⌝⟧₁ : {X Y : M} → (p : X == Y) → Trunc -1 (⟦ ⌜ p ⌝₁ ⟧₁ == {!!})
-⟦⌜ p ⌝⟧₁ = {!!}
+⟦⌜_⌝⟧₁ : {X Y : M} → (p : X == Y) → ⟦ ⌜ p ⌝₁ ⟧₁ == ap (λ X → ⟦ ⌜ X ⌝₀ ⟧₀) p
+⟦⌜ idp ⌝⟧₁ = idp
