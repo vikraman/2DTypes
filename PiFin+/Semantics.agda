@@ -34,19 +34,22 @@ El (S n) = ⊤ ⊔ El n
 ⊤-cncl = ua ∘ ⊤-cncl≃ ∘ coe-equiv
   where
     reduce-aux : ∀ {ℓ} {X Y : Type ℓ} →
-                 (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (x : X) →
+                 {x : X} → {f : ⊤ ⊔ X → ⊤ ⊔ Y} → {g : ⊤ ⊔ Y → ⊤ ⊔ X} →
+                 (f-g : (y : ⊤ ⊔ Y) → f (g y) == y) →
                  Σ (⊤ ⊔ Y) (λ y → f (inl unit) == y) →
                  Σ (⊤ ⊔ Y) (λ y → f (inr x) == y) →
                  Y
-    reduce-aux f x (inl unit , p) (inl unit , q) = {!!}
-    reduce-aux f x (inl unit , p) (inr y , q)    = y
-    reduce-aux f x (inr y , p)    (inl unit , q) = y
-    reduce-aux f x (inr y , p)    (inr y' , q)   = y'
+    reduce-aux f-g (inl unit , p) (inl unit , q) = {!!}
+    reduce-aux f-g (inl unit , p) (inr y , q)    = y
+    reduce-aux f-g (inr y , p)    (inl unit , q) = y
+    reduce-aux f-g (inr y , p)    (inr y' , q)   = y'
 
     reduce : ∀ {ℓ} {X Y : Type ℓ} →
              (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (g : ⊤ ⊔ Y → ⊤ ⊔ X) →
-             ((y : ⊤ ⊔ Y) → f (g y) == y) → X → Y
-    reduce f g f-g x = reduce-aux f x (f (inl unit) , idp) (f (inr x) , idp)
+             (f-g : (y : ⊤ ⊔ Y) → f (g y) == y) → X → Y
+    reduce f g f-g x =
+      reduce-aux {x = x} {f = f} {g = g}
+        f-g (f (inl unit) , idp) (f (inr x) , idp)
 
     reduce-η : ∀ {ℓ} {X Y : Type ℓ} →
                (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (g : ⊤ ⊔ Y → ⊤ ⊔ X) →
