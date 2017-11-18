@@ -3,14 +3,66 @@
 module PiFin+.Semantics where
 
 open import HoTT
+  using (Type; Type₀; Type₁; lsucc; lmax;
+         of-type; -- syntax u :> A
+         _∘_; is-inj;
+         ⊥; ⊥-elim;
+         ⊤; unit;
+         ℕ; O; S;
+         _⊔_; inl; inr;
+         Σ; _,_ ; fst; snd; pair=; fst=;
+         Ptd; ⊙[_,_]; pt;
+         Trunc; [_]; Trunc-elim; Trunc=-equiv;
+         _==_; idp; !; ap; ua; coe; coe-equiv;
+         PathOver; -- syntax u == v [ B ↓ p ]
+         _≃_; is-equiv; is-eq; equiv; transport-equiv; –>; <–;
+         has-level-in; is-contr; is-prop; is-connected;
+         inhab-prop-is-contr; prop-has-all-paths; prop-has-all-paths-↓
+         )
+
+-- Every finite type in Π can be represented by a natural number. We embed this
+-- natural into the HoTT universe
 
 El : ℕ → Type₀
 El O = ⊥
 El (S n) = ⊤ ⊔ El n
 
--- port over from EmbeddingsInUniverse
+-- A path between ⊤ ⊔ X and ⊤ ⊔ Y induces a path between X and Y
+-- Proof is tedious combinatorics
+
 ⊤-cncl : ∀ {ℓ} {X Y : Type ℓ} → ⊤ ⊔ X == ⊤ ⊔ Y → X == Y
-⊤-cncl = {!!}
+⊤-cncl = ua ∘ ⊤-cncl≃ ∘ coe-equiv
+  where
+    reduce-aux : ∀ {ℓ} {X Y : Type ℓ} →
+                 (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (x : X) →
+                 Σ (⊤ ⊔ Y) (λ y → f (inl unit) == y) →
+                 Σ (⊤ ⊔ Y) (λ y → f (inr x) == y) →
+                 Y
+    reduce-aux f x (inl unit , p) (inl unit , q) = {!!}
+    reduce-aux f x (inl unit , p) (inr y , q)    = y
+    reduce-aux f x (inr y , p)    (inl unit , q) = y
+    reduce-aux f x (inr y , p)    (inr y' , q)   = y'
+
+    reduce : ∀ {ℓ} {X Y : Type ℓ} →
+             (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (g : ⊤ ⊔ Y → ⊤ ⊔ X) →
+             ((y : ⊤ ⊔ Y) → f (g y) == y) → X → Y
+    reduce f g f-g x = reduce-aux f x (f (inl unit) , idp) (f (inr x) , idp)
+
+    reduce-η : ∀ {ℓ} {X Y : Type ℓ} →
+               (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (g : ⊤ ⊔ Y → ⊤ ⊔ X) →
+               (f-g : (y : ⊤ ⊔ Y) → f (g y) == y) →
+               (g-f : (x : ⊤ ⊔ X) → g (f x) == x) →
+               (x : X) → reduce g f g-f (reduce f g f-g x) == x
+    reduce-η = {!!}
+
+    ⊤-cncl≃ : ∀ {ℓ} {X Y : Type ℓ} → (⊤ ⊔ X ≃ ⊤ ⊔ Y) → (X ≃ Y)
+    ⊤-cncl≃ (f , record { g = g ; f-g = f-g ; g-f = g-f ; adj = adj }) =
+      reduce f g f-g ,
+      is-eq
+        _
+        (reduce g f g-f)
+        (reduce-η g f g-f f-g)
+        (reduce-η f g f-g g-f)
 
 El-is-inj : is-inj El
 El-is-inj O O p = idp

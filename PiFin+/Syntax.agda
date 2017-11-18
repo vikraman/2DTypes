@@ -1,6 +1,6 @@
 module PiFin+.Syntax where
 
-open import lib.Base
+-- open import lib.Base
 
 data U : Set where
   ZERO  : U
