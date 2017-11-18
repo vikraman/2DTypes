@@ -13,59 +13,70 @@ open import HoTT
          Σ; _,_ ; fst; snd; pair=; fst=;
          Ptd; ⊙[_,_]; pt;
          Trunc; [_]; Trunc-elim; Trunc=-equiv;
-         _==_; idp; !; ap; ua; coe; coe-equiv;
+         _==_; idp; !; _∙_; ap; ua; coe; coe-equiv;
          PathOver; -- syntax u == v [ B ↓ p ]
          _≃_; is-equiv; is-eq; equiv; transport-equiv; –>; <–;
          has-level-in; is-contr; is-prop; is-connected;
          inhab-prop-is-contr; prop-has-all-paths; prop-has-all-paths-↓
          )
 
+-----------------------------------------------------------------------------
+-- A path between ⊤ ⊔ X and ⊤ ⊔ Y induces a path between X and Y
+-- Proof is tedious combinatorics
+
+module _ {ℓ} {X Y : Type ℓ}
+         (f : ⊤ ⊔ X → ⊤ ⊔ Y) (g : ⊤ ⊔ Y → ⊤ ⊔ X)
+         (f-g : (y : ⊤ ⊔ Y) → f (g y) == y)
+         (g-f : (x : ⊤ ⊔ X) → g (f x) == x) where
+
+  inl≠inr : ∀ {x : X} → (inl unit == inr x) → Y
+  inl≠inr ()
+
+  reduce-aux : {x : X} →
+               Σ (⊤ ⊔ Y) (λ y → f (inl unit) == y) →
+               Σ (⊤ ⊔ Y) (λ y → f (inr x) == y) →
+               Y
+  reduce-aux (inl unit , p) (inl unit , q) =
+    inl≠inr (! (g-f (inl unit)) ∙ -- inl unit == g (f (inl unit))
+             ap g p ∙             -- g (f (inl unit)) == g (inl unit)
+             (ap g (! q)) ∙       -- g (inl unit) == g (f (inr x))
+             (g-f (inr _)))       -- g (f (inr x)) == inr x
+  reduce-aux (inl unit , p) (inr y , q)    = y
+  reduce-aux (inr y , p)    (inl unit , q) = y
+  reduce-aux (inr y , p)    (inr y' , q)   = y'
+
+  reduce : X → Y
+  reduce x = reduce-aux (f (inl unit) , idp) (f (inr x) , idp)
+
+module _ {ℓ} {X Y : Type ℓ}
+         (f : ⊤ ⊔ X → ⊤ ⊔ Y) (g : ⊤ ⊔ Y → ⊤ ⊔ X)
+         (f-g : (y : ⊤ ⊔ Y) → f (g y) == y)
+         (g-f : (x : ⊤ ⊔ X) → g (f x) == x) where
+
+  reduce-η : (x : X) → reduce g f g-f f-g (reduce f g f-g g-f x) == x
+  reduce-η = {!!}
+
+
+⊤-cncl : ∀ {ℓ} {X Y : Type ℓ} → ⊤ ⊔ X == ⊤ ⊔ Y → X == Y
+⊤-cncl = ua ∘ ⊤-cncl≃ ∘ coe-equiv
+  where
+    ⊤-cncl≃ : ∀ {ℓ} {X Y : Type ℓ} → (⊤ ⊔ X ≃ ⊤ ⊔ Y) → (X ≃ Y)
+    ⊤-cncl≃ (f , record { g = g ; f-g = f-g ; g-f = g-f ; adj = adj }) =
+      reduce f g f-g g-f ,
+      is-eq
+        _
+        (reduce g f g-f f-g)
+        (reduce-η g f g-f f-g)
+        (reduce-η f g f-g g-f)
+
+-----------------------------------------------------------------------------
+--
 -- Every finite type in Π can be represented by a natural number. We embed this
 -- natural into the HoTT universe
 
 El : ℕ → Type₀
 El O = ⊥
 El (S n) = ⊤ ⊔ El n
-
--- A path between ⊤ ⊔ X and ⊤ ⊔ Y induces a path between X and Y
--- Proof is tedious combinatorics
-
-⊤-cncl : ∀ {ℓ} {X Y : Type ℓ} → ⊤ ⊔ X == ⊤ ⊔ Y → X == Y
-⊤-cncl = ua ∘ ⊤-cncl≃ ∘ coe-equiv
-  where
-    reduce-aux : ∀ {ℓ} {X Y : Type ℓ} →
-                 {x : X} → {f : ⊤ ⊔ X → ⊤ ⊔ Y} → {g : ⊤ ⊔ Y → ⊤ ⊔ X} →
-                 (f-g : (y : ⊤ ⊔ Y) → f (g y) == y) →
-                 Σ (⊤ ⊔ Y) (λ y → f (inl unit) == y) →
-                 Σ (⊤ ⊔ Y) (λ y → f (inr x) == y) →
-                 Y
-    reduce-aux f-g (inl unit , p) (inl unit , q) = {!!}
-    reduce-aux f-g (inl unit , p) (inr y , q)    = y
-    reduce-aux f-g (inr y , p)    (inl unit , q) = y
-    reduce-aux f-g (inr y , p)    (inr y' , q)   = y'
-
-    reduce : ∀ {ℓ} {X Y : Type ℓ} →
-             (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (g : ⊤ ⊔ Y → ⊤ ⊔ X) →
-             (f-g : (y : ⊤ ⊔ Y) → f (g y) == y) → X → Y
-    reduce f g f-g x =
-      reduce-aux {x = x} {f = f} {g = g}
-        f-g (f (inl unit) , idp) (f (inr x) , idp)
-
-    reduce-η : ∀ {ℓ} {X Y : Type ℓ} →
-               (f : ⊤ ⊔ X → ⊤ ⊔ Y) → (g : ⊤ ⊔ Y → ⊤ ⊔ X) →
-               (f-g : (y : ⊤ ⊔ Y) → f (g y) == y) →
-               (g-f : (x : ⊤ ⊔ X) → g (f x) == x) →
-               (x : X) → reduce g f g-f (reduce f g f-g x) == x
-    reduce-η = {!!}
-
-    ⊤-cncl≃ : ∀ {ℓ} {X Y : Type ℓ} → (⊤ ⊔ X ≃ ⊤ ⊔ Y) → (X ≃ Y)
-    ⊤-cncl≃ (f , record { g = g ; f-g = f-g ; g-f = g-f ; adj = adj }) =
-      reduce f g f-g ,
-      is-eq
-        _
-        (reduce g f g-f)
-        (reduce-η g f g-f f-g)
-        (reduce-η f g f-g g-f)
 
 El-is-inj : is-inj El
 El-is-inj O O p = idp
