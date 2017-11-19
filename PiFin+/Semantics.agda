@@ -24,23 +24,29 @@ open import HoTT
 -- A path between ⊤ ⊔ X and ⊤ ⊔ Y induces a path between X and Y
 -- Proof is tedious combinatorics
 
+inl≠inr : ∀ {ℓ₁ ℓ₂ ℓ₃} {A : Type ℓ₁} {B : Type ℓ₂} {C : Type ℓ₃}
+          {a : A} {b : B} → (inl a == inr b) → C
+inl≠inr ()
+
 module _ {ℓ} {X Y : Type ℓ}
          (f : ⊤ ⊔ X → ⊤ ⊔ Y) (g : ⊤ ⊔ Y → ⊤ ⊔ X)
          (f-g : (y : ⊤ ⊔ Y) → f (g y) == y)
          (g-f : (x : ⊤ ⊔ X) → g (f x) == x) where
 
-  inl≠inr : ∀ {x : X} → (inl unit == inr x) → Y
-  inl≠inr ()
+  inlunit==inrx : {x : X} {y : ⊤ ⊔ Y} →
+                  (p : f (inl unit) == y) → (q : f (inr x) == y) →
+                  inl unit == inr x
+  inlunit==inrx p q =
+    ! (g-f (inl unit)) ∙ -- inl unit == g (f (inl unit))
+    ap g p ∙             -- g (f (inl unit)) == g (inl unit)
+    (ap g (! q)) ∙       -- g (inl unit) == g (f (inr x))
+    (g-f (inr _))        -- g (f (inr x)) == inr x
 
   reduce-aux : {x : X} →
                Σ (⊤ ⊔ Y) (λ y → f (inl unit) == y) →
                Σ (⊤ ⊔ Y) (λ y → f (inr x) == y) →
                Y
-  reduce-aux (inl unit , p) (inl unit , q) =
-    inl≠inr (! (g-f (inl unit)) ∙ -- inl unit == g (f (inl unit))
-             ap g p ∙             -- g (f (inl unit)) == g (inl unit)
-             (ap g (! q)) ∙       -- g (inl unit) == g (f (inr x))
-             (g-f (inr _)))       -- g (f (inr x)) == inr x
+  reduce-aux (inl unit , p) (inl unit , q) = inl≠inr (inlunit==inrx p q)
   reduce-aux (inl unit , p) (inr y , q)    = y
   reduce-aux (inr y , p)    (inl unit , q) = y
   reduce-aux (inr y , p)    (inr y' , q)   = y'
@@ -53,9 +59,43 @@ module _ {ℓ} {X Y : Type ℓ}
          (f-g : (y : ⊤ ⊔ Y) → f (g y) == y)
          (g-f : (x : ⊤ ⊔ X) → g (f x) == x) where
 
-  reduce-η : (x : X) → reduce g f g-f f-g (reduce f g f-g g-f x) == x
-  reduce-η = {!!}
+  reduce-η-aux : (x : X) →
+                 (u : Σ (⊤ ⊔ Y) (λ y → (f (inl unit)) == y)) →
+                 (v : Σ (⊤ ⊔ Y) (λ y → (f (inr x)) == y)) →
+                 (Σ (⊤ ⊔ X) (λ y → g (inl unit) == y)) →
+                 (Σ (⊤ ⊔ X) (λ y → g (fst u) == y)) →
+                 (Σ (⊤ ⊔ X) (λ y → g (fst v) == y)) →
+                 reduce g f g-f f-g (reduce f g f-g g-f x) == x
+  reduce-η-aux x (inl unit , p) (inl unit , q) _ _ _ =
+    inl≠inr (inlunit==inrx f g f-g g-f p q)
+  reduce-η-aux x (inl unit , p) (inr y' , q) _ (inl unit , r) (inr x'' , s) =
+    {!!}
+  reduce-η-aux x (inr y , p) (inl unit , q) _ (inl unit , r) (inr x'' , s) =
+    {!!}
+  reduce-η-aux x (inr y , p) (inr y' , q) (inl unit , t) (inl unit , r) (inr x'' , s) =
+    {!!}
+  reduce-η-aux x (inr y , p) (inr y' , q) (inr x' , t) (inl unit , r) (inr x'' , s) =
+    {!!}
+  reduce-η-aux x (u , p) (v , q) _ (inl unit , r) (inl unit , s) =
+    {!!}
+  reduce-η-aux x (_ , p) _ _ (inr _ , r) _ =
+    inl≠inr (inlunit==inrx f g f-g g-f p (ap f (! r) ∙ f-g _))
 
+
+
+
+
+
+
+
+
+  reduce-η : (x : X) → reduce g f g-f f-g (reduce f g f-g g-f x) == x
+  reduce-η x = reduce-η-aux x
+                 (f (inl unit) , idp)
+                 (f (inr x) , idp)
+                 (g (inl unit) , idp)
+                 (g (f (inl unit)) , idp)
+                 (g (f (inr x)) , idp)
 
 ⊤-cncl : ∀ {ℓ} {X Y : Type ℓ} → ⊤ ⊔ X == ⊤ ⊔ Y → X == Y
 ⊤-cncl = ua ∘ ⊤-cncl≃ ∘ coe-equiv
