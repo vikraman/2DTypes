@@ -10,7 +10,7 @@ open import HoTT
          ⊤; unit;
          ℕ; O; S;
          _⊔_; inl; inr;
-         Σ; _,_ ; fst; snd; pair=; fst=;
+         Σ; _,_ ; fst; snd; pair=; fst=; ↓-Σ-in;
          Ptd; ⊙[_,_]; pt;
          Trunc; [_]; Trunc-elim; Trunc=-equiv;
          _==_; idp; !; _∙_; ap; ua; coe; coe-equiv;
@@ -30,29 +30,53 @@ inl≠inr ()
 
 module _ {ℓ} {X Y : Type ℓ}
          (f : ⊤ ⊔ X → ⊤ ⊔ Y) (g : ⊤ ⊔ Y → ⊤ ⊔ X)
+         (g-f : (x : ⊤ ⊔ X) → g (f x) == x) where
+
+  finj : {x : X} → (p : f (inl unit) == f (inr x)) → inl unit == inr x
+  finj p = ! (g-f (inl unit)) ∙ -- inl unit = g (f (inl unit))
+           ap g p ∙             -- g (f (inl unit)) == g (f (inr x))
+           (g-f (inr _))        -- g (f (inr x)) = inr x
+
+module _ {ℓ} {X Y : Type ℓ}
+         (f : ⊤ ⊔ X → ⊤ ⊔ Y) (g : ⊤ ⊔ Y → ⊤ ⊔ X)
          (f-g : (y : ⊤ ⊔ Y) → f (g y) == y)
          (g-f : (x : ⊤ ⊔ X) → g (f x) == x) where
 
-  inlunit==inrx : {x : X} {y : ⊤ ⊔ Y} →
-                  (p : f (inl unit) == y) → (q : f (inr x) == y) →
-                  inl unit == inr x
-  inlunit==inrx p q =
-    ! (g-f (inl unit)) ∙ -- inl unit == g (f (inl unit))
-    ap g p ∙             -- g (f (inl unit)) == g (inl unit)
-    (ap g (! q)) ∙       -- g (inl unit) == g (f (inr x))
-    (g-f (inr _))        -- g (f (inr x)) == inr x
-
-  reduce-aux : {x : X} →
+  reduce-aux : (x : X) →
                Σ (⊤ ⊔ Y) (λ y → f (inl unit) == y) →
                Σ (⊤ ⊔ Y) (λ y → f (inr x) == y) →
                Y
-  reduce-aux (inl unit , p) (inl unit , q) = inl≠inr (inlunit==inrx p q)
-  reduce-aux (inl unit , p) (inr y , q)    = y
-  reduce-aux (inr y , p)    (inl unit , q) = y
-  reduce-aux (inr y , p)    (inr y' , q)   = y'
+  reduce-aux x (inl unit , p) (inl unit , q) =
+    inl≠inr (finj f g g-f (p ∙ ! q))
+  reduce-aux x (inl unit , p) (inr y , q)    = y
+  reduce-aux x (inr y , p)    (inl unit , q) = y
+  reduce-aux x (inr y , p)    (inr y' , q)   = y'
 
   reduce : X → Y
-  reduce x = reduce-aux (f (inl unit) , idp) (f (inr x) , idp)
+  reduce x = reduce-aux x (f (inl unit) , idp) (f (inr x) , idp)
+
+  reduce-aux-β : (x : X) →
+                 (w : ⊤ ⊔ Y) → (p : f (inl unit) == w) →
+                 (v : ⊤ ⊔ Y) → (q : f (inr x) == v) →
+                 reduce x == reduce-aux x (w , p) (v , q)
+  reduce-aux-β x w p v q =
+    ap (λ γ → reduce-aux x γ (f (inr x) , idp)) ? ∙
+    ap (λ γ → reduce-aux x (w , γ) (f (inr x) , idp)) {!!} ∙
+    ap (λ γ → reduce-aux x (w , p) γ) ? ∙
+    ap (λ γ → reduce-aux x (w , p) (v , γ)) {!!}
+
+{--
+   ap (λ γ → rest-aux f g η x γ (f (i₂ x) , refl _))
+      (dpair= (p , refl _))
+◾ ap (λ γ → rest-aux f g η x (w , γ) (f (i₂ x) , refl _))
+      (tpt=l _ p (refl _) ◾ ◾unitl _)
+◾ ap (λ γ → rest-aux f g η x (w , p) γ)
+      (dpair= (q , (refl _)))
+◾ ap (λ γ → rest-aux f g η x (w , p) (v , γ))
+      (tpt=l _ q (refl _) ◾ ◾unitl _)
+--}
+
+
 
 module _ {ℓ} {X Y : Type ℓ}
          (f : ⊤ ⊔ X → ⊤ ⊔ Y) (g : ⊤ ⊔ Y → ⊤ ⊔ X)
@@ -67,27 +91,25 @@ module _ {ℓ} {X Y : Type ℓ}
                  (Σ (⊤ ⊔ X) (λ y → g (fst v) == y)) →
                  reduce g f g-f f-g (reduce f g f-g g-f x) == x
   reduce-η-aux x (inl unit , p) (inl unit , q) _ _ _ =
-    inl≠inr (inlunit==inrx f g f-g g-f p q)
-  reduce-η-aux x (inl unit , p) (inr y' , q) _ (inl unit , r) (inr x'' , s) =
-    {!!}
-  reduce-η-aux x (inr y , p) (inl unit , q) _ (inl unit , r) (inr x'' , s) =
-    {!!}
-  reduce-η-aux x (inr y , p) (inr y' , q) (inl unit , t) (inl unit , r) (inr x'' , s) =
-    {!!}
-  reduce-η-aux x (inr y , p) (inr y' , q) (inr x' , t) (inl unit , r) (inr x'' , s) =
-    {!!}
+    inl≠inr (finj f g g-f (p ∙ (! q) ))
   reduce-η-aux x (u , p) (v , q) _ (inl unit , r) (inl unit , s) =
-    {!!}
+    inl≠inr
+      (finj f g g-f
+        (p ∙ (! (f-g u) ∙ ap f r ∙ ! (ap f s) ∙ f-g v) ∙ ! q))
+  reduce-η-aux x (inr y , p) (inr y' , q) (inl unit , t)
+    (inl unit , r) (inr x'' , s) =
+    inl≠inr (! (! (f-g _) ∙ ap f (r ∙ ! t) ∙ (f-g _)))
   reduce-η-aux x (_ , p) _ _ (inr _ , r) _ =
-    inl≠inr (inlunit==inrx f g f-g g-f p (ap f (! r) ∙ f-g _))
-
-
-
-
-
-
-
-
+    inl≠inr (finj f g g-f (p ∙ ! (f-g _) ∙ ap f r))
+  reduce-η-aux x (inr y , p) (inr y' , q) (inr x' , t)
+    (inl unit , r) (inr x'' , s) =
+    {!!}
+  reduce-η-aux x (inl unit , p) (inr y' , q) _
+    (inl unit , r) (inr x'' , s) =
+    {!!}
+  reduce-η-aux x (inr y , p) (inl unit , q) _
+    (inl unit , r) (inr x'' , s) =
+    {!!}
 
   reduce-η : (x : X) → reduce g f g-f f-g (reduce f g f-g g-f x) == x
   reduce-η x = reduce-η-aux x
@@ -213,3 +235,5 @@ pred-ext-is-univ B φ = {!!}
 
 finite-types-is-univ : is-univ-fib (fst {A = Type₀} {is-finite})
 finite-types-is-univ = {!!}
+
+-----------------------------------------------------------------------------
