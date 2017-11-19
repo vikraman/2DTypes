@@ -60,9 +60,9 @@ module _ {ℓ} {X Y : Type ℓ}
                  (v : ⊤ ⊔ Y) → (q : f (inr x) == v) →
                  reduce x == reduce-aux x (w , p) (v , q)
   reduce-aux-β x w p v q =
-    ap (λ γ → reduce-aux x γ (f (inr x) , idp)) ? ∙
+    ap (λ γ → reduce-aux x γ (f (inr x) , idp)) {!!} ∙
     ap (λ γ → reduce-aux x (w , γ) (f (inr x) , idp)) {!!} ∙
-    ap (λ γ → reduce-aux x (w , p) γ) ? ∙
+    ap (λ γ → reduce-aux x (w , p) γ) {!!} ∙
     ap (λ γ → reduce-aux x (w , p) (v , γ)) {!!}
 
 {--
