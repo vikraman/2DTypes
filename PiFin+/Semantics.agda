@@ -20,7 +20,8 @@ open import HoTT
          inhab-prop-is-contr; prop-has-all-paths; prop-has-all-paths-↓;
          SubtypeProp; Trunc-level; ℕ₋₂; has-level; transport; Subtype=;
          Subtype=-econv; equiv-preserves-level; universe-=-level;
-         is-set; ⟨-2⟩; is-gpd; ⊔-level; ⟨⟩; _⁻¹
+         is-set; ⟨-2⟩; is-gpd; ⊔-level; ⟨⟩; _⁻¹;
+         has-dec-eq; Dec; inr=inr-equiv; dec-eq-is-set
          )
 
 -----------------------------------------------------------------------------
@@ -229,6 +230,21 @@ instance
   El-is-set : {n : ℕ} → is-set (El n)
   El-is-set {O} = has-level-in (λ ())
   El-is-set {S n} = ⊔-level ⟨⟩ (El-is-set {n})
+
+-- stronger than being a set
+El-has-dec-eq : {n : ℕ} → has-dec-eq (El n)
+El-has-dec-eq {O} X Y = inr (λ _ → X)
+El-has-dec-eq {S n} (inl unit) (inl unit) = inl idp
+El-has-dec-eq {S n} (inl unit) (inr Y) = inr (λ ())
+El-has-dec-eq {S n} (inr X) (inl unit) = inr (λ ())
+El-has-dec-eq {S n} (inr X) (inr Y) = f (El-has-dec-eq X Y)
+  where f : Dec (X == Y) → Dec (inr X == inr Y)
+        f (inl  p) = inl (ap inr p)
+        f (inr ¬p) = inr (λ q → ¬p (–> (inr=inr-equiv X Y) q))
+
+-- alternative proof using hedberg's lemma
+El-is-set' : {n : ℕ} → is-set (El n)
+El-is-set' = dec-eq-is-set El-has-dec-eq
 
 N-is-gpd : is-gpd N
 N-is-gpd = ⟨⟩ ⟨⟩
