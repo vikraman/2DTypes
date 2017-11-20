@@ -17,7 +17,10 @@ open import HoTT
          PathOver; -- syntax u == v [ B ↓ p ]
          _≃_; is-equiv; is-eq; equiv; transport-equiv; –>; <–;
          has-level-in; is-contr; is-prop; is-connected;
-         inhab-prop-is-contr; prop-has-all-paths; prop-has-all-paths-↓
+         inhab-prop-is-contr; prop-has-all-paths; prop-has-all-paths-↓;
+         SubtypeProp; Trunc-level; ℕ₋₂; has-level; transport; Subtype=;
+         Subtype=-econv; equiv-preserves-level; universe-=-level;
+         is-set; ⟨-2⟩; is-gpd; ⊔-level; ⟨⟩; _⁻¹
          )
 
 -----------------------------------------------------------------------------
@@ -199,6 +202,40 @@ M≃N = equiv f g f-g g-f
 M=N : M == N
 M=N = ua M≃N
 
+BAut-SubtypeProp : ∀ {ℓ} → (T : Type ℓ) → SubtypeProp (Type ℓ) (lsucc ℓ)
+BAut-SubtypeProp T = (λ X → Trunc -1 (T == X)) , (λ _ → Trunc-level)
+
+BAut-level : ∀ {ℓ} {n : ℕ₋₂} {T : Type ℓ} {{φ : has-level n T}} → (X : BAut T) → has-level n (fst X)
+BAut-level {n = n} {{φ}} (X , ψ) = Trunc-elim (λ p → transport (has-level n) p φ) ψ
+
+BAut= : ∀ {ℓ} {T : Type ℓ} (X Y : BAut T) → Type (lsucc ℓ)
+BAut= {T = T} = Subtype= (BAut-SubtypeProp T)
+
+BAut=-econv : ∀ {ℓ} {T : Type ℓ} (X Y : BAut T) → (BAut= X Y) ≃ (X == Y)
+BAut=-econv {T = T} = Subtype=-econv (BAut-SubtypeProp T)
+
+_-BAut-level : ∀ {ℓ} (n : ℕ₋₂) {T : Type ℓ} {{φ : has-level n T}} → has-level (S n) (BAut T)
+_-BAut-level n {{φ}} =
+  has-level-in λ { X Y → equiv-preserves-level (BAut=-econv X Y)
+                         {{universe-=-level (BAut-level X) (BAut-level Y)}} }
+
+instance
+  BAut-prop-is-set : ∀ {ℓ} {T : Type ℓ} → {{φ : is-prop T}} → is-set (BAut T)
+  BAut-prop-is-set = S ⟨-2⟩ -BAut-level
+
+  BAut-set-is-gpd : ∀ {ℓ} {T : Type ℓ} → {{φ : is-set T}} → is-gpd (BAut T)
+  BAut-set-is-gpd = S (S ⟨-2⟩) -BAut-level
+
+  El-is-set : {n : ℕ} → is-set (El n)
+  El-is-set {O} = has-level-in (λ ())
+  El-is-set {S n} = ⊔-level ⟨⟩ (El-is-set {n})
+
+N-is-gpd : is-gpd N
+N-is-gpd = ⟨⟩ ⟨⟩
+
+M-is-gpd : is-gpd M
+M-is-gpd = equiv-preserves-level (M≃N ⁻¹)
+
 paths-in-M : {X Y : M} → X == Y → fst (snd X) == fst (snd Y)
 paths-in-M idp = idp
 
@@ -207,9 +244,6 @@ paths-in-N idp = idp
 
 M→N= : {X Y : M} → X == Y → –> M≃N X == –> M≃N Y
 M→N= p = ap (–> M≃N) p
-
-BAut= : ∀ {ℓ} {X Y : Type ℓ} → X == Y → BAut X == BAut Y
-BAut= = ap BAut
 
 BAut∘El= : ∀ {m n : ℕ} → m == n → BAut (El m) == BAut (El n)
 BAut∘El= = ap (BAut ∘ El)
