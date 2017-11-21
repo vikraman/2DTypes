@@ -3,6 +3,8 @@ module prelude where
 Path (A : U) (a b : A) : U = PathP (<_> A) a b
 
 refl (A : U) (a : A) : Path A a a = <_> a
+trans (A : U) (a b c : A) (p : Path A a b) (q : Path A b c) : Path A a c =
+  <i> comp (<_> A) (p @ i) [ (i = 0) -> <j> a, (i = 1) -> q ]
 
 isContr (A : U) : U = (a : A) * (b : A) -> Path A a b
 isProp (A : U) : U = (a b : A) -> Path A a b
@@ -14,6 +16,7 @@ Set : U = (X : U) * isSet X
 
 data Zero =
 
+zeroElim (A : U) : Zero -> A = split {}
 isPropZero : isProp Zero = split {}
 bot : Prop = (Zero, isPropZero)
 

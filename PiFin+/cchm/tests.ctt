@@ -1,0 +1,102 @@
+module tests where
+
+import prelude
+import equiv
+import syntax
+import semantics
+
+PlusUnitL (X : U) : Path U (Plus Zero X) X =
+  isoPath (Plus Zero X) X f g fg gf
+  where
+    f : Plus Zero X -> X = split
+      inl z -> zeroElim X z
+      inr x -> x
+    g (x : X) : Plus Zero X = inr x
+    fg (x : X) : Path X (f (g x)) x = <_> x
+    gf : (y : Plus Zero X) -> Path (Plus Zero X) (g (f y)) y = split
+      inl z -> zeroElim (Path (Plus Zero X) (g (f (inl z))) (inl z)) z
+      inr x -> <_> inr x
+
+PlusUnitR (X : U) : Path U (Plus X Zero) X =
+  isoPath (Plus X Zero) X f g fg gf
+  where
+    f : Plus X Zero -> X = split
+      inl x -> x
+      inr z -> zeroElim X z
+    g (x : X) : Plus X Zero = inl x
+    fg (x : X) : Path X (f (g x)) x = <_> x
+    gf : (y : Plus X Zero) -> Path (Plus X Zero) (g (f y)) y = split
+      inl x -> <_> inl x
+      inr z -> zeroElim (Path (Plus X Zero) (g (f (inr z))) (inr z)) z
+
+PlusAssoc (X Y Z : U) : Path U (Plus X (Plus Y Z)) (Plus (Plus X Y) Z) =
+  isoPath (Plus X (Plus Y Z)) (Plus (Plus X Y) Z) f g fg gf
+  where
+    f2 : Plus Y Z -> Plus (Plus X Y) Z = split
+      inl y -> inl (inr y)
+      inr z -> inr z
+    f : Plus X (Plus Y Z) -> Plus (Plus X Y) Z = split
+      inl x -> inl (inl x)
+      inr w -> f2 w
+    g2 : Plus X Y -> Plus X (Plus Y Z) = split
+      inl x -> inl x
+      inr y -> inr (inl y)
+    g : Plus (Plus X Y) Z -> Plus X (Plus Y Z) = split
+      inl w -> g2 w
+      inr z -> inr (inr z)
+    fg2 : (w : Plus X Y) -> Path (Plus (Plus X Y) Z) (f (g (inl w))) (inl w) = split
+      inl x -> <_> inl (inl x)
+      inr y -> <_> inl (inr y)
+    fg : (a : Plus (Plus X Y) Z) -> Path (Plus (Plus X Y) Z) (f (g a)) a = split
+      inl w -> fg2 w
+      inr z -> <_> inr z
+    gf2 : (w : Plus Y Z) -> Path (Plus X (Plus Y Z)) (g (f (inr w))) (inr w) = split
+      inl y -> <_> inr (inl y)
+      inr z -> <_> inr (inr z)
+    gf : (a : Plus X (Plus Y Z)) -> Path (Plus X (Plus Y Z)) (g (f a)) a = split
+      inl x -> <_> inl x
+      inr w -> gf2 w
+
+PlusComm (X Y : U) : Path U (Plus X Y) (Plus Y X) =
+  isoPath (Plus X Y) (Plus Y X) f g fg gf
+  where
+    f : Plus X Y -> Plus Y X = split
+      inl x -> inr x
+      inr y -> inl y
+    g : Plus Y X -> Plus X Y = split
+      inl y -> inr y
+      inr x -> inl x
+    fg : (z : Plus Y X) -> Path (Plus Y X) (f (g z)) z = split
+      inl y -> <_> inl y
+      inr x -> <_> inr x
+    gf : (z : Plus X Y) -> Path (Plus X Y) (g (f z)) z = split
+      inl x -> <_> inl x
+      inr y -> <_> inr y
+
+ElPlus (m : Nat) : (n : Nat) -> Path U (El (add m n)) (Plus (El m) (El n)) = split
+  O -> <i> PlusUnitR (El m) @ -i
+  S n -> trans U (Plus One (El (add m n))) (Plus One (Plus (El m) (El n))) (Plus (El m) (Plus One (El n)))
+               (<i> Plus One (ElPlus m n @ i))
+               (trans U (Plus One (Plus (El m) (El n))) (Plus (Plus One (El m)) (El n)) (Plus (El m) (Plus One (El n)))
+                      (PlusAssoc One (El m) (El n))
+                      (trans U (Plus (Plus One (El m)) (El n)) (Plus (Plus (El m) One) (El n)) (Plus (El m) (Plus One (El n)))
+                             (<i> Plus (PlusComm One (El m) @ i) (El n))
+                             (<i> PlusAssoc (El m) One (El n) @ -i)))
+
+swapEl (m n : Nat) : Path U (El (add m n)) (El (add n m)) =
+  <i> El (addComm m n @ i)
+
+-- this won't swap
+testSwapl : El (S (S O)) = comp (swapEl (S O) (S O)) (inl tt) []
+testSwapr : El (S (S O)) = comp (swapEl (S O) (S O)) (inr (inl tt)) []
+
+swap2El (m n : Nat) : Path U (El (add m n)) (El (add n m)) =
+  trans U (El (add m n)) (Plus (El m) (El n)) (El (add n m))
+        (ElPlus m n)
+        (trans U (Plus (El m) (El n)) (Plus (El n) (El m)) (El (add n m))
+               (PlusComm (El m) (El n))
+               (<i> ElPlus n m @ -i))
+
+-- this actually swaps
+testSwap2l : El (S (S O)) = comp (swap2El (S O) (S O)) (inl tt) []
+testSwap2r : El (S (S O)) = comp (swap2El (S O) (S O)) (inr (inl tt)) []
