@@ -3,35 +3,36 @@
 module PiFin+.Semantics where
 
 open import HoTT
-  using (Type; Type₀; Type₁; lsucc; lmax; lzero;
-         of-type; -- syntax u :> A
-         _∘_; is-inj;
-         ⊥; ⊥-elim;
-         ⊤; unit;
-         ℕ; O; S;
-         _⊔_; inl; inr;
-         Σ; _,_ ; fst; snd; pair=; fst=; ↓-Σ-in;
-         Ptd; ⊙[_,_]; pt;
-         Trunc; [_]; Trunc-elim; Trunc=-equiv;
-         _==_; idp; !; _∙_; ap; ua; coe; coe-equiv;
-         PathOver; -- syntax u == v [ B ↓ p ]
-         _≃_; is-equiv; is-eq; equiv; transport-equiv; –>; <–;
-         has-level-in; is-contr; is-prop; is-connected;
-         inhab-prop-is-contr; prop-has-all-paths; prop-has-all-paths-↓;
-         SubtypeProp; Trunc-level; ℕ₋₂; has-level; transport; Subtype=;
-         Subtype=-econv; equiv-preserves-level; universe-=-level;
-         is-set; ⟨-2⟩; is-gpd; ⊔-level; ⟨⟩; _⁻¹;
-         has-dec-eq; Dec; inr=inr-equiv; dec-eq-is-set;
-         Subtype=-out; coe-equiv-β; pair==; ua-η; pair=-η
-         )
+  -- this is tedious to maintain
+  -- using (Type; Type₀; Type₁; lsucc; lmax; lzero;
+  --        of-type; -- syntax u :> A
+  --        _∘_; is-inj;
+  --        ⊥; ⊥-elim;
+  --        ⊤; unit;
+  --        ℕ; O; S;
+  --        _⊔_; inl; inr;
+  --        Σ; _,_ ; fst; snd; pair=; fst=; ↓-Σ-in;
+  --        Ptd; ⊙[_,_]; pt;
+  --        Trunc; [_]; Trunc-elim; Trunc=-equiv;
+  --        _==_; idp; !; _∙_; ap; ua; coe; coe-equiv;
+  --        PathOver; -- syntax u == v [ B ↓ p ]
+  --        _≃_; is-equiv; is-eq; equiv; transport-equiv; –>; <–;
+  --        has-level-in; is-contr; is-prop; is-connected;
+  --        inhab-prop-is-contr; prop-has-all-paths; prop-has-all-paths-↓;
+  --        SubtypeProp; Trunc-level; ℕ₋₂; has-level; transport; Subtype=;
+  --        Subtype=-econv; equiv-preserves-level; universe-=-level;
+  --        is-set; ⟨-2⟩; is-gpd; ⊔-level; ⟨⟩; _⁻¹;
+  --        has-dec-eq; Dec; inr=inr-equiv; dec-eq-is-set;
+  --        Subtype=-out; coe-equiv-β; pair==; ua-η; pair=-η;
+  --        )
 
 -----------------------------------------------------------------------------
 -- A path between ⊤ ⊔ X and ⊤ ⊔ Y induces a path between X and Y
 -- Proof is tedious combinatorics
 
-inl≠inr : ∀ {ℓ₁ ℓ₂ ℓ₃} {A : Type ℓ₁} {B : Type ℓ₂} {C : Type ℓ₃}
+inl!=inr : ∀ {ℓ₁ ℓ₂ ℓ₃} {A : Type ℓ₁} {B : Type ℓ₂} {C : Type ℓ₃}
           {a : A} {b : B} → (inl a == inr b) → C
-inl≠inr ()
+inl!=inr ()
 
 module _ {ℓ} {X Y : Type ℓ}
          (f : ⊤ ⊔ X → ⊤ ⊔ Y) (g : ⊤ ⊔ Y → ⊤ ⊔ X)
@@ -52,7 +53,7 @@ module _ {ℓ} {X Y : Type ℓ}
                Σ (⊤ ⊔ Y) (λ y → f (inr x) == y) →
                Y
   reduce-aux x (inl unit , p) (inl unit , q) =
-    inl≠inr (finj f g g-f (p ∙ ! q))
+    inl!=inr (finj f g g-f (p ∙ ! q))
   reduce-aux x (inl unit , p) (inr y , q)    = y
   reduce-aux x (inr y , p)    (inl unit , q) = y
   reduce-aux x (inr y , p)    (inr y' , q)   = y'
@@ -96,16 +97,16 @@ module _ {ℓ} {X Y : Type ℓ}
                  (Σ (⊤ ⊔ X) (λ y → g (fst v) == y)) →
                  reduce g f g-f f-g (reduce f g f-g g-f x) == x
   reduce-η-aux x (inl unit , p) (inl unit , q) _ _ _ =
-    inl≠inr (finj f g g-f (p ∙ (! q) ))
+    inl!=inr (finj f g g-f (p ∙ (! q) ))
   reduce-η-aux x (u , p) (v , q) _ (inl unit , r) (inl unit , s) =
-    inl≠inr
+    inl!=inr
       (finj f g g-f
         (p ∙ (! (f-g u) ∙ ap f r ∙ ! (ap f s) ∙ f-g v) ∙ ! q))
   reduce-η-aux x (inr y , p) (inr y' , q) (inl unit , t)
     (inl unit , r) (inr x'' , s) =
-    inl≠inr (! (! (f-g _) ∙ ap f (r ∙ ! t) ∙ (f-g _)))
+    inl!=inr (! (! (f-g _) ∙ ap f (r ∙ ! t) ∙ (f-g _)))
   reduce-η-aux x (_ , p) _ _ (inr _ , r) _ =
-    inl≠inr (finj f g g-f (p ∙ ! (f-g _) ∙ ap f r))
+    inl!=inr (finj f g g-f (p ∙ ! (f-g _) ∙ ap f r))
   reduce-η-aux x (inr y , p) (inr y' , q) (inr x' , t)
     (inl unit , r) (inr x'' , s) =
     {!!}
@@ -157,8 +158,8 @@ is-finite X = Σ ℕ λ n → Trunc -1 (El n == X)
 -- port over from EmbeddingsInUniverse
 is-finite-path : (X : Type₀) → (φ₁ φ₂ : is-finite X) → φ₁ == φ₂
 is-finite-path X (O , ψ₁) (O , ψ₂) = pair= idp (prop-has-all-paths ψ₁ ψ₂)
-is-finite-path X (O , ψ₁) (S m , ψ₂) = {!!}
-is-finite-path X (S n , ψ₁) (O , ψ₂) = {!!}
+is-finite-path X (O , ψ₁) (S m , ψ₂) = ⊥-elim (Trunc-elim (λ p → coe p (inl unit)) (Trunc-fmap2 _∙_ ψ₂ (Trunc-fmap ! ψ₁)))
+is-finite-path X (S n , ψ₁) (O , ψ₂) = ⊥-elim (Trunc-elim (λ p → coe p (inl unit)) (Trunc-fmap2 _∙_ ψ₁ (Trunc-fmap ! ψ₂)))
 is-finite-path X (S n , ψ₁) (S m , ψ₂) = pair= (ap S {!!}) {!!}
 
 is-finite-is-prop : (X : Type₀) → is-prop (is-finite X)
@@ -304,3 +305,82 @@ finite-types-is-univ : is-univ-fib (fst {A = Type₀} {is-finite})
 finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
 
 -----------------------------------------------------------------------------
+
+2-paths-in-ℕ : (m n : ℕ) (p : m == n) → p == idp [ (λ x → x == n) ↓ p ]
+2-paths-in-ℕ m .m idp = idp
+
+2-paths-in-El : {n : ℕ} (x y : El n) (p : x == y) → p == idp [ (λ z → z == y) ↓ p ]
+2-paths-in-El x .x idp = idp
+
+⊔-unit-l : ∀ {ℓ} (X : Type ℓ) → ⊥ ⊔ X == X
+⊔-unit-l X = ua (equiv f g f-g g-f)
+  where f : ⊥ ⊔ X → X
+        f (inl ())
+        f (inr x) = x
+        g : X → ⊥ ⊔ X
+        g = inr
+        f-g : (b : X) → b == b
+        f-g b = idp
+        g-f : (a : ⊥ ⊔ X) → g (f a) == a
+        g-f (inl ())
+        g-f (inr x) = idp
+
+⊔-assoc : ∀ {ℓ} (X Y Z : Type ℓ) → X ⊔ (Y ⊔ Z) == (X ⊔ Y) ⊔ Z
+⊔-assoc X Y Z = ua (equiv f g f-g g-f)
+  where f : X ⊔ (Y ⊔ Z) → (X ⊔ Y) ⊔ Z
+        f (inl x) = inl (inl x)
+        f (inr (inl y)) = inl (inr y)
+        f (inr (inr z)) = inr z
+        g : (X ⊔ Y) ⊔ Z → X ⊔ (Y ⊔ Z)
+        g (inl (inl x)) = inl x
+        g (inl (inr y)) = inr (inl y)
+        g (inr z) = inr (inr z)
+        f-g : (b : (X ⊔ Y) ⊔ Z) → f (g b) == b
+        f-g (inl (inl x)) = idp
+        f-g (inl (inr y)) = idp
+        f-g (inr z) = idp
+        g-f : (a : X ⊔ (Y ⊔ Z)) → g (f a) == a
+        g-f (inl x) = idp
+        g-f (inr (inl y)) = idp
+        g-f (inr (inr z)) = idp
+
+⊔-comm : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y == Y ⊔ X
+⊔-comm X Y = ua (equiv f g f-g g-f)
+  where f : X ⊔ Y → Y ⊔ X
+        f (inl x) = inr x
+        f (inr y) = inl y
+        g : Y ⊔ X → X ⊔ Y
+        g (inl y) = inr y
+        g (inr x) = inl x
+        f-g : (b : Y ⊔ X) → f (g b) == b
+        f-g (inl y) = idp
+        f-g (inr x) = idp
+        g-f : (a : X ⊔ Y) → g (f a) == a
+        g-f (inl x) = idp
+        g-f (inr y) = idp
+
+El-+ : {m n : ℕ} → El (m + n) == (El m ⊔ El n)
+El-+ {O} {n} = ! (⊔-unit-l (El n))
+El-+ {S m} {n} = ap (λ X → ⊤ ⊔ X) (El-+ {m} {n}) ∙ (⊔-assoc ⊤ (El m) (El n))
+
+El-swap : {m n : ℕ} → El (m + n) == El (n + m)
+El-swap {m} {n} = ua (transport-equiv El (+-comm m n))
+
+tpt-equiv-El : {m n : ℕ} {p : m == n} (x : El m)
+             → –> (transport-equiv El p) x == coe (ap El p) x
+tpt-equiv-El {m} {.m} {idp} x = idp
+
+test-El-swap : coe (El-swap {1} {1}) (inl unit) == inl unit
+test-El-swap = (coe-β (transport-equiv El (+-comm 1 1)) (inl unit)) ∙ tpt-equiv-El (inl unit) ∙ {!!}
+
+El-swap2 : {m n : ℕ} → El (m + n) == El (n + m)
+El-swap2 {m} {n} = El-+ ∙ ⊔-comm (El m) (El n) ∙ ! El-+
+
+coe-∙∙ : ∀ {i} {A B C D : Type i} (p : A == B) (q : B == C) (r : C == D) (a : A)
+        → coe (p ∙ q ∙ r) a == coe r (coe q (coe p a))
+coe-∙∙ idp q r = coe-∙ q r
+
+test-El-swap2 : coe (El-swap2 {1} {1}) (inl unit) == inl unit
+test-El-swap2 = coe-∙∙ El-+ (⊔-comm (El 1) (El 1)) (! El-+) (inl unit)
+              ∙ coe-! El-+ (coe (⊔-comm (El 1) (El 1)) (coe (ap (_⊔_ ⊤) (! (⊔-unit-l (El 1))) ∙ (⊔-assoc ⊤ ⊥ (El 1))) (inl unit)))
+              ∙ {!!}
