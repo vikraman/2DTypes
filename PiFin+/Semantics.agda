@@ -1,9 +1,9 @@
-{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --rewriting #-}
 
 module PiFin+.Semantics where
 
 open import HoTT
-  using (Type; Type₀; Type₁; lsucc; lmax;
+  using (Type; Type₀; Type₁; lsucc; lmax; lzero;
          of-type; -- syntax u :> A
          _∘_; is-inj;
          ⊥; ⊥-elim;
@@ -21,7 +21,8 @@ open import HoTT
          SubtypeProp; Trunc-level; ℕ₋₂; has-level; transport; Subtype=;
          Subtype=-econv; equiv-preserves-level; universe-=-level;
          is-set; ⟨-2⟩; is-gpd; ⊔-level; ⟨⟩; _⁻¹;
-         has-dec-eq; Dec; inr=inr-equiv; dec-eq-is-set
+         has-dec-eq; Dec; inr=inr-equiv; dec-eq-is-set;
+         Subtype=-out; coe-equiv-β; pair==; ua-η; pair=-η
          )
 
 -----------------------------------------------------------------------------
@@ -279,11 +280,27 @@ M₀=-out {m} {n} p = El-is-inj m n (fst= p)
 is-univ-fib : ∀ {i j} {A : Type i} (B : A → Type j) → Type (lmax i j)
 is-univ-fib B = ∀ {x y} → is-equiv (transport-equiv B {x} {y})
 
-pred-ext-is-univ : ∀ {i j} → (B : Type i → Type j) → (φ : (X : Type i) → is-prop (B X))
-                 → is-univ-fib (fst {B = B})
-pred-ext-is-univ B φ = {!!}
+tpt-eqv-fst : ∀ {i j} {P : Type i → Type j} {X Y : Type i} → (p : X == Y)
+            → {ux : P X} {uy : P Y} → (up : ux == uy [ P ↓ p ])
+            → transport-equiv fst (pair= p up) == coe-equiv p
+tpt-eqv-fst idp idp = idp
+
+Subtype-is-univ : ∀ {i j} (P : SubtypeProp (Type i) j) → is-univ-fib (fst {A = Type i} {B = fst P})
+Subtype-is-univ P {X , φ₁} {Y , φ₂} = is-eq f g f-g g-f
+  where f : X , φ₁ == Y , φ₂ → X ≃ Y
+        f = transport-equiv fst
+        g : X ≃ Y → X , φ₁ == Y , φ₂
+        g e = Subtype=-out P (ua e)
+        f-g : (b : X ≃ Y) → f (g b) == b
+        f-g b = tpt-eqv-fst (ua b) prop-has-all-paths-↓ ∙ coe-equiv-β b
+        g-f : (a : X , φ₁ == Y , φ₂) → g (f a) == a
+        g-f idp = pair== (ua-η idp) prop-has-all-paths-↓ ∙ ! (pair=-η idp)
+          where instance _ = snd P X
+
+finite-SubtypeProp : SubtypeProp Type₀ (lsucc lzero)
+finite-SubtypeProp = is-finite , is-finite-is-prop
 
 finite-types-is-univ : is-univ-fib (fst {A = Type₀} {is-finite})
-finite-types-is-univ = {!!}
+finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
 
 -----------------------------------------------------------------------------
