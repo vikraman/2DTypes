@@ -96,30 +96,84 @@ swapEl (m n : Nat) : Path U (El (add m n)) (El (add n m)) =
                (PlusComm (El m) (El n))
                (<i> ElPlus n m @ -i))
 
-testSwapL2 : El (S (S O)) = comp (swapEl (S O) (S O)) (inl tt) []
-testSwapRL2 : El (S (S O)) = comp (swapEl (S O) (S O)) (inr (inl tt)) []
-
-testSwapL3 : El (S (S (S O))) = comp (swapEl (S (S O)) (S O)) (inl tt) []
-testSwapRL3 : El (S (S (S O))) = comp (swapEl (S (S O)) (S O)) (inr (inl tt)) []
-testSwapRRL3 : El (S (S (S O))) = comp (swapEl (S (S O)) (S O)) (inr (inr (inl tt))) []
-
-testSwapL4 : El (S (S (S (S O)))) = comp (swapEl (S (S (S O))) (S O)) (inl tt) []
-testSwapRL4 : El (S (S (S (S O)))) = comp (swapEl (S (S (S O))) (S O)) (inr (inl tt)) []
-testSwapRRL4 : El (S (S (S (S O)))) = comp (swapEl (S (S (S O))) (S O)) (inr (inr (inl tt))) []
-testSwapRRRL4 : El (S (S (S (S O)))) = comp (swapEl (S (S (S O))) (S O)) (inr (inr (inr (inl tt)))) []
-
 swap2El (m n : Nat) : Path U (El (add m n)) (El (add m n)) =
   <i> comp (<_> U) (swapEl m n @ i)
            [ (i = 0) -> <j> El (add m n), (i = 1) -> swapEl n m ]
 
-testSwap2L2 : El (S (S O)) = comp (swap2El (S O) (S O)) (inl tt) []
-testSwap2RL2 : El (S (S O)) = comp (swap2El (S O) (S O)) (inr (inl tt)) []
+assocEl (m n o : Nat) : Path U (El (add m (add n o))) (El (add (add m n) o)) =
+  trans U (El (add m (add n o))) (Plus (El m) (El (add n o))) (El (add (add m n) o))
+        (ElPlus m (add n o))
+        (trans U (Plus (El m) (El (add n o))) (Plus (El m) (Plus (El n) (El o))) (El (add (add m n) o))
+               (<i> (Plus (El m) (ElPlus n o @ i)))
+               (trans U (Plus (El m) (Plus (El n) (El o))) (Plus (Plus (El m) (El n)) (El o)) (El (add (add m n) o))
+                      (PlusAssoc (El m) (El n) (El o))
+                      (trans U (Plus (Plus (El m) (El n)) (El o)) (Plus (El (add m n)) (El o)) (El (add (add m n) o))
+                             (<i> (Plus (ElPlus m n @ -i) (El o)))
+                             (<i> ElPlus (add m n) o @ -i))))
 
-testSwap2L3 : El (S (S (S O))) = comp (swap2El (S (S O)) (S O)) (inl tt) []
-testSwap2RL3 : El (S (S (S O))) = comp (swap2El (S (S O)) (S O)) (inr (inl tt)) []
-testSwap2RRL3 : El (S (S (S O))) = comp (swap2El (S (S O)) (S O)) (inr (inr (inl tt))) []
+zero : Nat = O
+one : Nat = S O
+two : Nat = S one
+three : Nat = S two
+four : Nat = S three
+five : Nat = S four
+six : Nat = S five
 
-testSwap2L4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inl tt) []
-testSwap2RL4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inr (inl tt)) []
-testSwap2RRL4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inr (inr (inl tt))) []
-testSwap2RRRL4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inr (inr (inr (inl tt)))) []
+inEl : (m n : Nat) -> El (S n) = split
+  O -> \(n : Nat) -> inl tt
+  S m -> split@((n : Nat) -> El (S n)) with
+    O -> inl tt
+    S n -> inr (inEl m n)
+
+-- 2 = 1 + 1
+testSwapL2 : El two = comp (swapEl one one) (inEl zero one) []
+testSwapRL2 : El two = comp (swapEl one one) (inr (inl tt)) []
+
+-- 3 = 2 + 1
+testSwapL3 : El three = comp (swapEl two one) (inl tt) []
+testSwapRL3 : El three = comp (swapEl two one) (inr (inl tt)) []
+testSwapRRL3 : El three = comp (swapEl two one) (inr (inr (inl tt))) []
+
+-- 4 = 3 + 1
+testSwapL4 : El four = comp (swapEl three one) (inl tt) []
+testSwapRL4 : El four = comp (swapEl three one) (inr (inl tt)) []
+testSwapRRL4 : El four = comp (swapEl three one) (inr (inr (inl tt))) []
+testSwapRRRL4 : El four = comp (swapEl three one) (inr (inr (inr (inl tt)))) []
+
+-- 2 = 1 + 1
+testSwap2L2 : El two = comp (swap2El one one) (inl tt) []
+testSwap2RL2 : El two = comp (swap2El one one) (inr (inl tt)) []
+
+-- 3 = 2 + 1
+testSwap2L3 : El three = comp (swap2El two one) (inl tt) []
+testSwap2RL3 : El three = comp (swap2El two one) (inr (inl tt)) []
+testSwap2RRL3 : El three = comp (swap2El two one) (inr (inr (inl tt))) []
+
+-- 4 = 3 + 1
+testSwap2L4 : El four = comp (swap2El three one) (inl tt) []
+testSwap2RL4 : El four = comp (swap2El three one) (inr (inl tt)) []
+testSwap2RRL4 : El four = comp (swap2El three one) (inr (inr (inl tt))) []
+testSwap2RRRL4 : El four = comp (swap2El three one) (inr (inr (inr (inl tt)))) []
+
+-- 2 = 1 + 1 + 0
+testAssocL2 : El two = comp (assocEl one one zero) (inl tt) []
+testAssocRL2 : El two = comp (assocEl one one zero) (inr (inl tt)) []
+
+-- 3 = 1 + 1 + 1
+testAssocL3 : El three = comp (assocEl one one one) (inl tt) []
+testAssocRL3 : El three = comp (assocEl one one one) (inr (inl tt)) []
+testAssocRRL3 : El three = comp (assocEl one one one) (inr (inr (inl tt))) []
+
+-- 4 = 2 + 1 + 1
+testAssocL4 : El four = comp (assocEl two one one) (inl tt) []
+testAssocRL4 : El four = comp (assocEl two one one) (inr (inl tt)) []
+testAssocRRL4 : El four = comp (assocEl two one one) (inr (inr (inl tt))) []
+testAssocRRRL4 : El four = comp (assocEl two one one) (inr (inr (inr (inl tt)))) []
+
+-- 6 = 3 + 2 + 1
+testAssocL6 : El six = comp (assocEl three two one) (inl tt) []
+testAssocRL6 : El six = comp (assocEl three two one) (inr (inl tt)) []
+testAssocRRL6 : El six = comp (assocEl three two one) (inr (inr (inl tt))) []
+testAssocRRRL6 : El six = comp (assocEl three two one) (inr (inr (inr (inl tt)))) []
+testAssocRRRRL6 : El six = comp (assocEl three two one) (inr (inr (inr (inr (inl tt))))) []
+testAssocRRRRRL6 : El six = comp (assocEl three two one) (inr (inr (inr (inr (inr (inl tt)))))) []

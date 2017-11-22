@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
 
 module PiFin+.Semantics where
 
@@ -404,11 +404,12 @@ El-+ O n = ! (⊔-unit-l (El n))
 El-+ (S m) n = ap (λ X → ⊤ ⊔ X) (El-+ m n) ∙ ⊔-assoc ⊤ (El m) (El n)
 
 inl-El : {n : ℕ} → El (S n)
-inl-El = inl unit
+inl-El = inl tt
 
-inr-El : {n : ℕ} → El (S n)
-inr-El {O} = inl unit
-inr-El {S n} = inr (inr-El {n})
+inr-El : (m : ℕ) → {n : ℕ} → El (S n)
+inr-El O {n} = inl tt
+inr-El (S m) {O} = inl tt
+inr-El (S m) {S n} = inr (inr-El m {n})
 
 `id : {m n : ℕ} (p : m == n) → El m == El n
 `id = ap El
