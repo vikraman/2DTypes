@@ -384,6 +384,21 @@ finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
 ⊔-comm : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y == Y ⊔ X
 ⊔-comm X Y = ua (⊔-comm-eqv X Y)
 
+⊔-comm-eqv-inv : ∀ {ℓ} (X Y : Type ℓ) → ⊔-comm-eqv X Y == ⊔-comm-eqv Y X ⁻¹
+⊔-comm-eqv-inv X Y = pair= p prop-has-all-paths-↓
+  where p : –> (⊔-comm-eqv X Y) == <– (⊔-comm-eqv Y X)
+        p = λ= λ { (inl x) → idp ; (inr x) → idp }
+
+ide⁻¹ : ∀ {ℓ} {X : Type ℓ} → (ide X) ⁻¹ == ide X
+ide⁻¹ {X = X} = pair= idp (prop-has-all-paths (is-equiv-inverse (idf-is-equiv X)) (idf-is-equiv X))
+
+ua⁻¹ : ∀ {ℓ} {X Y : Type ℓ} (e : X ≃ Y) → ua (e ⁻¹) == ! (ua e)
+ua⁻¹ e = equiv-induction (λ eq → ua (eq ⁻¹) == ! (ua eq))
+                         (λ A → ((ap ua ide⁻¹) ∙ (ua-η idp)) ∙ (ap ! (! (ua-η idp)))) e
+
+⊔-comm-inv : ∀ {ℓ} (X Y : Type ℓ) → ⊔-comm X Y == ! (⊔-comm Y X)
+⊔-comm-inv X Y = (ap ua (⊔-comm-eqv-inv X Y)) ∙ ua⁻¹ (⊔-comm-eqv Y X)
+
 El-+ : (m n : ℕ) → El (m + n) == (El m ⊔ El n)
 El-+ O n = ! (⊔-unit-l (El n))
 El-+ (S m) n = ap (λ X → ⊤ ⊔ X) (El-+ m n) ∙ ⊔-assoc ⊤ (El m) (El n)
@@ -465,3 +480,18 @@ coe-∙∙∙∙ p q r s t a = coe-∙∙ p q (r ∙ s ∙ t) a ∙ coe-∙∙ r
                                      (coe-β (⊔-assoc-eqv (El m) (El n) (El o))
                                             (coe (ap (λ X → Coprod (El m) X) (El-+ n o))
                                                  (coe (El-+ m (n + o)) x))))
+
+`swap₊² : (m n : ℕ) → El (m + n) == El (m + n)
+`swap₊² m n = `swap₊ m n ∙ `swap₊ n m
+
+`swap₊²=idp : (m n : ℕ) → `swap₊² m n == idp
+`swap₊²=idp m n = path (El-+ m n) (⊔-comm (El m) (El n)) (⊔-comm (El n) (El m))
+                       (El-+ n m) (⊔-comm-inv (El m) (El n))
+  -- could be done with assoc but tedious
+  where path : ∀ {ℓ} {X : Type ℓ} {a b c d : X}
+             → (p : a == b) (q : b == c) (q' : c == b) (r : d == c)
+             → (α : q == ! q')
+             → (p ∙ q ∙ ! r) ∙ (r ∙ q' ∙ ! p) == idp
+        path idp q q' idp α = ap (λ z → (q ∙ idp) ∙ z) (∙-unit-r q')
+                            ∙ (ap (λ z → z ∙ q') (∙-unit-r q))
+                            ∙ ((ap (λ z → z ∙ q') α) ∙ (!-inv-l q'))
