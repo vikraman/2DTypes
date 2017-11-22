@@ -99,4 +99,13 @@ swap2El (m n : Nat) : Path U (El (add m n)) (El (add n m)) =
 
 -- this actually swaps
 testSwap2l : El (S (S O)) = comp (swap2El (S O) (S O)) (inl tt) []
-testSwap2r : El (S (S O)) = comp (swap2El (S O) (S O)) (inr (inl tt)) []
+testSwap2rl : El (S (S O)) = comp (swap2El (S O) (S O)) (inr (inl tt)) []
+
+testSwap2l3 : El (S (S (S O))) = comp (swap2El (S (S O)) (S O)) (inl tt) []
+testSwap2rl3 : El (S (S (S O))) = comp (swap2El (S (S O)) (S O)) (inr (inl tt)) []
+testSwap2rrl3 : El (S (S (S O))) = comp (swap2El (S (S O)) (S O)) (inr (inr (inl tt))) []
+
+testSwap2l4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inl tt) []
+testSwap2rl4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inr (inl tt)) []
+testSwap2rrl4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inr (inr (inl tt))) []
+testSwap2rrrl4 : El (S (S (S (S O)))) = comp (swap2El (S (S (S O))) (S O)) (inr (inr (inr (inl tt)))) []

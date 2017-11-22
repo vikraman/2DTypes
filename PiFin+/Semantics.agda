@@ -312,8 +312,8 @@ finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
 2-paths-in-El : {n : ℕ} (x y : El n) (p : x == y) → p == idp [ (λ z → z == y) ↓ p ]
 2-paths-in-El x .x idp = idp
 
-⊔-unit-l : ∀ {ℓ} (X : Type ℓ) → ⊥ ⊔ X == X
-⊔-unit-l X = ua (equiv f g f-g g-f)
+⊔-unit-l-eqv : ∀ {ℓ} (X : Type ℓ) → ⊥ ⊔ X ≃ X
+⊔-unit-l-eqv X = equiv f g f-g g-f
   where f : ⊥ ⊔ X → X
         f (inl ())
         f (inr x) = x
@@ -325,8 +325,27 @@ finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
         g-f (inl ())
         g-f (inr x) = idp
 
-⊔-assoc : ∀ {ℓ} (X Y Z : Type ℓ) → X ⊔ (Y ⊔ Z) == (X ⊔ Y) ⊔ Z
-⊔-assoc X Y Z = ua (equiv f g f-g g-f)
+⊔-unit-l : ∀ {ℓ} (X : Type ℓ) → ⊥ ⊔ X == X
+⊔-unit-l = ua ∘ ⊔-unit-l-eqv
+
+⊔-unit-r-eqv : ∀ {ℓ} (X : Type ℓ) → X ⊔ ⊥ ≃ X
+⊔-unit-r-eqv X = equiv f g f-g g-f
+  where f : X ⊔ ⊥ → X
+        f (inl x) = x
+        f (inr ())
+        g : X → X ⊔ ⊥
+        g = inl
+        f-g : (b : X) → b == b
+        f-g b = idp
+        g-f : (a : X ⊔ ⊥) → g (f a) == a
+        g-f (inl x) = idp
+        g-f (inr ())
+
+⊔-unit-r : ∀ {ℓ} (X : Type ℓ) → X ⊔ ⊥ == X
+⊔-unit-r = ua ∘ ⊔-unit-r-eqv
+
+⊔-assoc-eqv : ∀ {ℓ} (X Y Z : Type ℓ) → X ⊔ (Y ⊔ Z) ≃ (X ⊔ Y) ⊔ Z
+⊔-assoc-eqv X Y Z = equiv f g f-g g-f
   where f : X ⊔ (Y ⊔ Z) → (X ⊔ Y) ⊔ Z
         f (inl x) = inl (inl x)
         f (inr (inl y)) = inl (inr y)
@@ -344,8 +363,11 @@ finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
         g-f (inr (inl y)) = idp
         g-f (inr (inr z)) = idp
 
-⊔-comm : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y == Y ⊔ X
-⊔-comm X Y = ua (equiv f g f-g g-f)
+⊔-assoc : ∀ {ℓ} (X Y Z : Type ℓ) → X ⊔ (Y ⊔ Z) == (X ⊔ Y) ⊔ Z
+⊔-assoc X Y Z = ua (⊔-assoc-eqv X Y Z)
+
+⊔-comm-eqv : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y ≃ Y ⊔ X
+⊔-comm-eqv X Y = equiv f g f-g g-f
   where f : X ⊔ Y → Y ⊔ X
         f (inl x) = inr x
         f (inr y) = inl y
@@ -359,28 +381,87 @@ finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
         g-f (inl x) = idp
         g-f (inr y) = idp
 
-El-+ : {m n : ℕ} → El (m + n) == (El m ⊔ El n)
-El-+ {O} {n} = ! (⊔-unit-l (El n))
-El-+ {S m} {n} = ap (λ X → ⊤ ⊔ X) (El-+ {m} {n}) ∙ (⊔-assoc ⊤ (El m) (El n))
+⊔-comm : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y == Y ⊔ X
+⊔-comm X Y = ua (⊔-comm-eqv X Y)
 
-El-swap : {m n : ℕ} → El (m + n) == El (n + m)
-El-swap {m} {n} = ua (transport-equiv El (+-comm m n))
+El-+ : (m n : ℕ) → El (m + n) == (El m ⊔ El n)
+El-+ O n = ! (⊔-unit-l (El n))
+El-+ (S m) n = ap (λ X → ⊤ ⊔ X) (El-+ m n) ∙ ⊔-assoc ⊤ (El m) (El n)
 
-tpt-equiv-El : {m n : ℕ} {p : m == n} (x : El m)
-             → –> (transport-equiv El p) x == coe (ap El p) x
-tpt-equiv-El {m} {.m} {idp} x = idp
+inl-El : {n : ℕ} → El (S n)
+inl-El = inl unit
 
-test-El-swap : coe (El-swap {1} {1}) (inl unit) == inl unit
-test-El-swap = (coe-β (transport-equiv El (+-comm 1 1)) (inl unit)) ∙ tpt-equiv-El (inl unit) ∙ {!!}
+inr-El : {n : ℕ} → El (S n)
+inr-El {O} = inl unit
+inr-El {S n} = inr (inr-El {n})
 
-El-swap2 : {m n : ℕ} → El (m + n) == El (n + m)
-El-swap2 {m} {n} = El-+ ∙ ⊔-comm (El m) (El n) ∙ ! El-+
+`id : {m n : ℕ} (p : m == n) → El m == El n
+`id = ap El
+
+`id-coe-β : {n : ℕ} (p : n == n) (x : El n) → coe (`id p) x == x
+`id-coe-β {n} p x = (ap (λ p → coe (ap El p) x) (prop-has-all-paths p idp))
+
+`unite₊l : (n : ℕ) → El (0 + n) == El n
+`unite₊l n = El-+ O n
+           ∙ ⊔-unit-l (El n)
+
+`unite₊l-coe-β : {n : ℕ} → (x : El n) → coe (`unite₊l n) x == x
+`unite₊l-coe-β {O} ()
+`unite₊l-coe-β {S n} x = ap (λ p → coe p x) (!-inv-l (⊔-unit-l (El (S n))))
+
+`unite₊r : (n : ℕ) → El (n + 0) == El n
+`unite₊r n = El-+ n 0
+           ∙ ⊔-unit-r (El n)
+
+`unite₊r-El : {n : ℕ} → El (n + 0) → El n
+`unite₊r-El {n} x = –> (⊔-unit-r-eqv (El n)) (coe (El-+ n O) x)
+
+`unite₊r-coe-β : {n : ℕ} → (x : El (n + 0)) → coe (`unite₊r n) x == `unite₊r-El x
+`unite₊r-coe-β {n} x = coe-∙ (El-+ n O) (⊔-unit-r (El n)) x
+                     ∙ coe-β (⊔-unit-r-eqv (El n)) (coe (El-+ n O) x)
+
+`swap₊ : (m n : ℕ) → El (m + n) == El (n + m)
+`swap₊ m n = El-+ m n
+           ∙ ⊔-comm (El m) (El n)
+           ∙ ! (El-+ n m)
+
+`swap₊-El : {m n : ℕ} → El (m + n) → El (n + m)
+`swap₊-El {m} {n} x = coe (! (El-+ n m)) (–> (⊔-comm-eqv (El m) (El n)) (coe (El-+ m n) x))
 
 coe-∙∙ : ∀ {i} {A B C D : Type i} (p : A == B) (q : B == C) (r : C == D) (a : A)
-        → coe (p ∙ q ∙ r) a == coe r (coe q (coe p a))
-coe-∙∙ idp q r = coe-∙ q r
+       → coe (p ∙ q ∙ r) a == coe r (coe q (coe p a))
+coe-∙∙ p q r a = (coe-∙ p (q ∙ r) a) ∙ (coe-∙ q r (coe p a))
 
-test-El-swap2 : coe (El-swap2 {1} {1}) (inl unit) == inl unit
-test-El-swap2 = coe-∙∙ El-+ (⊔-comm (El 1) (El 1)) (! El-+) (inl unit)
-              ∙ coe-! El-+ (coe (⊔-comm (El 1) (El 1)) (coe (ap (_⊔_ ⊤) (! (⊔-unit-l (El 1))) ∙ (⊔-assoc ⊤ ⊥ (El 1))) (inl unit)))
-              ∙ {!!}
+`swap₊-coe-β : {m n : ℕ} → (x : El (m + n)) → coe (`swap₊ m n) x == `swap₊-El {m} {n} x
+`swap₊-coe-β {m} {n} x = coe-∙∙ (El-+ m n) (⊔-comm (El m) (El n)) (! (El-+ n m)) x
+                       ∙ ap (coe (! (El-+ n m)))
+                            (coe-β (⊔-comm-eqv (El m) (El n))
+                                   (coe (El-+ m n) x))
+
+`assocl₊ : (m n o : ℕ) → El (m + (n + o)) == El ((m + n) + o)
+`assocl₊ m n o = El-+ m (n + o)
+               ∙ ap (λ X → El m ⊔ X) (El-+ n o)
+               ∙ ⊔-assoc (El m) (El n) (El o)
+               ∙ ! (ap (λ X → X ⊔ El o) (El-+ m n))
+               ∙ ! (El-+ (m + n) o)
+
+`assocl₊-El : {m n o : ℕ} → El (m + (n + o)) → El ((m + n) + o)
+`assocl₊-El {m} {n} {o} x = coe (! (El-+ (m + n) o))
+                              (coe (! (ap (λ X → X ⊔ El o) (El-+ m n)))
+                                (–> (⊔-assoc-eqv (El m) (El n) (El o))
+                                  (coe (ap (λ X → El m ⊔ X) (El-+ n o))
+                                    (coe (El-+ m (n + o)) x))))
+
+coe-∙∙∙∙ : ∀ {i} {A B C D E F : Type i} (p : A == B) (q : B == C) (r : C == D) (s : D == E) (t : E == F) (a : A)
+         → coe (p ∙ q ∙ r ∙ s ∙ t) a == coe t (coe s (coe r (coe q (coe p a))))
+coe-∙∙∙∙ p q r s t a = coe-∙∙ p q (r ∙ s ∙ t) a ∙ coe-∙∙ r s t (coe q (coe p a))
+
+`assocl₊-El-β : {m n o : ℕ} → (x : El (m + (n + o))) → coe (`assocl₊ m n o) x == `assocl₊-El {m} {n} {o} x
+`assocl₊-El-β {m} {n} {o} x = coe-∙∙∙∙ (El-+ m (n + o)) (ap (λ X → El m ⊔ X) (El-+ n o))
+                                       (⊔-assoc (El m) (El n) (El o))
+                                       (! (ap (λ X → X ⊔ El o) (El-+ m n))) (! (El-+ (m + n) o)) x
+                            ∙ ap (coe ((! (El-+ (m + n) o))))
+                                 (ap (coe ((! (ap (λ X → Coprod X (El o)) (El-+ m n)))))
+                                     (coe-β (⊔-assoc-eqv (El m) (El n) (El o))
+                                            (coe (ap (λ X → Coprod (El m) X) (El-+ n o))
+                                                 (coe (El-+ m (n + o)) x))))
