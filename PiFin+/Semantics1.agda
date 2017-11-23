@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --rewriting #-}
 
 module PiFin+.Semantics1 where
 
@@ -23,17 +23,24 @@ El-is-inj (S m) (S n) p = ap S (El-is-inj m n (⊤-cncl p))
 is-finite : Type₀ → Type₁
 is-finite X = Σ ℕ λ n → Trunc -1 (El n == X)
 
--- port over from EmbeddingsInUniverse
-is-finite-path : (X : Type₀) → (φ₁ φ₂ : is-finite X) → φ₁ == φ₂
-is-finite-path X (O , ψ₁) (O , ψ₂) = pair= idp (prop-has-all-paths ψ₁ ψ₂)
-is-finite-path X (O , ψ₁) (S m , ψ₂) = ⊥-elim (Trunc-elim (λ p → coe p (inl unit)) (Trunc-fmap2 _∙_ ψ₂ (Trunc-fmap ! ψ₁)))
-is-finite-path X (S n , ψ₁) (O , ψ₂) = ⊥-elim (Trunc-elim (λ p → coe p (inl unit)) (Trunc-fmap2 _∙_ ψ₁ (Trunc-fmap ! ψ₂)))
-is-finite-path X (S n , ψ₁) (S m , ψ₂) = pair= (ap S {!!}) {!!}
-
-is-finite-is-prop : (X : Type₀) → is-prop (is-finite X)
-is-finite-is-prop X = has-level-in p
-  where p : (φ₁ φ₂ : is-finite X) → is-contr (φ₁ == φ₂)
-        p φ₁ φ₂ = inhab-prop-is-contr (is-finite-path X φ₁ φ₂) {{{!!}}}
+instance
+  is-finite-is-prop : {X : Type₀} → is-prop (is-finite X)
+  is-finite-is-prop {X} = all-paths-is-prop is-finite-path
+    where
+      -- instance search failing
+      is-finite-path : (φ₁ φ₂ : is-finite X) → φ₁ == φ₂
+      is-finite-path (O , ψ₁) (O , ψ₂) =
+        pair= idp (prop-has-all-paths ψ₁ ψ₂)
+      is-finite-path (O , ψ₁) (S m , ψ₂) =
+        ⊥-elim (Trunc-elim (λ p → coe p (inl tt))
+                           (Trunc-fmap2 _∙_ ψ₂ (Trunc-fmap ! ψ₁)))
+      is-finite-path (S n , ψ₁) (O , ψ₂) =
+        ⊥-elim (Trunc-elim (λ p → coe p (inl tt))
+                           (Trunc-fmap2 _∙_ ψ₁ (Trunc-fmap ! ψ₂)))
+      is-finite-path (S n , ψ₁) (S m , ψ₂) =
+        pair= (Trunc-elim (λ p → ap S (El-is-inj n m (⊤-cncl p)))
+                          (Trunc-fmap2 _∙_ ψ₁ (Trunc-fmap ! ψ₂)))
+              prop-has-all-paths-↓
 
 M : Type₁
 M = Σ Type₀ is-finite
@@ -167,7 +174,7 @@ Subtype-is-univ P {X , φ₁} {Y , φ₂} = is-eq f g f-g g-f
           where instance _ = snd P X
 
 finite-SubtypeProp : SubtypeProp Type₀ (lsucc lzero)
-finite-SubtypeProp = is-finite , is-finite-is-prop
+finite-SubtypeProp = is-finite , ⟨⟩
 
 finite-types-is-univ : is-univ-fib (fst {A = Type₀} {is-finite})
 finite-types-is-univ = Subtype-is-univ finite-SubtypeProp
