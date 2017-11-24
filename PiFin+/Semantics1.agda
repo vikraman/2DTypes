@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
 
 module PiFin+.Semantics1 where
 

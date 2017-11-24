@@ -1,8 +1,9 @@
-{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --rewriting #-}
 
 module PiFin+.Semantics2 where
 
 open import HoTT
+open import PiFin+.Semantics0
 open import PiFin+.Semantics1
 
 2-paths-in-ℕ : (m n : ℕ) (p : m == n) → p == idp [ (λ x → x == n) ↓ p ]
@@ -11,82 +12,86 @@ open import PiFin+.Semantics1
 2-paths-in-El : {n : ℕ} (x y : El n) (p : x == y) → p == idp [ (λ z → z == y) ↓ p ]
 2-paths-in-El x .x idp = idp
 
-⊔-unit-l-eqv : ∀ {ℓ} (X : Type ℓ) → ⊥ ⊔ X ≃ X
-⊔-unit-l-eqv X = equiv f g f-g g-f
-  where f : ⊥ ⊔ X → X
-        f (inl ())
-        f (inr x) = x
-        g : X → ⊥ ⊔ X
-        g = inr
-        f-g : (b : X) → b == b
-        f-g b = idp
-        g-f : (a : ⊥ ⊔ X) → g (f a) == a
-        g-f (inl ())
-        g-f (inr x) = idp
+abstract
+  ⊔-unit-l-eqv : ∀ {ℓ} (X : Type ℓ) → ⊥ ⊔ X ≃ X
+  ⊔-unit-l-eqv X = equiv f g f-g g-f
+    where f : ⊥ ⊔ X → X
+          f (inl ())
+          f (inr x) = x
+          g : X → ⊥ ⊔ X
+          g = inr
+          f-g : (b : X) → b == b
+          f-g b = idp
+          g-f : (a : ⊥ ⊔ X) → g (f a) == a
+          g-f (inl ())
+          g-f (inr x) = idp
 
 ⊔-unit-l : ∀ {ℓ} (X : Type ℓ) → ⊥ ⊔ X == X
 ⊔-unit-l = ua ∘ ⊔-unit-l-eqv
 
-⊔-unit-r-eqv : ∀ {ℓ} (X : Type ℓ) → X ⊔ ⊥ ≃ X
-⊔-unit-r-eqv X = equiv f g f-g g-f
-  where f : X ⊔ ⊥ → X
-        f (inl x) = x
-        f (inr ())
-        g : X → X ⊔ ⊥
-        g = inl
-        f-g : (b : X) → b == b
-        f-g b = idp
-        g-f : (a : X ⊔ ⊥) → g (f a) == a
-        g-f (inl x) = idp
-        g-f (inr ())
+abstract
+  ⊔-unit-r-eqv : ∀ {ℓ} (X : Type ℓ) → X ⊔ ⊥ ≃ X
+  ⊔-unit-r-eqv X = equiv f g f-g g-f
+    where f : X ⊔ ⊥ → X
+          f (inl x) = x
+          f (inr ())
+          g : X → X ⊔ ⊥
+          g = inl
+          f-g : (b : X) → b == b
+          f-g b = idp
+          g-f : (a : X ⊔ ⊥) → g (f a) == a
+          g-f (inl x) = idp
+          g-f (inr ())
 
 ⊔-unit-r : ∀ {ℓ} (X : Type ℓ) → X ⊔ ⊥ == X
 ⊔-unit-r = ua ∘ ⊔-unit-r-eqv
 
-⊔-assoc-eqv : ∀ {ℓ} (X Y Z : Type ℓ) → X ⊔ (Y ⊔ Z) ≃ (X ⊔ Y) ⊔ Z
-⊔-assoc-eqv X Y Z = equiv f g f-g g-f
-  where f : X ⊔ (Y ⊔ Z) → (X ⊔ Y) ⊔ Z
-        f (inl x) = inl (inl x)
-        f (inr (inl y)) = inl (inr y)
-        f (inr (inr z)) = inr z
-        g : (X ⊔ Y) ⊔ Z → X ⊔ (Y ⊔ Z)
-        g (inl (inl x)) = inl x
-        g (inl (inr y)) = inr (inl y)
-        g (inr z) = inr (inr z)
-        f-g : (b : (X ⊔ Y) ⊔ Z) → f (g b) == b
-        f-g (inl (inl x)) = idp
-        f-g (inl (inr y)) = idp
-        f-g (inr z) = idp
-        g-f : (a : X ⊔ (Y ⊔ Z)) → g (f a) == a
-        g-f (inl x) = idp
-        g-f (inr (inl y)) = idp
-        g-f (inr (inr z)) = idp
+abstract
+  ⊔-assoc-eqv : ∀ {ℓ} (X Y Z : Type ℓ) → X ⊔ (Y ⊔ Z) ≃ (X ⊔ Y) ⊔ Z
+  ⊔-assoc-eqv X Y Z = equiv f g f-g g-f
+    where f : X ⊔ (Y ⊔ Z) → (X ⊔ Y) ⊔ Z
+          f (inl x) = inl (inl x)
+          f (inr (inl y)) = inl (inr y)
+          f (inr (inr z)) = inr z
+          g : (X ⊔ Y) ⊔ Z → X ⊔ (Y ⊔ Z)
+          g (inl (inl x)) = inl x
+          g (inl (inr y)) = inr (inl y)
+          g (inr z) = inr (inr z)
+          f-g : (b : (X ⊔ Y) ⊔ Z) → f (g b) == b
+          f-g (inl (inl x)) = idp
+          f-g (inl (inr y)) = idp
+          f-g (inr z) = idp
+          g-f : (a : X ⊔ (Y ⊔ Z)) → g (f a) == a
+          g-f (inl x) = idp
+          g-f (inr (inl y)) = idp
+          g-f (inr (inr z)) = idp
 
 ⊔-assoc : ∀ {ℓ} (X Y Z : Type ℓ) → X ⊔ (Y ⊔ Z) == (X ⊔ Y) ⊔ Z
 ⊔-assoc X Y Z = ua (⊔-assoc-eqv X Y Z)
 
-⊔-comm-eqv : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y ≃ Y ⊔ X
-⊔-comm-eqv X Y = equiv f g f-g g-f
-  where f : X ⊔ Y → Y ⊔ X
-        f (inl x) = inr x
-        f (inr y) = inl y
-        g : Y ⊔ X → X ⊔ Y
-        g (inl y) = inr y
-        g (inr x) = inl x
-        f-g : (b : Y ⊔ X) → f (g b) == b
-        f-g (inl y) = idp
-        f-g (inr x) = idp
-        g-f : (a : X ⊔ Y) → g (f a) == a
-        g-f (inl x) = idp
-        g-f (inr y) = idp
+abstract
+  ⊔-comm-eqv : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y ≃ Y ⊔ X
+  ⊔-comm-eqv X Y = equiv f g f-g g-f
+    where f : X ⊔ Y → Y ⊔ X
+          f (inl x) = inr x
+          f (inr y) = inl y
+          g : Y ⊔ X → X ⊔ Y
+          g (inl y) = inr y
+          g (inr x) = inl x
+          f-g : (b : Y ⊔ X) → f (g b) == b
+          f-g (inl y) = idp
+          f-g (inr x) = idp
+          g-f : (a : X ⊔ Y) → g (f a) == a
+          g-f (inl x) = idp
+          g-f (inr y) = idp
+
+  ⊔-comm-eqv-inv : ∀ {ℓ} (X Y : Type ℓ) → ⊔-comm-eqv X Y == ⊔-comm-eqv Y X ⁻¹
+  ⊔-comm-eqv-inv X Y = pair= p prop-has-all-paths-↓
+    where p : –> (⊔-comm-eqv X Y) == <– (⊔-comm-eqv Y X)
+          p = λ= λ { (inl x) → idp ; (inr x) → idp }
 
 ⊔-comm : ∀ {ℓ} (X Y : Type ℓ) → X ⊔ Y == Y ⊔ X
 ⊔-comm X Y = ua (⊔-comm-eqv X Y)
-
-⊔-comm-eqv-inv : ∀ {ℓ} (X Y : Type ℓ) → ⊔-comm-eqv X Y == ⊔-comm-eqv Y X ⁻¹
-⊔-comm-eqv-inv X Y = pair= p prop-has-all-paths-↓
-  where p : –> (⊔-comm-eqv X Y) == <– (⊔-comm-eqv Y X)
-        p = λ= λ { (inl x) → idp ; (inr x) → idp }
 
 ide⁻¹ : ∀ {ℓ} {X : Type ℓ} → (ide X) ⁻¹ == ide X
 ide⁻¹ {X = X} = pair= idp (prop-has-all-paths (is-equiv-inverse (idf-is-equiv X)) (idf-is-equiv X))
@@ -101,14 +106,6 @@ ua⁻¹ e = equiv-induction (λ eq → ua (eq ⁻¹) == ! (ua eq))
 El-+ : (m n : ℕ) → El (m + n) == (El m ⊔ El n)
 El-+ O n = ! (⊔-unit-l (El n))
 El-+ (S m) n = ap (λ X → ⊤ ⊔ X) (El-+ m n) ∙ ⊔-assoc ⊤ (El m) (El n)
-
-inl-El : {n : ℕ} → El (S n)
-inl-El = inl tt
-
-inr-El : (m : ℕ) → {n : ℕ} → El (S n)
-inr-El O {n} = inl tt
-inr-El (S m) {O} = inl tt
-inr-El (S m) {S n} = inr (inr-El m {n})
 
 `id : {m n : ℕ} (p : m == n) → El m == El n
 `id = ap El
