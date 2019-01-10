@@ -48,19 +48,19 @@ M = Σ Type₀ is-finite
 M₀ : ℕ → M
 M₀ n = El n , n , [ idp ]
 
-BAut : ∀ {ℓ} → Type ℓ → Type (lsucc ℓ)
-BAut {ℓ} T = Σ (Type ℓ) λ X → Trunc -1 (T == X)
+-- BAut : ∀ {ℓ} → Type ℓ → Type (lsucc ℓ)
+-- BAut {ℓ} T = Σ (Type ℓ) λ X → Trunc -1 (T == X)
 
 ⊙BAut : ∀ {ℓ} → Type ℓ → Ptd (lsucc ℓ)
 ⊙BAut T = ⊙[ BAut T , (T , [ idp ]) ]
 
-BAut-trunc-path : ∀ {ℓ} (T X : Type ℓ) (φ : Trunc -1 (T == X))
-                → Trunc -1 ((T , [ idp ]) == (X , φ) :> BAut T)
-BAut-trunc-path {ℓ} T X = Trunc-elim λ p → [ pair= p prop-has-all-paths-↓ ]
+-- BAut-trunc-path : ∀ {ℓ} (T X : Type ℓ) (φ : Trunc -1 (T == X))
+--                 → Trunc -1 ((T , [ idp ]) == (X , φ) :> BAut T)
+-- BAut-trunc-path {ℓ} T X = Trunc-elim λ p → [ pair= p prop-has-all-paths-↓ ]
 
 BAut-0-conn : ∀ {ℓ} (T : Type ℓ) → is-connected 0 (BAut T)
 BAut-0-conn T = has-level-in ( [ pt (⊙BAut T) ]
-                             , Trunc-elim λ { (X , φ) → <– (Trunc=-equiv [ T , [ idp ] ] [ X , φ ])
+                             , Trunc-elim λ { (X , φ) → <– (=ₜ-equiv [ T , [ idp ] ] [ X , φ ])
                                                            (BAut-trunc-path T X φ) } )
 
 N : Type₁
