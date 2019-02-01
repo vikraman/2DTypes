@@ -1,0 +1,68 @@
+-- The integers as nat + nat with proof that suc is an iso giving a
+-- non-trivial path from Z to Z
+module int where
+
+import equiv
+import nat
+import discor
+
+       ---------------------------------------------------
+       -- Example: Non-trivial equality between Z and Z --
+       ---------------------------------------------------
+
+Z : U = or nat nat
+
+{- Z represents:
+
+  +2 = inr (suc (suc zero))
+  +1 = inr (suc zero)
+   0 = inr zero
+  -1 = inl zero
+  -2 = inl (suc zero)
+
+-}
+
+zeroZ : Z = inr zero
+
+sucZ : Z -> Z = split
+  inl u -> auxsucZ u
+    where
+    auxsucZ : nat -> Z = split
+      zero  -> inr zero
+      suc n -> inl n
+  inr v -> inr (suc v)
+
+predZ : Z -> Z = split
+  inl u -> inl (suc u)
+  inr v -> auxpredZ v
+    where
+    auxpredZ : nat -> Z = split
+      zero  -> inl zero
+      suc n -> inr n
+
+sucpredZ : (x : Z) -> Path Z (sucZ (predZ x)) x = split
+  inl u -> refl Z (inl u)
+  inr v -> lem v
+   where
+    lem : (u : nat) -> Path Z (sucZ (predZ (inr u))) (inr u) = split
+      zero  -> refl Z (inr zero)
+      suc n -> refl Z (inr (suc n))
+
+predsucZ : (x : Z) -> Path Z (predZ (sucZ x)) x = split
+  inl u -> lem u
+   where
+    lem : (u : nat) -> Path Z (predZ (sucZ (inl u))) (inl u) = split
+      zero  -> refl Z (inl zero)
+      suc n -> refl Z (inl (suc n))
+  inr v -> refl Z (inr v)
+
+
+sucPathZ : Path U Z Z = isoPath Z Z sucZ predZ sucpredZ predsucZ
+
+-- We can transport along the proof forward and backwards:
+testOneZ : Z = transport sucPathZ zeroZ
+testNOneZ : Z = transport (<i> sucPathZ @ - i) zeroZ
+
+
+
+ZSet : set Z = hedberg Z (orDisc nat nat natDec natDec)

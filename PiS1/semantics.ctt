@@ -1,0 +1,36 @@
+module semantics where
+
+import prelude
+import circle
+
+loopn : nat -> loopS1 -> loopS1 = split
+  zero  -> \(x:loopS1) -> <_> base
+  suc n -> \(x:loopS1) -> compS1 x (loopn n x)
+
+loopz : Z -> loopS1 = split
+  inl n -> loopn (suc n) invLoop
+  inr n -> loopn n loop1
+
+rotate (z : Z) : S1 -> S1 = split
+  base -> base
+  loop @ i -> loopz z @ i
+
+rotateRight : S1 -> S1 = rotate (sucZ zeroZ)
+rotateLeft : S1 -> S1 = rotate (predZ zeroZ)
+
+rr0 : loopS1 = <i> rotate zeroZ (loop1 @ i)
+rr1 : loopS1 = <i> rotate (sucZ zeroZ) (loop1 @ i)
+rr2 : loopS1 = <i> rotate (sucZ (sucZ zeroZ)) (loop1 @ i)
+rr3 : loopS1 = <i> rotate (sucZ (sucZ (sucZ zeroZ))) (loop1 @ i)
+rr4 : loopS1 = <i> rotate (sucZ (sucZ (sucZ (sucZ zeroZ)))) (loop1 @ i)
+rr5 : loopS1 = <i> rotate (sucZ (sucZ (sucZ (sucZ (sucZ zeroZ))))) (loop1 @ i)
+rr6 : loopS1 = <i> rotate (sucZ (sucZ (sucZ (sucZ (sucZ (sucZ zeroZ)))))) (loop1 @ i)
+
+rl1 : loopS1 = <i> rotate (predZ zeroZ) (loop1 @ i)
+rl2 : loopS1 = <i> rotate (predZ (predZ zeroZ)) (loop1 @ i)
+rl3 : loopS1 = <i> rotate (predZ (predZ (predZ zeroZ))) (loop1 @ i)
+rl4 : loopS1 = <i> rotate (predZ (predZ (predZ (predZ zeroZ)))) (loop1 @ i)
+rl5 : loopS1 = <i> rotate (predZ (predZ (predZ (predZ (predZ zeroZ))))) (loop1 @ i)
+rl6 : loopS1 = <i> rotate (predZ (predZ (predZ (predZ (predZ (predZ zeroZ)))))) (loop1 @ i)
+
+rr32 : loopS1 = <i> rotate (sucZ (sucZ (sucZ zeroZ))) (rotate (sucZ (sucZ zeroZ)) (loop1 @ i))

@@ -1,0 +1,234 @@
+-- This file contains the definition of equivalences and various
+-- results on these
+module equiv where
+
+import prelude
+
+fiber (A B : U) (f : A -> B) (y : B) : U =
+  (x : A) * Path B y (f x)
+
+isEquiv (A B : U) (f : A -> B) : U = (y : B) -> isContr (fiber A B f y)
+
+equiv (A B : U) : U = (f : A -> B) * isEquiv A B f
+
+propIsEquiv (A B : U) (f : A -> B)
+  : prop (isEquiv A B f) =
+  \ (u0 u1:isEquiv A B f) ->
+     <i> \ (y:B) -> propIsContr (fiber A B f y) (u0 y) (u1 y) @ i
+
+propIsEquivDirect (A B : U) (f : A -> B) : prop (isEquiv A B f) =
+  \(p q : isEquiv A B f) ->
+  <i> \(y : B) ->
+    let p0 : A = (p y).1.1
+        p1 : Path B y (f p0) = (p y).1.2
+        p2 : (w1 : fiber A B f y) -> Path (fiber A B f y) (p0,p1) w1 =
+         (p y).2
+        q0 : A = (q y).1.1
+        q1 : Path B y (f q0) = (q y).1.2
+        q2 : (w1 : fiber A B f y) -> Path (fiber A B f y) (q0,q1) w1 =
+         (q y).2
+    in (p2 (q0,q1) @ i,
+       \(w : fiber A B f y) ->
+          let sq : PathP (<j> Path (fiber A B f y) (p2 (q0,q1) @ j) w) (p2 w) (q2 w) = 
+                     <i j> comp (<_> fiber A B f y) (p2 w @ i \/ j)
+                                 [ (i = 0) -> <k> p2 w @ j
+                                 , (i = 1) -> <k> q2 w @ j \/ -k
+                                 , (j = 0) -> <k> p2 (q2 w @ -k) @ i
+                                 , (j = 1) -> <k> w ]
+          in sq @ i)
+
+-- Unfolded version of propIsEquiv with the same normal form as propIsEquivDirect:
+propIsEquivDirect' (A B : U) (f : A -> B) : prop (isEquiv A B f) =
+  \(p q : isEquiv A B f) ->
+  <i> \(y : B) ->
+    let p0 : A = (p y).1.1
+        p1 : Path B y (f p0) = (p y).1.2
+        p2 : (w1 : fiber A B f y) -> Path (fiber A B f y) (p0,p1) w1 = (p y).2
+        q0 : A = (q y).1.1
+        q1 : Path B y (f q0) = (q y).1.2
+        q2 : (w1 : fiber A B f y) -> Path (fiber A B f y) (q0,q1) w1 = (q y).2
+        alpha : Path (fiber A B f y) (p0,p1) (q0,q1) = p2 (q0,q1)
+    in (alpha @ i,
+        \(w : fiber A B f y) ->
+          let x : A = w.1
+              wx : Path B y (f x) = w.2
+              alpha1 : Path A p0 q0 = <i> (alpha @ i).1
+              alpha2 : PathP (<i> Path B y (f (alpha1 @ i))) p1 q1 =
+                <i> (alpha @ i).2
+              p2w1 : Path A p0 x = <i> (p2 w @ i).1
+              q2w1 : Path A q0 x = <i> (q2 w @ i).1
+              p2w2 : PathP (<i> Path B y (f (p2w1 @ i))) p1 wx = <i> (p2 w @ i).2
+              q2w2 : PathP (<i> Path B y (f (q2w1 @ i))) q1 wx = <i> (q2 w @ i).2
+              sq1 : PathP (<j> Path A (alpha1 @ j) x) p2w1 q2w1 =
+                <i j> comp (<_> A) (p2w1 @ i \/ j)
+                            [ (i = 0) -> <k> p2w1 @ j
+                            , (i = 1) -> <k> q2w1 @ j \/ -k
+                            , (j = 0) -> <k> (p2 (q2 w @ -k) @ i).1
+                            , (j = 1) -> <k> x ]
+
+              -- The l=0 face is f applied to the fill version of sq1, maybe
+              -- compute the filler separately?
+              sq2 : PathP (<i> PathP (<j> Path B y (f (sq1 @ i @ j)))
+                                     (alpha2 @ i) wx)
+                          p2w2 q2w2 =
+                <i j l> comp (<_> B) (p2w2 @ i \/ j @ l)
+                              [ (i = 0) -> <k> p2w2 @ j @ l
+                              , (i = 1) -> <k> q2w2 @ j \/ -k @ l
+                              , (j = 0) -> <k> (p2 (q2 w @ -k) @ i).2 @ l
+                              , (j = 1) -> <k> wx @ l
+                              , (l = 0) -> <k> y
+                              , (l = 1) -> <k> f (fill (<_> A) (p2w1 @ i \/ j)
+                                                        [ (i = 0) -> <k> p2w1 @ j
+                                                        , (i = 1) -> <k> q2w1 @ j \/ -k
+                                                        , (j = 0) -> <k> (p2 (q2 w @ -k) @ i).1
+                                                        , (j = 1) -> <k> x ] @ k) ]
+          in <j> (sq1 @ i @ j,sq2 @ i @ j))
+
+-- Using propIsEquivDirect here makes this a lot faster to use later
+equivLemma (A B : U)
+  : (v w : equiv A B) -> Path (A -> B) v.1 w.1 -> Path (equiv A B) v w
+  = lemSig (A -> B) (isEquiv A B) (propIsEquivDirect A B)
+
+idIsEquiv (A : U) : isEquiv A A (idfun A) =
+  \(a : A) -> ((a, refl A a)
+              ,\(z : fiber A A (idfun A) a) -> contrSingl A a z.1 z.2)
+
+equivPath (T A : U) (f : T -> A) (p : isEquiv T A f) : Path U T A =
+  <i> Glue A [ (i=0) -> (T,f,p), (i=1) -> (A,idfun A, idIsEquiv A)]
+
+-- for univalence
+invEq (A B:U) (w:equiv A B) (y:B) : A = (w.2 y).1.1
+
+retEq (A B:U) (w:equiv A B) (y:B) : Path B (w.1 (invEq A B w y)) y =
+ <i>(w.2 y).1.2@-i
+
+secEq (A B:U) (w:equiv A B) (x:A) : Path A (invEq A B w (w.1 x)) x =
+ <i> ((w.2 (w.1 x)).2 (x,<j>w.1 x)@i).1
+ --
+
+transEquivDirect (A B:U) (p:Path U A B) : equiv A B = (f,p)
+ where
+  f (x:A) : B = trans A B p x
+  g (y:B) : A = comp (<i>p@-i) y []
+  lem1 (x:A) : PathP p x (f x) = <i>comp (<j>p@(i/\j)) x [(i=0) -> <j>x]
+  lem2 (y:B) : PathP p (g y) y = <i>comp (<j>p@(i\/-j)) y [(i=1) -> <j>y]
+  lem3 (y:B) : Path B y (f (g y)) = <i>comp p (g y) [(i=0) -> lem2 y,(i=1) -> lem1 (g y)]
+  lem4 (y:B) : PathP (<i>Path (p@i) (lem2 y@i) (lem1 (g y)@i)) (<j>g y) (lem3 y) =
+    <j i>fill p (g y) [(i=0) -> lem2 y,(i=1) -> lem1 (g y)] @ j
+  lem5 (y:B) (x:A) (q:Path B y (f x)) : Path A (g y) x =
+    <i>comp (<j>p@-j) (q@i) [(i=0) -> <j>lem2 y@-j,(i=1) -> <j>lem1 x@-j]
+  lem6 (y:B) (x:A) (q:Path B y (f x)) : PathP (<i>Path (p@i) (lem2 y@i) (lem1 x@i)) (lem5 y x q) q =
+    <j i>fill (<j>p@-j) (q@i) [(i=0) -> <k>lem2 y@-k,(i=1) -> <k>lem1 x@-k] @ -j
+  lem7 (y:B) (x:A) (q:Path B y (f x)) : PathP (<i>Path B y (f (lem5 y x q@i))) (lem3 y) q =
+    <j i>comp p (lem5 y x q@i/\j) [(i=0) -> lem2 y, (i=1) -> lem1 (lem5 y x q@j),(j=0) -> <k>lem4 y@k@i,(j=1) -> <k>lem6 y x q@k@i]
+  lem8 (y:B) : fiber A B f y = (g y,lem3 y)
+  lem9 (y:B) (z:fiber A B f y) : Path (fiber A B f y) (lem8 y) z =
+    <i>(lem5 y z.1 z.2@i,lem7 y z.1 z.2@i)
+  p (y:B) : isContr (fiber A B f y) = (lem8 y,lem9 y)
+
+lemSinglContr (A:U) (a:A) : isContr ((x:A) * Path A a x) =
+ ((a,refl A a),\ (z:(x:A) * Path A a x) -> contrSingl A a z.1 z.2)
+
+idEquiv (A:U) : equiv A A = (\ (x:A) -> x, lemSinglContr A)
+
+transEquiv (A B : U) (p : Path U A B) : equiv A B =
+ subst U (equiv A) A B p (idEquiv A)
+
+compf (A B C : U) (f : B -> C) (g : A -> B) : A -> C =
+  \(a : A) -> f (g a)
+
+transEquivEq (A B : U) (p : Path U A B) :
+  Path (A -> B) (transEquiv A B p).1 (compf A A B (trans A B p) (trans A A (<_> A))) =
+  <_> (transEquiv A B p).1
+
+transDelta (A:U) : equiv A A = transEquiv A A (<i>A)
+
+transEquivToPath (A B : U) (w : equiv A B) : Path U A B =
+  <i> Glue B [ (i = 1) -> (B,eB)
+             , (i = 0) -> (A,w) ]
+ where eB : equiv B B = transDelta B
+
+eqToEq (A B : U) (p : Path U A B)
+  : Path (Path U A B) (transEquivToPath A B (transEquiv A B p)) p
+  = <j i> let e : equiv A B = transEquiv A B p
+              f : equiv B B = transDelta B
+              Ai : U = p@i
+              g : equiv Ai B = transEquiv Ai B (<k> p @ (i \/ k))
+          in Glue B
+           [ (i = 0) -> (A,e)
+           , (i = 1) -> (B,f)
+           , (j = 1) -> (p@i,g)]
+
+transPathFun (A B : U) (w : equiv A B)
+  : Path (A -> B) w.1 (transEquiv A B (transEquivToPath A B w)).1 =
+ <i> \ (a:A) ->
+   let b : B = w.1 a
+       u : A = comp (<j>A) a []
+       q : Path B (w.1 u) b = <i>w.1 (comp (<j>A) a [(i=1) -> <j>a])
+   in comp (<j> B)
+        (comp (<j> B) (comp (<j> B) (comp (<j> B) (w.1 u) [(i=0)->q]) [(i=0)-><k>b]) [(i=0)-><k>b]) [(i=0)-><k>b]
+
+idToPath (A B : U) (w : equiv A B)
+  : Path (equiv A B) (transEquiv A B (transEquivToPath A B w)) w
+  = equivLemma A B (transEquiv A B (transEquivToPath A B w)) w
+      (<i>transPathFun A B w@-i)
+
+
+-- The iso to equiv
+
+lemIso (A B : U) (f : A -> B) (g : B -> A)
+       (s : (y : B) -> Path B (f (g y)) y)
+       (t : (x : A) -> Path A (g (f x)) x)
+       (y : B) (x0 x1 : A) (p0 : Path B y (f x0)) (p1 : Path B y (f x1)) :
+       Path (fiber A B f y) (x0,p0) (x1,p1) = <i> (p @ i,sq1 @ i)
+  where
+    rem0 : Path A (g y) x0 =
+      <i> comp (<k> A) (g (p0 @ i)) [ (i = 1) -> t x0, (i = 0) -> <k> g y ]
+
+    rem0fill : Square A (g y) (g (f x0)) (g y) x0
+                        (<i> g (p0 @ i)) rem0 (<i> g y) (t x0)  =
+      <i> fill (<k> A) (g (p0 @ i)) [ (i = 1) -> t x0, (i = 0) -> <k> g y ]
+
+    rem1 : Path A (g y) x1 =
+      <i> comp (<k> A) (g (p1 @ i)) [ (i = 1) -> t x1, (i = 0) -> <k> g y ]
+
+    rem1fill : Square A (g y) (g (f x1)) (g y) x1
+                        (<i> g (p1 @ i)) rem1 (<i> g y) (t x1) =
+      <i> fill (<k> A) (g (p1 @ i)) [ (i = 1) -> t x1, (i = 0) -> <k> g y ]
+
+    p : Path A x0 x1 =
+      <i> comp (<k> A) (g y) [ (i = 1) -> rem1, (i = 0) -> rem0 ]
+
+    pfill : Square A (g y) (g y) x0 x1
+                     (<k> g y) p rem0 rem1 =
+      <i> fill (<k> A) (g y) [ (i = 1) -> rem1, (i = 0) -> rem0 ]
+
+    sq : Square A (g y) (g y) (g (f x0)) (g (f x1))
+                  (<i> g y) (<i> g (f (p @ i)))
+                  (<j> g (p0 @ j)) (<j> g (p1 @ j)) =
+      <i j> comp (<k> A) (pfill @ i @ j) [ (i = 0) -> <k> rem0fill @ j @ -k
+                                         , (i = 1) -> <k> rem1fill @ j @ -k
+                                         , (j = 0) -> <k> g y
+                                         , (j = 1) -> <k> t (p @ i) @ -k ]
+
+    sq1 : Square B y y (f x0) (f x1)
+                   (<k>y) (<i> f (p @ i)) p0 p1 =
+      <i j> comp (<k> B) (f (sq @ i @j)) [ (i = 0) -> s (p0 @ j)
+                                         , (i = 1) -> s (p1 @ j)
+                                         , (j = 1) -> s (f (p @ i))
+                                         , (j = 0) -> s y ]
+
+isoToEquiv (A B : U) (f : A -> B) (g : B -> A)
+       (s : (y : B) -> Path B (f (g y)) y)
+       (t : (x : A) -> Path A (g (f x)) x) : isEquiv A B f =
+  \(y:B) -> ((g y,<i>s y@-i),\ (z:fiber A B f y) ->
+    lemIso A B f g s t y (g y) z.1 (<i>s y@-i) z.2)
+
+isoPath (A B : U) (f : A -> B) (g : B -> A)
+      (s : (y : B) -> Path B (f (g y)) y)
+      (t : (x : A) -> Path A (g (f x)) x) : Path U A B =
+       <i> Glue B [ (i = 0) -> (A,f,isoToEquiv A B f g s t)
+                  , (i = 1) -> (B,idfun B,idIsEquiv B) ]
+
+idIsEquivIsoToEquiv (A : U) : isEquiv A A (idfun A) =
+  isoToEquiv A A (idfun A) (idfun A) (\(a : A) -> <i> a) (\(a : A) -> <i> a)

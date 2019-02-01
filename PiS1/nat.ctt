@@ -1,0 +1,149 @@
+-- Natural numbers
+module nat where
+
+import bool
+
+data nat = zero | suc (n : nat)
+
+one : nat = suc zero
+two : nat = suc one
+three : nat = suc two
+four : nat  = suc three
+five : nat  = suc four
+
+n0 : nat = zero
+n1 : nat = suc n0
+n2 : nat = suc n1
+n3 : nat = suc n2
+n4 : nat = suc n3
+n5 : nat = suc n4
+n6 : nat = suc n5
+n7 : nat = suc n6
+n8 : nat = suc n7
+n9 : nat = suc n8
+n10 : nat = suc n9
+n11 : nat = suc n10
+n12 : nat = suc n11
+n13 : nat = suc n12
+n14 : nat = suc n13
+n15 : nat = suc n14
+n16 : nat = suc n15
+n17 : nat = suc n16
+n18 : nat = suc n17
+n19 : nat = suc n18
+n20 : nat = suc n19
+
+pred : nat -> nat = split
+  zero -> zero
+  suc n -> n
+
+add (m : nat) : nat -> nat = split
+  zero  -> m
+  suc n -> suc (add m n)
+
+add_zero : (n : nat) -> Path nat (add zero n) n = split
+  zero  -> <i> zero
+  suc n -> <i> suc (add_zero n @ i)
+
+add_suc (a:nat) : (n : nat) -> Path nat (add (suc a) n) (suc (add a n)) = split
+  zero  ->  <i> suc a
+  suc m -> <i> suc (add_suc a m @ i)
+
+add_comm (a : nat) : (n : nat) -> Path nat (add a n) (add n a) = split
+  zero  -> <i> add_zero a @ -i
+  suc m -> <i> comp (<_> nat) (suc (add_comm a m @ i))
+                    [ (i = 0) -> <j> suc (add a m)
+                    , (i = 1) -> <j> add_suc m a @ -j ]
+
+assocAdd (a b:nat) : (c:nat) -> Path nat (add a (add b c)) (add (add a b) c) = split
+ zero -> <i>add a b
+ suc c1 -> <i>suc (assocAdd a b c1@i)
+
+add' : nat -> nat -> nat = split
+  zero -> \(x : nat) -> x
+  suc n -> \(x : nat) -> suc (add' n x)
+
+sucInj (n m : nat) (p : Path nat (suc n) (suc m)) : Path nat n m =
+ <i> pred (p @ i)
+
+add_comm3 (a b c : nat) : Path nat (add a (add b c)) (add c (add b a)) =
+  let rem : Path nat (add a (add b c)) (add a (add c b)) = <i> add a (add_comm b c @ i)
+      rem1 : Path nat (add a (add c b)) (add (add c b) a) = add_comm a (add c b)
+      rem2 : Path nat (add (add c b) a) (add c (add b a)) = <i> assocAdd c b a @ -i
+  in <i> comp (<_> nat) (rem1 @ i) [ (i = 0) -> <j> rem @ -j, (i = 1) -> rem2 ]
+
+natcancelr (a b : nat) : (x : nat) -> Path nat (add a x) (add b x) -> Path nat a b = split
+  zero -> \(h : Path nat a b) -> h
+  suc x' -> \(h : Path nat (suc (add a x')) (suc (add b x'))) ->
+    natcancelr a b x' (sucInj (add a x') (add b x') h)
+
+idnat : nat -> nat = split
+  zero -> zero
+  suc n -> suc (idnat n)
+
+test : Path (nat -> nat) idnat (idfun nat) = funExt nat (\(_ : nat) -> nat) idnat (idfun nat) rem
+  where
+  rem : (n : nat) -> Path nat (idnat n) n = split
+    zero -> refl nat zero
+    suc n -> mapOnPath nat nat (\(x : nat) -> suc x) (idnat n) n (rem n)
+
+caseNat (A : U) (a0 aS : A) : nat -> A = split
+ zero -> a0
+ suc n -> aS
+
+caseDNat (P:nat -> U) (a0 :P zero) (aS : (n:nat) -> P (suc n))
+            : (n:nat) -> P n = split
+ zero -> a0
+ suc n -> aS n
+
+znots (n : nat) : neg (Path nat zero (suc n)) =
+ \ (h:Path nat zero (suc n)) -> subst nat (caseNat U nat N0) zero (suc n) h zero
+
+snotz (n : nat) : neg (Path nat (suc n) zero) =
+ \ (h:Path nat (suc n) zero) -> znots n (inv nat (suc n) zero h)
+
+natDec : (n m:nat) -> dec (Path nat n m) = split
+ zero -> caseDNat (\ (m:nat) -> dec (Path nat zero m)) (inl (refl nat zero)) (\ (m:nat) -> inr (znots m))
+ suc n -> caseDNat (\ (m:nat) -> dec (Path nat (suc n) m)) (inr (snotz n))
+   (\ (m:nat) -> decEqCong (Path nat n m) (Path nat (suc n) (suc m)) (\ (p:Path nat n m) -> <i> suc (p @ i))
+                 (sucInj n m) (natDec n m))
+
+natSet : set nat = hedberg nat natDec
+
+equalNat : nat -> nat -> bool = split
+    zero -> split@(nat -> bool) with
+      zero  -> true
+      suc n -> false
+    suc m -> split@(nat -> bool) with
+      zero  -> false
+      suc n -> equalNat m n
+
+-- Direct proof that nat is a set:
+invP : (n m : nat) (p : Path nat n m) -> U = split
+  zero  -> split@((m : nat) (p : Path nat zero m) -> U) with
+    zero  -> \(p : Path nat zero zero) -> 
+               Path (Path nat zero zero) p (<_> zero)
+    suc m -> \(p : Path nat zero (suc m)) -> N0
+  suc n -> split@((m : nat) (p : Path nat (suc n) m) -> U) with
+    zero  -> \(p : Path nat (suc n) zero) -> N0
+    suc m -> \(p : Path nat (suc n) (suc m)) ->
+               Path (Path nat (suc n) (suc m)) p (<i> suc (pred (p @ i)))
+
+-- using J for now
+pinv : (n m : nat) (p : Path nat n m) -> invP n m p = split
+  zero  -> J nat zero (invP zero) (<_ _> zero)
+  suc n -> J nat (suc n) (invP (suc n)) (<_ _> suc n)
+
+lem : (n : nat) (p : Path nat n n) -> Path (Path nat n n) p (<_> n) = split
+  zero  -> pinv zero zero
+  suc n -> \(p : Path nat (suc n) (suc n)) ->
+               compPath (Path nat (suc n) (suc n)) p (<i> suc (pred (p @ i))) (<_> suc n)
+                 (pinv (suc n) (suc n) p)
+                 (<i j> suc (lem n (<k> pred (p @ k)) @ i @ j))
+
+natset' (n : nat) : (m : nat) (p q : Path nat n m) -> Path (Path nat n m) q p = 
+  J nat n (\(m : nat)(p : Path nat n m) ->
+            (q : Path nat n m) -> Path (Path nat n m) q p)
+    (lem n)
+  
+setnat (n m : nat) (p q : Path nat n m) : Path (Path nat n m) p q = natset' n m q p
