@@ -1,3 +1,5 @@
+{-# OPTIONS --without-K #-}
+
 module PiFin+.Syntax where
 
 -- open import lib.Base

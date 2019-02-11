@@ -75,13 +75,12 @@ module _ {i j} {X : Type i} {Y : Type j} (e : ⊤ ⊔ Y ≃ ⊤ ⊔ X) where
   reduce-η' : (x : X) → reduce e (reduce (e ⁻¹) x) == x
   reduce-η' x = ! (ap (λ eq → reduce eq (reduce (e ⁻¹) x)) e⁻¹-inv) ∙ reduce-η (e ⁻¹) x
 
-abstract
-  ⊤-⊔-is-inj : ∀ {ℓ} → is-inj (_⊔_ {_} {ℓ} ⊤)
-  ⊤-⊔-is-inj X Y p = ua (equiv f g f-g g-f)
-    where e : ⊤ ⊔ X ≃ ⊤ ⊔ Y
-          e = coe-equiv p
-          e' : ⊤ ⊔ Y ≃ ⊤ ⊔ X
-          e' = e ⁻¹ -- coe-equiv (! p)
+module _ {i j} {X : Type i} {Y : Type j} (e : ⊤ ⊔ X ≃ ⊤ ⊔ Y) where
+
+  reduce-eq : X ≃ Y
+  reduce-eq = equiv f g f-g g-f
+    where e' : ⊤ ⊔ Y ≃ ⊤ ⊔ X
+          e' = e ⁻¹
           f : X → Y
           f = reduce e
           g : Y → X
@@ -90,6 +89,10 @@ abstract
           f-g = reduce-η' e
           g-f : (x : X) → g (f x) == x
           g-f = reduce-η e
+
+abstract
+  ⊤-⊔-is-inj : ∀ {ℓ} → is-inj (_⊔_ {_} {ℓ} ⊤)
+  ⊤-⊔-is-inj X Y p = ua (reduce-eq (coe-equiv p))
 
 ⊤-cncl : ∀ {ℓ} {X Y : Type ℓ} → ⊤ ⊔ X == ⊤ ⊔ Y → X == Y
 ⊤-cncl = ⊤-⊔-is-inj _ _
