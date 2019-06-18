@@ -10,3 +10,6 @@
 [submodule "HoTT-Agda"]
 	path = HoTT-Agda
 	url = https://github.com/HoTT/HoTT-Agda.git
+[submodule "cubical"]
+	path = cubical
+	url = https://github.com/agda/cubical.git

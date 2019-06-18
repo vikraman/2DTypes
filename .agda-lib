@@ -6,3 +6,4 @@ include:
   categories
   HoTT-Agda/core
   HoTT-Agda/theorems
+  cubical
