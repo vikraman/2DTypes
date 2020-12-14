@@ -38,5 +38,5 @@ module _ {i} where
   module FSMGElim {A : Type i} {j} {P : FSMG A → Type j}
     (η* : (a : A) → P (η a))
     (I* : P I)
-    (_⊗*_ : {X Y : FSMG A} → P X → P Y → P (X ⊗ Y))
+    (_⊗*_ : {X Y : FSMG A} → (X* : P X) → (Y* : P Y) → P (X ⊗ Y))
     where
