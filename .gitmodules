@@ -9,7 +9,8 @@
 	url = https://github.com/agda/agda-stdlib.git
 [submodule "HoTT-Agda"]
 	path = HoTT-Agda
-	url = https://github.com/HoTT/HoTT-Agda.git
+	url = https://github.com/awswan/HoTT-Agda.git
+	branch = agda-2.6.1-compatible
 [submodule "cubical"]
 	path = cubical
 	url = https://github.com/agda/cubical.git
