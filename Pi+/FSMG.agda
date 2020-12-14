@@ -34,3 +34,9 @@ module _ {i} where
       β² : {X Y : FSMG A} → β {X} {Y} ∙ β {Y} {X} == idp
 
       trunc : Trunc 1 (FSMG A)
+
+  module FSMGElim {A : Type i} {j} {P : FSMG A → Type j}
+    (η* : (a : A) → P (η a))
+    (I* : P I)
+    (_⊗*_ : {X Y : FSMG A} → P X → P Y → P (X ⊗ Y))
+    where
