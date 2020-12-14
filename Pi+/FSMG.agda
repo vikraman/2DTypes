@@ -9,7 +9,7 @@ module _ {i} where
   postulate
     FSMG : (A : Type i) → Type i
 
-  module _ (A : Type i) where
+  module _ {A : Type i} where
     infix 40 _⊗_
     postulate
       η : A → FSMG A
