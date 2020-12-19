@@ -1,26 +1,48 @@
-{-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
 module Pi+.Conjectures where
 
-open import Pi+.Pi+ as Pi
-open import Pi+.FSMG as FSMG
+open import Pi+.Syntax as Pi
+open import Pi+.UFin
+open import Pi+.Level0
 
 open import lib.Basics
 
-M = FSMG Unit
+⟦_⟧₀ : U → UFin
+⟦ O ⟧₀ = FinFS 0
+⟦ I ⟧₀ = FinFS 1
+⟦ x Pi.+ y ⟧₀ = ⟦ x ⟧₀ ∪ ⟦ y ⟧₀
 
--- eval
-⟦_⟧₀ : U → M
-⟦ O ⟧₀ = FSMG.I
-⟦ U.I ⟧₀ = FSMG.η unit
-⟦ X + Y ⟧₀ = ⟦ X ⟧₀ ⊗ ⟦ Y ⟧₀
+⌜_⌝₀ : UFin → U
+⌜ x ⌝₀ = ℕ→Pi (card x)
 
-⟦_⟧₁ : {X Y : U} → X ⟷ Y → ⟦ X ⟧₀ == ⟦ Y ⟧₀
+⌜⟦_⟧⌝₀ : (X : U) → ⌜ ⟦ X ⟧₀ ⌝₀ ⟷₁ X
+⌜⟦ O ⟧⌝₀ = id⟷₁
+⌜⟦ I ⟧⌝₀ = swap₊ ◎ unite₊l
+⌜⟦ X + X₁ ⟧⌝₀ = {!   !}
+
+⟦⌜_⌝⟧₀ : (X : UFin) → ⟦ ⌜ X ⌝₀ ⟧₀ == X
+⟦⌜ X , φ ⌝⟧₀ = pair= {!!} {!!}
+
+⟦_⟧₁ : {X Y : U} → X ⟷₁ Y → ⟦ X ⟧₀ == ⟦ Y ⟧₀ {- Lehmer n -}
 ⟦ p ⟧₁ = {!   !}
 
-⟦_⟧₂ : {X Y : U} → {p q : X ⟷ Y } → p ⇔ q → ⟦ p ⟧₁ == ⟦ q ⟧₁
-⟦_⟧₂ = {!   !}
+⌜_⌝₁ : {X Y : UFin} → X == Y → ⌜ X ⌝₀ ⟷₁ ⌜ Y ⌝₀
+⌜_⌝₁ = {!   !}
 
--- quote
-⌜_⌝₀ : M → U
-⌜_⌝₀ = {!   !}
+-- ⌜⟦_⟧⌝₁ : {X Y : U} → (p : X ⟷₁ Y) → ⌜ ⟦ p ⟧₁ ⌝₁ ⟷₂ p
+-- ⌜⟦ p ⟧⌝₁ = {!   !}
+
+-- ⟦⌜_⌝⟧₁ : {X Y : UFin} → (p : X == Y) → ⟦ ⌜ p ⌝₁ ⟧₁ == p
+
+⟦_⟧₂ : {X Y : U} → {p q : X ⟷₁ Y } → p ⟷₂ q → ⟦ p ⟧₁ == ⟦ q ⟧₁
+⟦ α ⟧₂ = {!   !}
+
+-- ⌜_⌝₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
+-- ⌜ idp ⌝₂ = id⟷₂
+
+-- ⟦⌜_⌝⟧₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → ⟦ ⌜ α ⌝₂ ⟧₂ == α
+-- ⟦⌜ α ⌝⟧₂ = prop-has-all-paths (ap ((⟦_⟧₁ ∘ ⌜_⌝₁)) α) ((ap ((⟦_⟧₁ ∘ ⌜_⌝₁)) α))
+
+-- ⌜⟦_⟧⌝₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → ⌜ ⟦ α ⟧₂ ⌝₂ ⟷₃ α
+-- ⌜⟦ α ⟧⌝₂ = trunc

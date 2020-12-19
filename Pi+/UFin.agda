@@ -9,16 +9,7 @@ UFin = FinSet
 
 instance
     UFin-is-gpd : has-level (S (S (S ⟨-2⟩))) UFin
-    UFin-is-gpd = {!!}
-
-
-Fin-S+ : ∀ {n} → Fin n → Fin (S n)
-Fin-S+ (n , lt) = S n , <-ap-S lt
-
-Fin-S+^ : ∀ {n} → (m : ℕ) → Fin n → Fin (m + n)
-Fin-S+^ O <n = <n
-Fin-S+^ (S m) <n = Fin-S+ (Fin-S+^ m <n)
-
+    UFin-is-gpd = Subtype-level FinSet-prop {{{!   !}}}
 
 ⊔-comm : (A B : Type₀) -> (A ⊔ B) ≃ (B ⊔ A)
 ⊔-comm A B = equiv f g f-g g-f
@@ -54,7 +45,6 @@ Fin-S+^ (S m) <n = Fin-S+ (Fin-S+^ m <n)
         g-f (inl (inr x)) = idp
         g-f (inr x) = idp
 
-
 Fin-∪ : {n m : ℕ} → (Fin n ⊔ Fin m) ≃ Fin (n + m)
 Fin-∪ {O} {m} = pp
   where
@@ -73,24 +63,24 @@ Fin-∪ {S n} {m} = pp
   lemma : Fin (S n) ⊔ Fin m == (Fin n ⊔ Unit) ⊔ Fin m
   lemma = ap (λ x -> x ⊔ Fin m) (ua Fin-equiv-Coprod)
 
-  indCase : Fin n ⊔ Fin (S m) ≃ Fin (n + (S m))
-  indCase = Fin-∪ {n} {(S m)}
-
   pp =
       Fin (S n) ⊔ Fin m
         ≃⟨ coe-equiv lemma ⟩
       (Fin n ⊔ Unit) ⊔ Fin m
         ≃⟨ ⊔-assoc (Fin n) Unit (Fin m) ⟩
       Fin n ⊔ (Unit ⊔ Fin m)
-        ≃⟨ coe-equiv ((ap (λ x -> Fin n ⊔ x) (ua (⊔-comm Unit (Fin m) )))) ⟩
+        ≃⟨ coe-equiv ((ap (λ x -> Fin n ⊔ x) (ua (⊔-comm Unit (Fin m) ))))⟩
       Fin n ⊔ (Fin m ⊔ Unit)
-        ≃⟨ coe-equiv ((ap (λ x -> Fin n ⊔ x) (ua Fin-equiv-Coprod))) ⁻¹ ⟩
+        ≃⟨ coe-equiv ((ap (λ x -> Fin n ⊔ x) (ua Fin-equiv-Coprod))) ⁻¹⟩
       Fin n ⊔ Fin (S m)
-        ≃⟨ indCase ⟩
+        ≃⟨ Fin-∪ {n} {(S m)} ⟩
       Fin (n + (S m))
         ≃⟨ coe-equiv (ap Fin (+-βr n m)) ⟩
       Fin (S (n + m))
         ≃∎
 
 _∪_ : FinSet -> FinSet → FinSet
-(X , ϕ) ∪ (Y , ψ) = X ⊔ Y , {!!}
+(X , ϕ) ∪ (Y , ψ) = X ⊔ Y , Trunc-fmap2 {!   !} ϕ ψ
+  where
+    tx : {! ? !}
+    tx = transport (SubtypeProp.prop FinSet-prop) (ua (Fin-∪ ⁻¹)) {!!}
