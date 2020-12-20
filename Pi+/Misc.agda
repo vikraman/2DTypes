@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.MiscLemmas where
+module Pi+.Misc where
 
 open import HoTT
 

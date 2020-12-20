@@ -20,6 +20,7 @@ Code structure is as follows:
  - `UFin.agda` - helper lemmas about UFin.
  - `Syntax.agda` - syntax of "+" fragment of Π.
  - `Level0.agda` - helper lemmas about 0-th level of Π.
+ - `ShiftHIT.agda` - contains a definition of a HIT which is hypothesised to be equivalent to S_n - essentially, it's a presentation of S_n using shifts as generators and relations carried over from a Coxeter presentation. Maybe it will be useful later on.
 
 
 ## FSMG

@@ -1,3 +1,5 @@
+
+
 FSMG A = [] | cons | swap | swap^2 | hexagon
 
 swap : x :: y :: xs == y :: x :: xs

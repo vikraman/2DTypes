@@ -4,7 +4,7 @@ module Pi+.UFin where
 
 open import HoTT
 open import homotopy.FinSet public
-open import Pi+.MiscLemmas
+open import Pi+.Misc
 
 UFin = FinSet
 
