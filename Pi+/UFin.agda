@@ -4,6 +4,7 @@ module Pi+.UFin where
 
 open import HoTT
 open import homotopy.FinSet public
+open import Pi+.MiscLemmas
 
 UFin = FinSet
 
@@ -45,8 +46,8 @@ instance
         g-f (inl (inr x)) = idp
         g-f (inr x) = idp
 
-Fin-∪ : {n m : ℕ} → (Fin n ⊔ Fin m) ≃ Fin (n + m)
-Fin-∪ {O} {m} = pp
+Fin-⊔ : {n m : ℕ} → (Fin n ⊔ Fin m) ≃ Fin (n + m)
+Fin-⊔ {O} {m} = pp
   where
   lemma : Fin 0 ⊔ Fin m == Empty ⊔ Fin m
   lemma = ap (λ x -> x ⊔ Fin m) (ua Fin-equiv-Empty)
@@ -58,7 +59,7 @@ Fin-∪ {O} {m} = pp
         ≃⟨ ⊔₁-Empty (Fin m) ⟩
       Fin m
         ≃∎
-Fin-∪ {S n} {m} = pp
+Fin-⊔ {S n} {m} = pp
   where
     lemma : Fin (S n) ⊔ Fin m == (Fin n ⊔ Unit) ⊔ Fin m
     lemma = ap (λ x -> x ⊔ Fin m) (ua Fin-equiv-Coprod)
@@ -72,14 +73,14 @@ Fin-∪ {S n} {m} = pp
           Fin n ⊔ (Fin m ⊔ Unit)
         ≃⟨ coe-equiv (ap (λ x -> Fin n ⊔ x) (ua Fin-equiv-Coprod)) ⁻¹ ⟩
           Fin n ⊔ Fin (S m)
-        ≃⟨ Fin-∪ {n} {(S m)} ⟩
+        ≃⟨ Fin-⊔ {n} {(S m)} ⟩
           Fin (n + (S m))
         ≃⟨ coe-equiv (ap Fin (+-βr n m)) ⟩
           Fin (S (n + m))
         ≃∎
 
 _∪_ : FinSet -> FinSet → FinSet
-(X , ϕ) ∪ (Y , ψ) = X ⊔ Y , Trunc-fmap2 {!   !} ϕ ψ
+(X , ϕ) ∪ (Y , ψ) = X ⊔ Y , Trunc-fmap2 tx ϕ ψ
   where
-    tx : {! ? !}
-    tx = transport (SubtypeProp.prop FinSet-prop) (ua (Fin-∪ ⁻¹)) {!!}
+    tx : Σ ℕ (λ n → Fin n == X) → Σ ℕ (λ n → Fin n == Y) → Σ ℕ (λ n → Fin n == X ⊔ Y)
+    tx (n , α) (m , β)= (n + m) , ua ((Fin-⊔ ∘e transport2-equiv (λ x y ->  x ⊔ y) (! α) (! β)) ⁻¹)

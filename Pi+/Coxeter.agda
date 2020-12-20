@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split #-}
+y{-# OPTIONS --without-K --exact-split #-}
 
 module Pi+.Coxeter where
 
