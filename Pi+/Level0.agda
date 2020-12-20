@@ -4,7 +4,7 @@ module Pi+.Level0 where
 
 open import lib.Base
 
-open import Pi+.Pi+ as Pi
+open import Pi+.Syntax as Pi
 
 ℕ→Pi : ℕ → U
 ℕ→Pi O = O
