@@ -30,3 +30,21 @@ Using the above proof, we should be able to get the following corollary.
 ```
 Ufin ≃ FSMG Unit
 ```
+
+### TODO
+1. Define interfaces: 
+ - Lehmer
+ - Coxeter
+
+2. Write (or copy) the equivalence `Lehmer n ≃ (Fin n ≃ Fin n)`
+
+3. Write the equivalence between path space of `FSMG 1` and Coxeter (using Mac Lane book, p. 251)
+ - There are two versions of it, possible that the version with swap will be better suited
+
+4. Write the equivalence between Coxeter and LongCoxeter (push the commutativity of the relation down using diamond/strong normalization)
+
+5. Compose the equivalences.
+
+## Notes
+
+Look into what sorting algorithm is actually ran as we compute with swap and assoc.
