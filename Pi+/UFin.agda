@@ -9,7 +9,7 @@ UFin = FinSet
 
 instance
     UFin-is-gpd : has-level (S (S (S ⟨-2⟩))) UFin
-    UFin-is-gpd = ?
+    UFin-is-gpd = {!   !}
 
 ⊔-comm : (A B : Type₀) -> (A ⊔ B) ≃ (B ⊔ A)
 ⊔-comm A B = equiv f g f-g g-f
@@ -60,23 +60,22 @@ Fin-∪ {O} {m} = pp
         ≃∎
 Fin-∪ {S n} {m} = pp
   where
-  lemma : Fin (S n) ⊔ Fin m == (Fin n ⊔ Unit) ⊔ Fin m
-  lemma = ap (λ x -> x ⊔ Fin m) (ua Fin-equiv-Coprod)
+    lemma : Fin (S n) ⊔ Fin m == (Fin n ⊔ Unit) ⊔ Fin m
+    lemma = ap (λ x -> x ⊔ Fin m) (ua Fin-equiv-Coprod)
 
-  pp =
-      Fin (S n) ⊔ Fin m
+    pp =  Fin (S n) ⊔ Fin m
         ≃⟨ coe-equiv lemma ⟩
-      (Fin n ⊔ Unit) ⊔ Fin m
+          (Fin n ⊔ Unit) ⊔ Fin m
         ≃⟨ ⊔-assoc (Fin n) Unit (Fin m) ⟩
-      Fin n ⊔ (Unit ⊔ Fin m)
+          Fin n ⊔ (Unit ⊔ Fin m)
         ≃⟨ coe-equiv ((ap (λ x -> Fin n ⊔ x) (ua (⊔-comm Unit (Fin m) ))))⟩
-      Fin n ⊔ (Fin m ⊔ Unit)
-        ≃⟨ coe-equiv ((ap (λ x -> Fin n ⊔ x) (ua Fin-equiv-Coprod))) ⁻¹⟩
-      Fin n ⊔ Fin (S m)
+          Fin n ⊔ (Fin m ⊔ Unit)
+        ≃⟨ coe-equiv (ap (λ x -> Fin n ⊔ x) (ua Fin-equiv-Coprod)) ⁻¹ ⟩
+          Fin n ⊔ Fin (S m)
         ≃⟨ Fin-∪ {n} {(S m)} ⟩
-      Fin (n + (S m))
+          Fin (n + (S m))
         ≃⟨ coe-equiv (ap Fin (+-βr n m)) ⟩
-      Fin (S (n + m))
+          Fin (S (n + m))
         ≃∎
 
 _∪_ : FinSet -> FinSet → FinSet
