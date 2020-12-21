@@ -3,27 +3,70 @@
 module Pi+.Coxeter.Arithmetic where
 
 open import lib.Base
-open import lib.types.Nat
+open import lib.types.Nat using (_+_ ; ℕ-S-is-inj)
 open import lib.PathGroupoid
+open import Pi+.Misc
+
+infix 4 _≤_ _<_
+
+data _≤_ : ℕ -> ℕ -> Type₀ where
+  z≤n : ∀ {n}                 → 0  ≤ n
+  s≤s : ∀ {m n} (m≤n : m ≤ n) → S m ≤ S n
+
+_<_ : ℕ -> ℕ -> Type₀
+m < n = S m ≤ n
+
+≤-trans : {m n r : ℕ} -> m ≤ n -> n ≤ r -> m ≤ r
+≤-trans z≤n       _         = z≤n
+≤-trans (s≤s m≤n) (s≤s n≤o) = s≤s (≤-trans m≤n n≤o)
+
+≤-reflexive : {p q : ℕ} -> p == q -> p ≤ q
+≤-reflexive {0}  idp = z≤n
+≤-reflexive {S m} idp = s≤s (≤-reflexive idp)
 
 ≤-up : {n m : ℕ} -> m ≤ n -> m ≤ S n
-≤-up = lteSR
+≤-up {n} {.0} z≤n = z≤n
+≤-up {.(S _)} {.(S _)} (s≤s q) = s≤s (≤-up q)
 
 ≤-down : {n m : ℕ} -> S m ≤ n -> m ≤ n
-≤-down {n} {m} (inl x) = ≤-cancel-S (inr ((transport (λ t -> t < S n) (! x) ltS)))
-≤-down {n} {m} (inr x) = ≤-cancel-S (inr (<-trans x ltS))
+≤-down {.(S _)} {0} (s≤s p) = z≤n
+≤-down {.(S _)} {S n} (s≤s p) = s≤s (≤-down p)
 
 ≤-down2 : {n m : ℕ} -> S m ≤ S n -> m ≤ n
-≤-down2 = ≤-cancel-S
+≤-down2 {m} {n} (s≤s p) = p
 
 ≤-abs : {A : Type₀} -> {n : ℕ} -> (S n ≤ 0) -> A
-≤-abs {_} {n} p = ⊥-elim (S≰O n p)
+≤-abs ()
+
+1+n≰n : ∀ {n} → ¬ (1 + n ≤ n)
+1+n≰n (s≤s le) = 1+n≰n le
 
 abs-refl : {A : Type₀} -> {n : ℕ} -> n < n -> A
-abs-refl {_} {S n} p = abs-refl (<-cancel-S p)
+abs-refl p = ⊥-elim (1+n≰n p)
 
 abs-suc : {A : Type₀} -> {n : ℕ} -> S n < n -> A
-abs-suc {_} {S n} p = abs-suc (<-cancel-S p)
+abs-suc {n} p = ⊥-elim (1+n≰n (≤-down p))
+
++-unit : {n : ℕ} -> n + 0 == n
++-unit {O} = idp
++-unit {S n} = ap S +-unit
+
++-S : ∀ m n → m + S n == S (m + n)
++-S 0    n = idp
++-S (S m) n = cong S (+-S m n)
+
++-comm : (m n : ℕ) -> (m + n) == (n + m)
++-comm O n = ! +-unit
++-comm (S m) n =
+  begin
+  S m + n   =⟨ idp ⟩
+  S (m + n) =⟨ cong S (+-comm m n) ⟩
+  S (n + m) =⟨ ≡-sym (+-S n m) ⟩
+  n + S m   =∎
+
++-assoc : (m n r : ℕ) -> (m + n) + r == m + (n + r)
++-assoc 0    _ _ = idp
++-assoc (S m) n o = cong S (+-assoc m n o)
 
 infixl 81 _∸_
 _∸_ : ℕ → ℕ → ℕ
@@ -35,11 +78,11 @@ S m ∸ S n  =  m ∸ n
 ≡-down2 {p} {q} r = ℕ-S-is-inj p q r
 
 postulate
-    ∸-implies-≤ : {p q r : ℕ} -> (p == (q ∸ r)) -> (p ≤ q)
+    ∸-implies-≤ : {p q r : ℕ} -> (p == q ∸ r) -> (p ≤ q)
     ≤-remove-+ : {p q r : ℕ} -> (p + q ≤ r) -> (q ≤ r)
     introduce-≤-from-+ : {p q r : ℕ} -> (p + q == r) -> (p ≤ r)
     +-three-assoc : {k i r : ℕ} -> k + (i + r) == (i + k) + r
-    introduce-∸ : {p q r : ℕ} -> (r ≤ q) -> (p + r == q) -> (p == (q ∸ r))
+    introduce-∸ : {p q r : ℕ} -> (r ≤ q) -> (p + r == q) -> (p == q ∸ r)
     eliminate-∸ : {p q r : ℕ} -> (r ≤ q) -> (p == q ∸ r) -> (p + r == q)
     introduce-∸-≤ : {p q r : ℕ} -> (r ≤ q) -> (p + r ≤ q) -> (p ≤ q ∸ r)
     eliminate-∸-≤ : {p q r : ℕ} -> (r ≤ q) -> (p ≤ q ∸ r) -> (p + r ≤ q)
@@ -56,7 +99,6 @@ postulate
     ≡-down-+ : {p q r : ℕ} -> (r + p == r + q) -> (p == q)
     ≡-down-r-+ : {p q r : ℕ} -> (p + r == q + r) -> (p == q)
     ∸-anti-≤ : {p q r : ℕ} -> (q ≤ p) -> (p ≤ r) -> (r ∸ p) ≤ (r ∸ q)
-    +-unit : {n : ℕ} -> n + 0 == n
     ≤-≡ : {n k : ℕ} -> (n ≤ k) -> (k ≤ n) -> (n == k)
     plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
 
@@ -65,47 +107,39 @@ zero-∸ 0 = idp
 zero-∸ (S n) = idp
 
 ∸-∸-+ : {p q r : ℕ} -> (r ≤ q) -> (q ≤ p + r) -> p ∸ (q ∸ r) == (p + r) ∸ q
-∸-∸-+ {p} {O} {O} rq qpr = ! (+-unit-r p)
-∸-∸-+ {p} {S q} {O} rq qpr = ! (ap (λ t -> t ∸ S q) ((+-unit-r p)))
-∸-∸-+ {p} {O} {S r} rq qpr = ≤-abs rq
-∸-∸-+ {p} {S q} {S r} (inl x) qpr = 
-  let rec = ∸-∸-+ {p} {q} {r} (inl (≡-down2 x)) (≤-cancel-S (≤-trans qpr (transport (λ t -> t ≤ S (p + r)) (! (+-three-assoc {p} {1} {r})) ≤-refl)))
+∸-∸-+ {p} {0} {0} rq qpr = +-comm 0 p
+∸-∸-+ {p} {S q} {0} rq qpr rewrite +-comm p 0 = idp
+∸-∸-+ {p} {S q} {S r} (s≤s rq) qpr =
+  let rec = ∸-∸-+ {p} {q} {r} rq (≤-down2 (≤-trans qpr (≤-reflexive (+-three-assoc {p} {1} {r}))))
       lemma : (p + r) ∸ q == (p + S r) ∸ S q
-      lemma = ap (λ x -> x ∸ S q) (! (+-three-assoc {p} {1} {r}))
-  in rec ∙ lemma
-∸-∸-+ {p} {S q} {S r} (inr x) qpr = 
-  let rec = ∸-∸-+ {p} {q} {r} (inr (<-cancel-S x)) (≤-cancel-S (≤-trans qpr (transport (λ t -> t ≤ S (p + r)) (! (+-three-assoc {p} {1} {r})) ≤-refl)))
-      lemma : (p + r) ∸ q == (p + S r) ∸ S q
-      lemma = ap (λ x -> x ∸ S q) (! (+-three-assoc {p} {1} {r}))
-  in rec ∙ lemma
-
-
+      lemma = cong (λ x -> x ∸ S q) (≡-sym (+-three-assoc {p} {1} {r}))
+  in ≡-trans rec lemma
 
 ∸-up : {n r : ℕ} -> (r < n) -> (n ∸ r) == S (n ∸ (S r))
-∸-up {S n} {O} p = idp
-∸-up {S O} {S r} (ltSR p) = ⊥-elim (S≰O r (inr p))
-∸-up {S (S n)} {S .n} ltS = ∸-up {S n} {n} ltS
-∸-up {S (S n)} {S r} (ltSR p) = ∸-up {S n} {r} (ltSR (<-cancel-S p))
+∸-up {S 0} {0} p = idp
+∸-up {S 0} {S r} (s≤s p) = ≤-abs p
+∸-up {S (S n)} {0} p = idp
+∸-up {S (S n)} {S r} (s≤s p) = ∸-up {S n} {r} p
 
 nowhere : {n k : ℕ} -> (¬ (n < k)) -> (¬ (n == k)) -> (¬ (n == 1 + k)) -> (¬ (1 + k < n)) -> ⊥
 nowhere {0} {0} p1 p2 p3 p4 = p2 idp
-nowhere {0} {S k} p1 p2 p3 p4 = p1 (O<S k)
+nowhere {0} {S k} p1 p2 p3 p4 = p1 (s≤s z≤n)
 nowhere {S 0} {0} p1 p2 p3 p4 = p3 idp
-nowhere {S (S n)} {0} p1 p2 p3 p4 = p4 (<-ap-S (O<S n))
-nowhere {S n} {S k} p1 p2 p3 p4 = nowhere (λ x → p1 (<-ap-S x)) (λ x → p2 (ap S x)) (λ x → p3 (ap S x)) (λ x → p4 (<-ap-S x))
+nowhere {S (S n)} {0} p1 p2 p3 p4 = p4 (s≤s (s≤s z≤n))
+nowhere {S n} {S k} p1 p2 p3 p4 = nowhere (λ x → p1 (s≤s x)) (λ x → p2 (cong S x)) (λ x → p3 (cong S x)) (λ x → p4 (s≤s x))
 
 ≤-≠-≤ : {n m : ℕ} -> (n ≤ S m) -> ¬ (n == S m) -> (n ≤ m)
-≤-≠-≤ {O} {m} p q = O≤ m
-≤-≠-≤ {S n} {O} (inl x) q = ⊥-elim (q x)
-≤-≠-≤ {S n} {O} (inr (ltSR x)) q = inr x
-≤-≠-≤ {S n} {S m} p q = ≤-ap-S (≤-≠-≤ {n} {m} (≤-cancel-S p) λ x → q (ap S x))
+≤-≠-≤ {0} {0} p q = z≤n
+≤-≠-≤ {0} {S m} p q = z≤n
+≤-≠-≤ {S 0} {0} p q = ⊥-elim (q idp)
+≤-≠-≤ {S (S n)} {0} (s≤s ()) q
+≤-≠-≤ {S n} {S m} (s≤s p) q = s≤s (≤-≠-≤ p λ x → q (cong S x))
 
 ≤-∃ : (n m : ℕ) -> (n ≤ m) -> Σ ℕ (λ t -> t + n == m)
-≤-∃ n m (inl x) = 0 , x
-≤-∃ n .(S n) (inr ltS) = 1 , idp
-≤-∃ n (S m) (inr (ltSR x)) = 
-    let x = ≤-∃ n m (inr x)
-    in  1 + x .fst , ap S (x .snd)
+≤-∃ .0 m z≤n = m , +-unit
+≤-∃ (S n) (S m) (s≤s p) =
+  let rec-t , rec-p = ≤-∃ n m p
+  in  rec-t , ≡-trans (+-three-assoc {rec-t} {1} {n}) (cong S rec-p)
 
 rrr : {k : ℕ} -> k ≤ k
-rrr = inl idp
+rrr = ≤-reflexive idp

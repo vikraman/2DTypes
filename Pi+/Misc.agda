@@ -2,7 +2,9 @@
 
 module Pi+.Misc where
 
-open import HoTT
+open import lib.Base
+open import lib.Equivalence
+open import lib.PathGroupoid
 
 transport2 : ∀ {i j k} {A : Type i} {B : Type j} (C : A → B → Type k) {x1 x2 : A} {y1 y2 : B} (p : x1 == x2) (q : y1 == y2)
   → (C x1 y1 → C x2 y2)
@@ -17,3 +19,20 @@ transport2 C {x1} {x2} {y1} {y2} p q t = t''
 transport2-equiv : ∀ {i j k} {A : Type i} {B : Type j} (C : A → B → Type k) {x1 x2 : A} {y1 y2 : B} (p : x1 == x2) (q : y1 == y2)
   → (C x1 y1 ≃ C x2 y2)
 transport2-equiv C idp idp = ide _
+
+infix  1 begin_
+
+begin_ : {A : Type₀} -> {x y : A} → x == y → x == y
+begin_ p = p
+
+cong : {A B : Type₀} -> ∀ (f : A → B) {x y} → x == y → f x == f y
+cong f p = ap f p
+
+≡-sym : {A : Type₀} -> {p q : A} -> p == q -> q == p
+≡-sym = !
+
+≡-trans : {A : Type₀} -> {p q r : A} -> p == q -> q == r -> p == r
+≡-trans = _∙_
+
+idpp : {A : Type₀} -> (a : A) -> a == a
+idpp x = idp

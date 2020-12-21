@@ -17,7 +17,6 @@ pp2 = (id⟷₁ ⊕ id⟷₁) ⊕ swap₊
 Claimp : pp1 ◎ pp2 ⟷₂ pp2 ◎ pp1
 Claimp = trans⟷₂ hom◎⊕⟷₂ (trans⟷₂ (resp⊕⟷₂ swapl₊⟷₂ swapr₊⟷₂) hom⊕◎⟷₂)
 
-
 -- This combinator is should in some way correspond to `braid` relation in Coxeter presentation
 -- In the special case of Fin 4, it shows that three overlapping swaps can be braided, e.g. 010 = 101
 -- It's a translation of a diagram on p. 4 in "Pi Semantics.pdf" document.
