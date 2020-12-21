@@ -14,7 +14,7 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=${HOME}/.local/bin:${PATH}
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-- travis_wait 30 stack --no-terminal --install-ghc --resolver lts-9 install Agda
+- travis_wait 30 stack --no-terminal --install-ghc --resolver nightly install Agda-2.6.1.2
 script:
 - agda --version
 - set -o pipefail
@@ -27,12 +27,11 @@ before_deploy:
 deploy:
   provider: releases
   api_key: "${GITHUB_OAUTH_TOKEN}"
-  file: upi.pdf
   overwrite: true
   skip_cleanup: true
   on:
     branch: master
-    tags: false
+    condition: 0 = 1
 env:
   global:
   - secure: RSVBIv7ABCqZqw51TjPUDNTPOHyLxutpQE48t6nHcDOhMdBtCCzFgrckT4bB+Ez5jpC2vqtDlSD7m1Gz9/GqcEfF0t5Rk4nHqh0qdjHdE/UN2BY8NPRQWnGqJ1VJl4o3a1Jp53tnUwD8R2cCtgRmAQCi4lK4g3jTqoC3cKcpqupLvsMwYJGDIMLWiwrxHtP8Nsmr+/BBKmbnCgjQW1VBpPQA/RODi4iC3Ifsd0ACVA506f4PwSzM2954uZJrG8+lUNO17Kzu83AWkgA2v0L9U/yAHuE0x7/MTIn5Hx76u1gk8+SKHs0tuo3tFbQaxdPru62J/tfG0pboIiIswpjVkoLXI731SqOhxJHyyJnjQoDhSXMtv/hk4c/+SRAeLEZg1e40mqnVCKoojzc5qzPKRy/rQcUnycxzNJFx1QTaMYdqUvFxWon6QqJPSNtcGxnLerC50NX/8rOxS55ZP5JpiMcjM3kCCU8LMYEVGcE20pVYq2eR4BVNQS8voWd7puX6gjPgnfs5bJTkIXkEX3V1oXEgrrdLque8XEMXxoV5do9uXswgdGQpmZeeoq1Ff/2qDa1axK4GuZM2lprU5fWAEgf2EASlNwBcfq1XzLRBRjf7VSjC8iYpl1im/+sVG7AFq3J75QfXMHsSUxkOYrVkXjXthaEScQshTdEK+lmaXLQ=
