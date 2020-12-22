@@ -13,6 +13,13 @@ data _≤_ : ℕ -> ℕ -> Type₀ where
   z≤n : ∀ {n}                 → 0  ≤ n
   s≤s : ∀ {m n} (m≤n : m ≤ n) → S m ≤ S n
 
+≤-isProp : {m n : ℕ} -> (p : m ≤ n) -> (q : m ≤ n) -> p == q
+≤-isProp {O} {O} z≤n z≤n = idp
+≤-isProp {O} {S n} z≤n z≤n = idp
+≤-isProp {S m} {S n} (s≤s p) (s≤s q) = 
+  let rec = ≤-isProp p q 
+  in  ap s≤s rec
+
 _<_ : ℕ -> ℕ -> Type₀
 m < n = S m ≤ n
 
@@ -77,19 +84,25 @@ S m ∸ S n  =  m ∸ n
 ≡-down2 : {p q : ℕ} -> (S p == S q) -> p == q   
 ≡-down2 {p} {q} r = ℕ-S-is-inj p q r
 
-data Dec≤ : ℕ -> ℕ -> Type₀ where
-  yes : {m n : ℕ} -> m ≤ n -> Dec≤ m n
-  no  : {m n : ℕ} -> ¬ (m ≤ n) -> Dec≤ m n
 
-_≤?_ : (n m : ℕ) -> Dec≤ n m
+_≤?_ : (n m : ℕ) -> BoolDec (n ≤ m)
 O ≤? m = yes z≤n
 S n ≤? O = no (λ ())
 S n ≤? S m with n ≤? m
 ... | yes p = yes (s≤s p)
 ... | no  q = no (λ x → q (≤-down2 x))
 
-_<?_ : (n m : ℕ) -> Dec≤ (S n) m
+_<?_ : (n m : ℕ) -> BoolDec ((S n) ≤ m)
 n <? m = (S n) ≤? m
+
+_≟_ : (n m : ℕ) -> BoolDec (n == m)
+O ≟ O = yes idp
+O ≟ S m = no (λ ())
+S n ≟ O = no (λ ())
+S n ≟ S m with n ≟ m
+... | yes p = yes (ap S p)
+... | no  p = no (λ x → p (≡-down2 x))
+
 
 postulate
     ∸-implies-≤ : {p q r : ℕ} -> (p == q ∸ r) -> (p ≤ q)

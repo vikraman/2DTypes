@@ -3,6 +3,7 @@
 module Pi+.Coxeter.Lists where
 
 open import lib.Base
+open import lib.PathGroupoid
 open import lib.types.Nat using (_+_)
 open import lib.Function
 open import Pi+.Coxeter.Arithmetic
@@ -20,6 +21,10 @@ _++_ : List → List → List
 nil ++ l = l
 (x :: l₁) ++ l₂ = x :: (l₁ ++ l₂)
 
+reverse : List -> List
+reverse nil = nil
+reverse (x :: xs) = (reverse xs) ++ (x :: nil)
+
 ++-unit-r : ∀ l → l ++ nil == l
 ++-unit-r nil      = idp
 ++-unit-r (a :: l) = ap (a ::_) $ ++-unit-r l
@@ -27,6 +32,12 @@ nil ++ l = l
 ++-assoc : ∀ l₁ l₂ l₃ → (l₁ ++ l₂) ++ l₃ == l₁ ++ (l₂ ++ l₃)
 ++-assoc nil l₂ l₃ = idp
 ++-assoc (x :: l₁) l₂ l₃ = ap (x ::_) (++-assoc l₁ l₂ l₃)
+
+reverse-++-commute : (xs ys : List) → reverse (xs ++ ys) == reverse ys ++ reverse xs
+reverse-++-commute nil ys = ! (++-unit-r (reverse ys))
+reverse-++-commute (x :: xs) ys = 
+  let rec = reverse-++-commute xs ys
+  in  ap (λ t -> t ++ x :: nil) rec ∙ ++-assoc (reverse ys) (reverse xs) (x :: nil)
 
 infixr 60 _↓_
 
