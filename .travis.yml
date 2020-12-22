@@ -4,12 +4,6 @@ cache:
   apt: true
   directories:
   - "${HOME}/.stack"
-addons:
-  apt:
-    sources:
-    - sourceline: ppa:jonathonf/texlive-2016
-    packages:
-    - texlive-full
 before_install:
 - mkdir -p ~/.local/bin
 - export PATH=${HOME}/.local/bin:${PATH}
