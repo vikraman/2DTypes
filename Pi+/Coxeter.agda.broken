@@ -1,4 +1,4 @@
-y{-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --without-K --exact-split #-}
 
 module Pi+.Coxeter where
 
@@ -29,9 +29,9 @@ xs ≃ ys = Σ mf (xs →* mf × ys →* mf)
 
 -- l1 = NOT ∘ NOT ∘ NOT
 
--- l1 ≃ l1 = 
+-- l1 ≃ l1 =
 --  fst = mf = NOT
- 
+
 --  snd: (l1 →* mf) × (l1 →* mf)
 --  snd = (reduces first two NOTs), (reduces last two NOTs)
 
@@ -45,7 +45,7 @@ xs ≈ ys = map fst xs ≃ map fst ys
 ≈-is-prop-aux : {n : ℕ} {xs ys : List (Fin n)} → (p q : xs ≈ ys) → p == q
 ≈-is-prop-aux {n} {xs} {ys} p q = {! p !}
 
-{- 
+{-
 ≈-is-refl : {n : ℕ} {xs : List (Fin n)} → xs ≈ xs
 ≈-is-sym : {n : ℕ} {xs ys : List (Fin n)} → xs ≈ ys → ys ≈ xs
 ≈-is-trans : {n : ℕ} {xs ys zs : List (Fin n)} → is-trans (xs ≈ ys)
@@ -62,7 +62,7 @@ xs ≈ ys = map fst xs ≃ map fst ys
 ≈-is-prop-aux : {n : ℕ} {xs ys : List (Fin n)} → (p q : xs ≈ ys) → p == q
 ≈-is-prop-aux {n} {xs} {ys} p q = {! p !}
 
-{- 
+{-
 ≈-is-refl : {n : ℕ} {xs : List (Fin n)} → xs ≈ xs
 ≈-is-sym : {n : ℕ} {xs ys : List (Fin n)} → xs ≈ ys → ys ≈ xs
 ≈-is-trans : {n : ℕ} {xs ys zs : List (Fin n)} → is-trans (xs ≈ ys)

@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.Claim where
+module Pi+.notes.Claim where
 
 open import Pi+.Syntax
 

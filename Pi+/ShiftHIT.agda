@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --rewriting #-}
 
-module Pi+.Coxeter1 where
+module Pi+.ShiftHIT where
 
 open import lib.Basics
 open import lib.types.Nat
@@ -17,7 +17,7 @@ open import lib.types.SetQuotient
 -- For each τ , we can interpret it in as a list of adjacent transpositions:
 -- In our case, τ₀ = (3 4) (4 5) (5 6) (6 7)
 -- so in general τ = [a ↓ b] is interpreted as (a a+1) (a+1 a+2) ... (a+b-1 a+b)
--- Using this homomorphism on generators, out of the set of relations on Coxeter presentation, 
+-- Using this homomorphism on generators, out of the set of relations on Coxeter presentation,
 -- we can get a set of relations on shift- presentation.
 -- The relations are written below. (some of them are commented out since we didn't finish writing elimination principles for them)
 
@@ -30,7 +30,7 @@ module _ {n : ℕ} where
     postulate
         nilC : C n
         _↓_::_ : (k : Fin n) -> (l : ℕ) → C n → C n
-        
+
         cancel : ∀ (x : Fin n) -> (xs : C n) → xs == (x ↓ 1 :: (x ↓ 1  :: xs))
         -- swap : ∀ (x y : Fin n) -> (zs : C n) → (S (x .fst) < y .fst) → (y ↓ 1 :: (x ↓ 1 :: zs)) == (x ↓ 1 :: (y ↓ 1 :: zs))
         -- long : ∀ x y zs → (x ↓ (S y) :: ((S x) ↓ 1 :: zs)) == (x ↓ 1 :: (x ↓ S y :: zs))
@@ -56,9 +56,9 @@ module _ {n : ℕ} where
         (nilC* : P) (consC* : (k : Fin n) -> (l : ℕ) -> P -> P)
         (cancel* : (x : Fin n) (xs : P) -> xs == consC* x 1  (consC* x 1 xs)) where
 
-        private module CE = CElim {P = λ _ -> P} 
+        private module CE = CElim {P = λ _ -> P}
                         nilC*
-                        (λ k l p → consC* k l p) 
+                        (λ k l p → consC* k l p)
                         (λ x {xs} xs* → ↓-cst-in (cancel* x xs*))
 
         f : C n -> P

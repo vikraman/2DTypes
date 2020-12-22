@@ -10,7 +10,7 @@ UFin = FinSet
 
 instance
     UFin-is-gpd : has-level (S (S (S ⟨-2⟩))) UFin
-    UFin-is-gpd = {!   !}
+    UFin-is-gpd = {!!}
 
 ⊔-comm : (A B : Type₀) -> (A ⊔ B) ≃ (B ⊔ A)
 ⊔-comm A B = equiv f g f-g g-f

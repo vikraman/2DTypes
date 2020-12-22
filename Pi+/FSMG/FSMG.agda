@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split #-}
 
-module Pi+.FSMG where
+module Pi+.FSMG.FSMG where
 
 open import lib.Base
 open import lib.types.Truncation
