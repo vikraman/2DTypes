@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K #-}
 
-module Pi+.Pi+ where
+module Pi+.Syntax where
 
 data U : Set where
   O I : U

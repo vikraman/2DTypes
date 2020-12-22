@@ -1,24 +1,12 @@
-AGDA_LATEX_OPTIONS = --latex --latex-dir=.
-AGDA_QUICK_OPTIONS = --only-scope-checking
+AGDA_SRCS = $(shell find Pi+ -type f -name '*.agda')
+AGDA_BINS = $(subst .agda,.agdai,$(AGDA_SRCS))
 
-all : upi.pdf
+all: $(AGDA_BINS)
 
-upi.pdf: upi.tex entcs* cites.bib
-	latexmk -pdf upi.tex
-
-upi.tex: upi.lagda
-	agda $(AGDA_LATEX_OPTIONS) -i. upi.lagda
-
-cont: continuous
-
-continuous: upi.lagda
-	(while inotifywait -e attrib -e modify -e close_write upi.lagda; \
-	 do agda $(AGDA_LATEX_OPTIONS) $(AGDA_QUICK_OPTIONS) -i. upi.lagda; \
-	 done &)
-	latexmk -pvc -pdf -interaction=nonstopmode upi.tex
+%.agdai: %.agda
+	agda $<
 
 clean:
-	latexmk -C upi.pdf
-	rm -f upi.agdai
+	rm -f $(AGDA_BINS)
 
-.PHONY: all clean continuous
+.PHONY: all clean
