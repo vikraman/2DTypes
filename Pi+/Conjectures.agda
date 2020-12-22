@@ -8,28 +8,22 @@ open import Pi+.Level0
 
 open import lib.Basics
 open import lib.types.Fin
-open import lib.types.Truncation using (Trunc-fmap)
+open import lib.types.Truncation
+open import lib.NType2
 
 ⟦_⟧₀ : U → UFin
-⟦ O ⟧₀ = FinFS 0
-⟦ I ⟧₀ = FinFS 1
-⟦ x Pi.+ y ⟧₀ = ⟦ x ⟧₀ ∪ ⟦ y ⟧₀
+⟦ X ⟧₀ = FinFS ∣ X ∣
 
 ⌜_⌝₀ : UFin → U
-⌜ x ⌝₀ = ℕ→Pi (card x)
+⌜ X ⌝₀ = ⟪ card X ⟫
 
 ⌜⟦_⟧⌝₀ : (X : U) → ⌜ ⟦ X ⟧₀ ⌝₀ ⟷₁ X
 ⌜⟦ O ⟧⌝₀ = id⟷₁
 ⌜⟦ I ⟧⌝₀ = swap₊ ◎ unite₊l
-⌜⟦ X + X₁ ⟧⌝₀ = {!   !}
+⌜⟦ X + Y ⟧⌝₀ = !⟷₁ (normC (X + Y))
 
-⟦⌜_⌝⟧₀ : (X : UFin) → ⟦ ⌜ X ⌝₀ ⟧₀ == X
-⟦⌜ Xs , ϕ ⌝⟧₀ = pair= {! !} {!  !}
-    where
-        tx : Σ ℕ (λ n → Fin n == Xs) → Σ ℕ (λ n → (⟦ ⌜ Xs , ϕ ⌝₀ ⟧₀ .fst) == Xs)
-        tx (O , ψ) = {!   !}
-        tx (S n , ψ) = {!   !}
-
+⟦⌜_⌝⟧₀ : (X : UFin) → Trunc -1 (⟦ ⌜ X ⌝₀ ⟧₀ == X)
+⟦⌜_⌝⟧₀ = FinSet-elim-prop (λ _ → Trunc-level) λ n → [ pair= (ap Fin ∣⟪ n ⟫∣) prop-has-all-paths-↓ ]
 
 ⟦_⟧₁ : {X Y : U} → X ⟷₁ Y → ⟦ X ⟧₀ == ⟦ Y ⟧₀ {- Lehmer n -}
 ⟦ p ⟧₁ = {!   !}
