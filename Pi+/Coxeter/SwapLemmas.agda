@@ -9,7 +9,7 @@ open import lib.PathGroupoid
 open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.Coxeter
+open import Pi+.Coxeter.MCoxeter
 
 open ≅*-Reasoning
 
@@ -55,7 +55,7 @@ short-swap {n} {k} {t} {tl} {tr} ptn ptkn rewrite (≡-sym ptn) =
           ((n + (2 + tr)) ↓ tl) ++ (tr + n) :: (n ↓ (2 + tr)) ++ nil
         ≅*⟨ long-swap<-lr (tr + n) (n + (2 + tr)) tl nil (S (tr + n) :: tr + n :: (n ↓ tr) ++ nil) (≤-reflexive (≡-trans (≡-sym (+-assoc 2 tr n)) (+-comm (S (S tr)) n))) ⟩
           (tr + n) :: ((n + (2 + tr)) ↓ tl) ++ (n ↓ (2 + tr)) ++ nil
-        ≅*⟨ idp≅* (start+end (idpp ((tr + n) :: ((n + (2 + tr)) ↓ tl))) (++-unit {(n ↓ (2 + tr))})) ⟩
+        ≅*⟨ idp≅* (start+end (idp {a = (tr + n) :: ((n + (2 + tr)) ↓ tl)}) (++-unit {(n ↓ (2 + tr))})) ⟩
           (tr + n) :: ((n + (2 + tr)) ↓ tl) ++ (n ↓ (2 + tr))
         ≅*⟨ idp≅* (head+tail idp (≡-sym (↓-+ n tl (2 + tr)))) ⟩
           tr + n :: (n ↓ (tl + S (S tr)))
@@ -76,7 +76,7 @@ short-swap-lr {n} {k} {t} l r pnt ptkn =
   let tr , tr-p = ≤-∃ n t pnt
       tl , tl-p = ≤-∃ (S t) (S k + n) ptkn
       lemma = ++r r (l++ l (short-swap {n} {k} {t} {tl} {tr} tr-p tl-p))
-  in  trans (idp≅* (≡-sym (≡-trans (start+end (≡-sym (++-assoc l _ [ _ ])) (idpp r)) (++-assoc _ [ _ ] r)))) lemma
+  in  trans (idp≅* (≡-sym (≡-trans (start+end (≡-sym (++-assoc l _ [ _ ])) (idp {a = r})) (++-assoc _ [ _ ] r)))) lemma
 
 long->-long : (n k n1 k1 : ℕ) -> (k + n == S (k1 + n1)) -> (k1 < k) -> ((n ↓ (2 + k)) ++ ((1 + n1) ↓ (2 + k1))) ≅* ((n1 ↓ (2 + k1)) ++ (n ↓ (2 + k)))
 long->-long n 0 n1 k1 pp ()
@@ -137,6 +137,6 @@ long-≤-long n (S k) n1 (S k1) pp pk =
       _
     ≅*⟨ long-swap-lr n1 (S (S (k + n))) (S k1) [ _ ] ((1 + n) ↓ (1 + k)) (≤-reflexive (cong S (≡-sym pp))) ⟩
       1 + k1 + n1 :: (n1 ↓ (1 + k1)) ++ (2 + k + n) :: ((1 + n) ↓ (1 + k))
-    ≅*⟨ idp≅* (start+end (idpp (1 + k1 + n1 :: (n1 ↓ (1 + k1))))  (head+tail (≡-sym (+-three-assoc {1 + k} {1} {n})) idp)) ⟩
+    ≅*⟨ idp≅* (start+end (idp {a = 1 + k1 + n1 :: (n1 ↓ (1 + k1))})  (head+tail (≡-sym (+-three-assoc {1 + k} {1} {n})) idp)) ⟩
       _
     ≅*∎

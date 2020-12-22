@@ -77,6 +77,20 @@ S m ∸ S n  =  m ∸ n
 ≡-down2 : {p q : ℕ} -> (S p == S q) -> p == q   
 ≡-down2 {p} {q} r = ℕ-S-is-inj p q r
 
+data Dec≤ : ℕ -> ℕ -> Type₀ where
+  yes : {m n : ℕ} -> m ≤ n -> Dec≤ m n
+  no  : {m n : ℕ} -> ¬ (m ≤ n) -> Dec≤ m n
+
+_≤?_ : (n m : ℕ) -> Dec≤ n m
+O ≤? m = yes z≤n
+S n ≤? O = no (λ ())
+S n ≤? S m with n ≤? m
+... | yes p = yes (s≤s p)
+... | no  q = no (λ x → q (≤-down2 x))
+
+_<?_ : (n m : ℕ) -> Dec≤ (S n) m
+n <? m = (S n) ≤? m
+
 postulate
     ∸-implies-≤ : {p q r : ℕ} -> (p == q ∸ r) -> (p ≤ q)
     ≤-remove-+ : {p q r : ℕ} -> (p + q ≤ r) -> (q ≤ r)
@@ -101,6 +115,14 @@ postulate
     ∸-anti-≤ : {p q r : ℕ} -> (q ≤ p) -> (p ≤ r) -> (r ∸ p) ≤ (r ∸ q)
     ≤-≡ : {n k : ℕ} -> (n ≤ k) -> (k ≤ n) -> (n == k)
     plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
+
+
+≰⇒> : {m n : ℕ} -> ¬ (m ≤ n) -> n < m
+≰⇒> {O} {n} p = ⊥-elim (p z≤n)
+≰⇒> {S m} {O} p = s≤s z≤n
+≰⇒> {S m} {S n} p = 
+  let rec = ≰⇒> {m} {n} (λ x → p (s≤s x))
+  in  s≤s rec
 
 zero-∸ : (n : ℕ) -> (0 ∸ n == 0)
 zero-∸ 0 = idp

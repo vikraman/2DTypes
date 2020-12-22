@@ -10,7 +10,7 @@ open import lib.PathGroupoid
 open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.Coxeter
+open import Pi+.Coxeter.MCoxeter
 open import Pi+.Coxeter.SwapLemmas
 
 open ≅*-Reasoning

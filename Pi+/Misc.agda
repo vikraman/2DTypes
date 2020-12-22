@@ -34,5 +34,10 @@ cong f p = ap f p
 ≡-trans : {A : Type₀} -> {p q r : A} -> p == q -> q == r -> p == r
 ≡-trans = _∙_
 
-idpp : {A : Type₀} -> (a : A) -> a == a
-idpp x = idp
+idpp : {A : Type₀} -> {x : A} -> x == x
+idpp {A} {x} = idp
+
+
+data _⊎_ (A B : Type₀) : Type₀ where
+  inj₁ : (x : A) → A ⊎ B
+  inj₂ : (y : B) → A ⊎ B

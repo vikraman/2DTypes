@@ -15,6 +15,7 @@ data List : Type₀ where
   _::_ : ℕ → List → List
 
 infixr 34 _++_
+
 _++_ : List → List → List
 nil ++ l = l
 (x :: l₁) ++ l₂ = x :: (l₁ ++ l₂)
@@ -137,15 +138,15 @@ telescope-l-rev-+1 n k l r =
     _
   =⟨ ++-assoc (l) (rev (S (S (S n)) ↑ k)) (S (S n) :: S n :: n :: r) ⟩
     l ++ (rev (S (S (S n)) ↑ k) ++ S (S n) :: S n :: n :: r)
-  =⟨ start+end (idpp l) (≡-sym (++-assoc (rev (S (S (S n)) ↑ k)) (S (S n) :: nil) _)) ⟩
+  =⟨ start+end (idp {a = l}) (≡-sym (++-assoc (rev (S (S (S n)) ↑ k)) (S (S n) :: nil) _)) ⟩
     l ++ ((rev (S (S (S n)) ↑ k) ++ S (S n) :: nil) ++ S n :: n :: r)
-  =⟨ start+end (idpp l) (≡-sym (++-assoc (rev (S (S (S n)) ↑ k) ++ S (S n) :: nil) (S n :: nil) _)) ⟩
+  =⟨ start+end (idp {a = l}) (≡-sym (++-assoc (rev (S (S (S n)) ↑ k) ++ S (S n) :: nil) (S n :: nil) _)) ⟩
     l ++ (((rev (S (S (S n)) ↑ k) ++ S (S n) :: nil) ++ S n :: nil) ++ n :: r)
-  =⟨ start+end (idpp l) (≡-sym (++-assoc _ (n :: nil) r)) ⟩
+  =⟨ start+end (idp {a = l}) (≡-sym (++-assoc _ (n :: nil) r)) ⟩
     l ++ ((((rev (S (S (S n)) ↑ k) ++ S (S n) :: nil) ++ S n :: nil) ++ n :: nil) ++ r)
-  =⟨ start+end (idpp l) (start+end (telescope-rev (1 + n) k [ n ]) (idpp r)) ⟩
+  =⟨ start+end (idp {a = l}) (start+end (telescope-rev (1 + n) k [ n ]) (idp {a = r})) ⟩
     l ++ ((((S n) ↓ (2 + k)) ++ n :: nil) ++ r)
-  =⟨ start+end (idpp l) (start+end (++-↓ n (S (S k))) (idpp r))  ⟩
+  =⟨ start+end (idp {a = l}) (start+end (++-↓ n (S (S k))) (idp {a = r}))  ⟩
     _
   =∎
 

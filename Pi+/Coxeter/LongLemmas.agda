@@ -10,7 +10,7 @@ open import lib.PathGroupoid
 open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.Coxeter
+open import Pi+.Coxeter.MCoxeter
 open import Pi+.Coxeter.SwapLemmas
 open import Pi+.Coxeter.ImpossibleLemmas
 
@@ -25,7 +25,7 @@ long-lemma n n1 (S k) (S k1) t t1 pnt pnt1 r r1 p =
   let rec-m , rec-l , rec-r = long-lemma n n1 k k1 t t1 pnt pnt1 r r1 (cut-head p)
   in  rec-m , ((head+tail (cong S (cut-t2 p) ) rec-l) , rec-r)
 
-cancel-long-lemma-rev : (n k n1 : ℕ) -> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ n1 :: n1 :: l1)) -> Σ _ (λ mf -> ((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf) × (((rev l1) ++ (rev r1))) ≅* mf))
+cancel-long-lemma-rev : (n k n1 : ℕ) -> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ n1 :: n1 :: l1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × ((((rev l1) ++ (rev r1))) ≅* mf)))
 cancel-long-lemma-rev n k n1 nil l1 nil p =
   let fst = cut-t1 p
       snd = cut-t2 p
@@ -102,18 +102,18 @@ cancel-long-lemma-rev n k n1 (x :: r) l1 (x₁ :: r1) p rewrite (≡-sym (cut-ta
       rr = trans (idp≅* (≡-sym (++-assoc (rev l1) (rev r1) [ x ]))) (++r [ x ] rec-r)
   in  _ , (ll , rr)
 
-cancel-long-lemma : (n k n1 : ℕ) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: n1 :: r1)) -> Σ _ (λ mf -> ((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf) × ((l1 ++ r1)) ≅* mf))
+cancel-long-lemma : (n k n1 : ℕ) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: n1 :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × (((l1 ++ r1)) ≅* mf)))
 cancel-long-lemma n k n1 r l1 r1 p =
   let pp =
         begin
           rev r ++ S (k + n) :: n :: S n :: (S (S n) ↑ k)
-        =⟨ start+end idp (start+end (idp {x = [ S (k + n) ]}) (≡-sym (++-↑ n (S k)))) ⟩
+        =⟨ start+end idp (start+end (idp {a = [ S (k + n) ]}) (≡-sym (++-↑ n (S k)))) ⟩
           rev r ++ S (k + n) :: n :: (S n ↑ k) ++ S (k + n) :: nil
-        =⟨ start+end idp (start+end (idp {x = [ S (k + n) ]}) (≡-sym (start+end (++-↑ n k) idp))) ⟩
+        =⟨ start+end idp (start+end (idp {a = [ S (k + n) ]}) (≡-sym (start+end (++-↑ n k) idp))) ⟩
           rev r ++ S (k + n) :: nil ++ ((n ↑ k) ++ [ k + n ] ) ++ S (k + n) :: nil
-        =⟨ start+end (idp {x = rev r}) (start+end (idp {x = [ S (k + n) ]}) (++-assoc (n ↑ k) (k + n :: nil) (S (k + n) :: nil))) ⟩
+        =⟨ start+end (idp {a = rev r}) (start+end (idp {a = [ S (k + n) ]}) (++-assoc (n ↑ k) (k + n :: nil) (S (k + n) :: nil))) ⟩
           rev r ++ S (k + n) :: nil ++ (n ↑ k) ++ k + n :: S (k + n) :: nil
-        =⟨ start+end idp (start+end (idp {x = [ S (k + n) ]}) (start+end (≡-sym (rev-d n k)) idp)) ⟩
+        =⟨ start+end idp (start+end (idp {a = [ S (k + n) ]}) (start+end (≡-sym (rev-d n k)) idp)) ⟩
           rev r ++ S (k + n) :: nil ++ rev (n ↓ k) ++ k + n :: S (k + n) :: nil
         =⟨ ≡-sym (++-assoc (rev r) (S (k + n) :: nil) (rev (n ↓ k) ++ k + n :: S (k + n) :: nil)) ⟩
           (rev r ++ S (k + n) :: nil) ++ rev (n ↓ k) ++ k + n :: S (k + n) :: nil
@@ -152,7 +152,7 @@ swap-long-lemma-base n (S k) k1 pkn q1 q2 p | 0 , snd rewrite (≡-sym snd) =
           _
         ≅*⟨ left ⟩
           k + S k1 :: S (k + S k1) :: k + S k1 :: (k1 ↓ (1 + k)) ++ k1 :: nil
-        ≅*⟨ idp≅* (start+end (idp {x = k + S k1 :: S (k + S k1) :: k + S k1 :: nil}) (start+end (≡-sym (++-↓ k1 k)) idp)) ⟩
+        ≅*⟨ idp≅* (start+end (idp {a = k + S k1 :: S (k + S k1) :: k + S k1 :: nil}) (start+end (≡-sym (++-↓ k1 k)) idp)) ⟩
           k + S k1 :: S (k + S k1) :: k + S k1 :: ((S k1 ↓ k) ++ k1 :: nil) ++ k1 :: nil
         ≅*⟨ idp≅* (++-assoc (k + S k1 ::  S (k + S k1) :: k + S k1 :: (S k1 ↓ k)) [ k1 ] [ k1 ]) ⟩
           k + S k1 ::  S (k + S k1) :: k + S k1 :: (S k1 ↓ k) ++ k1 :: k1 :: nil
@@ -197,7 +197,7 @@ swap-long-lemma-base n k k1 pkn q1 q2 p | S 0 , snd rewrite (≡-sym snd) =
   in  _ , (left , right)
 swap-long-lemma-base n k k1 pkn q1 q2 p | S (S fst) , snd rewrite (≡-sym snd) = abs-refl (≤-trans q2 (s≤s (≤-up-+ rrr)))
 
-swap-long-lemma-rev : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1)-> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ k1 :: n1 :: l1)) -> Σ _ (λ mf -> ((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf) × (((rev l1) ++ (k1 :: n1 :: rev r1))) ≅* mf))
+swap-long-lemma-rev : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1)-> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ k1 :: n1 :: l1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × ((((rev l1) ++ (k1 :: n1 :: rev r1))) ≅* mf)))
 swap-long-lemma-rev n k n1 k1 pkn nil l1 nil p =
   let fst = cut-t1 p
       snd = cut-t2 p
@@ -316,18 +316,18 @@ swap-long-lemma-rev n k n1 k1 pkn (x :: r) l1 (x₁ :: r1) p rewrite (≡-sym (c
   in  _ , (ll , rr)
 
 
-swap-long-lemma : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: k1 :: r1)) -> Σ _ (λ mf -> ((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf) × ((l1 ++ (k1 :: n1 :: r1))) ≅* mf))
+swap-long-lemma : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: k1 :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × (((l1 ++ (k1 :: n1 :: r1))) ≅* mf)))
 swap-long-lemma n k n1 k1 pkn r l1 r1 p =
   let pp =
         begin
           rev r ++ S (k + n) :: n :: S n :: (S (S n) ↑ k)
-        =⟨ start+end idp (start+end (idp {x = [ S (k + n) ]}) (≡-sym (++-↑ n (S k)))) ⟩
+        =⟨ start+end idp (start+end (idp {a = [ S (k + n) ]}) (≡-sym (++-↑ n (S k)))) ⟩
           rev r ++ S (k + n) :: n :: (S n ↑ k) ++ S (k + n) :: nil
-        =⟨ start+end idp (start+end (idp {x = [ S (k + n) ]}) (≡-sym (start+end (++-↑ n k) idp))) ⟩
+        =⟨ start+end idp (start+end (idp {a = [ S (k + n) ]}) (≡-sym (start+end (++-↑ n k) idp))) ⟩
           rev r ++ S (k + n) :: nil ++ ((n ↑ k) ++ [ k + n ] ) ++ S (k + n) :: nil
-        =⟨ start+end (idp {x = rev r}) (start+end (idp {x = [ S (k + n) ]}) (++-assoc (n ↑ k) (k + n :: nil) (S (k + n) :: nil))) ⟩
+        =⟨ start+end (idp {a = rev r}) (start+end (idp {a = [ S (k + n) ]}) (++-assoc (n ↑ k) (k + n :: nil) (S (k + n) :: nil))) ⟩
           rev r ++ S (k + n) :: nil ++ (n ↑ k) ++ k + n :: S (k + n) :: nil
-        =⟨ start+end idp (start+end (idp {x = [ S (k + n) ]}) (start+end (≡-sym (rev-d n k)) idp)) ⟩
+        =⟨ start+end idp (start+end (idp {a = [ S (k + n) ]}) (start+end (≡-sym (rev-d n k)) idp)) ⟩
           rev r ++ S (k + n) :: nil ++ rev (n ↓ k) ++ k + n :: S (k + n) :: nil
         =⟨ ≡-sym (++-assoc (rev r) (S (k + n) :: nil) (rev (n ↓ k) ++ k + n :: S (k + n) :: nil)) ⟩
           (rev r ++ S (k + n) :: nil) ++ rev (n ↓ k) ++ k + n :: S (k + n) :: nil
@@ -371,7 +371,7 @@ dec-long-lemma-disjoint-rev n k n1 (S k1) x pnx (x₁ :: l) r p with (dec-long-l
 long-long-not-disjoint : (n k n1 k1 : ℕ) -> (k + n == S (k1 + n1))
                          -> Σ _ (λ mf -> ((k + n :: (n ↓ (2 + k)) ++ (n1 ↓ (2 + k1)) ++ (2 + (k1 + n1)) :: nil) ≅* mf) ×
                                         (((n ↓ (2 + k)) ++ (S (k1 + n1) :: (n1 ↓ (3 + k1)))) ≅* mf))
-long-long-not-disjoint n 0 n1 k1 p rewrite p rewrite (cong S (+-comm n1 k1)) =
+long-long-not-disjoint n 0 n1 k1 p rewrite p rewrite (cong {ℕ} {ℕ} S (+-comm n1 k1)) =
   let left = trans (cancel (_ :: _ :: nil) _) (trans (long-swap-lr n1 (2 + (k1 + n1)) (1 + k1) [ S (k1 + n1) ] [ 2 + k1 + n1 ] rrr) (trans (cancel _ nil) (idp≅* ++-unit)))
       right = trans (cancel [ _ ] _) (cancel nil _)
   in  _ , (left , right)
@@ -386,7 +386,7 @@ long-long-not-disjoint n (S k) n1 k1 p | yes q =
           (1 + k + n :: 2 + k + n :: (n1 ↓ (1 + k1)) ++ ((1 + n) ↓ (1 + k))) ++ (2 + (k1 + n1)) :: nil
         ≅*⟨ ++r [ _ ] (l++ [ _ ] (long-swap-lr (n1) (2 + k + n) (1 + k1) nil (((1 + n) ↓ (1 + k))) (≤-reflexive (≡-sym (cong S p))))) ⟩
           (1 + k + n :: (n1 ↓ (1 + k1)) ++ 2 + k + n :: ((1 + n) ↓ (1 + k))) ++ (2 + (k1 + n1)) :: nil
-        ≅*⟨ idp≅* (head+tail p (start+end (start+end (idp {x = (n1 ↓ (1 + k1))}) (head+tail (≡-sym (+-three-assoc {_} {1} {n})) idp)) idp)) ⟩
+        ≅*⟨ idp≅* (head+tail p (start+end (start+end (idp {a = (n1 ↓ (1 + k1))}) (head+tail (≡-sym (+-three-assoc {_} {1} {n})) idp)) idp)) ⟩
           (1 + (k1 + n1) :: (n1 ↓ (1 + k1)) ++ (1 + k + (1 + n)) :: ((1 + n) ↓ (1 + k))) ++ (2 + (k1 + n1)) :: nil
         ≅*⟨ idp ⟩
           ((n1 ↓ (2 + k1)) ++ ((1 + n) ↓ (2 + k))) ++ (2 + (k1 + n1)) :: nil
@@ -440,7 +440,7 @@ long-long-not-disjoint n (S k) (S n1) k1 p | no q =
 
 
 long-long-lemma-rev : (n k n1 k1 : ℕ) -> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ (1 + k1 + n1) :: (n1 ↑ (2 + k1)) ++ l1))
-                      -> Σ _ (λ mf -> ((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf) × ((rev l1) ++ (k1 + n1) :: (n1 ↓ (2 + k1)) ++ (rev r1)) ≅* mf))
+                      -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × (((rev l1) ++ (k1 + n1) :: (n1 ↓ (2 + k1)) ++ (rev r1)) ≅* mf)))
 long-long-lemma-rev n k n1 k1 nil nil nil p
   rewrite (cut-t2 p)
   rewrite (ar-lemma k k1 (cut-t2 p) (cut-t1 p)) = _ , idp , idp
@@ -502,7 +502,7 @@ long-long-lemma-rev n k n1 0 (.(S n1) :: .n1 :: .(S n1) :: r) .(r ++ S (k + n) :
           rev (r ++ S (k + n) :: (n ↑ (2 + k)))
         ≅*⟨ idp≅* (rev-++ r _) ⟩
           rev (S (k + n) :: (n ↑ (2 + k))) ++ (rev r)
-        ≅*⟨ ++r (rev r) (idp≅* (start+end (rev-u n (S (S k))) (idp {x = [ S (k + n) ]}))) ⟩
+        ≅*⟨ ++r (rev r) (idp≅* (start+end (rev-u n (S (S k))) (idp {a = [ S (k + n) ]}))) ⟩
           ((n ↓ (2 + k)) ++ [ S (k + n) ]) ++ (rev r)
         ≅*⟨ ++r (rev r) (short-swap-l nil (≤-up-+ rrr) rrr) ⟩
           k + n :: (n ↓ (2 + k)) ++ rev r
@@ -555,22 +555,22 @@ long-long-lemma-rev n k n1 (S k1) (x :: r) l nil p | inj₂ (m , lmp , mrp) rewr
   in   _ , (l++ (k + n :: (n ↓ (2 + k))) left , right)
 long-long-lemma-rev n k n1 k1 (x₁ :: r) l1 (x :: r1) p rewrite cut-tail p =
   let rec-m , rec-l , rec-r = long-long-lemma-rev n k n1 k1 r l1 r1 (cut-head p)
-  in  rec-m ++ [ x ] , (trans (idp≅* (≡-sym (++-assoc _ (rev r) [ x ]))) (++r [ x ] rec-l) ,
+  in  (rec-m ++ [ x ]) , (trans (idp≅* (≡-sym (++-assoc _ (rev r) [ x ]))) (++r [ x ] rec-l) ,
                        (trans (idp≅* (≡-sym
                            (≡-trans (++-assoc (rev l1)  _   (x :: nil))
                            (≡-trans (cong (λ e -> rev l1 ++ k1 + n1 :: S (k1 + n1) :: k1 + n1 :: nil ++ e)
                                      (++-assoc (n1 ↓ k1) (rev r1) (x :: nil))) idp)))) (++r [ x ] rec-r)))
 
-long-long-lemma : (n k n1 k1 : ℕ) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ (n1 ↓ (2 + k1)) ++ (1 + k1 + n1) :: r1)) -> Σ _ (λ mf -> ((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf) × (l1 ++ (k1 + n1) :: (n1 ↓ (2 + k1)) ++ r1) ≅* mf))
+long-long-lemma : (n k n1 k1 : ℕ) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ (n1 ↓ (2 + k1)) ++ (1 + k1 + n1) :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × ((l1 ++ (k1 + n1) :: (n1 ↓ (2 + k1)) ++ r1) ≅* mf)))
 long-long-lemma n k n1 k1 r l1 r1 p rewrite (rev-rev {l1}) rewrite (rev-rev {r1}) rewrite (rev-rev {r}) =
   let pp =
         begin
           rev r ++ S (k + n) :: (n ↑ (2 + k))
-        =⟨ ≡-sym (start+end (idp {x = rev r}) (head+tail idp (++-↑ n (1 + k)))) ⟩
+        =⟨ ≡-sym (start+end (idp {a = rev r}) (head+tail idp (++-↑ n (1 + k)))) ⟩
           _
-        =⟨ ≡-sym (start+end (idp {x = rev r}) (head+tail idp (start+end (++-↑ n k) idp))) ⟩
+        =⟨ ≡-sym (start+end (idp {a = rev r}) (head+tail idp (start+end (++-↑ n k) idp))) ⟩
           rev r ++ (S (k + n) :: ((n ↑ k) ++ [ k + n ]) ++ S (k + n) :: nil)
-        =⟨ ≡-sym (start+end (idp {x = rev r}) (head+tail idp (≡-sym (++-assoc (n ↑ k) (k + n :: nil) (S (k + n) :: nil))))) ⟩
+        =⟨ ≡-sym (start+end (idp {a = rev r}) (head+tail idp (≡-sym (++-assoc (n ↑ k) (k + n :: nil) (S (k + n) :: nil))))) ⟩
           rev r ++ (S (k + n) :: ((n ↑ k) ++ (k + n :: S (k + n) :: nil)))
         =⟨ ≡-sym (++-assoc (rev r) (S (k + n) :: nil) ((n ↑ k) ++ k + n :: S (k + n) :: nil)) ⟩
           ((rev r ++ S (k + n) :: nil)) ++ ((n ↑ k) ++ k + n :: S (k + n) :: nil)

@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Coxeter where
+module Pi+.Coxeter.MCoxeter where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
@@ -61,8 +61,8 @@ l++ l (trans≅ x p) = trans≅ (l++≅ _ _ l x) ((l++ l p))
 ++r≅ m1 m2 r (cancel≅ l r₁ .m1 .m2 defm defmf) = cancel≅ l (r₁ ++ r)  _ _  (≡-trans (start+end defm idp) (++-assoc l _ r)) ((≡-trans (start+end defmf idp) (++-assoc l _ r)))
 ++r≅ m1 m2 r (swap≅ x l r₁ .m1 .m2 defm defmf) = swap≅ x l (r₁ ++ r)  _ _  (≡-trans (start+end defm idp) (++-assoc l _ r)) ((≡-trans (start+end defmf idp) (++-assoc l _ r)))
 ++r≅ m1 m2 r (long≅ k l r₁ .m1 .m2 defm defmf) = long≅ k l (r₁ ++ r)  _ _
-  (≡-trans (start+end defm idp) (≡-trans (++-assoc l _ r) (start+end (idpp l) (head+tail idp (head+tail idp (++-assoc (_ ↓ k) _ r))))))
-  ((≡-trans (start+end defmf idp) (≡-trans (++-assoc l _ r) (start+end (idpp l) (head+tail idp (head+tail idp (head+tail idp (++-assoc _ r₁ r))))))))
+  (≡-trans (start+end defm idp) (≡-trans (++-assoc l _ r) (start+end (idp {a = l}) (head+tail idp (head+tail idp (++-assoc (_ ↓ k) _ r))))))
+  ((≡-trans (start+end defmf idp) (≡-trans (++-assoc l _ r) (start+end (idp {a = l}) (head+tail idp (head+tail idp (head+tail idp (++-assoc _ r₁ r))))))))
 
 ++r : {m1 m2 : List} -> (r : List) -> (m1 ≅* m2) -> ((m1 ++ r) ≅* (m2 ++ r))
 ++r r idp = idp
