@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.LongLemmas where
+module Pi+.Coxeter.CritPairsLong where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
@@ -11,8 +11,8 @@ open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
 open import Pi+.Coxeter.MCoxeter
-open import Pi+.Coxeter.SwapLemmas
-open import Pi+.Coxeter.ImpossibleLemmas
+open import Pi+.Coxeter.CritPairsSwap
+open import Pi+.Coxeter.CritPairsImpossible
 
 open ≅*-Reasoning
 

@@ -11,9 +11,9 @@ open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
 open import Pi+.Coxeter.MCoxeter
-open import Pi+.Coxeter.SwapLemmas
-open import Pi+.Coxeter.ImpossibleLemmas
-open import Pi+.Coxeter.LongLemmas
+open import Pi+.Coxeter.CritPairsSwap
+open import Pi+.Coxeter.CritPairsImpossible
+open import Pi+.Coxeter.CritPairsLong
 
 open ≅*-Reasoning
 
