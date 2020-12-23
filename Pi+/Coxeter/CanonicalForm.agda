@@ -16,7 +16,7 @@ open import Pi+.Coxeter.Lehmer
 
 open ≅*-Reasoning
 
--- Lehmer proper represents Lehmers with a non-empty last sequence
+-- LehmerProper represents Lehmers with a non-empty last sequence
 data LehmerProper : (n : ℕ) -> Type₀ where
   CanZ : LehmerProper 0
   CanS : {n : ℕ} -> {nf : ℕ} -> (n < nf) -> (l : LehmerProper n) -> {r : ℕ} -> (r < nf) -> LehmerProper nf
@@ -27,7 +27,7 @@ immersionProper {0} CanZ = nil
 immersionProper {S n} (CanS _ l {r} _) = (immersionProper l) ++ ((n ∸ r) ↓ (1 + r))
 
 properize : {n : ℕ} -> (cl : Lehmer n) -> Σ _ (λ nf -> Σ _ (λ clf -> immersion {n} cl == immersionProper {nf} clf))
-properize cl = {!!}
+properize cl = {!  !}
 
 unproperize : {n : ℕ} -> (cl : LehmerProper n) -> Σ _ (λ nf -> Σ _ (λ clf -> immersionProper {n} cl == immersion {nf} clf))
 unproperize cl = {!!}

@@ -11,7 +11,7 @@ open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
 open import Pi+.Coxeter.ReductionRel
-open import Pi+.Coxeter.CritPairsImpossible
+open import Pi+.Coxeter.ImpossibleLists
 
 open ≅*-Reasoning
 
@@ -51,7 +51,8 @@ final≅-↓ n k1 m (swap≅ x l r .(n ↓ k1) .m defm defmf) = incr-long-lemma 
 final≅-↓ n k1 m (long≅ {n₁} k l r .(n ↓ k1) .m defm defmf) =
   repeat-spaced-long-lemma n k1 (S (k + n₁)) l ((n₁ ↓ (1 + k))) r defm
 
-data _||_||_ (A : Set) (B : Set) (C : Set) : Type₀ where
+-- a helper trichotomy type
+data _||_||_ (A : Type₀) (B : Type₀) (C : Type₀) : Type₀ where
   R1 : A -> A || B || C
   R2 : B -> A || B || C
   R3 : C -> A || B || C
@@ -74,10 +75,13 @@ lemma-l++2++r a b (x :: l1) r1 (x₁ :: l2) r2 p with lemma-l++2++r a b l1 r1 l2
 ... | R2 ((fst , snd) , fst₁ , fst₂ , snd₁) = R2 (((x₁ :: fst) , snd) , ((cong (λ e -> x₁ :: e) fst₁) , ((head+tail (cut-tail p) fst₂) , snd₁)))
 ... | R3 (fst , snd) = R3 (head+tail (cut-tail p) fst , snd)
 
-
 final≅-↓-↓ : (n k n1 k1 : ℕ) -> (m : List) -> (k + n < k1 + n1) -> ((n ↓ k) ++ (n1 ↓ k1)) ≅ m -> ⊥
 final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .((n ↓ k) ++ (n1 ↓ k1)) .m defm defmf) with (lemma-l++2++r n₁ n₁ (n ↓ k) (n1 ↓ k1) l r defm)
-... | q = {! q  !}
+final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .(n ↓ k ++ n1 ↓ k1) .m defm defmf) | R1 (x , fst₁ , fst₂ , snd₁) = 
+    dec-long-lemma n k n₁ n₁ (≤-reflexive idp) l (fst x) fst₂
+final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .(n ↓ k ++ n1 ↓ k1) .m defm defmf) | R2 (x , fst₁ , fst₂ , snd₁) = 
+    dec-long-lemma n1 k1 n₁ n₁ (≤-reflexive idp) (snd x) r snd₁
+final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .(n ↓ k ++ n1 ↓ k1) .m defm defmf) | R3 x = {!   !}
 final≅-↓-↓ n k n1 k1 m pkn (swap≅ x l r .((n ↓ k) ++ (n1 ↓ k1)) .m defm defmf) with (lemma-l++2++r _ _ (n ↓ k) (n1 ↓ k1) l r defm)
 ... | q = {!   !}
 final≅-↓-↓ n k n1 k1 m pkn (long≅ k₁ l r .((n ↓ k) ++ (n1 ↓ k1)) .m defm defmf) = {!   !}
@@ -90,7 +94,9 @@ final≅-Lehmer {0} CanZ .nil mf idp p = empty-reduction p
 final≅-Lehmer {S 0} (CanS CanZ {0} x) .nil mf idp p = empty-reduction p
 final≅-Lehmer {S 0} (CanS CanZ {S 0} (s≤s x)) .(0 :: nil) mf idp p = one-reduction p
 final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) rewrite (++-assoc-≡ {l = immersion cl} defm) with (lemma-l++2++r n₁ n₁ (immersion cl) _ l r defm₁)
-... | p = {!   !}
+final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) | R1 x₂ = {!   !}
+final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) | R2 x₂ = {!   !}
+final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) | R3 x₂ = {!   !}
 final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (swap≅ x₂ l r .m .mf defm₁ defmf) rewrite (++-assoc-≡ {l = immersion cl} defm) with (lemma-l++2++r _ _ (immersion cl) _ l r defm₁)
 ... | p = {!   !}
 final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (long≅ k l r .m .mf defm₁ defmf) = {!   !}
