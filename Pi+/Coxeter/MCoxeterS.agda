@@ -35,6 +35,28 @@ comm≃s* {m1} {m2} {m3} (trans≃s x q) =
         q' = comm≃s* {_} {_} {m2} q
     in  trans≃s* q' (trans≃s (comm≃s x) idp≃s)
 
+l++≃s : (m1 m2 l : List) -> (m1 ≃s m2) -> ((l ++ m1) ≃s (l ++ m2))
+l++≃s m1 m2 l (cancel≃s l₁ r .m1 .m2 defm defmf) =  cancel≃s (l ++ l₁) r _ _ (≡-trans (start+end idp defm) (≡-sym (++-assoc l l₁ _))) ((≡-trans (start+end idp defmf) (≡-sym (++-assoc l l₁ _))))
+l++≃s m1 m2 l (swap≃s x l₁ r .m1 .m2 defm defmf) =  swap≃s x (l ++ l₁) r _ _ (≡-trans (start+end idp defm) (≡-sym (++-assoc l l₁ _))) ((≡-trans (start+end idp defmf) (≡-sym (++-assoc l l₁ _))))
+l++≃s m1 m2 l (long≃s k l₁ r .m1 .m2 defm defmf) =  long≃s k (l ++ l₁) r _ _ (≡-trans (start+end idp defm) (≡-sym (++-assoc l l₁ _))) ((≡-trans (start+end idp defmf) (≡-sym (++-assoc l l₁ _))))
+l++≃s m1 m2 l (comm≃s p) = comm≃s (l++≃s m2 m1 l p)
+
+l++≃s* : (l : List) -> {m1 m2 : List} -> (m1 ≃s* m2) -> ((l ++ m1) ≃s* (l ++ m2))
+l++≃s* l idp≃s = idp≃s
+l++≃s* l (trans≃s x p) = trans≃s (l++≃s _ _ l x) ((l++≃s* l p))
+
+++r≃s : (m1 m2 r : List) -> (m1 ≃s m2) -> ((m1 ++ r) ≃s (m2 ++ r))
+++r≃s m1 m2 r (cancel≃s l r₁ .m1 .m2 defm defmf) = cancel≃s l (r₁ ++ r)  _ _  (≡-trans (start+end defm idp) (++-assoc l _ r)) ((≡-trans (start+end defmf idp) (++-assoc l _ r)))
+++r≃s m1 m2 r (swap≃s x l r₁ .m1 .m2 defm defmf) = swap≃s x l (r₁ ++ r)  _ _  (≡-trans (start+end defm idp) (++-assoc l _ r)) ((≡-trans (start+end defmf idp) (++-assoc l _ r)))
+++r≃s m1 m2 r (long≃s k l r₁ .m1 .m2 defm defmf) = long≃s k l (r₁ ++ r)  _ _
+  (≡-trans (start+end defm idp) (≡-trans (++-assoc l _ r) (start+end (idp {a = l}) (head+tail idp (head+tail idp (++-assoc (_ ↓ k) _ r))))))
+  ((≡-trans (start+end defmf idp) (≡-trans (++-assoc l _ r) (start+end (idp {a = l}) (head+tail idp (head+tail idp (head+tail idp (++-assoc _ r₁ r))))))))
+++r≃s m1 m2 l (comm≃s p) = comm≃s (++r≃s m2 m1 l p)
+
+++r≃s* : {m1 m2 : List} -> (r : List) -> (m1 ≃s* m2) -> ((m1 ++ r) ≃s* (m2 ++ r))
+++r≃s* r idp≃s = idp≃s
+++r≃s* r (trans≃s x p) = trans≃s (++r≃s _ _ r x) (++r≃s* r p)
+
 mcoxeters->mcoxeter : {m1 m2 : List} -> (m1 ≃s m2) -> (m1 ≃ m2)
 mcoxeters->mcoxeter {m1} {m2} (cancel≃s l r .m1 .m2 defm defmf) = comm≅ {_} {_} {m2} (trans≅ (cancel≅ l r m1 m2 defm defmf) idp) idp
 mcoxeters->mcoxeter {m1} {m2} (swap≃s x l r .m1 .m2 defm defmf) = comm≅ {_} {_} {m2} (trans≅ (swap≅ x l r m1 m2 defm defmf) idp) idp
