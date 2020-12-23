@@ -10,7 +10,7 @@ open import lib.PathGroupoid
 open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.MCoxeter
+open import Pi+.Coxeter.ReductionRel
 open import Pi+.Coxeter.CritPairsSwap
 open import Pi+.Coxeter.CritPairsImpossible
 
