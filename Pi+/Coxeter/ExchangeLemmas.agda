@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.CritPairsSwap where
+module Pi+.Coxeter.ExchangeLemmas where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)

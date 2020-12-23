@@ -33,7 +33,3 @@ Diamond-related stuff:
     - The termination checker is not happy, because we simply say "do the reduction as long as it's possible" (the same technique as in the standard proof in β-reduction of λ-calculus)
     - But the algorithm does terminate - the reduction relation always reduces lexicographical order, and it's a well-ordering of words, so eventually we get to normal form.
     - The proof has to be modified to make Agda happy.
-
-Relationship with Coxeter relation:
-  - `MCoxeter.agda`
-    - It defines a 
