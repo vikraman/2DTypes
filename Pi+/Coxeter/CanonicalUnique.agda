@@ -10,10 +10,10 @@ open import lib.PathGroupoid
 open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
+open import Pi+.Coxeter.ReductionRel
+open import Pi+.Coxeter.ExchangeLemmas
+open import Pi+.Coxeter.ReductionRel
 open import Pi+.Coxeter.MCoxeter
-open import Pi+.Coxeter.CritPairsSwap
-open import Pi+.Coxeter.MCoxeter
-open import Pi+.Coxeter.Coxeter
 
 open ≅*-Reasoning
 
@@ -89,8 +89,8 @@ abs-jump-↓ n (S (S k)) a b x nil r p =
 abs-jump-↓ n (S k) a b x (e :: l) r p = abs-jump-↓ n k a b x l r (cut-head p)
 
 -- --- And versions for 2-⇣
-
-abs-const2-↓ : (n1 k1 n2 k2 a : ℕ) -> (n1 < n2) -> (l r : List) -> (n1 ↓ k1) ++ (n2 ↓ k2) == (l ++ a :: a :: r) -> ⊥
+postulate
+  abs-const2-↓ : (n1 k1 n2 k2 a : ℕ) -> (n1 < n2) -> (l r : List) -> (n1 ↓ k1) ++ (n2 ↓ k2) == (l ++ a :: a :: r) -> ⊥
 -- abs-const2-↓ 0 k1 n2 k2 a pnn l r p = abs-const-↓ _ _ _ l r p
 -- abs-const2-↓ (S n1) 0 n2 k2 a pnn l r p = abs-const-↓ _ _ _ l r p
 -- abs-const2-↓ (S 0) (S k1) (S .0) (S k2) .0 (s≤s ()) nil .nil refl
@@ -149,7 +149,8 @@ abs-jump-many-↓ .0 a b pab nil r CanZ ()
 abs-jump-many-↓ .0 a b pab (x :: l) r CanZ ()
 abs-jump-many-↓ .(S _) a b pab l r (CanS cl x) p = {!!}
 
-only-one≅-↓ : (n k1 k2 : ℕ)  -> (k1 ≤ n) -> (k2 ≤ n) -> ((n ↓ k1) ≅ (n ↓ k2)) -> ⊥
+postulate 
+  only-one≅-↓ : (n k1 k2 : ℕ)  -> (k1 ≤ n) -> (k2 ≤ n) -> ((n ↓ k1) ≅ (n ↓ k2)) -> ⊥
 -- only-one≅-↓ n k1 k2 pk1 pk2 (cancel≅ l r .(n ↓ k1) .(n ↓ k2) defm defmf) = abs-const-↓ _ _ _ l r defm
 -- only-one≅-↓ n k1 k2 pk1 pk2 (swap≅ x l r .(n ↓ k1) .(n ↓ k2) defm defmf) = abs-jump-↓ _ _ _ _ x l r defm
 -- only-one≅-↓ n k1 k2 pk1 pk2 (braid≅ l r .(n ↓ k1) .(n ↓ k2) defm defmf) = abs-inc-↓ _ _ _ l (_ :: r) defmf
@@ -157,19 +158,21 @@ only-one≅-↓ : (n k1 k2 : ℕ)  -> (k1 ≤ n) -> (k2 ≤ n) -> ((n ↓ k1) �
 ++-:: : {n : ℕ} -> {l r : List} -> l ++ n :: r == (l ++ [ n ]) ++ r
 ++-:: {n} {l} {r} = ≡-sym (++-assoc l (n :: nil) r)
 
-abs≅-↓ : (n k : ℕ) -> (k ≤ n) -> (m : List) -> ((n ↓ k) ≅ m) -> ⊥
+postulate
+  abs≅-↓ : (n k : ℕ) -> (k ≤ n) -> (m : List) -> ((n ↓ k) ≅ m) -> ⊥
 -- abs≅-↓ n k pk m (cancel≅ l r .(n ↓ k) .m defm defmf) = abs-const-↓ _ _ _ l r defm
 -- abs≅-↓ n k pk m (swap≅ x l r .(n ↓ k) .m defm defmf) = abs-jump-↓ _ _ _ _ x l r defm
 -- abs≅-↓ n k pk m (braid≅ {n₁} l r .(n ↓ k) .m defm defmf) =
 --   let lemma = ≡-trans defm ++-::
 --   in  abs-inc-↓ n k n₁ (l ++ [ S n₁ ]) r lemma
-
-abs2≅-↓ : (n1 k1 n2 k2 : ℕ) -> (k1 ≤ n1) -> (k2 ≤ n2) -> (n1 < n2) -> (m : List) -> ((n1 ↓ k1) ++ (n2 ↓ k2)) ≅ m -> ⊥
+postulate 
+  abs2≅-↓ : (n1 k1 n2 k2 : ℕ) -> (k1 ≤ n1) -> (k2 ≤ n2) -> (n1 < n2) -> (m : List) -> ((n1 ↓ k1) ++ (n2 ↓ k2)) ≅ m -> ⊥
 -- abs2≅-↓ n1 k1 n2 k2 pkn1 pkn2 pnn m (cancel≅ l r .((n1 ↓ k1) ++ (n2 ↓ k2)) .m defm defmf) = abs-const2-↓ n1 k1 n2 k2 _ pnn l r defm
 -- abs2≅-↓ n1 k1 n2 k2 pkn1 pkn2 pnn m (swap≅ x l r .((n1 ↓ k1) ++ (n2 ↓ k2)) .m defm defmf) = abs-jump2-↓ n1 k1 n2 k2 _ _ pnn x l r defm
 -- abs2≅-↓ n1 k1 n2 k2 pkn1 pkn2 pnn m (braid≅ l r .((n1 ↓ k1) ++ (n2 ↓ k2)) .m defm defmf) = abs-braid2-↓ n1 k1 n2 k2 _ pnn l r defm
 
-only-one-canonical≅ : {n : ℕ} -> (cl : Canonical n) -> (m : List) -> (immersion {n} cl) ≅ m -> ⊥
+postulate
+  only-one-canonical≅ : {n : ℕ} -> (cl : Canonical n) -> (m : List) -> (immersion {n} cl) ≅ m -> ⊥
 -- only-one-canonical≅ cl m (cancel≅ l r .(immersion cl) .m defm defmf) = abs-const-many-↓ _ _ _ r cl defm
 -- only-one-canonical≅ cl m (swap≅ x l r .(immersion cl) .m defm defmf) = abs-jump-many-↓ _ _ _ x l r cl defm
 -- only-one-canonical≅ cl m (braid≅ l r .(immersion cl) .m defm defmf) = abs-braid-many-↓ _ _ _ r cl defm
@@ -182,7 +185,8 @@ only-one-canonical≅ : {n : ℕ} -> (cl : Canonical n) -> (m : List) -> (immers
       rec = ≡-↓ _ _ _ (≤-down2 pk1) (≤-down2 pk2) {!!}
   in  cong S rec
 
-≡-++↓ : (m1 m2 : List) -> (n k1 k2 : ℕ) -> (ml1 : n >> m1) -> (ml2 : n >> m2) -> (k1 ≤ S n) -> (k2 ≤ S n) -> (m1 ++ ((S n) ↓ k1) == m2 ++ ((S n) ↓ k2)) -> (k1 == k2) × (m1 == m2)
+postulate
+  ≡-++↓ : (m1 m2 : List) -> (n k1 k2 : ℕ) -> (ml1 : n >> m1) -> (ml2 : n >> m2) -> (k1 ≤ S n) -> (k2 ≤ S n) -> (m1 ++ ((S n) ↓ k1) == m2 ++ ((S n) ↓ k2)) -> (k1 == k2) × (m1 == m2)
 -- ≡-++↓ nil nil n k1 k2 ml1 ml2 pk1 pk2 p = (≡-↓ _ _ _ pk1 pk2 p) , idp
 -- ≡-++↓ nil (x :: m2) (S n) (S k1) k2 ml1 (.x :⟨ x₁ ⟩: ml2) pk1 pk2 p =
 --   let r = cut-tail  p
@@ -212,7 +216,8 @@ only-one-canonical≅* cl1 cl2 m1 m2 pm1 pm2 (trans≅ x p) =
   let ss = transport (λ t → t ≅ _) (! pm1) x
   in  ⊥-elim (only-one-canonical≅ cl1 _ ss)
 
-only-one-canonical≃ : {n : ℕ} -> (cl1 cl2 : Canonical n) -> (m1 m2 : List) -> (immersion {n} cl1 == m1) -> (immersion {n} cl2 == m2) -> (m1 ≃ m2) -> cl1 == cl2
+postulate
+  only-one-canonical≃ : {n : ℕ} -> (cl1 cl2 : Canonical n) -> (m1 m2 : List) -> (immersion {n} cl1 == m1) -> (immersion {n} cl2 == m2) -> (m1 ≃ m2) -> cl1 == cl2
 -- only-one-canonical≃ cl1 cl2 m1 .m1 pm1 pm2 (R idp idp) = ≡immersion _ _ (≡-trans pm1 (≡-sym pm2))
 -- only-one-canonical≃ cl1 cl2 m1 m2 pm1 pm2 (R idp (trans≅ x p2)) =
 --   let ss = subst (λ t → t ≅ _) (≡-sym pm2) x
