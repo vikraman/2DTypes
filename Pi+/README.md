@@ -1,6 +1,6 @@
 # README
 
-This directory contains code attempting to prove that the soundness and completeness of Π wrt to UFin, thus proving that the "+" fragment of Pi presents a univalent subuniverse.
+This directory contains code attempting to prove the soundness and completeness of Π wrt to UFin, thus proving that the "+" fragment of Pi presents a univalent subuniverse.
 
 ## Code structure
 
