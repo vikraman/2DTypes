@@ -5,7 +5,6 @@ module Pi+.FSMG.M where
 open import lib.Base
 open import lib.NType
 open import lib.PathOver
-open import lib.types.Truncation
 
 open import Pi+.FSMG.Paths
 open import Pi+.Extra
@@ -28,7 +27,7 @@ module _ {i} where
 
       swap² : (x y : A) (xs : M A) → swap x y xs ∙ swap y x xs == idp
 
-      trunc : Trunc 1 (M A)
+      instance trunc : has-level 1 (M A)
 
     module MElim {j} {P : M A → Type j}
       (nil* : P nil)

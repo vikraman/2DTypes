@@ -5,7 +5,6 @@ module Pi+.FSMG.FSMG where
 open import lib.Base
 open import lib.NType
 open import lib.PathOver
-open import lib.types.Truncation
 
 open import Pi+.FSMG.Paths
 open import Pi+.Extra
@@ -38,7 +37,7 @@ module _ {i} where
 
       β² : {X Y : FSMG A} → β {X} {Y} ∙ β {Y} {X} == idp
 
-      trunc : Trunc 1 (FSMG A)
+      instance trunc : has-level 1 (FSMG A)
 
     module FSMGElim {j} {P : FSMG A → Type j}
       (η* : (a : A) → P (η a))
