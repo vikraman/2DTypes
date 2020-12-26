@@ -25,19 +25,19 @@ open import lib.NType2
 ⟦⌜_⌝⟧₀ : (X : UFin) → Trunc -1 (⟦ ⌜ X ⌝₀ ⟧₀ == X)
 ⟦⌜_⌝⟧₀ = FinSet-elim-prop (λ _ → Trunc-level) λ n → [ pair= (ap Fin ∣⟪ n ⟫∣) prop-has-all-paths-↓ ]
 
-⟦_⟧₁ : {X Y : U} → X ⟷₁ Y → ⟦ X ⟧₀ == ⟦ Y ⟧₀ {- Lehmer n -}
-⟦ p ⟧₁ = {!   !}
+-- ⟦_⟧₁ : {X Y : U} → X ⟷₁ Y → ⟦ X ⟧₀ == ⟦ Y ⟧₀ {- Lehmer n -}
+-- ⟦ p ⟧₁ = {!   !}
 
-⌜_⌝₁ : {X Y : UFin} → X == Y → ⌜ X ⌝₀ ⟷₁ ⌜ Y ⌝₀
-⌜_⌝₁ = {!   !}
+-- ⌜_⌝₁ : {X Y : UFin} → X == Y → ⌜ X ⌝₀ ⟷₁ ⌜ Y ⌝₀
+-- ⌜_⌝₁ = {!   !}
 
 -- ⌜⟦_⟧⌝₁ : {X Y : U} → (p : X ⟷₁ Y) → ⌜ ⟦ p ⟧₁ ⌝₁ ⟷₂ p
 -- ⌜⟦ p ⟧⌝₁ = {!   !}
 
 -- ⟦⌜_⌝⟧₁ : {X Y : UFin} → (p : X == Y) → ⟦ ⌜ p ⌝₁ ⟧₁ == p
 
-⟦_⟧₂ : {X Y : U} → {p q : X ⟷₁ Y } → p ⟷₂ q → ⟦ p ⟧₁ == ⟦ q ⟧₁
-⟦ α ⟧₂ = {!   !}
+-- ⟦_⟧₂ : {X Y : U} → {p q : X ⟷₁ Y } → p ⟷₂ q → ⟦ p ⟧₁ == ⟦ q ⟧₁
+-- ⟦ α ⟧₂ = {!   !}
 
 -- ⌜_⌝₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → ⌜ p ⌝₁ ⟷₂ ⌜ q ⌝₁
 -- ⌜ idp ⌝₂ = id⟷₂
