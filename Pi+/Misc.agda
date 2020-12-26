@@ -46,3 +46,9 @@ data _⊎_ (A B : Type₀) : Type₀ where
 data BoolDec (A : Type₀) : Type₀ where
   yes : A -> BoolDec A
   no  : ¬ A -> BoolDec A
+
+data Singleton {i} {A : Type i} (x : A) : Type i where
+  _with==_ : (y : A) → x == y → Singleton x
+
+inspect : ∀ {a} {A : Set a} (x : A) → Singleton x
+inspect x = x with== idp

@@ -21,22 +21,48 @@ data LehmerProper : (n : ℕ) -> Type₀ where
   CanZ : LehmerProper 0
   CanS : {n : ℕ} -> {nf : ℕ} -> (n < nf) -> (l : LehmerProper n) -> {r : ℕ} -> (r < nf) -> LehmerProper nf
 
-
 immersionProper : {n : ℕ} -> LehmerProper n -> List
 immersionProper {0} CanZ = nil
 immersionProper {S n} (CanS _ l {r} _) = (immersionProper l) ++ ((n ∸ r) ↓ (1 + r))
 
-properize : {n : ℕ} -> (cl : Lehmer n) -> Σ _ (λ nf -> Σ _ (λ clf -> immersion {n} cl == immersionProper {nf} clf))
-properize cl = {!  !}
+properize : {n : ℕ} -> (cl : Lehmer n) -> Σ _ (λ nf -> Σ _ (λ clf -> (immersion {n} cl == immersionProper {nf} clf) × (nf ≤ n)))
+properize CanZ = O , CanZ , idp , z≤n
+properize (CanS cl {O} x) = 
+  let nrec , clfrec , clfrecp , nfr = properize cl
+  in  nrec , clfrec , (++-unit ∙ clfrecp) , ≤-up nfr
+properize (CanS {n} cl {S r} x) with properize cl 
+... | .0 , CanZ , clfrecp , nfn = (S n) , ((CanS (s≤s z≤n) CanZ x) , ((ap (λ e -> e ++ ((r + n ∸ r) :: (n ∸ r) ↓ r)) clfrecp)) , ≤-reflexive idp )
+... | S nrec , CanS {nr} {nfr} pnf clfrec {rr} pnr , clfrecp , nfn = S n , (CanS (s≤s nfn) (CanS pnf clfrec pnr) x) ,  (ap (λ e -> e ++ ((r + n ∸ r) :: (n ∸ r) ↓ r)) clfrecp) , ≤-reflexive idp
 
-unproperize : {n : ℕ} -> (cl : LehmerProper n) -> Σ _ (λ nf -> Σ _ (λ clf -> immersionProper {n} cl == immersion {nf} clf))
-unproperize cl = {!!}
+append-zero-lehmer : {n : ℕ} -> (l : Lehmer n) -> Σ _ (λ ll -> immersion {n} l == immersion {S n} ll)
+append-zero-lehmer {n} l = (CanS l z≤n) , ! ++-unit
+
+immersion-transport : {n1 n2 : ℕ} -> (pn : n1 == n2) -> (l : Lehmer n1) -> (immersion l == immersion (transport Lehmer pn l))
+immersion-transport {n1} {.n1} idp l = idp
+
+append-zero*-lehmer : {n : ℕ} -> (l : Lehmer n) -> (nf : ℕ) -> (n ≤ nf) -> Σ _ (λ ll -> immersion {n} l == immersion {nf} ll)
+append-zero*-lehmer {O} CanZ O z≤n = CanZ , idp
+append-zero*-lehmer {O} CanZ (S nf) z≤n =
+  let llr , llpr = append-zero*-lehmer CanZ nf z≤n
+      llr' , llpr' = append-zero-lehmer llr
+  in  llr' , (llpr ∙ llpr')
+append-zero*-lehmer {S n} l (S nf) pnf with (≤-∃ (S n) (S nf) pnf)
+... | O , kp = (transport Lehmer kp l) , (immersion-transport kp l)
+... | S k , kp with append-zero*-lehmer {S n} l nf (≤-trans (≤-up-+ (≤-reflexive idp)) (≤-reflexive (≡-down2 kp)))
+...   | rec-l , rec-p with append-zero-lehmer rec-l
+...   | llr , llrp = llr , (rec-p ∙ llrp)
+
+unproperize : {n : ℕ} -> (cl : LehmerProper n) -> Σ _ (λ clf -> immersionProper {n} cl == immersion {n} clf)
+unproperize CanZ = CanZ , idp
+unproperize {S nf} (CanS {n} {.(S nf)} x cl {r} x₁) with unproperize cl
+... | nfr , clfr with  append-zero*-lehmer nfr nf (≤-down2 x)
+...    | rec-l , rec-p = CanS rec-l x₁ , ap (λ e -> e ++ (r + nf ∸ r :: nf ∸ r ↓ r)) (clfr ∙ rec-p)
 
 canonical-proper-append : {n : ℕ} -> (cl : LehmerProper n) -> (x : ℕ) -> (n ≤ x) -> Σ _ (λ clx -> immersionProper {S x} clx == immersionProper {n} cl ++ [ x ])
-canonical-proper-append cl x px =
-  let _ , upl , upl-p = unproperize cl
-      clx , clx-p = canonical-append upl x px
-  in  {!!}
+canonical-proper-append cl x px = {!    !}
+  -- let _ , upl , upl-p = unproperize cl
+  --     clx , clx-p = canonical-append upl x px
+  -- in  {!!}
 
 canonical-proper-append-smaller : {n nf r : ℕ} -> {pn : S n ≤ S nf} -> {pr : S r ≤ S nf} -> {cl : LehmerProper n} -> (x : ℕ) -> (clf : LehmerProper (S nf)) -> (defclf : clf == CanS pn cl pr)
                                   -> (defx : S x == (nf ∸ r)) -> Σ (S r < S nf) (λ prr -> immersionProper {S nf} (CanS pn cl prr) == (immersionProper {S nf} clf) ++ [ x ])
@@ -71,32 +97,48 @@ lemma n r x pnr cl f with n <? x
   in  ⊥-elim (f _ red)
 ... | inj₂ qq = inj₂ ({!!} , {!!})
 
--- canonical-final≅ : (m : List) -> (f : (mf : List) -> (rev m ≅* mf) -> ⊥) -> Σ _ (λ n -> Σ _ (λ cl -> immersion {n} cl == rev m))
--- canonical-final≅ nil f = 0 , CanZ , refl
--- canonical-final≅ (x :: m) f with (canonical-final≅ m (λ mf red → f (mf ++ [ x ]) (++r [ x ] red)))
--- canonical-final≅ (x :: m) f | 0 , CanZ , snd rewrite (≡-sym snd) = _ , canonical-append CanZ x z≤n
--- canonical-final≅ (x :: m) f | _ , CanS fst {0} x₁ , snd = {!!} -- TODO this requires changing the signature to return LehmerProper instead of just Lehmer - then it will be impossible
--- canonical-final≅ (x :: m) f | _ , CanS {n₁} fst {S r} x₁ , snd  with lemma n₁ r x (≤-down2 x₁) fst (λ mf mf-abs → f mf (subst (λ e -> (e ++ [ x ]) ≅* mf) snd mf-abs))
--- canonical-final≅ (x :: m) f | _ , CanS fst {S r} x₁ , snd | inj₁ x₂ =
---   let rec-m , rec-p = canonical-append (CanS fst {S r} x₁) x x₂
---   in  _ , rec-m , (≡-trans rec-p (start+end snd refl))
--- canonical-final≅ (x :: m) f | _ , CanS {n} fst {S r} x₁ , snd | inj₂ (fst₁ , snd₁) =
---   let tt =
---         begin
---           immersion fst ++ S (r + (n ∸ S r)) :: ((n ∸ S r) ↓ (1 + r))
---         =⟨ start+end (idp {a = immersion fst}) (head+tail (≡-trans (plus-minus snd₁) (≡-sym (plus-minus (≤-down snd₁)))) (≡-sym (++-↓ (n ∸ S r) r))) ⟩
---           immersion fst ++ r + (n ∸ r) :: (S (n ∸ S r) ↓ r) ++ n ∸ S r :: nil
---         =⟨ start+end (idp {a = immersion fst}) (head+tail refl (start+end (cong (λ e -> e ↓ r) {!!}) (cong [_]  (≡-sym fst₁)))) ⟩
---           immersion fst ++ r + (n ∸ r) :: ((n ∸ r) ↓ r) ++ x :: nil
---         =⟨ ≡-sym (++-assoc (immersion fst) _ [ x ]) ⟩
---           (immersion fst ++ r + (n ∸ r) :: ((n ∸ r) ↓ r)) ++ x :: nil
---         =⟨ start+end snd (idp {a = [ x ]}) ⟩
---           rev m ++ x :: nil
---         =∎
---   in _ , ((CanS fst {S (S r)} (s≤s snd₁)) , tt)
 
-canonical-final≅ : (m : List) -> (f : (mf : List) -> (rev m ≅* mf) -> ⊥) -> Σ _ (λ n -> Σ _ (λ cl -> immersionProper {n} cl == rev m))
-canonical-final≅ m pf = {!!}
+lemma-append : {n : ℕ} -> (cl : Lehmer n) -> (x : ℕ) -> (ll : List) -> (immersion {n} cl == ll) -> Σ ℕ (λ nf → Σ (Lehmer nf) (λ clf → immersion clf == ll ++ x :: nil))
+lemma-append {n} cl x pcl = {!   !}
+
+canonical-final≅ : (m : List) -> (f : (mf : List) -> (rev m ≅* mf) -> ⊥) -> Σ _ (λ n -> Σ _ (λ cl -> immersion {n} cl == rev m))
+canonical-final≅ nil f = 0 , CanZ , idp
+canonical-final≅ (x :: m) f with (canonical-final≅ m (λ mf red → f (mf ++ [ x ]) (++r [ x ] red)))
+canonical-final≅ (x :: m) f | 0 , CanZ , snd rewrite (≡-sym snd) = _ , canonical-append CanZ x z≤n
+canonical-final≅ (x :: m) f | _ , CanS {n} fst {0} x₁ , snd with n ≤? x
+... | yes p = 
+  let tl , tp =  canonical-append fst x p
+  in  (S x) , (tl , tp ∙ (ap (λ e → e ++ [ x ]) (! ++-unit ∙ snd)))
+... | no  p = 
+  let x<n = ≰⇒> p
+  in  ⊥-elim (f {!   !} {!   !}) -- TODO this requires changing the signature to return LehmerProper instead of just Lehmer - then it will be impossible
+canonical-final≅ (x :: m) f | _ , CanS {n₁} fst {S r} x₁ , snd  with lemma n₁ r x (≤-down2 x₁) fst (λ mf mf-abs → f mf (transport (λ e -> (e ++ [ x ]) ≅* mf) snd mf-abs))
+canonical-final≅ (x :: m) f | _ , CanS fst {S r} x₁ , snd | inj₁ x₂ =
+  let rec-m , rec-p = canonical-append (CanS fst {S r} x₁) x x₂
+  in  _ , rec-m , (≡-trans rec-p (start+end snd idp))
+canonical-final≅ (x :: m) f | _ , CanS {n} fst {S r} x₁ , snd | inj₂ (fst₁ , snd₁) =
+  let tt =
+        begin
+          immersion fst ++ S (r + (n ∸ S r)) :: ((n ∸ S r) ↓ (1 + r))
+        =⟨ start+end (idp {a = immersion fst}) (head+tail (≡-trans (plus-minus snd₁) (≡-sym (plus-minus (≤-down snd₁)))) (≡-sym (++-↓ (n ∸ S r) r))) ⟩
+          immersion fst ++ r + (n ∸ r) :: (S (n ∸ S r) ↓ r) ++ n ∸ S r :: nil
+        =⟨ start+end (idp {a = immersion fst}) (head+tail idp (start+end (cong (λ e -> e ↓ r) (! (∸-up snd₁))) (cong [_]  (≡-sym fst₁)))) ⟩
+          immersion fst ++ r + (n ∸ r) :: ((n ∸ r) ↓ r) ++ x :: nil
+        =⟨ ≡-sym (++-assoc (immersion fst) _ [ x ]) ⟩
+          (immersion fst ++ r + (n ∸ r) :: ((n ∸ r) ↓ r)) ++ x :: nil
+        =⟨ start+end snd (idp {a = [ x ]}) ⟩
+          rev m ++ x :: nil
+        =∎
+  in _ , ((CanS fst {S (S r)} (s≤s snd₁)) , tt)
+
+-- canonical-final≅ : (m : List) -> (f : (mf : List) -> (rev m ≅* mf) -> ⊥) -> Σ _ (λ n -> Σ _ (λ cl -> immersionProper {n} cl == rev m))
+-- canonical-final≅ nil pf = O , CanZ , idp
+-- canonical-final≅ (x :: m) f with (canonical-final≅ m (λ mf red → f (mf ++ [ x ]) (++r [ x ] red)))
+-- ... | O , CanZ , snd  rewrite (≡-sym snd) = _ , canonical-proper-append CanZ x z≤n
+-- ... | S fst₁ , CanS x₁ fst₂ {O} x₂ , snd₁ = 
+--   let rec = ap (λ e -> e ++ [ x ]) snd₁
+--   in  S x , (CanS (s≤s {!   !}) {!   !} (s≤s z≤n) , rec)
+-- ... | S fst₁ , CanS x₁ fst₂ {S t} x₂ , snd₁ = {!   !}
 
 abs-list : {l : List} -> {n : ℕ} -> {r : List} -> (nil == (l ++ (n :: r))) -> ⊥
 abs-list {nil} {n} {r} ()
@@ -156,9 +198,9 @@ is-canonical? (x :: m) with is-canonical? m
   (_ , CanS x cl {S r} pr , ppp) → {!!} }
 
 canonical-proper-NF : {n : ℕ} -> (cl : LehmerProper n) -> (Σ _ (λ m -> immersionProper {n} cl ≅ m)) -> ⊥
-canonical-proper-NF cl (m , p) =
-  let _ , unproper , unproper-p = unproperize cl
-  in  final≅-Lehmer unproper _ m idp {!   !} -- (subst (λ e -> e ≅ m) unproper-p p)
+canonical-proper-NF cl (m , p) = {!   !}
+  -- let _ , unproper = unproperize cl
+  -- in  final≅-Lehmer unproper _ m idp {!   !} -- (subst (λ e -> e ≅ m) unproper-p p)
 
 not-canonical-not-NF : (m : List) -> ¬ (Σ _ (λ n -> Σ _ (λ cl -> (immersionProper {n} cl) == (rev m)))) -> Σ _ (λ mf -> (rev m) ≅* mf)
 not-canonical-not-NF nil p = ⊥-elim (p (_ , (CanZ , idp)))

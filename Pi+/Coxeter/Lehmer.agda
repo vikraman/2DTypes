@@ -36,7 +36,7 @@ canonical-append cl x px =
   in  CanS lifted-m (s≤s z≤n) , start+end lifted-p idp
 
 postulate
-  canonical-eta : {n : ℕ} -> {cl1 cl2 : Lehmer n} -> {r1 r2 : ℕ} -> (rn1 : r1 ≤ (S n)) -> (rn2 : r2 ≤ (S n)) -> (cl1 == cl2) -> (r1 == r2) -> (CanS cl1 rn1) == (CanS cl2 rn2)
+  lehmer-eta : {n : ℕ} -> {cl1 cl2 : Lehmer n} -> {r1 r2 : ℕ} -> (rn1 : r1 ≤ (S n)) -> (rn2 : r2 ≤ (S n)) -> (cl1 == cl2) -> (r1 == r2) -> (CanS cl1 rn1) == (CanS cl2 rn2)
 
 data _>>_ : ℕ -> List -> Type₀ where
   nil : {n : ℕ} -> n >> nil

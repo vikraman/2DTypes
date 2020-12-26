@@ -35,6 +35,9 @@ m < n = S m ≤ n
 ≤-up {n} {.0} z≤n = z≤n
 ≤-up {.(S _)} {.(S _)} (s≤s q) = s≤s (≤-up q)
 
+≤-up2 : {n m : ℕ} -> m ≤ n -> S m ≤ S n
+≤-up2 p = s≤s p
+
 ≤-down : {n m : ℕ} -> S m ≤ n -> m ≤ n
 ≤-down {.(S _)} {0} (s≤s p) = z≤n
 ≤-down {.(S _)} {S n} (s≤s p) = s≤s (≤-down p)
