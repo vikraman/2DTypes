@@ -186,3 +186,7 @@ nowhere {S n} {S k} p1 p2 p3 p4 = nowhere (λ x → p1 (s≤s x)) (λ x → p2 (
 
 rrr : {k : ℕ} -> k ≤ k
 rrr = ≤-reflexive idp
+
+squeeze : {n k : ℕ} -> (n < k) -> (k ≤ S n) -> (k == S n)
+squeeze {.0} {.1} (s≤s {n = .0} z≤n) (s≤s z≤n) = idp
+squeeze {.(S _)} {.(S (S _))} (s≤s (s≤s pn)) (s≤s (s≤s pnn)) = ap S (squeeze (s≤s pn) (s≤s pnn))
