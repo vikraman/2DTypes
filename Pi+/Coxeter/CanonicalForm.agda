@@ -69,16 +69,16 @@ canonical-proper-append-smaller : {n nf r : ℕ} -> {pn : S n ≤ S nf} -> {pr :
 canonical-proper-append-smaller {n} {nf} {r} {pn} {pr} {cl} x clf defclf defx = {!!}
 
 
-always-reduces : (n k x : ℕ) -> (x ≤ k + n) -> (Σ _ (λ mf -> (n ↓ (1 + k) ++ [ x ]) ≅* mf)) ⊎ (S x == n)
+always-reduces : (n k x : ℕ) -> (x ≤ k + n) -> (Σ _ (λ mf -> (n ↓ (1 + k) ++ [ x ]) ≅ mf)) ⊎ (S x == n)
 always-reduces n k x px with S x <? n
-... | yes r = inj₁ (_ , (long-swap<-lr x n (1 + k) nil nil r))
+... | yes r = inj₁ (_ , ? )-- (long-swap<-lr x n (1 + k) nil nil r))
 ... | no r with S x ≟ n
 ... | yes rr = inj₂ rr
 ... | no rr with x ≟ n
 ... | no rrr = {!!}
-always-reduces n 0 x px | no r | no rr | yes rr2 rewrite rr2 = inj₁ (_ , (cancel nil nil))
+always-reduces n 0 x px | no r | no rr | yes rr2 rewrite rr2 = inj₁ (_ , ? ) -- (cancel nil nil))
 always-reduces n (S k) x px | no r | no rr | yes rr2 with (always-reduces n k x (≤-trans (≤-reflexive rr2) (≤-up-+ rrr)))
-always-reduces n (S k) x px | no r | no rr | yes rr2 | inj₁ (rec-m , rec-p) = inj₁ (_ , l++ [ S (k + n) ] rec-p)
+always-reduces n (S k) x px | no r | no rr | yes rr2 | inj₁ (rec-m , rec-p) = inj₁ (_ , ?) -- l++ [ S (k + n) ] rec-p)
 always-reduces n (S k) x px | no r | no rr | yes rr2 | inj₂ y = inj₂ y
 
 lemma : (n r x : ℕ) -> (r ≤ n) -> (cl : Lehmer n) -> (f : (mf : List) -> ((immersion {n} cl ++ ((n ∸ r) ↓ (1 + r))) ++ x :: nil) ≅* mf -> ⊥) -> (n < x) ⊎ ((x == n ∸ (1 + r)) × (S r ≤ n))
@@ -101,17 +101,26 @@ lemma n r x pnr cl f with n <? x
 lemma-append : {n : ℕ} -> (cl : Lehmer n) -> (x : ℕ) -> (ll : List) -> (immersion {n} cl == ll) -> Σ ℕ (λ nf → Σ (Lehmer nf) (λ clf → immersion clf == ll ++ x :: nil))
 lemma-append {n} cl x pcl = {!   !}
 
+-- canonical-final≅ (x :: m) f | _ , CanS {S n} (CanS fst₁ x₂) {0} x₁ , snd with (S n) ≤? x
+-- ... | yes p = 
+--   let tl , tp =  canonical-append ((CanS fst₁ x₂)) x p
+--   in  (S x) , (tl , tp ∙ (ap (λ e → e ++ [ x ]) (! ++-unit ∙ snd)))
+-- canonical-final≅ (x :: m) f | _ , CanS {S n} (CanS fst₁ {O} x₂) {0} x₁ , snd | no  p = {!   !}
+-- canonical-final≅ (x :: m) f | _ , CanS {S n} (CanS fst₁ {S r} x₂) {0} x₁ , snd | no  p = 
+--   let x<Sn = ≰⇒> p
+--       cl = (S n ∸ (S r) ↓ (S r) ++ [ x ])
+--   in  ⊥-elim (f {!   !} {!   !}) -- TODO this requires changing the signature to return LehmerProper instead of just Lehmer - then it will be impossible
+
+lemma-reduction : {n : ℕ} -> (x : ℕ) -> (cl : Lehmer n) -> (r : ℕ) -> Σ _ (λ mf -> ((immersion cl ++ S n ∸ r ↓ r) ++ [ x ]) ≅ mf)
+lemma-reduction {n} x cl r = ?
+
 canonical-final≅ : (m : List) -> (f : (mf : List) -> (rev m ≅* mf) -> ⊥) -> Σ _ (λ n -> Σ _ (λ cl -> immersion {n} cl == rev m))
 canonical-final≅ nil f = 0 , CanZ , idp
 canonical-final≅ (x :: m) f with (canonical-final≅ m (λ mf red → f (mf ++ [ x ]) (++r [ x ] red)))
 canonical-final≅ (x :: m) f | 0 , CanZ , snd rewrite (≡-sym snd) = _ , canonical-append CanZ x z≤n
-canonical-final≅ (x :: m) f | _ , CanS {n} fst {0} x₁ , snd with n ≤? x
-... | yes p = 
-  let tl , tp =  canonical-append fst x p
-  in  (S x) , (tl , tp ∙ (ap (λ e → e ++ [ x ]) (! ++-unit ∙ snd)))
-... | no  p = 
-  let x<n = ≰⇒> p
-  in  ⊥-elim (f {!   !} {!   !}) -- TODO this requires changing the signature to return LehmerProper instead of just Lehmer - then it will be impossible
+canonical-final≅ (x :: nil) f | _ , CanS {O} CanZ {0} x₁ , snd = _ ,  canonical-append CanZ x z≤n
+canonical-final≅ (x :: x₂ :: m) f | _ , CanS {O} CanZ {0} x₁ , snd = ⊥-elim (++-abs (! snd))
+canonical-final≅ (x :: m) f | _ , CanS {S n} (CanS fst₁ x₂) {0} x₁ , snd = {!   !}
 canonical-final≅ (x :: m) f | _ , CanS {n₁} fst {S r} x₁ , snd  with lemma n₁ r x (≤-down2 x₁) fst (λ mf mf-abs → f mf (transport (λ e -> (e ++ [ x ]) ≅* mf) snd mf-abs))
 canonical-final≅ (x :: m) f | _ , CanS fst {S r} x₁ , snd | inj₁ x₂ =
   let rec-m , rec-p = canonical-append (CanS fst {S r} x₁) x x₂
@@ -202,13 +211,13 @@ canonical-proper-NF cl (m , p) = {!   !}
   -- let _ , unproper = unproperize cl
   -- in  final≅-Lehmer unproper _ m idp {!   !} -- (subst (λ e -> e ≅ m) unproper-p p)
 
-not-canonical-not-NF : (m : List) -> ¬ (Σ _ (λ n -> Σ _ (λ cl -> (immersionProper {n} cl) == (rev m)))) -> Σ _ (λ mf -> (rev m) ≅* mf)
+not-canonical-not-NF : (m : List) -> ¬ (Σ _ (λ n -> Σ _ (λ cl -> (immersionProper {n} cl) == (rev m)))) -> Σ _ (λ mf -> (rev m) ≅ mf)
 not-canonical-not-NF nil p = ⊥-elim (p (_ , (CanZ , idp)))
 not-canonical-not-NF (x :: m) p with is-canonical? m
 -- first, the case when m is not canonical
 ... | no  q =
   let rec-m , rec-p = not-canonical-not-NF m q
-  in  _ , (++r [ x ] rec-p)
+  in  _ , (++r+ [ x ] rec-p)
 -- under this line, we know that m is canonical
 -- now, lets check if m is empty
 ... | yes (_ , CanZ , qp) rewrite (≡-sym qp) =
@@ -224,7 +233,7 @@ not-canonical-not-NF (x :: m) p with is-canonical? m
 -- now we can finally use the always-reduces
 ... | yes  q2 with (always-reduces (nf ∸ r) r x (≤-trans q2 (≤-reflexive (≡-sym (plus-minus (≤-down2 pr))))))
  -- the case when there is a reduction
-... | inj₁ (red-m , red-p) rewrite (≡-sym qp) rewrite (plus-minus (≤-down pr)) rewrite (plus-minus (≤-down2 pr)) = _ , trans (idp≅* (++-assoc (immersionProper cl) _ _)) (l++ (immersionProper cl) red-p)
+... | inj₁ (red-m , red-p) rewrite (≡-sym qp) rewrite (plus-minus (≤-down pr)) rewrite (plus-minus (≤-down2 pr)) = _ , trans≅+ {! (l++ (immersionProper cl) red-p) !} {!   !} -- trans (idp≅* (++-assoc (immersionProper cl) _ _)) (l++ (immersionProper cl) red-p)
 -- the case when x completes the sequence
 ... | inj₂ q3 rewrite (≡-sym qp) =
   let prr , app = canonical-proper-append-smaller x (CanS pn cl pr) idp q3
@@ -237,4 +246,4 @@ everything-to-Lehmer m with is-canonical? m
 ... | no  p =
   let step-m , step-p = not-canonical-not-NF m p
       nn , rec-m , rec-p = everything-to-Lehmer (rev step-m)
-  in  nn , rec-m , (trans step-p (trans (idp≅* rev-rev) rec-p))
+  in  nn , rec-m , {!   !} -- (trans step-p (trans (idp≅* rev-rev) rec-p))
