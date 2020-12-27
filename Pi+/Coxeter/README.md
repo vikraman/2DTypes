@@ -2,13 +2,15 @@
 
 ## Code structure
 
-First, files lowest in dependency order: these contain very general lemmas about behaviour of ℕ and lists.
+Listed here in dependency order.  
+
+General lemmas about behaviour of ℕ and lists.
   - `Arithmetic.agda` 
     - defines the ≤ order on ℕ (replicates the definition from Agda stdlib instead of using the one from HoTT stdlib for historic reasons)
     - defines the minus operation ∸
     - defines and states/proves a number of lemmas on interactions between + , ∸ and ≤
   - `Lists.agda`
-    - defines the List type - lists of natural numbers (we don't use the HoTT stdlib lists because Agda has problems with decomposing them in pattern-matchings)
+    - defines the `List` type - lists of natural numbers (we don't use the HoTT stdlib lists because Agda has problems with decomposing them in pattern-matchings)
     - defines appending operator _++_
     - defines _↓_ which is the key part in the whole proof - n ↓ k represents a list [ (n + k) , (n + k - 1) , (n + k - 2) ... (n + 1) ]
     - proves a number of lemmas concering lists, appends etc.
