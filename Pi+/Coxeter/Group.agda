@@ -12,6 +12,8 @@ open import Pi+.Coxeter.Lists
 open import Pi+.Coxeter.Coxeter
 open import Pi+.Extra
 
+infixr 60 _:⟨_⟩:_
+
 data _>>_ (n : ℕ) : List -> Type₀ where
   nil : n >> nil
   _:⟨_⟩:_ : {l : List} -> (k : ℕ) -> (k < n) -> n >> l -> n >> (k :: l)
@@ -19,14 +21,25 @@ data _>>_ (n : ℕ) : List -> Type₀ where
 ListN : (n : ℕ) → Type₀
 ListN n = Σ List λ xs -> n >> xs
 
+data LL (n : ℕ) : Type₀ where
+  nil : LL n
+  _:[_]:_ : (k : ℕ) (p : k < n) (xs : LL n) → LL n
+
 instance
     ListN-level : {n : ℕ} → is-set (ListN n)
     ListN-level = TODO
 
-CoxeterRel  : (n : ℕ) → Rel (ListN n) lzero
-CoxeterRel = TODO
-
 syntax CoxeterRel n x y = x ≈[ n ] y
+
+data CoxeterRel (n : ℕ) : Rel (LL n) lzero where
+  cancel≈ : {k : ℕ} -> (p : k < n) -> (k :[ p ]: (k :[ p ]: nil)) ≈[ n ] nil
+  -- swap≈ : {o : ℕ} -> (q : o < n) -> {k : ℕ} -> (p : k < n) -> (S k < o) -> (o :[ q ]: k :[ p ]: nil) ≈[ n ] (k :[ p ]: o :[ q ]: nil)
+  -- braid≈ : {o : ℕ} -> (p : o < n) -> (q : (S o) < n) -> ((S o) :[ q ]: o :[ p ]: (S o) :[ q ]: nil) ≈[ n ] (o :[ p ]: (S o) :[ q ]: o :[ p ]: nil)
+  respects-l≈ : (l : ListN) -> {r r' lr lr' : ListN} -> (r ≈[ n ] r') -> (lr == l ++ r) -> (lr' == l ++ r') -> lr ≈[ n ] lr'
+  respects-r≈ : {l l' : ListN} -> (r : ListN) ->{lr l'r : ListN} -> (l ≈[ n ] l') -> (lr == l ++ r) -> (l'r == l' ++ r) -> lr ≈[ n ] l'r
+  idp≈ : {m : ListN} -> m ≈[ n ] m
+  comm≈ : {m1 m2 : ListN} -> (m1 ≈[ n ] m2) -> m2 ≈[ n ] m1
+  trans≈ : {m1 m2 m3 : ListN} -> (m1 ≈[ n ] m2) -> (m2 ≈[ n ] m3) -> m1 ≈[ n ] m3
 
 instance
     CoxeterRel-level : {n : ℕ} → {l1 l2 : ListN n} → is-prop (CoxeterRel n l1 l2)
