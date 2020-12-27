@@ -54,4 +54,10 @@ Lehmer equivalence:
     - The first main result of this section is `final≅-Lehmer` - showing that immersions of Lehmer codes are normal forms wrt to ReductionRel (i.e. they can't be reduced any further).
     - A corollary of this is `only-one-canonical≃`, proving that if two immersions of Lehmer codes are related by ≃, then they are the same Lehmer codes 
     - This proves that `immersion` is an injection
-  - 
+  - `ReductionRel+.agda`
+    - A helper module - normal `ReductionRel` is a (Kleene star) *-completion over ≅, and this is +-completion - one or more reductions. 
+    - It's useful for defining that something is not a normal form - if it's not, then there exists n-step reduction (n > 1) to a normal form
+  - `ExchangeLemmas+.agda`
+    - The analogue of `ExchangeLemmas.agda`, but with a stronger conditions that the reductions should be at least 1-step long.
+  - `CanonicalForm.agda`
+    - Defines a `LehmerProper` type - an analogue to `Lehmer`, but it's now keeping just the non-empty . They can be converted from and back to normal Lehmer, but it's not an equivalence.
