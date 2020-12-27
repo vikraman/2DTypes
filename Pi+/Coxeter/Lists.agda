@@ -168,6 +168,10 @@ telescope-l-rev-+1 n k l r =
 nil-abs : {x : ℕ} -> {l : List} -> (x :: l) == nil -> ⊥
 nil-abs ()
 
+++-abs : {x : ℕ} -> {l : List} -> l ++ [ x ] == nil -> ⊥
+++-abs {x} {nil} ()
+++-abs {x} {x₁ :: l} p = nil-abs p
+
 _↓↓_,_ : (n : ℕ) -> (k : ℕ) -> (k ≤ n) -> List
 n ↓↓ 0 , z≤n = nil
 S n ↓↓ S k , s≤s p = n :: (n ↓↓ k , p)

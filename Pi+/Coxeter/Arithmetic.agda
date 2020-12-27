@@ -5,6 +5,7 @@ module Pi+.Coxeter.Arithmetic where
 open import lib.Base
 open import lib.types.Nat using (_+_ ; ℕ-S-is-inj)
 open import lib.PathGroupoid
+open import lib.NType
 open import Pi+.Misc
 
 infix 4 _≤_ _<_
@@ -13,12 +14,16 @@ data _≤_ : ℕ -> ℕ -> Type₀ where
   z≤n : ∀ {n}                 → 0  ≤ n
   s≤s : ∀ {m n} (m≤n : m ≤ n) → S m ≤ S n
 
-≤-isProp : {m n : ℕ} -> (p : m ≤ n) -> (q : m ≤ n) -> p == q
-≤-isProp {O} {O} z≤n z≤n = idp
-≤-isProp {O} {S n} z≤n z≤n = idp
-≤-isProp {S m} {S n} (s≤s p) (s≤s q) = 
-  let rec = ≤-isProp p q 
+≤-has-all-paths : {m n : ℕ} -> (p : m ≤ n) -> (q : m ≤ n) -> p == q
+≤-has-all-paths {O} {O} z≤n z≤n = idp
+≤-has-all-paths {O} {S n} z≤n z≤n = idp
+≤-has-all-paths {S m} {S n} (s≤s p) (s≤s q) = 
+  let rec = ≤-has-all-paths p q 
   in  ap s≤s rec
+
+instance
+  ≤-level : {m n : ℕ} → is-prop (m ≤ n)
+  ≤-level = all-paths-is-prop ≤-has-all-paths
 
 _<_ : ℕ -> ℕ -> Type₀
 m < n = S m ≤ n
@@ -34,6 +39,9 @@ m < n = S m ≤ n
 ≤-up : {n m : ℕ} -> m ≤ n -> m ≤ S n
 ≤-up {n} {.0} z≤n = z≤n
 ≤-up {.(S _)} {.(S _)} (s≤s q) = s≤s (≤-up q)
+
+≤-up2 : {n m : ℕ} -> m ≤ n -> S m ≤ S n
+≤-up2 p = s≤s p
 
 ≤-down : {n m : ℕ} -> S m ≤ n -> m ≤ n
 ≤-down {.(S _)} {0} (s≤s p) = z≤n

@@ -19,6 +19,9 @@ data _≅*_ : List -> List -> Type₀ where
     idp : {m : List} -> m ≅* m
     trans≅ : {m1 m2 m3 : List} -> (m1 ≅ m2) -> (m2 ≅* m3) -> m1 ≅* m3
 
+data _≅+_ : List -> List -> Type₀ where
+    trans≅+ : {m1 m2 m3 : List} -> (m1 ≅ m2) -> (m2 ≅* m3) -> m1 ≅+ m3
+
 cancel-c : {n : ℕ} -> (l r : List) -> (l ++ n :: n :: r) ≅ (l ++ r)
 cancel-c {n} = λ l r → cancel≅ l r (l ++ n :: n :: r) (l ++ r) idp idp
 
@@ -57,6 +60,9 @@ l++ : (l : List) -> {m1 m2 : List} -> (m1 ≅* m2) -> ((l ++ m1) ≅* (l ++ m2))
 l++ l idp = idp
 l++ l (trans≅ x p) = trans≅ (l++≅ _ _ l x) ((l++ l p))
 
++l++ : (l : List) -> {m1 m2 : List} -> (m1 ≅+ m2) -> ((l ++ m1) ≅+ (l ++ m2))
++l++ l (trans≅+ x p) = trans≅+ (l++≅ _ _ l x) ((l++ l p))
+
 ++r≅ : (m1 m2 r : List) -> (m1 ≅ m2) -> ((m1 ++ r) ≅ (m2 ++ r))
 ++r≅ m1 m2 r (cancel≅ l r₁ .m1 .m2 defm defmf) = cancel≅ l (r₁ ++ r)  _ _  (≡-trans (start+end defm idp) (++-assoc l _ r)) ((≡-trans (start+end defmf idp) (++-assoc l _ r)))
 ++r≅ m1 m2 r (swap≅ x l r₁ .m1 .m2 defm defmf) = swap≅ x l (r₁ ++ r)  _ _  (≡-trans (start+end defm idp) (++-assoc l _ r)) ((≡-trans (start+end defmf idp) (++-assoc l _ r)))
@@ -67,6 +73,9 @@ l++ l (trans≅ x p) = trans≅ (l++≅ _ _ l x) ((l++ l p))
 ++r : {m1 m2 : List} -> (r : List) -> (m1 ≅* m2) -> ((m1 ++ r) ≅* (m2 ++ r))
 ++r r idp = idp
 ++r r (trans≅ x p) = trans≅ (++r≅ _ _ r x) (++r r p)
+
+++r+ : {m1 m2 : List} -> (r : List) -> (m1 ≅+ m2) -> ((m1 ++ r) ≅+ (m2 ++ r))
+++r+ r (trans≅+ x p) = trans≅+ (++r≅ _ _ r x) (++r r p)
 
 idp≅* : {l l' : List} -> (l == l') -> l ≅* l'
 idp≅* idp = idp
