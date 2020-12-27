@@ -180,3 +180,9 @@ only-one-canonical≃ cl1 cl2 m1 m2 pm1 pm2 (comm≅ idp (trans≅ x p2)) =
 only-one-canonical≃ cl1 cl2 m1 m2 pm1 pm2 (comm≅ (trans≅ x p1) p2) =
   let ss = transport (λ t → t ≅ _) (≡-sym pm1) x
   in  ⊥-elim (final≅-Lehmer cl1 _ _ idp ss)
+
+open import Pi+.Extra
+
+instance
+  Lehmer-level : {n : ℕ} → is-set (Lehmer n)
+  Lehmer-level = TODO

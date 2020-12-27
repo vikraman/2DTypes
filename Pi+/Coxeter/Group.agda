@@ -5,7 +5,7 @@ module Pi+.Coxeter.Group where
 open import lib.Base
 open import lib.Relation
 open import lib.NType
-open import lib.types.SetQuotient
+open import lib.types.SetQuotient public
 
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
@@ -23,8 +23,10 @@ instance
     ListN-level : {n : ℕ} → is-set (ListN n)
     ListN-level = TODO
 
-CoxeterRel : (n : ℕ) → Rel (ListN n) lzero
+CoxeterRel  : (n : ℕ) → Rel (ListN n) lzero
 CoxeterRel = TODO
+
+syntax CoxeterRel n x y = x ≈[ n ] y
 
 instance
     CoxeterRel-level : {n : ℕ} → {l1 l2 : ListN n} → is-prop (CoxeterRel n l1 l2)
@@ -41,3 +43,7 @@ CoxeterRel-trans = TODO
 
 Sn : (n : ℕ) → Type lzero
 Sn n = SetQuot (CoxeterRel n)
+
+instance
+  Sn-level : {n : ℕ} → is-set (Sn n)
+  Sn-level = SetQuot-is-set
