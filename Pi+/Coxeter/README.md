@@ -49,7 +49,7 @@ Coxeter equivalence:
 Lehmer equivalence:
   - `Lehmer.agda`
     - Defines the Lehmer code and the operation `immersion` that turns a Lehmer code into a sequence of transpositions.
-    - The final result of this section is `final≅-Lehmer` - showing that immersions of Lehmer codes are normal forms wrt to ReductionRel (i.e. they can't be reduced any further).
-    - The proof is conceptually easy (case analysis) and goes by induction
-
-
+    - The first main result of this section is `final≅-Lehmer` - showing that immersions of Lehmer codes are normal forms wrt to ReductionRel (i.e. they can't be reduced any further).
+    - A corollary of this is `only-one-canonical≃`, proving that if two immersions of Lehmer codes are related by ≃, then they are the same Lehmer codes 
+    - This proves that `immersion` is an injection
+  - 

@@ -138,22 +138,6 @@ final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (long≅ k l r .m .m
       heads = cut-tail p
   in  rec-k , head+tail heads rec-l
 
--- ≡-++↓ : (m1 m2 : List) -> (n k1 k2 : ℕ) -> (ml1 : n >> m1) -> (ml2 : n >> m2) -> (k1 ≤ S n) -> (k2 ≤ S n) -> (m1 ++ ((S n) ↓ k1) == m2 ++ ((S n) ↓ k2)) -> (k1 == k2) × (m1 == m2)
--- ≡-++↓ nil nil n k1 k2 ml1 ml2 pk1 pk2 p = (≡-↓ _ _ _ pk1 pk2 p) , idp
--- ≡-++↓ nil (x :: m2) (S n) (S k1) k2 ml1 (.x :⟨ x₁ ⟩: ml2) pk1 pk2 p =
---   let r = cut-tail  p
---       lemma = (≤-trans (≤-up (≤-reflexive idp)) (introduce-≤-from-+ {S (S n)} {k1} {x} (+-comm (S (S n)) k1 ∙ r))) 
---   in  ⊥-elim (1+n≰n (≤-trans lemma (≤-down2 x₁)))
--- ≡-++↓ (x :: m1) nil (S n) k1 (S k2) (.x :⟨ x₁ ⟩: ml1) ml2 pk1 pk2 p =
---   let r = cut-tail  p
---       lemma = (≤-trans (≤-up (≤-reflexive idp)) (introduce-≤-from-+ {S (S n)} {k2} {x} (+-comm (S (S n)) k2 ∙ ! r))) 
---   in  ⊥-elim (1+n≰n {n} (≤-trans lemma (≤-down2 {n} {x} x₁)))
--- ≡-++↓ (x :: m1) (x₁ :: m2) n k1 k2 (.x :⟨ x₂ ⟩: ml1) (.x₁ :⟨ x₃ ⟩: ml2) pk1 pk2 p =
---   let t = cut-head  p
---       h = cut-tail  p
---       hh , tt = ≡-++↓ m1 m2 n k1 k2 ml1 ml2 pk1 pk2 t
---   in  hh , transport (λ z → x :: m1 == z :: m2) h (ap (λ e -> x :: e) tt)
-
 >>-++ : {n : ℕ} -> {l1 l2 : List} -> n >> l1 -> n >> l2 -> n >> (l1 ++ l2)
 >>-++ {n} {nil} {l2} ll1 ll2 = ll2
 >>-++ {n} {x :: l1} {l2} (.x :⟨ p ⟩: ll1) ll2 = x :⟨ p ⟩: (>>-++ ll1 ll2)
