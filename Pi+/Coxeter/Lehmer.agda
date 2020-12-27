@@ -5,6 +5,7 @@ module Pi+.Coxeter.Lehmer where
 open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.types.Sigma
+open import lib.NType
 open import lib.PathGroupoid
 
 open import Pi+.Misc
@@ -46,8 +47,8 @@ canonical-append cl x px =
   let lifted-m , lifted-p = canonical-lift x px cl
   in  CanS lifted-m (s≤s z≤n) , start+end lifted-p idp
 
-postulate
-  lehmer-eta : {n : ℕ} -> {cl1 cl2 : Lehmer n} -> {r1 r2 : ℕ} -> (rn1 : r1 ≤ (S n)) -> (rn2 : r2 ≤ (S n)) -> (cl1 == cl2) -> (r1 == r2) -> (CanS cl1 rn1) == (CanS cl2 rn2)
+lehmer-eta : {n : ℕ} -> {cl1 cl2 : Lehmer n} -> {r1 r2 : ℕ} -> (rn1 : r1 ≤ (S n)) -> (rn2 : r2 ≤ (S n)) -> (cl1 == cl2) -> (r1 == r2) -> (CanS cl1 rn1) == (CanS cl2 rn2)
+lehmer-eta rn1 rn2 idp idp = ap (CanS _) (prop-has-all-paths rn1 rn2) -- TODO: write with ap/uncurry, without path induction
 
 data _>>_ : ℕ -> List -> Type₀ where
   nil : {n : ℕ} -> n >> nil
