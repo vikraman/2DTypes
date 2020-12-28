@@ -5,6 +5,7 @@ module Pi+.Coxeter.Lehmer where
 open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.types.Sigma
+open import lib.NType
 open import lib.PathGroupoid
 
 open import Pi+.Misc
@@ -12,6 +13,7 @@ open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
 open import Pi+.Coxeter.ReductionRel
 open import Pi+.Coxeter.ImpossibleLists
+open import Pi+.Coxeter.MCoxeter
 
 open ≅*-Reasoning
 
@@ -22,6 +24,16 @@ data Lehmer : (n : ℕ) -> Type₀ where
 immersion : {n : ℕ} -> Lehmer n -> List
 immersion {0} CanZ = nil
 immersion {S n} (CanS l {r} r≤1+n) = (immersion l) ++ (((S n) ∸ r) ↓ r)
+
+-- l0 : Lehmer 0
+-- l0 = CanZ
+-- l1 : Lehmer 1
+-- l1 = CanS {0} CanZ {1} (s≤s z≤n)
+-- l2 : Lehmer 2
+-- l2 = CanS l1 {2} (s≤s (s≤s z≤n))
+
+-- ll2 : List
+-- ll2 = immersion {2} l2
 
 canonical-lift : {n : ℕ} -> (m : ℕ) -> (n ≤ m) -> (cln : Lehmer n) -> Σ (Lehmer m) (λ clm -> immersion {m} clm == immersion {n} cln)
 canonical-lift {n} m p cln with ≤-∃ _ _ p
@@ -35,8 +47,8 @@ canonical-append cl x px =
   let lifted-m , lifted-p = canonical-lift x px cl
   in  CanS lifted-m (s≤s z≤n) , start+end lifted-p idp
 
-postulate
-  canonical-eta : {n : ℕ} -> {cl1 cl2 : Lehmer n} -> {r1 r2 : ℕ} -> (rn1 : r1 ≤ (S n)) -> (rn2 : r2 ≤ (S n)) -> (cl1 == cl2) -> (r1 == r2) -> (CanS cl1 rn1) == (CanS cl2 rn2)
+lehmer-eta : {n : ℕ} -> {cl1 cl2 : Lehmer n} -> {r1 r2 : ℕ} -> (rn1 : r1 ≤ (S n)) -> (rn2 : r2 ≤ (S n)) -> (cl1 == cl2) -> (r1 == r2) -> (CanS cl1 rn1) == (CanS cl2 rn2)
+lehmer-eta rn1 rn2 idp idp = ap (CanS _) (prop-has-all-paths rn1 rn2) -- TODO: write with ap/uncurry, without path induction
 
 data _>>_ : ℕ -> List -> Type₀ where
   nil : {n : ℕ} -> n >> nil
@@ -100,3 +112,77 @@ final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l 
 final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (swap≅ x₂ l r .m .mf defm₁ defmf) rewrite (++-assoc-≡ {l = immersion cl} defm) with (lemma-l++2++r _ _ (immersion cl) _ l r defm₁)
 ... | p = {!   !}
 final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (long≅ k l r .m .mf defm₁ defmf) = {!   !}
+
+
+≡-↓ : (n k1 k2 : ℕ) -> (k1 ≤ n) -> (k2 ≤ n) -> ((n ↓ k1) == (n ↓ k2)) -> (k1 == k2)
+≡-↓ 0 .0 .0 z≤n z≤n p = idp
+≡-↓ (S n) 0 0 pk1 pk2 p = idp
+≡-↓ (S n) (S k1) (S k2) pk1 pk2 p =
+  let lemma = (cut-head p)
+      rec = ≡-↓ _ _ _ (≤-down2 pk1) (≤-down2 pk2) {!!}
+  in  cong S rec
+
+≡-++↓ : (m1 m2 : List) -> (n k1 k2 : ℕ) -> (ml1 : n >> m1) -> (ml2 : n >> m2) -> (k1 ≤ S n) -> (k2 ≤ S n) -> (m1 ++ ((S n ∸ k1) ↓ k1) == m2 ++ ((S n ∸ k2) ↓ k2)) -> (k1 == k2) × (m1 == m2)
+≡-++↓ nil nil n O O ml1 ml2 pk1 pk2 p = idp , idp
+≡-++↓ nil nil O (S .0) (S .0) ml1 ml2 (s≤s z≤n) (s≤s z≤n) p = idp , idp
+≡-++↓ nil nil (S n) (S k1) (S k2) ml1 ml2 pk1 pk2 p = 
+  let rec-k , rec-l = ≡-++↓ nil nil n k1 k2 nil nil (≤-down2 pk1) (≤-down2 pk2) (cut-head p)
+  in  (ap S rec-k) , idp
+≡-++↓ nil (x :: m2) n (S k1) k2 ml1 (.x :⟨ x₁ ⟩: ml2) pk1 pk2 p = 
+  let c = cut-tail p
+  in  ⊥-elim (1+n≰n (≤-trans (≤-reflexive (ap S c)) (≤-trans x₁ (≤-reflexive (! (plus-minus (≤-down2 pk1)))))))
+≡-++↓ (x :: m1) nil n k1 (S k2) (.x :⟨ x₁ ⟩: ml1) ml2 pk1 pk2 p = 
+  let c = cut-tail p
+  in  ⊥-elim (1+n≰n (≤-trans (≤-reflexive (ap S (! c))) ((≤-trans x₁ (≤-reflexive (! (plus-minus (≤-down2 pk2))))))))
+≡-++↓ (x :: m1) (x₁ :: m2) n k1 k2 (.x :⟨ x₂ ⟩: ml1) (.x₁ :⟨ x₃ ⟩: ml2) pk1 pk2 p =
+  let rec-k , rec-l = ≡-++↓ m1 m2 n k1 k2 ml1 ml2 pk1 pk2 (cut-head p)
+      heads = cut-tail p
+  in  rec-k , head+tail heads rec-l
+
+>>-++ : {n : ℕ} -> {l1 l2 : List} -> n >> l1 -> n >> l2 -> n >> (l1 ++ l2)
+>>-++ {n} {nil} {l2} ll1 ll2 = ll2
+>>-++ {n} {x :: l1} {l2} (.x :⟨ p ⟩: ll1) ll2 = x :⟨ p ⟩: (>>-++ ll1 ll2)
+
+>>-↓ : (n k r : ℕ) -> (r + k ≤ n) -> (n >> (k ↓ r))
+>>-↓ n k 0 p = nil
+>>-↓ n k (S r) p = (r + k) :⟨ p ⟩: (>>-↓ n k r (≤-down p))
+
+>>-S : {n : ℕ} -> {l : List} -> (n >> l) -> ((S n) >> l)
+>>-S  nil = nil
+>>-S  (k :⟨ p ⟩: l') = k :⟨ ≤-up p ⟩: >>-S l'
+
+immersion->> : {n : ℕ} -> (cl : Lehmer n) -> n >> immersion cl
+immersion->> {.0} CanZ = nil
+immersion->> {S n} (CanS {n} cl {r} rn) =
+  let p = immersion->> {n} cl
+  in  >>-++ (>>-S p) (>>-↓ (S n) (S n ∸ r) r (≤-reflexive (plus-minus rn)))
+
+≡immersion : {n : ℕ} -> (cl1 cl2 : Lehmer n) -> (immersion {n} cl1 == immersion {n} cl2) -> cl1 == cl2
+≡immersion CanZ CanZ idp = idp
+≡immersion {n} (CanS cl1 {r = r} x) (CanS cl2 {r = r₁} x₁) p = 
+  let n>>cl1 = immersion->> cl1
+      n>>cl2 = immersion->> cl2
+      lemma-r , lemma-cl = ≡-++↓ _ _ _ _ _ n>>cl1 n>>cl2 x x₁ p
+      rec = ≡immersion cl1 cl2 lemma-cl
+  in lehmer-eta x x₁ rec lemma-r
+
+only-one-canonical≅* : {n : ℕ} -> (cl1 cl2 : Lehmer n) -> (m1 m2 : List) -> (immersion {n} cl1 == m1) -> (immersion {n} cl2 == m2) -> (m1 ≅* m2)-> cl1 == cl2
+only-one-canonical≅* cl1 cl2 m1 .m1 pm1 pm2 idp = ≡immersion _ _ (≡-trans pm1 (≡-sym pm2))
+only-one-canonical≅* cl1 cl2 m1 m2 pm1 pm2 (trans≅ x p) =
+  let ss = transport (λ t → t ≅ _) (! pm1) x
+  in  ⊥-elim (final≅-Lehmer cl1 (immersion cl1) _ idp ss)
+
+only-one-canonical≃ : {n : ℕ} -> (cl1 cl2 : Lehmer n) -> (m1 m2 : List) -> (immersion {n} cl1 == m1) -> (immersion {n} cl2 == m2) -> (m1 ≃ m2) -> cl1 == cl2
+only-one-canonical≃ cl1 cl2 m1 .m1 pm1 pm2 (comm≅ idp idp) = ≡immersion _ _ (≡-trans pm1 (≡-sym pm2))
+only-one-canonical≃ cl1 cl2 m1 m2 pm1 pm2 (comm≅ idp (trans≅ x p2)) =
+  let ss = transport (λ t → t ≅ _) (≡-sym pm2) x
+  in  ⊥-elim (final≅-Lehmer cl2 _ _ idp ss)
+only-one-canonical≃ cl1 cl2 m1 m2 pm1 pm2 (comm≅ (trans≅ x p1) p2) =
+  let ss = transport (λ t → t ≅ _) (≡-sym pm1) x
+  in  ⊥-elim (final≅-Lehmer cl1 _ _ idp ss)
+
+open import Pi+.Extra
+
+instance
+  Lehmer-level : {n : ℕ} → is-set (Lehmer n)
+  Lehmer-level = TODO

@@ -6,6 +6,7 @@ open import lib.Base
 open import lib.types.Nat using (_+_ ; ℕ-S-is-inj)
 open import lib.PathGroupoid using (!)
 open import Pi+.Misc using (begin_; ≡-sym; ≡-trans; cong; BoolDec; yes; no)
+open import lib.NType
 
 infix 4 _≤_ _<_
 
@@ -13,9 +14,13 @@ data _≤_ : ℕ -> ℕ -> Type₀ where
   z≤n : ∀ {n}                 → 0  ≤ n
   s≤s : ∀ {m n} (m≤n : m ≤ n) → S m ≤ S n
 
-≤-isProp : {m n : ℕ} -> (p q : m ≤ n) -> p == q
-≤-isProp z≤n z≤n = idp
-≤-isProp (s≤s p) (s≤s q) = ap s≤s (≤-isProp p q)
+≤-has-all-paths : {m n : ℕ} -> (p q : m ≤ n) -> p == q
+≤-has-all-paths z≤n z≤n = idp
+≤-has-all-paths (s≤s p) (s≤s q) = ap s≤s (≤-has-all-paths p q)
+
+instance
+  ≤-level : {m n : ℕ} → is-prop (m ≤ n)
+  ≤-level = all-paths-is-prop ≤-has-all-paths
 
 _<_ : ℕ -> ℕ -> Type₀
 m < n = S m ≤ n
@@ -31,6 +36,9 @@ m < n = S m ≤ n
 ≤-up : {n m : ℕ} -> m ≤ n -> m ≤ S n
 ≤-up z≤n = z≤n
 ≤-up (s≤s q) = s≤s (≤-up q)
+
+≤-up2 : {n m : ℕ} -> m ≤ n -> S m ≤ S n
+≤-up2 p = s≤s p
 
 ≤-down : {n m : ℕ} -> S m ≤ n -> m ≤ n
 ≤-down (s≤s z≤n)     = z≤n
@@ -175,3 +183,7 @@ nowhere {S n} {S k} p1 p2 p3 p4 = nowhere (λ x → p1 (s≤s x)) (λ x → p2 (
 
 rrr : {k : ℕ} -> k ≤ k
 rrr = ≤-reflexive idp
+
+squeeze : {n k : ℕ} -> (n < k) -> (k ≤ S n) -> (k == S n)
+squeeze {.0} {.1} (s≤s {n = .0} z≤n) (s≤s z≤n) = idp
+squeeze {.(S _)} {.(S (S _))} (s≤s (s≤s pn)) (s≤s (s≤s pnn)) = ap S (squeeze (s≤s pn) (s≤s pnn))

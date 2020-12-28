@@ -1,16 +1,26 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.UFin where
 
-open import HoTT
+open import lib.Base
+open import lib.PathGroupoid
+open import lib.Equivalence
+open import lib.NType
+open import lib.Univalence
+open import lib.types.Nat
+open import lib.types.Fin
+open import lib.types.Coproduct
+open import lib.types.Truncation
 open import homotopy.FinSet public
+
 open import Pi+.Misc
+open import Pi+.Extra
 
 UFin = FinSet
 
 instance
     UFin-is-gpd : has-level (S (S (S ⟨-2⟩))) UFin
-    UFin-is-gpd = {!!}
+    UFin-is-gpd = TODO
 
 ⊔-comm : (A B : Type₀) -> (A ⊔ B) ≃ (B ⊔ A)
 ⊔-comm A B = equiv f g f-g g-f

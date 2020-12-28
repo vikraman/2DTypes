@@ -11,13 +11,13 @@ open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
 
 data _≅_ : List -> List -> Type₀ where
-    cancel≅ : {n : ℕ} -> (l r m mf : List) -> (defm : m == l ++ n :: n :: r) -> (defmf : mf == l ++ r) -> (m ≅ mf)
-    swap≅ : {n : ℕ} -> {k : ℕ} -> (S k < n) ->  (l r m mf : List) -> (defm : m == l ++ n :: k :: r) -> (defmf : mf == l ++ k :: n :: r) -> (m ≅ mf)
-    long≅ : {n : ℕ} -> (k : ℕ) -> (l r m mf : List) -> (defm : m == l ++ (n ↓ (2 + k)) ++ (1 + k + n) :: r) -> (defmf : mf == l ++ (k + n) :: (n ↓ (2 + k)) ++ r) -> (m ≅ mf)
+  cancel≅ : {n : ℕ} -> (l r m mf : List) -> (defm : m == l ++ n :: n :: r) -> (defmf : mf == l ++ r) -> (m ≅ mf)
+  swap≅ : {n : ℕ} -> {k : ℕ} -> (S k < n) ->  (l r m mf : List) -> (defm : m == l ++ n :: k :: r) -> (defmf : mf == l ++ k :: n :: r) -> (m ≅ mf)
+  long≅ : {n : ℕ} -> (k : ℕ) -> (l r m mf : List) -> (defm : m == l ++ (n ↓ (2 + k)) ++ (1 + k + n) :: r) -> (defmf : mf == l ++ (k + n) :: (n ↓ (2 + k)) ++ r) -> (m ≅ mf)
 
 data _≅*_ : List -> List -> Type₀ where
-    idp : {m : List} -> m ≅* m
-    trans≅ : {m1 m2 m3 : List} -> (m1 ≅ m2) -> (m2 ≅* m3) -> m1 ≅* m3
+  idp : {m : List} -> m ≅* m
+  trans≅ : {m1 m2 m3 : List} -> (m1 ≅ m2) -> (m2 ≅* m3) -> m1 ≅* m3
 
 cancel-c : {n : ℕ} -> (l r : List) -> (l ++ n :: n :: r) ≅ (l ++ r)
 cancel-c {n} = λ l r → cancel≅ l r (l ++ n :: n :: r) (l ++ r) idp idp

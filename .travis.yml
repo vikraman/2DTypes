@@ -3,7 +3,8 @@ language: generic
 cache:
   apt: true
   directories:
-  - "${HOME}/.stack"
+  - ${HOME}/.stack
+  - HoTT-Agda/_build
 before_install:
 - mkdir -p ~/.local/bin
 - export PATH=${HOME}/.local/bin:${PATH}
