@@ -13,12 +13,9 @@ data _≤_ : ℕ -> ℕ -> Type₀ where
   z≤n : ∀ {n}                 → 0  ≤ n
   s≤s : ∀ {m n} (m≤n : m ≤ n) → S m ≤ S n
 
-≤-isProp : {m n : ℕ} -> (p : m ≤ n) -> (q : m ≤ n) -> p == q
-≤-isProp {O} {O} z≤n z≤n = idp
-≤-isProp {O} {S n} z≤n z≤n = idp
-≤-isProp {S m} {S n} (s≤s p) (s≤s q) = 
-  let rec = ≤-isProp p q 
-  in  ap s≤s rec
+≤-isProp : {m n : ℕ} -> (p q : m ≤ n) -> p == q
+≤-isProp z≤n z≤n = idp
+≤-isProp (s≤s p) (s≤s q) = ap s≤s (≤-isProp p q)
 
 _<_ : ℕ -> ℕ -> Type₀
 m < n = S m ≤ n
@@ -28,19 +25,19 @@ m < n = S m ≤ n
 ≤-trans (s≤s m≤n) (s≤s n≤o) = s≤s (≤-trans m≤n n≤o)
 
 ≤-reflexive : {p q : ℕ} -> p == q -> p ≤ q
-≤-reflexive {0}  idp = z≤n
+≤-reflexive {0}   idp = z≤n
 ≤-reflexive {S m} idp = s≤s (≤-reflexive idp)
 
 ≤-up : {n m : ℕ} -> m ≤ n -> m ≤ S n
-≤-up {n} {.0} z≤n = z≤n
-≤-up {.(S _)} {.(S _)} (s≤s q) = s≤s (≤-up q)
+≤-up z≤n = z≤n
+≤-up (s≤s q) = s≤s (≤-up q)
 
 ≤-down : {n m : ℕ} -> S m ≤ n -> m ≤ n
-≤-down {.(S _)} {0} (s≤s p) = z≤n
-≤-down {.(S _)} {S n} (s≤s p) = s≤s (≤-down p)
+≤-down (s≤s z≤n)     = z≤n
+≤-down (s≤s (s≤s p)) = s≤s (≤-down (s≤s p))
 
 ≤-down2 : {n m : ℕ} -> S m ≤ S n -> m ≤ n
-≤-down2 {m} {n} (s≤s p) = p
+≤-down2 (s≤s p) = p
 
 ≤-abs : {A : Type₀} -> {n : ℕ} -> (S n ≤ 0) -> A
 ≤-abs ()
@@ -81,7 +78,7 @@ m ∸ 0   =  m
 0 ∸ S n  =  0
 S m ∸ S n  =  m ∸ n
 
-≡-down2 : {p q : ℕ} -> (S p == S q) -> p == q   
+≡-down2 : {p q : ℕ} -> (S p == S q) -> p == q
 ≡-down2 {p} {q} r = ℕ-S-is-inj p q r
 
 
@@ -133,7 +130,7 @@ postulate
 ≰⇒> : {m n : ℕ} -> ¬ (m ≤ n) -> n < m
 ≰⇒> {O} {n} p = ⊥-elim (p z≤n)
 ≰⇒> {S m} {O} p = s≤s z≤n
-≰⇒> {S m} {S n} p = 
+≰⇒> {S m} {S n} p =
   let rec = ≰⇒> {m} {n} (λ x → p (s≤s x))
   in  s≤s rec
 
