@@ -4,8 +4,8 @@ module Pi+.Coxeter.Arithmetic where
 
 open import lib.Base
 open import lib.types.Nat using (_+_ ; ℕ-S-is-inj)
-open import lib.PathGroupoid
-open import Pi+.Misc
+open import lib.PathGroupoid using (!)
+open import Pi+.Misc using (begin_; ≡-sym; ≡-trans; cong; BoolDec; yes; no)
 
 infix 4 _≤_ _<_
 
@@ -57,14 +57,14 @@ abs-suc {n} p = ⊥-elim (1+n≰n (≤-down p))
 
 +-S : ∀ m n → m + S n == S (m + n)
 +-S 0    n = idp
-+-S (S m) n = cong S (+-S m n)
++-S (S m) n = ap S (+-S m n)
 
 +-comm : (m n : ℕ) -> (m + n) == (n + m)
 +-comm O n = ! +-unit
 +-comm (S m) n =
   begin
   S m + n   =⟨ idp ⟩
-  S (m + n) =⟨ cong S (+-comm m n) ⟩
+  S (m + n) =⟨ ap S (+-comm m n) ⟩
   S (n + m) =⟨ ≡-sym (+-S n m) ⟩
   n + S m   =∎
 
