@@ -116,7 +116,15 @@ Evaluating mirrorTreeNF produces
 data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
                       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
                       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set where
+     idNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
+                    combNormalForm id⟷₁ nf nf id⟷₁ (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)
 
+-- unite₊l
+-- swap₊
+-- assocl₊
+-- (!⟷₁ c)
+-- (c₁ ◎ c₂)
+-- (c₁ ⊕ c₂)
 
 mirrorNF : combNormalForm
   mirror
