@@ -112,3 +112,16 @@ Evaluating mirrorTreeNF produces
 
 -- Now we want to define a normal form for combinators and relate 'mirror' to its
 -- normal form
+
+data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+                      (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+                      (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set where
+
+
+mirrorNF : combNormalForm
+  mirror
+  (sum+NF (sum+NF (sum1NF (sum1NF (sum1NF (sum+NF (sum1NF (sum1NF oneNF))))))))
+  (sum+NF (sum1NF (sum+NF (sum1NF (sum1NF (sum1NF (sum1NF oneNF)))))))
+  {!!}
+  {!!}
+mirrorNF = {!!}
