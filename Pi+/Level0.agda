@@ -55,6 +55,17 @@ data normalForm : (t : U) → (nt : U) → (t ⟷₁ nt) → Set where
            normalForm (t₁ + (t₂ + t₃)) nt c →
            normalForm ((t₁ + t₂) + t₃) nt (!⟷₁ assocl₊ ◎ c)
 
+{-# TERMINATING #-} -- fix later
+normalize : (t : U) → Σ U (λ nt → Σ (t ⟷₁ nt) (λ c → normalForm t nt c))
+normalize O = O , _ , zeroNF
+normalize I = (I + O) , _ , oneNF
+normalize (O + t) with normalize t
+... | nt , nc , nf = _ , _ , sum0NF nf
+normalize (I + t) with normalize t
+... | nt , nc , nf = _ , _ , sum1NF nf
+normalize ((t₁ + t₂) + t₃) with normalize (t₁ + (t₂ + t₃))
+... | nt , nc , nf = _ , _ , sum+NF nf
+
 -- Example of taking a combinator between regular types and producing one
 -- between normal forms along with a proof of 2-equivalence
 
@@ -126,6 +137,12 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                           (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
                           (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
                           (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)))
+     invNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂}
+                     {c : t₁ ⟷₁ t₂} {nf₁ : normalForm t₁ nt₁ c₁} {nf₂ : normalForm t₂ nt₂ c₂}
+                     {nc : nt₁ ⟷₁ nt₂} {c=nc : (!⟷₁ c₁ ◎ c ◎ c₂) ⟷₂ nc} →
+                     combNormalForm c nf₁ nf₂ nc c=nc →
+                     combNormalForm (!⟷₁ c) nf₂ nf₁ (!⟷₁ nc) {!!}
+
 
 -- swap₊
 -- (!⟷₁ c)
