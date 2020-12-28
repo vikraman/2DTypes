@@ -90,7 +90,6 @@ head+tail idp idp = idp
 start+end : (l1 == l2) -> (t1 == t2) -> (l1 ++ t1) == (l2 ++ t2)
 start+end idp idp = idp
 
-
 ↓-+ : (n k1 k2 : ℕ) -> (n ↓ (k1 + k2)) == ((n + k2) ↓ k1) ++ (n ↓ k2)
 ↓-+ n 0 k2 = idp
 ↓-+ n (S k1) k2 rewrite (↓-+ n k1 k2) rewrite (+-comm n k2) = head+tail ((+-assoc k1 k2 n)) idp
