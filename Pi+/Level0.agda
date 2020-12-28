@@ -120,15 +120,23 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                     combNormalForm id⟷₁ nf nf id⟷₁ (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)
      uniteNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
                     combNormalForm unite₊l (sum0NF nf) nf id⟷₁ rinv◎l
-
-
-
+     assoclNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
+                        (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
+                        combNormalForm assocl₊ nf (sum+NF nf) id⟷₁
+                          (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+                          (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
+                          (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)))
 
 -- swap₊
--- assocl₊
 -- (!⟷₁ c)
 -- (c₁ ◎ c₂)
 -- (c₁ ⊕ c₂)
+
+{--
+{t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+(c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+(nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
+--}
 
 mirrorNF : combNormalForm
   mirror
