@@ -4,6 +4,7 @@ module Pi+.Level0 where
 
 open import lib.Base
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
+open import lib.types.Sigma
 
 open import Pi+.Syntax as Pi
 
@@ -39,22 +40,25 @@ normC (X + Y) = (normC X ⊕ normC Y) ◎ ⟪+⟫ ∣ X ∣ ∣ Y ∣
 -- Experiment
 -- Mirror tree; flatten
 
--- Flat list of types
+-- Flat list of types; as subset of Pi types
 
-data UList : Set where
-  Zer : UList
-  Suc : ⊤ → UList → UList
+data normalForm : (t : U) → (nt : U) → (t ⟷₁ nt) → Set where
+  zeroNF : normalForm O O id⟷₁
+  oneNF  : normalForm I (I + O) (!⟷₁ (swap₊ ◎ unite₊l))
+  sum0NF  : {t nt : U} {c : t ⟷₁ nt} →
+           normalForm t nt c →
+           normalForm (O + t) nt (unite₊l ◎ c)
+  sum1NF  : {t nt : U} {c : t ⟷₁ nt} →
+           normalForm t nt c →
+           normalForm (I + t) (I + nt) (id⟷₁ ⊕ c)
+  sum+NF  : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
+           normalForm (t₁ + (t₂ + t₃)) nt c →
+           normalForm ((t₁ + t₂) + t₃) nt (!⟷₁ assocl₊ ◎ c)
 
-append : UList → UList → UList
-append Zer us = us
-append (Suc t ts) us = Suc t (append ts us)
+-- Example of taking a combinator between regular types and producing one
+-- between normal forms along with a proof of 2-equivalence
 
-flatten : U → UList
-flatten O = Zer
-flatten I = Suc unit Zer
-flatten (t₁ + t₂) = append (flatten t₁) (flatten t₂)
-
--- Regular Pi types are trees; combinators are tree isos
+-- For readability
 
 A1 A2 A3 A4 A5 A6 : U
 A1 = I
@@ -63,6 +67,8 @@ A3 = I
 A4 = I
 A5 = I
 A6 = I
+
+-- Regular Pi combinator on trees
 
 tree : U
 tree = ((A1 + A2) + A3) + ((A4 + A5) + A6)
@@ -73,45 +79,36 @@ mirrorTree = (A6 + (A5 + A4)) + (A3 + (A2 + A1))
 mirror : tree ⟷₁ mirrorTree
 mirror = swap₊ ◎ (swap₊ ⊕ swap₊) ◎ ((id⟷₁ ⊕ swap₊) ⊕ (id⟷₁ ⊕ swap₊))
 
--- Flatten the tree and derive the isos on the list representation
+-- Flattened normal-form types
 
-flatTree : UList
-flatTree = flatten tree
-         -- Suc A1 (Suc A2 (Suc A3 (Suc A4 (Suc A5 (Suc A6 Zer)))))
+flatTree : U
+flatTree = A1 + (A2 + (A3 + (A4 + (A5 + (A6 + O)))))
 
-flatMirrorTree : UList
-flatMirrorTree = flatten mirrorTree
-         -- Suc A6 (Suc A5 (Suc A4 (Suc A3 (Suc A2 (Suc A1 Zer)))))
+flatMirrorTree : U
+flatMirrorTree = A6 + (A5 + (A4 + (A3 + (A2 + (A1 + O)))))
 
-postulate
-  append-assoc : (A B C : U) →
-    append (flatten A) (append (flatten B) (flatten C)) ==
-    append (append (flatten A) (flatten B)) (flatten C)
+-- Going from regular Pi types to the normal form
 
-data _⇔_ : (ts us : UList) → Set where
-  idList : {ts : UList} → ts ⇔ ts
-  swapList : {ts us vs : UList} → (j k : ℕ) →
-             (append ts (Suc unit (append us (Suc unit vs)))) ⇔
-             (append ts (Suc unit (append us (Suc unit vs))))
-             -- swaps the two units at positions j and k; length ts = j-1 etc.
-  symList : {ts us : UList} → (ts ⇔ us) → (us ⇔ ts)
-  seqList : {ts us vs : UList} → (ts ⇔ us) → (us ⇔ vs) → (ts ⇔ vs)
-  appendList : {ts us vs ws : UList} → (ts ⇔ us) → (vs ⇔ ws) →
-               (append ts vs) ⇔ (append us ws)
+treeNF : Σ (tree ⟷₁ flatTree) (λ c → normalForm tree flatTree c)
+treeNF = _ , sum+NF (sum+NF (sum1NF (sum1NF (sum1NF (sum+NF (sum1NF (sum1NF oneNF)))))))
 
-flattenComb : {A B : U} → (c : A ⟷₁ B) → (flatten A ⇔ flatten B)
-flattenComb unite₊l = idList
-flattenComb {t₁ + t₂} {t₂ + t₁} swap₊ =
-  appendList (swapList 0 3)
-  (appendList (swapList 1 4) (swapList 2 5))
-  -- assuming (flatten t₁) has length 3
-flattenComb {t₁ + (t₂ + t₃)} {(t₁ + t₂) + t₃} assocl₊ rewrite append-assoc t₁ t₂ t₃ = idList
-flattenComb id⟷₁ = idList
-flattenComb (!⟷₁ c) = symList (flattenComb c)
-flattenComb (c₁ ◎ c₂) = seqList (flattenComb c₁) (flattenComb c₂)
-flattenComb (c₁ ⊕ c₂) = appendList
-                          (flattenComb c₁) -- say of length k
-                          (flattenComb c₂) -- after adding k to every index
+{--
+Evaluating treeNF produces
+(!⟷₁ assocl₊ ◎
+ !⟷₁ assocl₊ ◎
+ id⟷₁ ⊕
+ id⟷₁ ⊕ id⟷₁ ⊕ !⟷₁ assocl₊ ◎ id⟷₁ ⊕ id⟷₁ ⊕ !⟷₁ (swap₊ ◎ unite₊l))
+--}
 
-flatMirror : flatTree ⇔ flatMirrorTree
-flatMirror = flattenComb mirror
+mirrorTreeNF : Σ (mirrorTree ⟷₁ flatMirrorTree) (λ c → normalForm mirrorTree flatMirrorTree c)
+mirrorTreeNF = _ , sum+NF (sum1NF (sum+NF (sum1NF (sum1NF (sum1NF (sum1NF oneNF))))))
+
+{--
+Evaluating mirrorTreeNF produces
+(!⟷₁ assocl₊ ◎
+ id⟷₁ ⊕
+ !⟷₁ assocl₊ ◎ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ !⟷₁ (swap₊ ◎ unite₊l))
+--}
+
+-- Now we want to define a normal form for combinators and relate 'mirror' to its
+-- normal form
