@@ -118,8 +118,12 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set where
      idNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
                     combNormalForm id⟷₁ nf nf id⟷₁ (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)
+     uniteNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
+                    combNormalForm unite₊l (sum0NF nf) nf id⟷₁ rinv◎l
 
--- unite₊l
+
+
+
 -- swap₊
 -- assocl₊
 -- (!⟷₁ c)
