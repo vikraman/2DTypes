@@ -11,6 +11,15 @@ open import Pi+.Misc
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
 
+-- simpler version of repeat-long-lemma
+no-repeats : {n n1 : ℕ} (k : ℕ) (l : List) {r : List} → ¬ ((n ↓ k) == (l ++ n1 :: n1 :: r))
+no-repeats O nil ()
+no-repeats O (x :: l) ()
+no-repeats (S (S k)) nil p =
+  abs-refl (≤-trans (≤-reflexive (cut-t1 p)) (≤-reflexive (≡-sym (cut-t2 p))))
+no-repeats {n} (S O) (x :: l) p = no-repeats {n} O l (cut-head p)
+no-repeats (S (S k)) (x :: l) p = no-repeats (S k) l (cut-head p)
+
 repeat-long-lemma : (n k n1 : ℕ) -> (l r : List) -> (n ↓ k) == (l ++ n1 :: n1 :: r) -> ⊥
 repeat-long-lemma n 0 n1 nil r ()
 repeat-long-lemma n 0 n1 (x :: l) r ()
