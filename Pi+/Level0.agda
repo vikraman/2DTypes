@@ -124,6 +124,11 @@ Evaluating mirrorTreeNF produces
 -- Now we want to define a normal form for combinators and relate 'mirror' to its
 -- normal form
 
+postulate -- either prove or add to constructors in Syntax
+  !₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
+  !!₂ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₂ ⟷₁ t₁} {c : t₂ ⟷₁ t₃} {c₂ : t₃ ⟷₁ t₄} →
+        (nc : t₁ ⟷₁ t₄) → (!⟷₁ c₂ ◎ !⟷₁ c ◎ c₁) ⟷₂ (!⟷₁ (!⟷₁ c₁ ◎ c ◎ c₂))
+
 data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
                       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
                       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set where
@@ -141,19 +146,26 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                      {c : t₁ ⟷₁ t₂} {nf₁ : normalForm t₁ nt₁ c₁} {nf₂ : normalForm t₂ nt₂ c₂}
                      {nc : nt₁ ⟷₁ nt₂} {c=nc : (!⟷₁ c₁ ◎ c ◎ c₂) ⟷₂ nc} →
                      combNormalForm c nf₁ nf₂ nc c=nc →
-                     combNormalForm (!⟷₁ c) nf₂ nf₁ (!⟷₁ nc) {!!}
-
-
--- swap₊
--- (!⟷₁ c)
--- (c₁ ◎ c₂)
--- (c₁ ⊕ c₂)
-
-{--
-{t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
-(c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
-(nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
---}
+                     combNormalForm (!⟷₁ c) nf₂ nf₁ (!⟷₁ nc)
+                       (trans⟷₂ (!!₂ nc)  (!₂ c=nc))
+     -- swapNormalForm : swap₊
+     {--
+       {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
+     --}
+     -- seqNormalForm : (c₁ ◎ c₂)
+     {--
+       {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
+     --}
+     -- sumNormalForm : (c₁ ⊕ c₂)
+     {--
+       {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
+     --}
 
 mirrorNF : combNormalForm
   mirror
