@@ -35,7 +35,7 @@ reverse (x :: xs) = (reverse xs) ++ (x :: nil)
 
 reverse-++-commute : (xs ys : List) → reverse (xs ++ ys) == reverse ys ++ reverse xs
 reverse-++-commute nil ys = ! (++-unit-r (reverse ys))
-reverse-++-commute (x :: xs) ys = 
+reverse-++-commute (x :: xs) ys =
   let rec = reverse-++-commute xs ys
   in  ap (λ t -> t ++ x :: nil) rec ∙ ++-assoc (reverse ys) (reverse xs) (x :: nil)
 
@@ -48,41 +48,46 @@ n ↓ (S k) = (k + n) :: (n ↓ k)
 [_] : ℕ -> List
 [ x ] = x :: nil
 
+private
+  variable
+    a1 a2 b1 b2 c1 c2 d1 d2 h1 h2 : ℕ
+    l1 l2 t1 t2 : List
+
 ++-unit : {l : List} -> l ++ nil == l
 ++-unit {nil} = idp
 ++-unit {x :: l} rewrite (++-unit {l}) = idp
 
-cut-head : {a1 a2 : ℕ} -> {l1 l2 : List} -> (a1 :: l1) == (a2 :: l2) -> l1 == l2
-cut-head {a1} {a2} {l1} {.l1} idp = idp
+cut-head : (a1 :: l1) == (a2 :: l2) -> l1 == l2
+cut-head idp = idp
 
-cut-tail : {a1 a2 : ℕ} -> {l1 l2 : List} -> (a1 :: l1 == a2 :: l2) -> (a1 == a2)
-cut-tail {a1} {.a1} {l1} {.l1} idp = idp
+cut-tail : (a1 :: l1 == a2 :: l2) -> (a1 == a2)
+cut-tail idp = idp
 
-cut-t1 : {a1 a2 : ℕ} -> {l1 l2 : List} -> (a1 :: l1 == a2 :: l2) -> (a1 == a2)
-cut-t1 {a1} {.a1} {l1} {.l1} idp = idp
+cut-t1 : (a1 :: l1 == a2 :: l2) -> (a1 == a2)
+cut-t1 idp = idp
 
-cut-t2 : {a1 a2 b1 b2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (b1 == b2)
-cut-t2 {l1 = l1} {l2 = .l1} idp = idp
+cut-t2 : (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (b1 == b2)
+cut-t2 idp = idp
 
-cut-t3 : {a1 a2 b1 b2 c1 c2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (c1 == c2)
-cut-t3 {l1 = l1} {l2 = .l1} idp = idp
+cut-t3 : (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (c1 == c2)
+cut-t3 idp = idp
 
-cut-t4 : {a1 a2 b1 b2 c1 c2 d1 d2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (d1 == d2)
-cut-t4 {l1 = l1} {l2 = .l1} idp = idp
+cut-t4 : (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (d1 == d2)
+cut-t4 idp = idp
 
-cut-h2 : {a1 a2 b1 b2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (l1 == l2)
-cut-h2 {l1 = l1} {l2 = .l1} idp = idp
+cut-h2 : (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (l1 == l2)
+cut-h2 idp = idp
 
-cut-h3 : {a1 a2 b1 b2 c1 c2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (l1 == l2)
-cut-h3 {l1 = l1} {l2 = .l1} idp = idp
+cut-h3 : (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (l1 == l2)
+cut-h3 idp = idp
 
-cut-h4 : {a1 a2 b1 b2 c1 c2 d1 d2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (l1 == l2)
-cut-h4 {l1 = l1} {l2 = .l1} idp = idp
+cut-h4 : (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (l1 == l2)
+cut-h4 idp = idp
 
-head+tail : {h1 h2 : ℕ} -> {t1 t2 : List} -> (h1 == h2) -> (t1 == t2) -> (h1 :: t1) == (h2 :: t2)
+head+tail : (h1 == h2) -> (t1 == t2) -> (h1 :: t1) == (h2 :: t2)
 head+tail idp idp = idp
 
-start+end : {h1 h2 : List} -> {t1 t2 : List} -> (h1 == h2) -> (t1 == t2) -> (h1 ++ t1) == (h2 ++ t2)
+start+end : (l1 == l2) -> (t1 == t2) -> (l1 ++ t1) == (l2 ++ t2)
 start+end idp idp = idp
 
 
