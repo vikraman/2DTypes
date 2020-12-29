@@ -142,12 +142,26 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
      uniteNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
                     combNormalForm unite₊l (sum0NF nf) nf id⟷₁
                       rinv◎l
+{-- change to uniti
+     uniteNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
+                    combNormalForm unite₊l (sum0NF nf) nf id⟷₁
+                      rinv◎l
+--}
      assoclNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
                         (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
                         combNormalForm assocl₊ nf (sum+NF nf) id⟷₁
                           (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
                           (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
                           (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)))
+{-- change to assocr
+     assoclNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
+                        (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
+                        combNormalForm assocl₊ nf (sum+NF nf) id⟷₁
+                          (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+                          (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
+                          (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)))
+--}
+{--    -- delete
      invNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂}
                      {c : t₁ ⟷₁ t₂} {nf₁ : normalForm t₁ nt₁ c₁} {nf₂ : normalForm t₂ nt₂ c₂}
                      {nc : nt₁ ⟷₁ nt₂} {c=nc : (!⟷₁ c₁ ◎ c ◎ c₂) ⟷₂ nc} →
@@ -155,6 +169,7 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                      combNormalForm (!⟷₁ c) nf₂ nf₁ (!⟷₁ nc)
                        (trans⟷₂ assoc◎l
                        (trans⟷₂ (!⟷₂ (id⟷₂ ⊡ !⟷₁!⟷₁ c₁)) (!⟷₁⟷₂ c=nc)))
+--}
      swap0NormalForm :
         {t nt : U} {c : t ⟷₁ nt} {nf : normalForm t nt c}
         {nc : nt ⟷₁ nt} {c=nc : (!⟷₁ (unite₊l ◎ c) ◎ swap₊ ◎ swap₊ ◎ unite₊l ◎ c) ⟷₂ nc} →
