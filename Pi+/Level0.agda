@@ -54,9 +54,9 @@ data normalForm : (t : U) → (nt : U) → (t ⟷₁ nt) → Set where
   sum+NF  : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
            normalForm (t₁ + (t₂ + t₃)) nt c →
            normalForm ((t₁ + t₂) + t₃) nt (assocr₊ ◎ c)
-  swapNF : {t₁ t₂ nt : U} {c : t₁ + t₂ ⟷₁ nt} →
-           normalForm (t₁ + t₂) nt c →
-           normalForm (t₂ + t₁) nt (swap₊ ◎ c)
+  swap0NF : {t nt : U} {c : O + t ⟷₁ nt} →
+           normalForm (O + t) nt c →
+           normalForm (t + O) nt (swap₊ ◎ c)
 
 {-# TERMINATING #-} -- fix later
 normalize : (t : U) → Σ U (λ nt → Σ (t ⟷₁ nt) (λ c → normalForm t nt c))
@@ -161,12 +161,23 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
      swap0NormalForm : {t nt : U} {c : t ⟷₁ nt} {nf : normalForm t nt c}
                        {nc : nt ⟷₁ nt}
                        {c=nc : (!⟷₁ (unite₊l ◎ c) ◎ swap₊ ◎ swap₊ ◎ unite₊l ◎ c) ⟷₂ nc} →
-                    combNormalForm swap₊ (sum0NF nf) (swapNF (sum0NF nf)) id⟷₁
+                    combNormalForm swap₊ (sum0NF nf) (swap0NF (sum0NF nf)) id⟷₁
                       (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
                       (trans⟷₂ (id⟷₂ ⊡ (rinv◎l ⊡ id⟷₂))
                       (trans⟷₂ (id⟷₂ ⊡ idl◎l)
                       rinv◎l)))
-     -- swap1NormalForm : I + t
+     swap10NormalForm :
+       combNormalForm swap₊ (sum1NF zeroNF) (sum0NF oneNF) id⟷₁
+         {!!}
+     swap11NormalForm :
+       combNormalForm swap₊ (sum1NF oneNF) (sum1NF oneNF) (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+         {!!}
+     -- swap1+NormalForm :
+     --
+     -- I + (a + b)     --------      (a + b) + I
+     --                               a + (b + I)
+     -- I + a* + b* + 0            a* + b* + I + 0
+     --
      -- swap+NormalForm : (t₁ + t₂) + t₃
      {--
        swap₊
