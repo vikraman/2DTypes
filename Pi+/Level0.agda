@@ -54,6 +54,9 @@ data normalForm : (t : U) → (nt : U) → (t ⟷₁ nt) → Set where
   sum+NF  : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
            normalForm (t₁ + (t₂ + t₃)) nt c →
            normalForm ((t₁ + t₂) + t₃) nt (assocr₊ ◎ c)
+  swapNF : {t₁ t₂ nt : U} {c : t₁ + t₂ ⟷₁ nt} →
+           normalForm (t₁ + t₂) nt c →
+           normalForm (t₂ + t₁) nt (swap₊ ◎ c)
 
 {-# TERMINATING #-} -- fix later
 normalize : (t : U) → Σ U (λ nt → Σ (t ⟷₁ nt) (λ c → normalForm t nt c))
@@ -152,9 +155,18 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                      combNormalForm (!⟷₁ c) nf₂ nf₁ (!⟷₁ nc)
                        (trans⟷₂ assoc◎l
                        (trans⟷₂ (!⟷₂ (id⟷₂ ⊡ !⟷₁!⟷₁ c₁)) (!⟷₁⟷₂ c=nc)))
-     -- swapNormalForm : three versions 0+t, 1+t, (t+t)+t
+     swap0NormalForm :
+        {t nt : U} {c : t ⟷₁ nt} {nf : normalForm t nt c}
+        {nc : nt ⟷₁ nt} {c=nc : (!⟷₁ (unite₊l ◎ c) ◎ swap₊ ◎ swap₊ ◎ unite₊l ◎ c) ⟷₂ nc} →
+        combNormalForm swap₊ (sum0NF nf) (swapNF (sum0NF nf)) id⟷₁
+          {!!}
+     -- swap1NormalForm : I + t
+     -- swap+NormalForm : (t₁ + t₂) + t₃
      {--
        swap₊
+       O + t
+       I + t
+       (t₁ + t₂) + t₃
        {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
        (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
        (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
