@@ -124,13 +124,21 @@ Evaluating mirrorTreeNF produces
 -- Now we want to define a normal form for combinators and relate 'mirror' to its
 -- normal form
 
+-- Pay attention to nc below: allowed normal form combinators:
+-- nc ::= id⟷₁
+--     | !⟷₁ nc
+--     | nc ◎ nc
+--
+
 data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
                       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
                       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set where
      idNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
-                    combNormalForm id⟷₁ nf nf id⟷₁ (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)
+                    combNormalForm id⟷₁ nf nf id⟷₁
+                      (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)
      uniteNormalForm : {t nt : U} {c : t ⟷₁ nt} → (nf : normalForm t nt c) →
-                    combNormalForm unite₊l (sum0NF nf) nf id⟷₁ rinv◎l
+                    combNormalForm unite₊l (sum0NF nf) nf id⟷₁
+                      rinv◎l
      assoclNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
                         (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
                         combNormalForm assocl₊ nf (sum+NF nf) id⟷₁
@@ -144,18 +152,28 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                      combNormalForm (!⟷₁ c) nf₂ nf₁ (!⟷₁ nc)
                        (trans⟷₂ assoc◎l
                        (trans⟷₂ (!⟷₂ (id⟷₂ ⊡ !⟷₁!⟷₁ c₁)) (!⟷₁⟷₂ c=nc)))
-     -- swapNormalForm : swap₊
+     -- swapNormalForm : three versions 0+t, 1+t, (t+t)+t
      {--
+       swap₊
        {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
        (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
        (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
      --}
-     -- seqNormalForm : (c₁ ◎ c₂)
-     {--
-       {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
-       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
-       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
-     --}
+     seqNormalForm : {t₁ t₂ t₃ nt₁ nt₂ nt₃ : U}
+       {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} {c₃ : t₃ ⟷₁ nt₃} →
+       {c₁₂ : t₁ ⟷₁ t₂} {c₂₃ : t₂ ⟷₁ t₃}
+       {nf₁ : normalForm t₁ nt₁ c₁} {nf₂ : normalForm t₂ nt₂ c₂} {nf₃ : normalForm t₃ nt₃ c₃}
+       {nc₁₂ : nt₁ ⟷₁ nt₂} {nc₂₃ : nt₂ ⟷₁ nt₃}
+       {c₁₂=nc₁₂ : (!⟷₁ c₁ ◎ c₁₂ ◎ c₂) ⟷₂ nc₁₂} {c₂₃=nc₂₃ : (!⟷₁ c₂ ◎ c₂₃ ◎ c₃) ⟷₂ nc₂₃} →
+       combNormalForm c₁₂ nf₁ nf₂ nc₁₂ c₁₂=nc₁₂ →
+       combNormalForm c₂₃ nf₂ nf₃ nc₂₃ c₂₃=nc₂₃ →
+       combNormalForm (c₁₂ ◎ c₂₃) nf₁ nf₃ (nc₁₂ ◎ nc₂₃)
+         (trans⟷₂ (id⟷₂ ⊡ (((trans⟷₂ idr◎r (id⟷₂ ⊡ linv◎r {c = c₂})) ⊡ id⟷₂) ⊡ id⟷₂))
+         (trans⟷₂ (id⟷₂ ⊡ ((assoc◎l ⊡ id⟷₂) ⊡ id⟷₂))
+         (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+         (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+         (trans⟷₂ assoc◎l
+         (c₁₂=nc₁₂ ⊡ c₂₃=nc₂₃))))))
      -- sumNormalForm : (c₁ ⊕ c₂)
      {--
        {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
@@ -163,10 +181,10 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
        (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
      --}
 
-mirrorNF : combNormalForm
-  mirror
-  (sum+NF (sum+NF (sum1NF (sum1NF (sum1NF (sum+NF (sum1NF (sum1NF oneNF))))))))
-  (sum+NF (sum1NF (sum+NF (sum1NF (sum1NF (sum1NF (sum1NF oneNF)))))))
-  {!!}
-  {!!}
-mirrorNF = {!!}
+mirrorNF : Σ (flatTree ⟷₁ flatMirrorTree) (λ nc →
+           Σ (!⟷₁ (fst treeNF) ◎ mirror ◎ fst mirrorTreeNF ⟷₂ nc) (λ α →
+           combNormalForm mirror (snd treeNF) (snd mirrorTreeNF) nc α))
+mirrorNF = _ , _ ,
+  seqNormalForm {!!}
+  (seqNormalForm {!!}
+  {!!})
