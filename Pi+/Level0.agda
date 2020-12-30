@@ -37,11 +37,101 @@ normC O = id⟷₁
 normC I  = uniti₊l ◎ swap₊
 normC (X + Y) = (normC X ⊕ normC Y) ◎ ⟪+⟫ ∣ X ∣ ∣ Y ∣
 
--- Experiment
--- Mirror tree; flatten
+data combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (nc : canonU t₁ ⟷₁ canonU t₂) →
+                      (!⟷₁ (normC t₁) ◎ c ◎ (normC t₂) ⟷₂ nc) → Set where
+     idNormalForm : {t : U} →
+                    combNormalForm {t} {t} id⟷₁ id⟷₁
+                      (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)
+     uniteNormalForm : {t : U} →
+                    combNormalForm {O + t} {t} unite₊l id⟷₁
+                      (trans⟷₂ (uniti₊l⟷₂l ⊡ id⟷₂)
+                      (trans⟷₂ assoc◎r
+                      (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+                      (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
+                      (trans⟷₂ (id⟷₂ ⊡ idl◎l)
+                      rinv◎l)))))
+     unitiNormalForm : {t : U} →
+                    combNormalForm {t} {O + t} uniti₊l id⟷₁
+                      (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+                      (trans⟷₂ (id⟷₂ ⊡ (uniti₊l⟷₂l ⊡ id⟷₂))
+                      (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+                      (trans⟷₂ (id⟷₂ ⊡ (id⟷₂ ⊡ linv◎l))
+                      (trans⟷₂ (id⟷₂ ⊡ idr◎l)
+                      rinv◎l)))))
+{--
+     assoclNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
+                        (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
+                    combNormalForm assocl₊ nf (sum+NF nf) id⟷₁
+                      (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+                      (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
+                      (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)))
+     assocrNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
+                        (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
+                    combNormalForm assocr₊ (sum+NF nf) nf id⟷₁
+                      rinv◎l
+     swap0NormalForm : {t nt : U} {c : t ⟷₁ nt} {nf : normalForm t nt c}
+                       {nc : nt ⟷₁ nt}
+                       {c=nc : (!⟷₁ (unite₊l ◎ c) ◎ swap₊ ◎ swap₊ ◎ unite₊l ◎ c) ⟷₂ nc} →
+                    combNormalForm swap₊ (sum0NF nf) (swap0NF (sum0NF nf)) id⟷₁
+                      (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+                      (trans⟷₂ (id⟷₂ ⊡ (rinv◎l ⊡ id⟷₂))
+                      (trans⟷₂ (id⟷₂ ⊡ idl◎l)
+                      rinv◎l)))
+     swap10NormalForm :
+       combNormalForm swap₊ (sum1NF zeroNF) (sum0NF oneNF) id⟷₁
+         {!!}
+     swap11NormalForm :
+       combNormalForm swap₊ (sum1NF oneNF) (sum1NF oneNF) (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+         {!!}
+     -- swap1+NormalForm :
+     --
+     -- I + (a + b)     --------      (a + b) + I
+     --                               a + (b + I)
+     -- I + a* + b* + 0            a* + b* + I + 0
+     --
+     -- swap+NormalForm : (t₁ + t₂) + t₃
+     {--
+       swap₊
+       O + t
+       I + t
+       (t₁ + t₂) + t₃
+       {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
+     --}
+     seqNormalForm : {t₁ t₂ t₃ nt₁ nt₂ nt₃ : U}
+                     {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} {c₃ : t₃ ⟷₁ nt₃} →
+                     {c₁₂ : t₁ ⟷₁ t₂} {c₂₃ : t₂ ⟷₁ t₃}
+                     {nf₁ : normalForm t₁ nt₁ c₁} {nf₂ : normalForm t₂ nt₂ c₂}
+                     {nf₃ : normalForm t₃ nt₃ c₃}
+                     {nc₁₂ : nt₁ ⟷₁ nt₂} {nc₂₃ : nt₂ ⟷₁ nt₃}
+                     {c₁₂=nc₁₂ : (!⟷₁ c₁ ◎ c₁₂ ◎ c₂) ⟷₂ nc₁₂}
+                     {c₂₃=nc₂₃ : (!⟷₁ c₂ ◎ c₂₃ ◎ c₃) ⟷₂ nc₂₃} →
+                     combNormalForm c₁₂ nf₁ nf₂ nc₁₂ c₁₂=nc₁₂ →
+                     combNormalForm c₂₃ nf₂ nf₃ nc₂₃ c₂₃=nc₂₃ →
+                    combNormalForm (c₁₂ ◎ c₂₃) nf₁ nf₃ (nc₁₂ ◎ nc₂₃)
+                      (trans⟷₂
+                        (id⟷₂ ⊡
+                          (((trans⟷₂ idr◎r (id⟷₂ ⊡ linv◎r {c = c₂})) ⊡ id⟷₂) ⊡ id⟷₂))
+                      (trans⟷₂ (id⟷₂ ⊡ ((assoc◎l ⊡ id⟷₂) ⊡ id⟷₂))
+                      (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+                      (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+                      (trans⟷₂ assoc◎l
+                      (c₁₂=nc₁₂ ⊡ c₂₃=nc₂₃))))))
+     -- sumNormalForm : (c₁ ⊕ c₂)
+     {--
+       {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+       (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+       (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
+     --}
 
--- Flat list of types; as subset of Pi types
+--}
 
+
+
+
+
+{--
 data normalForm : (t : U) → (nt : U) → (t ⟷₁ nt) → Set where
   zeroNF : normalForm O O id⟷₁
   oneNF  : normalForm I (I + O) (uniti₊l ◎ swap₊)
@@ -133,6 +223,11 @@ Evaluating mirrorTreeNF produces
 --     | nc ◎ nc
 --
 
+data comb+NormalForm : {t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
+                    (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
+                    (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set where
+
+
 data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
                     (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
                     (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set where
@@ -222,3 +317,4 @@ mirrorNF = _ , _ ,
   seqNormalForm {!!}
   (seqNormalForm {!!}
   {!!})
+--}
