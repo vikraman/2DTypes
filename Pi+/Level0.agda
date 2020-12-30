@@ -31,6 +31,12 @@ canonU T = ⟪ ∣ T ∣ ⟫
 canonU-assoc : (t₁ t₂ t₃ : U) → canonU (t₁ + (t₂ + t₃)) == canonU ((t₁ + t₂) + t₃)
 canonU-assoc t₁ t₂ t₃ rewrite +-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣) = idp
 
+postulate
+  canonU-assoc-rewrite : (t₁ t₂ t₃ : U) →
+    ⟪ ∣ t₁ ∣ +ℕ ∣ t₂ + t₃ ∣ ⟫ ↦ ⟪ ∣ t₁ + t₂ ∣ +ℕ ∣ t₃ ∣ ⟫
+
+{-# REWRITE canonU-assoc-rewrite #-}
+
 ⟪+⟫ : (m n : ℕ) → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
 ⟪+⟫ O n = unite₊l
 ⟪+⟫ (S m) n = assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)
@@ -60,11 +66,26 @@ combNormalForm uniti₊l = id⟷₁ ,
   rinv◎l))))
 combNormalForm swap₊ = {!!} ,
   {!!}
--- ***
-combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = {!!} ,  {!!}
--- combNormalForm {t₁ + (t₂ + t₃)} assocl₊ rewrite canonU-assoc t₁ t₂ t₃ = {!id⟷₁!} ,  {!!}
--- ***
-combNormalForm assocr₊ = {!id⟷₁!} ,
+combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = id⟷₁ ,
+  {!!}
+
+{--
+ ! <+> |t1| |t2+t3| ;
+ ! (norm t1 + (norm t2 + norm t3 ; <+> |t2| |t3|)) ;
+ assocl+ ;
+ (norm t1 + norm t2 ; <+> |t1| |t2|) + norm t3 ;
+ <+> |t1+t2| |t3|
+--}
+
+
+
+
+
+-- formally:
+--   transport (λ X → canonU (t₁ + (t₂ + t₃)) ⟷₁ X)
+--             (canonU-assoc t₁ t₂ t₃) id⟷₁ ,
+--   {!!}
+combNormalForm {(t₁ + t₂) + t₃} assocr₊ = id⟷₁ ,
   {!!}
 combNormalForm (c₁ ◎ c₂) with combNormalForm c₁ | combNormalForm c₂
 ... | nc₁ , eq₁ | nc₂ , eq₂ = (nc₁ ◎ nc₂) ,
