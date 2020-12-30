@@ -32,14 +32,19 @@ canonU-assoc : (t₁ t₂ t₃ : U) → canonU (t₁ + (t₂ + t₃)) == canonU 
 canonU-assoc t₁ t₂ t₃ rewrite +-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣) = idp
 
 postulate
-  canonU-assoc-rewrite : (t₁ t₂ t₃ : U) →
-    ⟪ ∣ t₁ ∣ +ℕ ∣ t₂ + t₃ ∣ ⟫ ↦ ⟪ ∣ t₁ + t₂ ∣ +ℕ ∣ t₃ ∣ ⟫
+  canonU-assoc-rewrite : (m n k : ℕ) → ⟪ m +ℕ (n +ℕ k) ⟫ ↦ ⟪ (m +ℕ n) +ℕ k ⟫
 
 {-# REWRITE canonU-assoc-rewrite #-}
 
 ⟪+⟫ : (m n : ℕ) → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
 ⟪+⟫ O n = unite₊l
 ⟪+⟫ (S m) n = assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)
+
+⟪+⟫-assoc : (m n k : ℕ) →
+  (id⟷₁ ⊕ ⟪+⟫ n k) ◎ ⟪+⟫ m (n +ℕ k) ⟷₂
+  assocl₊ ◎ (⟪+⟫ m n ⊕ id⟷₁) ◎ ⟪+⟫ (m +ℕ n) k
+⟪+⟫-assoc O n k = {!!}
+⟪+⟫-assoc (S m) n k = {!!}
 
 normC : (t : U) → t ⟷₁ canonU t
 normC O = id⟷₁
