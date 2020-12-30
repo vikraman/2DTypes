@@ -28,6 +28,9 @@ open import Pi+.Syntax as Pi
 canonU : U → U
 canonU T = ⟪ ∣ T ∣ ⟫
 
+canonU-assoc : (t₁ t₂ t₃ : U) → canonU (t₁ + (t₂ + t₃)) == canonU ((t₁ + t₂) + t₃)
+canonU-assoc t₁ t₂ t₃ rewrite +-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣) = idp
+
 ⟪+⟫ : (m n : ℕ) → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
 ⟪+⟫ O n = unite₊l
 ⟪+⟫ (S m) n = assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)
@@ -37,34 +40,41 @@ normC O = id⟷₁
 normC I  = uniti₊l ◎ swap₊
 normC (X + Y) = (normC X ⊕ normC Y) ◎ ⟪+⟫ ∣ X ∣ ∣ Y ∣
 
-data combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (nc : canonU t₁ ⟷₁ canonU t₂) →
-                      (!⟷₁ (normC t₁) ◎ c ◎ (normC t₂) ⟷₂ nc) → Set where
-     idNormalForm : {t : U} →
-                    combNormalForm {t} {t} id⟷₁ id⟷₁
-                      (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)
-     uniteNormalForm : {t : U} →
-                    combNormalForm {O + t} {t} unite₊l id⟷₁
-                      (trans⟷₂ (uniti₊l⟷₂l ⊡ id⟷₂)
-                      (trans⟷₂ assoc◎r
-                      (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
-                      (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
-                      (trans⟷₂ (id⟷₂ ⊡ idl◎l)
-                      rinv◎l)))))
-     unitiNormalForm : {t : U} →
-                    combNormalForm {t} {O + t} uniti₊l id⟷₁
-                      (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
-                      (trans⟷₂ (id⟷₂ ⊡ (uniti₊l⟷₂l ⊡ id⟷₂))
-                      (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
-                      (trans⟷₂ (id⟷₂ ⊡ (id⟷₂ ⊡ linv◎l))
-                      (trans⟷₂ (id⟷₂ ⊡ idr◎l)
-                      rinv◎l)))))
+combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) →
+  Σ (canonU t₁ ⟷₁ canonU t₂) (λ nc → (!⟷₁ (normC t₁) ◎ c ◎ (normC t₂) ⟷₂ nc))
+combNormalForm id⟷₁ = id⟷₁ ,
+  trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l
+combNormalForm unite₊l = id⟷₁ ,
+  trans⟷₂ (uniti₊l⟷₂l ⊡ id⟷₂)
+  (trans⟷₂ assoc◎r
+  (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+  (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
+  (trans⟷₂ (id⟷₂ ⊡ idl◎l)
+  rinv◎l))))
+combNormalForm uniti₊l = id⟷₁ ,
+  trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+  (trans⟷₂ (id⟷₂ ⊡ (uniti₊l⟷₂l ⊡ id⟷₂))
+  (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+  (trans⟷₂ (id⟷₂ ⊡ (id⟷₂ ⊡ linv◎l))
+  (trans⟷₂ (id⟷₂ ⊡ idr◎l)
+  rinv◎l))))
+combNormalForm swap₊ = {!!} ,
+  {!!}
+-- ***
+combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = {!!} ,  {!!}
+-- combNormalForm {t₁ + (t₂ + t₃)} assocl₊ rewrite canonU-assoc t₁ t₂ t₃ = {!id⟷₁!} ,  {!!}
+-- ***
+combNormalForm assocr₊ = {!id⟷₁!} ,
+  {!!}
+combNormalForm (c₁ ◎ c₂) with combNormalForm c₁ | combNormalForm c₂
+... | nc₁ , eq₁ | nc₂ , eq₂ = (nc₁ ◎ nc₂) ,
+  {!!}
+combNormalForm (c₁ ⊕ c₂) with combNormalForm c₁ | combNormalForm c₂
+... | nc₁ , eq₁ | nc₂ , eq₂ = {!!} ,
+  {!!}
+
+
 {--
-     assoclNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
-                        (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
-                    combNormalForm assocl₊ nf (sum+NF nf) id⟷₁
-                      (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
-                      (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
-                      (trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l)))
      assocrNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
                         (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
                     combNormalForm assocr₊ (sum+NF nf) nf id⟷₁
@@ -130,6 +140,7 @@ data combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (nc : canon
 
 
 
+-----------------------------------------------------------------------------
 
 {--
 data normalForm : (t : U) → (nt : U) → (t ⟷₁ nt) → Set where
