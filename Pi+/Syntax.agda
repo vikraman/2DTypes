@@ -96,6 +96,18 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   triangle⊕r : {t₁ t₂ : U} →
     assocl₊ {O} {t₁} {t₂} ◎ (unite₊l ⊕ id⟷₁) ⟷₂ unite₊l
 
+-- Equational reasoning
+
+infixr 10 _⟷₂⟨_⟩_
+infix  15 _⟷₂∎
+
+_⟷₂⟨_⟩_ : ∀ {t₁ t₂ : U} (c₁ : t₁ ⟷₁ t₂) {c₂ c₃ : t₁ ⟷₁ t₂} →
+         (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
+_ ⟷₂⟨ β ⟩ γ = trans⟷₂ β γ
+
+_⟷₂∎ : ∀ {t₁ t₂ : U} (c : t₁ ⟷₁ t₂) → c ⟷₂ c
+_ ⟷₂∎ = id⟷₂
+
 !⟷₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₁)
 !⟷₂ assoc◎l = assoc◎r
 !⟷₂ assoc◎r = assoc◎l

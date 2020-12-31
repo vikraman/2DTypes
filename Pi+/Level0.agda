@@ -32,19 +32,41 @@ canonU-assoc : (t₁ t₂ t₃ : U) → canonU (t₁ + (t₂ + t₃)) == canonU 
 canonU-assoc t₁ t₂ t₃ rewrite +-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣) = idp
 
 postulate
+  canonU-right-rewrite : (t : U) → ∣ t ∣ +ℕ 0 ↦ ∣ t ∣
   canonU-assoc-rewrite : (m n k : ℕ) → ⟪ m +ℕ (n +ℕ k) ⟫ ↦ ⟪ (m +ℕ n) +ℕ k ⟫
 
-{-# REWRITE canonU-assoc-rewrite #-}
+{-# REWRITE canonU-right-rewrite canonU-assoc-rewrite #-}
+
+--
 
 ⟪+⟫ : (m n : ℕ) → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
 ⟪+⟫ O n = unite₊l
 ⟪+⟫ (S m) n = assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)
 
+swap-big : (t₁ t₂ : U) → canonU (t₁ + t₂) ⟷₁ canonU (t₂ + t₁)
+swap-big O t₂ = id⟷₁
+swap-big I O = id⟷₁
+swap-big I I = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+swap-big I (t₂ + t₃) =
+  (id⟷₁ ⊕ !⟷₁ (⟪+⟫ ∣ t₂ ∣ ∣ t₃ ∣)) ◎
+  assocl₊ ◎
+  (swap-big I t₂ ⊕ id⟷₁) ◎
+  (!⟷₁ (⟪+⟫ ∣ t₂ ∣ ∣ I ∣) ⊕ id⟷₁) ◎
+  assocr₊ ◎
+  {!!}
+swap-big (t₁ + t₃) t₂ = {!!}
+
 ⟪+⟫-assoc : (m n k : ℕ) →
   (id⟷₁ ⊕ ⟪+⟫ n k) ◎ ⟪+⟫ m (n +ℕ k) ⟷₂
   assocl₊ ◎ (⟪+⟫ m n ⊕ id⟷₁) ◎ ⟪+⟫ (m +ℕ n) k
 ⟪+⟫-assoc O n k = trans⟷₂ unite₊l⟷₂r (trans⟷₂ (triangle⊕l ⊡ id⟷₂) assoc◎r)
-⟪+⟫-assoc (S m) n k = {!!}
+⟪+⟫-assoc (S m) n k =
+    ((id⟷₁ ⊕ ⟪+⟫ n k) ◎ assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m (n +ℕ k)))
+  ⟷₂⟨ {!!} ⟩
+    ((assocl₊ ◎ ((assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)) ⊕ id⟷₁)) ◎ (assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ (m +ℕ n) k)))
+  ⟷₂⟨ assoc◎r ⟩
+    (assocl₊ ◎ (((assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)) ⊕ id⟷₁) ◎ (assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ (m +ℕ n) k))))
+  ⟷₂∎
 
 normC : (t : U) → t ⟷₁ canonU t
 normC O = id⟷₁
@@ -69,11 +91,10 @@ combNormalForm uniti₊l = id⟷₁ ,
   (trans⟷₂ (id⟷₂ ⊡ (id⟷₂ ⊡ linv◎l))
   (trans⟷₂ (id⟷₂ ⊡ idr◎l)
   rinv◎l))))
-combNormalForm swap₊ = {!!} ,
+combNormalForm {t₁ + t₂} {t₂ + t₁} swap₊ = swap-big t₁ t₂ ,
   {!!}
 combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = id⟷₁ ,
   {!!}
-
 {--
  ! <+> |t1| |t2+t3| ;
  id + (! (<+> |t2| |t3|)) ;
