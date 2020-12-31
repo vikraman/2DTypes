@@ -31,11 +31,8 @@ canonU T = ⟪ ∣ T ∣ ⟫
 canonU-assoc : (t₁ t₂ t₃ : U) → canonU (t₁ + (t₂ + t₃)) == canonU ((t₁ + t₂) + t₃)
 canonU-assoc t₁ t₂ t₃ rewrite +-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣) = idp
 
-postulate
-  canonU-right-rewrite : (t : U) → ∣ t ∣ +ℕ 0 ↦ ∣ t ∣
-  canonU-assoc-rewrite : (m n k : ℕ) → ⟪ m +ℕ (n +ℕ k) ⟫ ↦ ⟪ (m +ℕ n) +ℕ k ⟫
-
-{-# REWRITE canonU-right-rewrite canonU-assoc-rewrite #-}
+-- postulate
+-- {-# REWRITE  #-}
 
 --
 
@@ -43,6 +40,7 @@ postulate
 ⟪+⟫ O n = unite₊l
 ⟪+⟫ (S m) n = assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)
 
+{--
 swap-big : (t₁ t₂ : U) → canonU (t₁ + t₂) ⟷₁ canonU (t₂ + t₁)
 swap-big O t₂ = id⟷₁
 swap-big I O = id⟷₁
@@ -67,12 +65,37 @@ swap-big (t₁ + t₃) t₂ = {!!}
   ⟷₂⟨ assoc◎r ⟩
     (assocl₊ ◎ (((assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)) ⊕ id⟷₁) ◎ (assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ (m +ℕ n) k))))
   ⟷₂∎
+--}
 
 normC : (t : U) → t ⟷₁ canonU t
 normC O = id⟷₁
 normC I  = uniti₊l ◎ swap₊
 normC (X + Y) = (normC X ⊕ normC Y) ◎ ⟪+⟫ ∣ X ∣ ∣ Y ∣
 
+--
+-- Define special combinators for canonical forms
+
+data _⇔_ : (t₁ t₂ : U) → Set where
+  id⇔ : {t : U} → canonU t ⇔ canonU t
+  seq⇔ : {t₁ t₂ t₃ : U} →
+         (canonU t₁ ⇔ canonU t₂) → (canonU t₂ ⇔ canonU t₃) → (canonU t₁ ⇔ canonU t₃)
+  bigswap⇔ : {t₁ t₂ : U} → canonU (t₁ + t₂) ⇔ canonU (t₂ + t₁)
+  bigplus⇔ : {t₁ t₂ t₃ t₄ : U} → (canonU t₁ ⇔ canonU t₃) → (canonU t₂ ⇔ canonU t₄) →
+             (canonU (t₁ + t₂) ⇔ canonU (t₃ + t₄))
+
+combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
+combNormalForm {t} id⟷₁ = id⇔ {t}
+combNormalForm {O + t} unite₊l = id⇔ {t}
+combNormalForm {t} uniti₊l = id⇔ {t}
+combNormalForm {t₁ + t₂} swap₊ = bigswap⇔ {t₁} {t₂}
+combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = id⇔
+combNormalForm {(t₁ + t₂) + t₃} assocr₊ = id⇔
+combNormalForm (_◎_ {t₁} {t₂} {t₃} c₁ c₂) =
+  seq⇔ {t₁} {t₂} {t₃} (combNormalForm {t₁} {t₂} c₁) (combNormalForm {t₂} {t₃} c₂)
+combNormalForm (_⊕_ {t₁} {t₂} {t₃} {t₄} c₁ c₂) =
+  bigplus⇔ {t₁} {t₂} {t₃} {t₄} (combNormalForm {t₁} {t₃} c₁) (combNormalForm {t₂} {t₄} c₂)
+
+{--
 combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) →
   Σ (canonU t₁ ⟷₁ canonU t₂) (λ nc → (!⟷₁ (normC t₁) ◎ c ◎ (normC t₂) ⟷₂ nc))
 combNormalForm id⟷₁ = id⟷₁ ,
@@ -105,10 +128,6 @@ combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = id⟷₁ ,
  <+> |t1+t2| |t3|
 --}
 
-
-
-
-
 -- formally:
 --   transport (λ X → canonU (t₁ + (t₂ + t₃)) ⟷₁ X)
 --             (canonU-assoc t₁ t₂ t₃) id⟷₁ ,
@@ -122,6 +141,7 @@ combNormalForm (c₁ ⊕ c₂) with combNormalForm c₁ | combNormalForm c₂
 ... | nc₁ , eq₁ | nc₂ , eq₂ = {!!} ,
   {!!}
 
+--}
 
 {--
      assocrNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
