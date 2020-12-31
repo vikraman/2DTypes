@@ -91,6 +91,10 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   hom◎⊕⟷₂ : {t₁ t₂ t₃ t₄ t₅ t₆ : U} {c₁ : t₅ ⟷₁ t₁} {c₂ : t₆ ⟷₁ t₂}
         {c₃ : t₁ ⟷₁ t₃} {c₄ : t₂ ⟷₁ t₄} →
          ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄)) ⟷₂ ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄))
+  triangle⊕l : {t₁ t₂ : U} →
+    unite₊l ⟷₂ assocl₊ {O} {t₁} {t₂} ◎ (unite₊l ⊕ id⟷₁)
+  triangle⊕r : {t₁ t₂ : U} →
+    assocl₊ {O} {t₁} {t₂} ◎ (unite₊l ⊕ id⟷₁) ⟷₂ unite₊l
 
 !⟷₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₁)
 !⟷₂ assoc◎l = assoc◎r
@@ -121,7 +125,10 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
 !⟷₂ split⊕-id⟷₁ = id⟷₁⊕id⟷₁⟷₂
 !⟷₂ hom⊕◎⟷₂ = hom◎⊕⟷₂
 !⟷₂ hom◎⊕⟷₂ = hom⊕◎⟷₂
+!⟷₂ triangle⊕l = triangle⊕r
+!⟷₂ triangle⊕r = triangle⊕l
 
+{--
 !⟷₁⟷₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
 !⟷₁⟷₂ assoc◎l = assoc◎r
 !⟷₁⟷₂ assoc◎r = assoc◎l
@@ -151,6 +158,9 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
 !⟷₁⟷₂ split⊕-id⟷₁ = split⊕-id⟷₁
 !⟷₁⟷₂ hom⊕◎⟷₂ = hom⊕◎⟷₂
 !⟷₁⟷₂ hom◎⊕⟷₂ = hom◎⊕⟷₂
+!⟷₁⟷₂ triangle⊕l = {!!}
+!⟷₁⟷₂ triangle⊕r = {!!}
+--}
 
 !⟷₁!⟷₁ : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (!⟷₁ (!⟷₁ c) ⟷₂ c)
 !⟷₁!⟷₁ unite₊l = id⟷₂

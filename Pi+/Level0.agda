@@ -43,7 +43,7 @@ postulate
 ⟪+⟫-assoc : (m n k : ℕ) →
   (id⟷₁ ⊕ ⟪+⟫ n k) ◎ ⟪+⟫ m (n +ℕ k) ⟷₂
   assocl₊ ◎ (⟪+⟫ m n ⊕ id⟷₁) ◎ ⟪+⟫ (m +ℕ n) k
-⟪+⟫-assoc O n k = {!!}
+⟪+⟫-assoc O n k = trans⟷₂ unite₊l⟷₂r (trans⟷₂ (triangle⊕l ⊡ id⟷₂) assoc◎r)
 ⟪+⟫-assoc (S m) n k = {!!}
 
 normC : (t : U) → t ⟷₁ canonU t
@@ -76,9 +76,11 @@ combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = id⟷₁ ,
 
 {--
  ! <+> |t1| |t2+t3| ;
- ! (norm t1 + (norm t2 + norm t3 ; <+> |t2| |t3|)) ;
- assocl+ ;
- (norm t1 + norm t2 ; <+> |t1| |t2|) + norm t3 ;
+ id + (! (<+> |t2| |t3|)) ;
+ ! norm t1 + (! norm t2 + ! norm t3) ;
+  assocl+ ;
+ (norm t1 + norm t2) + norm t3 ;
+ (<+> |t1| |t2|) + id ;
  <+> |t1+t2| |t3|
 --}
 
