@@ -70,7 +70,8 @@ infix 100 _″
 _″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
 id⇔ ″ = id⟷₁
 seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
-(bigswap⇔ {t₁} {t₂}) ″ = split {∣ t₁ ∣} {∣ t₂ ∣} ◎ swap₊ ◎ !⟷₁ split
+(bigswap⇔ {t₁} {t₂}) ″ with ∣ t₁ ∣ | ∣ t₂ ∣
+... | n₁ | n₂ = {!!} -- WIP
 bigplus⇔ c₁ c₂ ″ = split ◎ (c₁ ″ ⊕ c₂ ″) ◎ !⟷₁ split
 
 combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
