@@ -7,7 +7,6 @@ open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma
 
 open import Pi+.Syntax as Pi
-
 -- Converting Pi types to normal form
 
 ∣_∣ : U → ℕ
@@ -61,6 +60,18 @@ data _⇔_ : (t₁ t₂ : U) → Set where
   -- the result of bigplus should be:
   -- (X + (Y + (V + (W + (Z + 0)))))
   -- below we express bigplus using a sequence of swaps
+
+split : ∀ {n m} → ⟪ n +ℕ m ⟫ ⟷₁ ⟪ n ⟫ + ⟪ m ⟫
+split {O} {m} = uniti₊l
+split {S n} {m} = (id⟷₁ ⊕ split) ◎ assocl₊
+
+infix 100 _″
+
+_″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
+id⇔ ″ = id⟷₁
+seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
+(bigswap⇔ {t₁} {t₂}) ″ = split {∣ t₁ ∣} {∣ t₂ ∣} ◎ swap₊ ◎ !⟷₁ split
+bigplus⇔ c₁ c₂ ″ = split ◎ (c₁ ″ ⊕ c₂ ″) ◎ !⟷₁ split
 
 combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
 combNormalForm {t} id⟷₁ = id⇔ {t}
