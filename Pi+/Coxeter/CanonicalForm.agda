@@ -40,23 +40,24 @@ properize CanZ = O , CanZ , idp , z≤n
 properize (CanS cl {O} x) = 
   let nrec , clfrec , clfrecp , nfr = properize cl
   in  nrec , clfrec , (++-unit ∙ clfrecp) , ≤-up nfr
-properize (CanS {n} cl {S r} x) with properize cl 
-... | .0 , CanZ , clfrecp , nfn = (S n) , ((CanS (s≤s z≤n) CanZ x) , ((ap (λ e -> e ++ ((r + n ∸ r) :: (n ∸ r) ↓ r)) clfrecp)) , ≤-reflexive idp )
-... | S nrec , CanS {nr} {nfr} pnf clfrec {rr} pnr , clfrecp , nfn = S n , (CanS (s≤s nfn) (CanS pnf clfrec pnr) x) ,  (ap (λ e -> e ++ ((r + n ∸ r) :: (n ∸ r) ↓ r)) clfrecp) , ≤-reflexive idp
+properize (CanS {n} cl {S r} x) =
+  let (k , clrec , clfrecp , nfn) = properize cl
+  in  S n , CanS (s≤s nfn) clrec x , (ap (λ e -> e ++ ((r + n ∸ r) :: (n ∸ r) ↓ r)) clfrecp) , ≤-reflexive idp
 
 unproperize : {n : ℕ} -> (cl : LehmerProper n) -> Σ _ (λ clf -> immersionProper {n} cl == immersion {n} clf)
 unproperize CanZ = CanZ , idp
-unproperize {S nf} (CanS {n} {.(S nf)} x cl {r} x₁) with unproperize cl
-... | nfr , clfr with canonical-lift nf (≤-down2 x) nfr
-...    | rec-l , rec-p = CanS rec-l x₁ , ap (λ e -> e ++ (r + nf ∸ r :: nf ∸ r ↓ r)) (clfr ∙ ! rec-p)
+unproperize {S nf} (CanS {n} {.(S nf)} x cl {r} x₁) =
+  let nfr , clfr = unproperize cl 
+      rec-l , rec-p = canonical-lift nf (≤-down2 x) nfr
+  in  CanS rec-l x₁ , ap (λ e -> e ++ (r + nf ∸ r :: nf ∸ r ↓ r)) (clfr ∙ ! rec-p)
 
 
 canonical-proper-append : {n : ℕ} -> (cl : LehmerProper n) -> (x : ℕ) -> (n ≤ x) -> Σ _ (λ clx -> immersionProper {S x} clx == immersionProper {n} cl ++ [ x ])
 canonical-proper-append cl x px with unproperize cl
 ... | upl , upl-p with canonical-append upl x px
-...    | (CanS clx {r} SxSx) , clx-p = 
-          let nf , clf , clfp , nfp = properize (CanS clx SxSx)
-          in  transport LehmerProper (≤-≡ nfp {! SxSx  !}) clf , (((! (immersionProper-transport {!   !} clf)) ∙ ! clfp) ∙ clx-p) ∙ ap (λ e -> e ++ [ x ]) (! upl-p)
+...    | clx , clx-p = 
+          let nf , clf , clfp , nfp = properize (CanS {x} clx {1} (≤-up2 z≤n))
+          in  transport LehmerProper (≤-≡ nfp rrr) clf , ((! ((immersionProper-transport ((≤-≡ (s≤s (≤-reflexive idp)) (s≤s (≤-reflexive idp)))) clf)) ∙ ! clfp) ∙ clx-p) ∙ ap (λ e -> e ++ [ x ]) (! upl-p)
 
 
 always-reduces : (n k x : ℕ) -> (x ≤ k + n) -> (Σ _ (λ mf -> (n ↓ (1 + k) ++ [ x ]) ≅+ mf)) ⊎ (S x == n)
