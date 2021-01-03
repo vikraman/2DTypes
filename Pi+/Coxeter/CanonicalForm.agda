@@ -27,6 +27,8 @@ immersionProper : {n : ℕ} -> LehmerProper n -> List
 immersionProper {0} CanZ = nil
 immersionProper {S n} (CanS _ l {r} _) = (immersionProper l) ++ ((n ∸ r) ↓ (1 + r))
 
+-- (20 ∸ 8) ↓ (1 + 3) = 15 :: 14 :: 13 :: 12 :: nil
+
 immersion-transport : {n1 n2 : ℕ} -> (pn : n1 == n2) -> (l : Lehmer n1) -> (immersion l == immersion (transport Lehmer pn l))
 immersion-transport {n1} {.n1} idp l = idp
 
@@ -90,7 +92,10 @@ lemma n r x pnr m f with n <? x
           m ++ ((n ∸ r) ↓ (1 + r)) ++ x :: nil
         ≅*∎
   in  ⊥-elim (f _ (trans*+ red (+l++ m ar-p)))
-... | inj₂ qq = inj₂ ({!  !} , {!  !})
+... | inj₂ qq = 
+  let 1+x+r=n = eliminate-∸ pnr qq
+      r<n = introduce-≤-from-+ (ap S (+-comm r x) ∙ 1+x+r=n)
+  in  inj₂ (≡-down2 (qq ∙ ∸-up {n} {r} r<n) , r<n)
 
 canonical-proper-append-smaller : {n nf r : ℕ} -> {pn : S n ≤ S nf} -> {pr : S r ≤ S nf} -> {cl : LehmerProper n} -> (x : ℕ) -> (clf : LehmerProper (S nf)) -> (defclf : clf == CanS pn cl pr)
                                   -> (defx : S x == (nf ∸ r)) -> Σ (S r < S nf) (λ prr -> immersionProper {S nf} (CanS pn cl prr) == (immersionProper {S nf} clf) ++ [ x ])
@@ -152,11 +157,11 @@ is-canonical? nil = yes ( _ , (CanZ , idp))
 is-canonical? (x :: m) with is-canonical? m
 ... | no  p = no λ {(_ , cl , pp) → p (cut-last-Lehmer x cl pp) }
 ... | yes (_ , CanZ , pp) rewrite (≡-sym pp) = yes (_ , canonical-proper-append CanZ x z≤n)
-... | yes (S nn , CanS {n} {S nn} qn cl {r} qr , pp) with nn <? x
-... | yes q =
-  let clx , clp = canonical-proper-append (CanS qn cl qr) x q
-  in  yes (_ , clx , (≡-trans clp (start+end pp idp)))
-... | no q with S x ≟ (nn ∸ r)
+... | yes (S nf , CanS {n} {S nf} qn cl {r} qr , pp) with nf <? x
+...   | yes q =
+    let clx , clp = canonical-proper-append (CanS qn cl qr) x q
+    in  yes (_ , clx , (≡-trans clp (start+end pp idp)))
+... | no q with S x ≟ (nf ∸ r)
 ... | yes qq rewrite (≡-sym pp) =
   let  prr , app = canonical-proper-append-smaller x (CanS qn cl qr) idp qq
   in  yes (_ , ((CanS qn cl prr) , app))
@@ -165,8 +170,10 @@ is-canonical? (x :: m) with is-canonical? m
   (_ , CanS (s≤s x) CanZ {0} (s≤s z≤n) , ppp) →
     let m-empty = cut-last {nil} ppp
     in  abs-list (≡-trans m-empty (≡-sym pp)) ;
-  (_ , CanS x (CanS x₂ cl pr) {0} x₁ , ppp) → {!  !} ;
-  (_ , CanS x cl {S r} pr , ppp) → {!  !} }
+  (_ , CanS {0} {S (S n₁)} (s≤s x₁) CanZ {S m₁} (s≤s (s≤s x₂)), snd₁) -> {!   !} ;
+  (_ , CanS (s≤s x₁) (CanS x₂ fst₁ x₃) {O} x₄ , snd₁) -> {!   !} ;
+  (_ , CanS (s≤s x₁) (CanS x₂ fst₁ x₃) {S r} x₄ , snd₁) -> {!   !}
+  }
 
 canonical-proper-NF : {n : ℕ} -> (cl : LehmerProper n) -> (Σ _ (λ m -> immersionProper {n} cl ≅ m)) -> ⊥
 canonical-proper-NF cl (m , p) = 
@@ -202,10 +209,17 @@ not-canonical-not-NF (x :: m) p with is-canonical? m
   in  ⊥-elim (p (_ , (CanS pn cl prr) , app))
 
 {-# NON_TERMINATING #-}
-everything-to-Lehmer : (m : List) -> Σ _ (λ n -> Σ _ (λ cl -> rev m ≅* immersionProper {n} cl))
-everything-to-Lehmer m with is-canonical? m
+everything-to-LehmerProper : (m : List) -> Σ _ (λ n -> Σ _ (λ cl -> rev m ≅* immersionProper {n} cl))
+everything-to-LehmerProper m with is-canonical? m
 ... | yes (_ , cl , cl-p) = _ , (cl , (idp≅* (≡-sym cl-p)))
 ... | no  p =
   let step-m , step-p = not-canonical-not-NF m p
-      nn , rec-m , rec-p = everything-to-Lehmer (rev step-m)
+      nn , rec-m , rec-p = everything-to-LehmerProper (rev step-m)
   in  nn , rec-m , (trans (ext* step-p) (trans (idp≅* rev-rev) rec-p))
+
+{-# NON_TERMINATING #-}
+everything-to-Lehmer : (m : List) -> Σ _ (λ n -> Σ _ (λ cl -> rev m ≅* immersion {n} cl))
+everything-to-Lehmer m = 
+  let n , cl , clp = everything-to-LehmerProper m
+      cl' , clp' = unproperize cl
+  in  n , (cl' , transport (λ e → rev m ≅* e) clp' clp)
