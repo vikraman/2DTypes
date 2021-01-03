@@ -61,7 +61,7 @@ final≅-↓ : (n k1 : ℕ) -> (m : List) -> (n ↓ k1) ≅ m -> ⊥
 final≅-↓ n k1 m (cancel≅ {n₁} l r .(n ↓ k1) .m defm defmf) = repeat-long-lemma n k1 n₁ l r defm
 final≅-↓ n k1 m (swap≅ x l r .(n ↓ k1) .m defm defmf) = incr-long-lemma _ _ _ _ x l r defm
 final≅-↓ n k1 m (long≅ {n₁} k l r .(n ↓ k1) .m defm defmf) =
-  repeat-spaced-long-lemma n k1 (S (k + n₁)) l ((n₁ ↓ (1 + k))) r defm
+  repeat-spaced-long-lemma n k1 ((S (k + n₁))) (S (k + n₁)) (≤-reflexive idp) l (((n₁ ↓ (1 + k)))) r defm
 
 -- a helper trichotomy type
 data _||_||_ (A : Type₀) (B : Type₀) (C : Type₀) : Type₀ where
@@ -87,16 +87,61 @@ lemma-l++2++r a b (x :: l1) r1 (x₁ :: l2) r2 p with lemma-l++2++r a b l1 r1 l2
 ... | R2 ((fst , snd) , fst₁ , fst₂ , snd₁) = R2 (((x₁ :: fst) , snd) , ((cong (λ e -> x₁ :: e) fst₁) , ((head+tail (cut-tail p) fst₂) , snd₁)))
 ... | R3 (fst , snd) = R3 (head+tail (cut-tail p) fst , snd)
 
+last-↓ : (n k o : ℕ) -> (l : List) -> (n ↓ k == l ++ [ o ]) -> (n == o)
+last-↓ n (S O) o nil p = cut-tail p
+last-↓ n (S k) o (x :: l) p = last-↓ n k o l (cut-head p)
+
 final≅-↓-↓ : (n k n1 k1 : ℕ) -> (m : List) -> (k + n < k1 + n1) -> ((n ↓ k) ++ (n1 ↓ k1)) ≅ m -> ⊥
 final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .((n ↓ k) ++ (n1 ↓ k1)) .m defm defmf) with (lemma-l++2++r n₁ n₁ (n ↓ k) (n1 ↓ k1) l r defm)
 final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .(n ↓ k ++ n1 ↓ k1) .m defm defmf) | R1 (x , fst₁ , fst₂ , snd₁) = 
     dec-long-lemma n k n₁ n₁ (≤-reflexive idp) l (fst x) fst₂
 final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .(n ↓ k ++ n1 ↓ k1) .m defm defmf) | R2 (x , fst₁ , fst₂ , snd₁) = 
     dec-long-lemma n1 k1 n₁ n₁ (≤-reflexive idp) (snd x) r snd₁
-final≅-↓-↓ n k n1 k1 m pkn (cancel≅ {n₁} l r .(n ↓ k ++ n1 ↓ k1) .m defm defmf) | R3 x = {!   !}
+final≅-↓-↓ n O n1 (S k1) m pkn (cancel≅ {n₁} nil r .(n ↓ O ++ n1 ↓ S k1) .m defm defmf) | R3 (() , snd₁)
+final≅-↓-↓ n O n1 (S k1) m pkn (cancel≅ {n₁} (x :: l) r .(n ↓ O ++ n1 ↓ S k1) .m defm defmf) | R3 (() , snd₁)
+final≅-↓-↓ n (S k) n1 (S k1) m pkn (cancel≅ {o} l r .(n ↓ S k ++ n1 ↓ S k1) .m defm defmf) | R3 (fst₁ , snd₁) = 
+  let k1+n1=o = cut-tail snd₁
+      n=o = last-↓ _ _ _ _ fst₁
+      open ≤-Reasoning
+      lemma =
+        ≤begin
+          S (S o)
+        ≡⟨ ap (λ e -> S (S e)) (≡-sym n=o) ⟩ 
+         S (S n) 
+        ≤⟨ ≤-up2 (≤-up2 (≤-up-+ (≤-reflexive idp))) ⟩ 
+          S (S (k + n))
+        ≤⟨ pkn ⟩ 
+          S (k1 + n1)
+        ≡⟨ ap S k1+n1=o ⟩ 
+          S o
+        ≤∎
+  in  ⊥-elim (1+n≰n lemma)
 final≅-↓-↓ n k n1 k1 m pkn (swap≅ x l r .((n ↓ k) ++ (n1 ↓ k1)) .m defm defmf) with (lemma-l++2++r _ _ (n ↓ k) (n1 ↓ k1) l r defm)
-... | q = {!   !}
-final≅-↓-↓ n k n1 k1 m pkn (long≅ k₁ l r .((n ↓ k) ++ (n1 ↓ k1)) .m defm defmf) = {!   !}
+... | R1 (q , fst₁ , fst₂ , snd₁) = incr-long-lemma n k _ _ x l (fst q) fst₂
+... | R2 (q , fst₁ , fst₂ , snd₁) = incr-long-lemma n1 k1 _ _ x (snd q) r snd₁
+final≅-↓-↓ n O n1 (S k1) m pkn (swap≅ x nil r .(n ↓ O ++ n1 ↓ S k1) .m defm defmf) | R3 (() , snd₁)
+final≅-↓-↓ n O n1 (S k1) m pkn (swap≅ x (x₁ :: l) r .(n ↓ O ++ n1 ↓ S k1) .m defm defmf) | R3 (() , snd₁)
+final≅-↓-↓ n (S k) n1 (S k1) m pkn (swap≅ {wn} {wk} x l r .(n ↓ S k ++ n1 ↓ S k1) .m defm defmf) | R3 (fst₁ , snd₁) = 
+    let k1+n1=wk = cut-tail snd₁
+        n=wn = last-↓ _ _ _ _ fst₁
+        open ≤-Reasoning
+        lemma =
+          ≤begin
+            S (S (S (S wk)))
+          ≤⟨ ≤-up2 (≤-up2 x) ⟩
+            S (S wn)
+          ≡⟨ ap (λ e -> S (S e)) (≡-sym n=wn) ⟩ 
+          S (S n)
+          ≤⟨ ≤-up2 (≤-up2 (≤-up-+ (≤-reflexive idp))) ⟩ 
+            S (S (k + n))
+          ≤⟨ pkn ⟩ 
+            S (k1 + n1)
+          ≡⟨ ap S k1+n1=wk ⟩ 
+            S wk
+          ≤∎
+  in  ⊥-elim (1+n≰n (≤-down (≤-down lemma)))
+final≅-↓-↓ n k n1 k1 m pkn (long≅ k₁ l r .((n ↓ k) ++ (n1 ↓ k1)) .m defm defmf) = 
+  repeat-↓-long-lemma n k n1 k1 _ (S k₁) pkn l r defm
 
 ++-assoc-≡ : {l r1 r2 m : List} -> m == ((l ++ r1) ++ r2) -> m == (l ++ (r1 ++ r2))
 ++-assoc-≡ {l} {r1} {r2} {m} p = ≡-trans p (++-assoc l r1 r2)
@@ -115,12 +160,10 @@ final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (long≅ k l r .m .m
 
 
 ≡-↓ : (n k1 k2 : ℕ) -> (k1 ≤ n) -> (k2 ≤ n) -> ((n ↓ k1) == (n ↓ k2)) -> (k1 == k2)
-≡-↓ 0 .0 .0 z≤n z≤n p = idp
-≡-↓ (S n) 0 0 pk1 pk2 p = idp
-≡-↓ (S n) (S k1) (S k2) pk1 pk2 p =
-  let lemma = (cut-head p)
-      rec = ≡-↓ _ _ _ (≤-down2 pk1) (≤-down2 pk2) {!!}
-  in  cong S rec
+≡-↓ n O O pk1 pk2 r = idp
+≡-↓ n (S k1) (S k2) pk1 pk2 r = 
+   let rec = ≡-↓ _ _ _ (≤-down pk1) (≤-down pk2) (cut-head r)
+   in  cong S rec
 
 ≡-++↓ : (m1 m2 : List) -> (n k1 k2 : ℕ) -> (ml1 : n >> m1) -> (ml2 : n >> m2) -> (k1 ≤ S n) -> (k2 ≤ S n) -> (m1 ++ ((S n ∸ k1) ↓ k1) == m2 ++ ((S n ∸ k2) ↓ k2)) -> (k1 == k2) × (m1 == m2)
 ≡-++↓ nil nil n O O ml1 ml2 pk1 pk2 p = idp , idp

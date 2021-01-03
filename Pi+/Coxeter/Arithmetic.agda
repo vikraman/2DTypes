@@ -190,3 +190,46 @@ rrr = ≤-reflexive idp
 squeeze : {n k : ℕ} -> (n < k) -> (k ≤ S n) -> (k == S n)
 squeeze {.0} {.1} (s≤s {n = .0} z≤n) (s≤s z≤n) = idp
 squeeze {.(S _)} {.(S (S _))} (s≤s (s≤s pn)) (s≤s (s≤s pnn)) = ap S (squeeze (s≤s pn) (s≤s pnn))
+
+
+module ≤-Reasoning where
+    infix  1 ≤begin_
+    infixr 2 _≤⟨⟩_ _≤⟨_⟩_ _≡⟨⟩_ _≡⟨_⟩_
+    infix  3 _≤∎
+
+    ≤begin_ : ∀ {x y : ℕ}
+             → x ≤ y
+               -----
+             → x ≤ y
+    ≤begin x≤y  =  x≤y
+
+    _≤⟨⟩_ : ∀ (x : ℕ) {y : ℕ}
+            → x ≤ y
+              -----
+            → x ≤ y
+    x ≤⟨⟩ x≤y  =  x≤y
+
+    _≡⟨⟩_ : ∀ (x : ℕ) {y : ℕ}
+            → x == y
+              -----
+            → x ≤ y
+    x ≡⟨⟩ x≡y  = ≤-reflexive x≡y
+
+    _≤⟨_⟩_ : ∀ (x : ℕ) {y z : ℕ}
+             → x ≤ y
+             → y ≤ z
+               -----
+             → x ≤ z
+    x ≤⟨ x≤y ⟩ y≤z  = ≤-trans x≤y y≤z
+
+    _≡⟨_⟩_ : ∀ (x : ℕ) {y z : ℕ}
+             → x == y
+             → y ≤ z
+               -----
+             → x ≤ z
+    x ≡⟨ x≡y ⟩ y≤z  = ≤-trans (≤-reflexive x≡y) y≤z
+
+    _≤∎ : ∀ (x : ℕ)
+           -----
+          → x ≤ x
+    x ≤∎  = ≤-reflexive idp
