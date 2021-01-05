@@ -100,7 +100,16 @@ lemma n r x pnr m f with n <? x
 
 canonical-proper-append-smaller : {n nf r : ℕ} -> {pn : S n ≤ S nf} -> {pr : S r ≤ S nf} -> {cl : LehmerProper n} -> (x : ℕ) -> (clf : LehmerProper (S nf)) -> (defclf : clf == CanS pn cl pr)
                                   -> (defx : S x == (nf ∸ r)) -> Σ (S r < S nf) (λ prr -> immersionProper {S nf} (CanS pn cl prr) == (immersionProper {S nf} clf) ++ [ x ])
-canonical-proper-append-smaller {n} {nf} {r} {pn} {pr} {cl} x clf defclf defx = {!  !}
+canonical-proper-append-smaller {n} {nf} {r} {pn} {pr} {cl} x clf defclf defx = 
+  let x+Sr=nf = ≡-down2 (eliminate-∸ pr defx)
+      r<nf = introduce-≤-from-+ {S r} {x} {nf} (ap S (+-comm r x) ∙ (! (+-three-assoc {x} {1} {r})) ∙ x+Sr=nf)
+      x=nf-Sr = ! (introduce-∸ r<nf x+Sr=nf)
+      lemma = ++-↓ (nf ∸ r) r
+  in  ≤-up2 r<nf , 
+    ap (λ e -> immersionProper cl ++ e) (head+tail ((plus-minus {S r} {nf} r<nf) ∙ (! (plus-minus {r} {nf} (≤-down r<nf)))) (! (++-↓-S (nf ∸ r) r x defx ∙ 
+      transport {!   !} x=nf-Sr {!   !}))) ∙ 
+    ! (++-assoc (immersionProper cl) (r + nf ∸ r :: nf ∸ r ↓ r) [ x ]) ∙ 
+    ap (λ e -> immersionProper e ++ [ x ]) (! defclf)
 
 canonical-final≅ : (m : List) -> (f : (mf : List) -> (rev m ≅+ mf) -> ⊥) -> Σ _ (λ n -> Σ _ (λ cl -> immersionProper {n} cl == rev m))
 canonical-final≅ nil f = O , CanZ , idp
