@@ -98,6 +98,10 @@ n ↑ (S k) = n :: (S n ↑ k)
 ++-↓ n 0 = idp
 ++-↓ n (S k) rewrite ++-↓ n k = head+tail (+-three-assoc {k} {1} {n}) idp
 
+++-↓-S : (n k x : ℕ) -> (S x == n) -> ((n ↓ k) ++ [ x ]) == (x ↓ (S k))
+++-↓-S n O x p = idp
+++-↓-S n (S k) x p rewrite (! p) rewrite ++-↓ n k = head+tail (+-three-assoc {k} {1} {x}) (++-↓ x k)
+
 ++-↑ : (n k : ℕ) -> ((n ↑ k) ++ [ k + n ]) == (n ↑ (S k))
 ++-↑ n 0 = idp
 ++-↑ n (S k) rewrite ≡-sym (++-↑ (S n) k) rewrite (+-three-assoc {k} {1} {n}) = idp
