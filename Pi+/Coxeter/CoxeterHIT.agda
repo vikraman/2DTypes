@@ -21,95 +21,93 @@ open import Pi+.Coxeter.MCoxeterS
 open import Pi+.Coxeter.Diamond
 open import Pi+.Extra
 
+⟦S_⟧ : ∀ {n} → Fin n → Fin (S n)
+⟦S (k , lt) ⟧ = S k , <-ap-S lt
 
-module _ (m : ℕ) where
-  
-  infixr 35 _::_
+⟦_⟧ : ∀ {n} → Fin n → Fin (S n)
+⟦_⟧ = Fin-S
 
-  ⟦S_⟧ : ∀ {n} → Fin n → Fin (S n)
-  ⟦S (k , lt) ⟧ = S k , <-ap-S lt
-  
-  ⟦_⟧ : ∀ {n} → Fin n → Fin (S n)
-  ⟦_⟧ = Fin-S
+
+infixr 35 _::_
+
+postulate
+  CList : ℕ → Type₀
+  nil : ∀ {m} → CList m
+  _::_ : ∀ {m} → Fin (S m) → CList m → CList m
+
+  cancel : ∀ {m} → {n : Fin (S m)} {w : CList m} -> (n :: n :: w) == w
+  swap : ∀ {m} → {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → {w : CList m} → (n :: k :: w) == (k :: n :: w)
+  braid : ∀ {m} → {n : Fin m} {w : CList m} → (⟦S n ⟧ :: ⟦ n ⟧ :: ⟦S n ⟧ :: w) == (⟦ n ⟧ :: ⟦S n ⟧ :: ⟦ n ⟧ :: w)
+
+  instance trunc : ∀ {m} → is-set (CList m)
+
+[_] : ∀ {m} → Fin (S m) → CList m
+[ n ] = n :: nil
+
+module CListElim {i} {m} {P : CList m → Type i}
+  (nil* : P nil)
+  (_::*_ : (n : Fin (S m)) {w : CList m} (w* : P w) → P (n :: w))
+  (cancel* : {n : Fin (S m)} {w : CList m} {w* : P w} → (n ::* (n ::* w*)) == w* [ P ↓ cancel ])
+  (swap* : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) → {w : CList m} {w* : P w} → (n ::* (k ::* w*)) == (k ::* (n ::* w*)) [ P ↓ swap p ])
+  (braid* : {n : Fin m} {w : CList m} {w* : P w} → (⟦S n ⟧ ::* (⟦ n ⟧ ::* (⟦S n ⟧ ::* w*))) == (⟦ n ⟧ ::* (⟦S n ⟧ ::* (⟦ n ⟧ ::* w*))) [ P ↓ braid ])
+  {{trunc* : {w : CList m} → is-set (P w)}}
+  where
 
   postulate
-    CList : Type₀
-    nil : CList
-    _::_ : Fin (S m) → CList → CList
+    f : (w : CList m) → P w
+    f-nil-β : f nil ↦ nil*
+    {-# REWRITE f-nil-β #-}
+    f-::-β : {n : Fin (S m)} {w : CList m} → f (n :: w) ↦ (n ::* (f w))
+    {-# REWRITE f-::-β #-}
 
-    cancel : {n : Fin (S m)} {w : CList} -> (n :: n :: w) == w
-    swap : {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → {w : CList} → (n :: k :: w) == (k :: n :: w)
-    braid : {n : Fin m} {w : CList} → (⟦S n ⟧ :: ⟦ n ⟧ :: ⟦S n ⟧ :: w) == (⟦ n ⟧ :: ⟦S n ⟧ :: ⟦ n ⟧ :: w)
+  postulate
+    f-cancel-β : {n : Fin (S m)} {w : CList m} → apd f (cancel {m} {n} {w}) == cancel* {n} {w}
+    f-swap-β : {n : Fin (S m)} {k : Fin (S m)} {w : CList m} → (p : S (k .fst) < (n .fst)) → apd f (swap {m} {n} {k} p {w}) == swap* p {w}
+    f-braid-β : {n : Fin m} {w : CList m} → apd f (braid {m} {n} {w}) == braid* {n} {w}
 
-    instance trunc : is-set CList
+module CListElimProp {i} {m} {P : CList m → Type i}
+  (nil* : P nil)
+  (_::*_ : (n : Fin (S m)) {w : CList m} (w* : P w) → P (n :: w))
+  {{trunc* : {w : CList m} → is-prop (P w)}}
+  where
+  private module E = CListElim {P = P} nil* _::*_ prop-has-all-paths-↓ (λ p → prop-has-all-paths-↓) prop-has-all-paths-↓
+  f : (w : CList m) → P w
+  f = E.f {{raise-level -1 trunc*}}
 
-  [_] : Fin (S m) → CList
-  [ n ] = n :: nil
+module CListRec {i} {m} {P : Type i}
+  (nil* : P)
+  (_::*_ : (n : Fin (S m)) (w* : P) → P)
+  (cancel* : {n : Fin (S m)} {w* : P} → (n ::* (n ::* w*)) == w*)
+  (swap* : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) → {w* : P} → (n ::* (k ::* w*)) == (k ::* (n ::* w*)))
+  (braid* : {n : Fin m} {w* : P} → (⟦S n ⟧ ::* (⟦ n ⟧ ::* (⟦S n ⟧ ::* w*))) == (⟦ n ⟧ ::* (⟦S n ⟧ ::* (⟦ n ⟧ ::* w*))))
+  {{trunc* : is-set P}}
+  where
 
-  module CListElim {i} {P : CList → Type i}
-    (nil* : P nil)
-    (_::*_ : (n : Fin (S m)) {w : CList} (w* : P w) → P (n :: w))
-    (cancel* : {n : Fin (S m)} {w : CList} {w* : P w} → (n ::* (n ::* w*)) == w* [ P ↓ cancel ])
-    (swap* : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) → {w : CList} {w* : P w} → (n ::* (k ::* w*)) == (k ::* (n ::* w*)) [ P ↓ swap p ])
-    (braid* : {n : Fin m} {w : CList} {w* : P w} → (⟦S n ⟧ ::* (⟦ n ⟧ ::* (⟦S n ⟧ ::* w*))) == (⟦ n ⟧ ::* (⟦S n ⟧ ::* (⟦ n ⟧ ::* w*))) [ P ↓ braid ])
-    {{trunc* : {w : CList} → is-set (P w)}}
-    where
+  private module E = CListElim {P = λ _ → P} nil* (λ n p → n ::* p) (↓-cst-in cancel*) (λ p → ↓-cst-in (swap* p)) (↓-cst-in braid*)
 
-    postulate
-      f : (w : CList) → P w
-      f-nil-β : f nil ↦ nil*
-      {-# REWRITE f-nil-β #-}
-      f-::-β : {n : Fin (S m)} {w : CList} → f (n :: w) ↦ (n ::* (f w))
-      {-# REWRITE f-::-β #-}
+  f : CList m → P
+  f = E.f
 
-    postulate
-      f-cancel-β : {n : Fin (S m)} {w : CList} → apd f (cancel {n} {w}) == cancel* {n} {w}
-      f-swap-β : {n : Fin (S m)} {k : Fin (S m)} {w : CList} → (p : S (k .fst) < (n .fst)) → apd f (swap {n} {k} p {w}) == swap* p {w}
-      f-braid-β : {n : Fin m} {w : CList} → apd f (braid {n} {w}) == braid* {n} {w}
+  f-cancel-β : {n : Fin (S m)} {w : CList m} → ap f (cancel {m} {n} {w}) == cancel* {n} {f w}
+  f-cancel-β = apd=cst-in E.f-cancel-β
 
-  module CListElimProp {i} {P : CList → Type i}
-    (nil* : P nil)
-    (_::*_ : (n : Fin (S m)) {w : CList} (w* : P w) → P (n :: w))
-    {{trunc* : {w : CList} → is-prop (P w)}}
-    where
-    private module E = CListElim {P = P} nil* _::*_ prop-has-all-paths-↓ (λ p → prop-has-all-paths-↓) prop-has-all-paths-↓
-    f : (w : CList) → P w
-    f = E.f {{raise-level -1 trunc*}}
+  f-swap-β : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) {w : CList m} → ap f (swap {m} {n} {k} p {w}) == swap* p {f w}
+  f-swap-β p = apd=cst-in (E.f-swap-β p)
 
-  module CListRec {i} {P : Type i}
-    (nil* : P)
-    (_::*_ : (n : Fin (S m)) (w* : P) → P)
-    (cancel* : {n : Fin (S m)} {w* : P} → (n ::* (n ::* w*)) == w*)
-    (swap* : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) → {w* : P} → (n ::* (k ::* w*)) == (k ::* (n ::* w*)))
-    (braid* : {n : Fin m} {w* : P} → (⟦S n ⟧ ::* (⟦ n ⟧ ::* (⟦S n ⟧ ::* w*))) == (⟦ n ⟧ ::* (⟦S n ⟧ ::* (⟦ n ⟧ ::* w*))))
-    {{trunc* : is-set P}}
-    where
+  f-braid-β : {n : Fin m} {w : CList m} → ap f (braid {m} {n} {w}) == braid* {n} {f w}
+  f-braid-β = apd=cst-in E.f-braid-β
 
-    private module E = CListElim {P = λ _ → P} nil* (λ n p → n ::* p) (↓-cst-in cancel*) (λ p → ↓-cst-in (swap* p)) (↓-cst-in braid*)
+infixr 50 _++_
 
-    f : CList → P
-    f = E.f
+_++_ : ∀ {m} → CList m → CList m → CList m
+_++_ {m} = CListRec.f (λ w → w) (λ n f w → n :: f w) (λ= λ _ → cancel) (λ p → λ= λ _ → swap p) (λ= λ _ → braid)
 
-    f-cancel-β : {n : Fin (S m)} {w : CList} → ap f (cancel {n} {w}) == cancel* {n} {f w}
-    f-cancel-β = apd=cst-in E.f-cancel-β
+instance
+  clist-paths-prop : ∀ {m} → {w1 w2 : CList m} → is-prop (w1 == w2)
+  clist-paths-prop = has-level-apply trunc _ _
 
-    f-swap-β : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) {w : CList} → ap f (swap {n} {k} p {w}) == swap* p {f w}
-    f-swap-β p = apd=cst-in (E.f-swap-β p)
+++-unit-r : ∀ {m} (l : CList m) → l ++ nil == l
+++-unit-r = CListElimProp.f idp (λ n {w} p → ap (n ::_) p) {{clist-paths-prop}}
 
-    f-braid-β : {n : Fin m} {w : CList} → ap f (braid {n} {w}) == braid* {n} {f w}
-    f-braid-β = apd=cst-in E.f-braid-β
-
--- infixr 50 _++_
-
--- _++_ : ∀ {m} → CList m → CList m → CList m
--- _++_ {m} = CListRec.f (λ w → w) (λ n f w → n :: f w) (λ= λ _ → cancel) (λ p → λ= λ _ → swap p) (λ= λ _ → braid)
-
--- instance
---   clist-paths-prop : ∀ {m} → {w1 w2 : CList m} → is-prop (w1 == w2)
---   clist-paths-prop = has-level-apply trunc _ _
-
--- ++-unit-r : l → l ++ nil == l
--- ++-unit-r = CListElimProp.f idp (λ n {w} p → ap (n ::_) p) {{clist-paths-prop}}
-
--- ++-assoc : ∀ l₁ l₂ l₃ → (l₁ ++ l₂) ++ l₃ == l₁ ++ (l₂ ++ l₃)
--- ++-assoc = CListElimProp.f (λ _ _ → idp) (λ n {w} f l₂ l₃ → ap (n ::_) (f l₂ l₃)) {{Π-level λ _ → Π-level λ _ → clist-paths-prop}}
+++-assoc : ∀ {m} (l₁ l₂ l₃ : CList m) → (l₁ ++ l₂) ++ l₃ == l₁ ++ (l₂ ++ l₃)
+++-assoc = CListElimProp.f (λ _ _ → idp) (λ n {w} f l₂ l₃ → ap (n ::_) (f l₂ l₃)) {{Π-level λ _ → Π-level λ _ → clist-paths-prop}}
