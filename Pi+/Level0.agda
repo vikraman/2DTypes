@@ -101,13 +101,12 @@ dneppa (S m) n =
   ⟪ S (m +ℕ n) ⟫
   ⟷₁⟨ snoc (m +ℕ n) ⟩
   ⟪ (m +ℕ n) +ℕ 1 ⟫
-  ⟷₁⟨ {!!} ⟩
+  ⟷₁⟨ transport (λ X → ⟪ (m +ℕ n) +ℕ 1 ⟫ ⟷₁ X) (ap ⟪_⟫ (+-assoc m n 1)) id⟷₁ ⟩
   ⟪ m +ℕ (n +ℕ 1) ⟫
   ⟷₁⟨ dneppa m (n +ℕ 1) ⟩
   ⟪ (n +ℕ 1) +ℕ m ⟫
-  ⟷₁⟨ {!!} ⟩
+  ⟷₁⟨ transport (λ X → ⟪ (n +ℕ 1) +ℕ m ⟫ ⟷₁ X) (ap ⟪_⟫ (+-assoc n 1 m)) id⟷₁ ⟩
   ⟪ n +ℕ S m ⟫ ⟷₁∎
-
 
 infix 100 _″
 
@@ -116,6 +115,141 @@ id⇔ ″ = id⟷₁
 seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
 bigplus⇔ c₁ c₂ ″ = !⟷₁ ⟪++⟫ ◎ (c₁ ″ ⊕ c₂ ″) ◎ ⟪++⟫
 bigswap⇔ {t₁} {t₂} ″ = dneppa ∣ t₁ ∣ ∣ t₂ ∣
+
+-----------------------------------------------------------------------------
+-- Example
+
+A1 A2 A3 A4 A5 A6 : U
+A1 = I
+A2 = I
+A3 = I
+A4 = I
+A5 = I
+A6 = I
+
+tree : U
+tree = ((A1 + A2) + A3) + ((A4 + A5) + A6)
+
+mirrorTree : U
+mirrorTree = (A6 + (A5 + A4)) + (A3 + (A2 + A1))
+
+mirror : tree ⟷₁ mirrorTree
+mirror = swap₊ ◎ (swap₊ ⊕ swap₊) ◎ ((id⟷₁ ⊕ swap₊) ⊕ (id⟷₁ ⊕ swap₊))
+
+mirrorNF : canonU tree ⟷₁ canonU mirrorTree
+mirrorNF = (combNormalForm mirror) ″
+
+{--
+(((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+  id⟷₁ ⊕
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+  id⟷₁ ⊕
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+  id⟷₁ ⊕
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+  id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
+ ◎
+ coe
+ (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 2 3 1)))
+ id⟷₁
+ ◎
+ (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+   id⟷₁ ⊕
+   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+   id⟷₁ ⊕
+   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+   id⟷₁ ⊕
+   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+   id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
+  ◎
+  coe
+  (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 4 1)))
+  id⟷₁
+  ◎
+  (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+    id⟷₁ ⊕
+    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+    id⟷₁ ⊕
+    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+    id⟷₁ ⊕
+    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
+   ◎
+   coe
+   (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 0 5 1)))
+   id⟷₁
+   ◎
+   coe
+   (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (! (+-unit-r 6))))
+   id⟷₁
+   ◎
+   coe
+   (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 5 1 0)))
+   id⟷₁
+   ◎ id⟷₁)
+  ◎
+  coe
+  (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 4 1 1)))
+  id⟷₁
+  ◎ id⟷₁)
+ ◎
+ coe
+ (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 3 1 2)))
+ id⟷₁
+ ◎ id⟷₁)
+◎
+(((id⟷₁ ⊕ (id⟷₁ ⊕ (id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ assocl₊) ◎ assocl₊)
+ ◎
+ ((((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
+   ◎
+   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
+   (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+     id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
+    ◎
+    coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 0 2 1))) id⟷₁ ◎
+    coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (! (+-unit-r 3)))) id⟷₁ ◎
+    coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 2 1 0))) id⟷₁ ◎
+    id⟷₁)
+   ◎
+   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
+   id⟷₁)
+  ⊕
+  ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+   id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
+  ◎
+  coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
+  (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
+   ◎
+   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 0 2 1))) id⟷₁ ◎
+   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (! (+-unit-r 3)))) id⟷₁ ◎
+   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 2 1 0))) id⟷₁ ◎
+   id⟷₁)
+  ◎
+  coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
+  id⟷₁)
+ ◎ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
+◎
+((id⟷₁ ⊕ (id⟷₁ ⊕ (id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ assocl₊) ◎ assocl₊)
+◎
+((((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
+  (id⟷₁ ⊕
+   ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁) ◎
+   coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 0 1 1))) id⟷₁ ◎
+   coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (! (+-unit-r 2)))) id⟷₁ ◎
+   coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 0))) id⟷₁ ◎ id⟷₁)
+  ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
+ ⊕
+ ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
+ (id⟷₁ ⊕
+  ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁) ◎
+  coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 0 1 1))) id⟷₁ ◎
+  coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (! (+-unit-r 2)))) id⟷₁ ◎
+  coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 0))) id⟷₁ ◎ id⟷₁)
+ ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
+◎ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ unite₊l
+--}
 
 -----------------------------------------------------------------------------
 -- Prove 2-equivalence between c and combNormalForm c
@@ -298,6 +432,8 @@ normalize ((t₁ + t₂) + t₃) with normalize (t₁ + (t₂ + t₃))
 -- between normal forms along with a proof of 2-equivalence
 
 -- For readability
+-- Regular Pi combinator on trees
+
 
 A1 A2 A3 A4 A5 A6 : U
 A1 = I
@@ -306,8 +442,6 @@ A3 = I
 A4 = I
 A5 = I
 A6 = I
-
--- Regular Pi combinator on trees
 
 tree : U
 tree = ((A1 + A2) + A3) + ((A4 + A5) + A6)
