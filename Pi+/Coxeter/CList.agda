@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.CoxeterHIT where
+module Pi+.Coxeter.CList where
 
 open import lib.Base
 open import lib.Base
@@ -21,12 +21,11 @@ open import Pi+.Coxeter.MCoxeterS
 open import Pi+.Coxeter.Diamond
 open import Pi+.Extra
 
-⟦S_⟧ : ∀ {n} → Fin n → Fin (S n)
-⟦S (k , lt) ⟧ = S k , <-ap-S lt
+⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
+⟨_⟩ = Fin-S
 
-⟦_⟧ : ∀ {n} → Fin n → Fin (S n)
-⟦_⟧ = Fin-S
-
+S⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
+S⟨ k , kltn ⟩ = S k , <-ap-S kltn
 
 infixr 35 _::_
 
@@ -35,9 +34,9 @@ postulate
   nil : ∀ {m} → CList m
   _::_ : ∀ {m} → Fin (S m) → CList m → CList m
 
-  cancel : ∀ {m} → {n : Fin (S m)} {w : CList m} -> (n :: n :: w) == w
+  cancel : ∀ {m} → {n : Fin (S m)} {w : CList m} → (n :: n :: w) == w
   swap : ∀ {m} → {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → {w : CList m} → (n :: k :: w) == (k :: n :: w)
-  braid : ∀ {m} → {n : Fin m} {w : CList m} → (⟦S n ⟧ :: ⟦ n ⟧ :: ⟦S n ⟧ :: w) == (⟦ n ⟧ :: ⟦S n ⟧ :: ⟦ n ⟧ :: w)
+  braid : ∀ {m} → {n : Fin m} {w : CList m} → (S⟨ n ⟩ :: ⟨ n ⟩ :: S⟨ n ⟩ :: w) == (⟨ n ⟩ :: S⟨ n ⟩ :: ⟨ n ⟩ :: w)
 
   instance trunc : ∀ {m} → is-set (CList m)
 
@@ -49,7 +48,7 @@ module CListElim {i} {m} {P : CList m → Type i}
   (_::*_ : (n : Fin (S m)) {w : CList m} (w* : P w) → P (n :: w))
   (cancel* : {n : Fin (S m)} {w : CList m} {w* : P w} → (n ::* (n ::* w*)) == w* [ P ↓ cancel ])
   (swap* : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) → {w : CList m} {w* : P w} → (n ::* (k ::* w*)) == (k ::* (n ::* w*)) [ P ↓ swap p ])
-  (braid* : {n : Fin m} {w : CList m} {w* : P w} → (⟦S n ⟧ ::* (⟦ n ⟧ ::* (⟦S n ⟧ ::* w*))) == (⟦ n ⟧ ::* (⟦S n ⟧ ::* (⟦ n ⟧ ::* w*))) [ P ↓ braid ])
+  (braid* : {n : Fin m} {w : CList m} {w* : P w} → (S⟨ n ⟩ ::* (⟨ n ⟩ ::* (S⟨ n ⟩ ::* w*))) == (⟨ n ⟩ ::* (S⟨ n ⟩ ::* (⟨ n ⟩ ::* w*))) [ P ↓ braid ])
   {{trunc* : {w : CList m} → is-set (P w)}}
   where
 
@@ -79,7 +78,7 @@ module CListRec {i} {m} {P : Type i}
   (_::*_ : (n : Fin (S m)) (w* : P) → P)
   (cancel* : {n : Fin (S m)} {w* : P} → (n ::* (n ::* w*)) == w*)
   (swap* : {n : Fin (S m)} {k : Fin (S m)} → (p : S (k .fst) < (n .fst)) → {w* : P} → (n ::* (k ::* w*)) == (k ::* (n ::* w*)))
-  (braid* : {n : Fin m} {w* : P} → (⟦S n ⟧ ::* (⟦ n ⟧ ::* (⟦S n ⟧ ::* w*))) == (⟦ n ⟧ ::* (⟦S n ⟧ ::* (⟦ n ⟧ ::* w*))))
+  (braid* : {n : Fin m} {w* : P} → (S⟨ n ⟩ ::* (⟨ n ⟩ ::* (S⟨ n ⟩ ::* w*))) == (⟨ n ⟩ ::* (S⟨ n ⟩ ::* (⟨ n ⟩ ::* w*))))
   {{trunc* : is-set P}}
   where
 
