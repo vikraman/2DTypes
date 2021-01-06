@@ -7,6 +7,8 @@ open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma
 
 open import Pi+.Syntax as Pi
+
+-----------------------------------------------------------------------------
 -- Converting Pi types to normal form
 
 ∣_∣ : U → ℕ
@@ -22,6 +24,7 @@ open import Pi+.Syntax as Pi
 ∣⟪ O ⟫∣ = idp
 ∣⟪ S n ⟫∣ = ap S ∣⟪ n ⟫∣
 
+-- Canonical representation of sum types as lists I + (I + (I + ... O))
 canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
 
@@ -29,15 +32,18 @@ canonU-assoc : (t₁ t₂ t₃ : U) →
   canonU (t₁ + (t₂ + t₃)) == canonU ((t₁ + t₂) + t₃)
 canonU-assoc t₁ t₂ t₃ rewrite +-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣) = idp
 
-⟪+⟫ : (m n : ℕ) → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
-⟪+⟫ O n = unite₊l
-⟪+⟫ (S m) n = assocr₊ ◎ (id⟷₁ ⊕ ⟪+⟫ m n)
+-- Append two lists of the form I + (I + ... O)
+⟪++⟫ : {m n : ℕ} → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
+⟪++⟫ {O} = unite₊l
+⟪++⟫ {S m} = assocr₊ ◎ (id⟷₁ ⊕ ⟪++⟫)
 
+-- Flatten a sum type (tree) to a list
 normC : (t : U) → t ⟷₁ canonU t
 normC O = id⟷₁
 normC I  = uniti₊l ◎ swap₊
-normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪+⟫ ∣ t₁ ∣ ∣ t₂ ∣
+normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
 
+-----------------------------------------------------------------------------
 -- Define special combinators for canonical forms
 
 data _⇔_ : (t₁ t₂ : U) → Set where
@@ -61,19 +67,6 @@ data _⇔_ : (t₁ t₂ : U) → Set where
   -- (X + (Y + (V + (W + (Z + 0)))))
   -- below we express bigplus using a sequence of swaps
 
-split : ∀ {n m} → ⟪ n +ℕ m ⟫ ⟷₁ ⟪ n ⟫ + ⟪ m ⟫
-split {O} {m} = uniti₊l
-split {S n} {m} = (id⟷₁ ⊕ split) ◎ assocl₊
-
-infix 100 _″
-
-_″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
-id⇔ ″ = id⟷₁
-seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
-(bigswap⇔ {t₁} {t₂}) ″ with ∣ t₁ ∣ | ∣ t₂ ∣
-... | n₁ | n₂ = {!!} -- WIP
-bigplus⇔ c₁ c₂ ″ = split ◎ (c₁ ″ ⊕ c₂ ″) ◎ !⟷₁ split
-
 combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
 combNormalForm {t} id⟷₁ = id⇔ {t}
 combNormalForm {O + t} unite₊l = id⇔ {t}
@@ -86,16 +79,32 @@ combNormalForm {(t₁ + t₂) + t₃} assocr₊ =
   transport (λ X → X ⇔ ⟪ ∣ t₁ ∣ +ℕ ∣ t₂ + t₃ ∣ ⟫)
     (canonU-assoc t₁ t₂ t₃) (id⇔ {t₁ + (t₂ + t₃)})
 combNormalForm (_◎_ {t₁} {t₂} {t₃} c₁ c₂) =
-  seq⇔ {t₁} {t₂} {t₃}
-    (combNormalForm {t₁} {t₂} c₁)
-    (combNormalForm {t₂} {t₃} c₂)
-combNormalForm (_⊕_ {t₁} {t₂} {t₃} {t₄} c₁ c₂) =
-  bigplus⇔ {t₁} {t₂} {t₃} {t₄}
-    (combNormalForm {t₁} {t₃} c₁)
-    (combNormalForm {t₂} {t₄} c₂)
+  seq⇔ {t₁} {t₂} {t₃} (combNormalForm c₁) (combNormalForm c₂)
+combNormalForm {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) =
+  bigplus⇔ {t₁} {t₂} {t₃} {t₄} (combNormalForm c₁) (combNormalForm c₂)
 
--- Express special combinators as regular Pi combinators and prove 2-equivalence
--- between c and combNormalForm c
+-----------------------------------------------------------------------------
+-- Express special combinators as regular Pi combinators
+
+infix 100 _″
+
+snoc : (t : U) → canonU (I + t) ⟷₁ canonU (t + I)
+snoc O = id⟷₁
+snoc I = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+snoc (t₁ + t₂) =
+  (id⟷₁ ⊕ !⟷₁ ⟪++⟫) ◎ assocl₊ ◎ (snoc t₁ ⊕ id⟷₁) ◎
+  (!⟷₁ ⟪++⟫ ⊕ id⟷₁) ◎ ((id⟷₁ ⊕ unite₊r) ⊕ id⟷₁) ◎ assocr₊ ◎
+  (id⟷₁ ⊕ snoc t₂) ◎ (id⟷₁ ⊕ !⟷₁ ⟪++⟫) ◎ assocl₊ ◎ (⟪++⟫ ⊕ id⟷₁) ◎
+  ⟪++⟫
+
+_″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
+id⇔ ″ = id⟷₁
+seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
+bigplus⇔ c₁ c₂ ″ = !⟷₁ ⟪++⟫ ◎ (c₁ ″ ⊕ c₂ ″) ◎ ⟪++⟫
+bigswap⇔ {t₁} {t₂} ″ = {!!}
+
+-----------------------------------------------------------------------------
+-- Prove 2-equivalence between c and combNormalForm c
 
 -----------------------------------------------------------------------------
 

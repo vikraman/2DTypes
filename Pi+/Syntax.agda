@@ -27,6 +27,9 @@ data _⟷₁_  : U → U → Set where
 -- assocr₊ : {t₁ t₂ t₃ : U} → (t₁ + t₂) + t₃ ⟷₁ t₁ + (t₂ + t₃)
 -- assocr₊ = !⟷₁ assocl₊
 
+unite₊r : {t : U} → t + O ⟷₁ t
+unite₊r = swap₊ ◎ unite₊l
+
 !⟷₁ : {t₁ t₂ : U} → t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
 !⟷₁ unite₊l = uniti₊l
 !⟷₁ uniti₊l = unite₊l
