@@ -9,7 +9,7 @@ before_install:
 - mkdir -p ~/.local/bin
 - export PATH=${HOME}/.local/bin:${PATH}
 - travis_retry curl -L https://www.stackage.org/stack/linux-x86_64 | tar xz --wildcards --strip-components=1 -C ~/.local/bin '*/stack'
-- travis_wait 60 stack --no-terminal --install-ghc --resolver nightly install Agda-2.6.1.2
+- travis_wait 60 stack --no-terminal --install-ghc --resolver lts-16.27 install data-hash-0.2.0.1 equivalence-0.3.5 geniplate-mirror-0.7.7 STMonadTrans-0.4.4 Agda-2.6.1.2
 script:
 - agda --version
 - set -o pipefail
