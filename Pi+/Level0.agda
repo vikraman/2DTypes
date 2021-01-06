@@ -3,6 +3,7 @@
 module Pi+.Level0 where
 
 open import lib.Base
+open import lib.PathGroupoid
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma
 
@@ -85,23 +86,36 @@ combNormalForm {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) =
 
 -----------------------------------------------------------------------------
 -- Express special combinators as regular Pi combinators
+-- Want these to be sequences of assocs and swaps
+
+swapHead : {m : ℕ} → I + (I + ⟪ m ⟫) ⟷₁  I + (I + ⟪ m ⟫)
+swapHead = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+
+snoc : (m : ℕ) → ⟪ 1 +ℕ m ⟫ ⟷₁ ⟪ m +ℕ 1 ⟫
+snoc O = id⟷₁
+snoc (S n) = swapHead ◎ (id⟷₁ ⊕ snoc n)
+
+dneppa : (m n : ℕ) → ⟪ m +ℕ n ⟫ ⟷₁ ⟪ n +ℕ m ⟫
+dneppa O n = transport (λ X → ⟪ n ⟫ ⟷₁ X) (ap ⟪_⟫ (! (+-unit-r n))) id⟷₁
+dneppa (S m) n =
+  ⟪ S (m +ℕ n) ⟫
+  ⟷₁⟨ snoc (m +ℕ n) ⟩
+  ⟪ (m +ℕ n) +ℕ 1 ⟫
+  ⟷₁⟨ {!!} ⟩
+  ⟪ m +ℕ (n +ℕ 1) ⟫
+  ⟷₁⟨ dneppa m (n +ℕ 1) ⟩
+  ⟪ (n +ℕ 1) +ℕ m ⟫
+  ⟷₁⟨ {!!} ⟩
+  ⟪ n +ℕ S m ⟫ ⟷₁∎
+
 
 infix 100 _″
-
-snoc : (t : U) → canonU (I + t) ⟷₁ canonU (t + I)
-snoc O = id⟷₁
-snoc I = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
-snoc (t₁ + t₂) =
-  (id⟷₁ ⊕ !⟷₁ ⟪++⟫) ◎ assocl₊ ◎ (snoc t₁ ⊕ id⟷₁) ◎
-  (!⟷₁ ⟪++⟫ ⊕ id⟷₁) ◎ ((id⟷₁ ⊕ unite₊r) ⊕ id⟷₁) ◎ assocr₊ ◎
-  (id⟷₁ ⊕ snoc t₂) ◎ (id⟷₁ ⊕ !⟷₁ ⟪++⟫) ◎ assocl₊ ◎ (⟪++⟫ ⊕ id⟷₁) ◎
-  ⟪++⟫
 
 _″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
 id⇔ ″ = id⟷₁
 seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
 bigplus⇔ c₁ c₂ ″ = !⟷₁ ⟪++⟫ ◎ (c₁ ″ ⊕ c₂ ″) ◎ ⟪++⟫
-bigswap⇔ {t₁} {t₂} ″ = {!!}
+bigswap⇔ {t₁} {t₂} ″ = dneppa ∣ t₁ ∣ ∣ t₂ ∣
 
 -----------------------------------------------------------------------------
 -- Prove 2-equivalence between c and combNormalForm c

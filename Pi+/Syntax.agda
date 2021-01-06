@@ -27,9 +27,6 @@ data _⟷₁_  : U → U → Set where
 -- assocr₊ : {t₁ t₂ t₃ : U} → (t₁ + t₂) + t₃ ⟷₁ t₁ + (t₂ + t₃)
 -- assocr₊ = !⟷₁ assocl₊
 
-unite₊r : {t : U} → t + O ⟷₁ t
-unite₊r = swap₊ ◎ unite₊l
-
 !⟷₁ : {t₁ t₂ : U} → t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
 !⟷₁ unite₊l = uniti₊l
 !⟷₁ uniti₊l = unite₊l
@@ -101,8 +98,14 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
 
 -- Equational reasoning
 
-infixr 10 _⟷₂⟨_⟩_
-infix  15 _⟷₂∎
+infixr 10 _⟷₁⟨_⟩_ _⟷₂⟨_⟩_
+infix  15 _⟷₁∎ _⟷₂∎
+
+_⟷₁⟨_⟩_ : ∀ {t₂ t₃ : U} → (t₁ : U) → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
+_ ⟷₁⟨ c₁ ⟩ c₂ = c₁ ◎ c₂
+
+_⟷₁∎ : (t : U) → t ⟷₁ t
+_⟷₁∎ t = id⟷₁
 
 _⟷₂⟨_⟩_ : ∀ {t₁ t₂ : U} (c₁ : t₁ ⟷₁ t₂) {c₂ c₃ : t₁ ⟷₁ t₂} →
          (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
