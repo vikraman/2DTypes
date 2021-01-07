@@ -7,10 +7,12 @@ open import lib.PathGroupoid
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma
 
-open import Pi+.Syntax as Pi
-
 -----------------------------------------------------------------------------
--- Converting Pi types to normal form
+-- Pi extended with special id combinators
+
+data U : Set where
+  O I : U
+  _+_ : U → U → U
 
 ∣_∣ : U → ℕ
 ∣ O ∣ = 0
@@ -21,24 +23,131 @@ open import Pi+.Syntax as Pi
 ⟪ O ⟫ = O
 ⟪ S n ⟫ = I + ⟪ n ⟫
 
-∣⟪_⟫∣ : (n : ℕ) → ∣ ⟪ n ⟫ ∣ == n
-∣⟪ O ⟫∣ = idp
-∣⟪ S n ⟫∣ = ap S ∣⟪ n ⟫∣
-
 -- Canonical representation of sum types as lists I + (I + (I + ... O))
+
 canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
+
+∣⟪⟫∣ : (n : ℕ) → ∣ ⟪ n ⟫ ∣ == n
+∣⟪⟫∣ O = idp
+∣⟪⟫∣ (S n) = ap S (∣⟪⟫∣ n)
+
+canon-invol : (t : U) → canonU (canonU t) == canonU t
+canon-invol t = ap ⟪_⟫ (∣⟪⟫∣ ∣ t ∣)
 
 canonU-assoc : (t₁ t₂ t₃ : U) →
   canonU (t₁ + (t₂ + t₃)) == canonU ((t₁ + t₂) + t₃)
 canonU-assoc t₁ t₂ t₃ rewrite +-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣) = idp
+
+infixr 40 _+_
+infix 30 _⟷₁_
+infixr 50 _◎_ _⊕_
+
+data _⟷₁_  : U → U → Set where
+  unite₊l : {t : U} → O + t ⟷₁ t
+  uniti₊l : {t : U} → t ⟷₁ O + t
+  swap₊   : {t₁ t₂ : U} → t₁ + t₂ ⟷₁ t₂ + t₁
+  assocl₊ : {t₁ t₂ t₃ : U} → t₁ + (t₂ + t₃) ⟷₁ (t₁ + t₂) + t₃
+  assocr₊ : {t₁ t₂ t₃ : U} → (t₁ + t₂) + t₃ ⟷₁ t₁ + (t₂ + t₃)
+  id⟷₁    : {t : U} → t ⟷₁ t
+  idupto⟷₁ : {t₁ t₂ : U} → {canonU t₁ == canonU t₂} → t₁ ⟷₁ t₂
+  _◎_     : {t₁ t₂ t₃ : U} → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
+  _⊕_     : {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷₁ t₃) → (t₂ ⟷₁ t₄) → (t₁ + t₂ ⟷₁ t₃ + t₄)
+
+-- Definitional inverse
+
+!⟷₁ : {t₁ t₂ : U} → t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
+!⟷₁ unite₊l = uniti₊l
+!⟷₁ uniti₊l = unite₊l
+!⟷₁ swap₊ = swap₊
+!⟷₁ assocl₊ = assocr₊
+!⟷₁ assocr₊ = assocl₊
+!⟷₁ id⟷₁ = id⟷₁
+!⟷₁ (idupto⟷₁ {t₁} {t₂} {eq}) = idupto⟷₁ {t₂} {t₁} { ! eq }
+!⟷₁ (c₁ ◎ c₂) = !⟷₁ c₂ ◎ !⟷₁ c₁
+!⟷₁ (c₁ ⊕ c₂) = !⟷₁ c₁ ⊕ !⟷₁ c₂
+
+-- Equational reasoning
+
+infixr 10 _⟷₁⟨_⟩_
+infix  15 _⟷₁∎
+
+_⟷₁⟨_⟩_ : ∀ {t₂ t₃ : U} → (t₁ : U) → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
+_ ⟷₁⟨ c₁ ⟩ c₂ = c₁ ◎ c₂
+
+_⟷₁∎ : (t : U) → t ⟷₁ t
+_⟷₁∎ t = id⟷₁
+
+-- Level 2
+
+data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
+  assoc◎l : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷₁ t₂} {c₂ : t₂ ⟷₁ t₃} {c₃ : t₃ ⟷₁ t₄} →
+          (c₁ ◎ (c₂ ◎ c₃)) ⟷₂ ((c₁ ◎ c₂) ◎ c₃)
+  assoc◎r : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷₁ t₂} {c₂ : t₂ ⟷₁ t₃} {c₃ : t₃ ⟷₁ t₄} →
+          ((c₁ ◎ c₂) ◎ c₃) ⟷₂ (c₁ ◎ (c₂ ◎ c₃))
+  assocl₊l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+          {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} {c₃ : t₅ ⟷₁ t₆} →
+          ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊) ⟷₂ (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃))
+  assocl₊r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+          {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} {c₃ : t₅ ⟷₁ t₆} →
+          (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃)) ⟷₂ ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊)
+  assocr₊r : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+          {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} {c₃ : t₅ ⟷₁ t₆} →
+          (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊) ⟷₂ (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃)))
+  assocr₊l : {t₁ t₂ t₃ t₄ t₅ t₆ : U}
+          {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} {c₃ : t₅ ⟷₁ t₆} →
+           (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃))) ⟷₂ (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊)
+  idl◎l   : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → (id⟷₁ ◎ c) ⟷₂ c
+  idl◎r   : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → c ⟷₂ id⟷₁ ◎ c
+  idr◎l   : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → (c ◎ id⟷₁) ⟷₂ c
+  idr◎r   : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → c ⟷₂ (c ◎ id⟷₁)
+  linv◎l  : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → (c ◎ !⟷₁ c) ⟷₂ id⟷₁
+  linv◎r  : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → id⟷₁ ⟷₂ (c ◎ !⟷₁ c)
+  rinv◎l  : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → (!⟷₁ c ◎ c) ⟷₂ id⟷₁
+  rinv◎r  : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → id⟷₁ ⟷₂ (!⟷₁ c ◎ c)
+  unite₊l⟷₂l : {t₁ t₂ : U} {c₁ : O ⟷₁ O} {c₂ : t₁ ⟷₁ t₂} →
+          (unite₊l ◎ c₂) ⟷₂ ((c₁ ⊕ c₂) ◎ unite₊l)
+  unite₊l⟷₂r : {t₁ t₂ : U} {c₁ : O ⟷₁ O} {c₂ : t₁ ⟷₁ t₂} →
+          ((c₁ ⊕ c₂) ◎ unite₊l) ⟷₂ (unite₊l ◎ c₂)
+  uniti₊l⟷₂l : {t₁ t₂ : U} {c₁ : O ⟷₁ O} {c₂ : t₁ ⟷₁ t₂} →
+          (uniti₊l ◎ (c₁ ⊕ c₂)) ⟷₂ (c₂ ◎ uniti₊l)
+  uniti₊l⟷₂r : {t₁ t₂ : U} {c₁ : O ⟷₁ O} {c₂ : t₁ ⟷₁ t₂} →
+          (c₂ ◎ uniti₊l) ⟷₂ (uniti₊l ◎ (c₁ ⊕ c₂))
+  swapl₊⟷₂ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} →
+          (swap₊ ◎ (c₁ ⊕ c₂)) ⟷₂ ((c₂ ⊕ c₁) ◎ swap₊)
+  swapr₊⟷₂ : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} →
+          ((c₂ ⊕ c₁) ◎ swap₊) ⟷₂ (swap₊ ◎ (c₁ ⊕ c₂))
+  id⟷₂     : {t₁ t₂ : U} {c : t₁ ⟷₁ t₂} → c ⟷₂ c
+  trans⟷₂  : {t₁ t₂ : U} {c₁ c₂ c₃ : t₁ ⟷₁ t₂} →
+         (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
+  _⊡_  : {t₁ t₂ t₃ : U}
+         {c₁ : t₁ ⟷₁ t₂} {c₂ : t₂ ⟷₁ t₃} {c₃ : t₁ ⟷₁ t₂} {c₄ : t₂ ⟷₁ t₃} →
+         (c₁ ⟷₂ c₃) → (c₂ ⟷₂ c₄) → (c₁ ◎ c₂) ⟷₂ (c₃ ◎ c₄)
+  resp⊕⟷₂  : {t₁ t₂ t₃ t₄ : U}
+         {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} {c₃ : t₁ ⟷₁ t₂} {c₄ : t₃ ⟷₁ t₄} →
+         (c₁ ⟷₂ c₃) → (c₂ ⟷₂ c₄) → (c₁ ⊕ c₂) ⟷₂ (c₃ ⊕ c₄)
+  id⟷₁⊕id⟷₁⟷₂ : {t₁ t₂ : U} → (id⟷₁ {t₁} ⊕ id⟷₁ {t₂}) ⟷₂ id⟷₁
+  split⊕-id⟷₁ : {t₁ t₂ : U} → (id⟷₁ {t₁ + t₂}) ⟷₂ (id⟷₁ ⊕ id⟷₁)
+  hom⊕◎⟷₂ : {t₁ t₂ t₃ t₄ t₅ t₆ : U} {c₁ : t₅ ⟷₁ t₁} {c₂ : t₆ ⟷₁ t₂}
+        {c₃ : t₁ ⟷₁ t₃} {c₄ : t₂ ⟷₁ t₄} →
+        ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄)) ⟷₂ ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄))
+  hom◎⊕⟷₂ : {t₁ t₂ t₃ t₄ t₅ t₆ : U} {c₁ : t₅ ⟷₁ t₁} {c₂ : t₆ ⟷₁ t₂}
+        {c₃ : t₁ ⟷₁ t₃} {c₄ : t₂ ⟷₁ t₄} →
+         ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄)) ⟷₂ ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄))
+  triangle⊕l : {t₁ t₂ : U} →
+    unite₊l ⟷₂ assocl₊ {O} {t₁} {t₂} ◎ (unite₊l ⊕ id⟷₁)
+  triangle⊕r : {t₁ t₂ : U} →
+    assocl₊ {O} {t₁} {t₂} ◎ (unite₊l ⊕ id⟷₁) ⟷₂ unite₊l
+
+-----------------------------------------------------------------------------
+-- Converting Pi types to normal form
 
 -- Append two lists of the form I + (I + ... O)
 ⟪++⟫ : {m n : ℕ} → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
 ⟪++⟫ {O} = unite₊l
 ⟪++⟫ {S m} = assocr₊ ◎ (id⟷₁ ⊕ ⟪++⟫)
 
--- Flatten a sum type (tree) to a list
+-- Flatten a Pi type (a tree) to a list
 normC : (t : U) → t ⟷₁ canonU t
 normC O = id⟷₁
 normC I  = uniti₊l ◎ swap₊
@@ -48,7 +157,7 @@ normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
 -- Define special combinators for canonical forms
 
 data _⇔_ : (t₁ t₂ : U) → Set where
-  id⇔ : {t : U} → canonU t ⇔ canonU t
+  id⇔ : {t₁ t₂ : U} → (canonU t₁ == canonU t₂) → canonU t₁ ⇔ canonU t₂
   seq⇔ : {t₁ t₂ t₃ : U} → (canonU t₁ ⇔ canonU t₂) → (canonU t₂ ⇔ canonU t₃) →
          (canonU t₁ ⇔ canonU t₃)
   bigswap⇔ : {t₁ t₂ : U} → canonU (t₁ + t₂) ⇔ canonU (t₂ + t₁)
@@ -66,19 +175,17 @@ data _⇔_ : (t₁ t₂ : U) → Set where
   -- we have canonU (t₁ + t₂) = (A + (B + (C + (D + (E + 0)))))
   -- the result of bigplus should be:
   -- (X + (Y + (V + (W + (Z + 0)))))
-  -- below we express bigplus using a sequence of swaps
 
 combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
-combNormalForm {t} id⟷₁ = id⇔ {t}
-combNormalForm {O + t} unite₊l = id⇔ {t}
-combNormalForm {t} uniti₊l = id⇔ {t}
+combNormalForm {t} id⟷₁ = id⇔ {t} {t} idp
+combNormalForm (idupto⟷₁ {t₁} {t₂} {eq}) = id⇔ {t₁} {t₂} eq
+combNormalForm {O + t} unite₊l = id⇔ {t} {t} idp
+combNormalForm {t} uniti₊l = id⇔ {t} {t} idp
 combNormalForm {t₁ + t₂} swap₊ = bigswap⇔ {t₁} {t₂}
 combNormalForm {t₁ + (t₂ + t₃)} assocl₊ =
-  transport (λ X → ⟪ ∣ t₁ ∣ +ℕ ∣ t₂ + t₃ ∣ ⟫ ⇔ X)
-    (canonU-assoc t₁ t₂ t₃) (id⇔ {t₁ + (t₂ + t₃)})
+  id⇔ {t₁ + (t₂ + t₃)} {(t₁ + t₂) + t₃} (canonU-assoc t₁ t₂ t₃)
 combNormalForm {(t₁ + t₂) + t₃} assocr₊ =
-  transport (λ X → X ⇔ ⟪ ∣ t₁ ∣ +ℕ ∣ t₂ + t₃ ∣ ⟫)
-    (canonU-assoc t₁ t₂ t₃) (id⇔ {t₁ + (t₂ + t₃)})
+  id⇔ {(t₁ + t₂) + t₃} {t₁ + (t₂ + t₃)} (! (canonU-assoc t₁ t₂ t₃))
 combNormalForm (_◎_ {t₁} {t₂} {t₃} c₁ c₂) =
   seq⇔ {t₁} {t₂} {t₃} (combNormalForm c₁) (combNormalForm c₂)
 combNormalForm {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) =
@@ -96,22 +203,22 @@ snoc O = id⟷₁
 snoc (S n) = swapHead ◎ (id⟷₁ ⊕ snoc n)
 
 dneppa : (m n : ℕ) → ⟪ m +ℕ n ⟫ ⟷₁ ⟪ n +ℕ m ⟫
-dneppa O n = transport (λ X → ⟪ n ⟫ ⟷₁ X) (ap ⟪_⟫ (! (+-unit-r n))) id⟷₁
+dneppa O n = idupto⟷₁ {_} {_} {ap (λ X → canonU ⟪ X ⟫) (! (+-unit-r n))}
 dneppa (S m) n =
   ⟪ S (m +ℕ n) ⟫
   ⟷₁⟨ snoc (m +ℕ n) ⟩
   ⟪ (m +ℕ n) +ℕ 1 ⟫
-  ⟷₁⟨ transport (λ X → ⟪ (m +ℕ n) +ℕ 1 ⟫ ⟷₁ X) (ap ⟪_⟫ (+-assoc m n 1)) id⟷₁ ⟩
+  ⟷₁⟨ idupto⟷₁ {_} {_} {ap (λ X → canonU ⟪ X ⟫) (+-assoc m n 1)} ⟩
   ⟪ m +ℕ (n +ℕ 1) ⟫
   ⟷₁⟨ dneppa m (n +ℕ 1) ⟩
   ⟪ (n +ℕ 1) +ℕ m ⟫
-  ⟷₁⟨ transport (λ X → ⟪ (n +ℕ 1) +ℕ m ⟫ ⟷₁ X) (ap ⟪_⟫ (+-assoc n 1 m)) id⟷₁ ⟩
+  ⟷₁⟨ idupto⟷₁ {_} {_} {ap (λ X → canonU ⟪ X ⟫) (+-assoc n 1 m)} ⟩
   ⟪ n +ℕ S m ⟫ ⟷₁∎
 
 infix 100 _″
 
 _″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
-id⇔ ″ = id⟷₁
+(id⇔ eq) ″ = idupto⟷₁ {_} {_} {ap canonU eq}
 seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
 bigplus⇔ c₁ c₂ ″ = !⟷₁ ⟪++⟫ ◎ (c₁ ″ ⊕ c₂ ″) ◎ ⟪++⟫
 bigswap⇔ {t₁} {t₂} ″ = dneppa ∣ t₁ ∣ ∣ t₂ ∣
@@ -140,6 +247,7 @@ mirrorNF : canonU tree ⟷₁ canonU mirrorTree
 mirrorNF = (combNormalForm mirror) ″
 
 {--
+
 (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
   id⟷₁ ⊕
   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
@@ -149,10 +257,7 @@ mirrorNF = (combNormalForm mirror) ″
   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
   id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
  ◎
- coe
- (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 2 3 1)))
- id⟷₁
- ◎
+ idupto⟷₁ ◎
  (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
    id⟷₁ ⊕
    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
@@ -162,10 +267,7 @@ mirrorNF = (combNormalForm mirror) ″
    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
   ◎
-  coe
-  (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 4 1)))
-  id⟷₁
-  ◎
+  idupto⟷₁ ◎
   (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
     id⟷₁ ⊕
     (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
@@ -174,81 +276,46 @@ mirrorNF = (combNormalForm mirror) ″
     id⟷₁ ⊕
     (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
     id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-   ◎
-   coe
-   (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 0 5 1)))
-   id⟷₁
-   ◎
-   coe
-   (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (! (+-unit-r 6))))
-   id⟷₁
-   ◎
-   coe
-   (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 5 1 0)))
-   id⟷₁
-   ◎ id⟷₁)
-  ◎
-  coe
-  (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 4 1 1)))
-  id⟷₁
-  ◎ id⟷₁)
- ◎
- coe
- (ap (_⟷₁_ (I + I + I + I + I + I + O)) (ap ⟪_⟫ (+-assoc 3 1 2)))
- id⟷₁
- ◎ id⟷₁)
+   ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
+  ◎ idupto⟷₁ ◎ id⟷₁)
+ ◎ idupto⟷₁ ◎ id⟷₁)
 ◎
 (((id⟷₁ ⊕ (id⟷₁ ⊕ (id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ assocl₊) ◎ assocl₊)
  ◎
  ((((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
     id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
    ◎
-   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
+   idupto⟷₁ ◎
    (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
      id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-    ◎
-    coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 0 2 1))) id⟷₁ ◎
-    coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (! (+-unit-r 3)))) id⟷₁ ◎
-    coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 2 1 0))) id⟷₁ ◎
-    id⟷₁)
-   ◎
-   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
-   id⟷₁)
+    ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
+   ◎ idupto⟷₁ ◎ id⟷₁)
   ⊕
   ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
   ◎
-  coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
+  idupto⟷₁ ◎
   (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
     id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-   ◎
-   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 0 2 1))) id⟷₁ ◎
-   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (! (+-unit-r 3)))) id⟷₁ ◎
-   coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 2 1 0))) id⟷₁ ◎
-   id⟷₁)
-  ◎
-  coe (ap (_⟷₁_ (I + I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 1))) id⟷₁ ◎
-  id⟷₁)
+   ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
+  ◎ idupto⟷₁ ◎ id⟷₁)
  ◎ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
 ◎
 ((id⟷₁ ⊕ (id⟷₁ ⊕ (id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ assocl₊) ◎ assocl₊)
 ◎
 ((((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
-  (id⟷₁ ⊕
+  (idupto⟷₁ ⊕
    ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁) ◎
-   coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 0 1 1))) id⟷₁ ◎
-   coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (! (+-unit-r 2)))) id⟷₁ ◎
-   coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 0))) id⟷₁ ◎ id⟷₁)
+   idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
   ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
  ⊕
  ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
- (id⟷₁ ⊕
+ (idupto⟷₁ ⊕
   ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁) ◎
-  coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 0 1 1))) id⟷₁ ◎
-  coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (! (+-unit-r 2)))) id⟷₁ ◎
-  coe (ap (_⟷₁_ (I + I + O)) (ap ⟪_⟫ (+-assoc 1 1 0))) id⟷₁ ◎ id⟷₁)
+  idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
  ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
 ◎ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ unite₊l
+
 --}
 
 -----------------------------------------------------------------------------
@@ -260,7 +327,9 @@ mirrorNF = (combNormalForm mirror) ″
 
 OLD STUFF. KEEP FOR NOW
 
-swap-big : (t₁ t₂ : U) → canonU (t₁ + t₂) ⟷₁ canonU (t₂ + t₁)
+
+
+<swap-big : (t₁ t₂ : U) → canonU (t₁ + t₂) ⟷₁ canonU (t₂ + t₁)
 swap-big O t₂ = id⟷₁
 swap-big I O = id⟷₁
 swap-big I I = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
