@@ -133,10 +133,17 @@ postulate
     ≤-down-+ : {p q r : ℕ} -> (p + r ≤ q) -> (p ≤ q)
     ≡-down-+ : {p q r : ℕ} -> (r + p == r + q) -> (p == q)
     ≡-down-r-+ : {p q r : ℕ} -> (p + r == q + r) -> (p == q)
-    ∸-anti-≤ : {p q r : ℕ} -> (q ≤ p) -> (p ≤ r) -> (r ∸ p) ≤ (r ∸ q)
     ≤-≡ : {n k : ℕ} -> (n ≤ k) -> (k ≤ n) -> (n == k)
     plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
 
+zero-∸ : (n : ℕ) -> (0 ∸ n == 0)
+zero-∸ 0 = idp
+zero-∸ (S n) = idp
+
+∸-anti-≤ : {p q r : ℕ} -> (q ≤ p) -> (r ∸ p) ≤ (r ∸ q)
+∸-anti-≤ {p} {.0} {r} z≤n = ∸-implies-≤ {r ∸ p} {r} {p} idp
+∸-anti-≤ {S p} {S q} {O} (s≤s qp) = z≤n
+∸-anti-≤ {S p} {S q} {S r} (s≤s qp) = ∸-anti-≤ {p} {q} {r} qp
 
 ≰⇒> : {m n : ℕ} -> ¬ (m ≤ n) -> n < m
 ≰⇒> {O} {n} p = ⊥-elim (p z≤n)
@@ -144,10 +151,6 @@ postulate
 ≰⇒> {S m} {S n} p = 
   let rec = ≰⇒> {m} {n} (λ x → p (s≤s x))
   in  s≤s rec
-
-zero-∸ : (n : ℕ) -> (0 ∸ n == 0)
-zero-∸ 0 = idp
-zero-∸ (S n) = idp
 
 ∸-∸-+ : {p q r : ℕ} -> (r ≤ q) -> (q ≤ p + r) -> p ∸ (q ∸ r) == (p + r) ∸ q
 ∸-∸-+ {p} {0} {0} rq qpr = +-comm 0 p
