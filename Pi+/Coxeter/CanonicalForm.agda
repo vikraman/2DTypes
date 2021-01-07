@@ -107,7 +107,7 @@ canonical-proper-append-smaller {n} {nf} {r} {pn} {pr} {cl} x clf defclf defx =
       lemma = ++-↓ (nf ∸ r) r
   in  ≤-up2 r<nf , 
     ap (λ e -> immersionProper cl ++ e) (head+tail ((plus-minus {S r} {nf} r<nf) ∙ (! (plus-minus {r} {nf} (≤-down r<nf)))) (! (++-↓-S (nf ∸ r) r x defx ∙ 
-      transport {!   !} x=nf-Sr {!   !}))) ∙ 
+      transport (λ e -> r + e :: e ↓ r == r + nf ∸ S r :: nf ∸ S r ↓ r ) x=nf-Sr idp))) ∙ 
     ! (++-assoc (immersionProper cl) (r + nf ∸ r :: nf ∸ r ↓ r) [ x ]) ∙ 
     ap (λ e -> immersionProper e ++ [ x ]) (! defclf)
 

@@ -219,8 +219,7 @@ final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {S r₂} x₂) m mf defm (
 final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {r₂} x₂) m mf defm (long≅ {n₁} k l r .m .mf defm₁ defmf) 
   with (lemma-l++1++r (S (k + n₁)) (immersion (CanS cl {r₁} x₁)) (S (S n) ∸ r₂ ↓ r₂) (l ++ S (k + n₁) :: k + n₁ :: (n₁ ↓ k)) r ((! defm) ∙ defm₁ ∙ ! (++-assoc l _ _)))
 ... | inl ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = final≅-Lehmer {S n} (CanS cl {r₁} x₁) _ _ idp (long≅ {n₁} k l fst₁ _ _ (fst₃ ∙ (++-assoc l _ _)) idp)
-... | inr ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = {!   !}
-
+final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {r₂} x₂) m mf defm (long≅ {n₁} k l r .m .mf defm₁ defmf) | inr ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = {!   !}
 
 ≡-↓ : (n k1 k2 : ℕ) -> (k1 ≤ n) -> (k2 ≤ n) -> ((n ↓ k1) == (n ↓ k2)) -> (k1 == k2)
 ≡-↓ n O O pk1 pk2 r = idp
