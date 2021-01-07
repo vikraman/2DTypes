@@ -87,6 +87,16 @@ lemma-l++2++r a b (x :: l1) r1 (x₁ :: l2) r2 p with lemma-l++2++r a b l1 r1 l2
 ... | R2 ((fst , snd) , fst₁ , fst₂ , snd₁) = R2 (((x₁ :: fst) , snd) , ((cong (λ e -> x₁ :: e) fst₁) , ((head+tail (cut-tail p) fst₂) , snd₁)))
 ... | R3 (fst , snd) = R3 (head+tail (cut-tail p) fst , snd)
 
+-- a technical lemma about splitting lists
+lemma-l++1++r : (a : ℕ) -> (l1 r1 l2 r2 : List) -> (l1 ++ r1 == l2 ++ a :: r2)
+                -> (Σ (List × List) (λ (rl2 , rr2) -> (r2 == rl2 ++ rr2) × (l1 == l2 ++ a :: rl2) × (r1 == rr2))) ⊔ -- the case when a is in left
+                   (Σ (List × List) (λ (ll2 , lr2) -> (l2 == ll2 ++ lr2) × (l1 == ll2) × (r1 == lr2 ++ a :: r2))) -- the case when a is in right
+lemma-l++1++r a nil r1 l2 r2 p = inr ((nil , l2) , (idp , (idp , p)))
+lemma-l++1++r a (x :: l1) r1 nil r2 p = inl ((l1 , r1) , (! (cut-head p) , (head+tail (cut-tail p) idp , idp)))
+lemma-l++1++r a (x :: l1) r1 (x₁ :: l2) r2 p with lemma-l++1++r a l1 r1 l2 r2 (cut-head p)
+... | inl ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = inl ((_ , _) , (fst₂ , (head+tail (cut-tail p) fst₃ , snd₂)))
+... | inr ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = inr ((_ , _) , (head+tail (cut-tail (! p)) fst₂ , (head+tail idp fst₃ , snd₂)))
+
 last-↓ : (n k o : ℕ) -> (l : List) -> (n ↓ k == l ++ [ o ]) -> (n == o)
 last-↓ n (S O) o nil p = cut-tail p
 last-↓ n (S k) o (x :: l) p = last-↓ n k o l (cut-head p)
@@ -146,17 +156,70 @@ final≅-↓-↓ n k n1 k1 m pkn (long≅ k₁ l r .((n ↓ k) ++ (n1 ↓ k1)) .
 ++-assoc-≡ : {l r1 r2 m : List} -> m == ((l ++ r1) ++ r2) -> m == (l ++ (r1 ++ r2))
 ++-assoc-≡ {l} {r1} {r2} {m} p = ≡-trans p (++-assoc l r1 r2)
 
+>>-++ : {n : ℕ} -> {l1 l2 : List} -> n >> l1 -> n >> l2 -> n >> (l1 ++ l2)
+>>-++ {n} {nil} {l2} ll1 ll2 = ll2
+>>-++ {n} {x :: l1} {l2} (.x :⟨ p ⟩: ll1) ll2 = x :⟨ p ⟩: (>>-++ ll1 ll2)
+
+>>-↓ : (n k r : ℕ) -> (r + k ≤ n) -> (n >> (k ↓ r))
+>>-↓ n k 0 p = nil
+>>-↓ n k (S r) p = (r + k) :⟨ p ⟩: (>>-↓ n k r (≤-down p))
+
+open ≤-Reasoning
+
+>>-⊥ : (n k : ℕ) -> (n ≤ k) -> (l l1 r1 : List) -> (n >> l) -> (l == l1 ++ k :: r1) -> ⊥
+>>-⊥ n k pnk .(k₁ :: _) nil r1 (k₁ :⟨ x ⟩: w) defl = 
+  let lemma =
+            ≤begin
+              S n
+            ≤⟨ ≤-up2 pnk ⟩
+              S k
+            ≡⟨ ap S (cut-tail (! defl)) ⟩
+              S k₁
+            ≤⟨ x ⟩
+              n
+            ≤∎
+  in 1+n≰n lemma
+>>-⊥ n k pnk (x₁ :: l) (x :: l1) r1 (.x₁ :⟨ x₂ ⟩: w) defl = >>-⊥ n k pnk l l1 r1 w (cut-head defl)
+
+>>-S : {n : ℕ} -> {l : List} -> (n >> l) -> ((S n) >> l)
+>>-S  nil = nil
+>>-S  (k :⟨ p ⟩: l') = k :⟨ ≤-up p ⟩: >>-S l'
+
+immersion->> : {n : ℕ} -> (cl : Lehmer n) -> n >> immersion cl
+immersion->> {.0} CanZ = nil
+immersion->> {S n} (CanS {n} cl {r} rn) =
+  let p = immersion->> {n} cl
+  in  >>-++ (>>-S p) (>>-↓ (S n) (S n ∸ r) r (≤-reflexive (plus-minus rn)))
+
+{-# NON_TERMINATING #-}
 final≅-Lehmer : {n : ℕ} -> (cl : Lehmer n) -> (m mf : List) -> (defm : m == (immersion {n} cl)) -> m ≅ mf -> ⊥
-final≅-Lehmer {0} CanZ .nil mf idp p = empty-reduction p
-final≅-Lehmer {S 0} (CanS CanZ {0} x) .nil mf idp p = empty-reduction p
-final≅-Lehmer {S 0} (CanS CanZ {S 0} (s≤s x)) .(0 :: nil) mf idp p = one-reduction p
-final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) rewrite (++-assoc-≡ {l = immersion cl} defm) with (lemma-l++2++r n₁ n₁ (immersion cl) _ l r defm₁)
-final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) | R1 x₂ = {!   !}
-final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) | R2 x₂ = {!   !}
-final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) | R3 x₂ = {!   !}
-final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (swap≅ x₂ l r .m .mf defm₁ defmf) rewrite (++-assoc-≡ {l = immersion cl} defm) with (lemma-l++2++r _ _ (immersion cl) _ l r defm₁)
-... | p = {!   !}
-final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (long≅ k l r .m .mf defm₁ defmf) = {!   !}
+final≅-Lehmer {O} CanZ nil mf defm p = empty-reduction p
+final≅-Lehmer {S O} (CanS CanZ {O} x) nil mf defm p = empty-reduction p
+final≅-Lehmer {S O} (CanS CanZ {S .0} (s≤s z≤n)) (x :: nil) mf defm p = one-reduction p
+final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {r₂} x₂) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) with (lemma-l++2++r n₁ n₁ ((immersion cl ++ S n ∸ r₁ ↓ r₁)) (S (S n) ∸ r₂ ↓ r₂) l r ((! defm) ∙ defm₁))
+... | R1 ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = final≅-Lehmer {S n} (CanS cl {r₁} x₁) _ _ idp (cancel≅ _ _ _ _ fst₃ idp)
+... | R2 ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = final≅-↓ (S (S n) ∸ r₂) r₂ _ (cancel≅ _ _ _ _ snd₂ idp)
+final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {S r₂} x₂) m mf defm (cancel≅ {n₁} l r .m .mf defm₁ defmf) | R3 (fst₁ , snd₁) = 
+  >>-⊥ (S n) n₁ (≤-reflexive (! (plus-minus (≤-down2 x₂)) ∙ (cut-tail snd₁))) (immersion (CanS cl {r₁} x₁)) l nil (immersion->> (CanS cl {r₁} x₁)) fst₁
+final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {r₂} x₂) m mf defm (swap≅ {n₁} {k₁} ps l r .m .mf defm₁ defmf) with (lemma-l++2++r n₁ k₁ ((immersion cl ++ S n ∸ r₁ ↓ r₁)) (S (S n) ∸ r₂ ↓ r₂) l r ((! defm) ∙ defm₁))
+... | R1 ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = final≅-Lehmer {S n} (CanS cl {r₁} x₁) _ _ idp (swap≅ ps _ _ _ _ fst₃ idp)
+... | R2 ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = final≅-↓ (S (S n) ∸ r₂) r₂ _ (swap≅ ps _ _ _ _ snd₂ idp)
+final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {S r₂} x₂) m mf defm (swap≅ {n₁} {k₁} ps l r .m .mf defm₁ defmf) | R3 (fst₁ , snd₁) =
+  let lemma = 
+          ≤begin
+            S (S (S n))
+          ≡⟨ ! (ap (λ e -> S (S e)) (plus-minus (≤-down2 x₂))) ⟩ 
+            S (S (r₂ + S n ∸ r₂))
+          ≡⟨ ap (λ e -> S (S e)) (cut-tail snd₁) ⟩
+            S (S k₁)
+          ≤⟨ ps ⟩
+            n₁
+          ≤∎
+  in  >>-⊥ (S n) n₁ (≤-down (≤-down lemma)) (immersion (CanS cl {r₁} x₁)) l nil (immersion->> (CanS cl {r₁} x₁)) fst₁
+final≅-Lehmer {S (S n)} (CanS (CanS cl {r₁} x₁) {r₂} x₂) m mf defm (long≅ {n₁} k l r .m .mf defm₁ defmf) 
+  with (lemma-l++1++r (S (k + n₁)) (immersion (CanS cl {r₁} x₁)) (S (S n) ∸ r₂ ↓ r₂) (l ++ S (k + n₁) :: k + n₁ :: (n₁ ↓ k)) r ((! defm) ∙ defm₁ ∙ ! (++-assoc l _ _)))
+... | inl ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = final≅-Lehmer {S n} (CanS cl {r₁} x₁) _ _ idp (long≅ {n₁} k l fst₁ _ _ (fst₃ ∙ (++-assoc l _ _)) idp)
+... | inr ((fst₁ , snd₁) , fst₂ , fst₃ , snd₂) = {!   !}
 
 
 ≡-↓ : (n k1 k2 : ℕ) -> (k1 ≤ n) -> (k2 ≤ n) -> ((n ↓ k1) == (n ↓ k2)) -> (k1 == k2)
@@ -181,24 +244,6 @@ final≅-Lehmer {S (S n)} (CanS (CanS cl x₁) x) m mf defm (long≅ k l r .m .m
   let rec-k , rec-l = ≡-++↓ m1 m2 n k1 k2 ml1 ml2 pk1 pk2 (cut-head p)
       heads = cut-tail p
   in  rec-k , head+tail heads rec-l
-
->>-++ : {n : ℕ} -> {l1 l2 : List} -> n >> l1 -> n >> l2 -> n >> (l1 ++ l2)
->>-++ {n} {nil} {l2} ll1 ll2 = ll2
->>-++ {n} {x :: l1} {l2} (.x :⟨ p ⟩: ll1) ll2 = x :⟨ p ⟩: (>>-++ ll1 ll2)
-
->>-↓ : (n k r : ℕ) -> (r + k ≤ n) -> (n >> (k ↓ r))
->>-↓ n k 0 p = nil
->>-↓ n k (S r) p = (r + k) :⟨ p ⟩: (>>-↓ n k r (≤-down p))
-
->>-S : {n : ℕ} -> {l : List} -> (n >> l) -> ((S n) >> l)
->>-S  nil = nil
->>-S  (k :⟨ p ⟩: l') = k :⟨ ≤-up p ⟩: >>-S l'
-
-immersion->> : {n : ℕ} -> (cl : Lehmer n) -> n >> immersion cl
-immersion->> {.0} CanZ = nil
-immersion->> {S n} (CanS {n} cl {r} rn) =
-  let p = immersion->> {n} cl
-  in  >>-++ (>>-S p) (>>-↓ (S n) (S n ∸ r) r (≤-reflexive (plus-minus rn)))
 
 ≡immersion : {n : ℕ} -> (cl1 cl2 : Lehmer n) -> (immersion {n} cl1 == immersion {n} cl2) -> cl1 == cl2
 ≡immersion CanZ CanZ idp = idp
