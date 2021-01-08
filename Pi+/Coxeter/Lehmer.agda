@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --rewriting --allow-unsolved-metas --termination-depth=2 #-}
 
 module Pi+.Coxeter.Lehmer where
 
@@ -279,7 +279,6 @@ immersion-long-lemma {(S n)} (CanS cl {S rl} x) k m l (x₁ :: r) dfm =
       lemma5 = ++-assoc l (S (k + m) :: k + m :: m ↓ k) (S (k + m) :: rev r)
   in  immersion-long-lemma (CanS cl {rl} (≤-down x)) k m l r ((ap (λ e -> immersion cl ++ e ↓ rl) (∸-up x) ∙ ! lemma4) ∙ lemma5)
 
-{-# NON_TERMINATING #-}
 final≅-Lehmer : {n : ℕ} -> (cl : Lehmer n) -> (m mf : List) -> (defm : m == (immersion {n} cl)) -> m ≅ mf -> ⊥
 final≅-Lehmer {O} CanZ nil mf defm p = empty-reduction p
 final≅-Lehmer {S O} (CanS CanZ {O} x) nil mf defm p = empty-reduction p

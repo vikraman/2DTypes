@@ -51,7 +51,6 @@ unproperize {S nf} (CanS {n} {.(S nf)} x cl {r} x₁) =
       rec-l , rec-p = canonical-lift nf (≤-down2 x) nfr
   in  CanS rec-l x₁ , ap (λ e -> e ++ (r + nf ∸ r :: nf ∸ r ↓ r)) (clfr ∙ ! rec-p)
 
-
 canonical-proper-append : {n : ℕ} -> (cl : LehmerProper n) -> (x : ℕ) -> (n ≤ x) -> Σ _ (λ clx -> immersionProper {S x} clx == immersionProper {n} cl ++ [ x ])
 canonical-proper-append cl x px with unproperize cl
 ... | upl , upl-p with canonical-append upl x px
@@ -130,14 +129,6 @@ abs-list : {l : List} -> {n : ℕ} -> {r : List} -> (nil == (l ++ (n :: r))) -> 
 abs-list {nil} {n} {r} ()
 abs-list {x :: l} {n} {r} ()
 
-cut-last : {l1 l2 : List} -> {x1 x2 : ℕ} -> (l1 ++ [ x1 ] == l2 ++ [ x2 ]) -> (l1 == l2)
-cut-last {nil} {nil} p = idp
-cut-last {nil} {x :: nil} ()
-cut-last {nil} {x :: x₁ :: l2} ()
-cut-last {x :: nil} {nil} ()
-cut-last {x :: x₁ :: l1} {nil} ()
-cut-last {x :: l1} {x₁ :: l2} p = head+tail (cut-tail p) (cut-last (cut-head p))
-
 cut-last-Lehmer : {n : ℕ} -> {l : List} -> (x : ℕ) -> (cl : LehmerProper n) -> (immersionProper cl == l ++ [ x ]) -> Σ _ (λ nf -> Σ _ (λ clf -> immersionProper {nf} clf == l))
 cut-last-Lehmer {0} {l} x CanZ pp = ⊥-elim (abs-list pp)
 cut-last-Lehmer {S n} {l} x (CanS pn cl {0} pr) pp = _ , (cl , cut-last pp)
@@ -178,11 +169,13 @@ is-canonical? (x :: m) with is-canonical? m
 ... | no qq = no λ {
   (_ , CanZ , pp) → abs-list pp ;
   (_ , CanS (s≤s x) CanZ {0} (s≤s z≤n) , ppp) →
-    let m-empty = cut-last {nil} ppp
+    let m-empty = cut-last {_} {_} {nil} ppp
     in  abs-list (≡-trans m-empty (≡-sym pp)) ;
-  (_ , CanS {0} {S (S n₁)} (s≤s x₁) CanZ {S m₁} (s≤s (s≤s x₂)), snd₁) -> {!   !} ;
-  (_ , CanS (s≤s x₁) (CanS x₂ fst₁ x₃) {O} x₄ , snd₁) -> {!   !} ;
-  (_ , CanS (s≤s x₁) (CanS x₂ fst₁ x₃) {S r} x₄ , snd₁) -> {!   !}
+  (S _ , CanS (s≤s x₁) (CanS x₂ fst₁ x₃) (s≤s z≤n) , snd₁) -> ? ;
+  (S (S _) , CanS (s≤s x₁) fst₁ (s≤s (s≤s x₂)) , snd₁) -> ?
+  -- (_ , CanS {0} {S (S n₁)} (s≤s x₁) CanZ {S m₁} (s≤s (s≤s x₂)), snd₁) -> {!   !} ;
+  -- (_ , CanS (s≤s x₁) (CanS x₂ fst₁ x₃) {O} x₄ , snd₁) -> {!   !} ;
+  -- (_ , CanS (s≤s x₁) (CanS x₂ fst₁ x₃) {S r} x₄ , snd₁) -> {!   !}
   }
 
 canonical-proper-NF : {n : ℕ} -> (cl : LehmerProper n) -> (Σ _ (λ m -> immersionProper {n} cl ≅ m)) -> ⊥
