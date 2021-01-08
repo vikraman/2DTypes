@@ -41,7 +41,14 @@ normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
 -----------------------------------------------------------------------------
 -- Example
 
-postulate A B C D E F : U
+-- postulate A B C D E F : U
+A B C D E F : U
+A = I
+B = I
+C = I
+D = I
+E = I
+F = I
 
 tree eert : U
 tree = ((A + B) + C) + ((D + E) + F)
@@ -86,6 +93,54 @@ combNF id⟷₁ = id⇔
 combNF (c₁ ◎ c₂) = seq⇔ (combNF c₁) (combNF c₂)
 combNF (c₁ ⊕ c₂) = append⇔ (combNF c₁) (combNF c₂)
 
+-----------------------------------------------------------------------------
+-- Example ctd
+
+mirror : tree ⟷₁ eert
+mirror = swap₊ ◎ (swap₊ ⊕ swap₊) ◎ ((id⟷₁ ⊕ swap₊) ⊕ (id⟷₁ ⊕ swap₊))
+
+mirrorNF : canonU tree ⇔ canonU eert
+mirrorNF = combNF mirror
+
+{--
+Keeping A..F as postulates
+
+seq⇔
+  (bigSwap⇔ {∣ A ∣ +ℕ ∣ B ∣ +ℕ ∣ C ∣} {∣ D ∣ +ℕ ∣ E ∣ +ℕ ∣ F ∣})
+  (seq⇔
+    (append⇔
+      (bigSwap⇔ {∣ D ∣ +ℕ ∣ E ∣} {∣ F ∣})
+      (bigSwap⇔ {∣ A ∣ +ℕ ∣ B ∣} {∣ C ∣}))
+    (append⇔
+      (append⇔ id⇔
+        (bigSwap⇔ {∣ D ∣} {∣ E ∣}))
+      (append⇔ id⇔
+        (bigSwap⇔ {∣ A ∣} {∣ B ∣}))))
+
+A..F are all set to I
+
+seq⇔
+(seq⇔ snocN⇔
+ (seq⇔ assocr⇔
+  (seq⇔
+   (seq⇔ snocN⇔
+    (seq⇔ assocr⇔
+     (seq⇔ (seq⇔ snocN⇔ (seq⇔ assocr⇔ (seq⇔ unit⇔ assocr⇔))) assocr⇔)))
+   assocr⇔)))
+(seq⇔
+ (append⇔
+  (seq⇔ snocN⇔
+   (seq⇔ assocr⇔
+    (seq⇔ (seq⇔ snocN⇔ (seq⇔ assocr⇔ (seq⇔ unit⇔ assocr⇔))) assocr⇔)))
+  (seq⇔ snocN⇔
+   (seq⇔ assocr⇔
+    (seq⇔ (seq⇔ snocN⇔ (seq⇔ assocr⇔ (seq⇔ unit⇔ assocr⇔))) assocr⇔))))
+ (append⇔
+  (append⇔ id⇔ (seq⇔ snocN⇔ (seq⇔ assocr⇔ (seq⇔ unit⇔ assocr⇔))))
+  (append⇔ id⇔ (seq⇔ snocN⇔ (seq⇔ assocr⇔ (seq⇔ unit⇔ assocr⇔))))))
+--}
+
+-----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 
 {--
