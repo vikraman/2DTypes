@@ -32,6 +32,10 @@ canonU t = ⟪ ∣ t ∣ ⟫
 ∣⟪⟫∣ O = idp
 ∣⟪⟫∣ (S n) = ap S (∣⟪⟫∣ n)
 
+canon-n : (m : ℕ) → canonU ⟪ m ⟫ == ⟪ m ⟫
+canon-n O = idp
+canon-n (S m) = ap (λ X → ⟪ S X ⟫) (∣⟪⟫∣ m)
+
 canon-invol : (t : U) → canonU (canonU t) == canonU t
 canon-invol t = ap ⟪_⟫ (∣⟪⟫∣ ∣ t ∣)
 
@@ -50,9 +54,10 @@ data _⟷₁_  : U → U → Set where
   assocl₊ : {t₁ t₂ t₃ : U} → t₁ + (t₂ + t₃) ⟷₁ (t₁ + t₂) + t₃
   assocr₊ : {t₁ t₂ t₃ : U} → (t₁ + t₂) + t₃ ⟷₁ t₁ + (t₂ + t₃)
   id⟷₁    : {t : U} → t ⟷₁ t
-  idupto⟷₁ : {t₁ t₂ : U} → {canonU t₁ == canonU t₂} → t₁ ⟷₁ t₂
   _◎_     : {t₁ t₂ t₃ : U} → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
   _⊕_     : {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷₁ t₃) → (t₂ ⟷₁ t₄) → (t₁ + t₂ ⟷₁ t₃ + t₄)
+  -- new combinator for normal forms
+  swap01 : {m : ℕ} → ⟪ S (S m) ⟫ ⟷₁ ⟪ S (S m) ⟫
 
 -- Definitional inverse
 
@@ -63,9 +68,9 @@ data _⟷₁_  : U → U → Set where
 !⟷₁ assocl₊ = assocr₊
 !⟷₁ assocr₊ = assocl₊
 !⟷₁ id⟷₁ = id⟷₁
-!⟷₁ (idupto⟷₁ {t₁} {t₂} {eq}) = idupto⟷₁ {t₂} {t₁} { ! eq }
 !⟷₁ (c₁ ◎ c₂) = !⟷₁ c₂ ◎ !⟷₁ c₁
 !⟷₁ (c₁ ⊕ c₂) = !⟷₁ c₁ ⊕ !⟷₁ c₂
+!⟷₁ swap01 = swap01
 
 -- Equational reasoning
 
@@ -155,73 +160,67 @@ normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
 
 -----------------------------------------------------------------------------
 -- Define special combinators for canonical forms
-
-data _⇔_ : (t₁ t₂ : U) → Set where
-  id⇔ : {t₁ t₂ : U} → (canonU t₁ == canonU t₂) → canonU t₁ ⇔ canonU t₂
-  seq⇔ : {t₁ t₂ t₃ : U} → (canonU t₁ ⇔ canonU t₂) → (canonU t₂ ⇔ canonU t₃) →
-         (canonU t₁ ⇔ canonU t₃)
-  bigswap⇔ : {t₁ t₂ : U} → canonU (t₁ + t₂) ⇔ canonU (t₂ + t₁)
-  -- say | t₁ ∣ = 2 with elements {A,B} and ∣ t₂ = 3 ∣ with elements {C,D,E}, then
-  -- canonU (t₁ + t₂) = (A + (B + (C + (D + (E + 0)))))
-  -- the result of bigswap should be:
-  -- (C + (D + (E + (A + (B + 0)))))
-  -- below we express bigswap using a sequence of swaps
-  bigplus⇔ : {t₁ t₂ t₃ t₄ : U} →
-             (canonU t₁ ⇔ canonU t₃) → (canonU t₂ ⇔ canonU t₄) →
-             (canonU (t₁ + t₂) ⇔ canonU (t₃ + t₄))
-  -- say | t₁ ∣ = 2 with elements {A,B} and ∣ t₂ = 3 ∣ with elements {C,D,E}, then
-  -- say c₁ maps (A + (B + 0)) to (X + (Y + 0))
-  -- and c₂ maps (C + (D + (E + 0))) to (V + (W + (Z + 0)))
-  -- we have canonU (t₁ + t₂) = (A + (B + (C + (D + (E + 0)))))
-  -- the result of bigplus should be:
-  -- (X + (Y + (V + (W + (Z + 0)))))
-
-combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
-combNormalForm {t} id⟷₁ = id⇔ {t} {t} idp
-combNormalForm (idupto⟷₁ {t₁} {t₂} {eq}) = id⇔ {t₁} {t₂} eq
-combNormalForm {O + t} unite₊l = id⇔ {t} {t} idp
-combNormalForm {t} uniti₊l = id⇔ {t} {t} idp
-combNormalForm {t₁ + t₂} swap₊ = bigswap⇔ {t₁} {t₂}
-combNormalForm {t₁ + (t₂ + t₃)} assocl₊ =
-  id⇔ {t₁ + (t₂ + t₃)} {(t₁ + t₂) + t₃} (canonU-assoc t₁ t₂ t₃)
-combNormalForm {(t₁ + t₂) + t₃} assocr₊ =
-  id⇔ {(t₁ + t₂) + t₃} {t₁ + (t₂ + t₃)} (! (canonU-assoc t₁ t₂ t₃))
-combNormalForm (_◎_ {t₁} {t₂} {t₃} c₁ c₂) =
-  seq⇔ {t₁} {t₂} {t₃} (combNormalForm c₁) (combNormalForm c₂)
-combNormalForm {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) =
-  bigplus⇔ {t₁} {t₂} {t₃} {t₄} (combNormalForm c₁) (combNormalForm c₂)
-
------------------------------------------------------------------------------
--- Express special combinators as regular Pi combinators
 -- Want these to be sequences of assocs and swaps
-
-swapHead : {m : ℕ} → I + (I + ⟪ m ⟫) ⟷₁  I + (I + ⟪ m ⟫)
-swapHead = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
 
 snoc : (m : ℕ) → ⟪ 1 +ℕ m ⟫ ⟷₁ ⟪ m +ℕ 1 ⟫
 snoc O = id⟷₁
-snoc (S n) = swapHead ◎ (id⟷₁ ⊕ snoc n)
+snoc (S n) = swap01 ◎ (id⟷₁ ⊕ snoc n)
 
 dneppa : (m n : ℕ) → ⟪ m +ℕ n ⟫ ⟷₁ ⟪ n +ℕ m ⟫
-dneppa O n = idupto⟷₁ {_} {_} {ap (λ X → canonU ⟪ X ⟫) (! (+-unit-r n))}
+dneppa O n = {!!}
 dneppa (S m) n =
   ⟪ S (m +ℕ n) ⟫
   ⟷₁⟨ snoc (m +ℕ n) ⟩
   ⟪ (m +ℕ n) +ℕ 1 ⟫
-  ⟷₁⟨ idupto⟷₁ {_} {_} {ap (λ X → canonU ⟪ X ⟫) (+-assoc m n 1)} ⟩
+  ⟷₁⟨ {!!} ⟩
   ⟪ m +ℕ (n +ℕ 1) ⟫
   ⟷₁⟨ dneppa m (n +ℕ 1) ⟩
   ⟪ (n +ℕ 1) +ℕ m ⟫
-  ⟷₁⟨ idupto⟷₁ {_} {_} {ap (λ X → canonU ⟪ X ⟫) (+-assoc n 1 m)} ⟩
+  ⟷₁⟨ {!!} ⟩
   ⟪ n +ℕ S m ⟫ ⟷₁∎
 
-infix 100 _″
-
-_″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
-(id⇔ eq) ″ = idupto⟷₁ {_} {_} {ap canonU eq}
-seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
-bigplus⇔ c₁ c₂ ″ = !⟷₁ ⟪++⟫ ◎ (c₁ ″ ⊕ c₂ ″) ◎ ⟪++⟫
-bigswap⇔ {t₁} {t₂} ″ = dneppa ∣ t₁ ∣ ∣ t₂ ∣
+combNormalForm : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) →
+  Σ (canonU t₁ ⟷₁ canonU t₂) (λ cnf → (!⟷₁ (normC t₁) ◎ c ◎ normC t₂) ⟷₂ cnf)
+combNormalForm {t} id⟷₁ = id⟷₁ ,
+  trans⟷₂ (id⟷₂ ⊡ idl◎l) rinv◎l
+combNormalForm {O + t} unite₊l = id⟷₁ ,
+  trans⟷₂ (uniti₊l⟷₂l ⊡ id⟷₂)
+  (trans⟷₂ assoc◎r
+  (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+  (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
+  (trans⟷₂ (id⟷₂ ⊡ idl◎l)
+  rinv◎l))))
+combNormalForm {t} uniti₊l = id⟷₁ ,
+  trans⟷₂ (id⟷₂ ⊡ assoc◎l)
+  (trans⟷₂ (id⟷₂ ⊡ (uniti₊l⟷₂l ⊡ id⟷₂))
+  (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+  (trans⟷₂ (id⟷₂ ⊡ (id⟷₂ ⊡ linv◎l))
+  (trans⟷₂ (id⟷₂ ⊡ idr◎l)
+  rinv◎l))))
+combNormalForm {t₁ + t₂} swap₊ = dneppa ∣ t₁ ∣ ∣ t₂ ∣ ,
+  {!!}
+combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = {!!} ,
+  {!!}
+combNormalForm {(t₁ + t₂) + t₃} assocr₊ = {!!} ,
+  {!!}
+combNormalForm (_◎_ {t₁} {t₂} {t₃} c₁ c₂) =
+  let (c1nf , p1) = combNormalForm c₁
+      (c2nf , p2) = combNormalForm c₂
+  in (c1nf ◎ c2nf) ,
+     (trans⟷₂
+     (id⟷₂ ⊡ (((trans⟷₂ idr◎r (id⟷₂ ⊡ linv◎r {c = c₂})) ⊡ id⟷₂) ⊡ id⟷₂))
+     (trans⟷₂ (id⟷₂ ⊡ ((assoc◎l ⊡ id⟷₂) ⊡ id⟷₂))
+     (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+     (trans⟷₂ (id⟷₂ ⊡ assoc◎r)
+     (trans⟷₂ assoc◎l
+     {!!})))))
+combNormalForm {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) =
+  let (c1nf , p1) = combNormalForm c₁
+      (c2nf , p2) = combNormalForm c₂
+  in (!⟷₁ ⟪++⟫ ◎ (c1nf ⊕ c2nf) ◎ ⟪++⟫) ,
+  {!!}
+combNormalForm swap01 = {!!} ,
+  {!!}
 
 -----------------------------------------------------------------------------
 -- Example
@@ -244,82 +243,7 @@ mirror : tree ⟷₁ mirrorTree
 mirror = swap₊ ◎ (swap₊ ⊕ swap₊) ◎ ((id⟷₁ ⊕ swap₊) ⊕ (id⟷₁ ⊕ swap₊))
 
 mirrorNF : canonU tree ⟷₁ canonU mirrorTree
-mirrorNF = (combNormalForm mirror) ″
-
-{--
-
-(((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-  id⟷₁ ⊕
-  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-  id⟷₁ ⊕
-  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-  id⟷₁ ⊕
-  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-  id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
- ◎
- idupto⟷₁ ◎
- (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-   id⟷₁ ⊕
-   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-   id⟷₁ ⊕
-   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-   id⟷₁ ⊕
-   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-   id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-  ◎
-  idupto⟷₁ ◎
-  (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-    id⟷₁ ⊕
-    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-    id⟷₁ ⊕
-    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-    id⟷₁ ⊕
-    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-   ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
-  ◎ idupto⟷₁ ◎ id⟷₁)
- ◎ idupto⟷₁ ◎ id⟷₁)
-◎
-(((id⟷₁ ⊕ (id⟷₁ ⊕ (id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ assocl₊) ◎ assocl₊)
- ◎
- ((((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-   ◎
-   idupto⟷₁ ◎
-   (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-     id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-    ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
-   ◎ idupto⟷₁ ◎ id⟷₁)
-  ⊕
-  ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-   id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-  ◎
-  idupto⟷₁ ◎
-  (((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-    id⟷₁ ⊕ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁)
-   ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
-  ◎ idupto⟷₁ ◎ id⟷₁)
- ◎ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
-◎
-((id⟷₁ ⊕ (id⟷₁ ⊕ (id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ assocl₊) ◎ assocl₊)
-◎
-((((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
-  (idupto⟷₁ ⊕
-   ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁) ◎
-   idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
-  ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
- ⊕
- ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
- (idupto⟷₁ ⊕
-  ((assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ id⟷₁) ◎
-  idupto⟷₁ ◎ idupto⟷₁ ◎ idupto⟷₁ ◎ id⟷₁)
- ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
-◎ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ unite₊l
-
---}
-
------------------------------------------------------------------------------
--- Prove 2-equivalence between c and combNormalForm c
+mirrorNF = fst (combNormalForm mirror)
 
 -----------------------------------------------------------------------------
 
@@ -327,6 +251,33 @@ mirrorNF = (combNormalForm mirror) ″
 
 OLD STUFF. KEEP FOR NOW
 
+infix 100 _″
+
+_″ : ∀ {t₁ t₂} → t₁ ⇔ t₂ → t₁ ⟷₁ t₂
+(id⇔ eq) ″ = idupto⟷₁ {_} {_} {ap canonU eq}
+seq⇔ c₁ c₂ ″ = c₁ ″ ◎ c₂ ″
+bigplus⇔ c₁ c₂ ″ = !⟷₁ ⟪++⟫ ◎ (c₁ ″ ⊕ c₂ ″) ◎ ⟪++⟫
+bigswap⇔ {t₁} {t₂} ″ = dneppa ∣ t₁ ∣ ∣ t₂ ∣
+
+data _⇔_ : (t₁ t₂ : U) → Set where
+  id⇔ : {t₁ t₂ : U} → (canonU t₁ == canonU t₂) → canonU t₁ ⇔ canonU t₂
+  seq⇔ : {t₁ t₂ t₃ : U} → (canonU t₁ ⇔ canonU t₂) → (canonU t₂ ⇔ canonU t₃) →
+         (canonU t₁ ⇔ canonU t₃)
+  bigswap⇔ : {t₁ t₂ : U} → canonU (t₁ + t₂) ⇔ canonU (t₂ + t₁)
+  -- say | t₁ ∣ = 2 with elements {A,B} and ∣ t₂ = 3 ∣ with elements {C,D,E}, then
+  -- canonU (t₁ + t₂) = (A + (B + (C + (D + (E + 0)))))
+  -- the result of bigswap should be:
+  -- (C + (D + (E + (A + (B + 0)))))
+  -- below we express bigswap using a sequence of swaps
+  bigplus⇔ : {t₁ t₂ t₃ t₄ : U} →
+             (canonU t₁ ⇔ canonU t₃) → (canonU t₂ ⇔ canonU t₄) →
+             (canonU (t₁ + t₂) ⇔ canonU (t₃ + t₄))
+  -- say | t₁ ∣ = 2 with elements {A,B} and ∣ t₂ = 3 ∣ with elements {C,D,E}, then
+  -- say c₁ maps (A + (B + 0)) to (X + (Y + 0))
+  -- and c₂ maps (C + (D + (E + 0))) to (V + (W + (Z + 0)))
+  -- we have canonU (t₁ + t₂) = (A + (B + (C + (D + (E + 0)))))
+  -- the result of bigplus should be:
+  -- (X + (Y + (V + (W + (Z + 0)))))
 
 
 <swap-big : (t₁ t₂ : U) → canonU (t₁ + t₂) ⟷₁ canonU (t₂ + t₁)
