@@ -60,6 +60,30 @@ eert = (F + (E + D)) + (C + (B + A))
 -----------------------------------------------------------------------------
 -- Special combinators on normal forms
 
+
+{--
+Better idea to explore:
+
+The normal form is a list; most of the combinators shift the focus around;
+the only real action is done by swap₊
+
+Given
+
+   x : ⟪ 6 ⟫
+   x = (A + (B + (C + (D + (E + (F + O))))))
+
+Want:
+
+   x[2] to have type ⟪ 2 +ℕ 4 ⟫
+   x[5] to have type ⟪ 5 +ℕ 1 ⟫
+   etc
+
+Perhaps use ideas from
+https://gist.github.com/beala/d9e95c17999e1cd4f2d9b8bddff7768a#file-cryptol-agda-L43
+
+--}
+
+
 data _⇔_ : (t₁ t₂ : U) → Set where
   id⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m ⟫
   seq⇔ : {m n k : ℕ} → ⟪ m ⟫ ⇔ ⟪ n ⟫ → ⟪ n ⟫ ⇔ ⟪ k ⟫ → ⟪ m ⟫ ⇔ ⟪ k ⟫
