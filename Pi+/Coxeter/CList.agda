@@ -110,3 +110,13 @@ instance
 
 ++-assoc : ∀ {m} (l₁ l₂ l₃ : CList m) → (l₁ ++ l₂) ++ l₃ == l₁ ++ (l₂ ++ l₃)
 ++-assoc = CListElimProp.f (λ _ _ → idp) (λ n {w} f l₂ l₃ → ap (n ::_) (f l₂ l₃)) {{Π-level λ _ → Π-level λ _ → clist-paths-prop}}
+
+-- x :: xs == xs ++ [ x ]
+
+_⁻¹ : ∀ {m} → CList m → CList m
+_⁻¹ = CListRec.f nil (λ n w* → w* ++ [ n ]) (λ {n} {w*} → ++-assoc w* [ n ] [ n ] ∙ ap (λ e → w* ++ e) cancel ∙ ++-unit-r w*) TODO {!   !} 
+
+inverse : ∀ {m} → (w : CList m) → w ++ (w ⁻¹) == nil
+inverse = CListElimProp.f idp λ n w* → {!   !} {{clist-paths-prop}}
+
+--  (w* ++ [ n ]) ++ [ n ] == w*
