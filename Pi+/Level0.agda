@@ -24,6 +24,32 @@ open import Pi+.Syntax
 canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
 
+--
+
+data UVec : (n : ℕ) → Set where
+  [] : UVec 0
+  X : {n : ℕ} → (nt : UVec n) → UVec (S n)
+
+tail : {n : ℕ} → UVec (S n) → UVec n
+tail (X nf) = nf
+
+data SplitUVec : {i j : ℕ} → UVec i → UVec j → Set where
+  here : {n : ℕ} {nf : UVec n} →
+         SplitUVec [] nf
+  skip : {i j : ℕ} {before : UVec i} {after : UVec (S j)} →
+         SplitUVec (X before) (tail after)
+
+⟦_⟧ : (n : ℕ) → UVec n
+⟦ 0 ⟧ = []
+⟦ S n ⟧ = X ⟦ n ⟧
+
+nfU : (t : U) → UVec ∣ t ∣
+nfU t = ⟦ ∣ t ∣ ⟧
+
+nf→canon : {m : ℕ} → UVec m → U
+nf→canon [] = O
+nf→canon (X nf) = I + nf→canon nf
+
 -----------------------------------------------------------------------------
 -- Converting Pi types to normal form
 
@@ -60,6 +86,20 @@ eert = (F + (E + D)) + (C + (B + A))
 -----------------------------------------------------------------------------
 -- Special combinators on normal forms
 
+-- Change to use SplitUVec...
+
+data _⇔_ : (t₁ t₂ : U) → Set where
+  id⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m ⟫
+
+{--
+  seq⇔ : {m n k : ℕ} → ⟪ m ⟫ ⇔ ⟪ n ⟫ → ⟪ n ⟫ ⇔ ⟪ k ⟫ → ⟪ m ⟫ ⇔ ⟪ k ⟫
+  append⇔ : {m n k p : ℕ} → ⟪ m ⟫ ⇔ ⟪ k ⟫ → ⟪ n ⟫ ⇔ ⟪ p ⟫ →
+            ⟪ m +ℕ n ⟫ ⇔ ⟪ k +ℕ p ⟫
+  assocl⇔ : {m n k : ℕ} → ⟪ m +ℕ (n +ℕ k) ⟫ ⇔ ⟪ (m +ℕ n)  +ℕ k ⟫
+  assocr⇔ : {m n k : ℕ} → ⟪ (m +ℕ n) +ℕ k ⟫ ⇔ ⟪ m +ℕ (n +ℕ k) ⟫
+  snocN⇔ : {m : ℕ} → ⟪ 1 +ℕ m ⟫ ⇔ ⟪ m +ℕ 1 ⟫
+  unit⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m +ℕ 0 ⟫
+--}
 
 {--
 Better idea to explore:
@@ -83,7 +123,7 @@ https://gist.github.com/beala/d9e95c17999e1cd4f2d9b8bddff7768a#file-cryptol-agda
 
 --}
 
-
+{--
 data _⇔_ : (t₁ t₂ : U) → Set where
   id⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m ⟫
   seq⇔ : {m n k : ℕ} → ⟪ m ⟫ ⇔ ⟪ n ⟫ → ⟪ n ⟫ ⇔ ⟪ k ⟫ → ⟪ m ⟫ ⇔ ⟪ k ⟫
@@ -125,6 +165,9 @@ mirror = swap₊ ◎ (swap₊ ⊕ swap₊) ◎ ((id⟷₁ ⊕ swap₊) ⊕ (id�
 
 mirrorNF : canonU tree ⇔ canonU eert
 mirrorNF = combNF mirror
+
+--}
+
 
 {--
 Keeping A..F as postulates
