@@ -167,6 +167,10 @@ zero-∸ (S n) = idp
 ∸-up {S (S n)} {0} p = idp
 ∸-up {S (S n)} {S r} (s≤s p) = ∸-up {S n} {r} p
 
+∸-up-r : {n m : ℕ} -> (m ≤ n) -> S (n ∸ m) == S n ∸ m
+∸-up-r {n} {O} q = idp
+∸-up-r {n} {S m} q = ! ((∸-up q))
+
 nowhere : {n k : ℕ} -> (¬ (n < k)) -> (¬ (n == k)) -> (¬ (n == 1 + k)) -> (¬ (1 + k < n)) -> ⊥
 nowhere {0} {0} p1 p2 p3 p4 = p2 idp
 nowhere {0} {S k} p1 p2 p3 p4 = p1 (s≤s z≤n)

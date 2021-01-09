@@ -191,6 +191,10 @@ nil-abs ()
 ++-abs {x} {nil} ()
 ++-abs {x} {x₁ :: l} p = nil-abs p
 
+++-abs-lr : {x : ℕ} -> {l r : List} -> l ++ x :: r == nil -> ⊥
+++-abs-lr {x} {nil} ()
+++-abs-lr {x} {x₁ :: l} p = nil-abs p
+
 _↓↓_,_ : (n : ℕ) -> (k : ℕ) -> (k ≤ n) -> List
 n ↓↓ 0 , z≤n = nil
 S n ↓↓ S k , s≤s p = n :: (n ↓↓ k , p)
