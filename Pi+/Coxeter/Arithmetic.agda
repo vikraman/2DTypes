@@ -112,30 +112,188 @@ S n ≟ S m with n ≟ m
 ... | no  p = no (λ x → p (≡-down2 x))
 
 
-postulate
-    ∸-implies-≤ : {p q r : ℕ} -> (p == q ∸ r) -> (p ≤ q)
-    ≤-remove-+ : {p q r : ℕ} -> (p + q ≤ r) -> (q ≤ r)
-    introduce-≤-from-+ : {p q r : ℕ} -> (p + q == r) -> (p ≤ r)
-    +-three-assoc : {k i r : ℕ} -> k + (i + r) == (i + k) + r
-    introduce-∸ : {p q r : ℕ} -> (r ≤ q) -> (p + r == q) -> (p == q ∸ r)
-    eliminate-∸ : {p q r : ℕ} -> (r ≤ q) -> (p == q ∸ r) -> (p + r == q)
-    introduce-∸-≤ : {p q r : ℕ} -> (r ≤ q) -> (p + r ≤ q) -> (p ≤ q ∸ r)
-    eliminate-∸-≤ : {p q r : ℕ} -> (r ≤ q) -> (p ≤ q ∸ r) -> (p + r ≤ q)
-    introduce-∸-≤l : {p q r : ℕ} -> (r ≤ p) -> (p ≤ q + r) -> (p ∸ r ≤ q)
-    eliminate-∸-≤l : {p q r : ℕ} -> (r ≤ p) -> (p ∸ r ≤ q) -> (p ≤ q + r)
-    ∸-to-zero : {p q : ℕ} -> (p == q) -> (p ∸ q == 0)
-    minus-plus : {p q : ℕ} -> {q ≤ p} -> p ∸ q + q == p
-    ∸-down2 : {n r : ℕ} -> {r ≤ n} -> ((S n) ∸ (S r)) == n ∸ r
-    ≤-up2-+ : {p q r : ℕ} -> (p ≤ q) -> (r + p ≤ r + q)
-    ≤-up2-r-+ : {p q r : ℕ} -> (p ≤ q) -> (p + r ≤ q + r)
-    ≤-up-r-+ : {p q r : ℕ} -> (p ≤ q) -> (p ≤ q + r)
-    ≤-up-+ : {p q r : ℕ} -> (p ≤ q) -> (p ≤ r + q)
-    ≤-down-+ : {p q r : ℕ} -> (p + r ≤ q) -> (p ≤ q)
-    ≡-down-+ : {p q r : ℕ} -> (r + p == r + q) -> (p == q)
-    ≡-up-+ : {p q p2 q2 : ℕ} -> (p == p2) -> (q == q2) -> (p + q == p2 + q2)
-    ≡-down-r-+ : {p q r : ℕ} -> (p + r == q + r) -> (p == q)
-    ≤-≡ : {n k : ℕ} -> (n ≤ k) -> (k ≤ n) -> (n == k)
-    plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
+module ≤-Reasoning where
+    infix  1 ≤begin_
+    infixr 2 _≤⟨⟩_ _≤⟨_⟩_ _≡⟨⟩_ _≡⟨_⟩_
+    infix  3 _≤∎
+
+    ≤begin_ : ∀ {x y : ℕ}
+             → x ≤ y
+               -----
+             → x ≤ y
+    ≤begin x≤y  =  x≤y
+
+    _≤⟨⟩_ : ∀ (x : ℕ) {y : ℕ}
+            → x ≤ y
+              -----
+            → x ≤ y
+    x ≤⟨⟩ x≤y  =  x≤y
+
+    _≡⟨⟩_ : ∀ (x : ℕ) {y : ℕ}
+            → x == y
+              -----
+            → x ≤ y
+    x ≡⟨⟩ x≡y  = ≤-reflexive x≡y
+
+    _≤⟨_⟩_ : ∀ (x : ℕ) {y z : ℕ}
+             → x ≤ y
+             → y ≤ z
+               -----
+             → x ≤ z
+    x ≤⟨ x≤y ⟩ y≤z  = ≤-trans x≤y y≤z
+
+    _≡⟨_⟩_ : ∀ (x : ℕ) {y z : ℕ}
+             → x == y
+             → y ≤ z
+               -----
+             → x ≤ z
+    x ≡⟨ x≡y ⟩ y≤z  = ≤-trans (≤-reflexive x≡y) y≤z
+
+    _≤∎ : ∀ (x : ℕ)
+           -----
+          → x ≤ x
+    x ≤∎  = ≤-reflexive idp
+
+open ≤-Reasoning
+
+≤-remove-+ : {p q r : ℕ} -> (p + q ≤ r) -> (q ≤ r)
+≤-remove-+ {p = O} pqr = pqr
+≤-remove-+ {p = S p} {r = S r} (s≤s pqr) = ≤-up (≤-remove-+ pqr)
+
++-three-assoc : {k i r : ℕ} -> k + (i + r) == (i + k) + r
++-three-assoc {k} {i} {r} = ! (+-assoc k i r) ∙ ap (λ e -> e + r) (+-comm k i)
+
+introduce-≤-from-+ : {p q r : ℕ} -> (p + q == r) -> (p ≤ r)
+introduce-≤-from-+ {O} {q} {r} pqr = z≤n
+introduce-≤-from-+ {S p} {q} {S r} pqr = s≤s (introduce-≤-from-+ (≡-down2 pqr))
+
+≤-up2-+ : {p q r : ℕ} -> (p ≤ q) -> (r + p ≤ r + q)
+≤-up2-+ {p} {q} {O} pq = pq
+≤-up2-+ {p} {q} {S r} pq = s≤s (≤-up2-+ pq)
+
++-left : (p r : ℕ) -> S (p + r) == p + S r
++-left p r = +-three-assoc {1} {p} {r} ∙ +-assoc p 1 r
+
+≤-up2-r-+ : {p q r : ℕ} -> (p ≤ q) -> (p + r ≤ q + r)
+≤-up2-r-+ {p} {q} {r} pq =
+  ≤begin
+    _
+  ≡⟨ +-comm p r ⟩
+    r + p
+  ≤⟨ ≤-up2-+ pq ⟩
+    r + q
+  ≡⟨ ! (+-comm q r) ⟩
+    q + r
+  ≤∎
+
+≤-up-+ : {p q r : ℕ} -> (p ≤ q) -> (p ≤ r + q)
+≤-up-+ {p} {q} {O} pq = pq
+≤-up-+ {p} {q} {S r} pq = ≤-up (≤-up-+ pq)
+
+≤-up-r-+ : {p q r : ℕ} -> (p ≤ q) -> (p ≤ q + r)
+≤-up-r-+ {p} {q} {r} pq =
+  ≤begin
+    p
+  ≤⟨ ≤-up-+ pq ⟩
+    r + q
+  ≡⟨ ! (+-comm q r) ⟩
+    q + r
+  ≤∎
+
+
+≤-down-+ : {p q r : ℕ} -> (p + r ≤ q) -> (p ≤ q)
+≤-down-+ {p} {q} {O} pqr = 
+  ≤begin
+    p
+  ≡⟨ +-comm O p ⟩
+    p + O
+  ≤⟨ pqr ⟩
+    q
+  ≤∎
+≤-down-+ {p} {q} {S r} pqr =
+  let lemma =
+        ≤begin
+          S (p + r)
+        ≡⟨ +-left p r  ⟩
+          p + S r
+        ≤⟨ pqr ⟩
+          q
+        ≤∎
+  in ≤-down-+ (≤-down lemma)
+
+≡-down-+ : {p q r : ℕ} -> (r + p == r + q) -> (p == q)
+≡-down-+ {p} {q} {O} pqr = pqr
+≡-down-+ {p} {q} {S r} pqr = ≡-down-+ (≡-down2 pqr)
+
+
+≡-up-+ : {p q p2 q2 : ℕ} -> (p == p2) -> (q == q2) -> (p + q == p2 + q2)
+≡-up-+ {p} {q} {p2} {q2} pp qq = ap (λ e -> e + q) pp ∙ ap (λ e -> p2 + e) qq
+
+
+≡-down-r-+ : {p q r : ℕ} -> (p + r == q + r) -> (p == q)
+≡-down-r-+ {p} {q} {r} pqr = ≡-down-+ (+-comm r p ∙ pqr ∙ (+-comm q r))
+
+
+∸-implies-≤ : {p q r : ℕ} -> (p == q ∸ r) -> (p ≤ q)
+∸-implies-≤ {p} {q} {O} pqr = ≤-reflexive pqr
+∸-implies-≤ {.0} {O} {S r} idp = z≤n
+∸-implies-≤ {p} {S q} {S r} pqr = ≤-up (∸-implies-≤ {p} {q} {r} pqr)
+
+
+introduce-∸ : {p q r : ℕ} -> (r ≤ q) -> (p + r == q) -> (p == q ∸ r)
+introduce-∸ {p} {q} {O} qr pqr = ! (+-comm p O) ∙ pqr
+introduce-∸ {p} {S q} {S r} (s≤s qr) pqr = introduce-∸ {p} {q} {r} qr (≡-down2 ((+-left p r) ∙  pqr))
+
+
+eliminate-∸ : {p q r : ℕ} -> (r ≤ q) -> (p == q ∸ r) -> (p + r == q)
+eliminate-∸ {p} {q} {O} rq pqr = +-comm p O ∙ pqr
+eliminate-∸ {p} {S q} {S r} (s≤s qr) pqr = 
+  let rec = eliminate-∸ {p} {q} {r} qr pqr
+  in  ! (+-left p r) ∙ ap S rec
+
+
+introduce-∸-≤ : {p q r : ℕ} -> (r ≤ q) -> (p + r ≤ q) -> (p ≤ q ∸ r)
+introduce-∸-≤ {p} {q} {O} qr pqr = ≤-trans (≤-reflexive (! (+-comm p O))) pqr
+introduce-∸-≤ {p} {S q} {S r} (s≤s qr) pqr = introduce-∸-≤ {p} {q} {r} qr (≤-down2 (≤-trans (≤-reflexive (+-left p r)) pqr))
+
+
+eliminate-∸-≤ : {p q r : ℕ} -> (r ≤ q) -> (p ≤ q ∸ r) -> (p + r ≤ q)
+eliminate-∸-≤ {p} {q} {O} qr pqr = ≤-trans (≤-reflexive (+-comm p O)) pqr
+eliminate-∸-≤ {p} {S q} {S r} (s≤s qr) pqr = 
+  let rec = eliminate-∸-≤ {p} {q} {r} qr pqr
+  in  ≤-trans (≤-reflexive (! (+-left p r))) (≤-up2 rec)
+
+
+introduce-∸-≤l : {p q r : ℕ} -> (r ≤ p) -> (p ≤ q + r) -> (p ∸ r ≤ q)
+introduce-∸-≤l {p} {q} {O} rp pqr = ≤-trans pqr (≤-reflexive (+-comm q O))
+introduce-∸-≤l {S p} {q} {S r} (s≤s rq) pqr = introduce-∸-≤l {p} {q} {r} rq (≤-down2 (≤-trans pqr (≤-reflexive (! (+-left q r)))))
+
+
+eliminate-∸-≤l : {p q r : ℕ} -> (r ≤ p) -> (p ∸ r ≤ q) -> (p ≤ q + r)
+eliminate-∸-≤l {p} {q} {O} rp pqr = ≤-trans pqr (≤-reflexive (! (+-comm q O)))
+eliminate-∸-≤l {S p} {q} {S r} (s≤s rp) pqr = 
+  let rec = eliminate-∸-≤l {p} {q} {r} rp pqr
+  in  ≤-trans (≤-up2 rec) (≤-reflexive (+-left q r))
+
+
+∸-to-zero : {p q : ℕ} -> (p == q) -> (p ∸ q == 0)
+∸-to-zero {O} {O} pq = idp
+∸-to-zero {S p} {S q} pq = ∸-to-zero (≡-down2 pq)
+
+minus-plus : {p q : ℕ} -> {q ≤ p} -> p ∸ q + q == p
+minus-plus {p} {q} {qp} = eliminate-∸ qp idp
+
+∸-down2 : {n r : ℕ} -> {r ≤ n} -> ((S n) ∸ (S r)) == n ∸ r
+∸-down2 = idp
+
+≤-≡ : {n k : ℕ} -> (n ≤ k) -> (k ≤ n) -> (n == k)
+≤-≡ z≤n z≤n = idp
+≤-≡ (s≤s pnk) (s≤s pkn) = ap S (≤-≡ pnk pkn)
+
+plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
+plus-minus {.0} {q} z≤n = idp
+plus-minus {.(S _)} {.(S _)} (s≤s pq) = ap S (plus-minus pq)
+
 
 zero-∸ : (n : ℕ) -> (0 ∸ n == 0)
 zero-∸ 0 = idp
@@ -200,44 +358,3 @@ squeeze {.0} {.1} (s≤s {n = .0} z≤n) (s≤s z≤n) = idp
 squeeze {.(S _)} {.(S (S _))} (s≤s (s≤s pn)) (s≤s (s≤s pnn)) = ap S (squeeze (s≤s pn) (s≤s pnn))
 
 
-module ≤-Reasoning where
-    infix  1 ≤begin_
-    infixr 2 _≤⟨⟩_ _≤⟨_⟩_ _≡⟨⟩_ _≡⟨_⟩_
-    infix  3 _≤∎
-
-    ≤begin_ : ∀ {x y : ℕ}
-             → x ≤ y
-               -----
-             → x ≤ y
-    ≤begin x≤y  =  x≤y
-
-    _≤⟨⟩_ : ∀ (x : ℕ) {y : ℕ}
-            → x ≤ y
-              -----
-            → x ≤ y
-    x ≤⟨⟩ x≤y  =  x≤y
-
-    _≡⟨⟩_ : ∀ (x : ℕ) {y : ℕ}
-            → x == y
-              -----
-            → x ≤ y
-    x ≡⟨⟩ x≡y  = ≤-reflexive x≡y
-
-    _≤⟨_⟩_ : ∀ (x : ℕ) {y z : ℕ}
-             → x ≤ y
-             → y ≤ z
-               -----
-             → x ≤ z
-    x ≤⟨ x≤y ⟩ y≤z  = ≤-trans x≤y y≤z
-
-    _≡⟨_⟩_ : ∀ (x : ℕ) {y z : ℕ}
-             → x == y
-             → y ≤ z
-               -----
-             → x ≤ z
-    x ≡⟨ x≡y ⟩ y≤z  = ≤-trans (≤-reflexive x≡y) y≤z
-
-    _≤∎ : ∀ (x : ℕ)
-           -----
-          → x ≤ x
-    x ≤∎  = ≤-reflexive idp
