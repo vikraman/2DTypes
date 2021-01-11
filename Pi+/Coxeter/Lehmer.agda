@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting --allow-unsolved-metas --termination-depth=2 #-}
+{-# OPTIONS --without-K --rewriting --termination-depth=2 #-}
 
 module Pi+.Coxeter.Lehmer where
 

@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --rewriting #-}
 
 module Pi+.Coxeter.CanonicalForm where
 
@@ -17,6 +17,7 @@ open import Pi+.Coxeter.ReductionRel+
 open import Pi+.Coxeter.ExchangeLemmas
 open import Pi+.Coxeter.ExchangeLemmas+
 open import Pi+.Coxeter.Lehmer
+open import Pi+.Coxeter.ImpossibleLists
 
 open ≅*-Reasoning
 
@@ -55,76 +56,120 @@ unproperize {S nf} (CanS {n} {.(S nf)} x cl {r} x₁) =
       rec-l , rec-p = canonical-lift nf (≤-down2 x) nfr
   in  CanS rec-l x₁ , ap (λ e -> e ++ (r + nf ∸ r :: nf ∸ r ↓ r)) (clfr ∙ ! rec-p)
 
-properize-fn : {n : ℕ} -> (cl : Lehmer n) -> Σ _ (λ nf → LehmerProper nf)
-properize-fn cl = let (nf , clf , _) = properize cl in (nf , clf)
-
-unproperize-fn : {n : ℕ} -> (cl : LehmerProper n) -> Lehmer n
-unproperize-fn = fst ∘ unproperize
-
-properize∘unproperize-fn-n : {n : ℕ} -> (cl : LehmerProper n) -> n == fst (properize-fn (unproperize-fn cl))
-properize∘unproperize-fn-n {O} CanZ = idp
-properize∘unproperize-fn-n {S n} (CanS x cl x₁) = idp
-
-properize∘unproperize-fn : {n : ℕ} -> (cl : LehmerProper n) → PathOver LehmerProper (properize∘unproperize-fn-n cl) cl (snd (properize-fn (unproperize-fn cl))) 
-properize∘unproperize-fn {O} CanZ = idp
-properize∘unproperize-fn {S n} (CanS x cl x₁) = 
-  let rec = properize∘unproperize-fn cl
-      t = ap↓ (λ e -> CanS x e x₁) rec 
-  in  {!   !}
-
 immersionProper->> : {n : ℕ} -> (cl : LehmerProper n) -> n >> immersionProper cl
 immersionProper->> {n} cl = 
   let clp , clp-r = unproperize cl
   in  transport (λ e -> n >> e) (! clp-r) (immersion->> clp)
 
-≡immersionProper : {nf : ℕ} -> (cl1 cl2 : LehmerProper nf) -> (immersionProper {nf} cl1 == immersionProper {nf} cl2) -> cl1 == cl2
-≡immersionProper {nf} cl1 cl2 p = 
-  let clu1 , clu1-p = unproperize cl1
-      clu2 , clu2-p = unproperize cl2
-      q : unproperize-fn cl1 == unproperize-fn cl2
-      q = ≡immersion clu1 clu2 (! clu1-p ∙ p ∙ clu2-p) 
 
-      -- LehmerProper (fst (properize (fst (unproperize cl1))))
-      qap : PathOver (λ e → LehmerProper (fst (properize e))) q (snd (properize-fn {nf} (unproperize-fn cl1))) (snd (properize-fn {nf} (unproperize-fn cl2)))
-      qap = apd (λ e -> snd (properize-fn {nf} e)) q 
+-- properize-fn : {n : ℕ} -> (cl : Lehmer n) -> Σ _ (λ nf → LehmerProper nf)
+-- properize-fn cl = let (nf , clf , _) = properize cl in (nf , clf)
 
-      question : fst (properize-fn {nf} (unproperize-fn cl1)) == fst (properize-fn {nf} (unproperize-fn cl2))
-      question = ap (λ e -> fst (properize e)) q
+-- unproperize-fn : {n : ℕ} -> (cl : LehmerProper n) -> Lehmer n
+-- unproperize-fn = fst ∘ unproperize
+
+-- properize∘unproperize-fn-n : {n : ℕ} -> (cl : LehmerProper n) -> n == fst (properize-fn (unproperize-fn cl))
+-- properize∘unproperize-fn-n {O} CanZ = idp
+-- properize∘unproperize-fn-n {S n} (CanS x cl x₁) = idp
+
+-- properize∘unproperize-fn : {n : ℕ} -> (cl : LehmerProper n) → PathOver LehmerProper (properize∘unproperize-fn-n cl) cl (snd (properize-fn (unproperize-fn cl))) 
+-- properize∘unproperize-fn {O} CanZ = idp
+-- properize∘unproperize-fn {S n} (CanS x cl x₁) = 
+--   let rec = properize∘unproperize-fn cl
+--       t = ap↓ (λ e -> CanS x e x₁) rec 
+--   in  {!   !}
+
+-- ≡immersionProper : {nf : ℕ} -> (cl1 cl2 : LehmerProper nf) -> (immersionProper {nf} cl1 == immersionProper {nf} cl2) -> cl1 == cl2
+-- ≡immersionProper {nf} cl1 cl2 p = 
+--   let clu1 , clu1-p = unproperize cl1
+--       clu2 , clu2-p = unproperize cl2
+--       q : unproperize-fn cl1 == unproperize-fn cl2
+--       q = ≡immersion clu1 clu2 (! clu1-p ∙ p ∙ clu2-p) 
+
+--       -- LehmerProper (fst (properize (fst (unproperize cl1))))
+--       qap : PathOver (λ e → LehmerProper (fst (properize e))) q (snd (properize-fn {nf} (unproperize-fn cl1))) (snd (properize-fn {nf} (unproperize-fn cl2)))
+--       qap = apd (λ e -> snd (properize-fn {nf} e)) q 
+
+--       question : fst (properize-fn {nf} (unproperize-fn cl1)) == fst (properize-fn {nf} (unproperize-fn cl2))
+--       question = ap (λ e -> fst (properize e)) q
       
-      qap' : PathOver LehmerProper question (snd (properize-fn {nf} (unproperize-fn cl1))) ((snd (properize-fn {nf} (unproperize-fn cl2))))
-      qap' = ↓-ap-in LehmerProper (λ x →  fst (properize x)) qap
+--       qap' : PathOver LehmerProper question (snd (properize-fn {nf} (unproperize-fn cl1))) ((snd (properize-fn {nf} (unproperize-fn cl2))))
+--       qap' = ↓-ap-in LehmerProper (λ x →  fst (properize x)) qap
 
-      -- ↓-ap-in : u == v [ C ∘ f ↓ p ] → u == v [ C ↓ ap f p ]  -- book, 2.7.somethin
-      -- transport P p u = coe (ap P p) u
-      -- transport P (ap f q) u = coe (ap P (ap f q)) u = coe (ap (P ∘ f) q) u
+--       -- ↓-ap-in : u == v [ C ∘ f ↓ p ] → u == v [ C ↓ ap f p ]  -- book, 2.7.somethin
+--       -- transport P p u = coe (ap P p) u
+--       -- transport P (ap f q) u = coe (ap P (ap f q)) u = coe (ap (P ∘ f) q) u
 
-      cl1-r' : PathOver LehmerProper (properize∘unproperize-fn-n cl1) cl1 (snd (properize-fn {nf} (unproperize-fn cl1)))
-      cl1-r' = properize∘unproperize-fn cl1
-      cl2-r' : PathOver LehmerProper (properize∘unproperize-fn-n cl2) cl2 (snd (properize-fn {nf} (unproperize-fn cl2)))
-      cl2-r' = properize∘unproperize-fn cl2  
+--       cl1-r' : PathOver LehmerProper (properize∘unproperize-fn-n cl1) cl1 (snd (properize-fn {nf} (unproperize-fn cl1)))
+--       cl1-r' = properize∘unproperize-fn cl1
+--       cl2-r' : PathOver LehmerProper (properize∘unproperize-fn-n cl2) cl2 (snd (properize-fn {nf} (unproperize-fn cl2)))
+--       cl2-r' = properize∘unproperize-fn cl2  
 
-      ttp : nf == nf
-      ttp = (properize∘unproperize-fn-n cl1 ∙ question ∙ ! (properize∘unproperize-fn-n cl2))
-      ttp-idp : ttp == idp
-      ttp-idp = prop-has-all-paths {{has-level-apply ℕ-level nf nf}} ttp idp
+--       ttp : nf == nf
+--       ttp = (properize∘unproperize-fn-n cl1 ∙ question ∙ ! (properize∘unproperize-fn-n cl2))
+--       ttp-idp : ttp == idp
+--       ttp-idp = prop-has-all-paths {{has-level-apply ℕ-level nf nf}} ttp idp
 
-      tt : PathOver LehmerProper ttp cl1 cl2
-      tt = cl1-r' ∙ᵈ qap' ∙ᵈ (!ᵈ cl2-r')
+--       tt : PathOver LehmerProper ttp cl1 cl2
+--       tt = cl1-r' ∙ᵈ qap' ∙ᵈ (!ᵈ cl2-r')
 
-      t : cl1 == cl2
-      t = transport (λ z → PathOver LehmerProper z cl1 cl2) ttp-idp tt
-  in  t
+--       t : cl1 == cl2
+--       t = transport (λ z → PathOver LehmerProper z cl1 cl2) ttp-idp tt
+--   in  t
 
-postulate
-  ≡immersionProper-n : {nf1 nf2 : ℕ} -> (cl1 : LehmerProper nf1) -> (cl2 : LehmerProper nf2) -> (immersionProper {nf1} cl1 == immersionProper {nf2} cl2) -> nf1 == nf2
-  ≡immersionProper-n : {nf1 nf2 : ℕ} -> (cl1 : LehmerProper nf1) -> (cl2 : LehmerProper nf2) -> (immersionProper {nf1} cl1 == immersionProper {nf2} cl2) -> nf1 == nf2
+extractProper-r : {k : ℕ} -> LehmerProper (S k) -> ℕ
+extractProper-r (CanS _ _ {r} _) = r
 
--- ≡immersionProper : {nf1 nf2 : ℕ} -> (cl1 : LehmerProper nf1) -> (cl2 : LehmerProper nf2) -> (immersionProper {nf1} cl1 == immersionProper {nf2} cl2) -> nf1 == nf2
--- ≡immersionProper {O} {O} cl1 cl2 p = idp
--- ≡immersionProper {O} {S nf2} CanZ (CanS x cl2 x₁) p = ⊥-elim (++-abs-lr (! p))
--- ≡immersionProper {S nf1} {O} (CanS x cl1 x₁) CanZ p = ⊥-elim (++-abs-lr p)
--- ≡immersionProper {S nf1} {S nf2} (CanS x cl1 x₁) (CanS x₂ cl2 x₃) p = 
---   let rec = ≡immersionProper cl1 cl2 {!   !}
+extract-r : {k : ℕ} -> Lehmer (S k) -> ℕ
+extract-r (CanS _ {r} _) = r
+
+≡immersion-r : {nf : ℕ} -> (cl1 : Lehmer (S nf)) -> (cl2 : Lehmer (S nf)) -> (immersion {S nf} cl1 == immersion {S nf} cl2) -> (extract-r cl1) == (extract-r cl2)
+≡immersion-r cl1 cl2 p with (≡immersion cl1 cl2 p)
+... | idp = idp
+
+≡-↓-Proper : (n1 n2 k1 k2 : ℕ) -> ((n1 ↓ S k1) == (n2 ↓ S k2)) -> (n1 == n2) × (k1 == k2)
+≡-↓-Proper n1 n2 O O p = (cut-tail p) , idp
+≡-↓-Proper n1 n2 (S k1) (S k2) p = 
+  let rec-n , rec-k = ≡-↓-Proper n1 n2 k1 k2 (cut-head p) 
+  in  rec-n , ap S rec-k
+
+>>-up : {n1 n2 : ℕ} -> (n1 ≤ n2) -> {l : List} -> (n1 >> l) -> (n2 >> l)
+>>-up pn nil = nil
+>>-up pn (k :⟨ x ⟩: xs) = k :⟨ (≤-trans x pn) ⟩: (>>-up pn xs)
+
+≡-++↓-Proper : (m1 m2 : List) -> (n1 n2 k1 k2 : ℕ) -> (x1 : S n1 >> m1) -> (x2 : S n2 >> m2) -> (k1 ≤ n1) -> (k2 ≤ n2) -> (m1 ++ ((n1 ∸ k1) ↓ S k1) == m2 ++ ((n2 ∸ k2) ↓ S k2)) 
+  -> (n1 == n2) × (k1 == k2) × (m1 == m2)
+≡-++↓-Proper nil nil n1 n2 k1 k2 x1 x2 pkn1 pkn2 p = 
+  let pkn , pk = ≡-↓-Proper (n1 ∸ k1) (n2 ∸ k2) k1 k2 p
+      pn = (! (minus-plus {_} {_} {pkn1})) ∙ (≡-up-+ pkn pk) ∙ (minus-plus {_} {_} {pkn2})
+  in  pn , (pk , idp)
+≡-++↓-Proper nil (x :: m2) n1 n2 k1 k2 x1 x2 pkn1 pkn2 p =
+  ⊥-elim (repeat-spaced-long-lemma (n1 ∸ k1) (S k1) x (k2 + n2 ∸ k2) (≤-trans (≤-down2 (extract-proof x2)) (≤-reflexive (! (plus-minus pkn2)))) nil m2 (n2 ∸ k2 ↓ k2) p)
+≡-++↓-Proper (x :: m1) nil n1 n2 k1 k2 x1 x2 pkn1 pkn2 p = 
+  let pn , pk , pm = ≡-++↓-Proper nil (x :: m1) n2 n1 k2 k1 x2 x1 pkn2 pkn1 (! p)
+  in  (! pn) , ((! pk) , (! pm))
+≡-++↓-Proper (x :: m1) (x₁ :: m2) n1 n2 k1 k2 (_ :⟨ _ ⟩: x1) (_ :⟨ _ ⟩: x2) pkn1 pkn2 p =
+  let pn , pk , pm = ≡-++↓-Proper m1 m2 n1 n2 k1 k2 x1 x2 pkn1 pkn2 (cut-head p)
+  in  pn , pk , head+tail (cut-tail p) pm
+
+
+≡immersionProper-n : {nf1 nf2 : ℕ} -> (cl1 : LehmerProper nf1) -> (cl2 : LehmerProper nf2) -> (immersionProper {nf1} cl1 == immersionProper {nf2} cl2) -> nf1 == nf2
+≡immersionProper-n CanZ CanZ p = idp
+≡immersionProper-n (CanS {n1} {S nf1} pn1 cl1 {r1} pr1) CanZ p = ⊥-elim (++-abs-lr p)
+≡immersionProper-n CanZ (CanS {n2} {S nf2} pn2 cl2 {r2} pr2) p = ⊥-elim (++-abs-lr (! p))
+≡immersionProper-n (CanS {n1} {S nf1} pn1 cl1 {r1} pr1) (CanS {n2} {S nf2} pn2 cl2 {r2} pr2) p = 
+  let n1>>cl1 = immersionProper->> cl1
+      n2>>cl2 = immersionProper->> cl2
+      pn , pk , pm = ≡-++↓-Proper _ _ _ _ _ _ (>>-up (≤-down pn1) n1>>cl1) (>>-up (≤-down pn2) n2>>cl2) (≤-down2 pr1) (≤-down2 pr2) p
+  in  ap S pn
+
+
+≡immersionProper-r : {nf1 nf2 : ℕ} -> (cl1 : LehmerProper (S nf1)) -> (cl2 : LehmerProper (S nf2)) -> (immersionProper {S nf1} cl1 == immersionProper {S nf2} cl2) -> (extractProper-r cl1) == (extractProper-r cl2)
+≡immersionProper-r (CanS {n1} {S nf1} pn1 cl1 {r1} pr1) (CanS {n2} {S nf2} pn2 cl2 {r2} pr2) p = 
+  let n1>>cl1 = immersionProper->> cl1
+      n2>>cl2 = immersionProper->> cl2
+      pn , pk , pm = ≡-++↓-Proper _ _ _ _ _ _ (>>-up (≤-down pn1) n1>>cl1) (>>-up (≤-down pn2) n2>>cl2) (≤-down2 pr1) (≤-down2 pr2) p
+  in  pk
 
 
 canonical-proper-append : {n : ℕ} -> (cl : LehmerProper n) -> (x : ℕ) -> (n ≤ x) -> Σ _ (λ clx -> immersionProper {S x} clx == immersionProper {n} cl ++ [ x ])
@@ -274,8 +319,8 @@ is-canonical? (x :: m) with is-canonical? m
         last = cut-prefix ss 
         prefix = cut-last ss
         SSn₁=Snf = ≡immersionProper-n ((CanS (s≤s x₁) fst₁ (≤-up (s≤s x₂)))) (CanS qn cl qr) (prefix ∙ ! pp)
-
-    in  qq (ap S (! last) ∙ (∸-up-r x₂ ∙ ap (λ e -> S n₁ ∸ e) {!   !}) ∙  ap (λ e -> e ∸ r) (≡-down2 SSn₁=Snf))
+        r₁=r₂ = ≡immersionProper-r ((CanS (s≤s x₁) fst₁ (≤-up (s≤s x₂)))) (CanS qn cl qr) (prefix ∙ ! pp)
+    in  qq (ap S (! last) ∙ (∸-up-r x₂ ∙ ap (λ e -> S n₁ ∸ e) r₁=r₂) ∙  ap (λ e -> e ∸ r) (≡-down2 SSn₁=Snf))
   }
 
 canonical-proper-NF : {n : ℕ} -> (cl : LehmerProper n) -> (Σ _ (λ m -> immersionProper {n} cl ≅ m)) -> ⊥
