@@ -132,6 +132,7 @@ postulate
     ≤-up-+ : {p q r : ℕ} -> (p ≤ q) -> (p ≤ r + q)
     ≤-down-+ : {p q r : ℕ} -> (p + r ≤ q) -> (p ≤ q)
     ≡-down-+ : {p q r : ℕ} -> (r + p == r + q) -> (p == q)
+    ≡-up-+ : {p q p2 q2 : ℕ} -> (p == p2) -> (q == q2) -> (p + q == p2 + q2)
     ≡-down-r-+ : {p q r : ℕ} -> (p + r == q + r) -> (p == q)
     ≤-≡ : {n k : ℕ} -> (n ≤ k) -> (k ≤ n) -> (n == k)
     plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
