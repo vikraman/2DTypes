@@ -85,6 +85,21 @@ head+tail idp idp = idp
 start+end : {h1 h2 : List} -> {t1 t2 : List} -> (h1 == h2) -> (t1 == t2) -> (h1 ++ t1) == (h2 ++ t2)
 start+end idp idp = idp
 
+cut-last : {a1 a2 : ℕ} -> {l1 l2 : List} -> (l1 ++ [ a1 ] == l2 ++ [ a2 ]) -> (l1 == l2)
+cut-last {a1} {.a1} {nil} {nil} idp = idp
+cut-last {a1} {a2} {nil} {x :: nil} ()
+cut-last {a1} {a2} {nil} {x :: x₁ :: l2} ()
+cut-last {a1} {a2} {x :: nil} {nil} ()
+cut-last {a1} {a2} {x :: x₁ :: l1} {nil} ()
+cut-last {a1} {a2} {x :: l1} {x₁ :: l2} p = head+tail (cut-tail p) (cut-last (cut-head p))
+
+cut-prefix : {a1 a2 : ℕ} -> {l1 l2 : List} -> (l1 ++ [ a1 ] == l2 ++ [ a2 ]) -> (a1 == a2)
+cut-prefix {a1} {.a1} {nil} {nil} idp = idp
+cut-prefix {a1} {a2} {nil} {x :: nil} ()
+cut-prefix {a1} {a2} {nil} {x :: x₁ :: l2} ()
+cut-prefix {a1} {a2} {x :: nil} {nil} ()
+cut-prefix {a1} {a2} {x :: x₁ :: l1} {nil} ()
+cut-prefix {a1} {a2} {x :: l1} {x₁ :: l2} p = cut-prefix (cut-head p)
 
 ↓-+ : (n k1 k2 : ℕ) -> (n ↓ (k1 + k2)) == ((n + k2) ↓ k1) ++ (n ↓ k2)
 ↓-+ n 0 k2 = idp
@@ -97,6 +112,10 @@ n ↑ (S k) = n :: (S n ↑ k)
 ++-↓ : (n k : ℕ) -> (((S n) ↓ k) ++ [ n ]) == (n ↓ (S k))
 ++-↓ n 0 = idp
 ++-↓ n (S k) rewrite ++-↓ n k = head+tail (+-three-assoc {k} {1} {n}) idp
+
+++-↓-S : (n k x : ℕ) -> (S x == n) -> ((n ↓ k) ++ [ x ]) == (x ↓ (S k))
+++-↓-S n O x p = idp
+++-↓-S n (S k) x p rewrite (! p) rewrite ++-↓ n k = head+tail (+-three-assoc {k} {1} {x}) (++-↓ x k)
 
 ++-↑ : (n k : ℕ) -> ((n ↑ k) ++ [ k + n ]) == (n ↑ (S k))
 ++-↑ n 0 = idp
@@ -171,6 +190,10 @@ nil-abs ()
 ++-abs : {x : ℕ} -> {l : List} -> l ++ [ x ] == nil -> ⊥
 ++-abs {x} {nil} ()
 ++-abs {x} {x₁ :: l} p = nil-abs p
+
+++-abs-lr : {x : ℕ} -> {l r : List} -> l ++ x :: r == nil -> ⊥
+++-abs-lr {x} {nil} ()
+++-abs-lr {x} {x₁ :: l} p = nil-abs p
 
 _↓↓_,_ : (n : ℕ) -> (k : ℕ) -> (k ≤ n) -> List
 n ↓↓ 0 , z≤n = nil
