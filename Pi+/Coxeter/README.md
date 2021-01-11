@@ -60,4 +60,7 @@ Lehmer equivalence:
   - `ExchangeLemmas+.agda`
     - The analogue of `ExchangeLemmas.agda`, but with a stronger conditions that the reductions should be at least 1-step long.
   - `CanonicalForm.agda`
-    - Defines a `LehmerProper` type - an analogue to `Lehmer`, but it's now keeping just the non-empty . They can be converted from and back to normal Lehmer, but it's not an equivalence.
+    - Defines a `LehmerProper` type - an analogue to `Lehmer`, but it's now keeping just the non-empty indices. They can be converted from and back to normal Lehmer, but it's not an equivalence.
+    - Proves that whether something is an immersion of `LehmerProper` is decidable.
+    - Proves that everything reduces to an image of `LehmerProper` (this this is the canonical form).
+    - Converts that proof to the proof that everything reduces to an image of `Lehmer`.
