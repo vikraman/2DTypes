@@ -11,19 +11,19 @@ open import lib.types.Fin
 open import lib.types.Truncation
 open import lib.NType2
 
-⟦_⟧₀ : U → UFin
-⟦ X ⟧₀ = FinFS ∣ X ∣
+-- ⟦_⟧₀ : U → UFin
+-- ⟦ X ⟧₀ = FinFS ∣ X ∣
 
-⌜_⌝₀ : UFin → U
-⌜ X ⌝₀ = ⟪ card X ⟫
+-- ⌜_⌝₀ : UFin → U
+-- ⌜ X ⌝₀ = ⟪ card X ⟫
 
-⌜⟦_⟧⌝₀ : (X : U) → ⌜ ⟦ X ⟧₀ ⌝₀ ⟷₁ X
-⌜⟦ O ⟧⌝₀ = id⟷₁
-⌜⟦ I ⟧⌝₀ = swap₊ ◎ unite₊l
-⌜⟦ X + Y ⟧⌝₀ = !⟷₁ (normC (X + Y))
+-- ⌜⟦_⟧⌝₀ : (X : U) → ⌜ ⟦ X ⟧₀ ⌝₀ ⟷₁ X
+-- ⌜⟦ O ⟧⌝₀ = id⟷₁
+-- ⌜⟦ I ⟧⌝₀ = swap₊ ◎ unite₊l
+-- ⌜⟦ X + Y ⟧⌝₀ = !⟷₁ (normC (X + Y))
 
-⟦⌜_⌝⟧₀ : (X : UFin) → Trunc -1 (⟦ ⌜ X ⌝₀ ⟧₀ == X)
-⟦⌜_⌝⟧₀ = FinSet-elim-prop (λ _ → Trunc-level) λ n → [ pair= (ap Fin ∣⟪ n ⟫∣) prop-has-all-paths-↓ ]
+-- ⟦⌜_⌝⟧₀ : (X : UFin) → Trunc -1 (⟦ ⌜ X ⌝₀ ⟧₀ == X)
+-- ⟦⌜_⌝⟧₀ = FinSet-elim-prop (λ _ → Trunc-level) λ n → [ pair= (ap Fin ∣⟪ n ⟫∣) prop-has-all-paths-↓ ]
 
 -- ⟦_⟧₁ : {X Y : U} → X ⟷₁ Y → ⟦ X ⟧₀ == ⟦ Y ⟧₀ {- Lehmer n -}
 -- ⟦ p ⟧₁ = {!   !}
