@@ -1,12 +1,12 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Lists where
+module Pi+.CoxeterCommon.Lists where
 
 open import lib.Base
 open import lib.PathGroupoid
 open import lib.types.Nat using (_+_)
 open import lib.Function
-open import Pi+.Coxeter.Arithmetic
+open import Pi+.CoxeterCommon.Arithmetic
 open import Pi+.Misc
 
 infixr 35 _::_

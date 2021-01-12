@@ -1,21 +1,20 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Coxeter where
+module Pi+.CoxeterNonParametrized.Coxeter where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.types.Sigma
 open import lib.PathGroupoid
+open import lib.types.Fin
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.ReductionRel
-open import Pi+.Coxeter.MCoxeter
-open import Pi+.Coxeter.MCoxeterS
-open import Pi+.Coxeter.Diamond
-
-open ≅*-Reasoning
+open import Pi+.CoxeterCommon.Arithmetic
+open import Pi+.CoxeterCommon.Lists
+open import Pi+.CoxeterNonParametrized.ReductionRel
+open import Pi+.CoxeterNonParametrized.MCoxeter
+open import Pi+.CoxeterNonParametrized.MCoxeterS
+open import Pi+.CoxeterNonParametrized.Diamond
 
 -- True coxeter presentation
 data _~_ : List -> List -> Set where
@@ -48,22 +47,22 @@ mcoxeter≅*->coxeter : (m1 m2 : List) -> (m1 ≅* m2) -> (m1 ~ m2)
 mcoxeter≅*->coxeter m1 .m1 idp = idp~
 mcoxeter≅*->coxeter m1 m2 (trans≅ x p) = trans~ ((mcoxeter≅->coxeter _ _ x)) ((mcoxeter≅*->coxeter _ _ p))
 
-mcoxeter->coxeter : (m1 m2 : List) -> (m1 ≃ m2) -> (m1 ~ m2)
-mcoxeter->coxeter m1 m2 (comm≅ p1 p2) = trans~ (mcoxeter≅*->coxeter _ _ p1) (comm~ ((mcoxeter≅*->coxeter _ _ p2)))
+mcoxeter->coxeter : (m1 m2 : List) -> (m1 ↔ m2) -> (m1 ~ m2)
+mcoxeter->coxeter m1 m2 (MC p1 p2) = trans~ (mcoxeter≅*->coxeter _ _ p1) (comm~ ((mcoxeter≅*->coxeter _ _ p2)))
 
-coxeter->mcoxeters : {m1 m2 : List} -> (m1 ~ m2) -> (m1 ≃s* m2)
-coxeter->mcoxeters (cancel~ {n}) = trans≃s (cancel≃s nil nil (n :: n :: nil) nil idp idp) idp≃s
-coxeter->mcoxeters (swap~ {n} {k} x) = trans≃s (swap≃s x nil nil (n :: k :: nil) (k :: n :: nil) idp idp) idp≃s
-coxeter->mcoxeters (braid~ {n}) = trans≃s (long≃s O nil nil (S n :: n :: S n :: nil) (n :: S n :: n :: nil) idp idp) idp≃s
+coxeter->mcoxeters : {m1 m2 : List} -> (m1 ~ m2) -> (m1 ↔s* m2)
+coxeter->mcoxeters (cancel~ {n}) = trans↔s (cancel↔s nil nil (n :: n :: nil) nil idp idp) idp↔s
+coxeter->mcoxeters (swap~ {n} {k} x) = trans↔s (swap↔s x nil nil (n :: k :: nil) (k :: n :: nil) idp idp) idp↔s
+coxeter->mcoxeters (braid~ {n}) = trans↔s (long↔s O nil nil (S n :: n :: S n :: nil) (n :: S n :: n :: nil) idp idp) idp↔s
 coxeter->mcoxeters (respects-l~ l p pm1 pm2) = 
-    let lemma = l++≃s* l (coxeter->mcoxeters p)
-    in  transport2 (λ a b → a ≃s* b) (! pm1) (! pm2) lemma
+    let lemma = l++↔s* l (coxeter->mcoxeters p)
+    in  transport2 (λ a b → a ↔s* b) (! pm1) (! pm2) lemma
 coxeter->mcoxeters (respects-r~ r p pm1 pm2) = 
-    let lemma = ++r≃s* r (coxeter->mcoxeters p)
-    in  transport2 (λ a b → a ≃s* b) (! pm1) (! pm2) lemma
-coxeter->mcoxeters (idp~ {m}) = idp≃s
-coxeter->mcoxeters (comm~ {m1} {m2} p) = trans≃s* (comm≃s* {_} {_} {m2} (coxeter->mcoxeters p)) idp≃s
-coxeter->mcoxeters (trans~ p p₁) = trans≃s* (coxeter->mcoxeters p) (coxeter->mcoxeters p₁)
+    let lemma = ++r↔s* r (coxeter->mcoxeters p)
+    in  transport2 (λ a b → a ↔s* b) (! pm1) (! pm2) lemma
+coxeter->mcoxeters (idp~ {m}) = idp↔s
+coxeter->mcoxeters (comm~ {m1} {m2} p) = trans↔s* (comm↔s* {_} {_} {m2} (coxeter->mcoxeters p)) idp↔s
+coxeter->mcoxeters (trans~ p p₁) = trans↔s* (coxeter->mcoxeters p) (coxeter->mcoxeters p₁)
 
-coxeter->mcoxeter : {m1 m2 : List} -> (m1 ~ m2) -> (m1 ≃ m2)
+coxeter->mcoxeter : {m1 m2 : List} -> (m1 ~ m2) -> (m1 ↔ m2)
 coxeter->mcoxeter = mcoxeters*->mcoxeter ∘ coxeter->mcoxeters 

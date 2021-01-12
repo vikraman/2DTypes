@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Arithmetic where
+module Pi+.CoxeterCommon.Arithmetic where
 
 open import lib.Base
 open import lib.types.Nat using (_+_ ; ℕ-S-is-inj)

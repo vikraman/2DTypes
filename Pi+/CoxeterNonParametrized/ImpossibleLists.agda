@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.ImpossibleLists where
+module Pi+.CoxeterNonParametrized.ImpossibleLists where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
@@ -8,8 +8,8 @@ open import lib.types.Sigma
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.Lists
+open import Pi+.CoxeterCommon.Arithmetic
+open import Pi+.CoxeterCommon.Lists
 
 repeat-long-lemma : (n k n1 : ℕ) -> (l r : List) -> (n ↓ k) == (l ++ n1 :: n1 :: r) -> ⊥
 repeat-long-lemma n 0 n1 nil r ()

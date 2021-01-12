@@ -1,14 +1,14 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.ReductionRel where
+module Pi+.CoxeterNonParametrized.ReductionRel where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.Lists
+open import Pi+.CoxeterCommon.Arithmetic
+open import Pi+.CoxeterCommon.Lists
 
 data _≅_ : List -> List -> Type₀ where
   cancel≅ : {n : ℕ} -> (l r m mf : List) -> (defm : m == l ++ n :: n :: r) -> (defmf : mf == l ++ r) -> (m ≅ mf)

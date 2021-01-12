@@ -1,15 +1,15 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.ExchangeLemmas where
+module Pi+.CoxeterNonParametrized.ExchangeLemmas where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.ReductionRel
+open import Pi+.CoxeterCommon.Arithmetic
+open import Pi+.CoxeterCommon.Lists
+open import Pi+.CoxeterNonParametrized.ReductionRel
 
 open ≅*-Reasoning
 

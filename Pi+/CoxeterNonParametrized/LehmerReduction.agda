@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.CanonicalForm where
+module Pi+.CoxeterNonParametrized.CanonicalForm where
 
 open import lib.Base
 open import lib.PathOver
@@ -10,14 +10,14 @@ open import lib.PathGroupoid
 open import lib.NType
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.ReductionRel
-open import Pi+.Coxeter.ReductionRel+
-open import Pi+.Coxeter.ExchangeLemmas
-open import Pi+.Coxeter.ExchangeLemmas+
-open import Pi+.Coxeter.Lehmer
-open import Pi+.Coxeter.ImpossibleLists
+open import Pi+.CoxeterCommon.Arithmetic
+open import Pi+.CoxeterCommon.Lists
+open import Pi+.CoxeterCommon.Lehmer
+open import Pi+.CoxeterNonParametrized.ReductionRel
+open import Pi+.CoxeterNonParametrized.ReductionRel+
+open import Pi+.CoxeterNonParametrized.ExchangeLemmas
+open import Pi+.CoxeterNonParametrized.ExchangeLemmas+
+open import Pi+.CoxeterNonParametrized.ImpossibleLists
 
 open ≅*-Reasoning
 

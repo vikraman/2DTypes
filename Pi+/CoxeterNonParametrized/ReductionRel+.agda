@@ -1,15 +1,15 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.ReductionRel+ where
+module Pi+.CoxeterNonParametrized.ReductionRel+ where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.Lists
-open import Pi+.Coxeter.ReductionRel
+open import Pi+.CoxeterCommon.Arithmetic
+open import Pi+.CoxeterCommon.Lists
+open import Pi+.CoxeterNonParametrized.ReductionRel
 
 data _≅+_ : List -> List -> Type₀ where
     trans≅+ : {m1 m2 m3 : List} -> (m1 ≅ m2) -> (m2 ≅* m3) -> m1 ≅+ m3

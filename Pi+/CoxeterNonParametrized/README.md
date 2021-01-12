@@ -49,7 +49,7 @@ Coxeter equivalence:
     - The other direction is more difficult - essentially, we want to prove that the if the relation is symmetric, then the generators of the relation can be made symmetric and the relation does not change. This requires `diamond`.
 
 Lehmer equivalence:
-  - `Lehmer.agda`
+  - `LehmerCanonical.agda`
     - Defines the Lehmer code and the operation `immersion` that turns a Lehmer code into a sequence of transpositions.
     - The first main result of this section is `final≅-Lehmer` - showing that immersions of Lehmer codes are normal forms wrt to ReductionRel (i.e. they can't be reduced any further).
     - A corollary of this is `only-one-canonical≃`, proving that if two immersions of Lehmer codes are related by ≃, then they are the same Lehmer codes 
@@ -59,7 +59,7 @@ Lehmer equivalence:
     - It's useful for defining that something is not a normal form - if it's not, then there exists n-step reduction (n > 1) to a normal form
   - `ExchangeLemmas+.agda`
     - The analogue of `ExchangeLemmas.agda`, but with a stronger conditions that the reductions should be at least 1-step long.
-  - `CanonicalForm.agda`
+  - `LehmerReduction.agda`
     - Defines a `LehmerProper` type - an analogue to `Lehmer`, but it's now keeping just the non-empty indices. They can be converted from and back to normal Lehmer, but it's not an equivalence.
     - Proves that whether something is an immersion of `LehmerProper` is decidable.
     - Proves that everything reduces to an image of `LehmerProper` (this this is the canonical form).
