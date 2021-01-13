@@ -10,11 +10,6 @@ open import lib.types.SetQuotient public
 open import Pi+.Extra
 open import Pi+.CoxeterParametrized.Coxeter
 
-instance
-    CList-level : {n : ℕ} → is-set (CList n)
-    CList-level = TODO
-
-
 CoxeterRel  : (n : ℕ) → Rel (CList n) lzero
 CoxeterRel n = _≈_ {n}
 

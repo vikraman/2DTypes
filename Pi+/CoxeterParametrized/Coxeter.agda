@@ -4,9 +4,11 @@ module Pi+.CoxeterParametrized.Coxeter where
 
 open import lib.Base
 open import lib.types.Nat using (_+_; <-ap-S; _<_; _≤_)
+open import lib.NType
 open import lib.PathGroupoid
 open import lib.types.Fin
 
+open import Pi+.Extra
 
 ⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
 ⟨_⟩ = Fin-S
@@ -19,6 +21,10 @@ infixr 35 _∷_
 data CList : ℕ → Type₀ where
     [] : ∀ {m} → CList m
     _∷_ : ∀ {m} → Fin (S m) → CList m → CList m
+
+instance
+    CList-level : {n : ℕ} → is-set (CList n)
+    CList-level = TODO
 
 infixr 50 _++_
 

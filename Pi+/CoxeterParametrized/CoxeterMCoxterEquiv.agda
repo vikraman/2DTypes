@@ -11,6 +11,7 @@ open import lib.Equivalence
 
 
 open import Pi+.Misc
+open import Pi+.Extra
 open import Pi+.Coxeter.Arithmetic
 open import Pi+.Coxeter.Lists
 -- open import Pi+.Coxeter.ReductionRel
@@ -36,7 +37,7 @@ open import Pi+.Coxeter.LList
 module _ {n : ℕ} where
   
   CList≃LList : CList n ≃ LList (S n)
-  CList≃LList = equiv f g {!   !} {!   !}
+  CList≃LList = equiv f g TODO TODO
     where
       f : (CList n) -> (LList (S n))
       f [] = nil , nil
