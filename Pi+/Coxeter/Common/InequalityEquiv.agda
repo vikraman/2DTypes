@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Parametrized.InequalityEquiv where
+module Pi+.Coxeter.Common.InequalityEquiv where
 
 open import lib.Base
 open import lib.types.Nat using (_+_; O<S; <-ap-S; <-has-all-paths) renaming (_<_ to _<N_)

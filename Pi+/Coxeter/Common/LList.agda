@@ -7,10 +7,13 @@ open import lib.types.Nat using (_+_)
 open import lib.types.Sigma
 open import lib.NType
 open import lib.PathGroupoid
+open import lib.Equivalence
+open import lib.PathOver
+open import lib.types.Fin
 
 open import Pi+.Coxeter.Common.Arithmetic
 open import Pi+.Coxeter.Common.ListN
-
+open import Pi+.Coxeter.Common.InequalityEquiv
 
 data _>>_ : ℕ -> Listℕ -> Type₀ where
   nil : {n : ℕ} -> n >> nil
@@ -34,10 +37,28 @@ extract-proof (_ :⟨ p ⟩: _) = p
 LList : ℕ → Type₀
 LList n = Σ _ (λ l → n >> l)
 
-infixr 50 _+++_
+>>-implies-> : {n a : ℕ} -> {l l1 r1 : Listℕ} -> (n >> l) -> (l == l1 ++ a ∷ r1) -> (a < n)
+>>-implies-> {n} {l = .(k ∷ _)} {nil} {r1} (k :⟨ x ⟩: nl) p = transport (λ e -> e < n) (cut-tail p) x
+>>-implies-> {n} {l = x₁ ∷ l} {x ∷ l1} {r1} (_ :⟨ _ ⟩: nl) p = >>-implies-> nl (cut-head p)
 
-_+++_ : {m : ℕ} -> (LList m) -> (LList m) -> LList m
-(nil , nil) +++ r = r
-((x ∷ xs) , (.x :⟨ px ⟩: pxs)) +++ r = 
-  let rec = (xs , pxs) +++ r
-  in  (x ∷ rec .fst) , (x :⟨ px ⟩: rec .snd)
+>>-implies->> : {n : ℕ} -> {l l1 m1 r1 : Listℕ} -> (n >> l) -> (l == l1 ++ (m1 ++ r1)) -> n >> m1
+>>-implies->> {l = l} {l1 = nil} {m1 = nil} nl p = nil
+>>-implies->> {n} {l = .(k ∷ _)} {l1 = nil} {m1 = x ∷ m1} (k :⟨ x₁ ⟩: nl) p = 
+  x :⟨ transport (λ e -> e < n) (cut-tail p) x₁ ⟩: >>-implies->> {_} {_} {nil} {m1} {_} nl (cut-head p)
+>>-implies->> {l = x₁ ∷ l} {l1 = x ∷ l1} {m1 = m1} (.x₁ :⟨ x₂ ⟩: nl) p = >>-implies->> {_} {l} {l1} {m1} nl (cut-head p)
+
+-- _:⟨⟩:_ : {m : ℕ} -> Fin m -> LList m -> LList m
+-- (x , xp) :⟨⟩: (xs , xsp) = (x ∷ xs) , (x :⟨ –> <N≃< xp ⟩: xsp)
+
+head+tail>> : {n a : ℕ} -> (ap1 : a < n) -> (ap2 : a < n) -> {l : Listℕ} -> {lp1 : n >> l} -> {lp2 : n >> l} -> (lp1 == lp2) -> (a :⟨ ap1 ⟩: lp1) == (a :⟨ ap2 ⟩: lp2)
+head+tail>> {a = a} ap1 ap2 {lp1 = lp1} {lp2 = lp2} pl = ap (λ e -> (a :⟨ ap1 ⟩: e)) pl ∙ ap (λ e -> a :⟨ e ⟩: lp2) (≤-has-all-paths ap1 ap2)
+
+>>-eq : {n : ℕ} -> {l : Listℕ} -> (lp1 : n >> l) -> (lp2 : n >> l) -> (lp1 == lp2)
+>>-eq nil nil = idp
+>>-eq (k :⟨ kp1 ⟩: lp1) (.k :⟨ kp2 ⟩: lp2) = head+tail>> kp1 kp2 (>>-eq lp1 lp2)
+
+>>-eq-d : {n : ℕ} -> {l1 l2 : Listℕ} -> (p : l1 == l2) -> (lp1 : n >> l1) -> (lp2 : n >> l2) -> PathOver (_>>_ n) p lp1 lp2
+>>-eq-d {n} idp lp1 lp2 = >>-eq lp1 lp2
+
+LList-eq : {n : ℕ} -> {l1 l2 : LList n} -> ((l1 .fst) == (l2 .fst)) -> (l1 == l2)
+LList-eq {n} {l1} {l2} p = pair= p (>>-eq-d p (l1 .snd) (l2 .snd))
