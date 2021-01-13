@@ -7,6 +7,7 @@ open import lib.NType
 open import lib.NType2
 open import lib.Equivalence
 open import lib.types.Fin
+open import lib.types.List
 
 open import Pi+.Coxeter.Common.Lehmer using (Lehmer)
 open import Pi+.Coxeter.Parametrized.Group
@@ -20,22 +21,22 @@ module _ {n : ℕ} where
 
 module _ {n : ℕ} where
 
-    immersion : Lehmer n -> CList n
+    immersion : Lehmer n -> List (Fin n)
     immersion = {!   !}
 
-    everything-to-Lehmer : (m : CList n) -> Σ (Lehmer n) (λ cl -> m ≈[ n ] immersion cl)
+    everything-to-Lehmer : (m : List (Fin n)) -> Σ (Lehmer n) (λ cl -> m ≈[] immersion cl)
     everything-to-Lehmer = {!   !}
     
-    immersion-is-injection : (cl1 cl2 : Lehmer n) -> ((immersion cl1) ≈[ n ] (immersion cl2)) -> cl1 == cl2
+    immersion-is-injection : (cl1 cl2 : Lehmer n) -> ((immersion cl1) ≈[] (immersion cl2)) -> cl1 == cl2
     immersion-is-injection = {!   !}
 
     f :  Lehmer n → Sn n
     f = q[_] ∘ immersion
 
-    g-q :  CList n → Lehmer n
+    g-q :  List (Fin n) → Lehmer n
     g-q m = everything-to-Lehmer m .fst
 
-    g-rel :  {m1 m2 : CList n} → m1 ≈[ n ] m2 → g-q m1 == g-q m2
+    g-rel :  {m1 m2 : List (Fin n)} → m1 ≈[] m2 → g-q m1 == g-q m2
     g-rel {m1} {m2} pm = 
         let (cl1 , cl1p) = everything-to-Lehmer m1
             (cl2 , cl2p) = everything-to-Lehmer m2
@@ -45,7 +46,7 @@ module _ {n : ℕ} where
     g :  Sn n → Lehmer n
     g = SetQuot-rec {B = Lehmer n} g-q g-rel
 
-    f-g-q : (m : CList n) → f (g q[ m ]) == q[ m ]
+    f-g-q : (m : List (Fin n)) → f (g q[ m ]) == q[ m ]
     f-g-q m = quot-rel (CoxeterRel-sym (everything-to-Lehmer m .snd))
 
     f-g :  (l : Sn n) → f (g l) == l

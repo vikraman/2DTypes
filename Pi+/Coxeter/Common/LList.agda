@@ -33,3 +33,11 @@ extract-proof (_ :⟨ p ⟩: _) = p
 
 LList : ℕ → Type₀
 LList n = Σ _ (λ l → n >> l)
+
+infixr 50 _+++_
+
+_+++_ : {m : ℕ} -> (LList m) -> (LList m) -> LList m
+(nil , nil) +++ r = r
+((x ∷ xs) , (.x :⟨ px ⟩: pxs)) +++ r = 
+  let rec = (xs , pxs) +++ r
+  in  (x ∷ rec .fst) , (x :⟨ px ⟩: rec .snd)

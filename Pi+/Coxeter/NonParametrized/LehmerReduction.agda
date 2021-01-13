@@ -367,7 +367,6 @@ Listℕ-to-LehmerProper m with is-canonical? m
       nn , rec-m , rec-p = Listℕ-to-LehmerProper (rev step-m)
   in  nn , rec-m , (trans (ext* step-p) (trans (idp≅* rev-rev) rec-p))
 
-{-# NON_TERMINATING #-}
 Listℕ-to-Lehmer : (m : Listℕ) -> Σ _ (λ n -> Σ _ (λ cl -> rev m ≅* immersion {n} cl))
 Listℕ-to-Lehmer m = 
   let n , cl , clp = Listℕ-to-LehmerProper m

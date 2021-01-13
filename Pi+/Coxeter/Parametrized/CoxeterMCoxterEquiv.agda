@@ -1,44 +1,25 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.CoxeterMCoxterEquiv where
+module Pi+.Coxeter.Parametrized.CoxeterMCoxterEquiv where
 
 open import lib.Base
-open import lib.types.Nat using (_+_; O<S; <-ap-S; <-has-all-paths) renaming (_<_ to _<N_)
+open import lib.types.Nat using (_+_)
 open import lib.types.Sigma
 open import lib.PathGroupoid
 open import lib.types.Fin
 open import lib.Equivalence
-
+open import lib.types.List 
 
 open import Pi+.Misc
 open import Pi+.Extra
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.Lists
--- open import Pi+.Coxeter.ReductionRel
-open import Pi+.Coxeter.MCoxeter
--- open import Pi+.Coxeter.MCoxeterS
--- open import Pi+.Coxeter.Diamond
-
-open import Pi+.Coxeter.Coxeter
-open import Pi+.Coxeter.LList
+open import Pi+.Coxeter.Common.Arithmetic
+open import Pi+.Coxeter.Common.ListN
+open import Pi+.Coxeter.Common.LList
+open import Pi+.Coxeter.NonParametrized.MCoxeter
+open import Pi+.Coxeter.Parametrized.ListFinLListEquiv
+open import Pi+.Coxeter.Parametrized.Group
 
   
-
-module _ {n : ℕ} where
-  
-  CList≃LList : CList n ≃ LList (S n)
-  CList≃LList = equiv f g TODO TODO
-    where
-      f : (CList n) -> (LList (S n))
-      f [] = nil , nil
-      f (x ∷ l) = 
-        let rec-l , rec-p = f l
-        in  ((x . fst) ∷ rec-l) , ((x .fst) :⟨ –> <N≃< (x .snd) ⟩: rec-p)
-
-      g : (LList (S n)) -> (CList n)
-      g (nil , nil) = []
-      g ((x ∷ fst) , (.x :⟨ px ⟩: snd)) = x , (<– <N≃< px) ∷ g (fst , snd)
-
 -- long-swap-lemma : (n k x : ℕ) -> (k + n < x) -> ((n ↓ k) ++ x ∷ nil) ~ (x ∷ (n ↓ k))
 -- long-swap-lemma n 0 x p = idp~
 -- long-swap-lemma n (S k) x p = trans~ (respects-l~ [ k + n ] (long-swap-lemma n k x (≤-down p)) idp idp) (respects-r~ (n ↓ k) (comm~ (swap~ p)) idp idp)
@@ -59,8 +40,8 @@ module _ {n : ℕ} where
 -- mcoxeter≅*->coxeter m1 .m1 idp = idp~
 -- mcoxeter≅*->coxeter m1 m2 (trans≅ x p) = trans~ ((mcoxeter≅->coxeter _ _ x)) ((mcoxeter≅*->coxeter _ _ p))
 
-  mcoxeter->coxeter : (m1 m2 : LList (S n)) -> ((m1 .fst) ↔ (m2 .fst)) -> (<– CList≃LList m1) ≈ (<– CList≃LList m2)
-  mcoxeter->coxeter = ?
+mcoxeter->coxeter : {n : ℕ} -> (m1 m2 : LList n) -> ((m1 .fst) ↔ (m2 .fst)) -> (<– List≃LList m1) ≈[ n ] (<– List≃LList m2)
+mcoxeter->coxeter = {!   !}
 
 -- coxeter->mcoxeters : {m1 m2 : List} -> (m1 ~ m2) -> (m1 ≃s* m2)
 -- coxeter->mcoxeters (cancel~ {n}) = trans≃s (cancel≃s nil nil (n ∷ n ∷ nil) nil idp idp) idp≃s
@@ -79,5 +60,5 @@ module _ {n : ℕ} where
 -- coxeter->mcoxeter : {m1 m2 : List} -> (m1 ~ m2) -> (m1 ≃ m2)
 -- coxeter->mcoxeter = mcoxeters*->mcoxeter ∘ coxeter->mcoxeters 
 
-  coxeter->mcoxeter : {m1 m2 : CList n} -> (m1 ≈ m2) -> (–> CList≃LList m1) .fst ↔ (–> CList≃LList m2) .fst
-  coxeter->mcoxeter = {!   !}
+coxeter->mcoxeter :  {n : ℕ} -> {m1 m2 : List (Fin n)} -> (m1 ≈[ n ] m2) -> (–> List≃LList m1) .fst ↔ (–> List≃LList m2) .fst
+coxeter->mcoxeter = {!   !}
