@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.CoxeterNonParametrized.LehmerReduction where
+module Pi+.Coxeter.NonParametrized.LehmerReduction where
 
 open import lib.Base
 open import lib.PathOver
@@ -10,16 +10,16 @@ open import lib.PathGroupoid
 open import lib.NType
 
 open import Pi+.Misc
-open import Pi+.CoxeterCommon.Arithmetic
-open import Pi+.CoxeterCommon.ListN
-open import Pi+.CoxeterCommon.LList
-open import Pi+.CoxeterCommon.Lehmer
-open import Pi+.CoxeterNonParametrized.ReductionRel
-open import Pi+.CoxeterNonParametrized.ReductionRel+
-open import Pi+.CoxeterNonParametrized.ExchangeLemmas
-open import Pi+.CoxeterNonParametrized.ExchangeLemmas+
-open import Pi+.CoxeterNonParametrized.ImpossibleLists
-open import Pi+.CoxeterNonParametrized.LehmerCanonical
+open import Pi+.Coxeter.Common.Arithmetic
+open import Pi+.Coxeter.Common.ListN
+open import Pi+.Coxeter.Common.LList
+open import Pi+.Coxeter.Common.Lehmer
+open import Pi+.Coxeter.NonParametrized.ReductionRel
+open import Pi+.Coxeter.NonParametrized.ReductionRel+
+open import Pi+.Coxeter.NonParametrized.ExchangeLemmas
+open import Pi+.Coxeter.NonParametrized.ExchangeLemmas+
+open import Pi+.Coxeter.NonParametrized.ImpossibleLists
+open import Pi+.Coxeter.NonParametrized.LehmerCanonical
 
 open ≅*-Reasoning
 
@@ -33,7 +33,7 @@ immersionProper : {n : ℕ} -> LehmerProper n -> Listℕ
 immersionProper {0} CanZ = nil
 immersionProper {S n} (CanS _ l {r} _) = (immersionProper l) ++ ((n ∸ r) ↓ (1 + r))
 
--- (20 ∸ 8) ↓ (1 + 3) = 15 :: 14 :: 13 :: 12 :: nil
+-- (20 ∸ 8) ↓ (1 + 3) = 15 ∷ 14 ∷ 13 ∷ 12 ∷ nil
 
 immersion-transport : {n1 n2 : ℕ} -> (pn : n1 == n2) -> (l : Lehmer n1) -> (immersion l == immersion (transport Lehmer pn l))
 immersion-transport {n1} {.n1} idp l = idp
@@ -49,14 +49,14 @@ properize (CanS cl {O} x) =
   in  nrec , clfrec , (++-unit ∙ clfrecp) , ≤-up nfr
 properize (CanS {n} cl {S r} x) =
   let (k , clrec , clfrecp , nfn) = properize cl
-  in  S n , CanS (s≤s nfn) clrec x , (ap (λ e -> e ++ ((r + n ∸ r) :: (n ∸ r) ↓ r)) clfrecp) , ≤-reflexive idp
+  in  S n , CanS (s≤s nfn) clrec x , (ap (λ e -> e ++ ((r + n ∸ r) ∷ (n ∸ r) ↓ r)) clfrecp) , ≤-reflexive idp
 
 unproperize : {n : ℕ} -> (cl : LehmerProper n) -> Σ _ (λ clf -> immersionProper {n} cl == immersion {n} clf)
 unproperize CanZ = CanZ , idp
 unproperize {S nf} (CanS {n} {.(S nf)} x cl {r} x₁) =
   let nfr , clfr = unproperize cl 
       rec-l , rec-p = canonical-lift nf (≤-down2 x) nfr
-  in  CanS rec-l x₁ , ap (λ e -> e ++ (r + nf ∸ r :: nf ∸ r ↓ r)) (clfr ∙ ! rec-p)
+  in  CanS rec-l x₁ , ap (λ e -> e ++ (r + nf ∸ r ∷ nf ∸ r ↓ r)) (clfr ∙ ! rec-p)
 
 immersionProper->> : {n : ℕ} -> (cl : LehmerProper n) -> n >> immersionProper cl
 immersionProper->> {n} cl = 
@@ -145,12 +145,12 @@ extract-r (CanS _ {r} _) = r
   let pkn , pk = ≡-↓-Proper (n1 ∸ k1) (n2 ∸ k2) k1 k2 p
       pn = (! (minus-plus {_} {_} {pkn1})) ∙ (≡-up-+ pkn pk) ∙ (minus-plus {_} {_} {pkn2})
   in  pn , (pk , idp)
-≡-++↓-Proper nil (x :: m2) n1 n2 k1 k2 x1 x2 pkn1 pkn2 p =
+≡-++↓-Proper nil (x ∷ m2) n1 n2 k1 k2 x1 x2 pkn1 pkn2 p =
   ⊥-elim (repeat-spaced-long-lemma (n1 ∸ k1) (S k1) x (k2 + n2 ∸ k2) (≤-trans (≤-down2 (extract-proof x2)) (≤-reflexive (! (plus-minus pkn2)))) nil m2 (n2 ∸ k2 ↓ k2) p)
-≡-++↓-Proper (x :: m1) nil n1 n2 k1 k2 x1 x2 pkn1 pkn2 p = 
-  let pn , pk , pm = ≡-++↓-Proper nil (x :: m1) n2 n1 k2 k1 x2 x1 pkn2 pkn1 (! p)
+≡-++↓-Proper (x ∷ m1) nil n1 n2 k1 k2 x1 x2 pkn1 pkn2 p = 
+  let pn , pk , pm = ≡-++↓-Proper nil (x ∷ m1) n2 n1 k2 k1 x2 x1 pkn2 pkn1 (! p)
   in  (! pn) , ((! pk) , (! pm))
-≡-++↓-Proper (x :: m1) (x₁ :: m2) n1 n2 k1 k2 (_ :⟨ _ ⟩: x1) (_ :⟨ _ ⟩: x2) pkn1 pkn2 p =
+≡-++↓-Proper (x ∷ m1) (x₁ ∷ m2) n1 n2 k1 k2 (_ :⟨ _ ⟩: x1) (_ :⟨ _ ⟩: x2) pkn1 pkn2 p =
   let pn , pk , pm = ≡-++↓-Proper m1 m2 n1 n2 k1 k2 x1 x2 pkn1 pkn2 (cut-head p)
   in  pn , pk , head+tail (cut-tail p) pm
 
@@ -195,24 +195,24 @@ always-reduces n O x px with n ≤? x
   in  ⊥-elim (nowhere rr r (λ x₁ → 1+n≰n (≤-trans (≤-reflexive (! x₁)) l1)) λ x₁ → p (≤-down2 (≤-down x₁)))
 always-reduces n (S k) x px with x ≤? k + n
 ... | yes p with always-reduces n k x p
-... | inj₁ (fst₁ , snd₁) =  inj₁ (_ , (+l++ (S (k + n) :: nil) snd₁))
+... | inj₁ (fst₁ , snd₁) =  inj₁ (_ , (+l++ (S (k + n) ∷ nil) snd₁))
 ... | inj₂ r = inj₂ r
 always-reduces n (S k) x px | no  p = 
   let l1 = ≰⇒> p
       l2 = squeeze l1 px
-      r = transport (λ e → ((n ↓ (2 + k)) ++ [ e ]) ≅+ ((k + n) :: (n ↓ (2 + k)) ++ nil)) (! l2) (long+ {n} k nil nil)
+      r = transport (λ e → ((n ↓ (2 + k)) ++ [ e ]) ≅+ ((k + n) ∷ (n ↓ (2 + k)) ++ nil)) (! l2) (long+ {n} k nil nil)
   in  inj₁ (_ , r)
 
-lemma : (n r x : ℕ) -> (r ≤ n) -> (m : Listℕ) -> (f : (mf : Listℕ) -> ((m ++ ((n ∸ r) ↓ (1 + r))) ++ x :: nil) ≅+ mf -> ⊥) -> (n < x) ⊎ ((x == n ∸ (1 + r)) × (S r ≤ n))
+lemma : (n r x : ℕ) -> (r ≤ n) -> (m : Listℕ) -> (f : (mf : Listℕ) -> ((m ++ ((n ∸ r) ↓ (1 + r))) ++ x ∷ nil) ≅+ mf -> ⊥) -> (n < x) ⊎ ((x == n ∸ (1 + r)) × (S r ≤ n))
 lemma n r x pnr m f with n <? x
 ... | yes q = inj₁ q
 ... | no q with  always-reduces (n ∸ r) r x (≤-trans (≤-down2 (≰⇒> q)) (≤-reflexive (≡-sym (plus-minus pnr))))
 ... | inj₁ (ar-m , ar-p) =
   let red =
         ≅*begin
-          (m ++ ((n ∸ r) ↓ (1 + r))) ++ x :: nil
+          (m ++ ((n ∸ r) ↓ (1 + r))) ++ x ∷ nil
         ≅*⟨ idp≅* (++-assoc m _ _) ⟩
-          m ++ ((n ∸ r) ↓ (1 + r)) ++ x :: nil
+          m ++ ((n ∸ r) ↓ (1 + r)) ++ x ∷ nil
         ≅*∎
   in  ⊥-elim (f _ (trans*+ red (+l++ m ar-p)))
 ... | inj₂ qq = 
@@ -229,28 +229,28 @@ canonical-proper-append-smaller {n} {nf} {r} {pn} {pr} {cl} x clf defclf defx =
       lemma = ++-↓ (nf ∸ r) r
   in  ≤-up2 r<nf , 
     ap (λ e -> immersionProper cl ++ e) (head+tail ((plus-minus {S r} {nf} r<nf) ∙ (! (plus-minus {r} {nf} (≤-down r<nf)))) (! (++-↓-S (nf ∸ r) r x defx ∙ 
-      transport (λ e -> r + e :: e ↓ r == r + nf ∸ S r :: nf ∸ S r ↓ r ) x=nf-Sr idp))) ∙ 
-    ! (++-assoc (immersionProper cl) (r + nf ∸ r :: nf ∸ r ↓ r) [ x ]) ∙ 
+      transport (λ e -> r + e ∷ e ↓ r == r + nf ∸ S r ∷ nf ∸ S r ↓ r ) x=nf-Sr idp))) ∙ 
+    ! (++-assoc (immersionProper cl) (r + nf ∸ r ∷ nf ∸ r ↓ r) [ x ]) ∙ 
     ap (λ e -> immersionProper e ++ [ x ]) (! defclf)
 
 canonical-final≅ : (m : Listℕ) -> (f : (mf : Listℕ) -> (rev m ≅+ mf) -> ⊥) -> Σ _ (λ n -> Σ _ (λ cl -> immersionProper {n} cl == rev m))
 canonical-final≅ nil f = O , CanZ , idp
-canonical-final≅ (x :: m) f with (canonical-final≅ m (λ mf red → f (mf ++ [ x ]) (++r+ [ x ] red)))
+canonical-final≅ (x ∷ m) f with (canonical-final≅ m (λ mf red → f (mf ++ [ x ]) (++r+ [ x ] red)))
 ... | n , cl , p with n ≤? x
 ... | yes q = 
   let ar-cl , ar-p = canonical-proper-append cl x q
   in  S x , ar-cl , (transport (λ e -> immersionProper (fst (canonical-proper-append cl x q)) == e ++ [ x ]) p ar-p)
-canonical-final≅ (x :: m) f | O , CanZ , p | no q = ⊥-elim (q z≤n)
-canonical-final≅ (x :: m) f | S n , CanS {k} k<Sn cl {r} r<Sn , p | no q with lemma n r x (≤-down2 r<Sn) _ (λ mf pp → f _ ((transport (λ e -> e ++ [ x ] ≅+ mf) p pp)))
+canonical-final≅ (x ∷ m) f | O , CanZ , p | no q = ⊥-elim (q z≤n)
+canonical-final≅ (x ∷ m) f | S n , CanS {k} k<Sn cl {r} r<Sn , p | no q with lemma n r x (≤-down2 r<Sn) _ (λ mf pp → f _ ((transport (λ e -> e ++ [ x ] ≅+ mf) p pp)))
 ... | inj₁ qq = ⊥-elim (q qq)
 ... | inj₂ (fst₁ , snd₁) = 
   let prr , prr-p = canonical-proper-append-smaller {k} {n} {r} {k<Sn} {r<Sn} {cl} x (CanS k<Sn cl r<Sn) idp (ap S fst₁ ∙ ! (∸-up snd₁))
   in  S n , (CanS {k} {S n} k<Sn cl {S r} (≤-up2 snd₁) , prr-p ∙ ap (λ e -> e ++ [ x ]) p)
 
 
-abs-Listℕ : {l : Listℕ} -> {n : ℕ} -> {r : Listℕ} -> (nil == (l ++ (n :: r))) -> ⊥
+abs-Listℕ : {l : Listℕ} -> {n : ℕ} -> {r : Listℕ} -> (nil == (l ++ (n ∷ r))) -> ⊥
 abs-Listℕ {nil} {n} {r} ()
-abs-Listℕ {x :: l} {n} {r} ()
+abs-Listℕ {x ∷ l} {n} {r} ()
 
 cut-last-Lehmer : {n : ℕ} -> {l : Listℕ} -> (x : ℕ) -> (cl : LehmerProper n) -> (immersionProper cl == l ++ [ x ]) -> Σ _ (λ nf -> Σ _ (λ clf -> immersionProper {nf} clf == l))
 cut-last-Lehmer {0} {l} x CanZ pp = ⊥-elim (abs-Listℕ pp)
@@ -270,7 +270,7 @@ cut-last-Lehmer {S n} {l} x (CanS pn cl {S r} pr) pp =
         begin
           _
         =⟨ start+end (idp {a = immersionProper cl}) (head+tail (cong (λ e -> r + e) (∸-up pr)) (cong (λ e -> e ↓ r) (∸-up pr))) ⟩
-          immersionProper cl ++ r + S (n ∸ S r) :: (S (n ∸ S r) ↓ r)
+          immersionProper cl ++ r + S (n ∸ S r) ∷ (S (n ∸ S r) ↓ r)
         =⟨ cut-last p1 ⟩
           l
         =∎
@@ -279,7 +279,7 @@ cut-last-Lehmer {S n} {l} x (CanS pn cl {S r} pr) pp =
 
 is-canonical? : (m : Listℕ) -> BoolDec (Σ _ (λ nf -> Σ _ (λ cl -> immersionProper {nf} cl == rev m)))
 is-canonical? nil = yes ( _ , (CanZ , idp))
-is-canonical? (x :: m) with is-canonical? m
+is-canonical? (x ∷ m) with is-canonical? m
 ... | no  p = no λ {(_ , cl , pp) → p (cut-last-Lehmer x cl pp) }
 ... | yes (_ , CanZ , pp) rewrite (≡-sym pp) = yes (_ , canonical-proper-append CanZ x z≤n)
 ... | yes (S nf , CanS {n} {S nf} qn cl {r} qr , pp) with nf <? x
@@ -316,7 +316,7 @@ is-canonical? (x :: m) with is-canonical? m
     in  1+n≰n lemma ;
     -- S n₁ ∸ m₁
   (S (S _) , CanS {_} {S (S n₁)} (s≤s x₁) fst₁ {S m₁} (s≤s (s≤s x₂)) , snd₁) -> 
-    let ss = (transport (λ e -> (immersionProper fst₁ ++ m₁ + e :: e ↓ m₁) ++ [ n₁ ∸ m₁ ] == (immersionProper fst₁ ++ m₁ + S (n₁ ∸ m₁) :: S (n₁ ∸ m₁) ↓ m₁) ++ [ n₁ ∸ m₁ ]) (∸-up-r x₂) idp ∙ 
+    let ss = (transport (λ e -> (immersionProper fst₁ ++ m₁ + e ∷ e ↓ m₁) ++ [ n₁ ∸ m₁ ] == (immersionProper fst₁ ++ m₁ + S (n₁ ∸ m₁) ∷ S (n₁ ∸ m₁) ↓ m₁) ++ [ n₁ ∸ m₁ ]) (∸-up-r x₂) idp ∙ 
             ++-assoc (immersionProper fst₁) (S (n₁ ∸ m₁) ↓ S m₁) [ n₁ ∸ m₁ ]) ∙ ap (λ e -> immersionProper fst₁ ++ e) (++-↓ (n₁ ∸ m₁) (S m₁)) ∙ snd₁
         last = cut-prefix ss 
         prefix = cut-last ss
@@ -332,7 +332,7 @@ canonical-proper-NF cl (m , p) =
 
 not-canonical-not-NF : (m : Listℕ) -> ¬ (Σ _ (λ n -> Σ _ (λ cl -> (immersionProper {n} cl) == (rev m)))) -> Σ _ (λ mf -> (rev m) ≅+ mf)
 not-canonical-not-NF nil p = ⊥-elim (p (_ , (CanZ , idp)))
-not-canonical-not-NF (x :: m) p with is-canonical? m
+not-canonical-not-NF (x ∷ m) p with is-canonical? m
 -- first, the case when m is not canonical
 ... | no  q =
   let rec-m , rec-p = not-canonical-not-NF m q

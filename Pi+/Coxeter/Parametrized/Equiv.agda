@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.CoxeterParametrized.Equiv where
+module Pi+.Coxeter.Parametrized.Equiv where
 
 open import lib.Base
 open import lib.NType
@@ -8,9 +8,9 @@ open import lib.NType2
 open import lib.Equivalence
 open import lib.types.Fin
 
-open import Pi+.CoxeterCommon.Lehmer using (Lehmer)
-open import Pi+.CoxeterParametrized.Group
-open import Pi+.CoxeterParametrized.Coxeter
+open import Pi+.Coxeter.Common.Lehmer using (Lehmer)
+open import Pi+.Coxeter.Parametrized.Group
+open import Pi+.Coxeter.Parametrized.Coxeter
 open import Pi+.Extra
 
 module _ {n : ℕ} where

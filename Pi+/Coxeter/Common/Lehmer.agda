@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.CoxeterCommon.Lehmer where
+module Pi+.Coxeter.Common.Lehmer where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
@@ -8,9 +8,9 @@ open import lib.types.Sigma
 open import lib.NType
 open import lib.PathGroupoid
 
-open import Pi+.CoxeterCommon.Arithmetic
-open import Pi+.CoxeterCommon.ListN
-open import Pi+.CoxeterCommon.LList
+open import Pi+.Coxeter.Common.Arithmetic
+open import Pi+.Coxeter.Common.ListN
+open import Pi+.Coxeter.Common.LList
 open import Pi+.Extra
 
 data Lehmer : (n : ℕ) -> Type₀ where

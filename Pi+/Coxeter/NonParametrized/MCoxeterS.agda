@@ -1,22 +1,22 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.CoxeterNonParametrized.MCoxeterS where
+module Pi+.Coxeter.NonParametrized.MCoxeterS where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.CoxeterCommon.Arithmetic
-open import Pi+.CoxeterCommon.ListN
-open import Pi+.CoxeterNonParametrized.MCoxeter
-open import Pi+.CoxeterNonParametrized.ReductionRel
-open import Pi+.CoxeterNonParametrized.Diamond
+open import Pi+.Coxeter.Common.Arithmetic
+open import Pi+.Coxeter.Common.ListN
+open import Pi+.Coxeter.NonParametrized.MCoxeter
+open import Pi+.Coxeter.NonParametrized.ReductionRel
+open import Pi+.Coxeter.NonParametrized.Diamond
 
 data _↔s_ : Listℕ -> Listℕ -> Type₀ where
-    cancel↔s : {n : ℕ} -> (l r m mf : Listℕ) -> (defm : m == l ++ n :: n :: r) -> (defmf : mf == l ++ r) -> (m ↔s mf)
-    swap↔s : {n : ℕ} -> {k : ℕ} -> (S k < n) ->  (l r m mf : Listℕ) -> (defm : m == l ++ n :: k :: r) -> (defmf : mf == l ++ k :: n :: r) -> (m ↔s mf)
-    long↔s : {n : ℕ} -> (k : ℕ) -> (l r m mf : Listℕ) -> (defm : m == l ++ (n ↓ (2 + k)) ++ (1 + k + n) :: r) -> (defmf : mf == l ++ (k + n) :: (n ↓ (2 + k)) ++ r) -> (m ↔s mf)
+    cancel↔s : {n : ℕ} -> (l r m mf : Listℕ) -> (defm : m == l ++ n ∷ n ∷ r) -> (defmf : mf == l ++ r) -> (m ↔s mf)
+    swap↔s : {n : ℕ} -> {k : ℕ} -> (S k < n) ->  (l r m mf : Listℕ) -> (defm : m == l ++ n ∷ k ∷ r) -> (defmf : mf == l ++ k ∷ n ∷ r) -> (m ↔s mf)
+    long↔s : {n : ℕ} -> (k : ℕ) -> (l r m mf : Listℕ) -> (defm : m == l ++ (n ↓ (2 + k)) ++ (1 + k + n) ∷ r) -> (defmf : mf == l ++ (k + n) ∷ (n ↓ (2 + k)) ++ r) -> (m ↔s mf)
     comm↔s : {m1 m2 : Listℕ} -> (m1 ↔s m2) -> (m2 ↔s m1)
 
 data _↔s*_ : Listℕ -> Listℕ -> Type₀ where

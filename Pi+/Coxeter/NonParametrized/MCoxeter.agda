@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.CoxeterNonParametrized.MCoxeter where
+module Pi+.Coxeter.NonParametrized.MCoxeter where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
@@ -8,10 +8,10 @@ open import lib.types.Sigma
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.CoxeterCommon.Arithmetic
-open import Pi+.CoxeterCommon.ListN
-open import Pi+.CoxeterNonParametrized.ReductionRel
-open import Pi+.CoxeterNonParametrized.Diamond
+open import Pi+.Coxeter.Common.Arithmetic
+open import Pi+.Coxeter.Common.ListN
+open import Pi+.Coxeter.NonParametrized.ReductionRel
+open import Pi+.Coxeter.NonParametrized.Diamond
 
 open ≅*-Reasoning
 

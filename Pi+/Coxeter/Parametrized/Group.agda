@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.CoxeterParametrized.Group where
+module Pi+.Coxeter.Parametrized.Group where
 
 open import lib.Base
 open import lib.Relation
@@ -8,7 +8,7 @@ open import lib.NType
 open import lib.types.SetQuotient public
 
 open import Pi+.Extra
-open import Pi+.CoxeterParametrized.Coxeter
+open import Pi+.Coxeter.Parametrized.Coxeter
 
 CoxeterRel  : (n : ℕ) → Rel (CList n) lzero
 CoxeterRel n = _≈_ {n}
