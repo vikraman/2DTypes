@@ -9,7 +9,7 @@ open import lib.PathGroupoid
 
 open import Pi+.Misc
 open import Pi+.CoxeterCommon.Arithmetic
-open import Pi+.CoxeterCommon.Lists
+open import Pi+.CoxeterCommon.ListN
 open import Pi+.CoxeterNonParametrized.ReductionRel
 open import Pi+.CoxeterNonParametrized.ExchangeLemmas
 open import Pi+.CoxeterNonParametrized.ImpossibleLists
@@ -20,7 +20,7 @@ open ≅*-Reasoning
 -- and this should do something like: if ir1 = (ir p1) and ir2 = (ir p2) are non-overlapping, use force-non-crit-pair
 -- otherwise, take the ir1 ∪ ir2 , force it into one of the critical pairs and then reduce critical pair
 {-# NON_TERMINATING #-}
-diamond : (m1 m2 m3 : List) -> (m1 ≅ m2) -> (m1 ≅ m3) -> Σ _ (λ m -> (m2 ≅* m) × (m3 ≅* m))
+diamond : (m1 m2 m3 : Listℕ) -> (m1 ≅ m2) -> (m1 ≅ m3) -> Σ _ (λ m -> (m2 ≅* m) × (m3 ≅* m))
 -- -- crit-pair
 diamond (x₁ :: .x₁ :: .x₁ :: m1) m2 m3 (cancel≅ nil .(x₁ :: m1) .(x₁ :: x₁ :: x₁ :: m1) .m2 idp defmf) (cancel≅ (.x₁ :: nil) .m1 .(x₁ :: x₁ :: x₁ :: m1) .m3 idp defmf₁)
   rewrite defmf rewrite defmf₁ = (x₁ :: m1) , (idp , idp) -- cc
@@ -167,7 +167,7 @@ diamond m1 m2 m3 (long≅ {n} k nil r .m1 .m2 defm defmf) (long≅ {n₁} k₁ l
   in  rec-m , rec-l , rec-r
 
 {-# NON_TERMINATING #-}
-diamond-full : {m1 m2 m3 : List} -> (m1 ≅* m2) -> (m1 ≅* m3) -> Σ _ (λ m -> (m2 ≅* m) × (m3 ≅* m))
+diamond-full : {m1 m2 m3 : Listℕ} -> (m1 ≅* m2) -> (m1 ≅* m3) -> Σ _ (λ m -> (m2 ≅* m) × (m3 ≅* m))
 diamond-full idp q = _ , (q , idp)
 diamond-full (trans≅ x p) idp = _ , idp , trans≅ x p
 diamond-full (trans≅ x idp) (trans≅ y idp) = diamond _ _ _ x y

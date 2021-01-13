@@ -18,15 +18,15 @@ open import Pi+.CoxeterParametrized.InequalityEquiv
 
 module _ {n : ℕ} where
   
-  CList≃LList : CList n ≃ LList (S n)
-  CList≃LList = equiv f g TODO TODO
+  List≃LList : List (Fin n) ≃ LList (S n)
+  List≃LList = equiv f g TODO TODO
     where
-      f : (CList n) -> (LList (S n))
+      f : List (Fin n) -> (LList (S n))
       f [] = nil , nil
       f (x ∷ l) = 
         let rec-l , rec-p = f l
         in  ((x . fst) :: rec-l) , ((x .fst) :⟨ –> <N≃< (x .snd) ⟩: rec-p)
 
-      g : (LList (S n)) -> (CList n)
+      g : (LList (S n)) -> List (Fin n)
       g (nil , nil) = []
       g ((x :: fst) , (.x :⟨ px ⟩: snd)) = x , (<– <N≃< px) ∷ g (fst , snd)

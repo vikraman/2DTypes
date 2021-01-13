@@ -8,7 +8,7 @@ open import lib.PathGroupoid
 
 open import Pi+.Misc
 open import Pi+.CoxeterCommon.Arithmetic
-open import Pi+.CoxeterCommon.Lists
+open import Pi+.CoxeterCommon.ListN
 open import Pi+.CoxeterNonParametrized.ReductionRel
 open import Pi+.CoxeterNonParametrized.ExchangeLemmas
 open import Pi+.CoxeterNonParametrized.ReductionRel+
@@ -27,12 +27,12 @@ long-swap<+ n1 n2 (S k) p =
   let rec = long-swap<+ n1 n2 k p
   in  trans+ (+l++ ((S k) + n2 :: nil) rec) (swap+ (≤-up-+ p) nil _)
 
-long-swap-lr+ : (n1 n2 k : ℕ) -> (l r : List) -> ((S k) + n1 < n2) -> (l ++ (n2 :: (n1 ↓ (S k))) ++ r) ≅+ (l ++ (n1 ↓ (S k)) ++ n2 :: r)
+long-swap-lr+ : (n1 n2 k : ℕ) -> (l r : Listℕ) -> ((S k) + n1 < n2) -> (l ++ (n2 :: (n1 ↓ (S k))) ++ r) ≅+ (l ++ (n1 ↓ (S k)) ++ n2 :: r)
 long-swap-lr+ n1 n2 k l r p =
   let lemma = (++r+ r (long-swap+ n1 n2 k p))
   in  +l++ l (trans+* lemma (idp≅* (++-assoc (k + n1 :: n1 ↓ k) (n2 :: nil) r)))
 
-long-swap<-lr+ : (n1 n2 k : ℕ) -> (l r : List) -> (S n1 < n2) -> (l ++ (n2 ↓ (S k)) ++ n1 :: r) ≅+ (l ++ n1 :: (n2 ↓ (S k)) ++ r)
+long-swap<-lr+ : (n1 n2 k : ℕ) -> (l r : Listℕ) -> (S n1 < n2) -> (l ++ (n2 ↓ (S k)) ++ n1 :: r) ≅+ (l ++ n1 :: (n2 ↓ (S k)) ++ r)
 long-swap<-lr+ n1 n2 k l r p =
   let lemma = (++r+ r (long-swap<+ n1 n2 k p))
   in  +l++ l (trans*+ (idp≅* (≡-sym (++-assoc (n2 ↓ (S k)) (n1 :: nil) r))) lemma)
@@ -71,14 +71,14 @@ short-swap+ {n} {k} {t} {tl} {tr} ptn ptkn rewrite (≡-sym ptn) =
         ≅*∎
   in trans+* (trans*+ red1 red2) red3
 
-short-swap-l+ : {n k t : ℕ} -> (l : List) -> (n ≤ t) -> (S t ≤ S (k + n)) -> (l ++ n ↓ (2 + k) ++ [ S t ]) ≅+ (l ++ t :: (n ↓ (2 + k)))
+short-swap-l+ : {n k t : ℕ} -> (l : Listℕ) -> (n ≤ t) -> (S t ≤ S (k + n)) -> (l ++ n ↓ (2 + k) ++ [ S t ]) ≅+ (l ++ t :: (n ↓ (2 + k)))
 short-swap-l+ {n} {k} {t} l pnt ptkn =
   let tr , tr-p = ≤-∃ n t pnt
       tl , tl-p = ≤-∃ (S t) (S k + n) ptkn
       lemma = (short-swap+ {n} {k} {t} {tl} {tr} tr-p tl-p)
   in  +l++ l lemma
 
-short-swap-lr+ : {n k t : ℕ} -> (l r : List) -> (n ≤ t) -> (S t ≤ S (k + n)) -> ((l ++ n ↓ (2 + k)) ++ S t :: r) ≅+ ((l ++ t :: (n ↓ (2 + k))) ++ r)
+short-swap-lr+ : {n k t : ℕ} -> (l r : Listℕ) -> (n ≤ t) -> (S t ≤ S (k + n)) -> ((l ++ n ↓ (2 + k)) ++ S t :: r) ≅+ ((l ++ t :: (n ↓ (2 + k))) ++ r)
 short-swap-lr+ {n} {k} {t} l r pnt ptkn =
   let tr , tr-p = ≤-∃ n t pnt
       tl , tl-p = ≤-∃ (S t) (S k + n) ptkn

@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.CoxeterCommon.Lists where
+module Pi+.CoxeterCommon.ListN where
 
 open import lib.Base
 open import lib.PathGroupoid
@@ -11,17 +11,17 @@ open import Pi+.Misc
 
 infixr 35 _::_
 
-data List : Type₀ where
-  nil : List
-  _::_ : ℕ → List → List
+data Listℕ : Type₀ where
+  nil : Listℕ
+  _::_ : ℕ → Listℕ → Listℕ
 
 infixr 34 _++_
 
-_++_ : List → List → List
+_++_ : Listℕ → Listℕ → Listℕ
 nil ++ l = l
 (x :: l₁) ++ l₂ = x :: (l₁ ++ l₂)
 
-reverse : List -> List
+reverse : Listℕ -> Listℕ
 reverse nil = nil
 reverse (x :: xs) = (reverse xs) ++ (x :: nil)
 
@@ -33,7 +33,10 @@ reverse (x :: xs) = (reverse xs) ++ (x :: nil)
 ++-assoc nil l₂ l₃ = idp
 ++-assoc (x :: l₁) l₂ l₃ = ap (x ::_) (++-assoc l₁ l₂ l₃)
 
-reverse-++-commute : (xs ys : List) → reverse (xs ++ ys) == reverse ys ++ reverse xs
+++-assoc-≡ : {l r1 r2 m : Listℕ} -> m == ((l ++ r1) ++ r2) -> m == (l ++ (r1 ++ r2))
+++-assoc-≡ {l} {r1} {r2} {m} p = ≡-trans p (++-assoc l r1 r2)
+
+reverse-++-commute : (xs ys : Listℕ) → reverse (xs ++ ys) == reverse ys ++ reverse xs
 reverse-++-commute nil ys = ! (++-unit-r (reverse ys))
 reverse-++-commute (x :: xs) ys = 
   let rec = reverse-++-commute xs ys
@@ -41,51 +44,51 @@ reverse-++-commute (x :: xs) ys =
 
 infixr 60 _↓_
 
-_↓_ : (n : ℕ) -> (k : ℕ) -> List
+_↓_ : (n : ℕ) -> (k : ℕ) -> Listℕ
 n ↓ 0 = nil
 n ↓ (S k) = (k + n) :: (n ↓ k)
 
-[_] : ℕ -> List
+[_] : ℕ -> Listℕ
 [ x ] = x :: nil
 
-++-unit : {l : List} -> l ++ nil == l
+++-unit : {l : Listℕ} -> l ++ nil == l
 ++-unit {nil} = idp
 ++-unit {x :: l} rewrite (++-unit {l}) = idp
 
-cut-head : {a1 a2 : ℕ} -> {l1 l2 : List} -> (a1 :: l1) == (a2 :: l2) -> l1 == l2
+cut-head : {a1 a2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: l1) == (a2 :: l2) -> l1 == l2
 cut-head {a1} {a2} {l1} {.l1} idp = idp
 
-cut-tail : {a1 a2 : ℕ} -> {l1 l2 : List} -> (a1 :: l1 == a2 :: l2) -> (a1 == a2)
+cut-tail : {a1 a2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: l1 == a2 :: l2) -> (a1 == a2)
 cut-tail {a1} {.a1} {l1} {.l1} idp = idp
 
-cut-t1 : {a1 a2 : ℕ} -> {l1 l2 : List} -> (a1 :: l1 == a2 :: l2) -> (a1 == a2)
+cut-t1 : {a1 a2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: l1 == a2 :: l2) -> (a1 == a2)
 cut-t1 {a1} {.a1} {l1} {.l1} idp = idp
 
-cut-t2 : {a1 a2 b1 b2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (b1 == b2)
+cut-t2 : {a1 a2 b1 b2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (b1 == b2)
 cut-t2 {l1 = l1} {l2 = .l1} idp = idp
 
-cut-t3 : {a1 a2 b1 b2 c1 c2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (c1 == c2)
+cut-t3 : {a1 a2 b1 b2 c1 c2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (c1 == c2)
 cut-t3 {l1 = l1} {l2 = .l1} idp = idp
 
-cut-t4 : {a1 a2 b1 b2 c1 c2 d1 d2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (d1 == d2)
+cut-t4 : {a1 a2 b1 b2 c1 c2 d1 d2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (d1 == d2)
 cut-t4 {l1 = l1} {l2 = .l1} idp = idp
 
-cut-h2 : {a1 a2 b1 b2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (l1 == l2)
+cut-h2 : {a1 a2 b1 b2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: b1 :: l1 == a2 :: b2 :: l2) -> (l1 == l2)
 cut-h2 {l1 = l1} {l2 = .l1} idp = idp
 
-cut-h3 : {a1 a2 b1 b2 c1 c2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (l1 == l2)
+cut-h3 : {a1 a2 b1 b2 c1 c2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: b1 :: c1 :: l1 == a2 :: b2 :: c2 :: l2) -> (l1 == l2)
 cut-h3 {l1 = l1} {l2 = .l1} idp = idp
 
-cut-h4 : {a1 a2 b1 b2 c1 c2 d1 d2 : ℕ} -> {l1 l2 : List} -> (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (l1 == l2)
+cut-h4 : {a1 a2 b1 b2 c1 c2 d1 d2 : ℕ} -> {l1 l2 : Listℕ} -> (a1 :: b1 :: c1 :: d1 :: l1 == a2 :: b2 :: c2 :: d2 :: l2) -> (l1 == l2)
 cut-h4 {l1 = l1} {l2 = .l1} idp = idp
 
-head+tail : {h1 h2 : ℕ} -> {t1 t2 : List} -> (h1 == h2) -> (t1 == t2) -> (h1 :: t1) == (h2 :: t2)
+head+tail : {h1 h2 : ℕ} -> {t1 t2 : Listℕ} -> (h1 == h2) -> (t1 == t2) -> (h1 :: t1) == (h2 :: t2)
 head+tail idp idp = idp
 
-start+end : {h1 h2 : List} -> {t1 t2 : List} -> (h1 == h2) -> (t1 == t2) -> (h1 ++ t1) == (h2 ++ t2)
+start+end : {h1 h2 : Listℕ} -> {t1 t2 : Listℕ} -> (h1 == h2) -> (t1 == t2) -> (h1 ++ t1) == (h2 ++ t2)
 start+end idp idp = idp
 
-cut-last : {a1 a2 : ℕ} -> {l1 l2 : List} -> (l1 ++ [ a1 ] == l2 ++ [ a2 ]) -> (l1 == l2)
+cut-last : {a1 a2 : ℕ} -> {l1 l2 : Listℕ} -> (l1 ++ [ a1 ] == l2 ++ [ a2 ]) -> (l1 == l2)
 cut-last {a1} {.a1} {nil} {nil} idp = idp
 cut-last {a1} {a2} {nil} {x :: nil} ()
 cut-last {a1} {a2} {nil} {x :: x₁ :: l2} ()
@@ -93,7 +96,7 @@ cut-last {a1} {a2} {x :: nil} {nil} ()
 cut-last {a1} {a2} {x :: x₁ :: l1} {nil} ()
 cut-last {a1} {a2} {x :: l1} {x₁ :: l2} p = head+tail (cut-tail p) (cut-last (cut-head p))
 
-cut-prefix : {a1 a2 : ℕ} -> {l1 l2 : List} -> (l1 ++ [ a1 ] == l2 ++ [ a2 ]) -> (a1 == a2)
+cut-prefix : {a1 a2 : ℕ} -> {l1 l2 : Listℕ} -> (l1 ++ [ a1 ] == l2 ++ [ a2 ]) -> (a1 == a2)
 cut-prefix {a1} {.a1} {nil} {nil} idp = idp
 cut-prefix {a1} {a2} {nil} {x :: nil} ()
 cut-prefix {a1} {a2} {nil} {x :: x₁ :: l2} ()
@@ -105,7 +108,7 @@ cut-prefix {a1} {a2} {x :: l1} {x₁ :: l2} p = cut-prefix (cut-head p)
 ↓-+ n 0 k2 = idp
 ↓-+ n (S k1) k2 rewrite (↓-+ n k1 k2) rewrite (+-comm n k2) = head+tail ((+-assoc k1 k2 n)) idp
 
-_↑_ : (n : ℕ) -> (k : ℕ) -> List
+_↑_ : (n : ℕ) -> (k : ℕ) -> Listℕ
 n ↑ 0 = nil
 n ↑ (S k) = n :: (S n ↑ k)
 
@@ -121,7 +124,7 @@ n ↑ (S k) = n :: (S n ↑ k)
 ++-↑ n 0 = idp
 ++-↑ n (S k) rewrite ≡-sym (++-↑ (S n) k) rewrite (+-three-assoc {k} {1} {n}) = idp
 
-rev : List -> List
+rev : Listℕ -> Listℕ
 rev nil = nil
 rev (x :: l) = (rev l) ++ [ x ]
 
@@ -133,17 +136,17 @@ rev-u : (k p : ℕ) -> (rev (k ↑ p)) == (k ↓ p)
 rev-u k 0 = idp
 rev-u k (S p) rewrite (rev-u (S k) p) = ++-↓ k p
 
-rev-++ : (l r : List) -> rev (l ++ r) == (rev r) ++ (rev l)
+rev-++ : (l r : Listℕ) -> rev (l ++ r) == (rev r) ++ (rev l)
 rev-++ nil r = ≡-sym ++-unit
 rev-++ (x :: l) r =
   let rec = start+end (rev-++ l r) idp
   in  ≡-trans rec (++-assoc (rev r) (rev l) (x :: nil))
 
-rev-rev : {l : List} -> l == rev (rev l)
+rev-rev : {l : Listℕ} -> l == rev (rev l)
 rev-rev {nil} = idp
 rev-rev {x :: l} = ≡-trans (head+tail idp (rev-rev {l})) (≡-sym (rev-++ (rev l) [ x ]))
 
-telescope-rev : (n k : ℕ) -> (r : List) -> (((rev (S (S n) ↑ k) ++ S n :: nil) ++ n :: nil) ++ r) == ((n ↓ (2 + k)) ++ r)
+telescope-rev : (n k : ℕ) -> (r : Listℕ) -> (((rev (S (S n) ↑ k) ++ S n :: nil) ++ n :: nil) ++ r) == ((n ↓ (2 + k)) ++ r)
 telescope-rev n k r =
   begin
     ((rev (S (S n) ↑ k) ++ S n :: nil) ++ n :: nil) ++ r
@@ -156,7 +159,7 @@ telescope-rev n k r =
   =∎
 
 -- -- highly specific lemma...
-telescope-l-rev-+1 : (n k : ℕ) -> (l r : List) -> ((((l ++ rev ((3 + n) ↑ k)) ++ (2 + n) :: nil) ++ (1 + n) :: nil) ++ n :: nil) ++ r == l ++ (n ↓ (3 + k)) ++ r
+telescope-l-rev-+1 : (n k : ℕ) -> (l r : Listℕ) -> ((((l ++ rev ((3 + n) ↑ k)) ++ (2 + n) :: nil) ++ (1 + n) :: nil) ++ n :: nil) ++ r == l ++ (n ↓ (3 + k)) ++ r
 telescope-l-rev-+1 n k l r =
   begin
     ((((l ++ (rev ((S (S (S n)) ↑ k)))) ++ S (S n) :: nil) ++ S n :: nil) ++ n :: nil) ++ r
@@ -180,22 +183,22 @@ telescope-l-rev-+1 n k l r =
     _
   =∎
 
-++-empty : (l r : List) -> (l ++ r) == l -> (r == nil)
+++-empty : (l r : Listℕ) -> (l ++ r) == l -> (r == nil)
 ++-empty nil r p = p
 ++-empty (x :: l) r p = ++-empty l r (cut-head p)
 
-nil-abs : {x : ℕ} -> {l : List} -> (x :: l) == nil -> ⊥
+nil-abs : {x : ℕ} -> {l : Listℕ} -> (x :: l) == nil -> ⊥
 nil-abs ()
 
-++-abs : {x : ℕ} -> {l : List} -> l ++ [ x ] == nil -> ⊥
+++-abs : {x : ℕ} -> {l : Listℕ} -> l ++ [ x ] == nil -> ⊥
 ++-abs {x} {nil} ()
 ++-abs {x} {x₁ :: l} p = nil-abs p
 
-++-abs-lr : {x : ℕ} -> {l r : List} -> l ++ x :: r == nil -> ⊥
+++-abs-lr : {x : ℕ} -> {l r : Listℕ} -> l ++ x :: r == nil -> ⊥
 ++-abs-lr {x} {nil} ()
 ++-abs-lr {x} {x₁ :: l} p = nil-abs p
 
-_↓↓_,_ : (n : ℕ) -> (k : ℕ) -> (k ≤ n) -> List
+_↓↓_,_ : (n : ℕ) -> (k : ℕ) -> (k ≤ n) -> Listℕ
 n ↓↓ 0 , z≤n = nil
 S n ↓↓ S k , s≤s p = n :: (n ↓↓ k , p)
 

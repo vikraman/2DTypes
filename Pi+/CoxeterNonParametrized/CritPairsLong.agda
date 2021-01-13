@@ -9,14 +9,14 @@ open import lib.PathGroupoid
 
 open import Pi+.Misc
 open import Pi+.CoxeterCommon.Arithmetic
-open import Pi+.CoxeterCommon.Lists
+open import Pi+.CoxeterCommon.ListN
 open import Pi+.CoxeterNonParametrized.ReductionRel
 open import Pi+.CoxeterNonParametrized.ExchangeLemmas
 open import Pi+.CoxeterNonParametrized.ImpossibleLists
 
 open ≅*-Reasoning
 
-long-lemma : (n n1 k k1 t t1 : ℕ) -> (S n ≤ t) -> (S n1 ≤ t1) -> (r r1 : List) -> (n ↓ (2 + k)) ++ t :: r == (n1 ↓ (2 + k1)) ++ t1 :: r1
+long-lemma : (n n1 k k1 t t1 : ℕ) -> (S n ≤ t) -> (S n1 ≤ t1) -> (r r1 : Listℕ) -> (n ↓ (2 + k)) ++ t :: r == (n1 ↓ (2 + k1)) ++ t1 :: r1
              -> (n == n1) × ((n ↓ (2 + k)) == (n1 ↓ (2 + k1))) × (r == r1)
 long-lemma n n1 0 0 t t1 pnt pnt1 r r1 p rewrite (cut-t1 p) rewrite (cut-t2 p) rewrite (cut-t3 p) rewrite (cut-h3 p) = idp , (idp , idp)
 long-lemma n n1 0 (S k1) t t1 pnt pnt1 r r1 p rewrite (cut-t1 p) rewrite (cut-t2 p) rewrite (cut-t3 p) rewrite (cut-h3 p) = abs-suc pnt
@@ -25,7 +25,7 @@ long-lemma n n1 (S k) (S k1) t t1 pnt pnt1 r r1 p =
   let rec-m , rec-l , rec-r = long-lemma n n1 k k1 t t1 pnt pnt1 r r1 (cut-head p)
   in  rec-m , ((head+tail (cong S (cut-t2 p) ) rec-l) , rec-r)
 
-cancel-long-lemma-rev : (n k n1 : ℕ) -> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ n1 :: n1 :: l1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × ((((rev l1) ++ (rev r1))) ≅* mf)))
+cancel-long-lemma-rev : (n k n1 : ℕ) -> (r l1 r1 : Listℕ) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ n1 :: n1 :: l1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × ((((rev l1) ++ (rev r1))) ≅* mf)))
 cancel-long-lemma-rev n k n1 nil l1 nil p =
   let fst = cut-t1 p
       snd = cut-t2 p
@@ -102,7 +102,7 @@ cancel-long-lemma-rev n k n1 (x :: r) l1 (x₁ :: r1) p rewrite (≡-sym (cut-ta
       rr = trans (idp≅* (≡-sym (++-assoc (rev l1) (rev r1) [ x ]))) (++r [ x ] rec-r)
   in  _ , (ll , rr)
 
-cancel-long-lemma : (n k n1 : ℕ) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: n1 :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × (((l1 ++ r1)) ≅* mf)))
+cancel-long-lemma : (n k n1 : ℕ) -> (r l1 r1 : Listℕ) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: n1 :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × (((l1 ++ r1)) ≅* mf)))
 cancel-long-lemma n k n1 r l1 r1 p =
   let pp =
         begin
@@ -197,7 +197,7 @@ swap-long-lemma-base n k k1 pkn q1 q2 p | S 0 , snd rewrite (≡-sym snd) =
   in  _ , (left , right)
 swap-long-lemma-base n k k1 pkn q1 q2 p | S (S fst) , snd rewrite (≡-sym snd) = abs-refl (≤-trans q2 (s≤s (≤-up-+ rrr)))
 
-swap-long-lemma-rev : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1)-> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ k1 :: n1 :: l1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × ((((rev l1) ++ (k1 :: n1 :: rev r1))) ≅* mf)))
+swap-long-lemma-rev : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1)-> (r l1 r1 : Listℕ) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ k1 :: n1 :: l1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × ((((rev l1) ++ (k1 :: n1 :: rev r1))) ≅* mf)))
 swap-long-lemma-rev n k n1 k1 pkn nil l1 nil p =
   let fst = cut-t1 p
       snd = cut-t2 p
@@ -316,7 +316,7 @@ swap-long-lemma-rev n k n1 k1 pkn (x :: r) l1 (x₁ :: r1) p rewrite (≡-sym (c
   in  _ , (ll , rr)
 
 
-swap-long-lemma : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: k1 :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × (((l1 ++ (k1 :: n1 :: r1))) ≅* mf)))
+swap-long-lemma : (n k n1 k1 : ℕ) -> (pkn : S k1 < n1) -> (r l1 r1 : Listℕ) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ n1 :: k1 :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × (((l1 ++ (k1 :: n1 :: r1))) ≅* mf)))
 swap-long-lemma n k n1 k1 pkn r l1 r1 p =
   let pp =
         begin
@@ -355,9 +355,9 @@ swap-long-lemma n k n1 k1 pkn r l1 r1 p =
 ar-lemma : (k1 k2 : ℕ) -> {n1 n2 : ℕ} -> (n1 == n2) -> S (k1 + n1) == S (k2 + n2) -> k1 == k2
 ar-lemma k1 k2 pn p rewrite pn = ≡-down-r-+ (≡-down2 p)
 
-dec-long-lemma-disjoint-rev : (n k n1 k1 x : ℕ) -> (n < x) -> (l r : List) -> l ++ x :: (n ↑ (1 + k)) == (n1 ↑ (1 + k1)) ++ r
+dec-long-lemma-disjoint-rev : (n k n1 k1 x : ℕ) -> (n < x) -> (l r : Listℕ) -> l ++ x :: (n ↑ (1 + k)) == (n1 ↑ (1 + k1)) ++ r
                               -> ((l == (n1 ↑ k1)) × (x == n1 + k1) × (r == (n ↑ (1 + k)))) ⊎
-                                  Σ (List) (λ m -> (l == (n1 ↑ (1 + k1)) ++ m) × (r == m ++ x :: (n ↑ (1 + k))))
+                                  Σ (Listℕ) (λ m -> (l == (n1 ↑ (1 + k1)) ++ m) × (r == m ++ x :: (n ↑ (1 + k))))
 dec-long-lemma-disjoint-rev n k n1 0 .n1 pnx nil .(n :: (S n ↑ k)) idp = inj₁ (idp , ((≡-sym (+-unit {n1})) , idp))
 dec-long-lemma-disjoint-rev n k n1 (S k1) x pnx nil r p =
   let h1 = cut-t1 p
@@ -439,7 +439,7 @@ long-long-not-disjoint n (S k) (S n1) k1 p | no q =
   in  _ , left , right
 
 
-long-long-lemma-rev : (n k n1 k1 : ℕ) -> (r l1 r1 : List) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ (1 + k1 + n1) :: (n1 ↑ (2 + k1)) ++ l1))
+long-long-lemma-rev : (n k n1 k1 : ℕ) -> (r l1 r1 : Listℕ) -> ((r ++ (1 + k + n) :: (n ↑ (2 + k))) == (r1 ++ (1 + k1 + n1) :: (n1 ↑ (2 + k1)) ++ l1))
                       -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × (((rev l1) ++ (k1 + n1) :: (n1 ↓ (2 + k1)) ++ (rev r1)) ≅* mf)))
 long-long-lemma-rev n k n1 k1 nil nil nil p
   rewrite (cut-t2 p)
@@ -561,7 +561,7 @@ long-long-lemma-rev n k n1 k1 (x₁ :: r) l1 (x :: r1) p rewrite cut-tail p =
                            (≡-trans (cong (λ e -> rev l1 ++ k1 + n1 :: S (k1 + n1) :: k1 + n1 :: nil ++ e)
                                      (++-assoc (n1 ↓ k1) (rev r1) (x :: nil))) idp)))) (++r [ x ] rec-r)))
 
-long-long-lemma : (n k n1 k1 : ℕ) -> (r l1 r1 : List) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ (n1 ↓ (2 + k1)) ++ (1 + k1 + n1) :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × ((l1 ++ (k1 + n1) :: (n1 ↓ (2 + k1)) ++ r1) ≅* mf)))
+long-long-lemma : (n k n1 k1 : ℕ) -> (r l1 r1 : Listℕ) -> (((n ↓ (2 + k)) ++ (1 + k + n) :: r) == (l1 ++ (n1 ↓ (2 + k1)) ++ (1 + k1 + n1) :: r1)) -> Σ _ (λ mf -> (((((k + n) :: (n ↓ (2 + k)) ++ r) ≅* mf)) × ((l1 ++ (k1 + n1) :: (n1 ↓ (2 + k1)) ++ r1) ≅* mf)))
 long-long-lemma n k n1 k1 r l1 r1 p rewrite (rev-rev {l1}) rewrite (rev-rev {r1}) rewrite (rev-rev {r}) =
   let pp =
         begin
