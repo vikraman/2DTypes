@@ -35,12 +35,6 @@ module Zero where
         nil : ∀ {m} → CList m
         _::_ : ∀ {m} → Fin (S m) → CList m → CList m
 
-    infixr 50 _++_
-
-    _++_ : ∀ {m} → CList m → CList m → CList m
-    _++_ {m} nil l2 = l2
-    _++_ {m} (x :: l1) l2 = x :: (l1 ++ l2)
-
     data _≈₀_ {m : ℕ} : CList m → CList m → Type₀ where
         cancel : {n : Fin (S m)} {w : CList m} → (n :: n :: w) ≈₀ w
         swap : {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → {w : CList m} → (n :: k :: w) ≈₀ (k :: n :: w)
@@ -50,7 +44,7 @@ module Zero where
         comm : {l1 l2 : CList m} -> (l1 ≈₀ l2) -> l2 ≈₀ l1
         trans : {l1 l2 l3 : CList m} -> (l1 ≈₀ l2) -> (l2 ≈₀ l3) -> l1 ≈₀ l3
 
-        respects-++ : {l l' r r' : CList m} -> (l ≈₀ l') -> (r ≈₀ r') -> l ++ r ≈₀ l' ++ r
+        respects-:: : {n : Fin (S m)} -> {l l' : CList m} -> (l ≈₀ l') -> n :: l ≈₀ n :: l'
 
 
 module One where 
