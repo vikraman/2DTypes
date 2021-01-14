@@ -9,9 +9,11 @@ open import lib.Equivalence
 open import lib.types.Fin
 open import lib.types.List
 
-open import Pi+.Coxeter.Common.Lehmer using (Lehmer)
+open import Pi+.Coxeter.Common.Lehmer using (Lehmer; immersion; immersion->>)
+open import Pi+.Coxeter.Common.ListFinLListEquiv
 open import Pi+.Coxeter.Parametrized.Group
 open import Pi+.Coxeter.Parametrized.Coxeter
+open import Pi+.Coxeter.NonParametrized.LehmerCanonical using (only-one-canonical↔)
 open import Pi+.Extra
 
 module _ {n : ℕ} where
@@ -21,17 +23,19 @@ module _ {n : ℕ} where
 
 module _ {n : ℕ} where
 
-    immersion : Lehmer n -> List (Fin n)
-    immersion = {!   !}
+    immersion-Fin : Lehmer n -> List (Fin n)
+    immersion-Fin code = <– List≃LList (immersion code , immersion->> code)
 
-    everything-to-Lehmer : (m : List (Fin n)) -> Σ (Lehmer n) (λ cl -> m ≈[ n ] immersion cl)
-    everything-to-Lehmer = {!   !}
+    everything-to-Lehmer : (m : List (Fin n)) -> Σ (Lehmer n) (λ cl -> m ≈[ n ] immersion-Fin cl)
+    everything-to-Lehmer m = 
+        let r , rp = –> List≃LList m
+        in  {!   !}
     
-    immersion-is-injection : (cl1 cl2 : Lehmer n) -> ((immersion cl1) ≈[ n ] (immersion cl2)) -> cl1 == cl2
-    immersion-is-injection = {!   !}
+    immersion-is-injection : (cl1 cl2 : Lehmer n) -> ((immersion-Fin cl1) ≈[ n ] (immersion-Fin cl2)) -> cl1 == cl2
+    immersion-is-injection cl1 cl2 = {!   !}
 
     f :  Lehmer n → Sn n
-    f = q[_] ∘ immersion
+    f = q[_] ∘ immersion-Fin
 
     g-q :  List (Fin n) → Lehmer n
     g-q m = everything-to-Lehmer m .fst
