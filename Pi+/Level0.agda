@@ -110,12 +110,26 @@ cox2pi++ : {m : ℕ} → (l r : List (Fin (S m))) → cox2pi (l ++ r) ⟷₂ cox
 cox2pi++ nil r = idl◎r
 cox2pi++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (cox2pi++ l r)) assoc◎l
 
-slide-transpos : {m : ℕ} → (n k : Fin (S m)) → (k<n : fst k < fst n) →
+slide-transpos : {m : ℕ} → (n k : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
   transpos2pi n ◎ transpos2pi k ⟷₂ transpos2pi k ◎ transpos2pi n
-slide-transpos {O} (.0 , ltS) (.0 , ltS) ()
-slide-transpos {O} (.0 , ltS) (k , ltSR kp) ()
-slide-transpos {S m} (S n , np) (O , kp) _ = {!!}
-slide-transpos {S m} (S n , np) (S k , kp) k<n = {!!}
+slide-transpos {O} (O , np) (O , kp) ()
+slide-transpos {O} (O , np) (S k , kp) ()
+slide-transpos {O} (S .1 , ltSR ()) (O , kp) ltS
+slide-transpos {O} (S n , ltSR ()) (O , kp) (ltSR lp)
+slide-transpos {O} (S .(S (S k)) , ltSR ()) (S k , kp) ltS
+slide-transpos {O} (S n , np) (S k , ltSR ()) (ltSR lp)
+slide-transpos {S m} (O , np) (O , kp) ()
+slide-transpos {S m} (O , np) (S k , kp) ()
+slide-transpos {S m} (S .1 , np) (O , kp) ltS =
+  (id⟷₁ ⊕ (id⟷₁ ⊕ transpos2pi (0 , <-cancel-S (<-cancel-S np)))) ◎ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ {!!} ⟩
+  (assocl₊ ◎ ((id⟷₁ ⊕ id⟷₁) ⊕ transpos2pi (0 , <-cancel-S (<-cancel-S np)))) ◎
+  ((swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ {!!} ⟩
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ (id⟷₁ ⊕ transpos2pi (0 , _))) ⟷₂∎
+slide-transpos {S m} (S n , np) (O , kp) (ltSR lp) = {!!}
+slide-transpos {S m} (S .(S (S k)) , np) (S k , kp) ltS = {!!}
+slide-transpos {S m} (S n , np) (S k , kp) (ltSR lp) = {!!}
 
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
@@ -126,29 +140,8 @@ cox≈2pi (cancel {n}) =
   id⟷₁ ◎ id⟷₁
     ⟷₂⟨ idl◎l ⟩
   id⟷₁ ⟷₂∎
-cox≈2pi (swap {O , np} {O , kp} ())
-cox≈2pi (swap {O , np} {S k , kp} ())
-cox≈2pi (swap {S .1 , np} {O , kp} ltS) = {!!}
-cox≈2pi (swap {S n , np} {O , kp} (ltSR lp)) = {!!}
-cox≈2pi (swap {S .(S (S k)) , np} {S k , kp} ltS) = {!!}
-cox≈2pi (swap {S n , np} {S k , kp} (ltSR lp)) = {!!}
-
---cox≈2pi (swap {S .1 , np} {O , kp} ltS) = {!!}
---cox≈2pi (swap {S n , np} {O , kp} (ltSR lp)) = {!!}
---cox≈2pi (swap {S .(S (S k)) , np} {S k , kp} ltS) = {!!}
---cox≈2pi (swap {S n , np} {S k , kp} (ltSR lp)) = {!!}
---  transpos2pi (S n , np) ◎ transpos2pi (k , kp) ◎ id⟷₁
---    ⟷₂⟨ id⟷₂ ⟩
---  (id⟷₁ ⊕ (transpos2pi (n , <-cancel-S np))) ◎ transpos2pi (k , kp) ◎ id⟷₁
---    ⟷₂⟨ {!!} ⟩
---  transpos2pi (k , kp) ◎ transpos2pi (S n , np) ◎ id⟷₁ ⟷₂∎
---
---cox≈2pi (swap {.(S (S k)) , SSk<Sm} {(k , k<Sm)} ltS) = {!!}
---cox≈2pi (swap {.(S _) , Sn<Sm} {(k , k<Sm)} (ltSR Sk<n)) = {!!}
---: cox2pi ((S (S k) , SSk<Sm) :: (k , k<Sm) :: nil) ⟷₂
---    cox2pi ((k , k<Sm) :: (S (S k) , SSk<Sm) :: nil)
---
---
+cox≈2pi (swap {n} {k} lp) =
+  trans⟷₂ assoc◎l (trans⟷₂ (slide-transpos n k lp ⊡ id⟷₂) assoc◎r)
 cox≈2pi braid = {!!}
 cox≈2pi idp = id⟷₂
 cox≈2pi (comm rw) = !⟷₂ (cox≈2pi rw)
