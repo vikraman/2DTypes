@@ -6,9 +6,132 @@ open import lib.Base
 open import lib.PathGroupoid
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma
+open import lib.types.Fin
+open import lib.types.List
 
 open import Pi+.Syntax
 
+-----------------------------------------------------------------------------
+-- Canonical representation of sum types as lists I + (I + (I + ... O))
+
+∣_∣ : U → ℕ
+∣ O ∣ = 0
+∣ I ∣ = 1
+∣ t₁ + t₂ ∣ = ∣ t₁ ∣ +ℕ ∣ t₂ ∣
+
+⟪_⟫ : ℕ → U
+⟪ O ⟫ = O
+⟪ S n ⟫ = I + ⟪ n ⟫
+
+canonU : U → U
+canonU t = ⟪ ∣ t ∣ ⟫
+
+-----------------------------------------------------------------------------
+-- Current proposal for interface from CoxeterN.agda
+-- Copied here for now
+
+⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
+⟨_⟩ = Fin-S
+
+S⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
+S⟨ k , kltn ⟩ = S k , <-ap-S kltn
+
+data _≈₁_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where
+
+  cancel : {n : Fin (S m)} → (n :: n :: nil) ≈₁ nil
+  swap : {n : Fin (S m)} {k : Fin (S m)} →
+         (S (k .fst) < (n .fst)) → (n :: k :: nil) ≈₁ (k :: n :: nil)
+  braid : {n : Fin m} →
+          (S⟨ n ⟩ :: ⟨ n ⟩ :: S⟨ n ⟩ :: nil) ≈₁ (⟨ n ⟩ :: S⟨ n ⟩ :: ⟨ n ⟩ :: nil)
+
+  idp : {m : List (Fin (S m))} → m ≈₁ m
+  comm : {m1 m2 : List (Fin (S m))} → (m1 ≈₁ m2) → m2 ≈₁ m1
+  trans : {m1 m2 m3 : List (Fin (S m))} → (m1 ≈₁ m2) → (m2 ≈₁ m3) → m1 ≈₁ m3
+
+  respects-++ : {l l' r r' : List (Fin (S m))} →
+                (l ≈₁ l') → (r ≈₁ r') → l ++ r ≈₁ l' ++ r'
+
+--- Recovering a pi combinator from the Coxeter representation
+
+transpos2pi : {m : ℕ} → Fin m → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
+transpos2pi {S m} (O , lp) = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+transpos2pi {S m} (S fn , lp) = id⟷₁ ⊕ transpos2pi (fn , <-cancel-S lp)
+
+cox2pi : {m : ℕ} → List (Fin m) → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
+cox2pi nil = id⟷₁
+cox2pi (fn :: xs) = transpos2pi fn ◎ cox2pi xs
+
+--- Showing that the Coxeter coherence conditions are preserved by 2-combinators
+
+transpos-cancel : {m : ℕ} {n : Fin (S m)} →
+                  transpos2pi n ◎ transpos2pi n ⟷₂ id⟷₁
+transpos-cancel {O} {.0 , ltS} =
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ trans⟷₂
+            assoc◎r
+            (trans⟷₂
+              (id⟷₂ ⊡ assoc◎r)
+              (id⟷₂ ⊡ (id⟷₂ ⊡ assoc◎l))) ⟩
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (assocr₊ ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ trans⟷₂
+           (id⟷₂ ⊡ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)))
+           (id⟷₂ ⊡ (id⟷₂ ⊡ idl◎l)) ⟩
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+  (assocl₊ ◎ ((swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁)) ◎ assocr₊)
+    ⟷₂⟨ trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) (id⟷₂ ⊡ idl◎l)  ⟩
+  (assocl₊ ◎ assocr₊)
+    ⟷₂⟨ linv◎l ⟩
+  id⟷₁ ⟷₂∎
+transpos-cancel {S m} {O , lp} =
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ trans⟷₂
+            assoc◎r
+            (trans⟷₂
+              (id⟷₂ ⊡ assoc◎r)
+              (id⟷₂ ⊡ (id⟷₂ ⊡ assoc◎l))) ⟩
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (assocr₊ ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ trans⟷₂
+           (id⟷₂ ⊡ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)))
+           (id⟷₂ ⊡ (id⟷₂ ⊡ idl◎l)) ⟩
+  (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+    ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+  (assocl₊ ◎ ((swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁)) ◎ assocr₊)
+    ⟷₂⟨ trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) (id⟷₂ ⊡ idl◎l)  ⟩
+  (assocl₊ ◎ assocr₊)
+    ⟷₂⟨ linv◎l ⟩
+  id⟷₁ ⟷₂∎
+transpos-cancel {S m} {S n , lp} =
+  trans⟷₂
+    hom◎⊕⟷₂
+    (trans⟷₂ (resp⊕⟷₂ idl◎l transpos-cancel) id⟷₁⊕id⟷₁⟷₂)
+
+cox2pi++ : {m : ℕ} → (l r : List (Fin (S m))) → cox2pi (l ++ r) ⟷₂ cox2pi l ◎ cox2pi r
+cox2pi++ nil r = idl◎r
+cox2pi++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (cox2pi++ l r)) assoc◎l
+
+cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
+cox≈2pi (cancel {n}) =
+  transpos2pi n ◎ transpos2pi n ◎ id⟷₁
+    ⟷₂⟨ assoc◎l ⟩
+  (transpos2pi n ◎ transpos2pi n) ◎ id⟷₁
+    ⟷₂⟨ transpos-cancel ⊡ id⟷₂ ⟩
+  id⟷₁ ◎ id⟷₁
+    ⟷₂⟨ idl◎l ⟩
+  id⟷₁ ⟷₂∎
+cox≈2pi (swap lp) = {!!}
+cox≈2pi braid = {!!}
+cox≈2pi idp = id⟷₂
+cox≈2pi (comm rw) = !⟷₂ (cox≈2pi rw)
+cox≈2pi (trans rw₁ rw₂) = trans⟷₂ (cox≈2pi rw₁) (cox≈2pi rw₂)
+cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
+  trans⟷₂
+    (cox2pi++ l r)
+    (trans⟷₂
+      ((cox≈2pi rw₁) ⊡ (cox≈2pi rw₂))
+      (!⟷₂ (cox2pi++ l' r')))
+
+{--
 -----------------------------------------------------------------------------
 -- Canonical representation of sum types as lists I + (I + (I + ... O))
 
@@ -672,4 +795,5 @@ mirrorNF = _ , _ ,
   seqNormalForm {!!}
   (seqNormalForm {!!}
   {!!})
+--}
 --}
