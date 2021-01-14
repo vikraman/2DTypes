@@ -37,9 +37,20 @@ module _ {n : ℕ} where
   fromLList (nil , nil) = nil
   fromLList ((x ∷ fst) , (.x :⟨ px ⟩: snd)) = (x , (<– <N≃< px)) :: fromLList (fst , snd)
 
+  toLList∘fromLList : (x : LList n) → toLList (fromLList x) == x
+  toLList∘fromLList = TODO
+  fromLList∘toLList : (x : List (Fin n)) → fromLList (toLList x) == x
+  fromLList∘toLList = TODO
+
   List≃LList : List (Fin n) ≃ (LList n)
-  List≃LList = equiv toLList fromLList TODO TODO
+  List≃LList = equiv toLList fromLList toLList∘fromLList fromLList∘toLList
 
   fromLList-++ : (l r : LList n) -> (fromLList l ++ fromLList r) == fromLList (((l .fst) ++ℕ (r .fst)) , (>>-++ (l .snd) (r .snd)))
   fromLList-++ (nil , nil) r = idp
   fromLList-++ ((x ∷ l) , (.x :⟨ x₁ ⟩: lp)) r = List=-out (idp , (fromLList-++ (l , lp) r))
+
+  fromLList-++-w : (l r m : LList n) -> ((l .fst) ++ℕ (r .fst) == m .fst) -> (fromLList l ++ fromLList r) == (fromLList m)
+  fromLList-++-w l r m p = 
+    let m' = ((l .fst) ++ℕ (r .fst)) , (>>-++ (l .snd) (r .snd))
+        lemma = LList-eq {_} {m'} {m} p
+    in  fromLList-++ l r ∙ ap fromLList lemma
