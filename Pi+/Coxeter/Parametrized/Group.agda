@@ -14,9 +14,9 @@ open import Pi+.Coxeter.Parametrized.Coxeter
 
 CoxeterRel  : (n : ℕ) → Rel (List (Fin n)) lzero
 CoxeterRel O a b = ⊤
-CoxeterRel (S n) = _≈_ {n}
+CoxeterRel (S n) = _≈₁_ {n}
 
-syntax CoxeterRel n x y = x ≈[] y
+syntax CoxeterRel n x y = x ≈[ n ] y
 
 instance
     CoxeterRel-level : {n : ℕ} → {l1 l2 : List (Fin n)} → is-prop (CoxeterRel n l1 l2)

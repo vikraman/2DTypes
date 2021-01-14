@@ -24,10 +24,10 @@ module _ {n : ℕ} where
     immersion : Lehmer n -> List (Fin n)
     immersion = {!   !}
 
-    everything-to-Lehmer : (m : List (Fin n)) -> Σ (Lehmer n) (λ cl -> m ≈[] immersion cl)
+    everything-to-Lehmer : (m : List (Fin n)) -> Σ (Lehmer n) (λ cl -> m ≈[ n ] immersion cl)
     everything-to-Lehmer = {!   !}
     
-    immersion-is-injection : (cl1 cl2 : Lehmer n) -> ((immersion cl1) ≈[] (immersion cl2)) -> cl1 == cl2
+    immersion-is-injection : (cl1 cl2 : Lehmer n) -> ((immersion cl1) ≈[ n ] (immersion cl2)) -> cl1 == cl2
     immersion-is-injection = {!   !}
 
     f :  Lehmer n → Sn n
@@ -36,7 +36,7 @@ module _ {n : ℕ} where
     g-q :  List (Fin n) → Lehmer n
     g-q m = everything-to-Lehmer m .fst
 
-    g-rel :  {m1 m2 : List (Fin n)} → m1 ≈[] m2 → g-q m1 == g-q m2
+    g-rel :  {m1 m2 : List (Fin n)} → m1 ≈[ n ] m2 → g-q m1 == g-q m2
     g-rel {m1} {m2} pm = 
         let (cl1 , cl1p) = everything-to-Lehmer m1
             (cl2 , cl2p) = everything-to-Lehmer m2
