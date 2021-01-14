@@ -58,21 +58,28 @@ extN : {m : ℕ} {l1 l2 : List (Fin (S m))} -> (l1 ≅[ m ] l2) -> (l1 ≅*[ m ]
 extN p = transN≅ p idpN
 
 reduction-implies->> : {n : ℕ} -> (s : LList n) -> (sf : Listℕ) -> ((s .fst) ≅* sf) -> n >> sf
-reduction-implies->> {n} (s , lp) .s idp = lp
-reduction-implies->> {n} (s , lp) sf (trans≅ (cancel≅ l r .s mf defm defmf) p) = 
-    let Sn>>l++r = transport (λ e -> n >> e) defm lp
-        Sn>>l = >>-implies->> {n} {s} {nil} {l} {_ ∷ _ ∷ r} lp defm
-        Sn>>r = >>-implies->> {n} {s} {l ++ℕ _ ∷ _ ∷ nil} {r} {nil} lp (defm ∙ ! (++-assocℕ l (_ ∷ _ ∷ nil) r) ∙ ! ++-unit ∙ ++-assocℕ _ r nil)
+reduction-implies->> {n} (s , sp) .s idp = sp
+reduction-implies->> {n} (s , sp) sf (trans≅ (cancel≅ l r .s mf defm defmf) p) = 
+    let Sn>>l++r = transport (λ e -> n >> e) defm sp
+        Sn>>l = >>-implies->> {n} {s} {nil} {l} {_ ∷ _ ∷ r} sp defm
+        Sn>>r = >>-implies->> {n} {s} {l ++ℕ _ ∷ _ ∷ nil} {r} {nil} sp (defm ∙ ! (++-assocℕ l (_ ∷ _ ∷ nil) r) ∙ ! ++-unit ∙ ++-assocℕ _ r nil)
     in  reduction-implies->> (mf , transport (λ e -> n >> e) (! defmf) (>>-++ Sn>>l Sn>>r)) sf p
-reduction-implies->> {n} (s , lp) sf (trans≅ (swap≅ {m} {k} x l r .s mf defm defmf) p) =
-    let Sn>>l++m∷k∷r = transport (λ e -> n >> e) defm lp
-        Sn>>l = >>-implies->> {n} {s} {nil} {l} {_ ∷ _ ∷ r} lp defm
-        Sn>k = >>-implies->  {n} {k} {s} {l ++ℕ [ m ]} {r} lp (defm ∙ ! (++-assocℕ l [ m ] (k ∷ r)))
-        Sn>m = >>-implies-> {n} {m} {s} {l} {k ∷ r} lp defm
-        Sn>>r = >>-implies->> {n} {s} {l ++ℕ _ ∷ _ ∷ nil} {r} {nil} lp (defm ∙ ! (++-assocℕ l (_ ∷ _ ∷ nil) r) ∙ ! ++-unit ∙ ++-assocℕ _ r nil)
+reduction-implies->> {n} (s , sp) sf (trans≅ (swap≅ {m} {k} x l r .s mf defm defmf) p) =
+    let Sn>>l++m∷k∷r = transport (λ e -> n >> e) defm sp
+        Sn>>l = >>-implies->> {n} {s} {nil} {l} {_ ∷ _ ∷ r} sp defm
+        Sn>k = >>-implies->  {n} {k} {s} {l ++ℕ [ m ]} {r} sp (defm ∙ ! (++-assocℕ l [ m ] (k ∷ r)))
+        Sn>m = >>-implies-> {n} {m} {s} {l} {k ∷ r} sp defm
+        Sn>>r = >>-implies->> {n} {s} {l ++ℕ _ ∷ _ ∷ nil} {r} {nil} sp (defm ∙ ! (++-assocℕ l (_ ∷ _ ∷ nil) r) ∙ ! ++-unit ∙ ++-assocℕ _ r nil)
         Sn>>k∷m∷r = k :⟨ Sn>k ⟩: (m :⟨ Sn>m ⟩: Sn>>r)
     in  reduction-implies->> (mf , transport (λ e -> n >> e) (! defmf) (>>-++ Sn>>l Sn>>k∷m∷r)) sf p
-reduction-implies->> {n} (s , lp) sf (trans≅ (long≅ k l₁ r .s mf defm defmf) p) = reduction-implies->> {!   !} sf p
+reduction-implies->> {n} (s , sp) sf (trans≅ (long≅ {m} k l r .s mf defm defmf) p) = 
+    let Sn>>l++↓∷r = transport (λ e -> n >> e) defm sp
+        Sn>>l = >>-implies->> {n} {s} {nil} {l} {S (k + m) ∷ k + m ∷ m ↓ k ++ℕ (1 + k + m) ∷ r} sp defm
+        Sn>k+m = >>-implies-> {n} {k + m} {s} {l ++ℕ [ S (k + m) ]} {(m ↓ k ++ℕ S (k + m) ∷ r)} sp (defm ∙ ! {!  !})
+        -- Sn>Sm = >>-implies-> {n} {m} {s} {l} {_ ∷ _ ∷ r} sp defm
+        -- Sn>>r = >>-implies->> {n} {s} {l ++ℕ _ ∷ _ ∷ _ ∷ nil} {r} {nil} sp (defm ∙ ! (++-assocℕ l (_ ∷ _ ∷ _ ∷ nil) r) ∙ ! ++-unit ∙ ++-assocℕ _ r nil)
+        Sn>>k∷m∷r = {!   !}
+    in  reduction-implies->> (mf , transport (λ e -> n >> e) (! defmf) (>>-++ Sn>>l (>>-++ ((k + m) :⟨ Sn>k+m ⟩: nil) {!   !}))) sf p -- 
 
 reduction-fromLList : {n : ℕ} -> (s sf : LList (S n)) -> (p : (s .fst) ≅ (sf .fst)) -> (<– List≃LList s ≅[ n ] <– List≃LList sf)
 reduction-fromLList {n} s sf (cancel≅ {m} l r .(s .fst) .(sf .fst) defm defmf) = 
@@ -94,15 +101,15 @@ reduction-fromLList {n} s sf (swap≅ {m} {k} x l r .(s .fst) .(sf .fst) defm de
         Sn>>l++k∷m∷r = transport (λ e -> S n >> e) defmf (sf .snd)
         Sn>>l = >>-implies->> {_} {_} {nil} {l} {k ∷ m ∷ r} (sf .snd) defmf
         Sn>>k∷m∷r = >>-implies->> {_} {_} {l} {k ∷ m ∷ r} {nil} (sf .snd) (defmf ∙ ap (λ e -> l ++ℕ k ∷ m ∷ e) (! ++-unit))
-        eqsf = fromLList-++ (l , Sn>>l) ((k ∷ m ∷ r) , Sn>>k∷m∷r) ∙ 
+        eqsf = fromLList-++ (l , _) ((k ∷ m ∷ r) , _) ∙ 
                ap fromLList (LList-eq {S n} {(l ++ℕ k ∷ m ∷ r) , _} {(l ++ℕ k ∷ m ∷ r) , Sn>>l++k∷m∷r} idp) ∙ 
                ap (λ e -> <– List≃LList e) (LList-eq {S n} {(l ++ℕ k ∷ m ∷ r) , Sn>>l++k∷m∷r} {sf} (! defmf))
         Sn>>l++m∷k∷r = transport (λ e -> S n >> e) defm (s .snd)
         Sn>>m∷k∷r = >>-implies->> {_} {_} {l} {m ∷ k ∷ r} {nil} (s .snd) (defm ∙ ap (λ e -> l ++ℕ m ∷ k ∷ e) (! ++-unit))
-        eqs = fromLList-++ (l , Sn>>l) ((m ∷ k ∷ r) , Sn>>m∷k∷r) ∙ 
+        eqs = fromLList-++ (l , _) ((m ∷ k ∷ r) , _) ∙ 
               ap (λ e -> fromLList {S n} e) (LList-eq {S n} {(l ++ℕ m ∷ k ∷ r) , _} {(l ++ℕ m ∷ k ∷ r) , Sn>>l++m∷k∷r} idp) ∙ 
               ap (<– List≃LList) (LList-eq {S n} {(l ++ℕ m ∷ k ∷ r) , Sn>>l++m∷k∷r} {s} (! defm))
-    in  transport2 (λ e f → ReductionRel n e f) {!  eqs !} {! eqsf  !} c -- 
+    in  transport2 (λ e f → ReductionRel n e f) eqs eqsf c
 reduction-fromLList {n} s sf (long≅ k l r .(s .fst) .(sf .fst) defm defmf) = {!   !}
 
 reduction-fromLList* : {n : ℕ} -> (s sf : LList (S n)) -> (p : (s .fst) ≅* (sf .fst)) -> (<– List≃LList s ≅*[ n ] <– List≃LList sf)
