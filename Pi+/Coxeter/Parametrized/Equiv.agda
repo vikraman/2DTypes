@@ -21,7 +21,7 @@ open import Pi+.Coxeter.NonParametrized.LehmerReduction using (Listℕ-to-Lehmer
 open import Pi+.Coxeter.Parametrized.Group
 open import Pi+.Coxeter.Parametrized.Coxeter
 open import Pi+.Coxeter.Parametrized.ReductionRel
-open import Pi+.Coxeter.Parametrized.CoxeterMCoxterEquiv
+open import Pi+.Coxeter.Parametrized.CoxeterMCoxeterEquiv
 open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Extra
 
@@ -89,8 +89,8 @@ module _ {n : ℕ} where
     f-g = SetQuot-elim {P = λ l → f (g l) == l} {{raise-level -1 has-level-apply-instance}} f-g-q (λ _ →   prop-has-all-paths-↓ {{has-level-apply-instance}})
     -- TODO: why don't the instances resolve?
 
-    g-f :  (w : Lehmer (S n)) → g (f w) == w
-    g-f = TODO
+    g-f :  (cl : Lehmer (S n)) → g (f cl) == cl
+    g-f cl = {!   !}
 
     Lehmer≃Coxeter :  Lehmer (S n) ≃ Sn n
     Lehmer≃Coxeter = equiv f g f-g g-f
