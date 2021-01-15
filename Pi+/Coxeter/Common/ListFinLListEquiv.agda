@@ -54,3 +54,9 @@ module _ {n : ℕ} where
     let m' = ((l .fst) ++ℕ (r .fst)) , (>>-++ (l .snd) (r .snd))
         lemma = LList-eq {_} {m'} {m} p
     in  fromLList-++ l r ∙ ap fromLList lemma
+
+  rev-reverse : (l : List (Fin n)) -> LList-rev (toLList (reverse l)) == (toLList l)
+  rev-reverse nil = idp
+  rev-reverse (x :: l) = 
+    let rec = rev-reverse l
+    in  TODO

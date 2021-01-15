@@ -21,10 +21,6 @@ _++_ : Listℕ → Listℕ → Listℕ
 nil ++ l = l
 (x ∷ l₁) ++ l₂ = x ∷ (l₁ ++ l₂)
 
-reverse : Listℕ -> Listℕ
-reverse nil = nil
-reverse (x ∷ xs) = (reverse xs) ++ (x ∷ nil)
-
 ++-unit-r : ∀ l → l ++ nil == l
 ++-unit-r nil      = idp
 ++-unit-r (a ∷ l) = ap (a ∷_) $ ++-unit-r l
@@ -35,12 +31,6 @@ reverse (x ∷ xs) = (reverse xs) ++ (x ∷ nil)
 
 ++-assoc-≡ : {l r1 r2 m : Listℕ} -> m == ((l ++ r1) ++ r2) -> m == (l ++ (r1 ++ r2))
 ++-assoc-≡ {l} {r1} {r2} {m} p = ≡-trans p (++-assoc l r1 r2)
-
-reverse-++-commute : (xs ys : Listℕ) → reverse (xs ++ ys) == reverse ys ++ reverse xs
-reverse-++-commute nil ys = ! (++-unit-r (reverse ys))
-reverse-++-commute (x ∷ xs) ys = 
-  let rec = reverse-++-commute xs ys
-  in  ap (λ t -> t ++ x ∷ nil) rec ∙ ++-assoc (reverse ys) (reverse xs) (x ∷ nil)
 
 infixr 60 _↓_
 

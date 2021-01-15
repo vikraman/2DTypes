@@ -19,12 +19,6 @@ open import Pi+.Coxeter.NonParametrized.MCoxeter
 
 open ≅*-Reasoning
 
-canonical-lift : {n : ℕ} -> (m : ℕ) -> (n ≤ m) -> (cln : Lehmer n) -> Σ (Lehmer m) (λ clm -> immersion {m} clm == immersion {n} cln)
-canonical-lift {n} m p cln with ≤-∃ _ _ p
-canonical-lift {.m} m p cln | 0 , idp = cln , idp
-canonical-lift {n} .(S (fst + n)) p cln | S fst , idp =
-  let rec-m , rec-p = canonical-lift {n} (fst + n) (≤-up-+ rrr) cln
-  in  (CanS rec-m z≤n) , (≡-trans ++-unit rec-p)
 
 canonical-append : {n : ℕ} -> (cl : Lehmer n) -> (x : ℕ) -> (n ≤ x) -> Σ (Lehmer x) (λ clx -> immersion {S x} (CanS {x} clx {1} (≤-up2 z≤n)) == immersion {n} cl ++ [ x ])
 canonical-append cl x px =

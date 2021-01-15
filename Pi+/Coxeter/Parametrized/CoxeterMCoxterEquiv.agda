@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
 
 module Pi+.Coxeter.Parametrized.CoxeterMCoxterEquiv where
 
@@ -18,7 +18,7 @@ open import Pi+.Coxeter.Parametrized.ReductionRel
 
   
 long-swap-lemma : {m : ℕ} -> (n k : Fin m) -> (x : Fin (S m)) -> ((n .fst) < (x .fst)) -> (p : k ≤^ n) -> ((n ↓⟨ p ⟩ k) ++ (x :: nil)) ≈₁ (x :: (n ↓⟨ p ⟩ k))
-long-swap-lemma n (O , kp) x nx p = {! snd₁  !}
+long-swap-lemma n (O , kp) x nx p = {! snd₁ !}
 long-swap-lemma n (S k , kp) x nx p = {!   !}
 
 -- long-lemma : (n k : ℕ) -> ((n ↓ (2 + k)) ++ S (k + n) ∷ nil) ~ (k + n ∷ (n ↓ (2 + k)))

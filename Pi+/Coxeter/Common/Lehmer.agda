@@ -12,6 +12,7 @@ open import Pi+.Coxeter.Common.Arithmetic
 open import Pi+.Coxeter.Common.ListN
 open import Pi+.Coxeter.Common.LList
 open import Pi+.Extra
+open import Pi+.Misc
 
 data Lehmer : (n : ℕ) -> Type₀ where
   CanZ : Lehmer 0
@@ -26,6 +27,20 @@ immersion->> {.0} CanZ = nil
 immersion->> {S n} (CanS {n} cl {r} rn) =
   let p = immersion->> {n} cl
   in  >>-++ (>>-S p) (>>-↓ (S n) (S n ∸ r) r (≤-reflexive (plus-minus rn)))
+
+canonical-lift : {n : ℕ} -> (m : ℕ) -> (n ≤ m) -> (cln : Lehmer n) -> Σ (Lehmer m) (λ clm -> immersion {m} clm == immersion {n} cln)
+canonical-lift {n} m p cln with ≤-∃ _ _ p
+canonical-lift {.m} m p cln | 0 , idp = cln , idp
+canonical-lift {n} .(S (fst + n)) p cln | S fst , idp =
+  let rec-m , rec-p = canonical-lift {n} (fst + n) (≤-up-+ rrr) cln
+  in  (CanS rec-m z≤n) , (≡-trans ++-unit rec-p)
+
+>>-drop : {n : ℕ} -> (cl : Lehmer n) -> (m : ℕ) -> (m >> (immersion cl)) -> Σ (Lehmer m) (λ cln -> immersion cln == immersion cl)
+>>-drop {O} CanZ m nil =  canonical-lift m z≤n CanZ
+>>-drop {S n} (CanS cl {O} x) m mcl =
+  let rec-l , rec-p = >>-drop {n} cl m (transport (λ e → m >> e) ++-unit mcl)
+  in  rec-l , (rec-p ∙ ! ++-unit)
+>>-drop {S n} (CanS cl {S r} x) m mcl = TODO
 
 -- l0 : Lehmer 0
 -- l0 = CanZ

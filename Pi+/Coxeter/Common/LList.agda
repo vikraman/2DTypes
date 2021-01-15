@@ -34,6 +34,10 @@ extract-proof (_ :⟨ p ⟩: _) = p
 >>-S  nil = nil
 >>-S  (k :⟨ p ⟩: l') = k :⟨ ≤-up p ⟩: >>-S l'
 
+>>-rev : {n : ℕ} -> {l : Listℕ} -> (n >> l) -> (n >> rev l)
+>>-rev {n} nil = nil
+>>-rev {n} (k :⟨ x ⟩: lp) = >>-++ (>>-rev lp) (k :⟨ x ⟩: nil)
+
 LList : ℕ → Type₀
 LList n = Σ _ (λ l → n >> l)
 
@@ -62,3 +66,6 @@ head+tail>> {a = a} ap1 ap2 {lp1 = lp1} {lp2 = lp2} pl = ap (λ e -> (a :⟨ ap1
 
 LList-eq : {n : ℕ} -> {l1 l2 : LList n} -> ((l1 .fst) == (l2 .fst)) -> (l1 == l2)
 LList-eq {n} {l1} {l2} p = pair= p (>>-eq-d p (l1 .snd) (l2 .snd))
+
+LList-rev : {n : ℕ} -> (l1 : LList n) -> LList n
+LList-rev (l , lp) = (rev l) , (>>-rev lp)
