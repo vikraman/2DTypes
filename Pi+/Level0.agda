@@ -142,8 +142,13 @@ slide-transpos {S m} (S .1 , np) (O , kp) ltS =
        ⟷₂⟨ trans⟷₂ (id⟷₂ ⊡ assoc◎l) assoc◎l ⟩
      (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ (id⟷₁ ⊕ tr0)) ⟷₂∎
 slide-transpos {S m} (S n , np) (O , kp) (ltSR lp) = {!!}
-slide-transpos {S m} (S .(S (S k)) , np) (S k , kp) ltS = {!!}
-slide-transpos {S m} (S n , np) (S k , kp) (ltSR lp) = {!!}
+slide-transpos {S m} (S .(S (S k)) , np) (S k , kp) ltS =
+  trans⟷₂
+    hom◎⊕⟷₂
+    (trans⟷₂
+      (resp⊕⟷₂ id⟷₂ (slide-transpos (S (S k) , <-cancel-S np) (k , <-cancel-S kp) ltS))
+      hom⊕◎⟷₂)
+slide-transpos {S m} (S n , np) (S k , kp) (ltSR lp) = ?
 
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
