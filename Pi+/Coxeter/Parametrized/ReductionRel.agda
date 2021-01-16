@@ -201,8 +201,8 @@ reduction-fromLList {n} (s , sp) sf (long≅ {m} k l r .s .(sf .fst) defm defmf)
         eqs = fromLList-++ (l , _) (↓++x∷r , Sn>>↓++x∷r) ∙
               ap (λ e -> fromLList {S n} e) (LList-eq {S n} {(l ++ℕ ↓++x∷r) , _} {(l ++ℕ ↓++x∷r) , Sn>>l++↓++x∷r} idp) ∙ 
               ap (<– List≃LList) (LList-eq {S n} {(l ++ℕ ↓++x∷r) , Sn>>l++↓++x∷r} {(s , sp)} (! defm))
-        eqs' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) {!   !}
-        eqsf' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) {!   !}
+        eqs' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) TODO
+        eqsf' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) TODO
     in  transport2 (λ e f → ReductionRel n e f) (eqs' ∙ eqs) (eqsf' ∙ eqsf) c
 
 reduction-fromLList* : {n : ℕ} -> (s sf : LList (S n)) -> (p : (s .fst) ≅* (sf .fst)) -> (<– List≃LList s ≅*[ n ] <– List≃LList sf)
@@ -227,8 +227,8 @@ reduction-toLList _ _ (longN≅ l r m k p) =
     let ll = (–> List≃LList l) .fst
         rr = (–> List≃LList r) .fst
         c = long≅ {(S (m .fst)) ∸ (k .fst)} (2 + (k .fst)) ll rr _ _ idp idp
-        p1 = {!   !}
-        p2 = {!   !}
+        p1 = TODO
+        p2 = TODO
     in  transport2 (λ e f -> e ≅ f) p1 p2 c
 
 reduction-toLList* : {n : ℕ} -> (s sf : List (Fin (S n))) -> (p : s ≅*[ n ] sf) -> ((–> List≃LList s) .fst) ≅* ((–> List≃LList sf) .fst)

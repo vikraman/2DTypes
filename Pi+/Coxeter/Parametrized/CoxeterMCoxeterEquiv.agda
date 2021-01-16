@@ -12,11 +12,11 @@ open import lib.types.List
 
 open import Pi+.Misc
 open import Pi+.Extra
+open import Pi+.Coxeter.Common.ListFinLListEquiv
+open import Pi+.Coxeter.Common.LList
 open import Pi+.Coxeter.Parametrized.Coxeter
 open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Coxeter.Parametrized.ReductionRel
-
--- lift-swap-lemma : {m : ℕ} -> {x : Fin (S m)} -> {l : List (Fin m)} -> 
 
 {-# NON_TERMINATING #-}
 long-swap-lemma : {m : ℕ} -> (n k : Fin m) -> (x : Fin (S m)) -> (S (S (n .fst)) < (x .fst)) -> (p : k ≤^ n) -> ((n ↓⟨ p ⟩ k) ++ (x :: nil)) ≈₁ (x :: (n ↓⟨ p ⟩ k))
@@ -27,14 +27,25 @@ long-swap-lemma {S m} (S n , np) (S k , kp) x nx p =
         lemma = (transport (λ e -> e ++ (x :: nil) ≈₁ x :: e) (! (map=⟨⟩ (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p))) rec) -- 
     in  trans (respects-++ (idp {l = S⟨ (S n , np) ⟩ :: nil}) lemma) (respects-++ (comm (swap nx)) idp)
 
+ListFin-eq : {m : ℕ} -> {l1 l2 : List (Fin (S m))} -> ((–> List≃LList l1) .fst) == ((–> List≃LList l2) .fst) -> l1 == l2
+ListFin-eq {m1} {l1} {l2} p = 
+    let ll = LList-eq p
+    in  ! (fromLList∘toLList l1) ∙ ap fromLList ll ∙ fromLList∘toLList l2
+
 long-lemma : {m : ℕ} -> (n k : Fin m) -> (p : k ≤^ n) -> ((n ↓⟨ p ⟩ k) ++ (S⟨ n ⟩ :: nil)) ≈₁ (⟨ n ⟩ :: (n ↓⟨ p ⟩ k))
-long-lemma n (O , _) p = braid
-long-lemma (O , snd₁) (S k , kp) (ltSR ())
-long-lemma {S m} (S O , np) (S .0 , kp) ltS = 
-    let t = respects-++ braid (idp {S m} {l = ((O , O<S (S m))) :: nil})
-    in  trans {!   !} {!   !}
-long-lemma {S m} (S O , np) (S k , kp) (ltSR (ltSR ()))
-long-lemma {S m} (S (S n) , np) (S k , kp) p = {!   !}
+long-lemma n (O , kp) p = braid
+long-lemma {S m} (O , np) (S O , kp) (ltSR ())
+long-lemma {S m} (S n , np) (S O , kp) p = 
+    let t = respects-++ (braid {S m} {(S n , np)}) (idp {S m} {l = (n , ltSR (ltSR (<-cancel-S np))) :: nil})
+        t2 = trans (respects-++ (idp {l = _ :: _ :: nil}) (comm (swap ltS))) t 
+    in  transport2 (λ e f -> e ≈₁ f) (ListFin-eq idp) (ListFin-eq idp) t2
+long-lemma {S m} (O , np) (S (S k) , kp) (ltSR ())
+long-lemma {S O} (S O , np) (S (S k) , kp) (ltSR (ltSR ()))
+long-lemma {S (S m)} (S O , np) (S (S k) , kp) (ltSR (ltSR ()))
+long-lemma {S O} (S (S n) , np) (S (S k) , ltSR ()) p
+long-lemma {S (S m)} (S (S n) , np) (S (S k) , kp) p = 
+    let t = ?
+    in  {!   !}
 
 reduction->coxeter : {n : ℕ} -> {l1 l2 : List (Fin (S n))} -> (l1 ≅[ n ] l2) -> (l1 ≈₁ l2)
 reduction->coxeter (cancelN≅ l r n) = respects-++ idp (respects-++ cancel idp)
