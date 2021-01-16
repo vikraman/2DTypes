@@ -231,12 +231,12 @@ reduction-toLList _ _ (swapN≅ l r m k x) =
         rr = (–> List≃LList r) .fst
         c = swap≅ {m .fst} {k .fst} (–> <N≃< x) ll rr _ _ idp idp
     in  transport2 (λ e f -> e ≅ f) (! (toLList-++ l (_ :: _ :: r))) (! (toLList-++ l (_ :: _ :: r))) c
-reduction-toLList _ _ (longN≅ l r m k p) = 
+reduction-toLList {S n} _ _ (longN≅ l r m k p) = 
     let ll = (–> List≃LList l) .fst
         rr = (–> List≃LList r) .fst
-        c = long≅ {(S (m .fst)) ∸ (k .fst)} (2 + (k .fst)) ll rr _ _ idp idp
-        p1 = TODO
-        p2 = TODO
+        c = long≅ {((m .fst)) ∸ (k .fst)} (k .fst) ll rr _ _ idp idp
+        p1 = {!   !}
+        p2 = {!   !}
     in  transport2 (λ e f -> e ≅ f) p1 p2 c
 
 reduction-toLList* : {n : ℕ} -> (s sf : List (Fin (S n))) -> (p : s ≅*[ n ] sf) -> ((–> List≃LList s) .fst) ≅* ((–> List≃LList sf) .fst)
