@@ -17,13 +17,6 @@ open import Pi+.Coxeter.Common.ListN renaming (_++_ to _++ℕ_)
 open import Pi+.Coxeter.Common.LList
 
 
--- infixr 50 _+++_
-
--- _+++_ : {m : ℕ} -> (LList m) -> (LList m) -> LList m
--- (nil , nil) +++ r = r
--- ((x ∷ xs) , (.x :⟨ px ⟩: pxs)) +++ r = 
---   let rec = (xs , pxs) +++ r
---   in  (x ∷ rec .fst) , (x :⟨ px ⟩: rec .snd)
 
 module _ {n : ℕ} where
 
@@ -37,10 +30,14 @@ module _ {n : ℕ} where
   fromLList (nil , nil) = nil
   fromLList ((x ∷ fst) , (.x :⟨ px ⟩: snd)) = (x , (<– <N≃< px)) :: fromLList (fst , snd)
 
-  toLList∘fromLList : (x : LList n) → toLList (fromLList x) == x
-  toLList∘fromLList = TODO
-  fromLList∘toLList : (x : List (Fin n)) → fromLList (toLList x) == x
-  fromLList∘toLList = TODO
+  toLList∘fromLList : (l : LList n) → toLList (fromLList l) == l
+  toLList∘fromLList (nil , nil) = idp
+  toLList∘fromLList ((x ∷ l) , (.x :⟨ x₁ ⟩: lp)) = 
+    LList-eq (head+tail idp (ap fst (toLList∘fromLList (l , lp))))
+  
+  fromLList∘toLList : (l : List (Fin n)) → fromLList (toLList l) == l
+  fromLList∘toLList nil = idp
+  fromLList∘toLList ((x , xp) :: l) = List=-out ((pair= idp (<-has-all-paths _ xp)) , fromLList∘toLList l)
 
   List≃LList : List (Fin n) ≃ (LList n)
   List≃LList = equiv toLList fromLList toLList∘fromLList fromLList∘toLList
@@ -55,8 +52,14 @@ module _ {n : ℕ} where
         lemma = LList-eq {_} {m'} {m} p
     in  fromLList-++ l r ∙ ap fromLList lemma
 
+  toLList-++ : (l r : List (Fin n)) -> (toLList (l ++ r)) .fst == ((toLList l) .fst) ++ℕ ((toLList r) .fst)
+  toLList-++ nil r = idp
+  toLList-++ (x :: l) r = 
+    let rec = toLList-++ l r
+    in  head+tail idp rec
+  
   rev-reverse : (l : List (Fin n)) -> LList-rev (toLList (reverse l)) == (toLList l)
   rev-reverse nil = idp
   rev-reverse (x :: l) = 
     let rec = rev-reverse l
-    in  TODO
+    in  LList-eq ((ap rev (toLList-++ (reverse l) (x :: nil)) ∙ rev-++ (fst (toLList (reverse l))) ((x .fst) ∷ nil)) ∙ head+tail idp (ap fst rec))

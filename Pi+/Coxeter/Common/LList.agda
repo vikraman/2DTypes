@@ -69,3 +69,12 @@ LList-eq {n} {l1} {l2} p = pair= p (>>-eq-d p (l1 .snd) (l2 .snd))
 
 LList-rev : {n : ℕ} -> (l1 : LList n) -> LList n
 LList-rev (l , lp) = (rev l) , (>>-rev lp)
+
+
+infixr 50 _+++_
+
+_+++_ : {m : ℕ} -> (LList m) -> (LList m) -> LList m
+(nil , nil) +++ r = r
+((x ∷ xs) , (.x :⟨ px ⟩: pxs)) +++ r = 
+  let rec = (xs , pxs) +++ r
+  in  (x ∷ rec .fst) , (x :⟨ px ⟩: rec .snd)
