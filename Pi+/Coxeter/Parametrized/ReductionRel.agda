@@ -192,15 +192,17 @@ reduction-fromLList {n} (s , sp) sf (long≅ {m} k l r .s .(sf .fst) defm defmf)
         c = longN≅ ll rr (k + m , <-cancel-S (<– <N≃< Sn>Sk+m)) (k , <-cancel-S (<– <N≃< Sn>Sk)) (<– <N≃< Sk+m>k)
         Sn>>l++x++↓∷r = transport (λ e -> S n >> e) defmf (sf .snd)
         x++↓∷r = [ _ ] ++ℕ _ ∷  ((m ↓ (S k)) ++ℕ r)
-        eqsf = fromLList-++ (l , Sn>>l) (x++↓∷r , TODO) ∙ 
+        Sn>>x++↓∷r = >>-implies->> {l1 = l} {r1 = nil} Sn>>l++x++↓∷r (ap (λ e -> l ++ℕ k + m ∷ S (k + m) ∷ k + m ∷ e) (! ++-unit))
+        eqsf = fromLList-++ (l , Sn>>l) (x++↓∷r , Sn>>x++↓∷r) ∙ 
                ap fromLList (LList-eq {S n} {(l ++ℕ x++↓∷r) , _} {(l ++ℕ x++↓∷r) , Sn>>l++x++↓∷r} idp) ∙ 
                ap (λ e -> <– List≃LList e) (LList-eq {S n} {(l ++ℕ x++↓∷r) , Sn>>l++x++↓∷r} {sf} (! defmf))
         ↓++x∷r = S (k + m) ∷ k + m ∷ m ↓ k ++ℕ (1 + k + m) ∷ r
-        eqs = fromLList-++ (l , _) (↓++x∷r , TODO) ∙ 
+        Sn>>↓++x∷r = _ :⟨ Sn>Sk+m ⟩: (_ :⟨ Sn>k+m ⟩: (>>-++ (>>-↓ (S n) m k (≤-down Sn>k+m)) (_ :⟨ Sn>Sk+m ⟩: Sn>>r)))
+        eqs = fromLList-++ (l , _) (↓++x∷r , Sn>>↓++x∷r) ∙
               ap (λ e -> fromLList {S n} e) (LList-eq {S n} {(l ++ℕ ↓++x∷r) , _} {(l ++ℕ ↓++x∷r) , Sn>>l++↓++x∷r} idp) ∙ 
               ap (<– List≃LList) (LList-eq {S n} {(l ++ℕ ↓++x∷r) , Sn>>l++↓++x∷r} {(s , sp)} (! defm))
-        eqs' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) TODO
-        eqsf' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) TODO
+        eqs' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) {!   !}
+        eqsf' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) {!   !}
     in  transport2 (λ e f → ReductionRel n e f) (eqs' ∙ eqs) (eqsf' ∙ eqsf) c
 
 reduction-fromLList* : {n : ℕ} -> (s sf : LList (S n)) -> (p : (s .fst) ≅* (sf .fst)) -> (<– List≃LList s ≅*[ n ] <– List≃LList sf)
@@ -211,16 +213,24 @@ reduction-fromLList* {n} s sf (trans≅ {m2 = m2} x p) =
     in  transN≅ c rec
 
 reduction-toLList : {n : ℕ} -> (s sf : List (Fin (S n))) -> (p : s ≅[ n ] sf) -> ((–> List≃LList s) .fst) ≅ ((–> List≃LList sf) .fst)
-reduction-toLList = TODO
+reduction-toLList _ _ (cancelN≅ l r m) = 
+    let ll = (–> List≃LList l) .fst
+        rr = (–> List≃LList r) .fst
+        c = cancel≅ {m .fst} ll rr _ _ idp idp
+    in  transport2 (λ e f -> e ≅ f) (! (toLList-++ l (m :: m :: r))) (! (toLList-++ l r)) c
+reduction-toLList _ _ (swapN≅ l r m k x) =
+    let ll = (–> List≃LList l) .fst
+        rr = (–> List≃LList r) .fst
+        c = swap≅ {m .fst} {k .fst} (–> <N≃< x) ll rr _ _ idp idp
+    in  transport2 (λ e f -> e ≅ f) (! (toLList-++ l (_ :: _ :: r))) (! (toLList-++ l (_ :: _ :: r))) c
+reduction-toLList _ _ (longN≅ l r m k p) = 
+    let ll = (–> List≃LList l) .fst
+        rr = (–> List≃LList r) .fst
+        c = long≅ {(S (m .fst)) ∸ (k .fst)} (2 + (k .fst)) ll rr _ _ idp idp
+        p1 = {!   !}
+        p2 = {!   !}
+    in  transport2 (λ e f -> e ≅ f) p1 p2 c
 
 reduction-toLList* : {n : ℕ} -> (s sf : List (Fin (S n))) -> (p : s ≅*[ n ] sf) -> ((–> List≃LList s) .fst) ≅* ((–> List≃LList sf) .fst)
-reduction-toLList* = TODO
-
--- reduction-toLList : {n : ℕ} -> (m mf : LList n) -> ((m .fst) ≅* (mf .fst)) -> (m ≅*[ n ] mf)
--- reduction-toLList = ?
-
--- {-# NON_TERMINATING #-}
--- LList-to-LehmerProper : {n : ℕ} -> (m : LList n) -> Σ _ (λ nf -> (n ≤ nf) × Σ _ (λ cl -> rev (m .fst) ≅* immersionProper {nf} cl))
--- LList-to-LehmerProper {n} m = 
---   let rn , rcl = Listℕ-to-LehmerProper (m .fst)
---   in {!   !}
+reduction-toLList* s .s idpN = idp
+reduction-toLList* s sf (transN≅ x p) = trans≅ (reduction-toLList _ _ x) (reduction-toLList* _ _ p)
