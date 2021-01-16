@@ -18,14 +18,19 @@ open import Pi+.Coxeter.Parametrized.Coxeter
 open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Coxeter.Parametrized.ReductionRel
 
-{-# NON_TERMINATING #-}
+long-swap-lemmaH : {m : ℕ} -> (n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (x : Fin (S m)) -> (S (S n) < (x .fst)) -> (p : k < S n) 
+    -> (((n , np) ↓⟨ p ⟩ (k , kp)) ++ (x :: nil)) ≈₁ (x :: ((n , np) ↓⟨ p ⟩ (k , kp)))
+long-swap-lemmaH {S m} n O np kp x nx p = 
+    comm (trans (respects-++ (swap nx) (idp {l = ⟨ (n , np) ⟩ :: nil})) (respects-++ (idp {l = S⟨ (n , np) ⟩ :: nil}) (swap (<-down nx))))
+long-swap-lemmaH {S m} O (S k) np kp x nx (ltSR ())
+long-swap-lemmaH {S m} (S n) (S k) np kp x nx p = 
+    let rec = long-swap-lemmaH {S m} n k (<-down np) (<-down kp) x (<-down nx) (<-cancel-S p)
+        one = respects-++ (swap nx) (idp {l = (n , (<-down np)) ↓⟨ (<-cancel-S p) ⟩ (k , (<-down kp))})
+        two = respects-++ (idp {l = (S (S n) , <-ap-S np) :: nil}) (comm rec)
+    in  comm (trans one two)
+
 long-swap-lemma : {m : ℕ} -> (n k : Fin m) -> (x : Fin (S m)) -> (S (S (n .fst)) < (x .fst)) -> (p : k ≤^ n) -> ((n ↓⟨ p ⟩ k) ++ (x :: nil)) ≈₁ (x :: (n ↓⟨ p ⟩ k))
-long-swap-lemma n (O , kp) x nx p = comm (trans (respects-++ (swap nx) (idp {l = ⟨ n ⟩ :: nil})) (respects-++ (idp {l = S⟨ n ⟩ :: nil}) (swap (<-down nx))))
-long-swap-lemma (O , snd₁) (S k , kp) x nx (ltSR ())
-long-swap-lemma {S m} (S n , np) (S k , kp) x nx p =
-    let rec = long-swap-lemma {S m} ⟨ n , <-cancel-S np ⟩ ⟨ k , <-cancel-S kp ⟩ x (<-down nx) (<-cancel-S p)
-        lemma = (transport (λ e -> e ++ (x :: nil) ≈₁ x :: e) (! (map=⟨⟩ (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p))) rec) -- 
-    in  trans (respects-++ (idp {l = S⟨ (S n , np) ⟩ :: nil}) lemma) (respects-++ (comm (swap nx)) idp)
+long-swap-lemma {S m} (n , np) (k , kp) x nx p = long-swap-lemmaH n k np kp x nx p
 
 ListFin-eq : {m : ℕ} -> {l1 l2 : List (Fin (S m))} -> ((–> List≃LList l1) .fst) == ((–> List≃LList l2) .fst) -> l1 == l2
 ListFin-eq {m1} {l1} {l2} p = 
@@ -44,8 +49,11 @@ long-lemma {S O} (S O , np) (S (S k) , kp) (ltSR (ltSR ()))
 long-lemma {S (S m)} (S O , np) (S (S k) , kp) (ltSR (ltSR ()))
 long-lemma {S O} (S (S n) , np) (S (S k) , ltSR ()) p
 long-lemma {S (S m)} (S (S n) , np) (S (S k) , kp) p = 
-    let t = ?
-    in  {!   !}
+    let cc = <-cancel-S ∘ <-cancel-S
+        t1 = respects-++ (idp {l = _ :: _ :: nil}) (long-swap-lemma _ (k , (<-down (<-down kp))) _ ltS _)
+        t2 = respects-++ (braid {n = (S (S n)) , np}) (idp {l = (n , _) ↓⟨ cc p ⟩ (k , <-down (<-down kp))})
+        t = trans t1 t2
+    in  transport2 (λ e f -> e ≈₁ f) (ListFin-eq idp) (ListFin-eq idp) t
 
 reduction->coxeter : {n : ℕ} -> {l1 l2 : List (Fin (S n))} -> (l1 ≅[ n ] l2) -> (l1 ≈₁ l2)
 reduction->coxeter (cancelN≅ l r n) = respects-++ idp (respects-++ cancel idp)
