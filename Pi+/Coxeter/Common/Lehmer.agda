@@ -40,7 +40,10 @@ canonical-lift {n} .(S (fst + n)) p cln | S fst , idp =
 >>-drop {S n} (CanS cl {O} x) m mcl =
   let rec-l , rec-p = >>-drop {n} cl m (transport (λ e → m >> e) ++-unit mcl)
   in  rec-l , (rec-p ∙ ! ++-unit)
->>-drop {S n} (CanS cl {S r} x) m mcl = TODO
+>>-drop {S n} (CanS cl {S r} x) O mcl = ⊥-elim (1+n≰n (≤-trans (>>-implies-> mcl idp) z≤n))
+>>-drop {S n} (CanS cl {S r} x) (S m) mcl =
+  let n<m = >>-implies-> mcl idp
+  in  canonical-lift (S m) (≤-trans (≤-up2 (≤-reflexive (! (plus-minus (≤-down2 x))))) n<m) (CanS cl {S r} x)
 
 -- l0 : Lehmer 0
 -- l0 = CanZ
