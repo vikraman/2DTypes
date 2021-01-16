@@ -30,6 +30,10 @@ S⟨ k , kltn ⟩ = S k , <-ap-S kltn
 _≤^_ : {m : ℕ} -> Fin m -> Fin m -> Type₀
 k ≤^ n = (k .fst) < S (n .fst)
 
+<-down : {n k : ℕ} -> (S n < k) -> (n < k)
+<-down p = <-cancel-S (ltSR p)
+
+
 syntax DownArrow x y p = x ↓⟨ p ⟩ y
 
 DownArrow : {m : ℕ} -> (n : Fin m) -> (k : Fin m) -> (k ≤^ n) -> List (Fin (S m))
@@ -37,8 +41,24 @@ DownArrow n (O , kp) p = S⟨ n ⟩ :: (⟨ n ⟩ :: nil )
 DownArrow {S m} (S n , np) (S k , kp) p =
     let rec = DownArrow {m} (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p)
     in  S⟨ (S n , np) ⟩ :: map ⟨_⟩ rec
-DownArrow {S m} (O , snd₁) (S fst₁ , snd₂) (ltSR ())
+DownArrow {S m} (O , np) (S k , kp) (ltSR ())
 
+DownArrow-== : {m : ℕ} -> {n n' k k' : ℕ} -> {p : k < S n} -> {p' : k' < S n'} -> {pn : n < m} -> {pn' : n' < m} -> {pk : k < m} -> {pk' : k' < m} 
+    -> (n == n') -> (k == k') -> ((n , pn) ↓⟨ p ⟩ (k , pk)) == ((n' , pn') ↓⟨ p' ⟩ (k' , pk'))
+DownArrow-== {m} {n} {n} {k} {k} {p} {p'} {pn} {pn'} {pk} {pk'} idp idp = 
+    ((n , pn) ↓⟨ p ⟩ (k , pk)) =⟨ ap2 (λ e f -> ((n , e) ↓⟨ p ⟩ (k , f)) ) (<-has-all-paths pn pn') (<-has-all-paths pk pk') ⟩
+    ((n , pn') ↓⟨ p ⟩ (k , pk')) =⟨ ap (λ e -> _ ↓⟨ e ⟩ _) (<-has-all-paths p p') ⟩
+    ((n , pn') ↓⟨ p' ⟩ (k , pk')) =∎
+
+-- ⟨⟩-idempotent : {m : ℕ} -> (n : Fin m) -> ⟨ ⟨ n ⟩ ⟩ == ⟨ n ⟩
+-- ⟨⟩-idempotent n = ?
+
+map=⟨⟩ : {m : ℕ} -> (n : Fin m) -> (k : Fin m) -> (p : k ≤^ n) -> (map ⟨_⟩ (n ↓⟨ p ⟩ k)) == (⟨ n ⟩ ↓⟨ p ⟩ ⟨ k ⟩)
+map=⟨⟩ {S m} n (O , snd₁) p = idp
+map=⟨⟩ {S m} (O , np) (S k , kp) (ltSR ())
+map=⟨⟩ {S m} (S n , np) (S k , kp) p =
+    let rec = map=⟨⟩ {m} (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p)
+    in  List=-out (idp , (ap (map ⟨_⟩) (rec ∙ DownArrow-== idp idp)))
 
 syntax ReductionRel n x y = x ≅[ n ] y
 

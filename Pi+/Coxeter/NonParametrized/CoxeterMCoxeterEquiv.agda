@@ -21,6 +21,7 @@ long-swap-lemma : (n k x : ℕ) -> (k + n < x) -> ((n ↓ k) ++ x ∷ nil) ~ (x 
 long-swap-lemma n 0 x p = idp~
 long-swap-lemma n (S k) x p = trans~ (respects-l~ [ k + n ] (long-swap-lemma n k x (≤-down p)) idp idp) (respects-r~ (n ↓ k) (comm~ (swap~ p)) idp idp)
 
+
 long-lemma : (n k : ℕ) -> ((n ↓ (2 + k)) ++ S (k + n) ∷ nil) ~ (k + n ∷ (n ↓ (2 + k)))
 long-lemma n 0 = braid~
 long-lemma n (S k) = trans~ (respects-l~ (_ ∷ _ ∷ nil) (long-swap-lemma n (1 + k) (2 + k + n) rrr) idp idp) (respects-r~ _ braid~ idp idp)

@@ -16,36 +16,36 @@ open import Pi+.Coxeter.Parametrized.Coxeter
 open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Coxeter.Parametrized.ReductionRel
 
-  
-long-swap-lemma : {m : ℕ} -> (n k : Fin m) -> (x : Fin (S m)) -> ((n .fst) < (x .fst)) -> (p : k ≤^ n) -> ((n ↓⟨ p ⟩ k) ++ (x :: nil)) ≈₁ (x :: (n ↓⟨ p ⟩ k))
-long-swap-lemma n (O , kp) x nx p = {! snd₁ !}
-long-swap-lemma n (S k , kp) x nx p = {!   !}
+-- lift-swap-lemma : {m : ℕ} -> {x : Fin (S m)} -> {l : List (Fin m)} -> 
 
--- long-lemma : (n k : ℕ) -> ((n ↓ (2 + k)) ++ S (k + n) ∷ nil) ~ (k + n ∷ (n ↓ (2 + k)))
--- long-lemma n 0 = braid~
--- long-lemma n (S k) = trans~ (respects-l~ (_ ∷ _ ∷ nil) (long-swap-lemma n (1 + k) (2 + k + n) rrr) idp idp) (respects-r~ _ braid~ idp idp)
+{-# NON_TERMINATING #-}
+long-swap-lemma : {m : ℕ} -> (n k : Fin m) -> (x : Fin (S m)) -> (S (S (n .fst)) < (x .fst)) -> (p : k ≤^ n) -> ((n ↓⟨ p ⟩ k) ++ (x :: nil)) ≈₁ (x :: (n ↓⟨ p ⟩ k))
+long-swap-lemma n (O , kp) x nx p = comm (trans (respects-++ (swap nx) (idp {l = ⟨ n ⟩ :: nil})) (respects-++ (idp {l = S⟨ n ⟩ :: nil}) (swap (<-down nx))))
+long-swap-lemma (O , snd₁) (S k , kp) x nx (ltSR ())
+long-swap-lemma {S m} (S n , np) (S k , kp) x nx p =
+    let rec = long-swap-lemma {S m} ⟨ n , <-cancel-S np ⟩ ⟨ k , <-cancel-S kp ⟩ x (<-down nx) (<-cancel-S p)
+        lemma = (transport (λ e -> e ++ (x :: nil) ≈₁ x :: e) (! (map=⟨⟩ (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p))) rec) -- 
+    in  trans (respects-++ (idp {l = S⟨ (S n , np) ⟩ :: nil}) lemma) (respects-++ (comm (swap nx)) idp)
 
--- mcoxeter≅->coxeter : (m1 m2 : List) -> (m1 ≅ m2) -> (m1 ~ m2)
--- mcoxeter≅->coxeter m1 m2 (cancel≅ l r .m1 .m2 defm defmf) = respects-l~ l (respects-r~ r cancel~ idp idp) defm defmf
--- mcoxeter≅->coxeter m1 m2 (swap≅ x l r .m1 .m2 defm defmf) = respects-l~ l (respects-r~ r (swap~ x) idp idp) defm defmf
--- mcoxeter≅->coxeter m1 m2 (long≅ {n} k nil r .m1 .m2 defm defmf) = respects-r~ r (long-lemma n k) (≡-trans defm (≡-sym (++-assoc (n ↓ (2 + k)) [ 1 + k + n ] r))) defmf
--- mcoxeter≅->coxeter (x₁ ∷ m1) (x₂ ∷ m2) (long≅ k (x ∷ l) r .(x₁ ∷ m1) .(x₂ ∷ m2) defm defmf) =
---   let rec = mcoxeter≅->coxeter m1 m2 (long≅ k l r m1 m2 (cut-head defm) (cut-head defmf))
---   in  respects-l~ [ x ] rec (head+tail (cut-tail defm) idp) (head+tail (cut-tail defmf) idp)
+long-lemma : {m : ℕ} -> (n k : Fin m) -> (p : k ≤^ n) -> ((n ↓⟨ p ⟩ k) ++ (S⟨ n ⟩ :: nil)) ≈₁ (⟨ n ⟩ :: (n ↓⟨ p ⟩ k))
+long-lemma n (O , _) p = braid
+long-lemma (O , snd₁) (S k , kp) (ltSR ())
+long-lemma {S m} (S O , np) (S .0 , kp) ltS = 
+    let t = respects-++ braid (idp {S m} {l = ((O , O<S (S m))) :: nil})
+    in  trans {!   !} {!   !}
+long-lemma {S m} (S O , np) (S k , kp) (ltSR (ltSR ()))
+long-lemma {S m} (S (S n) , np) (S k , kp) p = {!   !}
 
--- mcoxeter≅*->coxeter : (m1 m2 : List) -> (m1 ≅* m2) -> (m1 ~ m2)
--- mcoxeter≅*->coxeter m1 .m1 idp = idp~
--- mcoxeter≅*->coxeter m1 m2 (trans≅ x p) = trans~ ((mcoxeter≅->coxeter _ _ x)) ((mcoxeter≅*->coxeter _ _ p))
-
-reduction->coxeter : {n : ℕ} -> (l1 l2 : List (Fin (S n))) -> (l1 ≅[ n ] l2) -> (l1 ≈₁ l2)
-reduction->coxeter .(l ++ (n :: n :: r)) .(l ++ r) (cancelN≅ l r n) = respects-++ idp (respects-++ cancel idp)
-reduction->coxeter .(l ++ (n :: k :: r)) .(l ++ (k :: n :: r)) (swapN≅ l r n k x) = respects-++ idp (respects-++ (swap x) idp)
-reduction->coxeter .((n ↓⟨ p ⟩ k) ++ ((S (fst n) , <-ap-S (snd n)) :: r)) .((fst n , ltSR (snd n)) :: (n ↓⟨ p ⟩ k) ++ r) (longN≅ nil r n k p) = {!   !}
-reduction->coxeter .(x :: l ++ (n ↓⟨ p ⟩ k) ++ ((S (fst n) , <-ap-S (snd n)) :: r)) .(x :: l ++ ((fst n , ltSR (snd n)) :: (n ↓⟨ p ⟩ k) ++ r)) (longN≅ (x :: l) r n k p) = {!   !} 
+reduction->coxeter : {n : ℕ} -> {l1 l2 : List (Fin (S n))} -> (l1 ≅[ n ] l2) -> (l1 ≈₁ l2)
+reduction->coxeter (cancelN≅ l r n) = respects-++ idp (respects-++ cancel idp)
+reduction->coxeter (swapN≅ l r n k x) = respects-++ idp (respects-++ (swap x) idp)
+reduction->coxeter (longN≅ l r n k p) = 
+    let lemma = respects-++ (long-lemma n k p) (idp {l = r})
+    in  respects-++ (idp {l = l}) (transport (λ e -> e ≈₁ (_ :: ((n ↓⟨ p ⟩ k) ++ r))) (++-assoc (n ↓⟨ p ⟩ k) (S⟨ n ⟩ :: nil) r) lemma)
 
 reduction*->coxeter : {n : ℕ} -> (l1 l2 : List (Fin (S n))) -> (l1 ≅*[ n ] l2) -> (l1 ≈₁ l2)
 reduction*->coxeter l1 .l1 idpN = idp
-reduction*->coxeter l1 l2 (transN≅ x p) = trans (reduction->coxeter l1 _ x) (reduction*->coxeter _ _ p)
+reduction*->coxeter l1 l2 (transN≅ x p) = trans (reduction->coxeter {l1 = l1} x) (reduction*->coxeter _ _ p)
 
 mcoxeter->coxeter : {n : ℕ} -> (l1 l2 : List (Fin (S n))) -> (l1 ↔[ n ] l2) -> (l1 ≈₁ l2)
 mcoxeter->coxeter l1 l2 (MC p1 p2) = trans (reduction*->coxeter _ _ p1) (comm (reduction*->coxeter _ _ p2))

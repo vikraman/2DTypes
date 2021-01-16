@@ -10,11 +10,7 @@ open import lib.types.Fin
 open import lib.types.List
 open import Pi+.Extra
 
-⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-⟨_⟩ = Fin-S
-
-S⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-S⟨ k , kltn ⟩ = S k , <-ap-S kltn
+open import Pi+.Coxeter.Parametrized.ReductionRel
 
 -- This is the one that is to be used with HIT
 -- data _≈₀_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where
