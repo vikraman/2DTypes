@@ -86,11 +86,13 @@ module _ {n : ℕ} where
     f-g-q m = quot-rel (CoxeterRel-sym (ListFin-to-Lehmer m .snd))
 
     f-g :  (l : Sn n) → f (g l) == l
-    f-g = SetQuot-elim {P = λ l → f (g l) == l} {{raise-level -1 has-level-apply-instance}} f-g-q (λ _ →   prop-has-all-paths-↓ {{has-level-apply-instance}})
+    f-g = SetQuot-elim {P = λ l → f (g l) == l} {{raise-level -1 has-level-apply-instance}} f-g-q (λ _ → prop-has-all-paths-↓ {{has-level-apply-instance}})
     -- TODO: why don't the instances resolve?
 
     g-f :  (cl : Lehmer (S n)) → g (f cl) == cl
-    g-f cl = {!   !}
+    g-f cl =   
+        let cln , cln-p = ListFin-to-Lehmer (<– List≃LList (immersion cl , immersion->> cl))
+        in  immersionFin-is-injection cln cl (comm cln-p)
 
     Lehmer≃Coxeter :  Lehmer (S n) ≃ Sn n
     Lehmer≃Coxeter = equiv f g f-g g-f

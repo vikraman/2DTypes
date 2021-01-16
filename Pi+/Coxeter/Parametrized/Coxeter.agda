@@ -24,7 +24,6 @@ open import Pi+.Coxeter.Parametrized.ReductionRel
 
 --     respects-:: : {l l' : List (Fin (S m))} -> (l ≈₀ l') -> (n : Fin (S m)) -> n :: l ≈₀ n :: l'
 
-
 data _≈₁_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where
     cancel : {n : Fin (S m)} → (n :: n :: nil) ≈₁ nil
     swap : {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → (n :: k :: nil) ≈₁ (k :: n :: nil)

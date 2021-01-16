@@ -50,9 +50,6 @@ DownArrow-== {m} {n} {n} {k} {k} {p} {p'} {pn} {pn'} {pk} {pk'} idp idp =
     ((n , pn') ↓⟨ p ⟩ (k , pk')) =⟨ ap (λ e -> _ ↓⟨ e ⟩ _) (<-has-all-paths p p') ⟩
     ((n , pn') ↓⟨ p' ⟩ (k , pk')) =∎
 
--- ⟨⟩-idempotent : {m : ℕ} -> (n : Fin m) -> ⟨ ⟨ n ⟩ ⟩ == ⟨ n ⟩
--- ⟨⟩-idempotent n = ?
-
 map=⟨⟩ : {m : ℕ} -> (n : Fin m) -> (k : Fin m) -> (p : k ≤^ n) -> (map ⟨_⟩ (n ↓⟨ p ⟩ k)) == (⟨ n ⟩ ↓⟨ p ⟩ ⟨ k ⟩)
 map=⟨⟩ {S m} n (O , snd₁) p = idp
 map=⟨⟩ {S m} (O , np) (S k , kp) (ltSR ())
