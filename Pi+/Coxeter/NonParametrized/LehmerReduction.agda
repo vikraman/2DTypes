@@ -358,7 +358,7 @@ not-canonical-not-NF (x ∷ m) p with is-canonical? m
   let prr , app = canonical-proper-append-smaller x (CanS pn cl pr) idp q3
   in  ⊥-elim (p (_ , (CanS pn cl prr) , app))
 
-{-# NON_TERMINATING #-}
+{-# TERMINATING #-}
 Listℕ-to-LehmerProper : (m : Listℕ) -> Σ _ (λ n -> Σ _ (λ cl -> rev m ≅* immersionProper {n} cl))
 Listℕ-to-LehmerProper m with is-canonical? m
 ... | yes (_ , cl , cl-p) = _ , (cl , (idp≅* (≡-sym cl-p)))

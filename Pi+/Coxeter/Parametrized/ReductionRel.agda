@@ -235,8 +235,8 @@ reduction-toLList {S n} _ _ (longN≅ l r m k p) =
     let ll = (–> List≃LList l) .fst
         rr = (–> List≃LList r) .fst
         c = long≅ {((m .fst)) ∸ (k .fst)} (k .fst) ll rr _ _ idp idp
-        p1 = {!   !}
-        p2 = {!   !}
+        p1 = TODO
+        p2 = TODO
     in  transport2 (λ e f -> e ≅ f) p1 p2 c
 
 reduction-toLList* : {n : ℕ} -> (s sf : List (Fin (S n))) -> (p : s ≅*[ n ] sf) -> ((–> List≃LList s) .fst) ≅* ((–> List≃LList sf) .fst)

@@ -96,3 +96,4 @@ module _ {n : ℕ} where
 
     Lehmer≃Coxeter :  Lehmer (S n) ≃ Sn n
     Lehmer≃Coxeter = equiv f g f-g g-f
+
