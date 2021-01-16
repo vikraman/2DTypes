@@ -11,8 +11,6 @@ open import lib.types.Fin
 open import lib.Equivalence
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Common.Arithmetic
-open import Pi+.Coxeter.Common.ListN
 open import Pi+.Coxeter.Common.ListFinLListEquiv
 open import Pi+.Coxeter.Parametrized.ReductionRel
 open import Pi+.Coxeter.NonParametrized.Diamond
@@ -47,3 +45,6 @@ trans↔ {m} l1 l2 l3 (MC {lf = lf1} p1 p2) (MC {lf = lf2} p3 p4) =
       leg1 = transN p1 (transport (λ e -> ReductionRel* m e lemma-m-f) (fromLList∘toLList lf1) lemma1u)
       leg2 = transN p4 (transport (λ e -> ReductionRel* m e lemma-m-f) (fromLList∘toLList lf2) lemma2u)
   in  MC leg1 leg2
+
+↔-respects-++ : {m : ℕ} -> {l l' r r' : List (Fin (S m))} -> (l ↔[ m ] l') -> (r ↔[ m ] r') -> ((l ++ r) ↔[ m ] (l' ++ r'))
+↔-respects-++ (MC p1 p2) (MC p3 p4) = MC (reduction*-respects-++ p1 p3) (reduction*-respects-++ p2 p4)

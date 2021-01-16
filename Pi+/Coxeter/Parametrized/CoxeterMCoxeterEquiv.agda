@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting --allow-unsolved-metas #-}
 
-module Pi+.Coxeter.Parametrized.CoxeterMCoxterEquiv where
+module Pi+.Coxeter.Parametrized.CoxeterMCoxeterEquiv where
 
 open import lib.Base
 open import lib.types.Nat
@@ -42,7 +42,6 @@ reduction->coxeter .(l ++ (n :: n :: r)) .(l ++ r) (cancelN≅ l r n) = respects
 reduction->coxeter .(l ++ (n :: k :: r)) .(l ++ (k :: n :: r)) (swapN≅ l r n k x) = respects-++ idp (respects-++ (swap x) idp)
 reduction->coxeter .((n ↓⟨ p ⟩ k) ++ ((S (fst n) , <-ap-S (snd n)) :: r)) .((fst n , ltSR (snd n)) :: (n ↓⟨ p ⟩ k) ++ r) (longN≅ nil r n k p) = {!   !}
 reduction->coxeter .(x :: l ++ (n ↓⟨ p ⟩ k) ++ ((S (fst n) , <-ap-S (snd n)) :: r)) .(x :: l ++ ((fst n , ltSR (snd n)) :: (n ↓⟨ p ⟩ k) ++ r)) (longN≅ (x :: l) r n k p) = {!   !} 
-    -- respects-++ idp (respects-++ {!   !} idp)
 
 reduction*->coxeter : {n : ℕ} -> (l1 l2 : List (Fin (S n))) -> (l1 ≅*[ n ] l2) -> (l1 ≈₁ l2)
 reduction*->coxeter l1 .l1 idpN = idp
@@ -51,12 +50,11 @@ reduction*->coxeter l1 l2 (transN≅ x p) = trans (reduction->coxeter l1 _ x) (r
 mcoxeter->coxeter : {n : ℕ} -> (l1 l2 : List (Fin (S n))) -> (l1 ↔[ n ] l2) -> (l1 ≈₁ l2)
 mcoxeter->coxeter l1 l2 (MC p1 p2) = trans (reduction*->coxeter _ _ p1) (comm (reduction*->coxeter _ _ p2))
 
-
 coxeter->mcoxeter :  {n : ℕ} -> {l1 l2 : List (Fin (S n))} -> (l1 ≈₁ l2) -> l1 ↔[ n ] l2
-coxeter->mcoxeter {n} {.(_ :: _ :: nil)} {.nil} (cancel {k}) = MC (extN (cancelN≅ nil nil k)) idpN
-coxeter->mcoxeter {n} {.(_ :: _ :: nil)} {.(_ :: _ :: nil)} (swap x) = MC (extN (swapN≅ nil nil _ _ x)) idpN
-coxeter->mcoxeter {n} {.((S (fst _) , <-ap-S (snd _)) :: (fst _ , ltSR (snd _)) :: (S (fst _) , <-ap-S (snd _)) :: nil)} {.((fst _ , ltSR (snd _)) :: (S (fst _) , <-ap-S (snd _)) :: (fst _ , ltSR (snd _)) :: nil)} braid = {!   !}
-coxeter->mcoxeter {n} {l1} {.l1} idp = MC idpN idpN
-coxeter->mcoxeter {n} {l1} {l2} (comm p) = comm↔ _ _ (coxeter->mcoxeter p)
-coxeter->mcoxeter {n} {l1} {l2} (trans p p₁) = trans↔ _ _ _ (coxeter->mcoxeter p) (coxeter->mcoxeter p₁)
-coxeter->mcoxeter {n} {.(_ ++ _)} {.(_ ++ _)} (respects-++ p p₁) = {!   !}
+coxeter->mcoxeter {n} (cancel {k}) = MC (extN (cancelN≅ nil nil k)) idpN
+coxeter->mcoxeter {n} (swap x) = MC (extN (swapN≅ nil nil _ _ x)) idpN
+coxeter->mcoxeter {S n} (braid {m , mp}) = MC (extN (longN≅ nil nil (m , mp) (O , O<S n) (O<S m))) idpN
+coxeter->mcoxeter {n} idp = MC idpN idpN
+coxeter->mcoxeter {n} (comm p) = comm↔ _ _ (coxeter->mcoxeter p)
+coxeter->mcoxeter {n} (trans p p₁) = trans↔ _ _ _ (coxeter->mcoxeter p) (coxeter->mcoxeter p₁)
+coxeter->mcoxeter {n} (respects-++ p p1) = ↔-respects-++ (coxeter->mcoxeter p) (coxeter->mcoxeter p1)

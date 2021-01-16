@@ -63,6 +63,50 @@ transN : {m : ℕ} -> {l1 l2 l3 : List (Fin (S m))} -> (l1 ≅*[ m ] l2) -> (l2 
 transN idpN p  = p
 transN (transN≅ x q) p = transN≅ x (transN q p)
 
+reduction-respects-++-l : {m : ℕ} -> {l r r' : List (Fin (S m))} -> (r ≅[ m ] r') -> ((l ++ r) ≅[ m ] (l ++ r'))
+reduction-respects-++-l {m} {ll} (cancelN≅ l r n) =
+    let c = cancelN≅ (ll ++ l) r n
+    in  transport2 (λ e f -> e ≅[ m ] f) (++-assoc ll _ _) (++-assoc ll _ _) c
+reduction-respects-++-l {m} {ll} (swapN≅ l r n k x) = 
+    let c = swapN≅ (ll ++ l) r n k x
+    in  transport2 (λ e f -> e ≅[ m ] f) (++-assoc ll _ _) (++-assoc ll _ _) c
+reduction-respects-++-l {m} {ll} (longN≅ l r n k p) =
+    let c = longN≅ (ll ++ l) r n k p
+    in  transport2 (λ e f -> e ≅[ m ] f) (++-assoc ll _ _) (++-assoc ll _ _) c
+
+reduction-respects-++-r : {m : ℕ} -> {l l' r : List (Fin (S m))} -> (l ≅[ m ] l') -> ((l ++ r) ≅[ m ] (l' ++ r))
+reduction-respects-++-r {m} {r = rr} (cancelN≅ l r n) =
+    let c = cancelN≅ l (r ++ rr) n
+    in  transport2 (λ e f -> e ≅[ m ] f) (! (++-assoc l _ _)) (! (++-assoc l _ _)) c
+reduction-respects-++-r {m} {r = rr} (swapN≅ l r n k x) = 
+    let c = swapN≅ l (r ++ rr) n k x
+    in  transport2 (λ e f -> e ≅[ m ] f) (! (++-assoc l _ _)) (! (++-assoc l _ _)) c
+reduction-respects-++-r {m} {r = rr} (longN≅ l r n k p) =
+    let c = longN≅ l (r ++ rr) n k p
+        p1 = l ++ ((n ↓⟨ p ⟩ k) ++ (S⟨ n ⟩ :: r ++ rr)) =⟨ ap (l ++_) (! (++-assoc (n ↓⟨ p ⟩ k) (S⟨ n ⟩ :: r) _)) ⟩
+             l ++ (((n ↓⟨ p ⟩ k) ++ (S⟨ n ⟩ :: r)) ++ rr) =⟨ ! (++-assoc l _ _) ⟩
+             (l ++ ((n ↓⟨ p ⟩ k) ++ (S⟨ n ⟩ :: r))) ++ rr =∎
+        p2 = l ++ (⟨ n ⟩ :: (n ↓⟨ p ⟩ k) ++ (r ++ rr)) =⟨ ap (l ++_) (! (++-assoc (⟨ n ⟩ :: (n ↓⟨ p ⟩ k)) r _)) ⟩
+             l ++ (⟨ n ⟩ :: ((n ↓⟨ p ⟩ k) ++ r) ++ rr) =⟨ ! (++-assoc l _ _) ⟩
+             (l ++ (Fin-S n :: (n ↓⟨ p ⟩ k) ++ r)) ++ rr =∎
+    in  transport2 (λ e f -> e ≅[ m ] f) p1 p2 c
+
+reduction*-respects-++ : {m : ℕ} -> {l l' r r' : List (Fin (S m))} -> (l ≅*[ m ] l') -> (r ≅*[ m ] r') -> ((l ++ r) ≅*[ m ] (l' ++ r'))
+reduction*-respects-++ idpN idpN = idpN
+reduction*-respects-++  idpN (transN≅ x pr) = 
+    let cr = reduction-respects-++-l x
+        rec = reduction*-respects-++ idpN pr
+    in  transN≅ cr rec
+reduction*-respects-++ (transN≅ x pl) idpN =
+    let cl = reduction-respects-++-r x
+        rec = reduction*-respects-++ pl idpN
+    in  transN≅ cl rec
+reduction*-respects-++ (transN≅ xl pl) (transN≅ xr pr) =
+    let cl = reduction-respects-++-r xl
+        cr = reduction-respects-++-l xr
+        rec = reduction*-respects-++ pl pr
+    in  transN (transN (extN cl) (extN cr)) rec
+
 reduction-implies->> : {n : ℕ} -> (s : LList n) -> (sf : Listℕ) -> ((s .fst) ≅* sf) -> n >> sf
 reduction-implies->> {n} (s , sp) .s idp = sp
 reduction-implies->> {n} (s , sp) sf (trans≅ (cancel≅ l r .s mf defm defmf) p) = 
