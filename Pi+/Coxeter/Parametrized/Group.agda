@@ -15,9 +15,9 @@ open import Pi+.Coxeter.Parametrized.Coxeter
 CoxeterRel  : (n : ℕ) → Rel (List (Fin (S n))) lzero
 CoxeterRel n = _≈₁_ {n}
 
-instance
-    CoxeterRel-level : {n : ℕ} → {l1 l2 : List (Fin (S n))} → is-prop (CoxeterRel n l1 l2)
-    CoxeterRel-level = TODO
+-- instance
+--     CoxeterRel-level : {n : ℕ} → {l1 l2 : List (Fin (S n))} → is-prop (CoxeterRel n l1 l2)
+--     CoxeterRel-level = TODO
 
 CoxeterRel-refl : {n : ℕ} → is-refl (CoxeterRel n)
 CoxeterRel-refl {n} = λ _ → idp
