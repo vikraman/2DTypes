@@ -174,8 +174,8 @@ slide0-transpos : {m : ℕ}  {kp : 0 < S (S (S m))} →
                   (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
   transpos2pi n ◎ transpos2pi (0 , kp) ⟷₂ transpos2pi (0 , kp) ◎ transpos2pi n
 slide0-transpos (S O , np) (ltSR ())
-slide0-transpos (S (S O) , np) lp =
-  let tr0 = transpos2pi (0 , <-cancel-S (<-cancel-S np))
+slide0-transpos (S (S n) , np) lp =
+  let tr0 = transpos2pi (n , <-cancel-S (<-cancel-S np))
   in (id⟷₁ ⊕ (id⟷₁ ⊕ tr0)) ◎ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
        ⟷₂⟨ trans⟷₂ assoc◎l (assocl₊l ⊡ id⟷₂) ⟩
      (assocl₊ ◎ ((id⟷₁ ⊕ id⟷₁) ⊕ tr0)) ◎ ((swap₊ ⊕ id⟷₁) ◎ assocr₊)
@@ -195,11 +195,6 @@ slide0-transpos (S (S O) , np) lp =
      assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ (id⟷₁ ⊕ tr0))
        ⟷₂⟨ trans⟷₂ (id⟷₂ ⊡ assoc◎l) assoc◎l ⟩
      (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ (id⟷₁ ⊕ tr0)) ⟷₂∎
-slide0-transpos {kp = kp} (S (S (S n)) , np) lp =
-  -- move n back
-  (transpos2pi (S (S (S n)) , np) ◎ transpos2pi (0 , kp))
-    ⟷₂⟨ {!!} ⟩
-  (transpos2pi (0 , kp) ◎ transpos2pi (S (S (S n)) , np)) ⟷₂∎
 
 slide-transpos : {m : ℕ} → (n k : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
   transpos2pi n ◎ transpos2pi k ⟷₂ transpos2pi k ◎ transpos2pi n
@@ -213,9 +208,7 @@ slide-transpos {S (S m)} (n , np) (S k , kp) lp =
   (transpos2pi (n , np) ◎ transpos2pi (S k , kp))
     ⟷₂⟨ {!!} ⟩
   (transpos2pi (S k , kp) ◎ transpos2pi (n , np)) ⟷₂∎
-{--
-lp : S (S k) < n
---}
+--lp : S (S k) < n
 
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
