@@ -65,6 +65,14 @@ DownArrow-== {m} {n} {n} {k} {k} {p} {p'} {pn} {pn'} {pk} {pk'} idp idp =
 --     let rec = map=⟨⟩ {m} (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p)
 --     in  List=-out (idp , (ap (map ⟨_⟩) (rec ∙ DownArrow-== idp idp)))
 
+toLList-↓ : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n) -> (toLList ((n , np) ↓⟨ p ⟩ (k , kp))) .fst == (n ∸ k) ↓ (S (S k))
+toLList-↓ m n O np kp p = idp
+toLList-↓ m O (S k) np kp (ltSR ())
+toLList-↓ m (S n) (S k) np kp p = 
+    let rec = toLList-↓ m n k (<-down np) (<-down kp) (<-cancel-S p)
+    in  head+tail (ap (λ e → S (S e)) (! (plus-minus (≤-down2 (–> <N≃< (<-cancel-S p)))))) rec
+
+
 syntax ReductionRel n x y = x ≅[ n ] y
 
 data ReductionRel : (m : ℕ) -> List (Fin (S m)) -> List (Fin (S m)) -> Type₀ where
@@ -231,12 +239,30 @@ reduction-toLList _ _ (swapN≅ l r m k x) =
         rr = (–> List≃LList r) .fst
         c = swap≅ {m .fst} {k .fst} (–> <N≃< x) ll rr _ _ idp idp
     in  transport2 (λ e f -> e ≅ f) (! (toLList-++ l (_ :: _ :: r))) (! (toLList-++ l (_ :: _ :: r))) c
-reduction-toLList {S n} _ _ (longN≅ l r m k p) = 
+reduction-toLList {S n} _ _ (longN≅ l r (m , mp) (k , kp) p) = 
     let ll = (–> List≃LList l) .fst
         rr = (–> List≃LList r) .fst
-        c = long≅ {((m .fst)) ∸ (k .fst)} (k .fst) ll rr _ _ idp idp
-        p1 = TODO
-        p2 = TODO
+        c = long≅ {m ∸ k} k ll rr _ _ idp idp
+        p1 =  ((toLList l) .fst) ++ℕ (((m ∸ k) ↓ (S (S k))) ++ℕ S (k + m ∸ k) ∷ toLList r .fst) 
+            =⟨ ap (λ e → toLList l .fst ++ℕ m ∸ k ↓ S (S k) ++ℕ S e ∷ toLList r .fst) (plus-minus (≤-down2 (–> <N≃< p))) ⟩
+              ((toLList l) .fst) ++ℕ (((m ∸ k) ↓ (S (S k))) ++ℕ (S m ∷ toLList r .fst))
+            =⟨ ap (λ e → toLList l .fst ++ℕ e ++ℕ S m ∷ toLList r .fst) (! (toLList-↓ (S n) m k mp kp p)) ⟩ 
+              ((toLList l) .fst) ++ℕ (toLList ((m , mp) ↓⟨ p ⟩ (k , kp)) .fst ++ℕ toLList (((S m , <-ap-S mp) :: r)) .fst)
+            =⟨ ap (λ e → toLList l .fst ++ℕ e) (! (toLList-++ ((m , mp) ↓⟨ p ⟩ (k , kp)) ((S m , <-ap-S mp) :: r))) ⟩ 
+              ((toLList l) .fst) ++ℕ (toLList (((m , mp) ↓⟨ p ⟩ (k , kp)) ++ ((S m , <-ap-S mp) :: r))) .fst
+            =⟨ ! (toLList-++ l (((m , mp) ↓⟨ p ⟩ (k , kp)) ++ ((S m , <-ap-S mp) :: r))) ⟩ 
+              toLList (l ++ (((m , mp) ↓⟨ p ⟩ (k , kp)) ++ ((S m , <-ap-S mp) :: r))) .fst
+            =∎
+        p2 = ((toLList l) .fst) ++ℕ ((k + m ∸ k) ∷ ((m ∸ k) ↓ (S (S k))) ++ℕ toLList r .fst)
+            =⟨ ap (λ e → toLList l .fst ++ℕ e ∷ m ∸ k ↓ S (S k) ++ℕ toLList r .fst) (plus-minus (≤-down2 (–> <N≃< p))) ⟩
+              ((toLList l) .fst) ++ℕ (m ∷ ((m ∸ k) ↓ (S (S k))) ++ℕ toLList r .fst)
+            =⟨ ap (λ e → toLList l .fst ++ℕ m ∷ (e ++ℕ toLList r .fst)) (! (toLList-↓ (S n) m k mp kp p)) ⟩
+              ((toLList l) .fst) ++ℕ _ ∷ (toLList ((m , mp) ↓⟨ p ⟩ (k , kp)) .fst ++ℕ toLList r .fst)
+            =⟨ ap (λ e → toLList l .fst ++ℕ e) (! (toLList-++ ((m , ltSR mp) :: ((m , mp) ↓⟨ p ⟩ (k , kp))) r)) ⟩ 
+              ((toLList l) .fst) ++ℕ toLList ((m , ltSR mp) :: (((m , mp) ↓⟨ p ⟩ (k , kp)) ++ r)) .fst
+            =⟨ ! (toLList-++ l ((_ :: ((m , mp) ↓⟨ p ⟩ (k , kp))) ++ r)) ⟩ 
+              toLList (l ++ ((m , ltSR mp) :: ((m , mp) ↓⟨ p ⟩ (k , kp)) ++ r)) .fst
+            =∎
     in  transport2 (λ e f -> e ≅ f) p1 p2 c
 
 reduction-toLList* : {n : ℕ} -> (s sf : List (Fin (S n))) -> (p : s ≅*[ n ] sf) -> ((–> List≃LList s) .fst) ≅* ((–> List≃LList sf) .fst)
