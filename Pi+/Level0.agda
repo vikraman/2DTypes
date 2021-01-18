@@ -203,12 +203,23 @@ slide-transpos {O} (.(S _) , ltSR ()) (k , kp) (ltSR lp)
 slide-transpos {S O} (.(S (S k)) , ltSR (ltSR ())) (k , kp) ltS
 slide-transpos {S O} (.(S _) , ltSR (ltSR ())) (k , p) (ltSR lp)
 slide-transpos {S (S m)} n (O , kp) lp = slide0-transpos {kp = kp} n lp
-slide-transpos {S (S m)} (n , np) (S k , kp) lp =
-  -- move k back
-  (transpos2pi (n , np) ◎ transpos2pi (S k , kp))
-    ⟷₂⟨ {!!} ⟩
-  (transpos2pi (S k , kp) ◎ transpos2pi (n , np)) ⟷₂∎
---lp : S (S k) < n
+slide-transpos {S (S m)} (S O , np) (S k , kp) (ltSR ())
+slide-transpos {S (S m)} (S (S O) , np) (S k , kp) (ltSR (ltSR ()))
+slide-transpos {S (S m)} (S (S (S n)) , np) (S k , kp) lp =
+  let rn0 = transpos2pi (S (S n) , <-cancel-S np)
+      rk0 = transpos2pi (k , <-cancel-S kp)
+  in transpos2pi (S (S (S n)) , np) ◎ transpos2pi (S k , kp)
+       ⟷₂⟨ id⟷₂ ⟩
+     (id⟷₁ ⊕ rn0) ◎ (id⟷₁ ⊕ rk0)
+       ⟷₂⟨ hom◎⊕⟷₂ ⟩
+     (id⟷₁ ◎ id⟷₁) ⊕ (rn0 ◎ rk0)
+       ⟷₂⟨ resp⊕⟷₂ id⟷₂
+         (slide-transpos (S (S n) , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S lp))  ⟩
+     (id⟷₁ ◎ id⟷₁) ⊕ (rk0 ◎ rn0)
+       ⟷₂⟨ hom⊕◎⟷₂ ⟩
+     (id⟷₁ ⊕ rk0) ◎ (id⟷₁ ⊕ rn0)
+       ⟷₂⟨ id⟷₂ ⟩
+     transpos2pi (S k , kp) ◎ transpos2pi (S (S (S n)) , np) ⟷₂∎
 
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
