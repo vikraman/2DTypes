@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Arithmetic where
+module Pi+.Coxeter.Common.Arithmetic where
 
 open import lib.Base
 open import lib.types.Nat using (_+_ ; ℕ-S-is-inj)
@@ -293,6 +293,10 @@ minus-plus {p} {q} {qp} = eliminate-∸ qp idp
 plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
 plus-minus {.0} {q} z≤n = idp
 plus-minus {.(S _)} {.(S _)} (s≤s pq) = ap S (plus-minus pq)
+
+plus-minus-l : {p q : ℕ} -> (p + q) ∸ p == q
+plus-minus-l {O} {q} = idp
+plus-minus-l {S p} {q} = plus-minus-l {p} {q}
 
 
 zero-∸ : (n : ℕ) -> (0 ∸ n == 0)
