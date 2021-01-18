@@ -27,7 +27,7 @@ canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
 
 -----------------------------------------------------------------------------
--- Current proposal for interface CoxeterN.agda
+-- Current proposal for interface
 -- Copied here for now
 
 ⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
@@ -50,6 +50,7 @@ data _≈₁_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ wher
 
   respects-++ : {l l' r r' : List (Fin (S m))} →
                 (l ≈₁ l') → (r ≈₁ r') → l ++ r ≈₁ l' ++ r'
+
 
 -----------------------------------------------------------------------------
 --- Recovering a pi combinator from the Coxeter representation
@@ -166,7 +167,17 @@ slide-transpos {S (S m)} (S (S (S n)) , np) (S k , kp) lp =
 braid-transpos : {m : ℕ} → (n : Fin m) →
   transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ⟷₂
   transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩
-braid-transpos {S m} n = {!!}
+braid-transpos {S m} (n , np) =
+  let trn = transpos2pi (n , np)             --     I + I + ⟪ m ⟫ ⟷₁ I + I + ⟪ m ⟫
+      trns = transpos2pi (n , ltSR np)       -- I + I + I + ⟪ m ⟫ ⟷₁ I + I + I + ⟪ m ⟫
+      trsns = transpos2pi (S n , <-ap-S np)  -- I + I + I + ⟪ m ⟫ ⟷₁ I + I + I + ⟪ m ⟫
+  in trsns ◎ trns ◎ trsns
+       ⟷₂⟨ {!!} ⟩ -- need <-cancel-S (<-ap-S np) == np !!!
+     (id⟷₁ ⊕ trn) ◎ trns ◎ (id⟷₁ ⊕ trn)
+       ⟷₂⟨ {!!} ⟩
+     (id⟷₁ ⊕ trn) ◎ (id⟷₁ ⊕ trn) ◎ (id⟷₁ ⊕ trn)
+       ⟷₂⟨ {!!} ⟩
+     trns ◎ trsns ◎ trns ⟷₂∎
 
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
