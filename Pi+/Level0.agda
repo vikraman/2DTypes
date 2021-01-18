@@ -163,6 +163,11 @@ slide-transpos {S (S m)} (S (S (S n)) , np) (S k , kp) lp =
        ⟷₂⟨ id⟷₂ ⟩
      transpos2pi (S k , kp) ◎ transpos2pi (S (S (S n)) , np) ⟷₂∎
 
+braid-transpos : {m : ℕ} → (n : Fin m) →
+  transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ⟷₂
+  transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩
+braid-transpos {S m} n = {!!}
+
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
   transpos2pi n ◎ transpos2pi n ◎ id⟷₁
@@ -184,10 +189,12 @@ cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
       ((cox≈2pi rw₁) ⊡ (cox≈2pi rw₂))
       (!⟷₂ (cox2pi++ l' r')))
 cox≈2pi (braid {n}) =
-  -- strategy ??
-  transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ◎ id⟷₁
-    ⟷₂⟨ {!!} ⟩
-  transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩ ◎ id⟷₁ ⟷₂∎
+  trans⟷₂ assoc◎l
+  (trans⟷₂ assoc◎l
+  (trans⟷₂ (assoc◎r ⊡ id⟷₂)
+  (trans⟷₂ (braid-transpos n ⊡ id⟷₂)
+  (trans⟷₂ (assoc◎l ⊡ id⟷₂)
+  (trans⟷₂ assoc◎r assoc◎r)))))
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
