@@ -178,19 +178,44 @@ braid-transpos {S m} (O , np) =
     rpn0 ◎ (id⟷₁ ⊕ rp0) ◎ rpn0
       ⟷₂⟨ id⟷₂ ⟩
     transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ⟷₂∎
-braid-transpos {S m} (S n , np) = {!!}
-{--
-  let trn = transpos2pi (n , np)             --     I + I + ⟪ m ⟫ ⟷₁ I + I + ⟪ m ⟫
-      trns = transpos2pi (n , ltSR np)       -- I + I + I + ⟪ m ⟫ ⟷₁ I + I + I + ⟪ m ⟫
-      trsns = transpos2pi (S n , <-ap-S np)  -- I + I + I + ⟪ m ⟫ ⟷₁ I + I + I + ⟪ m ⟫
-  in trsns ◎ trns ◎ trsns
-       ⟷₂⟨ {!!} ⟩ -- need <-cancel-S (<-ap-S np) == np !!!
-     (id⟷₁ ⊕ trn) ◎ trns ◎ (id⟷₁ ⊕ trn)
-       ⟷₂⟨ {!!} ⟩
-     (id⟷₁ ⊕ trn) ◎ (id⟷₁ ⊕ trn) ◎ (id⟷₁ ⊕ trn)
-       ⟷₂⟨ {!!} ⟩
-     trns ◎ trsns ◎ trns ⟷₂∎
---}
+braid-transpos {S m} (S n , np) =
+  transpos2pi S⟨ S n , np ⟩ ◎ transpos2pi ⟨ S n , np ⟩ ◎ transpos2pi S⟨ S n , np ⟩
+    ⟷₂⟨ id⟷₂ ⟩
+  transpos2pi (S (S n) , <-ap-S np) ◎
+    transpos2pi (S n , ltSR np) ◎
+      transpos2pi (S (S n) , <-ap-S np)
+    ⟷₂⟨ id⟷₂ ⟩
+  (id⟷₁ ⊕ transpos2pi (S n , <-cancel-S (<-ap-S np))) ◎
+    (id⟷₁ ⊕ transpos2pi (n , <-cancel-S (ltSR np))) ◎
+    (id⟷₁ ⊕ transpos2pi (S n , <-cancel-S (<-ap-S np)))
+    ⟷₂⟨ id⟷₂ ⊡ hom◎⊕⟷₂ ⟩
+  (id⟷₁ ⊕ transpos2pi (S n , <-cancel-S (<-ap-S np))) ◎
+    ((id⟷₁ ◎ id⟷₁) ⊕
+     (transpos2pi (n , <-cancel-S (ltSR np)) ◎ transpos2pi (S n , <-cancel-S (<-ap-S np))))
+    ⟷₂⟨ hom◎⊕⟷₂ ⟩
+  ((id⟷₁ ◎ (id⟷₁ ◎ id⟷₁)) ⊕
+  (transpos2pi (S n , <-cancel-S (<-ap-S np)) ◎
+   (transpos2pi (n , <-cancel-S (ltSR np)) ◎ transpos2pi (S n , <-cancel-S (<-ap-S np)))))
+    ⟷₂⟨ {!!} ⟩
+  ((id⟷₁ ◎ (id⟷₁ ◎ id⟷₁)) ⊕
+   (transpos2pi S⟨ n , <-cancel-S np ⟩ ◎
+     transpos2pi ⟨ n , <-cancel-S np ⟩ ◎
+     transpos2pi S⟨ n , <-cancel-S np ⟩))
+    ⟷₂⟨ resp⊕⟷₂ id⟷₂ (braid-transpos (n , <-cancel-S np)) ⟩
+    ((id⟷₁ ◎ (id⟷₁ ◎ id⟷₁)) ⊕
+     (transpos2pi ⟨ n , <-cancel-S np ⟩ ◎
+      transpos2pi S⟨ n , <-cancel-S np ⟩ ◎
+      transpos2pi ⟨ n , <-cancel-S np ⟩))
+    ⟷₂⟨ hom⊕◎⟷₂ ⟩
+    ((id⟷₁ ⊕ transpos2pi ⟨ n , <-cancel-S np ⟩) ◎
+    ((id⟷₁ ◎ id⟷₁) ⊕
+      (transpos2pi S⟨ n , <-cancel-S np ⟩ ◎ transpos2pi ⟨ n , <-cancel-S np ⟩)))
+    ⟷₂⟨ id⟷₂ ⊡ hom⊕◎⟷₂ ⟩
+    (id⟷₁ ⊕ transpos2pi ⟨ n , <-cancel-S np ⟩) ◎
+    (id⟷₁ ⊕ transpos2pi S⟨ n , <-cancel-S np ⟩) ◎
+    (id⟷₁ ⊕ transpos2pi ⟨ n , <-cancel-S np ⟩)
+    ⟷₂⟨ {!!} ⟩
+  (transpos2pi ⟨ S n , np ⟩ ◎ transpos2pi S⟨ S n , np ⟩ ◎ transpos2pi ⟨ S n , np ⟩) ⟷₂∎
 
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
