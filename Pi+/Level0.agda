@@ -167,7 +167,19 @@ slide-transpos {S (S m)} (S (S (S n)) , np) (S k , kp) lp =
 braid-transpos : {m : ℕ} → (n : Fin m) →
   transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ⟷₂
   transpos2pi ⟨ n ⟩ ◎ transpos2pi S⟨ n ⟩ ◎ transpos2pi ⟨ n ⟩
-braid-transpos {S m} (n , np) =
+braid-transpos {S m} (O , np) =
+  let rp0  = assocl₊ {I} {I} {⟪ m ⟫} ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+      rpn0 = assocl₊ {I} {I} {I + ⟪ m ⟫} ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+  in
+    transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩
+      ⟷₂⟨ id⟷₂ ⟩
+    (id⟷₁ ⊕ rp0) ◎ rpn0 ◎ (id⟷₁ ⊕ rp0)
+      ⟷₂⟨ {!!} ⟩
+    rpn0 ◎ (id⟷₁ ⊕ rp0) ◎ rpn0
+      ⟷₂⟨ id⟷₂ ⟩
+    transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ⟷₂∎
+braid-transpos {S m} (S n , np) = {!!}
+{--
   let trn = transpos2pi (n , np)             --     I + I + ⟪ m ⟫ ⟷₁ I + I + ⟪ m ⟫
       trns = transpos2pi (n , ltSR np)       -- I + I + I + ⟪ m ⟫ ⟷₁ I + I + I + ⟪ m ⟫
       trsns = transpos2pi (S n , <-ap-S np)  -- I + I + I + ⟪ m ⟫ ⟷₁ I + I + I + ⟪ m ⟫
@@ -178,6 +190,7 @@ braid-transpos {S m} (n , np) =
      (id⟷₁ ⊕ trn) ◎ (id⟷₁ ⊕ trn) ◎ (id⟷₁ ⊕ trn)
        ⟷₂⟨ {!!} ⟩
      trns ◎ trsns ◎ trns ⟷₂∎
+--}
 
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
 cox≈2pi (cancel {n}) =
