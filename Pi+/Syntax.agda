@@ -37,6 +37,9 @@ data _⟷₁_  : U → U → Set where
 !⟷₁ (c₁ ◎ c₂) = !⟷₁ c₂ ◎ !⟷₁ c₁
 !⟷₁ (c₁ ⊕ c₂) = !⟷₁ c₁ ⊕ !⟷₁ c₂
 
+unite₊r : {t : U} → t + O ⟷₁ t
+unite₊r = swap₊ ◎ unite₊l
+
 data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   assoc◎l : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷₁ t₂} {c₂ : t₂ ⟷₁ t₃} {c₃ : t₃ ⟷₁ t₄} →
           (c₁ ◎ (c₂ ◎ c₃)) ⟷₂ ((c₁ ◎ c₂) ◎ c₃)
@@ -91,10 +94,33 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   hom◎⊕⟷₂ : {t₁ t₂ t₃ t₄ t₅ t₆ : U} {c₁ : t₅ ⟷₁ t₁} {c₂ : t₆ ⟷₁ t₂}
         {c₃ : t₁ ⟷₁ t₃} {c₄ : t₂ ⟷₁ t₄} →
          ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄)) ⟷₂ ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄))
-  triangle⊕l : {t₁ t₂ : U} →
-    unite₊l ⟷₂ assocl₊ {O} {t₁} {t₂} ◎ (unite₊l ⊕ id⟷₁)
-  triangle⊕r : {t₁ t₂ : U} →
-    assocl₊ {O} {t₁} {t₂} ◎ (unite₊l ⊕ id⟷₁) ⟷₂ unite₊l
+  -- associativity triangle
+  triangle₊l : {t₁ t₂ : U} →
+    (unite₊r {t₁} ⊕ id⟷₁ {t₂}) ⟷₂ assocr₊ ◎ (id⟷₁ ⊕ unite₊l)
+  triangle₊r : {t₁ t₂ : U} →
+    assocr₊ ◎ (id⟷₁ {t₁} ⊕ unite₊l {t₂}) ⟷₂ unite₊r ⊕ id⟷₁
+  pentagon₊l : {t₁ t₂ t₃ t₄ : U} →
+    assocr₊ ◎ (assocr₊ {t₁} {t₂} {t₃ + t₄}) ⟷₂
+    ((assocr₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ assocr₊)
+  pentagon₊r : {t₁ t₂ t₃ t₄ : U} →
+    ((assocr₊ {t₁} {t₂} {t₃} ⊕ id⟷₁ {t₄}) ◎ assocr₊) ◎ (id⟷₁ ⊕ assocr₊) ⟷₂
+    assocr₊ ◎ assocr₊
+  -- unit coherence
+  unite₊l-coh-l : {t₁ : U} → unite₊l {t₁} ⟷₂ swap₊ ◎ unite₊r
+  unite₊l-coh-r : {t₁ : U} → swap₊ ◎ unite₊r ⟷₂ unite₊l {t₁}
+  hexagonr₊l : {t₁ t₂ t₃ : U} →
+    (assocr₊ ◎ swap₊) ◎ assocr₊ {t₁} {t₂} {t₃} ⟷₂
+    ((swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ swap₊)
+  hexagonr₊r : {t₁ t₂ t₃ : U} →
+    ((swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ swap₊) ⟷₂
+    (assocr₊ ◎ swap₊) ◎ assocr₊ {t₁} {t₂} {t₃}
+  hexagonl₊l : {t₁ t₂ t₃ : U} →
+    (assocl₊ ◎ swap₊) ◎ assocl₊ {t₁} {t₂} {t₃} ⟷₂
+    ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁)
+  hexagonl₊r : {t₁ t₂ t₃ : U} →
+    ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ⟷₂
+    (assocl₊ ◎ swap₊) ◎ assocl₊ {t₁} {t₂} {t₃}
+
 
 -- Equational reasoning
 
@@ -143,8 +169,17 @@ _ ⟷₂∎ = id⟷₂
 !⟷₂ split⊕-id⟷₁ = id⟷₁⊕id⟷₁⟷₂
 !⟷₂ hom⊕◎⟷₂ = hom◎⊕⟷₂
 !⟷₂ hom◎⊕⟷₂ = hom⊕◎⟷₂
-!⟷₂ triangle⊕l = triangle⊕r
-!⟷₂ triangle⊕r = triangle⊕l
+!⟷₂ triangle₊l = triangle₊r
+!⟷₂ triangle₊r = triangle₊l
+!⟷₂ pentagon₊l = pentagon₊r
+!⟷₂ pentagon₊r = pentagon₊l
+!⟷₂ unite₊l-coh-l = unite₊l-coh-r
+!⟷₂ unite₊l-coh-r = unite₊l-coh-l
+!⟷₂ hexagonr₊l = hexagonr₊r
+!⟷₂ hexagonr₊r = hexagonr₊l
+!⟷₂ hexagonl₊l = hexagonl₊r
+!⟷₂ hexagonl₊r = hexagonl₊l
+
 
 {--
 !⟷₁⟷₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
