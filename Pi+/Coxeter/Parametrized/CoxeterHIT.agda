@@ -1,25 +1,18 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.CList where
+module Pi+.Coxeter.Parametrized.CoxeterHIT where
 
 open import lib.Base
 open import lib.Base
 open import lib.NType
 open import lib.NType2
 open import lib.PathOver
-open import lib.types.Nat using (_+_; <-ap-S)
+open import lib.types.Nat
 open import lib.types.Sigma
 open import lib.PathGroupoid
 open import lib.Funext
 open import lib.types.Pi
 open import lib.types.Fin
-
-open import Pi+.Misc
-open import Pi+.Coxeter.Arithmetic
-open import Pi+.Coxeter.MCoxeter
-open import Pi+.Coxeter.MCoxeterS
-open import Pi+.Coxeter.Diamond
-open import Pi+.Extra
 
 ⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
 ⟨_⟩ = Fin-S
