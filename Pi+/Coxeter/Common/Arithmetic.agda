@@ -294,6 +294,10 @@ plus-minus : {p q : ℕ} -> (p ≤ q) -> p + (q ∸ p) == q
 plus-minus {.0} {q} z≤n = idp
 plus-minus {.(S _)} {.(S _)} (s≤s pq) = ap S (plus-minus pq)
 
+plus-minus-l : {p q : ℕ} -> (p + q) ∸ p == q
+plus-minus-l {O} {q} = idp
+plus-minus-l {S p} {q} = plus-minus-l {p} {q}
+
 
 zero-∸ : (n : ℕ) -> (0 ∸ n == 0)
 zero-∸ 0 = idp

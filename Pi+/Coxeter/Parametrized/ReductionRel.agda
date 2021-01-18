@@ -65,12 +65,38 @@ DownArrow-== {m} {n} {n} {k} {k} {p} {p'} {pn} {pn'} {pk} {pk'} idp idp =
 --     let rec = map=⟨⟩ {m} (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p)
 --     in  List=-out (idp , (ap (map ⟨_⟩) (rec ∙ DownArrow-== idp idp)))
 
-toLList-↓ : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n) -> (toLList ((n , np) ↓⟨ p ⟩ (k , kp))) .fst == (n ∸ k) ↓ (S (S k))
-toLList-↓ m n O np kp p = idp
-toLList-↓ m O (S k) np kp (ltSR ())
-toLList-↓ m (S n) (S k) np kp p = 
-    let rec = toLList-↓ m n k (<-down np) (<-down kp) (<-cancel-S p)
-    in  head+tail (ap (λ e → S (S e)) (! (plus-minus (≤-down2 (–> <N≃< (<-cancel-S p)))))) rec
+toLList-↓-w : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n) 
+    -> (toLList ((n , np) ↓⟨ p ⟩ (k , kp))) == (((n ∸ k) ↓ (S (S k))) , >>-↓ (S m) (n ∸ k) (S (S k)) 
+        (–> <N≃< (<-ap-S (transport (λ e → e < m) (! (plus-minus (≤-down2 (–> <N≃< p)))) np))))
+toLList-↓-w m n O np kp p = LList-eq idp
+toLList-↓-w m O (S k) np kp (ltSR ())
+toLList-↓-w m (S n) (S k) np kp p = 
+    let rec = toLList-↓-w m n k (<-down np) (<-down kp) (<-cancel-S p)
+        rec-r = ap fst rec
+    in  LList-eq (head+tail (ap (λ e → S (S e)) (! (plus-minus (≤-down2 (–> <N≃< (<-cancel-S p)))))) rec-r)
+
+toLList-↓ : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n) -> (pl : S m >> ((n ∸ k) ↓ (S (S k))))
+    -> (toLList ((n , np) ↓⟨ p ⟩ (k , kp))) == (((n ∸ k) ↓ (S (S k))) , pl)
+toLList-↓ m n k np kp p pl = LList-eq (ap fst (toLList-↓-w m n k np kp p))
+
+fromLList-↓ : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n) -> (pl : S m >> ((n ∸ k) ↓ (S (S k))))
+    -> ((n , np) ↓⟨ p ⟩ (k , kp)) == fromLList (((n ∸ k) ↓ (S (S k))) , pl)
+fromLList-↓ m n k np kp p pl = 
+    let lemma = ap fromLList (toLList-↓ m n k np kp p pl)
+    in  ! (fromLList∘toLList _) ∙ lemma
+
+fromLList-↓-w : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n)
+    -> ((n , np) ↓⟨ p ⟩ (k , kp)) == fromLList (((n ∸ k) ↓ (S (S k))) , >>-↓ (S m) (n ∸ k) (S (S k)) 
+        (–> <N≃< (<-ap-S (transport (λ e → e < m) (! (plus-minus (≤-down2 (–> <N≃< p)))) np))))
+fromLList-↓-w m n k np kp p = 
+    let lemma = ap fromLList (toLList-↓-w m n k np kp p)
+    in  ! (fromLList∘toLList _) ∙ lemma
+
+fromLList-↓-c : (m n k : ℕ) -> (np : k + n < m) -> (kp : k < m) -> (pl : S m >> (n ↓ (S (S k))))
+    -> ((k + n , np) ↓⟨ <– <N≃< (≤-up2 (≤-up-r-+ rrr)) ⟩ (k , kp)) == fromLList ((n ↓ (S (S k))) , pl)
+fromLList-↓-c m n k np kp pl = 
+    let lemma = ap fromLList (toLList-↓ m (k + n) k np kp (<– <N≃< (≤-up2 (≤-up-r-+ rrr))) (transport (λ e -> S m >> e ↓ (S (S k))) (! (plus-minus-l {k} {n})) pl))
+    in  ! (fromLList∘toLList _) ∙ lemma ∙ ap fromLList (LList-eq (ap (λ e -> e ↓ (S (S k))) (plus-minus-l {k} {n})))
 
 
 syntax ReductionRel n x y = x ≅[ n ] y
@@ -157,10 +183,10 @@ reduction-implies->> {n} (s , sp) sf (trans≅ (swap≅ {m} {k} x l r .s mf defm
     in  reduction-implies->> (mf , transport (λ e -> n >> e) (! defmf) (>>-++ Sn>>l Sn>>k∷m∷r)) sf p
 reduction-implies->> {n} (s , sp) sf (trans≅ (long≅ {m} k l r .s mf defm defmf) p) = 
     let Sn>>l++↓∷r = transport (λ e -> n >> e) defm sp
-        Sn>>l = >>-implies->> {n} {s} {nil} {l} {S (k + m) ∷ k + m ∷ m ↓ k ++ℕ (1 + k + m) ∷ r} sp defm
+        Sn>>l = >>-implies->> {n} {s} {nil} {l} {(m ↓ (S (S k))) ++ℕ (S (k + m)) ∷ r} sp defm
         Sn>k+m = >>-implies-> {n} {k + m} {s} {l ++ℕ [ S (k + m) ]} {(m ↓ k ++ℕ S (k + m) ∷ r)} sp (defm ∙ ! (++-assocℕ l [ S(k + m) ] _))
-        Sn>Sk+m = >>-implies-> {n} {S (k + m)} {_} {l} {k + m ∷ m ↓ k ++ℕ (1 + k + m) ∷ r} Sn>>l++↓∷r idp
-        Sn>>r = >>-implies->> {n} {s} {l ++ℕ S (k + m) ∷ k + m ∷ m ↓ k ++ℕ [ 1 + k + m ]} {r} {nil} sp (defm ∙ 
+        Sn>Sk+m = >>-implies-> {n} {S (k + m)} {_} {l} {k + m ∷ m ↓ k ++ℕ (S (k + m)) ∷ r} Sn>>l++↓∷r idp
+        Sn>>r = >>-implies->> {n} {s} {l ++ℕ (m ↓ (S (S k))) ++ℕ [ 1 + k + m ]} {r} {nil} sp (defm ∙ 
             ! (++-assocℕ l _ (r ++ℕ nil) ∙ ap (λ e -> l ++ℕ S (k + m) ∷ k + m ∷ e) ((++-assocℕ  (m ↓ k) _ (r ++ℕ nil)) ∙ ap (λ e -> (m ↓ k) ++ℕ _ ∷ e) ++-unit)))
         Sn>>m↓Sk++r = >>-++ (>>-↓ n m (S k) Sn>k+m) Sn>>r
     in  reduction-implies->> (mf , transport (λ e -> n >> e) (! defmf) (>>-++ Sn>>l (>>-++ ((k + m) :⟨ Sn>k+m ⟩: nil) (S (k + m) :⟨ Sn>Sk+m ⟩: Sn>>m↓Sk++r)))) sf p -- 
@@ -196,29 +222,56 @@ reduction-fromLList {n} s sf (swap≅ {m} {k} x l r .(s .fst) .(sf .fst) defm de
     in  transport2 (λ e f → ReductionRel n e f) eqs eqsf c
 reduction-fromLList {n} (s , sp) sf (long≅ {m} k l r .s .(sf .fst) defm defmf) =
     let Sn>>l++↓++x∷r = transport (λ e -> S n >> e) defm sp
-        Sn>>l = >>-implies->> {S n} {s} {nil} {l} {S (k + m) ∷ k + m ∷ m ↓ k ++ℕ S (k + m) ∷ r} sp defm
+        Sn>>l = >>-implies->> {S n} {s} {nil} {l} {(m ↓ (S (S k))) ++ℕ S (k + m) ∷ r} sp defm
         Sn>k+m = >>-implies-> {S n} {k + m} {s} {l ++ℕ [ S (k + m) ]} {(m ↓ k ++ℕ S (k + m) ∷ r)} sp (defm ∙ ! (++-assocℕ l [ S(k + m) ] _))
-        Sn>Sk+m = >>-implies-> {S n} {S (k + m)} {_} {l} {k + m ∷ m ↓ k ++ℕ (1 + k + m) ∷ r} Sn>>l++↓++x∷r idp
-        Sn>>r = >>-implies->> {S n} {s} {l ++ℕ S (k + m) ∷ k + m ∷ m ↓ k ++ℕ [ 1 + k + m ]} {r} {nil} sp (defm ∙ 
+        Sn>Sk+m = >>-implies-> {S n} {S (k + m)} {_} {l} {k + m ∷ m ↓ k ++ℕ (S (k + m)) ∷ r} Sn>>l++↓++x∷r idp
+        Sn>>r = >>-implies->> {S n} {s} {l ++ℕ (m ↓ (S (S k))) ++ℕ [ 1 + k + m ]} {r} {nil} sp (defm ∙ 
             ! (++-assocℕ l _ (r ++ℕ nil) ∙ ap (λ e -> l ++ℕ S (k + m) ∷ k + m ∷ e) ((++-assocℕ  (m ↓ k) _ (r ++ℕ nil)) ∙ ap (λ e -> (m ↓ k) ++ℕ _ ∷ e) ++-unit)))
         Sk+m>k = ≤-up2 (≤-up-r-+ rrr)
         Sn>Sk = ≤-transℕ (≤-up2 Sk+m>k) Sn>Sk+m
         ll = <– List≃LList (l , Sn>>l)
         rr = <– List≃LList (r , Sn>>r)
-        c = longN≅ ll rr (k + m , <-cancel-S (<– <N≃< Sn>Sk+m)) (k , <-cancel-S (<– <N≃< Sn>Sk)) (<– <N≃< Sk+m>k)
+        SnN>Sk+m = (<– <N≃< Sn>Sk+m)
+        nN>k+m = (<-cancel-S SnN>Sk+m)
+        SnN>k+m = (<– <N≃< Sn>k+m)
+        nN>k = ((<-cancel-S (<– <N≃< Sn>Sk)))
+        Sk+mN>k = (<– <N≃< Sk+m>k)
+        c = longN≅ ll rr (k + m , nN>k+m) (k , nN>k) Sk+mN>k
+        Sn>>↓ = >>-↓ (S n) m (S (S k)) Sn>Sk+m
+        Sn>>x∷r = (_ :⟨ Sn>Sk+m ⟩: Sn>>r)
+        Sn>>↓++x∷r = >>-++  Sn>>↓ Sn>>x∷r
         Sn>>l++x++↓∷r = transport (λ e -> S n >> e) defmf (sf .snd)
-        x++↓∷r = [ _ ] ++ℕ _ ∷  ((m ↓ (S k)) ++ℕ r)
-        Sn>>x++↓∷r = >>-implies->> {l1 = l} {r1 = nil} Sn>>l++x++↓∷r (ap (λ e -> l ++ℕ k + m ∷ S (k + m) ∷ k + m ∷ e) (! ++-unit))
+        x++↓∷r = _ ∷ _ ∷  ((m ↓ (S k)) ++ℕ r)
+        Sn>>x++↓∷r = (k + m) :⟨ Sn>k+m ⟩: (>>-++ Sn>>↓ Sn>>r)
         eqsf = fromLList-++ (l , Sn>>l) (x++↓∷r , Sn>>x++↓∷r) ∙ 
                ap fromLList (LList-eq {S n} {(l ++ℕ x++↓∷r) , _} {(l ++ℕ x++↓∷r) , Sn>>l++x++↓∷r} idp) ∙ 
                ap (λ e -> <– List≃LList e) (LList-eq {S n} {(l ++ℕ x++↓∷r) , Sn>>l++x++↓∷r} {sf} (! defmf))
-        ↓++x∷r = S (k + m) ∷ k + m ∷ m ↓ k ++ℕ (1 + k + m) ∷ r
-        Sn>>↓++x∷r = _ :⟨ Sn>Sk+m ⟩: (_ :⟨ Sn>k+m ⟩: (>>-++ (>>-↓ (S n) m k (≤-down Sn>k+m)) (_ :⟨ Sn>Sk+m ⟩: Sn>>r)))
+        ↓++x∷r = (m ↓ (S (S k))) ++ℕ (S (k + m)) ∷ r
+        
+
         eqs = fromLList-++ (l , _) (↓++x∷r , Sn>>↓++x∷r) ∙
               ap (λ e -> fromLList {S n} e) (LList-eq {S n} {(l ++ℕ ↓++x∷r) , _} {(l ++ℕ ↓++x∷r) , Sn>>l++↓++x∷r} idp) ∙ 
               ap (<– List≃LList) (LList-eq {S n} {(l ++ℕ ↓++x∷r) , Sn>>l++↓++x∷r} {(s , sp)} (! defm))
-        eqs' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) TODO
-        eqsf' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) TODO
+        trm = <-cancel-S (<– <N≃<
+                (≤-transℕ (≤-up2 (≤-up2 (≤-up-r-+ rrr)))
+                    (>>-implies-> (transport (λ e → S n >> e) defm sp) idp)))
+        p1 =  _
+            =⟨ ap2 (λ e f -> e ++ f) idp (List=-out (pair= idp (<-has-all-paths _ _) , idp)) ⟩
+              ((k + m , _) ↓⟨ _ ⟩ (k , trm)) ++ (fromLList (((S (k + m)) ∷ r) , Sn>>x∷r))
+            =⟨ ap (λ e -> e ++ (fromLList (((S (k + m)) ∷ r) , Sn>>x∷r))) (fromLList-↓-c n m k nN>k+m nN>k Sn>>↓) ⟩
+              fromLList ((m ↓ (S (S k))) , (>>-↓ (S n) m (S (S k)) Sn>Sk+m)) ++ fromLList ((S (k + m) ∷ r) , Sn>>x∷r)
+            =⟨ fromLList-++ ((m ↓ (S (S k))) , Sn>>↓) ((S (k + m) ∷ r) , Sn>>x∷r) ⟩ 
+              fromLList (((m ↓ (S (S k)) ++ℕ (S (k + m) ∷ r)) , >>-++ Sn>>↓ Sn>>x∷r))
+            =∎
+        p1' = ((k + m , _) ↓⟨ _ ⟩ (k , trm)) ++ (fromLList (r , Sn>>r))
+            =⟨ ap (λ e -> e ++ (fromLList (r , Sn>>r))) (fromLList-↓-c n m k nN>k+m nN>k Sn>>↓) ⟩
+              fromLList ((m ↓ (S (S k))) , (>>-↓ (S n) m (S (S k)) Sn>Sk+m)) ++ fromLList (r , Sn>>r)
+            =⟨ fromLList-++ ((m ↓ (S (S k))) , Sn>>↓) (r , Sn>>r) ⟩ 
+              fromLList (((m ↓ (S (S k)) ++ℕ r) , >>-++ Sn>>↓ Sn>>r))
+            =∎
+        p2 = List=-out ((pair= idp (<-has-all-paths _ _)) , p1')
+        eqs' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) p1
+        eqsf' = ap (λ e -> (fromLList (l , Sn>>l)) ++ e) p2
     in  transport2 (λ e f → ReductionRel n e f) (eqs' ∙ eqs) (eqsf' ∙ eqsf) c
 
 reduction-fromLList* : {n : ℕ} -> (s sf : LList (S n)) -> (p : (s .fst) ≅* (sf .fst)) -> (<– List≃LList s ≅*[ n ] <– List≃LList sf)
@@ -246,7 +299,7 @@ reduction-toLList {S n} _ _ (longN≅ l r (m , mp) (k , kp) p) =
         p1 =  ((toLList l) .fst) ++ℕ (((m ∸ k) ↓ (S (S k))) ++ℕ S (k + m ∸ k) ∷ toLList r .fst) 
             =⟨ ap (λ e → toLList l .fst ++ℕ m ∸ k ↓ S (S k) ++ℕ S e ∷ toLList r .fst) (plus-minus (≤-down2 (–> <N≃< p))) ⟩
               ((toLList l) .fst) ++ℕ (((m ∸ k) ↓ (S (S k))) ++ℕ (S m ∷ toLList r .fst))
-            =⟨ ap (λ e → toLList l .fst ++ℕ e ++ℕ S m ∷ toLList r .fst) (! (toLList-↓ (S n) m k mp kp p)) ⟩ 
+            =⟨ ap (λ e → toLList l .fst ++ℕ e ++ℕ S m ∷ toLList r .fst) (! (ap fst (toLList-↓-w (S n) m k mp kp p))) ⟩ 
               ((toLList l) .fst) ++ℕ (toLList ((m , mp) ↓⟨ p ⟩ (k , kp)) .fst ++ℕ toLList (((S m , <-ap-S mp) :: r)) .fst)
             =⟨ ap (λ e → toLList l .fst ++ℕ e) (! (toLList-++ ((m , mp) ↓⟨ p ⟩ (k , kp)) ((S m , <-ap-S mp) :: r))) ⟩ 
               ((toLList l) .fst) ++ℕ (toLList (((m , mp) ↓⟨ p ⟩ (k , kp)) ++ ((S m , <-ap-S mp) :: r))) .fst
@@ -256,7 +309,7 @@ reduction-toLList {S n} _ _ (longN≅ l r (m , mp) (k , kp) p) =
         p2 = ((toLList l) .fst) ++ℕ ((k + m ∸ k) ∷ ((m ∸ k) ↓ (S (S k))) ++ℕ toLList r .fst)
             =⟨ ap (λ e → toLList l .fst ++ℕ e ∷ m ∸ k ↓ S (S k) ++ℕ toLList r .fst) (plus-minus (≤-down2 (–> <N≃< p))) ⟩
               ((toLList l) .fst) ++ℕ (m ∷ ((m ∸ k) ↓ (S (S k))) ++ℕ toLList r .fst)
-            =⟨ ap (λ e → toLList l .fst ++ℕ m ∷ (e ++ℕ toLList r .fst)) (! (toLList-↓ (S n) m k mp kp p)) ⟩
+            =⟨ ap (λ e → toLList l .fst ++ℕ m ∷ (e ++ℕ toLList r .fst)) (! (ap fst ((toLList-↓-w (S n) m k mp kp p)))) ⟩
               ((toLList l) .fst) ++ℕ _ ∷ (toLList ((m , mp) ↓⟨ p ⟩ (k , kp)) .fst ++ℕ toLList r .fst)
             =⟨ ap (λ e → toLList l .fst ++ℕ e) (! (toLList-++ ((m , ltSR mp) :: ((m , mp) ↓⟨ p ⟩ (k , kp))) r)) ⟩ 
               ((toLList l) .fst) ++ℕ toLList ((m , ltSR mp) :: (((m , mp) ↓⟨ p ⟩ (k , kp)) ++ r)) .fst
