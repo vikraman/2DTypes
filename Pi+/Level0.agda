@@ -180,16 +180,7 @@ braid-transpos {S m} (O , np) =
       ⟷₂⟨ id⟷₂ ⟩
     transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ⟷₂∎
 braid-transpos {S m} (S n , np) =
-  let t1 : ((id⟷₁ ◎ id⟷₁ ◎ id⟷₁) ⊕
-            (id⟷₁ ⊕ transpos2pi (n , <-cancel-S (<-cancel-S (<-ap-S np)))) ◎
-            transpos2pi (n , <-trans ltS np) ◎
-            id⟷₁ ⊕ transpos2pi (n , <-cancel-S (<-cancel-S (<-ap-S np))))
-            ⟷₂
-            ((id⟷₁ ◎ id⟷₁ ◎ id⟷₁) ⊕
-            (id⟷₁ ⊕ transpos2pi (n , <-cancel-S (<-ap-S (<-cancel-S np)))) ◎
-            transpos2pi (n , ltSR (<-cancel-S np)) ◎
-            id⟷₁ ⊕ transpos2pi (n , <-cancel-S (<-ap-S (<-cancel-S np))))
-      t1 = transport2 (λ e f -> 
+  let t1 = transport2 (λ e f -> 
               ((id⟷₁ ◎ id⟷₁ ◎ id⟷₁) ⊕
               (id⟷₁ ⊕ transpos2pi (n , <-cancel-S e)) ◎
               transpos2pi (n , f) ◎
@@ -201,15 +192,6 @@ braid-transpos {S m} (S n , np) =
               id⟷₁ ⊕ transpos2pi (n , <-cancel-S (<-ap-S (<-cancel-S np))))) 
            (<-has-all-paths (<-ap-S (<-cancel-S np)) (<-cancel-S (<-ap-S np))) (<-has-all-paths (ltSR (<-cancel-S np)) (<-trans ltS np))  id⟷₂
 
-      t2 : ((id⟷₁ ◎ id⟷₁ ◎ id⟷₁) ⊕
-            transpos2pi (n , ltSR (<-cancel-S np)) ◎
-            (id⟷₁ ⊕ transpos2pi (n , <-cancel-S (<-ap-S (<-cancel-S np)))) ◎
-            transpos2pi (n , ltSR (<-cancel-S np)))
-            ⟷₂
-            ((id⟷₁ ◎ id⟷₁ ◎ id⟷₁) ⊕
-            transpos2pi (n , <-trans ltS np) ◎
-            (id⟷₁ ⊕ transpos2pi (n , <-cancel-S (<-cancel-S (<-ap-S np)))) ◎
-            transpos2pi (n , <-trans ltS np))
       t2 = transport2 (λ e f -> 
               (_⊕_ {I} {I + I + ⟪ m ⟫} {I} {I + I + ⟪ m ⟫} (id⟷₁ ◎ id⟷₁ ◎ id⟷₁)
               (transpos2pi (n , e) ◎
@@ -232,8 +214,6 @@ braid-transpos {S m} (S n , np) =
     (transpos2pi (S n , <-cancel-S (<-ap-S np)) ◎
     (transpos2pi (n , <-cancel-S (ltSR np)) ◎ transpos2pi (S n , <-cancel-S (<-ap-S np)))))
       ⟷₂⟨ t1 ⟩
-      -- <-cancel-S o <-ap-S == <-ap-S o <-cancel-S
-      --   <-cancel-S o ltSR == ltSR o <-cancel-S
     ((id⟷₁ ◎ (id⟷₁ ◎ id⟷₁)) ⊕
     (transpos2pi (S n , <-ap-S (<-cancel-S np)) ◎
     (transpos2pi (n , ltSR (<-cancel-S np)) ◎ transpos2pi (S n , <-ap-S (<-cancel-S np)))))
@@ -243,8 +223,6 @@ braid-transpos {S m} (S n , np) =
         transpos2pi (S n , <-ap-S (<-cancel-S np)) ◎
         transpos2pi (n , ltSR (<-cancel-S np))))
       ⟷₂⟨ t2 ⟩
-      -- <-cancel-S o <-ap-S == <-ap-S o <-cancel-S
-      --   <-cancel-S o ltSR == ltSR o <-cancel-S
     (id⟷₁ ◎ (id⟷₁ ◎ id⟷₁)) ⊕
     (transpos2pi (n , <-cancel-S (ltSR np)) ◎
       (transpos2pi (S n , <-cancel-S (<-ap-S np)) ◎
