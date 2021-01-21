@@ -46,7 +46,7 @@ quote₂ α = TODO
 
 quote-eval₂ : {X Y : U} {p q : X ⟷₁ Y } (α : p ⟷₂ q) → quote₂ (eval₂ α) ⟷₃ 
     trans⟷₂ (quote-eval₁ p) (trans⟷₂ (id⟷₂ ⊡ (α ⊡ id⟷₂)) (!⟷₂ (quote-eval₁ q)))
-quote-eval₂ α = TODO
+quote-eval₂ {p = p} {q = q} α = trunc (quote₂ (eval₂ α)) (trans⟷₂ (quote-eval₁ p) (trans⟷₂ (id⟷₂ ⊡ (α ⊡ id⟷₂)) (!⟷₂ (quote-eval₁ q))))
 
 eval-quote₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → eval₂ (quote₂ α) == ap (λ e → eval₁ (quote₁ e)) α
-eval-quote₂ α = TODO
+eval-quote₂ {X} {Y} {p} {.p} idp = {!   !}
