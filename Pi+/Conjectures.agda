@@ -39,14 +39,14 @@ eval-quote₁ : {X Y : UFin} → (p : X == Y) → eval₁ (quote₁ p) == ap (λ
 eval-quote₁ p = TODO
 
 eval₂ : {X Y : U} {p q : X ⟷₁ Y } → p ⟷₂ q → eval₁ p == eval₁ q
-eval₂ {p = p} {q = q} α = prop-path (has-level-apply {!  !} _ _) (eval₁ p) (eval₁ q) -- UFin-is-gpd in UFin.agda
+eval₂ {p = p} {q = q} α = TODO
 
 quote₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → quote₁ p ⟷₂ quote₁ q
 quote₂ {p = p} {q = q} α = transport (λ e → quote₁ p ⟷₂ quote₁ e) α id⟷₂
 
-quote-eval₂ : {X Y : U} {p q : X ⟷₁ Y } (α : p ⟷₂ q) → quote₂ (eval₂ α) ⟷₃ 
+quote-eval₂ : {X Y : U} {p q : X ⟷₁ Y } (α : p ⟷₂ q) → quote₂ (eval₂ α) ⟷₃
     trans⟷₂ (quote-eval₁ p) (trans⟷₂ (id⟷₂ ⊡ (α ⊡ id⟷₂)) (!⟷₂ (quote-eval₁ q)))
 quote-eval₂ {p = p} {q = q} α = trunc (quote₂ (eval₂ α)) (trans⟷₂ (quote-eval₁ p) (trans⟷₂ (id⟷₂ ⊡ (α ⊡ id⟷₂)) (!⟷₂ (quote-eval₁ q))))
 
 eval-quote₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → eval₂ (quote₂ α) == ap (λ e → eval₁ (quote₁ e)) α
-eval-quote₂ {X} {Y} {p} {.p} idp = {!   !} -- should be idp, when all TODOs above are filled
+eval-quote₂ α = prop-has-all-paths {{has-level-apply (has-level-apply UFin-is-gpd _ _) _ _}} _ _
