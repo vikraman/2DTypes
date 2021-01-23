@@ -22,25 +22,25 @@ open import lib.types.Coproduct
 open import lib.types.Sigma
 
 postulate
-    pi2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
-    list2pi : {n : ℕ} → (List (Fin n)) → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
+    norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
+    list2norm : {n : ℕ} → (List (Fin n)) → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 
-    pi2pi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2pi (pi2list p) ⟷₂ p
-    list2list : {n : ℕ} → (p : List (Fin n)) → pi2list (list2pi p) == p
+    norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
+    list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
 
     zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 
 lehmer2pi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
-lehmer2pi {n} cl = list2pi (immersionFin cl)
+lehmer2pi {n} cl = list2norm (immersionFin cl)
 
 normpi2cox : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Sn n
-normpi2cox {n} p = q[ pi2list p ]
+normpi2cox {n} p = q[ norm2list p ]
 
 cox2normpi : {n : ℕ} → Sn n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 cox2normpi {n} = SetQuot-elim {{{!   !}}} (λ l → lehmer2pi (<– Lehmer≃Sn q[ l ])) {!   !}
 
 normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → cox2normpi (normpi2cox p) ⟷₂ p
-normpi2normpi {n} p = {!   !}
+normpi2normpi {n} p = {!   !} -- pi respects Coxeter
 
 cox2cox : {n : ℕ} → (p : Sn n) → normpi2cox (cox2normpi p) == p
 cox2cox {n} p = {!   !}
