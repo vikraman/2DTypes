@@ -26,8 +26,9 @@ open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Extra
 open import Pi+.UFin
 
-immersionFin : {n : ℕ} -> Lehmer (S n) -> List (Fin (S n))
-immersionFin code = <– List≃LList (immersion code , immersion->> code)
+immersionFin : {n : ℕ} -> Lehmer n -> List (Fin n)
+immersionFin {O} CanZ = nil
+immersionFin {S n} code = <– List≃LList (immersion code , immersion->> code)
 
 ListFin-to-Lehmer : {n : ℕ} -> (m : List (Fin (S n))) -> Σ (Lehmer (S n)) (λ cl -> m ≈₁ immersionFin cl)
 ListFin-to-Lehmer {n} m = 
@@ -60,41 +61,41 @@ immersionFin-is-injection cl1 cl2 p with coxeter->mcoxeter p
         c2t = transport (λ e -> e ≅* _) (ap fst (toLList∘fromLList _)) c2
     in  only-one-canonical↔ cl1 cl2 _ _ idp idp (MC c1t c2t)
 
-f : {n : ℕ} -> Lehmer n → Sn n
-f {O} CanZ = q[ nil ]
-f {S n} = q[_] ∘ immersionFin
-
-g-q : {n : ℕ} ->  List (Fin n) → Lehmer n
-g-q {O} nil = CanZ
-g-q {S n} m = ListFin-to-Lehmer m .fst
-
-g-rel :  {n : ℕ} ->  {m1 m2 : List (Fin n)} → m1 ≈ m2 → g-q m1 == g-q m2
-g-rel {O} {nil} {nil} pm = idp
-g-rel {S n} {m1} {m2} pm = 
-    let (cl1 , cl1p) = ListFin-to-Lehmer m1
-        (cl2 , cl2p) = ListFin-to-Lehmer m2
-        p = CoxeterRel-trans {S n} (CoxeterRel-sym {S n} cl1p) (CoxeterRel-trans {S n} pm cl2p)
-    in immersionFin-is-injection cl1 cl2 p
-        
-g :  {n : ℕ} -> Sn n → Lehmer n
-g {n} = SetQuot-rec {B = Lehmer n} g-q g-rel
-
-f-g-q : {n : ℕ} -> (m : List (Fin n)) → f (g q[ m ]) == q[ m ]
-f-g-q {O} nil = idp
-f-g-q {S n} m = quot-rel (CoxeterRel-sym {S n} (ListFin-to-Lehmer m .snd))
-
-f-g :  {n : ℕ} -> (l : Sn n) → f (g l) == l
-f-g = SetQuot-elim {P = λ l → f (g l) == l} {{raise-level -1 has-level-apply-instance}} f-g-q (λ _ → prop-has-all-paths-↓ {{has-level-apply-instance}})
--- TODO: why don't the instances resolve?
-
-g-f : {n : ℕ} ->  (cl : Lehmer n) → g (f cl) == cl
-g-f {O} CanZ = idp
-g-f {S n} cl =   
-    let cln , cln-p = ListFin-to-Lehmer (<– List≃LList (immersion cl , immersion->> cl))
-    in  immersionFin-is-injection cln cl (comm cln-p)
-
 Lehmer≃Sn : {n : ℕ} ->  Lehmer n ≃ Sn n
 Lehmer≃Sn = equiv f g f-g g-f
+    where
+        f : {n : ℕ} -> Lehmer n → Sn n
+        f = q[_] ∘ immersionFin
+
+        g-q : {n : ℕ} ->  List (Fin n) → Lehmer n
+        g-q {O} nil = CanZ
+        g-q {S n} m = ListFin-to-Lehmer m .fst
+
+        g-rel :  {n : ℕ} ->  {m1 m2 : List (Fin n)} → m1 ≈ m2 → g-q m1 == g-q m2
+        g-rel {O} {nil} {nil} pm = idp
+        g-rel {S n} {m1} {m2} pm = 
+            let (cl1 , cl1p) = ListFin-to-Lehmer m1
+                (cl2 , cl2p) = ListFin-to-Lehmer m2
+                p = CoxeterRel-trans {S n} (CoxeterRel-sym {S n} cl1p) (CoxeterRel-trans {S n} pm cl2p)
+            in immersionFin-is-injection cl1 cl2 p
+                
+        g :  {n : ℕ} -> Sn n → Lehmer n
+        g {n} = SetQuot-rec {B = Lehmer n} g-q g-rel
+
+        f-g-q : {n : ℕ} -> (m : List (Fin n)) → f (g q[ m ]) == q[ m ]
+        f-g-q {O} nil = idp
+        f-g-q {S n} m = quot-rel (CoxeterRel-sym {S n} (ListFin-to-Lehmer m .snd))
+
+        f-g :  {n : ℕ} -> (l : Sn n) → f (g l) == l
+        f-g = SetQuot-elim {P = λ l → f (g l) == l} {{raise-level -1 has-level-apply-instance}} f-g-q (λ _ → prop-has-all-paths-↓ {{has-level-apply-instance}})
+        -- TODO: why don't the instances resolve?
+
+        g-f : {n : ℕ} ->  (cl : Lehmer n) → g (f cl) == cl
+        g-f {O} CanZ = idp
+        g-f {S n} cl =   
+            let cln , cln-p = ListFin-to-Lehmer (<– List≃LList (immersion cl , immersion->> cl))
+            in  immersionFin-is-injection cln cl (comm cln-p)
+
 
 Aut : ∀ {ℓ} → Type ℓ → Type ℓ
 Aut T = T ≃ T

@@ -41,7 +41,7 @@ postulate
     pi2normpi : {X Y : U} → X ⟷₁ Y → ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫
 
 eval₁ : {X Y : U} → X ⟷₁ Y → eval₀ X == eval₀ Y
-eval₁ {X} {Y} p = TODO
+eval₁ {X} {Y} p = ?
 
 quote₁ : {X Y : UFin} → X == Y → quote₀ X ⟷₁ quote₀ Y
 quote₁ = TODO

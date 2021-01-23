@@ -21,16 +21,30 @@ open import lib.types.SetQuotient
 open import lib.types.Coproduct
 open import lib.types.Sigma
 
-
 postulate
-    normpi2cox : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Sn n
-    cox2normpi : {n : ℕ} → Sn n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
+    pi2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
+    list2pi : {n : ℕ} → (List (Fin n)) → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 
-    normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → cox2normpi (normpi2cox p) ⟷₂ p
-    cox2cox : {n : ℕ} → (p : Sn n) → normpi2cox (cox2normpi p) == p
-    
+    pi2pi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2pi (pi2list p) ⟷₂ p
+    list2list : {n : ℕ} → (p : List (Fin n)) → pi2list (list2pi p) == p
+
     ⟷₁-size : {n m : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ m ⟫ → n == m
 
+
+lehmer2pi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
+lehmer2pi {n} cl = list2pi (immersionFin cl)
+
+normpi2cox : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Sn n
+normpi2cox {n} p = q[ pi2list p ]
+
+cox2normpi : {n : ℕ} → Sn n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
+cox2normpi {n} = SetQuot-elim {{{!   !}}} (λ l → lehmer2pi (<– Lehmer≃Sn q[ l ])) {!   !}
+
+normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → cox2normpi (normpi2cox p) ⟷₂ p
+normpi2normpi {n} p = {!   !}
+
+cox2cox : {n : ℕ} → (p : Sn n) → normpi2cox (cox2normpi p) == p
+cox2cox {n} p = {!   !}
 
 eval₁-norm : {n : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ n ⟫ → FinFS n == FinFS n
 eval₁-norm {O} p = idp
@@ -55,9 +69,23 @@ quote₁-norm {S n} p =
     in  step2
 
 quote-eval₁-norm : {n : ℕ} → (p : ⟪ n ⟫ ⟷₁ ⟪ n ⟫) → quote₁-norm (eval₁-norm p) ⟷₂ p
-quote-eval₁-norm {O} p = {!   !} -- obvious
-quote-eval₁-norm {S n} p = {!   !}
+quote-eval₁-norm {O} p = TODO -- obvious
+quote-eval₁-norm {S n} p = 
+    let cancelSn : –> UFin≃Sn (<– UFin≃Sn (normpi2cox p)) == normpi2cox p
+        cancelSn = <–-inv-r UFin≃Sn (normpi2cox p)
+
+        cancelNorm : cox2normpi (–> UFin≃Sn (<– UFin≃Sn (normpi2cox p))) ⟷₂ p
+        cancelNorm = transport (λ e -> cox2normpi e ⟷₂ p) (! cancelSn) (normpi2normpi p)
+
+    in  cancelNorm
 
 eval-quote₁-norm : {n : ℕ} → (p : FinFS n == FinFS n) → eval₁-norm (quote₁-norm p) == p
-eval-quote₁-norm {O} p = {!   !} -- obvious
-eval-quote₁-norm {S n} p = {!   !}
+eval-quote₁-norm {O} p = TODO -- obvious
+eval-quote₁-norm {S n} p = 
+    let cancelNorm : normpi2cox (cox2normpi (–> UFin≃Sn p)) == (–> UFin≃Sn p)
+        cancelNorm = cox2cox (–> UFin≃Sn p)
+
+        cancelSn : <– UFin≃Sn (normpi2cox (cox2normpi (–> UFin≃Sn p))) == p
+        cancelSn = ap  (<– UFin≃Sn) cancelNorm ∙ <–-inv-l UFin≃Sn p
+        
+    in  cancelSn
