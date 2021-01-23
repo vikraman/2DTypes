@@ -24,10 +24,22 @@ open import Pi+.Coxeter.Parametrized.ReductionRel
 open import Pi+.Coxeter.Parametrized.CoxeterMCoxeterEquiv
 open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Extra
+open import Pi+.UFin
+
+Aut : ∀ {ℓ} → Type ℓ → Type ℓ
+Aut T = T ≃ T
+
+Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
+Ω (X , x) = (x == x)
 
 module _ {n : ℕ} where
 
-    Fin≃Lehmer :  (Fin (S n) ≃ Fin (S n)) ≃ Lehmer (S n)
+    UFin≃Fin : Ω (UFin , FinFS n) ≃ Aut (Fin (S n))
+    UFin≃Fin = TODO
+
+module _ {n : ℕ} where
+
+    Fin≃Lehmer :  Aut (Fin (S n)) ≃ Lehmer (S n)
     Fin≃Lehmer = TODO
 
 module _ {n : ℕ} where
