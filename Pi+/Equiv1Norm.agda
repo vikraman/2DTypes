@@ -32,6 +32,11 @@ postulate
 
     zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 
+-- -- TODO: is this true?
+-- instance
+--   ⟷₁-is-set : {n : ℕ} → is-set (⟪ S n ⟫ ⟷₁ ⟪ S n ⟫)
+--   ⟷₁-is-set = dec-eq-is-set TODO
+
 lehmer2pi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 lehmer2pi {n} cl = list2norm (immersionFin cl)
 
@@ -39,7 +44,7 @@ normpi2cox : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Sn n
 normpi2cox {n} p = q[ norm2list p ]
 
 cox2normpi : {n : ℕ} → Sn n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
-cox2normpi {n} = SetQuot-elim {{{!   !}}} (λ l → lehmer2pi (<– Lehmer≃Sn q[ l ])) {!   !}
+cox2normpi {n} = SetQuot-rec {{{!   !}}} (λ l → lehmer2pi (<– Lehmer≃Sn q[ l ])) (λ r → ap (λ e → lehmer2pi (<– Lehmer≃Sn e)) (quot-rel r))
 
 normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → cox2normpi (normpi2cox p) ⟷₂ p
 normpi2normpi {n} p = {!   !} -- piRespectsCox
