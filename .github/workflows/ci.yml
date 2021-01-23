@@ -1,0 +1,39 @@
+on: [push, pull_request]
+name: ci
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - uses: haskell/actions/setup@v1
+        with:
+          ghc-version: '8.8.4'
+          enable-stack: true
+          stack-version: 'latest'
+
+      - name: Set PATH
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+
+      - uses: actions/cache@v2
+        id: cache-stack
+        with:
+          path: ~/.stack
+          key: ${{ runner.os }}-stack
+
+      - uses: actions/cache@v2
+        id: cache-hott-agda
+        with:
+          path: HoTT-Agda/_build
+          key: ${{ runner.os }}-hott-agda-${{ hashFiles('HoTT-Agda/**/*.agda') }}
+
+      - name: Install Agda
+        run: stack --resolver lts-16.27 --system-ghc install data-hash-0.2.0.1 equivalence-0.3.5 geniplate-mirror-0.7.7 STMonadTrans-0.4.4 Agda-2.6.1.2
+
+      - name: make
+        run: make
