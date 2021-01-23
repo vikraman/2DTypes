@@ -116,4 +116,4 @@ module _ {n : ℕ} where
 module _ {n : ℕ} where
 
     UFin≃Sn : Ω (UFin , FinFS (S n)) ≃ Sn n
-    UFin≃Sn = TODO
+    UFin≃Sn = TODO -- composition of the above
