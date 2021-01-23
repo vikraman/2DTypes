@@ -38,30 +38,10 @@ eval-quote₀ : (X : UFin) → Trunc -1 (eval₀ (quote₀ X) == X)
 eval-quote₀ = FinSet-elim-prop (λ _ → Trunc-level) λ n → [ pair= (ap Fin ∣⟪ n ⟫∣) prop-has-all-paths-↓ ]
 
 postulate
-    pi2list : {X Y : U} → X ⟷₁ Y → (⊤ ⊔ List (Fin ∣ X ∣))
+    pi2normpi : {X Y : U} → X ⟷₁ Y → ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫
 
 eval₁ : {X Y : U} → X ⟷₁ Y → eval₀ X == eval₀ Y
-eval₁ {X} {Y} p = 
-    let n = ∣ X ∣
-        m = ∣ Y ∣
-
-        n=m : n == m
-        n=m = {!   !}
-        
-        step1 : (⊤ ⊔ List (Fin ∣ X ∣))
-        step1 = pi2list {X} {Y} p
-
-        step2 : Lehmer n
-        step2 = <– Lehmer≃Coxeter q[ step1 ]
-
-        step3 : Fin (S n) ≃ Fin (S n)
-        step3 = <– Fin≃Lehmer step2
-
-        step4 : FinFS (S n) == FinFS (S n)
-        step4 = <– UFin≃Fin step3
-
-    in  transport (λ e → {!  FinFS (S n) == FinFS (S e) !}) n=m {!   !}
-
+eval₁ {X} {Y} p = TODO
 
 quote₁ : {X Y : UFin} → X == Y → quote₀ X ⟷₁ quote₀ Y
 quote₁ = TODO

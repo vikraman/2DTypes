@@ -26,22 +26,6 @@ open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Extra
 open import Pi+.UFin
 
-Aut : ∀ {ℓ} → Type ℓ → Type ℓ
-Aut T = T ≃ T
-
-Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
-Ω (X , x) = (x == x)
-
-module _ {n : ℕ} where
-
-    UFin≃Fin : Ω (UFin , FinFS n) ≃ Aut (Fin (S n))
-    UFin≃Fin = TODO
-
-module _ {n : ℕ} where
-
-    Fin≃Lehmer :  Aut (Fin (S n)) ≃ Lehmer (S n)
-    Fin≃Lehmer = TODO
-
 immersionFin : {n : ℕ} -> Lehmer (S n) -> List (Fin (S n))
 immersionFin code = <– List≃LList (immersion code , immersion->> code)
 
@@ -109,6 +93,26 @@ g-f {S n} cl =
     let cln , cln-p = ListFin-to-Lehmer (<– List≃LList (immersion cl , immersion->> cl))
     in  immersionFin-is-injection cln cl (comm cln-p)
 
-Lehmer≃Coxeter : {n : ℕ} ->  Lehmer n ≃ Sn n
-Lehmer≃Coxeter = equiv f g f-g g-f
+Lehmer≃Sn : {n : ℕ} ->  Lehmer n ≃ Sn n
+Lehmer≃Sn = equiv f g f-g g-f
 
+Aut : ∀ {ℓ} → Type ℓ → Type ℓ
+Aut T = T ≃ T
+
+Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
+Ω (X , x) = (x == x)
+
+module _ {n : ℕ} where
+
+    UFin≃Fin : Ω (UFin , FinFS n) ≃ Aut (Fin n)
+    UFin≃Fin = TODO
+
+module _ {n : ℕ} where
+
+    Fin≃Lehmer :  Aut (Fin (S n)) ≃ Lehmer n
+    Fin≃Lehmer = TODO
+
+module _ {n : ℕ} where
+
+    UFin≃Sn : Ω (UFin , FinFS (S n)) ≃ Sn n
+    UFin≃Sn = TODO
