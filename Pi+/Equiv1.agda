@@ -40,19 +40,28 @@ eval₁ {X} {Y} p =
         Y=X = ⟷₁-size normc
         evc = eval₁-norm (transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫ ) Y=X normc)
     in  evc ∙ ! (ap FinFS Y=X)
+    
+-- (p : Fin (m + n) == Fin (n + m)) -> p == 
+-- (p : (X == Y)) -> Σ (X == X) λ p' -> Σ (X == Y) λ q' -> -> (p == p' ∙ q') × (q == transport (λ e -> FinFS n == FinFS e) cardX=cardY idp)
+
+-- lemma : (X : UFin) -> Trunc -1 (X == FinFS (card X))
+-- lemma (X , ϕ) = Trunc-fmap {!   !} {!   !}
 
 quote₁ : {X Y : UFin} → X == Y → quote₀ X ⟷₁ quote₀ Y
 quote₁ {X} {Y} p = 
     let X=Y : card X == card Y
         X=Y = ap card p
+        
+        p' : FinFS (card X) == FinFS (card Y)
+        p' = ap (λ e → FinFS (card e)) p
 
         evc : quote₀ X ⟷₁ quote₀ X
-        evc = quote₁-norm {!  !} -- p ∙ ?
+        evc = quote₁-norm (p' ∙ ap (FinFS ∘ card) (! p))
 
     in  evc ◎ transport (λ e -> quote₀ X ⟷₁ e) (ap ⟪_⟫ X=Y) id⟷₁ -- does it matter over which X=Y do I transport?
 
 quote-eval₁ : {X Y : U} → (p : X ⟷₁ Y) → quote₁ (eval₁ p) ⟷₂ norm p
-quote-eval₁ p = TODO
+quote-eval₁ p = ?
 
 eval-quote₁ : {X Y : UFin} → (p : X == Y) → eval₁ (quote₁ p) == ap (λ X → eval₀ (quote₀ X)) p
 eval-quote₁ p = TODO
