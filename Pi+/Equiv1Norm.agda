@@ -1,12 +1,12 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.ConjecturesNorm where
+module Pi+.Equiv1Norm where
 
 open import Pi+.Syntax as Pi
 open import Pi+.UFin
 open import Pi+.Level0
 open import Pi+.Extra
-open import Pi+.Conjectures
+open import Pi+.Equiv0
 
 open import Pi+.Coxeter.Common.Lehmer
 open import Pi+.Coxeter.Parametrized.Equiv
@@ -27,9 +27,6 @@ postulate
 
     pi2pi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2pi (pi2list p) ⟷₂ p
     list2list : {n : ℕ} → (p : List (Fin n)) → pi2list (list2pi p) == p
-
-    ⟷₁-size : {n m : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ m ⟫ → n == m
-
 
 lehmer2pi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 lehmer2pi {n} cl = list2pi (immersionFin cl)
