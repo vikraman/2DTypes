@@ -48,7 +48,7 @@ normpi2lehmer : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Lehmer n
 normpi2lehmer {n} p = immersion-inv (norm2list p)
 
 normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → lehmer2normpi (normpi2lehmer p) ⟷₂ p
-normpi2normpi {n} p = 
+normpi2normpi {n} p =
     let lemma : immersionFin (immersion-inv (norm2list p)) ≈ (norm2list p)
         lemma = immersion∘immersion-inv (norm2list p)
     in  trans⟷₂ (piRespectsCox _ _ _ lemma) (norm2norm p)
@@ -64,7 +64,7 @@ eval₁-norm {S n} p =
 
         step2 : FinFS (S n) == FinFS (S n)
         step2 = <– UFin≃Lehmer step1
-    
+
     in  step2
 
 quote₁-norm : {n : ℕ} → (FinFS n) == (FinFS n) → ⟪ n ⟫ ⟷₁ ⟪ n ⟫
@@ -80,7 +80,7 @@ quote₁-norm {S n} p =
 
 quote-eval₁-norm : {n : ℕ} → (p : ⟪ n ⟫ ⟷₁ ⟪ n ⟫) → quote₁-norm (eval₁-norm p) ⟷₂ p
 quote-eval₁-norm {O} p = zero⟷₂ p
-quote-eval₁-norm {S n} p = 
+quote-eval₁-norm {S n} p =
     let cancelSn : –> UFin≃Lehmer (<– UFin≃Lehmer (normpi2lehmer p)) == normpi2lehmer p
         cancelSn = <–-inv-r UFin≃Lehmer (normpi2lehmer p)
 
@@ -91,11 +91,11 @@ quote-eval₁-norm {S n} p =
 
 eval-quote₁-norm : {n : ℕ} → (p : FinFS n == FinFS n) → eval₁-norm (quote₁-norm p) == p
 eval-quote₁-norm {O} p = TODO -- obvious
-eval-quote₁-norm {S n} p = 
+eval-quote₁-norm {S n} p =
     let cancelNorm : normpi2lehmer (lehmer2normpi (–> UFin≃Lehmer p)) == (–> UFin≃Lehmer p)
         cancelNorm = lehmer2lehmer (–> UFin≃Lehmer p)
 
         cancelSn : <– UFin≃Lehmer (normpi2lehmer (lehmer2normpi (–> UFin≃Lehmer p))) == p
         cancelSn = ap  (<– UFin≃Lehmer) cancelNorm ∙ <–-inv-l UFin≃Lehmer p
-        
+
     in  cancelSn
