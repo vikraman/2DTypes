@@ -28,6 +28,8 @@ postulate
     pi2pi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2pi (pi2list p) ⟷₂ p
     list2list : {n : ℕ} → (p : List (Fin n)) → pi2list (list2pi p) == p
 
+    zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
+
 lehmer2pi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 lehmer2pi {n} cl = list2pi (immersionFin cl)
 
@@ -66,7 +68,7 @@ quote₁-norm {S n} p =
     in  step2
 
 quote-eval₁-norm : {n : ℕ} → (p : ⟪ n ⟫ ⟷₁ ⟪ n ⟫) → quote₁-norm (eval₁-norm p) ⟷₂ p
-quote-eval₁-norm {O} p = TODO -- obvious
+quote-eval₁-norm {O} p = zero⟷₂ p
 quote-eval₁-norm {S n} p = 
     let cancelSn : –> UFin≃Sn (<– UFin≃Sn (normpi2cox p)) == normpi2cox p
         cancelSn = <–-inv-r UFin≃Sn (normpi2cox p)
