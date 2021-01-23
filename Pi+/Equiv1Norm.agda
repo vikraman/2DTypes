@@ -28,6 +28,8 @@ postulate
     norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
     list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
 
+    piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) → (list2norm l₁) ⟷₂ (list2norm l₂)
+
     zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 
 lehmer2pi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
@@ -40,7 +42,7 @@ cox2normpi : {n : ℕ} → Sn n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 cox2normpi {n} = SetQuot-elim {{{!   !}}} (λ l → lehmer2pi (<– Lehmer≃Sn q[ l ])) {!   !}
 
 normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → cox2normpi (normpi2cox p) ⟷₂ p
-normpi2normpi {n} p = {!   !} -- pi respects Coxeter
+normpi2normpi {n} p = {!   !} -- piRespectsCox
 
 cox2cox : {n : ℕ} → (p : Sn n) → normpi2cox (cox2normpi p) == p
 cox2cox {n} p = {!   !}
