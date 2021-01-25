@@ -8,7 +8,7 @@ open import Pi+.Level0
 open import Pi+.Extra
 open import Pi+.Equiv0
 
-open import Pi+.Coxeter.Common.Lehmer
+open import Pi+.Coxeter.Common.Lehmer using (Lehmer)
 open import Pi+.Coxeter.Parametrized.Equiv
 open import Pi+.Coxeter.Parametrized.Group
 
@@ -33,28 +33,24 @@ postulate
     zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 
 
--- (p : O <-> t) -> p <=> id
-
-
--- -- TODO: is this true?
 -- instance
 --   ⟷₁-is-set : {n : ℕ} → is-set (⟪ S n ⟫ ⟷₁ ⟪ S n ⟫)
 --   ⟷₁-is-set = dec-eq-is-set TODO
 
 lehmer2normpi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
-lehmer2normpi {n} cl = list2norm (immersionFin cl)
+lehmer2normpi {n} cl = list2norm (immersion cl)
 
 normpi2lehmer : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Lehmer n
-normpi2lehmer {n} p = immersion-inv (norm2list p)
+normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
 
 normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → lehmer2normpi (normpi2lehmer p) ⟷₂ p
 normpi2normpi {n} p =
-    let lemma : immersionFin (immersion-inv (norm2list p)) ≈ (norm2list p)
-        lemma = immersion∘immersion-inv (norm2list p)
+    let lemma : immersion (immersion⁻¹ (norm2list p)) ≈ (norm2list p)
+        lemma = immersion∘immersion⁻¹ (norm2list p)
     in  trans⟷₂ (piRespectsCox _ _ _ lemma) (norm2norm p)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
-lehmer2lehmer {n} p = ap immersion-inv (list2list (immersionFin p)) ∙ immersion-inv∘immersion p
+lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p
 
 eval₁-norm : {n : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ n ⟫ → FinFS n == FinFS n
 eval₁-norm {O} p = idp
