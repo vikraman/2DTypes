@@ -269,24 +269,6 @@ cox≈2pi (braid {n}) =
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 {--
 -----------------------------------------------------------------------------
 -- Canonical representation of sum types as lists I + (I + (I + ... O))
@@ -370,7 +352,6 @@ eert = (F + (E + D)) + (C + (B + A))
 data _⇔_ : (t₁ t₂ : U) → Set where
   id⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m ⟫
 
-{--
   seq⇔ : {m n k : ℕ} → ⟪ m ⟫ ⇔ ⟪ n ⟫ → ⟪ n ⟫ ⇔ ⟪ k ⟫ → ⟪ m ⟫ ⇔ ⟪ k ⟫
   append⇔ : {m n k p : ℕ} → ⟪ m ⟫ ⇔ ⟪ k ⟫ → ⟪ n ⟫ ⇔ ⟪ p ⟫ →
             ⟪ m +ℕ n ⟫ ⇔ ⟪ k +ℕ p ⟫
@@ -378,9 +359,7 @@ data _⇔_ : (t₁ t₂ : U) → Set where
   assocr⇔ : {m n k : ℕ} → ⟪ (m +ℕ n) +ℕ k ⟫ ⇔ ⟪ m +ℕ (n +ℕ k) ⟫
   snocN⇔ : {m : ℕ} → ⟪ 1 +ℕ m ⟫ ⇔ ⟪ m +ℕ 1 ⟫
   unit⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m +ℕ 0 ⟫
---}
 
-{--
 Better idea to explore:
 
 The normal form is a list; most of the combinators shift the focus around;
@@ -400,42 +379,6 @@ Want:
 Perhaps use ideas from
 https://gist.github.com/beala/d9e95c17999e1cd4f2d9b8bddff7768a#file-cryptol-agda-L43
 
---}
-
-{--
-data _⇔_ : (t₁ t₂ : U) → Set where
-  id⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m ⟫
-  seq⇔ : {m n k : ℕ} → ⟪ m ⟫ ⇔ ⟪ n ⟫ → ⟪ n ⟫ ⇔ ⟪ k ⟫ → ⟪ m ⟫ ⇔ ⟪ k ⟫
-  append⇔ : {m n k p : ℕ} → ⟪ m ⟫ ⇔ ⟪ k ⟫ → ⟪ n ⟫ ⇔ ⟪ p ⟫ →
-            ⟪ m +ℕ n ⟫ ⇔ ⟪ k +ℕ p ⟫
-  assocl⇔ : {m n k : ℕ} → ⟪ m +ℕ (n +ℕ k) ⟫ ⇔ ⟪ (m +ℕ n)  +ℕ k ⟫
-  assocr⇔ : {m n k : ℕ} → ⟪ (m +ℕ n) +ℕ k ⟫ ⇔ ⟪ m +ℕ (n +ℕ k) ⟫
-  snocN⇔ : {m : ℕ} → ⟪ 1 +ℕ m ⟫ ⇔ ⟪ m +ℕ 1 ⟫
-  unit⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m +ℕ 0 ⟫
-  -- moves the first element to the end via a sequence of 'm' swaps
-  -- swap 0; swap 1; swap 2; ...; swap (m-1)
-
------------------------------------------------------------------------------
--- Convert combinators to normal form
-
-bigSwap⇔ : {m n : ℕ} → ⟪ m +ℕ n ⟫ ⇔ ⟪ n +ℕ m ⟫
-bigSwap⇔ {O} {n} = unit⇔
-bigSwap⇔ {S m} {n} =
-  seq⇔ snocN⇔
-  (seq⇔ (assocr⇔ {m} {n} {1})
-  (seq⇔ (bigSwap⇔ {m} {n +ℕ 1})
-  (assocr⇔ {n} {1} {m})))
-
-combNF : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
-combNF unite₊l = id⇔
-combNF uniti₊l = id⇔
-combNF {t₁ + t₂} swap₊ = bigSwap⇔ {∣ t₁ ∣} {∣ t₂ ∣}
-combNF {t₁ + (t₂ + t₃)} assocl₊ = assocl⇔ {∣ t₁ ∣}{∣ t₂ ∣}{∣ t₃ ∣}
-combNF {(t₁ + t₂) + t₃} assocr₊ = assocr⇔ {∣ t₁ ∣}{∣ t₂ ∣}{∣ t₃ ∣}
-combNF id⟷₁ = id⇔
-combNF (c₁ ◎ c₂) = seq⇔ (combNF c₁) (combNF c₂)
-combNF (c₁ ⊕ c₂) = append⇔ (combNF c₁) (combNF c₂)
-
 -----------------------------------------------------------------------------
 -- Example ctd
 
@@ -445,10 +388,6 @@ mirror = swap₊ ◎ (swap₊ ⊕ swap₊) ◎ ((id⟷₁ ⊕ swap₊) ⊕ (id�
 mirrorNF : canonU tree ⇔ canonU eert
 mirrorNF = combNF mirror
 
---}
-
-
-{--
 Keeping A..F as postulates
 
 seq⇔
@@ -484,12 +423,43 @@ seq⇔
  (append⇔
   (append⇔ id⇔ (seq⇔ snocN⇔ (seq⇔ assocr⇔ (seq⇔ unit⇔ assocr⇔))))
   (append⇔ id⇔ (seq⇔ snocN⇔ (seq⇔ assocr⇔ (seq⇔ unit⇔ assocr⇔))))))
---}
 
 -----------------------------------------------------------------------------
 -----------------------------------------------------------------------------
+data _⇔_ : (t₁ t₂ : U) → Set where
+  id⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m ⟫
+  seq⇔ : {m n k : ℕ} → ⟪ m ⟫ ⇔ ⟪ n ⟫ → ⟪ n ⟫ ⇔ ⟪ k ⟫ → ⟪ m ⟫ ⇔ ⟪ k ⟫
+  append⇔ : {m n k p : ℕ} → ⟪ m ⟫ ⇔ ⟪ k ⟫ → ⟪ n ⟫ ⇔ ⟪ p ⟫ →
+            ⟪ m +ℕ n ⟫ ⇔ ⟪ k +ℕ p ⟫
+  assocl⇔ : {m n k : ℕ} → ⟪ m +ℕ (n +ℕ k) ⟫ ⇔ ⟪ (m +ℕ n)  +ℕ k ⟫
+  assocr⇔ : {m n k : ℕ} → ⟪ (m +ℕ n) +ℕ k ⟫ ⇔ ⟪ m +ℕ (n +ℕ k) ⟫
+  snocN⇔ : {m : ℕ} → ⟪ 1 +ℕ m ⟫ ⇔ ⟪ m +ℕ 1 ⟫
+  unit⇔ : {m : ℕ} → ⟪ m ⟫ ⇔ ⟪ m +ℕ 0 ⟫
+  -- moves the first element to the end via a sequence of 'm' swaps
+  -- swap 0; swap 1; swap 2; ...; swap (m-1)
 
-{--
+-----------------------------------------------------------------------------
+-- Convert combinators to normal form
+
+bigSwap⇔ : {m n : ℕ} → ⟪ m +ℕ n ⟫ ⇔ ⟪ n +ℕ m ⟫
+bigSwap⇔ {O} {n} = unit⇔
+bigSwap⇔ {S m} {n} =
+  seq⇔ snocN⇔
+  (seq⇔ (assocr⇔ {m} {n} {1})
+  (seq⇔ (bigSwap⇔ {m} {n +ℕ 1})
+  (assocr⇔ {n} {1} {m})))
+
+combNF : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (canonU t₁ ⇔ canonU t₂)
+combNF unite₊l = id⇔
+combNF uniti₊l = id⇔
+combNF {t₁ + t₂} swap₊ = bigSwap⇔ {∣ t₁ ∣} {∣ t₂ ∣}
+combNF {t₁ + (t₂ + t₃)} assocl₊ = assocl⇔ {∣ t₁ ∣}{∣ t₂ ∣}{∣ t₃ ∣}
+combNF {(t₁ + t₂) + t₃} assocr₊ = assocr⇔ {∣ t₁ ∣}{∣ t₂ ∣}{∣ t₃ ∣}
+combNF id⟷₁ = id⇔
+combNF (c₁ ◎ c₂) = seq⇔ (combNF c₁) (combNF c₂)
+combNF (c₁ ⊕ c₂) = append⇔ (combNF c₁) (combNF c₂)
+
+
 
 OLD STUFF. KEEP FOR NOW
 ∣⟪⟫∣ : (n : ℕ) → ∣ ⟪ n ⟫ ∣ == n
@@ -672,7 +642,7 @@ combNormalForm {t₁ + t₂} {t₂ + t₁} swap₊ = swap-big t₁ t₂ ,
   {!!}
 combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = id⟷₁ ,
   {!!}
-{--
+
  ! <+> |t1| |t2+t3| ;
  id + (! (<+> |t2| |t3|)) ;
  ! norm t1 + (! norm t2 + ! norm t3) ;
@@ -680,7 +650,6 @@ combNormalForm {t₁ + (t₂ + t₃)} assocl₊ = id⟷₁ ,
  (norm t1 + norm t2) + norm t3 ;
  (<+> |t1| |t2|) + id ;
  <+> |t1+t2| |t3|
---}
 
 -- formally:
 --   transport (λ X → canonU (t₁ + (t₂ + t₃)) ⟷₁ X)
@@ -695,9 +664,6 @@ combNormalForm (c₁ ⊕ c₂) with combNormalForm c₁ | combNormalForm c₂
 ... | nc₁ , eq₁ | nc₂ , eq₂ = {!!} ,
   {!!}
 
---}
-
-{--
      assocrNormalForm : {t₁ t₂ t₃ nt : U} {c : t₁ + (t₂ + t₃) ⟷₁ nt} →
                         (nf : normalForm (t₁ + (t₂ + t₃)) nt c) →
                     combNormalForm assocr₊ (sum+NF nf) nf id⟷₁
@@ -723,7 +689,6 @@ combNormalForm (c₁ ⊕ c₂) with combNormalForm c₁ | combNormalForm c₂
      -- I + a* + b* + 0            a* + b* + I + 0
      --
      -- swap+NormalForm : (t₁ + t₂) + t₃
-     {--
        swap₊
        O + t
        I + t
@@ -731,7 +696,6 @@ combNormalForm (c₁ ⊕ c₂) with combNormalForm c₁ | combNormalForm c₂
        {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
        (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
        (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
-     --}
      seqNormalForm : {t₁ t₂ t₃ nt₁ nt₂ nt₃ : U}
                      {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} {c₃ : t₃ ⟷₁ nt₃} →
                      {c₁₂ : t₁ ⟷₁ t₂} {c₂₃ : t₂ ⟷₁ t₃}
@@ -752,20 +716,12 @@ combNormalForm (c₁ ⊕ c₂) with combNormalForm c₁ | combNormalForm c₂
                       (trans⟷₂ assoc◎l
                       (c₁₂=nc₁₂ ⊡ c₂₃=nc₂₃))))))
      -- sumNormalForm : (c₁ ⊕ c₂)
-     {--
        {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
        (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
        (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
-     --}
-
---}
-
-
-
 
 -----------------------------------------------------------------------------
 
-{--
 data normalForm : (t : U) → (nt : U) → (t ⟷₁ nt) → Set where
   zeroNF : normalForm O O id⟷₁
   oneNF  : normalForm I (I + O) (uniti₊l ◎ swap₊)
@@ -830,23 +786,19 @@ flatMirrorTree = A6 + (A5 + (A4 + (A3 + (A2 + (A1 + O)))))
 treeNF : Σ (tree ⟷₁ flatTree) (λ c → normalForm tree flatTree c)
 treeNF = _ , sum+NF (sum+NF (sum1NF (sum1NF (sum1NF (sum+NF (sum1NF (sum1NF oneNF)))))))
 
-{--
 Evaluating treeNF produces
 (assocr₊ ◎
  assocr₊ ◎
  id⟷₁ ⊕
  id⟷₁ ⊕ id⟷₁ ⊕ assocr₊ ◎ id⟷₁ ⊕ id⟷₁ ⊕ (uniti₊l ◎ swap₊))
---}
 
 mirrorTreeNF : Σ (mirrorTree ⟷₁ flatMirrorTree) (λ c → normalForm mirrorTree flatMirrorTree c)
 mirrorTreeNF = _ , sum+NF (sum1NF (sum+NF (sum1NF (sum1NF (sum1NF (sum1NF oneNF))))))
 
-{--
 Evaluating mirrorTreeNF produces
 (assocr₊ ◎
  id⟷₁ ⊕
  assocr₊ ◎ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ (uniti₊l ◎ swap₊))
---}
 
 -- Now we want to define a normal form for combinators and relate 'mirror' to its
 -- normal form
@@ -908,7 +860,6 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
      -- I + a* + b* + 0            a* + b* + I + 0
      --
      -- swap+NormalForm : (t₁ + t₂) + t₃
-     {--
        swap₊
        O + t
        I + t
@@ -916,7 +867,6 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
        {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
        (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
        (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
-     --}
      seqNormalForm : {t₁ t₂ t₃ nt₁ nt₂ nt₃ : U}
                      {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} {c₃ : t₃ ⟷₁ nt₃} →
                      {c₁₂ : t₁ ⟷₁ t₂} {c₂₃ : t₂ ⟷₁ t₃}
@@ -937,11 +887,9 @@ data combNormalForm : {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c�
                       (trans⟷₂ assoc◎l
                       (c₁₂=nc₁₂ ⊡ c₂₃=nc₂₃))))))
      -- sumNormalForm : (c₁ ⊕ c₂)
-     {--
        {t₁ t₂ nt₁ nt₂ : U} {c₁ : t₁ ⟷₁ nt₁} {c₂ : t₂ ⟷₁ nt₂} →
        (c : t₁ ⟷₁ t₂) → normalForm t₁ nt₁ c₁ → normalForm t₂ nt₂ c₂ →
        (nc : nt₁ ⟷₁ nt₂) → (!⟷₁ c₁ ◎ c ◎ c₂ ⟷₂ nc) → Set
-     --}
 
 
 mirrorNF : Σ (flatTree ⟷₁ flatMirrorTree) (λ nc →
@@ -951,5 +899,4 @@ mirrorNF = _ , _ ,
   seqNormalForm {!!}
   (seqNormalForm {!!}
   {!!})
---}
 --}
