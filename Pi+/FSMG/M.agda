@@ -5,6 +5,7 @@ module Pi+.FSMG.M where
 open import lib.Base
 open import lib.NType
 open import lib.PathOver
+open import lib.PathGroupoid
 
 open import Pi+.FSMG.Paths
 open import Pi+.Extra
@@ -35,10 +36,10 @@ module _ {i} where
       (swap* : (x y : A) {xs : M A} (xs* : P xs)
              → (x ::* (y ::* xs*)) == (y ::* (x ::* xs*)) [ P ↓ swap x y xs ])
       (swap²* : (x y z : A) {xs : M A} (xs* : P xs)
-              → (swap* x y xs* ■ swap* y x xs*) == idp [ (λ p → (x ::* (y ::* xs*)) == (x ::* (y ::* xs*)) [ P ↓ p ]) ↓ swap² x y xs ])
+              → (swap* x y xs* ∙ᵈ swap* y x xs*) == idp [ (λ p → (x ::* (y ::* xs*)) == (x ::* (y ::* xs*)) [ P ↓ p ]) ↓ swap² x y xs ])
       (⬡* : (x y z : A) {xs : M A} (xs* : P xs)
-          → let p1 = swap* x y (z ::* xs*) ■ ($ (y ::*_) (swap* x z xs*) ■ swap* y z (x ::* xs*)) in
-            let p2 = ($ (x ::*_) (swap* y z xs*) ■ (swap* x z (y ::* xs*) ■ $ (z ::*_) (swap* x y xs*))) in
+          → let p1 = swap* x y (z ::* xs*) ∙ᵈ ($ (y ::*_) (swap* x z xs*) ∙ᵈ swap* y z (x ::* xs*)) in
+            let p2 = ($ (x ::*_) (swap* y z xs*) ∙ᵈ (swap* x z (y ::* xs*) ∙ᵈ $ (z ::*_) (swap* x y xs*))) in
             p1 == p2 [ (λ p → (x ::* (y ::* (z ::* xs*))) == (z ::* (y ::* (x ::* xs*))) [ P ↓ p ]) ↓ ⬡ x y z xs ])
       (trunc* : {xs : M A} → has-level 1 (P xs))
       where

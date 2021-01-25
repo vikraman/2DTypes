@@ -310,7 +310,7 @@ nfU t = ⟦ ∣ t ∣ ⟧
 nf→canon : {m : ℕ} → UVec m → U
 nf→canon [] = O
 nf→canon (X nf) = I + nf→canon nf
-
+-}
 -----------------------------------------------------------------------------
 -- Converting Pi types to normal form
 
@@ -324,7 +324,7 @@ normC : (t : U) → t ⟷₁ canonU t
 normC O = id⟷₁
 normC I  = uniti₊l ◎ swap₊
 normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
-
+{-
 -----------------------------------------------------------------------------
 -- Example
 
