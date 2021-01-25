@@ -1,4 +1,7 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
+
+open import lib.Base
+open import lib.NType
 
 module Pi+.Syntax where
 
