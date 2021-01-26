@@ -1,12 +1,8 @@
-AGDA_SRCS = $(shell find Pi+ -type f -name '*.agda')
-AGDA_BINS = $(subst .agda,.agdai,$(AGDA_SRCS))
+SUBDIRS := Pi+ Pi+/paper
 
-all: $(AGDA_BINS)
+all: $(SUBDIRS)
 
-%.agdai: %.agda
-	agda $<
+$(SUBDIRS):
+	$(MAKE) -C $@
 
-clean:
-	rm -f $(AGDA_BINS)
-
-.PHONY: all clean
+.PHONY: all $(SUBDIRS)

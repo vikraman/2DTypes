@@ -1,0 +1,172 @@
+#+TITLE: Reversible Programming with Univalent Finite Types
+
+* Abstract (0.5pp)
+
+We establish a close connection between a reversible programming language based
+on isomorphisms of finite types and a formally presented univalent universe.
+
+The correspondence relates combinators witnessing type isomorphisms in the
+programming language to paths in the univalent universe; and combinator
+optimizations in the programming language to 2-paths in the univalent universe.
+
+The main result is a ....
+
+* Introduction (1pp)
+
+...
+
+We develop a nice programming language in which every expression is a valid
+permutation; all permutations can expressed; includes sound and complete
+meta-programsfor reasoning about permutations; can express compositions of
+permutations along sums and products; can transfer algorithms/proofs across
+several representations of permutations
+
+** Outline and Contributions
+
+* Reversible Programming Languages (3pp)
+
+** About Pi and Theseus (0.5pp)
+
+** Syntax of a fragment of Pi with sum types (2pp)
+*** Boolean circuits, optimisation
+*** Examples of Pi programs
+
+** Algebraic presentation of Pi (0.5pp)
+
+* Univalent Subuniverses (2.5pp)
+
+** The Type Theory (0.5pp)
+
+We work in univalent type theory with (-1)-truncations and set quotients.
+
+** Univalent Subuniverses (2pp)
+
+*** Define transport-equiv and univalent fibrations
+*** Introduce univalent subuniverses
+*** Subtypes are univalent subuniverses
+**** Characterise path space of the subtype universe
+*** Classifying types (BAut) as subtypes
+**** Characterise loop space of BAut
+Ω BAut(T) ≃ Aut(T)
+**** Homotopy level of BAut
+*** Families of subuniverses of types of fixed cardinality
+**** Characterise loop space of Un for every n
+Ω BAut(Fin(n)) ≃ Aut(Fin(n))
+*** One subuniverse of finite types
+**** Characterise loop space of UFin
+Ω UFin ≃ ?
+**** UFin is a groupoid
+
+* The groupoid of finite types (4.25pp)
+
+It is presentable/computable. Here's why.
+
+** Permutations (0.5pp)
+
+We can talk about permutations using paths in UFin.
+
+** Lehmer codes (0.75pp)
+*** Define Lehmer codes
+Mention factorial number system
+*** Prove the equivalence Lehmer n ≃ Aut (Fin n)
+
+** Symmetric group (1pp)
+*** Define Sₙ classically (group of permutations)
+Talk about group presentations and computational group theory.
+*** Coxeter presentation - generators, words and relations
+Define it - classically and using a set quotient.
+Question: why do we choose this particular presentation?
++ Ties with Lehmer and with Mac Lane proof
++ Simple rules
+
+*** Explain how Lehmer codes relate to insertion sort.
+
+** Sn ≃ Lehmer (1pp)
+*** Word problem in the instance of Sₙ
+*** Solved by reduction to normal form
+Images of Lehmer codes are normal forms
+*** Coxeter rules are not directed, so we modify them
+Describe new rules
+*** Diamond, strong normalization and Church-Rosser for new rules
+The reduction relation has to be prop-valued or we cannot get an effective
+quotient. So the homotopical structure guides us towards proving strong
+normalisation.
+*** Equivalence (<- and ->) with normal Coxeter
+Alternative approaches:
++ Knuth-Bendix algorithm
++ Lascoux method
+
+*** TODO
++ Why do we do the proof like that? (as a sequence of equivalences?)
++ Could we skip Lehmer codes?
++ Could we go directly to sequences of transpositions?
+
+Now we show the symmetric monoidal structure of the groupoid.
+
+** Symmetric monoidal structure of UFin (1pp)
+*** Unit and tensor product, One (generator)
+*** Isomorphisms (permutations)
+*** Coherences
+
+* Equivalence between Pi⁺ and UFin (3pp)
+
+Describe eval, quote, and the fact that they're weak equivalences.
+(Talk about NbE/NbC?)
+
+NOTE: We need to study the proof of Pi to Cox and describe it. And relate to
+Maclane's coherence proof.
+
+** Level 0 (0.5pp)
+Easy
+
+** Level 1 (1.5pp)
+*** Describe the normal fragment of Pi and pi2norm
+*** Describe norm2list and how it relates to coxeter relations
+*** Describe list2norm and how it relates to 2-combinators
+**** Use maclane hexagon to make braid
+
+** Level 2 (0.5pp)
+Describe eval₂ and the rest.
+
+** Univalence and path induction (in Pi) (0.25pp)
+** Equivalence of big step and small step operational semantics, and denotational semantics (0.25pp)
+* Discussion and related work (1pp)
+
+Algebraic theories. 2-algebraic theories.
+
+Higher order rewriting theory in constructive type theory.
+
+Free monoids, free commutative monoids, normalisation of monoids.
+
+Coherence problems in type theory, coherence via Well-Foundedness.
+
+Computational group theory (in HoTT?)
+
+Pi is a presentation of the free symmetric monoidal groupoid on one
+generator. We are describing the free symmetric monoidal groupoid on one
+generator, and we're proving a constructive/homotopical version of Maclane's
+coherence theorem. We have effectively proven the coherence theorem for this
+special case.
+
+This can be made more precise -- in HoTT, we can use HITs to construct
+groupoids. We can write a description of the free symmetric monoidal groupoid
+using the universal-algebraic construction (FSMG). We can also write another
+version using cons lists and coherent swap constructors (M). They're equivalent
+because they satisfy the same universal property. This is future work.
+
+The full Pi is FSMG 1, and the normalised fragment of Pi is M1.
+
+Applications of FSMG and history of the coherence theorems.
+
+Other proofs of coherence theorems, Joyal-Street.
+
+Pi has other extensions (fractional/negative/recursive types).
+What are the free X monoidal structures they're describing?
+
+Using our presentation of Sₙ, we can construct the Eilenberg-Maclane space
+(using a HIT) K(Sₙ,1). Then, it should be true that UFin ≃ ∐_{n:ℕ} K(Sₙ,1). This is
+future work.
+
+Other applications of symmetric groups.
+
+Actions of symmetric groups, permutation groupoids.
