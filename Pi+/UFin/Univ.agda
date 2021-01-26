@@ -48,10 +48,20 @@ open import homotopy.FinSet
 FinSet-is-univ : is-univ-fib (fib FinSet-prop)
 FinSet-is-univ = Subtype-is-univ FinSet-prop
 
+FinSet-n-prop : (n : ℕ) → SubtypeProp Type₀ (lsucc lzero)
+fst (FinSet-n-prop n) X = Σ ℕ λ n → Trunc -1 (Fin n == X)
+snd (FinSet-n-prop n) X =
+  all-paths-is-prop
+    λ { (n , ϕ) (m , ψ) →
+        pair= (Trunc-rec (λ p → Trunc-rec (λ q → Fin-inj n m (p ∙ ! q)) ψ) ϕ) prop-has-all-paths-↓ }
+
+FinSet-n-is-univ : (n : ℕ) → is-univ-fib (fib (FinSet-n-prop n))
+FinSet-n-is-univ n = Subtype-is-univ (FinSet-n-prop n)
+
 BAut-is-univ : (A : Type i) → is-univ-fib (fib (BAut-prop A))
 BAut-is-univ A = Subtype-is-univ (BAut-prop A)
 
-FinSet-exp-is-univ : {n : ℕ} → is-univ-fib (fib (BAut-prop (Fin n)))
-FinSet-exp-is-univ {n} = Subtype-is-univ (BAut-prop (Fin n))
+FinSet-exp-is-univ : (n : ℕ) → is-univ-fib (fib (BAut-prop (Fin n)))
+FinSet-exp-is-univ n = Subtype-is-univ (BAut-prop (Fin n))
 
 UFin-is-univ = FinSet-is-univ
