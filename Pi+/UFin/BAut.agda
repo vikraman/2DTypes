@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --rewriting #-}
 
-module Pi+.FSMG.BAut where
+module Pi+.UFin.BAut where
 
 open import lib.Base
 open import lib.NType

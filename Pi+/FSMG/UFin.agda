@@ -20,7 +20,7 @@ UFin : ∀ {i} → Type i → Type (lmax (lsucc lzero) i)
 UFin A = Σ FinSet λ X → X .fst → A
 
 open import Pi+.FSMG.SMG
-open import Pi+.FSMG.BAut
+open import Pi+.UFin.BAut
 
 open import Pi+.Extra
 
