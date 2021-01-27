@@ -2,13 +2,11 @@
 
 \bibliographystyle{plainurl}% the mandatory bibstyle
 
-\title{Dummy title} %TODO Please add
-
-\titlerunning{Dummy short title} %TODO optional, please use if title is longer than one line
+\title{Reversible Programming with Univalent Finite Types}
 
 \author{Anonymous}{Dummy University Computing Laboratory}{}{}{}
 
-\authorrunning{} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
+\authorrunning{Anonymous} %TODO mandatory. First: Use abbreviated first/middle names. Second (only in severe cases): Use first author plus 'et al.'
 
 \Copyright{} %TODO mandatory, please use full first names. LIPIcs license is "CC-BY";  http://creativecommons.org/licenses/by/3.0/
 
@@ -46,16 +44,33 @@
 \ArticleNo{23}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\usepackage{macros}
+
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent convallis
-  orci arcu, eu mollis dolor. Aliquam eleifend suscipit lacinia. Maecenas quam
-  mi, porta ut lacinia sed, convallis ac dui. Lorem ipsum dolor sit amet,
-  consectetur adipiscing elit. Suspendisse potenti.
+  We establish a close connection between a reversible programming language
+  based on isomorphisms of finite types and a formally presented univalent
+  universe.
+
+  The correspondence relates combinators witnessing type isomorphisms in the
+  programming language to paths in the univalent universe; and combinator
+  optimisations in the programming language to 2-paths in the univalent
+  universe.
+
+  The main result is a \ldots
 \end{abstract}
+
+\input{introduction}
+\input{reversible}
+\input{univalent}
+\input{finite}
+\input{equivalence}
+\input{discussion}
+
+\bibliography{main}
 
 \end{document}
 
