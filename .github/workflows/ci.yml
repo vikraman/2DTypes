@@ -2,8 +2,8 @@ on: [push, pull_request]
 name: ci
 
 jobs:
-  build:
-    name: build
+  agda:
+    name: agda
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -35,5 +35,20 @@ jobs:
       - name: Install Agda
         run: stack --resolver lts-16.27 --system-ghc install data-hash-0.2.0.1 equivalence-0.3.5 geniplate-mirror-0.7.7 STMonadTrans-0.4.4 Agda-2.6.1.2
 
-      - name: make
-        run: make
+      - name: Check Pi+
+        run: make Pi+
+  latex:
+    name: latex
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Pi+ paper
+        uses: xu-cheng/latex-action@v2
+        with:
+          working_directory: Pi+/paper
+          root_file: main.tex
+      - name: Upload Pi+ paper
+        uses: actions/upload-artifact@v2
+        with:
+          name: pdf
+          path: Pi+/paper/main.pdf

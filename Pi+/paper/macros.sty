@@ -1,0 +1,30 @@
+\ProvidesPackage{macros}
+
+\RequirePackage{xcolor}
+\RequirePackage{xparse}
+\RequirePackage{etoolbox}
+\RequirePackage{mathtools}
+\RequirePackage{amsmath}
+\RequirePackage{array}
+\RequirePackage{xspace}
+\RequirePackage{perfectcut}
+
+% misc
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\amr}[1]{\textcolor{blue}{AS: #1}}
+\newcommand{\jk}[1]{\textcolor{cyan}{JK: #1}}
+\newcommand{\vc}[1]{\textcolor{magenta}{VC: #1}}
+
+% text
+\let\ps\perfectparens%
+
+% types and terms
+\newcommand{\type}[1]{\mathsf{#1}}
+\newcommand{\term}[1]{\mathsf{#1}}
+
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\UFin}{\UU_{\type{Fin}}}
+
+% Pi
+\newcommand{\PiLang}{\mathsf{\Pi}}
+\newcommand{\PiPlusLang}{\mathsf{\Pi^{+}}}
