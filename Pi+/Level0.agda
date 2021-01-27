@@ -12,6 +12,10 @@ open import lib.types.List
 open import Pi+.Syntax
 open import Pi+.Misc
 
+open import Pi+.Coxeter.Parametrized.ReductionRel
+open import Pi+.Coxeter.Parametrized.Coxeter
+open import Pi+.Coxeter.Parametrized.Group
+
 -----------------------------------------------------------------------------
 -- Canonical representation of sum types as lists I + (I + (I + ... O))
 
@@ -28,72 +32,20 @@ canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
 
 -----------------------------------------------------------------------------
-
-ap₂ : ∀ {i j k} {A : Type i} {B : Type j} {C : Type k} (f : A → B → C)
-    {x y : A} {z w : B} → (x == y → z == w → f x z == f y w)
-ap₂ f idp idp = idp
-
-zero+l : (m n : ℕ) → (m +ℕ n == 0) → (m == 0) × (n == 0)
-zero+l O n p = idp , p
-
-empty2O : (t : U) → (tempty : ∣ t ∣ == 0) → t ⟷₁ O
-empty2O O _ = id⟷₁
-empty2O (t₁ + t₂) tempty with zero+l ∣ t₁ ∣ ∣ t₂ ∣ tempty
-... | (t1e , t2e) = (empty2O t₁ t1e ⊕ empty2O t₂ t2e) ◎ unite₊l
-
-comb0 : (t₁ t₂ : U) → (p : t₁ ⟷₁ t₂) → ∣ t₁ ∣ == ∣ t₂ ∣
-comb0 .(O + t₂) t₂ unite₊l = idp
-comb0 t₁ .(O + t₁) uniti₊l = idp
-comb0 (t₁ + t₂) .(_ + _) swap₊ =
-  transport (λ X → ∣ t₁ + t₂ ∣ == X) (+-comm ∣ t₁ ∣ ∣ t₂ ∣) idp
-comb0 (t₁ + t₂ + t₃) .((_ + _) + _) assocl₊ =
-  transport (λ X → X == ∣ (t₁ + t₂) + t₃ ∣) (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)) idp
-comb0 ((t₁ + t₂) + t₃) .(_ + _ + _) assocr₊ =
-  transport (λ X → ∣ (t₁ + t₂) + t₃ ∣ == X) (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)) idp
-comb0 t₁ .t₁ id⟷₁ = idp
-comb0 t₁ t₂ (p₁ ◎ p₂) = comb0 t₁ _ p₁ ∙ comb0 _ t₂ p₂
-comb0 (t₁ + t₂) (t₃ + t₄) (p₁ ⊕ p₂) = ap₂ (λ X Y → X +ℕ Y) (comb0 t₁ t₃ p₁) (comb0 t₂ t₄ p₂)
-
-zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
-zero⟷₂ id⟷₁ = id⟷₂
-zero⟷₂ (p₁ ◎ p₂) = {!!}
-
------------------------------------------------------------------------------
--- Current proposal for interface
--- Copied here for now
-
-⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-⟨_⟩ = Fin-S
-
-S⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-S⟨ k , kltn ⟩ = S k , <-ap-S kltn
-
-data _≈₁_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where
-
-  cancel : {n : Fin (S m)} → (n :: n :: nil) ≈₁ nil
-  swap : {n : Fin (S m)} {k : Fin (S m)} →
-         (S (k .fst) < (n .fst)) → (n :: k :: nil) ≈₁ (k :: n :: nil)
-  braid : {n : Fin m} →
-          (S⟨ n ⟩ :: ⟨ n ⟩ :: S⟨ n ⟩ :: nil) ≈₁ (⟨ n ⟩ :: S⟨ n ⟩ :: ⟨ n ⟩ :: nil)
-
-  idp : {m : List (Fin (S m))} → m ≈₁ m
-  comm : {m1 m2 : List (Fin (S m))} → (m1 ≈₁ m2) → m2 ≈₁ m1
-  trans : {m1 m2 m3 : List (Fin (S m))} → (m1 ≈₁ m2) → (m2 ≈₁ m3) → m1 ≈₁ m3
-
-  respects-++ : {l l' r r' : List (Fin (S m))} →
-                (l ≈₁ l') → (r ≈₁ r') → l ++ r ≈₁ l' ++ r'
-
-
------------------------------------------------------------------------------
 --- Recovering a pi combinator from the Coxeter representation
 
 transpos2pi : {m : ℕ} → Fin m → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
 transpos2pi {S m} (O , lp) = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
 transpos2pi {S m} (S fn , lp) = id⟷₁ ⊕ transpos2pi (fn , <-cancel-S lp)
 
-cox2pi : {m : ℕ} → List (Fin m) → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
-cox2pi nil = id⟷₁
-cox2pi (fn :: xs) = transpos2pi fn ◎ cox2pi xs
+list2norm : {m : ℕ} → List (Fin m) → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
+list2norm nil = id⟷₁
+list2norm (fn :: xs) = transpos2pi fn ◎ list2norm xs
+
+list2norm++ : {m : ℕ} → (l r : List (Fin (S m))) →
+              list2norm (l ++ r) ⟷₂ list2norm l ◎ list2norm r
+list2norm++ nil r = idl◎r
+list2norm++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
 
 -----------------------------------------------------------------------------
 --- Showing that the Coxeter coherence conditions are preserved by 2-combinators
@@ -140,10 +92,6 @@ transpos-cancel {S m} {S n , lp} =
   trans⟷₂
     hom◎⊕⟷₂
     (trans⟷₂ (resp⊕⟷₂ idl◎l transpos-cancel) id⟷₁⊕id⟷₁⟷₂)
-
-cox2pi++ : {m : ℕ} → (l r : List (Fin (S m))) → cox2pi (l ++ r) ⟷₂ cox2pi l ◎ cox2pi r
-cox2pi++ nil r = idl◎r
-cox2pi++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (cox2pi++ l r)) assoc◎l
 
 slide0-transpos : {m : ℕ}  {kp : 0 < S (S (S m))} →
                   (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
@@ -269,7 +217,7 @@ braid-transpos {S m} (S n , np) =
       ⟷₂⟨ id⟷₂ ⊡ hom⊕◎⟷₂ ⟩
     (transpos2pi ⟨ S n , np ⟩ ◎ transpos2pi S⟨ S n , np ⟩ ◎ transpos2pi ⟨ S n , np ⟩) ⟷₂∎
 
-cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → cox2pi r₁ ⟷₂ cox2pi r₂
+cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm r₁ ⟷₂ list2norm r₂
 cox≈2pi (cancel {n}) =
   transpos2pi n ◎ transpos2pi n ◎ id⟷₁
     ⟷₂⟨ assoc◎l ⟩
@@ -285,10 +233,10 @@ cox≈2pi (comm rw) = !⟷₂ (cox≈2pi rw)
 cox≈2pi (trans rw₁ rw₂) = trans⟷₂ (cox≈2pi rw₁) (cox≈2pi rw₂)
 cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
   trans⟷₂
-    (cox2pi++ l r)
+    (list2norm++ l r)
     (trans⟷₂
       ((cox≈2pi rw₁) ⊡ (cox≈2pi rw₂))
-      (!⟷₂ (cox2pi++ l' r')))
+      (!⟷₂ (list2norm++ l' r')))
 cox≈2pi (braid {n}) =
   trans⟷₂ assoc◎l
   (trans⟷₂ assoc◎l
@@ -297,8 +245,25 @@ cox≈2pi (braid {n}) =
   (trans⟷₂ (assoc◎l ⊡ id⟷₂)
   (trans⟷₂ assoc◎r assoc◎r)))))
 
+piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
+                (list2norm l₁) ⟷₂ (list2norm l₂)
+piRespectsCox O nil nil unit = id⟷₂
+piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
+
 -----------------------------------------------------------------------------
------------------------------------------------------------------------------
+-- TODO
+
+norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
+norm2list p = {!!}
+
+norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
+norm2norm p = {!!}
+
+list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
+list2list ns = {!!}
+
+zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
+zero⟷₂ p = {!!}
 
 {--
 -----------------------------------------------------------------------------
