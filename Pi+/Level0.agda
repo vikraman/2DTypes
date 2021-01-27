@@ -56,7 +56,7 @@ comb0 (t₁ + t₂) (t₃ + t₄) (p₁ ⊕ p₂) = ap₂ (λ X Y → X +ℕ Y) 
 
 zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 zero⟷₂ id⟷₁ = id⟷₂
-zero⟷₂ (p₁ ◎ p₂) = ?
+zero⟷₂ (p₁ ◎ p₂) = {!!}
 
 -----------------------------------------------------------------------------
 -- Current proposal for interface
