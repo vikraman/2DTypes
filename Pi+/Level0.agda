@@ -17,7 +17,7 @@ open import Pi+.Coxeter.Parametrized.Coxeter
 open import Pi+.Coxeter.Parametrized.Group
 
 -----------------------------------------------------------------------------
--- Canonical representation of sum types as lists I + (I + (I + ... O))
+-- Canonical representation of sum types as "lists" I + (I + (I + ... O))
 
 ∣_∣ : U → ℕ
 ∣ O ∣ = 0
@@ -32,7 +32,7 @@ canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
 
 -----------------------------------------------------------------------------
---- Recovering a pi combinator from the Coxeter representation
+-- Recovering a pi combinator from the Coxeter representation
 
 transpos2pi : {m : ℕ} → Fin m → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
 transpos2pi {S m} (O , lp) = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
@@ -48,7 +48,8 @@ list2norm++ nil r = idl◎r
 list2norm++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
 
 -----------------------------------------------------------------------------
---- Showing that the Coxeter coherence conditions are preserved by 2-combinators
+-- Showing that the Coxeter coherence conditions are preserved by
+-- 2-combinators
 
 transpos-cancel : {m : ℕ} {n : Fin (S m)} →
                   transpos2pi n ◎ transpos2pi n ⟷₂ id⟷₁
