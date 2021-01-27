@@ -28,6 +28,37 @@ canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
 
 -----------------------------------------------------------------------------
+
+ap₂ : ∀ {i j k} {A : Type i} {B : Type j} {C : Type k} (f : A → B → C)
+    {x y : A} {z w : B} → (x == y → z == w → f x z == f y w)
+ap₂ f idp idp = idp
+
+zero+l : (m n : ℕ) → (m +ℕ n == 0) → (m == 0) × (n == 0)
+zero+l O n p = idp , p
+
+empty2O : (t : U) → (tempty : ∣ t ∣ == 0) → t ⟷₁ O
+empty2O O _ = id⟷₁
+empty2O (t₁ + t₂) tempty with zero+l ∣ t₁ ∣ ∣ t₂ ∣ tempty
+... | (t1e , t2e) = (empty2O t₁ t1e ⊕ empty2O t₂ t2e) ◎ unite₊l
+
+comb0 : (t₁ t₂ : U) → (p : t₁ ⟷₁ t₂) → ∣ t₁ ∣ == ∣ t₂ ∣
+comb0 .(O + t₂) t₂ unite₊l = idp
+comb0 t₁ .(O + t₁) uniti₊l = idp
+comb0 (t₁ + t₂) .(_ + _) swap₊ =
+  transport (λ X → ∣ t₁ + t₂ ∣ == X) (+-comm ∣ t₁ ∣ ∣ t₂ ∣) idp
+comb0 (t₁ + t₂ + t₃) .((_ + _) + _) assocl₊ =
+  transport (λ X → X == ∣ (t₁ + t₂) + t₃ ∣) (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)) idp
+comb0 ((t₁ + t₂) + t₃) .(_ + _ + _) assocr₊ =
+  transport (λ X → ∣ (t₁ + t₂) + t₃ ∣ == X) (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)) idp
+comb0 t₁ .t₁ id⟷₁ = idp
+comb0 t₁ t₂ (p₁ ◎ p₂) = comb0 t₁ _ p₁ ∙ comb0 _ t₂ p₂
+comb0 (t₁ + t₂) (t₃ + t₄) (p₁ ⊕ p₂) = ap₂ (λ X Y → X +ℕ Y) (comb0 t₁ t₃ p₁) (comb0 t₂ t₄ p₂)
+
+zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
+zero⟷₂ id⟷₁ = id⟷₂
+zero⟷₂ (p₁ ◎ p₂) = ?
+
+-----------------------------------------------------------------------------
 -- Current proposal for interface
 -- Copied here for now
 
