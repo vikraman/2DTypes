@@ -21,17 +21,13 @@ open import lib.types.SetQuotient
 open import lib.types.Coproduct
 open import lib.types.Sigma
 
-postulate
+-- postulate
 --    norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
 --    list2norm : {n : ℕ} → (List (Fin n)) → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
-
 --    norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
 --    list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
-
 --    piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) → (list2norm l₁) ⟷₂ (list2norm l₂)
-
 --    zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
-
 
 -- instance
 --   ⟷₁-is-set : {n : ℕ} → is-set (⟪ S n ⟫ ⟷₁ ⟪ S n ⟫)

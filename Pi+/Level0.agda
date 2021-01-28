@@ -32,24 +32,64 @@ canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
 
 -----------------------------------------------------------------------------
--- Recovering a pi combinator from the Coxeter representation
+-- Recovering a pi combinator over zero types from the
+-- Coxeter representation
+
+plus0l : (m n : ℕ) → (m +ℕ n == 0) → (m == 0)
+plus0l O n pr = idp
+
+plus0r : (m n : ℕ) → (m +ℕ n == 0) → (n == 0)
+plus0r O n pr = pr
+
+eqsize : {t₁ t₂ : U} → (p : t₁ ⟷₁ t₂) → ∣ t₁ ∣ == ∣ t₂ ∣
+eqsize unite₊l = idp
+eqsize uniti₊l = idp
+eqsize (swap₊ {t₁} {t₂}) = +-comm ∣ t₁ ∣ ∣ t₂ ∣
+eqsize (assocl₊ {t₁} {t₂} {t₃}) = ! (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
+eqsize (assocr₊ {t₁} {t₂} {t₃}) = (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
+eqsize id⟷₁ = idp
+eqsize (p₁ ◎ p₂) = eqsize p₁ ∙ eqsize p₂
+eqsize (p₁ ⊕ p₂) = ap2 (λ X Y → X +ℕ Y) (eqsize p₁) (eqsize p₂)
+
+zeroDecompose : (t : U) → (tz : ∣ t ∣ == 0) →
+                (t == O ⊎ Σ U (λ t' → (t ⟷₁ O + t') × (∣ t' ∣ == 0)))
+zeroDecompose O idp = inj₁ idp
+zeroDecompose (t₁ + t₂) tz with zeroDecompose t₁ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ tz)
+... | inj₁ idp = inj₂ (t₂ , id⟷₁ , tz)
+... | inj₂ (t₃ , t₁⟷0+t₃ , t₃z) =
+  inj₂ ((t₃ + t₂) ,
+        ((t₁⟷0+t₃ ⊕ id⟷₁) ◎ assocr₊) ,
+        ap2 (λ X Y → X +ℕ Y) t₃z (plus0r ∣ t₁ ∣ ∣ t₂ ∣ tz))
+
+zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
+zero⟷₂ id⟷₁ = id⟷₂
+zero⟷₂ (_◎_ {O} {t} {O} p₁ p₂) with zeroDecompose t (eqsize p₂)
+... | inj₁ idp = trans⟷₂ idl◎r ((zero⟷₂ p₁) ⊡ (zero⟷₂ p₂))
+... | inj₂ (t₃ , p₃ , t₃z) = {!!}
+
+{--
+  O ---p1--- t ---p2--- 0
+             |
+             |
+             |
+           0 + t3
+
+  ∣ t₃ ∣ == 0
+--}
+
+-----------------------------------------------------------------------------
+-- Recovering a pi combinator over non-zero types from the
+-- Coxeter representation
+
+norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
+norm2list p = {!!}
+
+-- Mapping each transposition index to a combinator and
+-- some properties
 
 transpos2pi : {m : ℕ} → Fin m → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
 transpos2pi {S m} (O , lp) = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
 transpos2pi {S m} (S fn , lp) = id⟷₁ ⊕ transpos2pi (fn , <-cancel-S lp)
-
-list2norm : {m : ℕ} → List (Fin m) → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
-list2norm nil = id⟷₁
-list2norm (fn :: xs) = transpos2pi fn ◎ list2norm xs
-
-list2norm++ : {m : ℕ} → (l r : List (Fin (S m))) →
-              list2norm (l ++ r) ⟷₂ list2norm l ◎ list2norm r
-list2norm++ nil r = idl◎r
-list2norm++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
-
------------------------------------------------------------------------------
--- Showing that the Coxeter coherence conditions are preserved by
--- 2-combinators
 
 transpos-cancel : {m : ℕ} {n : Fin (S m)} →
                   transpos2pi n ◎ transpos2pi n ⟷₂ id⟷₁
@@ -218,6 +258,18 @@ braid-transpos {S m} (S n , np) =
       ⟷₂⟨ id⟷₂ ⊡ hom⊕◎⟷₂ ⟩
     (transpos2pi ⟨ S n , np ⟩ ◎ transpos2pi S⟨ S n , np ⟩ ◎ transpos2pi ⟨ S n , np ⟩) ⟷₂∎
 
+-- Mapping the entire list of transpositions to a combinator and
+-- some properties
+
+list2norm : {m : ℕ} → List (Fin m) → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
+list2norm nil = id⟷₁
+list2norm (fn :: xs) = transpos2pi fn ◎ list2norm xs
+
+list2norm++ : {m : ℕ} → (l r : List (Fin (S m))) →
+              list2norm (l ++ r) ⟷₂ list2norm l ◎ list2norm r
+list2norm++ nil r = idl◎r
+list2norm++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
+
 cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm r₁ ⟷₂ list2norm r₂
 cox≈2pi (cancel {n}) =
   transpos2pi n ◎ transpos2pi n ◎ id⟷₁
@@ -251,11 +303,7 @@ piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
 piRespectsCox O nil nil unit = id⟷₂
 piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
 
------------------------------------------------------------------------------
--- TODO
-
-norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
-norm2list p = {!!}
+-- Back and forth identities
 
 norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
 norm2norm p = {!!}
@@ -263,8 +311,8 @@ norm2norm p = {!!}
 list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
 list2list ns = {!!}
 
-zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
-zero⟷₂ p = {!!}
+-----------------------------------------------------------------------------
+
 
 {--
 -----------------------------------------------------------------------------
