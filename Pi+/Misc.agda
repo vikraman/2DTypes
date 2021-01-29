@@ -22,6 +22,12 @@ ap2 f idp idp = idp
 transport2-equiv : ∀ {i j k} {A : Type i} {B : Type j} (C : A → B → Type k) {x1 x2 : A} {y1 y2 : B} (p : x1 == x2) (q : y1 == y2) → (C x1 y1 ≃ C x2 y2)
 transport2-equiv C idp idp = ide _
 
+Aut : ∀ {ℓ} → Type ℓ → Type ℓ
+Aut T = T ≃ T
+
+Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
+Ω (X , x) = (x == x)
+
 infix  1 begin_
 
 begin_ : {A : Type₀} -> {x y : A} → x == y → x == y

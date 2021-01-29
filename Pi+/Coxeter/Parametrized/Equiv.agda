@@ -25,6 +25,7 @@ open import Pi+.Coxeter.Parametrized.CoxeterMCoxeterEquiv
 open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Extra
 open import Pi+.UFin
+open import Pi+.Misc
 
 immersion : {n : ℕ} -> Lehmer n -> List (Fin n)
 immersion {O} CanZ = nil
@@ -84,17 +85,6 @@ immersion⁻¹∘immersion {S n} cl =
     in  immersion-is-injection cln cl (comm cln-p)
 
 
-Aut : ∀ {ℓ} → Type ℓ → Type ℓ
-Aut T = T ≃ T
-
-Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
-Ω (X , x) = (x == x)
-
-module _ {n : ℕ} where
-
-    UFin≃Fin : Ω (UFin , FinFS n) ≃ Aut (Fin n)
-    UFin≃Fin = TODO
-
 module _ {n : ℕ} where
 
     Fin≃Lehmer :  Aut (Fin (S n)) ≃ Lehmer n
@@ -103,4 +93,4 @@ module _ {n : ℕ} where
 module _ {n : ℕ} where
 
     UFin≃Lehmer : Ω (UFin , FinFS (S n)) ≃ Lehmer n
-    UFin≃Lehmer = Fin≃Lehmer ∘e UFin≃Fin
+    UFin≃Lehmer = TODO -- Fin≃Lehmer ∘e UFin≃Fin
