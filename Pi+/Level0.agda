@@ -61,6 +61,19 @@ zeroDecompose (t₁ + t₂) tz with zeroDecompose t₁ (plus0l ∣ t₁ ∣ ∣ 
         ((t₁⟷0+t₃ ⊕ id⟷₁) ◎ assocr₊) ,
         ap2 (λ X Y → X +ℕ Y) t₃z (plus0r ∣ t₁ ∣ ∣ t₂ ∣ tz))
 
+tzO : (t : U) → (tz : ∣ t ∣ == 0) → (t ⟷₁ O)
+tzO O idp = id⟷₁
+tzO (t₁ + t₂) tz =
+  (tzO t₁ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ tz) ⊕ tzO t₂ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ tz)) ◎ unite₊l
+
+gzero⟷₂ : (t₁ t₂ : U) → (t₁z : ∣ t₁ ∣ == 0) → (t₂z : ∣ t₂ ∣ == 0) → (c : t₁ ⟷₁ t₂) →
+            (!⟷₁ (tzO t₁ t₁z) ◎ c ◎ (tzO t₂ t₂z)) ⟷₂ id⟷₁
+gzero⟷₂ O O t₁z t₂z c = {!!}
+gzero⟷₂ O (t₂ + t₃) t₁z t₂z c = {!!}
+gzero⟷₂ (t₁ + t₂) O t₁z t₂z c = {!!}
+gzero⟷₂ (t₁ + t₂) (t₃ + t₄) t₁z t₂z c = {!!}
+
+
 zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 zero⟷₂ id⟷₁ = id⟷₂
 zero⟷₂ (_◎_ {O} {t} {O} p₁ p₂) with zeroDecompose t (eqsize p₂)
