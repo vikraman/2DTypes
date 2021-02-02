@@ -116,8 +116,8 @@ lemma-f (e , p) = equiv f g f-g g-f
     g-f : _
     g-f a = {!   !}
 
-lemma : {A : Type₀} -> Σ ((Unit ⊔ A) ≃ (Unit ⊔ A)) (λ e -> –> e (inl tt) == (inl tt)) ≃ (A ≃ A)
-lemma = equiv lemma-f g f-g g-f
+lemma : {A : Type₀} -> is-equiv (lemma-f {A})
+lemma = is-eq lemma-f g f-g g-f
     where
     g : _
     g x = Coprod-≃-l x , Coprod-≃-l-left x tt
@@ -130,30 +130,13 @@ lemma = equiv lemma-f g f-g g-f
 lemma-r : {A : Type₀} -> Σ ((A ⊔ Unit) ≃ (A ⊔ Unit)) (λ e -> –> e (inr tt) == (inr tt)) ≃ (A ≃ A)
 lemma-r = TODO
 
-aut-⊔ : {A : Type₀} -> ((A ⊔ Unit) ≃ (A ⊔ Unit)) -> ((A ≃ A) ⊔ (A × (A ≃ A)))
+aut-⊔ : {A : Type₀} -> ((A ⊔ Unit) ≃ (A ⊔ Unit)) -> ((A ⊔ Unit) × (A ≃ A))
 aut-⊔ e with inspect (–> e (inr tt))
-... | inl x with== bx = inr (x , {!   !})
-... | inr tt with== bx = inl (–> lemma-r (e , bx))
+... | inl x with== bx = (inl x) , {!   !}
+... | inr tt with== bx = (inr tt) , –> lemma-r (e , bx)
 
 aut-⊔-≃ : {A : Type₀} -> is-equiv (aut-⊔ {A})
 aut-⊔-≃ = {!   !}
-
-module _ where
-    -- f : {n : ℕ} -> ((Fin n ⊔ Unit) ≃ (Fin n ⊔ Unit)) -> (Fin (S n) × (Fin n ≃ Fin n))
-    -- f {n} x = {!   !}
-    -- g : {n : ℕ} -> (Fin (S n) × (Fin n ≃ Fin n)) -> ((Fin n ⊔ Unit) ≃ (Fin n ⊔ Unit))
-    -- g x = {!   !}
-    -- f-g : {n : ℕ} -> (b : Fin (S n) × (Fin n ≃ Fin n)) → f (g b) == b
-    -- f-g = {!   !}
-    -- g-f : {n : ℕ} -> (a : Fin n ⊔ Unit ≃ Fin n ⊔ Unit) → g (f a) == a
-    -- g-f = {!   !}
-
-    keyLemma : {n : ℕ} -> ((Fin n ⊔ Unit) ≃ (Fin n ⊔ Unit)) ≃ (Fin (S n) × (Fin n ≃ Fin n))
-    keyLemma {n} = TODO
-
-
-helper : {n : ℕ} -> (Fin (S n) ≃ Fin (S n)) ≃ (Fin (S n) × (Fin n ≃ Fin n))
-helper {n} = keyLemma ∘e ≃-equiv Fin-equiv-Coprod
 
 Fin1≃Unit : Fin 1 ≃ Unit
 Fin1≃Unit = ⊔₁-Empty ⊤ ∘e Coprod-≃-r Fin-equiv-Empty ∘e Fin-equiv-Coprod
@@ -164,7 +147,9 @@ Fin1≃isContr = ≃-contr (equiv-preserves-level (Fin1≃Unit ⁻¹)) (equiv-pr
 Fin≃Lehmer : {n : ℕ} -> (Fin (S n) ≃ Fin (S n)) ≃ Lehmer n
 Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
 Fin≃Lehmer {S n} =
-        Fin (S (S n)) ≃ Fin (S (S n)) ≃⟨ helper ⟩
+        Fin (S (S n)) ≃ Fin (S (S n)) ≃⟨ ≃-equiv Fin-equiv-Coprod ⟩
+        _ ≃⟨ _ , aut-⊔-≃ ⟩
+        _ ≃⟨ ((_ , ×-isemap-l _ (snd (Fin-equiv-Coprod ⁻¹)))) ⟩
         Fin (S (S n)) × (Fin (S n) ≃ Fin (S n)) ≃⟨ _ , (×-isemap-r _ (snd (Fin≃Lehmer {n}))) ⟩
         Fin (S (S n)) × Lehmer n ≃⟨ LehmerInd ⟩
         Lehmer (S n) ≃∎
