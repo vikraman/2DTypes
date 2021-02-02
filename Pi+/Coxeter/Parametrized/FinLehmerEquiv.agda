@@ -136,7 +136,7 @@ aut-⊔ e with inspect (–> e (inr tt))
 ... | inr tt with== bx = (inr tt) , –> lemma-r (e , bx)
 
 aut-⊔-≃ : {A : Type₀} -> is-equiv (aut-⊔ {A})
-aut-⊔-≃ = {!   !}
+aut-⊔-≃ = is-eq aut-⊔ {!   !} {!   !} {!   !}
 
 Fin1≃Unit : Fin 1 ≃ Unit
 Fin1≃Unit = ⊔₁-Empty ⊤ ∘e Coprod-≃-r Fin-equiv-Empty ∘e Fin-equiv-Coprod
@@ -147,13 +147,9 @@ Fin1≃isContr = ≃-contr (equiv-preserves-level (Fin1≃Unit ⁻¹)) (equiv-pr
 Fin≃Lehmer : {n : ℕ} -> (Fin (S n) ≃ Fin (S n)) ≃ Lehmer n
 Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
 Fin≃Lehmer {S n} =
-        Fin (S (S n)) ≃ Fin (S (S n)) ≃⟨ ≃-equiv Fin-equiv-Coprod ⟩
-        _ ≃⟨ _ , aut-⊔-≃ ⟩
-        _ ≃⟨ ((_ , ×-isemap-l _ (snd (Fin-equiv-Coprod ⁻¹)))) ⟩
-        Fin (S (S n)) × (Fin (S n) ≃ Fin (S n)) ≃⟨ _ , (×-isemap-r _ (snd (Fin≃Lehmer {n}))) ⟩
-        Fin (S (S n)) × Lehmer n ≃⟨ LehmerInd ⟩
+        Fin (S (S n)) ≃ Fin (S (S n))                   ≃⟨ ≃-equiv Fin-equiv-Coprod ⟩
+        ((Fin (S n) ⊔ Unit) ≃ (Fin (S n) ⊔ Unit))       ≃⟨ _ , aut-⊔-≃ ⟩
+        ((Fin (S n) ⊔ Unit) × (Fin (S n) ≃ Fin (S n)))  ≃⟨ ((_ , ×-isemap-l _ (snd (Fin-equiv-Coprod ⁻¹)))) ⟩
+        Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))         ≃⟨ _ , (×-isemap-r _ (snd (Fin≃Lehmer {n}))) ⟩
+        Fin (S (S n)) × Lehmer n                        ≃⟨ LehmerInd ⟩
         Lehmer (S n) ≃∎
-
-        
-        -- Fin (S (S n)) × (Fin n ⊔ Unit  ≃ Fin n ⊔ Unit) ≃⟨ _ , (×-isemap-r _ (snd ({!   !} ∘e {!   !} ∘e {!   !}))) ⟩
-        -- Fin-equiv-Coprod : fin -> unit
