@@ -62,6 +62,9 @@ Coprod-≃-l e = equiv f g f-g g-f
 Coprod-≃-l-left : {A B C : Type₀} -> (p : A ≃ B) -> (c : C) -> (–> (Coprod-≃-l p) (inl c)) == (inl c)
 Coprod-≃-l-left p c = idp
 
+Coprod-≃-l-right : {A B C : Type₀} -> (p : A ≃ B) -> (a : A) -> (–> (Coprod-≃-l {A} {B} {C} p)) (inr a) == inr (–> p a)
+Coprod-≃-l-right p a = idp
+
 ≃-equiv : {A B : Type₀} -> (A ≃ B) -> ((A ≃ A) ≃ (B ≃ B))
 ≃-equiv p = TODO
 
@@ -92,6 +95,9 @@ Except≃ deq a = equiv f g f-g g-f
     ... | ()
 
 
+bottom-lemma : {false : ⊥} -> {A : Type₀} -> {a : A} -> (⊥-elim false == a)
+bottom-lemma {()}
+
 lemma-f : {A : Type₀} -> Σ ((Unit ⊔ A) ≃ (Unit ⊔ A)) (λ e -> –> e (inl tt) == (inl tt)) -> (A ≃ A)
 lemma-f (e , p) = equiv f g f-g g-f
     where
@@ -112,9 +118,20 @@ lemma-f (e , p) = equiv f g f-g g-f
         in  ⊥-elim (inl≠inr _ _ (! (t ∙ p)))
     ... | inr b with== bp = b
     f-g : _
-    f-g a = {!   !}
+    f-g a with inspect (<– e (inr a)) 
+    ... | inl tt with== bp with (inl≠inr _ _ (! ((! (<–-inv-r e _)) ∙ (ap (–> e) bp) ∙ p)))
+    f-g a | inl tt with== bp | ()
+    f-g a | inr b with== bp with inspect (–> e (inr b))
+    ... | inl tt with== ap' = bottom-lemma
+    ... | inr a' with== ap' = ! (–> (inr=inr-equiv a a') (! ((ap (–> e) (! bp)) ∙ <–-inv-r e (inr a)) ∙ ap'))
+
     g-f : _
-    g-f a = {!   !}
+    g-f a with inspect (–> e (inr a)) 
+    ... | inl tt with== bp with (inl≠inr _ _ (! ((! (<–-inv-l e _)) ∙ (ap (<– e) bp) ∙ lemma←)))
+    g-f a | inl tt with== bp | ()
+    g-f a | inr b with== bp with inspect (<– e (inr b))
+    ... | inl tt with== ap' = bottom-lemma
+    ... | inr a' with== ap' = ! (–> (inr=inr-equiv a a') (! (ap (<– e) (! bp) ∙ (<–-inv-l e (inr a))) ∙ ap'))
 
 lemma : {A : Type₀} -> is-equiv (lemma-f {A})
 lemma = is-eq lemma-f g f-g g-f
