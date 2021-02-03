@@ -18,26 +18,6 @@
 % text
 \let\ps\perfectparens%
 
-% types and terms
-\newcommand{\type}[1]{\mathsf{#1}}
-\newcommand{\term}[1]{\mathsf{#1}}
-\newcommand{\typef}[1]{\mathsf{#1}}
-
-% universes
-\newcommand{\UU}{\mathcal{U}}
-\newcommand{\UFin}{\UU_{\type{Fin}}}
-
-% equivalences
-\newcommand{\eqv}{\mathrel{\simeq}}
-
-% aut
-\NewDocumentCommand{\Aut}{O{}}{\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
-
-% unit type
-\newcommand{\unit}{\ensuremath{\mathbf{1}}\xspace}
-\newcommand{\ttt}{\ensuremath{\star}\xspace}
-\newcommand{\pt}{\mathsf{pt}}
-
 \newcommand{\Nat}[0]{\mathbb{N}}
 \NewDocumentCommand{\suc}{O{}}{\mathsf{suc}\ifstrempty{#1}{}{\ps{#1}}}
 \newcommand{\fac}[1]{{#1}\,!}
