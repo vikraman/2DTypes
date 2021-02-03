@@ -41,29 +41,27 @@ LehmerInd {n} = equiv f g f-g g-f
     g-f ((x , p) , l) = pair= (pair= idp (<-has-all-paths _ _)) (↓-cst-in idp)
 
 Coprod-≃-r : {A B C : Type₀} -> (A ≃ B) -> (A ⊔ C) ≃ (B ⊔ C)
-Coprod-≃-r = TODO
-
-Coprod-≃-l : {A B C : Type₀} -> (A ≃ B) -> (C ⊔ A) ≃ (C ⊔ B)
-Coprod-≃-l e = equiv f g f-g g-f
+Coprod-≃-r e = equiv f g f-g g-f
     where
     f : _
-    f (inl x) = inl x
-    f (inr x) = inr (–> e x)
+    f (inr x) = inr x
+    f (inl x) = inl (–> e x)
     g : _
-    g (inl x) = inl x
-    g (inr x) = inr (<– e x)
+    g (inr x) = inr x
+    g (inl x) = inl (<– e x)
     f-g : _
-    f-g (inl x) = idp
-    f-g (inr x) = ap inr (<–-inv-r e x)
+    f-g (inr x) = idp
+    f-g (inl x) = ap inl (<–-inv-r e x)
     g-f : _
-    g-f (inl x) = idp
-    g-f (inr x) = ap inr (<–-inv-l e x)
+    g-f (inr x) = idp
+    g-f (inl x) = ap inl (<–-inv-l e x)
 
-Coprod-≃-l-left : {A B C : Type₀} -> (p : A ≃ B) -> (c : C) -> (–> (Coprod-≃-l p) (inl c)) == (inl c)
-Coprod-≃-l-left p c = idp
 
-Coprod-≃-l-right : {A B C : Type₀} -> (p : A ≃ B) -> (a : A) -> (–> (Coprod-≃-l {A} {B} {C} p)) (inr a) == inr (–> p a)
-Coprod-≃-l-right p a = idp
+Coprod-≃-r-left : {A B C : Type₀} -> (p : A ≃ B) -> (c : C) -> (–> (Coprod-≃-r p) (inr c)) == (inr c)
+Coprod-≃-r-left p c = idp
+
+Coprod-≃-r-right : {A B C : Type₀} -> (p : A ≃ B) -> (a : A) -> (–> (Coprod-≃-r {A} {B} {C} p)) (inl a) == inl (–> p a)
+Coprod-≃-r-right p a = idp
 
 -- postulate
 --     inv-ua : {A B : Type₀} -> (e : A ≃ B) -> ua (e ⁻¹) == ! (ua e)
@@ -116,46 +114,46 @@ Except≃ deq a = equiv f g f-g g-f
 bottom-lemma : {false : ⊥} -> {A : Type₀} -> {a : A} -> (⊥-elim false == a)
 bottom-lemma {()}
 
-unit-except-f : {A : Type₀} -> Σ ((Unit ⊔ A) ≃ (Unit ⊔ A)) (λ e -> –> e (inl tt) == (inl tt)) -> (A ≃ A)
+unit-except-f : {A : Type₀} -> Σ ((A ⊔ Unit) ≃ (A ⊔ Unit)) (λ e -> –> e (inr tt) == (inr tt)) -> (A ≃ A)
 unit-except-f (e , p) = equiv f g f-g g-f
     where
 
-    lemma← : <– e (inl tt) == (inl tt)
+    lemma← : <– e (inr tt) == (inr tt)
     lemma← = ! (! (<–-inv-l e _) ∙ (ap (<– e) p))
     
     f : _
-    f a with inspect (–> e (inr a))
-    ... | inl x with== bp = 
+    f a with inspect (–> e (inl a))
+    ... | inr x with== bp = 
         let t = (! (<–-inv-l e _)) ∙ (ap (<– e) bp)
-        in  ⊥-elim (inl≠inr _ _ (! (t ∙ lemma←)))
-    ... | inr b with== bp = b
+        in  ⊥-elim (inr≠inl _ _ (! (t ∙ lemma←)))
+    ... | inl b with== bp = b
     g : _
-    g a with inspect (<– e (inr a))
-    ... | inl tt with== bp = 
+    g a with inspect (<– e (inl a))
+    ... | inr tt with== bp = 
         let t = (! (<–-inv-r e _)) ∙ (ap (–> e) bp)
-        in  ⊥-elim (inl≠inr _ _ (! (t ∙ p)))
-    ... | inr b with== bp = b
+        in  ⊥-elim (inr≠inl _ _ (! (t ∙ p)))
+    ... | inl b with== bp = b
     f-g : _
-    f-g a with inspect (<– e (inr a)) 
-    ... | inl tt with== bp with (inl≠inr _ _ (! ((! (<–-inv-r e _)) ∙ (ap (–> e) bp) ∙ p)))
-    f-g a | inl tt with== bp | ()
-    f-g a | inr b with== bp with inspect (–> e (inr b))
-    ... | inl tt with== ap' = bottom-lemma
-    ... | inr a' with== ap' = ! (–> (inr=inr-equiv a a') (! ((ap (–> e) (! bp)) ∙ <–-inv-r e (inr a)) ∙ ap'))
+    f-g a with inspect (<– e (inl a)) 
+    ... | inr tt with== bp with (inr≠inl _ _ (! ((! (<–-inv-r e _)) ∙ (ap (–> e) bp) ∙ p)))
+    f-g a | inr tt with== bp | ()
+    f-g a | inl b with== bp with inspect (–> e (inl b))
+    ... | inr tt with== ap' = bottom-lemma
+    ... | inl a' with== ap' = ! (–> (inl=inl-equiv a a') (! ((ap (–> e) (! bp)) ∙ <–-inv-r e (inl a)) ∙ ap'))
 
     g-f : _
-    g-f a with inspect (–> e (inr a)) 
-    ... | inl tt with== bp with (inl≠inr _ _ (! ((! (<–-inv-l e _)) ∙ (ap (<– e) bp) ∙ lemma←)))
-    g-f a | inl tt with== bp | ()
-    g-f a | inr b with== bp with inspect (<– e (inr b))
-    ... | inl tt with== ap' = bottom-lemma
-    ... | inr a' with== ap' = ! (–> (inr=inr-equiv a a') (! (ap (<– e) (! bp) ∙ (<–-inv-l e (inr a))) ∙ ap'))
+    g-f a with inspect (–> e (inl a)) 
+    ... | inr tt with== bp with (inr≠inl _ _ (! ((! (<–-inv-l e _)) ∙ (ap (<– e) bp) ∙ lemma←)))
+    g-f a | inr tt with== bp | ()
+    g-f a | inl b with== bp with inspect (<– e (inl b))
+    ... | inr tt with== ap' = bottom-lemma
+    ... | inl a' with== ap' = ! (–> (inl=inl-equiv a a') (! (ap (<– e) (! bp) ∙ (<–-inv-l e (inl a))) ∙ ap'))
 
 unit-except : {A : Type₀} -> is-equiv (unit-except-f {A})
 unit-except = is-eq unit-except-f g f-g g-f
     where
     g : _
-    g x = Coprod-≃-l x , Coprod-≃-l-left x tt
+    g x = Coprod-≃-r x , Coprod-≃-r-left x tt
     f-g : _
     f-g x = pair= idp (↓-cst-in {!  !})
     g-f : _
