@@ -87,6 +87,9 @@ Coprod-≃-r-right p a = idp
 Except : {A : Type₀} -> A -> Type₀
 Except {A} a = Σ A λ b -> ¬ (a == b)
 
+inj : {A : Type₀} -> {a : A} -> Except a -> A
+inj (b , p) = b
+
 Except≃ : {A : Type₀} -> (has-dec-eq A) -> (a : A) -> (Except a) ⊔ Unit ≃ A
 Except≃ deq a = equiv f g f-g g-f
     where 
@@ -159,32 +162,41 @@ unit-except = is-eq unit-except-f g f-g g-f
     g-f : _
     g-f x = pair= {!   !} {!   !}
 
--- symmetric version of the lemma above
-unit-except-r : {A : Type₀} -> Σ ((A ⊔ Unit) ≃ (A ⊔ Unit)) (λ e -> –> e (inr tt) == (inr tt)) ≃ (A ≃ A)
-unit-except-r = TODO
-
+lemma2 : {A : Type₀} -> (has-dec-eq A) -> (e : (A ⊔ Unit) ≃ (A ⊔ Unit)) ->
+        (a : A) -> (–> e (inr tt) == (inl a)) -> 
+        (c : Except a) -> (–> e (inl (inj c)) == (inr tt)) ->
+        ((Except {Except a} c) ⊔ Unit ⊔ Unit) ≃ ((Except {Except a} c) ⊔ Unit ⊔ Unit)
+lemma2 deq e a ax c cx = {!   !}
 
 lemma : {A : Type₀} -> (has-dec-eq A) -> (e : (A ⊔ Unit) ≃ (A ⊔ Unit)) 
         -> (a : A) -> (–> e (inr tt) == (inl a)) -> (Except a ⊔ Unit) ≃ (Except a ⊔ Unit)
-lemma {A} deq e a ap = equiv f g f-g g-f
-    where
-    f : _
-    f (inl x) = {!   !}
-    f (inr tt) = {!   !}
-    g : _
-    g x = {!   !}
-    f-g : _
-    f-g x = {!   !}
-    g-f : _
-    g-f x = {!   !}
+lemma {A} deq e a ax =
+    let a→tt : –> e (inl a) == (inr tt) 
+        a→tt = {!   !}
+    in  equiv f g f-g g-f
+        where    
+        f : _
+        f (inl (x , x≠a)) with (inspect (–> e (inl x)))
+        ... | inl b with== bp = inl (b , (λ pp → 
+            let ll = ap inl (! pp)
 
+            in  inr≠inl _ _ (({!   !} ∙ bp) ∙ ll)))
+        ... | inr tt with== bp = inl {!   !}
+        f (inr tt) = inr tt
+        g : _
+        g x = {!   !}
+        f-g : _
+        f-g x = {!   !}
+        g-f : _
+        g-f x = {!   !}
+    
 
 aut-⊔ : {A : Type₀} -> (has-dec-eq A) -> ((A ⊔ Unit) ≃ (A ⊔ Unit)) -> ((A ⊔ Unit) × (A ≃ A))
 aut-⊔ deq e with inspect (–> e (inr tt))
-... | inl a with== ap = 
+... | inl a with== ax = 
     let e-except = Except≃ deq a
-    in  (inl a) , –> (≃-equiv² e-except) (lemma deq e a ap)
-... | inr tt with== bx = (inr tt) , –> unit-except-r (e , bx)
+    in  (inl a) , –> (≃-equiv² e-except) (lemma deq e a ax)
+... | inr tt with== bx = (inr tt) , –> (unit-except-f , unit-except) (e , bx)
 
 
 aut-⊔-≃ : {A : Type₀} -> (deq : has-dec-eq A) -> is-equiv (aut-⊔ deq)
