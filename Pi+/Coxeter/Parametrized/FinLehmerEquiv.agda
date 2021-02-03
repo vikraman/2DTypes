@@ -222,7 +222,7 @@ Fin≃Lehmer : {n : ℕ} -> (Fin (S n) ≃ Fin (S n)) ≃ Lehmer n
 Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
 Fin≃Lehmer {S n} =
         Fin (S (S n)) ≃ Fin (S (S n))                   ≃⟨ ≃-equiv² Fin-equiv-Coprod ⟩
-        ((Fin (S n) ⊔ Unit) ≃ (Fin (S n) ⊔ Unit))       ≃⟨ _ , aut-⊔-≃ Fin-has-dec-eq ⟩
+        ((Fin (S n) ⊔ Unit) ≃ (Fin (S n) ⊔ Unit))       ≃⟨ ? ⟩
         ((Fin (S n) ⊔ Unit) × (Fin (S n) ≃ Fin (S n)))  ≃⟨ ((_ , ×-isemap-l _ (snd (Fin-equiv-Coprod ⁻¹)))) ⟩
         Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))         ≃⟨ _ , (×-isemap-r _ (snd (Fin≃Lehmer {n}))) ⟩
         Fin (S (S n)) × Lehmer n                        ≃⟨ LehmerInd ⟩
