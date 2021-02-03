@@ -65,8 +65,26 @@ Coprod-≃-l-left p c = idp
 Coprod-≃-l-right : {A B C : Type₀} -> (p : A ≃ B) -> (a : A) -> (–> (Coprod-≃-l {A} {B} {C} p)) (inr a) == inr (–> p a)
 Coprod-≃-l-right p a = idp
 
-≃-equiv : {A B : Type₀} -> (A ≃ B) -> ((A ≃ A) ≃ (B ≃ B))
-≃-equiv p = TODO
+-- postulate
+--     inv-ua : {A B : Type₀} -> (e : A ≃ B) -> ua (e ⁻¹) == ! (ua e)
+--     ∘-ua : {A B C : Type₀} -> (e : A ≃ B) -> (f : B ≃ C) -> ua (f ∘e e) == (ua e) ∙ (ua f)
+--     id-ua : {A : Type₀} -> ua (ide A) == idp
+
+-- left-inv-id : {A B : Type₀} -> (e : A ≃ B) -> (e ⁻¹) ∘e e == ide A
+-- left-inv-id e = {! ua !}
+
+≃-equiv² : {A B : Type₀} -> (A ≃ B) -> ((A ≃ A) ≃ (B ≃ B))
+≃-equiv² p = equiv f g f-g g-f
+    where
+    f : _
+    f x = p ∘e x ∘e p ⁻¹
+    g : _
+    g x = p ⁻¹ ∘e x ∘e p
+    f-g : _
+    f-g x = TODO
+    g-f : _
+    g-f x = TODO
+
 
 Except : {A : Type₀} -> A -> Type₀
 Except {A} a = Σ A λ b -> ¬ (a == b)
@@ -98,8 +116,8 @@ Except≃ deq a = equiv f g f-g g-f
 bottom-lemma : {false : ⊥} -> {A : Type₀} -> {a : A} -> (⊥-elim false == a)
 bottom-lemma {()}
 
-lemma-f : {A : Type₀} -> Σ ((Unit ⊔ A) ≃ (Unit ⊔ A)) (λ e -> –> e (inl tt) == (inl tt)) -> (A ≃ A)
-lemma-f (e , p) = equiv f g f-g g-f
+unit-except-f : {A : Type₀} -> Σ ((Unit ⊔ A) ≃ (Unit ⊔ A)) (λ e -> –> e (inl tt) == (inl tt)) -> (A ≃ A)
+unit-except-f (e , p) = equiv f g f-g g-f
     where
 
     lemma← : <– e (inl tt) == (inl tt)
@@ -133,8 +151,8 @@ lemma-f (e , p) = equiv f g f-g g-f
     ... | inl tt with== ap' = bottom-lemma
     ... | inr a' with== ap' = ! (–> (inr=inr-equiv a a') (! (ap (<– e) (! bp) ∙ (<–-inv-l e (inr a))) ∙ ap'))
 
-lemma : {A : Type₀} -> is-equiv (lemma-f {A})
-lemma = is-eq lemma-f g f-g g-f
+unit-except : {A : Type₀} -> is-equiv (unit-except-f {A})
+unit-except = is-eq unit-except-f g f-g g-f
     where
     g : _
     g x = Coprod-≃-l x , Coprod-≃-l-left x tt
@@ -144,16 +162,45 @@ lemma = is-eq lemma-f g f-g g-f
     g-f x = pair= {!   !} {!   !}
 
 -- symmetric version of the lemma above
-lemma-r : {A : Type₀} -> Σ ((A ⊔ Unit) ≃ (A ⊔ Unit)) (λ e -> –> e (inr tt) == (inr tt)) ≃ (A ≃ A)
-lemma-r = TODO
+unit-except-r : {A : Type₀} -> Σ ((A ⊔ Unit) ≃ (A ⊔ Unit)) (λ e -> –> e (inr tt) == (inr tt)) ≃ (A ≃ A)
+unit-except-r = TODO
 
-aut-⊔ : {A : Type₀} -> ((A ⊔ Unit) ≃ (A ⊔ Unit)) -> ((A ⊔ Unit) × (A ≃ A))
-aut-⊔ e with inspect (–> e (inr tt))
-... | inl x with== bx = (inl x) , {!   !}
-... | inr tt with== bx = (inr tt) , –> lemma-r (e , bx)
 
-aut-⊔-≃ : {A : Type₀} -> is-equiv (aut-⊔ {A})
-aut-⊔-≃ = is-eq aut-⊔ {!   !} {!   !} {!   !}
+lemma : {A : Type₀} -> (has-dec-eq A) -> (e : (A ⊔ Unit) ≃ (A ⊔ Unit)) 
+        -> (a : A) -> (–> e (inr tt) == (inl a)) -> (Except a ⊔ Unit) ≃ (Except a ⊔ Unit)
+lemma {A} deq e a ap = equiv f g f-g g-f
+    where
+    f : _
+    f (inl x) = {!   !}
+    f (inr tt) = {!   !}
+    g : _
+    g x = {!   !}
+    f-g : _
+    f-g x = {!   !}
+    g-f : _
+    g-f x = {!   !}
+
+
+aut-⊔ : {A : Type₀} -> (has-dec-eq A) -> ((A ⊔ Unit) ≃ (A ⊔ Unit)) -> ((A ⊔ Unit) × (A ≃ A))
+aut-⊔ deq e with inspect (–> e (inr tt))
+... | inl a with== ap = 
+    let e-except = Except≃ deq a
+    in  (inl a) , –> (≃-equiv² e-except) (lemma deq e a ap)
+... | inr tt with== bx = (inr tt) , –> unit-except-r (e , bx)
+
+
+aut-⊔-≃ : {A : Type₀} -> (deq : has-dec-eq A) -> is-equiv (aut-⊔ deq)
+aut-⊔-≃ deq = is-eq (aut-⊔ deq) g f-g g-f
+    where
+    g : _
+    g (inl x , e) = 
+        let e-except₁ = Except≃ deq x ⁻¹
+        in  {!   !} 
+    g (inr tt , e) = Coprod-≃-r e
+    f-g : _
+    f-g x = {!   !}
+    g-f : _
+    g-f x = {!   !}
 
 Fin1≃Unit : Fin 1 ≃ Unit
 Fin1≃Unit = ⊔₁-Empty ⊤ ∘e Coprod-≃-r Fin-equiv-Empty ∘e Fin-equiv-Coprod
@@ -164,8 +211,8 @@ Fin1≃isContr = ≃-contr (equiv-preserves-level (Fin1≃Unit ⁻¹)) (equiv-pr
 Fin≃Lehmer : {n : ℕ} -> (Fin (S n) ≃ Fin (S n)) ≃ Lehmer n
 Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
 Fin≃Lehmer {S n} =
-        Fin (S (S n)) ≃ Fin (S (S n))                   ≃⟨ ≃-equiv Fin-equiv-Coprod ⟩
-        ((Fin (S n) ⊔ Unit) ≃ (Fin (S n) ⊔ Unit))       ≃⟨ _ , aut-⊔-≃ ⟩
+        Fin (S (S n)) ≃ Fin (S (S n))                   ≃⟨ ≃-equiv² Fin-equiv-Coprod ⟩
+        ((Fin (S n) ⊔ Unit) ≃ (Fin (S n) ⊔ Unit))       ≃⟨ _ , aut-⊔-≃ Fin-has-dec-eq ⟩
         ((Fin (S n) ⊔ Unit) × (Fin (S n) ≃ Fin (S n)))  ≃⟨ ((_ , ×-isemap-l _ (snd (Fin-equiv-Coprod ⁻¹)))) ⟩
         Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))         ≃⟨ _ , (×-isemap-r _ (snd (Fin≃Lehmer {n}))) ⟩
         Fin (S (S n)) × Lehmer n                        ≃⟨ LehmerInd ⟩
