@@ -9,14 +9,18 @@ open import lib.Equivalence
 open import lib.Univalence
 open import lib.PathGroupoid
 open import lib.PathOver
-open import lib.types.Fin
+open import lib.types.Fin hiding (Fin-has-dec-eq)
 open import lib.types.List
 open import lib.types.Sigma
 open import lib.types.Coproduct
 open import lib.types.Unit
 open import lib.types.Nat
+open import lib.types.Subtype
+open import lib.Funext
+
 
 open import Pi+.Extra
+open import Pi+.FinHelpers
 
 infix 2 Σ-syntax
 
@@ -35,19 +39,6 @@ fzero = (0 , O<S _)
 -- Conversion back to ℕ is trivial...
 toℕ : Fin k → ℕ
 toℕ = fst
-
-⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-⟨_⟩ = Fin-S
-
-S⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-S⟨ k , kltn ⟩ = S k , <-ap-S kltn
-
-
-_≤^_ : {m : ℕ} -> Fin m -> Fin m -> Type₀
-k ≤^ n = (k .fst) < S (n .fst)
-
-<-down : {n k : ℕ} -> (S n < k) -> (n < k)
-<-down p = <-cancel-S (ltSR p)
 
 -- ... and injective.
 toℕ-injective : ∀{fj fk : Fin k} → toℕ fj == toℕ fk → fj == fk
@@ -121,19 +112,19 @@ projectionEquiv {n = n} {i = i} = equiv f g f-g g-f
       f (inl _) = i
       f (inr m) = fst m
       g : _
-      g m with (Fin-has-dec-eq i m)
+      g m with (Fin-has-dec-eq-p i m)
       ... | (inl _) = inl tt
       ... | (inr n) = inr (m , n)
       f-g : _
-      f-g m with Fin-has-dec-eq i m
+      f-g m with Fin-has-dec-eq-p i m
       ... | (inl p) = p
       ... | (inr _) = toℕ-injective idp
       g-f : _
-      g-f (inl tt) with Fin-has-dec-eq i i
+      g-f (inl tt) with Fin-has-dec-eq-p i i
       ... | (inl _) = idp
       ... | (inr ¬ii) with (¬ii idp)
       ... | ()
-      g-f (inr m) with Fin-has-dec-eq i (fst m)
+      g-f (inr m) with Fin-has-dec-eq-p i (fst m)
       ... | (inr _) = ap inr (toℕExc-injective idp)
       ... | (inl p) with (snd m p)
       ... | ()
@@ -145,15 +136,10 @@ punchOut-injective : (i : Fin (S n)) → ∀ j k → punchOut i j == punchOut i 
 punchOut-injective i j k = toFinExc-injective ∘ punchOut-inj (snd j) (snd k)
 
 fznotfs : ∀ {m : ℕ} {k : Fin m} → ¬ (fzero == fsuc k)
-fznotfs {m} p = {!   !}
-  where
-    F : Fin (S m) → Type₀
-    F (O , _) = Unit
-    F (S _ , _) = ⊥
+fznotfs {m} ()
 
 ¬Fin0 : ¬ (Fin 0)
 ¬Fin0 ()
-
 
 punchIn : (i : Fin (S n)) → Fin n → FinExcept i
 punchIn {_} i j with fsplit i
@@ -198,7 +184,7 @@ data LehmerCode : (n : ℕ) → Type₀ where
   _∷_ : ∀ {n} → Fin (S n) → LehmerCode n → LehmerCode (S n)
 
 isContrLehmerZero : is-contr (LehmerCode 0)
-isContrLehmerZero = {!   !}
+isContrLehmerZero = has-level-in ([] , (λ {[] → idp}))
 
 lehmerSucEquiv : Fin (S n) × LehmerCode n ≃ LehmerCode (S n)
 lehmerSucEquiv = equiv (λ (e , c) → e ∷ c)
@@ -209,17 +195,16 @@ lehmerSucEquiv = equiv (λ (e , c) → e ∷ c)
 equivFun : ∀ {A B : Type₀} → A ≃ B → A → B
 equivFun e = fst e
 
-
 congEquiv : {A B : Type₀} {x y : A} (e : A ≃ B) → (x == y) ≃ (equivFun e x == equivFun e y)
-congEquiv e = {!   !}
+congEquiv e = ap-equiv e _ _
 
 equivEq : {A B : Type₀} {e f : A ≃ B} → (h : e .fst == f .fst) → e == f
-equivEq {e = e} {f = f} h = {!   !} -- λ i → (h i) , isProp→PathP (λ i → isPropIsEquiv (h i)) (e .snd) (f .snd) i
+equivEq {e = e} {f = f} h = pair= h {!   !} -- λ i → (h i) , isProp→PathP (λ i → isPropIsEquiv (h i)) (e .snd) (f .snd) i
 
 -- We get function extensionality by going back and forth between Path and Id
 funExt : ∀ {A : Type₀} {B : A → Type₀} {f g : (x : A) → B x} →
          ((x : A) → f x == g x) → f == g
-funExt p = {!   !} -- pathToId (λ i x → idToPath (p x) i)
+funExt p = λ= p
 
 preCompEquiv : {A B C : Type₀} -> (e : A ≃ B) → (B → C) ≃ (A → C)
 preCompEquiv e = equiv f g f-g g-f
@@ -295,7 +280,7 @@ lehmerEquiv {S n} =
         ≃∎
 
     equivOutChar : ∀ {k} {f : FinExcept (fzero {k = n}) ≃ FinExcept k} (x : FinExcept fzero) → equivFun (equivOut {k = k} f) (fst x) == fst (equivFun f x)
-    equivOutChar {k = k} {f = f} x with Fin-has-dec-eq fzero (fst x)
+    equivOutChar {k = k} {f = f} x with Fin-has-dec-eq-p fzero (fst x)
     ... | (inr n) = 
       let ll = toℕExc-injective {_} {fzero} {x} {x} idp
           ff = (λ x′ → fst (equivFun f x′))
@@ -311,17 +296,16 @@ lehmerEquiv {S n} =
         g : _
         g (k , f) = equivOut f
         f-g : _
-        f-g (k , f) = {!   !} -- ΣPathP (idp , equivEq (funExt λ x → toℕExc-injective (cong toℕ (equivOutChar {f = f} x))))
+        f-g (k , f) = pair= idp (equivEq (funExt λ x → toℕExc-injective (ap toℕ (equivOutChar {f = f} x))))
         g-f : _
         g-f f = equivEq (funExt goal) where
           goal : ∀ x → equivFun (equivOut (equivIn f)) x == equivFun f x
           goal x with fsplit x
           ... | (inr (_ , xn)) = equivOutChar {f = equivIn f} (x , fznotfs ∘ (_∙ ! xn))
-          ... | (inl xz) = transport (λ x → equivFun (equivOut (equivIn f)) x == equivFun f x) xz {!   !}
+          ... | (inl xz) = transport (λ x → equivFun (equivOut (equivIn f)) x == equivFun f x) xz idp
           
 
     ii : ∀ k → (FinExcept fzero ≃ FinExcept k) ≃ (Fin n ≃ Fin n)
-    ii k = {!   !} 
-          --  (FinExcept fzero ≃ FinExcept k) ≃⟨ cong≃ (λ R → FinExcept fzero ≃ R) punchOutEquiv ⟩
-          --  (FinExcept fzero ≃ Fin n)       ≃⟨ cong≃ (λ L → L ≃ Fin n) punchOutEquiv  ⟩
-          --  (Fin n ≃ Fin n)                 ≃∎
+    ii k = (FinExcept fzero ≃ FinExcept k)   ≃⟨ cong≃ (λ R → FinExcept fzero ≃ R) punchOutEquiv ⟩
+           (FinExcept fzero ≃ Fin n)         ≃⟨ cong≃ (λ L → L ≃ Fin n) punchOutEquiv  ⟩
+           (Fin n ≃ Fin n)                   ≃∎
