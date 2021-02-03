@@ -15,7 +15,7 @@ open import lib.types.Sigma
 open import lib.types.Coproduct
 open import lib.types.Unit
 open import lib.types.Nat using (<-has-all-paths; ltS)
- 
+
 ------------------------------------------------------------------------------
 -- This is WAY simpler than using 'with' and 'inspect'!
 
@@ -67,40 +67,40 @@ injectivity : {A B : Type₀} (equiv : (⊤ ⊔ A) ≃ (⊤ ⊔ B)) →
   (a : A) → fst equiv (inl tt) == fst equiv (inr a) → (inl tt == inr a) 
 injectivity equiv x path = inj≃ equiv (inl tt) (inr x) path
 
-left-cancel-⊤ : {A B : Type₀} →  ((⊤ ⊔ A) ≃ (⊤ ⊔ B)) → A ≃ B
-left-cancel-⊤ {A} {B} (f₁ , qinv g₁ α₁ β₁) =
+left-cancel-⊤ : {A : Type₀} →  ((⊤ ⊔ A) ≃ (⊤ ⊔ A)) → (⊤ ⊔ (A × A)) × (A ≃ A)
+left-cancel-⊤ {A} (f₁ , qinv g₁ α₁ β₁) =
   let eqv = (f₁ , qinv g₁ α₁ β₁) in
   let v₁ = mkV f₁ (inl tt) in
   let v₂ = mkV g₁ (inl tt) in
-  mk₁ {A} {B} eqv v₁ v₂
+  mk₁ {A} eqv v₁ v₂
   where
-    mk₁ : {A B : Type₀} (e : (⊤ ⊔ A) ≃ (⊤ ⊔ B)) → 
+    mk₁ : {A : Type₀} (e : (⊤ ⊔ A) ≃ (⊤ ⊔ A)) → 
               let (f₁ , qinv g₁ α₁ β₁) = e in 
-              Ev f₁ (inl tt) → Ev g₁ (inl tt) → A ≃ B
-    mk₁ {A} {B} (f , qinv g α β) (ev (inl tt) eq₁) (ev (inl tt) eq₂) = A≃B
+              Ev f₁ (inl tt) → Ev g₁ (inl tt) → (⊤ ⊔ (A × A)) × (A ≃ A)
+    mk₁ {A} (f , qinv g α β) (ev (inl tt) eq₁) (ev (inl tt) eq₂) = inl tt , A≃B
       where
-        equiv : (⊤ ⊔ A) ≃ (⊤ ⊔ B)
+        equiv : (⊤ ⊔ A) ≃ (⊤ ⊔ A)
         equiv = (f , qinv g α β)
 
         elim-path : {X Y Z : Type₀} → (e : (⊤ ⊔ X) ≃ (⊤ ⊔ Y)) → (x : X) → 
            (fst e) (inl tt) == (fst e) (inr x) → Z
         elim-path e a path = ⊥-elim (bad-path tt a (injectivity e a path))
 
-        mkf : (a : A) → Ev f (inr a) → B
+        mkf : (a : A) → Ev f (inr a) → A
         mkf a (ev (inl tt) eq) = elim-path equiv a (eq₁ ∙ ! eq)
         mkf a (ev (inr y) fx≡v) = y
 
-        ff : A → B
+        ff : A → A
         ff a = mkf a (mkV f (inr a))
 
-        mkg : (b : B) → Ev g (inr b) → A
+        mkg : (b : A) → Ev g (inr b) → A
         mkg b (ev (inl tt) eq) = elim-path (sym≃ equiv) b (eq₂ ∙ ! eq)
         mkg b (ev (inr a) eq) = a
 
-        gg : B → A
+        gg : A → A
         gg b = mkg b (mkV g (inr b))
 
-        mkα : (b : B) →  (e : Ev g (inr b)) → ff (mkg b e) == b
+        mkα : (b : A) →  (e : Ev g (inr b)) → ff (mkg b e) == b
         mkα b (ev (inl tt) eq) = elim-path (sym≃ equiv) b (eq₂ ∙ ! eq)
         mkα b (ev (inr a) eq) = mkα' (mkV f (inr a))
           where
@@ -125,7 +125,7 @@ left-cancel-⊤ {A} {B} (f₁ , qinv g₁ α₁ β₁) =
         ββ : ∀ a -> (gg ∘ ff) a == a
         ββ a = let ev₁ = mkV f (inr a) in mkβ a ev₁ (mkV g (inr (mkf a ev₁)))
 
-        A≃B : A ≃ B
+        A≃B : A ≃ A
         A≃B = ff , qinv gg αα ββ
 
     mk₁ (f , qinv g α β) (ev (inl tt) eq₁) (ev (inr a) eq₂) = 
@@ -135,31 +135,30 @@ left-cancel-⊤ {A} {B} (f₁ , qinv g₁ α₁ β₁) =
           (injectivity e a ((eq₁ ∙ ! (α (inl tt))) ∙ ap f eq₂)))
     mk₁ (f , qinv g α β) (ev (inr b) eq₁) (ev (inl tt) eq₂) = 
      ⊥-elim  (bad-path tt b (((! (α (inl tt))) ∙ ap f eq₂) ∙ eq₁))
-    mk₁ {A} {B} (f , qinv g α β) (ev (inr x) ftt=x) (ev (inr y) gtt=y) =
-      A≃B
+    mk₁ {A} (f , qinv g α β) (ev (inr x) ftt=x) (ev (inr y) gtt=y) = (inr (x , y)) , A≃B
       where
-        equiv : (⊤ ⊔ A) ≃ (⊤ ⊔ B)
+        equiv : (⊤ ⊔ A) ≃ (⊤ ⊔ A)
         equiv = (f , qinv g α β)
 
         elim-path : {X Y Z : Type₀} → (e : (⊤ ⊔ X) ≃ (⊤ ⊔ Y)) → (x : X) → 
            (fst e) (inl tt) == (fst e) (inr x) → Z
         elim-path e a path = ⊥-elim (bad-path tt a (injectivity e a path))
 
-        mkf : (a : A) → Ev f (inr a) → B
+        mkf : (a : A) → Ev f (inr a) → A
         mkf a (ev (inl tt) _) = x
         mkf a (ev (inr y) _) = y
 
-        ff : A → B
+        ff : A → A
         ff a = mkf a (mkV f (inr a))
 
-        mkg : (b : B) → Ev g (inr b) → A
+        mkg : (b : A) → Ev g (inr b) → A
         mkg b (ev (inl tt) eq) = y
         mkg b (ev (inr a) eq) = a
 
-        gg : B → A
+        gg : A → A
         gg b = mkg b (mkV g (inr b))
 
-        mkα : (b : B) →  (e₁ : Ev g (inr b)) → (e₂ : Ev f (inr (mkg b e₁))) →
+        mkα : (b : A) →  (e₁ : Ev g (inr b)) → (e₂ : Ev f (inr (mkg b e₁))) →
               mkf (mkg b e₁) e₂ == b
         mkα b (ev (inl tt) gb=tt) (ev (inl tt) fgb=tt) =
           inj₂≡ (! ftt=x ∙ ! (ap f gb=tt) ∙ α (inr b))
@@ -196,9 +195,48 @@ left-cancel-⊤ {A} {B} (f₁ , qinv g₁ α₁ β₁) =
         ββ : ∀ a -> (gg ∘ ff) a == a
         ββ a = let ev₁ = mkV f (inr a) in mkβ a ev₁ (mkV g (inr (mkf a ev₁)))
 
-        A≃B : A ≃ B
+        A≃B : A ≃ A
         A≃B = ff , qinv gg αα ββ
 
 
-left-cancel-≃ : {A B : Type₀} →  ((⊤ ⊔ A) ≃ (⊤ ⊔ B)) ≃ (A ≃ B)
-left-cancel-≃ 
+left-add-⊤ : {A : Type₀} → (has-dec-eq A) -> (⊤ ⊔ (A × A)) × (A ≃ A) -> ((⊤ ⊔ A) ≃ (⊤ ⊔ A))
+left-add-⊤ deq (inl tt , ff , qinv gg α β) = f , (qinv g f-g g-f)
+  where
+  f : _
+  f (inl tt) = inl tt
+  f (inr x) = inr (ff x)
+  g : _
+  g (inl tt) = inl tt
+  g (inr x) = inr (gg x)
+  f-g : _
+  f-g (inl tt) = idp
+  f-g (inr x) = ap inr (α x)
+  g-f : _
+  g-f (inl tt) = idp
+  g-f (inr x) = ap inr (β x)
+
+left-add-⊤ deq (inr (a1 , a2) , ff , qinv gg α β) = f , (qinv g f-g g-f)
+  where
+  f : _
+  f (inl tt) = inr a1
+  f (inr x) with (deq x a2)
+  ... | inl idp = inl tt
+  ... | inr q = inr (ff x)
+  g : _
+  g (inl tt) = inr a2
+  g (inr x) with (deq x a1)
+  ... | inl idp = inl tt
+  ... | inr q = inr (gg x)
+  f-g : _
+  f-g (inl tt) with (deq a2 a2)
+  ... | inl idp = idp
+  ... | inr q with (q idp)
+  ... | ()
+  f-g (inr x) with (deq x a1)
+  ... | inl idp = idp
+  ... | inr q with (deq (gg x) a2)
+  ... | inl idp = {!   !}
+  ... | inr qq = ap inr (α x)
+  g-f : _
+  g-f (inl x) = {!   !}
+  g-f (inr x) = {!   !}
