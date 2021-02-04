@@ -54,7 +54,3 @@ canonical-lift {n} .(S (fst + n)) p cln | S fst , idp =
 
 -- ll2 : Listℕ
 -- ll2 = immersion {2} l2
-
-instance
-  Lehmer-level : {n : ℕ} → is-set (Lehmer n)
-  Lehmer-level = TODO

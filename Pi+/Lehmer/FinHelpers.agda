@@ -1,6 +1,6 @@
 {-# OPTIONS --rewriting --without-K #-}
 
-module Pi+.LehmerFin.FinHelpers where
+module Pi+.Lehmer.FinHelpers where
 
 open import HoTT hiding (⟨_⟩)
 
@@ -213,8 +213,8 @@ cong≃ F e = coe-equiv (ap F (ua e))
 Σ-cong-equiv-snd : {A : Type₀} {B B' : A -> Type₀} -> (∀ a → B a ≃ B' a) → Σ A B ≃ Σ A B'
 Σ-cong-equiv-snd x = (λ (a , b) → a , (–> (x a) b)) , (Σ-isemap-r (λ a → snd (x a)))
 
-Coprod-≃-r : {A B C : Type₀} -> (A ≃ B) -> (C ⊔ A) ≃ (C ⊔ B)
-Coprod-≃-r e = equiv f g f-g g-f
+Coprod-≃-l : {A B C : Type₀} -> (A ≃ B) -> (C ⊔ A) ≃ (C ⊔ B)
+Coprod-≃-l e = equiv f g f-g g-f
     where
     f : _
     f (inl x) = inl x
@@ -245,7 +245,7 @@ equivOut {n} {k = k} f =
   Fin (S n)
     ≃⟨ _⁻¹ projectionEquiv ⟩
   Unit ⊔ FinExcept fzero
-    ≃⟨ Coprod-≃-r f ⟩
+    ≃⟨ Coprod-≃-l f ⟩
   Unit ⊔ FinExcept k
     ≃⟨ projectionEquiv ⟩
   Fin (S n)
