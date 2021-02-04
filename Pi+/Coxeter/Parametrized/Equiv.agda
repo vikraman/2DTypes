@@ -9,6 +9,7 @@ open import lib.Equivalence
 open import lib.PathGroupoid
 open import lib.types.Fin
 open import lib.types.List
+open import lib.types.LoopSpace
 
 open import Pi+.Coxeter.Common.Lehmer renaming (immersion to immersionLehmer)
 open import Pi+.Coxeter.Common.ListFinLListEquiv
@@ -83,17 +84,23 @@ immersion⁻¹∘immersion {S n} cl =
     let cln , cln-p = ListFin-to-Lehmer (<– List≃LList (immersionLehmer cl , immersion->> cl))
     in  immersion-is-injection cln cl (comm cln-p)
 
-
-Aut : ∀ {ℓ} → Type ℓ → Type ℓ
-Aut T = T ≃ T
-
-Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
-Ω (X , x) = (x == x)
-
 module _ {n : ℕ} where
 
-    UFin≃Fin : Ω (UFin , FinFS n) ≃ Aut (Fin n)
-    UFin≃Fin = TODO
+    open import HoTT
+
+    UFin≃BAut : Ω ⊙[ UFin , FinFS n ] ≃ ΩBAut (Fin n)
+    UFin≃BAut = equiv f g f-g g-f
+      where f : Ω ⊙[ UFin , FinFS n ] → ΩBAut (Fin n)
+            f p = pair= (fst= p) prop-has-all-paths-↓
+            g : ΩBAut (Fin n) → Ω ⊙[ UFin , FinFS n ]
+            g p = pair= (fst= p) prop-has-all-paths-↓
+            f-g : (p : ΩBAut (Fin n)) → f (g p) == p
+            f-g p = TODO
+            g-f : (p : Ω ⊙[ UFin , FinFS n ]) → g (f p) == p
+            g-f p = TODO
+
+    UFin≃Fin : Ω ⊙[ UFin , FinFS n ] ≃ Aut (Fin n)
+    UFin≃Fin = Fin-loop-equiv n ∘e UFin≃BAut
 
 module _ {n : ℕ} where
 
@@ -102,5 +109,5 @@ module _ {n : ℕ} where
 
 module _ {n : ℕ} where
 
-    UFin≃Lehmer : Ω (UFin , FinFS (S n)) ≃ Lehmer n
+    UFin≃Lehmer : Ω ⊙[ UFin , FinFS (S n) ] ≃ Lehmer n
     UFin≃Lehmer = Fin≃Lehmer ∘e UFin≃Fin
