@@ -18,6 +18,20 @@ transport-equiv-fst idp idp = idp
 is-univ-fib : {A : Type i} (B : A → Type j) → Type (lmax i j)
 is-univ-fib B = ∀ {x y} → is-equiv (transport-equiv B {x} {y})
 
+proto-subuniv : (P : Type i → Type j) → Type _
+proto-subuniv P = Σ (Type _) P
+
+is-univ-subuniv : {P : Type i → Type j} → (Ũ : proto-subuniv P) → Type _
+is-univ-subuniv {P = P} Ũ = is-univ-fib (fst {A = Type _} {B = P})
+
+helper : {P : Type i → Type j} {Ũ : proto-subuniv P} -> is-univ-subuniv Ũ → (X Y : Type i) (pX : P X) (pY : P Y) → (X = Y) ≃ ((X , pX) ≃ (Y , pY))
+
+conjecture : ∀ {P : Type i → Type j} {Ũ : proto-subuniv P} -> is-univ-subuniv Ũ -> (X : Type i) → is-prop (P X)
+conjecture {P = P} {Ũ = (U , pU)} ϕ X = all-paths-is-prop (λ x y → {!   !})
+
+known : (X : Type i) (P : Type i → Type j) → is-prop (P X) → is-univ-subuniv (X , P)
+known = {!   !}
+
 module _ (P : SubtypeProp (Type i) j) where
 
   open SubtypeProp P
