@@ -1,26 +1,31 @@
 {-# OPTIONS --rewriting --without-K #-}
 
-module Pi+.Copy2 where
+module Pi+.LehmerFin.FinHelpers where
 
-open import lib.Base
-open import lib.NType
-open import lib.NType2
-open import lib.Equivalence
-open import lib.Univalence
-open import lib.PathGroupoid
-open import lib.PathOver
-open import lib.types.Fin hiding (Fin-has-dec-eq)
-open import lib.types.List
-open import lib.types.Sigma
-open import lib.types.Coproduct
-open import lib.types.Unit
-open import lib.types.Nat
-open import lib.types.Subtype
-open import lib.Funext
+open import HoTT hiding (⟨_⟩)
 
+⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
+⟨_⟩ = Fin-S
 
-open import Pi+.Extra
-open import Pi+.FinHelpers
+S⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
+S⟨ k , kltn ⟩ = S k , <-ap-S kltn
+
+_≤^_ : {m : ℕ} -> Fin m -> Fin m -> Type₀
+k ≤^ n = (k .fst) < S (n .fst)
+
+<-down : {n k : ℕ} -> (S n < k) -> (n < k)
+<-down p = <-cancel-S (ltSR p)
+
+Fin= : {n : ℕ} -> (x y : ℕ) -> (x == y) -> (px : x < n) -> (py : y < n) -> (((x , px) :> Fin n) == ((y , py) :> Fin n))
+Fin= {n} x y p xp yp = pair= p (from-transp (λ z → z < n) p (<-has-all-paths (transport (λ z → z < n) p xp) yp))
+
+Fin-has-dec-eq-p : {n : ℕ} → has-dec-eq (Fin n)
+Fin-has-dec-eq-p {n} (O , xp) (O , yp) = inl (pair= idp (<-has-all-paths xp yp))
+Fin-has-dec-eq-p {n} (O , xp) (S y , yp) = inr (λ {()})
+Fin-has-dec-eq-p {n} (S x , xp) (O , yp) = inr (λ {()})
+Fin-has-dec-eq-p {S n} (S x , xp) (S y , yp) with (Fin-has-dec-eq-p {n} (x , <-cancel-S xp) (y , <-cancel-S yp))
+... | inl q = inl (Fin= (S x) (S y) (ap S (ap fst q)) xp yp)
+... | inr q = inr λ qq → q (Fin= x y (ℕ-S-is-inj x y (ap fst qq)) (<-cancel-S xp) (<-cancel-S yp))
 
 infix 2 Σ-syntax
 
@@ -42,7 +47,7 @@ toℕ = fst
 
 -- ... and injective.
 toℕ-injective : ∀{fj fk : Fin k} → toℕ fj == toℕ fk → fj == fk
-toℕ-injective {fj = fj} {fk} p = pair= p TODO
+toℕ-injective {fj = fj} {fk} p = pair= p prop-has-all-paths-↓
 
 S⟨⟩-inj : {n : ℕ} -> {fj fk : Fin n} → S⟨ fj ⟩ == S⟨ fk ⟩ → fj == fk
 S⟨⟩-inj = toℕ-injective ∘ ℕ-S-is-inj _ _ ∘ ap toℕ
@@ -81,8 +86,9 @@ private
 FinExcept : (i : Fin n) → Type₀
 FinExcept i = Σ[ j ∈ Fin _ ] ¬ (i == j)
 
-isSetFinExcept : {i : Fin n} → is-set (FinExcept i)
-isSetFinExcept = {!   !}
+instance
+    isSetFinExcept : {i : Fin n} → is-set (FinExcept i)
+    isSetFinExcept = Σ-level Fin-is-set (λ x → raise-level (S ⟨-2⟩) (Π-level (λ p → Empty-is-prop)))
 
 fsuc : _
 fsuc = S⟨_⟩
@@ -97,7 +103,7 @@ toFinExc : {i : Fin n} → FinExcept i → Fin n
 toFinExc = fst
 
 toFinExc-injective : {i : Fin n} → {j k : FinExcept i} → toFinExc j == toFinExc k → j == k
-toFinExc-injective {i = i} {(j , jpp)} {(k , kpp)} t = pair= t (from-transp (λ z → (x : i == z) → ⊥) t {!  !})
+toFinExc-injective {i = i} {(j , jpp)} {(k , kpp)} t = pair= t prop-has-all-paths-↓
 
 toℕExc : {i : Fin n} → FinExcept i → ℕ
 toℕExc = toℕ ∘ toFinExc
@@ -169,28 +175,13 @@ punchOut∘In {n} i j | inr (i′ , _) | S n′ with fsplit j
                               j                                  =∎
 
 isEquivPunchOut : {i : Fin (S n)} → is-equiv (punchOut i)
-isEquivPunchOut {i = i} = {!   !} -- isEmbedding×isSurjection→isEquiv (isEmbPunchOut , isSurPunchOut) where
-  -- isEmbPunchOut : isEmbedding (punchOut i)
-  -- isEmbPunchOut = injEmbedding isSetFinExcept isSetFin λ {_} {_} → punchOut-injective i _ _
-  -- isSurPunchOut : isSurjection (punchOut i)
-  -- isSurPunchOut b = ∣ _ , punchOut∘In i b ∣
+isEquivPunchOut {i = i} = is-eq (punchOut i) (punchIn i) (punchOut∘In i) λ a →
+    let q = punchOut∘In i (punchOut i a)
+    in  punchOut-injective i _ _ q
 
 punchOutEquiv : {i : Fin (S n)} → FinExcept i ≃ Fin n
 punchOutEquiv = _ , isEquivPunchOut
 
-infixr 4 _∷_
-data LehmerCode : (n : ℕ) → Type₀ where
-  [] : LehmerCode O
-  _∷_ : ∀ {n} → Fin (S n) → LehmerCode n → LehmerCode (S n)
-
-isContrLehmerZero : is-contr (LehmerCode 0)
-isContrLehmerZero = has-level-in ([] , (λ {[] → idp}))
-
-lehmerSucEquiv : Fin (S n) × LehmerCode n ≃ LehmerCode (S n)
-lehmerSucEquiv = equiv (λ (e , c) → e ∷ c)
-                                 (λ { (e ∷ c) → (e , c) })
-                                 (λ { (e ∷ c) → idp })
-                                 (λ (e , c) → idp)
 
 equivFun : ∀ {A B : Type₀} → A ≃ B → A → B
 equivFun e = fst e
@@ -199,12 +190,7 @@ congEquiv : {A B : Type₀} {x y : A} (e : A ≃ B) → (x == y) ≃ (equivFun e
 congEquiv e = ap-equiv e _ _
 
 equivEq : {A B : Type₀} {e f : A ≃ B} → (h : e .fst == f .fst) → e == f
-equivEq {e = e} {f = f} h = pair= h {!   !} -- λ i → (h i) , isProp→PathP (λ i → isPropIsEquiv (h i)) (e .snd) (f .snd) i
-
--- We get function extensionality by going back and forth between Path and Id
-funExt : ∀ {A : Type₀} {B : A → Type₀} {f g : (x : A) → B x} →
-         ((x : A) → f x == g x) → f == g
-funExt p = λ= p
+equivEq {e = e} {f = f} h = pair= h prop-has-all-paths-↓
 
 preCompEquiv : {A B C : Type₀} -> (e : A ≃ B) → (B → C) ≃ (A → C)
 preCompEquiv e = equiv f g f-g g-f
@@ -214,9 +200,9 @@ preCompEquiv e = equiv f g f-g g-f
   g : _
   g x b = x (<– e b)
   f-g : _
-  f-g x = funExt (λ a → ap x (<–-inv-l e a))
+  f-g x = λ= (λ a → ap x (<–-inv-l e a))
   g-f : _
-  g-f x = funExt (λ a → ap x (<–-inv-r e a))
+  g-f x = λ= (λ a → ap x (<–-inv-r e a))
 
 cong≃ : {A B : Type₀} (F : Type₀ -> Type₀) → (A ≃ B) → F A ≃ F B
 cong≃ F e = coe-equiv (ap F (ua e))
@@ -226,7 +212,6 @@ cong≃ F e = coe-equiv (ap F (ua e))
 
 Σ-cong-equiv-snd : {A : Type₀} {B B' : A -> Type₀} -> (∀ a → B a ≃ B' a) → Σ A B ≃ Σ A B'
 Σ-cong-equiv-snd x = (λ (a , b) → a , (–> (x a) b)) , (Σ-isemap-r (λ a → snd (x a)))
-
 
 Coprod-≃-r : {A B C : Type₀} -> (A ≃ B) -> (C ⊔ A) ≃ (C ⊔ B)
 Coprod-≃-r e = equiv f g f-g g-f
@@ -244,68 +229,55 @@ Coprod-≃-r e = equiv f g f-g g-f
     g-f (inl x) = idp
     g-f (inr x) = ap inr (<–-inv-l e x)
 
+equivIn : {n : ℕ} -> (f : Fin (S n) ≃ Fin (S n))
+        → FinExcept fzero ≃ FinExcept (equivFun f fzero)
+equivIn {n} f =
+  FinExcept fzero
+    ≃⟨ Σ-cong-equiv-snd (λ _ → preCompEquiv (_⁻¹ (congEquiv f))) ⟩
+  (Σ[ x ∈ Fin (S n) ] ¬ (ffun fzero == ffun x))
+    ≃⟨ Σ-cong-equiv-fst f ⟩
+  FinExcept (ffun fzero)
+    ≃∎ 
+    where ffun = equivFun f
 
-lehmerEquiv : {n : ℕ} -> (Fin n ≃ Fin n) ≃ LehmerCode n
-lehmerEquiv {O} = {!   !}
-lehmerEquiv {S n} =
-  (Fin (S n) ≃ Fin (S n))                              ≃⟨ i ⟩
-  (Σ[ k ∈ Fin (S n) ] (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩ -- Σ-isemap-r (_ , ii) ⟩
-  (Fin (S n) × (Fin n ≃ Fin n))                        ≃⟨ Σ-cong-equiv-snd (λ _ → lehmerEquiv) ⟩ -- Σ-isemap-r (_ , (λ _ → lehmerEquiv)) ⟩
-  (Fin (S n) × LehmerCode n)                           ≃⟨ lehmerSucEquiv ⟩
-  LehmerCode (S n) ≃∎ 
+equivOut : ∀ {n : ℕ} {k : Fin (S n)} → FinExcept (fzero {k = n}) ≃ FinExcept k → Fin (S n) ≃ Fin (S n)
+equivOut {n} {k = k} f =
+  Fin (S n)
+    ≃⟨ _⁻¹ projectionEquiv ⟩
+  Unit ⊔ FinExcept fzero
+    ≃⟨ Coprod-≃-r f ⟩
+  Unit ⊔ FinExcept k
+    ≃⟨ projectionEquiv ⟩
+  Fin (S n)
+    ≃∎
+
+equivOutChar : ∀ {n : ℕ} {k : Fin (S n)} {f : FinExcept (fzero {k = n}) ≃ FinExcept k} (x : FinExcept fzero) → equivFun (equivOut {k = k} f) (fst x) == fst (equivFun f x)
+equivOutChar {n} {k = k} {f = f} x with Fin-has-dec-eq-p fzero (fst x)
+... | (inr p) = 
+  let ll = toℕExc-injective idp
+      ff = (λ x′ → fst (equivFun f x′))
+  in  ap ff ll
+... | (inl y) with (x .snd y)
+... | ()
+
+i : {n : ℕ} -> (Fin (S n) ≃ Fin (S n)) ≃ (Σ[ k ∈ Fin (S n) ] (FinExcept (fzero {k = n}) ≃ FinExcept k))
+i {n} = equiv ff g f-g g-f 
   where
-    equivIn : (f : Fin (S n) ≃ Fin (S n))
-            → FinExcept fzero ≃ FinExcept (equivFun f fzero)
-    equivIn f =
-      FinExcept fzero
-        ≃⟨ Σ-cong-equiv-snd (λ _ → preCompEquiv (_⁻¹ (congEquiv f))) ⟩
-      (Σ[ x ∈ Fin (S n) ] ¬ (ffun fzero == ffun x))
-        ≃⟨ Σ-cong-equiv-fst f ⟩
-      FinExcept (ffun fzero)
-        ≃∎ 
-        where ffun = equivFun f
+    ff : _
+    ff f  = equivFun f fzero , equivIn f
+    g : _
+    g (k , f) = equivOut f
+    f-g : _
+    f-g (k , f) = pair= idp (equivEq (λ= λ x → toℕExc-injective (ap toℕ (equivOutChar {f = f} x))))
+    g-f : _
+    g-f f = equivEq (λ= goal) where
+      goal : ∀ x → equivFun (equivOut (equivIn f)) x == equivFun f x
+      goal x with fsplit x
+      ... | (inr (_ , xn)) = equivOutChar {f = equivIn f} (x , fznotfs ∘ (_∙ ! xn))
+      ... | (inl xz) = transport (λ x → equivFun (equivOut (equivIn f)) x == equivFun f x) xz idp
+      
 
---    equivInChar : ∀ {f} x → fst (equivFun (equivIn f) x) ≡ equivFun f (fst x)
---    equivInChar x = idp
-
-    equivOut : ∀ {k} → FinExcept (fzero {k = n}) ≃ FinExcept k → Fin (S n) ≃ Fin (S n)
-    equivOut {k = k} f =
-      Fin (S n)
-        ≃⟨ _⁻¹ projectionEquiv ⟩
-      Unit ⊔ FinExcept fzero
-        ≃⟨ Coprod-≃-r f ⟩
-      Unit ⊔ FinExcept k
-        ≃⟨ projectionEquiv ⟩
-      Fin (S n)
-        ≃∎
-
-    equivOutChar : ∀ {k} {f : FinExcept (fzero {k = n}) ≃ FinExcept k} (x : FinExcept fzero) → equivFun (equivOut {k = k} f) (fst x) == fst (equivFun f x)
-    equivOutChar {k = k} {f = f} x with Fin-has-dec-eq-p fzero (fst x)
-    ... | (inr n) = 
-      let ll = toℕExc-injective {_} {fzero} {x} {x} idp
-          ff = (λ x′ → fst (equivFun f x′))
-      in  {!   !} ∙ ap ff ll
-    ... | (inl y) with (x .snd y)
-    ... | ()
-
-    i : (Fin (S n) ≃ Fin (S n)) ≃ (Σ[ k ∈ Fin (S n) ] (FinExcept (fzero {k = n}) ≃ FinExcept k))
-    i = equiv ff g f-g g-f 
-      where
-        ff : _
-        ff f  = equivFun f fzero , equivIn f
-        g : _
-        g (k , f) = equivOut f
-        f-g : _
-        f-g (k , f) = pair= idp (equivEq (funExt λ x → toℕExc-injective (ap toℕ (equivOutChar {f = f} x))))
-        g-f : _
-        g-f f = equivEq (funExt goal) where
-          goal : ∀ x → equivFun (equivOut (equivIn f)) x == equivFun f x
-          goal x with fsplit x
-          ... | (inr (_ , xn)) = equivOutChar {f = equivIn f} (x , fznotfs ∘ (_∙ ! xn))
-          ... | (inl xz) = transport (λ x → equivFun (equivOut (equivIn f)) x == equivFun f x) xz idp
-          
-
-    ii : ∀ k → (FinExcept fzero ≃ FinExcept k) ≃ (Fin n ≃ Fin n)
-    ii k = (FinExcept fzero ≃ FinExcept k)   ≃⟨ cong≃ (λ R → FinExcept fzero ≃ R) punchOutEquiv ⟩
-           (FinExcept fzero ≃ Fin n)         ≃⟨ cong≃ (λ L → L ≃ Fin n) punchOutEquiv  ⟩
-           (Fin n ≃ Fin n)                   ≃∎
+ii : ∀ {n : ℕ} (k : Fin (S n)) → (FinExcept fzero ≃ FinExcept k) ≃ (Fin n ≃ Fin n)
+ii {n} k = (FinExcept fzero ≃ FinExcept k)   ≃⟨ cong≃ (λ R → (FinExcept (fzero {k = n})) ≃ R) punchOutEquiv ⟩
+        (FinExcept fzero ≃ Fin n)         ≃⟨ cong≃ (λ L → L ≃ Fin n) punchOutEquiv  ⟩
+        (Fin n ≃ Fin n)                   ≃∎
