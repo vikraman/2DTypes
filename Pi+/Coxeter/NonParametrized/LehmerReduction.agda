@@ -13,7 +13,7 @@ open import Pi+.Misc
 open import Pi+.Common.Arithmetic
 open import Pi+.Common.ListN
 open import Pi+.Common.LList
-open import Pi+.Lehmer.Lehmer
+open import Pi+.Coxeter.LehmerImmersion
 open import Pi+.Coxeter.NonParametrized.ReductionRel
 open import Pi+.Coxeter.NonParametrized.ReductionRel+
 open import Pi+.Coxeter.NonParametrized.ExchangeLemmas

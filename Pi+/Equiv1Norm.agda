@@ -10,7 +10,9 @@ open import Pi+.Equiv0
 
 open import Pi+.Lehmer.Lehmer using (Lehmer)
 open import Pi+.Lehmer.LehmerFinEquiv
-open import Pi+.Coxeter.CoxeterListFinEquiv
+open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Coxeter.Sn
+open import Pi+.UFinLehmerEquiv
 
 open import lib.Basics
 open import lib.types.Fin
@@ -20,18 +22,6 @@ open import lib.NType2
 open import lib.types.SetQuotient
 open import lib.types.Coproduct
 open import lib.types.Sigma
-
--- postulate
---    norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
---    list2norm : {n : ℕ} → (List (Fin n)) → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
---    norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
---    list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
---    piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) → (list2norm l₁) ⟷₂ (list2norm l₂)
---    zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
-
--- instance
---   ⟷₁-is-set : {n : ℕ} → is-set (⟪ S n ⟫ ⟷₁ ⟪ S n ⟫)
---   ⟷₁-is-set = dec-eq-is-set TODO
 
 lehmer2normpi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 lehmer2normpi {n} cl = list2norm (immersion cl)

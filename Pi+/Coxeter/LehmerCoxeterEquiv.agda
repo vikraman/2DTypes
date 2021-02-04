@@ -11,7 +11,7 @@ open import lib.types.Fin
 open import lib.types.List
 open import lib.types.LoopSpace
 
-open import Pi+.Lehmer.Lehmer renaming (immersion to immersionLehmer)
+open import Pi+.Coxeter.LehmerImmersion renaming (immersion to immersionLehmer)
 open import Pi+.Lehmer.LehmerLevel
 open import Pi+.Common.ListFinLListEquiv
 open import Pi+.Common.LList
