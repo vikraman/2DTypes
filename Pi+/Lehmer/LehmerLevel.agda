@@ -4,7 +4,7 @@ module Pi+.Lehmer.LehmerLevel where
 
 open import HoTT
 
-open import Pi+.Coxeter.Common.Lehmer
+open import Pi+.Lehmer.Lehmer
 open import Pi+.Lehmer.LehmerFinEquiv
 
 instance

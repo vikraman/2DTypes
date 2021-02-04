@@ -8,9 +8,9 @@ open import Pi+.Level0
 open import Pi+.Extra
 open import Pi+.Equiv0
 
-open import Pi+.Coxeter.Common.Lehmer using (Lehmer)
-open import Pi+.Coxeter.Parametrized.Equiv
-open import Pi+.Coxeter.Parametrized.Group
+open import Pi+.Lehmer.Lehmer using (Lehmer)
+open import Pi+.Lehmer.LehmerFinEquiv
+open import Pi+.Coxeter.CoxeterListFinEquiv
 
 open import lib.Basics
 open import lib.types.Fin

@@ -52,3 +52,9 @@ data Singleton {i} {A : Type i} (x : A) : Type i where
 
 inspect : ∀ {a} {A : Set a} (x : A) → Singleton x
 inspect x = x with== idp
+
+Aut : ∀ {ℓ} → Type ℓ → Type ℓ
+Aut T = T ≃ T
+
+Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
+Ω (X , x) = (x == x)

@@ -6,9 +6,9 @@ open import HoTT hiding (_≤_; _<_; ≤-has-all-paths)
 
 open import Pi+.Extra
 open import Pi+.Lehmer.FinHelpers
-open import Pi+.Coxeter.Common.Lehmer
-open import Pi+.Coxeter.Common.InequalityEquiv
-open import Pi+.Coxeter.Common.Arithmetic
+open import Pi+.Lehmer.Lehmer
+open import Pi+.Common.InequalityEquiv
+open import Pi+.Common.Arithmetic
 
 open import Pi+.UFin.Monoidal
 open import Pi+.Extra
@@ -52,7 +52,7 @@ Fin1≃Unit = ⊔₁-Empty ⊤ ∘e Coprod-≃-r Fin-equiv-Empty ∘e Fin-equiv-
 Fin1≃isContr : is-contr (Fin 1 ≃ Fin 1)
 Fin1≃isContr = ≃-contr (equiv-preserves-level (Fin1≃Unit ⁻¹)) (equiv-preserves-level (Fin1≃Unit ⁻¹))
 
-Fin≃Lehmer : {n : ℕ} -> (Fin (S n) ≃ Fin (S n)) ≃ Lehmer n
+Fin≃Lehmer : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
 Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
 Fin≃Lehmer {S n} =
         Fin (S (S n)) ≃ Fin (S (S n))                            ≃⟨ i ⟩

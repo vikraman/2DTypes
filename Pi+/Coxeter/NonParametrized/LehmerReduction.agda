@@ -10,10 +10,10 @@ open import lib.PathGroupoid
 open import lib.NType
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Common.Arithmetic
-open import Pi+.Coxeter.Common.ListN
-open import Pi+.Coxeter.Common.LList
-open import Pi+.Coxeter.Common.Lehmer
+open import Pi+.Common.Arithmetic
+open import Pi+.Common.ListN
+open import Pi+.Common.LList
+open import Pi+.Lehmer.Lehmer
 open import Pi+.Coxeter.NonParametrized.ReductionRel
 open import Pi+.Coxeter.NonParametrized.ReductionRel+
 open import Pi+.Coxeter.NonParametrized.ExchangeLemmas

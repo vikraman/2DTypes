@@ -1,5 +1,5 @@
 
-module Pi+.Coxeter.Parametrized.Test where
+module Pi+.Coxeter.Test where
 
 -- open import lib.Base
 -- open import lib.NType
@@ -10,11 +10,11 @@ module Pi+.Coxeter.Parametrized.Test where
 -- open import lib.types.List
 -- open import lib.types.Nat
 -- 
--- open import Pi+.Coxeter.Common.Lehmer
--- open import Pi+.Coxeter.Common.ListFinLListEquiv
--- open import Pi+.Coxeter.Common.LList
--- open import Pi+.Coxeter.Common.ListN
--- open import Pi+.Coxeter.Common.Arithmetic
+-- open import Pi+.Lehmer.Lehmer
+-- open import Pi+.Common.ListFinLListEquiv
+-- open import Pi+.Common.LList
+-- open import Pi+.Common.ListN
+-- open import Pi+.Common.Arithmetic
 -- open import Pi+.Coxeter.NonParametrized.ReductionRel
 -- open import Pi+.Coxeter.NonParametrized.MCoxeter
 -- open import Pi+.Coxeter.NonParametrized.LehmerCanonical using (only-one-canonical↔)
