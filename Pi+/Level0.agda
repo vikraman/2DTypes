@@ -134,13 +134,30 @@ gzero⟷₂ t₁ t₂ t₁z t₂z (c ◎ c₁) =
       X1 ◎ (X2 ◎ X5 ◎ X6) ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ !⟷₂ idl◎l) ⟩
       X1 ◎ (X2 ◎ id⟷₁ ◎ X5 ◎ X6) ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ (!⟷₂ tz0=l ⊡ id⟷₂)) ⟩
       X1 ◎ (X2 ◎ (X3 ◎ X4) ◎ X5 ◎ X6) ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ assoc◎r) ⟩
-      X1 ◎ (X2 ◎ (X3 ◎ (X4 ◎ X5 ◎ X6))) ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩ -- id⟷₂ ⊡ assoc◎r ⟩
+      X1 ◎ (X2 ◎ (X3 ◎ (X4 ◎ X5 ◎ X6))) ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
       (X1 ◎ ((X2 ◎ X3) ◎ (X4 ◎ X5 ◎ X6))) ⟷₂⟨ assoc◎l ⟩
       ((X1 ◎ X2 ◎ X3) ◎ (X4 ◎ X5 ◎ X6)) ⟷₂⟨ cc ⟩
       id⟷₁ ◎ id⟷₁ ⟷₂⟨ idl◎l ⟩
       id⟷₁ ⟷₂∎
-gzero⟷₂ .(_ + _) .(_ + _) t₁z t₂z (c ⊕ c₁) = {!   !}
-
+gzero⟷₂ (t₁ + t₂) (t₃ + t₄) t₁z t₂z (c ⊕ c₁) = 
+  let rec₁ = gzero⟷₂ _ _ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ t₁z) (plus0l ∣ t₃ ∣ ∣ t₄ ∣ t₂z) c 
+      rec₂ = gzero⟷₂ _ _ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ t₁z) (plus0r ∣ t₃ ∣ ∣ t₄ ∣ t₂z) c₁
+      cc = rec₁ ⊡ rec₂
+      X1 = !⟷₁ (tzO t₁ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ t₁z))
+      X2 = !⟷₁ (tzO t₂ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ t₁z))
+      X3 = tzO t₃ (plus0l ∣ t₃ ∣ ∣ t₄ ∣ t₂z)
+      X4 = tzO t₄ (plus0r ∣ t₃ ∣ ∣ t₄ ∣ t₂z)
+      
+  in  (uniti₊l ◎ (X1 ⊕ X2)) ◎ (c ⊕ c₁) ◎ ((X3 ⊕ X4) ◎ unite₊l) ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+      (uniti₊l ◎ (X1 ⊕ X2)) ◎ ((c ⊕ c₁) ◎ (X3 ⊕ X4)) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂) ⟩
+      (uniti₊l ◎ (X1 ⊕ X2)) ◎ ((c ◎ X3) ⊕ (c₁ ◎ X4)) ◎ unite₊l ⟷₂⟨ assoc◎r ⟩
+      uniti₊l ◎ (X1 ⊕ X2) ◎ ((c ◎ X3) ⊕ (c₁ ◎ X4)) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+      uniti₊l ◎ ((X1 ⊕ X2) ◎ ((c ◎ X3) ⊕ (c₁ ◎ X4))) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂) ⟩
+      uniti₊l ◎ ((X1 ◎ c ◎ X3) ⊕ (X2 ◎ c₁ ◎ X4)) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ ((resp⊕⟷₂ rec₁ rec₂) ⊡ id⟷₂) ⟩
+      uniti₊l ◎ (id⟷₁ ⊕ id⟷₁) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ (id⟷₁⊕id⟷₁⟷₂ ⊡ id⟷₂) ⟩
+      uniti₊l ◎ id⟷₁ ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
+      uniti₊l ◎ unite₊l ⟷₂⟨ linv◎l ⟩
+      id⟷₁ ⟷₂∎
 
 zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 zero⟷₂ id⟷₁ = id⟷₂
