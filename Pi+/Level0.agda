@@ -8,6 +8,7 @@ open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma
 open import lib.types.Fin
 open import lib.types.List
+open import lib.NType
 
 open import Pi+.Syntax
 open import Pi+.Misc
@@ -66,12 +67,42 @@ tzO O idp = id⟷₁
 tzO (t₁ + t₂) tz =
   (tzO t₁ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ tz) ⊕ tzO t₂ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ tz)) ◎ unite₊l
 
+tz0=l : {t : U} → {p1 : ∣ t ∣ == 0} → {p2 : ∣ t ∣ == 0} → (tzO t p1) ◎ (!⟷₁ (tzO t p2)) ⟷₂ id⟷₁
+tz0=l {t} {p1} {p2} = transport (λ e -> ((tzO t p1) ◎ !⟷₁ (tzO t e)) ⟷₂ id⟷₁) (prop-has-all-paths {{has-level-apply-instance}} p1 p2) linv◎l
+
+tz0=r : {t : U} → {p1 : ∣ t ∣ == 0} → {p2 : ∣ t ∣ == 0} → !⟷₁ (tzO t p1) ◎ (tzO t p2) ⟷₂ id⟷₁
+tz0=r {t} {p1} {p2} = transport (λ e -> (!⟷₁ (tzO t p1) ◎ (tzO t e)) ⟷₂ id⟷₁) (prop-has-all-paths {{has-level-apply-instance}} p1 p2) rinv◎l
+
 gzero⟷₂ : (t₁ t₂ : U) → (t₁z : ∣ t₁ ∣ == 0) → (t₂z : ∣ t₂ ∣ == 0) → (c : t₁ ⟷₁ t₂) →
             (!⟷₁ (tzO t₁ t₁z) ◎ c ◎ (tzO t₂ t₂z)) ⟷₂ id⟷₁
-gzero⟷₂ O O t₁z t₂z c = {!!}
-gzero⟷₂ O (t₂ + t₃) t₁z t₂z c = {!!}
-gzero⟷₂ (t₁ + t₂) O t₁z t₂z c = {!!}
-gzero⟷₂ (t₁ + t₂) (t₃ + t₄) t₁z t₂z c = {!!}
+gzero⟷₂ .(O + t₂) t₂ t₁z t₂z unite₊l = {!   !}
+gzero⟷₂ t₁ .(O + t₁) t₁z t₂z uniti₊l = {!   !}
+gzero⟷₂ .(_ + _) .(_ + _) t₁z t₂z swap₊ = {!   !}
+gzero⟷₂ .(_ + _ + _) .((_ + _) + _) t₁z t₂z assocl₊ = {!   !}
+gzero⟷₂ .((_ + _) + _) .(_ + _ + _) t₁z t₂z assocr₊ = {!   !}
+gzero⟷₂ t₁ .t₁ t₁z t₂z id⟷₁ = 
+  trans⟷₂ (id⟷₂ ⊡ idl◎l) tz0=r
+   -- instance doesn't resolve
+gzero⟷₂ t₁ t₂ t₁z t₂z (c ◎ c₁) = 
+  let rec₁ = gzero⟷₂ _ _ t₁z (! (eqsize c) ∙ t₁z) c 
+      rec₂ = gzero⟷₂ _ _ ((eqsize c₁) ∙ t₂z) t₂z c₁
+      cc = rec₁ ⊡ rec₂
+      X1 = !⟷₁ (tzO t₁ t₁z)
+      X2 = c
+      X3 = tzO _ (! (eqsize c) ∙ t₁z)
+      X4 = !⟷₁ (tzO _ (eqsize c₁ ∙ t₂z))
+      X5 = c₁
+      X6 = tzO t₂ t₂z
+  in  X1 ◎ (X2 ◎ X5) ◎ X6 ⟷₂⟨ id⟷₂ ⊡ assoc◎r ⟩
+      X1 ◎ (X2 ◎ X5 ◎ X6) ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ !⟷₂ idl◎l) ⟩
+      X1 ◎ (X2 ◎ id⟷₁ ◎ X5 ◎ X6) ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ (!⟷₂ tz0=l ⊡ id⟷₂)) ⟩
+      X1 ◎ (X2 ◎ (X3 ◎ X4) ◎ X5 ◎ X6) ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ assoc◎r) ⟩
+      X1 ◎ (X2 ◎ (X3 ◎ (X4 ◎ X5 ◎ X6))) ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩ -- id⟷₂ ⊡ assoc◎r ⟩
+      (X1 ◎ ((X2 ◎ X3) ◎ (X4 ◎ X5 ◎ X6))) ⟷₂⟨ assoc◎l ⟩
+      ((X1 ◎ X2 ◎ X3) ◎ (X4 ◎ X5 ◎ X6)) ⟷₂⟨ cc ⟩
+      id⟷₁ ◎ id⟷₁ ⟷₂⟨ idl◎l ⟩
+      id⟷₁ ⟷₂∎
+gzero⟷₂ .(_ + _) .(_ + _) t₁z t₂z (c ⊕ c₁) = {!   !}
 
 
 zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
