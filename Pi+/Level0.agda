@@ -67,6 +67,7 @@ tzO O idp = id⟷₁
 tzO (t₁ + t₂) tz =
   (tzO t₁ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ tz) ⊕ tzO t₂ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ tz)) ◎ unite₊l
 
+-- instances don't resolve
 tz0=l : {t : U} → {p1 : ∣ t ∣ == 0} → {p2 : ∣ t ∣ == 0} → (tzO t p1) ◎ (!⟷₁ (tzO t p2)) ⟷₂ id⟷₁
 tz0=l {t} {p1} {p2} = transport (λ e -> ((tzO t p1) ◎ !⟷₁ (tzO t e)) ⟷₂ id⟷₁) (prop-has-all-paths {{has-level-apply-instance}} p1 p2) linv◎l
 
@@ -119,7 +120,6 @@ gzero⟷₂ .(_ + _ + _) .((_ + _) + _) t₁z t₂z assocl₊ = {!   !}
 gzero⟷₂ .((_ + _) + _) .(_ + _ + _) t₁z t₂z assocr₊ = {!   !}
 gzero⟷₂ t₁ .t₁ t₁z t₂z id⟷₁ = 
   trans⟷₂ (id⟷₂ ⊡ idl◎l) tz0=r
-   -- instance doesn't resolve
 gzero⟷₂ t₁ t₂ t₁z t₂z (c ◎ c₁) = 
   let rec₁ = gzero⟷₂ _ _ t₁z (! (eqsize c) ∙ t₁z) c 
       rec₂ = gzero⟷₂ _ _ ((eqsize c₁) ∙ t₂z) t₂z c₁
