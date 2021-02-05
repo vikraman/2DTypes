@@ -12,9 +12,9 @@ open import lib.types.List
 open import Pi+.Syntax
 open import Pi+.Misc
 
-open import Pi+.Coxeter.Parametrized.ReductionRel
-open import Pi+.Coxeter.Parametrized.Coxeter
-open import Pi+.Coxeter.Parametrized.Group
+open import Pi+.Common.FinHelpers
+open import Pi+.Coxeter.Coxeter
+open import Pi+.Coxeter.Sn
 
 -----------------------------------------------------------------------------
 -- Canonical representation of sum types as "lists" I + (I + (I + ... O))
@@ -77,7 +77,20 @@ zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 zero⟷₂ id⟷₁ = id⟷₂
 zero⟷₂ (_◎_ {O} {t} {O} p₁ p₂) with zeroDecompose t (eqsize p₂)
 ... | inj₁ idp = trans⟷₂ idl◎r ((zero⟷₂ p₁) ⊡ (zero⟷₂ p₂))
-... | inj₂ (t₃ , p₃ , t₃z) = {!!}
+... | inj₂ (t₃ , p₃ , t₃z) = 
+  let rec₁ = gzero⟷₂ O t idp (eqsize p₂) p₁
+      rec₂ = gzero⟷₂ t O (eqsize p₂) idp p₂
+      cc = rec₁ ⊡ rec₂
+  in  !⟷₂ ( p₁ ◎ p₂ ⟷₂⟨ !⟷₂ (id⟷₂ ⊡ idl◎l) ⟩
+            p₁ ◎ id⟷₁ ◎ p₂ ⟷₂⟨ !⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) ⟩
+            p₁ ◎ (tzO t (eqsize p₂) ◎ !⟷₁ (tzO t (eqsize p₂))) ◎ p₂ ⟷₂⟨ !⟷₂ (id⟷₂ ⊡ assoc◎l) ⟩
+            p₁ ◎ tzO t (eqsize p₂) ◎ !⟷₁ (tzO t (eqsize p₂)) ◎ p₂ ⟷₂⟨ !⟷₂ assoc◎r ⟩
+            (p₁ ◎ tzO t (eqsize p₂)) ◎ (!⟷₁ (tzO t (eqsize p₂)) ◎ p₂) ⟷₂⟨ !⟷₂ (idl◎l ⊡ trans⟷₂ assoc◎l idr◎l) ⟩
+            _ ⟷₂⟨ cc ⟩
+            id⟷₁ ◎ id⟷₁ ⟷₂⟨ idl◎l ⟩
+            id⟷₁ ⟷₂∎
+      )
+
 
 {--
   O ---p1--- t ---p2--- 0

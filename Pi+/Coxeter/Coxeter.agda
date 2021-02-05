@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Parametrized.Coxeter where
+module Pi+.Coxeter.Coxeter where
 
 open import lib.Base
 open import lib.types.Nat using (_+_; <-ap-S; _<_; _≤_)
@@ -10,7 +10,7 @@ open import lib.types.Fin
 open import lib.types.List
 open import Pi+.Extra
 
-open import Pi+.Coxeter.Parametrized.ReductionRel
+open import Pi+.Common.FinHelpers
 
 -- This is the one that is to be used with HIT
 -- data _≈₀_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where

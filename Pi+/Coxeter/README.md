@@ -2,7 +2,7 @@
 
 ## Code structure
 
-Listℕed here in dependency order.  
+Listed here in dependency order.  
 
 General lemmas about behaviour of ℕ and ListN.
   - `Arithmetic.agda` 

@@ -12,9 +12,10 @@ open import lib.types.List
 
 open import Pi+.Misc
 open import Pi+.Extra
-open import Pi+.Coxeter.Common.ListFinLListEquiv
-open import Pi+.Coxeter.Common.LList
-open import Pi+.Coxeter.Parametrized.Coxeter
+open import Pi+.Common.ListFinLListEquiv
+open import Pi+.Common.FinHelpers
+open import Pi+.Common.LList
+open import Pi+.Coxeter.Coxeter
 open import Pi+.Coxeter.Parametrized.MCoxeter
 open import Pi+.Coxeter.Parametrized.ReductionRel
 

@@ -1,12 +1,12 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Common.InequalityEquiv where
+module Pi+.Common.InequalityEquiv where
 
 open import lib.Base
 open import lib.types.Nat using (_+_; O<S; <-ap-S; <-has-all-paths) renaming (_<_ to _<N_)
 open import lib.Equivalence
 
-open import Pi+.Coxeter.Common.Arithmetic
+open import  Pi+.Common.Arithmetic
 
 
 <N≃< : {a b : ℕ} -> (a <N b) ≃ (a < b)

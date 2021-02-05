@@ -8,8 +8,8 @@ open import lib.types.Sigma
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Common.Arithmetic
-open import Pi+.Coxeter.Common.ListN
+open import Pi+.Common.Arithmetic
+open import Pi+.Common.ListN
 
 repeat-long-lemma : (n k n1 : ℕ) -> (l r : Listℕ) -> (n ↓ k) == (l ++ n1 ∷ n1 ∷ r) -> ⊥
 repeat-long-lemma n 0 n1 nil r ()

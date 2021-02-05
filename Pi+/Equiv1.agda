@@ -7,8 +7,7 @@ open import Pi+.UFin
 open import Pi+.Level0
 open import Pi+.Extra
 
-open import Pi+.Coxeter.Common.Lehmer
-open import Pi+.Coxeter.Parametrized.Equiv
+open import Pi+.Lehmer.Lehmer
 
 open import Pi+.Equiv0
 open import Pi+.Equiv1Norm
@@ -55,7 +54,7 @@ quote₁ {X} {Y} p =
     in  evc ◎ transport (λ e -> quote₀ X ⟷₁ ⟪ e ⟫) X=Y id⟷₁ -- does it matter over which X=Y do I transport?
 
 quote-eval₁ : {X Y : U} → (p : X ⟷₁ Y) → quote₁ (eval₁ p) ⟷₂ norm p
-quote-eval₁ p = {!   !}
+quote-eval₁ p = TODO
 
 eval-quote₁ : {X Y : UFin} → (p : X == Y) → eval₁ (quote₁ p) == ap (λ X → eval₀ (quote₀ X)) p
 eval-quote₁ p = TODO

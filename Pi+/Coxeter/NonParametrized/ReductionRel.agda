@@ -7,8 +7,8 @@ open import lib.types.Nat using (_+_)
 open import lib.PathGroupoid
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Common.Arithmetic
-open import Pi+.Coxeter.Common.ListN
+open import Pi+.Common.Arithmetic
+open import Pi+.Common.ListN
 
 data _≅_ : Listℕ -> Listℕ -> Type₀ where
   cancel≅ : {n : ℕ} -> (l r m mf : Listℕ) -> (defm : m == l ++ n ∷ n ∷ r) -> (defmf : mf == l ++ r) -> (m ≅ mf)
