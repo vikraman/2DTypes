@@ -73,7 +73,6 @@ gzero⟷₂ O (t₂ + t₃) t₁z t₂z c = {!!}
 gzero⟷₂ (t₁ + t₂) O t₁z t₂z c = {!!}
 gzero⟷₂ (t₁ + t₂) (t₃ + t₄) t₁z t₂z c = {!!}
 
-
 zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
 zero⟷₂ id⟷₁ = id⟷₂
 zero⟷₂ (_◎_ {O} {t} {O} p₁ p₂) with zeroDecompose t (eqsize p₂)
