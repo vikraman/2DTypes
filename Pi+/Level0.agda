@@ -77,6 +77,46 @@ tz0=r {t} {p1} {p2} = transport (λ e -> (!⟷₁ (tzO t p1) ◎ (tzO t e)) ⟷�
 u-swap-u : uniti₊l ◎ swap₊ ◎ unite₊l ⟷₂ id⟷₁
 u-swap-u = {!   !}
 
+neg2 : {t₁ t₂ : U} -> (c₁ c₂ : t₁ ⟷₁ t₂) -> (c₁ ⟷₂ c₂) -> (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
+neg2 .(_ ◎ _ ◎ _) .((_ ◎ _) ◎ _) assoc◎l = assoc◎r
+neg2 .((_ ◎ _) ◎ _) .(_ ◎ _ ◎ _) assoc◎r = assoc◎l
+neg2 .((_ ⊕ _ ⊕ _) ◎ assocl₊) .(assocl₊ ◎ (_ ⊕ _) ⊕ _) assocl₊l = assocr₊l
+neg2 .(assocl₊ ◎ (_ ⊕ _) ⊕ _) .((_ ⊕ _ ⊕ _) ◎ assocl₊) assocl₊r = assocr₊r
+neg2 .(((_ ⊕ _) ⊕ _) ◎ assocr₊) .(assocr₊ ◎ _ ⊕ _ ⊕ _) assocr₊r = assocl₊r
+neg2 .(assocr₊ ◎ _ ⊕ _ ⊕ _) .(((_ ⊕ _) ⊕ _) ◎ assocr₊) assocr₊l = assocl₊l
+neg2 .(id⟷₁ ◎ c₂) c₂ idl◎l = idr◎l
+neg2 c₁ .(id⟷₁ ◎ c₁) idl◎r = idr◎r
+neg2 .(c₂ ◎ id⟷₁) c₂ idr◎l = idl◎l
+neg2 c₁ .(c₁ ◎ id⟷₁) idr◎r = idl◎r
+neg2 .(_ ◎ !⟷₁ _) .id⟷₁ linv◎l = rinv◎l
+neg2 .id⟷₁ .(_ ◎ !⟷₁ _) linv◎r = rinv◎r
+neg2 .(!⟷₁ _ ◎ _) .id⟷₁ rinv◎l = linv◎l
+neg2 .id⟷₁ .(!⟷₁ _ ◎ _) rinv◎r = linv◎r
+neg2 .(unite₊l ◎ _) .((_ ⊕ _) ◎ unite₊l) unite₊l⟷₂l = uniti₊l⟷₂r
+neg2 .((_ ⊕ _) ◎ unite₊l) .(unite₊l ◎ _) unite₊l⟷₂r = uniti₊l⟷₂l
+neg2 .(uniti₊l ◎ _ ⊕ _) .(_ ◎ uniti₊l) uniti₊l⟷₂l = unite₊l⟷₂r
+neg2 .(_ ◎ uniti₊l) .(uniti₊l ◎ _ ⊕ _) uniti₊l⟷₂r = unite₊l⟷₂l
+neg2 .(swap₊ ◎ _ ⊕ _) .((_ ⊕ _) ◎ swap₊) swapl₊⟷₂ = swapr₊⟷₂
+neg2 .((_ ⊕ _) ◎ swap₊) .(swap₊ ◎ _ ⊕ _) swapr₊⟷₂ = swapl₊⟷₂
+neg2 c₁ .c₁ id⟷₂ = id⟷₂
+neg2 c₁ c₂ (trans⟷₂ p₁ p₂) = trans⟷₂ (neg2 _ _ p₁) (neg2 _ _ p₂)
+neg2 .(_ ◎ _) .(_ ◎ _) (p₁ ⊡ p₂) = neg2 _ _ p₂ ⊡ neg2 _ _ p₁
+neg2 .(_ ⊕ _) .(_ ⊕ _) (resp⊕⟷₂ p₁ p₂) = resp⊕⟷₂ (neg2 _ _ p₁) (neg2 _ _ p₂)
+neg2 .(id⟷₁ ⊕ id⟷₁) .id⟷₁ id⟷₁⊕id⟷₁⟷₂ = id⟷₁⊕id⟷₁⟷₂
+neg2 .id⟷₁ .(id⟷₁ ⊕ id⟷₁) split⊕-id⟷₁ = split⊕-id⟷₁
+neg2 .((_ ◎ _) ⊕ _ ◎ _) .((_ ⊕ _) ◎ _ ⊕ _) hom⊕◎⟷₂ = hom⊕◎⟷₂
+neg2 .((_ ⊕ _) ◎ _ ⊕ _) .((_ ◎ _) ⊕ _ ◎ _) hom◎⊕⟷₂ = hom◎⊕⟷₂
+neg2 .((swap₊ ◎ unite₊l) ⊕ id⟷₁) .(assocr₊ ◎ id⟷₁ ⊕ unite₊l) triangle₊l = {! -t 10  !}
+neg2 .(assocr₊ ◎ id⟷₁ ⊕ unite₊l) .((swap₊ ◎ unite₊l) ⊕ id⟷₁) triangle₊r = {!   !}
+neg2 .(assocr₊ ◎ assocr₊) .(((assocr₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ assocr₊) pentagon₊l = {! -t 30  !}
+neg2 .(((assocr₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ assocr₊) .(assocr₊ ◎ assocr₊) pentagon₊r = {! -t 30  !}
+neg2 .unite₊l .(swap₊ ◎ swap₊ ◎ unite₊l) unite₊l-coh-l = {! -t 30  !}
+neg2 .(swap₊ ◎ swap₊ ◎ unite₊l) .unite₊l unite₊l-coh-r = {! -t 30  !}
+neg2 .((assocr₊ ◎ swap₊) ◎ assocr₊) .(((swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ swap₊) hexagonr₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊l) assoc◎r
+neg2 .(((swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁ ⊕ swap₊) .((assocr₊ ◎ swap₊) ◎ assocr₊) hexagonr₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊r) assoc◎r
+neg2 .((assocl₊ ◎ swap₊) ◎ assocl₊) .(((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ swap₊ ⊕ id⟷₁) hexagonl₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊l) assoc◎r
+neg2 .(((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ swap₊ ⊕ id⟷₁) .((assocl₊ ◎ swap₊) ◎ assocl₊) hexagonl₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊r) assoc◎r
+
 gzero⟷₂ : (t₁ t₂ : U) → (t₁z : ∣ t₁ ∣ == 0) → (t₂z : ∣ t₂ ∣ == 0) → (c : t₁ ⟷₁ t₂) →
             (!⟷₁ (tzO t₁ t₁z) ◎ c ◎ (tzO t₂ t₂z)) ⟷₂ id⟷₁
 gzero⟷₂ .(O + t₂) t₂ t₁z t₂z unite₊l = 
@@ -116,8 +156,30 @@ gzero⟷₂ (t₁ + t₂) (t₂ + t₁) t₁z t₂z swap₊ =
       (id⟷₁ ◎ uniti₊l) ◎ swap₊ ◎ unite₊l ⟷₂⟨ trans⟷₂ assoc◎r idl◎l ⟩
       uniti₊l ◎ swap₊ ◎ unite₊l ⟷₂⟨ u-swap-u ⟩
       id⟷₁ ⟷₂∎
-gzero⟷₂ .(_ + _ + _) .((_ + _) + _) t₁z t₂z assocl₊ = {!   !}
-gzero⟷₂ .((_ + _) + _) .(_ + _ + _) t₁z t₂z assocr₊ = {!   !}
+gzero⟷₂ (t₁ + t₂ + t₃) ((t₁ + t₂) + t₃) t₁z t₂z assocl₊ = 
+  let X1 = !⟷₁ (tzO t₁ (plus0l ∣ t₁ ∣ (∣ t₂ ∣ +ℕ ∣ t₃ ∣) t₁z))
+      X2 = !⟷₁ (tzO t₂ (plus0l ∣ t₂ ∣ ∣ t₃ ∣ (plus0r ∣ t₁ ∣ (∣ t₂ ∣ +ℕ ∣ t₃ ∣) t₁z)))
+      X3 = !⟷₁ (tzO t₃ (plus0r ∣ t₂ ∣ ∣ t₃ ∣ (plus0r ∣ t₁ ∣ (∣ t₂ ∣ +ℕ ∣ t₃ ∣) t₁z)))
+      X4 = tzO t₁ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ (plus0l (∣ t₁ ∣ +ℕ ∣ t₂ ∣) ∣ t₃ ∣ t₂z))
+      X5 = tzO t₂ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ (plus0l (∣ t₁ ∣ +ℕ ∣ t₂ ∣) ∣ t₃ ∣ t₂z))
+      X6 = tzO t₃ (plus0r (∣ t₁ ∣ +ℕ ∣ t₂ ∣) ∣ t₃ ∣ t₂z)
+      -- doesn't really matter what are these combinators above
+      -- just knowing that the assumptions below hold, it should
+      -- be possible to prove the result
+      X1∘X4 : X1 ◎ X4 ⟷₂ id⟷₁
+      X1∘X4 = tz0=r
+      X2∘X5 : X2 ◎ X5 ⟷₂ id⟷₁
+      X2∘X5 = tz0=r
+      X3∘X6 : X3 ◎ X6 ⟷₂ id⟷₁
+      X3∘X6 = tz0=r
+   in  (uniti₊l ◎ (X1 ⊕ uniti₊l ◎ (X2 ⊕ X3))) ◎ assocl₊ ◎ ((((X4 ⊕ X5) ◎ unite₊l) ⊕ X6) ◎ unite₊l) ⟷₂⟨ {!  !} ⟩
+       id⟷₁ ⟷₂∎
+gzero⟷₂ ((t₁ + t₂) + t₃) (t₁ + (t₂ + t₃)) t₁z t₂z assocr₊ = 
+  let rec = gzero⟷₂ (t₁ + t₂ + t₃) ((t₁ + t₂) + t₃) t₂z t₁z assocl₊
+      rec! = neg2 _ _ rec
+      -- this should be just rec!, after filling in the hole above
+  in  !⟷₁ ((((_ ⊕ _) ◎ unite₊l) ⊕ _) ◎ unite₊l) ◎ assocr₊ ◎ (_ ⊕ (_ ⊕ _) ◎ unite₊l) ◎ unite₊l ⟷₂⟨ {!  !} ⟩
+       id⟷₁ ⟷₂∎
 gzero⟷₂ t₁ .t₁ t₁z t₂z id⟷₁ = 
   trans⟷₂ (id⟷₂ ⊡ idl◎l) tz0=r
 gzero⟷₂ t₁ t₂ t₁z t₂z (c ◎ c₁) = 
@@ -147,7 +209,6 @@ gzero⟷₂ (t₁ + t₂) (t₃ + t₄) t₁z t₂z (c ⊕ c₁) =
       X2 = !⟷₁ (tzO t₂ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ t₁z))
       X3 = tzO t₃ (plus0l ∣ t₃ ∣ ∣ t₄ ∣ t₂z)
       X4 = tzO t₄ (plus0r ∣ t₃ ∣ ∣ t₄ ∣ t₂z)
-      
   in  (uniti₊l ◎ (X1 ⊕ X2)) ◎ (c ⊕ c₁) ◎ ((X3 ⊕ X4) ◎ unite₊l) ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
       (uniti₊l ◎ (X1 ⊕ X2)) ◎ ((c ⊕ c₁) ◎ (X3 ⊕ X4)) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂) ⟩
       (uniti₊l ◎ (X1 ⊕ X2)) ◎ ((c ◎ X3) ⊕ (c₁ ◎ X4)) ◎ unite₊l ⟷₂⟨ assoc◎r ⟩
