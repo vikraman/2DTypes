@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Parametrized.Group where
+module Pi+.Coxeter.Sn where
 
 open import lib.Base
 open import lib.Relation
@@ -10,17 +10,13 @@ open import lib.types.List
 open import lib.types.Fin
 
 open import Pi+.Extra
-open import Pi+.Coxeter.Parametrized.Coxeter
+open import Pi+.Coxeter.Coxeter
 
 CoxeterRel  : {n : ℕ} → Rel (List (Fin n)) lzero
 CoxeterRel {O} = λ _ _ → ⊤
 CoxeterRel {S n} = _≈₁_ {n}
 
 syntax CoxeterRel l1 l2 = l1 ≈ l2
-
--- instance
---     CoxeterRel-level : {n : ℕ} → {l1 l2 : List (Fin (S n))} → is-prop (CoxeterRel {n} l1 l2)
---     CoxeterRel-level = TODO
 
 CoxeterRel-refl : {n : ℕ} → is-refl (CoxeterRel {n})
 CoxeterRel-refl {O} = λ _ → unit

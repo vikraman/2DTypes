@@ -11,7 +11,7 @@ open import lib.types.Fin
 open import lib.Equivalence
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Common.ListFinLListEquiv
+open import Pi+.Common.ListFinLListEquiv
 open import Pi+.Coxeter.Parametrized.ReductionRel
 open import Pi+.Coxeter.NonParametrized.Diamond
 

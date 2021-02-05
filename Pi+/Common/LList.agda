@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Common.LList where
+module Pi+.Common.LList where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
@@ -11,9 +11,9 @@ open import lib.Equivalence
 open import lib.PathOver
 open import lib.types.Fin
 
-open import Pi+.Coxeter.Common.Arithmetic
-open import Pi+.Coxeter.Common.ListN
-open import Pi+.Coxeter.Common.InequalityEquiv
+open import  Pi+.Common.Arithmetic
+open import  Pi+.Common.ListN
+open import  Pi+.Common.InequalityEquiv
 
 data _>>_ : ℕ -> Listℕ -> Type₀ where
   nil : {n : ℕ} -> n >> nil

@@ -12,9 +12,9 @@ open import lib.types.List
 open import Pi+.Syntax
 open import Pi+.Misc
 
-open import Pi+.Coxeter.Parametrized.ReductionRel
-open import Pi+.Coxeter.Parametrized.Coxeter
-open import Pi+.Coxeter.Parametrized.Group
+open import Pi+.Common.FinHelpers
+open import Pi+.Coxeter.Coxeter
+open import Pi+.Coxeter.Sn
 
 -----------------------------------------------------------------------------
 -- Canonical representation of sum types as "lists" I + (I + (I + ... O))

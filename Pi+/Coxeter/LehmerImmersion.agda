@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Common.Lehmer where
+module Pi+.Coxeter.LehmerImmersion where
 
 open import lib.Base
 open import lib.types.Nat using (_+_)
@@ -8,15 +8,13 @@ open import lib.types.Sigma
 open import lib.NType
 open import lib.PathGroupoid
 
-open import Pi+.Coxeter.Common.Arithmetic
-open import Pi+.Coxeter.Common.ListN
-open import Pi+.Coxeter.Common.LList
+open import Pi+.Common.Arithmetic
+open import Pi+.Common.ListN
+open import Pi+.Common.LList
 open import Pi+.Extra
 open import Pi+.Misc
 
-data Lehmer : (n : ℕ) -> Type₀ where
-  CanZ : Lehmer 0
-  CanS : {n : ℕ} -> (l : Lehmer n) -> {r : ℕ} -> (r ≤ S n) -> Lehmer (S n)
+open import Pi+.Lehmer.Lehmer public
 
 immersion : {n : ℕ} -> Lehmer n -> Listℕ
 immersion {0} CanZ = nil
@@ -54,7 +52,3 @@ canonical-lift {n} .(S (fst + n)) p cln | S fst , idp =
 
 -- ll2 : Listℕ
 -- ll2 = immersion {2} l2
-
-instance
-  Lehmer-level : {n : ℕ} → is-set (Lehmer n)
-  Lehmer-level = TODO

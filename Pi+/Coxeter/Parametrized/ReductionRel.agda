@@ -14,25 +14,13 @@ open import lib.types.Fin
 
 open import Pi+.Misc
 open import Pi+.Extra
-open import Pi+.Coxeter.Common.LList
-open import Pi+.Coxeter.Common.InequalityEquiv
-open import Pi+.Coxeter.Common.ListFinLListEquiv
-open import Pi+.Coxeter.Common.ListN renaming (_++_ to _++ℕ_; ++-assoc to ++-assocℕ)
+open import Pi+.Common.LList
+open import Pi+.Common.InequalityEquiv
+open import Pi+.Common.ListFinLListEquiv
+open import Pi+.Common.ListN renaming (_++_ to _++ℕ_; ++-assoc to ++-assocℕ)
 open import Pi+.Coxeter.NonParametrized.ReductionRel
-open import Pi+.Coxeter.Common.Arithmetic renaming (_<_ to _<ℕ_; ≤-trans to ≤-transℕ)
-
-⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-⟨_⟩ = Fin-S
-
-S⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
-S⟨ k , kltn ⟩ = S k , <-ap-S kltn
-
-_≤^_ : {m : ℕ} -> Fin m -> Fin m -> Type₀
-k ≤^ n = (k .fst) < S (n .fst)
-
-<-down : {n k : ℕ} -> (S n < k) -> (n < k)
-<-down p = <-cancel-S (ltSR p)
-
+open import Pi+.Common.Arithmetic renaming (_<_ to _<ℕ_; ≤-trans to ≤-transℕ)
+open import Pi+.Common.FinHelpers
 
 syntax DownArrow x y p = x ↓⟨ p ⟩ y
 

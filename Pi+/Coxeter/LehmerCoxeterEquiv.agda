@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.Coxeter.Parametrized.Equiv where
+module Pi+.Coxeter.LehmerCoxeterEquiv where
 
 open import lib.Base
 open import lib.NType
@@ -9,21 +9,24 @@ open import lib.Equivalence
 open import lib.PathGroupoid
 open import lib.types.Fin
 open import lib.types.List
+open import lib.types.LoopSpace
 
-open import Pi+.Coxeter.Common.Lehmer renaming (immersion to immersionLehmer)
-open import Pi+.Coxeter.Common.ListFinLListEquiv
-open import Pi+.Coxeter.Common.LList
-open import Pi+.Coxeter.Common.ListN
+open import Pi+.Coxeter.LehmerImmersion renaming (immersion to immersionLehmer)
+open import Pi+.Lehmer.LehmerLevel
+open import Pi+.Common.ListFinLListEquiv
+open import Pi+.Common.LList
+open import Pi+.Common.ListN
 open import Pi+.Coxeter.NonParametrized.ReductionRel
 open import Pi+.Coxeter.NonParametrized.MCoxeter
 open import Pi+.Coxeter.NonParametrized.LehmerCanonical using (only-one-canonical↔)
 open import Pi+.Coxeter.NonParametrized.LehmerReduction using (Listℕ-to-Lehmer)
-open import Pi+.Coxeter.Parametrized.Group
-open import Pi+.Coxeter.Parametrized.Coxeter
 open import Pi+.Coxeter.Parametrized.ReductionRel
 open import Pi+.Coxeter.Parametrized.CoxeterMCoxeterEquiv
 open import Pi+.Coxeter.Parametrized.MCoxeter
+open import Pi+.Coxeter.Coxeter
+open import Pi+.Coxeter.Sn
 open import Pi+.Extra
+open import Pi+.Misc
 open import Pi+.UFin
 
 immersion : {n : ℕ} -> Lehmer n -> List (Fin n)
@@ -82,25 +85,3 @@ immersion⁻¹∘immersion {O} CanZ = idp
 immersion⁻¹∘immersion {S n} cl =   
     let cln , cln-p = ListFin-to-Lehmer (<– List≃LList (immersionLehmer cl , immersion->> cl))
     in  immersion-is-injection cln cl (comm cln-p)
-
-
-Aut : ∀ {ℓ} → Type ℓ → Type ℓ
-Aut T = T ≃ T
-
-Ω : ∀ {ℓ} → Σ (Type ℓ) (λ X → X) → Type ℓ
-Ω (X , x) = (x == x)
-
-module _ {n : ℕ} where
-
-    UFin≃Fin : Ω (UFin , FinFS n) ≃ Aut (Fin n)
-    UFin≃Fin = TODO
-
-module _ {n : ℕ} where
-
-    Fin≃Lehmer :  Aut (Fin (S n)) ≃ Lehmer n
-    Fin≃Lehmer = TODO
-
-module _ {n : ℕ} where
-
-    UFin≃Lehmer : Ω (UFin , FinFS (S n)) ≃ Lehmer n
-    UFin≃Lehmer = Fin≃Lehmer ∘e UFin≃Fin

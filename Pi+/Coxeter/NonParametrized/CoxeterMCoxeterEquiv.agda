@@ -9,8 +9,8 @@ open import lib.PathGroupoid
 open import lib.types.Fin
 
 open import Pi+.Misc
-open import Pi+.Coxeter.Common.Arithmetic
-open import Pi+.Coxeter.Common.ListN
+open import Pi+.Common.Arithmetic
+open import Pi+.Common.ListN
 open import Pi+.Coxeter.NonParametrized.ReductionRel
 open import Pi+.Coxeter.NonParametrized.MCoxeter
 open import Pi+.Coxeter.NonParametrized.MCoxeterS
