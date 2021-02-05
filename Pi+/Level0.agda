@@ -73,11 +73,48 @@ tz0=l {t} {p1} {p2} = transport (λ e -> ((tzO t p1) ◎ !⟷₁ (tzO t e)) ⟷�
 tz0=r : {t : U} → {p1 : ∣ t ∣ == 0} → {p2 : ∣ t ∣ == 0} → !⟷₁ (tzO t p1) ◎ (tzO t p2) ⟷₂ id⟷₁
 tz0=r {t} {p1} {p2} = transport (λ e -> (!⟷₁ (tzO t p1) ◎ (tzO t e)) ⟷₂ id⟷₁) (prop-has-all-paths {{has-level-apply-instance}} p1 p2) rinv◎l
 
+u-swap-u : uniti₊l ◎ swap₊ ◎ unite₊l ⟷₂ id⟷₁
+u-swap-u = {!   !}
+
 gzero⟷₂ : (t₁ t₂ : U) → (t₁z : ∣ t₁ ∣ == 0) → (t₂z : ∣ t₂ ∣ == 0) → (c : t₁ ⟷₁ t₂) →
             (!⟷₁ (tzO t₁ t₁z) ◎ c ◎ (tzO t₂ t₂z)) ⟷₂ id⟷₁
-gzero⟷₂ .(O + t₂) t₂ t₁z t₂z unite₊l = {!   !}
-gzero⟷₂ t₁ .(O + t₁) t₁z t₂z uniti₊l = {!   !}
-gzero⟷₂ .(_ + _) .(_ + _) t₁z t₂z swap₊ = {!   !}
+gzero⟷₂ .(O + t₂) t₂ t₁z t₂z unite₊l = 
+  let X1 = !⟷₁ (tzO t₂ t₁z)
+      X2 = tzO t₂ t₂z
+  in  ((uniti₊l ◎ (id⟷₁ ⊕ X1)) ◎ unite₊l ◎ X2) ⟷₂⟨ uniti₊l⟷₂l ⊡ id⟷₂ ⟩
+      (X1 ◎ uniti₊l) ◎ unite₊l ◎ X2 ⟷₂⟨ assoc◎r ⟩
+      X1 ◎ uniti₊l ◎ unite₊l ◎ X2 ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+      X1 ◎ (uniti₊l ◎ unite₊l) ◎ X2 ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
+      X1 ◎ id⟷₁ ◎ X2 ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
+      X1 ◎ X2 ⟷₂⟨ tz0=r ⟩
+      id⟷₁ ⟷₂∎
+gzero⟷₂ t₁ .(O + t₁) t₁z t₂z uniti₊l = 
+  let X1 = !⟷₁ (tzO t₁ t₁z)
+      X2 = tzO t₁ t₂z
+  in  (X1 ◎ uniti₊l ◎ (id⟷₁ ⊕ X2) ◎ unite₊l) ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ unite₊l⟷₂r) ⟩
+      X1 ◎ uniti₊l ◎ unite₊l ◎ X2 ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+      X1 ◎ (uniti₊l ◎ unite₊l) ◎ X2 ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
+      X1 ◎ id⟷₁ ◎ X2 ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
+      X1 ◎ X2 ⟷₂⟨ tz0=r ⟩
+      id⟷₁ ⟷₂∎
+
+gzero⟷₂ (t₁ + t₂) (t₂ + t₁) t₁z t₂z swap₊ = 
+  let X2 = !⟷₁ (tzO _ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ t₁z))
+      X3 = !⟷₁ (tzO _ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ t₁z))
+      X5 = tzO _ (plus0l ∣ t₂ ∣ ∣ t₁ ∣ t₂z)
+      X6 = tzO _ (plus0r ∣ t₂ ∣ ∣ t₁ ∣ t₂z)
+  in  (uniti₊l ◎ (X2 ⊕ X3)) ◎ (swap₊ ◎ (X5 ⊕ X6) ◎ unite₊l) ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+      (uniti₊l ◎ (X2 ⊕ X3)) ◎ (swap₊ ◎ (X5 ⊕ X6)) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ (swapl₊⟷₂ ⊡ id⟷₂) ⟩
+      (uniti₊l ◎ (X2 ⊕ X3)) ◎ ((X6 ⊕ X5) ◎ swap₊) ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ assoc◎r ⟩
+      (uniti₊l ◎ (X2 ⊕ X3)) ◎ (X6 ⊕ X5) ◎ swap₊ ◎ unite₊l ⟷₂⟨ assoc◎r ⟩
+      uniti₊l ◎ (X2 ⊕ X3) ◎ (X6 ⊕ X5) ◎ swap₊ ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+      uniti₊l ◎ ((X2 ⊕ X3) ◎ (X6 ⊕ X5)) ◎ swap₊ ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂) ⟩
+      uniti₊l ◎ ((X2 ◎ X6) ⊕ (X3 ◎ X5)) ◎ swap₊ ◎ unite₊l ⟷₂⟨ id⟷₂ ⊡ (resp⊕⟷₂ tz0=r tz0=r ⊡ id⟷₂) ⟩
+      uniti₊l ◎ (id⟷₁ ⊕ id⟷₁) ◎ swap₊ ◎ unite₊l ⟷₂⟨ assoc◎l ⟩
+      (uniti₊l ◎ (id⟷₁ ⊕ id⟷₁)) ◎ swap₊ ◎ unite₊l ⟷₂⟨ uniti₊l⟷₂l ⊡ id⟷₂ ⟩
+      (id⟷₁ ◎ uniti₊l) ◎ swap₊ ◎ unite₊l ⟷₂⟨ trans⟷₂ assoc◎r idl◎l ⟩
+      uniti₊l ◎ swap₊ ◎ unite₊l ⟷₂⟨ u-swap-u ⟩
+      id⟷₁ ⟷₂∎
 gzero⟷₂ .(_ + _ + _) .((_ + _) + _) t₁z t₂z assocl₊ = {!   !}
 gzero⟷₂ .((_ + _) + _) .(_ + _ + _) t₁z t₂z assocr₊ = {!   !}
 gzero⟷₂ t₁ .t₁ t₁z t₂z id⟷₁ = 
