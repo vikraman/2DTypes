@@ -10,9 +10,8 @@ open import Pi+.Lehmer.Lehmer
 open import Pi+.Common.InequalityEquiv
 open import Pi+.Common.Arithmetic
 
-open import Pi+.UFin.Monoidal
+open import Pi+.UFin.BAut using (Aut)
 open import Pi+.Extra
-open import Pi+.Misc
 
 ≤→< : {k n : ℕ} -> (k ≤ n) -> (k < S n)
 ≤→< z≤n = s≤s z≤n
