@@ -20,15 +20,14 @@ data _⟷₁_  : U → U → Set where
   assocl₊ : {t₁ t₂ t₃ : U} → t₁ + (t₂ + t₃) ⟷₁ (t₁ + t₂) + t₃
   assocr₊ : {t₁ t₂ t₃ : U} → (t₁ + t₂) + t₃ ⟷₁ t₁ + (t₂ + t₃)
   id⟷₁     : {t : U} → t ⟷₁ t
---  !⟷₁      : {t₁ t₂ : U} → t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
   _◎_     : {t₁ t₂ t₃ : U} → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
   _⊕_     : {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷₁ t₃) → (t₂ ⟷₁ t₄) → (t₁ + t₂ ⟷₁ t₃ + t₄)
 
--- uniti₊l : {t : U} → t ⟷₁ O + t
--- uniti₊l = !⟷₁ unite₊l
+unite₊r : {t : U} → t + O ⟷₁ t
+unite₊r = swap₊ ◎ unite₊l
 
--- assocr₊ : {t₁ t₂ t₃ : U} → (t₁ + t₂) + t₃ ⟷₁ t₁ + (t₂ + t₃)
--- assocr₊ = !⟷₁ assocl₊
+uniti₊r : {t : U} → t ⟷₁ t + O
+uniti₊r = uniti₊l ◎ swap₊
 
 !⟷₁ : {t₁ t₂ : U} → t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
 !⟷₁ unite₊l = uniti₊l
@@ -39,9 +38,6 @@ data _⟷₁_  : U → U → Set where
 !⟷₁ id⟷₁ = id⟷₁
 !⟷₁ (c₁ ◎ c₂) = !⟷₁ c₂ ◎ !⟷₁ c₁
 !⟷₁ (c₁ ⊕ c₂) = !⟷₁ c₁ ⊕ !⟷₁ c₂
-
-unite₊r : {t : U} → t + O ⟷₁ t
-unite₊r = swap₊ ◎ unite₊l
 
 data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   assoc◎l : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷₁ t₂} {c₂ : t₂ ⟷₁ t₃} {c₃ : t₃ ⟷₁ t₄} →
@@ -123,6 +119,9 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   hexagonl₊r : {t₁ t₂ t₃ : U} →
     ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ⟷₂
     (assocl₊ ◎ swap₊) ◎ assocl₊ {t₁} {t₂} {t₃}
+  -- Braiding compatible with unitors (redundant; provable from above axioms)
+--  unit-braid : {t : U} → uniti₊l ⟷₂ uniti₊r ◎ swap₊
+--  braid-unit : {t : U} → uniti₊r ◎ swap₊ ⟷₂ uniti₊l
 
 
 -- Equational reasoning
