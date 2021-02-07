@@ -75,11 +75,27 @@ tz0=r : {t : U} → {p1 : ∣ t ∣ == 0} → {p2 : ∣ t ∣ == 0} → !⟷₁ 
 tz0=r {t} {p1} {p2} = transport (λ e -> (!⟷₁ (tzO t p1) ◎ (tzO t e)) ⟷₂ id⟷₁) (prop-has-all-paths {{has-level-apply-instance}} p1 p2) rinv◎l
 
 u-swap-u : uniti₊l ◎ swap₊ ◎ unite₊l ⟷₂ id⟷₁
-u-swap-u = trans⟷₂ (id⟷₂ ⊡ (id⟷₂ ⊡ unite₊l-coh-l))
-           (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
-           (trans⟷₂ (id⟷₂ ⊡ (rinv◎l ⊡ id⟷₂))
-           (trans⟷₂ (id⟷₂ ⊡ idl◎l)
-           {!!})))
+u-swap-u = {!!}
+
+{--
+   01
+-> 02 + 01
+-> 01 + 02
+-> 02
+
+   01
+-> 02 + 01
+-> 01 + 02
+-> 02
+
+ hexagonl₊l :
+   01 + (02 + 03)
+-> (01 + 02) + 03
+-> 03 + (01 + 02)
+-> (03 + 01) + 02
+
+--}
+
 
 neg2 : {t₁ t₂ : U} -> (c₁ c₂ : t₁ ⟷₁ t₂) -> (c₁ ⟷₂ c₂) -> (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
 neg2 .(_ ◎ _ ◎ _) .((_ ◎ _) ◎ _) assoc◎l = assoc◎r
