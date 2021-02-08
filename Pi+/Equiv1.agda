@@ -14,6 +14,7 @@ open import Pi+.Equiv1Norm
 
 open import lib.Basics
 open import lib.types.Fin
+open import lib.types.Nat
 open import lib.types.List
 open import lib.types.Truncation
 open import lib.NType2
@@ -74,12 +75,24 @@ quote-eval₁ {X} {Y} p =
         X=Y' = ap card p' -- equality in Nat
         ide' = ap FinFS X=Y'
         idc' = transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y' id⟷₁
-
-        evc' = quote₁-norm (normp' ∙ ! ide')
-        p'' = evc' ◎ idc'
         
-        quoted⟷₂norm : p'' ⟷₂ (quote-eval₀ X ◎ p ◎ !⟷₁ (quote-eval₀ Y))
-        quoted⟷₂norm = {!   !}
+        X=Y=X=Y' = prop-has-all-paths {{has-level-apply-instance}} (⟷₁-size (norm p)) X=Y'
+
+        ide=ide' : ide == ide'
+        ide=ide' = transport (λ e -> ap FinFS (⟷₁-size (norm p)) == ap FinFS e) X=Y=X=Y' idp
+
+        quoted⟷₂norm : quote₁-norm (normp' ∙ ! ide') ◎ idc' ⟷₂ normp
+        quoted⟷₂norm = 
+              quote₁-norm (normp' ∙ ! ide') ◎ idc'
+            ⟷₂⟨ transport (λ e -> quote₁-norm (normp' ∙ ! ide') ◎ idc' ⟷₂ quote₁-norm (normp' ∙ ! e) ◎ idc') (! ide=ide') id⟷₂ ⟩ 
+              quote₁-norm (normp' ∙ ! ide) ◎ (transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y' id⟷₁)
+            ⟷₂⟨ transport (λ e -> (quote₁-norm (normp' ∙ ! ide)) ◎ (transport (λ f -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ f ⟫) X=Y' id⟷₁) ⟷₂ (quote₁-norm (normp' ∙ ! ide)) ◎ (transport (λ f -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ f ⟫) e id⟷₁)) (! X=Y=X=Y') id⟷₂ ⟩ 
+              quote₁-norm (normp' ∙ ! ide) ◎ (transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁)
+            ⟷₂⟨ id⟷₂ ⟩
+              quote₁-norm ((<– finfs-ufin (eval₁-norm (normp ◎ (transport (λ e -> ⟪ ∣ Y ∣ ⟫ ⟷₁ ⟪ e ⟫) (! X=Y) id⟷₁)) ∙ ide)) ∙ ! ide) ◎ (transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁)
+            ⟷₂⟨ {!   !} ⟩
+              {!   !}
+            ⟷₂∎
         
     in  quoted⟷₂norm
 
