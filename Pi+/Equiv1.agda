@@ -42,32 +42,46 @@ finfs-ufin = equiv (λ x → {!   !}) (λ {idp → idp}) (λ {idp → {!   !}}) 
 
 eval₁ : {X Y : U} → X ⟷₁ Y → eval₀ X == eval₀ Y
 eval₁ {X} {Y} p =
-    let normc = norm p
-        X=Y = ⟷₁-size normc
-        evc = eval₁-norm (transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫ ) (! X=Y) normc)
-    in  evc ∙ (ap FinFS X=Y)
+    let normp = norm p
+        X=Y = ⟷₁-size normp  -- equality in Nat
+        ide = ap FinFS X=Y
+        idc = transport (λ e -> ⟪ ∣ Y ∣ ⟫ ⟷₁ ⟪ e ⟫) (! X=Y) id⟷₁
+        
+        evc = eval₁-norm (normp ◎ idc)
+    in  evc ∙ ide
 
 quote₁ : {X Y : UFin} → X == Y → quote₀ X ⟷₁ quote₀ Y
 quote₁ {X} {Y} p =
-    let evc : quote₀ X ⟷₁ quote₀ X
-        evc = quote₁-norm ( <– finfs-ufin p ∙ ap (FinFS ∘ card) (! p))
-        idc = transport (λ e -> quote₀ X ⟷₁ ⟪ e ⟫) (ap card p) id⟷₁
+    let normp = <– finfs-ufin p
+        X=Y = ap card p -- equality in Nat
+        ide = ap FinFS X=Y
+        idc = transport (λ e -> ⟪ card X ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁
+
+        evc = quote₁-norm (normp ∙ ! ide)
     in  evc ◎ idc
 
 quote-eval₁ : {X Y : U} → (p : X ⟷₁ Y) → quote₁ (eval₁ p) ⟷₂ norm p
-quote-eval₁ {X} {Y} p = 
-    let X=Y = ⟷₁-size (quote-eval₀ X ◎ p ◎ !⟷₁ (quote-eval₀ Y))
-        evc = eval₁-norm (transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫ ) (! X=Y) (quote-eval₀ X ◎ p ◎ !⟷₁ (quote-eval₀ Y)))
-
-        evc2 = quote₁-norm ( <– finfs-ufin (evc ∙ (ap FinFS X=Y)) ∙ ap (FinFS ∘ card) (! (evc ∙ (ap FinFS X=Y))))
+quote-eval₁ {X} {Y} p =
+    let normp = norm p
+        X=Y = ⟷₁-size normp  -- equality in Nat
+        ide = ap FinFS X=Y
+        idc = transport (λ e -> ⟪ ∣ Y ∣ ⟫ ⟷₁ ⟪ e ⟫) (! X=Y) id⟷₁
         
-        X=Y2 = (ap card (evc ∙ (ap FinFS X=Y)))
-        idc = transport (λ e -> quote₀ (eval₀ X) ⟷₁ ⟪ e ⟫) X=Y2 id⟷₁
-      
-        quoted⟷₂norm : evc2 ◎ idc ⟷₂ (quote-eval₀ X ◎ p ◎ !⟷₁ (quote-eval₀ Y))
+        evc = eval₁-norm (normp ◎ idc)
+        p' = evc ∙ ide
+        
+        normp' = <– finfs-ufin p'
+        X=Y' = ap card p' -- equality in Nat
+        ide' = ap FinFS X=Y'
+        idc' = transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y' id⟷₁
+
+        evc' = quote₁-norm (normp' ∙ ! ide')
+        p'' = evc' ◎ idc'
+        
+        quoted⟷₂norm : p'' ⟷₂ (quote-eval₀ X ◎ p ◎ !⟷₁ (quote-eval₀ Y))
         quoted⟷₂norm = {!   !}
         
-    in  quoted⟷₂norm -- quoted⟷₂norm
+    in  quoted⟷₂norm
 
 eval-quote₁ : {X Y : UFin} → (p : X == Y) → eval₁ (quote₁ p) == ap (λ X → eval₀ (quote₀ X)) p
 eval-quote₁ p = TODO
