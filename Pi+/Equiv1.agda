@@ -31,14 +31,18 @@ denorm {X} {Y} p = (!⟷₁ (quote-eval₀ X)) ◎ p ◎ (quote-eval₀ Y)
 postulate
     denorm∘norm : {X Y : U} → (c : X ⟷₁ Y) → denorm (norm c) ⟷₂ c
     norm∘denorm : {X Y : U} → (c : ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫) → norm {X} {Y} (denorm c) ⟷₂ c
-    ⟷₁-size : {n m : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ m ⟫ → m == n
+
+⟷₁-size : {n m : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ m ⟫ → n == m
+⟷₁-size {n} {m} p = 
+    let p = eqsize p
+    in  ! ∣⟪ n ⟫∣ ∙ p ∙ ∣⟪ m ⟫∣
 
 eval₁ : {X Y : U} → X ⟷₁ Y → eval₀ X == eval₀ Y
 eval₁ {X} {Y} p =
     let normc = norm p
-        Y=X = ⟷₁-size normc
-        evc = eval₁-norm (transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫ ) Y=X normc) -- ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫
-    in  evc ∙ ! (ap FinFS Y=X)
+        X=Y = ⟷₁-size normc
+        evc = eval₁-norm (transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫ ) (! X=Y) normc) -- ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫
+    in  evc ∙ (ap FinFS X=Y)
 
 quote₁ : {X Y : UFin} → X == Y → quote₀ X ⟷₁ quote₀ Y
 quote₁ {X} {Y} p =
@@ -54,7 +58,7 @@ quote₁ {X} {Y} p =
     in  evc ◎ transport (λ e -> quote₀ X ⟷₁ ⟪ e ⟫) X=Y id⟷₁ -- does it matter over which X=Y do I transport?
 
 quote-eval₁ : {X Y : U} → (p : X ⟷₁ Y) → quote₁ (eval₁ p) ⟷₂ norm p
-quote-eval₁ p = TODO
+quote-eval₁ {X} {Y} p = {!   !}
 
 eval-quote₁ : {X Y : UFin} → (p : X == Y) → eval₁ (quote₁ p) == ap (λ X → eval₀ (quote₀ X)) p
 eval-quote₁ p = TODO
