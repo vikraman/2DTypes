@@ -72,7 +72,7 @@ quote-eval₁-norm {S n} p =
     in  cancelNorm
 
 eval-quote₁-norm : {n : ℕ} → (p : FinFS n == FinFS n) → eval₁-norm (quote₁-norm p) == p
-eval-quote₁-norm {O} p = TODO -- obvious
+eval-quote₁-norm {O} p = {!   !} -- obvious
 eval-quote₁-norm {S n} p =
     let cancelNorm : normpi2lehmer (lehmer2normpi (–> UFin≃Lehmer p)) == (–> UFin≃Lehmer p)
         cancelNorm = lehmer2lehmer (–> UFin≃Lehmer p)
