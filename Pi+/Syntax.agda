@@ -5,6 +5,8 @@ open import lib.NType
 
 module Pi+.Syntax where
 
+-- Types
+
 data U : Set where
   O I : U
   _+_ : U → U → U
@@ -12,6 +14,8 @@ data U : Set where
 infixr 40 _+_
 infix 30 _⟷₁_
 infixr 50 _◎_ _⊕_
+
+-- 1-combinators
 
 data _⟷₁_  : U → U → Set where
   unite₊l : {t : U} → O + t ⟷₁ t
@@ -22,6 +26,19 @@ data _⟷₁_  : U → U → Set where
   id⟷₁     : {t : U} → t ⟷₁ t
   _◎_     : {t₁ t₂ t₃ : U} → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
   _⊕_     : {t₁ t₂ t₃ t₄ : U} → (t₁ ⟷₁ t₃) → (t₂ ⟷₁ t₄) → (t₁ + t₂ ⟷₁ t₃ + t₄)
+
+-- Equational reasoning
+
+infixr 10 _⟷₁⟨_⟩_
+infix  15 _⟷₁∎
+
+_⟷₁⟨_⟩_ : ∀ {t₂ t₃ : U} → (t₁ : U) → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
+_ ⟷₁⟨ c₁ ⟩ c₂ = c₁ ◎ c₂
+
+_⟷₁∎ : (t : U) → t ⟷₁ t
+_⟷₁∎ t = id⟷₁
+
+-- Coherence
 
 unite₊r : {t : U} → t + O ⟷₁ t
 unite₊r = swap₊ ◎ unite₊l
@@ -38,6 +55,8 @@ uniti₊r = uniti₊l ◎ swap₊
 !⟷₁ id⟷₁ = id⟷₁
 !⟷₁ (c₁ ◎ c₂) = !⟷₁ c₂ ◎ !⟷₁ c₁
 !⟷₁ (c₁ ⊕ c₂) = !⟷₁ c₁ ⊕ !⟷₁ c₂
+
+-- 2-combinators
 
 data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   assoc◎l : {t₁ t₂ t₃ t₄ : U} {c₁ : t₁ ⟷₁ t₂} {c₂ : t₂ ⟷₁ t₃} {c₃ : t₃ ⟷₁ t₄} →
@@ -119,21 +138,17 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   hexagonl₊r : {t₁ t₂ t₃ : U} →
     ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ⟷₂
     (assocl₊ ◎ swap₊) ◎ assocl₊ {t₁} {t₂} {t₃}
-  -- Braiding compatible with unitors (redundant; provable from above axioms)
---  unit-braid : {t : U} → uniti₊l ⟷₂ uniti₊r ◎ swap₊
---  braid-unit : {t : U} → uniti₊r ◎ swap₊ ⟷₂ uniti₊l
-
+  -- Braiding compatible with unitors (redundant; provable from above
+  -- axioms. See for example Thm. 10 in "On MacLane's Conditions for
+  -- Coherence of Natural Associativities, Commutativities, etc.
+  -- Kelly 1964)
+  unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
+  braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
 
 -- Equational reasoning
 
-infixr 10 _⟷₁⟨_⟩_ _⟷₂⟨_⟩_
-infix  15 _⟷₁∎ _⟷₂∎
-
-_⟷₁⟨_⟩_ : ∀ {t₂ t₃ : U} → (t₁ : U) → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
-_ ⟷₁⟨ c₁ ⟩ c₂ = c₁ ◎ c₂
-
-_⟷₁∎ : (t : U) → t ⟷₁ t
-_⟷₁∎ t = id⟷₁
+infixr 10 _⟷₂⟨_⟩_
+infix  15 _⟷₂∎
 
 _⟷₂⟨_⟩_ : ∀ {t₁ t₂ : U} (c₁ : t₁ ⟷₁ t₂) {c₂ c₃ : t₁ ⟷₁ t₂} →
          (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
@@ -141,6 +156,18 @@ _ ⟷₂⟨ β ⟩ γ = trans⟷₂ β γ
 
 _⟷₂∎ : ∀ {t₁ t₂ : U} (c : t₁ ⟷₁ t₂) → c ⟷₂ c
 _ ⟷₂∎ = id⟷₂
+
+-- Coherence
+
+!⟷₁!⟷₁ : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (!⟷₁ (!⟷₁ c) ⟷₂ c)
+!⟷₁!⟷₁ unite₊l = id⟷₂
+!⟷₁!⟷₁ uniti₊l = id⟷₂
+!⟷₁!⟷₁ swap₊ = id⟷₂
+!⟷₁!⟷₁ assocl₊ = id⟷₂
+!⟷₁!⟷₁ assocr₊ = id⟷₂
+!⟷₁!⟷₁ id⟷₁ = id⟷₂
+!⟷₁!⟷₁ (c ◎ c₁) = !⟷₁!⟷₁ c ⊡ !⟷₁!⟷₁ c₁
+!⟷₁!⟷₁ (c ⊕ c₁) = resp⊕⟷₂ (!⟷₁!⟷₁ c) (!⟷₁!⟷₁ c₁)
 
 !⟷₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₁)
 !⟷₂ assoc◎l = assoc◎r
@@ -181,9 +208,9 @@ _ ⟷₂∎ = id⟷₂
 !⟷₂ hexagonr₊r = hexagonr₊l
 !⟷₂ hexagonl₊l = hexagonl₊r
 !⟷₂ hexagonl₊r = hexagonl₊l
+!⟷₂ unit-braid = braid-unit
+!⟷₂ braid-unit = unit-braid
 
-
-{--
 !⟷₁⟷₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
 !⟷₁⟷₂ assoc◎l = assoc◎r
 !⟷₁⟷₂ assoc◎r = assoc◎l
@@ -206,26 +233,35 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ swapl₊⟷₂ = swapr₊⟷₂
 !⟷₁⟷₂ swapr₊⟷₂ = swapl₊⟷₂
 !⟷₁⟷₂ id⟷₂ = id⟷₂
-!⟷₁⟷₂ (trans⟷₂ α α₁) = trans⟷₂ (!⟷₁⟷₂ α) (!⟷₁⟷₂ α₁)
-!⟷₁⟷₂ (α ⊡ α₁) = !⟷₁⟷₂ α₁ ⊡ !⟷₁⟷₂ α
-!⟷₁⟷₂ (resp⊕⟷₂ α α₁) = resp⊕⟷₂ (!⟷₁⟷₂ α) (!⟷₁⟷₂ α₁)
+!⟷₁⟷₂ (trans⟷₂ α β) = trans⟷₂ (!⟷₁⟷₂ α) (!⟷₁⟷₂ β)
+!⟷₁⟷₂ (α ⊡ β) = !⟷₁⟷₂ β ⊡ !⟷₁⟷₂ α
+!⟷₁⟷₂ (resp⊕⟷₂ α β) = resp⊕⟷₂ (!⟷₁⟷₂ α) (!⟷₁⟷₂ β)
 !⟷₁⟷₂ id⟷₁⊕id⟷₁⟷₂ = id⟷₁⊕id⟷₁⟷₂
 !⟷₁⟷₂ split⊕-id⟷₁ = split⊕-id⟷₁
 !⟷₁⟷₂ hom⊕◎⟷₂ = hom⊕◎⟷₂
 !⟷₁⟷₂ hom◎⊕⟷₂ = hom◎⊕⟷₂
-!⟷₁⟷₂ triangle⊕l = {!!}
-!⟷₁⟷₂ triangle⊕r = {!!}
---}
+!⟷₁⟷₂ triangle₊l =
+  ((uniti₊l ◎ swap₊) ⊕ id⟷₁)
+    ⟷₂⟨ {!!} ⟩
+  ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ⟷₂∎
+!⟷₁⟷₂ triangle₊r =
+  ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊)
+    ⟷₂⟨ {!!} ⟩
+  ((uniti₊l ◎ swap₊) ⊕ id⟷₁) ⟷₂∎
+!⟷₁⟷₂ pentagon₊l = {!!}
+!⟷₁⟷₂ pentagon₊r = {!!}
+!⟷₁⟷₂ unite₊l-coh-l = {!!}
+!⟷₁⟷₂ unite₊l-coh-r = {!!}
+!⟷₁⟷₂ hexagonr₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊l) assoc◎r
+!⟷₁⟷₂ hexagonr₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊r) assoc◎r
+!⟷₁⟷₂ hexagonl₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊l) assoc◎r
+!⟷₁⟷₂ hexagonl₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊r) assoc◎r
+!⟷₁⟷₂ unit-braid = {!!}
+!⟷₁⟷₂ braid-unit = {!!}
 
-!⟷₁!⟷₁ : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → (!⟷₁ (!⟷₁ c) ⟷₂ c)
-!⟷₁!⟷₁ unite₊l = id⟷₂
-!⟷₁!⟷₁ uniti₊l = id⟷₂
-!⟷₁!⟷₁ swap₊ = id⟷₂
-!⟷₁!⟷₁ assocl₊ = id⟷₂
-!⟷₁!⟷₁ assocr₊ = id⟷₂
-!⟷₁!⟷₁ id⟷₁ = id⟷₂
-!⟷₁!⟷₁ (c ◎ c₁) = !⟷₁!⟷₁ c ⊡ !⟷₁!⟷₁ c₁
-!⟷₁!⟷₁ (c ⊕ c₁) = resp⊕⟷₂ (!⟷₁!⟷₁ c) (!⟷₁!⟷₁ c₁)
+-- 3-combinators trivial
 
 data _⟷₃_ : {X Y : U} {p q : X ⟷₁ Y} → (p ⟷₂ q) → (p ⟷₂ q) → Set where
   trunc : {X Y : U} {p q : X ⟷₁ Y} (α β : p ⟷₂ q) → α ⟷₃ β
+
+--
