@@ -46,9 +46,9 @@ eval₁ {X} {Y} p =
     let normp = norm p
         X=Y = ⟷₁-size normp  -- equality in Nat
         ide = ap FinFS X=Y
-        idc = transport (λ e -> ⟪ ∣ Y ∣ ⟫ ⟷₁ ⟪ e ⟫) (! X=Y) id⟷₁
+        idc = transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁
         
-        evc = eval₁-norm (normp ◎ idc)
+        evc = eval₁-norm (normp ◎ (!⟷₁ idc))
     in  evc ∙ ide
 
 quote₁ : {X Y : UFin} → X == Y → quote₀ X ⟷₁ quote₀ Y
@@ -66,9 +66,9 @@ quote-eval₁ {X} {Y} p =
     let normp = norm p
         X=Y = ⟷₁-size normp  -- equality in Nat
         ide = ap FinFS X=Y
-        idc = transport (λ e -> ⟪ ∣ Y ∣ ⟫ ⟷₁ ⟪ e ⟫) (! X=Y) id⟷₁
+        idc = transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁
         
-        evc = eval₁-norm (normp ◎ idc)
+        evc = eval₁-norm (normp ◎ (!⟷₁ idc))
         p' = evc ∙ ide
         
         normp' = <– finfs-ufin p'
@@ -89,9 +89,9 @@ quote-eval₁ {X} {Y} p =
             ⟷₂⟨ transport (λ e -> (quote₁-norm (normp' ∙ ! ide)) ◎ (transport (λ f -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ f ⟫) X=Y' id⟷₁) ⟷₂ (quote₁-norm (normp' ∙ ! ide)) ◎ (transport (λ f -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ f ⟫) e id⟷₁)) (! X=Y=X=Y') id⟷₂ ⟩ 
               quote₁-norm (normp' ∙ ! ide) ◎ (transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁)
             ⟷₂⟨ id⟷₂ ⟩
-              quote₁-norm ((<– finfs-ufin (eval₁-norm (normp ◎ (transport (λ e -> ⟪ ∣ Y ∣ ⟫ ⟷₁ ⟪ e ⟫) (! X=Y) id⟷₁)) ∙ ide)) ∙ ! ide) ◎ (transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁)
+              quote₁-norm ((<– finfs-ufin (eval₁-norm (normp ◎ !⟷₁ (transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁)) ∙ ide)) ∙ ! ide) ◎ (transport (λ e -> ⟪ card (eval₀ X) ⟫ ⟷₁ ⟪ e ⟫) X=Y id⟷₁)
             ⟷₂⟨ {!   !} ⟩
-              {!   !}
+              normp
             ⟷₂∎
         
     in  quoted⟷₂norm
