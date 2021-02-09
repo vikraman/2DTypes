@@ -25,12 +25,33 @@ open import Pi+.Coxeter.Sn
 ∣ I ∣ = 1
 ∣ t₁ + t₂ ∣ = ∣ t₁ ∣ +ℕ ∣ t₂ ∣
 
+eqsize : {t₁ t₂ : U} → (p : t₁ ⟷₁ t₂) → ∣ t₁ ∣ == ∣ t₂ ∣
+eqsize unite₊l = idp
+eqsize uniti₊l = idp
+eqsize (swap₊ {t₁} {t₂}) = +-comm ∣ t₁ ∣ ∣ t₂ ∣
+eqsize (assocl₊ {t₁} {t₂} {t₃}) = ! (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
+eqsize (assocr₊ {t₁} {t₂} {t₃}) = (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
+eqsize id⟷₁ = idp
+eqsize (p₁ ◎ p₂) = eqsize p₁ ∙ eqsize p₂
+eqsize (p₁ ⊕ p₂) = ap2 (λ X Y → X +ℕ Y) (eqsize p₁) (eqsize p₂)
+
 ⟪_⟫ : ℕ → U
 ⟪ O ⟫ = O
 ⟪ S n ⟫ = I + ⟪ n ⟫
 
 canonU : U → U
 canonU t = ⟪ ∣ t ∣ ⟫
+
+-- Append two lists of the form I + (I + ... O)
+⟪++⟫ : {m n : ℕ} → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
+⟪++⟫ {O} = unite₊l
+⟪++⟫ {S m} = assocr₊ ◎ (id⟷₁ ⊕ ⟪++⟫)
+
+-- Flatten a Pi type (a tree) to a list
+normC : (t : U) → t ⟷₁ canonU t
+normC O = id⟷₁
+normC I  = uniti₊l ◎ swap₊
+normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
 
 -----------------------------------------------------------------------------
 -- Mapping betweem pi combinators over zero types to and from the
@@ -41,16 +62,6 @@ plus0l O n pr = idp
 
 plus0r : (m n : ℕ) → (m +ℕ n == 0) → (n == 0)
 plus0r O n pr = pr
-
-eqsize : {t₁ t₂ : U} → (p : t₁ ⟷₁ t₂) → ∣ t₁ ∣ == ∣ t₂ ∣
-eqsize unite₊l = idp
-eqsize uniti₊l = idp
-eqsize (swap₊ {t₁} {t₂}) = +-comm ∣ t₁ ∣ ∣ t₂ ∣
-eqsize (assocl₊ {t₁} {t₂} {t₃}) = ! (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
-eqsize (assocr₊ {t₁} {t₂} {t₃}) = (+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
-eqsize id⟷₁ = idp
-eqsize (p₁ ◎ p₂) = eqsize p₁ ∙ eqsize p₂
-eqsize (p₁ ⊕ p₂) = ap2 (λ X Y → X +ℕ Y) (eqsize p₁) (eqsize p₂)
 
 zeroDecompose : (t : U) → (tz : ∣ t ∣ == 0) →
                 (t == O ⊎ Σ U (λ t' → (t ⟷₁ O + t') × (∣ t' ∣ == 0)))
@@ -67,7 +78,6 @@ tzO O idp = id⟷₁
 tzO (t₁ + t₂) tz =
   (tzO t₁ (plus0l ∣ t₁ ∣ ∣ t₂ ∣ tz) ⊕ tzO t₂ (plus0r ∣ t₁ ∣ ∣ t₂ ∣ tz)) ◎ unite₊l
 
--- instances don't resolve
 tz0=l : {t : U} → {p1 : ∣ t ∣ == 0} → {p2 : ∣ t ∣ == 0} →
         (tzO t p1) ◎ (!⟷₁ (tzO t p2)) ⟷₂ id⟷₁
 tz0=l {t} {p1} {p2} =
@@ -242,19 +252,6 @@ zero⟷₂ (_◎_ {O} {t} {O} p₁ p₂) with zeroDecompose t (eqsize p₂)
 -----------------------------------------------------------------------------
 -- Mapping betweem pi combinators over non-zero types to and from the
 -- Coxeter representation
-
-c2list : {t₁ t₂ : U} → t₁ ⟷₁ t₂ → List (Fin ∣ t₁ ∣)
-c2list unite₊l = {!!}
-c2list uniti₊l = {!!}
-c2list swap₊ = {!!}
-c2list assocl₊ = {!!}
-c2list assocr₊ = {!!}
-c2list id⟷₁ = ?
-c2list (p₁ ◎ p₂) = {!!}
-c2list (p₁ ⊕ p₂) = {!!}
-
-norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
-norm2list p = {!!}
 
 -- Mapping each transposition index to a combinator and
 -- some properties
@@ -475,6 +472,16 @@ piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
 piRespectsCox O nil nil unit = id⟷₂
 piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
 
+-- Mapping from combinators to lists
+
+-- c2list : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) →
+--   Σ (List (Fin ∣ t₁ ∣)) (λ ns → (!⟷₁ (normC t₁) ◎ c ◎ normC t₂) ⟷₂ list2norm ns)
+-- c2list = ?
+
+
+norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
+norm2list p = {!!}
+
 -- Back and forth identities
 
 norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
@@ -531,16 +538,6 @@ nf→canon (X nf) = I + nf→canon nf
 -----------------------------------------------------------------------------
 -- Converting Pi types to normal form
 
--- Append two lists of the form I + (I + ... O)
-⟪++⟫ : {m n : ℕ} → ⟪ m ⟫ + ⟪ n ⟫ ⟷₁ ⟪ m +ℕ n ⟫
-⟪++⟫ {O} = unite₊l
-⟪++⟫ {S m} = assocr₊ ◎ (id⟷₁ ⊕ ⟪++⟫)
-
--- Flatten a Pi type (a tree) to a list
-normC : (t : U) → t ⟷₁ canonU t
-normC O = id⟷₁
-normC I  = uniti₊l ◎ swap₊
-normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
 {-
 -----------------------------------------------------------------------------
 -- Example
