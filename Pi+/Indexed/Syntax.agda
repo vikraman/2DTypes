@@ -4,10 +4,11 @@ open import lib.Base
 open import lib.NType
 import lib.types.Nat as N
 
-module Pi+.Syntax.Indexed where
+module Pi+.Indexed.Syntax where
 
-variable
-  m n o p q r : ℕ
+private
+  variable
+    m n o p q r : ℕ
 
 -- Types
 
@@ -27,8 +28,9 @@ infixr 50 _◎_ _⊕_
 -- +-assoc-↦ k m n = =↦ (N.+-assoc k m n)
 -- {-# REWRITE +-assoc-↦ #-}
 
-variable
-  t t₁ t₂ t₃ t₄ t₅ t₆ : U n
+private
+  variable
+    t t₁ t₂ t₃ t₄ t₅ t₆ : U n
 
 -- 1-combinators
 

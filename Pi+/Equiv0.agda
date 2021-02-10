@@ -15,7 +15,7 @@ open import lib.NType2
 open import lib.types.SetQuotient
 open import lib.types.Coproduct
 
-∣⟪_⟫∣ : (n : ℕ) → ∣ ⟪ n ⟫ ∣ == n 
+∣⟪_⟫∣ : (n : ℕ) → ∣ ⟪ n ⟫ ∣ == n
 ∣⟪ O ⟫∣ = idp
 ∣⟪ S n ⟫∣ = ap S ∣⟪ n ⟫∣
 
