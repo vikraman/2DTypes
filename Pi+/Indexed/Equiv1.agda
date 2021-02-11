@@ -69,6 +69,9 @@ evalNorm₁ {S n} c =
 
     in  step2
 
+eval₁ : {t : U n} → (c : t ⟷₁ t) → Aut (Fin n)
+eval₁ = evalNorm₁ ∘ eval^₁
+
 -- quoteNorm₁ : Aut (Fin n) → quoteNorm₀ (pFin n) ⟷₁^ quoteNorm₀ (pFin n)
 
 quoteNorm₁ : (t : U^ n) -> Aut (Fin n) → t ⟷₁^ t
@@ -79,6 +82,10 @@ quoteNorm₁ {S n} _ p =
 
         step2 = lehmer2normpi step1
     in  step2
+
+quote₁ : Aut (Fin n) → (quote₀ (pFin n) ⟷₁ quote₀ (pFin n))
+quote₁ e = quote^₁ (quoteNorm₁ _ e)
+
 
 quote-evalNorm₁ : {n : ℕ} {t : U^ n} → (c : t ⟷₁^ t) → quoteNorm₁ t (evalNorm₁ c) ⟷₂^ c
 quote-evalNorm₁ {O} p = TODO
@@ -114,18 +121,19 @@ postulate
     unitr-rewrite : {t₁ : U^ n} {t₂ : U^ m} {c : t₁ ⟷₁^ t₂} → (c ◎^ id⟷₁^) ↦ c
     {-# REWRITE ap-id-rewrite unitl-rewrite unitr-rewrite #-}
  
+
 eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ denorm c
-eval-quote^₁ (swap₊^ {t = t}) = 
-    let cc = eval-quote^₀ t
-    in  !⟷₂^ ( -- ) -- (swapl₊⟷₂^ {c = {! id⟷₁^  !}})
-        (⊕^ ⊕^ cc) ◎^ (swap₊^ ◎^ ⊕^ (⊕^ (!⟷₁^ cc))) ⟷₂^⟨ _⊡^_ {c₁ = (⊕^ ⊕^ cc)} {c₂ = _} {c₃ = (⊕^ ⊕^ cc)} {c₄ = ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^)} {!   !}  {! swapl₊⟷₂^ !} ⟩
-        {!   !} ⟷₂^⟨ {!   !} ⟩ -- (⊕^ ⊕^ cc) ◎^ ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^) ,, assoc◎l^
-        ((⊕^ ⊕^ cc) ◎^ (⊕^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ hom◎⊕⟷₂^ ⊡^ id⟷₂^ ⟩
-        (⊕^ ((⊕^ cc) ◎^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ hom◎⊕⟷₂^) ⊡^ id⟷₂^ ⟩
-        (⊕^ (⊕^ ((cc) ◎^ (!⟷₁^ (cc))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
-        (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
-        swap₊^ ⟷₂^∎)
-eval-quote^₁ id⟷₁^ = {!   !}
+eval-quote^₁ (swap₊^ {t = t}) = {!   !}
+    -- let cc = eval-quote^₀ t
+    -- in  !⟷₂^ ( -- ) -- (swapl₊⟷₂^ {c = {! id⟷₁^  !}})
+    --     (⊕^ ⊕^ cc) ◎^ (swap₊^ ◎^ ⊕^ (⊕^ (!⟷₁^ cc))) ⟷₂^⟨ _⊡^_ {c₁ = (⊕^ ⊕^ cc)} {c₂ = _} {c₃ = (⊕^ ⊕^ cc)} {c₄ = ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^)} {!   !}  {! swapl₊⟷₂^ !} ⟩
+    --     {!   !} ⟷₂^⟨ {!   !} ⟩ -- (⊕^ ⊕^ cc) ◎^ ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^) ,, assoc◎l^
+    --     ((⊕^ ⊕^ cc) ◎^ (⊕^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ hom◎⊕⟷₂^ ⊡^ id⟷₂^ ⟩
+    --     (⊕^ ((⊕^ cc) ◎^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ hom◎⊕⟷₂^) ⊡^ id⟷₂^ ⟩
+    --     (⊕^ (⊕^ ((cc) ◎^ (!⟷₁^ (cc))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
+    --     (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
+    --     swap₊^ ⟷₂^∎)
+eval-quote^₁ {n = n} {t₁ = t₁} id⟷₁^ = !⟷₂^ (linv◎l^ {n} {t₁ = eval^₀ (quote^₀ t₁)} {t₂ = t₁} {c = eval-quote^₀ _})
 eval-quote^₁ (c ◎^ c₁) = {!   !}
 eval-quote^₁ (⊕^ c) = {!   !}
 
@@ -138,3 +146,9 @@ quote-eval^₁ assocr₊ = {!   !}
 quote-eval^₁ id⟷₁ = {!   !}
 quote-eval^₁ (c ◎ c₁) = {!   !}
 quote-eval^₁ (c ⊕ c₁) = {!   !}
+
+eval-quote₁ : (e : Aut (Fin n)) → (eval₁ (quote₁ e)) == e
+eval-quote₁ e = {!   !}
+
+quote-eval₁ : {t : U n} → (c : t ⟷₁ t) → (quote₁ (eval₁ c)) ⟷₂ (quote-eval₀ t ◎ c ◎ !⟷₁ (quote-eval₀ t))
+quote-eval₁ e = {!   !}
