@@ -50,10 +50,10 @@ normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
 
 normpi2normpi : {t : U^ (S n)} → (c : t ⟷₁^ t) →
     (lehmer2normpi {t = t} (normpi2lehmer c)) ⟷₂^ c
-normpi2normpi {n} p =
-    let lemma : immersion (immersion⁻¹ (norm2list p)) ≈ (norm2list p)
-        lemma = immersion∘immersion⁻¹ (norm2list p)
-    in  trans⟷₂^ (piRespectsCox  _ _ lemma) (norm2norm p) -- (piRespectsCox _ _ _ lemma)
+normpi2normpi {n} c =
+    let lemma : immersion (immersion⁻¹ (norm2list c)) ≈ (norm2list c)
+        lemma = immersion∘immersion⁻¹ (norm2list c)
+    in  trans⟷₂^ (piRespectsCox  _ _ lemma) (norm2norm c)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
 lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p

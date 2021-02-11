@@ -20,12 +20,10 @@ open import Pi+.Coxeter.Sn
 
 private
   variable
-    n m : ℕ
-
--- transpos2pi : (Fin n) → (i^ (S n)) ⟷₁^ (i^ (S n))
+    n m o : ℕ
 
 transpos2pi : {t : U^ (S n)} → (Fin n) → t ⟷₁^ t
-transpos2pi {S n} {I+ I+ t} (O , lp) = swap₊^ -- swap₊^
+transpos2pi {S n} {I+ I+ t} (O , lp) = swap₊^
 transpos2pi {S n} {I+ I+ t} (S x , lp) = ⊕^ transpos2pi (x , (<-cancel-S lp)) 
 
 transpos-cancel : {m : ℕ} {t : U^ (S (S m))} → {n : Fin (S m)} →
@@ -73,15 +71,13 @@ transpos-cancel {m} {n} = {!   !}
 -- -- some properties
 
 list2norm : {t : U^ (S n)} → List (Fin n) → t ⟷₁^ t
-list2norm {t = I+ O} nil = id⟷₁^
-list2norm {t = I+ I+ t} nil = ⊕^ (list2norm {t = I+ t} nil)
-list2norm {S n} {t = I+ I+ t} ((fs , fp) :: xs) = (transpos2pi {t = I+ I+ t} (fs , fp)) ◎^ (list2norm xs) -- 
+list2norm nil = id⟷₁^
+list2norm ((fs , fp) :: xs) = (transpos2pi (fs , fp)) ◎^ (list2norm xs) -- 
 
 list2norm++ : {t : U^ (S n)} → (l r : List (Fin n)) →
               list2norm {t = t} (l ++ r) ⟷₂^ list2norm {t = t} l ◎^ list2norm r
-list2norm++ {t = I+ O} nil r = {!   !} -- id⟷₁^
-list2norm++ {t = I+ I+ t₁} nil r = {!   !} -- ⊕^ (list2norm {t₁ = I+ t₁} {t₂ = I+ t₂} nil)
-list2norm++ {S n} {t = I+ I+ t₁} ((fs , fp) :: xs) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2norm++ xs r)) assoc◎l^ -- 
+list2norm++ nil r = idl◎r^ -- id⟷₁^
+list2norm++ ((fs , fp) :: xs) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2norm++ xs r)) assoc◎l^ -- 
 
 -- cox≈2pi : {t₁ t₂ : U^ (S (S m))} → {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm {t₁ = t₁} {t₂ = t₂} r₁ ⟷₂^ list2norm {t₁ = t₁} {t₂ = t₂} r₂
 -- cox≈2pi {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} (cancel {n}) =
@@ -122,25 +118,43 @@ piRespectsCox {S n} l₁ l₂ eq = {! cox≈2pi eq  !} -- cox≈2pi eq
 --   Σ (List (Fin ∣ t₁ ∣)) (λ ns → (!⟷₁ (normC t₁) ◎^ c ◎ normC t₂) ⟷₂ list2norm ns)
 -- c2list = ?
 
+ℕ-S-is-inj-idp : {n : ℕ} -> ℕ-S-is-inj (S n) (S n) idp == idp
+ℕ-S-is-inj-idp = prop-has-all-paths {{has-level-apply ℕ-level _ _}} _ _
 
-norm2list-h : {t₁ : U^ n} {t₂ : U^ m} → t₁ ⟷₁^ t₂ → List (Fin n)
-norm2list-h swap₊^ = fzero :: nil
-norm2list-h id⟷₁^ = nil
-norm2list-h (c₁ ◎^ c₂) = (norm2list-h c₁) ++ transport (λ z → List (Fin z)) (! (⟷₁-eq-size c₁)) (norm2list-h c₂)
-norm2list-h (⊕^ c) = map S⟨_⟩ (norm2list-h c)
+norm2list : {t₁ : U^ (S n)} {t₂ : U^ m} → t₁ ⟷₁^ t₂ → List (Fin n)
+norm2list swap₊^ = fzero :: nil
+norm2list id⟷₁^ = nil
+norm2list (_◎^_ {.(S _)} {_} {O} c₁ c₂) = nil
+norm2list (_◎^_ {.(S _)} {_} {S o} c₁ c₂) = (norm2list c₁) ++ transport (λ e -> List (Fin e)) (ℕ-S-is-inj _ _ (! (⟷₁-eq-size c₁))) (norm2list c₂)
+norm2list {n = O} (⊕^ c) = nil
+norm2list {n = S n} (⊕^ c) = map S⟨_⟩ (norm2list c)
 
-norm2list : {t₁ t₂ : U^ (S n)} → t₁ ⟷₁^ t₂ → List (Fin n)
-norm2list {O} {t₁ = I+ O} {t₂ = I+ O} c = nil
-norm2list {S n} {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} c = {!  !}
 
 -- -- Back and forth identities
 
-norm2norm : {t : U^ (S n)} → (c : t ⟷₁^ t) → 
-    (list2norm (norm2list c)) ⟷₂^ c
-norm2norm c = {!  !}
+norm2norm : {t₁ : U^ (S n)} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) →
+    (list2norm (norm2list c)) ⟷₂^ (c ◎^ bigid₊^ (!⟷₁^ c))
+norm2norm (swap₊^ {t = t}) = id⟷₂^
+norm2norm id⟷₁^ = idl◎r^
+norm2norm (_◎^_ {.(S _)} {_} {O} c₁ c₂) = {!   !} -- impossible
+norm2norm (_◎^_ {.(S _)} {_} {S o} c₁ c₂) =
+  let r1 = norm2norm c₁ 
+      r2 = norm2norm c₂
+  in  {!   !}
+norm2norm {n = O} (⊕^ c) = {!   !} -- zero case
+norm2norm {n = S n} (⊕^ c) = 
+  let rec = norm2norm c
+  in  {!   !}
 
 list2list : {n : ℕ} → (p : List (Fin n)) → norm2list {t₁ = i^ (S n)} {t₂ = i^ (S n)} (list2norm p) == p
-list2list ns = {!  !}
+list2list nil = idp
+list2list {S n} ((O , fp) :: ns) = 
+  let rec = list2list ns
+      n2n = norm2list (list2norm ns)
+      tt = transport (λ e → List (Fin e)) (ℕ-S-is-inj (S n) (S n) idp) n2n == transport (λ e → List (Fin e)) idp n2n
+      tt = ap (λ x → transport (λ e → List (Fin e)) x n2n) ℕ-S-is-inj-idp
+  in  List=-out ((Fin= _ _ idp (O<S n) fp) , (tt ∙ rec))
+list2list {S n} ((S x , fp) :: ns) = {!   !}
 
 -- -----------------------------------------------------------------------------
 
