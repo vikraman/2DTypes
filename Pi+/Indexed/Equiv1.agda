@@ -19,6 +19,7 @@ open import Pi+.Indexed.Level0Norm
 open import lib.Basics
 open import lib.types.Fin
 open import lib.types.List
+open import lib.types.BAut
 open import lib.types.Nat
 open import lib.types.Truncation
 open import lib.NType2
@@ -80,8 +81,19 @@ lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion�
 --     in  step2
 
 
-evalNorm₁ : {X : U^ n} {Y : U^ m} → (c : X ⟷₁^ Y) → (evalNorm₀ X) == (evalNorm₀ Y) [ UFin[_] ↓ ⟷₁-eq-size c ]
-evalNorm₁ {X = X} {Y} c = {!   !} -- from-transp UFin[_] (⟷₁-eq-size c) {!   !}
+evalNorm₁ : {t₁ t₂ : U^ n} → (c : t₁ ⟷₁^ t₂) → (evalNorm₀ t₁) == (evalNorm₀ t₂) [ UFin[_] ↓ ⟷₁-eq-size c ]
+evalNorm₁ {O} {O} {O} c = {!   !} -- zero case
+evalNorm₁ {S n} c = 
+    let step1 : Lehmer n
+        step1 = normpi2lehmer c
+
+        stepp : Fin (S n) == Fin (S n)
+        stepp = ua (<– Fin≃Lehmer step1)
+
+        step2 : BAut (Fin (S n))
+        step2 = _ , [ stepp ]
+
+    in  {!   !}
 
 
 -- norm : {X Y : U} → X ⟷₁ Y → ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫

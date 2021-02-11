@@ -22,10 +22,6 @@ private
   variable
     n m : ℕ
 
-i^ : (n : ℕ) -> U^ n
-i^ O = O
-i^ (S n) = I+ i^ n
-
 transpos2pi : {t₁ t₂ : U^ (S n)} → (Fin n) → t₁ ⟷₁^ t₂
 transpos2pi {S n} {I+ I+ t₁} {I+ I+ t₂} (O , lp) = {!   !} -- swap₊^
 transpos2pi {S n} {I+ I+ t₁} {I+ I+ t₂} (S x , lp) = {!   !} -- ⊕^ transpos2pi (x , (<-cancel-S lp))
@@ -85,33 +81,33 @@ list2norm++ {t₁ = I+ O} {t₂ = I+ O} nil r = {!   !} -- id⟷₁^
 list2norm++ {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} nil r = {!   !} -- ⊕^ (list2norm {t₁ = I+ t₁} {t₂ = I+ t₂} nil)
 list2norm++ {S n} {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} ((fs , fp) :: xs) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2norm++ xs r)) assoc◎l^ -- 
 
-cox≈2pi : {t₁ t₂ : U^ (S (S m))} → {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm {t₁ = t₁} {t₂ = t₂} r₁ ⟷₂^ list2norm {t₁ = t₁} {t₂ = t₂} r₂
-cox≈2pi {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} (cancel {n}) =
-  ? -- transpos2pi n ◎^ transpos2pi n ◎^ id⟷₁^
-    ⟷₂^⟨ assoc◎l^ ⟩
-  ? -- (transpos2pi n ◎^ transpos2pi n) ◎^ id⟷₁^
-    ⟷₂^⟨ ? ⊡^ id⟷₂^ ⟩ -- transpos-cancel
-  ? -- id⟷₁^ ◎^ id⟷₁^
-    ⟷₂^⟨ idl◎l^ ⟩
-  id⟷₁^ ⟷₂^∎
-cox≈2pi (swap {n} {k} lp) =
-  trans⟷₂^ assoc◎l^ (trans⟷₂^ ? assoc◎r^) -- (slide-transpos n k lp ⊡^ id⟷₂^)
-cox≈2pi idp = id⟷₂^
-cox≈2pi (comm rw) = !⟷₂^ (cox≈2pi rw)
-cox≈2pi (trans rw₁ rw₂) = trans⟷₂^ (cox≈2pi rw₁) (cox≈2pi rw₂)
-cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
-  trans⟷₂^
-    (list2norm++ l r)
-    (trans⟷₂^
-      ((cox≈2pi rw₁) ⊡^ (cox≈2pi rw₂))
-      (!⟷₂^ (list2norm++ l' r')))
-cox≈2pi (braid {n}) =
-  trans⟷₂^ assoc◎l^
-  (trans⟷₂^ assoc◎l^
-  (trans⟷₂^ (assoc◎r^ ⊡^ id⟷₂^)
-  (trans⟷₂^ ? -- (braid-transpos n ⊡^ id⟷₂^)
-  (trans⟷₂^ (assoc◎l^ ⊡^ id⟷₂^)
-  (trans⟷₂^ assoc◎r^ assoc◎r^)))))
+-- cox≈2pi : {t₁ t₂ : U^ (S (S m))} → {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm {t₁ = t₁} {t₂ = t₂} r₁ ⟷₂^ list2norm {t₁ = t₁} {t₂ = t₂} r₂
+-- cox≈2pi {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} (cancel {n}) =
+--   transpos2pi n ◎^ transpos2pi n ◎^ id⟷₁^
+--     ⟷₂^⟨ assoc◎l^ ⟩
+--   (transpos2pi n ◎^ transpos2pi n) ◎^ id⟷₁^
+--     ⟷₂^⟨ ? ⊡^ id⟷₂^ ⟩ -- transpos-cancel
+--   id⟷₁^ ◎^ id⟷₁^
+--     ⟷₂^⟨ idl◎l^ ⟩
+--   id⟷₁^ ⟷₂^∎
+-- cox≈2pi (swap {n} {k} lp) =
+--   trans⟷₂^ assoc◎l^ (trans⟷₂^ ? assoc◎r^) -- (slide-transpos n k lp ⊡^ id⟷₂^)
+-- cox≈2pi idp = id⟷₂^
+-- cox≈2pi (comm rw) = !⟷₂^ (cox≈2pi rw)
+-- cox≈2pi (trans rw₁ rw₂) = trans⟷₂^ (cox≈2pi rw₁) (cox≈2pi rw₂)
+-- cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
+--   trans⟷₂^
+--     (list2norm++ l r)
+--     (trans⟷₂^
+--       ((cox≈2pi rw₁) ⊡^ (cox≈2pi rw₂))
+--       (!⟷₂^ (list2norm++ l' r')))
+-- cox≈2pi (braid {n}) =
+--   trans⟷₂^ assoc◎l^
+--   (trans⟷₂^ assoc◎l^
+--   (trans⟷₂^ (assoc◎r^ ⊡^ id⟷₂^)
+--   (trans⟷₂^ (braid-transpos n ⊡^ id⟷₂^)
+--   (trans⟷₂^ (assoc◎l^ ⊡^ id⟷₂^)
+  -- (trans⟷₂^ assoc◎r^ assoc◎r^)))))
 
 piRespectsCox : {t₁ t₂ : U^ (S n)} → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
                 (list2norm {t₁ = t₁} {t₂ = t₂} l₁) ⟷₂^ (list2norm {t₁ = t₁} {t₂ = t₂} l₂)

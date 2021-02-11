@@ -167,6 +167,10 @@ idf^ : {n : ℕ} {t₁ t₂ : U^ n} → t₁ ⟷₁^ t₂
 idf^ {t₁ = O} {t₂ = O} = id⟷₁^
 idf^ {t₁ = I+ t₁} {t₂ = I+ t₂} = ⊕^ idf^
 
+i^ : (n : ℕ) -> U^ n
+i^ O = O
+i^ (S n) = I+ i^ n
+
 -- idf^⟷₂id : {n : ℕ} {t₁ t₂ : U^ n} → idf^ {t₁ = t₁} {t₂ = t₂} ⟷₂^ {!  id⟷₁^ !}
 -- idf^⟷₂id = {!   !}
 
