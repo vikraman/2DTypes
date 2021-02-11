@@ -144,9 +144,9 @@ data _⟷₂^_ : {X : U^ m} {Y : U^ n} → X ⟷₁^ Y → X ⟷₁^ Y → Set w
          ⊕^ (c₁ ◎^ c₂) ⟷₂^ ((⊕^ c₁) ◎^ (⊕^ c₂))
 
   swapr₊⟷₂^ : {t : U^ n} {c : t ⟷₁^ t} 
-    → (⊕^ (⊕^ c)) ◎^ swap₊^ ⟷₂^ swap₊^ ◎^ ⊕^ (⊕^ c)
+    → (⊕^ (⊕^ c)) ◎^ swap₊^ ⟷₂^ swap₊^ ◎^ (⊕^ (⊕^ c))
   swapl₊⟷₂^ : {t : U^ n} {c : t ⟷₁^ t} 
-    → swap₊^ ◎^ ⊕^ ⊕^ c ⟷₂^ (⊕^ (⊕^ c)) ◎^ swap₊^
+    → swap₊^ ◎^ (⊕^ (⊕^ c)) ⟷₂^ (⊕^ (⊕^ c)) ◎^ swap₊^
 
 -- -- -- Equational reasoning
 

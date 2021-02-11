@@ -115,14 +115,16 @@ postulate
     {-# REWRITE ap-id-rewrite unitl-rewrite unitr-rewrite #-}
  
 eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ denorm c
-eval-quote^₁ (swap₊^ {t = t}) = !⟷₂^ (
-    (⊕^ ⊕^ eval-quote^₀ t) ◎^ swap₊^ ◎^ ⊕^ (⊕^ !⟷₁^ (eval-quote^₀ t)) ⟷₂^⟨ id⟷₂^ ⊡^ swapr₊⟷₂^ ⟩
-    (⊕^ ⊕^ eval-quote^₀ t) ◎^ (⊕^ (⊕^ !⟷₁^ (eval-quote^₀ t))) ◎^ swap₊^ ⟷₂^⟨ assoc◎l^ ⟩
-    ((⊕^ ⊕^ eval-quote^₀ t) ◎^ (⊕^ (⊕^ !⟷₁^ (eval-quote^₀ t)))) ◎^ swap₊^ ⟷₂^⟨ hom◎⊕⟷₂^ ⊡^ id⟷₂^ ⟩
-    (⊕^ ((⊕^ eval-quote^₀ t) ◎^ (⊕^ !⟷₁^ (eval-quote^₀ t)))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ hom◎⊕⟷₂^) ⊡^ id⟷₂^ ⟩
-    (⊕^ (⊕^ ((eval-quote^₀ t) ◎^ (!⟷₁^ (eval-quote^₀ t))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
-    (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
-    swap₊^ ⟷₂^∎)
+eval-quote^₁ (swap₊^ {t = t}) = 
+    let cc = eval-quote^₀ t
+    in  !⟷₂^ ( -- ) -- (swapl₊⟷₂^ {c = {! id⟷₁^  !}})
+        (⊕^ ⊕^ cc) ◎^ (swap₊^ ◎^ ⊕^ (⊕^ (!⟷₁^ cc))) ⟷₂^⟨ _⊡^_ {c₁ = (⊕^ ⊕^ cc)} {c₂ = _} {c₃ = (⊕^ ⊕^ cc)} {c₄ = ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^)} {!   !}  {! swapl₊⟷₂^ !} ⟩
+        {!   !} ⟷₂^⟨ {!   !} ⟩ -- (⊕^ ⊕^ cc) ◎^ ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^) ,, assoc◎l^
+        ((⊕^ ⊕^ cc) ◎^ (⊕^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ hom◎⊕⟷₂^ ⊡^ id⟷₂^ ⟩
+        (⊕^ ((⊕^ cc) ◎^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ hom◎⊕⟷₂^) ⊡^ id⟷₂^ ⟩
+        (⊕^ (⊕^ ((cc) ◎^ (!⟷₁^ (cc))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
+        (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
+        swap₊^ ⟷₂^∎)
 eval-quote^₁ id⟷₁^ = {!   !}
 eval-quote^₁ (c ◎^ c₁) = {!   !}
 eval-quote^₁ (⊕^ c) = {!   !}
