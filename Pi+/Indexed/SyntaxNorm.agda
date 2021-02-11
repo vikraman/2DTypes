@@ -32,6 +32,18 @@ data _⟷₁^_  : U^ m → U^ n → Type₀ where
   _◎^_     : (t₁ ⟷₁^ t₂) → (t₂ ⟷₁^ t₃) → (t₁ ⟷₁^ t₃)
   ⊕^_      : (t₁ ⟷₁^ t₂) → (I+ t₁ ⟷₁^ I+ t₂)
 
+bigid₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
+bigid₊^ swap₊^ = id⟷₁^
+bigid₊^ id⟷₁^ = id⟷₁^
+bigid₊^ (c₁ ◎^ c₂) = bigid₊^ c₁ ◎^ bigid₊^  c₂
+bigid₊^ (⊕^ c) = ⊕^ (bigid₊^ c)
+
+bigswap₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → I+ (I+ t₁) ⟷₁^ I+ (I+ t₂)
+bigswap₊^ swap₊^ = swap₊^
+bigswap₊^ id⟷₁^ = swap₊^
+bigswap₊^ (c₁ ◎^ c₂) = (bigswap₊^ c₁) ◎^ bigid₊^ (⊕^ (⊕^ c₂))
+bigswap₊^ (⊕^ c) = swap₊^ ◎^ bigid₊^ ((⊕^ (⊕^ (⊕^ c))))
+
 !⟷₁^ : t₁ ⟷₁^ t₂ → t₂ ⟷₁^ t₁
 !⟷₁^ swap₊^ = swap₊^
 !⟷₁^ id⟷₁^ = id⟷₁^
@@ -130,6 +142,12 @@ data _⟷₂^_ : {X : U^ m} {Y : U^ n} → X ⟷₁^ Y → X ⟷₁^ Y → Set w
          {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₁ ⟷₁^ t₂} → (c₁ ⟷₂^ c₂) → (⊕^ c₁) ⟷₂^ (⊕^ c₂)
   hom⊕◎⟷₂^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₂ ⟷₁^ t₃} → 
          ⊕^ (c₁ ◎^ c₂) ⟷₂^ ((⊕^ c₁) ◎^ (⊕^ c₂))
+
+  swapr₊⟷₂^ : {t : U^ n} {c : t ⟷₁^ t} 
+    → (⊕^ (⊕^ c)) ◎^ swap₊^ ⟷₂^ swap₊^ ◎^ ⊕^ (⊕^ c)
+  swapl₊⟷₂^ : {t : U^ n} {c : t ⟷₁^ t} 
+    → swap₊^ ◎^ ⊕^ ⊕^ c ⟷₂^ (⊕^ (⊕^ c)) ◎^ swap₊^
+
 -- -- -- Equational reasoning
 
 infixr 10 _⟷₂^⟨_⟩_
@@ -161,7 +179,8 @@ _ ⟷₂^∎ = id⟷₂^
 !⟷₂^ hom◎⊕⟷₂^ = hom⊕◎⟷₂^
 !⟷₂^ (resp⊕⟷₂ α) = resp⊕⟷₂ (!⟷₂^ α)
 !⟷₂^ hom⊕◎⟷₂^ = hom◎⊕⟷₂^
-
+!⟷₂^ swapl₊⟷₂^ = swapr₊⟷₂^
+!⟷₂^ swapr₊⟷₂^ = swapl₊⟷₂^
 
 idf^ : {n : ℕ} {t₁ t₂ : U^ n} → t₁ ⟷₁^ t₂
 idf^ {t₁ = O} {t₂ = O} = id⟷₁^

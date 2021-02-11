@@ -32,7 +32,7 @@ private
     variable
         n m : ℕ
 
-eval^₁ : {X : U n} {Y : U m} → (X ⟷₁ Y) → (eval^₀ X ⟷₁^ eval^₀ Y)
+eval^₁ : {t₁ : U n} {t₂ : U m} → (t₁ ⟷₁ t₂) → (eval^₀ t₁ ⟷₁^ eval^₀ t₂)
 eval^₁ unite₊l = id⟷₁^
 eval^₁ uniti₊l = id⟷₁^
 eval^₁ (swap₊ {t₁ = t₁} {t₂ = t₂}) = ++^-swap (eval^₀ t₁) (eval^₀ t₂)
@@ -42,14 +42,14 @@ eval^₁ id⟷₁ = id⟷₁^
 eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
-lehmer2normpi : {t₁ t₂ : U^ (S n)} → Lehmer n → t₁ ⟷₁^ t₂
+lehmer2normpi : {t : U^ (S n)} → Lehmer n → t ⟷₁^ t
 lehmer2normpi {n} cl = list2norm (immersion cl)
 
-normpi2lehmer : {t₁ t₂ : U^ (S n)} → t₁ ⟷₁^ t₂ → Lehmer n
+normpi2lehmer : {t : U^ (S n)} → t ⟷₁^ t → Lehmer n
 normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
 
-normpi2normpi : {t₁ t₂ : U^ (S n)} → (c : t₁ ⟷₁^ t₂) →
-    (lehmer2normpi {t₁ = t₁} {t₂ = t₂} (normpi2lehmer c)) ⟷₂^ c
+normpi2normpi : {t : U^ (S n)} → (c : t ⟷₁^ t) →
+    (lehmer2normpi {t = t} (normpi2lehmer c)) ⟷₂^ c
 normpi2normpi {n} p =
     let lemma : immersion (immersion⁻¹ (norm2list p)) ≈ (norm2list p)
         lemma = immersion∘immersion⁻¹ (norm2list p)
@@ -58,77 +58,81 @@ normpi2normpi {n} p =
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
 lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p
 
--- eval₁-norm : {n : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ n ⟫ → FinFS n == FinFS n
--- eval₁-norm {O} p = idp
--- eval₁-norm {S n} p =
---     let step1 : Lehmer n
---         step1 = normpi2lehmer p
-
---         step2 : FinFS (S n) == FinFS (S n)
---         step2 = <– UFin≃Lehmer step1
-
---     in  step2
-
--- quote₁-norm : {n : ℕ} → (FinFS n) == (FinFS n) → ⟪ n ⟫ ⟷₁ ⟪ n ⟫
--- quote₁-norm {O} p = id⟷₁
--- quote₁-norm {S n} p =
---     let step1 : Lehmer n
---         step1 = –> UFin≃Lehmer p
-
---         step2 : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
---         step2 = lehmer2normpi step1
-
---     in  step2
-
-
-evalNorm₁ : {t₁ t₂ : U^ n} → (c : t₁ ⟷₁^ t₂) → (evalNorm₀ t₁) == (evalNorm₀ t₂) [ UFin[_] ↓ ⟷₁-eq-size c ]
-evalNorm₁ {O} {O} {O} c = {!   !} -- zero case
-evalNorm₁ {S n} c = 
+evalNorm₁ : {t : U^ n} → (c : t ⟷₁^ t) → Aut (Fin n)
+evalNorm₁ {O} {O} c = {!   !} -- zero case
+evalNorm₁ {S n} c =
     let step1 : Lehmer n
         step1 = normpi2lehmer c
 
-        stepp : Fin (S n) == Fin (S n)
-        stepp = ua (<– Fin≃Lehmer step1)
+        step2 : Aut (Fin (S n))
+        step2 = <– Fin≃Lehmer step1
 
-        step2 : BAut (Fin (S n))
-        step2 = _ , [ stepp ]
+    in  step2
 
-    in  {!   !}
+-- quoteNorm₁ : Aut (Fin n) → quoteNorm₀ (pFin n) ⟷₁^ quoteNorm₀ (pFin n)
 
+quoteNorm₁ : (t : U^ n) -> Aut (Fin n) → t ⟷₁^ t
+quoteNorm₁ {O} _ p = id⟷₁^
+quoteNorm₁ {S n} _ p =
+    let step1 : Lehmer n
+        step1 = –> Fin≃Lehmer p
 
--- norm : {X Y : U} → X ⟷₁ Y → ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫
--- norm {X} {Y} p = quote-eval₀ X ◎ p ◎ !⟷₁ (quote-eval₀ Y)
+        step2 = lehmer2normpi step1
+    in  step2
 
--- denorm : {X Y : U} → ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫ → X ⟷₁ Y
--- denorm {X} {Y} p = (!⟷₁ (quote-eval₀ X)) ◎ p ◎ (quote-eval₀ Y)
+quote-evalNorm₁ : {n : ℕ} {t : U^ n} → (c : t ⟷₁^ t) → quoteNorm₁ t (evalNorm₁ c) ⟷₂^ c
+quote-evalNorm₁ {O} p = TODO
+quote-evalNorm₁ {S n} p =
+    let cancelSn : –> Fin≃Lehmer (<– Fin≃Lehmer (normpi2lehmer p)) == normpi2lehmer p
+        cancelSn = <–-inv-r Fin≃Lehmer (normpi2lehmer p)
 
--- postulate
---     denorm∘norm : {X Y : U} → (c : X ⟷₁ Y) → denorm (norm c) ⟷₂ c
---     norm∘denorm : {X Y : U} → (c : ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫) → norm {X} {Y} (denorm c) ⟷₂ c
---     ⟷₁-size : {n m : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ m ⟫ → m == n
+        cancelNorm : lehmer2normpi (–> Fin≃Lehmer (<– Fin≃Lehmer (normpi2lehmer p))) ⟷₂^ p
+        cancelNorm = transport (λ e -> lehmer2normpi e ⟷₂^ p) (! cancelSn) (normpi2normpi p)
 
--- eval₁ : {X Y : U} → X ⟷₁ Y → eval₀ X == eval₀ Y
--- eval₁ {X} {Y} p =
---     let normc = norm p
---         Y=X = ⟷₁-size normc
---         evc = eval₁-norm (transport (λ e -> ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ e ⟫ ) Y=X normc) -- ⟪ ∣ X ∣ ⟫ ⟷₁ ⟪ ∣ Y ∣ ⟫
---     in  evc ∙ ! (ap FinFS Y=X)
+    in  cancelNorm
 
--- quote₁ : {X Y : UFin} → X == Y → quote₀ X ⟷₁ quote₀ Y
--- quote₁ {X} {Y} p =
---     let X=Y : card X == card Y
---         X=Y = ap card p
+eval-quoteNorm₁ : {n : ℕ} → (p : Aut (Fin n)) → evalNorm₁ (quoteNorm₁ (i^ _) p) == p
+eval-quoteNorm₁ {O} p = TODO -- obvious
+eval-quoteNorm₁ {S n} p =
+    let cancelNorm : normpi2lehmer (lehmer2normpi (–> Fin≃Lehmer p)) == (–> Fin≃Lehmer p)
+        cancelNorm = lehmer2lehmer (–> Fin≃Lehmer p)
 
---         p' : FinFS (card X) == FinFS (card Y)
---         p' = ap (λ e → FinFS (card e)) p
+        cancelSn : <– Fin≃Lehmer (normpi2lehmer (lehmer2normpi (–> Fin≃Lehmer p))) == p
+        cancelSn = ap  (<– Fin≃Lehmer) cancelNorm ∙ <–-inv-l Fin≃Lehmer p
 
---         evc : quote₀ X ⟷₁ quote₀ X
---         evc = quote₁-norm (p' ∙ ap (FinFS ∘ card) (! p))
+    in  cancelSn
 
---     in  evc ◎ transport (λ e -> quote₀ X ⟷₁ ⟪ e ⟫) X=Y id⟷₁ -- does it matter over which X=Y do I transport?
+norm : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)
+norm {t₁ = t₁} {t₂ = t₂} c = (quote-eval^₀ t₁ ◎ c ◎ !⟷₁ (quote-eval^₀ t₂))
 
--- quote-eval₁ : {X Y : U} → (p : X ⟷₁ Y) → quote₁ (eval₁ p) ⟷₂ norm p
--- quote-eval₁ p = TODO
+denorm : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₀ (quote^₀ t₁) ⟷₁^ eval^₀ (quote^₀ t₂)
+denorm {t₁ = t₁} {t₂ = t₂} c = (eval-quote^₀ t₁ ◎^ c ◎^ !⟷₁^ (eval-quote^₀ t₂)) -- 
 
--- eval-quote₁ : {X Y : UFin} → (p : X == Y) → eval₁ (quote₁ p) == ap (λ X → eval₀ (quote₀ X)) p
--- eval-quote₁ p = TODO
+postulate
+    ap-id-rewrite : {t : U^ n} → (⊕^ (id⟷₁^ {t = t})) ↦ (id⟷₁^ {t = I+ t})
+    unitl-rewrite : {t₁ : U^ n} {t₂ : U^ m} {c : t₁ ⟷₁^ t₂} → (id⟷₁^ ◎^ c) ↦ c
+    unitr-rewrite : {t₁ : U^ n} {t₂ : U^ m} {c : t₁ ⟷₁^ t₂} → (c ◎^ id⟷₁^) ↦ c
+    {-# REWRITE ap-id-rewrite unitl-rewrite unitr-rewrite #-}
+ 
+eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ denorm c
+eval-quote^₁ (swap₊^ {t = t}) = !⟷₂^ (
+    (⊕^ ⊕^ eval-quote^₀ t) ◎^ swap₊^ ◎^ ⊕^ (⊕^ !⟷₁^ (eval-quote^₀ t)) ⟷₂^⟨ id⟷₂^ ⊡^ swapr₊⟷₂^ ⟩
+    (⊕^ ⊕^ eval-quote^₀ t) ◎^ (⊕^ (⊕^ !⟷₁^ (eval-quote^₀ t))) ◎^ swap₊^ ⟷₂^⟨ assoc◎l^ ⟩
+    ((⊕^ ⊕^ eval-quote^₀ t) ◎^ (⊕^ (⊕^ !⟷₁^ (eval-quote^₀ t)))) ◎^ swap₊^ ⟷₂^⟨ hom◎⊕⟷₂^ ⊡^ id⟷₂^ ⟩
+    (⊕^ ((⊕^ eval-quote^₀ t) ◎^ (⊕^ !⟷₁^ (eval-quote^₀ t)))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ hom◎⊕⟷₂^) ⊡^ id⟷₂^ ⟩
+    (⊕^ (⊕^ ((eval-quote^₀ t) ◎^ (!⟷₁^ (eval-quote^₀ t))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
+    (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
+    swap₊^ ⟷₂^∎)
+eval-quote^₁ id⟷₁^ = {!   !}
+eval-quote^₁ (c ◎^ c₁) = {!   !}
+eval-quote^₁ (⊕^ c) = {!   !}
+
+quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ norm c
+quote-eval^₁ unite₊l = {!   !}
+quote-eval^₁ uniti₊l = {!   !}
+quote-eval^₁ swap₊ = {!   !}
+quote-eval^₁ assocl₊ = {!   !}
+quote-eval^₁ assocr₊ = {!   !}
+quote-eval^₁ id⟷₁ = {!   !}
+quote-eval^₁ (c ◎ c₁) = {!   !}
+quote-eval^₁ (c ⊕ c₁) = {!   !}

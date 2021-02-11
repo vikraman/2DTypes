@@ -22,13 +22,15 @@ private
   variable
     n m : ℕ
 
-transpos2pi : {t₁ t₂ : U^ (S n)} → (Fin n) → t₁ ⟷₁^ t₂
-transpos2pi {S n} {I+ I+ t₁} {I+ I+ t₂} (O , lp) = {!   !} -- swap₊^
-transpos2pi {S n} {I+ I+ t₁} {I+ I+ t₂} (S x , lp) = {!   !} -- ⊕^ transpos2pi (x , (<-cancel-S lp))
+-- transpos2pi : (Fin n) → (i^ (S n)) ⟷₁^ (i^ (S n))
 
--- transpos-cancel : {m : ℕ} {t₁ t₂ : U^ (S (S m))} → {n : Fin (S m)} →
---                   transpos2pi n ◎^ transpos2pi n ⟷₂^ id⟷₁^
--- transpos-cancel {m} {n} = {!   !}
+transpos2pi : {t : U^ (S n)} → (Fin n) → t ⟷₁^ t
+transpos2pi {S n} {I+ I+ t} (O , lp) = swap₊^ -- swap₊^
+transpos2pi {S n} {I+ I+ t} (S x , lp) = ⊕^ transpos2pi (x , (<-cancel-S lp)) 
+
+transpos-cancel : {m : ℕ} {t : U^ (S (S m))} → {n : Fin (S m)} →
+                  transpos2pi {t = t} n ◎^ transpos2pi {t = t} n ⟷₂^ id⟷₁^
+transpos-cancel {m} {n} = {!   !}
 
 -- slide0-transpos : {m : ℕ}  {kp : 0 < S (S (S m))} →
 --                   (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
@@ -70,16 +72,16 @@ transpos2pi {S n} {I+ I+ t₁} {I+ I+ t₂} (S x , lp) = {!   !} -- ⊕^ transpo
 -- -- Mapping the entire list of transpositions to a combinator and
 -- -- some properties
 
-list2norm : {t₁ t₂ : U^ (S n)} → List (Fin n) → t₁ ⟷₁^ t₂
-list2norm {t₁ = I+ O} {t₂ = I+ O} nil = id⟷₁^
-list2norm {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} nil = ⊕^ (list2norm {t₁ = I+ t₁} {t₂ = I+ t₂} nil)
-list2norm {S n} {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} ((fs , fp) :: xs) = (transpos2pi {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} (fs , fp)) ◎^ (list2norm xs) -- 
+list2norm : {t : U^ (S n)} → List (Fin n) → t ⟷₁^ t
+list2norm {t = I+ O} nil = id⟷₁^
+list2norm {t = I+ I+ t} nil = ⊕^ (list2norm {t = I+ t} nil)
+list2norm {S n} {t = I+ I+ t} ((fs , fp) :: xs) = (transpos2pi {t = I+ I+ t} (fs , fp)) ◎^ (list2norm xs) -- 
 
-list2norm++ : {t₁ t₂ : U^ (S n)} → (l r : List (Fin n)) →
-              list2norm {t₁ = t₁} {t₂ = t₂} (l ++ r) ⟷₂^ list2norm {t₁ = t₁} {t₂ = t₂} l ◎^ list2norm r
-list2norm++ {t₁ = I+ O} {t₂ = I+ O} nil r = {!   !} -- id⟷₁^
-list2norm++ {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} nil r = {!   !} -- ⊕^ (list2norm {t₁ = I+ t₁} {t₂ = I+ t₂} nil)
-list2norm++ {S n} {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} ((fs , fp) :: xs) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2norm++ xs r)) assoc◎l^ -- 
+list2norm++ : {t : U^ (S n)} → (l r : List (Fin n)) →
+              list2norm {t = t} (l ++ r) ⟷₂^ list2norm {t = t} l ◎^ list2norm r
+list2norm++ {t = I+ O} nil r = {!   !} -- id⟷₁^
+list2norm++ {t = I+ I+ t₁} nil r = {!   !} -- ⊕^ (list2norm {t₁ = I+ t₁} {t₂ = I+ t₂} nil)
+list2norm++ {S n} {t = I+ I+ t₁} ((fs , fp) :: xs) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2norm++ xs r)) assoc◎l^ -- 
 
 -- cox≈2pi : {t₁ t₂ : U^ (S (S m))} → {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm {t₁ = t₁} {t₂ = t₂} r₁ ⟷₂^ list2norm {t₁ = t₁} {t₂ = t₂} r₂
 -- cox≈2pi {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} (cancel {n}) =
@@ -109,8 +111,8 @@ list2norm++ {S n} {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} ((fs , fp) :: xs) r = 
 --   (trans⟷₂^ (assoc◎l^ ⊡^ id⟷₂^)
   -- (trans⟷₂^ assoc◎r^ assoc◎r^)))))
 
-piRespectsCox : {t₁ t₂ : U^ (S n)} → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
-                (list2norm {t₁ = t₁} {t₂ = t₂} l₁) ⟷₂^ (list2norm {t₁ = t₁} {t₂ = t₂} l₂)
+piRespectsCox : {t : U^ (S n)} → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
+                (list2norm {t = t} l₁) ⟷₂^ (list2norm {t = t} l₂)
 piRespectsCox {O} nil nil unit = id⟷₂^
 piRespectsCox {S n} l₁ l₂ eq = {! cox≈2pi eq  !} -- cox≈2pi eq
 
@@ -133,7 +135,7 @@ norm2list {S n} {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} c = {!  !}
 
 -- -- Back and forth identities
 
-norm2norm : {t₁ t₂ : U^ (S n)} → (c : t₁ ⟷₁^ t₂) → 
+norm2norm : {t : U^ (S n)} → (c : t ⟷₁^ t) → 
     (list2norm (norm2list c)) ⟷₂^ c
 norm2norm c = {!  !}
 

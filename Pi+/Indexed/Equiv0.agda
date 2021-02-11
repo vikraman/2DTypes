@@ -29,8 +29,6 @@ _++^_ : U^ m → U^ n → U^ (m N.+ n)
 O ++^ t₂ = t₂
 (I+ t₁) ++^ t₂ = I+ (t₁ ++^ t₂)
 
--- ++^-assoc== : {X : U^ m} {Y : U^ n} {Z : U^ o} → X ++^ (Y ++^ Z) == (X ++^ Y) ++^ Z
-
 ++^-unit : {t : U^ m} → t ⟷₁^ (t ++^ O)
 ++^-unit {t = O} = id⟷₁^
 ++^-unit {t = I+ t} = ⊕^ ++^-unit {t = t}
@@ -44,7 +42,11 @@ O ++^ t₂ = t₂
 ++^-cons (I+ t) = swap₊^ ◎^ (⊕^ (++^-cons t))
 
 ++^-⊕ : {t₁ : U^ m} {t₂ : U^ n} {t₃ : U^ o} {t₄ : U^ p} → (t₁ ⟷₁^ t₂) → (t₃ ⟷₁^ t₄) → (t₁ ++^ t₃) ⟷₁^ (t₂ ++^ t₄)
-++^-⊕ = TODO   
+++^-⊕ (swap₊^ {t = t}) c₂ = bigswap₊^ (++^-⊕ (id⟷₁^ {t = t}) c₂)
+++^-⊕ {t₁ = O} id⟷₁^ c₂ = c₂
+++^-⊕ {t₁ = I+ t₁} id⟷₁^ c₂ = ⊕^ (++^-⊕ id⟷₁^ c₂)
+++^-⊕ (c₁ ◎^ c₃) c₂ = (++^-⊕ c₁ c₂) ◎^ ++^-⊕ c₃ id⟷₁^
+++^-⊕ (⊕^ c₁) c₂ = ⊕^ (++^-⊕ c₁ c₂)
 
 ++^-swap : (t₁ : U^ m) (t₂ : U^ n) → (t₁ ++^ t₂) ⟷₁^ (t₂ ++^ t₁)
 ++^-swap O t₂ = ++^-unit {t = t₂}
@@ -55,7 +57,7 @@ quote^₀ O = O
 quote^₀ (I+ X) = I U.+ quote^₀ X
 
 quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (t₁ ⟷₁^ t₂) → (quote^₀ t₁ ⟷₁ quote^₀ t₂)
-quote^₁ swap₊^ = TODO
+quote^₁ swap₊^ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
 quote^₁ id⟷₁^ = id⟷₁
 quote^₁ (t ◎^ t₁) = quote^₁ t ◎ quote^₁ t₁
 quote^₁ (⊕^ t) = id⟷₁ ⊕ quote^₁ t
