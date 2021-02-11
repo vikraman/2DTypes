@@ -41,20 +41,20 @@ eval^₁ id⟷₁ = id⟷₁^
 eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
-lehmer2normpi : {n m : ℕ} → (n == m) → {t₁ : U^ (S n)} {t₂ : U^ (S m)} → Lehmer n → t₁ ⟷₁^ t₂
-lehmer2normpi {n} p cl = list2norm p (immersion cl)
+lehmer2normpi : {t₁ t₂ : U^ (S n)} → Lehmer n → t₁ ⟷₁^ t₂
+lehmer2normpi {n} cl = list2norm (immersion cl)
 
-normpi2lehmer : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → t₁ ⟷₁^ t₂ → Lehmer n
+normpi2lehmer : {t₁ t₂ : U^ (S n)} → t₁ ⟷₁^ t₂ → Lehmer n
 normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
 
-normpi2normpi : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (c : t₁ ⟷₁^ t₂) →
-    (lehmer2normpi (ℕ-S-is-inj _ _ (⟷₁-eq-size c)) {t₁} {t₂} (normpi2lehmer c)) ⟷₂^ c
+normpi2normpi : {t₁ t₂ : U^ (S n)} → (c : t₁ ⟷₁^ t₂) →
+    (lehmer2normpi {t₁ = t₁} {t₂ = t₂} (normpi2lehmer c)) ⟷₂^ c
 normpi2normpi {n} p =
     let lemma : immersion (immersion⁻¹ (norm2list p)) ≈ (norm2list p)
         lemma = immersion∘immersion⁻¹ (norm2list p)
-    in  trans⟷₂^ {!   !} (norm2norm p) -- (piRespectsCox _ _ _ lemma)
+    in  trans⟷₂^ (piRespectsCox  _ _ lemma) (norm2norm p) -- (piRespectsCox _ _ _ lemma)
 
-lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi idp p) == p
+lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
 lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p
 
 -- eval₁-norm : {n : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ n ⟫ → FinFS n == FinFS n
