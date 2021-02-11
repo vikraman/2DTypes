@@ -36,16 +36,15 @@ O ++^ t₂ = t₂
 ++^-unit {t = I+ t} = ⊕^ ++^-unit {t = t}
 
 ++^-assoc : (t₁ : U^ m) (t₂ : U^ n) (t₃ : U^ o) → (t₁ ++^ (t₂ ++^ t₃)) ⟷₁^ ((t₁ ++^ t₂) ++^ t₃)
-++^-assoc = TODO
+++^-assoc O t₂ t₃ = id⟷₁^
+++^-assoc (I+ t₁) t₂ t₃ = ⊕^ ++^-assoc t₁ t₂ t₃
 
 ++^-cons : (t : U^ n) → I+ t ⟷₁^ (t ++^ (I+ O))
-++^-cons O = {!   !}
+++^-cons O = id⟷₁^
 ++^-cons (I+ t) = swap₊^ ◎^ (⊕^ (++^-cons t))
 
--- (I+ t1) ++ t2 = I+ (t1 ++ t2) == I+ (t2 ++ t1) == (t2 ++ t1) ++ (I+ O) == t2 ++ (t1 ++ (I+ O)) == t2 ++ (I+ t1)
-
 ++^-⊕ : {t₁ : U^ m} {t₂ : U^ n} {t₃ : U^ o} {t₄ : U^ p} → (t₁ ⟷₁^ t₂) → (t₃ ⟷₁^ t₄) → (t₁ ++^ t₃) ⟷₁^ (t₂ ++^ t₄)
-++^-⊕ = {!   !}
+++^-⊕ = TODO   
 
 ++^-swap : (t₁ : U^ m) (t₂ : U^ n) → (t₁ ++^ t₂) ⟷₁^ (t₂ ++^ t₁)
 ++^-swap O t₂ = ++^-unit {t = t₂}
@@ -100,7 +99,8 @@ eval-quote^==₀ O = idp
 eval-quote^==₀ (I+ t) = ap I+_ (eval-quote^==₀ t)
 
 eval-quote^₀ : (t : U^ n) → eval^₀ (quote^₀ t) ⟷₁^ t
-eval-quote^₀ t = transport (λ e → e ⟷₁^ t) (! (eval-quote^==₀ t)) id⟷₁^
+eval-quote^₀ O = id⟷₁^
+eval-quote^₀ (I+ t) = ⊕^ eval-quote^₀ t
 
 eval-quoteNorm₀ : {n : ℕ} (X : UFin[ n ]) → Trunc -1 (evalNorm₀ (quoteNorm₀ X) == X)
 eval-quoteNorm₀ (X , ϕ) = Trunc-fmap (λ p → pair= p prop-has-all-paths-↓) ϕ
