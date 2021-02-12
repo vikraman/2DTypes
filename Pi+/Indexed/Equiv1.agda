@@ -14,7 +14,7 @@ open import Pi+.Coxeter.LehmerCoxeterEquiv
 open import Pi+.Coxeter.Sn
 open import Pi+.UFinLehmerEquiv
 open import Pi+.Indexed.Equiv0
-open import Pi+.Indexed.Level0Norm
+open import Pi+.Indexed.PiCoxeter
 
 open import lib.Basics
 open import lib.types.Fin
@@ -48,12 +48,36 @@ lehmer2normpi {n} cl = list2norm (immersion cl)
 normpi2lehmer : {t : U^ (S n)} → t ⟷₁^ t → Lehmer n
 normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
 
+-- t₊⟷₁O⇒t=O : (t : U^ n) → (c : t ⟷₁^ O) → t == O
+-- t₊⟷₁O⇒t=O t = ?
+
+c₊⟷₂id⟷₁ : (c : O ⟷₁^ O) → c ⟷₂^ id⟷₁^
+c₊⟷₂id⟷₁ id⟷₁^ = id⟷₂^
+c₊⟷₂id⟷₁ (_◎^_ {t₂ = O} c₁ c₂) = trans⟷₂^ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
+c₊⟷₂id⟷₁ (_◎^_ {t₂ = I+ t₂} c₁ c₂) with (⟷₁-eq-size c₂)
+... | ()
+
+big-id₊⟷₂id⟷₁ : {t : U^ n} → (c : t ⟷₁^ t) → big-id₊^ c ⟷₂^ id⟷₁^
+big-id₊⟷₂id⟷₁ {t = O} c = big-id₊^-ap (c₊⟷₂id⟷₁ c)
+big-id₊⟷₂id⟷₁ {t = I+ t} c = {!   !}
+
+-- c : t1 ----> t2
+--      |       |
+--     id      bigid
+--      |       |
+-- c': t1 ----> t1
+
+-- (t₁ : U^ n) (t₂ : U^ m) -> (c : t₁ ⟷₁ t₂) -> (f : (t₁ ⟷₁ t₂) -> A) -> (g : A -> (t₁ ⟷₁ t₁)) -> g (f c) ⟷₂ c
+-- you can prove, that t₁ == t₂ [ U^ ↓ (p <: n == m) ]
+
 normpi2normpi : {t : U^ (S n)} → (c : t ⟷₁^ t) →
     (lehmer2normpi {t = t} (normpi2lehmer c)) ⟷₂^ c
 normpi2normpi {n} c =
     let lemma : immersion (immersion⁻¹ (norm2list c)) ≈ (norm2list c)
         lemma = immersion∘immersion⁻¹ (norm2list c)
-    in  trans⟷₂^ (piRespectsCox  _ _ lemma) (norm2norm c)
+        
+        tt = trans⟷₂^ (piRespectsCox  _ _ lemma) (norm2norm c)
+    in  {!   !}
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
 lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p
@@ -85,7 +109,6 @@ quoteNorm₁ {S n} _ p =
 
 quote₁ : Aut (Fin n) → (quote₀ (pFin n) ⟷₁ quote₀ (pFin n))
 quote₁ e = quote^₁ (quoteNorm₁ _ e)
-
 
 quote-evalNorm₁ : {n : ℕ} {t : U^ n} → (c : t ⟷₁^ t) → quoteNorm₁ t (evalNorm₁ c) ⟷₂^ c
 quote-evalNorm₁ {O} p = TODO

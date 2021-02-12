@@ -1,10 +1,13 @@
 {-# OPTIONS --without-K --exact-split --rewriting --allow-unsolved-metas #-}
 
+module Pi+.Indexed.SyntaxNorm where
+
 open import lib.Base
 open import lib.NType
+open import lib.PathOver
 import lib.types.Nat as N
 
-module Pi+.Indexed.SyntaxNorm where
+open import Pi+.Extra
 
 private
     variable
@@ -32,17 +35,17 @@ data _⟷₁^_  : U^ m → U^ n → Type₀ where
   _◎^_     : (t₁ ⟷₁^ t₂) → (t₂ ⟷₁^ t₃) → (t₁ ⟷₁^ t₃)
   ⊕^_      : (t₁ ⟷₁^ t₂) → (I+ t₁ ⟷₁^ I+ t₂)
 
-bigid₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
-bigid₊^ swap₊^ = id⟷₁^
-bigid₊^ id⟷₁^ = id⟷₁^
-bigid₊^ (c₁ ◎^ c₂) = bigid₊^ c₁ ◎^ bigid₊^  c₂
-bigid₊^ (⊕^ c) = ⊕^ (bigid₊^ c)
+-- down₊^ : {t₁ : U^ m} {t₂ : U^ n} → (I+ t₁ ⟷₁^ I+ t₂) → t₁ ⟷₁^ t₂
+-- down₊^ {t₁ = O} {t₂ = O} c = id⟷₁^
+-- down₊^ {t₁ = O} {t₂ = I+ t₂} c = {!   !}
+-- down₊^ {t₁ = I+ t₁} {t₂ = O} c = {!   !}
+-- down₊^ {t₁ = I+ t₁} {t₂ = I+ t₂} c = {!   !}
 
-bigswap₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → I+ (I+ t₁) ⟷₁^ I+ (I+ t₂)
-bigswap₊^ swap₊^ = swap₊^
-bigswap₊^ id⟷₁^ = swap₊^
-bigswap₊^ (c₁ ◎^ c₂) = (bigswap₊^ c₁) ◎^ bigid₊^ (⊕^ (⊕^ c₂))
-bigswap₊^ (⊕^ c) = swap₊^ ◎^ bigid₊^ ((⊕^ (⊕^ (⊕^ c))))
+-- big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
+-- big-id₊^ swap₊^ = id⟷₁^
+-- big-id₊^ id⟷₁^ = id⟷₁^
+-- big-id₊^ (c₁ ◎^ c₂) = big-id₊^ c₁ ◎^ big-id₊^  c₂
+-- big-id₊^ (⊕^ c) = ⊕^ (big-id₊^ c)
 
 !⟷₁^ : t₁ ⟷₁^ t₂ → t₂ ⟷₁^ t₁
 !⟷₁^ swap₊^ = swap₊^
@@ -56,6 +59,41 @@ bigswap₊^ (⊕^ c) = swap₊^ ◎^ bigid₊^ ((⊕^ (⊕^ (⊕^ c))))
 ⟷₁-eq-size id⟷₁^ = idp
 ⟷₁-eq-size (c₁ ◎^ c₂) = ⟷₁-eq-size c₁ ∙ ⟷₁-eq-size c₂
 ⟷₁-eq-size (⊕^ c) = ap S (⟷₁-eq-size c)
+
+⊥-⟷₁ : (t : U^ n) → ((I+ t₁) ⟷₁^ O) → ⊥
+⊥-⟷₁ _ c = N.S≰O _ (inl (⟷₁-eq-size c))
+
+down-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (I+ t₁ ⟷₁^ I+ t₂) → t₁ ⟷₁^ t₂
+down-id₊^ swap₊^ = id⟷₁^
+down-id₊^ id⟷₁^ = id⟷₁^
+down-id₊^ (_◎^_ {t₁ = t₁} {t₂ = O} c c₁) = ⊥-elim  (⊥-⟷₁ t₁ c)
+down-id₊^ (_◎^_ {t₂ = I+ t₂} c c₁) = down-id₊^ c ◎^ down-id₊^ c₁
+down-id₊^ (⊕^ c) = c
+
+-- big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
+-- big-id₊^ {m = O} {n = O} {O} {O} c = id⟷₁^
+-- big-id₊^ {m = O} {n = S n} {O} {I+ t₂} c = ⊥-elim (⊥-⟷₁ t₂ (!⟷₁^ c))
+-- big-id₊^ {m = S m} {n = O} {I+ t₁} {t₂ = O} c = ⊥-elim (⊥-⟷₁ t₁ c)
+-- big-id₊^ {m = S m} {n = S n} {I+ t₁} {I+ t₂} c = ⊕^ (big-id₊^ (down-id₊^ c))
+
+-- lemma : (t₁ : U^ m) (t₂ : U^ n) → (p : m == n) → t₁ == t₂ [ U^ ↓ p ]
+-- lemma t₁ t₂ p = ?
+
+-- -- U^ n = Σ ℕ (λ m → m == n)
+
+-- big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
+-- big-id₊^ {t₁ = t₁} c =
+--   let p : m == n
+--       p = ?
+--       q : t₁ == t₂ [ U^ ↓ p ]
+--       q = lemma _ _ p
+--   in transport (λ t → t₁ ⟷₁^ t) (to-transp q) id⟷₁^
+
+big-swap₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → I+ (I+ t₁) ⟷₁^ I+ (I+ t₂)
+big-swap₊^ swap₊^ = swap₊^
+big-swap₊^ id⟷₁^ = swap₊^
+big-swap₊^ (c₁ ◎^ c₂) = (big-swap₊^ c₁) ◎^ big-id₊^ (⊕^ (⊕^ c₂))
+big-swap₊^ (⊕^ c) = swap₊^ ◎^ big-id₊^ ((⊕^ (⊕^ (⊕^ c))))
 
 
 -- 2-combinators
@@ -190,8 +228,8 @@ i^ : (n : ℕ) -> U^ n
 i^ O = O
 i^ (S n) = I+ i^ n
 
--- idf^⟷₂id : {n : ℕ} {t₁ t₂ : U^ n} → idf^ {t₁ = t₁} {t₂ = t₂} ⟷₂^ {!  id⟷₁^ !}
--- idf^⟷₂id = {!   !}
+big-id₊^-ap : {t₁ : U^ m} {t₂ : U^ n} → {c₁ c₂ : t₁ ⟷₁^ t₂} → (α : c₁ ⟷₂^ c₂) → big-id₊^ c₁ ⟷₂^ big-id₊^ c₂
+big-id₊^-ap α = TODO
 
 -- -- -- 3-combinators trivial
 

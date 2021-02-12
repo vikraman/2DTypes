@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.Indexed.Level0Norm where
+module Pi+.Indexed.PiCoxeter where
 
 open import lib.Base
 open import lib.PathGroupoid
@@ -133,9 +133,9 @@ norm2list {n = S n} (⊕^ c) = map S⟨_⟩ (norm2list c)
 -- -- Back and forth identities
 
 norm2norm : {t₁ : U^ (S n)} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) →
-    (list2norm (norm2list c)) ⟷₂^ (c ◎^ bigid₊^ (!⟷₁^ c))
-norm2norm (swap₊^ {t = t}) = id⟷₂^
-norm2norm id⟷₁^ = idl◎r^
+    (list2norm (norm2list c)) ⟷₂^ (c ◎^ big-id₊^ (!⟷₁^ c))
+norm2norm (swap₊^ {t = t}) = {!   !}
+norm2norm id⟷₁^ = {!   !}
 norm2norm (_◎^_ {.(S _)} {_} {O} c₁ c₂) = {!   !} -- impossible
 norm2norm (_◎^_ {.(S _)} {_} {S o} c₁ c₂) =
   let r1 = norm2norm c₁ 
