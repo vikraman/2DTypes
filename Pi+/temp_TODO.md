@@ -2,9 +2,10 @@ TODO (Pi part):
 
  1. Prove the big-id thing
  2. Port the Equiv2.agda to the same structure of ^, Norm etc.
- 3. Have only clearly defined syntax manipulation parts (the parts of the proof between U^ and U) left out
- 4. Write about the parts that we have done
- 5. Wait for prof. Sabry to fill syntax parts and write about them
+ 3. Prove the group presentation
+ 4. Have only clearly defined syntax manipulation parts (the parts of the proof between U^ and U) left out
+ 5. Write about the parts that we have done
+ 6. Wait for prof. Sabry to fill syntax parts and write about them
 
 
 FSMG:
@@ -22,4 +23,4 @@ FSMG:
 
  1. Paper about a construction of the symmetric group in HoTT/UF (MFCS/TYPES/CSL/CPP)
  2. Paper about completeness of Pi+ (could be written for ICFP/POPL)
- 3. Paper about a proof of coherence (which implies 1 and 2) (TYPES/CSL/CPP/LICS)
+ 3. Paper about a proof of coherence (which implies 1 and 2) (TYPES/CSL/CPP/LICS)ixr 5◎ ^_

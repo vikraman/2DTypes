@@ -11,6 +11,7 @@ open import lib.Equivalence
 open import lib.Equivalence2
 open import lib.Univalence
 open import lib.Funext
+open import lib.types.Empty
 open import lib.types.Sigma
 open import lib.types.Truncation
 open import lib.types.BAut
@@ -38,6 +39,10 @@ module _ {i} (T : Type i) where
 
   pAut : Ptd i
   pAut = ⊙[ Aut , ide T ]
+
+instance
+  Aut-level : ∀ {i} {T : Type i} {n : ℕ₋₂} {{_ : has-level n T}} → has-level n (Aut T)
+  Aut-level = ≃-level ⟨⟩ ⟨⟩
 
 module _ {i} (T : Type i) where
 
@@ -82,3 +87,7 @@ Fin-loop-equiv n = loop-equiv (Fin n)
 
 pFin-loop-equiv : (n : ℕ) → ⊙ΩBAut (Fin n) ⊙≃ pAut (Fin n)
 pFin-loop-equiv n = ⊙loop-equiv (Fin n)
+
+instance
+  Aut-FinO-level : is-contr (Aut (Fin O))
+  Aut-FinO-level = inhab-prop-is-contr (ide _) {{Aut-level {{equiv-preserves-level (Fin-equiv-Empty ⁻¹)}}}}

@@ -30,7 +30,7 @@ open import lib.types.Sigma
 
 private
     variable
-        n m : ℕ
+        n m : ℕ    
 
 eval^₁ : {t₁ : U n} {t₂ : U m} → (t₁ ⟷₁ t₂) → (eval^₀ t₁ ⟷₁^ eval^₀ t₂)
 eval^₁ unite₊l = id⟷₁^
@@ -48,28 +48,6 @@ lehmer2normpi {n} cl = list2norm (immersion cl)
 normpi2lehmer : {t : U^ (S n)} → t ⟷₁^ t → Lehmer n
 normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
 
--- t₊⟷₁O⇒t=O : (t : U^ n) → (c : t ⟷₁^ O) → t == O
--- t₊⟷₁O⇒t=O t = ?
-
-c₊⟷₂id⟷₁ : (c : O ⟷₁^ O) → c ⟷₂^ id⟷₁^
-c₊⟷₂id⟷₁ id⟷₁^ = id⟷₂^
-c₊⟷₂id⟷₁ (_◎^_ {t₂ = O} c₁ c₂) = trans⟷₂^ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
-c₊⟷₂id⟷₁ (_◎^_ {t₂ = I+ t₂} c₁ c₂) with (⟷₁-eq-size c₂)
-... | ()
-
-big-id₊⟷₂id⟷₁ : {t : U^ n} → (c : t ⟷₁^ t) → big-id₊^ c ⟷₂^ id⟷₁^
-big-id₊⟷₂id⟷₁ {t = O} c = big-id₊^-ap (c₊⟷₂id⟷₁ c)
-big-id₊⟷₂id⟷₁ {t = I+ t} c = {!   !}
-
--- c : t1 ----> t2
---      |       |
---     id      bigid
---      |       |
--- c': t1 ----> t1
-
--- (t₁ : U^ n) (t₂ : U^ m) -> (c : t₁ ⟷₁ t₂) -> (f : (t₁ ⟷₁ t₂) -> A) -> (g : A -> (t₁ ⟷₁ t₁)) -> g (f c) ⟷₂ c
--- you can prove, that t₁ == t₂ [ U^ ↓ (p <: n == m) ]
-
 normpi2normpi : {t : U^ (S n)} → (c : t ⟷₁^ t) →
     (lehmer2normpi {t = t} (normpi2lehmer c)) ⟷₂^ c
 normpi2normpi {n} c =
@@ -77,13 +55,13 @@ normpi2normpi {n} c =
         lemma = immersion∘immersion⁻¹ (norm2list c)
         
         tt = trans⟷₂^ (piRespectsCox  _ _ lemma) (norm2norm c)
-    in  {!   !}
+    in  trans⟷₂^ tt (trans⟷₂^ (id⟷₂^ ⊡^ big-id₊⟷₂id⟷₁ (!⟷₁^ c)) idr◎l^)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
 lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p
 
 evalNorm₁ : {t : U^ n} → (c : t ⟷₁^ t) → Aut (Fin n)
-evalNorm₁ {O} {O} c = {!   !} -- zero case
+evalNorm₁ {O} {O} c = ide _ -- zero case
 evalNorm₁ {S n} c =
     let step1 : Lehmer n
         step1 = normpi2lehmer c
@@ -95,8 +73,6 @@ evalNorm₁ {S n} c =
 
 eval₁ : {t : U n} → (c : t ⟷₁ t) → Aut (Fin n)
 eval₁ = evalNorm₁ ∘ eval^₁
-
--- quoteNorm₁ : Aut (Fin n) → quoteNorm₀ (pFin n) ⟷₁^ quoteNorm₀ (pFin n)
 
 quoteNorm₁ : (t : U^ n) -> Aut (Fin n) → t ⟷₁^ t
 quoteNorm₁ {O} _ p = id⟷₁^
@@ -111,7 +87,7 @@ quote₁ : Aut (Fin n) → (quote₀ (pFin n) ⟷₁ quote₀ (pFin n))
 quote₁ e = quote^₁ (quoteNorm₁ _ e)
 
 quote-evalNorm₁ : {n : ℕ} {t : U^ n} → (c : t ⟷₁^ t) → quoteNorm₁ t (evalNorm₁ c) ⟷₂^ c
-quote-evalNorm₁ {O} p = TODO
+quote-evalNorm₁ {O} {O} p = !⟷₂^ (c₊⟷₂id⟷₁ p)
 quote-evalNorm₁ {S n} p =
     let cancelSn : –> Fin≃Lehmer (<– Fin≃Lehmer (normpi2lehmer p)) == normpi2lehmer p
         cancelSn = <–-inv-r Fin≃Lehmer (normpi2lehmer p)
@@ -122,7 +98,7 @@ quote-evalNorm₁ {S n} p =
     in  cancelNorm
 
 eval-quoteNorm₁ : {n : ℕ} → (p : Aut (Fin n)) → evalNorm₁ (quoteNorm₁ (i^ _) p) == p
-eval-quoteNorm₁ {O} p = TODO -- obvious
+eval-quoteNorm₁ {O} p = contr-has-all-paths {{Aut-FinO-level}} _ _
 eval-quoteNorm₁ {S n} p =
     let cancelNorm : normpi2lehmer (lehmer2normpi (–> Fin≃Lehmer p)) == (–> Fin≃Lehmer p)
         cancelNorm = lehmer2lehmer (–> Fin≃Lehmer p)
@@ -132,20 +108,24 @@ eval-quoteNorm₁ {S n} p =
 
     in  cancelSn
 
-norm : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)
-norm {t₁ = t₁} {t₂ = t₂} c = (quote-eval^₀ t₁ ◎ c ◎ !⟷₁ (quote-eval^₀ t₂))
+denorm : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)
+denorm {t₁ = t₁} {t₂ = t₂} c = (quote-eval^₀ t₁ ◎ c ◎ !⟷₁ (quote-eval^₀ t₂))
 
-denorm : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₀ (quote^₀ t₁) ⟷₁^ eval^₀ (quote^₀ t₂)
-denorm {t₁ = t₁} {t₂ = t₂} c = (eval-quote^₀ t₁ ◎^ c ◎^ !⟷₁^ (eval-quote^₀ t₂)) -- 
+norm : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₀ (quote^₀ t₁) ⟷₁^ eval^₀ (quote^₀ t₂)
+norm {t₁ = t₁} {t₂ = t₂} c = (eval-quote^₀ t₁ ◎^ c ◎^ !⟷₁^ (eval-quote^₀ t₂)) -- 
 
-postulate
-    ap-id-rewrite : {t : U^ n} → (⊕^ (id⟷₁^ {t = t})) ↦ (id⟷₁^ {t = I+ t})
-    unitl-rewrite : {t₁ : U^ n} {t₂ : U^ m} {c : t₁ ⟷₁^ t₂} → (id⟷₁^ ◎^ c) ↦ c
-    unitr-rewrite : {t₁ : U^ n} {t₂ : U^ m} {c : t₁ ⟷₁^ t₂} → (c ◎^ id⟷₁^) ↦ c
-    {-# REWRITE ap-id-rewrite unitl-rewrite unitr-rewrite #-}
+-- postulate
+--     denorm∘norm : {X Y : U n} → (c : X ⟷₁ Y) → norm (denorm c) ⟷₂ c
+--     norm∘denorm : {X Y : U^ n} → (c : X ⟷₁^ Y) → denorm (norm c) ⟷₂^ c
+
+-- postulate
+--     ap-id-rewrite : {t : U^ n} → (⊕^ (id⟷₁^ {t = t})) ↦ (id⟷₁^ {t = I+ t})
+--     unitl-rewrite : {t₁ : U^ n} {t₂ : U^ m} {c : t₁ ⟷₁^ t₂} → (id⟷₁^ ◎^ c) ↦ c
+--     unitr-rewrite : {t₁ : U^ n} {t₂ : U^ m} {c : t₁ ⟷₁^ t₂} → (c ◎^ id⟷₁^) ↦ c
+--     {-# REWRITE ap-id-rewrite unitl-rewrite unitr-rewrite #-}
  
 
-eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ denorm c
+eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ norm c
 eval-quote^₁ (swap₊^ {t = t}) = {!   !}
     -- let cc = eval-quote^₀ t
     -- in  !⟷₂^ ( -- ) -- (swapl₊⟷₂^ {c = {! id⟷₁^  !}})
@@ -156,11 +136,11 @@ eval-quote^₁ (swap₊^ {t = t}) = {!   !}
     --     (⊕^ (⊕^ ((cc) ◎^ (!⟷₁^ (cc))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
     --     (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
     --     swap₊^ ⟷₂^∎)
-eval-quote^₁ {n = n} {t₁ = t₁} id⟷₁^ = !⟷₂^ (linv◎l^ {n} {t₁ = eval^₀ (quote^₀ t₁)} {t₂ = t₁} {c = eval-quote^₀ _})
+eval-quote^₁ {n = n} {t₁ = t₁} id⟷₁^ = {!   !} -- !⟷₂^ (linv◎l^ {n} {t₁ = eval^₀ (quote^₀ t₁)} {t₂ = t₁} {c = eval-quote^₀ _})
 eval-quote^₁ (c ◎^ c₁) = {!   !}
 eval-quote^₁ (⊕^ c) = {!   !}
 
-quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ norm c
+quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
 quote-eval^₁ unite₊l = {!   !}
 quote-eval^₁ uniti₊l = {!   !}
 quote-eval^₁ swap₊ = {!   !}
@@ -170,8 +150,21 @@ quote-eval^₁ id⟷₁ = {!   !}
 quote-eval^₁ (c ◎ c₁) = {!   !}
 quote-eval^₁ (c ⊕ c₁) = {!   !}
 
+-- evalNorm₂ : {t₁ : U^ n} {t₂ : U^ m} {c₁ c₂ : t₁ ⟷₁^ t₂} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
+-- evalNorm₂ α = {! α !}
+
 eval-quote₁ : (e : Aut (Fin n)) → (eval₁ (quote₁ e)) == e
-eval-quote₁ e = {!   !}
+eval-quote₁ {n} e = 
+    let l1 = eval-quoteNorm₁ e
+        l2 = eval-quote^₁ (quoteNorm₁ (i^ n) e)
+    in  {!   !} ∙ l1
 
 quote-eval₁ : {t : U n} → (c : t ⟷₁ t) → (quote₁ (eval₁ c)) ⟷₂ (quote-eval₀ t ◎ c ◎ !⟷₁ (quote-eval₀ t))
 quote-eval₁ e = {!   !}
+
+-- Have:
+--     eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ norm c
+--     eval-quoteNorm₁ : {n : ℕ} → (p : Aut (Fin n)) → evalNorm₁ (quoteNorm₁ (i^ _) p) == p
+
+-- Goal:
+--     eval-quote₁ : (e : Aut (Fin n)) → (eval₁ (quote₁ e)) == e

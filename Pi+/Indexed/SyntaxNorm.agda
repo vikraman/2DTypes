@@ -72,11 +72,29 @@ down-id₊^ (⊕^ c) = c
 
 -- big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
 
+U^-is-Singleton : (t₁ t₂ : U^ n) → (t₁ == t₂)
+U^-is-Singleton O O = idp
+U^-is-Singleton (I+ t₁) (I+ t₂) = ap I+_ (U^-is-Singleton t₁ t₂)
+
+lemma : {t₁ : U^ m} {t₂ : U^ n} → (p : m == n) → t₁ == t₂ [ U^ ↓ p ]
+lemma idp = U^-is-Singleton _ _
+
+lemma' : {t₁ : U^ m} {t₂ : U^ n} → (p : m == n) → (t₁ == t₂ [ U^ ↓ p ]) -> t₁ ⟷₁^ t₂
+lemma' idp q = transport (λ x → _ ⟷₁^ x) q id⟷₁^
+
 big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
-big-id₊^ {m = O} {n = O} {O} {O} c = id⟷₁^
-big-id₊^ {m = O} {n = S n} {O} {I+ t₂} c = ⊥-elim (⊥-⟷₁ t₂ (!⟷₁^ c))
-big-id₊^ {m = S m} {n = O} {I+ t₁} {t₂ = O} c = ⊥-elim (⊥-⟷₁ t₁ c)
-big-id₊^ {m = S m} {n = S n} {I+ t₁} {I+ t₂} c = ⊕^ (big-id₊^ (down-id₊^ c))
+big-id₊^ {m = m} {n = n} {t₁} {t₂} c = 
+  let pn : m == n
+      pn = ⟷₁-eq-size c
+      p : t₁ == t₂ [ U^ ↓ pn ]
+      p = lemma pn
+  in lemma' pn p
+
+-- big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
+-- big-id₊^ {m = O} {n = O} {O} {O} c = id⟷₁^
+-- big-id₊^ {m = O} {n = S n} {O} {I+ t₂} c = ⊥-elim (⊥-⟷₁ t₂ (!⟷₁^ c))
+-- big-id₊^ {m = S m} {n = O} {I+ t₁} {t₂ = O} c = ⊥-elim (⊥-⟷₁ t₁ c)
+-- big-id₊^ {m = S m} {n = S n} {I+ t₁} {I+ t₂} c = ⊕^ (big-id₊^ (down-id₊^ c))
 
 -- lemma : (t₁ : U^ m) (t₂ : U^ n) → (p : m == n) → t₁ == t₂ [ U^ ↓ p ]
 -- lemma t₁ t₂ p = ?
@@ -233,9 +251,27 @@ i^ (S n) = I+ i^ n
 big-id₊^-ap : {t₁ : U^ m} {t₂ : U^ n} → {c₁ c₂ : t₁ ⟷₁^ t₂} → (α : c₁ ⟷₂^ c₂) → big-id₊^ c₁ ⟷₂^ big-id₊^ c₂
 big-id₊^-ap α = TODO
 
+c₊⟷₂id⟷₁ : (c : O ⟷₁^ O) → c ⟷₂^ id⟷₁^
+c₊⟷₂id⟷₁ id⟷₁^ = id⟷₂^
+c₊⟷₂id⟷₁ (_◎^_ {t₂ = O} c₁ c₂) = trans⟷₂^ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
+c₊⟷₂id⟷₁ (_◎^_ {t₂ = I+ t₂} c₁ c₂) with (⟷₁-eq-size c₂)
+... | ()
+
+lemma'' : {t : U^ n} → (c : t ⟷₁^ t) → (⟷₁-eq-size c) == idp
+lemma'' c = prop-has-all-paths ⦃ has-level-apply N.ℕ-level _ _ ⦄ _ _
+
+lemma3 : {A B : Type₀} {x y : A} (P : B → Type₀) (f : A → B) (p : x == y) (u : P (f x)) → transport P (ap f p) u == transport (P ∘ f) p u
+lemma3 P f idp u = idp
+
+lemma4 : (t : U^ n) → U^-is-Singleton t t == idp
+lemma4 O = idp
+lemma4 (I+ t) = ap (ap I+_) (lemma4 t)
+
+big-id₊⟷₂id⟷₁ : {t : U^ n} → (c : t ⟷₁^ t) → big-id₊^ c ⟷₂^ id⟷₁^
+big-id₊⟷₂id⟷₁ {t = t} c rewrite (lemma'' c) rewrite (lemma4 t) = id⟷₂^
+
 -- -- -- 3-combinators trivial
 
 data _⟷₃_ : {X Y : U^ n} {p q : X ⟷₁^ Y} → (p ⟷₂^ q) → (p ⟷₂^ q) → Set where
   trunc : {X Y : U^ n} {p q : X ⟷₁^ Y} (α β : p ⟷₂^ q) → α ⟷₃ β
 
--- -- --
