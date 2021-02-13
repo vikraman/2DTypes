@@ -101,11 +101,3 @@ eval-quote^==₀ O = idp
 eval-quote^==₀ (I+ t) = ap I+_ (eval-quote^==₀ t)
 
 eval-quote^₀ : (t : U^ n) → eval^₀ (quote^₀ t) ⟷₁^ t
-eval-quote^₀ O = id⟷₁^
-eval-quote^₀ (I+ t) = ⊕^ eval-quote^₀ t
-
-eval-quoteNorm₀ : {n : ℕ} (X : UFin[ n ]) → Trunc -1 (evalNorm₀ (quoteNorm₀ X) == X)
-eval-quoteNorm₀ (X , ϕ) = Trunc-fmap (λ p → pair= p prop-has-all-paths-↓) ϕ
-
-eval-quote₀ : {n : ℕ} (X : UFin[ n ]) → Trunc -1 (eval₀ (quote₀ X) == X)
-eval-quote₀ = eval-quoteNorm₀
