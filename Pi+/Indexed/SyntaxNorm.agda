@@ -156,17 +156,6 @@ gg-ff (⊕^ x) = ap ⊕^_  (gg-ff x)
 ⟷₁-equiv :  {n m : ℕ} {t₁ : U^ n} {t₂ : U^ m} → (t₁ ⟷₁^ t₂) ≃ (my2 n m)
 ⟷₁-equiv = my-equiv ⁻¹ ∘e ⟷-equiv  
 
--- induction : {A : Type₀} {t : U^ (S (S n))}
---     → (swap* : A) -- image for swap
---     → (id* : A) -- image for id
---     → (plus* : ∀ (t : U^ (S n)) (c : t^) → A) -- image for swap
---     → (comp* : ∀ (t : U^ (S (S n))) → A) -- image for swap
---     → (t ⟷₁^ t) → 
-
--- -- f : (t ⟷₁ t) -> ℕ
--- -- f c with (–> ⟷₁-equiv c)
--- -- ... | cc = ?
-
 induction^^ :
         (P : {n : ℕ} {t : U^ n} → (t ⟷₁^ t) → Type₀)
     → (swap* : {n : ℕ} {t : U^ n} → P (swap₊^ {t = t}))
@@ -422,9 +411,3 @@ big-id₊⟷₂id⟷₁ {t = t} c rewrite (lemma'' c) rewrite (lemma4 t) = id⟷
 
 data _⟷₃_ : {X Y : U^ n} {p q : X ⟷₁^ Y} → (p ⟷₂^ q) → (p ⟷₂^ q) → Set where
   trunc : {X Y : U^ n} {p q : X ⟷₁^ Y} (α β : p ⟷₂^ q) → α ⟷₃ β
-
-
-
-
-
-
