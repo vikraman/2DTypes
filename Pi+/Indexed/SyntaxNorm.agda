@@ -71,10 +71,12 @@ down-id₊^ (_◎^_ {t₂ = I+ t₂} c c₁) = down-id₊^ c ◎^ down-id₊^ c�
 down-id₊^ (⊕^ c) = c
 
 -- big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
--- big-id₊^ {m = O} {n = O} {O} {O} c = id⟷₁^
--- big-id₊^ {m = O} {n = S n} {O} {I+ t₂} c = ⊥-elim (⊥-⟷₁ t₂ (!⟷₁^ c))
--- big-id₊^ {m = S m} {n = O} {I+ t₁} {t₂ = O} c = ⊥-elim (⊥-⟷₁ t₁ c)
--- big-id₊^ {m = S m} {n = S n} {I+ t₁} {I+ t₂} c = ⊕^ (big-id₊^ (down-id₊^ c))
+
+big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
+big-id₊^ {m = O} {n = O} {O} {O} c = id⟷₁^
+big-id₊^ {m = O} {n = S n} {O} {I+ t₂} c = ⊥-elim (⊥-⟷₁ t₂ (!⟷₁^ c))
+big-id₊^ {m = S m} {n = O} {I+ t₁} {t₂ = O} c = ⊥-elim (⊥-⟷₁ t₁ c)
+big-id₊^ {m = S m} {n = S n} {I+ t₁} {I+ t₂} c = ⊕^ (big-id₊^ (down-id₊^ c))
 
 -- lemma : (t₁ : U^ m) (t₂ : U^ n) → (p : m == n) → t₁ == t₂ [ U^ ↓ p ]
 -- lemma t₁ t₂ p = ?

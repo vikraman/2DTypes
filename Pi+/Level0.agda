@@ -479,16 +479,16 @@ piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
 -- c2list = ?
 
 
-norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
+norm2list : {n m : ℕ} → (n == m) → ⟪ S n ⟫ ⟷₁ ⟪ S m ⟫ → List (Fin n)
 norm2list p = {!!}
 
 -- Back and forth identities
 
-norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
-norm2norm p = {!!}
+norm2norm : {n m : ℕ} → (q : n == m) → (p : ⟪ S n ⟫ ⟷₁ ⟪ S m ⟫) → list2norm (norm2list q p) ⟷₂ {!   !}
+norm2norm p q = {! p !}
 
-list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
-list2list ns = {!!}
+-- list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
+-- list2list ns = {!!}
 
 -----------------------------------------------------------------------------
 
