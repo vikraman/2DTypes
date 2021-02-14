@@ -203,14 +203,14 @@ induction P swap* id* comp* plus* c =
 !⟷₁^ (⊕^ c₁) = ⊕^ (!⟷₁^ c₁)
 
 
-⟷₁-eq-size : {n m : ℕ} {t₁ : U^ n} {t₂ : U^ m} -> (t₁ ⟷₁^ t₂) -> n == m
-⟷₁-eq-size swap₊^ = idp
-⟷₁-eq-size id⟷₁^ = idp
-⟷₁-eq-size (c₁ ◎^ c₂) = ⟷₁-eq-size c₁ ∙ ⟷₁-eq-size c₂
-⟷₁-eq-size (⊕^ c) = ap S (⟷₁-eq-size c)
+⟷₁^-eq-size : {n m : ℕ} {t₁ : U^ n} {t₂ : U^ m} -> (t₁ ⟷₁^ t₂) -> n == m
+⟷₁^-eq-size swap₊^ = idp
+⟷₁^-eq-size id⟷₁^ = idp
+⟷₁^-eq-size (c₁ ◎^ c₂) = ⟷₁^-eq-size c₁ ∙ ⟷₁^-eq-size c₂
+⟷₁^-eq-size (⊕^ c) = ap S (⟷₁^-eq-size c)
 
 ⊥-⟷₁ : (t : U^ n) → ((I+ t₁) ⟷₁^ O) → ⊥
-⊥-⟷₁ _ c = N.S≰O _ (inl (⟷₁-eq-size c))
+⊥-⟷₁ _ c = N.S≰O _ (inl (⟷₁^-eq-size c))
 
 down-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (I+ t₁ ⟷₁^ I+ t₂) → t₁ ⟷₁^ t₂
 down-id₊^ swap₊^ = id⟷₁^
@@ -230,7 +230,7 @@ lemma' idp q = transport (λ x → _ ⟷₁^ x) q id⟷₁^
 big-id₊^ : {t₁ : U^ m} {t₂ : U^ n} → (t₁ ⟷₁^ t₂) → t₁ ⟷₁^ t₂
 big-id₊^ {m = m} {n = n} {t₁} {t₂} c = 
   let pn : m == n
-      pn = ⟷₁-eq-size c
+      pn = ⟷₁^-eq-size c
       p : t₁ == t₂ [ U^ ↓ pn ]
       p = lemma pn
   in lemma' pn p
@@ -263,7 +263,7 @@ big-swap₊^ (⊕^ c) = swap₊^ ◎^ big-id₊^ ((⊕^ (⊕^ (⊕^ c))))
 
 -- 2-combinators
 
-data _⟷₂^_ : {X : U^ m} {Y : U^ n} → X ⟷₁^ Y → X ⟷₁^ Y → Set where
+data _⟷₂^_ : {X : U^ n} {Y : U^ m} → X ⟷₁^ Y → X ⟷₁^ Y → Set where
   assoc◎l^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₂ ⟷₁^ t₃} {c₃ : t₃ ⟷₁^ t₄} →
           (c₁ ◎^ (c₂ ◎^ c₃)) ⟷₂^ ((c₁ ◎^ c₂) ◎^ c₃)
   assoc◎r^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₂ ⟷₁^ t₃} {c₃ : t₃ ⟷₁^ t₄} →
@@ -395,10 +395,10 @@ big-id₊^-ap α = TODO
 c₊⟷₂id⟷₁ : (c : O ⟷₁^ O) → c ⟷₂^ id⟷₁^
 c₊⟷₂id⟷₁ id⟷₁^ = id⟷₂^
 c₊⟷₂id⟷₁ (_◎^_ {t₂ = O} c₁ c₂) = trans⟷₂^ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
-c₊⟷₂id⟷₁ (_◎^_ {t₂ = I+ t₂} c₁ c₂) with (⟷₁-eq-size c₂)
+c₊⟷₂id⟷₁ (_◎^_ {t₂ = I+ t₂} c₁ c₂) with (⟷₁^-eq-size c₂)
 ... | ()
 
-lemma'' : {t : U^ n} → (c : t ⟷₁^ t) → (⟷₁-eq-size c) == idp
+lemma'' : {t : U^ n} → (c : t ⟷₁^ t) → (⟷₁^-eq-size c) == idp
 lemma'' c = prop-has-all-paths ⦃ has-level-apply N.ℕ-level _ _ ⦄ _ _
 
 lemma3 : {A B : Type₀} {x y : A} (P : B → Type₀) (f : A → B) (p : x == y) (u : P (f x)) → transport P (ap f p) u == transport (P ∘ f) p u
