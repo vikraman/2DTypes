@@ -2,11 +2,11 @@
 
 module Pi+.NonIndexed.Equiv1Norm where
 
-open import Pi+.Syntax as Pi
+open import Pi+.NonIndexed.Syntax as Pi
 open import Pi+.UFin
-open import Pi+.Level0
+open import Pi+.NonIndexed.Level0
 open import Pi+.Extra
-open import Pi+.Equiv0
+open import Pi+.NonIndexed.Equiv0
 
 open import Pi+.Lehmer.Lehmer using (Lehmer)
 open import Pi+.Lehmer.LehmerFinEquiv
@@ -27,13 +27,13 @@ lehmer2normpi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
 lehmer2normpi {n} cl = list2norm (immersion cl)
 
 normpi2lehmer : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Lehmer n
-normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
+normpi2lehmer {n} p = immersion⁻¹ (norm2list idp p)
 
 normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → lehmer2normpi (normpi2lehmer p) ⟷₂ p
 normpi2normpi {n} p =
-    let lemma : immersion (immersion⁻¹ (norm2list p)) ≈ (norm2list p)
-        lemma = immersion∘immersion⁻¹ (norm2list p)
-    in  trans⟷₂ (piRespectsCox _ _ _ lemma) (norm2norm p)
+    let lemma : immersion (immersion⁻¹ (norm2list idp p)) ≈ (norm2list idp p)
+        lemma = immersion∘immersion⁻¹ (norm2list idp p)
+    in  trans⟷₂ (piRespectsCox _ _ _ lemma) {!   !} -- (norm2norm p)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
 lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p

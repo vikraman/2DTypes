@@ -4,12 +4,12 @@ module Pi+.NonIndexed.Util where
 
 open import lib.Base
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
-open import Pi+.Level0
+open import Pi+.NonIndexed.Level0
 open import lib.types.Fin
 open import lib.types.Sigma
 open import lib.PathGroupoid
 
-open import Pi+.Syntax as Pi
+open import Pi+.NonIndexed.Syntax as Pi
 
 
 -- swap i-th and j-th position

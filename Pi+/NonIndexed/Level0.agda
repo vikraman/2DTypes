@@ -10,7 +10,7 @@ open import lib.types.Fin
 open import lib.types.List
 open import lib.NType
 
-open import Pi+.Syntax
+open import Pi+.NonIndexed.Syntax
 open import Pi+.Misc
 
 open import Pi+.Common.FinHelpers
@@ -487,8 +487,8 @@ norm2list p = {!!}
 norm2norm : {n m : ℕ} → (q : n == m) → (p : ⟪ S n ⟫ ⟷₁ ⟪ S m ⟫) → list2norm (norm2list q p) ⟷₂ {!   !}
 norm2norm p q = {! p !}
 
--- list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
--- list2list ns = {!!}
+list2list : {n : ℕ} → (p : List (Fin n)) → norm2list idp (list2norm p) == p
+list2list ns = {!!}
 
 -----------------------------------------------------------------------------
 

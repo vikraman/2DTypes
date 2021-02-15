@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --rewriting #-}
+{-# OPTIONS --without-K --allow-unsolved-metas --exact-split --rewriting #-}
 
 module Pi+.Indexed.Level0 where
 

@@ -2,9 +2,9 @@
 
 module Pi+.NonIndexed.Equiv0 where
 
-open import Pi+.Syntax as Pi
+open import Pi+.NonIndexed.Syntax as Pi
 open import Pi+.UFin
-open import Pi+.Level0
+open import Pi+.NonIndexed.Level0
 open import Pi+.Extra
 
 open import lib.Basics

@@ -1,8 +1,8 @@
-{-# OPTIONS --without-K --exact-split --rewriting #-}
+{-# OPTIONS --without-K --allow-unsolved-metas --exact-split --rewriting #-}
 
 module Pi+.notes.Claim where
 
-open import Pi+.Syntax
+open import Pi+.NonIndexed.Syntax
 
 pp1 : (I + I) + (I + I) ⟷₁ (I + I) + (I + I)
 pp1 = swap₊ ⊕ (id⟷₁ ⊕ id⟷₁)
