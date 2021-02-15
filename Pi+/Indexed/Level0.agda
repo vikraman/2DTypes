@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas --exact-split --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.Indexed.Level0 where
 
@@ -12,6 +12,7 @@ open import lib.NType
 
 open import Pi+.Indexed.Syntax
 open import Pi+.Misc
+open import Pi+.Extra
 
 open import Pi+.Common.FinHelpers
 open import Pi+.Coxeter.Coxeter
@@ -46,27 +47,6 @@ normC : (t : U n) → t ⟷₁ canonU t
 normC O = id⟷₁
 normC I  = uniti₊l ◎ swap₊
 normC (t₁ + t₂) = (normC t₁ ⊕ normC t₂) ◎ ⟪++⟫
-
------------------------------------------------------------------------------
--- Mapping betweem pi combinators over zero types to and from the
--- Coxeter representation
-
-plus0l : (m n : ℕ) → (m +ℕ n == 0) → (m == 0)
-plus0l O n pr = idp
-
-plus0r : (m n : ℕ) → (m +ℕ n == 0) → (n == 0)
-plus0r O n pr = pr
-
-u-swap-u : uniti₊l ◎ swap₊ ◎ unite₊l ⟷₂ id⟷₁
-u-swap-u =
-  trans⟷₂ (id⟷₂ ⊡ (id⟷₂ ⊡ unit-braid))
-  (trans⟷₂ (id⟷₂ ⊡ assoc◎l)
-  (trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂))
-  (trans⟷₂ (id⟷₂ ⊡ idl◎l)
-  linv◎l)))
-
-zero⟷₂ : (p : O ⟷₁ O) → (id⟷₁ ⟷₂ p)
-zero⟷₂ = {!   !}
 
 -----------------------------------------------------------------------------
 -- Mapping betweem pi combinators over non-zero types to and from the
@@ -183,7 +163,7 @@ braid-transpos {S m} (O , np) =
     transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩
       ⟷₂⟨ id⟷₂ ⟩
     (id⟷₁ ⊕ rp0) ◎ rpn0 ◎ (id⟷₁ ⊕ rp0)
-      ⟷₂⟨ {!!} ⟩
+      ⟷₂⟨ TODO ⟩
     rpn0 ◎ (id⟷₁ ⊕ rp0) ◎ rpn0
       ⟷₂⟨ id⟷₂ ⟩
     transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ⟷₂∎
@@ -290,24 +270,6 @@ piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
                 (list2norm l₁) ⟷₂ (list2norm l₂)
 piRespectsCox O nil nil unit = id⟷₂
 piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
-
--- Mapping from combinators to lists
-
--- c2list : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) →
---   Σ (List (Fin ∣ t₁ ∣)) (λ ns → (!⟷₁ (normC t₁) ◎ c ◎ normC t₂) ⟷₂ list2norm ns)
--- c2list = ?
-
-
-norm2list : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → List (Fin n)
-norm2list p = {!!}
-
--- Back and forth identities
-
-norm2norm : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → list2norm (norm2list p) ⟷₂ p
-norm2norm p = {!!}
-
-list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2norm p) == p
-list2list ns = {!!}
 
 -----------------------------------------------------------------------------
 

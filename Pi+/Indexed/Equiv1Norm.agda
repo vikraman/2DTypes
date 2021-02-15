@@ -48,7 +48,7 @@ normpi2normpi : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (c : t₁ ⟷₁^ t₂) 
 normpi2normpi {n} c =
     let lemma : immersion (immersion⁻¹ (norm2list c)) ≈ (norm2list c)
         lemma = immersion∘immersion⁻¹ (norm2list c)
-    in  trans⟷₂^ (piRespectsCox (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) _ _ lemma) (norm2norm c)
+    in  trans⟷₂^ (piRespectsCoxI (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) _ _ lemma) (norm2norm c)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi {t₁ = (quoteNorm₀ (pFin _))} {t₂ = (quoteNorm₀ (pFin _))} idp p) == p
 lehmer2lehmer {n} p = 
