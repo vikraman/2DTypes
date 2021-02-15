@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.Indexed.Equiv1Norm where
 
@@ -47,8 +47,8 @@ normpi2normpi {n} c =
     in  trans⟷₂^ (piRespectsCox (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) _ _ lemma) (norm2norm c)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi {t₁ = (quoteNorm₀ (pFin _))} {t₂ = (quoteNorm₀ (pFin _))} idp p) == p
-lehmer2lehmer {n} p rewrite (lemma4 (quoteNorm₀ (pFin n))) = 
-    ap immersion⁻¹ ({!   !} ∙ (list2list (immersion p))) ∙ immersion⁻¹∘immersion p -- 
+lehmer2lehmer {n} p rewrite (U^-is-singleton=idp (quoteNorm₀ (pFin n))) = 
+    ap immersion⁻¹ (TODO ∙ (list2list (immersion p))) ∙ immersion⁻¹∘immersion p -- 
 
 evalNorm₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → Aut (Fin n)
 evalNorm₁ {O} {O} c = ide _ -- zero case

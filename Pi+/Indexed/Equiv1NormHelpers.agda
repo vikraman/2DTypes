@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.Indexed.Equiv1NormHelpers where
 
@@ -15,6 +15,7 @@ open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.Equiv0Norm
 
 open import Pi+.Misc
+open import Pi+.Extra
 open import Pi+.UFin.Base
 open import Pi+.Common.FinHelpers
 open import Pi+.Coxeter.Coxeter
@@ -30,12 +31,12 @@ transpos2pi {S n} {I+ I+ t} (S x , lp) = ⊕^ transpos2pi (x , (<-cancel-S lp))
 
 transpos-cancel : {m : ℕ} {t : U^ (S (S m))} → {n : Fin (S m)} →
                   transpos2pi {t = t} n ◎^ transpos2pi {t = t} n ⟷₂^ id⟷₁^
-transpos-cancel {m} {n} = {!   !}
+transpos-cancel {m} {n} = TODO
 
 -- slide0-transpos : {m : ℕ}  {kp : 0 < S (S (S m))} →
 --                   (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
 --   transpos2pi n ◎^ transpos2pi (0 , kp) ⟷₂^ transpos2pi (0 , kp) ◎^ transpos2pi n
--- slide0-transpos = {!   !}
+-- slide0-transpos = TODO
 
 -- slide-transpos : {m : ℕ} → (n k : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
 --   transpos2pi n ◎^ transpos2pi k ⟷₂^ transpos2pi k ◎^ transpos2pi n
@@ -67,7 +68,7 @@ transpos-cancel {m} {n} = {!   !}
 -- braid-transpos : {m : ℕ} → (n : Fin m) →
 --   transpos2pi S⟨ n ⟩ ◎^ transpos2pi ⟨ n ⟩ ◎^ transpos2pi S⟨ n ⟩ ⟷₂^
 --   transpos2pi ⟨ n ⟩ ◎^ transpos2pi S⟨ n ⟩ ◎^ transpos2pi ⟨ n ⟩
--- braid-transpos {m} n = {!   !}
+-- braid-transpos {m} n = TODO
 
 -- -- Mapping the entire list of transpositions to a combinator and
 -- -- some properties
@@ -116,7 +117,7 @@ list2norm++ ((fs , fp) :: xs) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2norm++ xs r
 piRespectsCox : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (p : n == m) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
                 (list2normI {t₁ = t₁} {t₂ = t₂} p l₁) ⟷₂^ (list2normI {t₁ = t₁} {t₂ = t₂} p l₂)
 piRespectsCox {O} idp nil nil unit = id⟷₂^
-piRespectsCox {S n} idp l₁ l₂ eq = {! cox≈2pi eq  !} -- cox≈2pi eq
+piRespectsCox {S n} idp l₁ l₂ eq = TODO -- cox≈2pi eq
 
 -- Mapping from combinators to lists
 
@@ -140,28 +141,28 @@ norm2list {n = S n} (⊕^ c) = map S⟨_⟩ (norm2list c)
 
 norm2norm : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (c : t₁ ⟷₁^ t₂) →
     (list2normI {t₁ = t₁} {t₂ = t₂} (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (norm2list c)) ⟷₂^ c
-norm2norm (swap₊^ {t = t}) = {!   !}
-norm2norm id⟷₁^ = {!   !}
-norm2norm (_◎^_ {.(S _)} {_} {O} c₁ c₂) = {!   !} -- impossible
+norm2norm (swap₊^ {t = t}) = TODO
+norm2norm id⟷₁^ = TODO
+norm2norm (_◎^_ {.(S _)} {_} {O} c₁ c₂) = TODO -- impossible
 norm2norm (_◎^_ {.(S _)} {_} {S o} c₁ c₂) =
   let r1 = norm2norm c₁ 
       r2 = norm2norm c₂
-  in  {!   !}
-norm2norm {n = O} (⊕^ c) = {!   !} -- zero case
-norm2norm {n = S n} (⊕^ c) = {!   !}
+  in  TODO
+norm2norm {n = O} (⊕^ c) = TODO -- zero case
+norm2norm {n = S n} (⊕^ c) = TODO
   -- let rec = norm2norm c
-  -- in  {!   !}
+  -- in  TODO
 
 list2list : {n : ℕ} → (p : List (Fin n)) → 
   norm2list {t₁ = quoteNorm₀ (pFin _)} {t₂ = quoteNorm₀ (pFin _)} (list2normI {t₁ = quoteNorm₀ (pFin _)} {t₂ = quoteNorm₀ (pFin _)} idp p) == p
-list2list nil = {!   !}
-list2list {S n} ((O , fp) :: ns) = {!   !}
+list2list nil = TODO
+list2list {S n} ((O , fp) :: ns) = TODO
   -- let rec = list2list ns
   --     n2n = norm2list (list2norm ns)
   --     tt = transport (λ e → List (Fin e)) (ℕ-S-is-inj (S n) (S n) idp) n2n == transport (λ e → List (Fin e)) idp n2n
   --     tt = ap (λ x → transport (λ e → List (Fin e)) x n2n) ℕ-S-is-inj-idp
   -- in  List=-out ((Fin= _ _ idp (O<S n) fp) , (tt ∙ rec))
-list2list {S n} ((S x , fp) :: ns) = {!   !}
+list2list {S n} ((S x , fp) :: ns) = TODO
 
 -- -----------------------------------------------------------------------------
 

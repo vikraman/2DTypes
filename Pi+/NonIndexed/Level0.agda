@@ -1,6 +1,6 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --allow-unsolved-metas --exact-split --rewriting #-}
 
-module Pi+.Level0 where
+module Pi+.NonIndexed.Level0 where
 
 open import lib.Base
 open import lib.PathGroupoid

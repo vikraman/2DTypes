@@ -1,11 +1,10 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting --overlapping-instances #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
 module Pi+.Indexed.Equiv2 where
 
 open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.UFin
-open import Pi+.Level0
 open import Pi+.Extra
 open import Pi+.UFin.BAut
 

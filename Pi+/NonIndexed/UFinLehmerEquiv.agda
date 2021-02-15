@@ -1,6 +1,6 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --allow-unsolved-metas --rewriting #-}
 
-module Pi+.Level1ChainEquiv where
+module Pi+.NonIndexed.UFinLehmerEquiv where
 
 open import HoTT
 

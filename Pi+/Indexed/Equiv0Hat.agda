@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.Indexed.Equiv0Hat where
 
@@ -79,5 +79,5 @@ postulate
 
 quote-eval²₀ : (t : U n) → quote-eval^₀ (quote^₀ (eval^₀ t)) ⟷₂ id⟷₁
 quote-eval²₀ O = id⟷₂
-quote-eval²₀ I = {!   !}
-quote-eval²₀ (t U.+ t₁) = {!   !}
+quote-eval²₀ I = TODO
+quote-eval²₀ (t U.+ t₁) = TODO

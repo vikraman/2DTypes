@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.Equiv1Norm where
+module Pi+.NonIndexed.Equiv1Norm where
 
 open import Pi+.Syntax as Pi
 open import Pi+.UFin

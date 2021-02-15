@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.Indexed.Equiv1Hat where
 
@@ -51,26 +51,26 @@ eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
 eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ norm c
-eval-quote^₁ (swap₊^ {t = t}) = {!   !}
+eval-quote^₁ (swap₊^ {t = t}) = TODO
     -- let cc = eval-quote^₀ t
     -- in  !⟷₂^ ( -- ) -- (swapl₊⟷₂^ {c = {! id⟷₁^  !}})
-    --     (⊕^ ⊕^ cc) ◎^ (swap₊^ ◎^ ⊕^ (⊕^ (!⟷₁^ cc))) ⟷₂^⟨ _⊡^_ {c₁ = (⊕^ ⊕^ cc)} {c₂ = _} {c₃ = (⊕^ ⊕^ cc)} {c₄ = ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^)} {!   !}  {! swapl₊⟷₂^ !} ⟩
-    --     {!   !} ⟷₂^⟨ {!   !} ⟩ -- (⊕^ ⊕^ cc) ◎^ ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^) ,, assoc◎l^
+    --     (⊕^ ⊕^ cc) ◎^ (swap₊^ ◎^ ⊕^ (⊕^ (!⟷₁^ cc))) ⟷₂^⟨ _⊡^_ {c₁ = (⊕^ ⊕^ cc)} {c₂ = _} {c₃ = (⊕^ ⊕^ cc)} {c₄ = ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^)} TODO  {! swapl₊⟷₂^ !} ⟩
+    --     TODO ⟷₂^⟨ TODO ⟩ -- (⊕^ ⊕^ cc) ◎^ ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^) ,, assoc◎l^
     --     ((⊕^ ⊕^ cc) ◎^ (⊕^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ hom◎⊕⟷₂^ ⊡^ id⟷₂^ ⟩
     --     (⊕^ ((⊕^ cc) ◎^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ hom◎⊕⟷₂^) ⊡^ id⟷₂^ ⟩
     --     (⊕^ (⊕^ ((cc) ◎^ (!⟷₁^ (cc))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
     --     (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
     --     swap₊^ ⟷₂^∎)
-eval-quote^₁ {n = n} {t₁ = t₁} id⟷₁^ = {!   !} -- !⟷₂^ (linv◎l^ {n} {t₁ = eval^₀ (quote^₀ t₁)} {t₂ = t₁} {c = eval-quote^₀ _})
-eval-quote^₁ (c ◎^ c₁) = {!   !}
-eval-quote^₁ (⊕^ c) = {!   !}
+eval-quote^₁ {n = n} {t₁ = t₁} id⟷₁^ = TODO -- !⟷₂^ (linv◎l^ {n} {t₁ = eval^₀ (quote^₀ t₁)} {t₂ = t₁} {c = eval-quote^₀ _})
+eval-quote^₁ (c ◎^ c₁) = TODO
+eval-quote^₁ (⊕^ c) = TODO
 
 quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
-quote-eval^₁ unite₊l = {!   !}
-quote-eval^₁ uniti₊l = {!   !}
-quote-eval^₁ swap₊ = {!   !}
-quote-eval^₁ assocl₊ = {!   !}
-quote-eval^₁ assocr₊ = {!   !}
-quote-eval^₁ id⟷₁ = {!   !}
-quote-eval^₁ (c ◎ c₁) = {!   !}
-quote-eval^₁ (c ⊕ c₁) = {!   !}
+quote-eval^₁ unite₊l = TODO
+quote-eval^₁ uniti₊l = TODO
+quote-eval^₁ swap₊ = TODO
+quote-eval^₁ assocl₊ = TODO
+quote-eval^₁ assocr₊ = TODO
+quote-eval^₁ id⟷₁ = TODO
+quote-eval^₁ (c ◎ c₁) = TODO
+quote-eval^₁ (c ⊕ c₁) = TODO

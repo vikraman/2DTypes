@@ -1,15 +1,16 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --allow-unsolved-metas --exact-split --rewriting #-}
 
-module Pi+.Util where
+module Pi+.NonIndexed.Util where
 
 open import lib.Base
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
+open import Pi+.Level0
 open import lib.types.Fin
 open import lib.types.Sigma
 open import lib.PathGroupoid
 
 open import Pi+.Syntax as Pi
-open import Pi+.Level0
+
 
 -- swap i-th and j-th position
 swap[_,_]⟦_,_⟧ : ∀ {n} → (i j : ℕ) → i < j → j < 2 +ℕ n → ⟪ 2 +ℕ n ⟫ ⟷₁ ⟪ 2 +ℕ n ⟫

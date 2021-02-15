@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.Equiv0 where
+module Pi+.NonIndexed.Equiv0 where
 
 open import Pi+.Syntax as Pi
 open import Pi+.UFin

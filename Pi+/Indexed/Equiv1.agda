@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.Indexed.Equiv1 where
 
@@ -45,7 +45,7 @@ eval-quote₁ {n} e =
     let l1 = eval-quoteNorm₁ e
         l2 = eval-quote^₁ (quoteNorm₁ idp (quoteNorm₀ (pFin _)) (quoteNorm₀ (pFin _)) e)
         l3 = evalNorm₂ {n} {n} {_} {_} {_} {_} l2
-    in  ({!   !} ∙ l3 ∙ {!   !}) ∙ l1 -- (l3 ∙ {!   !}) ∙ l1
+    in  TODO -- ({!   !} ∙ l3 ∙ {!   !}) ∙ l1
 
 postulate
     eq-size-rewrite : {t₁ : U n} {t₂ : U m} {c : t₁ ⟷₁ t₂} → (⟷₁^-eq-size (eval^₁ c)) ↦ (⟷₁-eq-size c) -- because proof of == in ℕ
