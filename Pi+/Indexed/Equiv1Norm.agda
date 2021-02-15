@@ -33,6 +33,11 @@ private
     variable
         n m : ℕ    
 
+postulate
+    U^-is-singleton=idp-rewrite : {t : U^ n} → (U^-is-Singleton t t) ↦ idp -- U^-is-singleton=idp
+    ℕ-S-is-inj-rewrite : {n : ℕ} -> (ℕ-S-is-inj n n idp) ↦ idp -- path in ℕ
+    {-# REWRITE U^-is-singleton=idp-rewrite ℕ-S-is-inj-rewrite #-}
+
 lehmer2normpi : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (S n == S m) → Lehmer n → t₁ ⟷₁^ t₂
 lehmer2normpi p cl = list2normI (ℕ-S-is-inj _ _ p) (immersion cl)
 
@@ -47,8 +52,8 @@ normpi2normpi {n} c =
     in  trans⟷₂^ (piRespectsCox (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) _ _ lemma) (norm2norm c)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi {t₁ = (quoteNorm₀ (pFin _))} {t₂ = (quoteNorm₀ (pFin _))} idp p) == p
-lehmer2lehmer {n} p rewrite (U^-is-singleton=idp (quoteNorm₀ (pFin n))) = 
-    ap immersion⁻¹ (TODO ∙ (list2list (immersion p))) ∙ immersion⁻¹∘immersion p -- 
+lehmer2lehmer {n} p = 
+    ap immersion⁻¹ (idp ∙ (list2list (immersion p))) ∙ immersion⁻¹∘immersion p -- 
 
 evalNorm₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → Aut (Fin n)
 evalNorm₁ {O} {O} c = ide _ -- zero case
@@ -92,10 +97,10 @@ quote-evalNorm₁ {S n} {O} c with (⟷₁^-eq-size c)
 eval-quoteNorm₁ : {n : ℕ} → (p : Aut (Fin n)) → evalNorm₁ (quoteNorm₁ idp (quoteNorm₀ (pFin _)) (quoteNorm₀ (pFin _)) p) == p
 eval-quoteNorm₁ {O} p = contr-has-all-paths {{Aut-FinO-level}} _ _
 eval-quoteNorm₁ {S n} p =
-    let cancelNorm : normpi2lehmer (lehmer2normpi idp (–> Fin≃Lehmer p)) == (–> Fin≃Lehmer p)
+    let cancelNorm : normpi2lehmer {t₁ = (quoteNorm₀ (pFin _))} {t₂ = (quoteNorm₀ (pFin _))} (lehmer2normpi idp (–> Fin≃Lehmer p)) == (–> Fin≃Lehmer p)
         cancelNorm = lehmer2lehmer (–> Fin≃Lehmer p)
 
-        cancelSn : <– Fin≃Lehmer (normpi2lehmer (lehmer2normpi idp (–> Fin≃Lehmer p))) == p
+        cancelSn : <– Fin≃Lehmer (normpi2lehmer {t₁ = (quoteNorm₀ (pFin _))} {t₂ = (quoteNorm₀ (pFin _))} (lehmer2normpi idp (–> Fin≃Lehmer p))) == p
         cancelSn = ap  (<– Fin≃Lehmer) cancelNorm ∙ <–-inv-l Fin≃Lehmer p
 
     in  cancelSn
