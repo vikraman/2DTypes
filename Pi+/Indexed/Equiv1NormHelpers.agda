@@ -33,13 +33,14 @@ transpos-cancel : {m : ℕ} {t : U^ (S (S m))} → {n : Fin (S m)} →
                   transpos2pi {t = t} n ◎^ transpos2pi {t = t} n ⟷₂^ id⟷₁^
 transpos-cancel {m} {n} = TODO
 
--- slide0-transpos : {m : ℕ}  {kp : 0 < S (S (S m))} →
---                   (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
---   transpos2pi n ◎^ transpos2pi (0 , kp) ⟷₂^ transpos2pi (0 , kp) ◎^ transpos2pi n
--- slide0-transpos = TODO
+slide0-transpos : {m : ℕ} → {t : U^ (S (S (S (S m))))} → {kp : 0 < S (S (S m))} →
+                  (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
+  transpos2pi {t = t} n ◎^ transpos2pi (0 , kp) ⟷₂^ transpos2pi {t = t} (0 , kp) ◎^ transpos2pi n
+slide0-transpos = TODO
 
--- slide-transpos : {m : ℕ} → (n k : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
---   transpos2pi n ◎^ transpos2pi k ⟷₂^ transpos2pi k ◎^ transpos2pi n
+slide-transpos : {m : ℕ} → {t : U^ (S (S m))} → (n k : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
+  transpos2pi {t = t} n ◎^ transpos2pi k ⟷₂^ transpos2pi {t = t} k ◎^ transpos2pi n
+slide-transpos = TODO
 -- slide-transpos {O} (.(S (S k)) , ltSR ()) (k , kp) ltS
 -- slide-transpos {O} (.(S _) , ltSR ()) (k , kp) (ltSR lp)
 -- slide-transpos {S O} (.(S (S k)) , ltSR (ltSR ())) (k , kp) ltS
@@ -65,10 +66,10 @@ transpos-cancel {m} {n} = TODO
 --        ⟷₂^∎
 
 
--- braid-transpos : {m : ℕ} → (n : Fin m) →
---   transpos2pi S⟨ n ⟩ ◎^ transpos2pi ⟨ n ⟩ ◎^ transpos2pi S⟨ n ⟩ ⟷₂^
---   transpos2pi ⟨ n ⟩ ◎^ transpos2pi S⟨ n ⟩ ◎^ transpos2pi ⟨ n ⟩
--- braid-transpos {m} n = TODO
+braid-transpos : {m : ℕ} → {t : U^ (S (S m))} → (n : Fin m) →
+  transpos2pi {t = t} S⟨ n ⟩ ◎^ transpos2pi ⟨ n ⟩ ◎^ transpos2pi S⟨ n ⟩ ⟷₂^
+  transpos2pi ⟨ n ⟩ ◎^ transpos2pi S⟨ n ⟩ ◎^ transpos2pi ⟨ n ⟩
+braid-transpos {m} n = TODO
 
 -- -- Mapping the entire list of transpositions to a combinator and
 -- -- some properties
@@ -80,13 +81,14 @@ list2norm ((fs , fp) :: xs) = (transpos2pi (fs , fp)) ◎^ (list2norm xs) --
 list2normI : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (n == m) → List (Fin n) → t₁ ⟷₁^ t₂
 list2normI {t₁ = t₁} {t₂ = t₂} idp l rewrite (U^-is-Singleton t₁ t₂) = list2norm l
 
-
 list2norm++ : {t : U^ (S n)} → (l r : List (Fin n)) →
               list2norm {t = t} (l ++ r) ⟷₂^ list2norm {t = t} l ◎^ list2norm r
-list2norm++ nil r = idl◎r^ -- id⟷₁^
+list2norm++ nil r = idl◎r^
 list2norm++ ((fs , fp) :: xs) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2norm++ xs r)) assoc◎l^ -- 
 
--- cox≈2pi : {t₁ t₂ : U^ (S (S m))} → {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm {t₁ = t₁} {t₂ = t₂} r₁ ⟷₂^ list2norm {t₁ = t₁} {t₂ = t₂} r₂
+cox≈2pi : {t₁ : U^ (S (S n))} {t₂ : U^ (S (S m))} → {p : n == m} → {r₁ r₂ : List (Fin (S n))} → r₁ ≈₁ r₂ → 
+  list2normI {t₁ = t₁} {t₂ = t₂} (ap S p) r₁ ⟷₂^ list2normI {t₁ = t₁} {t₂ = t₂} (ap S p) r₂
+cox≈2pi = {!   !}
 -- cox≈2pi {t₁ = I+ I+ t₁} {t₂ = I+ I+ t₂} (cancel {n}) =
 --   transpos2pi n ◎^ transpos2pi n ◎^ id⟷₁^
 --     ⟷₂^⟨ assoc◎l^ ⟩
