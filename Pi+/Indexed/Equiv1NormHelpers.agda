@@ -127,9 +127,6 @@ piRespectsCox {S n} idp l₁ l₂ eq = TODO -- cox≈2pi eq
 --   Σ (List (Fin ∣ t₁ ∣)) (λ ns → (!⟷₁ (normC t₁) ◎^ c ◎ normC t₂) ⟷₂ list2norm ns)
 -- c2list = ?
 
-ℕ-S-is-inj-idp : {n : ℕ} -> ℕ-S-is-inj (S n) (S n) idp == idp
-ℕ-S-is-inj-idp = prop-has-all-paths {{has-level-apply ℕ-level _ _}} _ _
-
 norm2list : {t₁ : U^ (S n)} {t₂ : U^ m} → t₁ ⟷₁^ t₂ → List (Fin n)
 norm2list swap₊^ = fzero :: nil
 norm2list id⟷₁^ = nil

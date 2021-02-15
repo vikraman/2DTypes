@@ -31,12 +31,11 @@ open import lib.types.Sigma
 
 private
     variable
-        n m : ℕ    
+        n m : ℕ
 
 postulate
-    U^-is-singleton=idp-rewrite : {t : U^ n} → (U^-is-Singleton t t) ↦ idp -- U^-is-singleton=idp
     ℕ-S-is-inj-rewrite : {n : ℕ} -> (ℕ-S-is-inj n n idp) ↦ idp -- path in ℕ
-    {-# REWRITE U^-is-singleton=idp-rewrite ℕ-S-is-inj-rewrite #-}
+    {-# REWRITE ℕ-S-is-inj-rewrite #-}
 
 lehmer2normpi : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (S n == S m) → Lehmer n → t₁ ⟷₁^ t₂
 lehmer2normpi p cl = list2normI (ℕ-S-is-inj _ _ p) (immersion cl)

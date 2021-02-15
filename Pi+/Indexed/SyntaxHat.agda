@@ -121,9 +121,9 @@ U^-is-singleton=idp : (t : U^ n) → U^-is-Singleton t t == idp
 U^-is-singleton=idp O = idp
 U^-is-singleton=idp (I+ t) = ap (ap I+_) (U^-is-singleton=idp t)
 
--- postulate
---     U^-is-singleton=idp-rewrite : {t : U^ n} → (U^-is-Singleton t t) ↦ idp -- U^-is-singleton=idp
---     {-# REWRITE U^-is-singleton=idp-rewrite #-}
+postulate
+    U^-is-singleton=idp-rewrite : {t : U^ n} → (U^-is-Singleton t t) ↦ idp -- U^-is-singleton=idp
+    {-# REWRITE U^-is-singleton=idp-rewrite #-}
 
 ff : {n m : ℕ} {t₁ : U^ n} {t₂ : U^ m} → (t₁ ⟷₁^ t₂) -> (n ⟷ m)
 ff swap₊^ = swap₊^
@@ -143,13 +143,13 @@ gg {n = .(S _)} {m = .(S _)} (⊕^ c) {t₁ = I+ t₁} {t₂ = I+ t₂} =
   in  ⊕^ r
 
 ff-gg : {n m : ℕ} {t₁ : U^ n} {t₂ : U^ m} → (c : n ⟷ m) -> ff {n} {m} {t₁} {t₂} (gg c) == c
-ff-gg {.(S (S _))} {.(S (S _))} {I+ I+ t₁} {I+ I+ t₂} swap₊^ rewrite (U^-is-Singleton t₁ t₂) rewrite (U^-is-singleton=idp t₂) = idp
-ff-gg {t₁ = t₁} {t₂ = t₂} id⟷₁^ rewrite (U^-is-Singleton t₁ t₂) rewrite (U^-is-singleton=idp t₂) = idp
+ff-gg {.(S (S _))} {.(S (S _))} {I+ I+ t₁} {I+ I+ t₂} swap₊^ rewrite (U^-is-Singleton t₁ t₂) = idp
+ff-gg {t₁ = t₁} {t₂ = t₂} id⟷₁^ rewrite (U^-is-Singleton t₁ t₂) = idp
 ff-gg (x ◎^ x₁) = (ap2 (λ c d -> c ◎^ d) (ff-gg x) (ff-gg x₁))
 ff-gg {t₁ = I+ t₁} {t₂ = I+ t₂} (⊕^ x) = ap ⊕^_ (ff-gg x)
 gg-ff : {n m : ℕ} {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) -> gg (ff c) == c
-gg-ff (swap₊^ {t = t}) rewrite (U^-is-singleton=idp t) = idp
-gg-ff (id⟷₁^ {t = t}) rewrite (U^-is-singleton=idp t) = idp
+gg-ff (swap₊^ {t = t}) = idp
+gg-ff (id⟷₁^ {t = t}) = idp
 gg-ff {n = n₁} {m = m₁} (_◎^_ {n} {m} {o} {t₂ = t₃} x  x₁) rewrite (U^-is-Singleton (i^ o) t₃) = idp ∙ (ap2 (λ c d -> c ◎^ d) (gg-ff x) (gg-ff x₁))
 gg-ff (⊕^ x) = ap ⊕^_  (gg-ff x)
 
@@ -166,8 +166,8 @@ induction^^ :
     → (comp* : {n : ℕ}  {t : U^ n} {c₁ : t ⟷₁^ t} {c₂ : t ⟷₁^ t} → P c₁ → P c₂ → P (c₁ ◎^ c₂))
     → (plus* : {n : ℕ} {t : U^ n} {c : t ⟷₁^ t} → P (⊕^_ c))
     → {n : ℕ} → {t : U^ n} → (c : my2 n n) → P {n = n} {t = t} (<– ⟷₁-equiv c)
-induction^^ P swap* id* comp* plus* {t = I+ (I+ t)} (pp , swap₊^) rewrite (ℕ-p pp) rewrite (U^-is-singleton=idp t) = swap*
-induction^^ P swap* id* comp* plus* {t = t} (pp , id⟷₁^) rewrite (ℕ-p pp) rewrite (U^-is-singleton=idp t) = id*
+induction^^ P swap* id* comp* plus* {t = I+ (I+ t)} (pp , swap₊^) rewrite (ℕ-p pp) = swap*
+induction^^ P swap* id* comp* plus* {t = t} (pp , id⟷₁^) rewrite (ℕ-p pp) = id*
 induction^^ P swap* id* comp* plus* {n = n} {t = t} (pp , (c₁ ◎^ c₂)) rewrite (ℕ-p pp) rewrite (U^-is-Singleton (i^ n) t) = 
   let r1 = induction^^ P swap* id* comp* plus* {n = n} {t = t} (idp , c₁)
       r2 = induction^^ P swap* id* comp* plus* {n = n} {t = t} (idp , c₂)
@@ -377,7 +377,7 @@ lemma3 : {A B : Type₀} {x y : A} (P : B → Type₀) (f : A → B) (p : x == y
 lemma3 P f idp u = idp
 
 big-id₊⟷₂id⟷₁ : {t : U^ n} → (c : t ⟷₁^ t) → big-id₊^ c ⟷₂^ id⟷₁^
-big-id₊⟷₂id⟷₁ {t = t} c rewrite (lemma'' c) rewrite (U^-is-singleton=idp t) = id⟷₂^
+big-id₊⟷₂id⟷₁ {t = t} c rewrite (lemma'' c) = id⟷₂^
 
 -- -- -- 3-combinators trivial
 
