@@ -26,6 +26,10 @@ private
   variable
     n m o : ℕ
 
+postulate
+    ℕ-S-is-inj-rewrite : {n : ℕ} -> (ℕ-S-is-inj n n idp) ↦ idp -- path in ℕ
+    {-# REWRITE ℕ-S-is-inj-rewrite #-}
+
 list2normI : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (n == m) → List (Fin n) → t₁ ⟷₁^ t₂
 list2normI {n} {t₁ = t₁} {t₂ = t₂} idp l rewrite (U^-is-Singleton t₁ (i^ (S n))) rewrite (U^-is-Singleton t₂ (i^ (S n))) = list2norm^ l
 
@@ -46,7 +50,7 @@ norm2list {n = S n} (⊕^ c) = map S⟨_⟩ (norm2list c)
 norm2norm : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (c : t₁ ⟷₁^ t₂) →
     (list2normI {t₁ = t₁} {t₂ = t₂} (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (norm2list c)) ⟷₂^ c
 norm2norm (swap₊^ {t = t}) = TODO
-norm2norm id⟷₁^ = TODO
+norm2norm id⟷₁^ = {!   !}
 norm2norm (_◎^_ {.(S _)} {_} {O} c₁ c₂) = TODO -- impossible
 norm2norm (_◎^_ {.(S _)} {_} {S o} c₁ c₂) =
   let r1 = norm2norm c₁ 

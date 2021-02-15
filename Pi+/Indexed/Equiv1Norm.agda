@@ -33,10 +33,6 @@ private
     variable
         n m : ℕ
 
-postulate
-    ℕ-S-is-inj-rewrite : {n : ℕ} -> (ℕ-S-is-inj n n idp) ↦ idp -- path in ℕ
-    {-# REWRITE ℕ-S-is-inj-rewrite #-}
-
 lehmer2normpi : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (S n == S m) → Lehmer n → t₁ ⟷₁^ t₂
 lehmer2normpi p cl = list2normI (ℕ-S-is-inj _ _ p) (immersion cl)
 

@@ -124,7 +124,7 @@ U^-is-singleton=idp (I+ t) = ap (ap I+_) (U^-is-singleton=idp t)
 postulate
     U^-is-singleton=idp-rewrite : {t : U^ n} → (U^-is-Singleton t t) ↦ idp -- U^-is-singleton=idp
     {-# REWRITE U^-is-singleton=idp-rewrite #-}
-
+    
 ff : {n m : ℕ} {t₁ : U^ n} {t₂ : U^ m} → (t₁ ⟷₁^ t₂) -> (n ⟷ m)
 ff swap₊^ = swap₊^
 ff id⟷₁^ = id⟷₁^
