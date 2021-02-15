@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.Indexed.PiCoxeter where
+module Pi+.Indexed.Equiv1NormHelpers where
 
 open import lib.Base
 open import lib.PathGroupoid
@@ -11,11 +11,11 @@ open import lib.types.List
 open import lib.NType
 
 open import Pi+.Indexed.Syntax as Pi
-open import Pi+.Indexed.SyntaxNorm as Pi^
-open import Pi+.Indexed.Equiv0
+open import Pi+.Indexed.SyntaxHat as Pi^
+open import Pi+.Indexed.Equiv0Norm
+
 open import Pi+.Misc
 open import Pi+.UFin.Base
-
 open import Pi+.Common.FinHelpers
 open import Pi+.Coxeter.Coxeter
 open import Pi+.Coxeter.Sn

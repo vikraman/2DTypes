@@ -9,6 +9,7 @@ open import Pi+.Extra
 
 open import Pi+.Indexed.Equiv0Hat
 open import Pi+.Indexed.Equiv0Norm
+open import Pi+.Indexed.Equiv1Hat
 
 open import lib.Basics
 open import lib.types.Fin

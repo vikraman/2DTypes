@@ -51,12 +51,6 @@ quote^₀ : U^ n → U n
 quote^₀ O = O
 quote^₀ (I+ X) = I U.+ quote^₀ X
 
-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (t₁ ⟷₁^ t₂) → (quote^₀ t₁ ⟷₁ quote^₀ t₂)
-quote^₁ swap₊^ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
-quote^₁ id⟷₁^ = id⟷₁
-quote^₁ (t ◎^ t₁) = quote^₁ t ◎ quote^₁ t₁
-quote^₁ (⊕^ t) = id⟷₁ ⊕ quote^₁ t
-
 quote^₀++ : (t₁ : U^ n) (t₂ : U^ m) → quote^₀ (t₁ ++^ t₂) ⟷₁ quote^₀ t₁ U.+ quote^₀ t₂
 quote^₀++ O t₂ = uniti₊l
 quote^₀++ (I+ t₁) t₂ = (id⟷₁ ⊕ quote^₀++ t₁ t₂) ◎ assocl₊
@@ -78,3 +72,12 @@ eval-quote^==₀ (I+ t) = ap I+_ (eval-quote^==₀ t)
 eval-quote^₀ : (t : U^ n) → eval^₀ (quote^₀ t) ⟷₁^ t
 eval-quote^₀ O = id⟷₁^
 eval-quote^₀ (I+ t) = ⊕^ eval-quote^₀ t
+
+postulate
+    eval-quote₀-rewrite : {t : U^ n} → (eval^₀ (quote^₀ t)) ↦ t -- because eval-quote^==₀
+    {-# REWRITE eval-quote₀-rewrite #-}
+
+quote-eval²₀ : (t : U n) → quote-eval^₀ (quote^₀ (eval^₀ t)) ⟷₂ id⟷₁
+quote-eval²₀ O = id⟷₂
+quote-eval²₀ I = {!   !}
+quote-eval²₀ (t U.+ t₁) = {!   !}
