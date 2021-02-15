@@ -409,5 +409,5 @@ big-id₊⟷₂id⟷₁ {t = t} c rewrite (lemma'' c) rewrite (lemma4 t) = id⟷
 
 -- -- -- 3-combinators trivial
 
-data _⟷₃_ : {X Y : U^ n} {p q : X ⟷₁^ Y} → (p ⟷₂^ q) → (p ⟷₂^ q) → Set where
-  trunc : {X Y : U^ n} {p q : X ⟷₁^ Y} (α β : p ⟷₂^ q) → α ⟷₃ β
+data _⟷₃^_ : {X Y : U^ n} {p q : X ⟷₁^ Y} → (p ⟷₂^ q) → (p ⟷₂^ q) → Set where
+  trunc : {X Y : U^ n} {p q : X ⟷₁^ Y} (α β : p ⟷₂^ q) → α ⟷₃^ β

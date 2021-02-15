@@ -189,7 +189,7 @@ evalNorm₂ {S (S n)} hom⊕◎⟷₂^ = {!   !}
 evalNorm₂ {S .(S _)} swapr₊⟷₂^ = {!   !}
 evalNorm₂ {S .(S _)} swapl₊⟷₂^ = {!   !}
 
-eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ == eval^₁ c₂
+eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
 eval^₂ α = {!   !}
 
 quote^₂ : {t₁ : U^ n} {t₂ : U^ m} {c₁ c₂ : t₁ ⟷₁^ t₂} → c₁ ⟷₂^ c₂ → quote^₁ c₁ ⟷₂ quote^₁ c₂
