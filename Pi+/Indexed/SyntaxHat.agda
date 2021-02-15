@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K  --rewriting --allow-unsolved-metas #-}
 
-module Pi+.Indexed.SyntaxNorm where
+module Pi+.Indexed.SyntaxHat where
 
 open import lib.Base
 open import lib.NType
