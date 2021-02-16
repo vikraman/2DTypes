@@ -13,7 +13,7 @@ open import lib.Basics
 open import lib.types.Fin
 open import lib.types.List
 open import lib.types.BAut
-open import lib.types.Nat
+open import lib.types.Nat as N
 open import lib.types.Truncation
 open import lib.NType2
 open import lib.types.SetQuotient
@@ -25,11 +25,11 @@ private
     variable
         n m : ℕ    
 
-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (t₁ ⟷₁^ t₂) → (quote^₀ t₁ ⟷₁ quote^₀ t₂)
+quote^₁ : (n ⟷₁^ m) → (quote^₀ n ⟷₁ quote^₀ m)
 quote^₁ swap₊^ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
 quote^₁ id⟷₁^ = id⟷₁
-quote^₁ (t ◎^ t₁) = quote^₁ t ◎ quote^₁ t₁
-quote^₁ (⊕^ t) = id⟷₁ ⊕ quote^₁ t
+quote^₁ (c₁ ◎^ c₂) = quote^₁ c₁ ◎ quote^₁ c₂
+quote^₁ (⊕^ c₁) = id⟷₁ ⊕ quote^₁ c₁
 
 denorm : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)
 denorm {t₁ = t₁} {t₂ = t₂} c = (quote-eval^₀ t₁ ◎ c ◎ !⟷₁ (quote-eval^₀ t₂))
@@ -37,40 +37,33 @@ denorm {t₁ = t₁} {t₂ = t₂} c = (quote-eval^₀ t₁ ◎ c ◎ !⟷₁ (q
 denorm← : {t₁ : U n} {t₂ : U m} → (c : quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)) → t₁ ⟷₁ t₂
 denorm← {t₁ = t₁} {t₂ = t₂} c = (!⟷₁ (quote-eval^₀ t₁)) ◎ c ◎ (quote-eval^₀ t₂)
 
-norm : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₀ (quote^₀ t₁) ⟷₁^ eval^₀ (quote^₀ t₂)
-norm {t₁ = t₁} {t₂ = t₂} c = (eval-quote^₀ t₁ ◎^ c ◎^ !⟷₁^ (eval-quote^₀ t₂)) -- 
-
 eval^₁ : {t₁ : U n} {t₂ : U m} → (t₁ ⟷₁ t₂) → (eval^₀ t₁ ⟷₁^ eval^₀ t₂)
 eval^₁ unite₊l = id⟷₁^
 eval^₁ uniti₊l = id⟷₁^
 eval^₁ (swap₊ {t₁ = t₁} {t₂ = t₂}) = ++^-swap (eval^₀ t₁) (eval^₀ t₂)
-eval^₁ (assocl₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}) = ++^-assoc (eval^₀ t₁) (eval^₀ t₂) (eval^₀ t₃)
-eval^₁ (assocr₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}) = !⟷₁^ (++^-assoc (eval^₀ t₁) (eval^₀ t₂) (eval^₀ t₃))
+eval^₁ (assocl₊ {n} {t₁ = t₁} {m} {t₂ = t₂} {o} {t₃ = t₃}) = ++^-id (! (+-assoc n m o))
+eval^₁ (assocr₊ {n} {t₁ = t₁} {m} {t₂ = t₂} {o} {t₃ = t₃}) = ++^-id (+-assoc n m o)
 eval^₁ id⟷₁ = id⟷₁^
 eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
-eval-quote^₁ : {t₁ : U^ n} {t₂ : U^ m} → (c : t₁ ⟷₁^ t₂) → eval^₁ (quote^₁ c) ⟷₂^ norm c
-eval-quote^₁ (swap₊^ {t = t}) = TODO
-    -- let cc = eval-quote^₀ t
-    -- in  !⟷₂^ ( -- ) -- (swapl₊⟷₂^ {c = {! id⟷₁^  !}})
-    --     (⊕^ ⊕^ cc) ◎^ (swap₊^ ◎^ ⊕^ (⊕^ (!⟷₁^ cc))) ⟷₂^⟨ _⊡^_ {c₁ = (⊕^ ⊕^ cc)} {c₂ = _} {c₃ = (⊕^ ⊕^ cc)} {c₄ = ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^)} TODO  {! swapl₊⟷₂^ !} ⟩
-    --     TODO ⟷₂^⟨ TODO ⟩ -- (⊕^ ⊕^ cc) ◎^ ((⊕^ (⊕^ !⟷₁^ cc)) ◎^ swap₊^) ,, assoc◎l^
-    --     ((⊕^ ⊕^ cc) ◎^ (⊕^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ hom◎⊕⟷₂^ ⊡^ id⟷₂^ ⟩
-    --     (⊕^ ((⊕^ cc) ◎^ (⊕^ !⟷₁^ (cc)))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ hom◎⊕⟷₂^) ⊡^ id⟷₂^ ⟩
-    --     (⊕^ (⊕^ ((cc) ◎^ (!⟷₁^ (cc))))) ◎^ swap₊^ ⟷₂^⟨ (resp⊕⟷₂ (resp⊕⟷₂ linv◎l^)) ⊡^ id⟷₂^ ⟩
-    --     (⊕^ (⊕^ (id⟷₁^))) ◎^ swap₊^ ⟷₂^⟨ id⟷₂^ ⟩
-    --     swap₊^ ⟷₂^∎)
-eval-quote^₁ {n = n} {t₁ = t₁} id⟷₁^ = TODO -- !⟷₂^ (linv◎l^ {n} {t₁ = eval^₀ (quote^₀ t₁)} {t₂ = t₁} {c = eval-quote^₀ _})
-eval-quote^₁ (c ◎^ c₁) = TODO
-eval-quote^₁ (⊕^ c) = TODO
+eval-quote^₁ : (c : n ⟷₁^ m) → eval^₁ (quote^₁ c) ⟷₂^ c
+eval-quote^₁ (swap₊^ {n = n}) 
+    rewrite (ℕ-p (+-assoc 1 1 n))
+    rewrite (ℕ-p (+-unit-r 1)) 
+    rewrite (ℕ-p (+-assoc 1 0 1)) = 
+        _ ⟷₂^⟨ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩   -- id⟷₂^ ⊡^ {! _  !} ⟩
+        _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
+        _ ⟷₂^⟨ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⊡^ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩
+        swap₊^ ⟷₂^∎
+eval-quote^₁ id⟷₁^ = id⟷₂^
+eval-quote^₁ (c ◎^ c₁) = eval-quote^₁ c ⊡^ eval-quote^₁ c₁
+eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c) 
+... | idp = resp⊕⟷₂ (eval-quote^₁ c)
 
 quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
-quote-eval^₁ unite₊l = TODO
-quote-eval^₁ uniti₊l = TODO
-quote-eval^₁ swap₊ = TODO
-quote-eval^₁ assocl₊ = TODO
-quote-eval^₁ assocr₊ = TODO
-quote-eval^₁ id⟷₁ = TODO
-quote-eval^₁ (c ◎ c₁) = TODO
-quote-eval^₁ (c ⊕ c₁) = TODO
+quote-eval^₁ c = TODO
+-- quote-eval^₁ {t₁} {.t₁} id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)

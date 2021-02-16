@@ -13,7 +13,9 @@ open import lib.NType
 open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.Equiv0Norm
+open import Pi+.Indexed.Equiv1Hat
 open import Pi+.Indexed.Level0Hat
+open import Pi+.Indexed.Level0
 
 open import Pi+.Misc
 open import Pi+.Extra
@@ -30,47 +32,56 @@ postulate
     ℕ-S-is-inj-rewrite : {n : ℕ} -> (ℕ-S-is-inj n n idp) ↦ idp -- path in ℕ
     {-# REWRITE ℕ-S-is-inj-rewrite #-}
 
-list2normI : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (n == m) → List (Fin n) → t₁ ⟷₁^ t₂
-list2normI {n} {t₁ = t₁} {t₂ = t₂} idp l rewrite (U^-is-Singleton t₁ (i^ (S n))) rewrite (U^-is-Singleton t₂ (i^ (S n))) = list2norm^ l
+list2normI : (n == m) → List (Fin n) → S n ⟷₁^ S m
+list2normI idp l = list2norm^ l
 
-piRespectsCoxI : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (p : n == m) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
-                (list2normI {t₁ = t₁} {t₂ = t₂} p l₁) ⟷₂^ (list2normI {t₁ = t₁} {t₂ = t₂} p l₂)
-piRespectsCoxI {n} {t₁ = t₁} {t₂ = t₂} idp _ _ c rewrite (U^-is-Singleton t₁ (i^ (S n))) rewrite (U^-is-Singleton t₂ (i^ (S n))) = piRespectsCox^ _ _ _ c
+piRespectsCoxI : (p : n == m) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
+                (list2normI {n = n} {m = m} p l₁) ⟷₂^ (list2normI {n = n} {m = m} p l₂)
+piRespectsCoxI idp _ _ c = piRespectsCox^ _ _ _ c
 
-norm2list : {t₁ : U^ (S n)} {t₂ : U^ m} → t₁ ⟷₁^ t₂ → List (Fin n)
+norm2list : (S n) ⟷₁^ (S m) → List (Fin n)
 norm2list swap₊^ = fzero :: nil
 norm2list id⟷₁^ = nil
-norm2list (_◎^_ {.(S _)} {_} {O} c₁ c₂) = nil
-norm2list (_◎^_ {.(S _)} {_} {S o} c₁ c₂) = (norm2list c₁) ++ transport (λ e -> List (Fin e)) (ℕ-S-is-inj _ _ (! (⟷₁^-eq-size c₁))) (norm2list c₂)
-norm2list {n = O} (⊕^ c) = nil
-norm2list {n = S n} (⊕^ c) = map S⟨_⟩ (norm2list c)
+norm2list (c ◎^ c₁) with (⟷₁^-eq-size c) | (⟷₁^-eq-size c₁)
+... | idp | idp = norm2list c ++ norm2list c₁
+norm2list {O} (⊕^ c) = nil
+norm2list {S n} (⊕^ c) with (⟷₁^-eq-size c)
+... | idp = map S⟨_⟩ (norm2list c)
 
--- -- Back and forth identities
-
-norm2norm : {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (c : t₁ ⟷₁^ t₂) →
-    (list2normI {t₁ = t₁} {t₂ = t₂} (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (norm2list c)) ⟷₂^ c
-norm2norm (swap₊^ {t = t}) = TODO
-norm2norm id⟷₁^ = {!   !}
-norm2norm (_◎^_ {.(S _)} {_} {O} c₁ c₂) = TODO -- impossible
-norm2norm (_◎^_ {.(S _)} {_} {S o} c₁ c₂) =
-  let r1 = norm2norm c₁ 
-      r2 = norm2norm c₂
+norm2norm : (c : S n ⟷₁^ S m) →
+    (list2normI (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (norm2list c)) ⟷₂^ c
+norm2norm (swap₊^ {n = n}) 
+    rewrite (ℕ-p (+-assoc 1 1 n))
+    rewrite (ℕ-p (+-unit-r 1)) 
+    rewrite (ℕ-p (+-assoc 1 0 1)) = 
+    -- Code duplication with Eval1Hat
+        _ ⟷₂^⟨ idr◎l^ ⟩
+        _ ⟷₂^⟨ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩
+        _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
+        _ ⟷₂^⟨ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⊡^ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩
+        swap₊^ ⟷₂^∎
+norm2norm id⟷₁^ = id⟷₂^
+norm2norm (c₁ ◎^ c₂) with (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₁)
+... | idp | idp = 
+  let r₁ = norm2norm c₁
+      r₂ = norm2norm c₂
+  in  trans⟷₂^ TODO (r₁ ⊡^ r₂)
+norm2norm {O} (⊕^ c) with (⟷₁^-eq-size c)
+... | idp = !⟷₂^ (trans⟷₂^ (resp⊕⟷₂ (c₊⟷₂id⟷₁ c)) ⊕id⟷₁⟷₂^)
+norm2norm {S n} (⊕^ c) with (⟷₁^-eq-size c)
+... | idp = 
+  let rec = norm2norm c
   in  TODO
-norm2norm {n = O} (⊕^ c) = TODO -- zero case
-norm2norm {n = S n} (⊕^ c) = TODO
-  -- let rec = norm2norm c
-  -- in  TODO
 
-list2list : {n : ℕ} → (p : List (Fin n)) → 
-  norm2list {t₁ = quoteNorm₀ (pFin _)} {t₂ = quoteNorm₀ (pFin _)} (list2normI {t₁ = quoteNorm₀ (pFin _)} {t₂ = quoteNorm₀ (pFin _)} idp p) == p
-list2list nil = TODO
-list2list {S n} ((O , fp) :: ns) = TODO
-  -- let rec = list2list ns
-  --     n2n = norm2list (list2norm ns)
-  --     tt = transport (λ e → List (Fin e)) (ℕ-S-is-inj (S n) (S n) idp) n2n == transport (λ e → List (Fin e)) idp n2n
-  --     tt = ap (λ x → transport (λ e → List (Fin e)) x n2n) ℕ-S-is-inj-idp
-  -- in  List=-out ((Fin= _ _ idp (O<S n) fp) , (tt ∙ rec))
-list2list {S n} ((S x , fp) :: ns) = TODO
-
--- -----------------------------------------------------------------------------
-
+list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2normI idp p) == p
+list2list nil = idp
+list2list {S n} ((O , p0) :: p) 
+    rewrite (ℕ-p (+-assoc 1 1 n))
+    rewrite (ℕ-p (+-unit-r 1)) 
+    rewrite (ℕ-p (+-assoc 1 0 1)) = 
+      let rec = list2list p 
+      in  TODO
+list2list {S n} ((S k , pk) :: p) = TODO

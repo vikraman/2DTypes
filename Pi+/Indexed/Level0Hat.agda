@@ -38,24 +38,16 @@ private
 -- Mapping each transposition index to a combinator and
 -- some properties
 
-eval^₀⟪_⟫ : (n : ℕ) →  eval^₀ ⟪ n ⟫ == i^ n
-eval^₀⟪ O ⟫ = idp
-eval^₀⟪ S n ⟫ = ap I+_  eval^₀⟪ n ⟫
-
-postulate
-    eval^₀⟪_⟫-rewrite : {n : ℕ} → (eval^₀ ⟪ n ⟫) ↦ i^ n
-    {-# REWRITE eval^₀⟪_⟫-rewrite #-}
-
 ℕ-S-is-inj-idp : {n : ℕ} -> ℕ-S-is-inj (S n) (S n) idp == idp
 ℕ-S-is-inj-idp = prop-has-all-paths {{has-level-apply ℕ-level _ _}} _ _
 
--- transpos2pi^ : {n m : ℕ} {t₁ : U^ (S n)} {t₂ : U^ (S m)} → (p : n == m) → Fin n → t₁ ⟷₁^ t₂
--- transpos2pi^ {n = n} {t₁ = t₁} {t₂ = t₂} idp x =
---   let y = eval^₁ (transpos2pi x)
---       z = transport2 _⟷₁^_ (U^-is-Singleton (i^ (S n)) t₁) (U^-is-Singleton (i^ (S n)) t₂) y
---   in  z
+-- -- transpos2pi^ : {n m : ℕ} {t₁ : (S n)} {t₂ : (S m)} → (p : n == m) → Fin n → t₁ ⟷₁^ t₂
+-- -- transpos2pi^ {n = n} {t₁ = t₁} {t₂ = t₂} idp x =
+-- --   let y = eval^₁ (transpos2pi x)
+-- --       z = transport2 _⟷₁^_ (U^-is-Singleton ((S n)) t₁) (U^-is-Singleton ((S n)) t₂) y
+-- --   in  z
 
-transpos2pi^ : {n : ℕ} → Fin n → (i^ (S n)) ⟷₁^ i^ (S n)
+transpos2pi^ : {n : ℕ} → Fin n → ((S n)) ⟷₁^ (S n)
 transpos2pi^ x = eval^₁ (transpos2pi x)
 
 transpos-cancel^ : {n : ℕ} {k : Fin (S n)} →
@@ -76,7 +68,7 @@ braid-transpos^ : {m : ℕ} → (n : Fin m) →
   transpos2pi^ ⟨ n ⟩ ◎^ transpos2pi^ S⟨ n ⟩ ◎^ transpos2pi^ ⟨ n ⟩
 braid-transpos^ {m} n = eval^₂ (braid-transpos {m} n)
 
-list2norm^ : {m : ℕ} → List (Fin m) → i^ (S m) ⟷₁^ i^ (S m)
+list2norm^ : {m : ℕ} → List (Fin m) → (S m) ⟷₁^ (S m)
 list2norm^ l = eval^₁ (list2norm l)
 
 cox≈2pi^ : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm^ r₁ ⟷₂^ list2norm^ r₂

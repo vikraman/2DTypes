@@ -168,9 +168,6 @@ preCompEquiv e = equiv f g f-g g-f
   g-f : _
   g-f x = λ= (λ a → ap x (<–-inv-r e a))
 
-cong≃ : {A B : Type₀} (F : Type₀ -> Type₀) → (A ≃ B) → F A ≃ F B
-cong≃ F e = coe-equiv (ap F (ua e))
-
 Σ-cong-equiv-fst : {A A' : Type₀} {B : A' -> Type₀} (e : A ≃ A') → (Σ A (B ∘ (equivFun e))) ≃ (Σ A' B)
 Σ-cong-equiv-fst {B = B} e = _ , (Σ-isemap-l B (snd e))
 
@@ -242,6 +239,6 @@ i {n} = equiv ff g f-g g-f
       
 
 ii : ∀ {n : ℕ} (k : Fin (S n)) → (FinExcept fzero ≃ FinExcept k) ≃ (Fin n ≃ Fin n)
-ii {n} k = (FinExcept fzero ≃ FinExcept k)   ≃⟨ cong≃ (λ R → (FinExcept (fzero {k = n})) ≃ R) punchOutEquiv ⟩
-        (FinExcept fzero ≃ Fin n)         ≃⟨ cong≃ (λ L → L ≃ Fin n) punchOutEquiv  ⟩
+ii {n} k = (FinExcept fzero ≃ FinExcept k)   ≃⟨ {!  cong≃ (λ R → (FinExcept (fzero {k = n})) ≃ R) punchOutEquiv !} ⟩ -- 
+        (FinExcept fzero ≃ Fin n)         ≃⟨ {!  cong≃ (λ L → L ≃ Fin n) punchOutEquiv  !} ⟩ -- 
         (Fin n ≃ Fin n)                   ≃∎

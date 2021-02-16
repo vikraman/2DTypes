@@ -20,64 +20,42 @@ private
   variable
     n m o p : ℕ
 
-_++^_ : U^ m → U^ n → U^ (m N.+ n)
-O ++^ t₂ = t₂
-(I+ t₁) ++^ t₂ = I+ (t₁ ++^ t₂)
+++^-id : {n m : ℕ} → (n == m) → n ⟷₁^ m
+++^-id idp = id⟷₁^
 
-++^-unit : {t : U^ m} → t ⟷₁^ (t ++^ O)
-++^-unit {t = O} = id⟷₁^
-++^-unit {t = I+ t} = ⊕^ ++^-unit {t = t}
-
-++^-assoc : (t₁ : U^ m) (t₂ : U^ n) (t₃ : U^ o) → (t₁ ++^ (t₂ ++^ t₃)) ⟷₁^ ((t₁ ++^ t₂) ++^ t₃)
-++^-assoc O t₂ t₃ = id⟷₁^
-++^-assoc (I+ t₁) t₂ t₃ = ⊕^ ++^-assoc t₁ t₂ t₃
-
-++^-cons : (t : U^ n) → I+ t ⟷₁^ (t ++^ (I+ O))
+++^-cons : (n : ℕ) → (S n) ⟷₁^ (n N.+ 1)
 ++^-cons O = id⟷₁^
-++^-cons (I+ t) = swap₊^ ◎^ (⊕^ (++^-cons t))
+++^-cons (S n) = swap₊^ ◎^ (⊕^ (++^-cons n))
 
-++^-⊕ : {t₁ : U^ m} {t₂ : U^ n} {t₃ : U^ o} {t₄ : U^ p} → (t₁ ⟷₁^ t₂) → (t₃ ⟷₁^ t₄) → (t₁ ++^ t₃) ⟷₁^ (t₂ ++^ t₄)
-++^-⊕ (swap₊^ {t = t}) c₂ = big-swap₊^ (++^-⊕ (id⟷₁^ {t = t}) c₂)
-++^-⊕ {t₁ = O} id⟷₁^ c₂ = c₂
-++^-⊕ {t₁ = I+ t₁} id⟷₁^ c₂ = ⊕^ (++^-⊕ id⟷₁^ c₂)
+++^-⊕ : {n m o p : ℕ} → (n ⟷₁^ m) → (o ⟷₁^ p) → (n N.+ o) ⟷₁^ (m N.+ p)
+++^-⊕ (swap₊^ {n = n}) c₂ = big-swap₊^ (++^-⊕ id⟷₁^ c₂)
+++^-⊕ {O} id⟷₁^ c₂ = c₂
+++^-⊕ {S n} id⟷₁^ c₂ = ⊕^ (++^-⊕ {n} id⟷₁^ c₂) -- 
 ++^-⊕ (c₁ ◎^ c₃) c₂ = (++^-⊕ c₁ c₂) ◎^ ++^-⊕ c₃ id⟷₁^
 ++^-⊕ (⊕^ c₁) c₂ = ⊕^ (++^-⊕ c₁ c₂)
 
-++^-swap : (t₁ : U^ m) (t₂ : U^ n) → (t₁ ++^ t₂) ⟷₁^ (t₂ ++^ t₁)
-++^-swap O t₂ = ++^-unit {t = t₂}
-++^-swap (I+ t₁) t₂ = (⊕^ ++^-swap t₁ t₂) ◎^ ++^-cons (t₂ ++^ t₁) ◎^ !⟷₁^ (++^-assoc t₂ t₁ (I+ O)) ◎^ ++^-⊕ id⟷₁^ (!⟷₁^ (++^-cons t₁))
+++^-swap : (n m : ℕ) → (n N.+ m) ⟷₁^ (m N.+ n)
+++^-swap O m = ++^-id (! (+-unit-r m))
+++^-swap (S n) m = (⊕^ ++^-swap n m) ◎^ ++^-cons (m N.+ n) ◎^ !⟷₁^ (++^-id (! (+-assoc m n (S O)))) ◎^ ++^-⊕ id⟷₁^ (!⟷₁^ (++^-cons n))
 
-quote^₀ : U^ n → U n
+quote^₀ : (n : ℕ) → U n
 quote^₀ O = O
-quote^₀ (I+ X) = I U.+ quote^₀ X
+quote^₀ (S n) = I U.+ quote^₀ n
 
-quote^₀++ : (t₁ : U^ n) (t₂ : U^ m) → quote^₀ (t₁ ++^ t₂) ⟷₁ quote^₀ t₁ U.+ quote^₀ t₂
-quote^₀++ O t₂ = uniti₊l
-quote^₀++ (I+ t₁) t₂ = (id⟷₁ ⊕ quote^₀++ t₁ t₂) ◎ assocl₊
+quote^₀++ : (n m : ℕ) → quote^₀ (n N.+ m) ⟷₁ quote^₀ n U.+ quote^₀ m
+quote^₀++ O m = uniti₊l
+quote^₀++ (S n) m = (id⟷₁ ⊕ quote^₀++ n m) ◎ assocl₊
 
-eval^₀ : U n → U^ n
-eval^₀ O = O
-eval^₀ I = I+ O
-eval^₀ (t₁ U.+ t₂) = eval^₀ t₁ ++^ eval^₀ t₂
+eval^₀ : U n → ℕ
+eval^₀ {n} t = n
 
 quote-eval^₀ : (t : U n) → quote^₀ (eval^₀ t) ⟷₁ t
 quote-eval^₀ O = id⟷₁
-quote-eval^₀ I = swap₊ ◎ unite₊l
-quote-eval^₀ (t₁ U.+ t₂) = quote^₀++ (eval^₀ t₁) (eval^₀ t₂) ◎ (quote-eval^₀ t₁ ⊕ quote-eval^₀ t₂)
+quote-eval^₀ I = unite₊r
+quote-eval^₀ (t₁ U.+ t₂) = quote^₀++ (eval^₀ t₁) (eval^₀ t₂)  ◎ (quote-eval^₀ t₁ ⊕ quote-eval^₀ t₂)
 
-eval-quote^==₀ : (t : U^ n) → eval^₀ (quote^₀ t) == t
-eval-quote^==₀ O = idp
-eval-quote^==₀ (I+ t) = ap I+_ (eval-quote^==₀ t)
+eval-quote^==₀ : (n : ℕ) → eval^₀ (quote^₀ n) == n
+eval-quote^==₀ n = idp
 
-eval-quote^₀ : (t : U^ n) → eval^₀ (quote^₀ t) ⟷₁^ t
-eval-quote^₀ O = id⟷₁^
-eval-quote^₀ (I+ t) = ⊕^ eval-quote^₀ t
-
-postulate
-    eval-quote₀-rewrite : {t : U^ n} → (eval^₀ (quote^₀ t)) ↦ t -- because eval-quote^==₀
-    {-# REWRITE eval-quote₀-rewrite #-}
-
-quote-eval²₀ : (t : U n) → quote-eval^₀ (quote^₀ (eval^₀ t)) ⟷₂ id⟷₁
-quote-eval²₀ O = id⟷₂
-quote-eval²₀ I = TODO
-quote-eval²₀ (t U.+ t₁) = TODO
+eval-quote^₀ : (n : ℕ) → eval^₀ (quote^₀ n) ⟷₁^ n
+eval-quote^₀ n = id⟷₁^

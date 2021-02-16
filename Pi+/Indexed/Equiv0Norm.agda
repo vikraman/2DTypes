@@ -20,16 +20,15 @@ private
   variable
     n m o p : ℕ
 
-quoteNorm₀ : {n : ℕ} -> UFin[ n ] → U^ n
-quoteNorm₀ {O} _ = O
-quoteNorm₀ {S n} _ = I+ quoteNorm₀ (pFin n)
+quoteNorm₀ : {n : ℕ} -> UFin[ n ] → ℕ
+quoteNorm₀ {n} _ = n
 
-evalNorm₀ : U^ n → UFin[ n ]
+evalNorm₀ : (n : ℕ) → UFin[ n ]
 evalNorm₀ _ = pFin _
 
-quote-evalNorm₀ : (t : U^ n) → quoteNorm₀ (evalNorm₀ t) ⟷₁^ t
+quote-evalNorm₀ : (n : ℕ) → quoteNorm₀ (evalNorm₀ n) ⟷₁^ n
 quote-evalNorm₀ O = id⟷₁^
-quote-evalNorm₀ (I+ t) = ⊕^ quote-evalNorm₀ t 
+quote-evalNorm₀ (S n) = ⊕^ quote-evalNorm₀ n 
 
 eval-quoteNorm₀ : {n : ℕ} (X : UFin[ n ]) → Trunc -1 (evalNorm₀ (quoteNorm₀ X) == X)
 eval-quoteNorm₀ (X , ϕ) = Trunc-fmap (λ p → pair= p prop-has-all-paths-↓) ϕ
