@@ -16,6 +16,8 @@ open import Pi+.Indexed.Equiv1Hat
 open import Pi+.Indexed.Equiv2Norm
 open import Pi+.Indexed.Equiv2Hat
 
+open import Pi+.Indexed.Equiv1NormHelpers
+
 open import lib.Basics
 open import lib.types.Fin
 open import lib.types.List
@@ -27,6 +29,9 @@ open import lib.types.SetQuotient
 open import lib.types.Coproduct
 open import lib.types.Sigma
 
+import Pi+.Indexed.Level0
+import Pi+.Coxeter.LehmerCoxeterEquiv
+import Pi+.Lehmer.LehmerFinEquiv
 
 private
     variable
@@ -37,19 +42,32 @@ eval₁ = evalNorm₁ ∘ eval^₁
 
 quote₁ : {t₁ : U n} {t₂ : U m} → (p : n == m) → Aut (Fin n) → (t₁ ⟷₁ t₂)
 quote₁ {t₁ = t₁} {t₂ = t₂} p e = 
-    let c = quote^₁ {t₁ = eval^₀ t₁} {t₂ = eval^₀ t₂} (quoteNorm₁ p _ _ e)
+    let c = quote^₁ {n = eval^₀ t₁} {m = eval^₀ t₂} (quoteNorm₁ p e)
     in  denorm← c
 
+-- postulate
+    -- eq-size-rewrite0 : {t₁ t₂ : U n} {c : t₁ ⟷₁ t₂} → (⟷₁-eq-size (quote^₁ (eval^₁ c))) ↦ idp -- because proof of == in ℕ
+    -- norm2list-rewrite : norm2list (⊕^ (id⟷₁^ {n = n})) ↦ nil
+    -- {-# REWRITE eq-size-rewrite0 norm2list-rewrite #-}
+  -- rewrite (ℕ-p (+-assoc 1 0 n))
+  -- rewrite (ℕ-p (+-unit-r 0)) 
+  -- rewrite (ℕ-p (+-unit-r 1))
+  -- rewrite (ℕ-p (+-assoc 0 0 1)) =
+
 eval-quote₁ : (e : Aut (Fin n)) → (eval₁ {t₁ = (quote₀ (pFin _))} {t₂ = (quote₀ (pFin _))} (quote₁ idp e)) == e
-eval-quote₁ {n} e = 
+eval-quote₁ {O} e = contr-has-all-paths {{Aut-FinO-level}} _ _
+eval-quote₁ {S n} e =
     let l1 = eval-quoteNorm₁ e
-        l2 = eval-quote^₁ (quoteNorm₁ idp (quoteNorm₀ (pFin _)) (quoteNorm₀ (pFin _)) e)
-        l3 = evalNorm₂ {n} {n} {_} {_} {_} {_} l2
-    in  TODO -- ({!   !} ∙ l3 ∙ {!   !}) ∙ l1
+        l2 = eval-quote^₁ (quoteNorm₁ idp e)
+        l3 = evalNorm₂ l2
+    in  (TODO ∙ l3) ∙ l1 -- this should evaluate to idp when we have TODOs in Pi_.Misc filled in
 
 postulate
     eq-size-rewrite : {t₁ : U n} {t₂ : U m} {c : t₁ ⟷₁ t₂} → (⟷₁^-eq-size (eval^₁ c)) ↦ (⟷₁-eq-size c) -- because proof of == in ℕ
     {-# REWRITE eq-size-rewrite #-}
+
+quote-eval²₀ : (t : U n) → quote-eval^₀ (quote^₀ (eval^₀ t)) ⟷₂ id⟷₁
+quote-eval²₀ t = {!   !}
 
 quote-eval₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → (quote₁ (⟷₁-eq-size c) (eval₁ c)) ⟷₂ denorm c
 quote-eval₁ {t₁ = t₁} {t₂ = t₂} c = 

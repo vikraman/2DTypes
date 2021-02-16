@@ -56,10 +56,6 @@ postulate
     ⟷₁^-eq-size-rewrite : {c : t ⟷₁^ t} → (⟷₁^-eq-size c) ↦ idp -- because proof of == in ℕ
     {-# REWRITE ⟷₁^-eq-size-rewrite #-}
 
-big-id₊^ : (n ⟷₁^ m) → n ⟷₁^ m
-big-id₊^ {m} {n} c with (⟷₁^-eq-size c)
-... | idp = id⟷₁^
-
 big-swap₊^ : n ⟷₁^ m → (S (S n)) ⟷₁^ (S (S m))
 big-swap₊^ c with (⟷₁^-eq-size c)
 ... | idp = swap₊^
@@ -194,12 +190,8 @@ c₊⟷₂id⟷₁ (_◎^_ {m = (O)} c₁ c₂) = trans⟷₂^ (c₊⟷₂id⟷�
 c₊⟷₂id⟷₁ (_◎^_ {m = ((S m))} c₁ c₂) with (⟷₁^-eq-size c₂)
 ... | ()
 
-
 ⊕⊕id⟷₁⟷₂^ : {n : ℕ} → (⊕^ ⊕^ id⟷₁^ {n = n}) ⟷₂^ id⟷₁^ {n = S (S n)}
 ⊕⊕id⟷₁⟷₂^ = trans⟷₂^ (resp⊕⟷₂ ⊕id⟷₁⟷₂^) ⊕id⟷₁⟷₂^
-
--- big-id₊⟷₂id⟷₁ : {t : n} → (c : t ⟷₁^ t) → big-id₊^ c ⟷₂^ id⟷₁^
--- big-id₊⟷₂id⟷₁ {n =  _} c = id⟷₂^
 
 -- -- -- 3-combinators trivial
 

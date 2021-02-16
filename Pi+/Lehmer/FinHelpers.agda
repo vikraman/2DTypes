@@ -6,6 +6,8 @@ open import HoTT hiding (⟨_⟩)
 
 open import Pi+.Common.FinHelpers public
 
+open import Pi+.Misc
+
 infix 2 Σ-syntax
 
 Σ-syntax : (A : Type₀) (B : A → Type₀) → Type₀
@@ -239,6 +241,6 @@ i {n} = equiv ff g f-g g-f
       
 
 ii : ∀ {n : ℕ} (k : Fin (S n)) → (FinExcept fzero ≃ FinExcept k) ≃ (Fin n ≃ Fin n)
-ii {n} k = (FinExcept fzero ≃ FinExcept k)   ≃⟨ {!  cong≃ (λ R → (FinExcept (fzero {k = n})) ≃ R) punchOutEquiv !} ⟩ -- 
-        (FinExcept fzero ≃ Fin n)         ≃⟨ {!  cong≃ (λ L → L ≃ Fin n) punchOutEquiv  !} ⟩ -- 
+ii {n} k = (FinExcept fzero ≃ FinExcept k)   ≃⟨ cong≃ punchOutEquiv ⟩
+        (FinExcept fzero ≃ Fin n)         ≃⟨ !≃ (cong≃ punchOutEquiv) ⟩
         (Fin n ≃ Fin n)                   ≃∎
