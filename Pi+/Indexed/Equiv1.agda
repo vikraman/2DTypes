@@ -67,7 +67,15 @@ postulate
     {-# REWRITE eq-size-rewrite #-}
 
 quote-eval²₀ : (t : U n) → quote-eval^₀ (quote^₀ (eval^₀ t)) ⟷₂ id⟷₁
-quote-eval²₀ t = {!   !}
+quote-eval²₀ {O} t = id⟷₂
+quote-eval²₀ {S n} t = 
+  let rec = quote-eval²₀ {n} (quote₀ (pFin _))
+  in  _     
+    ⟷₂⟨ id⟷₂ ⊡ resp⊕⟷₂ id⟷₂ rec ⟩
+      _
+    ⟷₂⟨ TODO ⟩ -- Goal: (((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ unite₊r ⊕ id⟷₁) ⟷₂ id⟷₁
+      _
+    ⟷₂∎
 
 quote-eval₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → (quote₁ (⟷₁-eq-size c) (eval₁ c)) ⟷₂ denorm c
 quote-eval₁ {t₁ = t₁} {t₂ = t₂} c = 
