@@ -1,9 +1,9 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --allow-unsolved-metas --exact-split #-}
 
 open import lib.Base
 open import lib.NType
 
-module Pi+.Syntax where
+module Pi+.NonIndexed.Syntax where
 
 -- Types
 

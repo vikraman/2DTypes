@@ -1,16 +1,17 @@
 {-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
 
-module Pi+.Equiv1 where
+module Pi+.NonIndexed.Equiv1 where
 
-open import Pi+.Syntax as Pi
+open import Pi+.NonIndexed.Syntax as Pi
 open import Pi+.UFin
-open import Pi+.Level0
+
 open import Pi+.Extra
 
 open import Pi+.Lehmer.Lehmer
 
-open import Pi+.Equiv0
-open import Pi+.Equiv1Norm
+open import Pi+.NonIndexed.Equiv0
+open import Pi+.NonIndexed.Level0
+open import Pi+.NonIndexed.Equiv1Norm
 
 open import lib.Basics
 open import lib.types.Fin

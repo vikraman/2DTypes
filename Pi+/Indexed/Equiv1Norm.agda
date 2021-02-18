@@ -1,12 +1,12 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.Indexed.Equiv1Norm where
 
-open import Pi+.Syntax as Pi
+open import Pi+.Indexed.Syntax as Pi
+open import Pi+.Indexed.SyntaxHat as Pi^
+
 open import Pi+.UFin
-open import Pi+.Level0
 open import Pi+.Extra
-open import Pi+.Equiv0
 
 open import Pi+.Lehmer.Lehmer using (Lehmer)
 open import Pi+.Lehmer.LehmerFinEquiv
@@ -14,70 +14,86 @@ open import Pi+.Coxeter.LehmerCoxeterEquiv
 open import Pi+.Coxeter.Sn
 open import Pi+.UFinLehmerEquiv
 
+open import Pi+.Indexed.Equiv0Norm
+open import Pi+.Indexed.Equiv1NormHelpers
+
 open import lib.Basics
 open import lib.types.Fin
 open import lib.types.List
+open import lib.types.BAut
+open import lib.types.Nat
 open import lib.types.Truncation
 open import lib.NType2
 open import lib.types.SetQuotient
 open import lib.types.Coproduct
 open import lib.types.Sigma
 
-lehmer2normpi : {n : ℕ} → Lehmer n → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
-lehmer2normpi {n} cl = list2norm (immersion cl)
 
-normpi2lehmer : {n : ℕ} → ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫ → Lehmer n
-normpi2lehmer {n} p = immersion⁻¹ (norm2list p)
+private
+    variable
+        n m : ℕ
 
-normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → lehmer2normpi (normpi2lehmer p) ⟷₂ p
-normpi2normpi {n} p =
-    let lemma : immersion (immersion⁻¹ (norm2list p)) ≈ (norm2list p)
-        lemma = immersion∘immersion⁻¹ (norm2list p)
-    in  trans⟷₂ (piRespectsCox _ _ _ lemma) (norm2norm p)
+lehmer2normpi : {n m : ℕ} → (n == m) → Lehmer n → S n ⟷₁^ S m
+lehmer2normpi p cl = list2normI p (immersion cl)
 
-lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
-lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p
+normpi2lehmer : (S n) ⟷₁^ (S m) → Lehmer n
+normpi2lehmer p = immersion⁻¹ (norm2list p)
 
-eval₁-norm : {n : ℕ} → ⟪ n ⟫ ⟷₁ ⟪ n ⟫ → FinFS n == FinFS n
-eval₁-norm {O} p = idp
-eval₁-norm {S n} p =
+normpi2normpi : (c : (S n) ⟷₁^ (S m)) →
+    (lehmer2normpi (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (normpi2lehmer c)) ⟷₂^ c
+normpi2normpi {n} c =
+    let lemma : immersion (immersion⁻¹ (norm2list c)) ≈ (norm2list c)
+        lemma = immersion∘immersion⁻¹ (norm2list c)
+    in  trans⟷₂^ (piRespectsCoxI (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) _ _ lemma) (norm2norm c)
+
+lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi idp p) == p
+lehmer2lehmer {n} p = 
+    ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p -- 
+
+evalNorm₁ : (c : n ⟷₁^ m) → Aut (Fin n)
+evalNorm₁ {O} c with (⟷₁^-eq-size c)
+... | idp = ide _ -- zero case
+evalNorm₁ {S n} c with (⟷₁^-eq-size c)
+... | idp =
     let step1 : Lehmer n
-        step1 = normpi2lehmer p
+        step1 = normpi2lehmer c
 
-        step2 : FinFS (S n) == FinFS (S n)
-        step2 = <– UFin≃Lehmer step1
+        step2 : Aut (Fin (S n))
+        step2 = <– Fin≃Lehmer step1
 
     in  step2
 
-quote₁-norm : {n : ℕ} → (FinFS n) == (FinFS n) → ⟪ n ⟫ ⟷₁ ⟪ n ⟫
-quote₁-norm {O} p = id⟷₁
-quote₁-norm {S n} p =
+quoteNorm₁ : {n m : ℕ} → (pn : n == m) → Aut (Fin n) → n ⟷₁^ m
+quoteNorm₁ {O} idp p = id⟷₁^
+quoteNorm₁ {S n} {S m} q p =
     let step1 : Lehmer n
-        step1 = –> UFin≃Lehmer p
+        step1 = –> Fin≃Lehmer p
 
-        step2 : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫
-        step2 = lehmer2normpi step1
-
+        step2 = lehmer2normpi (ℕ-S-is-inj _ _ q) step1
     in  step2
 
-quote-eval₁-norm : {n : ℕ} → (p : ⟪ n ⟫ ⟷₁ ⟪ n ⟫) → quote₁-norm (eval₁-norm p) ⟷₂ p
-quote-eval₁-norm {O} p = zero⟷₂ p
-quote-eval₁-norm {S n} p =
-    let cancelSn : –> UFin≃Lehmer (<– UFin≃Lehmer (normpi2lehmer p)) == normpi2lehmer p
-        cancelSn = <–-inv-r UFin≃Lehmer (normpi2lehmer p)
+quote-evalNorm₁ : {n m : ℕ} → (c : n ⟷₁^ m) → quoteNorm₁ (⟷₁^-eq-size c) (evalNorm₁ c) ⟷₂^ c
+quote-evalNorm₁ {O} c with (⟷₁^-eq-size c)
+... | idp = trans⟷₂^ (c₊⟷₂id⟷₁ _) (!⟷₂^ (c₊⟷₂id⟷₁ c))
+quote-evalNorm₁ {S n} p with (⟷₁^-eq-size p)
+... | idp =
+    let cancelSn : –> Fin≃Lehmer (<– Fin≃Lehmer (normpi2lehmer p)) == normpi2lehmer p
+        cancelSn = <–-inv-r Fin≃Lehmer (normpi2lehmer p)
 
-        cancelNorm : lehmer2normpi (–> UFin≃Lehmer (<– UFin≃Lehmer (normpi2lehmer p))) ⟷₂ p
-        cancelNorm = transport (λ e -> lehmer2normpi e ⟷₂ p) (! cancelSn) (normpi2normpi p)
+        sizes = (ℕ-S-is-inj _ _ (⟷₁^-eq-size p))
+        
+        cancelNorm : lehmer2normpi sizes (–> Fin≃Lehmer (<– Fin≃Lehmer (normpi2lehmer p))) ⟷₂^ p
+        cancelNorm = transport (λ e -> lehmer2normpi sizes e ⟷₂^ p) (! cancelSn) (normpi2normpi p)
 
     in  cancelNorm
 
-eval-quote₁-norm : {n : ℕ} → (p : FinFS n == FinFS n) → eval₁-norm (quote₁-norm p) == p
-eval-quote₁-norm {O} p = TODO -- obvious
-eval-quote₁-norm {S n} p =
-    let cancelNorm : normpi2lehmer (lehmer2normpi (–> UFin≃Lehmer p)) == (–> UFin≃Lehmer p)
-        cancelNorm = lehmer2lehmer (–> UFin≃Lehmer p)
+eval-quoteNorm₁ : {n : ℕ} → (p : Aut (Fin n)) → evalNorm₁ (quoteNorm₁ idp p) == p
+eval-quoteNorm₁ {O} p = contr-has-all-paths {{Aut-FinO-level}} _ _
+eval-quoteNorm₁ {S n} p =
+    let cancelNorm : normpi2lehmer (lehmer2normpi idp (–> Fin≃Lehmer p)) == (–> Fin≃Lehmer p)
+        cancelNorm = lehmer2lehmer (–> Fin≃Lehmer p)
 
-        cancelSn : <– UFin≃Lehmer (normpi2lehmer (lehmer2normpi (–> UFin≃Lehmer p))) == p
-        cancelSn = ap  (<– UFin≃Lehmer) cancelNorm ∙ <–-inv-l UFin≃Lehmer p
+        cancelSn : <– Fin≃Lehmer (normpi2lehmer (lehmer2normpi idp (–> Fin≃Lehmer p))) == p
+        cancelSn = ap  (<– Fin≃Lehmer) cancelNorm ∙ <–-inv-l Fin≃Lehmer p
 
     in  cancelSn

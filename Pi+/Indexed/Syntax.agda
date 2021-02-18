@@ -1,8 +1,12 @@
-{-# OPTIONS --without-K --exact-split --rewriting --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 open import lib.Base
 open import lib.NType
+open import lib.PathGroupoid
 import lib.types.Nat as N
+
+open import Pi+.Misc
+open import Pi+.Extra
 
 module Pi+.Indexed.Syntax where
 
@@ -54,6 +58,17 @@ _ ⟷₁⟨ c₁ ⟩ c₂ = c₁ ◎ c₂
 
 _⟷₁∎ : (t : U n) → t ⟷₁ t
 _⟷₁∎ t = id⟷₁
+
+
+⟷₁-eq-size : {n m : ℕ} {t₁ : U n} {t₂ : U m} -> (t₁ ⟷₁ t₂) -> n == m
+⟷₁-eq-size unite₊l = idp
+⟷₁-eq-size uniti₊l = idp
+⟷₁-eq-size (swap₊ {m} {_} {n}) = N.+-comm m n
+⟷₁-eq-size (assocl₊ {m} {_} {n} {_} {o}) = ! (N.+-assoc m n o)
+⟷₁-eq-size (assocr₊ {m} {_} {n} {_} {o}) = N.+-assoc m n o
+⟷₁-eq-size id⟷₁ = idp
+⟷₁-eq-size (c ◎ c₁) = (⟷₁-eq-size c) ∙ ⟷₁-eq-size c₁
+⟷₁-eq-size (c ⊕ c₁) = ap2 N._+_ (⟷₁-eq-size c) (⟷₁-eq-size c₁)
 
 -- Coherence
 
@@ -258,22 +273,22 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ hom◎⊕⟷₂ = hom◎⊕⟷₂
 !⟷₁⟷₂ triangle₊l =
   ((uniti₊l ◎ swap₊) ⊕ id⟷₁)
-    ⟷₂⟨ {!!} ⟩
+    ⟷₂⟨ TODO ⟩
   ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ⟷₂∎
 !⟷₁⟷₂ triangle₊r =
   ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊)
-    ⟷₂⟨ {!!} ⟩
+    ⟷₂⟨ TODO ⟩
   ((uniti₊l ◎ swap₊) ⊕ id⟷₁) ⟷₂∎
-!⟷₁⟷₂ pentagon₊l = {!!}
-!⟷₁⟷₂ pentagon₊r = {!!}
-!⟷₁⟷₂ unite₊l-coh-l = {!!}
-!⟷₁⟷₂ unite₊l-coh-r = {!!}
+!⟷₁⟷₂ pentagon₊l = TODO
+!⟷₁⟷₂ pentagon₊r = TODO
+!⟷₁⟷₂ unite₊l-coh-l = TODO
+!⟷₁⟷₂ unite₊l-coh-r = TODO
 !⟷₁⟷₂ hexagonr₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊l) assoc◎r
 !⟷₁⟷₂ hexagonr₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊r) assoc◎r
 !⟷₁⟷₂ hexagonl₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊l) assoc◎r
 !⟷₁⟷₂ hexagonl₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊r) assoc◎r
-!⟷₁⟷₂ unit-braid = {!!}
-!⟷₁⟷₂ braid-unit = {!!}
+!⟷₁⟷₂ unit-braid = TODO
+!⟷₁⟷₂ braid-unit = TODO
 
 -- -- 3-combinators trivial
 
