@@ -50,7 +50,7 @@ inspect : ∀ {a} {A : Set a} (x : A) → SingletonWith x
 inspect x = x with== idp
 
 
-∘e-assoc : {A B C D : Type₀} → (ab : A ≃ B) → (bc : B ≃ C) → (cd : C ≃ D) 
+∘e-assoc : {A B C D : Type₀} → (ab : A ≃ B) → (bc : B ≃ C) → (cd : C ≃ D)
   → (cd ∘e (bc ∘e ab)) == (cd ∘e bc) ∘e ab
 ∘e-assoc ab bc cd = TODO
 
@@ -63,15 +63,17 @@ inspect x = x with== idp
 ∘e-inv-l : {A B : Type₀} → (e : A ≃ B) → (e ⁻¹ ∘e e) == (ide A)
 ∘e-inv-l e = TODO
 
+-- post∘-equiv
+
 cong≃ : {A B C : Type₀} → (B ≃ C) → (A ≃ B) ≃ (A ≃ C)
 cong≃ bc = equiv f g f-g g-f
     where
     f : _
-    f x = bc ∘e x -- 
+    f x = bc ∘e x --
     g : _
-    g x = bc ⁻¹ ∘e x -- 
+    g x = bc ⁻¹ ∘e x --
     f-g : _
-    f-g x = ∘e-assoc x (bc ⁻¹) bc ∙ ap (λ e → e ∘e x) (∘e-inv-r bc) ∙ ∘e-unit-r x -- 
+    f-g x = ∘e-assoc x (bc ⁻¹) bc ∙ ap (λ e → e ∘e x) (∘e-inv-r bc) ∙ ∘e-unit-r x --
     g-f : _
     g-f x = ∘e-assoc x bc (bc ⁻¹) ∙ ap (λ e → e ∘e x) (∘e-inv-l bc) ∙ ∘e-unit-r x
 

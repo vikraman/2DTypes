@@ -90,18 +90,18 @@ norm2list-id {O} = idp
 norm2list-id {S n} = idp
 
 eval^₁-transpos : (k : Fin n) → (norm2list (eval^₁ (transpos2pi k))) == k :: nil
-eval^₁-transpos {S n} (O , pk) 
+eval^₁-transpos {S n} (O , pk)
     rewrite (ℕ-p (+-assoc 1 1 n))
     rewrite (ℕ-p (+-unit-r 1))
     rewrite (ℕ-p (+-assoc 1 0 1))
     rewrite norm2list-id {n} = List=-out ((Fin= _ _ idp _ _) , idp)
-eval^₁-transpos {S n} (S k , pk) = 
+eval^₁-transpos {S n} (S k , pk) =
   let rec = ap (map S⟨_⟩) (eval^₁-transpos {n} (k , <-cancel-S pk))
   in  rec ∙ List=-out ((Fin= _ _ idp _ _) , idp)
 
 list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2normI idp p) == p
 list2list nil = idp
 list2list {S n} ((k , pk) :: xs)
-  rewrite (eval^₁-transpos (k , pk)) = 
+  rewrite (eval^₁-transpos (k , pk)) =
     let rec = list2list xs
     in  List=-out ((pair= idp (<-has-all-paths _ _)) , rec)
