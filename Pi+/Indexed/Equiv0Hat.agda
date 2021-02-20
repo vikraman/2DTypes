@@ -21,7 +21,7 @@ private
     n m o p : ℕ
 
 ++^-id : {n m : ℕ} → (n == m) → n ⟷₁^ m
-++^-id idp = id⟷₁^
+++^-id p = transport (λ n → _ ⟷₁^ n) p id⟷₁^
 
 ++^-cons : (n : ℕ) → (S n) ⟷₁^ (n N.+ 1)
 ++^-cons O = id⟷₁^
@@ -30,7 +30,7 @@ private
 ++^-⊕ : {n m o p : ℕ} → (n ⟷₁^ m) → (o ⟷₁^ p) → (n N.+ o) ⟷₁^ (m N.+ p)
 ++^-⊕ (swap₊^ {n = n}) c₂ = big-swap₊^ (++^-⊕ id⟷₁^ c₂)
 ++^-⊕ {O} id⟷₁^ c₂ = c₂
-++^-⊕ {S n} id⟷₁^ c₂ = ⊕^ (++^-⊕ {n} id⟷₁^ c₂) -- 
+++^-⊕ {S n} id⟷₁^ c₂ = ⊕^ (++^-⊕ {n} id⟷₁^ c₂) --
 ++^-⊕ (c₁ ◎^ c₃) c₂ = (++^-⊕ c₁ c₂) ◎^ ++^-⊕ c₃ id⟷₁^
 ++^-⊕ (⊕^ c₁) c₂ = ⊕^ (++^-⊕ c₁ c₂)
 

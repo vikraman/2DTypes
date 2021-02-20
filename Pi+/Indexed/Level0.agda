@@ -272,4 +272,3 @@ piRespectsCox O nil nil unit = id⟷₂
 piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
 
 -----------------------------------------------------------------------------
-
