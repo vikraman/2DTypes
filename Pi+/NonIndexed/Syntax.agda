@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas --exact-split #-}
+{-# OPTIONS --without-K --allow-unsolved-metas --exact-split --rewriting #-}
 
 open import lib.Base
 open import lib.NType
