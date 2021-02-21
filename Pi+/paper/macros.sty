@@ -2,9 +2,9 @@
 
 \RequirePackage{xcolor}
 \RequirePackage{xparse}
+\RequirePackage{amsmath}
 \RequirePackage{etoolbox}
 \RequirePackage{mathtools}
-\RequirePackage{amsmath}
 \RequirePackage{array}
 \RequirePackage{xspace}
 \RequirePackage{perfectcut}
@@ -18,13 +18,13 @@
 % text
 \let\ps\perfectparens%
 
-% types and terms
-\newcommand{\type}[1]{\mathsf{#1}}
-\newcommand{\term}[1]{\mathsf{#1}}
+\newcommand{\Nat}[0]{\mathbb{N}}
+\NewDocumentCommand{\suc}{O{}}{\mathsf{suc}\ifstrempty{#1}{}{\ps{#1}}}
+\newcommand{\fac}[1]{{#1}\,!}
 
-\newcommand{\UU}{\mathcal{U}}
-\newcommand{\UFin}{\UU_{\type{Fin}}}
+\NewDocumentCommand{\Fin}{O{}}{\mathsf{Fin}\ifstrempty{#1}{}{\ps{#1}}}
+\NewDocumentCommand{\Lehmer}{O{}}{\mathsf{Lehmer}\ifstrempty{#1}{}{\ps{#1}}}
 
 % Pi
 \newcommand{\PiLang}{\mathsf{\Pi}}
-\newcommand{\PiPlusLang}{\mathsf{\Pi^{+}}}
+\newcommand{\PiPlusLang}{\mathit{{\Pi}^{+}}}

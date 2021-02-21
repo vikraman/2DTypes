@@ -71,10 +71,10 @@ Mention factorial number system
 *** Prove the equivalence Lehmer n ≃ Aut (Fin n)
 
 ** Symmetric group (1pp)
-*** Define Sₙ classically (group of permutations)
-Talk about group presentations and computational group theory.
+*** Reference Sₙ as Aut(Fin n) (group of permutations)
+Define a group presentation about group presentations and computational group theory.
 *** Coxeter presentation - generators, words and relations
-Define it - classically and using a set quotient.
+Define it as set quotient.
 Question: why do we choose this particular presentation?
 + Ties with Lehmer and with Mac Lane proof
 + Simple rules

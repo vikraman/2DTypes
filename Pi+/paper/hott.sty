@@ -1,0 +1,63 @@
+\ProvidesPackage{hott}
+
+\RequirePackage{xparse}
+\RequirePackage{etoolbox}
+\RequirePackage{mathtools}
+\RequirePackage{amsmath}
+\RequirePackage{perfectcut}
+\let\ps\perfectparens%
+
+% types and terms
+\newcommand{\type}[1]{\mathsf{#1}}
+\newcommand{\term}[1]{\mathsf{#1}}
+\newcommand{\typef}[1]{\mathsf{#1}}
+
+% universes
+\newcommand{\UU}{\mathcal{U}}
+\newcommand{\UFin}{\UU_{\type{Fin}}}
+
+% unit type
+\newcommand{\unit}{{\mathbf{1}}}
+\newcommand{\ttt}{\star}
+
+% empty type
+\newcommand{\emptyt}{{\mathbf{0}}}
+
+% identity type
+\NewDocumentCommand{\id}{E{^_}{{}{}}}{
+  \mathrel{
+    \ifstrempty{#1}
+    {\ifstrempty{#2}{=}{{=}_{#2}}}
+    {{=}^{#1}_{#2}}
+  }
+}
+\NewDocumentCommand{\refl}{E{_}{{}}}{
+  \ifstrempty{#1}
+  {\term{refl}}
+  {\term{refl}_{#1}}
+}
+\newcommand{\ap}[2]{\term{ap}_{#1}\ps{#2}}
+\newcommand{\apd}[2]{\term{apd}_{#1}\ps{#2}}
+\newcommand{\coe}[1]{\term{coe}\ps{#1}}
+\newcommand{\transport}[1]{\term{transport}\ps{#1}}
+\newcommand{\tr}[2]{{#1}_{\star}\ps{#2}}
+
+% functions
+\newcommand{\inv}[1]{{#1}^{-1}}
+\newcommand{\comp}{\mathrel{\circ}}
+\newcommand{\htpy}{\mathrel{\sim}}
+
+% equivalences
+\newcommand{\eqv}{\mathrel{\simeq}}
+
+% truncations
+\newcommand{\Trunc}[2]{\left\Vert #2\right\Vert_{#1}}
+\newcommand{\trunc}[2]{\Vert #2\Vert_{#1}}
+
+% propositions
+\newcommand{\isContr}[1]{\mathop{\term{isContr}}\ps{#1}}
+\newcommand{\isProp}[1]{\mathop{\term{isProp}}\ps{#1}}
+\newcommand{\isEquiv}[1]{\mathop{\term{isEquiv}}\ps{#1}}
+
+% aut
+\NewDocumentCommand{\Aut}{O{}}{\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
