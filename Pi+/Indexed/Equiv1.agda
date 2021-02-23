@@ -35,13 +35,13 @@ import Pi+.Lehmer.LehmerFinEquiv
 
 private
     variable
-        n m : ℕ    
+        n m : ℕ
 
 eval₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → Aut (Fin n)
 eval₁ = evalNorm₁ ∘ eval^₁
 
 quote₁ : {t₁ : U n} {t₂ : U m} → (p : n == m) → Aut (Fin n) → (t₁ ⟷₁ t₂)
-quote₁ {t₁ = t₁} {t₂ = t₂} p e = 
+quote₁ {t₁ = t₁} {t₂ = t₂} p e =
     let c = quote^₁ {n = eval^₀ t₁} {m = eval^₀ t₂} (quoteNorm₁ p e)
     in  denorm← c
 
@@ -50,7 +50,7 @@ quote₁ {t₁ = t₁} {t₂ = t₂} p e =
     -- norm2list-rewrite : norm2list (⊕^ (id⟷₁^ {n = n})) ↦ nil
     -- {-# REWRITE eq-size-rewrite0 norm2list-rewrite #-}
   -- rewrite (ℕ-p (+-assoc 1 0 n))
-  -- rewrite (ℕ-p (+-unit-r 0)) 
+  -- rewrite (ℕ-p (+-unit-r 0))
   -- rewrite (ℕ-p (+-unit-r 1))
   -- rewrite (ℕ-p (+-assoc 0 0 1)) =
 
@@ -68,9 +68,9 @@ postulate
 
 quote-eval²₀ : (t : U n) → quote-eval^₀ (quote^₀ (eval^₀ t)) ⟷₂ id⟷₁
 quote-eval²₀ {O} t = id⟷₂
-quote-eval²₀ {S n} t = 
+quote-eval²₀ {S n} t =
   let rec = quote-eval²₀ {n} (quote₀ (pFin _))
-  in  _     
+  in  _
     ⟷₂⟨ id⟷₂ ⊡ resp⊕⟷₂ id⟷₂ rec ⟩
       _
     ⟷₂⟨ TODO ⟩ -- Goal: (((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ unite₊r ⊕ id⟷₁) ⟷₂ id⟷₁
@@ -78,10 +78,10 @@ quote-eval²₀ {S n} t =
     ⟷₂∎
 
 quote-eval₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → (quote₁ (⟷₁-eq-size c) (eval₁ c)) ⟷₂ denorm c
-quote-eval₁ {t₁ = t₁} {t₂ = t₂} c = 
+quote-eval₁ {t₁ = t₁} {t₂ = t₂} c =
     let l1 = quote-eval^₁ c
         l2 = quote^₂ (quote-evalNorm₁ (eval^₁ c))
-    in    _ 
+    in    _
         ⟷₂⟨ id⟷₂ ⊡ (l2 ⊡ id⟷₂) ⟩
           _
         ⟷₂⟨ !⟷₁⟷₂ (quote-eval²₀ t₁) ⊡ (id⟷₂ ⊡ quote-eval²₀ t₂) ⟩
@@ -89,7 +89,7 @@ quote-eval₁ {t₁ = t₁} {t₂ = t₂} c =
         ⟷₂⟨ id⟷₂ ⊡ idr◎l ⟩
           _
         ⟷₂⟨ idl◎l ⟩
-          quote^₁ (eval^₁ c) 
+          quote^₁ (eval^₁ c)
         ⟷₂⟨ l1 ⟩
-          denorm c 
+          denorm c
         ⟷₂∎

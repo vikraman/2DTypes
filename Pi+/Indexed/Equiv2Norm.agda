@@ -11,100 +11,76 @@ open import Pi+.UFin.BAut
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv1Norm
 
+open import Pi+.Indexed.Equiv1NormHelpers using (norm2list)
+open import Pi+.Lehmer.LehmerFinEquiv using (Fin≃Lehmer)
+open import Pi+.Coxeter.LehmerCoxeterEquiv using (immersion⁻¹)
+
 open import HoTT
--- open import lib.Basics
--- open import lib.types.Fin
--- open import lib.types.List
--- open import lib.types.Truncation
--- open import lib.Equivalence
--- open import lib.NType2
--- open import lib.types.SetQuotient
--- open import lib.types.Coproduct
 
 private
     variable
         n m : ℕ
 
-e= : ∀ {i} {X : Type i} {e₁ e₂ : Fin n ≃ X} → ((f : Fin n) → (–> e₁ f == –> e₂ f)) → e₁ == e₂
-e= h = pair= (λ= h) prop-has-all-paths-↓
+abstract
+  e= : ∀ {i} {X : Type i} {e₁ e₂ : Fin n ≃ X} → ((f : Fin n) → (–> e₁ f == –> e₂ f)) → e₁ == e₂
+  e= h = pair= (λ= h) prop-has-all-paths-↓
 
-evalNorm₂-O : {c₁ c₂ : 0 ⟷₁^ m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
-evalNorm₂-O α = e= λ { (n , ()) }
+abstract
+  loop-η : ∀ {i} {X : Type i} {{_ : is-set X}} {x : X} → (p : x == x) → p == idp
+  loop-η p = prop-has-all-paths p idp
+
+module _ {c₁ c₂ : O ⟷₁^ m} where
+
+  evalNorm₂-O : c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
+  evalNorm₂-O α = e= λ { (n , ()) }
+
+module _ {c₁ c₂ : S n ⟷₁^ m} where
+
+  evalNorm₂-S : c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
+  evalNorm₂-S (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
+  ... | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
+  ... | idp | idp | p rewrite loop-η p = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-assoc (norm2list c₁) (norm2list c₂) (norm2list c₃)))
+  evalNorm₂-S (assoc◎r^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
+  ... | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
+  ... | idp | idp | p rewrite loop-η p = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (++-assoc (norm2list c₁) (norm2list c₂) (norm2list c₃))
+  evalNorm₂-S idl◎l^ with (⟷₁^-eq-size c₂)
+  ... | idp = idp
+  evalNorm₂-S idl◎r^ with (⟷₁^-eq-size c₁)
+  ... | idp = idp
+  evalNorm₂-S idr◎l^ with (⟷₁^-eq-size c₂)
+  ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (++-unit-r (norm2list c₂))
+  evalNorm₂-S idr◎r^ with (⟷₁^-eq-size c₂)
+  ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-unit-r (norm2list c₁)))
+  evalNorm₂-S (linv◎l^ {c = c}) with (⟷₁^-eq-size c)
+  ... | idp = TODO
+  evalNorm₂-S (linv◎r^ {c = c}) with (⟷₁^-eq-size c)
+  ... | idp = TODO
+  evalNorm₂-S (rinv◎l^ {c = c}) with (⟷₁^-eq-size c)
+  ... | idp = TODO
+  evalNorm₂-S (rinv◎r^ {c = c}) with (⟷₁^-eq-size c)
+  ... | idp = TODO
+  evalNorm₂-S id⟷₂^ = idp
+  evalNorm₂-S (trans⟷₂^ α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
+  ... | idp | q rewrite loop-η q = TODO
+  evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α_₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
+  ... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO
+  evalNorm₂-S (⊕id⟷₁⟷₂^ {n = O}) = idp
+  evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
+  evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = O}) = idp
+  evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
+  evalNorm₂-S hom◎⊕⟷₂^ = TODO
+  evalNorm₂-S (resp⊕⟷₂ {c₁ = c₁} {c₂ = c₂} α) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
+  ... | idp | q rewrite loop-η q = TODO
+  evalNorm₂-S (hom⊕◎⟷₂^ {c₁ = c₁} {c₂ = c₂}) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
+  ... | idp | idp = TODO
+  evalNorm₂-S (swapr₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
+  evalNorm₂-S (swapr₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO ; (S n , p) → TODO }
+  evalNorm₂-S (swapl₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
+  evalNorm₂-S (swapl₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO ; (S n , p) → TODO }
 
 evalNorm₂ : {c₁ c₂ : n ⟷₁^ m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
-evalNorm₂ {O} = evalNorm₂-O
-evalNorm₂ {S n} {m} (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
-evalNorm₂ {S n} {S n} (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
-... | idp | idp | p = {!!}
-evalNorm₂ {S n} assoc◎r^ = {!!}
-evalNorm₂ {S n} idl◎l^ = {!!}
-evalNorm₂ {S n} idl◎r^ = {!!}
-evalNorm₂ {S n} idr◎l^ = {!!}
-evalNorm₂ {S n} idr◎r^ = {!!}
-evalNorm₂ {S n} linv◎l^ = {!!}
-evalNorm₂ {S n} linv◎r^ = {!!}
-evalNorm₂ {S n} rinv◎l^ = {!!}
-evalNorm₂ {S n} rinv◎r^ = {!!}
-evalNorm₂ {S n} id⟷₂^ = {!!}
-evalNorm₂ {S n} (trans⟷₂^ α α₁) = {!!}
-evalNorm₂ {S n} (α ⊡^ α₁) = {!!}
-evalNorm₂ {S n} ⊕id⟷₁⟷₂^ = {!!}
-evalNorm₂ {S n} !⊕id⟷₁⟷₂^ = {!!}
-evalNorm₂ {S n} hom◎⊕⟷₂^ = {!!}
-evalNorm₂ {S n} (resp⊕⟷₂ α) = {!!}
-evalNorm₂ {S n} hom⊕◎⟷₂^ = {!!}
-evalNorm₂ {S .(S _)} swapr₊⟷₂^ = {!!}
-evalNorm₂ {S .(S _)} swapl₊⟷₂^ = {!!}
-
--- evalNorm₂ {O} {m} {(c₁ ◎^ c₂ ◎^ c₃)} assoc◎l^ with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
--- evalNorm₂ {O} {O} {c₁ ◎^ c₂ ◎^ c₃} assoc◎l^ | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
--- ... | idp | idp | idp = idp
--- evalNorm₂ {O} {m} {.((_ ◎^ _) ◎^ _)} (assoc◎r^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size ((c₁ ◎^ c₂) ◎^ c₃))
--- evalNorm₂ {O} {O} {(_ ◎^ _) ◎^ _} (assoc◎r^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
--- ... | idp | idp | idp = idp
--- evalNorm₂ {O} {m} {.(id⟷₁^ ◎^ _)} idl◎l^ = e= λ { (f , ()) }
--- evalNorm₂ {O} {m} {c₁} idl◎r^ = e= (λ { (f , ()) })
--- evalNorm₂ {O} {m} {.(_ ◎^ id⟷₁^)} idr◎l^ = e= (λ { (f , ()) })
--- evalNorm₂ {O} {m} {c₁} idr◎r^ = e= (λ { (f , ()) })
--- evalNorm₂ {O} {.0} {.(_ ◎^ !⟷₁^ _)} linv◎l^ = TODO
--- evalNorm₂ {O} {.0} {.id⟷₁^} linv◎r^ = TODO
--- evalNorm₂ {O} {.0} {.(!⟷₁^ _ ◎^ _)} rinv◎l^ = TODO
--- evalNorm₂ {O} {.0} {.id⟷₁^} rinv◎r^ = TODO
--- evalNorm₂ {O} {m} {c₁} id⟷₂^ with (⟷₁^-eq-size c₁)
--- ... | idp = idp
--- evalNorm₂ {O} {m} {c₁} {c₂} (trans⟷₂^ α α₁) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
--- ... | idp | idp = idp
--- evalNorm₂ {O} {m} {.(_ ◎^ _)} (α ⊡^ α₁) = TODO
--- evalNorm₂ {S n} {m} {.(_ ◎^ _ ◎^ _)} {.((_ ◎^ _) ◎^ _)} assoc◎l^ = TODO
--- evalNorm₂ {S n} {m} {.((_ ◎^ _) ◎^ _)} {.(_ ◎^ _ ◎^ _)} assoc◎r^ = TODO
--- evalNorm₂ {S n} {m} {.(id⟷₁^ ◎^ c₂)} {c₂} idl◎l^ = TODO
--- evalNorm₂ {S n} {m} {c₁} {.(id⟷₁^ ◎^ c₁)} idl◎r^ = TODO
--- evalNorm₂ {S n} {m} {.(c₂ ◎^ id⟷₁^)} {c₂} idr◎l^ = TODO
--- evalNorm₂ {S n} {m} {c₁} {.(c₁ ◎^ id⟷₁^)} idr◎r^ = TODO
--- evalNorm₂ {S n} {.(S n)} {.(_ ◎^ !⟷₁^ _)} {.id⟷₁^} linv◎l^ = TODO
--- evalNorm₂ {S n} {.(S n)} {.id⟷₁^} {.(_ ◎^ !⟷₁^ _)} linv◎r^ = TODO
--- evalNorm₂ {S n} {.(S n)} {.(!⟷₁^ _ ◎^ _)} {.id⟷₁^} rinv◎l^ = TODO
--- evalNorm₂ {S n} {.(S n)} {.id⟷₁^} {.(!⟷₁^ _ ◎^ _)} rinv◎r^ = TODO
--- evalNorm₂ {S n} {m} {c₁} {.c₁} id⟷₂^ with (⟷₁^-eq-size c₁)
--- ... | idp = idp
--- evalNorm₂ {S n} {m} {c₁} {c₂} (trans⟷₂^ α α₁) = TODO
--- evalNorm₂ {S n} {m} {.(_ ◎^ _)} {.(_ ◎^ _)} (α ⊡^ α₁) = TODO
--- evalNorm₂ {S n} {.(S n)} {.(⊕^ id⟷₁^)} {.id⟷₁^} ⊕id⟷₁⟷₂^ = TODO
--- evalNorm₂ {S n} {.(S n)} {.id⟷₁^} {.(⊕^ id⟷₁^)} !⊕id⟷₁⟷₂^ = TODO
--- evalNorm₂ {S n} {.(S _)} {.((⊕^ _) ◎^ ⊕^ _)} {.(⊕^ _ ◎^ _)} hom◎⊕⟷₂^ = TODO
--- evalNorm₂ {S n} {.(S _)} {.(⊕^ _)} {.(⊕^ _)} (resp⊕⟷₂ α) = TODO
--- evalNorm₂ {S n} {.(S _)} {.(⊕^ _ ◎^ _)} {.((⊕^ _) ◎^ ⊕^ _)} hom⊕◎⟷₂^ = TODO
--- evalNorm₂ {S .(S _)} {.(S (S _))} {.((⊕^ ⊕^ _) ◎^ swap₊^)} {.(swap₊^ ◎^ ⊕^ ⊕^ _)} swapr₊⟷₂^ = TODO
--- evalNorm₂ {S .1} {.2} {swap₊^ {O} ◎^ ⊕^ ⊕^ c} {(⊕^ ⊕^ c) ◎^ swap₊^} swapl₊⟷₂^ =
---   e= (λ { (O , p) → idp ; (S n , p) → idp })
--- evalNorm₂ {S .(S (S n))} {.(S (S (S n)))} {swap₊^ {S n} ◎^ ⊕^ ⊕^ c} {(⊕^ ⊕^ c) ◎^ swap₊^} swapl₊⟷₂^ =
---   e= (λ { (O , p) → {!!} ; (S n , p) → {!!} })
---   -- e= (λ { (O , p) → {!!} ; (S n , p) → TODO })
-
--- evalNorm₂ id⟷₂^ = idp
--- evalNorm₂ (trans⟷₂^ α α₁) = evalNorm₂ α ∙ evalNorm₂ α₁
-
--- _ : evalNorm₁ (swap₊^ {n = 0} ◎^ swap₊^ {n = 0}) == evalNorm₁ id⟷₁^
+evalNorm₂ {n = O} = evalNorm₂-O
+evalNorm₂ {n = S n} = evalNorm₂-S
 
 _ : {n : ℕ} → evalNorm₁ (id⟷₁^ {n = n}) == evalNorm₁ (id⟷₁^ {n = n})
 _ = e= (λ { (O , p) → idp ; (S n , p) → idp })
