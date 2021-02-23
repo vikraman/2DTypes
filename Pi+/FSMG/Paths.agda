@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 open import lib.Base
 open import lib.PathOver
