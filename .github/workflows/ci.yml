@@ -32,6 +32,12 @@ jobs:
           path: HoTT-Agda/_build
           key: ${{ runner.os }}-hott-agda-${{ hashFiles('HoTT-Agda/**/*.agda') }}
 
+      - uses: actions/cache@v2
+        id: cache-2dtypes
+        with:
+          path: _build
+          key: ${{ runner.os }}-2dtypes
+
       - name: Install Agda
         run: stack --resolver lts-16.27 --system-ghc install data-hash-0.2.0.1 equivalence-0.3.5 geniplate-mirror-0.7.7 STMonadTrans-0.4.4 Agda-2.6.1.2
 
