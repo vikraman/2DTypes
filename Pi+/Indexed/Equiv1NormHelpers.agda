@@ -46,32 +46,56 @@ list2pi^ (fn :: xs) = transpos2pi^ fn ◎^ list2pi^ xs
 list2pi^++ : {m : ℕ} → (l r : List (Fin m)) →
               list2pi^ (l ++ r) ⟷₂^ list2pi^ l ◎^ list2pi^ r
 list2pi^++ nil r = idl◎r^
-list2pi^++ (n :: l) r = trans⟷₂^ (id⟷₂^ ⊡^ (list2pi^++ l r)) assoc◎l^
+list2pi^++ (n :: l) r = _■^_ (id⟷₂^ ⊡^ (list2pi^++ l r)) assoc◎l^
 
-transpos-cancel^ : {n : ℕ} {k : Fin (S n)} →
+transpos-cancel^ : {n : ℕ} {k : Fin n} →
                   transpos2pi^ k ◎^ transpos2pi^ k ⟷₂^ id⟷₁^
-transpos-cancel^ {n} {k = k} = TODO -- eval^₂ (transpos-cancel {m = n} {n = k})
+transpos-cancel^ {S n} {k = O , p0} = linv◎l^
+transpos-cancel^ {S n} {k = S k , pk} = hom◎⊕⟷₂^ ■^ (resp⊕⟷₂ transpos-cancel^ ■^ ⊕id⟷₁⟷₂^)
 
-slide0-transpos^ : {m : ℕ}  {kp : 0 < S (S (S m))} →
-                  (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
-  transpos2pi^ n ◎^ transpos2pi^ (0 , kp) ⟷₂^ transpos2pi^ (0 , kp) ◎^ transpos2pi^ n
-slide0-transpos^ {m} {kp} n 1<n = TODO -- eval^₂ (slide0-transpos {m} {kp} n 1<n)
+postulate
+  n≰n : {n : ℕ} → ¬ (n < n)
 
-slide-transpos^ : {m : ℕ} → (n k : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
+slide-transpos^ : {m : ℕ} → (k n : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
   transpos2pi^ n ◎^ transpos2pi^ k ⟷₂^ transpos2pi^ k ◎^ transpos2pi^ n
-slide-transpos^ {m} n k Sk<n = TODO -- eval^₂ (slide-transpos {m} n k Sk<n)
+slide-transpos^ {O} (.0 , ltS) (.0 , ltS) Sk<n = id⟷₂^
+slide-transpos^ {O} (k , ltSR ()) (.0 , ltS) Sk<n
+slide-transpos^ {O} (k , pk) (n , ltSR ()) Sk<n
+slide-transpos^ {S m} (O , pk) (S O , pn) (ltSR ())
+slide-transpos^ {S m} (O , pk) (S (S n) , pn) Sk<n = swapr₊⟷₂^
+slide-transpos^ {S m} (S k , pk) (S n , pn) Sk<n = 
+  let rec = slide-transpos^ ((k , <-cancel-S pk)) (n , <-cancel-S pn) (<-cancel-S Sk<n)
+  in  hom◎⊕⟷₂^ ■^ (resp⊕⟷₂ rec ■^ hom⊕◎⟷₂^)
 
 braid-transpos^ : {m : ℕ} → (n : Fin m) →
   transpos2pi^ S⟨ n ⟩ ◎^ transpos2pi^ ⟨ n ⟩ ◎^ transpos2pi^ S⟨ n ⟩ ⟷₂^
   transpos2pi^ ⟨ n ⟩ ◎^ transpos2pi^ S⟨ n ⟩ ◎^ transpos2pi^ ⟨ n ⟩
-braid-transpos^ {m} n = TODO -- eval^₂ (braid-transpos {m} n)
+braid-transpos^ {S m} (O , p0) = hexagonl₊r
+braid-transpos^ {S m} (S n , pn) 
+  rewrite <-has-all-paths (<-cancel-S (<-ap-S pn)) (<-ap-S (<-cancel-S pn))
+  rewrite <-has-all-paths (<-trans ltS pn) (ltSR (<-cancel-S pn)) =
+  let rec = braid-transpos^ (n , <-cancel-S pn)
+  in 
+    _ ⟷₂^⟨ id⟷₂^ ⊡^ hom◎⊕⟷₂^ ⟩
+    _ ⟷₂^⟨ hom◎⊕⟷₂^ ⟩
+    _ ⟷₂^⟨ resp⊕⟷₂ rec ⟩
+    _ ⟷₂^⟨ !⟷₂^ hom◎⊕⟷₂^ ⟩
+    _ ⟷₂^⟨ !⟷₂^ (id⟷₂^ ⊡^ hom◎⊕⟷₂^) ⟩
+    _ ⟷₂^∎
 
 cox≈2pi^ : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2pi^ r₁ ⟷₂^ list2pi^ r₂
-cox≈2pi^ c = TODO -- eval^₂ (cox≈2pi c)
+cox≈2pi^ cancel = (id⟷₂^ ⊡^ idr◎l^) ■^ transpos-cancel^
+cox≈2pi^ (swap x) = (id⟷₂^ ⊡^ idr◎l^) ■^ (slide-transpos^ _ _ x ■^ !⟷₂^ (id⟷₂^ ⊡^ idr◎l^))
+cox≈2pi^ braid = (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))  ■^ (braid-transpos^ _ ■^ !⟷₂^ ((id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^)))) 
+cox≈2pi^ idp = id⟷₂^
+cox≈2pi^ (comm c) = !⟷₂^ (cox≈2pi^ c)
+cox≈2pi^ (trans c c₁) = cox≈2pi^ c ■^ cox≈2pi^ c₁
+cox≈2pi^ (respects-++ c c₁) = list2pi^++ _ _ ■^ ((cox≈2pi^ c ⊡^ cox≈2pi^ c₁) ■^ !⟷₂^ (list2pi^++ _ _))
 
 piRespectsCox^ : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
                 (list2pi^ l₁) ⟷₂^ (list2pi^ l₂)
-piRespectsCox^ _ _ _ c = TODO -- eval^₂ (piRespectsCox _ _ _ c)
+piRespectsCox^ O nil nil c = id⟷₂^
+piRespectsCox^ (S n) _ _ c = cox≈2pi^ c
 
 list2pi^I : (n == m) → List (Fin n) → S n ⟷₁^ S m
 list2pi^I idp l = list2pi^ l
@@ -93,7 +117,7 @@ eval₁-map-S : {n : ℕ} → (l : List (Fin n)) → list2pi^ (map S⟨_⟩ l) �
 eval₁-map-S nil = !⊕id⟷₁⟷₂^
 eval₁-map-S ((x , xp) :: l) rewrite <-has-all-paths (<-cancel-S (<-ap-S xp)) xp =
   let rec = eval₁-map-S l
-  in  trans⟷₂^ (id⟷₂^ ⊡^ rec) TODO -- hom◎⊕⟷₂^
+  in  _■^_ (id⟷₂^ ⊡^ rec) hom◎⊕⟷₂^
 
 pi^2list-◎^-β : {c₁ c₂ : S n ⟷₁^ S n} → pi^2list (c₁ ◎^ c₂) == pi^2list c₁ ++ pi^2list c₂
 pi^2list-◎^-β = idp
@@ -107,35 +131,26 @@ pi^2list-!-β {O} {c₁ ◎^ c₂} with (⟷₁^-eq-size c₁)
 pi^2list-!-β {O} {⊕^ c} = TODO
 pi^2list-!-β {S n} {c} = TODO
 
-norm2norm : (c : S n ⟷₁^ S m) →
+pi^2list2pi^ : (c : S n ⟷₁^ S m) →
     (list2pi^I (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (pi^2list c)) ⟷₂^ c
-norm2norm (swap₊^ {n = n})
+pi^2list2pi^ (swap₊^ {n = n})
     rewrite (ℕ-p (+-assoc 1 1 n))
     rewrite (ℕ-p (+-unit-r 1))
-    rewrite (ℕ-p (+-assoc 1 0 1)) =
-    -- Code duplication with Eval1Hat
-        _ ⟷₂^⟨ idr◎l^ ⟩
-        _ ⟷₂^⟨ TODO {- idl◎l^ -} ⟩
-        _ ⟷₂^⟨ idr◎l^ ⟩
-        _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
-        _ ⟷₂^⟨ idl◎l^ ⟩
-        _ ⟷₂^⟨ idr◎l^ ⊡^ idl◎l^ ⟩
-        _ ⟷₂^⟨ idr◎l^ ⟩
-        swap₊^ ⟷₂^∎
-norm2norm id⟷₁^ = id⟷₂^
-norm2norm (c₁ ◎^ c₂) with (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₁)
+    rewrite (ℕ-p (+-assoc 1 0 1)) = idr◎l^
+pi^2list2pi^ id⟷₁^ = id⟷₂^
+pi^2list2pi^ (c₁ ◎^ c₂) with (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₁)
 ... | idp | idp =
-  let r₁ = norm2norm c₁
-      r₂ = norm2norm c₂
+  let r₁ = pi^2list2pi^ c₁
+      r₂ = pi^2list2pi^ c₂
       lemma = list2pi^++ (pi^2list c₁) (pi^2list c₂)
-  in  trans⟷₂^ lemma (r₁ ⊡^ r₂)
-norm2norm {O} (⊕^ c) with (⟷₁^-eq-size c)
-... | idp = !⟷₂^ (trans⟷₂^ (resp⊕⟷₂ (c₊⟷₂id⟷₁ c)) ⊕id⟷₁⟷₂^)
-norm2norm {S n} (⊕^ c) with (⟷₁^-eq-size c)
+  in  _■^_ lemma (r₁ ⊡^ r₂)
+pi^2list2pi^ {O} (⊕^ c) with (⟷₁^-eq-size c)
+... | idp = !⟷₂^ (_■^_ (resp⊕⟷₂ (c₊⟷₂id⟷₁ c)) ⊕id⟷₁⟷₂^)
+pi^2list2pi^ {S n} (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp =
-  let rec = norm2norm c
+  let rec = pi^2list2pi^ c
       l = eval₁-map-S ((pi^2list c))
-  in  trans⟷₂^ l (resp⊕⟷₂ rec)
+  in  _■^_ l (resp⊕⟷₂ rec)
 
 pi^2list-id : {n : ℕ} → pi^2list (⊕^ (id⟷₁^ {n = n})) == nil
 pi^2list-id {O} = idp
@@ -146,10 +161,10 @@ eval^₁-transpos {S n} (O , pk)
     rewrite (ℕ-p (+-assoc 1 1 n))
     rewrite (ℕ-p (+-unit-r 1))
     rewrite (ℕ-p (+-assoc 1 0 1))
-    rewrite pi^2list-id {n} = TODO -- List=-out ((Fin= _ _ idp _ _) , idp)
+    rewrite pi^2list-id {n} = List=-out ((Fin= _ _ idp _ _) , idp)
 eval^₁-transpos {S n} (S k , pk) =
   let rec = ap (map S⟨_⟩) (eval^₁-transpos {n} (k , <-cancel-S pk))
-  in  TODO -- rec ∙ List=-out ((Fin= _ _ idp _ _) , idp)
+  in  rec ∙ List=-out ((Fin= _ _ idp _ _) , idp)
 
 list2list : {n : ℕ} → (p : List (Fin n)) → pi^2list (list2pi^I idp p) == p
 list2list nil = idp

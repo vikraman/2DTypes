@@ -67,14 +67,6 @@ data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
           (c₁ ◎^ (c₂ ◎^ c₃)) ⟷₂^ ((c₁ ◎^ c₂) ◎^ c₃)
   assoc◎r^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₂ ⟷₁^ t₃} {c₃ : t₃ ⟷₁^ t₄} →
           ((c₁ ◎^ c₂) ◎^ c₃) ⟷₂^ (c₁ ◎^ (c₂ ◎^ c₃))
-  -- assocl₊l^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₃ ⟷₁^ t₄} {c₃ : t₅ ⟷₁^ t₆} →
-  --         ((c₁ ⊕ (c₂ ⊕ c₃)) ◎^ assocl₊) ⟷₂^ (assocl₊ ◎^ ((c₁ ⊕ c₂) ⊕ c₃))
-  -- assocl₊r^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₃ ⟷₁^ t₄} {c₃ : t₅ ⟷₁^ t₆} →
-  --         (assocl₊ ◎^ ((c₁ ⊕ c₂) ⊕ c₃)) ⟷₂^ ((c₁ ⊕ (c₂ ⊕ c₃)) ◎^ assocl₊)
-  -- assocr₊r^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₃ ⟷₁^ t₄} {c₃ : t₅ ⟷₁^ t₆} →
-  --         (((c₁ ⊕ c₂) ⊕ c₃) ◎^ assocr₊) ⟷₂^ (assocr₊ ◎^ (c₁ ⊕ (c₂ ⊕ c₃)))
-  -- assocr₊l^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₃ ⟷₁^ t₄} {c₃ : t₅ ⟷₁^ t₆} →
-  --          (assocr₊ ◎^ (c₁ ⊕ (c₂ ⊕ c₃))) ⟷₂^ (((c₁ ⊕ c₂) ⊕ c₃) ◎^ assocr₊)
   idl◎l^   : {c : t₁ ⟷₁^ t₂} → (id⟷₁^ ◎^ c) ⟷₂^ c
   idl◎r^   : {c : t₁ ⟷₁^ t₂} → c ⟷₂^ id⟷₁^ ◎^ c
   idr◎l^   : {c : t₁ ⟷₁^ t₂} → (c ◎^ id⟷₁^) ⟷₂^ c
@@ -83,58 +75,11 @@ data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
   linv◎r^  : {c : t₁ ⟷₁^ t₂} → id⟷₁^ ⟷₂^ (c ◎^ !⟷₁^ c)
   rinv◎l^  : {c : t₁ ⟷₁^ t₂} → (!⟷₁^ c ◎^ c) ⟷₂^ id⟷₁^
   rinv◎r^  : {c : t₁ ⟷₁^ t₂} → id⟷₁^ ⟷₂^ (!⟷₁^ c ◎^ c)
-  -- unite₊l⟷₂l^ : {c₁ : O ⟷₁^ O} {c₂ : t₁ ⟷₁^ t₂} →
-  --         (unite₊l ◎^ c₂) ⟷₂^ ((c₁ ⊕ c₂) ◎^ unite₊l)
-  -- unite₊l⟷₂r^ : {c₁ : O ⟷₁^ O} {c₂ : t₁ ⟷₁^ t₂} →
-  --         ((c₁ ⊕ c₂) ◎^ unite₊l) ⟷₂^ (unite₊l ◎^ c₂)
-  -- uniti₊l⟷₂l^ : {c₁ : O ⟷₁^ O} {c₂ : t₁ ⟷₁^ t₂} →
-  --         (uniti₊l ◎^ (c₁ ⊕ c₂)) ⟷₂^ (c₂ ◎^ uniti₊l)
-  -- uniti₊l⟷₂r^ : {c₁ : O ⟷₁^ O} {c₂ : t₁ ⟷₁^ t₂} →
-  --         (c₂ ◎^ uniti₊l) ⟷₂^ (uniti₊l ◎^ (c₁ ⊕ c₂))
-  -- swapl₊⟷₂^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₃ ⟷₁^ t₄} →
-  --         (swap₊ ◎^ (c₁ ⊕ c₂)) ⟷₂^ ((c₂ ⊕ c₁) ◎^ swap₊)
-  -- swapr₊⟷₂^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₃ ⟷₁^ t₄} →
-  --         ((c₂ ⊕ c₁) ◎^ swap₊) ⟷₂^ (swap₊ ◎^ (c₁ ⊕ c₂))
   id⟷₂^     : {c : t₁ ⟷₁^ t₂} → c ⟷₂^ c
-  trans⟷₂^ : {c₁ c₂ c₃ : t₁ ⟷₁^ t₂} →
+  _■^_ : {c₁ c₂ c₃ : t₁ ⟷₁^ t₂} →
          (c₁ ⟷₂^ c₂) → (c₂ ⟷₂^ c₃) → (c₁ ⟷₂^ c₃)
   _⊡^_ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₂ ⟷₁^ t₃} {c₃ : t₁ ⟷₁^ t₂} {c₄ : t₂ ⟷₁^ t₃} →
          (c₁ ⟷₂^ c₃) → (c₂ ⟷₂^ c₄) → (c₁ ◎^ c₂) ⟷₂^ (c₃ ◎^ c₄)
-  -- split⊕-id⟷₁^ : (id⟷₁^ {t = t₁ + t₂}) ⟷₂^ (id⟷₁^ ⊕ id⟷₁)
-
-  -- associativity triangle
-  -- triangle₊l :
-  --   (unite₊r {t = t₁} ⊕ id⟷₁^ {t = t₂}) ⟷₂^ assocr₊ ◎^ (id⟷₁^ ⊕ unite₊l)
-  -- triangle₊r :
-  --   assocr₊ ◎^ (id⟷₁^ {t = t₁} ⊕ unite₊l {t = t₂}) ⟷₂^ unite₊r ⊕ id⟷₁
-  -- pentagon₊l :
-  --   assocr₊ ◎^ (assocr₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃ + t₄}) ⟷₂
-  --   ((assocr₊ ⊕ id⟷₁) ◎^ assocr₊) ◎^ (id⟷₁^ ⊕ assocr₊)
-  -- pentagon₊r :
-  --   ((assocr₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃} ⊕ id⟷₁^ {t = t₄}) ◎^ assocr₊) ◎^ (id⟷₁^ ⊕ assocr₊) ⟷₂
-  --   assocr₊ ◎^ assocr₊
---   -- unit coherence
-  -- unite₊l-coh-l : unite₊l {t = t₁} ⟷₂^ swap₊ ◎^ unite₊r
-  -- unite₊l-coh-r : swap₊ ◎^ unite₊r ⟷₂^ unite₊l {t = t₁}
-  -- hexagonr₊l :
-  --   (assocr₊ ◎^ swap₊) ◎^ assocr₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃} ⟷₂
-  --   ((swap₊ ⊕ id⟷₁) ◎^ assocr₊) ◎^ (id⟷₁^ ⊕ swap₊)
-  -- hexagonr₊r :
-  --   ((swap₊ ⊕ id⟷₁) ◎^ assocr₊) ◎^ (id⟷₁^ ⊕ swap₊) ⟷₂
-  --   (assocr₊ ◎^ swap₊) ◎^ assocr₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}
-  -- hexagonl₊l :
-  --   (assocl₊ ◎^ swap₊) ◎^ assocl₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃} ⟷₂
-  --   ((id⟷₁^ ⊕ swap₊) ◎^ assocl₊) ◎^ (swap₊ ⊕ id⟷₁)
-  -- hexagonl₊r :
-  --   ((id⟷₁^ ⊕ swap₊) ◎^ assocl₊) ◎^ (swap₊ ⊕ id⟷₁) ⟷₂
-  --   (assocl₊ ◎^ swap₊) ◎^ assocl₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}
-  -- Braiding compatible with unitors (redundant; provable from above
-  -- axioms. See for example Thm. 10 in "On MacLane's Conditions for
-  -- Coherence of Natural Associativities, Commutativities, etc.
-  -- Kelly 1964)
-  -- unit-braid : unite₊l {O} ⟷₂^ swap₊ ◎^ unite₊l
-  -- braid-unit : swap₊ ◎^ unite₊l ⟷₂^ unite₊l {O}
-  
   -- New ones
   ⊕id⟷₁⟷₂^ : ⊕^ id⟷₁^ {n =  n} ⟷₂^ id⟷₁^ {n =  (S n)}
   !⊕id⟷₁⟷₂^ : id⟷₁^ {n =  (S n)} ⟷₂^ ⊕^ id⟷₁^ {n =  n}
@@ -150,6 +95,12 @@ data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
   swapl₊⟷₂^ : {c : (n) ⟷₁^ (n)} 
     → swap₊^ ◎^ (⊕^ (⊕^ c)) ⟷₂^ (⊕^ (⊕^ c)) ◎^ swap₊^
 
+  hexagonl₊l : (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^) 
+    ⟷₂^ (⊕^ swap₊^) ◎^ (swap₊^ ◎^ ⊕^ swap₊^)
+  
+  hexagonl₊r : (⊕^ swap₊^) ◎^ (swap₊^ ◎^ ⊕^ swap₊^) 
+    ⟷₂^ (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^) 
+
 -- -- -- Equational reasoning
 
 infixr 10 _⟷₂^⟨_⟩_
@@ -157,7 +108,7 @@ infix  15 _⟷₂^∎
 
 _⟷₂^⟨_⟩_ : ∀ (c₁ : t₁ ⟷₁^ t₂) {c₂ c₃ : t₁ ⟷₁^ t₂} →
          (c₁ ⟷₂^ c₂) → (c₂ ⟷₂^ c₃) → (c₁ ⟷₂^ c₃)
-_ ⟷₂^⟨ β ⟩ γ = trans⟷₂^ β γ
+_ ⟷₂^⟨ β ⟩ γ = _■^_ β γ
 
 _⟷₂^∎ : ∀ (c : t₁ ⟷₁^ t₂) → c ⟷₂^ c
 _ ⟷₂^∎ = id⟷₂^
@@ -174,7 +125,7 @@ _ ⟷₂^∎ = id⟷₂^
 !⟷₂^ rinv◎l^ = rinv◎r^
 !⟷₂^ rinv◎r^ = rinv◎l^
 !⟷₂^ id⟷₂^ = id⟷₂^
-!⟷₂^ (trans⟷₂^ α α₁) = trans⟷₂^ (!⟷₂^ α₁) (!⟷₂^ α)
+!⟷₂^ (_■^_ α α₁) = _■^_ (!⟷₂^ α₁) (!⟷₂^ α)
 !⟷₂^ (α ⊡^ α₁) = !⟷₂^ α ⊡^ !⟷₂^ α₁
 !⟷₂^ ⊕id⟷₁⟷₂^ = !⊕id⟷₁⟷₂^
 !⟷₂^ !⊕id⟷₁⟷₂^ = ⊕id⟷₁⟷₂^
@@ -183,15 +134,17 @@ _ ⟷₂^∎ = id⟷₂^
 !⟷₂^ hom⊕◎⟷₂^ = hom◎⊕⟷₂^
 !⟷₂^ swapl₊⟷₂^ = swapr₊⟷₂^
 !⟷₂^ swapr₊⟷₂^ = swapl₊⟷₂^
+!⟷₂^ hexagonl₊l = hexagonl₊r
+!⟷₂^ hexagonl₊r = hexagonl₊l
 
 c₊⟷₂id⟷₁ : (c : (O) ⟷₁^ (O)) → c ⟷₂^ id⟷₁^
 c₊⟷₂id⟷₁ id⟷₁^ = id⟷₂^
-c₊⟷₂id⟷₁ (_◎^_ {m = (O)} c₁ c₂) = trans⟷₂^ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
+c₊⟷₂id⟷₁ (_◎^_ {m = (O)} c₁ c₂) = _■^_ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
 c₊⟷₂id⟷₁ (_◎^_ {m = ((S m))} c₁ c₂) with (⟷₁^-eq-size c₂)
 ... | ()
 
 ⊕⊕id⟷₁⟷₂^ : {n : ℕ} → (⊕^ ⊕^ id⟷₁^ {n = n}) ⟷₂^ id⟷₁^ {n = S (S n)}
-⊕⊕id⟷₁⟷₂^ = trans⟷₂^ (resp⊕⟷₂ ⊕id⟷₁⟷₂^) ⊕id⟷₁⟷₂^
+⊕⊕id⟷₁⟷₂^ = _■^_ (resp⊕⟷₂ ⊕id⟷₁⟷₂^) ⊕id⟷₁⟷₂^
 
 -- -- -- 3-combinators trivial
 

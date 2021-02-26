@@ -63,44 +63,44 @@ module Pi+.Indexed.Level0 where
 --                   transpos2pi n ◎ transpos2pi n ⟷₂ id⟷₁
 -- transpos-cancel {O} {.0 , ltS} =
 --   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
---     ⟷₂⟨ trans⟷₂
+--     ⟷₂⟨ _■_
 --             assoc◎r
---             (trans⟷₂
+--             (_■_
 --               (id⟷₂ ⊡ assoc◎r)
 --               (id⟷₂ ⊡ (id⟷₂ ⊡ assoc◎l))) ⟩
 --   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (assocr₊ ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
---     ⟷₂⟨ trans⟷₂
+--     ⟷₂⟨ _■_
 --            (id⟷₂ ⊡ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)))
 --            (id⟷₂ ⊡ (id⟷₂ ⊡ idl◎l)) ⟩
 --   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
 --     ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
 --   (assocl₊ ◎ ((swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁)) ◎ assocr₊)
---     ⟷₂⟨ trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) (id⟷₂ ⊡ idl◎l)  ⟩
+--     ⟷₂⟨ _■_ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) (id⟷₂ ⊡ idl◎l)  ⟩
 --   (assocl₊ ◎ assocr₊)
 --     ⟷₂⟨ linv◎l ⟩
 --   id⟷₁ ⟷₂∎
 -- transpos-cancel {S m} {O , lp} =
 --   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
---     ⟷₂⟨ trans⟷₂
+--     ⟷₂⟨ _■_
 --             assoc◎r
---             (trans⟷₂
+--             (_■_
 --               (id⟷₂ ⊡ assoc◎r)
 --               (id⟷₂ ⊡ (id⟷₂ ⊡ assoc◎l))) ⟩
 --   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (assocr₊ ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
---     ⟷₂⟨ trans⟷₂
+--     ⟷₂⟨ _■_
 --            (id⟷₂ ⊡ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)))
 --            (id⟷₂ ⊡ (id⟷₂ ⊡ idl◎l)) ⟩
 --   (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
 --     ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
 --   (assocl₊ ◎ ((swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁)) ◎ assocr₊)
---     ⟷₂⟨ trans⟷₂ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) (id⟷₂ ⊡ idl◎l)  ⟩
+--     ⟷₂⟨ _■_ (id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) (id⟷₂ ⊡ idl◎l)  ⟩
 --   (assocl₊ ◎ assocr₊)
 --     ⟷₂⟨ linv◎l ⟩
 --   id⟷₁ ⟷₂∎
 -- transpos-cancel {S m} {S n , lp} =
---   trans⟷₂
+--   _■_
 --     hom◎⊕⟷₂
---     (trans⟷₂ (resp⊕⟷₂ idl◎l transpos-cancel) id⟷₁⊕id⟷₁⟷₂)
+--     (_■_ (resp⊕⟷₂ idl◎l transpos-cancel) id⟷₁⊕id⟷₁⟷₂)
 
 -- slide0-transpos : {m : ℕ}  {kp : 0 < S (S (S m))} →
 --                   (n : Fin (S (S (S m)))) → (1<n : 1 < fst n) →
@@ -109,23 +109,23 @@ module Pi+.Indexed.Level0 where
 -- slide0-transpos (S (S n) , np) lp =
 --   let tr0 = transpos2pi (n , <-cancel-S (<-cancel-S np))
 --   in (id⟷₁ ⊕ (id⟷₁ ⊕ tr0)) ◎ (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
---        ⟷₂⟨ trans⟷₂ assoc◎l (assocl₊l ⊡ id⟷₂) ⟩
+--        ⟷₂⟨ _■_ assoc◎l (assocl₊l ⊡ id⟷₂) ⟩
 --      (assocl₊ ◎ ((id⟷₁ ⊕ id⟷₁) ⊕ tr0)) ◎ ((swap₊ ⊕ id⟷₁) ◎ assocr₊)
 --        ⟷₂⟨ assoc◎r ⟩
 --      assocl₊ ◎ ((id⟷₁ ⊕ id⟷₁) ⊕ tr0) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
---        ⟷₂⟨ id⟷₂ ⊡ (trans⟷₂ (resp⊕⟷₂ id⟷₁⊕id⟷₁⟷₂ id⟷₂ ⊡ id⟷₂) assoc◎l)  ⟩
+--        ⟷₂⟨ id⟷₂ ⊡ (_■_ (resp⊕⟷₂ id⟷₁⊕id⟷₁⟷₂ id⟷₂ ⊡ id⟷₂) assoc◎l)  ⟩
 --      assocl₊ ◎ ((id⟷₁ ⊕ tr0) ◎ (swap₊ ⊕ id⟷₁)) ◎ assocr₊
 --        ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂)  ⟩
 --      assocl₊ ◎ ((id⟷₁ ◎ swap₊) ⊕ (tr0 ◎ id⟷₁)) ◎ assocr₊
---        ⟷₂⟨ id⟷₂ ⊡ (trans⟷₂ (resp⊕⟷₂ idl◎l idr◎l) (resp⊕⟷₂ idr◎r idl◎r) ⊡ id⟷₂) ⟩
+--        ⟷₂⟨ id⟷₂ ⊡ (_■_ (resp⊕⟷₂ idl◎l idr◎l) (resp⊕⟷₂ idr◎r idl◎r) ⊡ id⟷₂) ⟩
 --      assocl₊ ◎ ((swap₊ ◎ id⟷₁) ⊕ (id⟷₁ ◎ tr0)) ◎ assocr₊
 --        ⟷₂⟨  id⟷₂ ⊡ (hom⊕◎⟷₂ ⊡ id⟷₂)  ⟩
 --      assocl₊ ◎ ((swap₊ ⊕ id⟷₁) ◎ (id⟷₁ ⊕ tr0)) ◎ assocr₊
 --        ⟷₂⟨ id⟷₂ ⊡ ((id⟷₂ ⊡ resp⊕⟷₂ split⊕-id⟷₁ id⟷₂) ⊡ id⟷₂) ⟩
 --      assocl₊ ◎ ((swap₊ ⊕ id⟷₁) ◎ ((id⟷₁ ⊕ id⟷₁) ⊕ tr0)) ◎ assocr₊
---        ⟷₂⟨ id⟷₂ ⊡ trans⟷₂ assoc◎r (id⟷₂ ⊡ assocr₊r) ⟩
+--        ⟷₂⟨ id⟷₂ ⊡ _■_ assoc◎r (id⟷₂ ⊡ assocr₊r) ⟩
 --      assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ (id⟷₁ ⊕ tr0))
---        ⟷₂⟨ trans⟷₂ (id⟷₂ ⊡ assoc◎l) assoc◎l ⟩
+--        ⟷₂⟨ _■_ (id⟷₂ ⊡ assoc◎l) assoc◎l ⟩
 --      (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ (id⟷₁ ⊕ tr0)) ⟷₂∎
 
 -- slide-transpos : {m : ℕ} → (n k : Fin (S m)) → (Sk<n : S (fst k) < fst n) →
@@ -236,7 +236,7 @@ module Pi+.Indexed.Level0 where
 -- list2norm++ : {m : ℕ} → (l r : List (Fin m)) →
 --               list2norm (l ++ r) ⟷₂ list2norm l ◎ list2norm r
 -- list2norm++ nil r = idl◎r
--- list2norm++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
+-- list2norm++ (n :: l) r = _■_ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
 
 -- cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm r₁ ⟷₂ list2norm r₂
 -- cox≈2pi (cancel {n}) =
@@ -248,23 +248,23 @@ module Pi+.Indexed.Level0 where
 --     ⟷₂⟨ idl◎l ⟩
 --   id⟷₁ ⟷₂∎
 -- cox≈2pi (swap {n} {k} lp) =
---   trans⟷₂ assoc◎l (trans⟷₂ (slide-transpos n k lp ⊡ id⟷₂) assoc◎r)
+--   _■_ assoc◎l (_■_ (slide-transpos n k lp ⊡ id⟷₂) assoc◎r)
 -- cox≈2pi idp = id⟷₂
 -- cox≈2pi (comm rw) = !⟷₂ (cox≈2pi rw)
--- cox≈2pi (trans rw₁ rw₂) = trans⟷₂ (cox≈2pi rw₁) (cox≈2pi rw₂)
+-- cox≈2pi (trans rw₁ rw₂) = _■_ (cox≈2pi rw₁) (cox≈2pi rw₂)
 -- cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
---   trans⟷₂
+--   _■_
 --     (list2norm++ l r)
---     (trans⟷₂
+--     (_■_
 --       ((cox≈2pi rw₁) ⊡ (cox≈2pi rw₂))
 --       (!⟷₂ (list2norm++ l' r')))
 -- cox≈2pi (braid {n}) =
---   trans⟷₂ assoc◎l
---   (trans⟷₂ assoc◎l
---   (trans⟷₂ (assoc◎r ⊡ id⟷₂)
---   (trans⟷₂ (braid-transpos n ⊡ id⟷₂)
---   (trans⟷₂ (assoc◎l ⊡ id⟷₂)
---   (trans⟷₂ assoc◎r assoc◎r)))))
+--   _■_ assoc◎l
+--   (_■_ assoc◎l
+--   (_■_ (assoc◎r ⊡ id⟷₂)
+--   (_■_ (braid-transpos n ⊡ id⟷₂)
+--   (_■_ (assoc◎l ⊡ id⟷₂)
+--   (_■_ assoc◎r assoc◎r)))))
 
 -- piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
 --                 (list2norm l₁) ⟷₂ (list2norm l₂)

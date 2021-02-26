@@ -128,7 +128,7 @@ data _⟷₂_ : {X : U m} {Y : U n} → X ⟷₁ Y → X ⟷₁ Y → Set where
   swapr₊⟷₂ : {c₁ : t₁ ⟷₁ t₂} {c₂ : t₃ ⟷₁ t₄} →
           ((c₂ ⊕ c₁) ◎ swap₊) ⟷₂ (swap₊ ◎ (c₁ ⊕ c₂))
   id⟷₂     : {c : t₁ ⟷₁ t₂} → c ⟷₂ c
-  trans⟷₂  : {c₁ c₂ c₃ : t₁ ⟷₁ t₂} →
+  _■_  : {c₁ c₂ c₃ : t₁ ⟷₁ t₂} →
          (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
   _⊡_  : {c₁ : t₁ ⟷₁ t₂} {c₂ : t₂ ⟷₁ t₃} {c₃ : t₁ ⟷₁ t₂} {c₄ : t₂ ⟷₁ t₃} →
          (c₁ ⟷₂ c₃) → (c₂ ⟷₂ c₄) → (c₁ ◎ c₂) ⟷₂ (c₃ ◎ c₄)
@@ -183,7 +183,7 @@ infix  15 _⟷₂∎
 
 _⟷₂⟨_⟩_ : ∀ (c₁ : t₁ ⟷₁ t₂) {c₂ c₃ : t₁ ⟷₁ t₂} →
          (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
-_ ⟷₂⟨ β ⟩ γ = trans⟷₂ β γ
+_ ⟷₂⟨ β ⟩ γ = _■_ β γ
 
 _⟷₂∎ : ∀ (c : t₁ ⟷₁ t₂) → c ⟷₂ c
 _ ⟷₂∎ = id⟷₂
@@ -222,7 +222,7 @@ _ ⟷₂∎ = id⟷₂
 !⟷₂ swapl₊⟷₂ = swapr₊⟷₂
 !⟷₂ swapr₊⟷₂ = swapl₊⟷₂
 !⟷₂ id⟷₂ = id⟷₂
-!⟷₂ (trans⟷₂ c c₁) = trans⟷₂ (!⟷₂ c₁) (!⟷₂ c)
+!⟷₂ (_■_ c c₁) = _■_ (!⟷₂ c₁) (!⟷₂ c)
 !⟷₂ (c ⊡ c₁) = !⟷₂ c ⊡ !⟷₂ c₁
 !⟷₂ (resp⊕⟷₂ c c₁) = resp⊕⟷₂ (!⟷₂ c) (!⟷₂ c₁)
 !⟷₂ id⟷₁⊕id⟷₁⟷₂ = split⊕-id⟷₁
@@ -262,7 +262,7 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ swapl₊⟷₂ = swapr₊⟷₂
 !⟷₁⟷₂ swapr₊⟷₂ = swapl₊⟷₂
 !⟷₁⟷₂ id⟷₂ = id⟷₂
-!⟷₁⟷₂ (trans⟷₂ α β) = trans⟷₂ (!⟷₁⟷₂ α) (!⟷₁⟷₂ β)
+!⟷₁⟷₂ (_■_ α β) = _■_ (!⟷₁⟷₂ α) (!⟷₁⟷₂ β)
 !⟷₁⟷₂ (α ⊡ β) = !⟷₁⟷₂ β ⊡ !⟷₁⟷₂ α
 !⟷₁⟷₂ (resp⊕⟷₂ α β) = resp⊕⟷₂ (!⟷₁⟷₂ α) (!⟷₁⟷₂ β)
 !⟷₁⟷₂ id⟷₁⊕id⟷₁⟷₂ = id⟷₁⊕id⟷₁⟷₂
@@ -281,10 +281,10 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ pentagon₊r = TODO
 !⟷₁⟷₂ unite₊l-coh-l = TODO
 !⟷₁⟷₂ unite₊l-coh-r = TODO
-!⟷₁⟷₂ hexagonr₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊l) assoc◎r
-!⟷₁⟷₂ hexagonr₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊r) assoc◎r
-!⟷₁⟷₂ hexagonl₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊l) assoc◎r
-!⟷₁⟷₂ hexagonl₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊r) assoc◎r
+!⟷₁⟷₂ hexagonr₊l = _■_ (_■_ assoc◎l hexagonl₊l) assoc◎r
+!⟷₁⟷₂ hexagonr₊r = _■_ (_■_ assoc◎l hexagonl₊r) assoc◎r
+!⟷₁⟷₂ hexagonl₊l = _■_ (_■_ assoc◎l hexagonr₊l) assoc◎r
+!⟷₁⟷₂ hexagonl₊r = _■_ (_■_ assoc◎l hexagonr₊r) assoc◎r
 
 -- -- 3-combinators trivial
 

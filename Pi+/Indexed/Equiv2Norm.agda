@@ -60,7 +60,7 @@ module _ {c₁ c₂ : S n ⟷₁^ m} where
   evalNorm₂-S (rinv◎r^ {c = c}) with (⟷₁^-eq-size c)
   ... | idp = TODO
   evalNorm₂-S id⟷₂^ = idp
-  evalNorm₂-S (trans⟷₂^ α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
+  evalNorm₂-S (_■^_ α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
   ... | idp | q rewrite loop-η q = TODO
   evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α_₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
   ... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO
