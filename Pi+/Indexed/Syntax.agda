@@ -173,8 +173,8 @@ data _⟷₂_ : {X : U m} {Y : U n} → X ⟷₁ Y → X ⟷₁ Y → Set where
   -- axioms. See for example Thm. 10 in "On MacLane's Conditions for
   -- Coherence of Natural Associativities, Commutativities, etc.
   -- Kelly 1964)
-  unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
-  braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
+  -- unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
+  -- braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
 
 -- -- Equational reasoning
 
@@ -239,8 +239,6 @@ _ ⟷₂∎ = id⟷₂
 !⟷₂ hexagonr₊r = hexagonr₊l
 !⟷₂ hexagonl₊l = hexagonl₊r
 !⟷₂ hexagonl₊r = hexagonl₊l
-!⟷₂ unit-braid = braid-unit
-!⟷₂ braid-unit = unit-braid
 
 !⟷₁⟷₂ : {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
 !⟷₁⟷₂ assoc◎l = assoc◎r
@@ -287,8 +285,6 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ hexagonr₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊r) assoc◎r
 !⟷₁⟷₂ hexagonl₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊l) assoc◎r
 !⟷₁⟷₂ hexagonl₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊r) assoc◎r
-!⟷₁⟷₂ unit-braid = TODO
-!⟷₁⟷₂ braid-unit = TODO
 
 -- -- 3-combinators trivial
 

@@ -18,13 +18,52 @@ open import lib.types.Truncation
 open import lib.NType2
 open import lib.types.SetQuotient
 open import lib.types.Coproduct
+open import lib.types.Nat as N
 
 private
     variable
         n m : ℕ
 
 eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
-eval^₂ α = TODO
+eval^₂ assoc◎l = assoc◎l^
+eval^₂ assoc◎r = assoc◎r^
+eval^₂ (assocl₊l {n₁} {_} {n₂} {_} {n₃} {_} {n₄} {_} {n₅} {_} {n₆} {_}) with (N.+-assoc n₂ n₄ n₆) | (N.+-assoc n₁ n₃ n₅)
+... | p | q = TODO
+eval^₂ assocl₊r = TODO
+eval^₂ assocr₊r = TODO
+eval^₂ assocr₊l = TODO
+eval^₂ idl◎l = idl◎l^
+eval^₂ idl◎r = idl◎r^
+eval^₂ idr◎l = idr◎l^
+eval^₂ idr◎r = idr◎r^
+eval^₂ linv◎l = TODO
+eval^₂ linv◎r = TODO
+eval^₂ rinv◎l = TODO
+eval^₂ rinv◎r = TODO
+eval^₂ unite₊l⟷₂l = TODO
+eval^₂ unite₊l⟷₂r = TODO
+eval^₂ uniti₊l⟷₂l = TODO
+eval^₂ uniti₊l⟷₂r = TODO
+eval^₂ swapl₊⟷₂ = TODO
+eval^₂ swapr₊⟷₂ = TODO
+eval^₂ id⟷₂ = id⟷₂^
+eval^₂ (trans⟷₂ α₁ α₂) = trans⟷₂^ (eval^₂ α₁) (eval^₂ α₂)
+eval^₂ (α₁ ⊡ α₂) = eval^₂ α₁ ⊡^ eval^₂ α₂
+eval^₂ (resp⊕⟷₂ α₁ α₂) = TODO
+eval^₂ id⟷₁⊕id⟷₁⟷₂ = TODO
+eval^₂ split⊕-id⟷₁ = TODO
+eval^₂ hom⊕◎⟷₂ = TODO
+eval^₂ hom◎⊕⟷₂ = TODO
+eval^₂ triangle₊l = TODO
+eval^₂ triangle₊r = TODO
+eval^₂ pentagon₊l = TODO
+eval^₂ pentagon₊r = TODO
+eval^₂ unite₊l-coh-l = TODO
+eval^₂ unite₊l-coh-r = TODO
+eval^₂ hexagonr₊l = TODO
+eval^₂ hexagonr₊r = TODO
+eval^₂ hexagonl₊l = TODO
+eval^₂ hexagonl₊r = TODO
 
 !-quote^₁ : (c : n ⟷₁^ m) → quote^₁ (!⟷₁^ c) ⟷₂ !⟷₁ (quote^₁ c)
 !-quote^₁ swap₊^ = assoc◎l

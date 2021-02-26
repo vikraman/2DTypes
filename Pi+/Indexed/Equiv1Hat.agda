@@ -23,7 +23,7 @@ open import lib.types.Sigma
 
 private
     variable
-        n m : ℕ    
+        n m : ℕ
 
 quote^₁ : (n ⟷₁^ m) → (quote^₀ n ⟷₁ quote^₀ m)
 quote^₁ swap₊^ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
@@ -48,10 +48,10 @@ eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
 eval-quote^₁ : (c : n ⟷₁^ m) → eval^₁ (quote^₁ c) ⟷₂^ c
-eval-quote^₁ (swap₊^ {n = n}) 
+eval-quote^₁ (swap₊^ {n = n})
     rewrite (ℕ-p (+-assoc 1 1 n))
-    rewrite (ℕ-p (+-unit-r 1)) 
-    rewrite (ℕ-p (+-assoc 1 0 1)) = 
+    rewrite (ℕ-p (+-unit-r 1))
+    rewrite (ℕ-p (+-assoc 1 0 1)) =
         _ ⟷₂^⟨ idl◎l^ ⟩
         _ ⟷₂^⟨ idr◎l^ ⟩   -- id⟷₂^ ⊡^ {! _  !} ⟩
         _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
@@ -61,9 +61,9 @@ eval-quote^₁ (swap₊^ {n = n})
         swap₊^ ⟷₂^∎
 eval-quote^₁ id⟷₁^ = id⟷₂^
 eval-quote^₁ (c ◎^ c₁) = eval-quote^₁ c ⊡^ eval-quote^₁ c₁
-eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c) 
+eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp = resp⊕⟷₂ (eval-quote^₁ c)
 
 quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
-quote-eval^₁ c = TODO
+quote-eval^₁ c = TODO -- easy
 -- quote-eval^₁ {t₁} {.t₁} id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
