@@ -24,24 +24,22 @@ jobs:
         id: cache-stack
         with:
           path: ~/.stack
-          key: ${{ runner.os }}-stack
+          key: ${{ runner.os }}-stack-ghc-8.10.3-agda-2.6.1.3
 
       - uses: actions/cache@v2
         id: cache-hott-agda
         with:
           path: HoTT-Agda/_build
-          key: ${{ runner.os }}-hott-agda-${{ hashFiles('HoTT-Agda/**/*.agda') }}
+          key: ${{ runner.os }}-hott-agda-${{ hashFiles('HoTT-Agda/_build/**/*.agdai') }}
 
       - uses: actions/cache@v2
         id: cache-2dtypes
         with:
           path: _build
-          key: ${{ runner.os }}-2dtypes
+          key: ${{ runner.os }}-2dtypes-${{ hashFiles('_build/**/*.agdai') }}
 
       - name: Install Agda
-        run: |
-          stack update
-          stack --resolver lts-17.2 --system-ghc install Agda-2.6.1.3
+        run: stack --resolver lts-17.2 --system-ghc install Agda-2.6.1.3
 
       - name: Check Pi+
         run: make -j3 Pi+
