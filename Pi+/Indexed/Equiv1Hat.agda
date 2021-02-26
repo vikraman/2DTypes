@@ -65,12 +65,12 @@ eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp = resp⊕⟷₂ (eval-quote^₁ c)
 
 quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
-quote-eval^₁ unite₊l = {!   !}
-quote-eval^₁ uniti₊l = {!   !}
-quote-eval^₁ swap₊ = {!   !}
-quote-eval^₁ assocl₊ = {!   !}
-quote-eval^₁ assocr₊ = {!   !}
-quote-eval^₁ id⟷₁ = {!   !}
-quote-eval^₁ (c ◎ c₁) = {!   !}
-quote-eval^₁ (c ⊕ c₁) = {!   !}
+quote-eval^₁ unite₊l = TODO
+quote-eval^₁ uniti₊l = TODO
+quote-eval^₁ swap₊ = TODO
+quote-eval^₁ assocl₊ = TODO
+quote-eval^₁ assocr₊ = TODO
+quote-eval^₁ id⟷₁ = TODO
+quote-eval^₁ (c₁ ◎ c₂) = TODO
+quote-eval^₁ (c₁ ⊕ c₂) = TODO
 -- quote-eval^₁ {t₁} {.t₁} id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
