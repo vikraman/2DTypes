@@ -55,6 +55,18 @@ eval₁-map-S ((x , xp) :: l) rewrite <-has-all-paths (<-cancel-S (<-ap-S xp)) x
   let rec = eval₁-map-S l
   in  trans⟷₂^ (id⟷₂^ ⊡^ rec) hom◎⊕⟷₂^
 
+norm2list-◎^-β : {c₁ c₂ : S n ⟷₁^ S n} → norm2list (c₁ ◎^ c₂) == norm2list c₁ ++ norm2list c₂
+norm2list-◎^-β = idp
+
+norm2list-!-β : {c : S n ⟷₁^ S n} → norm2list (!⟷₁^ c) == reverse (norm2list c)
+norm2list-!-β {O} {id⟷₁^} = idp
+norm2list-!-β {O} {c₁ ◎^ c₂} with (⟷₁^-eq-size c₁)
+... | idp = ap (λ l → l ++ norm2list (!⟷₁^ c₁)) (norm2list-!-β {c = c₂})
+          ∙ ap (λ l → reverse (norm2list c₂) ++ l) (norm2list-!-β {c = c₁})
+          ∙ TODO
+norm2list-!-β {O} {⊕^ c} = TODO
+norm2list-!-β {S n} {c} = TODO
+
 norm2norm : (c : S n ⟷₁^ S m) →
     (list2normI (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (norm2list c)) ⟷₂^ c
 norm2norm (swap₊^ {n = n})
