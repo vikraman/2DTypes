@@ -14,6 +14,7 @@ open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv1Hat
+open import Pi+.Indexed.Equiv2Hat
 open import Pi+.Indexed.Level0Hat
 open import Pi+.Indexed.Level0
 
@@ -48,12 +49,18 @@ norm2list {O} (⊕^ c) = nil
 norm2list {S n} (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp = map S⟨_⟩ (norm2list c)
 
+eval₁-map-S : {n : ℕ} → (l : List (Fin n)) → eval^₁ (list2norm (map S⟨_⟩ l)) ⟷₂^ ⊕^ (eval^₁ (list2norm l))
+eval₁-map-S nil = !⊕id⟷₁⟷₂^
+eval₁-map-S ((x , xp) :: l) rewrite <-has-all-paths (<-cancel-S (<-ap-S xp)) xp =
+  let rec = eval₁-map-S l
+  in  trans⟷₂^ (id⟷₂^ ⊡^ rec) hom◎⊕⟷₂^
+
 norm2norm : (c : S n ⟷₁^ S m) →
     (list2normI (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (norm2list c)) ⟷₂^ c
-norm2norm (swap₊^ {n = n}) 
+norm2norm (swap₊^ {n = n})
     rewrite (ℕ-p (+-assoc 1 1 n))
-    rewrite (ℕ-p (+-unit-r 1)) 
-    rewrite (ℕ-p (+-assoc 1 0 1)) = 
+    rewrite (ℕ-p (+-unit-r 1))
+    rewrite (ℕ-p (+-assoc 1 0 1)) =
     -- Code duplication with Eval1Hat
         _ ⟷₂^⟨ idr◎l^ ⟩
         _ ⟷₂^⟨ idl◎l^ ⟩
@@ -65,23 +72,36 @@ norm2norm (swap₊^ {n = n})
         swap₊^ ⟷₂^∎
 norm2norm id⟷₁^ = id⟷₂^
 norm2norm (c₁ ◎^ c₂) with (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₁)
-... | idp | idp = 
+... | idp | idp =
   let r₁ = norm2norm c₁
       r₂ = norm2norm c₂
-  in  trans⟷₂^ TODO (r₁ ⊡^ r₂)
+      lemma = list2norm++ (norm2list c₁) (norm2list c₂)
+  in  trans⟷₂^ (eval^₂ lemma) (r₁ ⊡^ r₂)
 norm2norm {O} (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp = !⟷₂^ (trans⟷₂^ (resp⊕⟷₂ (c₊⟷₂id⟷₁ c)) ⊕id⟷₁⟷₂^)
 norm2norm {S n} (⊕^ c) with (⟷₁^-eq-size c)
-... | idp = 
+... | idp =
   let rec = norm2norm c
-  in  TODO
+      l = eval₁-map-S ((norm2list c))
+  in  trans⟷₂^ l (resp⊕⟷₂ rec)
+
+norm2list-id : {n : ℕ} → norm2list (⊕^ (id⟷₁^ {n = n})) == nil
+norm2list-id {O} = idp
+norm2list-id {S n} = idp
+
+eval^₁-transpos : (k : Fin n) → (norm2list (eval^₁ (transpos2pi k))) == k :: nil
+eval^₁-transpos {S n} (O , pk) 
+    rewrite (ℕ-p (+-assoc 1 1 n))
+    rewrite (ℕ-p (+-unit-r 1))
+    rewrite (ℕ-p (+-assoc 1 0 1))
+    rewrite norm2list-id {n} = List=-out ((Fin= _ _ idp _ _) , idp)
+eval^₁-transpos {S n} (S k , pk) = 
+  let rec = ap (map S⟨_⟩) (eval^₁-transpos {n} (k , <-cancel-S pk))
+  in  rec ∙ List=-out ((Fin= _ _ idp _ _) , idp)
 
 list2list : {n : ℕ} → (p : List (Fin n)) → norm2list (list2normI idp p) == p
 list2list nil = idp
-list2list {S n} ((O , p0) :: p) 
-    rewrite (ℕ-p (+-assoc 1 1 n))
-    rewrite (ℕ-p (+-unit-r 1)) 
-    rewrite (ℕ-p (+-assoc 1 0 1)) = 
-      let rec = list2list p 
-      in  TODO
-list2list {S n} ((S k , pk) :: p) = TODO
+list2list {S n} ((k , pk) :: xs)
+  rewrite (eval^₁-transpos (k , pk)) = 
+    let rec = list2list xs
+    in  List=-out ((pair= idp (<-has-all-paths _ _)) , rec)

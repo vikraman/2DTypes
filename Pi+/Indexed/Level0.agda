@@ -233,7 +233,7 @@ list2norm : {m : ℕ} → List (Fin m) → ⟪ S m ⟫ ⟷₁ ⟪ S m ⟫
 list2norm nil = id⟷₁
 list2norm (fn :: xs) = transpos2pi fn ◎ list2norm xs
 
-list2norm++ : {m : ℕ} → (l r : List (Fin (S m))) →
+list2norm++ : {m : ℕ} → (l r : List (Fin m)) →
               list2norm (l ++ r) ⟷₂ list2norm l ◎ list2norm r
 list2norm++ nil r = idl◎r
 list2norm++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
