@@ -75,11 +75,11 @@ quote-eval^₁ swap₊ = !⟷₂ (
     _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
-    _ ⟷₂⟨ {!   !} ⟩
+    _ ⟷₂⟨ TODO ⟩
     _ ⟷₂∎)
-quote-eval^₁ (assocl₊ {n} {_} {m} {_} {o} {_}) = {!   !}
-quote-eval^₁ assocr₊ = {!   !}
+quote-eval^₁ (assocl₊ {n} {_} {m} {_} {o} {_}) = TODO
+quote-eval^₁ assocr₊ = TODO
 quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r) -- 
-quote-eval^₁ (c ◎ c₁) = {!   !}
-quote-eval^₁ (c ⊕ c₁) = {!   !}
+quote-eval^₁ (c ◎ c₁) = TODO
+quote-eval^₁ (c ⊕ c₁) = TODO
 -- quote-eval^₁ {t₁} {.t₁} id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
