@@ -12,7 +12,7 @@ jobs:
 
       - uses: haskell/actions/setup@v1
         with:
-          ghc-version: '8.8.4'
+          ghc-version: '8.10.3'
           enable-stack: true
           stack-version: 'latest'
 
@@ -39,10 +39,12 @@ jobs:
           key: ${{ runner.os }}-2dtypes
 
       - name: Install Agda
-        run: stack --resolver lts-16.27 --system-ghc install data-hash-0.2.0.1 equivalence-0.3.5 geniplate-mirror-0.7.7 STMonadTrans-0.4.4 Agda-2.6.1.2
+        run: |
+          stack update
+          stack --resolver lts-17.2 --system-ghc install Agda-2.6.1.3
 
       - name: Check Pi+
-        run: make Pi+
+        run: make -j3 Pi+
   latex:
     name: latex
     runs-on: ubuntu-latest
