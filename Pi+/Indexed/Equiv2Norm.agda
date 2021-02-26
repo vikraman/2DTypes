@@ -11,7 +11,7 @@ open import Pi+.UFin.BAut
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv1Norm
 
-open import Pi+.Indexed.Equiv1NormHelpers using (norm2list)
+open import Pi+.Indexed.Equiv1NormHelpers using (pi^2list)
 open import Pi+.Lehmer.LehmerFinEquiv using (Fin≃Lehmer)
 open import Pi+.Coxeter.LehmerCoxeterEquiv using (immersion⁻¹)
 
@@ -39,18 +39,18 @@ module _ {c₁ c₂ : S n ⟷₁^ m} where
   evalNorm₂-S : c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
   evalNorm₂-S (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
   ... | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
-  ... | idp | idp | p rewrite loop-η p = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-assoc (norm2list c₁) (norm2list c₂) (norm2list c₃)))
+  ... | idp | idp | p rewrite loop-η p = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-assoc (pi^2list c₁) (pi^2list c₂) (pi^2list c₃)))
   evalNorm₂-S (assoc◎r^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
   ... | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
-  ... | idp | idp | p rewrite loop-η p = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (++-assoc (norm2list c₁) (norm2list c₂) (norm2list c₃))
+  ... | idp | idp | p rewrite loop-η p = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (++-assoc (pi^2list c₁) (pi^2list c₂) (pi^2list c₃))
   evalNorm₂-S idl◎l^ with (⟷₁^-eq-size c₂)
   ... | idp = idp
   evalNorm₂-S idl◎r^ with (⟷₁^-eq-size c₁)
   ... | idp = idp
   evalNorm₂-S idr◎l^ with (⟷₁^-eq-size c₂)
-  ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (++-unit-r (norm2list c₂))
+  ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (++-unit-r (pi^2list c₂))
   evalNorm₂-S idr◎r^ with (⟷₁^-eq-size c₂)
-  ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-unit-r (norm2list c₁)))
+  ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-unit-r (pi^2list c₁)))
   evalNorm₂-S (linv◎l^ {c = c}) with (⟷₁^-eq-size c)
   ... | idp = TODO
   evalNorm₂-S (linv◎r^ {c = c}) with (⟷₁^-eq-size c)
