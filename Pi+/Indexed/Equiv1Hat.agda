@@ -23,7 +23,8 @@ open import lib.types.Sigma
 
 private
     variable
-        n m : ℕ
+        n m o : ℕ
+        t₁ t₂ t₃ t₄ : U n
 
 quote^₁ : (n ⟷₁^ m) → (quote^₀ n ⟷₁ quote^₀ m)
 quote^₁ swap₊^ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
@@ -33,6 +34,28 @@ quote^₁ (⊕^ c₁) = id⟷₁ ⊕ quote^₁ c₁
 
 denorm : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)
 denorm {t₁ = t₁} {t₂ = t₂} c = (quote-eval^₀ t₁ ◎ c ◎ !⟷₁ (quote-eval^₀ t₂))
+
+denorm-⊕-β : (c₁ : t₁ ⟷₁ t₂) → (c₂ : t₃ ⟷₁ t₄) 
+    → denorm (c₁ ⊕ c₂) ⟷₂ (quote^₀++ _ _ ◎ ((denorm c₁) ⊕ (denorm c₂)) ◎ !⟷₁ (quote^₀++ _ _))
+denorm-⊕-β c₁ c₂ = !⟷₂ (
+    _ ⟷₂⟨ assoc◎l ⟩
+    _ ⟷₂⟨ (id⟷₂ ⊡  hom⊕◎⟷₂) ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ (id⟷₂ ⊡ (id⟷₂ ⊡ hom⊕◎⟷₂)) ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ assoc◎l ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ assoc◎r ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎r ⟩
+    _ ⟷₂∎)
+
+denorm-◎-β : {t₁ : U n} {t₂ : U m} {t₃ : U o} → (c₁ : t₁ ⟷₁ t₂) → (c₂ : t₂ ⟷₁ t₃) → denorm (c₁ ◎ c₂) ⟷₂ (denorm c₁) ◎ (denorm c₂)
+denorm-◎-β c₁ c₂ = !⟷₂ (
+    _ ⟷₂⟨ assoc◎l ⟩
+    _ ⟷₂⟨ assoc◎r ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ (id⟷₂ ⊡ assoc◎r) ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ (id⟷₂ ⊡ (id⟷₂ ⊡ rinv◎l)) ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ (id⟷₂ ⊡ idr◎l) ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ assoc◎r ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+    _ ⟷₂∎)
 
 denorm← : {t₁ : U n} {t₂ : U m} → (c : quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)) → t₁ ⟷₁ t₂
 denorm← {t₁ = t₁} {t₂ = t₂} c = (!⟷₁ (quote-eval^₀ t₁)) ◎ c ◎ (quote-eval^₀ t₂)
@@ -51,8 +74,8 @@ eval-quote^₁ : (c : n ⟷₁^ m) → eval^₁ (quote^₁ c) ⟷₂^ c
 eval-quote^₁ (swap₊^ {n = n})
     rewrite (ℕ-p (+-assoc 1 1 n))
     rewrite (ℕ-p (+-unit-r 1))
-    rewrite (ℕ-p (+-assoc 1 0 1)) =
-        _ ⟷₂^⟨ idl◎l^ ⟩
+    rewrite (ℕ-p (+-assoc 1 0 1)) = 
+        _ ⟷₂^⟨ idl◎l^ ⟩ -- 
         _ ⟷₂^⟨ idr◎l^ ⟩
         _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
         _ ⟷₂^⟨ idl◎l^ ⟩
@@ -79,7 +102,18 @@ quote-eval^₁ swap₊ = !⟷₂ (
     _ ⟷₂∎)
 quote-eval^₁ (assocl₊ {n} {_} {m} {_} {o} {_}) = TODO
 quote-eval^₁ assocr₊ = TODO
-quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r) -- 
-quote-eval^₁ (c ◎ c₁) = TODO
-quote-eval^₁ (c ⊕ c₁) = TODO
--- quote-eval^₁ {t₁} {.t₁} id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
+quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r)
+quote-eval^₁ (c₁ ◎ c₂) =
+    let r₁ = quote-eval^₁ c₁
+        r₂ = quote-eval^₁ c₂
+    in _ ⟷₂⟨ (r₁ ⊡ r₂) ⟩
+       _ ⟷₂⟨ !⟷₂ (denorm-◎-β _ _) ⟩
+       _ ⟷₂∎
+quote-eval^₁ (c₁ ⊕ c₂) =
+    let r₁ = !⟷₂ (quote-eval^₁ c₁)
+        r₂ = !⟷₂ (quote-eval^₁ c₂)
+    in !⟷₂ (
+       _ ⟷₂⟨ denorm-⊕-β _ _ ⟩
+       _ ⟷₂⟨ (id⟷₂ ⊡ (resp⊕⟷₂ r₁ r₂ ⊡ id⟷₂)) ⟩
+       _ ⟷₂⟨ TODO ⟩
+       _ ⟷₂∎)
