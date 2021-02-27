@@ -77,6 +77,10 @@ module _ {c₁ c₂ : S n ⟷₁^ m} where
   evalNorm₂-S (swapr₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO ; (S n , p) → TODO }
   evalNorm₂-S (swapl₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
   evalNorm₂-S (swapl₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO ; (S n , p) → TODO }
+  evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → idp }
+  evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
+  evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → idp }
+  evalNorm₂-S (hexagonl₊r {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
 
 evalNorm₂ : {c₁ c₂ : n ⟷₁^ m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
 evalNorm₂ {n = O} = evalNorm₂-O
