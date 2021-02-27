@@ -53,7 +53,7 @@ eval-quote^₁ (swap₊^ {n = n})
     rewrite (ℕ-p (+-unit-r 1))
     rewrite (ℕ-p (+-assoc 1 0 1)) =
         _ ⟷₂^⟨ idl◎l^ ⟩
-        _ ⟷₂^⟨ idr◎l^ ⟩   -- id⟷₂^ ⊡^ {! _  !} ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩
         _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
         _ ⟷₂^⟨ idl◎l^ ⟩
         _ ⟷₂^⟨ idr◎l^ ⊡^ idl◎l^ ⟩
@@ -65,5 +65,21 @@ eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp = resp⊕⟷₂ (eval-quote^₁ c)
 
 quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
-quote-eval^₁ c = TODO -- easy
+quote-eval^₁ unite₊l = !⟷₂ ((uniti₊l⟷₂l ⊡ id⟷₂) ■ linv◎l)
+quote-eval^₁ uniti₊l = !⟷₂ ((id⟷₂ ⊡ (id⟷₂ ⊡ unite₊l⟷₂r)) ■ (assoc◎l ■ linv◎l))
+quote-eval^₁ swap₊ = !⟷₂ (
+    _ ⟷₂⟨ (id⟷₂ ⊡ assoc◎l) ⟩
+    _ ⟷₂⟨ (id⟷₂ ⊡ (swapl₊⟷₂ ⊡ id⟷₂)) ⟩
+    _ ⟷₂⟨ assoc◎r ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡  assoc◎r) ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
+    _ ⟷₂⟨ TODO ⟩
+    _ ⟷₂∎)
+quote-eval^₁ (assocl₊ {n} {_} {m} {_} {o} {_}) = TODO
+quote-eval^₁ assocr₊ = TODO
+quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r) -- 
+quote-eval^₁ (c ◎ c₁) = TODO
+quote-eval^₁ (c ⊕ c₁) = TODO
 -- quote-eval^₁ {t₁} {.t₁} id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)

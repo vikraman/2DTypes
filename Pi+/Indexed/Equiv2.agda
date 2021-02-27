@@ -35,7 +35,7 @@ postulate
     eq-size-idp-rewrite : {t₁ : U n} {t₂ : U n} {c : t₁ ⟷₁ t₂} → (⟷₁-eq-size c) ↦ idp -- because proof of == in ℕ
     {-# REWRITE eq-size-idp-rewrite #-}
 
-quote-eval₂ : {t₁ t₂ : U n} {c₁ c₂ : t₁ ⟷₁ t₂} (α : c₁ ⟷₂ c₂) → quote₂ (eval₂ α) ⟷₃ trans⟷₂ (quote-eval₁ c₁) (trans⟷₂ (id⟷₂ ⊡ (α ⊡ id⟷₂)) (!⟷₂ (quote-eval₁ c₂)))
+quote-eval₂ : {t₁ t₂ : U n} {c₁ c₂ : t₁ ⟷₁ t₂} (α : c₁ ⟷₂ c₂) → quote₂ (eval₂ α) ⟷₃ _■_ (quote-eval₁ c₁) (_■_ (id⟷₂ ⊡ (α ⊡ id⟷₂)) (!⟷₂ (quote-eval₁ c₂)))
 quote-eval₂ {c₁ = c₁} {c₂ = c₂} α = trunc _ _
 
 eval-quote₂ : {e₁ e₂ : Aut (Fin n)} (α : e₁ == e₂) → 

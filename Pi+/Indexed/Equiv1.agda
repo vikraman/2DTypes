@@ -29,7 +29,6 @@ open import lib.types.SetQuotient
 open import lib.types.Coproduct
 open import lib.types.Sigma
 
-import Pi+.Indexed.Level0
 import Pi+.Coxeter.LehmerCoxeterEquiv
 import Pi+.Lehmer.LehmerFinEquiv
 
