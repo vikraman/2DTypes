@@ -114,7 +114,15 @@ instance
 -- x :: xs == xs ++ [ x ]
 
 _⁻¹ : ∀ {m} → CList m → CList m
-_⁻¹ = CListRec.f nil (λ n w* → w* ++ [ n ]) (λ {n} {w*} → ++-assoc w* [ n ] [ n ] ∙ ap (λ e → w* ++ e) cancel ∙ ++-unit-r w*) TODO {!   !} 
+_⁻¹ = CListRec.f nil (λ n w* → w* ++ [ n ]) 
+  (λ {n} {w*} → ++-assoc w* [ n ] [ n ] ∙ ap (λ e → w* ++ e) cancel ∙ ++-unit-r w*) 
+  (λ {n} {k} p {w*} → ++-assoc w* [ k ] [ n ] ∙ ap (λ e → w* ++ e) (! (swap p)) ∙ ! (++-assoc w* [ n ] [ k ])) 
+  (λ {n} {w*} → 
+    ++-assoc (w* ++ [ S⟨ n ⟩ ]) [ ⟨ n ⟩ ] [ S⟨ n ⟩ ] ∙ 
+    ++-assoc  w* [ S⟨ n ⟩ ] ([ ⟨ n ⟩ ] ++ [ S⟨ n ⟩ ]) ∙ 
+    ap (λ e → w* ++ e) braid ∙
+    ! (++-assoc (w* ++ [ ⟨ n ⟩ ]) [ S⟨ n ⟩ ] [ ⟨ n ⟩ ] ∙ 
+      ++-assoc  w* [ ⟨ n ⟩ ] ([ S⟨ n ⟩ ] ++ [ ⟨ n ⟩ ])))
 
 inverse : ∀ {m} → (w : CList m) → w ++ (w ⁻¹) == nil
 inverse = CListElimProp.f idp λ n w* → {!   !} {{clist-paths-prop}}
