@@ -52,31 +52,31 @@ module _ {c₁ c₂ : S n ⟷₁^ m} where
   evalNorm₂-S idr◎r^ with (⟷₁^-eq-size c₂)
   ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-unit-r (pi^2list c₁)))
   evalNorm₂-S (linv◎l^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO
+  ... | idp = TODO!
   evalNorm₂-S (linv◎r^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO
+  ... | idp = TODO!
   evalNorm₂-S (rinv◎l^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO
+  ... | idp = TODO!
   evalNorm₂-S (rinv◎r^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO
+  ... | idp = TODO!
   evalNorm₂-S id⟷₂^ = idp
   evalNorm₂-S (_■^_ α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-  ... | idp | q rewrite loop-η q = TODO
+  ... | idp | q rewrite loop-η q = TODO!
   evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α_₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
-  ... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO
+  ... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO!
   evalNorm₂-S (⊕id⟷₁⟷₂^ {n = O}) = idp
-  evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
+  evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
   evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = O}) = idp
-  evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
-  evalNorm₂-S hom◎⊕⟷₂^ = TODO
+  evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+  evalNorm₂-S hom◎⊕⟷₂^ = TODO!
   evalNorm₂-S (resp⊕⟷₂ {c₁ = c₁} {c₂ = c₂} α) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-  ... | idp | q rewrite loop-η q = TODO
+  ... | idp | q rewrite loop-η q = TODO!
   evalNorm₂-S (hom⊕◎⟷₂^ {c₁ = c₁} {c₂ = c₂}) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-  ... | idp | idp = TODO
-  evalNorm₂-S (swapr₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
-  evalNorm₂-S (swapr₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO ; (S n , p) → TODO }
-  evalNorm₂-S (swapl₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO }
-  evalNorm₂-S (swapl₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO ; (S n , p) → TODO }
+  ... | idp | idp = TODO!
+  evalNorm₂-S (swapr₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+  evalNorm₂-S (swapr₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! }
+  evalNorm₂-S (swapl₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+  evalNorm₂-S (swapl₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! }
   evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → idp }
   evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
   evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → idp }

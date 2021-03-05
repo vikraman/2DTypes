@@ -52,7 +52,7 @@ dec-long-lemma-rev : (n k n1 k1 : ℕ) -> (n1 ≤ k1) -> (l r : Listℕ) -> (n �
 dec-long-lemma-rev n (S (S k)) .(S n) .n pkn nil .(S (S n) ↑ k) idp = abs-refl pkn
 dec-long-lemma-rev n (S k) n1 k1 pkn (x ∷ l) r p = dec-long-lemma-rev (S n) k n1 k1 pkn l r (cut-head p)
 
--- TODO exact code duplication from incr-long-lemma
+-- nice to have: exact code duplication from incr-long-lemma
 dec-long-lemma : (n k n1 k1 : ℕ) -> (n1 ≤ k1) -> (l r : Listℕ) -> (n ↓ k) == (l ++ n1 ∷ k1 ∷ r) -> ⊥
 dec-long-lemma n k n1 k1 p l r q =
   let pp =
