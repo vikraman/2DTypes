@@ -98,4 +98,4 @@ quote-eval₁ {X} {Y} p =
     in  quoted⟷₂norm
 
 eval-quote₁ : {X Y : UFin} → (p : X == Y) → eval₁ (quote₁ p) == ap (λ X → eval₀ (quote₀ X)) p
-eval-quote₁ p = TODO
+eval-quote₁ p = TODO-

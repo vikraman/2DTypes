@@ -52,16 +52,16 @@ inspect x = x with== idp
 
 ∘e-assoc : {A B C D : Type₀} → (ab : A ≃ B) → (bc : B ≃ C) → (cd : C ≃ D)
   → (cd ∘e (bc ∘e ab)) == (cd ∘e bc) ∘e ab
-∘e-assoc ab bc cd = TODO
+∘e-assoc ab bc cd = TODO!
 
 ∘e-inv-r : {A B : Type₀} → (e : A ≃ B) → (e ∘e e ⁻¹) == (ide B)
-∘e-inv-r e = TODO
+∘e-inv-r e = TODO!
 
 ∘e-unit-r : {A B : Type₀} → (e : A ≃ B) → ((ide B) ∘e e) == e
-∘e-unit-r e = TODO
+∘e-unit-r e = TODO!
 
 ∘e-inv-l : {A B : Type₀} → (e : A ≃ B) → (e ⁻¹ ∘e e) == (ide A)
-∘e-inv-l e = TODO
+∘e-inv-l e = TODO!
 
 -- post∘-equiv
 
@@ -78,7 +78,7 @@ cong≃ bc = equiv f g f-g g-f
     g-f x = ∘e-assoc x bc (bc ⁻¹) ∙ ap (λ e → e ∘e x) (∘e-inv-l bc) ∙ ∘e-unit-r x
 
 double⁻¹ : {A B : Type₀} → (x : A ≃ B) → (x ⁻¹ ⁻¹) == x
-double⁻¹ x = pair= idp TODO
+double⁻¹ x = pair= idp TODO!
 
 !≃ : {A B C D : Type₀} → (A ≃ B) ≃ (C ≃ D) → (B ≃ A) ≃ (D ≃ C)
 !≃ (f , record { g = g ; f-g = f-g ; g-f = g-f ; adj = adj }) = equiv ff gg ff-gg gg-ff

@@ -26,7 +26,7 @@ canonical-append cl x px =
   in  lifted-m , start+end lifted-p idp
 
 lehmer-eta : {n : ℕ} -> {cl1 cl2 : Lehmer n} -> {r1 r2 : ℕ} -> (rn1 : r1 ≤ (S n)) -> (rn2 : r2 ≤ (S n)) -> (cl1 == cl2) -> (r1 == r2) -> (CanS cl1 rn1) == (CanS cl2 rn2)
-lehmer-eta rn1 rn2 idp idp = ap (CanS _) (prop-has-all-paths rn1 rn2) -- TODO: write with ap/uncurry, without path induction
+lehmer-eta rn1 rn2 idp idp = ap (CanS _) (prop-has-all-paths rn1 rn2) -- nice to have: write with ap/uncurry, without path induction
 
 final≅-↓ : (n k1 : ℕ) -> (m : Listℕ) -> (n ↓ k1) ≅ m -> ⊥
 final≅-↓ n k1 m (cancel≅ {n₁} l r .(n ↓ k1) .m defm defmf) = repeat-long-lemma n k1 n₁ l r defm

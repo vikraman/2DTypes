@@ -1,4 +1,4 @@
-TODO (Pi part):
+(Pi part):
 
  1. Prove the big-id thing
  2. Port the Equiv2.agda to the same structure of ^, Norm etc.
