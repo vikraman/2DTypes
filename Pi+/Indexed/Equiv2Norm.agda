@@ -11,10 +11,10 @@ open import Pi+.UFin.BAut
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv1Norm
 
-open import Pi+.Indexed.Equiv1NormHelpers using (pi^2list)
+open import Pi+.Indexed.Equiv1NormHelpers using (pi^2list; pi^2list-!^-β)
 open import Pi+.Lehmer.LehmerFinEquiv using (Fin≃Lehmer)
-open import Pi+.Coxeter.LehmerCoxeterEquiv using (immersion⁻¹)
-
+open import Pi+.Coxeter.LehmerCoxeterEquiv using (immersion⁻¹; immersion⁻¹-respects≈)
+open import Pi+.Coxeter.Sn using (≈-inv-l; ≈-inv-r)
 open import HoTT
 
 private
@@ -38,7 +38,7 @@ module _ {c₁ c₂ : O ⟷₁^ m} where
   evalNorm₂-O : c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
   evalNorm₂-O α = e= λ { (n , ()) }
 
-module _ {c₁ c₂ : S n ⟷₁^ m} where
+module _ {c₁ c₂ : S n ⟷₁^ S m} where
 
   evalNorm₂-S : c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
   evalNorm₂-S (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
@@ -56,13 +56,23 @@ module _ {c₁ c₂ : S n ⟷₁^ m} where
   evalNorm₂-S idr◎r^ with (⟷₁^-eq-size c₂)
   ... | idp = ap (<– Fin≃Lehmer ∘ immersion⁻¹) (! (++-unit-r (pi^2list c₁)))
   evalNorm₂-S (linv◎l^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO!
+  ... | idp =
+    let r = (immersion⁻¹-respects≈ {_} {pi^2list c ++ reverse (pi^2list c)} {nil} (≈-inv-r (pi^2list c)))
+    in  ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → pi^2list c ++ e) (pi^2list-!^-β c)) ∙ r)
   evalNorm₂-S (linv◎r^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO!
+  ... | idp =
+    -- why can't I use the above case?
+    let r = (immersion⁻¹-respects≈ {_} {pi^2list c ++ reverse (pi^2list c)} {nil} (≈-inv-r (pi^2list c)))
+    in  ! (ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → pi^2list c ++ e) (pi^2list-!^-β c)) ∙ r))
   evalNorm₂-S (rinv◎l^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO!
+  ... | idp =
+    let r = (immersion⁻¹-respects≈ {_} {reverse (pi^2list c) ++ pi^2list c} {nil} (≈-inv-l (pi^2list c)))
+    in  (ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → e ++ pi^2list c) (pi^2list-!^-β c)) ∙ r))
   evalNorm₂-S (rinv◎r^ {c = c}) with (⟷₁^-eq-size c)
-  ... | idp = TODO!
+  ... | idp =
+    -- why can't I use the above case?
+    let r = (immersion⁻¹-respects≈ {_} {reverse (pi^2list c) ++ pi^2list c} {nil} (≈-inv-l (pi^2list c)))
+    in  ! (ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → e ++ pi^2list c) (pi^2list-!^-β c)) ∙ r))
   evalNorm₂-S id⟷₂^ = idp
   evalNorm₂-S (_■^_ α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
   ... | idp | q with q | (uip idp q)
@@ -89,7 +99,8 @@ module _ {c₁ c₂ : S n ⟷₁^ m} where
 
 evalNorm₂ : {c₁ c₂ : n ⟷₁^ m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
 evalNorm₂ {n = O} = evalNorm₂-O
-evalNorm₂ {n = S n} = evalNorm₂-S
+evalNorm₂ {n = S n} {c₁ = c₁} with (⟷₁^-eq-size c₁)
+... | idp = evalNorm₂-S
 
 _ : {n : ℕ} → evalNorm₁ (id⟷₁^ {n = n}) == evalNorm₁ (id⟷₁^ {n = n})
 _ = e= (λ { (O , p) → idp ; (S n , p) → idp })

@@ -4,6 +4,7 @@ module Pi+.Coxeter.Sn where
 
 open import lib.Base
 open import lib.Relation
+open import lib.PathGroupoid
 open import lib.NType
 open import lib.types.SetQuotient public
 open import lib.types.List
@@ -36,3 +37,29 @@ Sn n = SetQuot (CoxeterRel {n})
 instance
   Sn-level : {n : ℕ} → is-set (Sn n)
   Sn-level = SetQuot-is-set
+
+private
+  list++-assoc-lemma : {n : ℕ} → (l₁ l₂ l₃ l₄ : List (Fin n)) → (l₁ ++ l₂) ++ (l₃ ++ l₄) == l₁ ++ (l₂ ++ l₃) ++ l₄
+  list++-assoc-lemma l₁ l₂ l₃ l₄ = (++-assoc l₁ l₂ (l₃ ++ l₄)) ∙ ap (λ e → l₁ ++ e) (! (++-assoc l₂ l₃ l₄))
+
+idp≃ : {n : ℕ} → (l₁ l₂ : List (Fin (S n))) → (l₁ == l₂) → (l₁ ≈ l₂)
+idp≃ l₁ l₂ p = transport (λ e → l₁ ≈ e) p idp
+
+respects-++-lr : {n : ℕ} → (l m m' r : List (Fin (S n))) → (m ≈ m') → (l ++ (m ++ r)) ≈ (l ++ (m' ++ r))
+respects-++-lr l m m' r p = respects-++ {l = l} {l' = l} idp (respects-++ p idp)
+
+≈-inv-r : {n : ℕ} → (l : List (Fin n)) → (l ++ reverse l) ≈ nil
+≈-inv-r {O} l = unit
+≈-inv-r {S n} nil = idp
+≈-inv-r {S n} (x :: l) = 
+  trans (idp≃ _ _ (list++-assoc-lemma (x :: nil) l (reverse l) (x :: nil))) 
+  (trans (respects-++-lr (x :: nil) (l ++ reverse l) nil (x :: nil) (≈-inv-r l)) 
+  cancel)
+
+≈-inv-l : {n : ℕ} → (l : List (Fin n)) → ((reverse l) ++ l) ≈ nil
+≈-inv-l {O} l = unit
+≈-inv-l {S n} nil = idp
+≈-inv-l {S n} (x :: l) = 
+  trans (idp≃ _ _ (list++-assoc-lemma (reverse l) (x :: nil) (x :: nil) l)) 
+  (trans (respects-++-lr (reverse l) (x :: x :: nil) nil l cancel) 
+  (≈-inv-l l))
