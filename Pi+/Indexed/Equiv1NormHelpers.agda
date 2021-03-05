@@ -63,7 +63,7 @@ slide-transpos^ {O} (k , ltSR ()) (.0 , ltS) Sk<n
 slide-transpos^ {O} (k , pk) (n , ltSR ()) Sk<n
 slide-transpos^ {S m} (O , pk) (S O , pn) (ltSR ())
 slide-transpos^ {S m} (O , pk) (S (S n) , pn) Sk<n = swapr₊⟷₂^
-slide-transpos^ {S m} (S k , pk) (S n , pn) Sk<n = 
+slide-transpos^ {S m} (S k , pk) (S n , pn) Sk<n =
   let rec = slide-transpos^ ((k , <-cancel-S pk)) (n , <-cancel-S pn) (<-cancel-S Sk<n)
   in  hom◎⊕⟷₂^ ■^ (resp⊕⟷₂ rec ■^ hom⊕◎⟷₂^)
 
@@ -71,11 +71,11 @@ braid-transpos^ : {m : ℕ} → (n : Fin m) →
   transpos2pi^ S⟨ n ⟩ ◎^ transpos2pi^ ⟨ n ⟩ ◎^ transpos2pi^ S⟨ n ⟩ ⟷₂^
   transpos2pi^ ⟨ n ⟩ ◎^ transpos2pi^ S⟨ n ⟩ ◎^ transpos2pi^ ⟨ n ⟩
 braid-transpos^ {S m} (O , p0) = hexagonl₊r
-braid-transpos^ {S m} (S n , pn) 
+braid-transpos^ {S m} (S n , pn)
   rewrite <-has-all-paths (<-cancel-S (<-ap-S pn)) (<-ap-S (<-cancel-S pn))
   rewrite <-has-all-paths (<-trans ltS pn) (ltSR (<-cancel-S pn)) =
   let rec = braid-transpos^ (n , <-cancel-S pn)
-  in 
+  in
     _ ⟷₂^⟨ id⟷₂^ ⊡^ hom◎⊕⟷₂^ ⟩
     _ ⟷₂^⟨ hom◎⊕⟷₂^ ⟩
     _ ⟷₂^⟨ resp⊕⟷₂ rec ⟩
@@ -86,7 +86,7 @@ braid-transpos^ {S m} (S n , pn)
 cox≈2pi^ : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2pi^ r₁ ⟷₂^ list2pi^ r₂
 cox≈2pi^ cancel = (id⟷₂^ ⊡^ idr◎l^) ■^ transpos-cancel^
 cox≈2pi^ (swap x) = (id⟷₂^ ⊡^ idr◎l^) ■^ (slide-transpos^ _ _ x ■^ !⟷₂^ (id⟷₂^ ⊡^ idr◎l^))
-cox≈2pi^ braid = (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))  ■^ (braid-transpos^ _ ■^ !⟷₂^ ((id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^)))) 
+cox≈2pi^ braid = (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))  ■^ (braid-transpos^ _ ■^ !⟷₂^ ((id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))))
 cox≈2pi^ idp = id⟷₂^
 cox≈2pi^ (comm c) = !⟷₂^ (cox≈2pi^ c)
 cox≈2pi^ (trans c c₁) = cox≈2pi^ c ■^ cox≈2pi^ c₁

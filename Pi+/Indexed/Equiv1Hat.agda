@@ -35,7 +35,7 @@ quote^₁ (⊕^ c₁) = id⟷₁ ⊕ quote^₁ c₁
 denorm : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₀ (eval^₀ t₁) ⟷₁ quote^₀ (eval^₀ t₂)
 denorm {t₁ = t₁} {t₂ = t₂} c = (quote-eval^₀ t₁ ◎ c ◎ !⟷₁ (quote-eval^₀ t₂))
 
-denorm-⊕-β : (c₁ : t₁ ⟷₁ t₂) → (c₂ : t₃ ⟷₁ t₄) 
+denorm-⊕-β : (c₁ : t₁ ⟷₁ t₂) → (c₂ : t₃ ⟷₁ t₄)
     → denorm (c₁ ⊕ c₂) ⟷₂ (quote^₀++ _ _ ◎ ((denorm c₁) ⊕ (denorm c₂)) ◎ !⟷₁ (quote^₀++ _ _))
 denorm-⊕-β c₁ c₂ = !⟷₂ (
     _ ⟷₂⟨ assoc◎l ⟩
@@ -74,8 +74,8 @@ eval-quote^₁ : (c : n ⟷₁^ m) → eval^₁ (quote^₁ c) ⟷₂^ c
 eval-quote^₁ (swap₊^ {n = n})
     rewrite (ℕ-p (+-assoc 1 1 n))
     rewrite (ℕ-p (+-unit-r 1))
-    rewrite (ℕ-p (+-assoc 1 0 1)) = 
-        _ ⟷₂^⟨ idl◎l^ ⟩ -- 
+    rewrite (ℕ-p (+-assoc 1 0 1)) =
+        _ ⟷₂^⟨ idl◎l^ ⟩ --
         _ ⟷₂^⟨ idr◎l^ ⟩
         _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
         _ ⟷₂^⟨ idl◎l^ ⟩
@@ -98,10 +98,10 @@ quote-eval^₁ swap₊ = !⟷₂ (
     _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
-    _ ⟷₂⟨ TODO ⟩
+    _ ⟷₂⟨ {!!} ⟩
     _ ⟷₂∎)
-quote-eval^₁ (assocl₊ {n} {_} {m} {_} {o} {_}) = TODO
-quote-eval^₁ assocr₊ = TODO
+quote-eval^₁ (assocl₊ {n} {_} {m} {_} {o} {_}) = {!!}
+quote-eval^₁ assocr₊ = {!!}
 quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r)
 quote-eval^₁ (c₁ ◎ c₂) =
     let r₁ = quote-eval^₁ c₁
@@ -115,5 +115,5 @@ quote-eval^₁ (c₁ ⊕ c₂) =
     in !⟷₂ (
        _ ⟷₂⟨ denorm-⊕-β _ _ ⟩
        _ ⟷₂⟨ (id⟷₂ ⊡ (resp⊕⟷₂ r₁ r₂ ⊡ id⟷₂)) ⟩
-       _ ⟷₂⟨ TODO ⟩
+       _ ⟷₂⟨ {!!} ⟩
        _ ⟷₂∎)
