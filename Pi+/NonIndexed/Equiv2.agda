@@ -19,7 +19,7 @@ open import lib.types.SetQuotient
 open import lib.types.Coproduct
 
 eval₂ : {X Y : U} {p q : X ⟷₁ Y } → p ⟷₂ q → eval₁ p == eval₁ q
-eval₂ {p = p} {q = q} α = TODO
+eval₂ {p = p} {q = q} α = TODO-
 
 quote₂ : {X Y : UFin} {p q : X == Y} (α : p == q) → quote₁ p ⟷₂ quote₁ q
 quote₂ {p = p} {q = q} α = transport (λ e → quote₁ p ⟷₂ quote₁ e) α id⟷₂

@@ -4,7 +4,11 @@ module Pi+.Misc where
 
 open import lib.Base
 open import lib.Equivalence
+open import lib.Equivalence2
 open import lib.PathGroupoid
+open import lib.Funext
+open import lib.NType
+open import lib.NType2
 
 open import Pi+.Extra
 
@@ -52,16 +56,16 @@ inspect x = x with== idp
 
 ∘e-assoc : {A B C D : Type₀} → (ab : A ≃ B) → (bc : B ≃ C) → (cd : C ≃ D)
   → (cd ∘e (bc ∘e ab)) == (cd ∘e bc) ∘e ab
-∘e-assoc ab bc cd = TODO
+∘e-assoc ab bc cd = pair= idp (prop-has-all-paths _ _)
 
 ∘e-inv-r : {A B : Type₀} → (e : A ≃ B) → (e ∘e e ⁻¹) == (ide B)
-∘e-inv-r e = TODO
+∘e-inv-r e = pair= (λ= (λ x → <–-inv-r e x)) prop-has-all-paths-↓
 
-∘e-unit-r : {A B : Type₀} → (e : A ≃ B) → ((ide B) ∘e e) == e
-∘e-unit-r e = TODO
+∘e-unit-l : {A B : Type₀} → (e : A ≃ B) → ((ide B) ∘e e) == e
+∘e-unit-l e = pair= (λ= (λ x → idp)) prop-has-all-paths-↓
 
 ∘e-inv-l : {A B : Type₀} → (e : A ≃ B) → (e ⁻¹ ∘e e) == (ide A)
-∘e-inv-l e = TODO
+∘e-inv-l e = pair= (λ= (λ x → <–-inv-l e x)) prop-has-all-paths-↓
 
 -- post∘-equiv
 
@@ -73,12 +77,12 @@ cong≃ bc = equiv f g f-g g-f
     g : _
     g x = bc ⁻¹ ∘e x --
     f-g : _
-    f-g x = ∘e-assoc x (bc ⁻¹) bc ∙ ap (λ e → e ∘e x) (∘e-inv-r bc) ∙ ∘e-unit-r x --
+    f-g x = ∘e-assoc x (bc ⁻¹) bc ∙ ap (λ e → e ∘e x) (∘e-inv-r bc) ∙ ∘e-unit-l x --
     g-f : _
-    g-f x = ∘e-assoc x bc (bc ⁻¹) ∙ ap (λ e → e ∘e x) (∘e-inv-l bc) ∙ ∘e-unit-r x
+    g-f x = ∘e-assoc x bc (bc ⁻¹) ∙ ap (λ e → e ∘e x) (∘e-inv-l bc) ∙ ∘e-unit-l x
 
 double⁻¹ : {A B : Type₀} → (x : A ≃ B) → (x ⁻¹ ⁻¹) == x
-double⁻¹ x = pair= idp TODO
+double⁻¹ x = pair= idp (prop-has-all-paths _ _)
 
 !≃ : {A B C D : Type₀} → (A ≃ B) ≃ (C ≃ D) → (B ≃ A) ≃ (D ≃ C)
 !≃ (f , record { g = g ; f-g = f-g ; g-f = g-f ; adj = adj }) = equiv ff gg ff-gg gg-ff

@@ -122,14 +122,62 @@ eval₁-map-S ((x , xp) :: l) rewrite <-has-all-paths (<-cancel-S (<-ap-S xp)) x
 pi^2list-◎^-β : {c₁ c₂ : S n ⟷₁^ S n} → pi^2list (c₁ ◎^ c₂) == pi^2list c₁ ++ pi^2list c₂
 pi^2list-◎^-β = idp
 
-pi^2list-!-β : {c : S n ⟷₁^ S n} → pi^2list (!⟷₁^ c) == reverse (pi^2list c)
-pi^2list-!-β {O} {id⟷₁^} = idp
-pi^2list-!-β {O} {c₁ ◎^ c₂} with (⟷₁^-eq-size c₁)
-... | idp = ap (λ l → l ++ pi^2list (!⟷₁^ c₁)) (pi^2list-!-β {c = c₂})
-          ∙ ap (λ l → reverse (pi^2list c₂) ++ l) (pi^2list-!-β {c = c₁})
-          ∙ TODO
-pi^2list-!-β {O} {⊕^ c} = TODO
-pi^2list-!-β {S n} {c} = TODO
+module _ where
+  ++^-id-! : (p : n == m) → ++^-id p == !⟷₁^ (++^-id (! p))
+  ++^-id-! idp = idp
+
+  ++^-⊕-id : (c : n ⟷₁^ m) → ++^-⊕ c id⟷₁^ ⟷₂^ transport2 (λ n' m' → n' ⟷₁^ m') (! (+-unit-r n)) (! (+-unit-r m)) c
+  ++^-⊕-id c = TODO-
+
+  ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) → (c₂ : o ⟷₁^ p) → ++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂) == !⟷₁^ (++^-⊕ c₁ c₂)
+  ++^-⊕-! {n} swap₊^ c₂ with (⟷₁^-eq-size (++^-⊕ (id⟷₁^ {n = n}) (!⟷₁^ c₂)))
+  ... | q =  TODO-
+  ++^-⊕-! {O} id⟷₁^ c₂ = idp
+  ++^-⊕-! {S n} id⟷₁^ c₂ = ap ⊕^_ (++^-⊕-! {n} id⟷₁^ c₂)
+  ++^-⊕-! (c₁ ◎^ c₂) c₃ = 
+    let r₁ = ++^-⊕-! c₁ id⟷₁^
+        r₂ = ++^-⊕-! c₂ c₃
+    in  ap2 _◎^_ r₂ r₁ ∙ TODO-
+  ++^-⊕-! (⊕^ c₁) c₂ = ap ⊕^_ (++^-⊕-! c₁ c₂)
+
+  ++^-swap-! : {n m : ℕ} → ++^-swap m n == !⟷₁^ (++^-swap n m)
+  ++^-swap-! {n} {m} = TODO-
+
+  eval^₁-! : {t₁ : U n} → {t₂ : U m} → (c : t₁ ⟷₁ t₂) → eval^₁ (!⟷₁ c) == !⟷₁^ (eval^₁ c)
+  eval^₁-! unite₊l = idp
+  eval^₁-! uniti₊l = idp
+  eval^₁-! (swap₊ {n} {_} {m} {_}) = ++^-swap-! {n} {m}
+  eval^₁-! assocl₊ = ++^-id-! _
+  eval^₁-! assocr₊ = ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
+  eval^₁-! id⟷₁ = idp
+  eval^₁-! (c₁ ◎ c₂) = 
+    let r₁ = eval^₁-! c₁
+        r₂ = eval^₁-! c₂
+    in  ap2 (λ c₁' c₂' → c₁' ◎^ c₂') r₂ r₁
+  eval^₁-! (c₁ ⊕ c₂) = 
+    let r₁ = eval^₁-! c₁
+        r₂ = eval^₁-! c₂
+    in  ap2 ++^-⊕ r₁ r₂ ∙ ++^-⊕-! (eval^₁ c₁) (eval^₁ c₂)
+
+  reverse-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → reverse (l₁ ++ l₂) == (reverse l₂) ++ (reverse l₁)
+  reverse-++ nil l₂ = ! (++-unit-r _)
+  reverse-++ (x :: l₁) l₂ = 
+    let r = reverse-++ l₁ l₂
+    in  ap (λ l → snoc l x) r ∙ ++-assoc (reverse l₂) (reverse l₁) (x :: nil)
+
+  pi^2list-!^-β : (c : (S n) ⟷₁^ (S m)) → pi^2list (!⟷₁^ c) == transport (λ k → List (Fin k)) (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (reverse (pi^2list c))
+  pi^2list-!^-β swap₊^ = idp
+  pi^2list-!^-β id⟷₁^ = idp
+  pi^2list-!^-β (c₁ ◎^ c₂) with (⟷₁^-eq-size c₁) with (⟷₁^-eq-size c₂)
+  ... | idp | idp = 
+    let r₁ = pi^2list-!^-β c₁
+        r₂ = pi^2list-!^-β c₂
+    in  ap2 (λ l₁ l₂ → l₁ ++ l₂) r₂ r₁ ∙ ! (reverse-++ (pi^2list c₁) (pi^2list c₂))
+  pi^2list-!^-β {O} (⊕^ c) with (⟷₁^-eq-size c)
+  ... | idp = idp
+  pi^2list-!^-β {S n} (⊕^ c) with (⟷₁^-eq-size c)
+  ... | idp = ap (map S⟨_⟩) (pi^2list-!^-β c) ∙ ! (reverse-map S⟨_⟩ (pi^2list c))
+
 
 pi^2list2pi^ : (c : S n ⟷₁^ S m) →
     (list2pi^I (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (pi^2list c)) ⟷₂^ c
