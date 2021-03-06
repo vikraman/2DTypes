@@ -13,7 +13,7 @@ open import lib.Basics
 open import lib.types.Fin
 open import lib.types.List
 open import lib.types.BAut
-open import lib.types.Nat as N
+open import lib.types.Nat as N renaming (_+_ to _+N_)
 open import lib.types.Truncation
 open import lib.NType2
 open import lib.types.SetQuotient
@@ -100,7 +100,13 @@ quote-eval^₁ swap₊ = !⟷₂ (
     _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
     _ ⟷₂⟨ {!!} ⟩
     _ ⟷₂∎)
-quote-eval^₁ (assocl₊ {n} {_} {m} {_} {o} {_}) = {!!}
+quote-eval^₁ (assocl₊ {n₁} {t₁} {n₂} {t₂} {n₃} {t₃}) =
+  quote^₁ (transport (λ n → n₁ +N (n₂ +N n₃) ⟷₁^ n) (! (+-assoc n₁ n₂ n₃)) id⟷₁^)
+    ⟷₂⟨ {!!} ⟩
+  transport (λ n → quote^₀ (n₁ +N (n₂ +N n₃)) ⟷₁ quote^₀ n) (! (+-assoc n₁ n₂ n₃)) id⟷₁
+    ⟷₂⟨ {!!} ⟩
+  denorm assocl₊ ⟷₂∎
+
 quote-eval^₁ assocr₊ = {!!}
 quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r)
 quote-eval^₁ (c₁ ◎ c₂) =
