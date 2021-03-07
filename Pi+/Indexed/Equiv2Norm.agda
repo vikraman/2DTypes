@@ -29,6 +29,10 @@ abstract
   loop-η : ∀ {i} {X : Type i} {{_ : is-set X}} {x : X} → (p : x == x) → p == idp
   loop-η p = prop-has-all-paths p idp
 
+abstract
+  uip : ∀ {i} {X : Type i} {{_ : is-set X}} {x y : X} → (p q : x == y) → p == q
+  uip p q = prop-has-all-paths p q
+
 module _ {c₁ c₂ : O ⟷₁^ m} where
 
   evalNorm₂-O : c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
@@ -61,7 +65,8 @@ module _ {c₁ c₂ : S n ⟷₁^ m} where
   ... | idp = TODO!
   evalNorm₂-S id⟷₂^ = idp
   evalNorm₂-S (_■^_ α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-  ... | idp | q rewrite loop-η q = TODO!
+  ... | idp | q with q | (uip idp q)
+  ... | .idp | idp = TODO!
   evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α_₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
   ... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO!
   evalNorm₂-S (⊕id⟷₁⟷₂^ {n = O}) = idp

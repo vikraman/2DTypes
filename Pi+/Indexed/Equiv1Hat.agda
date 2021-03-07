@@ -98,16 +98,16 @@ quote-eval^₁ swap₊ = !⟷₂ (
     _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
-    _ ⟷₂⟨ {!!} ⟩
+    _ ⟷₂⟨ TODO! ⟩
     _ ⟷₂∎)
 quote-eval^₁ (assocl₊ {n₁} {t₁} {n₂} {t₂} {n₃} {t₃}) =
   quote^₁ (transport (λ n → n₁ +N (n₂ +N n₃) ⟷₁^ n) (! (+-assoc n₁ n₂ n₃)) id⟷₁^)
-    ⟷₂⟨ {!!} ⟩
+    ⟷₂⟨ TODO- ⟩
   transport (λ n → quote^₀ (n₁ +N (n₂ +N n₃)) ⟷₁ quote^₀ n) (! (+-assoc n₁ n₂ n₃)) id⟷₁
-    ⟷₂⟨ {!!} ⟩
+    ⟷₂⟨ TODO- ⟩
   denorm assocl₊ ⟷₂∎
 
-quote-eval^₁ assocr₊ = {!!}
+quote-eval^₁ assocr₊ = TODO-
 quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r)
 quote-eval^₁ (c₁ ◎ c₂) =
     let r₁ = quote-eval^₁ c₁
@@ -121,5 +121,5 @@ quote-eval^₁ (c₁ ⊕ c₂) =
     in !⟷₂ (
        _ ⟷₂⟨ denorm-⊕-β _ _ ⟩
        _ ⟷₂⟨ (id⟷₂ ⊡ (resp⊕⟷₂ r₁ r₂ ⊡ id⟷₂)) ⟩
-       _ ⟷₂⟨ {!!} ⟩
+       _ ⟷₂⟨ TODO! ⟩
        _ ⟷₂∎)

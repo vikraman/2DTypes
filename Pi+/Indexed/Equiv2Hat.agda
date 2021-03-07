@@ -90,9 +90,9 @@ quote^₂ !⊕id⟷₁⟷₂^ = split⊕-id⟷₁
 quote^₂ hom◎⊕⟷₂^ = _■_ hom◎⊕⟷₂ (resp⊕⟷₂ idl◎l id⟷₂)
 quote^₂ (resp⊕⟷₂ α) = resp⊕⟷₂ id⟷₂ (quote^₂ α)
 quote^₂ hom⊕◎⟷₂^ = !⟷₂ (_■_ hom◎⊕⟷₂ (resp⊕⟷₂ idl◎l id⟷₂))
-quote^₂ swapr₊⟷₂^ = 
+quote^₂ swapr₊⟷₂^ =
     _ ⟷₂⟨ assoc◎l ⟩
-    _ ⟷₂⟨ assocl₊l ⊡ id⟷₂ ⟩ 
+    _ ⟷₂⟨ assocl₊l ⊡ id⟷₂ ⟩
     _ ⟷₂⟨ assoc◎r ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂) ⟩
@@ -104,7 +104,7 @@ quote^₂ swapr₊⟷₂^ =
     _ ⟷₂⟨ assoc◎l ⟩
     _ ⟷₂⟨ assoc◎r ⊡ resp⊕⟷₂ id⟷₂ (resp⊕⟷₂ id⟷₂ idr◎l) ⟩
     _ ⟷₂∎
-quote^₂ (swapl₊⟷₂^ {c = c}) = 
+quote^₂ (swapl₊⟷₂^ {c = c}) =
     let r = (quote^₂ (swapr₊⟷₂^ {c = c}))
     in !⟷₂ r
 quote^₂ hexagonl₊l =
@@ -112,6 +112,6 @@ quote^₂ hexagonl₊l =
         s₂ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
     in  s₁ ◎ (id⟷₁ ⊕ s₂) ◎ s₁ ⟷₂⟨ TODO! ⟩
         (id⟷₁ ⊕ s₂) ◎ s₁ ◎ (id⟷₁ ⊕ s₂) ⟷₂∎
-quote^₂ hexagonl₊r = 
+quote^₂ hexagonl₊r =
     let r = (quote^₂ hexagonl₊l)
     in !⟷₂ r
