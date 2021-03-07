@@ -3,6 +3,7 @@
 module Pi+.Indexed.Equiv1NormHelpers where
 
 open import lib.Base
+open import lib.PathFunctor
 open import lib.PathGroupoid
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma
@@ -134,7 +135,7 @@ module _ where
   ... | q =  TODO-
   ++^-⊕-! {O} id⟷₁^ c₂ = idp
   ++^-⊕-! {S n} id⟷₁^ c₂ = ap ⊕^_ (++^-⊕-! {n} id⟷₁^ c₂)
-  ++^-⊕-! (c₁ ◎^ c₂) c₃ = 
+  ++^-⊕-! (c₁ ◎^ c₂) c₃ =
     let r₁ = ++^-⊕-! c₁ id⟷₁^
         r₂ = ++^-⊕-! c₂ c₃
     in  ap2 _◎^_ r₂ r₁ ∙ TODO-
@@ -150,18 +151,18 @@ module _ where
   eval^₁-! assocl₊ = ++^-id-! _
   eval^₁-! assocr₊ = ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
   eval^₁-! id⟷₁ = idp
-  eval^₁-! (c₁ ◎ c₂) = 
+  eval^₁-! (c₁ ◎ c₂) =
     let r₁ = eval^₁-! c₁
         r₂ = eval^₁-! c₂
     in  ap2 (λ c₁' c₂' → c₁' ◎^ c₂') r₂ r₁
-  eval^₁-! (c₁ ⊕ c₂) = 
+  eval^₁-! (c₁ ⊕ c₂) =
     let r₁ = eval^₁-! c₁
         r₂ = eval^₁-! c₂
     in  ap2 ++^-⊕ r₁ r₂ ∙ ++^-⊕-! (eval^₁ c₁) (eval^₁ c₂)
 
   reverse-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → reverse (l₁ ++ l₂) == (reverse l₂) ++ (reverse l₁)
   reverse-++ nil l₂ = ! (++-unit-r _)
-  reverse-++ (x :: l₁) l₂ = 
+  reverse-++ (x :: l₁) l₂ =
     let r = reverse-++ l₁ l₂
     in  ap (λ l → snoc l x) r ∙ ++-assoc (reverse l₂) (reverse l₁) (x :: nil)
 
@@ -169,7 +170,7 @@ module _ where
   pi^2list-!^-β swap₊^ = idp
   pi^2list-!^-β id⟷₁^ = idp
   pi^2list-!^-β (c₁ ◎^ c₂) with (⟷₁^-eq-size c₁) with (⟷₁^-eq-size c₂)
-  ... | idp | idp = 
+  ... | idp | idp =
     let r₁ = pi^2list-!^-β c₁
         r₂ = pi^2list-!^-β c₂
     in  ap2 (λ l₁ l₂ → l₁ ++ l₂) r₂ r₁ ∙ ! (reverse-++ (pi^2list c₁) (pi^2list c₂))

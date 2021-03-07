@@ -23,6 +23,9 @@ private
 ++^-id : {n m : ℕ} → (n == m) → n ⟷₁^ m
 ++^-id p = transport (λ n → _ ⟷₁^ n) p id⟷₁^
 
+-- ++^-id {O} {O} p = id⟷₁^
+-- ++^-id {S n} {S m} p = ⊕^ (++^-id (ℕ-S-is-inj n m p))
+
 ++^-cons : (n : ℕ) → (S n) ⟷₁^ (n ++ 1)
 ++^-cons O = id⟷₁^
 ++^-cons (S n) = swap₊^ ◎^ (⊕^ (++^-cons n))

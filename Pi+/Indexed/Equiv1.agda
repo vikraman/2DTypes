@@ -79,21 +79,21 @@ pi^2list-!-nil {S n}
 -- pi^2list-!-nil' : pi^2list (⊕^ eval^₁ (!⟷₁ (quote-eval^₀ (quote^₀ n)))) == nil
 -- pi^2list-!-nil' {n} =
 --   ap (λ x → pi^2list (⊕^ x)) (eval^₁-! (quote-eval^₀ (quote^₀ n))) ∙
---   pi^2list-! (⊕^ (eval^₁ (quote-eval^₀ (quote^₀ n)))) ∙ 
+--   pi^2list-! (⊕^ (eval^₁ (quote-eval^₀ (quote^₀ n)))) ∙
 --   transport (λ e → transport (λ k → List (Fin k)) e (reverse (pi^2list (⊕^ eval^₁ (quote-eval^₀ (quote^₀ n))))) == nil) (ℕ-p idp) (ap reverse pi^2list-nil)
 
 
 eval-quote₁ : (e : Aut (Fin n)) → (eval₁ {t₁ = (quote₀ (pFin _))} {t₂ = (quote₀ (pFin _))} (quote₁ idp e)) == e
 eval-quote₁ {O} e = contr-has-all-paths {{Aut-FinO-level}} _ _
-eval-quote₁ {S n} e 
-  with evalNorm₂ (eval-quote^₁ (quoteNorm₁ idp e)) 
+eval-quote₁ {S n} e
+  with evalNorm₂ (eval-quote^₁ (quoteNorm₁ idp e))
   with ⟷₁-eq-size (quote^₁ (list2pi^ (immersion (–> Fin≃Lehmer e))))
-... | q | r 
+... | q | r
   rewrite (ℕ-p (+-assoc 1 0 n))
   rewrite (ℕ-p (+-unit-r 0))
   rewrite (ℕ-p (+-unit-r 1))
   rewrite (ℕ-p (+-assoc 0 0 1))
-  rewrite (id-⊕-== {n = n}) 
+  rewrite (id-⊕-== {n = n})
   rewrite (pi^2list-nil {n = n})
   rewrite (pi^2list-!-nil {n = n}) =
     let s = eval-quoteNorm₁ e

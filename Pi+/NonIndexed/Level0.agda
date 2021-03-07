@@ -3,6 +3,7 @@
 module Pi+.NonIndexed.Level0 where
 
 open import lib.Base
+open import lib.PathFunctor
 open import lib.PathGroupoid
 open import lib.types.Nat renaming (_+_ to _+ℕ_)
 open import lib.types.Sigma

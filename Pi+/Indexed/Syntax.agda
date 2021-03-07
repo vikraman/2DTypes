@@ -2,6 +2,7 @@
 
 open import lib.Base
 open import lib.NType
+open import lib.PathFunctor
 open import lib.PathGroupoid
 import lib.types.Nat as N
 
