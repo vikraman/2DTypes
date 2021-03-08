@@ -148,8 +148,8 @@ module _ where
   eval^₁-! unite₊l = idp
   eval^₁-! uniti₊l = idp
   eval^₁-! (swap₊ {n} {_} {m} {_}) = ++^-swap-! {n} {m}
-  eval^₁-! assocl₊ = ++^-id-! _
-  eval^₁-! assocr₊ = ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
+  eval^₁-! assocl₊ = TODO-
+  eval^₁-! assocr₊ = idp -- ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
   eval^₁-! id⟷₁ = idp
   eval^₁-! (c₁ ◎ c₂) =
     let r₁ = eval^₁-! c₁
