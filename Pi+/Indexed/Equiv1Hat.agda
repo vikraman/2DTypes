@@ -64,50 +64,25 @@ eval^₁ : {t₁ : U n} {t₂ : U m} → (t₁ ⟷₁ t₂) → (eval^₀ t₁ �
 eval^₁ unite₊l = id⟷₁^
 eval^₁ uniti₊l = id⟷₁^
 eval^₁ (swap₊ {t₁ = t₁} {t₂ = t₂}) = ++^-swap (eval^₀ t₁) (eval^₀ t₂)
-eval^₁ (assocl₊ {n} {t₁ = t₁} {m} {t₂ = t₂} {o} {t₃ = t₃}) = ++^-id (! (+-assoc n m o))
-eval^₁ (assocr₊ {n} {t₁ = t₁} {m} {t₂ = t₂} {o} {t₃ = t₃}) = ++^-id (+-assoc n m o)
+eval^₁ (assocl₊ {n} {t₁ = t₁} {m} {t₂ = t₂} {o} {t₃ = t₃}) = !⟷₁^ (++^-assoc (eval^₀ t₁) (eval^₀ t₂) (eval^₀ t₃))
+eval^₁ (assocr₊ {n} {t₁ = t₁} {m} {t₂ = t₂} {o} {t₃ = t₃}) = ++^-assoc (eval^₀ t₁) (eval^₀ t₂) (eval^₀ t₃)
 eval^₁ id⟷₁ = id⟷₁^
 eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
 eval-quote^₁ : (c : n ⟷₁^ m) → eval^₁ (quote^₁ c) ⟷₂^ c
-eval-quote^₁ (swap₊^ {n = n})
-    rewrite (ℕ-p (+-assoc 1 1 n))
-    rewrite (ℕ-p (+-unit-r 1))
-    rewrite (ℕ-p (+-assoc 1 0 1)) =
-        _ ⟷₂^⟨ idl◎l^ ⟩ --
-        _ ⟷₂^⟨ idr◎l^ ⟩
-        _ ⟷₂^⟨ ⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)) ⟩
-        _ ⟷₂^⟨ idl◎l^ ⟩
-        _ ⟷₂^⟨ idr◎l^ ⊡^ idl◎l^ ⟩
-        _ ⟷₂^⟨ idr◎l^ ⟩
-        swap₊^ ⟷₂^∎
+eval-quote^₁ (swap₊^ {n = n}) = TODO!
 eval-quote^₁ id⟷₁^ = id⟷₂^
-eval-quote^₁ (c ◎^ c₁) = eval-quote^₁ c ⊡^ eval-quote^₁ c₁
+eval-quote^₁ (c₁ ◎^ c₂) = eval-quote^₁ c₁ ⊡^ eval-quote^₁ c₂
 eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp = resp⊕⟷₂ (eval-quote^₁ c)
 
 quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
 quote-eval^₁ unite₊l = !⟷₂ ((uniti₊l⟷₂l ⊡ id⟷₂) ■ linv◎l)
 quote-eval^₁ uniti₊l = !⟷₂ ((id⟷₂ ⊡ (id⟷₂ ⊡ unite₊l⟷₂r)) ■ (assoc◎l ■ linv◎l))
-quote-eval^₁ swap₊ = !⟷₂ (
-    _ ⟷₂⟨ (id⟷₂ ⊡ assoc◎l) ⟩
-    _ ⟷₂⟨ (id⟷₂ ⊡ (swapl₊⟷₂ ⊡ id⟷₂)) ⟩
-    _ ⟷₂⟨ assoc◎r ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡  assoc◎r) ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
-    _ ⟷₂⟨ TODO! ⟩
-    _ ⟷₂∎)
-quote-eval^₁ (assocl₊ {n₁} {t₁} {n₂} {t₂} {n₃} {t₃}) =
-  quote^₁ (transport (λ n → n₁ +N (n₂ +N n₃) ⟷₁^ n) (! (+-assoc n₁ n₂ n₃)) id⟷₁^)
-    ⟷₂⟨ TODO- ⟩
-  transport (λ n → quote^₀ (n₁ +N (n₂ +N n₃)) ⟷₁ quote^₀ n) (! (+-assoc n₁ n₂ n₃)) id⟷₁
-    ⟷₂⟨ TODO- ⟩
-  denorm assocl₊ ⟷₂∎
-
-quote-eval^₁ assocr₊ = TODO-
+quote-eval^₁ swap₊ = TODO!
+quote-eval^₁ assocl₊ = TODO!
+quote-eval^₁ assocr₊ = TODO!
 quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r)
 quote-eval^₁ (c₁ ◎ c₂) =
     let r₁ = quote-eval^₁ c₁
