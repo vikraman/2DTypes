@@ -71,7 +71,15 @@ eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
 eval-quote^₁ : (c : n ⟷₁^ m) → eval^₁ (quote^₁ c) ⟷₂^ c
-eval-quote^₁ (swap₊^ {n = n}) = TODO!
+eval-quote^₁ (swap₊^ {n = n}) = 
+        _ ⟷₂^⟨ ⊕id⟷₁⟷₂^ ⊡^ (((⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)))) ⊡^ ⊕id⟷₁⟷₂^) ⟩
+        _ ⟷₂^⟨ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩
+        _ ⟷₂^⟨ idl◎l^ ⟩
+        _ ⟷₂^⟨ id⟷₂^ ⊡^ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⟩
+        swap₊^ ⟷₂^∎
 eval-quote^₁ id⟷₁^ = id⟷₂^
 eval-quote^₁ (c₁ ◎^ c₂) = eval-quote^₁ c₁ ⊡^ eval-quote^₁ c₂
 eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c)
@@ -80,7 +88,16 @@ eval-quote^₁ (⊕^ c) with (⟷₁^-eq-size c)
 quote-eval^₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → quote^₁ (eval^₁ c) ⟷₂ denorm c
 quote-eval^₁ unite₊l = !⟷₂ ((uniti₊l⟷₂l ⊡ id⟷₂) ■ linv◎l)
 quote-eval^₁ uniti₊l = !⟷₂ ((id⟷₂ ⊡ (id⟷₂ ⊡ unite₊l⟷₂r)) ■ (assoc◎l ■ linv◎l))
-quote-eval^₁ swap₊ = TODO!
+quote-eval^₁ swap₊ = !⟷₂ (
+    _ ⟷₂⟨ (id⟷₂ ⊡ assoc◎l) ⟩
+    _ ⟷₂⟨ (id⟷₂ ⊡ (swapl₊⟷₂ ⊡ id⟷₂)) ⟩
+    _ ⟷₂⟨ assoc◎r ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡  assoc◎r) ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
+    _ ⟷₂⟨ TODO! ⟩
+    _ ⟷₂∎)
 quote-eval^₁ assocl₊ = TODO!
 quote-eval^₁ assocr₊ = TODO!
 quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r)
