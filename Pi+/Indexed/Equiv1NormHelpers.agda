@@ -13,6 +13,7 @@ open import lib.NType
 
 open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
+open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv0Hat
 open import Pi+.Indexed.Equiv1Hat

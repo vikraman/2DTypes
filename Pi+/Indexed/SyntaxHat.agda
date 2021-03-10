@@ -62,6 +62,7 @@ big-swap₊^ c with (⟷₁^-eq-size c)
 
 -- -- -- 2-combinators
 
+
 data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
   assoc◎l^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₂ ⟷₁^ t₃} {c₃ : t₃ ⟷₁^ t₄} →
           (c₁ ◎^ (c₂ ◎^ c₃)) ⟷₂^ ((c₁ ◎^ c₂) ◎^ c₃)
@@ -83,23 +84,23 @@ data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
   -- New ones
   ⊕id⟷₁⟷₂^ : ⊕^ id⟷₁^ {n =  n} ⟷₂^ id⟷₁^ {n =  (S n)}
   !⊕id⟷₁⟷₂^ : id⟷₁^ {n =  (S n)} ⟷₂^ ⊕^ id⟷₁^ {n =  n}
-  hom◎⊕⟷₂^ : {c₁ : (n) ⟷₁^ (m)} {c₂ : (m) ⟷₁^ (o)} → 
+  hom◎⊕⟷₂^ : {c₁ : (n) ⟷₁^ (m)} {c₂ : (m) ⟷₁^ (o)} →
          ((⊕^ c₁) ◎^ (⊕^ c₂)) ⟷₂^ ⊕^ (c₁ ◎^ c₂)
   resp⊕⟷₂  :
          {c₁ : (n) ⟷₁^ (m)} {c₂ : (n) ⟷₁^ (m)} → (c₁ ⟷₂^ c₂) → (⊕^ c₁) ⟷₂^ (⊕^ c₂)
-  hom⊕◎⟷₂^ : {c₁ : (n) ⟷₁^ (m)} {c₂ : (m) ⟷₁^ (o)} → 
+  hom⊕◎⟷₂^ : {c₁ : (n) ⟷₁^ (m)} {c₂ : (m) ⟷₁^ (o)} →
          ⊕^ (c₁ ◎^ c₂) ⟷₂^ ((⊕^ c₁) ◎^ (⊕^ c₂))
 
-  swapr₊⟷₂^ : {c : (n) ⟷₁^ (n)} 
+  swapr₊⟷₂^ : {c : (n) ⟷₁^ (n)}
     → (⊕^ (⊕^ c)) ◎^ swap₊^ ⟷₂^ swap₊^ ◎^ (⊕^ (⊕^ c))
-  swapl₊⟷₂^ : {c : (n) ⟷₁^ (n)} 
+  swapl₊⟷₂^ : {c : (n) ⟷₁^ (n)}
     → swap₊^ ◎^ (⊕^ (⊕^ c)) ⟷₂^ (⊕^ (⊕^ c)) ◎^ swap₊^
 
-  hexagonl₊l : (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^) 
+  hexagonl₊l : (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^)
     ⟷₂^ (⊕^ swap₊^) ◎^ (swap₊^ ◎^ ⊕^ swap₊^)
-  
-  hexagonl₊r : (⊕^ swap₊^) ◎^ (swap₊^ ◎^ ⊕^ swap₊^) 
-    ⟷₂^ (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^) 
+
+  hexagonl₊r : (⊕^ swap₊^) ◎^ (swap₊^ ◎^ ⊕^ swap₊^)
+    ⟷₂^ (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^)
 
 -- -- -- Equational reasoning
 
@@ -145,6 +146,14 @@ c₊⟷₂id⟷₁ (_◎^_ {m = ((S m))} c₁ c₂) with (⟷₁^-eq-size c₂)
 
 ⊕⊕id⟷₁⟷₂^ : {n : ℕ} → (⊕^ ⊕^ id⟷₁^ {n = n}) ⟷₂^ id⟷₁^ {n = S (S n)}
 ⊕⊕id⟷₁⟷₂^ = _■^_ (resp⊕⟷₂ ⊕id⟷₁⟷₂^) ⊕id⟷₁⟷₂^
+
+-- Pasting equations
+
+infixr 50 _□^_
+
+_□^_ : {c₁ c₂ c₃ : t₁ ⟷₁^ t₂}
+     → (c₁ ⟷₂^ c₃) → (c₂ ⟷₂^ c₃) → (c₁ ⟷₂^ c₂)
+α₁ □^ α₂ = α₁ ■^ !⟷₂^ α₂
 
 -- -- -- 3-combinators trivial
 
