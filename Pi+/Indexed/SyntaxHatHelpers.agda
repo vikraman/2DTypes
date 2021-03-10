@@ -65,9 +65,13 @@ private
 ++^-pentagon : (n m o p : ℕ)
              → (++^-assoc (n ++ m) o p) ◎^ ++^-assoc n m (o ++ p) ⟷₂^
                ++^-r (++^-assoc n m o) ◎^ ++^-assoc n (m ++ o) p ◎^ ++^-⊕ (id⟷₁^ {n = n}) (++^-assoc m o p)
-++^-pentagon n m o p = TODO!
+++^-pentagon O O o p = idl◎l^ □^ idl◎l^ □^ idl◎r^
+++^-pentagon O (S m) o p = idl◎r^ □^ idl◎l^ □^  idl◎l^ □^ idl◎l^ □^ idr◎l^
+++^-pentagon (S n) m o p = TODO!
 
 ++^-hexagon : (n m o : ℕ)
             → (++^-assoc n m o) ◎^ ++^-swap n (m ++ o) ◎^ ++^-assoc m o n ⟷₂^
               ++^-⊕ (++^-swap n m) (id⟷₁^ {n = o}) ◎^ ++^-assoc m n o ◎^ ++^-⊕ (id⟷₁^ {n = m}) (++^-swap n o)
-++^-hexagon n m o = TODO!
+++^-hexagon O O o = idl◎l^ □^ idl◎l^ □^ idl◎r^ □^ idl◎l^ □^ idl◎l^ □^ idr◎r^
+++^-hexagon O (S m) o = TODO!
+++^-hexagon (S n) m o = TODO!
