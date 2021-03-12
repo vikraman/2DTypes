@@ -55,6 +55,8 @@ private
 ++^-⊕ {S n} id⟷₁^ c₂ = ⊕^ (++^-⊕ {n} id⟷₁^ c₂)
 ++^-⊕ (c₁ ◎^ c₃) c₂ = (++^-⊕ c₁ c₂) ◎^ ++^-⊕ c₃ id⟷₁^
 ++^-⊕ (⊕^ c₁) c₂ = ⊕^ (++^-⊕ c₁ c₂)
+-- ++^-⊕ {n} {m} {o} {p} c₁ c₂ with ⟷₁^-eq-size c₁
+-- ... | idp = ++^-l c₂
 
 ++^-triangle : (n m : ℕ)
              → (++^-assoc n O m) ◎^ ++^-l (++^-unit-l m) ⟷₂^ ++^-r (++^-unit-r n)
