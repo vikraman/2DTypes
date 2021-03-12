@@ -4,6 +4,7 @@ module Pi+.Indexed.Equiv2Hat where
 
 open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
+open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.UFin
 open import Pi+.Extra
 open import Pi+.UFin.BAut

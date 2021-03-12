@@ -20,38 +20,6 @@ private
   variable
     n m o p : ℕ
 
-++^-id : {n m : ℕ} → (n == m) → n ⟷₁^ m
-++^-id p = transport (λ n → _ ⟷₁^ n) p id⟷₁^
-
--- ++^-id {O} {O} p = id⟷₁^
--- ++^-id {S n} {S m} p = ⊕^ (++^-id (ℕ-S-is-inj n m p))
-
-++^-unit-r : (n : ℕ) → n ++ O ⟷₁^ n
-++^-unit-r O = id⟷₁^
-++^-unit-r (S n) = ⊕^ (++^-unit-r n)
-
-++^-assoc : (n m o : ℕ) → (n ++ m) ++ o ⟷₁^ n ++ (m ++ o)
-++^-assoc O m o = id⟷₁^
-++^-assoc (S n) m o = ⊕^ ++^-assoc n m o
-
-++^-cons : (n : ℕ) → (S n) ⟷₁^ (n ++ 1)
-++^-cons O = id⟷₁^
-++^-cons (S n) = swap₊^ ◎^ (⊕^ (++^-cons n))
-
-++^-⊕ : {n m o p : ℕ} → (n ⟷₁^ m) → (o ⟷₁^ p) → (n ++ o) ⟷₁^ (m ++ p)
-++^-⊕ (swap₊^ {n = n}) c₂ = big-swap₊^ (++^-⊕ id⟷₁^ c₂)
-++^-⊕ {O} id⟷₁^ c₂ = c₂
-++^-⊕ {S n} id⟷₁^ c₂ = ⊕^ (++^-⊕ {n} id⟷₁^ c₂)
-++^-⊕ (c₁ ◎^ c₃) c₂ = (++^-⊕ c₁ c₂) ◎^ ++^-⊕ c₃ id⟷₁^
-++^-⊕ (⊕^ c₁) c₂ = ⊕^ (++^-⊕ c₁ c₂)
-
-++^-swap : (n m : ℕ) → (n ++ m) ⟷₁^ (m ++ n)
-++^-swap O m = !⟷₁^ (++^-unit-r m)
-++^-swap (S n) m = (⊕^ ++^-swap n m)
-                 ◎^ ++^-cons (m ++ n)
-                 ◎^ ++^-assoc m n 1
-                 ◎^ ++^-⊕ id⟷₁^ (!⟷₁^ (++^-cons n))
-
 quote^₀ : (n : ℕ) → U n
 quote^₀ O = O
 quote^₀ (S n) = I U.+ quote^₀ n
