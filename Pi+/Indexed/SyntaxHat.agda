@@ -102,6 +102,13 @@ data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
   hexagonl₊r : (⊕^ swap₊^) ◎^ (swap₊^ ◎^ ⊕^ swap₊^)
     ⟷₂^ (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^)
 
+
+!!⟷₁^ : (c : n ⟷₁^ m) → !⟷₁^ (!⟷₁^ c) ⟷₂^ c
+!!⟷₁^ swap₊^ = id⟷₂^
+!!⟷₁^ id⟷₁^ = id⟷₂^
+!!⟷₁^ (c ◎^ c₁) = !!⟷₁^ c ⊡^ !!⟷₁^ c₁
+!!⟷₁^ (⊕^ c) = resp⊕⟷₂ (!!⟷₁^ c) 
+
 -- -- -- Equational reasoning
 
 infixr 10 _⟷₂^⟨_⟩_

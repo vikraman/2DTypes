@@ -55,7 +55,14 @@ eval^₂ id⟷₁⊕id⟷₁⟷₂ = TODO!
 eval^₂ split⊕-id⟷₁ = TODO!
 eval^₂ hom⊕◎⟷₂ = TODO!
 eval^₂ hom◎⊕⟷₂ = TODO!
-eval^₂ triangle₊l = TODO!
+eval^₂ (triangle₊l {n}) = 
+    _ ⟷₂^⟨ (++^-⊕-id-r (++^-swap n 0)) ⊡^ ++^-⊕-id-r (id⟷₁^ {n}) ⟩
+    _ ⟷₂^⟨ idr◎l^  ⟩
+    _ ⟷₂^⟨ (++^-r⟷₂ (++^-swap-0 n)) ⟩
+    _ ⟷₂^⟨ (++^-r⟷₂ (!!⟷₁^ (++^-unit-r n))) ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-triangle n _) ⟩
+    _ ⟷₂^⟨ id⟷₂^ ⊡^ !⟷₂^ (++^-⊕-id-l id⟷₁^) ⟩
+    _ ⟷₂^∎
 eval^₂ triangle₊r = TODO!
 eval^₂ pentagon₊l = TODO!
 eval^₂ pentagon₊r = TODO!
