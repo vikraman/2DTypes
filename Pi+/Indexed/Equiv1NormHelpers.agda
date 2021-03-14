@@ -17,7 +17,6 @@ open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv0Hat
 open import Pi+.Indexed.Equiv1Hat
-open import Pi+.Indexed.Equiv2Hat
 
 open import Pi+.Misc
 open import Pi+.Extra
@@ -145,21 +144,21 @@ module _ where
   ++^-swap-! : {n m : ℕ} → ++^-swap m n == !⟷₁^ (++^-swap n m)
   ++^-swap-! {n} {m} = TODO-
 
-  eval^₁-! : {t₁ : U n} → {t₂ : U m} → (c : t₁ ⟷₁ t₂) → eval^₁ (!⟷₁ c) == !⟷₁^ (eval^₁ c)
-  eval^₁-! unite₊l = idp
-  eval^₁-! uniti₊l = idp
-  eval^₁-! (swap₊ {n} {_} {m} {_}) = ++^-swap-! {n} {m}
-  eval^₁-! assocl₊ = TODO-
-  eval^₁-! assocr₊ = idp -- ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
-  eval^₁-! id⟷₁ = idp
-  eval^₁-! (c₁ ◎ c₂) =
-    let r₁ = eval^₁-! c₁
-        r₂ = eval^₁-! c₂
-    in  ap2 (λ c₁' c₂' → c₁' ◎^ c₂') r₂ r₁
-  eval^₁-! (c₁ ⊕ c₂) =
-    let r₁ = eval^₁-! c₁
-        r₂ = eval^₁-! c₂
-    in  ap2 ++^-⊕ r₁ r₂ ∙ ++^-⊕-! (eval^₁ c₁) (eval^₁ c₂)
+  -- eval^₁-! : {t₁ : U n} → {t₂ : U m} → (c : t₁ ⟷₁ t₂) → eval^₁ (!⟷₁ c) == !⟷₁^ (eval^₁ c)
+  -- eval^₁-! unite₊l = idp
+  -- eval^₁-! uniti₊l = idp
+  -- eval^₁-! (swap₊ {n} {_} {m} {_}) = ++^-swap-! {n} {m}
+  -- eval^₁-! assocl₊ = TODO-
+  -- eval^₁-! assocr₊ = idp -- ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
+  -- eval^₁-! id⟷₁ = idp
+  -- eval^₁-! (c₁ ◎ c₂) =
+  --   let r₁ = eval^₁-! c₁
+  --       r₂ = eval^₁-! c₂
+  --   in  ap2 (λ c₁' c₂' → c₁' ◎^ c₂') r₂ r₁
+  -- eval^₁-! (c₁ ⊕ c₂) =
+  --   let r₁ = eval^₁-! c₁
+  --       r₂ = eval^₁-! c₂
+  --   in  ap2 ++^-⊕ r₁ r₂ ∙ ++^-⊕-! (eval^₁ c₁) (eval^₁ c₂)
 
   reverse-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → reverse (l₁ ++ l₂) == (reverse l₂) ++ (reverse l₁)
   reverse-++ nil l₂ = ! (++-unit-r _)
@@ -222,3 +221,13 @@ list2list {S n} ((k , pk) :: xs)
   rewrite (eval^₁-transpos (k , pk)) =
     let rec = list2list xs
     in  List=-out ((pair= idp (<-has-all-paths _ _)) , rec)
+
+eval^₁-◎ : {t₁ : U n} {t₂ : U m} {t₃ : U o} → (c₁ : t₁ ⟷₁ t₂) (c₂ : t₂ ⟷₁ t₃) → eval^₁ (c₁ ◎ c₂) ⟷₂^ (eval^₁ c₁) ◎^ (eval^₁ c₂)
+eval^₁-◎ unite₊l c₂ = id⟷₂^
+eval^₁-◎ uniti₊l c₂ = id⟷₂^
+eval^₁-◎ swap₊ c₂ = id⟷₂^
+eval^₁-◎ assocl₊ c₂ = id⟷₂^
+eval^₁-◎ assocr₊ c₂ = id⟷₂^
+eval^₁-◎ id⟷₁ c₂ = id⟷₂^
+eval^₁-◎ (c₁ ◎ c₃) c₂ = id⟷₂^
+eval^₁-◎ (c₁ ⊕ c₃) c₂ = id⟷₂^

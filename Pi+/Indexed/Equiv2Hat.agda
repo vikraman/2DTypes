@@ -5,6 +5,7 @@ module Pi+.Indexed.Equiv2Hat where
 open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
+open import Pi+.Indexed.Equiv1NormHelpers
 open import Pi+.UFin
 open import Pi+.Extra
 open import Pi+.UFin.BAut
@@ -28,8 +29,7 @@ private
 eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
 eval^₂ assoc◎l = assoc◎l^
 eval^₂ assoc◎r = assoc◎r^
-eval^₂ (assocl₊l {n₁} {_} {n₂} {_} {n₃} {_} {n₄} {_} {n₅} {_} {n₆} {_}) with (N.+-assoc n₂ n₄ n₆) | (N.+-assoc n₁ n₃ n₅)
-... | p | q = TODO!
+eval^₂ (assocl₊l {n₁} {_} {n₂} {_} {n₃} {_} {n₄} {_} {n₅} {_} {n₆} {_}) = TODO!
 eval^₂ assocl₊r = TODO!
 eval^₂ assocr₊r = TODO!
 eval^₂ assocr₊l = TODO!
@@ -37,7 +37,7 @@ eval^₂ idl◎l = idl◎l^
 eval^₂ idl◎r = idl◎r^
 eval^₂ idr◎l = idr◎l^
 eval^₂ idr◎r = idr◎r^
-eval^₂ linv◎l = TODO!
+eval^₂ (linv◎l {c = c}) = TODO!
 eval^₂ linv◎r = TODO!
 eval^₂ rinv◎l = TODO!
 eval^₂ rinv◎r = TODO!
@@ -55,7 +55,7 @@ eval^₂ id⟷₁⊕id⟷₁⟷₂ = TODO!
 eval^₂ split⊕-id⟷₁ = TODO!
 eval^₂ hom⊕◎⟷₂ = TODO!
 eval^₂ hom◎⊕⟷₂ = TODO!
-eval^₂ (triangle₊l {n}) = 
+eval^₂ (triangle₊l {n}) =
     _ ⟷₂^⟨ (++^-⊕-id-r (++^-swap n 0)) ⊡^ ++^-⊕-id-r (id⟷₁^ {n}) ⟩
     _ ⟷₂^⟨ idr◎l^  ⟩
     _ ⟷₂^⟨ (++^-r⟷₂ (++^-swap-0 n)) ⟩
@@ -63,7 +63,14 @@ eval^₂ (triangle₊l {n}) =
     _ ⟷₂^⟨ !⟷₂^ (++^-triangle n _) ⟩
     _ ⟷₂^⟨ id⟷₂^ ⊡^ !⟷₂^ (++^-⊕-id-l id⟷₁^) ⟩
     _ ⟷₂^∎
-eval^₂ triangle₊r = TODO!
+eval^₂ (triangle₊r {n}) =
+    _ ⟷₂^⟨ id⟷₂^ ⊡^ (++^-⊕-id-l id⟷₁^) ⟩
+    _ ⟷₂^⟨ ++^-triangle n _  ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-r⟷₂ (!!⟷₁^ (++^-unit-r n))) ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-r⟷₂ (++^-swap-0 n)) ⟩
+    _ ⟷₂^⟨ idr◎r^ ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-⊕-id-r (++^-swap n 0) ⊡^ ++^-⊕-id-r (id⟷₁^ {n})) ⟩
+    _ ⟷₂^∎
 eval^₂ pentagon₊l = TODO!
 eval^₂ pentagon₊r = TODO!
 eval^₂ unite₊l-coh-l = TODO!

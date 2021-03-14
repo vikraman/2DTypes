@@ -36,28 +36,28 @@ private
 ++^-r-! {c = ⊕^ c} = resp⊕⟷₂ ++^-r-!
 
 ++^-r⟷₂ : {o : ℕ} → (c₁ ⟷₂^ c₂) → (++^-r {o = o} c₁) ⟷₂^ ++^-r {o = o} c₂
-++^-r⟷₂ {c₁ = .(_ ◎^ _ ◎^ _)} {.((_ ◎^ _) ◎^ _)} assoc◎l^ = assoc◎l^
-++^-r⟷₂ {c₁ = .((_ ◎^ _) ◎^ _)} {.(_ ◎^ _ ◎^ _)} assoc◎r^ = assoc◎r^
-++^-r⟷₂ {c₁ = .(id⟷₁^ ◎^ c₂)} {c₂} idl◎l^ = idl◎l^
-++^-r⟷₂ {c₁ = c₁} {.(id⟷₁^ ◎^ c₁)} idl◎r^ = idl◎r^
-++^-r⟷₂ {c₁ = .(c₂ ◎^ id⟷₁^)} {c₂} idr◎l^ = idr◎l^
-++^-r⟷₂ {c₁ = c₁} {.(c₁ ◎^ id⟷₁^)} idr◎r^ = idr◎r^
-++^-r⟷₂ {c₁ = .(_ ◎^ !⟷₁^ _)} {.id⟷₁^} linv◎l^ = (id⟷₂^ ⊡^ ++^-r-!) ■^ linv◎l^
-++^-r⟷₂ {c₁ = .id⟷₁^} {.(_ ◎^ !⟷₁^ _)} linv◎r^ = !⟷₂^ ((id⟷₂^ ⊡^ ++^-r-!) ■^ linv◎l^)
-++^-r⟷₂ {c₁ = .(!⟷₁^ _ ◎^ _)} {.id⟷₁^} rinv◎l^ = (++^-r-! ⊡^ id⟷₂^) ■^ rinv◎l^
-++^-r⟷₂ {c₁ = .id⟷₁^} {.(!⟷₁^ _ ◎^ _)} rinv◎r^ = !⟷₂^ ((++^-r-! ⊡^ id⟷₂^) ■^ rinv◎l^)
-++^-r⟷₂ {c₁ = c₁} {.c₁} id⟷₂^ = id⟷₂^
-++^-r⟷₂ {c₁ = c₁} {c₂} (α ■^ α₁) = ++^-r⟷₂ α ■^ ++^-r⟷₂ α₁
-++^-r⟷₂ {c₁ = .(_ ◎^ _)} {.(_ ◎^ _)} (α ⊡^ α₁) = ++^-r⟷₂ α ⊡^ ++^-r⟷₂ α₁
-++^-r⟷₂ {c₁ = .(⊕^ id⟷₁^)} {.id⟷₁^} ⊕id⟷₁⟷₂^ = ⊕id⟷₁⟷₂^
-++^-r⟷₂ {c₁ = .id⟷₁^} {.(⊕^ id⟷₁^)} !⊕id⟷₁⟷₂^ = !⊕id⟷₁⟷₂^
-++^-r⟷₂ {c₁ = .((⊕^ _) ◎^ ⊕^ _)} {.(⊕^ _ ◎^ _)} hom◎⊕⟷₂^ = hom◎⊕⟷₂^
-++^-r⟷₂ {c₁ = .(⊕^ _)} {.(⊕^ _)} (resp⊕⟷₂ α) = resp⊕⟷₂ (++^-r⟷₂ α)
-++^-r⟷₂ {c₁ = .(⊕^ _ ◎^ _)} {.((⊕^ _) ◎^ ⊕^ _)} hom⊕◎⟷₂^ = hom⊕◎⟷₂^
-++^-r⟷₂ {c₁ = .((⊕^ ⊕^ _) ◎^ swap₊^)} {.(swap₊^ ◎^ ⊕^ ⊕^ _)} swapr₊⟷₂^ = swapr₊⟷₂^
-++^-r⟷₂ {c₁ = .(swap₊^ ◎^ ⊕^ ⊕^ _)} {.((⊕^ ⊕^ _) ◎^ swap₊^)} swapl₊⟷₂^ = swapl₊⟷₂^
-++^-r⟷₂ {c₁ = .(swap₊^ ◎^ (⊕^ swap₊^) ◎^ swap₊^)} {.((⊕^ swap₊^) ◎^ swap₊^ ◎^ ⊕^ swap₊^)} hexagonl₊l = hexagonl₊l
-++^-r⟷₂ {c₁ = .((⊕^ swap₊^) ◎^ swap₊^ ◎^ ⊕^ swap₊^)} {.(swap₊^ ◎^ (⊕^ swap₊^) ◎^ swap₊^)} hexagonl₊r = hexagonl₊r
+++^-r⟷₂ assoc◎l^ = assoc◎l^
+++^-r⟷₂ assoc◎r^ = assoc◎r^
+++^-r⟷₂ idl◎l^ = idl◎l^
+++^-r⟷₂ idl◎r^ = idl◎r^
+++^-r⟷₂ idr◎l^ = idr◎l^
+++^-r⟷₂ idr◎r^ = idr◎r^
+++^-r⟷₂ linv◎l^ = (id⟷₂^ ⊡^ ++^-r-!) ■^ linv◎l^
+++^-r⟷₂ linv◎r^ = !⟷₂^ ((id⟷₂^ ⊡^ ++^-r-!) ■^ linv◎l^)
+++^-r⟷₂ rinv◎l^ = (++^-r-! ⊡^ id⟷₂^) ■^ rinv◎l^
+++^-r⟷₂ rinv◎r^ = !⟷₂^ ((++^-r-! ⊡^ id⟷₂^) ■^ rinv◎l^)
+++^-r⟷₂ id⟷₂^ = id⟷₂^
+++^-r⟷₂ (α ■^ α₁) = ++^-r⟷₂ α ■^ ++^-r⟷₂ α₁
+++^-r⟷₂ (α ⊡^ α₁) = ++^-r⟷₂ α ⊡^ ++^-r⟷₂ α₁
+++^-r⟷₂ ⊕id⟷₁⟷₂^ = ⊕id⟷₁⟷₂^
+++^-r⟷₂ !⊕id⟷₁⟷₂^ = !⊕id⟷₁⟷₂^
+++^-r⟷₂ hom◎⊕⟷₂^ = hom◎⊕⟷₂^
+++^-r⟷₂ (resp⊕⟷₂ α) = resp⊕⟷₂ (++^-r⟷₂ α)
+++^-r⟷₂ hom⊕◎⟷₂^ = hom⊕◎⟷₂^
+++^-r⟷₂ swapr₊⟷₂^ = swapr₊⟷₂^
+++^-r⟷₂ swapl₊⟷₂^ = swapl₊⟷₂^
+++^-r⟷₂ hexagonl₊l = hexagonl₊l
+++^-r⟷₂ hexagonl₊r = hexagonl₊r
 
 ++^-unit-l : (n : ℕ) → O ++ n ⟷₁^ n
 ++^-unit-l n = id⟷₁^
@@ -83,11 +83,11 @@ private
 
 ++^-swap-0 : (n : ℕ) → (++^-swap n 0) ⟷₂^ !⟷₁^ (++^-swap 0 n)
 ++^-swap-0 O = id⟷₂^
-++^-swap-0 (S n) = 
+++^-swap-0 (S n) =
   let r = ++^-swap-0 n
-  in  ((resp⊕⟷₂ r) ⊡^ id⟷₂^) ■^ 
-      ((id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idl◎l^)) ■^ 
-      ((id⟷₂^ ⊡^ linv◎l^) ■^  
+  in  ((resp⊕⟷₂ r) ⊡^ id⟷₂^) ■^
+      ((id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idl◎l^)) ■^
+      ((id⟷₂^ ⊡^ linv◎l^) ■^
       idr◎l^))
 
 ++^-⊕ : {n m o p : ℕ} → (n ⟷₁^ m) → (o ⟷₁^ p) → (n ++ o) ⟷₁^ (m ++ p)
@@ -120,13 +120,13 @@ private
              → (++^-assoc (n ++ m) o p) ◎^ ++^-assoc n m (o ++ p) ⟷₂^
                ++^-r (++^-assoc n m o) ◎^ ++^-assoc n (m ++ o) p ◎^ ++^-l {o = n} (++^-assoc m o p)
 ++^-pentagon O m o p = idr◎r^ □^ idl◎l^ □^ idr◎r^ □^ idl◎l^ □^ (idr◎l^ ■^ (idr◎l^ ■^ idr◎l^))
-++^-pentagon (S n) m o p = 
-  hom◎⊕⟷₂^ ■^ (resp⊕⟷₂ (++^-pentagon n m o p) ■^ 
+++^-pentagon (S n) m o p =
+  hom◎⊕⟷₂^ ■^ (resp⊕⟷₂ (++^-pentagon n m o p) ■^
   ((!⟷₂^ hom◎⊕⟷₂^) ■^ (id⟷₂^ ⊡^ hom⊕◎⟷₂^)))
 
 ++^-cons-assoc : (n m : ℕ) → ++^-r {o = m} (++^-cons n) ◎^ ++^-assoc n 1 m ⟷₂^ ++^-cons (n ++ m) ◎^ ++^-assoc n m 1 ◎^ !⟷₁^ (++^-l {o = n} (++^-cons m))
 ++^-cons-assoc O m = TODO-
-++^-cons-assoc (S n) m = TODO-                
+++^-cons-assoc (S n) m = TODO-
 
 -- c₁ = ⊕^ ++^-swap n (m ++ o)
 -- c₂ = ++^-⊕ (++^-cons (m ++ o)) (id⟷₁^ {n})
@@ -143,7 +143,7 @@ private
             → (++^-assoc n m o) ◎^ ++^-swap n (m ++ o) ◎^ ++^-assoc m o n ⟷₂^
               ++^-r {o = o} (++^-swap n m) ◎^ ++^-assoc m n o ◎^ ++^-l {o = m} (++^-swap n o)
 ++^-hexagon O m o = TODO!
-++^-hexagon (S n) m o = 
+++^-hexagon (S n) m o =
   let r = ++^-hexagon n m o
   in  _ ◎^ ((_ ◎^ (_ ◎^ (_ ◎^ _))) ◎^ _)  ⟷₂^⟨ id⟷₂^ ⊡^ assoc◎r^ ⟩
       _ ◎^ (_ ◎^ (_ ◎^ (_ ◎^ _)) ◎^ _) ⟷₂^⟨ assoc◎l^ ⟩
@@ -173,3 +173,23 @@ private
 -- ++^-hexagon O O o = idl◎l^ □^ idl◎l^ □^ idr◎l^ □^ idl◎l^
 -- ++^-hexagon O (S m) o = {!   !}
 -- ++^-hexagon (S n) m o = TODO!
+
+++^-swap-unit : (n : ℕ) → !⟷₁^ (++^-unit-r n) ◎^ ++^-swap n 0 ⟷₂^ id⟷₁^
+++^-swap-unit O = idl◎l^
+++^-swap-unit (S n) =
+  assoc◎l^ ■^
+  ((!⟷₂^ hom⊕◎⟷₂^ ⊡^ (assoc◎l^ ■^ ((idr◎l^ ⊡^ id⟷₂^) ■^ linv◎l^))) ■^
+    (idr◎l^ ■^ !⟷₂^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ (!⟷₂^ (++^-swap-unit n)))))
+
+++^-symm-O : (n : ℕ) → ++^-swap O n ◎^ ++^-swap n O ⟷₂^ id⟷₁^
+++^-symm-O O = idl◎l^
+++^-symm-O (S n) = ++^-swap-unit (S n)
+
+++^-swap-S-assoc : (n m : ℕ)
+                 → ++^-swap (S n) m  ◎^ ++^-l {o = m} (++^-swap 1 n)  ⟷₂^
+                   (⊕^ ++^-swap n m) ◎^ ++^-swap 1 (m ++ n) ◎^ (++^-assoc m n 1)
+++^-swap-S-assoc n m = TODO!
+
+++^-symm : (n m : ℕ) → ++^-swap n m ◎^ ++^-swap m n ⟷₂^ id⟷₁^
+++^-symm O m = ++^-symm-O m
+++^-symm (S n) m = TODO!
