@@ -6,6 +6,7 @@ open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.Equiv1NormHelpers
+open import Pi+.Indexed.Equiv2HatHelpers
 open import Pi+.UFin
 open import Pi+.Extra
 open import Pi+.UFin.BAut
@@ -37,10 +38,10 @@ eval^₂ idl◎l = idl◎l^
 eval^₂ idl◎r = idl◎r^
 eval^₂ idr◎l = idr◎l^
 eval^₂ idr◎r = idr◎r^
-eval^₂ (linv◎l {c = c}) = TODO!
-eval^₂ linv◎r = TODO!
-eval^₂ rinv◎l = TODO!
-eval^₂ rinv◎r = TODO!
+eval^₂ (linv◎l {c = c}) = (id⟷₂^ ⊡^ eval^₁-! c) ■^ linv◎l^
+eval^₂ (linv◎r {c = c}) = linv◎r^ ■^ (id⟷₂^ ⊡^ !⟷₂^ (eval^₁-! c))
+eval^₂ (rinv◎l {c = c}) = (eval^₁-! c ⊡^ id⟷₂^) ■^ rinv◎l^
+eval^₂ (rinv◎r {c = c}) = rinv◎r^ ■^ (!⟷₂^ (eval^₁-! c) ⊡^ id⟷₂^)
 eval^₂ unite₊l⟷₂l = TODO!
 eval^₂ unite₊l⟷₂r = TODO!
 eval^₂ uniti₊l⟷₂l = TODO!
@@ -71,10 +72,18 @@ eval^₂ (triangle₊r {n}) =
     _ ⟷₂^⟨ idr◎r^ ⟩
     _ ⟷₂^⟨ !⟷₂^ (++^-⊕-id-r (++^-swap n 0) ⊡^ ++^-⊕-id-r (id⟷₁^ {n})) ⟩
     _ ⟷₂^∎
-eval^₂ pentagon₊l = TODO!
-eval^₂ pentagon₊r = TODO!
-eval^₂ unite₊l-coh-l = TODO!
-eval^₂ unite₊l-coh-r = TODO!
+eval^₂ (pentagon₊l {n₁} {t₁} {n₂} {t₂} {n₃} {t₃} {n₄} {t₄}) =
+  ++^-pentagon n₁ n₂ n₃ n₄ ■^
+  (!⟷₂^ (++^-⊕-id-r (++^-assoc n₁ n₂ n₃)) ⊡^ (id⟷₂^ ⊡^ !⟷₂^ (++^-⊕-id-l (++^-assoc n₂ n₃ n₄)))) ■^
+  assoc◎l^
+eval^₂ (pentagon₊r {n₁} {t₁} {n₂} {t₂} {n₃} {t₃} {n₄} {t₄}) =
+  assoc◎r^ ■^
+  (++^-⊕-id-r (++^-assoc n₁ n₂ n₃) ⊡^ (id⟷₂^ ⊡^ ++^-⊕-id-l (++^-assoc n₂ n₃ n₄))) ■^
+  !⟷₂^ (++^-pentagon n₁ n₂ n₃ n₄)
+eval^₂ (unite₊l-coh-l {t₁ = t₁}) =
+  idl◎r^ ■^ (!⟷₂^ (++^-swap-unit (eval^₀ t₁)) ⊡^ id⟷₂^) ■^ assoc◎r^
+eval^₂ (unite₊l-coh-r {t₁ = t₁}) =
+  assoc◎l^ ■^ (++^-swap-unit (eval^₀ t₁) ⊡^ id⟷₂^) ■^ idl◎l^
 eval^₂ hexagonr₊l = TODO!
 eval^₂ hexagonr₊r = TODO!
 eval^₂ hexagonl₊l = TODO!

@@ -130,16 +130,16 @@ module _ where
   ++^-⊕-id : (c : n ⟷₁^ m) → ++^-⊕ c id⟷₁^ ⟷₂^ transport2 (λ n' m' → n' ⟷₁^ m') (! (+-unit-r n)) (! (+-unit-r m)) c
   ++^-⊕-id c = TODO-
 
-  ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) → (c₂ : o ⟷₁^ p) → ++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂) == !⟷₁^ (++^-⊕ c₁ c₂)
-  ++^-⊕-! {n} swap₊^ c₂ with (⟷₁^-eq-size (++^-⊕ (id⟷₁^ {n = n}) (!⟷₁^ c₂)))
-  ... | q =  TODO-
-  ++^-⊕-! {O} id⟷₁^ c₂ = idp
-  ++^-⊕-! {S n} id⟷₁^ c₂ = ap ⊕^_ (++^-⊕-! {n} id⟷₁^ c₂)
-  ++^-⊕-! (c₁ ◎^ c₂) c₃ =
-    let r₁ = ++^-⊕-! c₁ id⟷₁^
-        r₂ = ++^-⊕-! c₂ c₃
-    in  ap2 _◎^_ r₂ r₁ ∙ TODO-
-  ++^-⊕-! (⊕^ c₁) c₂ = ap ⊕^_ (++^-⊕-! c₁ c₂)
+  -- ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) → (c₂ : o ⟷₁^ p) → ++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂) == !⟷₁^ (++^-⊕ c₁ c₂)
+  -- ++^-⊕-! {n} swap₊^ c₂ with (⟷₁^-eq-size (++^-⊕ (id⟷₁^ {n = n}) (!⟷₁^ c₂)))
+  -- ... | q =  TODO-
+  -- ++^-⊕-! {O} id⟷₁^ c₂ = idp
+  -- ++^-⊕-! {S n} id⟷₁^ c₂ = ap ⊕^_ (++^-⊕-! {n} id⟷₁^ c₂)
+  -- ++^-⊕-! (c₁ ◎^ c₂) c₃ =
+  --   let r₁ = ++^-⊕-! c₁ id⟷₁^
+  --       r₂ = ++^-⊕-! c₂ c₃
+  --   in  ap2 _◎^_ r₂ r₁ ∙ TODO-
+  -- ++^-⊕-! (⊕^ c₁) c₂ = ap ⊕^_ (++^-⊕-! c₁ c₂)
 
   ++^-swap-! : {n m : ℕ} → ++^-swap m n == !⟷₁^ (++^-swap n m)
   ++^-swap-! {n} {m} = TODO-
@@ -221,13 +221,3 @@ list2list {S n} ((k , pk) :: xs)
   rewrite (eval^₁-transpos (k , pk)) =
     let rec = list2list xs
     in  List=-out ((pair= idp (<-has-all-paths _ _)) , rec)
-
-eval^₁-◎ : {t₁ : U n} {t₂ : U m} {t₃ : U o} → (c₁ : t₁ ⟷₁ t₂) (c₂ : t₂ ⟷₁ t₃) → eval^₁ (c₁ ◎ c₂) ⟷₂^ (eval^₁ c₁) ◎^ (eval^₁ c₂)
-eval^₁-◎ unite₊l c₂ = id⟷₂^
-eval^₁-◎ uniti₊l c₂ = id⟷₂^
-eval^₁-◎ swap₊ c₂ = id⟷₂^
-eval^₁-◎ assocl₊ c₂ = id⟷₂^
-eval^₁-◎ assocr₊ c₂ = id⟷₂^
-eval^₁-◎ id⟷₁ c₂ = id⟷₂^
-eval^₁-◎ (c₁ ◎ c₃) c₂ = id⟷₂^
-eval^₁-◎ (c₁ ⊕ c₃) c₂ = id⟷₂^

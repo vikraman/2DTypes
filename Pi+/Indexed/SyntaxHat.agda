@@ -28,6 +28,7 @@ private
 
 infix 30 _⟷₁^_
 infixr 50 _◎^_ ⊕^_
+infixr 50 _■^_ _□^_
 
 ℕ-p : {n : ℕ} -> (p : n == n) -> p == idp
 ℕ-p p = (prop-has-all-paths {{has-level-apply N.ℕ-level _ _}} p idp)
@@ -107,7 +108,7 @@ data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
 !!⟷₁^ swap₊^ = id⟷₂^
 !!⟷₁^ id⟷₁^ = id⟷₂^
 !!⟷₁^ (c ◎^ c₁) = !!⟷₁^ c ⊡^ !!⟷₁^ c₁
-!!⟷₁^ (⊕^ c) = resp⊕⟷₂ (!!⟷₁^ c) 
+!!⟷₁^ (⊕^ c) = resp⊕⟷₂ (!!⟷₁^ c)
 
 -- -- -- Equational reasoning
 
@@ -145,6 +146,30 @@ _ ⟷₂^∎ = id⟷₂^
 !⟷₂^ hexagonl₊l = hexagonl₊r
 !⟷₂^ hexagonl₊r = hexagonl₊l
 
+resp!⟷₂ : {c₁ c₂ : n ⟷₁^ m} → (c₁ ⟷₂^ c₂) → !⟷₁^ c₁ ⟷₂^ !⟷₁^ c₂
+resp!⟷₂ assoc◎l^ = assoc◎r^
+resp!⟷₂ assoc◎r^ = assoc◎l^
+resp!⟷₂ idl◎l^ = idr◎l^
+resp!⟷₂ idl◎r^ = idr◎r^
+resp!⟷₂ idr◎l^ = idl◎l^
+resp!⟷₂ idr◎r^ = idl◎r^
+resp!⟷₂ linv◎l^ = rinv◎l^
+resp!⟷₂ linv◎r^ = rinv◎r^
+resp!⟷₂ rinv◎l^ = linv◎l^
+resp!⟷₂ rinv◎r^ = linv◎r^
+resp!⟷₂ id⟷₂^ = id⟷₂^
+resp!⟷₂ (α₁ ■^ α₂) = resp!⟷₂ α₁ ■^ resp!⟷₂ α₂
+resp!⟷₂ (α₁ ⊡^ α₂) = resp!⟷₂ α₂ ⊡^ resp!⟷₂ α₁
+resp!⟷₂ ⊕id⟷₁⟷₂^ = ⊕id⟷₁⟷₂^
+resp!⟷₂ !⊕id⟷₁⟷₂^ = !⊕id⟷₁⟷₂^
+resp!⟷₂ hom◎⊕⟷₂^ = hom◎⊕⟷₂^
+resp!⟷₂ (resp⊕⟷₂ α) = resp⊕⟷₂ (resp!⟷₂ α)
+resp!⟷₂ hom⊕◎⟷₂^ = hom⊕◎⟷₂^
+resp!⟷₂ swapr₊⟷₂^ = swapl₊⟷₂^
+resp!⟷₂ swapl₊⟷₂^ = swapr₊⟷₂^
+resp!⟷₂ hexagonl₊l = assoc◎r^ ■^ hexagonl₊l ■^ assoc◎l^
+resp!⟷₂ hexagonl₊r = assoc◎r^ ■^ hexagonl₊r ■^ assoc◎l^
+
 c₊⟷₂id⟷₁ : (c : (O) ⟷₁^ (O)) → c ⟷₂^ id⟷₁^
 c₊⟷₂id⟷₁ id⟷₁^ = id⟷₂^
 c₊⟷₂id⟷₁ (_◎^_ {m = (O)} c₁ c₂) = _■^_ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
@@ -155,8 +180,6 @@ c₊⟷₂id⟷₁ (_◎^_ {m = ((S m))} c₁ c₂) with (⟷₁^-eq-size c₂)
 ⊕⊕id⟷₁⟷₂^ = _■^_ (resp⊕⟷₂ ⊕id⟷₁⟷₂^) ⊕id⟷₁⟷₂^
 
 -- Pasting equations
-
-infixr 50 _□^_
 
 _□^_ : {c₁ c₂ c₃ : t₁ ⟷₁^ t₂}
      → (c₁ ⟷₂^ c₃) → (c₂ ⟷₂^ c₃) → (c₁ ⟷₂^ c₂)
