@@ -57,13 +57,6 @@ postulate
     ⟷₁^-eq-size-rewrite : {c : t ⟷₁^ t} → (⟷₁^-eq-size c) ↦ idp -- because proof of == in ℕ
     {-# REWRITE ⟷₁^-eq-size-rewrite #-}
 
-big-swap₊^ : n ⟷₁^ m → (S (S n)) ⟷₁^ (S (S m))
-big-swap₊^ c with (⟷₁^-eq-size c)
-... | idp = swap₊^
-
--- -- -- 2-combinators
-
-
 data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
   assoc◎l^ : {c₁ : t₁ ⟷₁^ t₂} {c₂ : t₂ ⟷₁^ t₃} {c₃ : t₃ ⟷₁^ t₄} →
           (c₁ ◎^ (c₂ ◎^ c₃)) ⟷₂^ ((c₁ ◎^ c₂) ◎^ c₃)

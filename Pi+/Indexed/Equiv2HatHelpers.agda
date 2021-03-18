@@ -6,14 +6,18 @@ open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 
+open import lib.types.Nat renaming (_+_ to _++_)
+
 open import Pi+.Indexed.Equiv0Hat
 open import Pi+.Indexed.Equiv1Hat
 
-open import HoTT
+open import HoTT hiding (_++_)
+
+open import Pi+.Extra
 
 private
     variable
-        n m o : ℕ
+        n n₁ n₂ n₃ m₁ m₂ m₃ m o : ℕ
         t₁ t₂ t₃ : U n
         c₁ c₂ c₃ : n ⟷₁^ m
 
@@ -45,3 +49,28 @@ eval^₁-◎ assocr₊ c₂ = id⟷₂^
 eval^₁-◎ id⟷₁ c₂ = id⟷₂^
 eval^₁-◎ (c₁ ◎ c₃) c₂ = id⟷₂^
 eval^₁-◎ (c₁ ⊕ c₃) c₂ = id⟷₂^
+
++-assoc' : (k m n : ℕ) → (k ++ m) ++ n == k ++ (m ++ n)
++-assoc' 0     m n = idp
++-assoc' (S k) m n = ap S (+-assoc' k m n)
+
+
+-- ++^-assoc-id : (++^-id (+-assoc' n m o)) ⟷₂^ ++^-assoc n m o
+-- ++^-assoc-id {O} {m} {o} = id⟷₂^
+-- ++^-assoc-id {S n} {m} {o} = 
+--   let r = ++^-assoc-id {n} {m} {o}
+--   in  {!   !} ■^ {!   !}
+
+-- postulate
+--         -- Temporary
+--         -- theorem : ++^-⊕-id-l
+--     plus-rewrite : {n m o : ℕ} {c : n ⟷₁^ m} → ++^-⊕ (id⟷₁^ {o}) c ↦ ++^-l c -- because proof of == in ℕ
+--     {-# REWRITE plus-rewrite #-}
+
+++^-assoc-⊕ : ∀ {c₁ : n₁ ⟷₁^ m₁} {c₂ : n₂ ⟷₁^ m₂} {c₃ : n₃ ⟷₁^ m₃} →
+        (++^-assoc n₁ n₂ n₃) ◎^ (++^-⊕ c₁ (++^-⊕ c₂ c₃)) ⟷₂^ 
+        (++^-⊕ (++^-⊕ c₁ c₂) c₃) ◎^ (++^-assoc m₁ m₂ m₃)
+++^-assoc-⊕ {c₁ = (swap₊^ {n})} {c₂ = c₂} {c₃ = c₃} = TODO!
+++^-assoc-⊕ {c₁ = id⟷₁^} = TODO!
+++^-assoc-⊕ {c₁ = c₁ ◎^ c₂} = TODO!
+++^-assoc-⊕ {c₁ = ⊕^ c₁} = hom◎⊕⟷₂^ ■^ resp⊕⟷₂ (++^-assoc-⊕ {c₁ = c₁}) ■^ (!⟷₂^ hom◎⊕⟷₂^)

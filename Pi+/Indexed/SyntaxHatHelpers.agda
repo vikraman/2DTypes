@@ -22,6 +22,16 @@ private
 ++^-l {o = O} c = c
 ++^-l {o = S o} c = ⊕^ ++^-l c
 
+++^-l-id : ++^-l {n} {n} {o} (id⟷₁^ {n}) ⟷₂^ id⟷₁^ {o ++ n}
+++^-l-id {n} {O} = id⟷₂^
+++^-l-id {n} {S o} = resp⊕⟷₂ ++^-l-id ■^ ⊕id⟷₁⟷₂^
+
+++^-bigswap : {n m : ℕ} → (n ⟷₁^ m) → (2 ++ n) ⟷₁^ (2 ++ m)
+++^-bigswap swap₊^ = swap₊^ ◎^ ⊕^ ⊕^ swap₊^
+++^-bigswap id⟷₁^ = swap₊^
+++^-bigswap (c ◎^ c₁) = ++^-bigswap c ◎^ (⊕^ (⊕^ c₁))
+++^-bigswap (⊕^ c) = swap₊^ ◎^ ⊕^ (⊕^ (⊕^ c))
+
 ++^-l-! : {o : ℕ} → (++^-l {o = o} (!⟷₁^ c)) ⟷₂^ !⟷₁^ (++^-l {o = o} c)
 ++^-l-! {o = O} = id⟷₂^
 ++^-l-! {o = S o} = resp⊕⟷₂ (++^-l-! {o = o})
@@ -32,6 +42,7 @@ private
 ++^-r (c₁ ◎^ c₂) = ++^-r c₁ ◎^ ++^-r c₂
 ++^-r (⊕^ c) = ⊕^ (++^-r c)
 -- ++^-r c = ++^-id (⟷₁-size-eq c)
+
 
 ++^-r-! : {o : ℕ} → (++^-r {o = o} (!⟷₁^ c)) ⟷₂^ !⟷₁^ (++^-r {o = o} c)
 ++^-r-! {c = swap₊^} = id⟷₂^
@@ -95,7 +106,9 @@ private
       idr◎l^))
 
 ++^-⊕ : {n m o p : ℕ} → (n ⟷₁^ m) → (o ⟷₁^ p) → (n ++ o) ⟷₁^ (m ++ p)
-++^-⊕ (swap₊^ {n = n}) c₂ = big-swap₊^ (++^-⊕ id⟷₁^ c₂)
+++^-⊕ {_} {m} {o} (swap₊^ {n = n}) c₂ = 
+        let r = ++^-⊕ (id⟷₁^ {n}) c₂
+        in  ++^-bigswap (++^-⊕ (id⟷₁^ {n}) c₂)
 ++^-⊕ {O} id⟷₁^ c₂ = c₂
 ++^-⊕ {S n} id⟷₁^ c₂ = ⊕^ (++^-⊕ {n} id⟷₁^ c₂)
 ++^-⊕ (c₁ ◎^ c₃) c₂ = (++^-⊕ c₁ c₂) ◎^ ++^-⊕ c₃ id⟷₁^
@@ -104,21 +117,30 @@ private
 -- ++^-⊕ {n} {m} {o} {p} c₁ c₂ with ⟷₁^-eq-size c₁
 -- ... | idp = ++^-l c₂
 
+++^-⊕-id-l : (c : n ⟷₁^ m) → (++^-⊕ (id⟷₁^ {n = o}) c) ⟷₂^ (++^-l {o = o} c)
+++^-⊕-id-l {o = O} c = id⟷₂^
+++^-⊕-id-l {o = S o} c = resp⊕⟷₂ (++^-⊕-id-l {o = o} c)
+
 ++^-⊕-id-r : {n m o : ℕ} → (c : n ⟷₁^ m) → (++^-⊕ c (id⟷₁^ {o})) ⟷₂^ ++^-r c
-++^-⊕-id-r swap₊^ = id⟷₂^
+++^-⊕-id-r (swap₊^ {O}) = id⟷₂^
+++^-⊕-id-r {S (S (S n))} {m} {o} (swap₊^ {S n}) = 
+  _ ⟷₂^⟨ (id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (resp⊕⟷₂ (++^-⊕-id-l (id⟷₁^ {o}))))) ⟩
+  _ ⟷₂^⟨ (id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (resp⊕⟷₂ ++^-l-id))) ⟩
+  _ ⟷₂^⟨ id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (⊕id⟷₁⟷₂^)) ⟩
+  _ ⟷₂^⟨ id⟷₂^ ⊡^ resp⊕⟷₂ (⊕id⟷₁⟷₂^) ⟩
+  _ ⟷₂^⟨ id⟷₂^ ⊡^ ⊕id⟷₁⟷₂^ ⟩
+  _ ⟷₂^⟨ idr◎l^ ⟩
+  _ ⟷₂^∎
+
 ++^-⊕-id-r {O} id⟷₁^ = id⟷₂^
 ++^-⊕-id-r {S n} id⟷₁^ = resp⊕⟷₂ (++^-⊕-id-r {n} id⟷₁^) ■^ ⊕id⟷₁⟷₂^
 ++^-⊕-id-r (c₁ ◎^ c₂) = ++^-⊕-id-r c₁ ⊡^ ++^-⊕-id-r c₂
 ++^-⊕-id-r (⊕^ c) = resp⊕⟷₂ (++^-⊕-id-r c)
 
-++^-⊕-id-l : (c : n ⟷₁^ m) → (++^-⊕ (id⟷₁^ {n = o}) c) ⟷₂^ (++^-l {o = o} c)
-++^-⊕-id-l {o = O} c = id⟷₂^
-++^-⊕-id-l {o = S o} c = resp⊕⟷₂ (++^-⊕-id-l {o = o} c)
 
 ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) (c₂ : o ⟷₁^ p)
         → (++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂)) ⟷₂^ (!⟷₁^ (++^-⊕ c₁ c₂))
-++^-⊕-! swap₊^ c₂ with (⟷₁^-eq-size c₂)
-... | idp = id⟷₂^
+++^-⊕-! swap₊^ c₂ = TODO-
 ++^-⊕-! id⟷₁^ c₂ =
   ++^-⊕-id-l (!⟷₁^ c₂) ■^
   (++^-l-! {c = c₂} ■^ resp!⟷₂ (!⟷₂^ (++^-⊕-id-l c₂)))
