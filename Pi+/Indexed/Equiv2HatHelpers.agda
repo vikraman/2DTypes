@@ -57,7 +57,7 @@ eval^₁-◎ (c₁ ⊕ c₃) c₂ = id⟷₂^
 
 -- ++^-assoc-id : (++^-id (+-assoc' n m o)) ⟷₂^ ++^-assoc n m o
 -- ++^-assoc-id {O} {m} {o} = id⟷₂^
--- ++^-assoc-id {S n} {m} {o} = 
+-- ++^-assoc-id {S n} {m} {o} =
 --   let r = ++^-assoc-id {n} {m} {o}
 --   in  {!   !} ■^ {!   !}
 
@@ -68,7 +68,7 @@ eval^₁-◎ (c₁ ⊕ c₃) c₂ = id⟷₂^
 --     {-# REWRITE plus-rewrite #-}
 
 ++^-assoc-⊕ : ∀ {c₁ : n₁ ⟷₁^ m₁} {c₂ : n₂ ⟷₁^ m₂} {c₃ : n₃ ⟷₁^ m₃} →
-        (++^-assoc n₁ n₂ n₃) ◎^ (++^-⊕ c₁ (++^-⊕ c₂ c₃)) ⟷₂^ 
+        (++^-assoc n₁ n₂ n₃) ◎^ (++^-⊕ c₁ (++^-⊕ c₂ c₃)) ⟷₂^
         (++^-⊕ (++^-⊕ c₁ c₂) c₃) ◎^ (++^-assoc m₁ m₂ m₃)
 ++^-assoc-⊕ {c₁ = (swap₊^ {n})} {c₂ = c₂} {c₃ = c₃} = TODO!
 ++^-assoc-⊕ {c₁ = id⟷₁^} = TODO!

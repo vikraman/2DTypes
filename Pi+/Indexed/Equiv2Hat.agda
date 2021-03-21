@@ -32,8 +32,8 @@ eval^₂ assoc◎l = assoc◎l^
 eval^₂ assoc◎r = assoc◎r^
 eval^₂ (assocl₊l {n₁} {_} {n₂} {_} {n₃} {_} {n₄} {_} {n₅} {_} {n₆} {_}) = TODO!
 eval^₂ assocl₊r = TODO!
-eval^₂ assocr₊r = TODO!
-eval^₂ assocr₊l = TODO!
+eval^₂ (assocr₊r {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = !⟷₂^ (++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃})
+eval^₂ (assocr₊l {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = ++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃}
 eval^₂ idl◎l = idl◎l^
 eval^₂ idl◎r = idl◎r^
 eval^₂ idr◎l = idr◎l^
