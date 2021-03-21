@@ -17,7 +17,6 @@ open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv0Hat
 open import Pi+.Indexed.Equiv1Hat
-open import Pi+.Indexed.Equiv2Hat
 
 open import Pi+.Misc
 open import Pi+.Extra
@@ -131,35 +130,35 @@ module _ where
   ++^-⊕-id : (c : n ⟷₁^ m) → ++^-⊕ c id⟷₁^ ⟷₂^ transport2 (λ n' m' → n' ⟷₁^ m') (! (+-unit-r n)) (! (+-unit-r m)) c
   ++^-⊕-id c = TODO-
 
-  ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) → (c₂ : o ⟷₁^ p) → ++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂) == !⟷₁^ (++^-⊕ c₁ c₂)
-  ++^-⊕-! {n} swap₊^ c₂ with (⟷₁^-eq-size (++^-⊕ (id⟷₁^ {n = n}) (!⟷₁^ c₂)))
-  ... | q =  TODO-
-  ++^-⊕-! {O} id⟷₁^ c₂ = idp
-  ++^-⊕-! {S n} id⟷₁^ c₂ = ap ⊕^_ (++^-⊕-! {n} id⟷₁^ c₂)
-  ++^-⊕-! (c₁ ◎^ c₂) c₃ =
-    let r₁ = ++^-⊕-! c₁ id⟷₁^
-        r₂ = ++^-⊕-! c₂ c₃
-    in  ap2 _◎^_ r₂ r₁ ∙ TODO-
-  ++^-⊕-! (⊕^ c₁) c₂ = ap ⊕^_ (++^-⊕-! c₁ c₂)
+  -- ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) → (c₂ : o ⟷₁^ p) → ++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂) == !⟷₁^ (++^-⊕ c₁ c₂)
+  -- ++^-⊕-! {n} swap₊^ c₂ with (⟷₁^-eq-size (++^-⊕ (id⟷₁^ {n = n}) (!⟷₁^ c₂)))
+  -- ... | q =  TODO-
+  -- ++^-⊕-! {O} id⟷₁^ c₂ = idp
+  -- ++^-⊕-! {S n} id⟷₁^ c₂ = ap ⊕^_ (++^-⊕-! {n} id⟷₁^ c₂)
+  -- ++^-⊕-! (c₁ ◎^ c₂) c₃ =
+  --   let r₁ = ++^-⊕-! c₁ id⟷₁^
+  --       r₂ = ++^-⊕-! c₂ c₃
+  --   in  ap2 _◎^_ r₂ r₁ ∙ TODO-
+  -- ++^-⊕-! (⊕^ c₁) c₂ = ap ⊕^_ (++^-⊕-! c₁ c₂)
 
   ++^-swap-! : {n m : ℕ} → ++^-swap m n == !⟷₁^ (++^-swap n m)
   ++^-swap-! {n} {m} = TODO-
 
-  eval^₁-! : {t₁ : U n} → {t₂ : U m} → (c : t₁ ⟷₁ t₂) → eval^₁ (!⟷₁ c) == !⟷₁^ (eval^₁ c)
-  eval^₁-! unite₊l = idp
-  eval^₁-! uniti₊l = idp
-  eval^₁-! (swap₊ {n} {_} {m} {_}) = ++^-swap-! {n} {m}
-  eval^₁-! assocl₊ = TODO-
-  eval^₁-! assocr₊ = idp -- ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
-  eval^₁-! id⟷₁ = idp
-  eval^₁-! (c₁ ◎ c₂) =
-    let r₁ = eval^₁-! c₁
-        r₂ = eval^₁-! c₂
-    in  ap2 (λ c₁' c₂' → c₁' ◎^ c₂') r₂ r₁
-  eval^₁-! (c₁ ⊕ c₂) =
-    let r₁ = eval^₁-! c₁
-        r₂ = eval^₁-! c₂
-    in  ap2 ++^-⊕ r₁ r₂ ∙ ++^-⊕-! (eval^₁ c₁) (eval^₁ c₂)
+  -- eval^₁-! : {t₁ : U n} → {t₂ : U m} → (c : t₁ ⟷₁ t₂) → eval^₁ (!⟷₁ c) == !⟷₁^ (eval^₁ c)
+  -- eval^₁-! unite₊l = idp
+  -- eval^₁-! uniti₊l = idp
+  -- eval^₁-! (swap₊ {n} {_} {m} {_}) = ++^-swap-! {n} {m}
+  -- eval^₁-! assocl₊ = TODO-
+  -- eval^₁-! assocr₊ = idp -- ++^-id-! _ ∙ ap (λ x → !⟷₁^ (++^-id x)) (!-! _)
+  -- eval^₁-! id⟷₁ = idp
+  -- eval^₁-! (c₁ ◎ c₂) =
+  --   let r₁ = eval^₁-! c₁
+  --       r₂ = eval^₁-! c₂
+  --   in  ap2 (λ c₁' c₂' → c₁' ◎^ c₂') r₂ r₁
+  -- eval^₁-! (c₁ ⊕ c₂) =
+  --   let r₁ = eval^₁-! c₁
+  --       r₂ = eval^₁-! c₂
+  --   in  ap2 ++^-⊕ r₁ r₂ ∙ ++^-⊕-! (eval^₁ c₁) (eval^₁ c₂)
 
   reverse-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → reverse (l₁ ++ l₂) == (reverse l₂) ++ (reverse l₁)
   reverse-++ nil l₂ = ! (++-unit-r _)

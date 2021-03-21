@@ -5,6 +5,8 @@ module Pi+.Indexed.Equiv2Hat where
 open import Pi+.Indexed.Syntax as Pi
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
+open import Pi+.Indexed.Equiv1NormHelpers
+open import Pi+.Indexed.Equiv2HatHelpers
 open import Pi+.UFin
 open import Pi+.Extra
 open import Pi+.UFin.BAut
@@ -28,19 +30,18 @@ private
 eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
 eval^₂ assoc◎l = assoc◎l^
 eval^₂ assoc◎r = assoc◎r^
-eval^₂ (assocl₊l {n₁} {_} {n₂} {_} {n₃} {_} {n₄} {_} {n₅} {_} {n₆} {_}) with (N.+-assoc n₂ n₄ n₆) | (N.+-assoc n₁ n₃ n₅)
-... | p | q = TODO!
+eval^₂ (assocl₊l {n₁} {_} {n₂} {_} {n₃} {_} {n₄} {_} {n₅} {_} {n₆} {_}) = TODO!
 eval^₂ assocl₊r = TODO!
-eval^₂ assocr₊r = TODO!
-eval^₂ assocr₊l = TODO!
+eval^₂ (assocr₊r {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = !⟷₂^ (++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃})
+eval^₂ (assocr₊l {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = ++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃}
 eval^₂ idl◎l = idl◎l^
 eval^₂ idl◎r = idl◎r^
 eval^₂ idr◎l = idr◎l^
 eval^₂ idr◎r = idr◎r^
-eval^₂ linv◎l = TODO!
-eval^₂ linv◎r = TODO!
-eval^₂ rinv◎l = TODO!
-eval^₂ rinv◎r = TODO!
+eval^₂ (linv◎l {c = c}) = (id⟷₂^ ⊡^ eval^₁-! c) ■^ linv◎l^
+eval^₂ (linv◎r {c = c}) = linv◎r^ ■^ (id⟷₂^ ⊡^ !⟷₂^ (eval^₁-! c))
+eval^₂ (rinv◎l {c = c}) = (eval^₁-! c ⊡^ id⟷₂^) ■^ rinv◎l^
+eval^₂ (rinv◎r {c = c}) = rinv◎r^ ■^ (!⟷₂^ (eval^₁-! c) ⊡^ id⟷₂^)
 eval^₂ unite₊l⟷₂l = TODO!
 eval^₂ unite₊l⟷₂r = TODO!
 eval^₂ uniti₊l⟷₂l = TODO!
@@ -55,12 +56,34 @@ eval^₂ id⟷₁⊕id⟷₁⟷₂ = TODO!
 eval^₂ split⊕-id⟷₁ = TODO!
 eval^₂ hom⊕◎⟷₂ = TODO!
 eval^₂ hom◎⊕⟷₂ = TODO!
-eval^₂ triangle₊l = TODO!
-eval^₂ triangle₊r = TODO!
-eval^₂ pentagon₊l = TODO!
-eval^₂ pentagon₊r = TODO!
-eval^₂ unite₊l-coh-l = TODO!
-eval^₂ unite₊l-coh-r = TODO!
+eval^₂ (triangle₊l {n}) =
+    _ ⟷₂^⟨ (++^-⊕-id-r (++^-swap n 0)) ⊡^ ++^-⊕-id-r (id⟷₁^ {n}) ⟩
+    _ ⟷₂^⟨ idr◎l^  ⟩
+    _ ⟷₂^⟨ (++^-r⟷₂ (++^-swap-0 n)) ⟩
+    _ ⟷₂^⟨ (++^-r⟷₂ (!!⟷₁^ (++^-unit-r n))) ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-triangle n _) ⟩
+    _ ⟷₂^⟨ id⟷₂^ ⊡^ !⟷₂^ (++^-⊕-id-l id⟷₁^) ⟩
+    _ ⟷₂^∎
+eval^₂ (triangle₊r {n}) =
+    _ ⟷₂^⟨ id⟷₂^ ⊡^ (++^-⊕-id-l id⟷₁^) ⟩
+    _ ⟷₂^⟨ ++^-triangle n _  ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-r⟷₂ (!!⟷₁^ (++^-unit-r n))) ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-r⟷₂ (++^-swap-0 n)) ⟩
+    _ ⟷₂^⟨ idr◎r^ ⟩
+    _ ⟷₂^⟨ !⟷₂^ (++^-⊕-id-r (++^-swap n 0) ⊡^ ++^-⊕-id-r (id⟷₁^ {n})) ⟩
+    _ ⟷₂^∎
+eval^₂ (pentagon₊l {n₁} {t₁} {n₂} {t₂} {n₃} {t₃} {n₄} {t₄}) =
+  ++^-pentagon n₁ n₂ n₃ n₄ ■^
+  (!⟷₂^ (++^-⊕-id-r (++^-assoc n₁ n₂ n₃)) ⊡^ (id⟷₂^ ⊡^ !⟷₂^ (++^-⊕-id-l (++^-assoc n₂ n₃ n₄)))) ■^
+  assoc◎l^
+eval^₂ (pentagon₊r {n₁} {t₁} {n₂} {t₂} {n₃} {t₃} {n₄} {t₄}) =
+  assoc◎r^ ■^
+  (++^-⊕-id-r (++^-assoc n₁ n₂ n₃) ⊡^ (id⟷₂^ ⊡^ ++^-⊕-id-l (++^-assoc n₂ n₃ n₄))) ■^
+  !⟷₂^ (++^-pentagon n₁ n₂ n₃ n₄)
+eval^₂ (unite₊l-coh-l {t₁ = t₁}) =
+  idl◎r^ ■^ (!⟷₂^ (++^-swap-unit (eval^₀ t₁)) ⊡^ id⟷₂^) ■^ assoc◎r^
+eval^₂ (unite₊l-coh-r {t₁ = t₁}) =
+  assoc◎l^ ■^ (++^-swap-unit (eval^₀ t₁) ⊡^ id⟷₂^) ■^ idl◎l^
 eval^₂ hexagonr₊l = TODO!
 eval^₂ hexagonr₊r = TODO!
 eval^₂ hexagonl₊l = TODO!
