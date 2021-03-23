@@ -30,7 +30,18 @@ private
 eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
 eval^₂ assoc◎l = assoc◎l^
 eval^₂ assoc◎r = assoc◎r^
-eval^₂ (assocl₊l {n₁} {_} {n₂} {_} {n₃} {_} {n₄} {_} {n₅} {_} {n₆} {_}) = TODO!
+eval^₂ {.(n₁ N.+ (n₃ N.+ n₅))} {.((n₂ N.+ n₄) N.+ n₆)}
+       {.(t₁ U.+ (t₃ U.+ t₅))} {.((t₂ U.+ t₄) U.+ t₆)}
+       {.((c₁₂ ⊕ (c₃₄ ⊕ c₅₆)) ◎ assocl₊)} {.(assocl₊ ◎ ((c₁₂ ⊕ c₃₄) ⊕ c₅₆))}
+  (assocl₊l {n₁} {t₁} {n₂} {t₂} {n₃} {t₃} {n₄} {t₄} {n₅} {t₅} {n₆} {t₆}
+            {c₁₂} {c₃₄} {c₅₆}) =
+  eval^₁ ((c₁₂ ⊕ (c₃₄ ⊕ c₅₆)) ◎ assocl₊)
+    ⟷₂^⟨ id⟷₂^ ⟩
+  (++^-⊕ (eval^₁ c₁₂) (++^-⊕ (eval^₁ c₃₄) (eval^₁ c₅₆))) ◎^ (!⟷₁^ (++^-assoc n₂ n₄ n₆))
+    ⟷₂^⟨ TODO! ⟩
+  (!⟷₁^ (++^-assoc n₁ n₃ n₅)) ◎^ (++^-⊕ (++^-⊕ (eval^₁ c₁₂) (eval^₁ c₃₄)) (eval^₁ c₅₆))
+    ⟷₂^⟨ id⟷₂^ ⟩
+  eval^₁ (assocl₊ ◎ (c₁₂ ⊕ c₃₄) ⊕ c₅₆) ⟷₂^∎
 eval^₂ assocl₊r = TODO!
 eval^₂ (assocr₊r {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = !⟷₂^ (++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃})
 eval^₂ (assocr₊l {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = ++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃}
