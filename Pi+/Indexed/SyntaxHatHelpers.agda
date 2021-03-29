@@ -232,6 +232,11 @@ private
   ((!⟷₂^ hom⊕◎⟷₂^ ⊡^ (assoc◎l^ ■^ ((idr◎l^ ⊡^ id⟷₂^) ■^ linv◎l^))) ■^
     (idr◎l^ ■^ !⟷₂^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ (!⟷₂^ (++^-swap-unit n)))))
 
+++^-unit-swap : (n : ℕ) → ++^-swap n 0 ◎^ !⟷₁^ (++^-unit-r n) ⟷₂^ id⟷₁^
+++^-unit-swap O = idl◎l^
+++^-unit-swap (S n) = assoc◎r^ ■^ ((((id⟷₂^ ⊡^ (((id⟷₂^ ⊡^ idl◎l^) ■^ linv◎l^) ⊡^ id⟷₂^)) ■^ 
+        (id⟷₂^ ⊡^ idl◎l^)) ■^ hom◎⊕⟷₂^) ■^ resp⊕⟷₂ id⟷₂^) ■^ !⟷₂^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ (!⟷₂^ (++^-unit-swap n)))
+
 ++^-symm-O : (n : ℕ) → ++^-swap O n ◎^ ++^-swap n O ⟷₂^ id⟷₁^
 ++^-symm-O O = idl◎l^
 ++^-symm-O (S n) = ++^-swap-unit (S n)
@@ -243,4 +248,12 @@ private
 
 ++^-symm : (n m : ℕ) → ++^-swap n m ◎^ ++^-swap m n ⟷₂^ id⟷₁^
 ++^-symm O m = ++^-symm-O m
-++^-symm (S n) m = TODO!
+++^-symm (S n) O = 
+      _ ⟷₂^⟨ (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idl◎l^)) ⊡^ id⟷₂^ ⟩
+      _ ⟷₂^⟨ (id⟷₂^ ⊡^ linv◎l^) ⊡^ id⟷₂^ ⟩
+      _ ⟷₂^⟨ idr◎l^ ⊡^ id⟷₂^ ⟩
+      _ ⟷₂^⟨ hom◎⊕⟷₂^ ⟩
+      _ ⟷₂^⟨ resp⊕⟷₂ (++^-unit-swap n) ⟩
+      _ ⟷₂^⟨ ⊕id⟷₁⟷₂^ ⟩
+      _ ⟷₂^∎
+++^-symm (S n) (S m) = TODO!
