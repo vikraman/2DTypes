@@ -163,10 +163,10 @@ resp!⟷₂ swapl₊⟷₂^ = swapr₊⟷₂^
 resp!⟷₂ hexagonl₊l = assoc◎r^ ■^ hexagonl₊l ■^ assoc◎l^
 resp!⟷₂ hexagonl₊r = assoc◎r^ ■^ hexagonl₊r ■^ assoc◎l^
 
-c₊⟷₂id⟷₁ : (c : (O) ⟷₁^ (O)) → c ⟷₂^ id⟷₁^
-c₊⟷₂id⟷₁ id⟷₁^ = id⟷₂^
-c₊⟷₂id⟷₁ (_◎^_ {m = (O)} c₁ c₂) = _■^_ (c₊⟷₂id⟷₁ c₁ ⊡^ c₊⟷₂id⟷₁ c₂) idl◎l^
-c₊⟷₂id⟷₁ (_◎^_ {m = ((S m))} c₁ c₂) with (⟷₁^-eq-size c₂)
+c₊⟷₂id⟷₁^ : (c : (O) ⟷₁^ (O)) → c ⟷₂^ id⟷₁^
+c₊⟷₂id⟷₁^ id⟷₁^ = id⟷₂^
+c₊⟷₂id⟷₁^ (_◎^_ {m = (O)} c₁ c₂) = _■^_ (c₊⟷₂id⟷₁^ c₁ ⊡^ c₊⟷₂id⟷₁^ c₂) idl◎l^
+c₊⟷₂id⟷₁^ (_◎^_ {m = ((S m))} c₁ c₂) with (⟷₁^-eq-size c₂)
 ... | ()
 
 ⊕⊕id⟷₁⟷₂^ : {n : ℕ} → (⊕^ ⊕^ id⟷₁^ {n = n}) ⟷₂^ id⟷₁^ {n = S (S n)}

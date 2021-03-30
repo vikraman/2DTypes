@@ -159,7 +159,7 @@ pi^2list2pi^ (c₁ ◎^ c₂) with (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c�
       lemma = list2pi^++ (pi^2list c₁) (pi^2list c₂)
   in  _■^_ lemma (r₁ ⊡^ r₂)
 pi^2list2pi^ {O} (⊕^ c) with (⟷₁^-eq-size c)
-... | idp = !⟷₂^ (_■^_ (resp⊕⟷₂ (c₊⟷₂id⟷₁ c)) ⊕id⟷₁⟷₂^)
+... | idp = !⟷₂^ (_■^_ (resp⊕⟷₂ (c₊⟷₂id⟷₁^ c)) ⊕id⟷₁⟷₂^)
 pi^2list2pi^ {S n} (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp =
   let rec = pi^2list2pi^ c

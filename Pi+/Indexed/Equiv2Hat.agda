@@ -27,6 +27,15 @@ private
     variable
         n m : ℕ
 
+eval^₂-id : {t₁ : U n} {c₁ : t₁ ⟷₁ t₁} → (c₁ ⟷₂ id⟷₁) → eval^₁ c₁ ⟷₂^ id⟷₁^
+eval^₂-id idl◎l = idl◎l^
+eval^₂-id idr◎l = idl◎l^
+eval^₂-id (linv◎l {c = c}) = (id⟷₂^ ⊡^ eval^₁-! c) ■^ linv◎l^
+eval^₂-id (rinv◎l {c = c}) = ((eval^₁-! c) ⊡^ id⟷₂^) ■^ rinv◎l^
+eval^₂-id id⟷₂ = id⟷₂^
+eval^₂-id (c ■ c₁) = TODO! -- hard, a refactor is probably needed
+eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {n}) = ++^-⊕-id-l {n = _} {m = _} {o = n} (id⟷₁^ {n = _}) ■^ ++^-l-id
+
 eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
 eval^₂ assoc◎l = assoc◎l^
 eval^₂ assoc◎r = assoc◎r^
@@ -77,18 +86,22 @@ eval^₂ (linv◎l {c = c}) = (id⟷₂^ ⊡^ eval^₁-! c) ■^ linv◎l^
 eval^₂ (linv◎r {c = c}) = linv◎r^ ■^ (id⟷₂^ ⊡^ !⟷₂^ (eval^₁-! c))
 eval^₂ (rinv◎l {c = c}) = (eval^₁-! c ⊡^ id⟷₂^) ■^ rinv◎l^
 eval^₂ (rinv◎r {c = c}) = rinv◎r^ ■^ (!⟷₂^ (eval^₁-! c) ⊡^ id⟷₂^)
-eval^₂ unite₊l⟷₂l = ?
-eval^₂ unite₊l⟷₂r = TODO!
-eval^₂ uniti₊l⟷₂l = TODO!
-eval^₂ uniti₊l⟷₂r = TODO!
+eval^₂ (unite₊l⟷₂l {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
+... | α = !⟷₂^ (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idl◎r^) -- this α is why we have to have sth like eval^₂-id
+eval^₂ (unite₊l⟷₂r {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
+... | α = (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idl◎r^) -- this α is why we have to have sth like eval^₂-id
+eval^₂ (uniti₊l⟷₂l {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
+... | α = (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idr◎r^) -- this α is why we have to have sth like eval^₂-id
+eval^₂ (uniti₊l⟷₂r {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
+... | α = !⟷₂^ (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idr◎r^) -- this α is why we have to have sth like eval^₂-id
 eval^₂ swapl₊⟷₂ = TODO!
 eval^₂ swapr₊⟷₂ = TODO!
 eval^₂ id⟷₂ = id⟷₂^
 eval^₂ (_■_ α₁ α₂) = _■^_ (eval^₂ α₁) (eval^₂ α₂)
 eval^₂ (α₁ ⊡ α₂) = eval^₂ α₁ ⊡^ eval^₂ α₂
-eval^₂ (resp⊕⟷₂ α₁ α₂) = TODO!
-eval^₂ id⟷₁⊕id⟷₁⟷₂ = TODO!
-eval^₂ split⊕-id⟷₁ = TODO!
+eval^₂ (resp⊕⟷₂ α₁ α₂) = ++^-⊕-◎ (eval^₂ α₁) (eval^₂ α₂)
+eval^₂ (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}) = eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂})
+eval^₂ (split⊕-id⟷₁ {t₁ = t₁} {t₂ = t₂}) = !⟷₂^ (eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}))
 eval^₂ hom⊕◎⟷₂ = TODO!
 eval^₂ hom◎⊕⟷₂ = TODO!
 eval^₂ (triangle₊l {n}) =
