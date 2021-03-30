@@ -30,6 +30,23 @@ private
   id⟷₁^  ◎^ !⟷₁^ c₂ ⟷₂^⟨ idl◎l^ ⟩
   !⟷₁^ c₂ ⟷₂^∎
 
+-- eval^₁-! : {t₁ : U n} → {t₂ : U m} → (c : t₁ ⟷₁ t₂) → eval^₁ (!⟷₁ c) ⟷₂^ !⟷₁^ (eval^₁ c)
+-- eval^₁-! unite₊l = id⟷₂^
+-- eval^₁-! uniti₊l = id⟷₂^
+-- eval^₁-! (swap₊ {n} {_} {m} {_}) = 
+-- let x = ((id⟷₂^ {c = !⟷₁^ (++^-swap n m)}) ⊡^ (++^-symm n m)) ■^ idr◎l^
+-- in  (idl◎r^ ■^ (rinv◎r^ ⊡^ id⟷₂^) ■^ assoc◎r^) ■^ x
+-- eval^₁-! assocl₊ = !⟷₂^ (!!⟷₁^ (++^-assoc _ _ _))
+-- eval^₁-! assocr₊ = id⟷₂^
+-- eval^₁-! id⟷₁ = id⟷₂^
+-- eval^₁-! (c₁ ◎ c₂) = eval^₁-! c₂ ⊡^ eval^₁-! c₁
+-- eval^₁-! (c₁ ⊕ c₂) =
+-- let r₁ = eval^₁-! c₁
+-- r₂ = eval^₁-! c₂
+-- l = ++^-⊕-◎-l r₁
+-- r = ++^-⊕-◎-r {c₁ = (!⟷₁^ (eval^₁ c₁))} r₂
+-- in  l ■^ r ■^ ++^-⊕-! (eval^₁ c₁) (eval^₁ c₂)
+
 eval^₁-! : (c : t₁ ⟷₁ t₂) → eval^₁ (!⟷₁ c) ⟷₂^ !⟷₁^ (eval^₁ c)
 eval^₁-! unite₊l = id⟷₂^
 eval^₁-! uniti₊l = id⟷₂^

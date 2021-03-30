@@ -30,19 +30,43 @@ private
 eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
 eval^₂ assoc◎l = assoc◎l^
 eval^₂ assoc◎r = assoc◎r^
-eval^₂ {.(n₁ N.+ (n₃ N.+ n₅))} {.((n₂ N.+ n₄) N.+ n₆)}
-       {.(t₁ U.+ (t₃ U.+ t₅))} {.((t₂ U.+ t₄) U.+ t₆)}
-       {.((c₁₂ ⊕ (c₃₄ ⊕ c₅₆)) ◎ assocl₊)} {.(assocl₊ ◎ ((c₁₂ ⊕ c₃₄) ⊕ c₅₆))}
-  (assocl₊l {n₁} {t₁} {n₂} {t₂} {n₃} {t₃} {n₄} {t₄} {n₅} {t₅} {n₆} {t₆}
-            {c₁₂} {c₃₄} {c₅₆}) =
-  eval^₁ ((c₁₂ ⊕ (c₃₄ ⊕ c₅₆)) ◎ assocl₊)
-    ⟷₂^⟨ id⟷₂^ ⟩
-  (++^-⊕ (eval^₁ c₁₂) (++^-⊕ (eval^₁ c₃₄) (eval^₁ c₅₆))) ◎^ (!⟷₁^ (++^-assoc n₂ n₄ n₆))
-    ⟷₂^⟨ TODO! ⟩
-  (!⟷₁^ (++^-assoc n₁ n₃ n₅)) ◎^ (++^-⊕ (++^-⊕ (eval^₁ c₁₂) (eval^₁ c₃₄)) (eval^₁ c₅₆))
-    ⟷₂^⟨ id⟷₂^ ⟩
-  eval^₁ (assocl₊ ◎ (c₁₂ ⊕ c₃₄) ⊕ c₅₆) ⟷₂^∎
-eval^₂ assocl₊r = TODO!
+eval^₂ {c₁ = cc₁} {c₂ = cc₂} (assocl₊r {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = 
+    let e = resp!⟷₂ (!⟷₂^ (++^-assoc-⊕ {c₁ = eval^₁ (!⟷₁ c₁)} {c₂ = eval^₁ (!⟷₁ c₂)} {c₃ = eval^₁ (!⟷₁ c₃)}))
+        r₁ = eval^₁-! c₁
+        r₂ = eval^₁-! c₂
+        r₃ = eval^₁-! c₃
+        
+        r-mx = ++^-⊕-◎ r₁ (++^-⊕-◎ r₂ r₃)
+        r-!-lx = ++^-⊕-◎-r {c₁ = !⟷₁^ (eval^₁ c₁)} (++^-⊕-! (eval^₁ c₂) (eval^₁ c₃))
+        r-!-rx = ++^-⊕-! (eval^₁ c₁) (++^-⊕ (eval^₁ c₂) (eval^₁ c₃))        
+        r-!-mx = r-!-lx ■^ r-!-rx
+        r-m = (resp!⟷₂ (r-mx ■^ r-!-mx)) ■^ !!⟷₁^ _
+
+        l-mx = ++^-⊕-◎ (++^-⊕-◎ r₁ r₂) r₃ 
+        l-!-lx = ++^-⊕-◎-l {c₃ = !⟷₁^ (eval^₁ c₃)} (++^-⊕-! (eval^₁ c₁) (eval^₁ c₂))
+        l-!-rx = ++^-⊕-! (++^-⊕ (eval^₁ c₁) (eval^₁ c₂)) (eval^₁ c₃)
+        l-!-mx = l-!-lx ■^ l-!-rx
+        l-m = !⟷₂^ ((resp!⟷₂ (l-mx ■^ l-!-mx)) ■^ !!⟷₁^ _)
+
+    in  (id⟷₂^ ⊡^  l-m) ■^ e ■^ (r-m ⊡^ id⟷₂^)
+eval^₂ (assocl₊l {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = 
+    let e = resp!⟷₂ (!⟷₂^ (++^-assoc-⊕ {c₁ = eval^₁ (!⟷₁ c₁)} {c₂ = eval^₁ (!⟷₁ c₂)} {c₃ = eval^₁ (!⟷₁ c₃)}))
+        r₁ = eval^₁-! c₁
+        r₂ = eval^₁-! c₂
+        r₃ = eval^₁-! c₃
+        
+        r-mx = ++^-⊕-◎ r₁ (++^-⊕-◎ r₂ r₃)
+        r-!-lx = ++^-⊕-◎-r {c₁ = !⟷₁^ (eval^₁ c₁)} (++^-⊕-! (eval^₁ c₂) (eval^₁ c₃))
+        r-!-rx = ++^-⊕-! (eval^₁ c₁) (++^-⊕ (eval^₁ c₂) (eval^₁ c₃))        
+        r-!-mx = r-!-lx ■^ r-!-rx
+        r-m = (resp!⟷₂ (r-mx ■^ r-!-mx)) ■^ !!⟷₁^ _
+
+        l-mx = ++^-⊕-◎ (++^-⊕-◎ r₁ r₂) r₃ 
+        l-!-lx = ++^-⊕-◎-l {c₃ = !⟷₁^ (eval^₁ c₃)} (++^-⊕-! (eval^₁ c₁) (eval^₁ c₂))
+        l-!-rx = ++^-⊕-! (++^-⊕ (eval^₁ c₁) (eval^₁ c₂)) (eval^₁ c₃)
+        l-!-mx = l-!-lx ■^ l-!-rx
+        l-m = !⟷₂^ ((resp!⟷₂ (l-mx ■^ l-!-mx)) ■^ !!⟷₁^ _)
+    in  !⟷₂^ ((id⟷₂^ ⊡^  l-m) ■^ e ■^ (r-m ⊡^ id⟷₂^))
 eval^₂ (assocr₊r {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = !⟷₂^ (++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃})
 eval^₂ (assocr₊l {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) = ++^-assoc-⊕ {c₁ = eval^₁ c₁} {c₂ = eval^₁ c₂} {c₃ = eval^₁ c₃}
 eval^₂ idl◎l = idl◎l^
@@ -53,7 +77,7 @@ eval^₂ (linv◎l {c = c}) = (id⟷₂^ ⊡^ eval^₁-! c) ■^ linv◎l^
 eval^₂ (linv◎r {c = c}) = linv◎r^ ■^ (id⟷₂^ ⊡^ !⟷₂^ (eval^₁-! c))
 eval^₂ (rinv◎l {c = c}) = (eval^₁-! c ⊡^ id⟷₂^) ■^ rinv◎l^
 eval^₂ (rinv◎r {c = c}) = rinv◎r^ ■^ (!⟷₂^ (eval^₁-! c) ⊡^ id⟷₂^)
-eval^₂ unite₊l⟷₂l = TODO!
+eval^₂ unite₊l⟷₂l = ?
 eval^₂ unite₊l⟷₂r = TODO!
 eval^₂ uniti₊l⟷₂l = TODO!
 eval^₂ uniti₊l⟷₂r = TODO!
