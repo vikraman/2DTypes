@@ -190,6 +190,39 @@ private
 -- lemma : (++^-l {o = 1 ++ m} (++^-swap n o)) ◎^ ++^-r {o = n} (++^-cons (m ++ o)) ⟷₂^
 --   (++^-r {o = n ++ o} (++^-cons m)) ◎^ (++^-l {o = m ++ 1} (++^-swap n o)) ◎^ (++^-l {o = m} (++^-r {o = n} (++^-cons o)))
 
+++^-cons-S : (n m : ℕ) → S (n ++ m) ⟷₁^ n ++ S m
+++^-cons-S O m = id⟷₁^
+++^-cons-S (S n) m = ⊕^ ++^-cons-S n m
+
+-- Note: do not generalize the generator of 2-combinators
+-- It's extremely easy to prove this lemma
+-- But proving the soundness of it as a constructor is quite difficult
+swapr₊⟷₂^-gen : {n m : ℕ} → (c : n ⟷₁^ m) → ((⊕^ ⊕^ c) ◎^ swap₊^) ⟷₂^ (swap₊^ ◎^ ⊕^ ⊕^ c)
+swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
+... | idp = swapr₊⟷₂^
+
+-- ++^-swap is defined by induction on the left paramter
+-- here, we show how does it behave by induction on the right parameter
+++^-swap-S : (n m : ℕ) → ++^-swap n (S m) ⟷₂^ !⟷₁^ (++^-assoc n 1 m) ◎^ (++^-r (!⟷₁^ (++^-cons n))) ◎^ (⊕^ (++^-swap n m))
+++^-swap-S O m = idl◎r^ ■^ idl◎r^
+++^-swap-S (S n) m = 
+    let r = ++^-swap-S n m
+    in  _ ◎^ (_ ◎^ ⊕^ _) ◎^ (⊕^ _) ◎^ ⊕^ _ ⟷₂^⟨ assoc◎l^ ■^ (assoc◎l^ ⊡^ id⟷₂^) ■^ assoc◎r^ ⟩
+        (_ ◎^ _) ◎^ ((⊕^ _) ◎^ (⊕^ _) ◎^ ⊕^ _) ⟷₂^⟨ id⟷₂^ ⊡^ (id⟷₂^ ⊡^ hom◎⊕⟷₂^) ⟩
+        _ ⟷₂^⟨ id⟷₂^ ⊡^ hom◎⊕⟷₂^ ⟩
+        (_ ◎^ _) ◎^ ⊕^ (_ ◎^ _ ◎^ _) ⟷₂^⟨ (resp⊕⟷₂ r ⊡^ id⟷₂^) ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ (hom⊕◎⟷₂^ ⊡^ id⟷₂^) ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ assoc◎r^ ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ (id⟷₂^ ⊡^ (hom⊕◎⟷₂^ ⊡^ id⟷₂^)) ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ (id⟷₂^ ⊡^ assoc◎r^) ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ swapr₊⟷₂^-gen _)) ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ (id⟷₂^ ⊡^ assoc◎l^) ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ assoc◎l^ ⊡^ id⟷₂^ ⟩
+        _ ⟷₂^⟨ assoc◎r^ ⟩
+        (_ ◎^ _) ◎^ (⊕^ _) ◎^ (⊕^ _) ⟷₂^⟨ id⟷₂^ ⊡^ hom◎⊕⟷₂^ ⟩
+        (_ ◎^ _) ◎^ ⊕^ (_ ◎^ _) ⟷₂^⟨ assoc◎r^ ⟩
+        _ ◎^ _ ◎^ ⊕^ _ ⟷₂^∎
+
 ++^-hexagon : (n m o : ℕ)
             → (++^-assoc n m o) ◎^ ++^-swap n (m ++ o) ◎^ ++^-assoc m o n ⟷₂^
               ++^-r {o = o} (++^-swap n m) ◎^ ++^-assoc m n o ◎^ ++^-l {o = m} (++^-swap n o)
@@ -246,14 +279,25 @@ private
                    (⊕^ ++^-swap n m) ◎^ ++^-swap 1 (m ++ n) ◎^ (++^-assoc m n 1)
 ++^-swap-S-assoc n m = TODO!
 
+-- ++-cons (m ++ n) in terms of ++-cons m and ++-cons n
+-- should be provable from ++^-cons-assoc
+++^-cons-++ : (n m : ℕ) → 
+        (((++^-cons (m ++ n) ◎^  ++^-assoc m n 1 ◎^ !⟷₁^ (++^-l (++^-cons n)))
+          ◎^ !⟷₁^ (++^-assoc m 1 n))
+          ◎^ ++^-r (!⟷₁^ (++^-cons m)))
+        ⟷₂^ id⟷₁^
+++^-cons-++ n m = TODO!
+
 ++^-symm : (n m : ℕ) → ++^-swap n m ◎^ ++^-swap m n ⟷₂^ id⟷₁^
 ++^-symm O m = ++^-symm-O m
-++^-symm (S n) O = 
-      _ ⟷₂^⟨ (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idl◎l^)) ⊡^ id⟷₂^ ⟩
-      _ ⟷₂^⟨ (id⟷₂^ ⊡^ linv◎l^) ⊡^ id⟷₂^ ⟩
-      _ ⟷₂^⟨ idr◎l^ ⊡^ id⟷₂^ ⟩
-      _ ⟷₂^⟨ hom◎⊕⟷₂^ ⟩
-      _ ⟷₂^⟨ resp⊕⟷₂ (++^-unit-swap n) ⟩
-      _ ⟷₂^⟨ ⊕id⟷₁⟷₂^ ⟩
-      _ ⟷₂^∎
-++^-symm (S n) (S m) = TODO!
+++^-symm (S n) m = 
+    let r = ++^-symm n m 
+    in  _ ⟷₂^⟨ assoc◎r^ ⟩
+        _ ⟷₂^⟨ id⟷₂^ ⊡^ (id⟷₂^ ⊡^ ++^-swap-S m n) ⟩
+        _ ⟷₂^⟨ id⟷₂^ ⊡^ (assoc◎l^ ■^ assoc◎l^) ⟩
+        _ ⟷₂^⟨ id⟷₂^ ⊡^ (++^-cons-++ n m ⊡^ id⟷₂^) ⟩
+        _ ⟷₂^⟨ id⟷₂^ ⊡^ idl◎l^ ⟩
+        _ ⟷₂^⟨ hom◎⊕⟷₂^ ⟩
+        _ ⟷₂^⟨ resp⊕⟷₂ r ⟩
+        _ ⟷₂^⟨ ⊕id⟷₁⟷₂^ ⟩
+        _ ⟷₂^∎
