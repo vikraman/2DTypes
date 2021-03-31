@@ -27,14 +27,64 @@ private
     variable
         n m : ℕ
 
-eval^₂-id : {t₁ : U n} {c₁ : t₁ ⟷₁ t₁} → (c₁ ⟷₂ id⟷₁) → eval^₁ c₁ ⟷₂^ id⟷₁^
-eval^₂-id idl◎l = idl◎l^
-eval^₂-id idr◎l = idl◎l^
-eval^₂-id (linv◎l {c = c}) = (id⟷₂^ ⊡^ eval^₁-! c) ■^ linv◎l^
-eval^₂-id (rinv◎l {c = c}) = ((eval^₁-! c) ⊡^ id⟷₂^) ■^ rinv◎l^
-eval^₂-id id⟷₂ = id⟷₂^
-eval^₂-id (c ■ c₁) = TODO! -- hard, a refactor is probably needed
-eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {n}) = ++^-⊕-id-l {n = _} {m = _} {o = n} (id⟷₁^ {n = _}) ■^ ++^-l-id
+!-quote^₁ : (c : n ⟷₁^ m) → quote^₁ (!⟷₁^ c) ⟷₂ !⟷₁ (quote^₁ c)
+!-quote^₁ swap₊^ = assoc◎l
+!-quote^₁ id⟷₁^ = id⟷₂
+!-quote^₁ (c ◎^ c₁) = (!-quote^₁ c₁) ⊡ (!-quote^₁ c)
+!-quote^₁ (⊕^ c) = resp⊕⟷₂ id⟷₂ (!-quote^₁ c)
+
+quote^₂ : {c₁ c₂ : n ⟷₁^ m} → c₁ ⟷₂^ c₂ → quote^₁ c₁ ⟷₂ quote^₁ c₂
+quote^₂ assoc◎l^ = assoc◎l
+quote^₂ assoc◎r^ = assoc◎r
+quote^₂ idl◎l^ = idl◎l
+quote^₂ idl◎r^ = idl◎r
+quote^₂ idr◎l^ = idr◎l
+quote^₂ idr◎r^ = idr◎r
+quote^₂ linv◎l^ = _■_ (id⟷₂ ⊡ (!-quote^₁ _)) linv◎l
+quote^₂ linv◎r^ = !⟷₂ (_■_ (id⟷₂ ⊡ (!-quote^₁ _)) linv◎l)
+quote^₂ rinv◎l^ = _■_ ( (!-quote^₁ _) ⊡ id⟷₂) rinv◎l
+quote^₂ rinv◎r^ = !⟷₂ (_■_ ( (!-quote^₁ _) ⊡ id⟷₂) rinv◎l)
+quote^₂ id⟷₂^ = id⟷₂
+quote^₂ (_■^_ α α₁) = _■_ (quote^₂ α) (quote^₂ α₁)
+quote^₂ (α ⊡^ α₁) = quote^₂ α ⊡ quote^₂ α₁
+quote^₂ ⊕id⟷₁⟷₂^ = id⟷₁⊕id⟷₁⟷₂
+quote^₂ !⊕id⟷₁⟷₂^ = split⊕-id⟷₁
+quote^₂ hom◎⊕⟷₂^ = _■_ hom◎⊕⟷₂ (resp⊕⟷₂ idl◎l id⟷₂)
+quote^₂ (resp⊕⟷₂ α) = resp⊕⟷₂ id⟷₂ (quote^₂ α)
+quote^₂ hom⊕◎⟷₂^ = !⟷₂ (_■_ hom◎⊕⟷₂ (resp⊕⟷₂ idl◎l id⟷₂))
+quote^₂ swapr₊⟷₂^ =
+    _ ⟷₂⟨ assoc◎l ⟩
+    _ ⟷₂⟨ assocl₊l ⊡ id⟷₂ ⟩
+    _ ⟷₂⟨ assoc◎r ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂) ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (resp⊕⟷₂ swapr₊⟷₂ idl◎r ⊡ id⟷₂) ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (hom⊕◎⟷₂ ⊡ id⟷₂) ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎r ⟩
+    _ ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ assocr₊r) ⟩
+    _ ⟷₂⟨ assoc◎l ⟩
+    _ ⟷₂⟨ assoc◎l ⟩
+    _ ⟷₂⟨ assoc◎r ⊡ resp⊕⟷₂ id⟷₂ (resp⊕⟷₂ id⟷₂ idr◎l) ⟩
+    _ ⟷₂∎
+quote^₂ (swapl₊⟷₂^ {c = c}) =
+    let r = (quote^₂ (swapr₊⟷₂^ {c = c}))
+    in !⟷₂ r
+quote^₂ hexagonl₊l =
+    let s₁ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+        s₂ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+    in  s₁ ◎ (id⟷₁ ⊕ s₂) ◎ s₁ ⟷₂⟨ TODO! ⟩
+        (id⟷₁ ⊕ s₂) ◎ s₁ ◎ (id⟷₁ ⊕ s₂) ⟷₂∎
+quote^₂ hexagonl₊r =
+    let r = (quote^₂ hexagonl₊l)
+    in !⟷₂ r
+
+eval^₂-O : {t₁ t₂ : U O} → (c : t₁ ⟷₁ t₂) → eval^₁ c ⟷₂^ id⟷₁^
+eval^₂-O c = c₊⟷₂id⟷₁^ (eval^₁ c)
+
+c₊⟷₂id⟷₁ : (c : O ⟷₁ O) → c ⟷₂ id⟷₁
+c₊⟷₂id⟷₁ c = 
+        let x = quote^₂ (eval^₂-O c)
+        in  ((idr◎r ■ idl◎r) ■ !⟷₂ (quote-eval^₁ c)) ■ x
 
 eval^₂ : {t₁ : U n} {t₂ : U m} {c₁ c₂ : t₁ ⟷₁ t₂} → c₁ ⟷₂ c₂ → eval^₁ c₁ ⟷₂^ eval^₁ c₂
 eval^₂ assoc◎l = assoc◎l^
@@ -87,21 +137,21 @@ eval^₂ (linv◎r {c = c}) = linv◎r^ ■^ (id⟷₂^ ⊡^ !⟷₂^ (eval^₁-
 eval^₂ (rinv◎l {c = c}) = (eval^₁-! c ⊡^ id⟷₂^) ■^ rinv◎l^
 eval^₂ (rinv◎r {c = c}) = rinv◎r^ ■^ (!⟷₂^ (eval^₁-! c) ⊡^ id⟷₂^)
 eval^₂ (unite₊l⟷₂l {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
-... | α = !⟷₂^ (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idl◎r^) -- this α is why we have to have sth like eval^₂-id
+... | α = !⟷₂^ (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idl◎r^)
 eval^₂ (unite₊l⟷₂r {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
-... | α = (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idl◎r^) -- this α is why we have to have sth like eval^₂-id
+... | α = (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idl◎r^)
 eval^₂ (uniti₊l⟷₂l {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
-... | α = (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idr◎r^) -- this α is why we have to have sth like eval^₂-id
+... | α = (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idr◎r^)
 eval^₂ (uniti₊l⟷₂r {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
-... | α = !⟷₂^ (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-id α)) ■^ idr◎r^) -- this α is why we have to have sth like eval^₂-id
+... | α = !⟷₂^ (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idr◎r^)
 eval^₂ swapl₊⟷₂ = TODO!
 eval^₂ swapr₊⟷₂ = TODO!
 eval^₂ id⟷₂ = id⟷₂^
 eval^₂ (_■_ α₁ α₂) = _■^_ (eval^₂ α₁) (eval^₂ α₂)
 eval^₂ (α₁ ⊡ α₂) = eval^₂ α₁ ⊡^ eval^₂ α₂
 eval^₂ (resp⊕⟷₂ α₁ α₂) = ++^-⊕-◎ (eval^₂ α₁) (eval^₂ α₂)
-eval^₂ (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}) = eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂})
-eval^₂ (split⊕-id⟷₁ {t₁ = t₁} {t₂ = t₂}) = !⟷₂^ (eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}))
+eval^₂ (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}) = {!   !} -- eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂})
+eval^₂ (split⊕-id⟷₁ {t₁ = t₁} {t₂ = t₂}) = {!   !} -- !⟷₂^ (eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}))
 eval^₂ hom⊕◎⟷₂ = TODO!
 eval^₂ hom◎⊕⟷₂ = TODO!
 eval^₂ (triangle₊l {n}) =
@@ -137,53 +187,3 @@ eval^₂ hexagonr₊r = TODO!
 eval^₂ hexagonl₊l = TODO!
 eval^₂ hexagonl₊r = TODO!
 
-!-quote^₁ : (c : n ⟷₁^ m) → quote^₁ (!⟷₁^ c) ⟷₂ !⟷₁ (quote^₁ c)
-!-quote^₁ swap₊^ = assoc◎l
-!-quote^₁ id⟷₁^ = id⟷₂
-!-quote^₁ (c ◎^ c₁) = (!-quote^₁ c₁) ⊡ (!-quote^₁ c)
-!-quote^₁ (⊕^ c) = resp⊕⟷₂ id⟷₂ (!-quote^₁ c)
-
-quote^₂ : {c₁ c₂ : n ⟷₁^ m} → c₁ ⟷₂^ c₂ → quote^₁ c₁ ⟷₂ quote^₁ c₂
-quote^₂ assoc◎l^ = assoc◎l
-quote^₂ assoc◎r^ = assoc◎r
-quote^₂ idl◎l^ = idl◎l
-quote^₂ idl◎r^ = idl◎r
-quote^₂ idr◎l^ = idr◎l
-quote^₂ idr◎r^ = idr◎r
-quote^₂ linv◎l^ = _■_ (id⟷₂ ⊡ (!-quote^₁ _)) linv◎l
-quote^₂ linv◎r^ = !⟷₂ (_■_ (id⟷₂ ⊡ (!-quote^₁ _)) linv◎l)
-quote^₂ rinv◎l^ = _■_ ( (!-quote^₁ _) ⊡ id⟷₂) rinv◎l
-quote^₂ rinv◎r^ = !⟷₂ (_■_ ( (!-quote^₁ _) ⊡ id⟷₂) rinv◎l)
-quote^₂ id⟷₂^ = id⟷₂
-quote^₂ (_■^_ α α₁) = _■_ (quote^₂ α) (quote^₂ α₁)
-quote^₂ (α ⊡^ α₁) = quote^₂ α ⊡ quote^₂ α₁
-quote^₂ ⊕id⟷₁⟷₂^ = id⟷₁⊕id⟷₁⟷₂
-quote^₂ !⊕id⟷₁⟷₂^ = split⊕-id⟷₁
-quote^₂ hom◎⊕⟷₂^ = _■_ hom◎⊕⟷₂ (resp⊕⟷₂ idl◎l id⟷₂)
-quote^₂ (resp⊕⟷₂ α) = resp⊕⟷₂ id⟷₂ (quote^₂ α)
-quote^₂ hom⊕◎⟷₂^ = !⟷₂ (_■_ hom◎⊕⟷₂ (resp⊕⟷₂ idl◎l id⟷₂))
-quote^₂ swapr₊⟷₂^ =
-    _ ⟷₂⟨ assoc◎l ⟩
-    _ ⟷₂⟨ assocl₊l ⊡ id⟷₂ ⟩
-    _ ⟷₂⟨ assoc◎r ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ (hom◎⊕⟷₂ ⊡ id⟷₂) ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ (resp⊕⟷₂ swapr₊⟷₂ idl◎r ⊡ id⟷₂) ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ (hom⊕◎⟷₂ ⊡ id⟷₂) ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ assoc◎r ⟩
-    _ ⟷₂⟨ id⟷₂ ⊡ (id⟷₂ ⊡ assocr₊r) ⟩
-    _ ⟷₂⟨ assoc◎l ⟩
-    _ ⟷₂⟨ assoc◎l ⟩
-    _ ⟷₂⟨ assoc◎r ⊡ resp⊕⟷₂ id⟷₂ (resp⊕⟷₂ id⟷₂ idr◎l) ⟩
-    _ ⟷₂∎
-quote^₂ (swapl₊⟷₂^ {c = c}) =
-    let r = (quote^₂ (swapr₊⟷₂^ {c = c}))
-    in !⟷₂ r
-quote^₂ hexagonl₊l =
-    let s₁ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
-        s₂ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
-    in  s₁ ◎ (id⟷₁ ⊕ s₂) ◎ s₁ ⟷₂⟨ TODO! ⟩
-        (id⟷₁ ⊕ s₂) ◎ s₁ ◎ (id⟷₁ ⊕ s₂) ⟷₂∎
-quote^₂ hexagonl₊r =
-    let r = (quote^₂ hexagonl₊l)
-    in !⟷₂ r

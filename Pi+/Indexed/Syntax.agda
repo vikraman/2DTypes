@@ -287,10 +287,6 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ hexagonl₊l = _■_ (_■_ assoc◎l hexagonr₊l) assoc◎r
 !⟷₁⟷₂ hexagonl₊r = _■_ (_■_ assoc◎l hexagonr₊r) assoc◎r
 
-c₊⟷₂id⟷₁ : (c : (O) ⟷₁ (O)) → c ⟷₂ id⟷₁
-c₊⟷₂id⟷₁ id⟷₁ = id⟷₂
-c₊⟷₂id⟷₁ (c ◎ c₁) = TODO!
-
 -- -- 3-combinators trivial
 
 data _⟷₃_ : {X Y : U n} {p q : X ⟷₁ Y} → (p ⟷₂ q) → (p ⟷₂ q) → Set where
