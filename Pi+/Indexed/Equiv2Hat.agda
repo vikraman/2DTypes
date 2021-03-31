@@ -137,7 +137,7 @@ eval^₂ (linv◎r {c = c}) = linv◎r^ ■^ (id⟷₂^ ⊡^ !⟷₂^ (eval^₁-
 eval^₂ (rinv◎l {c = c}) = (eval^₁-! c ⊡^ id⟷₂^) ■^ rinv◎l^
 eval^₂ (rinv◎r {c = c}) = rinv◎r^ ■^ (!⟷₂^ (eval^₁-! c) ⊡^ id⟷₂^)
 eval^₂ (unite₊l⟷₂l {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
-... | α = !⟷₂^ (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idl◎r^)
+... | α =  !⟷₂^ (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idl◎r^)
 eval^₂ (unite₊l⟷₂r {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
 ... | α = (idr◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idl◎r^)
 eval^₂ (uniti₊l⟷₂l {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
@@ -150,8 +150,8 @@ eval^₂ id⟷₂ = id⟷₂^
 eval^₂ (_■_ α₁ α₂) = _■^_ (eval^₂ α₁) (eval^₂ α₂)
 eval^₂ (α₁ ⊡ α₂) = eval^₂ α₁ ⊡^ eval^₂ α₂
 eval^₂ (resp⊕⟷₂ α₁ α₂) = ++^-⊕-◎ (eval^₂ α₁) (eval^₂ α₂)
-eval^₂ (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}) = {!   !} -- eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂})
-eval^₂ (split⊕-id⟷₁ {t₁ = t₁} {t₂ = t₂}) = {!   !} -- !⟷₂^ (eval^₂-id (id⟷₁⊕id⟷₁⟷₂ {t₁ = t₁} {t₂ = t₂}))
+eval^₂ (id⟷₁⊕id⟷₁⟷₂ {n}) = ++^-⊕-id-l {n = _} {m = _} {o = n} (id⟷₁^ {n = _}) ■^ ++^-l-id
+eval^₂ (split⊕-id⟷₁ {n}) = !⟷₂^ (++^-⊕-id-l {n = _} {m = _} {o = n} (id⟷₁^ {n = _}) ■^ ++^-l-id)
 eval^₂ hom⊕◎⟷₂ = TODO!
 eval^₂ hom◎⊕⟷₂ = TODO!
 eval^₂ (triangle₊l {n}) =
