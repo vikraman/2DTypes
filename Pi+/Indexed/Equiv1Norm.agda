@@ -75,7 +75,7 @@ quoteNorm₁ {S n} {S m} q p =
 
 quote-evalNorm₁ : {n m : ℕ} → (c : n ⟷₁^ m) → quoteNorm₁ (⟷₁^-eq-size c) (evalNorm₁ c) ⟷₂^ c
 quote-evalNorm₁ {O} c with (⟷₁^-eq-size c)
-... | idp = _■^_ (c₊⟷₂id⟷₁ _) (!⟷₂^ (c₊⟷₂id⟷₁ c))
+... | idp = _■^_ (c₊⟷₂id⟷₁^ _) (!⟷₂^ (c₊⟷₂id⟷₁^ c))
 quote-evalNorm₁ {S n} p with (⟷₁^-eq-size p)
 ... | idp =
     let cancelSn : –> Fin≃Lehmer (<– Fin≃Lehmer (pi^2lehmer p)) == pi^2lehmer p
