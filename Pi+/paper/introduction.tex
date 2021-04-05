@@ -1,5 +1,18 @@
 \section{Introduction}~\label{sec:introduction}
 
+Semantically, obvious that only permutation on empty set is id.
+
+Syntactically, we have 0, 1, +, *  and an infinite number of programs of type 0
+<-> 0. How do we prove that they are all equivalent to id?
+
+Obvious induction does not work because after a sequential composition step, the
+intermediate type is no longer syntactically 0.
+
+So we add size indices to types. Separate U and UHat. Now the proof is obvious.
+
+
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
