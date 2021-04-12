@@ -58,3 +58,33 @@ jobs:
         with:
           name: pdf
           path: Pi+/paper/main.pdf
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Pi+ paper
+        uses: xu-cheng/latex-action@v2
+        with:
+          working_directory: Pi+/paper
+          root_file: main.tex
+      - name: Release Pi+ paper
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: Pi+
+          release_name: Pi+
+          draft: true
+          prerelease: true
+      - name: Release Pi+ paper
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: Pi+/paper/main.pdf
+          asset_name: main.pdf
+          asset_content_type: pdf
