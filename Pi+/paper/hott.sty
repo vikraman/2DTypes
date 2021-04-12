@@ -3,18 +3,25 @@
 \RequirePackage{xparse}
 \RequirePackage{etoolbox}
 \RequirePackage{mathtools}
+\RequirePackage{relsize}
 \RequirePackage{amsmath}
 \RequirePackage{perfectcut}
 \let\ps\perfectparens%
 
+% meta
+\newcommand{\defeq}{\mathrel{\triangleq}}
+
 % types and terms
 \newcommand{\type}[1]{\mathsf{#1}}
-\newcommand{\term}[1]{\mathsf{#1}}
-\newcommand{\typef}[1]{\mathsf{#1}}
+\newcommand{\term}[1]{\operatorname{\mathsf{#1}}}
+\newcommand{\typef}[1]{\operatorname{\mathsf{#1}}}
 
 % universes
 \newcommand{\UU}{\mathcal{U}}
-\newcommand{\UFin}{\UU_{\type{Fin}}}
+\NewDocumentCommand{\UFin}{O{}}{{\UU_{\type{Fin}}}\ifstrempty{#1}{}{\ps{#1}}}
+\newcommand{\El}{\term{El}}
+\newcommand{\SubP}[2]{\Trunc{-1}{{#1} \id_{\UU} {#2}}}
+\newcommand{\Sub}[1]{\dsum{X:\UU}{\SubP{X}{#1}}}
 
 % unit type
 \newcommand{\unit}{{\mathbf{1}}}
@@ -23,11 +30,14 @@
 % empty type
 \newcommand{\emptyt}{{\mathbf{0}}}
 
+% Bool
+\newcommand{\Bool}{{\mathbf{2}}}
+
 % identity type
 \NewDocumentCommand{\id}{E{^_}{{}{}}}{
   \mathrel{
     \ifstrempty{#1}
-    {\ifstrempty{#2}{=}{{=}_{#2}}}
+    {\ifstrempty{#2}{\mathrel{=}}{\mathrel{{=}_{\mathsmaller{#2}}}}}
     {{=}^{#1}_{#2}}
   }
 }
@@ -55,9 +65,16 @@
 \newcommand{\trunc}[2]{\Vert #2\Vert_{#1}}
 
 % propositions
-\newcommand{\isContr}[1]{\mathop{\term{isContr}}\ps{#1}}
-\newcommand{\isProp}[1]{\mathop{\term{isProp}}\ps{#1}}
-\newcommand{\isEquiv}[1]{\mathop{\term{isEquiv}}\ps{#1}}
+\newcommand{\isContr}[1]{\mathop{\term{isContr}}({#1})}
+\newcommand{\isProp}[1]{\mathop{\term{isProp}}({#1})}
+\newcommand{\isEquiv}[1]{\mathop{\term{isEquiv}}({#1})}
 
 % aut
 \NewDocumentCommand{\Aut}{O{}}{\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
+\NewDocumentCommand{\BAut}{O{}}{\mathcal{B}\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
+
+% dependent sum
+\newcommand{\dsum}[2]{\sum\limits_{\mathsmaller{#1}}{#2}}
+\newcommand{\pair}[1]{\ps{#1}}
+\newcommand{\fst}{\pi_1}
+\newcommand{\snd}{\pi_2}
