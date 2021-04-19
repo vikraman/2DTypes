@@ -1,6 +1,7 @@
 \section{The groupoid of finite types}~\label{sec:finite}
 
-In this section, we describe the algebraic structure of the groupoid of finite types by characterising its paths.
+In this section, we describe the algebraic structure of the groupoid of finite types, and give a computable presentation
+for it.
 
 \subsection{Permutations}
 
@@ -94,6 +95,20 @@ First, we formally define a presentation of a group.
 \end{proposition}
 
 We now introduce a presentation of the symmetric group.
+
+\subsection{Symmetric Monoidal structure}
+
+$\UFin$ is a symmetric monoidal groupoid with unit and tensor given by
+
+\begin{definition}
+  \begin{align*}
+    I & \defeq \Fin[0] \\
+    X \otimes Y & \defeq X \sqcup Y
+  \end{align*}
+\end{definition}
+
+with unitors, associator, and braiding satisfying Mac Lane's triangle, pentagon, and hexagon coherence laws, and
+symmetry. It is the free symmetric monoidal groupoid on one generator.
 
 %%% Local Variables:
 %%% mode: latex
