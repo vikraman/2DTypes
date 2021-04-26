@@ -1,9 +1,46 @@
 \documentclass[acmsmall,review,nonacm]{acmart}
 
 \usepackage{cleveref}
-
 \usepackage{macros}
 \usepackage{hott}
+
+%% Some recommended packages.
+%% \usepackage{booktabs}   %% For formal tables:
+                        %% http://ctan.org/pkg/booktabs
+%% \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+                        %% http://ctan.org/pkg/subcaption
+%% \usepackage{verbatim}
+%% \usepackage{amsmath,amsbsy}
+%% \usepackage{alltt}
+%% \usepackage{fdsymbol}
+%% \usepackage{amsthm,proof}
+%% \usepackage{bbold,stmaryrd,bbm}
+\usepackage{bbold}
+%% \usepackage{ucs}
+%% \usepackage{wrapfig}
+%% \usepackage[utf8x]{inputenc}
+%% \usepackage{newunicodechar}
+%% \usepackage{microtype}
+%% \usepackage{subcaption}
+%% \usepackage{agda}
+%% \usepackage{tikz}
+%% \usetikzlibrary{cd}
+%% \usetikzlibrary{quotes}
+%% \usetikzlibrary{decorations.markings}
+%% \usepackage{tikzit}
+%% \input{tikzit.tikzstyles}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem*{remark}{Remark}
+
+\newcommand{\zerot}{\mathbb{0}}
+\newcommand{\onet}{\mathbb{1}}
+\newcommand{\sumt}{\mathbin{\mathsf{+}}}
+\newcommand{\prodt}{\mathbin{\mathsf{\times}}}
+\newcommand{\isot}{\leftrightarrow}
 
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs
