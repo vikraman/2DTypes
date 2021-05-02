@@ -46,11 +46,12 @@
   {\term{refl}}
   {\term{refl}_{#1}}
 }
-\newcommand{\ap}[2]{\term{ap}_{#1}\ps{#2}}
-\newcommand{\apd}[2]{\term{apd}_{#1}\ps{#2}}
-\newcommand{\coe}[1]{\term{coe}\ps{#1}}
-\newcommand{\transport}[1]{\term{transport}\ps{#1}}
-\newcommand{\tr}[2]{{#1}_{\star}\ps{#2}}
+\newcommand{\ap}[2]{\term{ap}_{#1}({#2})}
+\newcommand{\apd}[2]{\term{apd}_{#1}({#2})}
+\newcommand{\coe}[1]{\term{coe}({#1})}
+\newcommand{\transport}[1]{\term{transport}({#1})}
+\newcommand{\tr}[2]{{#1}_{\star}({#2})}
+\newcommand{\ua}{\term{ua}}
 
 % functions
 \newcommand{\inv}[1]{{#1}^{-1}}
@@ -72,6 +73,9 @@
 % aut
 \NewDocumentCommand{\Aut}{O{}}{\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
 \NewDocumentCommand{\BAut}{O{}}{\mathcal{B}\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
+
+% dependent function
+\newcommand{\dfun}[2]{\prod\limits_{\mathsmaller{#1}}{#2}}
 
 % dependent sum
 \newcommand{\dsum}[2]{\sum\limits_{\mathsmaller{#1}}{#2}}
