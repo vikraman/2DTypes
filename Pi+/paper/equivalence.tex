@@ -8,6 +8,27 @@ We use this to establish completeness for $\PiPlusLang$.
 
 Finally, we show how to translate $\PiLang$ programs to $\PiPlusLang$ programs.
 
+\begin{definition}
+  \begin{align*}
+    \evalt_{0} & : U n \to \UFin[n] \\
+    \evalt_{1} & : (c : t_{1} \iso t_{2}) \to \evalt_{0}(t_{1}) \id \evalt_{0}(t_{2}) \\
+    \evalt_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
+  \end{align*}
+\end{definition}
+
+\begin{definition}
+  \begin{align*}
+    \quotet_{0} & : \UFin[n] \to U n \\
+    \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quotet_{0}(X_{1}) \iso \quotet_{0}(X_{2}) \\
+    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quotet_{1}(p_{1}) \Iso \quotet_{1}(p_{2}) \\
+  \end{align*}
+\end{definition}
+
+\begin{theorem}
+  ${\quotet}/{\evalt}$ gives a symmetric monoidal equivalence between $U$ and
+  $\UFin$.
+\end{theorem}
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
