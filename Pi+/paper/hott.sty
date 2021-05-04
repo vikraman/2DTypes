@@ -10,6 +10,7 @@
 
 % meta
 \newcommand{\defeq}{\mathrel{\triangleq}}
+\newcommand{\blank}{{\scriptstyle{-}}}
 
 % types and terms
 \newcommand{\type}[1]{\mathsf{#1}}
@@ -20,8 +21,11 @@
 \newcommand{\UU}{\mathcal{U}}
 \NewDocumentCommand{\UFin}{O{}}{{\UU_{\type{Fin}}}\ifstrempty{#1}{}{\ps{#1}}}
 \newcommand{\El}{\term{El}}
-\newcommand{\SubP}[2]{\Trunc{-1}{{#1} \id_{\UU} {#2}}}
+\newcommand{\SubP}[2]{\Trunc[-1]{{#1} \id_{\UU} {#2}}}
 \newcommand{\Sub}[1]{\dsum{X:\UU}{\SubP{X}{#1}}}
+
+\newcommand{\hProp}{\type{hProp}}
+\newcommand{\hSet}{\type{hSet}}
 
 % unit type
 \newcommand{\unit}{{\mathbf{1}}}
@@ -52,6 +56,7 @@
 \newcommand{\transport}[1]{\term{transport}({#1})}
 \newcommand{\tr}[2]{{#1}_{\star}({#2})}
 \newcommand{\ua}{\term{ua}}
+\newcommand{\tptEqv}[1]{\term{transport-equiv}({#1})}
 
 % functions
 \newcommand{\inv}[1]{{#1}^{-1}}
@@ -62,8 +67,15 @@
 \newcommand{\eqv}{\mathrel{\simeq}}
 
 % truncations
-\newcommand{\Trunc}[2]{\left\Vert #2\right\Vert_{#1}}
-\newcommand{\trunc}[2]{\Vert #2\Vert_{#1}}
+\NewDocumentCommand{\Trunc}{O{}m}{
+  \ifstrempty{#1}
+  {\left\Vert #2\right\Vert}
+  {\left\Vert #2\right\Vert_{#1}}
+}
+\newcommand{\trunc}[1]{\vert #1\vert}
+
+% quotients
+\newcommand{\quot}[2]{{#1}/{#2}}
 
 % propositions
 \newcommand{\isContr}[1]{\mathop{\term{isContr}}({#1})}

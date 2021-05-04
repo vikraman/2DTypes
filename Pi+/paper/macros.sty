@@ -30,13 +30,24 @@
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
 
 % Pi
-\newcommand{\PiLang}{\mathsf{\Pi}}
+\newcommand{\PiLang}{\mathit{\Pi}}
 \newcommand{\PiPlusLang}{\mathit{{\Pi}^{+}}}
 \newcommand{\PiHatLang}{\mathit{{\Pi}^{\wedge}}}
 
+% Combinators
+\newcommand{\iso}{\mathrel{\leftrightarrow}}
+\newcommand{\Iso}{\mathrel{\Leftrightarrow}}
+
 % Pi equivalence
-\NewDocumentCommand{\Quote}{E{_}{{}}O{}}{
+\NewDocumentCommand{\quotet}{E{_}{{}}O{}}{
   \ifstrempty{#1}
   {\term{quote}}
   {\term{quote_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
+\NewDocumentCommand{\evalt}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{eval}}
+  {\term{eval_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
 }

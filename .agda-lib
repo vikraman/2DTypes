@@ -7,3 +7,4 @@ include:
   HoTT-Agda/core
   HoTT-Agda/theorems
   cubical
+  Pi+/paper
