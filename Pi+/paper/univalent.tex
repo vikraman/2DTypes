@@ -129,15 +129,15 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
 \end{proof}
 
 \begin{example}[$\BAut$]
-  The type of self-equivalences on a type $T$ is defined as $\Aut[T] \defeq T \eqv T$. The subuniverse of types that are
-  merely equal to $T$ is given by $\BAut[T] \defeq \Sub{T}$. This turns out to be the delooping of $\Aut[T]$, as
-  justified by~\cref{lem:loop-deloop}.
+  The type of self-equivalences on a type $T$ is defined as $\Aut[T] \defeq T \eqv T$, which is an $\infty$-group. The
+  subuniverse of types that are merely equal to $T$ is given by $\BAut[T] \defeq \Sub{T}$. This turns out to be the
+  classifying space of $\Aut[T]$, as justified by~\cref{lem:loop-deloop}. We write $T_{o} \defeq (T, \trunc{\refl_{T}})$
+  for the image of the inclusion of $T$.
 \end{example}
 
 \begin{example}
-  The univalent subuniverse of types merely equal to $\Bool$ is given by the subtype $P(X) \defeq \SubP{X}{\Bool}$. This
-  can be used to give the denotational semantics of a 2-bit reversible
-  language~\cite{caretteReversibleProgramsUnivalent2018}.
+  The univalent subuniverse of types merely equal to $\Bool$ is given by $\BAut[\Bool]$. This can be used to give the
+  denotational semantics of a 2-bit reversible language~\cite{caretteReversibleProgramsUnivalent2018}.
 \end{example}
 
 \begin{definition}[$\Fin$]
@@ -156,8 +156,9 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
 \end{definition}
 
 \begin{example}
-  For any $n : \Nat$, we define the subtype of types merely equal to $\Fin[n]$ as $P(X) \defeq \SubP{X}{\Fin[n]}$. This
-  gives the univalent subuniverse $\UFin[n] \defeq \Sub{\Fin[n]}$ of finite types with cardinality equal to $n$.
+  For any $n : \Nat$, we define the univalent subuniverse of types merely equal to $\Fin[n]$ as $\BAut[\Fin[n]]$. This
+  is the universe of finite sets with cardinality equal to $n$. We write $F_{n} \defeq (\Fin[n], \trunc{\refl})$ for the
+  image of the inclusion of $\Fin[n]$.
 \end{example}
 
 \begin{definition}[$\isFin$]
@@ -177,7 +178,7 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
   enough to show that $n \id m$. Since $\Nat$ is a set, this is a proposition, so we can use the induction principle of
   propositional truncation to eliminate to $n \id m$, applying it on $\phi$ and $\psi$ respectively. This gives us the
   equalities $X \id \Fin[n]$ and $X \id \Fin[m]$, which gives us $\Fin[n] \id \Fin[m]$, from which $n \id m$ follows by
-  taking the first projection.
+  applying the first projection.
 \end{proof}
 
 \begin{example}
@@ -185,31 +186,46 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
   \[
     \UFin \defeq \dsum{X:\UU}{\isFin[X]}.
   \]
-  We use this as the denotational semantics to interpret our reversible programming language $\PiPlusLang$.
+  We write $F_{n} \defeq (n, \Fin[n], \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$. We use this as the
+  denotational semantics to interpret our reversible programming language $\PiPlusLang$.
 \end{example}
 
-We characterise the path space of subunivalent universes.
+We characterise the path space of univalent subuniverses.
 
 \begin{proposition}
   If $T$ is an $n$-type, $\BAut[T]$ is an $(n+1)$-type.
 \end{proposition}
 
-\begin{proposition}
+\begin{proof}
+  We need to show that the equality type of $\BAut[T]$ is an $n$-type. Assume $X, Y : \BAut[T]$. Since $\BAut[T]$ is a
+  univalent subuniverse, we have $(X \id Y) \eqv (\fst(X) \eqv \fst(Y))$. Note that being an $n$-type is a proposition.
+  Since $T$ is an $n$-type, and $\fst(X)$ and $\fst(Y)$ are merely equal to $T$, they're also $n$-types. It follows that
+  $\fst(X) \eqv \fst(Y)$ is an $n$-type, and hence $X \id Y$ is an $n$-type.
+\end{proof}
+
+\begin{corollary}
   $\UFin$ is a 1-type, that is, a 1-groupoid, or has h-level 3.
-\end{proposition}
+\end{corollary}
 
 \begin{lemma}~\label{lem:loop-deloop}
   \[
-    \Omega\BAut[T] \eqv \Aut[T]
+    \loopspace[\BAut[T],T_{0}] \eqv \Aut[T]
   \]
 \end{lemma}
 
-\begin{proposition}
+\begin{proof}
+  Since $\BAut[T]$ is a univalent universe, it follows that
+  \[
+    (T_{0} \id_{\BAut[T]} T_{0}) \eqv (\fst(T_{0}) \eqv \fst(T_{0})) \equiv (T \eqv T) \equiv \Aut[T].
+  \]
+\end{proof}
+
+\begin{corollary}
   For every $n:\Nat$,
   \[
-    \Omega\UFin[n] \eqv \Aut[\Fin[n]]
+    \loopspace[\UFin[n],\Fin[n]] \eqv \Aut[\Fin[n]]
   \]
-\end{proposition}
+\end{corollary}
 
 %%% Local Variables:
 %%% mode: latex

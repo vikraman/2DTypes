@@ -57,6 +57,11 @@
 \newcommand{\tr}[2]{{#1}_{\star}({#2})}
 \newcommand{\ua}{\term{ua}}
 \newcommand{\tptEqv}[1]{\term{transport-equiv}({#1})}
+\NewDocumentCommand{\loopspace}{O{}}{
+  \ifstrempty{#1}
+  {\Omega}
+  {\Omega}{(#1)}
+}
 
 % functions
 \newcommand{\inv}[1]{{#1}^{-1}}
