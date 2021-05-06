@@ -77,59 +77,6 @@ quantum: observational equiv says |s1> is the same as |s2>
 do we have a denotational way (inside Hilbert space) to show that these two
 states are the same?
 
-\newpage
-
-\paragraph*{Categorical Connections.}
-
-Natural numbers under addition form the free commutative monoid. We're
-categorifying this.
-
-We would be proving that the groupoid of finite sets and bijections is
-the free symmetric monoidal groupoid on one generator, where both
-concepts are appropriately defined internally in HoTT.
-
-We might be able to prove something slightly more general, that is, the
-groupoid of functions (to a groupoid A) with finite support and
-morphisms between them (bijections with action of the permutations), is
-the free symmetric monoidal groupoid on a groupoid (A).
-
-There's nothing special about groupoids here, it works for categories as
-well, but we're using paths in HoTT.
-
-The free symmetric monoidal category on a category is a 2-monad on
-Cat. The earliest definition of this is in Blackwell, Kelly, Power's
-"2-dimensional monad theory" (in the examples section), where they
-describe the construction using the functions with finite support and
-bijections/actions for the morphisms. It is also in Abramsky's "Abstract
-scalars" paper, using the same description. Martin Hyland has used it
-several times in his papers, starting from "Symmetric Monoidal
-sketches".
-
-In physics, it occurs in the axiomatic construction of Fock spaces by
-Vicary (using the free commutative monad, but alluding to a
-categorification to the free smc 2-monad).
-
-The problem is that all these papers describe the construction using
-permutations and claim it is "the free SMC 2-monad", but DO NOT prove
-the universal property.
-
-Marcelo has used this construction many times in his papers in the last
-20 years, and he uses the universal property to do his calculations. It
-is everywhere in species and models of linear logic. The point is that
-the universal property encodes all the combinatorics and coherence
-problems, so it's convenient to use.
-
-Now, it is folklore that Maclane's coherence theorem (pg 253) should be
-enough to establish this universal property, but no one has proved it
-explicitly. Besides, Maclane's proof is just a sketch.
-
-So, Marcelo asked me to define it in HoTT and prove an appropriate form
-of the the universal property. Then I defined it using lists and swap
-and it worked. Later we experimented with it and found other
-constructions that satisfy the universal property as well.
-
-
-
 \[\begin{array}{rcl}
     A \sumt B &\isot& B \sumt A \\
     A \prodt B &\isot& B \prodt A \\
@@ -470,7 +417,6 @@ foundation that can be used for other programming languages with different
 types, constructs, etc.
 
 %%
-\newpage
 
 Semantically, obvious that only permutation on empty set is id.
 
@@ -514,12 +460,22 @@ theory. \url{https://www.sciencedirect.com/science/article/pii/0022404989901606}
 
 %%
 
-We establish a Curry-Howard-Lambek correspondence for Pi, with 0, 1,
-+. Categorically, the syntactic groupoid of Pi is the free symmetric monoidal
-groupoid on one generator. The groupoid of finite sets and bijections, with
-coproducts, is equivalent to the free symmetric monoidal groupoid on one
-generator, making Pi fully adequate with respect to this semantics.
+\paragraph*{Categorical Connections.}
 
+Natural numbers under addition form the free commutative monoid on one generator. Categorifying this, we get the free
+symmetric monoidal groupoid on generators. This is the groupoid of finite sets and bijections.
+
+More generally, we can construct the free symmetric monoidal groupoid on a groupoid, by taking the action of the
+groupoid of finite sets and bijections. We can construct this in HoTT by using the classifying space of the symmetric
+group.
+
+The free symmetric monoidal category on a category is a 2-monad on Cat (cite BKP, Abramsky, Hyland). Other applications
+are Fock Spaces, Generalised Species, Abstract Syntax.
+
+We establish a Curry-Howard-Lambek correspondence for Pi, with 0, 1, +. Categorically, the syntactic groupoid of Pi is
+the free symmetric monoidal groupoid on one generator. The groupoid of finite sets and bijections, with coproducts, is
+equivalent to the free symmetric monoidal groupoid on one generator, making Pi fully adequate with respect to this
+semantics.
 
 %%% Local Variables:
 %%% mode: latex
