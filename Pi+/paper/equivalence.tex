@@ -1,16 +1,54 @@
 \section{Equivalence between \texorpdfstring{$\PiPlusLang$}{Pi} and \texorpdfstring{$\UFin$}{UFin}}~\label{sec:equivalence}
 
-First, we normalise $\PiPlusLang$ to $\PiHatLang$, and show that they are equivalent.
+\subsection{$\PiLang$ to $\PiPlusLang$}
 
-Then we establish the completeness of $\PiHatLang$ with respect to $\UFin$.
+We show how to translate $\PiLang$ programs to $\PiPlusLang$ programs.
 
-We use this to establish completeness for $\PiPlusLang$.
+\subsection{$\PiPlusLang$ to $\PiHatLang$}
 
-Finally, we show how to translate $\PiLang$ programs to $\PiPlusLang$ programs.
+We normalise $\PiPlusLang$ to $\PiHatLang$, and show that they are equivalent.
 
 \begin{definition}
   \begin{align*}
-    \evalt_{0} & : U n \to \UFin[n] \\
+    \evalh_{0} & : \UPlus n \to \UHat n \\
+    \evalh_{1} & : (c : t_{1} \iso t_{2}) \to \evalh_{0}(t_{1}) \isoh \evalh_{0}(t_{2}) \\
+    \evalh_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalh_{1}(c_{1}) \Isoh \evalh_{1}(c_{2}) \\
+  \end{align*}
+\end{definition}
+
+\begin{definition}
+  \begin{align*}
+    \quoteh_{0} & : \UHat n \to \UPlus n \\
+    \quoteh_{1} & : (p : X_{1} \isoh X_{2}) \to \quoteh_{0}(X_{1}) \iso \quoteh_{0}(X_{2}) \\
+    \quoteh_{2} & : (\alpha : p_{1} \Isoh p_{2}) \to \quoteh_{1}(p_{1}) \Iso \quoteh_{1}(p_{2}) \\
+  \end{align*}
+\end{definition}
+
+\subsection{$\PiHatLang$ to $\UFin$}
+
+Then we establish the completeness of $\PiHatLang$ with respect to $\UFin$.
+
+\begin{definition}
+  \begin{align*}
+    \evalt_{0} & : \UHat n \to \UFin[n] \\
+    \evalt_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2}) \\
+    \evalt_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
+  \end{align*}
+\end{definition}
+
+\begin{definition}
+  \begin{align*}
+    \quotet_{0} & : \UFin[n] \to \UHat n \\
+    \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quoteh_{0}(X_{1}) \isoh \quoteh_{0}(X_{2}) \\
+    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2}) \\
+  \end{align*}
+\end{definition}
+
+We use this to establish completeness for $\PiPlusLang$.
+
+\begin{definition}
+  \begin{align*}
+    \evalt_{0} & : \UPlus n \to \UFin[n] \\
     \evalt_{1} & : (c : t_{1} \iso t_{2}) \to \evalt_{0}(t_{1}) \id \evalt_{0}(t_{2}) \\
     \evalt_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
   \end{align*}
@@ -25,8 +63,8 @@ Finally, we show how to translate $\PiLang$ programs to $\PiPlusLang$ programs.
 \end{definition}
 
 \begin{theorem}
-  ${\quotet}/{\evalt}$ gives a symmetric monoidal equivalence between $U$ and
-  $\UFin$.
+  ${\quotet}/{\evalt}$ gives a symmetric monoidal equivalence between $\UPlus$
+  and $\UFin$.
 \end{theorem}
 
 %%% Local Variables:
