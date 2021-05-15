@@ -2,7 +2,7 @@
 
 module Pi+.Misc where
 
-open import HoTT
+open import HoTT hiding (_*_)
 
 transport2 : ∀ {i j k} {A : Type i} {B : Type j} (C : A → B → Type k) {x1 x2 : A} {y1 y2 : B} (p : x1 == x2) (q : y1 == y2) → (C x1 y1 → C x2 y2)
 transport2 C {x1} {x2} {y1} {y2} p q t = transport (uncurry C) (pair×= p q) t
@@ -93,3 +93,9 @@ abstract
 
   uip : ∀ {i} {X : Type i} {{_ : is-set X}} {x y : X} → (p q : x == y) → p == q
   uip p q = prop-has-all-paths p q
+
+_*_ : ℕ → ℕ → ℕ
+O * m = O
+S n * m = m + (n * m)
+
+{-# BUILTIN NATTIMES _*_ #-}
