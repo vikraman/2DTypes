@@ -14,11 +14,19 @@ private
 
 -- Types
 
-data U : ℕ → Type₀ where
-  O : U 0
-  I : U 1
-  _+_ : U m → U n → U (m N.+ n)
-  _×_ : U m → U n → U (m N.* n)
+-- FIXME: indexed version causes internal error
+
+-- data U : ℕ → Type₀ where
+--   O : U 0
+--   I : U 1
+--   _+_ : U m → U n → U (m N.+ n)
+--   _×_ : U m → U n → U (m N.* n)
+
+data U : Type₀ where
+  O : U
+  I : U
+  _+_ : U → U → U
+  _×_ : U → U → U
 
 infixr 40 _+_ _×_
 infix 30 _⟷₁_
@@ -26,11 +34,12 @@ infixr 50 _◎_ _⊕_
 
 private
   variable
-    t t₁ t₂ t₃ t₄ t₅ t₆ : U n
+    -- t t₁ t₂ t₃ t₄ t₅ t₆ : U n
+    t t₁ t₂ t₃ t₄ t₅ t₆ : U
 
 -- 1-combinators
 
-data _⟷₁_  : U m → U n → Type₀ where
+data _⟷₁_  : U → U → Type₀ where
   unite₊l : O + t ⟷₁ t
   uniti₊l : t ⟷₁ O + t
   unite⋆l : I × t ⟷₁ t
@@ -46,7 +55,7 @@ data _⟷₁_  : U m → U n → Type₀ where
   factorzr : O ⟷₁ t × O
   factorzl : O ⟷₁ O × t
   dist : (t₁ + t₂) × t₃ ⟷₁ (t₁ × t₃) + (t₂ × t₃)
-  factor : (t₁ × t₃) + (t₂ × t₃) ⟷₁ (t₁ + t₂) × t₃
+  factor : {t₁ t₂ t₃ : U} → (t₁ × t₃) + (t₂ × t₃) ⟷₁ (t₁ + t₂) × t₃
   id⟷₁  : t ⟷₁ t
   _◎_     : (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
   _⊕_     : (t₁ ⟷₁ t₃) → (t₂ ⟷₁ t₄) → (t₁ + t₂ ⟷₁ t₃ + t₄)
@@ -57,27 +66,26 @@ data _⟷₁_  : U m → U n → Type₀ where
 infixr 10 _⟷₁⟨_⟩_
 infix  15 _⟷₁∎
 
-_⟷₁⟨_⟩_ : (t₁ : U n) → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
+_⟷₁⟨_⟩_ : (t₁ : U) → (t₁ ⟷₁ t₂) → (t₂ ⟷₁ t₃) → (t₁ ⟷₁ t₃)
 _ ⟷₁⟨ c₁ ⟩ c₂ = c₁ ◎ c₂
 
-_⟷₁∎ : (t : U n) → t ⟷₁ t
+_⟷₁∎ : (t : U) → t ⟷₁ t
 _⟷₁∎ t = id⟷₁
 
 -- Coherence
 
-unite₊r : {t : U n} → t + O ⟷₁ t
+unite₊r : {t : U} → t + O ⟷₁ t
 unite₊r = swap₊ ◎ unite₊l
 
 uniti₊r : t ⟷₁ t + O
 uniti₊r = uniti₊l ◎ swap₊
 
-unite⋆r : {t : U n} → t × I ⟷₁ t
+unite⋆r : {t : U} → t × I ⟷₁ t
 unite⋆r = swap⋆ ◎ unite⋆l
 
 uniti⋆r : t ⟷₁ t × I
 uniti⋆r = uniti⋆l ◎ swap⋆
 
--- FIXME: internal error
 -- !⟷₁ : t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
 -- !⟷₁ unite₊l = uniti₊l
 -- !⟷₁ uniti₊l = unite₊l
