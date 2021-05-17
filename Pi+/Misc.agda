@@ -94,6 +94,7 @@ abstract
   uip : ∀ {i} {X : Type i} {{_ : is-set X}} {x y : X} → (p q : x == y) → p == q
   uip p q = prop-has-all-paths p q
 
+infixl 80 _*_
 _*_ : ℕ → ℕ → ℕ
 O * m = O
 S n * m = m + (n * m)
