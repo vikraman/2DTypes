@@ -106,7 +106,7 @@ private
       idr◎l^))
 
 ++^-⊕ : {n m o p : ℕ} → (n ⟷₁^ m) → (o ⟷₁^ p) → (n ++ o) ⟷₁^ (m ++ p)
-++^-⊕ {_} {m} {o} (swap₊^ {n = n}) c₂ = 
+++^-⊕ {_} {m} {o} (swap₊^ {n = n}) c₂ =
         let r = ++^-⊕ (id⟷₁^ {n}) c₂
         in  ++^-bigswap (++^-⊕ (id⟷₁^ {n}) c₂)
 ++^-⊕ {O} id⟷₁^ c₂ = c₂
@@ -123,7 +123,7 @@ private
 
 ++^-⊕-id-r : {n m o : ℕ} → (c : n ⟷₁^ m) → (++^-⊕ c (id⟷₁^ {o})) ⟷₂^ ++^-r c
 ++^-⊕-id-r (swap₊^ {O}) = id⟷₂^
-++^-⊕-id-r {S (S (S n))} {m} {o} (swap₊^ {S n}) = 
+++^-⊕-id-r {S (S (S n))} {m} {o} (swap₊^ {S n}) =
   _ ⟷₂^⟨ (id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (resp⊕⟷₂ (++^-⊕-id-l (id⟷₁^ {o}))))) ⟩
   _ ⟷₂^⟨ (id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (resp⊕⟷₂ ++^-l-id))) ⟩
   _ ⟷₂^⟨ id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (⊕id⟷₁⟷₂^)) ⟩
@@ -205,7 +205,7 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 -- here, we show how does it behave by induction on the right parameter
 ++^-swap-S : (n m : ℕ) → ++^-swap n (S m) ⟷₂^ !⟷₁^ (++^-assoc n 1 m) ◎^ (++^-r (!⟷₁^ (++^-cons n))) ◎^ (⊕^ (++^-swap n m))
 ++^-swap-S O m = idl◎r^ ■^ idl◎r^
-++^-swap-S (S n) m = 
+++^-swap-S (S n) m =
     let r = ++^-swap-S n m
     in  _ ◎^ (_ ◎^ ⊕^ _) ◎^ (⊕^ _) ◎^ ⊕^ _ ⟷₂^⟨ assoc◎l^ ■^ (assoc◎l^ ⊡^ id⟷₂^) ■^ assoc◎r^ ⟩
         (_ ◎^ _) ◎^ ((⊕^ _) ◎^ (⊕^ _) ◎^ ⊕^ _) ⟷₂^⟨ id⟷₂^ ⊡^ (id⟷₂^ ⊡^ hom◎⊕⟷₂^) ⟩
@@ -267,7 +267,7 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 
 ++^-unit-swap : (n : ℕ) → ++^-swap n 0 ◎^ !⟷₁^ (++^-unit-r n) ⟷₂^ id⟷₁^
 ++^-unit-swap O = idl◎l^
-++^-unit-swap (S n) = assoc◎r^ ■^ ((((id⟷₂^ ⊡^ (((id⟷₂^ ⊡^ idl◎l^) ■^ linv◎l^) ⊡^ id⟷₂^)) ■^ 
+++^-unit-swap (S n) = assoc◎r^ ■^ ((((id⟷₂^ ⊡^ (((id⟷₂^ ⊡^ idl◎l^) ■^ linv◎l^) ⊡^ id⟷₂^)) ■^
         (id⟷₂^ ⊡^ idl◎l^)) ■^ hom◎⊕⟷₂^) ■^ resp⊕⟷₂ id⟷₂^) ■^ !⟷₂^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ (!⟷₂^ (++^-unit-swap n)))
 
 ++^-symm-O : (n : ℕ) → ++^-swap O n ◎^ ++^-swap n O ⟷₂^ id⟷₁^
@@ -281,7 +281,7 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 
 -- ++-cons (m ++ n) in terms of ++-cons m and ++-cons n
 -- should be provable from ++^-cons-assoc
-++^-cons-++ : (n m : ℕ) → 
+++^-cons-++ : (n m : ℕ) →
         (((++^-cons (m ++ n) ◎^  ++^-assoc m n 1 ◎^ !⟷₁^ (++^-l (++^-cons n)))
           ◎^ !⟷₁^ (++^-assoc m 1 n))
           ◎^ ++^-r (!⟷₁^ (++^-cons m)))
@@ -290,8 +290,8 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 
 ++^-symm : (n m : ℕ) → ++^-swap n m ◎^ ++^-swap m n ⟷₂^ id⟷₁^
 ++^-symm O m = ++^-symm-O m
-++^-symm (S n) m = 
-    let r = ++^-symm n m 
+++^-symm (S n) m =
+    let r = ++^-symm n m
     in  _ ⟷₂^⟨ assoc◎r^ ⟩
         _ ⟷₂^⟨ id⟷₂^ ⊡^ (id⟷₂^ ⊡^ ++^-swap-S m n) ⟩
         _ ⟷₂^⟨ id⟷₂^ ⊡^ (assoc◎l^ ■^ assoc◎l^) ⟩
