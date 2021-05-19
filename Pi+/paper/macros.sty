@@ -1,6 +1,7 @@
 \ProvidesPackage{macros}
 
 \RequirePackage{xcolor}
+\RequirePackage{xcolor-solarized}
 \RequirePackage{xparse}
 \RequirePackage{amsmath}
 \RequirePackage{etoolbox}
@@ -12,10 +13,11 @@
 \RequirePackage{hott}
 
 % misc
-\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
-\newcommand{\amr}[1]{\textcolor{blue}{AS: #1}}
-\newcommand{\jk}[1]{\textcolor{cyan}{JK: #1}}
-\newcommand{\vc}[1]{\textcolor{magenta}{VC: #1}}
+\newcommand{\todo}[1]{\textcolor{solarized-red}{TODO: #1}}
+\newcommand{\amr}[1]{\textcolor{solarized-blue}{AS: #1}}
+\newcommand{\jk}[1]{\textcolor{solarized-cyan}{JK: #1}}
+\newcommand{\vc}[1]{\textcolor{solarized-magenta}{VC: #1}}
+\newcommand{\review}[1]{\textcolor{solarized-red}{#1}}
 
 % text
 \let\ps\perfectparens%
@@ -24,10 +26,18 @@
 \NewDocumentCommand{\suc}{O{}}{\term{suc}\ifstrempty{#1}{}{\ps{#1}}}
 \newcommand{\fac}[1]{{#1}\,!}
 
+\newcommand{\highlight}[1]{\textcolor{solarized-orange}{#1}}
+
 % finite types
 \NewDocumentCommand{\Fin}{O{}}{\term{Fin}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\Lehmer}{O{}}{\term{Lehmer}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
+
+% permutations
+\newcommand{\el}[1]{\mathbf{#1}}
+
+% symmetric group
+\newcommand{\Sn}[0]{\mathsf{S_n}}
 
 % Pi
 \newcommand{\PiLang}{\mathit{\Pi}}

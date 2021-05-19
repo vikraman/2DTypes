@@ -217,6 +217,9 @@ MAlonzo
 # Mac stuff
 .DS_Store
 
+# vscode
+.vscode/
+
 # upi.lagda
 upi.tex
 upi.pdf
