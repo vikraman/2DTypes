@@ -100,3 +100,25 @@ O * m = O
 S n * m = m + (n * m)
 
 {-# BUILTIN NATTIMES _*_ #-}
+
+module _ {i} {A : Type i} {j} {R : Rel A j} where
+
+  SetQuot-map : (f : A → A)
+              → (f-cong : ∀ {a₁ a₂} → R a₁ a₂ → R (f a₁) (f a₂))
+              → SetQuot R → SetQuot R
+  SetQuot-map f f-cong = SetQuot-rec (q[_] ∘ f) (quot-rel ∘ f-cong)
+
+  SetQuot-map2 : (f : A → A → A)
+               → (R-is-refl : is-refl R)
+               → (f-cong₂ : ∀ {a₁ a₂ b₁ b₂} → R a₁ a₂ → R b₁ b₂ → R (f a₁ b₁) (f a₂ b₂))
+               → SetQuot R → SetQuot R → SetQuot R
+  SetQuot-map2 f R-is-refl f-cong₂ =
+    SetQuot-rec (λ a → SetQuot-rec (λ b → q[ f a b ])
+                                   (λ p → quot-rel (f-cong₂ (R-is-refl a) p)))
+                (λ p → λ= (SetQuot-elim (λ b → quot-rel (f-cong₂ p (R-is-refl b))) (λ r → prop-has-all-paths-↓)))
+
+reverse-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → reverse (l₁ ++ l₂) == (reverse l₂) ++ (reverse l₁)
+reverse-++ nil l₂ = ! (++-unit-r _)
+reverse-++ (x :: l₁) l₂ =
+  let r = reverse-++ l₁ l₂
+  in  ap (λ l → snoc l x) r ∙ ++-assoc (reverse l₂) (reverse l₁) (x :: nil)
