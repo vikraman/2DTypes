@@ -51,15 +51,32 @@ respects-++-lr l m m' r p = respects-++ {l = l} {l' = l} idp (respects-++ p idp)
 ≈-inv-r : {n : ℕ} → (l : List (Fin n)) → (l ++ reverse l) ≈ nil
 ≈-inv-r {O} l = unit
 ≈-inv-r {S n} nil = idp
-≈-inv-r {S n} (x :: l) = 
-  trans (idp≃ _ _ (list++-assoc-lemma (x :: nil) l (reverse l) (x :: nil))) 
-  (trans (respects-++-lr (x :: nil) (l ++ reverse l) nil (x :: nil) (≈-inv-r l)) 
+≈-inv-r {S n} (x :: l) =
+  trans (idp≃ _ _ (list++-assoc-lemma (x :: nil) l (reverse l) (x :: nil)))
+  (trans (respects-++-lr (x :: nil) (l ++ reverse l) nil (x :: nil) (≈-inv-r l))
   cancel)
 
 ≈-inv-l : {n : ℕ} → (l : List (Fin n)) → ((reverse l) ++ l) ≈ nil
 ≈-inv-l {O} l = unit
 ≈-inv-l {S n} nil = idp
-≈-inv-l {S n} (x :: l) = 
-  trans (idp≃ _ _ (list++-assoc-lemma (reverse l) (x :: nil) (x :: nil) l)) 
-  (trans (respects-++-lr (reverse l) (x :: x :: nil) nil l cancel) 
+≈-inv-l {S n} (x :: l) =
+  trans (idp≃ _ _ (list++-assoc-lemma (reverse l) (x :: nil) (x :: nil) l))
+  (trans (respects-++-lr (reverse l) (x :: x :: nil) nil l cancel)
   (≈-inv-l l))
+
+reverse-respects-≈ : {n : ℕ} {l1 l2 : List (Fin n)} → l1 ≈ l2 → reverse l1 ≈ reverse l2
+reverse-respects-≈ {n = O} p = unit
+reverse-respects-≈ {n = S n} cancel = cancel
+reverse-respects-≈ {n = S n} (swap p) = comm (swap p)
+reverse-respects-≈ {n = S n} braid = braid
+reverse-respects-≈ {n = S n} idp = idp
+reverse-respects-≈ {n = S n} (comm {l1 = l1} {l2 = l2} p) =
+  comm {m = n} {l1 = reverse l1} {l2 = reverse l2} TODO
+reverse-respects-≈ {n = S n} (trans {l1 = l1} {l2 = l2} {l3 = l3} p1 p2) =
+  trans {l1 = reverse l1} {l2 = reverse l2} {l3 = reverse l3} TODO TODO
+reverse-respects-≈ {n = S n} (respects-++ {l = l} {l' = l'} {r = r} {r' = r'} p1 p2) =
+  TODO
+
+++-respects-≈ : {n : ℕ} {l1 l2 r1 r2 : List (Fin n)} → l1 ≈ l2 → r1 ≈ r2 → (l1 ++ r1) ≈ (l2 ++ r2)
+++-respects-≈ {n = O} p1 p2 = unit
+++-respects-≈ {n = S n} p1 p2 = respects-++ p1 p2
