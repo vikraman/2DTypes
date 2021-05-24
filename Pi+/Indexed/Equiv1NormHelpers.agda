@@ -125,12 +125,6 @@ pi^2list-◎^-β = idp
 
 module _ where
 
-  reverse-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → reverse (l₁ ++ l₂) == (reverse l₂) ++ (reverse l₁)
-  reverse-++ nil l₂ = ! (++-unit-r _)
-  reverse-++ (x :: l₁) l₂ =
-    let r = reverse-++ l₁ l₂
-    in  ap (λ l → snoc l x) r ∙ ++-assoc (reverse l₂) (reverse l₁) (x :: nil)
-
   pi^2list-!^-β : (c : (S n) ⟷₁^ (S m)) → pi^2list (!⟷₁^ c) == transport (λ k → List (Fin k)) (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (reverse (pi^2list c))
   pi^2list-!^-β swap₊^ = idp
   pi^2list-!^-β id⟷₁^ = idp

@@ -116,3 +116,9 @@ module _ {i} {A : Type i} {j} {R : Rel A j} where
     SetQuot-rec (λ a → SetQuot-rec (λ b → q[ f a b ])
                                    (λ p → quot-rel (f-cong₂ (R-is-refl a) p)))
                 (λ p → λ= (SetQuot-elim (λ b → quot-rel (f-cong₂ p (R-is-refl b))) (λ r → prop-has-all-paths-↓)))
+
+reverse-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → reverse (l₁ ++ l₂) == (reverse l₂) ++ (reverse l₁)
+reverse-++ nil l₂ = ! (++-unit-r _)
+reverse-++ (x :: l₁) l₂ =
+  let r = reverse-++ l₁ l₂
+  in  ap (λ l → snoc l x) r ∙ ++-assoc (reverse l₂) (reverse l₁) (x :: nil)

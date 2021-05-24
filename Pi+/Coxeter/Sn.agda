@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --termination-depth=2 #-}
 
 module Pi+.Coxeter.Sn where
 
@@ -12,6 +12,7 @@ open import lib.types.Fin
 
 open import Pi+.Extra
 open import Pi+.Coxeter.Coxeter
+open import Pi+.Misc
 
 CoxeterRel  : {n : ℕ} → Rel (List (Fin n)) lzero
 CoxeterRel {O} = λ _ _ → ⊤
@@ -64,18 +65,27 @@ respects-++-lr l m m' r p = respects-++ {l = l} {l' = l} idp (respects-++ p idp)
   (trans (respects-++-lr (reverse l) (x :: x :: nil) nil l cancel)
   (≈-inv-l l))
 
+reverse-respects-≈₁ : {n : ℕ} {l1 l2 : List (Fin (S n))} → l1 ≈₁ l2 → reverse l1 ≈₁ reverse l2
+reverse-respects-≈₁ cancel = cancel
+reverse-respects-≈₁ (swap p) = comm (swap p)
+reverse-respects-≈₁ braid = braid
+reverse-respects-≈₁ idp = idp
+reverse-respects-≈₁ (comm {l1 = l1} {l2 = l2} p) =
+  comm {l1 = reverse l1} {l2 = reverse l2} (reverse-respects-≈₁ p)
+reverse-respects-≈₁ (trans {l1 = l1} {l2 = l2} {l3 = l3} p1 p2) =
+  let r1 = reverse-respects-≈₁ {l1 = l2} {l2 = l3} p2
+      r2 = reverse-respects-≈₁ {l1 = l1} {l2 = l2} p1
+  in  trans {l1 = reverse l1} {l2 = reverse l2} {l3 = reverse l3} r2 r1
+reverse-respects-≈₁ (respects-++ {l = l} {l' = l'} {r = r} {r' = r'} p1 p2) = 
+  let r1 = reverse-respects-≈₁ p1
+      r2 = reverse-respects-≈₁ p2
+      s1 = reverse-++ l r
+      s2 = reverse-++ l' r'
+  in  trans (idp≃ _ _ s1) (trans (respects-++ r2 r1) (idp≃ _ _ (! s2)))
+
 reverse-respects-≈ : {n : ℕ} {l1 l2 : List (Fin n)} → l1 ≈ l2 → reverse l1 ≈ reverse l2
-reverse-respects-≈ {n = O} p = unit
-reverse-respects-≈ {n = S n} cancel = cancel
-reverse-respects-≈ {n = S n} (swap p) = comm (swap p)
-reverse-respects-≈ {n = S n} braid = braid
-reverse-respects-≈ {n = S n} idp = idp
-reverse-respects-≈ {n = S n} (comm {l1 = l1} {l2 = l2} p) =
-  comm {m = n} {l1 = reverse l1} {l2 = reverse l2} TODO
-reverse-respects-≈ {n = S n} (trans {l1 = l1} {l2 = l2} {l3 = l3} p1 p2) =
-  trans {l1 = reverse l1} {l2 = reverse l2} {l3 = reverse l3} TODO TODO
-reverse-respects-≈ {n = S n} (respects-++ {l = l} {l' = l'} {r = r} {r' = r'} p1 p2) =
-  TODO
+reverse-respects-≈ {O} unit = unit
+reverse-respects-≈ {S n} p = reverse-respects-≈₁ p
 
 ++-respects-≈ : {n : ℕ} {l1 l2 r1 r2 : List (Fin n)} → l1 ≈ l2 → r1 ≈ r2 → (l1 ++ r1) ≈ (l2 ++ r2)
 ++-respects-≈ {n = O} p1 p2 = unit
