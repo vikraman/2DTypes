@@ -1,10 +1,18 @@
 \section{The groupoid of finite types}~\label{sec:finite}
 
-In this section, we describe the algebraic structure of the groupoid of finite
-types, and give a computable presentation for it. To do so, we will characterise
-the automorphisms on finite sets of cardinality $n$, and show them to be
-equivalent to the symmetric group $\Sn$, via the Coxeter presentation. We will
-do that in two steps,
+In this section, we describe \review{the algebraic structure} of the groupoid of
+finite types, and give \review{a computable presentation} for it.
+
+\vc{The groupoid of finite types is the free symmetric monoidal groupoid on one
+  generator. This can be presented as an algebraic 2-theory, which is our syntax
+  for $\PiHatLang$. Vertical categorification of natural numbers as a free
+  commutative monoid. See groupoidification.}
+
+\todo{Check Brent Yorgey's thesis?}
+
+To do so, we will characterise the automorphisms on finite sets of cardinality
+$n$, and show them to be equivalent to the symmetric group $\Sn$, via the
+Coxeter presentation. We will do that in two steps,
 in~\cref*{subsec:permutations,subsec:lehmer,subsec:symmetric}.
 
 %% Coxeter presentation of $\Sn$ $\eqv$ $\Lehmer[n]$ $\eqv$ $\Aut[\Fin[n]]$
@@ -213,7 +221,7 @@ $\UFin$ is a symmetric monoidal groupoid with unit and tensor given by
 
 \begin{definition}
   \begin{align*}
-    I           & \defeq \Fin[0]    \\
+    I           & \defeq F_{0}    \\
     X \otimes Y & \defeq X \sqcup Y
   \end{align*}
 \end{definition}
@@ -224,4 +232,5 @@ symmetry. It is the free symmetric monoidal groupoid on one generator.
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
+%%% fill-column: 120
 %%% End:
