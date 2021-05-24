@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting --termination-depth=2 #-}
+{-# OPTIONS --without-K --rewriting #-}
 
 module Pi+.Coxeter.Sn where
 
@@ -76,7 +76,7 @@ reverse-respects-≈₁ (trans {l1 = l1} {l2 = l2} {l3 = l3} p1 p2) =
   let r1 = reverse-respects-≈₁ {l1 = l2} {l2 = l3} p2
       r2 = reverse-respects-≈₁ {l1 = l1} {l2 = l2} p1
   in  trans {l1 = reverse l1} {l2 = reverse l2} {l3 = reverse l3} r2 r1
-reverse-respects-≈₁ (respects-++ {l = l} {l' = l'} {r = r} {r' = r'} p1 p2) = 
+reverse-respects-≈₁ (respects-++ {l = l} {l' = l'} {r = r} {r' = r'} p1 p2) =
   let r1 = reverse-respects-≈₁ p1
       r2 = reverse-respects-≈₁ p2
       s1 = reverse-++ l r
