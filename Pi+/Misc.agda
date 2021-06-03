@@ -146,3 +146,16 @@ module _ {i} {A : Type i} {j} (G : Group j) where
     Word-extendᴳ-:: (inr x) nil = ! (G.unit-r (G.inv (f x)))
     Word-extendᴳ-:: (inl x) (y :: w) = idp
     Word-extendᴳ-:: (inr x) (y :: w) = idp
+
+module _ {i j k} {A : Type i} {B : Type j} {C : Type k}
+         (f : A → B) (g : B → C) where
+
+  map-∘ : {xs : List A} → map g (map f xs) == map (g ∘ f) xs
+  map-∘ {xs = nil} = idp
+  map-∘ {xs = x :: xs} = ap (g (f x) ::_) (map-∘ {xs = xs})
+
+module _ {i} {A : Type i} where
+
+  map-id : {xs : List A} → map (idf A) xs == xs
+  map-id {xs = nil} = idp
+  map-id {xs = x :: xs} = ap (x ::_) (map-id {xs = xs})

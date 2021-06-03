@@ -5,7 +5,7 @@ module Pi+.Coxeter.GeneratedGroup where
 open import HoTT
 
 open import lib.groups.GeneratedGroup
-open import Pi+.Coxeter.Sn using (CoxeterRel)
+open import Pi+.Coxeter.Sn hiding (Sn)
 open import Pi+.Coxeter.Group
 open import Pi+.Extra
 open import Pi+.Misc
@@ -14,6 +14,8 @@ module _ (n : ℕ) where
 
   GRel : Rel (Word (Fin n)) lzero
   GRel w1 w2 = map codiag w1 ≈ map codiag w2
+
+  syntax GRel w1 w2 = w1 ≈ᴳ w2
 
   module GG = GeneratedGroup (Fin n) GRel
   G = GG.GenGroup
@@ -66,3 +68,34 @@ module _ (n : ℕ) where
 
   ηᴳ♯ : G →ᴳ Sn
   ηᴳ♯ = GG.HomomorphismEquiv.extend Sn (rel-res-fun ηᴳ η-respects-relᴳ)
+
+  εᴳ : List (Fin n) → Group.El G
+  εᴳ = q[_] ∘ map inl
+
+  map-inl-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈ w2 → map inl w1 ≈ᴳ map inl w2
+  map-inl-respects-≈ {nil} {nil} r =
+    CoxeterRel-refl {n} nil
+  map-inl-respects-≈ {nil} {x :: w2} r =
+    transport (CoxeterRel nil) (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) r
+  map-inl-respects-≈ {x :: w1} {nil} r =
+    transport (λ l → CoxeterRel l nil) (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) r
+  map-inl-respects-≈ {x :: w1} {y :: w2} r =
+    transport2 CoxeterRel (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) (ap (y ::_) (! (map-∘ inl codiag ∙ map-id))) r
+
+  εᴳ-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈ w2 → εᴳ w1 == εᴳ w2
+  εᴳ-respects-≈ = quot-rel ∘ GG.qwr-rel ∘ map-inl-respects-≈
+
+  map-inl-preserves-++ : {w1 w2 : List (Fin n)} → map inl (w1 ++ w2) ≈ᴳ map inl w1 ++ map inl w2
+  map-inl-preserves-++ {w1} {w2} =
+    transport (GRel _) (map-++ inl w1 w2) (CoxeterRel-refl {n} (map codiag (map inl (w1 ++ w2))))
+
+  εᴳ-preserves-comp : {w1 w2 : List (Fin n)} → εᴳ (w1 ++ w2) == Group.comp G (εᴳ w1) (εᴳ w2)
+  εᴳ-preserves-comp {w1} {w2} = quot-rel (GG.qwr-rel (map-inl-preserves-++ {w1} {w2}))
+
+  ε : Sn →ᴳ G
+  GroupHom.f ε = SetQuot-rec εᴳ εᴳ-respects-≈
+  GroupHom.pres-comp ε =
+    SetQuot-elim (λ w1 → SetQuot-elim (λ w2 →
+      εᴳ-preserves-comp {w1} {w2})
+        (λ r → prop-has-all-paths-↓))
+          (λ r → prop-has-all-paths-↓)
