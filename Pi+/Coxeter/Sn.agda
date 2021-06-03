@@ -90,3 +90,6 @@ reverse-respects-≈ {S n} p = reverse-respects-≈₁ p
 ++-respects-≈ : {n : ℕ} {l1 l2 r1 r2 : List (Fin n)} → l1 ≈ l2 → r1 ≈ r2 → (l1 ++ r1) ≈ (l2 ++ r2)
 ++-respects-≈ {n = O} p1 p2 = unit
 ++-respects-≈ {n = S n} p1 p2 = respects-++ p1 p2
+
+::-respects-≈ : {n : ℕ} {x : Fin n} {l1 l2 : List (Fin n)} → l1 ≈ l2 → (x :: l1) ≈ (x :: l2)
+::-respects-≈ {n = S n} p = respects-++ idp p

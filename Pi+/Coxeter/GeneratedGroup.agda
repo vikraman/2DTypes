@@ -1,16 +1,16 @@
 {-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
-module Pi+.Coxeter.GeneratedGroup where
-
 open import HoTT
 
-open import lib.groups.GeneratedGroup
 open import Pi+.Coxeter.Sn hiding (Sn)
 open import Pi+.Coxeter.Group
 open import Pi+.Extra
 open import Pi+.Misc
 
-module _ (n : ℕ) where
+-- If we have a group structure S on (List A, R)
+-- then we can lift it uniquely to (List (PlusMinus A), R')
+
+module Pi+.Coxeter.GeneratedGroup (n : ℕ) where
 
   GRel : Rel (Word (Fin n)) lzero
   GRel w1 w2 = map codiag w1 ≈ map codiag w2
@@ -60,8 +60,9 @@ module _ (n : ℕ) where
   η-respects-relˢ : ∀ {w1 w2} → GRel w1 w2 → Word-extendˢ w1 ≈ Word-extendˢ w2
   η-respects-relˢ {w1} {w2} r = transport2 CoxeterRel (! (Word-extendˢ-η w1)) (! (Word-extendˢ-η w2)) r
 
-  η-respects-relᴳ : respects-rel ηᴳ
-  η-respects-relᴳ {w1} {w2} r = Word-extendᴳ-η w1 ∙ quot-rel (η-respects-relˢ r) ∙ ! (Word-extendᴳ-η w2)
+  abstract
+    η-respects-relᴳ : respects-rel ηᴳ
+    η-respects-relᴳ {w1} {w2} r = Word-extendᴳ-η w1 ∙ quot-rel (η-respects-relˢ r) ∙ ! (Word-extendᴳ-η w2)
 
   module R = RelationRespectingFunctions (Fin n) GRel Sn
   open R.RelationRespectingFunction
@@ -82,15 +83,17 @@ module _ (n : ℕ) where
   map-inl-respects-≈ {x :: w1} {y :: w2} r =
     transport2 CoxeterRel (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) (ap (y ::_) (! (map-∘ inl codiag ∙ map-id))) r
 
-  εᴳ-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈ w2 → εᴳ w1 == εᴳ w2
-  εᴳ-respects-≈ = quot-rel ∘ GG.qwr-rel ∘ map-inl-respects-≈
+  abstract
+    εᴳ-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈ w2 → εᴳ w1 == εᴳ w2
+    εᴳ-respects-≈ = quot-rel ∘ GG.qwr-rel ∘ map-inl-respects-≈
 
   map-inl-preserves-++ : {w1 w2 : List (Fin n)} → map inl (w1 ++ w2) ≈ᴳ map inl w1 ++ map inl w2
   map-inl-preserves-++ {w1} {w2} =
     transport (GRel _) (map-++ inl w1 w2) (CoxeterRel-refl {n} (map codiag (map inl (w1 ++ w2))))
 
-  εᴳ-preserves-comp : {w1 w2 : List (Fin n)} → εᴳ (w1 ++ w2) == Group.comp G (εᴳ w1) (εᴳ w2)
-  εᴳ-preserves-comp {w1} {w2} = quot-rel (GG.qwr-rel (map-inl-preserves-++ {w1} {w2}))
+  abstract
+    εᴳ-preserves-comp : {w1 w2 : List (Fin n)} → εᴳ (w1 ++ w2) == Group.comp G (εᴳ w1) (εᴳ w2)
+    εᴳ-preserves-comp {w1} {w2} = quot-rel (GG.qwr-rel (map-inl-preserves-++ {w1} {w2}))
 
   ε : Sn →ᴳ G
   GroupHom.f ε = SetQuot-rec εᴳ εᴳ-respects-≈
