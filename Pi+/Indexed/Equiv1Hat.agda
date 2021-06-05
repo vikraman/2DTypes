@@ -72,7 +72,7 @@ eval^₁ (c₁ ◎ c₂) = eval^₁ c₁ ◎^ eval^₁ c₂
 eval^₁ (c₁ ⊕ c₂) = ++^-⊕ (eval^₁ c₁) (eval^₁ c₂)
 
 eval-quote^₁ : (c : n ⟷₁^ m) → eval^₁ (quote^₁ c) ⟷₂^ c
-eval-quote^₁ (swap₊^ {n = n}) = 
+eval-quote^₁ (swap₊^ {n = n}) =
         _ ⟷₂^⟨ ⊕id⟷₁⟷₂^ ⊡^ (((⊕⊕id⟷₁⟷₂^ ⊡^ ((id⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^) ⊡^ (⊕⊕id⟷₁⟷₂^ ⊡^ ⊕⊕id⟷₁⟷₂^)))) ⊡^ ⊕id⟷₁⟷₂^) ⟩
         _ ⟷₂^⟨ idl◎l^ ⟩
         _ ⟷₂^⟨ idr◎l^ ⟩

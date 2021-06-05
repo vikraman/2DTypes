@@ -77,12 +77,12 @@ evalNorm₂-S {c₁ = c₁} {c₂ = c₂} (_■^_ α₁ α₂) with (⟷₁^-eq-
   let r₁ = evalNorm₂-S α₁
       r₂ = evalNorm₂-S α₂
   in  r₁ ∙ r₂
-evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α_₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
+evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
 ... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO!
 evalNorm₂-S (⊕id⟷₁⟷₂^ {n = O}) = idp
-evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
 evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = O}) = idp
-evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
 evalNorm₂-S hom◎⊕⟷₂^ = TODO!
 evalNorm₂-S (resp⊕⟷₂ {n = O} {c₁ = c₁} {c₂ = c₂} α) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
 ... | idp | idp = idp
