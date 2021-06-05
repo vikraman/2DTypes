@@ -38,7 +38,14 @@
 \newcommand{\el}[1]{\mathbf{#1}}
 
 % symmetric group
-\newcommand{\Sn}[0]{\mathsf{S_n}}
+\NewDocumentCommand{\Sn}{O{n}}{\type{S_{#1}}}
+\newcommand{\List}{\type{List}}
+\newcommand{\nil}{\term{nil}}
+\newcommand{\cons}{\mathrel{\term{::}}}
+\newcommand{\inl}{\term{inl}}
+\newcommand{\inr}{\term{inr}}
+\newcommand{\extend}[1]{{#1}^\#}
+\newcommand{\Grp}{\type{Grp}}
 
 % Pi
 \newcommand{\PiLang}{\mathit{\Pi}}
