@@ -272,16 +272,16 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ hom◎⊕⟷₂ = hom◎⊕⟷₂
 !⟷₁⟷₂ triangle₊l =
   ((uniti₊l ◎ swap₊) ⊕ id⟷₁)
-    ⟷₂⟨ TODO! ⟩
+    ⟷₂⟨ TODO! ⟩ -- J-S prop 1.1
   ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ⟷₂∎
 !⟷₁⟷₂ triangle₊r =
   ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊)
-    ⟷₂⟨ TODO! ⟩
+    ⟷₂⟨ TODO! ⟩ -- J-S prop 1.1
   ((uniti₊l ◎ swap₊) ⊕ id⟷₁) ⟷₂∎
-!⟷₁⟷₂ pentagon₊l = TODO!
-!⟷₁⟷₂ pentagon₊r = TODO!
-!⟷₁⟷₂ unite₊l-coh-l = TODO!
-!⟷₁⟷₂ unite₊l-coh-r = TODO!
+!⟷₁⟷₂ pentagon₊l = TODO! -- J-S prop 1.1
+!⟷₁⟷₂ pentagon₊r = TODO!  -- J-S prop 1.1
+!⟷₁⟷₂ unite₊l-coh-l = TODO! -- J-S prop 2.1
+!⟷₁⟷₂ unite₊l-coh-r = TODO! -- J-S prop 2.1
 !⟷₁⟷₂ hexagonr₊l = _■_ (_■_ assoc◎l hexagonl₊l) assoc◎r
 !⟷₁⟷₂ hexagonr₊r = _■_ (_■_ assoc◎l hexagonl₊r) assoc◎r
 !⟷₁⟷₂ hexagonl₊l = _■_ (_■_ assoc◎l hexagonr₊l) assoc◎r
