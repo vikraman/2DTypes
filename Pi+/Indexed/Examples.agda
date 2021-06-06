@@ -31,6 +31,9 @@ private
 𝟜+ : Pi+.U 4
 𝟜+ = I + I + I + I + O
 
+𝟠+ : Pi+.U 8
+𝟠+ = I + I + I + I + I + I + I + I + O
+
 𝔹 : ℕ → Pi.U
 𝔹 O = I
 𝔹 (S O) = 𝟚
@@ -73,6 +76,9 @@ toffoli (S (S n)) = cif (toffoli (S n)) id⟷₁
 
 toffoli^ : ∀ n → _
 toffoli^ = eval₁ ∘ toffoli
+
+toffoli+ : ∀ n → _
+toffoli+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ toffoli^
 
 toffoli^2-perm : Aut (Fin 4)
 toffoli^2-perm = Pi^.evalNorm₁ (toffoli^ 2)
@@ -132,6 +138,9 @@ copy (S (S n)) = assocl⋆ ◎ (copy (S O) ⊗ id⟷₁) ◎ assocr⋆
 copy^ : ∀ n → _
 copy^ = eval₁ ∘ copy
 
+copy+ : ∀ n → _
+copy+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ copy^
+
 rearrange : (t₁ t₂ t₃ : Pi.U) → t₁ Pi.× (t₂ Pi.× t₃) Pi.⟷₁ t₂ Pi.× (t₁ Pi.× t₃)
 rearrange t₁ t₂ t₃ = assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 
@@ -142,6 +151,9 @@ reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (reset (S n)) (swap�
 
 reset^ : ∀ n → _
 reset^ = eval₁ ∘ reset
+
+reset+ : ∀ n → _
+reset+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ reset^
 
 fst2last : ∀ n → 𝔹 n Pi.⟷₁ 𝔹 n
 fst2last O = id⟷₁
@@ -156,3 +168,6 @@ incr (S (S n)) = (id⟷₁ ⊗ incr (S n)) ◎ fst2last (S (S n)) ◎ toffoli (S
 
 incr^ : ∀ n → _
 incr^ = eval₁ ∘ incr
+
+incr+ : ∀ n → _
+incr+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ incr^
