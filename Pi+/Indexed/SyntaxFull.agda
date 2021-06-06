@@ -86,24 +86,24 @@ unite⋆r = swap⋆ ◎ unite⋆l
 uniti⋆r : t ⟷₁ t × I
 uniti⋆r = uniti⋆l ◎ swap⋆
 
--- !⟷₁ : t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
--- !⟷₁ unite₊l = uniti₊l
--- !⟷₁ uniti₊l = unite₊l
--- !⟷₁ unite⋆l = uniti⋆l
--- !⟷₁ uniti⋆l = unite⋆l
--- !⟷₁ swap₊   = swap₊
--- !⟷₁ swap⋆   = swap⋆
--- !⟷₁ assocl₊ = assocr₊
--- !⟷₁ assocr₊ = assocl₊
--- !⟷₁ assocl⋆ = assocr⋆
--- !⟷₁ assocr⋆ = assocl⋆
--- !⟷₁ absorbr = factorzl
--- !⟷₁ absorbl = factorzr
--- !⟷₁ factorzr = absorbl
--- !⟷₁ factorzl = absorbr
--- !⟷₁ dist = factor
--- !⟷₁ factor = dist
--- !⟷₁ id⟷₁ = id⟷₁
--- !⟷₁ (c₁ ◎ c₂) = !⟷₁ c₂ ◎ !⟷₁ c₁
--- !⟷₁ (c₁ ⊕ c₂) = !⟷₁ c₂ ⊕ !⟷₁ c₁
--- !⟷₁ (c₁ ⊗ c₂) = !⟷₁ c₂ ⊗ !⟷₁ c₁
+!⟷₁ : t₁ ⟷₁ t₂ → t₂ ⟷₁ t₁
+!⟷₁ unite₊l = uniti₊l
+!⟷₁ uniti₊l = unite₊l
+!⟷₁ unite⋆l = uniti⋆l
+!⟷₁ uniti⋆l = unite⋆l
+!⟷₁ swap₊   = swap₊
+!⟷₁ swap⋆   = swap⋆
+!⟷₁ assocl₊ = assocr₊
+!⟷₁ assocr₊ = assocl₊
+!⟷₁ assocl⋆ = assocr⋆
+!⟷₁ assocr⋆ = assocl⋆
+!⟷₁ absorbr = factorzl
+!⟷₁ absorbl = factorzr
+!⟷₁ factorzr = absorbl
+!⟷₁ factorzl = absorbr
+!⟷₁ dist = factor
+!⟷₁ factor = dist
+!⟷₁ id⟷₁ = id⟷₁
+!⟷₁ (c₁ ◎ c₂) = !⟷₁ c₂ ◎ !⟷₁ c₁
+!⟷₁ (c₁ ⊕ c₂) = !⟷₁ c₁ ⊕ !⟷₁ c₂
+!⟷₁ (c₁ ⊗ c₂) = !⟷₁ c₁ ⊗ !⟷₁ c₂
