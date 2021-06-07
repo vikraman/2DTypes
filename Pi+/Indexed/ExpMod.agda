@@ -1,3 +1,26 @@
+{-# OPTIONS --without-K --exact-split --rewriting #-}
+
+open import lib.Base
+open import lib.Equivalence
+open import lib.NType
+import lib.types.Nat as N
+open import lib.types.Fin
+
+open import Pi+.UFin.BAut
+open import Pi+.Misc
+open import Pi+.Extra
+
+module Pi+.Indexed.ExpMod where
+
+open import Pi+.Indexed.Syntax as Pi+
+open import Pi+.Indexed.SyntaxHat as Pi^
+open import Pi+.Indexed.SyntaxHatHelpers as Pi^
+open import Pi+.Indexed.SyntaxFull as Pi
+open import Pi+.Indexed.Translation
+import Pi+.Indexed.Equiv1 as Pi+
+import Pi+.Indexed.Equiv1Hat as Pi^
+import Pi+.Indexed.Equiv1Norm as Pi^
+import Pi+.Indexed.Examples
 
 {--
 
@@ -44,3 +67,95 @@ g(r,15) where r odd = (r,4)
 
 
 --}
+
+g-perm : Aut (Fin 16)
+g-perm = equiv f f f-f f-f
+  where f : Fin 16 → Fin 16
+        f (O , ϕ) = 11 , N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS)))
+        f (1 , ϕ) = 10 , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS))))
+        f (2 , ϕ) = 9 , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS)))))
+        f (3 , ϕ) = 8 , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS))))))
+        f (4 , ϕ) = 15 , N.ltS
+        f (5 , ϕ) = 14 , N.ltSR N.ltS
+        f (6 , ϕ) = 13 , N.ltSR (N.ltSR N.ltS)
+        f (7 , ϕ) = 12 , N.ltSR (N.ltSR (N.ltSR N.ltS))
+        f (8 , ϕ) = 3 , N.ltSR
+                          (N.ltSR
+                           (N.ltSR
+                            (N.ltSR
+                             (N.ltSR
+                              (N.ltSR
+                               (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS)))))))))))
+        f (9 , ϕ) = 2 , N.ltSR
+                          (N.ltSR
+                           (N.ltSR
+                            (N.ltSR
+                             (N.ltSR
+                              (N.ltSR
+                               (N.ltSR
+                                (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS))))))))))))
+        f (10 , ϕ) = 1 , N.ltSR
+                           (N.ltSR
+                            (N.ltSR
+                             (N.ltSR
+                              (N.ltSR
+                               (N.ltSR
+                                (N.ltSR
+                                 (N.ltSR
+                                  (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS)))))))))))))
+        f (11 , ϕ) = 0 , N.ltSR
+                           (N.ltSR
+                            (N.ltSR
+                             (N.ltSR
+                              (N.ltSR
+                               (N.ltSR
+                                (N.ltSR
+                                 (N.ltSR
+                                  (N.ltSR
+                                   (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS))))))))))))))
+        f (12 , ϕ) = 7 , N.ltSR
+                           (N.ltSR
+                            (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS)))))))
+        f (13 , ϕ) = 6 , N.ltSR
+                           (N.ltSR
+                            (N.ltSR
+                             (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS))))))))
+        f (14 , ϕ) = 5 , N.ltSR
+                           (N.ltSR
+                            (N.ltSR
+                             (N.ltSR
+                              (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS)))))))))
+        f (15 , ϕ) = 4 , N.ltSR
+                           (N.ltSR
+                            (N.ltSR
+                             (N.ltSR
+                              (N.ltSR
+                               (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR N.ltS))))))))))
+        f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))))))))))
+        f-f : (x : Fin 16) → f (f x) == x
+        f-f (O , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (1 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (2 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (3 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (4 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (5 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (6 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (7 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (8 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (9 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (10 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (11 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (12 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (13 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (14 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (15 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))))))))))
+
+g^ : 16 ⟷₁^ 16
+g^ = Pi^.quoteNorm₁ idp g-perm
+
+𝟙𝟞+ : Pi+.U 16
+𝟙𝟞+ = I + I + I + I + I + I + I + I + I + I + I + I + I + I + I + I + O
+
+g+ : 𝟙𝟞+ Pi+.⟷₁ 𝟙𝟞+
+g+ = Pi^.quote^₁ g^
