@@ -1,16 +1,15 @@
-{-# OPTIONS --without-K --exact-split --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
 open import lib.Base
 open import lib.Equivalence
 open import lib.NType
+open import lib.NType2
 import lib.types.Nat as N
 open import lib.types.Fin
 
 open import Pi+.UFin.BAut
 open import Pi+.Misc
 open import Pi+.Extra
-
-module Pi+.Indexed.Examples where
 
 open import Pi+.Indexed.Syntax as Pi+
 open import Pi+.Indexed.SyntaxHat as Pi^
@@ -21,9 +20,21 @@ import Pi+.Indexed.Equiv1 as Pi+
 import Pi+.Indexed.Equiv1Hat as Pi^
 import Pi+.Indexed.Equiv1Norm as Pi^
 
+module Pi+.Indexed.Examples where
+
 private
   variable
     m n o p q r : ℕ
+
+instance
+  ltS : {m : ℕ} → m N.< (S m)
+  ltS = N.ltS
+  ltSR : {m n : ℕ} → {{m N.< n}} → m N.< (S n)
+  ltSR {m} {n} {{ϕ}} = N.ltSR ϕ
+
+abstract
+  fin= : {f g : Fin n} → f .fst == g .fst → f == g
+  fin= p = pair= p prop-has-all-paths-↓
 
 𝟚 : Pi.U
 𝟚 = I + I
@@ -86,25 +97,25 @@ toffoli^2-perm = Pi^.evalNorm₁ (toffoli^ 2)
 swap23 : Aut (Fin 4)
 swap23 = equiv f f f-f f-f
   where f : Fin 4 → Fin 4
-        f (O , ϕ) = O , ϕ
-        f (1 , ϕ) = 1 , ϕ
-        f (2 , ϕ) = 3 , N.ltS
-        f (3 , ϕ) = 2 , N.ltSR N.ltS
+        f (O , ϕ) = 0
+        f (1 , ϕ) = 1
+        f (2 , ϕ) = 3
+        f (3 , ϕ) = 2
         f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
         f-f : (x : Fin 4) → f (f x) == x
-        f-f (O , ϕ) = idp
-        f-f (1 , ϕ) = idp
-        f-f (2 , ϕ) = pair= idp (prop-has-all-paths _ _)
-        f-f (3 , ϕ) = pair= idp (prop-has-all-paths _ _)
+        f-f (O , ϕ) = fin= idp
+        f-f (1 , ϕ) = fin= idp
+        f-f (2 , ϕ) = fin= idp
+        f-f (3 , ϕ) = fin= idp
         f-f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
 
 toffoli^2perm=swap23 : toffoli^2-perm == swap23
 toffoli^2perm=swap23 = e= ϕ
-  where ϕ : (f : Fin 4) → _
-        ϕ (O , ϕ) = pair= idp (prop-has-all-paths _ _)
-        ϕ (1 , ϕ) = pair= idp (prop-has-all-paths _ _)
-        ϕ (2 , ϕ) = pair= idp (prop-has-all-paths _ _)
-        ϕ (3 , ϕ) = pair= idp (prop-has-all-paths _ _)
+  where ϕ : (f : Fin 4) → –> toffoli^2-perm f == –> swap23 f
+        ϕ (O , ϕ) = fin= idp
+        ϕ (1 , ϕ) = fin= idp
+        ϕ (2 , ϕ) = fin= idp
+        ϕ (3 , ϕ) = fin= idp
         ϕ (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
 
 swap23^ : 4 Pi^.⟷₁^ 4
@@ -171,3 +182,18 @@ incr^ = eval₁ ∘ incr
 
 incr+ : ∀ n → _
 incr+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ incr^
+
+incr+test : Fin 4 → Fin 4
+incr+test = –> (Pi+.eval₁ (incr+ 2))
+
+incr+test-0 : incr+test 0 == 3
+incr+test-0 = fin= idp
+
+incr+test-1 : incr+test 1 == 0
+incr+test-1 = fin= idp
+
+incr+test-2 : incr+test 2 == 1
+incr+test-2 = fin= idp
+
+incr+test-3 : incr+test 3 == 2
+incr+test-3 = fin= idp
