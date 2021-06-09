@@ -2,21 +2,16 @@
 
 module Pi+.Lehmer.Lehmer2FinEquiv where
 
-open import HoTT hiding (_≤_; _<_; ≤-has-all-paths)
+open import HoTT
 
-open import Pi+.Extra
+open import Pi+.Misc
 open import Pi+.Lehmer.FinHelpers
 open import Pi+.Lehmer.Lehmer2
-open import Pi+.Common.InequalityEquiv
-open import Pi+.Common.Arithmetic
 
 open import Pi+.UFin.BAut using (Aut)
 open import Pi+.Extra
 
 abstract
-  e= : ∀ {i} {X : Type i} {n : ℕ} {e₁ e₂ : Fin n ≃ X} → ((f : Fin n) → (–> e₁ f == –> e₂ f)) → e₁ == e₂
-  e= h = pair= (λ= h) prop-has-all-paths-↓
-
   instance
     Fin0-isProp : is-prop (Fin 0)
     Fin0-isProp = equiv-preserves-level {A = ⊥} (Fin-equiv-Empty ⁻¹)
