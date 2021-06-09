@@ -193,7 +193,7 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
 \end{definition}
 
 \begin{proposition}
-  $\isFin$ is a proposition.
+  For any type $X$, $\isFin[X]$ is a proposition.
 \end{proposition}
 
 \begin{proof}
@@ -209,7 +209,7 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
   \[
     \UFin \defeq \dsum{X:\UU}{\isFin[X]}.
   \]
-  We write $F_{n} \defeq (n, \Fin[n], \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$. We use this as the
+  We write $F_{n} \defeq (\Fin[n], n, \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$. We use this as the
   denotational semantics to interpret our reversible programming language $\PiPlusLang$.
 \end{example}
 
