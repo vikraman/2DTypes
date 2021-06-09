@@ -210,6 +210,9 @@ TSWLatexianTemp*
 # auto folder when using emacs and auctex
 /auto/*
 
+# regions when using auctex
+_region_.tex
+
 # agda
 *.agdai
 MAlonzo
