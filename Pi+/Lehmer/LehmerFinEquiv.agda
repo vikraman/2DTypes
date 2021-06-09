@@ -56,6 +56,6 @@ Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ �
 Fin≃Lehmer {S n} =
         Fin (S (S n)) ≃ Fin (S (S n))                            ≃⟨ i ⟩
         (Σ[ k ∈ Fin (S (S n)) ] (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
-        Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                  ≃⟨ _ , (×-isemap-r _ (snd (Fin≃Lehmer {n}))) ⟩
+        Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                  ≃⟨ _ , (×-isemap-r (Fin (S (S n))) (snd (Fin≃Lehmer {n}))) ⟩
         Fin (S (S n)) × Lehmer n                                 ≃⟨ LehmerInd ⟩
         Lehmer (S n) ≃∎
