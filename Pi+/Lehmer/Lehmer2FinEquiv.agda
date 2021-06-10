@@ -30,6 +30,6 @@ Fin≃Lehmer : {n : ℕ} -> Aut (Fin n) ≃ Lehmer n
 Fin≃Lehmer {O} = AutFin≃Lehmer-0
 Fin≃Lehmer {S n} =
   Fin (S n) ≃ Fin (S n) ≃⟨ i ⟩
-  (Σ[ k ∈ Fin (S n) ] (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
+  Σ (Fin (S n)) (λ k → FinExcept fzero ≃ FinExcept k) ≃⟨ Σ-cong-equiv-snd ii ⟩
   Fin (S n) × (Fin n ≃ Fin n) ≃⟨ _ , ×-isemap-r (Fin (S n)) (snd (Fin≃Lehmer {n})) ⟩
   Fin (S n) × Lehmer n ≃∎
