@@ -24,13 +24,16 @@
 \let\ps\perfectparens%
 
 \newcommand{\Nat}[0]{\mathbb{N}}
-\NewDocumentCommand{\suc}{O{}}{\term{suc}\ifstrempty{#1}{}{\ps{#1}}}
+\NewDocumentCommand{\suc}{O{}}{\mathop{\term{S}}{#1}}
 \newcommand{\fac}[1]{{#1}\,!}
 
 \newcommand{\highlight}[1]{\textcolor{solarized-orange}{#1}}
 
 % finite types
 \NewDocumentCommand{\Fin}{O{}}{\term{Fin}\ifstrempty{#1}{}{({#1})}}
+\NewDocumentCommand{\FinExcept}{mO{}}{\term{Fin_{\mathsmaller{#1}}^{-}}\ifstrempty{#2}{}{({#2})}}
+\newcommand{\fzero}{f_0}
+
 \NewDocumentCommand{\Lehmer}{O{}}{\term{Lehmer}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
 

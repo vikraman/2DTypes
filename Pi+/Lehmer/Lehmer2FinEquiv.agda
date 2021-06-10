@@ -28,8 +28,8 @@ open import Pi+.Lehmer.FinHelpers
 
 Fin≃Lehmer : {n : ℕ} -> Aut (Fin n) ≃ Lehmer n
 Fin≃Lehmer {O} = AutFin≃Lehmer-0
-Fin≃Lehmer {S n} =
-  Fin (S n) ≃ Fin (S n) ≃⟨ i ⟩
-  Σ (Fin (S n)) (λ k → FinExcept fzero ≃ FinExcept k) ≃⟨ Σ-cong-equiv-snd ii ⟩
-  Fin (S n) × (Fin n ≃ Fin n) ≃⟨ _ , ×-isemap-r (Fin (S n)) (snd (Fin≃Lehmer {n})) ⟩
-  Fin (S n) × Lehmer n ≃∎
+Fin≃Lehmer {S m} =
+  Fin (S m) ≃ Fin (S m) ≃⟨ i ⟩
+  Σ (Fin (S m)) (λ k → FinExcept fzero ≃ FinExcept k) ≃⟨ Σ-cong-equiv-snd ii ⟩
+  Fin (S m) × (Fin m ≃ Fin m) ≃⟨ _ , ×-isemap-r (Fin (S m)) (snd (Fin≃Lehmer {m})) ⟩
+  Fin (S m) × Lehmer m ≃∎

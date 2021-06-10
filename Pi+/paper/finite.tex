@@ -132,19 +132,45 @@ places.
 \end{center}
 \todo{figure}
 
-Using this Lehmer encoding algorithm, we can now construct the equivalence
-between these types.
+Using this Lehmer encoding algorithm, we can now construct the equivalence between these types.
+
+We define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except the one
+provided. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence an $\hSet$.
+
+\begin{definition}
+  \( \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j} \).
+\end{definition}
 
 \begin{proposition}
-  For all $n:\Nat$,
-  \[
-    \Lehmer[n] \eqv \Aut[\Fin[n]]
-  \]
+  For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$.
+\end{proposition}
+
+\begin{proposition}
+  For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$.
+\end{proposition}
+
+\begin{proposition}
+  For any $n : \Nat$,
+  \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}{k}} \).
+\end{proposition}
+
+\begin{proposition}
+  For all $n:\Nat$, \( \Lehmer[n] \eqv \Aut[\Fin[n]] \).
 \end{proposition}
 
 \begin{proof}
-  We have to turn this algorithm into a constructive proof in type theory where
-  we only use functions and recursion. \todo{Describe the agda code.}
+  For $n = 0$, note that $\Lehmer[0]$ is contractible, and so is $\Aut[\Fin[0]]$. For $n = \suc[m]$, we have the
+  following chain of equivalences.
+  \[\arraycolsep=0.5em\def\arraystretch{1.5}
+    \begin{array}{rl}
+      & \Aut[\Fin[\suc[m]]] \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \Fin[m]} \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\Fin[m] \eqv \Fin[m]} \\
+      \eqv & \Fin[\suc[m]] \times \Aut[\Fin[m]] \\
+      \eqv & \Fin[\suc[m]] \times \Lehmer[m] \\
+    \end{array}
+  \]
 \end{proof}
 
 \subsection{Symmetric groups}~\label{subsec:symmetric}
