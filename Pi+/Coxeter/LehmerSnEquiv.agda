@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
 module Pi+.Coxeter.LehmerSnEquiv where
 
@@ -27,7 +27,7 @@ Lehmer≃Coxeter = equiv f g f-g g-f
 
     g-rel :  {n : ℕ} ->  {m1 m2 : List (Fin n)} → m1 ≈ m2 → g-q m1 == g-q m2
     g-rel = immersion⁻¹-respects≈
-            
+
     g :  {n : ℕ} -> Sn n → Lehmer n
     g {n} = SetQuot-rec {B = Lehmer n} g-q g-rel
 
@@ -36,7 +36,7 @@ Lehmer≃Coxeter = equiv f g f-g g-f
     f-g-q {S n} m = quot-rel (immersion∘immersion⁻¹ m)
 
     f-g :  {n : ℕ} -> (l : Sn n) → f (g l) == l
-    f-g = SetQuot-elim {P = λ l → f (g l) == l} {{raise-level -1 has-level-apply-instance}} f-g-q (λ _ → prop-has-all-paths-↓ {{has-level-apply-instance}})
+    f-g = SetQuot-elim {P = λ l → f (g l) == l} f-g-q (λ _ → prop-has-all-paths-↓)
 
     g-f : {n : ℕ} ->  (cl : Lehmer n) → g (f cl) == cl
     g-f {O} CanZ = idp
