@@ -1,14 +1,8 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
 module Pi+.Common.FinHelpers where
 
-open import lib.Base
-open import lib.types.Nat
-open import lib.types.Fin
-open import lib.PathGroupoid
-open import lib.PathOver
-open import lib.NType
-open import lib.NType2
+open import HoTT hiding (⟨_⟩)
 open import Pi+.Misc
 
 ⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
@@ -34,6 +28,9 @@ Fin-has-dec-eq-p {S n} (S x , xp) (S y , yp) with (Fin-has-dec-eq-p {n} (x , <-c
 ... | inl q = inl (Fin= (S x) (S y) (ap S (ap fst q)) xp yp)
 ... | inr q = inr λ qq → q (Fin= x y (ℕ-S-is-inj x y (ap fst qq)) (<-cancel-S xp) (<-cancel-S yp))
 
+instance
+  Fin-is-set-p : {n : ℕ} → is-set (Fin n)
+  Fin-is-set-p = dec-eq-is-set Fin-has-dec-eq-p
 
 private
   variable
@@ -47,8 +44,18 @@ toℕ : Fin k → ℕ
 toℕ = fst
 
 -- ... and injective.
-toℕ-injective : ∀{fj fk : Fin k} → toℕ fj == toℕ fk → fj == fk
-toℕ-injective {fj = fj} {fk} p = pair= p prop-has-all-paths-↓
+abstract
+  toℕ-inj : {fj fk : Fin k} → toℕ fj == toℕ fk → fj == fk
+  toℕ-inj {fj = fj} {fk} p = pair= p prop-has-all-paths-↓
 
-S⟨⟩-inj : {n : ℕ} -> {fj fk : Fin n} → S⟨ fj ⟩ == S⟨ fk ⟩ → fj == fk
-S⟨⟩-inj = toℕ-injective ∘ ℕ-S-is-inj _ _ ∘ ap toℕ
+  ap-toℕ-equiv : {fj fk : Fin k} → is-equiv (ap toℕ {x = fj} {y = fk})
+  ap-toℕ-equiv =
+    is-eq (ap toℕ) toℕ-inj (λ _ → prop-has-all-paths _ _) (λ _ → prop-has-all-paths _ _)
+
+abstract
+  S⟨⟩-inj : {n : ℕ} → {fj fk : Fin n} → S⟨ fj ⟩ == S⟨ fk ⟩ → fj == fk
+  S⟨⟩-inj = toℕ-inj ∘ ℕ-S-is-inj _ _ ∘ ap toℕ
+
+  ap-S⟨⟩-equiv : {n : ℕ} → {fj fk : Fin n} → is-equiv (ap S⟨_⟩ {x = fj} {y = fk})
+  ap-S⟨⟩-equiv {n} {fj} {fk} =
+    is-eq (ap S⟨_⟩) S⟨⟩-inj (λ _ → prop-has-all-paths _ _) (λ _ → prop-has-all-paths _ _)
