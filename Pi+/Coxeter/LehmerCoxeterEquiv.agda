@@ -68,17 +68,19 @@ immersion⁻¹ : {n : ℕ} ->  List (Fin n) → Lehmer n
 immersion⁻¹ {O} nil = CanZ
 immersion⁻¹ {S n} m = ListFin-to-Lehmer m .fst
 
-immersion⁻¹-respects≈ :  {n : ℕ} ->  {m1 m2 : List (Fin n)} → m1 ≈ m2 → immersion⁻¹ m1 == immersion⁻¹ m2
-immersion⁻¹-respects≈ {O} {nil} {nil} pm = idp
-immersion⁻¹-respects≈ {S n} {m1} {m2} pm = 
+immersion⁻¹-respects≈ :  {n : ℕ} ->  {m1 m2 : List (Fin (S n))} → m1 ≈ m2 → immersion⁻¹ m1 == immersion⁻¹ m2
+immersion⁻¹-respects≈ {O} {m1} {m2} pm = TODO!
+immersion⁻¹-respects≈ {S O} {m1} {m2} pm = TODO!
+immersion⁻¹-respects≈ {S (S n)} {m1} {m2} pm = 
     let (cl1 , cl1p) = ListFin-to-Lehmer m1
         (cl2 , cl2p) = ListFin-to-Lehmer m2
-        p = CoxeterRel-trans {S n} (CoxeterRel-sym {S n} cl1p) (CoxeterRel-trans {S n} pm cl2p)
+        p = CoxeterRel-trans {S (S n)} (CoxeterRel-sym {S (S n)} cl1p) (CoxeterRel-trans {S (S n)} pm cl2p)
     in immersion-is-injection cl1 cl2 p
 
-immersion∘immersion⁻¹ : {n : ℕ} -> (m : List (Fin n)) → immersion (immersion⁻¹ m) ≈ m
-immersion∘immersion⁻¹ {O} nil = unit
-immersion∘immersion⁻¹ {S n} m = CoxeterRel-sym {S n} (ListFin-to-Lehmer m .snd)
+immersion∘immersion⁻¹ : {n : ℕ} -> (m : List (Fin (S n))) → immersion (immersion⁻¹ m) ≈ m
+immersion∘immersion⁻¹ {O} m = unit
+immersion∘immersion⁻¹ {S O} m = unit
+immersion∘immersion⁻¹ {S (S n)} m = CoxeterRel-sym {S (S n)} (ListFin-to-Lehmer m .snd)
 
 immersion⁻¹∘immersion : {n : ℕ} ->  (cl : Lehmer n) → immersion⁻¹ (immersion cl) == cl
 immersion⁻¹∘immersion {O} CanZ = idp

@@ -53,7 +53,7 @@ idp== {n = n} l₁ l₂ p = transport (λ e → l₁ ≈₁ e) p idp
 idp≃ : {n : ℕ} → (l₁ l₂ : List (Fin (S n))) → (l₁ == l₂) → (l₁ ≈ l₂)
 idp≃ {n = O} l₁ l₂ p = unit
 idp≃ {n = S O} l₁ l₂ p = unit
-idp≃ {n = S (S n)} = idp== 
+idp≃ {n = S (S n)} = idp==
 
 respects-++-lr : {n : ℕ} → (l m m' r : List (Fin (S n))) → (m ≈ m') → (l ++ (m ++ r)) ≈ (l ++ (m' ++ r))
 respects-++-lr {n = O} l m m' r p = unit
@@ -64,7 +64,7 @@ respects-++-lr {n = S (S n)} l m m' r p = respects-++ {l = l} {l' = l} idp (resp
 ≈-inv-r {O} l = unit
 ≈-inv-r {S O} l = unit
 ≈-inv-r {S (S n)} nil = idp
-≈-inv-r {S (S n)} (x :: l) = 
+≈-inv-r {S (S n)} (x :: l) =
   trans (idp≃ _ _ (list++-assoc-lemma (x :: nil) l (reverse l) (x :: nil)))
   (trans (respects-++-lr (x :: nil) (l ++ reverse l) nil (x :: nil) (≈-inv-r l))
   cancel)
