@@ -201,7 +201,7 @@ First, we formally define a presentation of a group.
 
 \begin{definition}
   Let $A$ be a type and $R : A \to A \to \UU$ a binary relation on $A$. The group $G$ presented by
-  $\langle A ; R \rangle$ is given by the set-quotient of the free group $F(A)$ by the normal closure $N_{R}$, or
+  $\langle A ; R \rangle$ is given by the set-quotient of the free group $F(A)$ by the normal closure $N_{R}$ of $R$, or
   equivalently, as the coequaliser
   \[\begin{tikzcd}
       FR && FA && G
@@ -217,18 +217,40 @@ First, we formally define a presentation of a group.
 
 We define a binary relation on $\List(\Fin[n])$.
 
-\begin{definition}[Coxeter relation]
+\begin{definition}[$\cox$]
   \begin{align*}
-    & \mathsf{cancel} : (n \cons n \cons \nil) \cx \nil \\
-    & \mathsf{swap} : (\suc[k] < n) \to (n \cons k \cons \nil) \cx (k \cons n \cons \nil) \\
-    & \mathsf{braid} : (\suc[n] \cons k \cons \suc[n] \cons \nil) \cx (n \cons \suc[k] \cons n \cons \nil)
+    \cancel
+    & : \forall n \to (n \cons n \cons \nil) \cox \nil \\
+    \swap
+    & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil) \\
+    \braid
+    & : \forall k, n \to (\suc[n] \cons k \cons \suc[n] \cons \nil) \cox (n \cons \suc[k] \cons n \cons \nil) \\
   \end{align*}
 \end{definition}
 
-The type $\Sn$ is defined as the set-quotient of $\List(\Fin[n])$ by the congruence closure of $\cx$.
+We define $\cox*$ as the congruence closure of $\cox$.
 
+\vc{This could be simplified a bit depending on our formalisation.}
+
+\begin{definition}[$\cox*$]
+  \begin{align*}
+    \reflr{\cox}
+    & : \forall w \to w \cox* w \\
+    \symr{\cox}
+    & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1} \\
+    \transr{\cox}
+    & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3} \\
+    \congrf{\cox}{\append}
+    & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
+    \relr{\cox}
+    & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2} \\
+  \end{align*}
+\end{definition}
+
+The type $\Sn$ is defined as the set-quotient of $\List(\Fin[n])$ by $\cox*$.
+q
 \begin{definition}[$\Sn$]
-  \(\Sn \defeq \quot{\List(\Fin[n])}{\cx^{\ast}}\)
+  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
 
 \begin{proposition}

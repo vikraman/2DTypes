@@ -49,7 +49,16 @@
 \newcommand{\inr}{\term{inr}}
 \newcommand{\extend}[1]{{#1}^\#}
 \newcommand{\Grp}{\type{Grp}}
-\newcommand{\cx}{\mathrel{\approx}}
+\NewDocumentCommand{\cox}{s}{\IfBooleanTF{#1}{\mathrel{\approx^{\ast}}}{\mathrel{\approx}}}
+\newcommand{\cancel}{\term{cancel}}
+\newcommand{\swap}{\term{swap}}
+\newcommand{\braid}{\term{braid}}
+\newcommand{\reflr}[1]{\term{{#1}-refl}}
+\newcommand{\symr}[1]{\term{{#1}-sym}}
+\newcommand{\transr}[1]{\term{{#1}-trans}}
+\newcommand{\congrf}[2]{\term{{#1}-cong-{#2}}}
+\newcommand{\relr}[1]{\term{{#1}-rel}}
+\newcommand{\append}{\mathbin{+\kern -0.4em+}}
 
 % Pi
 \newcommand{\PiLang}{\mathit{\Pi}}
