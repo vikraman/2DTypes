@@ -1,7 +1,40 @@
 \section{Introduction}~\label{sec:introduction}
 
-\note{This is just a collection of notes for now, and most of it might move into
-  discussion.}
+\note{This is just a collection of notes for now, and most of it might move into discussion.}
+
+Shor's quantum factoring algorithm requires, at its core, a classical reversible function for modular exponentiation. As
+a small example, consider the function $f(r) = 11^{r} \mod 15$. Using the Toffoli construction~\cite{Toffoli:1980}, we
+can embed this function $f$ into a reversible function $g$, shown below, such that $g(r,0) = (r,f(r))$:
+\[\begin{array}{rcll}
+g(r,h) &=& (r,h+1) & \mbox{when~$r$~even~and~$h$~even} \\
+g(r,h) &=& (r,h-1) & \mbox{when~$r$~even~and~$h$~odd} \\
+g(r,h) &=& (r,11-h) & \mbox{when~$r$~odd~and~$4 > h \geq 0$~or~$12 > h \geq 8$} \\
+g(r,h) &=& (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
+  \end{array}\]
+In Shor's algorithm, $r$ is of the form $2^j$ and to satisfy the complexity requirements of the algorithm, it is
+necessary to implement the function $g$ in a way that grows \emph{polynomially} with $j$. As explained in standard
+accounts of the algorithm (e.g., the Qiskit implementation), such efficient modular exponentiation circuits are not
+straightforward and are the bottleneck in Shor’s algorithm.
+
+P~\cite{shorefficient}
+
+something that uses level 2 is better
+
+
+
+Tabulating this function, we observe that it is periodic with
+$f(0) = 1, f(1) = 11, f(2) = 0, f(3) = 11, f(4) = 0, \cdots$ or more succinctly:
+\[\begin{array}{rcll}
+f(r) &=& 1 & \mbox{if~$r$~even} \\
+f(r) &=& 11 & \mbox{if~$r$~odd}
+\end{array}\]
+
+If $h=0$, we get:
+
+\begin{verbatim}
+g(r,0) = (r, 1) when r even
+g(r,0) = (r, 11) when r odd
+\end{verbatim}
 
 Homotopy type theory (HoTT) introduced the concept of \emph{univalent universes
   of types.} We argue that this concept should be considered a benchmark
