@@ -187,8 +187,8 @@ group.
 First, we formally define a presentation of a group.
 
 \begin{definition}
-  Let $A$ be a type, and $\List(A)$ the free monoid on $A$. The free group $F(A)$ on $A$ is the set-quotient of
-  $\List(A + A)$ by the congruence closure of the relation $(\inl(a) \cons \inr(a) \cons \nil) \sim \nil$.
+  Let $A$ be a type, and $\List[A]$ the free monoid on $A$. The free group $F(A)$ on $A$ is the set-quotient of
+  $\List[A + A]$ by the congruence closure of the relation $(\inl(a) \cons \inr(a) \cons \nil) \sim \nil$.
 \end{definition}
 
 \begin{proposition}
@@ -215,7 +215,7 @@ First, we formally define a presentation of a group.
 
 \subsubsection{Coxeter Relations}
 
-We define a binary relation on $\List(\Fin[n])$.
+We define a binary relation on $\List[\Fin[n]]$.
 
 \begin{definition}[$\cox$]
   \begin{align*}
@@ -229,8 +229,7 @@ We define a binary relation on $\List(\Fin[n])$.
 \end{definition}
 
 We define $\cox*$ as the congruence closure of $\cox$.
-
-\vc{This could be simplified a bit depending on our formalisation.}
+\vc{This could be simplified a bit depending on our formalisation. $\cox$ is directed, use a different symbol?}
 
 \begin{definition}[$\cox*$]
   \begin{align*}
@@ -247,8 +246,23 @@ We define $\cox*$ as the congruence closure of $\cox$.
   \end{align*}
 \end{definition}
 
-The type $\Sn$ is defined as the set-quotient of $\List(\Fin[n])$ by $\cox*$.
-q
+We state and prove two desirable properties of this relation on $\List[\Fin[n]]$ from the point of view of an abstract
+rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}.
+\vc{Not completely formalised.}
+
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item $\cox$ is (locally) confluent. For every span $w_{1} \cox w \cox w_{2}$, there is a matching extended cospan
+          $w_{1} \cox* v \cox* w_{2}$.
+    \item $\cox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \cox* v$. Equivalently,
+          the type $\dsum{v:\List[\Fin[n]]}{w \cox* v}$ is contractible, and $w \cox* v$ is a proposition for every $w$
+          and $v$.
+  \end{enumerate}
+\end{proposition}
+
+The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
+
 \begin{definition}[$\Sn$]
   \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
@@ -259,7 +273,7 @@ q
 \end{proposition}
 
 \begin{proposition}
-  $\Sn$ is equivalent to the generated group given by the normal closure of $\cx$ extended to $\List(\Fin[n] + \Fin[n])$
+  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to $\List(\Fin[n] + \Fin[n])$
   along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
 \end{proposition}
 

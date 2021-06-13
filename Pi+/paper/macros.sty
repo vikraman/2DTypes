@@ -30,7 +30,7 @@
 \newcommand{\highlight}[1]{\textcolor{solarized-orange}{#1}}
 
 % finite types
-\NewDocumentCommand{\Fin}{O{}}{\term{Fin}\ifstrempty{#1}{}{({#1})}}
+\NewDocumentCommand{\Fin}{O{}}{\type{Fin}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\FinExcept}{mO{}}{\term{Fin_{\mathsmaller{#1}}^{-}}\ifstrempty{#2}{}{({#2})}}
 \newcommand{\fzero}{f_0}
 
@@ -42,7 +42,7 @@
 
 % symmetric group
 \NewDocumentCommand{\Sn}{O{n}}{\type{S_{#1}}}
-\newcommand{\List}{\type{List}}
+\NewDocumentCommand{\List}{O{}}{\type{List}\ifstrempty{#1}{}{({#1})}}
 \newcommand{\nil}{\term{nil}}
 \newcommand{\cons}{\mathrel{\term{::}}}
 \newcommand{\inl}{\term{inl}}
