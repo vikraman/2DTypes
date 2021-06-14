@@ -15,6 +15,8 @@ $n$, and show them to be equivalent to the symmetric group $\Sn$, via the
 Coxeter presentation. We will do that in two steps,
 in~\cref*{subsec:permutations,subsec:lehmer,subsec:symmetric}.
 
+\todo{Big example: Start from a listed permutation, show Lehmer code, then adjacent swaps.}
+
 %% Coxeter presentation of $\Sn$ $\eqv$ $\Lehmer[n]$ $\eqv$ $\Aut[\Fin[n]]$
 
 \subsection{Permutations}~\label{subsec:permutations}
@@ -289,14 +291,36 @@ We will now prove the group structure of $\Sn$.
 
 We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
 
-\todo{immersion}
-
-\begin{theorem}
-  For all $n : \Nat$,
+\begin{definition}
   \[
-    \Sn \eqv \Lehmer[n]
+    \encode{\List} : \List[\Fin[n]] \to \Lehmer[n]
   \]
-\end{theorem}
+\end{definition}
+
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item \( l_{1} \cox* l_{2} \to \encode{\List}(l_{1}) \id \encode{\List}(l_{1}) \)
+  \end{enumerate}
+\end{proposition}
+
+\begin{definition}
+  \begin{align*}
+    \encodeSn & : \Sn[n] \to \Lehmer[n] \\
+    \decodeSn & : \Lehmer[n] \to \Sn[n]
+  \end{align*}
+\end{definition}
+
+\begin{proposition}
+  For all $n : \Nat$, $(\encodeSn, \decodeSn)$ is an equivalence.
+\end{proposition}
+
+\begin{corollary}
+  For all $n : \Nat$,
+  \(
+    \Sn \eqv \Lehmer[n] \eqv \Aut[\Fin[n]]
+  \).
+\end{corollary}
 
 \subsection{Symmetric Monoidal structure}
 

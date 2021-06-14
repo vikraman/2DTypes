@@ -37,6 +37,13 @@
 \NewDocumentCommand{\Lehmer}{O{}}{\term{Lehmer}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
 
+\newcommand{\encode}[1]{\mathop{\term{encode_{#1}}}}
+\newcommand{\encodePerm}{\encode{perm}}
+\newcommand{\encodeSn}{\encode{\Sn}}
+\newcommand{\decode}[1]{\mathop{\term{decode_{#1}}}}
+\newcommand{\decodePerm}{\decode{perm}}
+\newcommand{\decodeSn}{\decode{\Sn}}
+
 % permutations
 \newcommand{\el}[1]{\mathbf{#1}}
 
