@@ -118,16 +118,13 @@
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-  We establish a close connection between a reversible programming language
-  based on isomorphisms of finite types and a formally presented univalent
-  universe.
+Reversible computing is an alternative model of computation motivated by the physical nature of computational processes, where computations are required to preserve information. Several reversible programming languages have been proposed which permit hardware-independent, low-level and high-level descriptions of reversible circuits.
 
-  The correspondence relates combinators witnessing type isomorphisms in the
-  programming language to paths in the univalent universe; and combinator
-  optimisations in the programming language to 2-paths in the univalent
-  universe.
+The $\PiLang$ family of reversible programming languages were proposed by~\citet{jamesInformationEffects2012} in which all computations are logically reversible. Formally, it is presented as a language of 1-combinators witnessing type isomorphisms, and an equational theory given by 2-combinators witnessing 1-combinator optimisations.
 
-  The main result is a \ldots
+In this paper, we present a denotational semantics for this language, using the language of groupoids \`{a} la Homotopy Type Theory (HoTT). We establish a correspondence between the syntactic groupoid of the language and a formally presented univalent subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and 2-combinators to 2-paths in the universe, which is shown to be sound and complete for both levels. The result suggests a Curry-Howard-Lambek/Lawvere correspondence between Reversible Logic, Reversible Programming Languages, and Symmetric Monoidal Groupoids, similar to the well-known correspondence of Intuitionistic Logic, Simply Typed Lambda Calculus, and Cartesian Closed Categories.
+
+Using soundness and completeness, we show how to perform Normalisation by Evaluation (NbE) for boolean reversible circuits, motivated by a few examples of reversible logic gates used in Quantum Computing. We also show how to synthesise normal forms for reversible circuits starting from the extensional view of permutations of bits.
 \end{abstract}
 
 %%
