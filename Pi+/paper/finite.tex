@@ -246,18 +246,20 @@ We define $\cox*$ as the congruence closure of $\cox$.
   \end{align*}
 \end{definition}
 
+\todo{Long form of Coxeter relations and their equivalence.}
+
 We state and prove two desirable properties of this relation on $\List[\Fin[n]]$ from the point of view of an abstract
-rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}.
-\vc{Not completely formalised.}
+rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}. \vc{Not completely
+  formalised. Is this with Coxeter or LongCoxeter?}
 
 \begin{proposition}
   \leavevmode
   \begin{enumerate}
     \item $\cox$ is (locally) confluent. For every span $w_{1} \cox w \cox w_{2}$, there is a matching extended cospan
           $w_{1} \cox* v \cox* w_{2}$.
-    \item $\cox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \cox* v$. Equivalently,
-          the type $\dsum{v:\List[\Fin[n]]}{w \cox* v}$ is contractible, and $w \cox* v$ is a proposition for every $w$
-          and $v$.
+    \item $\cox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \cox* v$.
+          \review{Equivalently, the type $\dsum{v:\List[\Fin[n]]}{w \cox* v}$ is contractible, and $w \cox* v$ is a
+          proposition for every $w$ and $v$.}
   \end{enumerate}
 \end{proposition}
 
@@ -267,14 +269,16 @@ The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
   \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
 
+We will now prove the group structure of $\Sn$.
+
 \begin{proposition}
   There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
   inverse is given by list reversal.
 \end{proposition}
 
 \begin{proposition}
-  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to $\List(\Fin[n] + \Fin[n])$
-  along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
+  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
+  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
 \end{proposition}
 
 We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
