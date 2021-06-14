@@ -186,18 +186,23 @@ group.
 
 First, we formally define a presentation of a group.
 
+\todo{Free 1-group, needs to be truncated}
+
 \begin{definition}
   Let $A$ be a type, and $\List[A]$ the free monoid on $A$. The free group $F(A)$ on $A$ is the set-quotient of
   $\List[A + A]$ by the congruence closure of the relation $(\inl(a) \cons \inr(a) \cons \nil) \sim \nil$.
 \end{definition}
 
 \begin{proposition}
-  Let $\eta : A \to F(A)$ be given by $a \mapsto \inl(a) \cons \nil$. Given any group $G$ with a map $f : A \to G$,
+  Let $\eta_{A} : A \to F(A)$ be given by $a \mapsto \inl(a) \cons \nil$. Given any group $G$ with a map $f : A \to G$,
   there is a canonical lifting of $f$ to a group homomorphism $\extend{f} : F(A) \to G$, such that
   $\extend{f} \comp \eta_{A} \htpy f$, that is, the type of group homomorphisms $h : \Grp(F(A),G)$ satisfying
   $h \comp \eta_{A} \htpy f$ is contractible. Equivalently, composition by $\eta_{A}$ is an equivalence
   $\Grp(F(A),G) \eqv (A \to G)$.
 \end{proposition}
+
+\todo{diagram}
+\todo{Plus/Minus}
 
 \begin{definition}
   Let $A$ be a type and $R : A \to A \to \UU$ a binary relation on $A$. The group $G$ presented by
@@ -212,6 +217,7 @@ First, we formally define a presentation of a group.
 \end{definition}
 
 \todo{Universal property}
+\todo{Examples: empty relation, van Kampen of $\pi_{1}$}
 
 \subsubsection{Coxeter Relations}
 
@@ -224,7 +230,7 @@ We define a binary relation on $\List[\Fin[n]]$.
     \swap
     & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil) \\
     \braid
-    & : \forall k, n \to (\suc[n] \cons k \cons \suc[n] \cons \nil) \cox (n \cons \suc[k] \cons n \cons \nil) \\
+    & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
   \end{align*}
 \end{definition}
 
