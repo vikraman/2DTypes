@@ -90,7 +90,7 @@ model induces the following denotational equivalence.
 \end{definition}
 
 The full abstraction property for this language follows from a well-established
-result by Fiore, Di Cosmo, and Balat~\cite{fiore-remarks}.
+result by Fiore, Di Cosmo, and Balat~\cite{fioreRemarksIsomorphismsTyped2002}.
 
 \paragraph*{Function Extensionality.} The previous (standard) definitions of
 operational and denotational equivalences rely on function extensionality as
@@ -363,10 +363,8 @@ As an illustration, here is the Agda proof of the first isomorphism above:
 % and more elegant presentation of program transformations.
 
 This set of isomorphisms is known to be sound and
-complete~\cite{Fiore:2004,fiore-remarks} for isomorphisms
-of finite types.  Furthermore, it is also universal
-for hardware combinational
-circuits~\cite{James:2012:IE:2103656.2103667}.
+complete~\cite*{fioreIsomorphismsGenericRecursive2004,fioreRemarksIsomorphismsTyped2002} for isomorphisms of finite
+types. Furthermore, it is also universal for hardware combinational circuits~\cite{jamesInformationEffects2012}.
 
 
 
@@ -493,9 +491,8 @@ also, swap 2 3 is
 
 To cite:
 
-Earliest reference we know about the free symmetric strict monoidal category (as
-an example of 2-monads): Two-dimensional monad
-theory. \url{https://www.sciencedirect.com/science/article/pii/0022404989901606}
+Earliest reference we know about the free symmetric strict monoidal category (as an example of 2-monads):
+Two-dimensional monad theory~\cite{blackwellTwodimensionalMonadTheory1989}.
 
 %%
 
@@ -508,8 +505,9 @@ More generally, we can construct the free symmetric monoidal groupoid on a group
 groupoid of finite sets and bijections. We can construct this in HoTT by using the classifying space of the symmetric
 group.
 
-The free symmetric monoidal category on a category is a 2-monad on Cat (cite BKP, Abramsky, Hyland). Other applications
-are Fock Spaces, Generalised Species, Abstract Syntax.
+The free symmetric monoidal category on a category is a 2-monad on
+Cat~\cite{blackwellTwodimensionalMonadTheory1989,abramskyAbstractScalarsLoops2005,leinsterHigherOperadsHigher2004}.
+Other applications are Fock Spaces, Generalised Species, Abstract Syntax.
 
 We establish a Curry-Howard-Lambek correspondence for Pi, with 0, 1, +. Categorically, the syntactic groupoid of Pi is
 the free symmetric monoidal groupoid on one generator. The groupoid of finite sets and bijections, with coproducts, is

@@ -85,7 +85,7 @@ double⁻¹ x = pair= idp (prop-has-all-paths _ _)
     gg-ff x = (ap _⁻¹ (ap g (double⁻¹ (f (x ⁻¹)))) ∙ ap _⁻¹ (g-f (x ⁻¹))) ∙ double⁻¹ x
 
 abstract
-  e= : ∀ {i} {X : Type i} {n : ℕ} {e₁ e₂ : Fin n ≃ X} → ((f : Fin n) → (–> e₁ f == –> e₂ f)) → e₁ == e₂
+  e= : ∀ {i} {j} {X : Type i} {Y : Type j} {e₁ e₂ : Y ≃ X} → ((y : Y) → (–> e₁ y == –> e₂ y)) → e₁ == e₂
   e= h = pair= (λ= h) prop-has-all-paths-↓
 
   loop-η : ∀ {i} {X : Type i} {{_ : is-set X}} {x : X} → (p : x == x) → p == idp

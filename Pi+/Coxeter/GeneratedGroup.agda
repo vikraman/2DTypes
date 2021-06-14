@@ -7,9 +7,6 @@ open import Pi+.Coxeter.Group
 open import Pi+.Extra
 open import Pi+.Misc
 
--- If we have a group structure S on (List A, R)
--- then we can lift it uniquely to (List (PlusMinus A), R')
-
 module Pi+.Coxeter.GeneratedGroup (n : ℕ) where
 
   GRel : Rel (Word (Fin n)) lzero

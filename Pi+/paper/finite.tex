@@ -52,7 +52,7 @@ natural numbers to sets.
   this!}
 
 The name Lehmer comes from Lehmer
-codes~\cite{lehmerTeachingCombinatorialTricks1960a} which are known in
+codes~\cite{lehmerTeachingCombinatorialTricks1960} which are known in
 Combinatorial Analysis~\cite{bellmanCombinatorialAnalysis1960}. There are many
 ways to represent permutations, e.g. inversions, or cycles, or matrices. Lehmer
 codes are a particularly convenient way to represent permutations on a
@@ -132,19 +132,45 @@ places.
 \end{center}
 \todo{figure}
 
-Using this Lehmer encoding algorithm, we can now construct the equivalence
-between these types.
+Using this Lehmer encoding algorithm, we can now construct the equivalence between these types.
+
+We define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except the one
+provided. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence an $\hSet$.
+
+\begin{definition}
+  \( \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j} \).
+\end{definition}
 
 \begin{proposition}
-  For all $n:\Nat$,
-  \[
-    \Lehmer[n] \eqv \Aut[\Fin[n]]
-  \]
+  For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$.
+\end{proposition}
+
+\begin{proposition}
+  For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$.
+\end{proposition}
+
+\begin{proposition}
+  For any $n : \Nat$,
+  \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}{k}} \).
+\end{proposition}
+
+\begin{proposition}
+  For all $n:\Nat$, \( \Lehmer[n] \eqv \Aut[\Fin[n]] \).
 \end{proposition}
 
 \begin{proof}
-  We have to turn this algorithm into a constructive proof in type theory where
-  we only use functions and recursion. \todo{Describe the agda code.}
+  For $n = 0$, note that $\Lehmer[0]$ is contractible, and so is $\Aut[\Fin[0]]$. For $n = \suc[m]$, we have the
+  following chain of equivalences.
+  \[\arraycolsep=0.5em\def\arraystretch{1.5}
+    \begin{array}{rl}
+      & \Aut[\Fin[\suc[m]]] \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \Fin[m]} \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\Fin[m] \eqv \Fin[m]} \\
+      \eqv & \Fin[\suc[m]] \times \Aut[\Fin[m]] \\
+      \eqv & \Fin[\suc[m]] \times \Lehmer[m] \\
+    \end{array}
+  \]
 \end{proof}
 
 \subsection{Symmetric groups}~\label{subsec:symmetric}
@@ -161,8 +187,8 @@ group.
 First, we formally define a presentation of a group.
 
 \begin{definition}
-  Let $A$ be a type, and $\List(A)$ the free monoid on $A$. The free group $F(A)$ on $A$ is the set-quotient of
-  $\List(A + A)$ by the congruence closure of the relation $(\inl(a) \cons \inr(a) \cons \nil) \sim \nil$.
+  Let $A$ be a type, and $\List[A]$ the free monoid on $A$. The free group $F(A)$ on $A$ is the set-quotient of
+  $\List[A + A]$ by the congruence closure of the relation $(\inl(a) \cons \inr(a) \cons \nil) \sim \nil$.
 \end{definition}
 
 \begin{proposition}
@@ -175,7 +201,7 @@ First, we formally define a presentation of a group.
 
 \begin{definition}
   Let $A$ be a type and $R : A \to A \to \UU$ a binary relation on $A$. The group $G$ presented by
-  $\langle A ; R \rangle$ is given by the set-quotient of the free group $F(A)$ by the normal closure $N_{R}$, or
+  $\langle A ; R \rangle$ is given by the set-quotient of the free group $F(A)$ by the normal closure $N_{R}$ of $R$, or
   equivalently, as the coequaliser
   \[\begin{tikzcd}
       FR && FA && G
@@ -189,21 +215,61 @@ First, we formally define a presentation of a group.
 
 \subsubsection{Coxeter Relations}
 
-We define a binary relation on $\List(\Fin[n])$.
+We define a binary relation on $\List[\Fin[n]]$.
 
-\begin{definition}[Coxeter relation]
+\begin{definition}[$\cox$]
   \begin{align*}
-    & \mathsf{cancel} : (n \cons n \cons \nil) \cx \nil \\
-    & \mathsf{swap} : (\suc[k] < n) \to (n \cons k \cons \nil) \cx (k \cons n \cons \nil) \\
-    & \mathsf{braid} : (\suc[n] \cons k \cons \suc[n] \cons \nil) \cx (n \cons \suc[k] \cons n \cons \nil)
+    \cancel
+    & : \forall n \to (n \cons n \cons \nil) \cox \nil \\
+    \swap
+    & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil) \\
+    \braid
+    & : \forall k, n \to (\suc[n] \cons k \cons \suc[n] \cons \nil) \cox (n \cons \suc[k] \cons n \cons \nil) \\
   \end{align*}
 \end{definition}
 
-The type $\Sn$ is defined as the set-quotient of $\List(\Fin[n])$ by the congruence closure of $\cx$.
+We define $\cox*$ as the congruence closure of $\cox$.
+\vc{This could be simplified a bit depending on our formalisation. $\cox$ is directed, use a different symbol?}
+
+\begin{definition}[$\cox*$]
+  \begin{align*}
+    \reflr{\cox}
+    & : \forall w \to w \cox* w \\
+    \symr{\cox}
+    & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1} \\
+    \transr{\cox}
+    & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3} \\
+    \congrf{\cox}{\append}
+    & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
+    \relr{\cox}
+    & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2} \\
+  \end{align*}
+\end{definition}
+
+\todo{Long form of Coxeter relations and their equivalence.}
+
+We state and prove two desirable properties of this relation on $\List[\Fin[n]]$ from the point of view of an abstract
+rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}. \vc{Not completely
+  formalised. Is this with Coxeter or LongCoxeter?}
+
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item $\cox$ is (locally) confluent. For every span $w_{1} \cox w \cox w_{2}$, there is a matching extended cospan
+          $w_{1} \cox* v \cox* w_{2}$.
+    \item $\cox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \cox* v$.
+          \review{Equivalently, the type $\dsum{v:\List[\Fin[n]]}{w \cox* v}$ is contractible, and $w \cox* v$ is a
+          proposition for every $w$ and $v$.}
+  \end{enumerate}
+\end{proposition}
+
+The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
 
 \begin{definition}[$\Sn$]
-  \(\Sn \defeq \quot{\List(\Fin[n])}{\cx^{\ast}}\)
+  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
+
+We will now prove the group structure of $\Sn$.
 
 \begin{proposition}
   There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
@@ -211,8 +277,8 @@ The type $\Sn$ is defined as the set-quotient of $\List(\Fin[n])$ by the congrue
 \end{proposition}
 
 \begin{proposition}
-  $\Sn$ is equivalent to the generated group given by the normal closure of $\cx$ extended to $\List(\Fin[n] + \Fin[n])$
-  along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
+  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
+  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
 \end{proposition}
 
 We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
@@ -228,17 +294,90 @@ We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
 
 \subsection{Symmetric Monoidal structure}
 
-$\UFin$ is a symmetric monoidal groupoid with unit and tensor given by
+We describe the symmetric monoidal structure of the groupoid $\UFin$.
+
+First, we observe a few equivalences.
+
+\begin{proposition}
+  For any $n, m : \Nat$,
+  \begin{align*}
+    \Fin[0]                & \eqv \bot \\
+    \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m] \\
+  \end{align*}
+  and for any types $X, Y, Z$,
+  \begin{align*}
+    \bot \sqcup X          & \eqv X \\
+    X \sqcup \bot          & \eqv X \\
+    (X \sqcup Y) \sqcup Z  & \eqv X \sqcup (Y \sqcup Z) \\
+    X \sqcup Y             & \eqv Y \sqcup Y \\
+  \end{align*}
+\end{proposition}
+
+We lift these equivalences to $\UFin$ giving it the (additive) symmetric monoidal structure $(I, \oplus)$, with natural
+isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$, and the symmetry isomorphism $\mathcal{B}_{X,Y}$. Note that
+types in $\UFin$ are $\hSet$s since they're merely equivalent to $\Fin[n]$ for some $n : \Nat$.
 
 \begin{definition}
   \begin{align*}
     I           & \defeq F_{0}    \\
-    X \otimes Y & \defeq X \sqcup Y
+    X \oplus Y & \defeq X \sqcup Y \\
+    \lambda_{X} & : I \oplus X \eqv X \\
+    \rho_{X} & : X \oplus I \eqv X \\
+    \alpha_{X,Y,Z} & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
+    \mathcal{B}_{X,Y} & : X \oplus Y \eqv Y \oplus X
   \end{align*}
 \end{definition}
 
-with unitors, associator, and braiding satisfying Mac Lane's triangle, pentagon, and hexagon coherence laws, and
-symmetry. It is the free symmetric monoidal groupoid on one generator.
+These isomorphisms satisfy the Mac Lane coherence conditions for symmetric monoidal categories, that is, the triangle,
+pentagon, and hexagon identities, and the syllepsis of the braiding, upto 2-paths in $\UFin$.
+
+\begin{proposition}
+  % https://q.uiver.app/?q=WzAsNCxbMCwwLCIoWCBcXG9wbHVzIEkpIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyAoSSBcXG9wbHVzIFkpIl0sWzEsMSwiWCBcXG9wbHVzIFkiXSxbMCwxXSxbMCwxLCJcXGFscGhhX3tYLEksWX0iXSxbMCwyLCJcXHJob197WH0gXFxvcGx1cyAxX3tZfSIsMl0sWzEsMiwiMV97WH0gXFxvcGx1cyBcXGxhbWJkYV97WX0iXSxbNSw2LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+  \[\begin{tikzcd}
+      {(X \oplus I) \oplus Y} && {X \oplus (I \oplus Y)} \\
+      {} & {X \oplus Y}
+      \arrow["{\alpha_{X,I,Y}}", from=1-1, to=1-3]
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{\rho_{X} \oplus 1_{Y}}"', from=1-1, to=2-2]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "{1_{X} \oplus \lambda_{Y}}", from=1-3, to=2-2]
+      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+    \end{tikzcd}\]
+  % https://q.uiver.app/?q=WzAsNSxbMCwxLCIoKFcgXFxvcGx1cyBYKSBcXG9wbHVzIFkpIFxcb3BsdXMgWiJdLFsxLDAsIihXIFxcb3BsdXMgWCkgXFxvcGx1cyAoWSBcXG9wbHVzIFopIl0sWzIsMSwiVyBcXG9wbHVzIChYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSkiXSxbMiwzLCJXIFxcb3BsdXMgKChYIFxcb3BsdXMgWSkgXFxvcGx1cyBaKSJdLFswLDMsIihXIFxcb3BsdXMgKFggXFxvcGx1cyBZKSkgXFxvcGx1cyBaIl0sWzAsMSwiXFxhbHBoYV97VyBcXG9wbHVzIFgsIFksIFp9Il0sWzEsMiwiXFxhbHBoYV97VyxYLFkgXFxvcGx1cyBafSJdLFszLDIsIjFfe1d9IFxcb3BsdXMgXFxhbHBoYV97WCxZLFp9IiwyXSxbMCw0LCJcXGFscGhhX3tXLFgsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzQsMywiXFxhbHBoYV97VyxYIFxcb3BsdXMgWSxafSIsMl0sWzAsMiwiXFxpZCIsMSx7Im9mZnNldCI6NSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+  \[\begin{tikzcd}
+      & {(W \oplus X) \oplus (Y \oplus Z)} \\
+      {((W \oplus X) \oplus Y) \oplus Z} && {W \oplus (X \oplus (Y \oplus Z))} \\
+      \\
+      {(W \oplus (X \oplus Y)) \oplus Z} && {W \oplus ((X \oplus Y) \oplus Z)}
+      \arrow["{\alpha_{W \oplus X, Y, Z}}", from=2-1, to=1-2]
+      \arrow["{\alpha_{W,X,Y \oplus Z}}", from=1-2, to=2-3]
+      \arrow["{1_{W} \oplus \alpha_{X,Y,Z}}"', from=4-3, to=2-3]
+      \arrow["{\alpha_{W,X,Y} \oplus 1_{Z}}"', from=2-1, to=4-1]
+      \arrow["{\alpha_{W,X \oplus Y,Z}}"', from=4-1, to=4-3]
+      \arrow["\id"{description}, shift right=5, draw=none, from=2-1, to=2-3]
+    \end{tikzcd}\]
+  % https://q.uiver.app/?q=WzAsNixbMSwwLCJYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSJdLFswLDEsIihYIFxcb3BsdXMgWSkgXFxvcGx1cyBaIl0sWzAsMiwiKFkgXFxvcGx1cyBYKSBcXG9wbHVzIFoiXSxbMSwzLCJZIFxcb3BsdXMgKFggXFxvcGx1cyBaKSJdLFsyLDIsIlkgXFxvcGx1cyAoWiBcXG9wbHVzIFgpIl0sWzIsMSwiKFkgXFxvcGx1cyBaKSBcXG9wbHVzIFgiXSxbMSwwLCJcXGFscGhhX3tYLFksWn0iXSxbMSwyLCJcXG1hdGhjYWx7Qn1fe1gsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzIsMywiXFxhbHBoYV97WSxYLFp9IiwyXSxbMyw0LCIxX3tZfSBcXG9wbHVzIFxcbWF0aGNhbHtCfV97WCxafSIsMl0sWzUsNCwiXFxhbHBoYV97WSxaLFh9Il0sWzAsNSwiXFxtYXRoY2Fse0J9X3tYLFkgXFxvcGx1cyBafSJdLFs3LDEwLCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+  \[\begin{tikzcd}
+      & {X \oplus (Y \oplus Z)} \\
+      {(X \oplus Y) \oplus Z} && {(Y \oplus Z) \oplus X} \\
+      {(Y \oplus X) \oplus Z} && {Y \oplus (Z \oplus X)} \\
+      & {Y \oplus (X \oplus Z)}
+      \arrow["{\alpha_{X,Y,Z}}", from=2-1, to=1-2]
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y} \oplus 1_{Z}}"', from=2-1, to=3-1]
+      \arrow["{\alpha_{Y,X,Z}}"', from=3-1, to=4-2]
+      \arrow["{1_{Y} \oplus \mathcal{B}_{X,Z}}"', from=4-2, to=3-3]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "{\alpha_{Y,Z,X}}", from=2-3, to=3-3]
+      \arrow["{\mathcal{B}_{X,Y \oplus Z}}", from=1-2, to=2-3]
+      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+    \end{tikzcd}\]
+  % https://q.uiver.app/?q=WzAsMyxbMCwwLCJYIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyBZIl0sWzEsMSwiWSBcXG9wbHVzIFgiXSxbMCwxLCIxX3tYIFxcb3BsdXMgWX0iLDAseyJsZXZlbCI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIlxcbWF0aGNhbHtCfV97WCxZfSIsMl0sWzIsMSwiXFxtYXRoY2Fse0J9X3tZLFh9IiwyXSxbNCw1LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+  \[\begin{tikzcd}
+      {X \oplus Y} && {X \oplus Y} \\
+      & {Y \oplus X}
+      \arrow["{1_{X \oplus Y}}", Rightarrow, no head, from=1-1, to=1-3]
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y}}"', from=1-1, to=2-2]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "{\mathcal{B}_{Y,X}}"', from=2-2, to=1-3]
+      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+    \end{tikzcd}\]
+\end{proposition}
 
 %%% Local Variables:
 %%% mode: latex

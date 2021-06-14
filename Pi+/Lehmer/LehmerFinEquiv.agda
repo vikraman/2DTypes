@@ -54,8 +54,8 @@ Fin1≃isContr = ≃-contr (equiv-preserves-level (Fin1≃Unit ⁻¹)) (equiv-pr
 Fin≃Lehmer : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
 Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
 Fin≃Lehmer {S n} =
-        Fin (S (S n)) ≃ Fin (S (S n))                            ≃⟨ i ⟩
-        (Σ[ k ∈ Fin (S (S n)) ] (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
-        Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                  ≃⟨ _ , (×-isemap-r _ (snd (Fin≃Lehmer {n}))) ⟩
-        Fin (S (S n)) × Lehmer n                                 ≃⟨ LehmerInd ⟩
+        Fin (S (S n)) ≃ Fin (S (S n))                              ≃⟨ i ⟩
+        Σ (Fin (S (S n))) (λ k → (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
+        Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                    ≃⟨ _ , (×-isemap-r (Fin (S (S n))) (snd (Fin≃Lehmer {n}))) ⟩
+        Fin (S (S n)) × Lehmer n                                   ≃⟨ LehmerInd ⟩
         Lehmer (S n) ≃∎

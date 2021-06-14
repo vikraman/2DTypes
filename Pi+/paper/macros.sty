@@ -24,13 +24,16 @@
 \let\ps\perfectparens%
 
 \newcommand{\Nat}[0]{\mathbb{N}}
-\NewDocumentCommand{\suc}{O{}}{\term{suc}\ifstrempty{#1}{}{\ps{#1}}}
+\NewDocumentCommand{\suc}{O{}}{\mathop{\term{S}}{#1}}
 \newcommand{\fac}[1]{{#1}\,!}
 
 \newcommand{\highlight}[1]{\textcolor{solarized-orange}{#1}}
 
 % finite types
-\NewDocumentCommand{\Fin}{O{}}{\term{Fin}\ifstrempty{#1}{}{({#1})}}
+\NewDocumentCommand{\Fin}{O{}}{\type{Fin}\ifstrempty{#1}{}{({#1})}}
+\NewDocumentCommand{\FinExcept}{mO{}}{\term{Fin_{\mathsmaller{#1}}^{-}}\ifstrempty{#2}{}{({#2})}}
+\newcommand{\fzero}{f_0}
+
 \NewDocumentCommand{\Lehmer}{O{}}{\term{Lehmer}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
 
@@ -39,14 +42,23 @@
 
 % symmetric group
 \NewDocumentCommand{\Sn}{O{n}}{\type{S_{#1}}}
-\newcommand{\List}{\type{List}}
+\NewDocumentCommand{\List}{O{}}{\type{List}\ifstrempty{#1}{}{({#1})}}
 \newcommand{\nil}{\term{nil}}
 \newcommand{\cons}{\mathrel{\term{::}}}
 \newcommand{\inl}{\term{inl}}
 \newcommand{\inr}{\term{inr}}
 \newcommand{\extend}[1]{{#1}^\#}
 \newcommand{\Grp}{\type{Grp}}
-\newcommand{\cx}{\mathrel{\approx}}
+\NewDocumentCommand{\cox}{s}{\IfBooleanTF{#1}{\mathrel{\approx^{\ast}}}{\mathrel{\approx}}}
+\newcommand{\cancel}{\term{cancel}}
+\newcommand{\swap}{\term{swap}}
+\newcommand{\braid}{\term{braid}}
+\newcommand{\reflr}[1]{\term{{#1}-refl}}
+\newcommand{\symr}[1]{\term{{#1}-sym}}
+\newcommand{\transr}[1]{\term{{#1}-trans}}
+\newcommand{\congrf}[2]{\term{{#1}-cong-{#2}}}
+\newcommand{\relr}[1]{\term{{#1}-rel}}
+\newcommand{\append}{\mathbin{+\kern -0.4em+}}
 
 % Pi
 \newcommand{\PiLang}{\mathit{\Pi}}
