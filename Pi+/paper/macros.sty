@@ -30,7 +30,7 @@
 \newcommand{\highlight}[1]{\textcolor{solarized-orange}{#1}}
 
 % finite types
-\NewDocumentCommand{\Fin}{O{}}{\type{Fin}\ifstrempty{#1}{}{({#1})}}
+\NewDocumentCommand{\Fin}{O{}}{\type{Fin}\ifstrempty{#1}{}{_{#1}}}
 \NewDocumentCommand{\FinExcept}{mO{}}{\term{Fin_{\mathsmaller{#1}}^{-}}\ifstrempty{#2}{}{({#2})}}
 \newcommand{\fzero}{f_0}
 
