@@ -8,11 +8,11 @@ open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.UFin
 open import Pi+.Extra
 
-open import Pi+.Lehmer.Lehmer using (Lehmer)
-open import Pi+.Lehmer.LehmerFinEquiv
-open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Lehmer.Lehmer2 using (Lehmer)
+open import Pi+.Lehmer.Lehmer2FinEquiv
+open import Pi+.Coxeter.Lehmer2CoxeterEquiv
 open import Pi+.Coxeter.Sn
-open import Pi+.UFinLehmerEquiv
+open import Pi+.UFinLehmer2Equiv
 
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv1NormHelpers
