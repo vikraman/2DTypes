@@ -1,0 +1,134 @@
+\section{The Underlying Ideas}
+
+\todo{Not the right title.}
+
+\note{This section should explain the main technical parts of the paper
+  informally, without using any technology. Use an example, such as, a
+  reversible language with $\leq 5$ bits, and examples of permutations and
+  transpositions, and when they're equal.}
+
+\note{Motivation: There are two reversible circuits which describe the following permutation. They can be shown to be
+  equal using the 2-combinators.}
+
+\[
+  \begin{tikzpicture}
+    \begin{knot}[clip width=5]
+      \filldraw (0,5) circle (2pt) node[above] {0};
+      \filldraw (1,5) circle (2pt) node[above] {1};
+      \filldraw (2,5) circle (2pt) node[above] {2};
+      \filldraw (3,5) circle (2pt) node[above] {3};
+      \filldraw (4,5) circle (2pt) node[above] {4};
+      \filldraw (0,0) circle (2pt) node[below] {1};
+      \filldraw (1,0) circle (2pt) node[below] {4};
+      \filldraw (2,0) circle (2pt) node[below] {0};
+      \filldraw (3,0) circle (2pt) node[below] {3};
+      \filldraw (4,0) circle (2pt) node[below] {2};
+      \strand (0,5) .. controls (0.5,0.5) and (1.5,3.5) .. (2,0);
+      \strand (1,5) .. controls (0.75,0.5) and (0.25,3.5) .. (0,0);
+      \strand (2,5) .. controls (2.5,2.5) and (3.5,1.5) .. (4,0);
+      \strand (3,5) .. controls (4.5,2.5) and (4,1.5) .. (3,0);
+      \strand (4,5) .. controls (3.5,2.5) and (1.5,2.5) .. (1,0);
+      \flipcrossings{4,5};
+    \end{knot}
+  \end{tikzpicture}
+\]
+
+\note{Example: We reduce $\mathsf{swap} : 2 + 2 \leftrightarrow 2 + 2$ to a sequence of adjacent swaps. This is an
+  example of a translation from $\PiPlusLang$ to $\PiHatLang$.}
+
+\[
+  \begin{tikzpicture}
+    \begin{knot}[clip width=4]
+      \filldraw (0,4) circle (2pt) node[above] {0};
+      \filldraw (1,4) circle (2pt) node[above] {1};
+      \filldraw (2,4) circle (2pt) node[above] {2};
+      \filldraw (3,4) circle (2pt) node[above] {3};
+      \filldraw (0,0) circle (2pt) node[below] {2};
+      \filldraw (1,0) circle (2pt) node[below] {3};
+      \filldraw (2,0) circle (2pt) node[below] {0};
+      \filldraw (3,0) circle (2pt) node[below] {1};
+      \strand (0,4) .. controls (0.5,1.5) and (1.5,2.5) .. (2,0);
+      \strand (1,4) .. controls (1.5,1.5) and (2.5,2.5) .. (3,0);
+      \strand (2,4) .. controls (1.5,1.5) and (1.5,2.5) .. (0,0);
+      \strand (3,4) .. controls (2.5,1.5) and (2.5,2.5) .. (1,0);
+    \end{knot}
+  \end{tikzpicture}
+\]
+
+\begin{align*}
+  \begin{tikzpicture}
+    \begin{knot}[clip width=4]
+      \filldraw (0,4) circle (2pt) node[above] {0};
+      \filldraw (1,4) circle (2pt) node[above] {1};
+      \filldraw (2,4) circle (2pt) node[above] {2};
+      \filldraw (3,4) circle (2pt) node[above] {3};
+      \filldraw (0,0) circle (2pt) node[below] {0};
+      \filldraw (1,0) circle (2pt) node[below] {2};
+      \filldraw (2,0) circle (2pt) node[below] {1};
+      \filldraw (3,0) circle (2pt) node[below] {3};
+      \strand (0,4) to (0,0);
+      \strand (1,4) .. controls (0.5,2) and (2.5,2) .. (2,0);
+      \strand (2,4) .. controls (2.5,2) and (0.5,2) .. (1,0);
+      \strand (3,4) to (3,0);
+    \end{knot}
+  \end{tikzpicture}
+  &&
+    \begin{tikzpicture}
+      \begin{knot}[clip width=4]
+        \filldraw (0,4) circle (2pt) node[above] {0};
+        \filldraw (1,4) circle (2pt) node[above] {2};
+        \filldraw (2,4) circle (2pt) node[above] {1};
+        \filldraw (3,4) circle (2pt) node[above] {3};
+        \filldraw (0,0) circle (2pt) node[below] {2};
+        \filldraw (1,0) circle (2pt) node[below] {0};
+        \filldraw (2,0) circle (2pt) node[below] {1};
+        \filldraw (3,0) circle (2pt) node[below] {3};
+        \strand (0,4) .. controls (-0.5,2) and (1.5,2) .. (1,0);
+        \strand (1,4) .. controls (1.5,2) and (-0.5,2) .. (0,0);
+        \strand (2,4) to (2,0);
+        \strand (3,4) to (3,0);
+      \end{knot}
+    \end{tikzpicture}
+  \\
+  \begin{tikzpicture}
+    \begin{knot}[clip width=4]
+      \filldraw (0,4) circle (2pt) node[above] {2};
+      \filldraw (1,4) circle (2pt) node[above] {0};
+      \filldraw (2,4) circle (2pt) node[above] {1};
+      \filldraw (3,4) circle (2pt) node[above] {3};
+      \filldraw (0,0) circle (2pt) node[below] {2};
+      \filldraw (1,0) circle (2pt) node[below] {0};
+      \filldraw (2,0) circle (2pt) node[below] {3};
+      \filldraw (3,0) circle (2pt) node[below] {1};
+      \strand (0,4) to (0,0);
+      \strand (1,4) to (1,0);
+      \strand (2,4) .. controls (1.5,2) and (3.5,2) .. (3,0);
+      \strand (3,4) .. controls (3.5,2) and (1.5,2) .. (2,0);
+    \end{knot}
+  \end{tikzpicture}
+  &&
+    \begin{tikzpicture}
+      \begin{knot}[clip width=4]
+        \filldraw (0,4) circle (2pt) node[above] {2};
+        \filldraw (1,4) circle (2pt) node[above] {0};
+        \filldraw (2,4) circle (2pt) node[above] {3};
+        \filldraw (3,4) circle (2pt) node[above] {1};
+        \filldraw (0,0) circle (2pt) node[below] {2};
+        \filldraw (1,0) circle (2pt) node[below] {3};
+        \filldraw (2,0) circle (2pt) node[below] {0};
+        \filldraw (3,0) circle (2pt) node[below] {1};
+        \strand (0,4) to (0,0);
+        \strand (1,4) .. controls (0.5,2) and (2.5,2) .. (2,0);
+        \strand (2,4) .. controls (2.5,2) and (0.5,2) .. (1,0);
+        \strand (3,4) to (3,0);
+      \end{knot}
+    \end{tikzpicture}
+\end{align*}
+
+\note{This might be followed by a section which explains the syntax of Pi.}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% fill-column: 120
+%%% End:
