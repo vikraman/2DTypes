@@ -64,7 +64,7 @@
 }
 
 % functions
-\newcommand{\inv}[1]{{#1}^{-1}}
+\newcommand\inv[1]{{#1}^{\mathsmaller{-1}}}
 \newcommand{\comp}{\mathrel{\circ}}
 \newcommand{\htpy}{\mathrel{\sim}}
 
@@ -87,9 +87,13 @@
 \newcommand{\isProp}[1]{\mathop{\term{isProp}}({#1})}
 \newcommand{\isEquiv}[1]{\mathop{\term{isEquiv}}({#1})}
 
+% loops
+\newcommand{\B}[1]{\mathcal{B}{#1}}
+\newcommand{\pt}{\term{pt}}
+
 % aut
 \NewDocumentCommand{\Aut}{O{}}{\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
-\NewDocumentCommand{\BAut}{O{}}{\mathcal{B}\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}
+\NewDocumentCommand{\BAut}{O{}}{\B{\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}}
 
 % dependent function
 \newcommand{\dfun}[2]{\prod\limits_{\mathsmaller{#1}}{#2}}
