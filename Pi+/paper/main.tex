@@ -29,9 +29,26 @@
 \usetikzlibrary{cd}
 \usetikzlibrary{quotes}
 \usetikzlibrary{decorations.markings}
+\usetikzlibrary{quotes,fit,positioning,decorations}
 \usetikzlibrary{knots}
-% \usepackage{tikzit}
-% \input{tikzit.tikzstyles}
+\tikzstyle{func}=[rectangle,draw,fill=black!20,minimum size=1.9em,text width=2.4em, text centered]
+
+\usepackage[utf8x]{inputenc}
+\usepackage{agda}
+\usepackage[nocenter]{qtree}
+\usepackage{amssymb,amsthm,amsmath}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{stmaryrd}
+\usepackage{proof}
+\usetikzlibrary{quotes,fit,positioning,decorations}
+\usepackage{tikzit}
+\input{tikzit.tikzstyles}
+\tikzset{>=latex}
+\usepackage{newunicodechar}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}[theorem]{Corollary}
@@ -39,11 +56,82 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem*{remark}{Remark}
 
+\newcommand{\idd}{\mathit{id}\leftrightarrow}
+\newcommand{\idf}{\mathit{id}\Leftrightarrow}
+\newcommand{\Gpd}{\ensuremath{\mathsf{Groupoid}}}
+\newcommand{\scalef}{0.85}
+\newcommand{\alt}{~|~}
 \newcommand{\zerot}{\mathbb{0}}
 \newcommand{\onet}{\mathbb{1}}
 \newcommand{\sumt}{\mathbin{\mathsf{+}}}
 \newcommand{\prodt}{\mathbin{\mathsf{\times}}}
-\newcommand{\isot}{\leftrightarrow}
+\newcommand{\Acon}[1]{\AgdaInductiveConstructor{#1}}
+\newcommand{\inlv}[1]{\ensuremath{\Acon{inj₁} \; #1}}
+\newcommand{\inrv}[1]{\ensuremath{\Acon{inj₂} \; #1}}
+\newcommand{\idc}{\AgdaInductiveConstructor{id↔}}
+\newcommand{\assoc}{\circ}
+\newcommand{\transLR}{\AgdaInductiveConstructor{trans⇔}}
+\newcommand{\identlp}{\AgdaInductiveConstructor{unite₊l}}
+\newcommand{\identrp}{\AgdaInductiveConstructor{uniti₊l}}
+\newcommand{\identlsp}{\AgdaInductiveConstructor{unite₊r}}
+\newcommand{\identrsp}{\AgdaInductiveConstructor{uniti₊r}}
+\newcommand{\swapp}{\AgdaInductiveConstructor{swap₊}}
+\newcommand{\assoclp}{\AgdaInductiveConstructor{assocl₊}}
+\newcommand{\assocrp}{\AgdaInductiveConstructor{assocr₊}}
+\newcommand{\identlt}{\AgdaInductiveConstructor{unite⋆l}}
+\newcommand{\identrt}{\AgdaInductiveConstructor{uniti⋆l}}
+\newcommand{\identlst}{\AgdaInductiveConstructor{unite⋆r}}
+\newcommand{\identrst}{\AgdaInductiveConstructor{uniti⋆r}}
+\newcommand{\swapt}{\AgdaInductiveConstructor{swap⋆}}
+\newcommand{\assoclt}{\AgdaInductiveConstructor{assocl⋆}}
+\newcommand{\assocrt}{\AgdaInductiveConstructor{assocr⋆}}
+\newcommand{\absorbr}{\AgdaInductiveConstructor{absorbr}}
+\newcommand{\absorbl}{\AgdaInductiveConstructor{absorbl}}
+\newcommand{\factorzr}{\AgdaInductiveConstructor{factorzr}}
+\newcommand{\factorzl}{\AgdaInductiveConstructor{factorzl}}
+\newcommand{\dist}{\AgdaInductiveConstructor{dist}}
+\newcommand{\factor}{\AgdaInductiveConstructor{factor}}
+\newcommand{\distl}{\AgdaInductiveConstructor{distl}}
+\newcommand{\factorl}{\AgdaInductiveConstructor{factorl}}
+\newcommand{\isot}{\ensuremath{\leftrightarrow}}
+\newcommand{\Rule}[4]{
+\makebox{{\rm #1}
+$\displaystyle
+\frac{\begin{array}{l}#2 \\\end{array}}
+{\begin{array}{l}#3      \\\end{array}}$
+ #4}}
+\newcommand{\jdg}[3]{#2 \proves_{#1} #3}
+\newcommand{\proves}{\vdash}
+\newcommand{\interp}[2]{\mathit{interp}(#1,#2)}
+\newcommand{\sumtype}{+}
+\newcommand{\prodtype}{\times}
+\newcommand{\inkscape}[2][1.5]{
+\begin{center}
+\scalebox{#1}{
+\includegraphics{inkscape/#2}
+}
+\end{center}
+}
+
+\newunicodechar{⊸}{$\multimap$}
+\newunicodechar{𝕍}{$\mathbb{V}$}
+\newunicodechar{𝕃}{$\mathbb{L}$}
+\newunicodechar{𝕄}{$\mathbb{M}$}
+\newunicodechar{ℝ}{$\mathbb{R}$}
+\newunicodechar{𝕌}{$\mathbb{U}$}
+\newunicodechar{𝔹}{$\mathbb{B}$}
+\newunicodechar{𝕐}{$\mathbb{Y}$}
+\newunicodechar{𝔼}{$\mathbb{E}$}
+\newunicodechar{𝔽}{$\mathbb{F}$}
+\newunicodechar{𝕋}{$\mathbb{T}$}
+\newunicodechar{𝕚}{$\mathbb{i}$}
+\newunicodechar{𝟘}{$\mathbb{0}$}
+\newunicodechar{𝟙}{$\mathbb{1}$}
+\newunicodechar{𝟚}{$\mathbb{2}$}
+\newunicodechar{𝟛}{$\mathbb{3}$}
+\DeclareUnicodeCharacter{9678}{\ensuremath{\odot}}
+\DeclareUnicodeCharacter{9636}{\ensuremath{\Box}}
+\DeclareUnicodeCharacter{10231}{\ensuremath{\leftrightarrow}}
 
 %%
 %% \BibTeX command to typeset BibTeX logo in the docs
@@ -68,7 +156,6 @@
   June 03--05, 2018, Woodstock, NY}
 \acmPrice{15.00}
 \acmISBN{978-1-4503-XXXX-X/18/06}
-
 
 %%
 %% Submission ID.
@@ -197,7 +284,7 @@ Using soundness and completeness, we show how to perform Normalisation by Evalua
 %% Acks: Chao-Hong and Jacques
 
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{2dtypesZot}
+\bibliography{2dtypesZot,survey} %% ,chen}
 
 \end{document}
 
