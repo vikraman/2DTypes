@@ -17,6 +17,7 @@ data Lehmer : (n : ℕ) -> Type₀ where
 -- off-by-one
 -- Lehmer 1 has two elements
 
-x y : Lehmer 1
-x = CanS CanZ z≤n -- r = 0
-y = CanS CanZ (s≤s z≤n) -- r = 1
+private
+  x y : Lehmer 1
+  x = CanS CanZ z≤n -- r = 0
+  y = CanS CanZ (s≤s z≤n) -- r = 1

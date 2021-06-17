@@ -8,21 +8,13 @@ open import Pi+.Misc
 open import Pi+.Lehmer.FinHelpers
 open import Pi+.Lehmer.Lehmer2
 
-open import Pi+.UFin.BAut using (Aut)
+open import Pi+.UFin.BAut
 open import Pi+.Extra
 
-abstract
-  instance
-    Fin1-isProp : is-prop (Fin (S 0))
-    Fin1-isProp = equiv-preserves-level {A = ⊥} TODO!
-
-  AutFin1≃isContr : is-contr (Aut (Fin (S 0)))
-  AutFin1≃isContr = inhab-prop-is-contr (ide (Fin (S 0)))
-
 AutFin≃Lehmer-0 : Aut (Fin (S 0)) ≃ Lehmer 0
-AutFin≃Lehmer-0 = TODO!
---   equiv (λ _ → tt) (λ _ → ide (Fin O))
---         (contr-has-all-paths _) (contr-has-all-paths _)
+AutFin≃Lehmer-0 = f , contr-to-contr-is-equiv f ⟨⟩ ⟨⟩
+  where f : Aut (Fin (S 0)) → Lehmer 0
+        f _ = 0 , ltS
 
 open import Pi+.Lehmer.FinHelpers
 

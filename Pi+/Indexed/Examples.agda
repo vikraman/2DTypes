@@ -32,10 +32,6 @@ instance
   ltSR : {m n : ℕ} → {{m N.< n}} → m N.< (S n)
   ltSR {m} {n} {{ϕ}} = N.ltSR ϕ
 
-abstract
-  fin= : {f g : Fin n} → f .fst == g .fst → f == g
-  fin= p = pair= p prop-has-all-paths-↓
-
 𝟚 : Pi.U
 𝟚 = I + I
 

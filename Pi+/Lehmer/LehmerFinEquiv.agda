@@ -11,6 +11,7 @@ open import Pi+.Common.InequalityEquiv
 open import Pi+.Common.Arithmetic
 
 open import Pi+.UFin.BAut using (Aut)
+open import Pi+.Misc
 open import Pi+.Extra
 
 ≤→< : {k n : ℕ} -> (k ≤ n) -> (k < S n)
@@ -45,11 +46,16 @@ Coprod-≃-r e = equiv f g f-g g-f
     g-f (inr x) = idp
     g-f (inl x) = ap inl (<–-inv-l e x)
 
-Fin1≃Unit : Fin 1 ≃ Unit
-Fin1≃Unit = ⊔₁-Empty ⊤ ∘e Coprod-≃-r Fin-equiv-Empty ∘e Fin-equiv-Coprod
+instance
+  Fin1-level : is-contr (Fin 1)
+  Fin1-level = has-level-in ((0 , ltS) , λ { (O , ϕ) → fin= idp ; (S n , ltSR ()) })
+
+abstract
+  Fin1≃Unit : Fin 1 ≃ Unit
+  Fin1≃Unit = contr-equiv-Unit Fin1-level
 
 Fin1≃isContr : is-contr (Fin 1 ≃ Fin 1)
-Fin1≃isContr = ≃-contr (equiv-preserves-level (Fin1≃Unit ⁻¹)) (equiv-preserves-level (Fin1≃Unit ⁻¹))
+Fin1≃isContr = ≃-contr Fin1-level Fin1-level
 
 Fin≃Lehmer : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
 Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
