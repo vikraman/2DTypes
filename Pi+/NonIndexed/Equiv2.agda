@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting --overlapping-instances #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
 module Pi+.NonIndexed.Equiv2 where
 

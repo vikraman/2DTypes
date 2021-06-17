@@ -11,7 +11,7 @@ open import lib.types.Fin
 open import lib.types.List
 
 open import Pi+.Lehmer.Lehmer
-open import Pi+.Lehmer.LehmerLevel
+open import Pi+.Lehmer.LehmerFinEquiv
 open import Pi+.Coxeter.LehmerCoxeterEquiv
 open import Pi+.Coxeter.Sn
 open import Pi+.Coxeter.Coxeter

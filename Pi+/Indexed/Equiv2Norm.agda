@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
 module Pi+.Indexed.Equiv2Norm where
 

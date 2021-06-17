@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances --show-implicit #-}
 
 open import lib.Base
 open import lib.Equivalence

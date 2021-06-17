@@ -11,15 +11,13 @@ open import Pi+.Lehmer.Lehmer2
 open import Pi+.UFin.BAut
 open import Pi+.Extra
 
-AutFin≃Lehmer-0 : Aut (Fin (S 0)) ≃ Lehmer 0
-AutFin≃Lehmer-0 = f , contr-to-contr-is-equiv f ⟨⟩ ⟨⟩
-  where f : Aut (Fin (S 0)) → Lehmer 0
-        f _ = 0 , ltS
-
 open import Pi+.Lehmer.FinHelpers
 
 Fin≃Lehmer : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
-Fin≃Lehmer {O} = AutFin≃Lehmer-0
+Fin≃Lehmer {O} =
+  Aut (Fin (S O)) ≃⟨ contr-equiv-Unit (Aut-level {{Fin1-level}}) ⟩
+  Unit ≃⟨ contr-equiv-Unit Fin1-level ⁻¹ ⟩
+  Lehmer O ≃∎
 Fin≃Lehmer {S m} =
   Fin (S (S m)) ≃ Fin (S (S m)) ≃⟨ i ⟩
   Σ (Fin (S (S m))) (λ k → FinExcept fzero ≃ FinExcept k) ≃⟨ Σ-cong-equiv-snd ii ⟩

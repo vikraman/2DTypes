@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --rewriting #-}
 
 module Pi+.UFinLehmer2Equiv where
 
