@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances --allow-unsolved-metas #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
 module Pi+.Indexed.Equiv2Norm where
 
@@ -12,8 +12,8 @@ open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv1Norm
 
 open import Pi+.Indexed.Equiv1NormHelpers using (pi^2list; pi^2list-!^-β)
-open import Pi+.Lehmer.LehmerFinEquiv using (Fin≃Lehmer)
-open import Pi+.Coxeter.LehmerCoxeterEquiv using (immersion⁻¹; immersion⁻¹-respects≈)
+open import Pi+.Lehmer.Lehmer2FinEquiv using (Fin≃Lehmer)
+open import Pi+.Coxeter.Lehmer2CoxeterEquiv using (immersion⁻¹; immersion⁻¹-respects≈)
 open import Pi+.Coxeter.Sn using (≈-inv-l; ≈-inv-r)
 open import HoTT
 

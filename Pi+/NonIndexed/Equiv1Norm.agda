@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.NonIndexed.Equiv1Norm where
 
@@ -11,6 +11,7 @@ open import Pi+.NonIndexed.Equiv0
 open import Pi+.Lehmer.Lehmer using (Lehmer)
 open import Pi+.Lehmer.LehmerFinEquiv
 open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Coxeter.Coxeter
 open import Pi+.Coxeter.Sn
 open import Pi+.UFinLehmerEquiv
 
@@ -31,9 +32,9 @@ normpi2lehmer {n} p = immersion⁻¹ (norm2list idp p)
 
 normpi2normpi : {n : ℕ} → (p : ⟪ S n ⟫ ⟷₁ ⟪ S n ⟫) → lehmer2normpi (normpi2lehmer p) ⟷₂ p
 normpi2normpi {n} p =
-    let lemma : immersion (immersion⁻¹ (norm2list idp p)) ≈ (norm2list idp p)
+    let lemma : immersion (immersion⁻¹ (norm2list idp p)) ≈* (norm2list idp p)
         lemma = immersion∘immersion⁻¹ (norm2list idp p)
-    in  trans⟷₂ (piRespectsCox _ _ _ lemma) {!   !} -- (norm2norm p)
+    in  trans⟷₂ (piRespectsCox _ _ _ lemma) TODO-    -- (norm2norm p)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → normpi2lehmer (lehmer2normpi p) == p
 lehmer2lehmer {n} p = ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p
@@ -72,7 +73,7 @@ quote-eval₁-norm {S n} p =
     in  cancelNorm
 
 eval-quote₁-norm : {n : ℕ} → (p : FinFS n == FinFS n) → eval₁-norm (quote₁-norm p) == p
-eval-quote₁-norm {O} p = {!   !} -- obvious
+eval-quote₁-norm {O} p = TODO-    -- obvious
 eval-quote₁-norm {S n} p =
     let cancelNorm : normpi2lehmer (lehmer2normpi (–> UFin≃Lehmer p)) == (–> UFin≃Lehmer p)
         cancelNorm = lehmer2lehmer (–> UFin≃Lehmer p)

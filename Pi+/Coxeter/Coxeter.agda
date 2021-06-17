@@ -24,13 +24,29 @@ open import Pi+.Common.FinHelpers
 
 --     respects-:: : {l l' : List (Fin (S m))} -> (l ≈₀ l') -> (n : Fin (S m)) -> n :: l ≈₀ n :: l'
 
-data _≈₁_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where
-    cancel : {n : Fin (S m)} → (n :: n :: nil) ≈₁ nil
-    swap : {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → (n :: k :: nil) ≈₁ (k :: n :: nil)
-    braid : {n : Fin m} → (S⟨ n ⟩ :: ⟨ n ⟩ :: S⟨ n ⟩ :: nil) ≈₁ (⟨ n ⟩ :: S⟨ n ⟩ :: ⟨ n ⟩ :: nil)
+-- data _≈₁_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where
+--     cancel : {n : Fin (S m)} → (n :: n :: nil) ≈₁ nil
+--     swap : {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → (n :: k :: nil) ≈₁ (k :: n :: nil)
+--     braid : {n : Fin m} → (S⟨ n ⟩ :: ⟨ n ⟩ :: S⟨ n ⟩ :: nil) ≈₁ (⟨ n ⟩ :: S⟨ n ⟩ :: ⟨ n ⟩ :: nil)
 
-    idp : {l : List (Fin (S m))} -> l ≈₁ l
-    comm : {l1 l2 : List (Fin (S m))} -> (l1 ≈₁ l2) -> l2 ≈₁ l1
-    trans : {l1 l2 l3 : List (Fin (S m))} -> (l1 ≈₁ l2) -> (l2 ≈₁ l3) -> l1 ≈₁ l3
+--     idp : {l : List (Fin (S m))} -> l ≈₁ l
+--     comm : {l1 l2 : List (Fin (S m))} -> (l1 ≈₁ l2) -> l2 ≈₁ l1
+--     trans : {l1 l2 l3 : List (Fin (S m))} -> (l1 ≈₁ l2) -> (l2 ≈₁ l3) -> l1 ≈₁ l3
 
-    respects-++ : {l l' r r' : List (Fin (S m))} → (l ≈₁ l') → (r ≈₁ r') → l ++ r ≈₁ l' ++ r'
+--     respects-++ : {l l' r r' : List (Fin (S m))} → (l ≈₁ l') → (r ≈₁ r') → l ++ r ≈₁ l' ++ r'
+
+data _≈'_ {m : ℕ} : List (Fin (S m)) → List (Fin (S m)) → Type₀ where
+    swap : {n : Fin (S m)} {k : Fin (S m)} → (S (k .fst) < (n .fst)) → (n :: k :: nil) ≈' (k :: n :: nil)
+    braid : {n : Fin m} → (S⟨ n ⟩ :: ⟨ n ⟩ :: S⟨ n ⟩ :: nil) ≈' (⟨ n ⟩ :: S⟨ n ⟩ :: ⟨ n ⟩ :: nil)
+    cancel : {n : Fin (S m)} → (n :: n :: nil) ≈' nil
+
+data _≈*_ : {m : ℕ} → List (Fin m) → List (Fin m) → Type₀ where
+    idp : {m : ℕ} {l : List (Fin m)} -> l ≈* l
+    comm : {m : ℕ} {l1 l2 : List (Fin m)} -> (l1 ≈* l2) -> l2 ≈* l1
+    trans : {m : ℕ} {l1 l2 l3 : List (Fin m)} -> (l1 ≈* l2) -> (l2 ≈* l3) -> l1 ≈* l3
+    respects-++ : {m : ℕ} {l l' r r' : List (Fin m)} → (l ≈* l') → (r ≈* r') → l ++ r ≈* l' ++ r'
+    ≈-rel : {m : ℕ} {l1 l2 : List (Fin (S m))} → l1 ≈' l2 →  l1 ≈* l2
+
+infixl 20 _■_
+_■_ : {m : ℕ} {l1 l2 l3 : List (Fin m)} -> (l1 ≈* l2) -> (l2 ≈* l3) -> l1 ≈* l3
+_■_ = trans

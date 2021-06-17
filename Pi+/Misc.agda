@@ -159,3 +159,7 @@ module _ {i} {A : Type i} where
   map-id : {xs : List A} → map (idf A) xs == xs
   map-id {xs = nil} = idp
   map-id {xs = x :: xs} = ap (x ::_) (map-id {xs = xs})
+
+abstract
+  fin= : {n : ℕ} {f g : Fin n} → f .fst == g .fst → f == g
+  fin= p = pair= p prop-has-all-paths-↓

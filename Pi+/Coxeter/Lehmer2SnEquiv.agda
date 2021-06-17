@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
-module Pi+.Coxeter.LehmerSnEquiv where
+module Pi+.Coxeter.Lehmer2SnEquiv where
 
 open import lib.Base
 open import lib.NType
@@ -9,18 +9,19 @@ open import lib.Equivalence
 open import lib.PathGroupoid
 open import lib.types.Fin
 open import lib.types.List
+open import lib.types.Nat
 
-open import Pi+.Lehmer.Lehmer
-open import Pi+.Lehmer.LehmerFinEquiv
-open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Lehmer.Lehmer2
+open import Pi+.Coxeter.Lehmer2CoxeterEquiv
 open import Pi+.Coxeter.Sn
 open import Pi+.Coxeter.Coxeter
+open import Pi+.Misc
 
-Lehmer≃Coxeter : {n : ℕ} ->  Lehmer n ≃ Sn n
+Lehmer≃Coxeter : {n : ℕ} -> Lehmer n ≃ Sn n
 Lehmer≃Coxeter = equiv f g f-g g-f
     where
     f : {n : ℕ} -> Lehmer n → Sn n
-    f {O} CanZ = q[ nil ]
+    f {O} f = q[ nil ]
     f {S n} = q[_] ∘ immersion
 
     g-q : {n : ℕ} ->  List (Fin n) → Lehmer n
@@ -40,5 +41,6 @@ Lehmer≃Coxeter = equiv f g f-g g-f
     f-g = SetQuot-elim {P = λ l → f (g l) == l} f-g-q (λ _ → prop-has-all-paths-↓)
 
     g-f : {n : ℕ} ->  (cl : Lehmer n) → g (f cl) == cl
-    g-f {O} CanZ = idp
-    g-f {S n} cl = immersion⁻¹∘immersion cl
+    g-f {O} (O , ϕ) = fin= idp
+    g-f {O} (S m , ltSR ())
+    g-f {S n} cl = immersion⁻¹∘immersion {n = S n} cl

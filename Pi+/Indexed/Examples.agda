@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances --show-implicit #-}
 
 open import lib.Base
 open import lib.Equivalence
@@ -31,10 +31,6 @@ instance
   ltS = N.ltS
   ltSR : {m n : ℕ} → {{m N.< n}} → m N.< (S n)
   ltSR {m} {n} {{ϕ}} = N.ltSR ϕ
-
-abstract
-  fin= : {f g : Fin n} → f .fst == g .fst → f == g
-  fin= p = pair= p prop-has-all-paths-↓
 
 𝟚 : Pi.U
 𝟚 = I + I

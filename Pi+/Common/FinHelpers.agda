@@ -32,6 +32,10 @@ instance
   Fin-is-set-p : {n : ℕ} → is-set (Fin n)
   Fin-is-set-p = dec-eq-is-set Fin-has-dec-eq-p
 
+instance
+  Fin1-level : is-contr (Fin 1)
+  Fin1-level = has-level-in ((0 , ltS) , λ { (O , ϕ) → fin= idp ; (S n , ltSR ()) })
+
 private
   variable
     k : ℕ

@@ -1,11 +1,11 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi+.UFinLehmerEquiv where
+module Pi+.UFinLehmer2Equiv where
 
 open import HoTT
 
-open import Pi+.Lehmer.Lehmer
-open import Pi+.Lehmer.LehmerFinEquiv
+open import Pi+.Lehmer.Lehmer2
+open import Pi+.Lehmer.Lehmer2FinEquiv
 open import Pi+.Extra
 open import Pi+.UFin
 

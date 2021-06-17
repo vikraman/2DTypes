@@ -84,16 +84,16 @@ braid-transpos^ {S m} (S n , pn)
     _ ⟷₂^⟨ !⟷₂^ (id⟷₂^ ⊡^ hom◎⊕⟷₂^) ⟩
     _ ⟷₂^∎
 
-cox≈2pi^ : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2pi^ r₁ ⟷₂^ list2pi^ r₂
-cox≈2pi^ cancel = (id⟷₂^ ⊡^ idr◎l^) ■^ transpos-cancel^
-cox≈2pi^ (swap x) = (id⟷₂^ ⊡^ idr◎l^) ■^ (slide-transpos^ _ _ x ■^ !⟷₂^ (id⟷₂^ ⊡^ idr◎l^))
-cox≈2pi^ braid = (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))  ■^ (braid-transpos^ _ ■^ !⟷₂^ ((id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))))
+cox≈2pi^ : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈* r₂ → list2pi^ r₁ ⟷₂^ list2pi^ r₂
+cox≈2pi^ (≈-rel cancel) = (id⟷₂^ ⊡^ idr◎l^) ■^ transpos-cancel^
+cox≈2pi^ (≈-rel (swap x)) = (id⟷₂^ ⊡^ idr◎l^) ■^ (slide-transpos^ _ _ x ■^ !⟷₂^ (id⟷₂^ ⊡^ idr◎l^))
+cox≈2pi^ (≈-rel braid) = (id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))  ■^ (braid-transpos^ _ ■^ !⟷₂^ ((id⟷₂^ ⊡^ (id⟷₂^ ⊡^ idr◎l^))))
 cox≈2pi^ idp = id⟷₂^
 cox≈2pi^ (comm c) = !⟷₂^ (cox≈2pi^ c)
 cox≈2pi^ (trans c c₁) = cox≈2pi^ c ■^ cox≈2pi^ c₁
 cox≈2pi^ (respects-++ c c₁) = list2pi^++ _ _ ■^ ((cox≈2pi^ c ⊡^ cox≈2pi^ c₁) ■^ !⟷₂^ (list2pi^++ _ _))
 
-piRespectsCox^ : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
+piRespectsCox^ : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈* l₂) →
                 (list2pi^ l₁) ⟷₂^ (list2pi^ l₂)
 piRespectsCox^ O nil nil c = id⟷₂^
 piRespectsCox^ (S n) _ _ c = cox≈2pi^ c
@@ -101,7 +101,7 @@ piRespectsCox^ (S n) _ _ c = cox≈2pi^ c
 list2pi^I : (n == m) → List (Fin n) → S n ⟷₁^ S m
 list2pi^I idp l = list2pi^ l
 
-piRespectsCoxI : (p : n == m) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
+piRespectsCoxI : (p : n == m) → (l₁ l₂ : List (Fin n)) → (l₁ ≈* l₂) →
                 (list2pi^I {n = n} {m = m} p l₁) ⟷₂^ (list2pi^I {n = n} {m = m} p l₂)
 piRespectsCoxI idp _ _ c = piRespectsCox^ _ _ _ c
 

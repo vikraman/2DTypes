@@ -22,12 +22,12 @@ module Pi+.Coxeter.GeneratedGroupIso (n : ℕ) where
   η-εᴳ = SetQuot-elim η-εˢ (λ r → prop-has-all-paths-↓)
 
   GRel-refl : ∀ w → w ≈ᴳ w
-  GRel-refl w = CoxeterRel-refl {n} (map codiag w)
+  GRel-refl w = idp {n}
 
   ε-ηˢ-w : ∀ w → map inl (map codiag w) ≈ᴳ w
   ε-ηˢ-w nil = GRel-refl nil
   ε-ηˢ-w (x :: w) =
-    ::-respects-≈ {x = codiag x} (transport (λ l → CoxeterRel l (map codiag w)) (! (map-∘ inl codiag ∙ map-id)) (GRel-refl w))
+    ::-respects-≈ {x = codiag x} (transport (_≈* (map codiag w)) (! (map-∘ inl codiag ∙ map-id)) (GRel-refl w))
 
   ε-ηˢ : ∀ w → SetQuot-rec εᴳ εᴳ-respects-≈ (GroupHom.f ηᴳ♯ q[ w ]) == q[ w ]
   ε-ηˢ w = ap (SetQuot-rec εᴳ εᴳ-respects-≈) (ηᴳ♯-β w) ∙ quot-rel (GG.qwr-rel (ε-ηˢ-w w))
