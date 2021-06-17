@@ -1,0 +1,2 @@
+status = [ "agda", "latex" ]
+delete_merged_branches = true

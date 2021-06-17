@@ -15,8 +15,50 @@ $n$, and show them to be equivalent to the symmetric group $\Sn$, via the
 Coxeter presentation. We will do that in two steps,
 in~\cref*{subsec:permutations,subsec:lehmer,subsec:symmetric}.
 
+\todo{Big example: Start from a listed permutation, show Lehmer code, then adjacent swaps.}
+\todo{Justification for why we need group theory.}
+
 %% Coxeter presentation of $\Sn$ $\eqv$ $\Lehmer[n]$ $\eqv$ $\Aut[\Fin[n]]$
 
+\subsection{Groups}
+
+From universal algebra, a group is simply a set with a 0-ary constant, the neutral element, a binary operation for group
+multiplication, and a unary inverse operation. A simple example is $\mathbb{Z}/n\mathbb{Z}$, where the neutral element
+is 0, the inverse of $k$ is $-k$, and the group multiplication is given by addition modulo $n$. The neutral element has
+to satisfy unit and inverse laws, and the multiplication has to be associative.
+
+In type theory, a group $G$ can be defined as an $\hSet$ $S$ with the following pieces of data:
+
+\begin{enumerate}
+  \item a unit or neutral element $e : S$
+  \item a multiplication function $m : S \times S \to S$ written as $(g_{1}, g_{2}) \mapsto g_{1} \mult g_{2}$, that satisfies
+  \begin{enumerate}
+    \item the unit laws, for all $g : S$, that \( g \mult e \id g \) and \( e \mult g \id g \)
+    \item the associativity law, for all $g_{1}, g_{2}, g_{3} : S$, that \( g_{1} \mult (g_{2} \mult g_{3}) \id (g_{1} \mult g_{2}) \mult g_{3} \)
+  \end{enumerate}
+  \item an inversion function $i : S \to S$ written as $g \mapsto \inv{g}$, that satisfies
+  \begin{enumerate}
+    \item the inverse laws, for all $g : S$, that \( g \mult \inv{g} \id e \) and \( \inv{g} \mult g \id e \)
+  \end{enumerate}
+\end{enumerate}
+
+However, more conveniently, in HoTT, we can instead use groupoids to talk about groups. A group can be identified with a
+1-object groupoid, using a technique called delooping. The delooping of a group $G$ is a groupoid $\B{G}$ given by a
+unique object $\pt$ with self-loops that are 1-paths $\pt \id_{\B{G}} \pt$ corresponding to the elements of $G$. Note
+that the group operations are automatically given by operations on the identity type, with $\refl_{\pt}$ for the neutral
+element, path composition for the group multiplication, and path inverse for the group inverse. These satisfy the group
+laws as well, up to the identity type, using the groupoid coherence laws. Moreover, for 1-groups which are supposed to
+be sets, these 2-paths should be propositions, so we have to restrict $\B{G}$ to be a 1-groupoid. Hence, a group is
+simply given by a pointed, connected 1-type~\cite*{buchholtzHigherGroupsHomotopy2018,symmetryBook2021}.
+
+For example, given a pointed type $(A:\UU, a:A)$, the automorphism group structure at $a$ is given by $a \id_{A} a$. Of
+course, for 1-groups we will require that $a \id_{A} a$ is an $\hSet$, which is enforced by having $A$ be a groupoid. In
+our running example for the permutation group on finite sets, we have that $\Fin[n]$ is an $\hSet$, and hence,
+$\UFin[n] \defeq \BAut[\Fin[n]]$ is a pointed, connected 1-type, whose loopspace $\loopspace[\BAut[\Fin[n]],F_{n}]$ is
+equivalent to $\Aut[\Fin[n]] \defeq (\Fin[n] \eqv \Fin[n]) \eqv (\Fin[n] \id_{\UU} \Fin[n])$, which has the
+corresponding automorphism group structure.
+
+Alternatively, groups can also be presented using generators and relations, or a quotient of the free group \ldots
 \subsection{Permutations}~\label{subsec:permutations}
 
 In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are
@@ -186,18 +228,23 @@ group.
 
 First, we formally define a presentation of a group.
 
+\todo{Free 1-group, needs to be truncated}
+
 \begin{definition}
   Let $A$ be a type, and $\List[A]$ the free monoid on $A$. The free group $F(A)$ on $A$ is the set-quotient of
   $\List[A + A]$ by the congruence closure of the relation $(\inl(a) \cons \inr(a) \cons \nil) \sim \nil$.
 \end{definition}
 
 \begin{proposition}
-  Let $\eta : A \to F(A)$ be given by $a \mapsto \inl(a) \cons \nil$. Given any group $G$ with a map $f : A \to G$,
+  Let $\eta_{A} : A \to F(A)$ be given by $a \mapsto \inl(a) \cons \nil$. Given any group $G$ with a map $f : A \to G$,
   there is a canonical lifting of $f$ to a group homomorphism $\extend{f} : F(A) \to G$, such that
   $\extend{f} \comp \eta_{A} \htpy f$, that is, the type of group homomorphisms $h : \Grp(F(A),G)$ satisfying
   $h \comp \eta_{A} \htpy f$ is contractible. Equivalently, composition by $\eta_{A}$ is an equivalence
   $\Grp(F(A),G) \eqv (A \to G)$.
 \end{proposition}
+
+\todo{diagram}
+\todo{Plus/Minus}
 
 \begin{definition}
   Let $A$ be a type and $R : A \to A \to \UU$ a binary relation on $A$. The group $G$ presented by
@@ -212,6 +259,7 @@ First, we formally define a presentation of a group.
 \end{definition}
 
 \todo{Universal property}
+\todo{Examples: empty relation, van Kampen of $\pi_{1}$}
 
 \subsubsection{Coxeter Relations}
 
@@ -224,7 +272,7 @@ We define a binary relation on $\List[\Fin[n]]$.
     \swap
     & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil) \\
     \braid
-    & : \forall k, n \to (\suc[n] \cons k \cons \suc[n] \cons \nil) \cox (n \cons \suc[k] \cons n \cons \nil) \\
+    & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
   \end{align*}
 \end{definition}
 
@@ -283,14 +331,36 @@ We will now prove the group structure of $\Sn$.
 
 We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
 
-\todo{immersion}
-
-\begin{theorem}
-  For all $n : \Nat$,
+\begin{definition}
   \[
-    \Sn \eqv \Lehmer[n]
+    \encode{\List} : \List[\Fin[n]] \to \Lehmer[n]
   \]
-\end{theorem}
+\end{definition}
+
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item \( l_{1} \cox* l_{2} \to \encode{\List}(l_{1}) \id \encode{\List}(l_{1}) \)
+  \end{enumerate}
+\end{proposition}
+
+\begin{definition}
+  \begin{align*}
+    \encodeSn & : \Sn[n] \to \Lehmer[n] \\
+    \decodeSn & : \Lehmer[n] \to \Sn[n]
+  \end{align*}
+\end{definition}
+
+\begin{proposition}
+  For all $n : \Nat$, $(\encodeSn, \decodeSn)$ is an equivalence.
+\end{proposition}
+
+\begin{corollary}
+  For all $n : \Nat$,
+  \(
+    \Sn \eqv \Lehmer[n] \eqv \Aut[\Fin[n]]
+  \).
+\end{corollary}
 
 \subsection{Symmetric Monoidal structure}
 

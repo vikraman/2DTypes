@@ -30,12 +30,19 @@
 \newcommand{\highlight}[1]{\textcolor{solarized-orange}{#1}}
 
 % finite types
-\NewDocumentCommand{\Fin}{O{}}{\type{Fin}\ifstrempty{#1}{}{({#1})}}
+\NewDocumentCommand{\Fin}{O{}}{\type{Fin}\ifstrempty{#1}{}{_{#1}}}
 \NewDocumentCommand{\FinExcept}{mO{}}{\term{Fin_{\mathsmaller{#1}}^{-}}\ifstrempty{#2}{}{({#2})}}
 \newcommand{\fzero}{f_0}
 
 \NewDocumentCommand{\Lehmer}{O{}}{\term{Lehmer}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
+
+\newcommand{\encode}[1]{\mathop{\term{encode_{#1}}}}
+\newcommand{\encodePerm}{\encode{perm}}
+\newcommand{\encodeSn}{\encode{\Sn}}
+\newcommand{\decode}[1]{\mathop{\term{decode_{#1}}}}
+\newcommand{\decodePerm}{\decode{perm}}
+\newcommand{\decodeSn}{\decode{\Sn}}
 
 % permutations
 \newcommand{\el}[1]{\mathbf{#1}}
@@ -59,6 +66,7 @@
 \newcommand{\congrf}[2]{\term{{#1}-cong-{#2}}}
 \newcommand{\relr}[1]{\term{{#1}-rel}}
 \newcommand{\append}{\mathbin{+\kern -0.4em+}}
+\newcommand{\mult}{\mathrel{\cdot}}
 
 % Pi
 \newcommand{\PiLang}{\mathit{\Pi}}
