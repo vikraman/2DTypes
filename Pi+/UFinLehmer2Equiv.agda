@@ -29,5 +29,5 @@ module _ {n : ℕ} where
 
 module _ {n : ℕ} where
 
-    UFin≃Lehmer : Ω ⊙[ UFin , FinFS n ] ≃ Lehmer n
+    UFin≃Lehmer : Ω ⊙[ UFin , FinFS (S n) ] ≃ Lehmer n
     UFin≃Lehmer = Fin≃Lehmer ∘e UFin≃Fin

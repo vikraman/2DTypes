@@ -25,7 +25,7 @@ private
   list++-assoc-lemma : {n : ℕ} → (l₁ l₂ l₃ l₄ : List (Fin n)) → (l₁ ++ l₂) ++ (l₃ ++ l₄) == l₁ ++ (l₂ ++ l₃) ++ l₄
   list++-assoc-lemma l₁ l₂ l₃ l₄ = (++-assoc l₁ l₂ (l₃ ++ l₄)) ∙ ap (λ e → l₁ ++ e) (! (++-assoc l₂ l₃ l₄))
 
-idp≃ : {n : ℕ} → (l₁ l₂ : List (Fin (S n))) → (l₁ == l₂) → (l₁ ≈* l₂)
+idp≃ : {n : ℕ} → (l₁ l₂ : List (Fin n)) → (l₁ == l₂) → (l₁ ≈* l₂)
 idp≃ l₁ l₂ p = transport (λ e → l₁ ≈* e) p idp
 
 respects-++-lr : {n : ℕ} → (l m m' r : List (Fin (S n))) → (m ≈* m') → (l ++ (m ++ r)) ≈* (l ++ (m' ++ r))

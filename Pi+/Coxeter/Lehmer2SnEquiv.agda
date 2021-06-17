@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
-module Pi+.Coxeter.LehmerSnEquiv where
+module Pi+.Coxeter.Lehmer2SnEquiv where
 
 open import lib.Base
 open import lib.NType
@@ -10,9 +10,9 @@ open import lib.PathGroupoid
 open import lib.types.Fin
 open import lib.types.List
 
-open import Pi+.Lehmer.Lehmer
+open import Pi+.Lehmer.Lehmer2
 open import Pi+.Lehmer.LehmerLevel
-open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Coxeter.Lehmer2CoxeterEquiv
 open import Pi+.Coxeter.Sn
 open import Pi+.Coxeter.Coxeter
 
