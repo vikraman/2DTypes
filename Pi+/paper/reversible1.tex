@@ -1,0 +1,307 @@
+\section{A Reversible Programming Language: Set-Theoretic Semantics}~\label{sec:reversibleone}
+
+The practice of programming languages is replete with \emph{ad hoc} instances of reversible computations: database
+transactions, mechanisms for data provenance, checkpoints, stack and exception traces, logs, backups, rollback
+recoveries, version control systems, reverse engineering, software transactional memories, continuations, backtracking
+search, and multiple-level undo features in commercial applications. In the early nineties,
+\citet{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class, treatment of reversibility. But intensive
+research in full-fledged reversible models of computations and reversible programming languages was only sparked by the
+discovery of deep connections between physics and
+computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275, Hey:1999:FCE:304763,fredkin1982conservative}, and by the
+potential for efficient quantum computation~\cite{springerlink:10.1007/BF02650179}.
+
+The early developments of reversible programming languages started
+with a conventional programming language, e.g., an extended
+$\lambda$-calculus, and either:
+\begin{enumerate}
+\item extended the language with a history
+mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
+\item imposed constraints on the control flow constructs to make them
+reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
+\end{enumerate}
+More foundational approaches recognize that reversible programming languages require a fresh approach and should be
+designed from first principles without the detour via conventional irreversible
+languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047,
+  rc2011,James:2012:IE:2103656.2103667,Carette2016}.
+
+%%%%%%%%%%%%%%%%%
+\subsection{The $\Pi$ Family of Languages}
+
+A natural candidate for a semantic foundation for reversible programming languages is the notion of type
+isomorphism. Indeed, the type isomorphisms among finite types represent a universal language for reversible boolean
+circuits~\cite{James:2012:IE:2103656.2103667} and the extension with recursive types and trace
+operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
+language~\cite{James:2012:IE:2103656.2103667,rc2011}.
+
+Focusing on finite types, the building blocks of type theory are: the
+empty type ($\mathbb{0}$), the unit type ($\mathbb{1}$) containing
+just one value $\Acon{tt}$, the sum type ($+$) containing values of
+the form $\inlv{v}$ and $\inrv{v}$, and the product ($\times$) type
+containing pairs of values $(v_1,v_2)$. One may view each type $A$
+as a collection of physical wires that can transmit $|A|$ distinct
+values where $|A|$ is a natural number that indicates the size of a
+type, computed as: $| \mathbb{0} | = 0$; $| \mathbb{1} | = 1$;
+$| A + B | = | A | + |B |$; and
+$| A \times B | = | A | * |B |$.  Thus the type
+$\mathbb{B} = \mathbb{1} + \mathbb{1}$ corresponds to a wire that can
+transmit one of two values, i.e., bits, with the convention that
+$\inlv{\Acon{tt}}$ represents \AgdaFunction{𝔽} and
+$\inrv{\Acon{tt}}$ represents \AgdaFunction{𝕋}.  The type
+$\mathbb{B} \times \mathbb{B} \times \mathbb{B}$ corresponds to a
+collection of wires that can transmit three bits. From that
+perspective, a type isomorphism between types $A$ and $B$
+(such that $|A|=|B|=n$) models a \emph{reversible}
+combinational circuit that \emph{permutes} the $n$ different
+values. These type isomorphisms are collected in Fig.~\ref{pi-terms}.
+\begin{figure}[t]
+{\scalebox{\scalef}{$%
+%%\noindent\begin{minipage}{.7\linewidth}
+\begin{array}{rrcll}
+\idc :& A & \iso & A &: \idc \\
+\\
+\identlp :&  \mathbb{0} + A & \iso & A &: \identrp \\
+\swapp :&  A + B & \iso & B + A &: \swapp \\
+\assoclp :&  A + (B + C) & \iso & (A + B) + C &: \assocrp \\ [1.5ex]
+\identlt :&  \mathbb{1} \times A & \iso & A &: \identrt \\
+\swapt :&  A \times B & \iso & B \times A &: \swapt \\
+\assoclt :&  A \times (B \times C) & \iso & (A \times B) \times C &: \assocrt \\ [1.5ex]
+\absorbr :&~ \mathbb{0} \times A & \iso & \mathbb{0} ~ &: \factorzl \\
+\dist :&~ (A + B) \times C & \iso & (A \times C) + (B \times C)~ &: \factor
+  \end{array}$}}
+
+{\scalebox{\scalef}{%
+\Rule{}
+{\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : B \iso C}
+{\jdg{}{}{c_1 \fatsemi c_2 : A \iso C}}
+{}
+
+\Rule{}
+{\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
+{\jdg{}{}{c_1 \oplus c_2 : A + C \iso B + D}}
+{}
+
+\Rule{}
+{\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
+{\jdg{}{}{c_1 \otimes c_2 : A \times C \iso B \times D}}
+{}
+}}
+\caption{$\Pi$-terms, combinators, and their types.}
+\label{pi-terms}
+\end{figure}
+
+Each line in the top part of the figure introduces a pair of dual constants that witness the type isomorphism in the
+middle.  These are the \emph{base} (non-reducible) terms of $\Pi$. The isomorphisms are extended to form a congruence
+relation by adding the three constructors at the bottom of the figure that witness equivalence and compatible
+closure. Although austere, this combinator-based language has the advantage of being amenable to formal analysis for at
+least two reasons: (i) it is conceptually simple and small, and (ii) it has direct and evident connections to type
+theory and category theory and hence possesses a rich algebraic structure which we exploit in the remainder of the
+paper.
+
+% Specifically, the type isomorphisms of~$\Pi$ are sound and complete for all permutations on finite
+% types~\cite{Fiore:2004,fiore-remarks} and hence they are \emph{complete} for expressing reversible combinational
+% circuits~\cite{fredkin1982conservative, James:2012:IE:2103656.2103667,Toffoli:1980}. Algebraically, these types and
+% combinators form a \emph{commutative semiring} (up to type isomorphism). Logically, they form a superstructural logic
+% capturing space-time trade-offs~\cite{superstructural}. Categorically, they form a \emph{distributive bimonoidal
+%   category}~\cite{laplaza72}.
+
+% For the fragment over finite types, the syntax of the language $\Pi$ consists of several sorts:
+
+%  {\scalebox{\scalef}{$%
+% \begin{array}{lrcl}
+% \textit{Value types} & A,B,C,D &::=& \mathbb{0} \alt \mathbb{1} \alt A+B \alt A\times B \\
+% \textit{Values}      & v,w,x,y &::=& \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
+% \textit{Program types} &&& A \leftrightarrow B \\
+% \textit{Programs} & c &::=& (\textrm{See Fig.~\ref{pi-terms}})
+% \end{array}$}}
+
+\begin{figure}[t]
+{\scalebox{\scalef}{%
+$\begin{array}{rclcrcl}
+\delta(\identlp,~\inrv{v}) & = & v & & \delta(\identrp,~v)        & = & \inrv{v}\\
+\delta(\swapp,~\inlv{v})     & = & \inrv{v}\\
+\delta(\swapp,~\inrv{v})     & = & \inlv{v}\\
+\delta(\assoclp,~\inlv{v})          & = & \inlv{(\inlv{v})} & & \delta(\assocrp,~\inlv{(\inlv{v})}) & = & \inlv{v}         \\
+\delta(\assoclp,~\inrv{(\inlv{v})}) & = & \inlv{(\inrv{v})} & & \delta(\assocrp,~\inlv{(\inrv{v})}) & = & \inrv{(\inlv{v})}\\
+\delta(\assoclp,~\inrv{(\inrv{v})}) & = & \inrv{v}          & & \delta(\assocrp,~\inrv{v})          & = & \inrv{(\inrv{v})}\\
+\delta(\identlt,~(\Acon{tt},v)) & = & v & & \delta(\identrt,~v)             & = & (\Acon{tt},v)\\
+\delta(\swapt,~(x,y))         & = & (y,x)    \\
+\delta(\assoclt,~(x,(y,z))) & = & ((x,y),z) & & \delta(\assocrt,~((x,y),z)) & = & (x,(y,z))\\
+\delta(\dist,~(\inlv{x},z)) & = & \inlv{(x,z)} & & \delta(\factor,~\inlv{(x,z)}) & = & (\inlv{x},z)\\
+\delta(\dist,~(\inrv{y},z)) & = & \inrv{(y,z)} & & \delta(\factor,~\inrv{(y,z)}) & = & (\inrv{y},z)
+\end{array}$}}
+\caption{Semantics of base combinators}\label{fig:delta}
+\end{figure}
+
+%%%%%%%%%
+\subsection{Denotational Semantics}
+
+\noindent A simple denotational semantics of $\Pi$ can be specified by mapping each type to a finite set and each
+combinator to a permutation between finite sets.
+
+Fig.~\ref{fig:delta} specifies the semantics of the base combinators
+using a function $\delta$. It is clear that this function has an inverse $\delta^\dagger$ such that
+$\delta^\dagger(c,\delta(c,v))=v$. The semantics of full programs is given by the interpreter in the second figure.
+
+We choose a canonical set of size $n$, called $\mathsf{Fin}~n$, whose elements are natural numbers less than $n$. To
+compute the denotation of a type $A$, we first calculate its size $n = \sizet{A}$. We then construct the canonical set
+$\mathsf{Fin}~n$ and provide the (trivial) evidence that this set is identical to $(\mathsf{Fin}~n)$:
+
+\[\begin{array}{rcll}
+    \sem{A} &=& \mathsf{Fin}~\sizet{A}
+\\
+    \sem{c : A \isot B} &:& \mathsf{Fin}~\sizet{A} \rightarrow \mathsf{Fin}~\sizet{B} \\
+    %% base combinators
+    \sem{c_1\oplus c_2}_{A+B \isot C+D}~\inlv{v} &=& \sem{c_1}_{A \isot C}~v \\
+    \sem{c_1\oplus c_2}_{A+B \isot C+D}~\inrv{v} &=& \sizet{A} + \sem{c_2}_{B \isot D}~v \\
+    \sem{\idc}~v &=& v \\
+    \sem{c_1\fatsemi c_2}~v &=& \sem{c_2} (\sem{c_1}~v) \\
+    \sem{c_1\otimes c_2}~(v_1,v_2) &=& (\sem{c_1}~v_1 , \sem{c_2}~v_2)
+\end{array}\]
+
+%%%%%%%%%
+\subsection{Examples}
+\label{sec:langRev-examples}
+\label{examples}
+
+\note{Revisit to pick examples relevant to the rest of the paper; also unify notation}
+
+\paragraph*{Booleans}
+Let us start with encoding booleans. We use the type \ensuremath{1{\sumtype}1} to
+represent booleans with \ensuremath{\mathit{left} ~()} representing \ensuremath{\mathit{true}} and
+\ensuremath{\mathit{right}~()} representing \ensuremath{\mathit{false}}.
+Boolean negation is straightforward to define:
+
+\ensuremath{\mathit{not} : \mathit{bool} \leftrightarrow \mathit{bool}}
+
+\ensuremath{\mathit{not} = \swapp}
+
+\noindent
+It is easy to verify that \ensuremath{\mathit{not}} changes \ensuremath{\mathit{true}} to \ensuremath{\mathit{false}} and
+vice versa.
+
+\paragraph*{Bit Vectors.}
+We can represent $n$-bit words using an n-ary product of
+\ensuremath{\mathit{bool}}s. For example, we can represent a 3-bit word, \ensuremath{\mathit{word}_3},
+using the type \ensuremath{\mathit{bool} {\prodtype} (\mathit{bool} {\prodtype}  \mathit{bool})}.  We can perform various
+operations on these 3-bit words using combinators in \ensuremath{\Pi }. For
+instance the bitwise \ensuremath{\mathit{not}} operation is the parallel composition of
+three \ensuremath{\mathit{not}} operations:
+
+\ensuremath{\mathit{not}_{\mathit{word}_3} :: \mathit{word}_3 \leftrightarrow \mathit{word}_3}
+
+\ensuremath{\mathit{not}_{\mathit{word}_3} = \mathit{not}  {\prodtype}  (\mathit{not}  {\prodtype}  \mathit{not})}
+
+\noindent We can express a 3-bit word reversal operation as follows:
+
+\ensuremath{\mathit{reverse} : \mathit{word}_3 \leftrightarrow \mathit{word}_3}
+
+\ensuremath{\mathit{reverse} = \swapt \odot (\swapt  \otimes  \idc)~ \odot \assocrt}
+
+\noindent We can check that \ensuremath{\mathit{reverse}} does the right thing by
+applying it to a value \ensuremath{(v_1, (v_2, v_3))} and writing out the full
+derivation tree of the reduction.  The combinator \ensuremath{\mathit{reverse}}, like
+many others we will see in this paper, is formed by sequentially
+composing several simpler combinators. Instead of presenting the
+operation of \ensuremath{\mathit{reverse}} as a derivation tree, it is easier (purely
+for presentation reasons) to flatten the tree into a sequence of
+reductions as caused by each component. Such a sequence of reductions
+is given below:
+\[\begin{array}{rlr}
+ & (v_1, (v_2, v_3)) \\
+ \swapt & ((v_2, v_3), v_1) \\
+ \swapt \otimes  \idc & ((v_3, v_2), v_1) \\
+ \assocrt & (v_3, (v_2, v_1)) \\
+ \end{array}\]
+%subcode source isomorphisms.tex:979
+
+\noindent On the first line is the initial value. On each subsequent
+line is a fragment of the \ensuremath{\mathit{reverse}} combinator and the value that
+results from applying this combinator to the value on the previous
+line. For example, \ensuremath{\swapt} transforms \ensuremath{(v_1, (v_2, v_3))} to
+\ensuremath{((v_2,v_3),v_1)}.  On the last line we see the expected result with
+the bits in reverse order.
+
+We can also draw out the graphical representation of the 3-bit reverse
+combinator. In the graphical representation, it is clear that the
+combinator achieves the required shuffling.
+
+% \inkscape{reverse-3-bit.pdf}
+
+\paragraph*{Conditionals.}
+Even though \ensuremath{\Pi } lacks conditional expressions, they are
+expressible using the distributivity and factoring laws. The
+diagrammatic representation of \ensuremath{\dist} shows that it redirects the flow
+of a value \ensuremath{v:b} based on the value of another one of type
+\ensuremath{b_1{\sumtype}b_2}. If we choose \ensuremath{1{\sumtype}1} to be
+\ensuremath{\mathit{bool}} and apply either \ensuremath{c_1:b_1\leftrightarrow
+b_2} or \ensuremath{c_2:b_1\leftrightarrow b_2} to the value \ensuremath{v},
+then we essentially have an `if' expression.
+
+\ensuremath{\mathit{if}_{c_1,c_2} : \mathit{bool}  {\prodtype}  b_1 \leftrightarrow \mathit{bool}  {\prodtype}  b_2}
+
+\ensuremath{\mathit{if}_{c_1,c_2} = \dist \odot ((\idc  \otimes\  c_1) {\sumtype} (\idc \otimes\  c_2)) \odot \factor}
+
+
+% \inkscape{if-c1-c2.pdf}
+
+
+The diagram above shows the input value of type \ensuremath{(1{\sumtype}1) {\prodtype}  b_1}
+processed by the distribute operator \ensuremath{\dist}, which converts it into
+a value of type \ensuremath{(1 {\prodtype}  b_1){\sumtype}(1 {\prodtype}  b_1)}. In the
+\ensuremath{\mathit{left}} branch, which corresponds to the
+case when the boolean is \ensuremath{\mathit{true}} (i.e. the value was
+\ensuremath{\mathit{left} ~()}), the combinator~\ensuremath{c_1} is applied to
+the value of type~\ensuremath{b_1}. The right
+branch which corresponds to the boolean being \ensuremath{\mathit{false}} passes
+the value of type \ensuremath{b_1} through the combinator \ensuremath{c_2}.
+The inverse of \ensuremath{\dist}, namely \ensuremath{\factor} is applied
+to get the final result of type \ensuremath{(1{\sumtype}1) {\prodtype} b_2}.
+
+\paragraph*{Logic Gates}
+There are several universal primitives for conventional (irreversible)
+hardware circuits, such as \ensuremath{\mathit{nand}} and \ensuremath{\mathit{fanout}}. In the case
+of reversible hardware circuits, the canonical universal primitive is
+the Toffoli gate~\cite{Toffoli:1980}. The Toffoli gate takes three
+boolean inputs: if the first two inputs are \ensuremath{\mathit{true}} then the third
+bit is negated. In a traditional language, the Toffoli gate would be
+most conveniently expressed as a conditional expression like:
+
+\noindent
+\ensuremath{ \mathit{toffoli}(v_1,v_2,v_3) = \mathit{if} ~(v_1 ~\mathit{and} ~v_2) ~\mathit{then} ~(v_1, v_2, \mathit{not}(v_3)) ~\mathit{else} ~(v_1, v_2, v_3)}
+
+We will derive Toffoli gate in \ensuremath{\Pi } by first deriving a simpler
+logic gate called \ensuremath{\mathit{cnot}}.  Consider a one-armed version, \ensuremath{\mathit{if}_c},
+of the conditional derived above. If the \ensuremath{\mathit{bool}} is
+\ensuremath{\mathit{true}}, the value of type \ensuremath{b} is modified by the operator \ensuremath{c}.
+
+\begin{center}
+\scalebox{1.5}{
+%%subcode-line{pdfimage}[diagrams/if_c.pdf]
+% \includegraphics{inkscape/cnot.pdf}
+}
+\end{center}
+
+
+By choosing \ensuremath{b} to be \ensuremath{\mathit{bool}} and \ensuremath{c} to be \ensuremath{\mathit{not}}, we have the
+combinator \ensuremath{\mathit{if}_{\mathit{not}} : \mathit{bool} {\prodtype}  \mathit{bool}\leftrightarrow \mathit{bool} {\prodtype}  \mathit{bool}} which negates its
+second argument if the first argument is \ensuremath{\mathit{true}}. This gate
+\ensuremath{\mathit{if}_{\mathit{not}}} is often referred to as the \ensuremath{\mathit{cnot}} gate\cite{Toffoli:1980}.
+
+If we iterate this construction once more, the resulting combinator
+\ensuremath{\mathit{if}_{\mathit{cnot}}} has type \ensuremath{\mathit{bool} {\prodtype}  (\mathit{bool} {\prodtype}  \mathit{bool})\leftrightarrow \mathit{bool} {\prodtype}  (\mathit{bool} {\prodtype}  \mathit{bool})}. The
+resulting gate checks the first argument and if it is \ensuremath{\mathit{true}},
+proceeds to check the second argument. If that is also \ensuremath{\mathit{true}} then
+it will negate the third argument. Thus \ensuremath{\mathit{if}_{\mathit{cnot}}} is the required
+Toffoli gate.
+
+\begin{center}
+\scalebox{1.6}{
+% \includegraphics{inkscape/toffoli.pdf}
+}
+\end{center}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% fill-column: 120
+%%% End:
