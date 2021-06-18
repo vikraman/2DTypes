@@ -5,6 +5,7 @@ module Pi+.PiLevel0 where
 open import lib.Base
 open import lib.PathGroupoid
 import lib.types.Nat as N
+open import lib.types.Sigma renaming (_×_ to _X_)
 open import lib.types.Fin
 
 open import Pi+.Misc as N
@@ -62,30 +63,44 @@ data _⟷₁_  : U → U → Type₀ where
 
 -- Simple denotational semantics
 
+postulate
+  *-unit-r : (n : ℕ) → n N.* 0 == 0
+  decomp+ : (t₁ t₂ : U) → Fin ∣ t₁ + t₂ ∣ → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣
+  comp+ : (t₁ t₂ : U) → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣ → Fin ∣ t₁ + t₂ ∣
+  decomp* : (t₁ t₂ : U) → Fin ∣ t₁ × t₂ ∣ → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣
+  comp* : (t₁ t₂ : U) → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣ → Fin ∣ t₁ × t₂ ∣
+
+swap+Fin : {t₁ t₂ : U} → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣ → Fin ∣ t₂ ∣ ⊎ Fin ∣ t₁ ∣
+swap+Fin (inj₁ v) = inj₂ v
+swap+Fin (inj₂ v) = inj₁ v
+
+swap*Fin : {t₁ t₂ : U} → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣ → Fin ∣ t₂ ∣ X Fin ∣ t₁ ∣
+swap*Fin (v , w) = (w , v)
+
 semT : (t : U) → Set
 semT t = Fin ∣ t ∣
 
 semC : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → Fin ∣ t₁ ∣ → Fin ∣ t₂ ∣
-semC unite₊l n = n
-semC uniti₊l n = n
+semC unite₊l = idf _
+semC uniti₊l = idf _
 semC {I × t₂} {t₂} unite⋆l = transport Fin (N.+-unit-r ∣ t₂ ∣)
 semC {t₁} {I × t₁} uniti⋆l = transport Fin (! (N.+-unit-r ∣ t₁ ∣))
-semC swap₊ n = {!!}
-semC swap⋆ n = {!!}
-semC assocl₊ n = {!!}
-semC assocr₊ n = {!!}
-semC assocl⋆ n = {!!}
-semC assocr⋆ n = {!!}
+semC {t₁ + t₂} {t₂ + t₁} swap₊ = (comp+ t₂ t₁) ∘ (swap+Fin {t₁} {t₂}) ∘ (decomp+ t₁ t₂)
+semC {t₁ × t₂} {t₂ × t₁} swap⋆ = (comp* t₂ t₁) ∘ (swap*Fin {t₁} {t₂}) ∘ (decomp* t₁ t₂)
+semC assocl₊ = {!!} -- n = {!!}
+semC assocr₊ = {!!} -- n = {!!}
+semC assocl⋆ = {!!} -- n = {!!}
+semC assocr⋆ = {!!} -- n = {!!}
 semC absorbr ()
-semC absorbl n = {!!}
+semC {t × O} {O} absorbl = transport Fin (*-unit-r ∣ t ∣)
 semC factorzr ()
 semC factorzl ()
-semC dist n = {!!}
-semC factor n = {!!}
+semC dist n = {!!} -- = {!!}
+semC factor = {!!} -- n = {!!}
 semC id⟷₁ n = n
-semC (c₁ ◎ c₂) n = semC c₂ (semC c₁ n)
-semC (c₁ ⊕ c₂) n = {!!}
-semC (c₁ ⊗ c₂) n = {!!}
+semC (c₁ ◎ c₂) = semC c₂ ∘ semC c₁
+semC (c₁ ⊕ c₂) = {!!} -- n = {!!}
+semC (c₁ ⊗ c₂) = {!!} -- n = {!!}
 
 {--
 
