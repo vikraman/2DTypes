@@ -161,6 +161,29 @@ $\delta^\dagger$ such that $\delta^\dagger(c,\delta(c,v))=v$. The semantics of f
 in Fig.~\ref{fig:pi:interp}.
 
 %%%%%%%%%
+\subsection{Denotational Semantics}
+
+We choose a canonical set of size $n$, called $\mathsf{Fin}~n$, whose elements are natural numbers less than $n$. To
+compute the denotation of a type $A$, we first calculate its size $n = \sizet{A}$. We then construct the canonical set
+$\mathsf{Fin}~n$ and provide the (trivial) evidence that this set is identical to $(\mathsf{Fin}~n)$:
+
+\[\begin{array}{rcll}
+\sem{A} &=& (\mathsf{Fin}~n, [ n , \mathsf{refl} ]) & \mbox{where}~\sizet{A} = n
+\end{array}\]
+
+\noindent The denotation $\sem{c}$ of a combinator $c : A \isot B$ is a path between $\sem{A}$ and $\sem{B}$. If the
+size of $A$ is $m$ and the size of $B$ is $n$, the desired path is between $(\mathsf{Fin}~m, [ m , \mathsf{refl} ])$ and
+$(\mathsf{Fin}~n, [ n , \mathsf{refl} ])$. This path is directly constructed using $\mathit{ap}$ and the fact that $m=n$
+since combinators are always between types of the same size.
+
+\noindent Finally, given two combinators $p , q : A \isot_1 B$ and a 2-combinator $\alpha : p \iso_2 q$, the denotation
+$\sem{\alpha}$ of $\alpha$ is a path between $\sem{p}$ and $\sem{q}$.
+
+
+
+
+
+%%%%%%%%%
 \subsection{Examples}
 \label{sec:langRev-examples}
 \label{examples}
