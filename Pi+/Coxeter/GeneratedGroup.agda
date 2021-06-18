@@ -3,6 +3,7 @@
 open import HoTT
 
 open import Pi+.Coxeter.Sn hiding (Sn)
+open import Pi+.Coxeter.Coxeter
 open import Pi+.Coxeter.Group
 open import Pi+.Extra
 open import Pi+.Misc
@@ -10,7 +11,7 @@ open import Pi+.Misc
 module Pi+.Coxeter.GeneratedGroup (n : ℕ) where
 
   GRel : Rel (Word (Fin n)) lzero
-  GRel w1 w2 = map codiag w1 ≈ map codiag w2
+  GRel w1 w2 = map codiag w1 ≈* map codiag w2
 
   syntax GRel w1 w2 = w1 ≈ᴳ w2
 
@@ -54,8 +55,8 @@ module Pi+.Coxeter.GeneratedGroup (n : ℕ) where
       Word-extendᴳ-:: Sn ηᴳ x w
     ∙ ap2 (Group.comp Sn) (PlusMinus-extendᴳ-η x) (Word-extendᴳ-η w)
 
-  η-respects-relˢ : ∀ {w1 w2} → GRel w1 w2 → Word-extendˢ w1 ≈ Word-extendˢ w2
-  η-respects-relˢ {w1} {w2} r = transport2 CoxeterRel (! (Word-extendˢ-η w1)) (! (Word-extendˢ-η w2)) r
+  η-respects-relˢ : ∀ {w1 w2} → GRel w1 w2 → Word-extendˢ w1 ≈* Word-extendˢ w2
+  η-respects-relˢ {w1} {w2} r = transport2 _≈*_ (! (Word-extendˢ-η w1)) (! (Word-extendˢ-η w2)) r
 
   abstract
     η-respects-relᴳ : respects-rel ηᴳ
@@ -70,23 +71,23 @@ module Pi+.Coxeter.GeneratedGroup (n : ℕ) where
   εᴳ : List (Fin n) → Group.El G
   εᴳ = q[_] ∘ map inl
 
-  map-inl-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈ w2 → map inl w1 ≈ᴳ map inl w2
+  map-inl-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈* w2 → map inl w1 ≈ᴳ map inl w2
   map-inl-respects-≈ {nil} {nil} r =
-    CoxeterRel-refl {n} nil
+    idp {n}
   map-inl-respects-≈ {nil} {x :: w2} r =
-    transport (CoxeterRel nil) (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) r
+    transport (nil ≈*_) (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) r
   map-inl-respects-≈ {x :: w1} {nil} r =
-    transport (λ l → CoxeterRel l nil) (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) r
+    transport (_≈* nil) (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) r
   map-inl-respects-≈ {x :: w1} {y :: w2} r =
-    transport2 CoxeterRel (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) (ap (y ::_) (! (map-∘ inl codiag ∙ map-id))) r
+    transport2 _≈*_ (ap (x ::_) (! (map-∘ inl codiag ∙ map-id))) (ap (y ::_) (! (map-∘ inl codiag ∙ map-id))) r
 
   abstract
-    εᴳ-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈ w2 → εᴳ w1 == εᴳ w2
+    εᴳ-respects-≈ : {w1 w2 : List (Fin n)} → w1 ≈* w2 → εᴳ w1 == εᴳ w2
     εᴳ-respects-≈ = quot-rel ∘ GG.qwr-rel ∘ map-inl-respects-≈
 
   map-inl-preserves-++ : {w1 w2 : List (Fin n)} → map inl (w1 ++ w2) ≈ᴳ map inl w1 ++ map inl w2
   map-inl-preserves-++ {w1} {w2} =
-    transport (GRel _) (map-++ inl w1 w2) (CoxeterRel-refl {n} (map codiag (map inl (w1 ++ w2))))
+    transport (GRel _) (map-++ inl w1 w2) (idp {n})
 
   abstract
     εᴳ-preserves-comp : {w1 w2 : List (Fin n)} → εᴳ (w1 ++ w2) == Group.comp G (εᴳ w1) (εᴳ w2)

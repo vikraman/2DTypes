@@ -20,8 +20,8 @@ open import Pi+.Indexed.Equiv2Norm
 open import Pi+.Indexed.Equiv2Hat
 
 open import Pi+.Indexed.Equiv1NormHelpers
-open import Pi+.Lehmer.LehmerFinEquiv
-open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Lehmer.Lehmer2FinEquiv
+open import Pi+.Coxeter.Lehmer2CoxeterEquiv
 
 open import lib.Basics
 open import lib.types.Fin
@@ -34,8 +34,6 @@ open import lib.types.SetQuotient
 open import lib.types.Coproduct
 open import lib.types.Sigma
 
-import Pi+.Coxeter.LehmerCoxeterEquiv
-import Pi+.Lehmer.LehmerFinEquiv
 
 private
     variable

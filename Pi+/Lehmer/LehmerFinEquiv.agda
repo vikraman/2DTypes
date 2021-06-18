@@ -1,4 +1,4 @@
-{-# OPTIONS --rewriting --without-K #-}
+{-# OPTIONS --rewriting --without-K --overlapping-instances #-}
 
 module Pi+.Lehmer.LehmerFinEquiv where
 
@@ -10,7 +10,8 @@ open import Pi+.Lehmer.Lehmer
 open import Pi+.Common.InequalityEquiv
 open import Pi+.Common.Arithmetic
 
-open import Pi+.UFin.BAut using (Aut)
+open import Pi+.UFin.BAut
+open import Pi+.Misc
 open import Pi+.Extra
 
 ≤→< : {k n : ℕ} -> (k ≤ n) -> (k < S n)
@@ -45,17 +46,25 @@ Coprod-≃-r e = equiv f g f-g g-f
     g-f (inr x) = idp
     g-f (inl x) = ap inl (<–-inv-l e x)
 
-Fin1≃Unit : Fin 1 ≃ Unit
-Fin1≃Unit = ⊔₁-Empty ⊤ ∘e Coprod-≃-r Fin-equiv-Empty ∘e Fin-equiv-Coprod
+instance
+  Lehmer-O-level : is-contr (Lehmer O)
+  Lehmer-O-level = has-level-in (CanZ , λ { CanZ → idp })
 
-Fin1≃isContr : is-contr (Fin 1 ≃ Fin 1)
-Fin1≃isContr = ≃-contr (equiv-preserves-level (Fin1≃Unit ⁻¹)) (equiv-preserves-level (Fin1≃Unit ⁻¹))
+  Lehmer-level : {n : ℕ} → is-set (Lehmer n)
+  Lehmer-level {O} = contr-is-set Lehmer-O-level
+  Lehmer-level {S n} =
+    let ind = LehmerInd {n}
+        rec = Lehmer-level {n}
+    in  equiv-preserves-level {B = Lehmer (S n)} ind {{×-level Fin-is-set rec}}
 
 Fin≃Lehmer : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
-Fin≃Lehmer {O} = equiv (λ _ → CanZ) (λ CanZ → coe-equiv idp) (λ {CanZ → idp}) λ x → contr-has-all-paths {{Fin1≃isContr}} _ _
+Fin≃Lehmer {O} =
+  Aut (Fin (S O)) ≃⟨ contr-equiv-Unit Aut-level ⟩
+  Unit ≃⟨ contr-equiv-Unit Lehmer-O-level ⁻¹ ⟩
+  Lehmer O ≃∎
 Fin≃Lehmer {S n} =
-        Fin (S (S n)) ≃ Fin (S (S n))                              ≃⟨ i ⟩
-        Σ (Fin (S (S n))) (λ k → (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
-        Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                    ≃⟨ _ , (×-isemap-r (Fin (S (S n))) (snd (Fin≃Lehmer {n}))) ⟩
-        Fin (S (S n)) × Lehmer n                                   ≃⟨ LehmerInd ⟩
-        Lehmer (S n) ≃∎
+  Fin (S (S n)) ≃ Fin (S (S n))                              ≃⟨ i ⟩
+  Σ (Fin (S (S n))) (λ k → (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
+  Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                    ≃⟨ _ , (×-isemap-r (Fin (S (S n))) (snd (Fin≃Lehmer {n}))) ⟩
+  Fin (S (S n)) × Lehmer n                                   ≃⟨ LehmerInd ⟩
+  Lehmer (S n) ≃∎

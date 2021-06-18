@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --allow-unsolved-metas --exact-split --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.NonIndexed.Level0 where
 
@@ -13,6 +13,7 @@ open import lib.NType
 
 open import Pi+.NonIndexed.Syntax
 open import Pi+.Misc
+open import Pi+.Extra
 
 open import Pi+.Common.FinHelpers
 open import Pi+.Coxeter.Coxeter
@@ -167,14 +168,14 @@ gzero⟷₂ (t₁ + t₂ + t₃) ((t₁ + t₂) + t₃) t₁z t₂z assocl₊ =
       X3∘X6 : X3 ◎ X6 ⟷₂ id⟷₁
       X3∘X6 = tz0=r
    in  (uniti₊l ◎ (X1 ⊕ uniti₊l ◎ (X2 ⊕ X3))) ◎ assocl₊ ◎ ((((X4 ⊕ X5) ◎ unite₊l) ⊕ X6) ◎ unite₊l)
-         ⟷₂⟨ {!  !} ⟩
+         ⟷₂⟨ TODO- ⟩
        id⟷₁ ⟷₂∎
 gzero⟷₂ ((t₁ + t₂) + t₃) (t₁ + (t₂ + t₃)) t₁z t₂z assocr₊ =
   let rec = gzero⟷₂ (t₁ + t₂ + t₃) ((t₁ + t₂) + t₃) t₂z t₁z assocl₊
       rec! = !⟷₁⟷₂ rec
       -- this should be just rec!, after filling in the hole above
   in  !⟷₁ ((((_ ⊕ _) ◎ unite₊l) ⊕ _) ◎ unite₊l) ◎ assocr₊ ◎ (_ ⊕ (_ ⊕ _) ◎ unite₊l) ◎ unite₊l
-        ⟷₂⟨ {!  !} ⟩
+        ⟷₂⟨ TODO-  ⟩
       id⟷₁ ⟷₂∎
 gzero⟷₂ t₁ .t₁ t₁z t₂z id⟷₁ =
   trans⟷₂ (id⟷₂ ⊡ idl◎l) tz0=r
@@ -365,7 +366,7 @@ braid-transpos {S m} (O , np) =
     transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩
       ⟷₂⟨ id⟷₂ ⟩
     (id⟷₁ ⊕ rp0) ◎ rpn0 ◎ (id⟷₁ ⊕ rp0)
-      ⟷₂⟨ {!!} ⟩
+      ⟷₂⟨ TODO- ⟩
     rpn0 ◎ (id⟷₁ ⊕ rp0) ◎ rpn0
       ⟷₂⟨ id⟷₂ ⟩
     transpos2pi ⟨ O , np ⟩ ◎ transpos2pi S⟨ O , np ⟩ ◎ transpos2pi ⟨ O , np ⟩ ⟷₂∎
@@ -440,37 +441,38 @@ list2norm++ : {m : ℕ} → (l r : List (Fin (S m))) →
 list2norm++ nil r = idl◎r
 list2norm++ (n :: l) r = trans⟷₂ (id⟷₂ ⊡ (list2norm++ l r)) assoc◎l
 
-cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈₁ r₂ → list2norm r₁ ⟷₂ list2norm r₂
-cox≈2pi (cancel {n}) =
-  transpos2pi n ◎ transpos2pi n ◎ id⟷₁
-    ⟷₂⟨ assoc◎l ⟩
-  (transpos2pi n ◎ transpos2pi n) ◎ id⟷₁
-    ⟷₂⟨ transpos-cancel ⊡ id⟷₂ ⟩
-  id⟷₁ ◎ id⟷₁
-    ⟷₂⟨ idl◎l ⟩
-  id⟷₁ ⟷₂∎
-cox≈2pi (swap {n} {k} lp) =
-  trans⟷₂ assoc◎l (trans⟷₂ (slide-transpos n k lp ⊡ id⟷₂) assoc◎r)
-cox≈2pi idp = id⟷₂
-cox≈2pi (comm rw) = !⟷₂ (cox≈2pi rw)
-cox≈2pi (trans rw₁ rw₂) = trans⟷₂ (cox≈2pi rw₁) (cox≈2pi rw₂)
-cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
-  trans⟷₂
-    (list2norm++ l r)
-    (trans⟷₂
-      ((cox≈2pi rw₁) ⊡ (cox≈2pi rw₂))
-      (!⟷₂ (list2norm++ l' r')))
-cox≈2pi (braid {n}) =
-  trans⟷₂ assoc◎l
-  (trans⟷₂ assoc◎l
-  (trans⟷₂ (assoc◎r ⊡ id⟷₂)
-  (trans⟷₂ (braid-transpos n ⊡ id⟷₂)
-  (trans⟷₂ (assoc◎l ⊡ id⟷₂)
-  (trans⟷₂ assoc◎r assoc◎r)))))
+cox≈2pi : {m : ℕ} {r₁ r₂ : List (Fin (S m))} → r₁ ≈* r₂ → list2norm r₁ ⟷₂ list2norm r₂
+cox≈2pi = TODO-
+-- cox≈2pi (cancel {n}) =
+--   transpos2pi n ◎ transpos2pi n ◎ id⟷₁
+--     ⟷₂⟨ assoc◎l ⟩
+--   (transpos2pi n ◎ transpos2pi n) ◎ id⟷₁
+--     ⟷₂⟨ transpos-cancel ⊡ id⟷₂ ⟩
+--   id⟷₁ ◎ id⟷₁
+--     ⟷₂⟨ idl◎l ⟩
+--   id⟷₁ ⟷₂∎
+-- cox≈2pi (swap {n} {k} lp) =
+--   trans⟷₂ assoc◎l (trans⟷₂ (slide-transpos n k lp ⊡ id⟷₂) assoc◎r)
+-- cox≈2pi idp = id⟷₂
+-- cox≈2pi (comm rw) = !⟷₂ (cox≈2pi rw)
+-- cox≈2pi (trans rw₁ rw₂) = trans⟷₂ (cox≈2pi rw₁) (cox≈2pi rw₂)
+-- cox≈2pi (respects-++ {l} {l'} {r} {r'} rw₁ rw₂) =
+--   trans⟷₂
+--     (list2norm++ l r)
+--     (trans⟷₂
+--       ((cox≈2pi rw₁) ⊡ (cox≈2pi rw₂))
+--       (!⟷₂ (list2norm++ l' r')))
+-- cox≈2pi (braid {n}) =
+--   trans⟷₂ assoc◎l
+--   (trans⟷₂ assoc◎l
+--   (trans⟷₂ (assoc◎r ⊡ id⟷₂)
+--   (trans⟷₂ (braid-transpos n ⊡ id⟷₂)
+--   (trans⟷₂ (assoc◎l ⊡ id⟷₂)
+--   (trans⟷₂ assoc◎r assoc◎r)))))
 
-piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈ l₂) →
+piRespectsCox : (n : ℕ) → (l₁ l₂ : List (Fin n)) → (l₁ ≈* l₂) →
                 (list2norm l₁) ⟷₂ (list2norm l₂)
-piRespectsCox O nil nil unit = id⟷₂
+piRespectsCox O nil nil _ = id⟷₂
 piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
 
 -- Mapping from combinators to lists
@@ -481,15 +483,15 @@ piRespectsCox (S n) l₁ l₂ eq = cox≈2pi eq
 
 
 norm2list : {n m : ℕ} → (n == m) → ⟪ S n ⟫ ⟷₁ ⟪ S m ⟫ → List (Fin n)
-norm2list p = {!!}
+norm2list p = TODO-
 
 -- Back and forth identities
 
-norm2norm : {n m : ℕ} → (q : n == m) → (p : ⟪ S n ⟫ ⟷₁ ⟪ S m ⟫) → list2norm (norm2list q p) ⟷₂ {!   !}
-norm2norm p q = {! p !}
+norm2norm : {n m : ℕ} → (q : n == m) → (p : ⟪ S n ⟫ ⟷₁ ⟪ S m ⟫) → list2norm (norm2list q p) ⟷₂ TODO-
+norm2norm p q = TODO-
 
 list2list : {n : ℕ} → (p : List (Fin n)) → norm2list idp (list2norm p) == p
-list2list ns = {!!}
+list2list ns = TODO-
 
 -----------------------------------------------------------------------------
 

@@ -17,7 +17,7 @@ module _ (n : ℕ) where
   GroupStructure.inv SnGroupStructure =
     SetQuot-map reverse (reverse-respects-≈ {n = n})
   GroupStructure.comp SnGroupStructure =
-    SetQuot-map2 _++_ CoxeterRel-refl (++-respects-≈ {n = n})
+    SetQuot-map2 _++_ (λ l → idp) respects-++
   GroupStructure.unit-l SnGroupStructure =
     SetQuot-elim (λ l → idp) (λ p → prop-has-all-paths-↓)
   GroupStructure.assoc SnGroupStructure =

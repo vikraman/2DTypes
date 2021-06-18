@@ -8,11 +8,12 @@ open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.UFin
 open import Pi+.Extra
 
-open import Pi+.Lehmer.Lehmer using (Lehmer)
-open import Pi+.Lehmer.LehmerFinEquiv
-open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Lehmer.Lehmer2 using (Lehmer)
+open import Pi+.Lehmer.Lehmer2FinEquiv
+open import Pi+.Coxeter.Lehmer2CoxeterEquiv
 open import Pi+.Coxeter.Sn
-open import Pi+.UFinLehmerEquiv
+open import Pi+.Coxeter.Coxeter
+open import Pi+.UFinLehmer2Equiv
 
 open import Pi+.Indexed.Equiv0Norm
 open import Pi+.Indexed.Equiv1NormHelpers
@@ -43,7 +44,7 @@ pi^2pi^ : (c : (S n) ⟷₁^ (S m)) →
     (lehmer2pi^ (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (pi^2lehmer c)) ⟷₂^ c
 pi^2pi^ {n} c with (⟷₁^-eq-size c)
 ... | idp = 
-    let lemma : immersion (immersion⁻¹ (pi^2list c)) ≈ (pi^2list c)
+    let lemma : immersion (immersion⁻¹ (pi^2list c)) ≈* (pi^2list c)
         lemma = immersion∘immersion⁻¹ (pi^2list c)
     in  _■^_ (piRespectsCoxI (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) _ _ lemma) (pi^2list2pi^ c)
 

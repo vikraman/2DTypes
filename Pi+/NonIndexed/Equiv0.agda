@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --allow-unsolved-metas --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting #-}
 
 module Pi+.NonIndexed.Equiv0 where
 

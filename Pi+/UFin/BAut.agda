@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
 module Pi+.UFin.BAut where
 
@@ -13,6 +13,7 @@ open import lib.Univalence
 open import lib.Funext
 open import lib.types.Empty
 open import lib.types.Sigma
+open import lib.types.Pi
 open import lib.types.Truncation
 open import lib.types.BAut
 open import lib.types.LoopSpace
@@ -40,9 +41,16 @@ module _ {i} (T : Type i) where
   pAut : Ptd i
   pAut = ⊙[ Aut , ide T ]
 
+-- NOTE: We're defining it from scratch because we need this to compute, it
+-- could be defined simply using ≃-level, but that uses ≃-contr which is marked
+-- abstract.
+--
 instance
   Aut-level : ∀ {i} {T : Type i} {n : ℕ₋₂} {{_ : has-level n T}} → has-level n (Aut T)
-  Aut-level = ≃-level ⟨⟩ ⟨⟩
+  Aut-level {n = ⟨-2⟩} =
+    has-level-in (ide _ , λ { (f , ϕ) → pair= (contr-has-all-paths (idf _) f) prop-has-all-paths-↓ })
+  Aut-level {n = S n} =
+    Σ-level (Π-level (λ _ → ⟨⟩)) λ _ → prop-has-level-S ⟨⟩
 
 module _ {i} (T : Type i) where
 
@@ -90,4 +98,6 @@ pFin-loop-equiv n = ⊙loop-equiv (Fin n)
 
 instance
   Aut-FinO-level : is-contr (Aut (Fin O))
-  Aut-FinO-level = inhab-prop-is-contr (ide _) {{Aut-level {{equiv-preserves-level (Fin-equiv-Empty ⁻¹)}}}}
+  Aut-FinO-level =
+    inhab-prop-is-contr (ide _)
+      {{Aut-level {{equiv-preserves-level (Fin-equiv-Empty ⁻¹)}}}}
