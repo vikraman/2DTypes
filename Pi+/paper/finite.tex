@@ -58,7 +58,248 @@ $\UFin[n] \defeq \BAut[\Fin[n]]$ is a pointed, connected 1-type, whose loopspace
 equivalent to $\Aut[\Fin[n]] \defeq (\Fin[n] \eqv \Fin[n]) \eqv (\Fin[n] \id_{\UU} \Fin[n])$, which has the
 corresponding automorphism group structure.
 
-Alternatively, groups can also be presented using generators and relations, or a quotient of the free group \ldots
+\subsection{Free groups}
+
+Given a generating set $A$, we can naively construct a \emph{free group on $A$},
+whose elements are drawn from the alphabet $A$, and closed under the group
+operations of multiplication and inverse, identified by the group axioms.
+For example, the singleton set generates the additive group of integers,
+$\mathbb{Z}$.
+
+Usually, there are are many equations, besides the group axioms, that hold for
+the elements of the group. For example, in the group $\mathbb{Z}/3\mathbb{Z}$,
+we have an equation $1 + 1 + 1 = 0$. A free group has the property that has no
+other relations than the ones directly implied by the group axioms.
+
+\todo{What's the best notation for HITs?}
+\begin{definition}
+  Given an $\hSet$ $A$, the free group $F(A)$ on it is given by a higher
+  inductive type with the following point and path constructors. Notice the
+  similarity with the definition of a group structure in~\ref{subsec:groups},
+  but note that each operation here is a generator for the type $F(A)$\dots.
+  \begin{itemize}
+    \item An inclusion function $\eta_{A} : A \to F(A)$
+    \item A multiplication function $m : F(A) \times F(A) \to F(A)$
+    \item An element $e : F(A)$
+    \item An inverse function $i : F(A) \to F(A)$
+  \end{itemize}
+  \smallskip
+  \begin{itemize}
+    \item For every $x, y, z : F(A)$, a path $\term{assoc} : m(x, m(y, z)) \id m(m(x, y), z)$
+    \item For every $x : F(A)$, paths $\term{unitr} : m(x, e) \id x$ and $\term{unitl} : m(e, x) \id x$
+    \item For every $x : F(A)$, paths $\term{invr} : m(x, i(x)) \id e$ and $\term{invl} : m(i(x), x) \id e$
+    \item A 0-truncation, for every $x, y : F(A)$ and $p, q : x \id y$, a 2-path $\term{trunc} : p \id q$
+  \end{itemize}
+\end{definition}
+
+A group homomorphism between groups is a function between the underlying sets
+that preserves the group structure, which we write as $G_1 \to^G G_2$. With
+this, we can state the universal property of free groups.
+
+\begin{proposition}[Universal Property of $F(A)$]~\label{prop:free-groups}
+  Given a group $G$ and a map $f : A \to G$, there is a unique group
+  homomorphism $\extend{f} : F(A) \to^G G$ such that $\extend{f} \comp \eta_A
+  \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
+  \to^G G \eqv A \to G$. Alternatively, the type of group homomorphisms $h :
+  F(A) \to^G G$ satisfying $h \comp \eta_A \htpy f$ is contractible.
+
+  % https://q.uiver.app/?q=WzAsMyxbMCwyLCJBIl0sWzAsMCwiRihBKSJdLFsyLDAsIkciXSxbMCwxLCJcXGV0YV9BIl0sWzAsMiwiZiIsMl0sWzEsMiwiXFxleHRlbmR7Zn0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+\[\begin{tikzcd}
+	{F(A)} && G \\
+	\\
+	A
+	\arrow[""{name=0, anchor=center, inner sep=0}, "{\eta_A}", from=3-1, to=1-1]
+	\arrow[""{name=1, anchor=center, inner sep=0}, "f"', from=3-1, to=1-3]
+	\arrow["{\extend{f}}", dashed, from=1-1, to=1-3]
+	\arrow["\id", Rightarrow, draw=none, from=0, to=1]
+\end{tikzcd}\]
+\end{proposition}
+
+This definition of $F(A)$ however has lots of path constructors corresponding to
+each group axiom. Alternatively, the free group construction can be thought of
+as drawing letters from the generating set, while adding formal inverses, and
+constructing words which are sequences of these letters. 
+
+Each element in the sequence can either be an element drawn from the generating
+set $a$, or an inverse of such an element $\inv{a}$. If we take the disjoint
+union of $A$ with itself, that is, $A + A$ as the underlying set, we can use
+$\inl/\inr$ to mark the elements. Hence, we can encode the free group using the
+free monoid, that is, lists.
+
+\begin{definition}
+  Let $A$ be an $\hSet$, and $\List[\blank]$ the free monoid. The free group
+  $F(A)$ on $A$ is the set-quotient of $\List[A + A]$ by the congruence closure
+  of the relation $a \cons \inv{a} \cons \nil \sim \nil$.
+\end{definition}
+
+\begin{proposition}
+  $F(A) \defeq \quot{\List[A + A]}{\sim^{\ast}}$ has a group structure, with the
+  empty list $\nil$ for the neutral element, multiplication given by list append
+  $\append$, and inverse given by list reversal. Further, $F(A)$ with $\eta_A :
+  A \to F(A) \defeq \inl(a) \cons \nil$ satisfies the universal property of free
+  groups.~\cref{prop:free-groups}
+\end{proposition}
+
+\subsubsection{Group presentations}
+
+One useful way of defining groups is by their presentations. A presentation of a
+group builds it by starting from the free group $F(A)$ and introducing a
+collection of equations that have to be satisfied in the resulting group. For
+example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an equation $1 + 1 + 1
+= 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$.
+
+The generators can be thought of as primitive operations in a (reversible)
+programming language, group structure gives the way of composing these
+operations and inverting them, and relations describe how these primitive
+operations interact with each other.
+
+Instead of opereating directly in the semantics of the group operation, here the
+focus is on the syntax. While before, the equality of elements (such as the
+result of multiplication of two elements) had to be computed externally, now it is
+reduced to a \emph{word problem}, i.e., deciding one word can be reduced to another
+using group's equations.
+
+However, because equations are not directed, is not always possible to construct a
+well-behaving rewriting system. In general, the word problem is proven to be undecidable.
+
+\jk{Example?}
+
+\begin{definition}
+  Let $A$ be an $\hSet$ and $R : (A + A) \to (A + A) \to \UU$ a binary relation
+  on $A + A$. The group $G$ presented by $\langle A ; R \rangle$ is given by the
+  set-quotient of the free group $F(A)$ by the closure of $R$, or equivalently,
+  as the coequaliser
+  \[\begin{tikzcd}
+      FR && FA && G
+      \arrow[shift right=2, from=1-1, to=1-3]
+      \arrow[shift left=2, from=1-1, to=1-3]
+      \arrow[two heads, from=1-3, to=1-5]
+    \end{tikzcd}\]
+\end{definition}
+
+\vc{do we need this level of detail?}
+\todo{Universal property}
+\todo{Examples: empty relation, van Kampen of $\pi_{1}$}
+
+The above definition is correct because the universal property of the free group allows 
+for properly extending the relation on the generating set to the whole group.
+\jk{Turn that into a propostion?}
+
+\subsection{Permutation groups}
+
+Because $\Pi$ The group that we are interested in is the group of permutations on a
+fininte set. We can define it formally in two different ways:
+8a. Taking the type Aut (Fin n) and showing that it satisfies the group
+axiom.
+8b. Writing up a presentation - choosing generating set and equations that
+have to be satisfied.
+
+9. By proving these two to be equivalent, we are bridging the gap between
+syntactic and semantic side in the whole proof - by assinging the meaning
+(a bijection) to a word (a program).
+
+10. However, in the point 8b, there is an element of choice. One group can
+be presented in many different ways. For example, we could generate the
+permutations by using generators that:
+ - swap i-th element with j-th element
+ - swap i-th element with the first element
+ - shift elements in a cyclic way: operation with label "i" leaves elements
+with numbers > i in place, and element j <= i goes to (j + 1) mod i.
+
+11. One way of thinking about these presentations is to compare them to
+sorting algorithms with different primitive operations. If using a set of
+operations, one can sort any list, then these operations generate the
+permutations group. One weird example: pancake sorting.
+
+\subsection{Coxeter Presentation}
+
+12. Here, we are choosing a presentation based on the adjacent
+transpositions generators - i.e. primitive operations of the form "swap
+i-th and i+1 elements". In the language of sorting, this corresponds to
+what the insertion sort or bubble sort are doing.
+In the explanations below, we will use diagrams to draw the permutations.
+
+12a. There two very obvious laws that such operation has to preserve:
+ - Swapping the same two elements two times in a row does not change
+anything (cancel)
+TODO diagram.
+ - When swapping two pairs of elements on a positions far away, it does not
+matter in which order one does it (swap). (We can slide the wires).
+TODO diagram.
+But there is also one more law that these operations have to satisfy, in
+the situation when we are swapping adjacent pairs of elements. It is best
+seen on a diagram (braid)
+TODO diagram.
+
+This construction is called a Coxeter presentation. Writing it formally, we
+get the following definition
+Definition: Coxeter presentation.
+
+13. There are two main considerations to this choice:
+13a. How well the presentation matches the syntactic side of Pi? This is,
+how closely does the operational semantics built from these particular
+primitive operations match the natural operational semantics of Pi?
+13b. How convenient is it to turn the presentation it into rewriting system
+and solve the word problem for it?
+
+Thus, the argument:
+14. TODO I don't know what to write here, we have to think.
+
+15a. The equations that define Coxeter presentation have a nice property:
+as it is written, the LHS is smaller (lexicographically) than the RHS.
+Thus, if we could direct them from right to left, it would have a
+termination property out of the box.
+15b. However, it is not at all obvious that the system would be confluent.
+There are many possible critical pairs, such as
+TODO diagram 1212 (braid, braid)
+or
+TODO diagram 3233 (braid, cancel)
+As it turns out, there are instances of critical pairs that do not resolve.
+A simplest example is the following:
+TODO diagram 3213
+
+16. The equations have to be changed. We thus propose a new presentation.
+We keep the (cancel) and (swap) equations, but replace (braid) with a more
+general:
+TODO diagram:
+
+Definition: Long Coxeter presentation.
+
+17. In return for increased complexity of the equations, it satisfies the
+diamond property (if we direct the equation). Thus, together with the
+(preserved) termination, it creates a confluent rewriting system.
+Proof: All the critical pairs resolve, in the appendix.
+Definition: A normal form is a list that cannot be reduced any further.
+
+18. We define the equivalence classes on List (Fin n) to be precisely these
+elements that have the same normal form.
+
+19. However, the Long Coxeter relations are unwieldly and have no
+connectino to the broader scope of computational group theory - while the
+usual Coxeter presentation is to-go choice in this area (cite all these
+papers in Coq, this guy from Sweden(?) etc.).
+Thus, we prove:
+Proposition: Long Coxeter is equivalent to normal Coxeter.
+
+19a. (Note: here we try to convince the reader about reusability badge) So,
+the Long Coxeter can be regarded as a trick to get the proof to pass - but
+the external user-facing interface is still that of the usual Coxeter
+presentation.
+
+20. Now, to prove the equivalence of 9, on one side we have Aut(Fin n), and
+on the other, equivalence classes of List (Fin n) wrt to the usual Coxeter
+group, we would define two functions from and back. The easiest way to
+define a function out of the group presentation is to define them on the
+equivalence classes' representatives. But to do that, we have to know how
+do these representatives look like exactly.
+
+\subsection{Lehmer Codes}
+
+21. Enter: Lehmer codes.
+TODO diagram with List (Fin n) being divided into equivalence classes, and
+Lehmer codes being an image of immersion, being the normal form
+(representative) in each class.
+
 \subsection{Permutations}~\label{subsec:permutations}
 
 In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are
@@ -230,36 +471,6 @@ First, we formally define a presentation of a group.
 
 \todo{Free 1-group, needs to be truncated}
 
-\begin{definition}
-  Let $A$ be a type, and $\List[A]$ the free monoid on $A$. The free group $F(A)$ on $A$ is the set-quotient of
-  $\List[A + A]$ by the congruence closure of the relation $(\inl(a) \cons \inr(a) \cons \nil) \sim \nil$.
-\end{definition}
-
-\begin{proposition}
-  Let $\eta_{A} : A \to F(A)$ be given by $a \mapsto \inl(a) \cons \nil$. Given any group $G$ with a map $f : A \to G$,
-  there is a canonical lifting of $f$ to a group homomorphism $\extend{f} : F(A) \to G$, such that
-  $\extend{f} \comp \eta_{A} \htpy f$, that is, the type of group homomorphisms $h : \Grp(F(A),G)$ satisfying
-  $h \comp \eta_{A} \htpy f$ is contractible. Equivalently, composition by $\eta_{A}$ is an equivalence
-  $\Grp(F(A),G) \eqv (A \to G)$.
-\end{proposition}
-
-\todo{diagram}
-\todo{Plus/Minus}
-
-\begin{definition}
-  Let $A$ be a type and $R : A \to A \to \UU$ a binary relation on $A$. The group $G$ presented by
-  $\langle A ; R \rangle$ is given by the set-quotient of the free group $F(A)$ by the normal closure $N_{R}$ of $R$, or
-  equivalently, as the coequaliser
-  \[\begin{tikzcd}
-      FR && FA && G
-      \arrow[shift right=2, from=1-1, to=1-3]
-      \arrow[shift left=2, from=1-1, to=1-3]
-      \arrow[two heads, from=1-3, to=1-5]
-    \end{tikzcd}\]
-\end{definition}
-
-\todo{Universal property}
-\todo{Examples: empty relation, van Kampen of $\pi_{1}$}
 
 \subsubsection{Coxeter Relations}
 
