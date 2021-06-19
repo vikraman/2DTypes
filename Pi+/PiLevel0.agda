@@ -85,6 +85,27 @@ swap*Fin (v , w) = (w , v)
 semT : (t : U) → Set
 semT t = Fin ∣ t ∣
 
+{--
+Canonical order of elements: any combinator that does not change the order
+is id (modulo some transport)
+
+The only really interesting combinator is swap:
+
+    swap the first m elements with the last n elements
+     [ v₀ , v₁   , v₂   , ... , vm-1 ,     vm , vm₊₁ , ... , vm+n-1 ]
+     ==>
+     [ vm , vm₊₁ , ... , vm+n-1 ,     v₀ , v₁   , v₂   , ... , vm-1 ]
+
+elems : (t : U) → List ⟦ t ⟧
+elems ZERO = []
+elems ONE = [ tt ]
+elems (PLUS t₁ t₂) = map inj₁ (elems t₁) ++ map inj₂ (elems t₂)
+elems (TIMES t₁ t₂) = concat
+                        (map
+                          (λ v₂ → map (λ v₁ → (v₁ , v₂)) (elems t₁))
+                         (elems t₂))
+--}
+
 semC : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → Fin ∣ t₁ ∣ → Fin ∣ t₂ ∣
 semC unite₊l = idf _
 semC uniti₊l = idf _
