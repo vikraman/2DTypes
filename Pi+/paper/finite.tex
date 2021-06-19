@@ -207,19 +207,19 @@ permutation group on $\Fin[n]$ by using generators that:
 
 \begin{itemize}
 \item swap the $i$-the element with the $(i+1)$-th element, that is, adjacent swaps, or
-\item swap the $i$-th element with the $j$-th element, for arbitrary $i$s and $j$s, or
+\item swap the $i$-th element with the $j$-th element, for arbitrary $i$-s and $j$-s, or
 \item swap the $i$-th element with an element at a fixed position, or
 \item flip a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
 \item cyclically shift any subset of $\Fin[n]$.
 \end{itemize}
 
 One way of thinking about these presentations is via sorting algorithms, which
-use different primitive operations. A sorting algorithm has to
-calculate a permutation of a list or a finite set, which satisfies the invariant
-of being a sorted sequence, which means, the primitive operations of a sorting
-algorithm should be able to generate all the permutations on a given list. If
-using a chosen set of reversible operations, one can write a sorting algorithm,
-then those operations generate the permutation group.
+use different primitive operations. A sorting algorithm has to calculate a
+permutation of a list or a finite set, which satisfies the invariant of being a
+sorted sequence, which means, the primitive operations of a sorting algorithm
+should be able to generate all the permutations on a given list. If using a
+chosen set of reversible operations, one can write a sorting algorithm, then
+those operations generate the permutation group.
 
 For example, bubble sort uses the primitive operation of adjacent swaps,
 insertion sort and selection sort use the primitive operation of swapping the
@@ -229,23 +229,126 @@ subsequences, pancake sort uses flips of prefixes of the list, et cetera.
 
 \subsection{Coxeter Presentation}
 
-12. Here, we are choosing a presentation based on the adjacent
-transpositions generators - i.e. primitive operations of the form "swap
-i-th and i+1 elements". In the language of sorting, this corresponds to
-what the insertion sort or bubble sort are doing.
-In the explanations below, we will use diagrams to draw the permutations.
+To do the proof, we are using a presentation based on the adjacent
+transpositions, i.e. where the primitive operations are adjacent swaps. There
+are three laws that these operations have to satisfy - it is easiest to
+visualize them on diagrams.
+\begin{itemize}
+\item Swapping the same two elements two times in a row is the same as doing nothing:
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 2,
+        thick]
+        {braid={ s_1, s_1}};
+    \end{tikzpicture}
+    \hspace{1cm}
+    \begin{tikzpicture}
+        \draw [-stealth](0,0) -- node[anchor=south] {cancel} (2,0);
+    \end{tikzpicture}
+    \hspace{1cm}
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 2,
+        thick]
+        {braid={1, 1}};
+    \end{tikzpicture}
+\item When swapping two pairs of elements on a positions far away, it does not
+matter in which order it is done (We can slide the wires).
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 2,
+        thick]
+        {braid={ 1, s_1}};
+    \end{tikzpicture}
+    \hspace{0cm}
+    \dots
+    \hspace{0cm}
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 2,
+        thick]
+        {braid={ s_1, 1 }};
+    \end{tikzpicture}
+    \hspace{1cm}
+    \begin{tikzpicture}
+        \draw [-stealth](0,0) -- node[anchor=south] {swap} (2,0);
+    \end{tikzpicture}
+    \hspace{1cm}
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 2,
+        thick]
+        {braid={ s_1, 1}};
+    \end{tikzpicture}
+    \hspace{0cm}
+    \dots
+    \hspace{0cm}
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 2,
+        thick]
+        {braid={ 1, s_1}};
+    \end{tikzpicture}
 
-12a. There two very obvious laws that such operation has to preserve:
- - Swapping the same two elements two times in a row does not change
-anything (cancel)
-TODO diagram.
- - When swapping two pairs of elements on a positions far away, it does not
-matter in which order one does it (swap). (We can slide the wires).
-TODO diagram.
-But there is also one more law that these operations have to satisfy, in
-the situation when we are swapping adjacent pairs of elements. It is best
-seen on a diagram (braid)
-TODO diagram.
+\item seen on a diagram (braid)
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 3,
+        thick]
+        {braid={ s_2, s_1, s_2}};
+    \end{tikzpicture}
+    \hspace{1cm}
+    \begin{tikzpicture}
+        \draw [-stealth](0,0) -- node[anchor=south] {braid} (2,0);
+    \end{tikzpicture}
+    \hspace{1cm}
+    \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd, 
+        number of strands = 3,
+        thick]
+        {braid={ s_1, s_2, s_1}};
+    \end{tikzpicture}
+
+\end{itemize}
+
+Diagram of long-braid:
+\begin{tikzpicture}
+    \pic[local bounding box=my braid,braid/.cd, 
+    number of strands = 2,
+    thick]
+    {braid={1, 1, 1, 1, s_1, 1}};
+\end{tikzpicture}
+\hspace{0cm}
+\dots
+\hspace{0cm}
+\begin{tikzpicture}
+    \pic[local bounding box=my braid,braid/.cd, 
+    number of strands = 5,
+    thick]
+    {braid={ s_4, s_3, s_2, s_1, 1, s_4}};
+\end{tikzpicture}
+\hspace{1cm}
+\begin{tikzpicture}
+    \draw [-stealth](0,0) -- node[anchor=south] {long-braid} (2,0);
+\end{tikzpicture}
+\hspace{1cm}
+\begin{tikzpicture}
+    \pic[local bounding box=my braid,braid/.cd, 
+    number of strands = 2,
+    thick]
+    {braid={1, 1, 1, 1, 1, s_1}};
+\end{tikzpicture}
+\hspace{0cm}
+\dots
+\hspace{0cm}
+\begin{tikzpicture}
+    \pic[local bounding box=my braid,braid/.cd, 
+    number of strands = 5,
+    thick]
+    {braid={ s_3, s_4, s_3, s_2, s_1, 1}};
+\end{tikzpicture}
+\hspace{1cm}
+
 
 This construction is called a Coxeter presentation. Writing it formally, we
 get the following definition
