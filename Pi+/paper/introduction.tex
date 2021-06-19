@@ -6,7 +6,7 @@
 
 \subsection*{Outline and Contributions}
 
-\begin{itemize}
+\begin{itemize}[leftmargin=*]
 \item We take the $\PiLang$ family of reversible languages~\cite{jamesInformationEffects2012} and show how to encode various boolean reversible circuits in the language. The circuits are implemented using 1-combinators in the language, and circuit optimisations are realised as 2-combinators between these reversible programs.
 \item We show how to encode reversible circuits on a fixed number of bits as permutations of finite sets with the appropriate cardinality. We observe that reversible programs can be translated to bijective functions between finite sets and equality of reversible programs can be witnessed as extensional equality of these bijective functions, which is decidable.
 \item We review a few basics of Homotopy Type Theory~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}, and exhibit some results that we use in our technical development. We define the notion of a universe \`{a} la Tarski internally in HoTT, which is given by a type for codes $U$ and a decoding function to a univalent universe $\El : U \to \UU$. We say that this universe is univalent, if the decoding fibration is univalent, that is, the decoding function $\El$ reflects the path space of the underlying univalent universe. We exhibit some examples of univalent subuniverses, in particular, we define the subuniverse of finite types, $\UFin$, which classifies all types with a specified cardinality $n : \Nat$, and show that it is univalent. Hence, we establish a characterisation of the path space of the universe of finite types.
