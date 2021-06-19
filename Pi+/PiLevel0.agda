@@ -69,6 +69,11 @@ postulate
   comp+ : (t₁ t₂ : U) → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣ → Fin ∣ t₁ + t₂ ∣
   decomp* : (t₁ t₂ : U) → Fin ∣ t₁ × t₂ ∣ → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣
   comp* : (t₁ t₂ : U) → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣ → Fin ∣ t₁ × t₂ ∣
+  *-assoc : (k m n : ℕ) → (k * m) * n == k * (m * n)
+  map+ : {A B C D : Set} → (A → C) → (B → D) → (A ⊎ B → C ⊎ D)
+  map* : {A B C D : Set} → (A → C) → (B → D) → (A X B → C X D)
+  distNative : {A B C : Set} → (A ⊎ B) X C → (A X C) ⊎ (B X C)
+  factorNative : {A B C : Set} → (A X C) ⊎ (B X C) → (A ⊎ B) X C
 
 swap+Fin : {t₁ t₂ : U} → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣ → Fin ∣ t₂ ∣ ⊎ Fin ∣ t₁ ∣
 swap+Fin (inj₁ v) = inj₂ v
@@ -87,23 +92,32 @@ semC {I × t₂} {t₂} unite⋆l = transport Fin (N.+-unit-r ∣ t₂ ∣)
 semC {t₁} {I × t₁} uniti⋆l = transport Fin (! (N.+-unit-r ∣ t₁ ∣))
 semC {t₁ + t₂} {t₂ + t₁} swap₊ = (comp+ t₂ t₁) ∘ (swap+Fin {t₁} {t₂}) ∘ (decomp+ t₁ t₂)
 semC {t₁ × t₂} {t₂ × t₁} swap⋆ = (comp* t₂ t₁) ∘ (swap*Fin {t₁} {t₂}) ∘ (decomp* t₁ t₂)
-semC assocl₊ = {!!} -- n = {!!}
-semC assocr₊ = {!!} -- n = {!!}
-semC assocl⋆ = {!!} -- n = {!!}
-semC assocr⋆ = {!!} -- n = {!!}
+semC {t₁ + (t₂ + t₃)} {(t₁ + t₂) + t₃} assocl₊ = transport Fin (! (N.+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)))
+semC {(t₁ + t₂) + t₃} {t₁ + (t₂ + t₃)} assocr₊ = transport Fin (N.+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
+semC {t₁ × (t₂ × t₃)} {(t₁ × t₂) × t₃} assocl⋆ = transport Fin (! (*-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)))
+semC {(t₁ × t₂) × t₃} {t₁ × (t₂ × t₃)} assocr⋆ = transport Fin (*-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
 semC absorbr ()
 semC {t × O} {O} absorbl = transport Fin (*-unit-r ∣ t ∣)
 semC factorzr ()
 semC factorzl ()
-semC dist n = {!!} -- = {!!}
-semC factor = {!!} -- n = {!!}
-semC id⟷₁ n = n
+semC {(t₁ + t₂) × t₃} {(t₁ × t₃) + (t₂ × t₃)} dist =
+  comp+ (t₁ × t₃) (t₂ × t₃) ∘
+  map+ (comp* t₁ t₃) (comp* t₂ t₃) ∘
+  distNative ∘
+  map* (decomp+ t₁ t₂) (idf _) ∘
+  decomp* (t₁ + t₂) t₃
+semC {(t₁ × t₃) + (t₂ × t₃)} {(t₁ + t₂) × t₃} factor =
+  comp* (t₁ + t₂) t₃ ∘
+  map* (comp+ t₁ t₂) (idf _) ∘
+  factorNative ∘
+  map+ (decomp* t₁ t₃) (decomp* t₂ t₃) ∘
+  decomp+ (t₁ × t₃) (t₂ × t₃)
+semC id⟷₁ = idf _
 semC (c₁ ◎ c₂) = semC c₂ ∘ semC c₁
-semC (c₁ ⊕ c₂) = {!!} -- n = {!!}
-semC (c₁ ⊗ c₂) = {!!} -- n = {!!}
+semC {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) = (comp+ t₃ t₄) ∘ map+ (semC c₁) (semC c₂) ∘ (decomp+ t₁ t₂)
+semC {t₁ × t₂} {t₃ × t₄} (c₁ ⊗ c₂) = (comp* t₃ t₄) ∘ map* (semC c₁) (semC c₂) ∘ (decomp* t₁ t₂)
 
 {--
-
 -- We refine the trivial relation used in level-(-2). We do not
 -- identify all types: only those of the same "size". So between any
 -- two types, there could be zero, one, or many identifications. If

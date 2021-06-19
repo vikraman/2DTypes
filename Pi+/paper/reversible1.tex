@@ -138,25 +138,42 @@ $\begin{array}{rclcrcl}
 \noindent A simple denotational semantics of $\Pi$ can be specified by mapping each type to a finite set and each
 combinator to a permutation between finite sets.
 
-Fig.~\ref{fig:delta} specifies the semantics of the base combinators
-using a function $\delta$. It is clear that this function has an inverse $\delta^\dagger$ such that
-$\delta^\dagger(c,\delta(c,v))=v$. The semantics of full programs is given by the interpreter in the second figure.
+\note{Explain code below as best as you can}
 
-We choose a canonical set of size $n$, called $\mathsf{Fin}~n$, whose elements are natural numbers less than $n$. To
-compute the denotation of a type $A$, we first calculate its size $n = \sizet{A}$. We then construct the canonical set
-$\mathsf{Fin}~n$ and provide the (trivial) evidence that this set is identical to $(\mathsf{Fin}~n)$:
+% semT : (t : U) → Set
+% semT t = Fin ∣ t ∣
 
-\[\begin{array}{rcll}
-    \sem{A} &=& \mathsf{Fin}~\sizet{A}
-\\
-    \sem{c : A \isot B} &:& \mathsf{Fin}~\sizet{A} \rightarrow \mathsf{Fin}~\sizet{B} \\
-    %% base combinators
-    \sem{c_1\oplus c_2}_{A+B \isot C+D}~\inlv{v} &=& \sem{c_1}_{A \isot C}~v \\
-    \sem{c_1\oplus c_2}_{A+B \isot C+D}~\inrv{v} &=& \sizet{A} + \sem{c_2}_{B \isot D}~v \\
-    \sem{\idc}~v &=& v \\
-    \sem{c_1\fatsemi c_2}~v &=& \sem{c_2} (\sem{c_1}~v) \\
-    \sem{c_1\otimes c_2}~(v_1,v_2) &=& (\sem{c_1}~v_1 , \sem{c_2}~v_2)
-\end{array}\]
+% semC : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → Fin ∣ t₁ ∣ → Fin ∣ t₂ ∣
+% semC unite₊l = idf _
+% semC uniti₊l = idf _
+% semC {I × t₂} {t₂} unite⋆l = transport Fin (N.+-unit-r ∣ t₂ ∣)
+% semC {t₁} {I × t₁} uniti⋆l = transport Fin (! (N.+-unit-r ∣ t₁ ∣))
+% semC {t₁ + t₂} {t₂ + t₁} swap₊ = (comp+ t₂ t₁) ∘ (swap+Fin {t₁} {t₂}) ∘ (decomp+ t₁ t₂)
+% semC {t₁ × t₂} {t₂ × t₁} swap⋆ = (comp* t₂ t₁) ∘ (swap*Fin {t₁} {t₂}) ∘ (decomp* t₁ t₂)
+% semC {t₁ + (t₂ + t₃)} {(t₁ + t₂) + t₃} assocl₊ = transport Fin (! (N.+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)))
+% semC {(t₁ + t₂) + t₃} {t₁ + (t₂ + t₃)} assocr₊ = transport Fin (N.+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
+% semC {t₁ × (t₂ × t₃)} {(t₁ × t₂) × t₃} assocl⋆ = transport Fin (! (*-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)))
+% semC {(t₁ × t₂) × t₃} {t₁ × (t₂ × t₃)} assocr⋆ = transport Fin (*-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
+% semC absorbr ()
+% semC {t × O} {O} absorbl = transport Fin (*-unit-r ∣ t ∣)
+% semC factorzr ()
+% semC factorzl ()
+% semC {(t₁ + t₂) × t₃} {(t₁ × t₃) + (t₂ × t₃)} dist =
+%   comp+ (t₁ × t₃) (t₂ × t₃) ∘
+%   map+ (comp* t₁ t₃) (comp* t₂ t₃) ∘
+%   distNative ∘
+%   map* (decomp+ t₁ t₂) (idf _) ∘
+%   decomp* (t₁ + t₂) t₃
+% semC {(t₁ × t₃) + (t₂ × t₃)} {(t₁ + t₂) × t₃} factor =
+%   comp* (t₁ + t₂) t₃ ∘
+%   map* (comp+ t₁ t₂) (idf _) ∘
+%   factorNative ∘
+%   map+ (decomp* t₁ t₃) (decomp* t₂ t₃) ∘
+%   decomp+ (t₁ × t₃) (t₂ × t₃)
+% semC id⟷₁ = idf _
+% semC (c₁ ◎ c₂) = semC c₂ ∘ semC c₁
+% semC {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) = (comp+ t₃ t₄) ∘ map+ (semC c₁) (semC c₂) ∘ (decomp+ t₁ t₂)
+% semC {t₁ × t₂} {t₃ × t₄} (c₁ ⊗ c₂) = (comp* t₃ t₄) ∘ map* (semC c₁) (semC c₂) ∘ (decomp* t₁ t₂)
 
 %%%%%%%%%
 \subsection{Examples}
