@@ -336,52 +336,26 @@ which order the swapping happens, that is, we can slide the wires.
 Diagram of long-braid:
 
 \[
-  \begin{tabular}{m{0.45\linewidth}m{0.1\linewidth}m{0.45\linewidth}}
-    \begin{tabular}{m{0.15\linewidth}m{0.05\linewidth}m{0.1\linewidth}}
+  \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
       \begin{center}
         \begin{tikzpicture}
           \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 2,
+            number of strands = 6,
             thick]
-          {braid={1, 1, 1, 1, s_1, 1}};
+          {braid={s_5, s_4, s_3, s_2, s_1, s_5}};
         \end{tikzpicture}
       \end{center}
-       &
-      \(\cdots\)
-       &
-      \begin{center}
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 5,
-            thick]
-          {braid={ s_4, s_3, s_2, s_1, 1, s_4}};
-        \end{tikzpicture}
-      \end{center}
-    \end{tabular}
      &
     \(\xlongrightarrow[]{\longbraid}\)
      &
-    \begin{tabular}{m{0.15\linewidth}m{0.05\linewidth}m{0.1\linewidth}}
       \begin{center}
         \begin{tikzpicture}
           \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 2,
+            number of strands = 6,
             thick]
-          {braid={1, 1, 1, 1, 1, s_1}};
+            {braid={s_4, s_5, s_4, s_3, s_2, s_1}};
         \end{tikzpicture}
       \end{center}
-       &
-      \(\cdots\)
-       &
-      \begin{center}
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 5,
-            thick]
-          {braid={ s_3, s_4, s_3, s_2, s_1, 1}};
-        \end{tikzpicture}
-      \end{center}
-    \end{tabular}
   \end{tabular}
 \]
 
