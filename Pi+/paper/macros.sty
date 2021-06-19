@@ -4,11 +4,18 @@
 \RequirePackage{xcolor-solarized}
 \RequirePackage{xparse}
 \RequirePackage{amsmath}
+\RequirePackage{braket}
 \RequirePackage{etoolbox}
 \RequirePackage{mathtools}
 \RequirePackage{array}
 \RequirePackage{xspace}
 \RequirePackage{perfectcut}
+
+% eucal keeping mathcal
+\let\oldmathcal\mathcal
+\RequirePackage{eucal}
+\let\matheucal\mathcal
+\let\mathcal\oldmathcal
 
 \RequirePackage{hott}
 
@@ -109,3 +116,7 @@
   {\term{eval^\wedge_{#1}}}
   \ifstrempty{#2}{}{({#2})}
 }
+
+% math
+\newcommand{\SetFin}{\matheucal{S}\mathrm{et_{fin}}}
+\newcommand{\BFin}{\matheucal{B}}
