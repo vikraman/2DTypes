@@ -187,29 +187,45 @@ for properly extending the relation on the generating set to the whole group.
 
 \subsection{Permutation groups}
 
-Because $\Pi$ The group that we are interested in is the group of permutations on a
-fininte set. We can define it formally in two different ways:
-8a. Taking the type Aut (Fin n) and showing that it satisfies the group
-axiom.
-8b. Writing up a presentation - choosing generating set and equations that
-have to be satisfied.
+Because $\PiLang$ is used for reasoning about reversible functions on finite
+sets, the group that we are interested in is the group of permutations on a
+fininte set, which is classically know as the symmetric group on $n$ words,
+$\Sn$. We've already seen that we can define it formally by taking the
+automorphism group given by the type $\Aut[\Fin[n]]$, and showing that it has a
+group structure satisfying the group axioms. Alternatively, we can write a group
+presentation for $\Sn$ -- by defining a set of generators and a set of relations.
 
-9. By proving these two to be equivalent, we are bridging the gap between
-syntactic and semantic side in the whole proof - by assinging the meaning
-(a bijection) to a word (a program).
+The technical contribution of this section is a proof that these two
+descriptions are equivalent. By doing that, we bridge the gap between the
+syntactic and semantic notions in our completeness proof -- by establishing a
+correspondence between the meaning of a program (a bijection) and its syntax (a
+word).
 
-10. However, in the point 8b, there is an element of choice. One group can
-be presented in many different ways. For example, we could generate the
-permutations by using generators that:
- - swap i-th element with j-th element
- - swap i-th element with the first element
- - shift elements in a cyclic way: operation with label "i" leaves elements
-with numbers > i in place, and element j <= i goes to (j + 1) mod i.
+However, in giving a group presentation, there is an element of choice. A group
+can be presented in many different ways. For example, we could generate the
+permutation group on $\Fin[n]$ by using generators that:
 
-11. One way of thinking about these presentations is to compare them to
-sorting algorithms with different primitive operations. If using a set of
-operations, one can sort any list, then these operations generate the
-permutations group. One weird example: pancake sorting.
+\begin{itemize}
+\item swap the $i$-the element with the $(i+1)$-th element, that is, adjacent swaps, or
+\item swap the $i$-th element with the $j$-th element, for arbitrary $i$s and $j$s, or
+\item swap the $i$-th element with an element at a fixed position, or
+\item flip a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
+\item cyclically shift any subset of $\Fin[n]$.
+\end{itemize}
+
+One way of thinking about these presentations is via sorting algorithms, which
+use different primitive operations. A sorting algorithm has to
+calculate a permutation of a list or a finite set, which satisfies the invariant
+of being a sorted sequence, which means, the primitive operations of a sorting
+algorithm should be able to generate all the permutations on a given list. If
+using a chosen set of reversible operations, one can write a sorting algorithm,
+then those operations generate the permutation group.
+
+For example, bubble sort uses the primitive operation of adjacent swaps,
+insertion sort and selection sort use the primitive operation of swapping the
+$i$-th element with the $j$-th element, cycle sort uses cyclical shifts of
+subsequences, pancake sort uses flips of prefixes of the list, et cetera.
+\todo{check!}
 
 \subsection{Coxeter Presentation}
 
