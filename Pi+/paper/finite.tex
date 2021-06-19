@@ -32,14 +32,14 @@ In type theory, a group $G$ can be defined as an $\hSet$ $S$ with the following 
 \begin{enumerate}
   \item a unit or neutral element $e : S$
   \item a multiplication function $m : S \times S \to S$ written as $(g_{1}, g_{2}) \mapsto g_{1} \mult g_{2}$, that satisfies
-  \begin{enumerate}
-    \item the unit laws, for all $g : S$, that \( g \mult e \id g \) and \( e \mult g \id g \)
-    \item the associativity law, for all $g_{1}, g_{2}, g_{3} : S$, that \( g_{1} \mult (g_{2} \mult g_{3}) \id (g_{1} \mult g_{2}) \mult g_{3} \)
-  \end{enumerate}
+        \begin{enumerate}
+          \item the unit laws, for all $g : S$, that \( g \mult e \id g \) and \( e \mult g \id g \)
+          \item the associativity law, for all $g_{1}, g_{2}, g_{3} : S$, that \( g_{1} \mult (g_{2} \mult g_{3}) \id (g_{1} \mult g_{2}) \mult g_{3} \)
+        \end{enumerate}
   \item an inversion function $i : S \to S$ written as $g \mapsto \inv{g}$, that satisfies
-  \begin{enumerate}
-    \item the inverse laws, for all $g : S$, that \( g \mult \inv{g} \id e \) and \( \inv{g} \mult g \id e \)
-  \end{enumerate}
+        \begin{enumerate}
+          \item the inverse laws, for all $g : S$, that \( g \mult \inv{g} \id e \) and \( \inv{g} \mult g \id e \)
+        \end{enumerate}
 \end{enumerate}
 
 However, more conveniently, in HoTT, we can instead use groupoids to talk about groups. A group can be identified with a
@@ -99,26 +99,26 @@ this, we can state the universal property of free groups.
 \begin{proposition}[Universal Property of $F(A)$]~\label{prop:free-groups}
   Given a group $G$ and a map $f : A \to G$, there is a unique group
   homomorphism $\extend{f} : F(A) \to^G G$ such that $\extend{f} \comp \eta_A
-  \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
-  \to^G G \eqv A \to G$. Alternatively, the type of group homomorphisms $h :
-  F(A) \to^G G$ satisfying $h \comp \eta_A \htpy f$ is contractible.
+    \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
+    \to^G G \eqv A \to G$. Alternatively, the type of group homomorphisms $h :
+    F(A) \to^G G$ satisfying $h \comp \eta_A \htpy f$ is contractible.
 
   % https://q.uiver.app/?q=WzAsMyxbMCwyLCJBIl0sWzAsMCwiRihBKSJdLFsyLDAsIkciXSxbMCwxLCJcXGV0YV9BIl0sWzAsMiwiZiIsMl0sWzEsMiwiXFxleHRlbmR7Zn0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-\[\begin{tikzcd}
-	{F(A)} && G \\
-	\\
-	A
-	\arrow[""{name=0, anchor=center, inner sep=0}, "{\eta_A}", from=3-1, to=1-1]
-	\arrow[""{name=1, anchor=center, inner sep=0}, "f"', from=3-1, to=1-3]
-	\arrow["{\extend{f}}", dashed, from=1-1, to=1-3]
-	\arrow["\id", Rightarrow, draw=none, from=0, to=1]
-\end{tikzcd}\]
+  \[\begin{tikzcd}
+      {F(A)} && G \\
+      \\
+      A
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{\eta_A}", from=3-1, to=1-1]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "f"', from=3-1, to=1-3]
+      \arrow["{\extend{f}}", dashed, from=1-1, to=1-3]
+      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+    \end{tikzcd}\]
 \end{proposition}
 
 This definition of $F(A)$ however has lots of path constructors corresponding to
 each group axiom. Alternatively, the free group construction can be thought of
 as drawing letters from the generating set, while adding formal inverses, and
-constructing words which are sequences of these letters. 
+constructing words which are sequences of these letters.
 
 Each element in the sequence can either be an element drawn from the generating
 set $a$, or an inverse of such an element $\inv{a}$. If we take the disjoint
@@ -136,7 +136,7 @@ free monoid, that is, lists.
   $F(A) \defeq \quot{\List[A + A]}{\sim^{\ast}}$ has a group structure, with the
   empty list $\nil$ for the neutral element, multiplication given by list append
   $\append$, and inverse given by list reversal. Further, $F(A)$ with $\eta_A :
-  A \to F(A) \defeq \inl(a) \cons \nil$ satisfies the universal property of free
+    A \to F(A) \defeq \inl(a) \cons \nil$ satisfies the universal property of free
   groups.~\cref{prop:free-groups}
 \end{proposition}
 
@@ -146,7 +146,7 @@ One useful way of defining groups is by their presentations. A presentation of a
 group builds it by starting from the free group $F(A)$ and introducing a
 collection of equations that have to be satisfied in the resulting group. For
 example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an equation $1 + 1 + 1
-= 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$.
+  = 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$.
 
 The generators can be thought of as primitive operations in a (reversible)
 programming language, group structure gives the way of composing these
@@ -181,7 +181,7 @@ well-behaving rewriting system. In general, the word problem is proven to be und
 \todo{Universal property}
 \todo{Examples: empty relation, van Kampen of $\pi_{1}$}
 
-The above definition is correct because the universal property of the free group allows 
+The above definition is correct because the universal property of the free group allows
 for properly extending the relation on the generating set to the whole group.
 \jk{Turn that into a propostion?}
 
@@ -206,11 +206,11 @@ can be presented in many different ways. For example, we could generate the
 permutation group on $\Fin[n]$ by using generators that:
 
 \begin{itemize}
-\item swap the $i$-the element with the $(i+1)$-th element, that is, adjacent swaps, or
-\item swap the $i$-th element with the $j$-th element, for arbitrary $i$-s and $j$-s, or
-\item swap the $i$-th element with an element at a fixed position, or
-\item flip a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
-\item cyclically shift any subset of $\Fin[n]$.
+  \item swap the $i$-the element with the $(i+1)$-th element, that is, adjacent swaps, or
+  \item swap the $i$-th element with the $j$-th element, for arbitrary $i$-s and $j$-s, or
+  \item swap the $i$-th element with an element at a fixed position, or
+  \item flip a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
+  \item cyclically shift any subset of $\Fin[n]$.
 \end{itemize}
 
 One way of thinking about these presentations is via sorting algorithms, which
@@ -229,126 +229,161 @@ subsequences, pancake sort uses flips of prefixes of the list, et cetera.
 
 \subsection{Coxeter Presentation}
 
-To do the proof, we are using a presentation based on the adjacent
-transpositions, i.e. where the primitive operations are adjacent swaps. There
-are three laws that these operations have to satisfy - it is easiest to
-visualize them on diagrams.
-\begin{itemize}
-\item Swapping the same two elements two times in a row is the same as doing nothing:
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 2,
-        thick]
+We use a presentation based on adjacent transpositions, which is called the
+Coxeter presentation. The primitive operations are adjacent swaps. Further,
+there are three laws that these operations have to satisfy -- it is easiest to
+visualise them as braid diagrams.
+
+Swapping the same two elements two times in a row is the same as doing nothing:
+
+\[
+  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 2,
+          thick]
         {braid={ s_1, s_1}};
-    \end{tikzpicture}
-    \hspace{1cm}
-    \begin{tikzpicture}
-        \draw [-stealth](0,0) -- node[anchor=south] {cancel} (2,0);
-    \end{tikzpicture}
-    \hspace{1cm}
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 2,
-        thick]
+      \end{tikzpicture}
+    \end{center}
+     &
+    \(\xlongrightarrow[]{\cancel}\)
+     &
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 2,
+          thick]
         {braid={1, 1}};
-    \end{tikzpicture}
-\item When swapping two pairs of elements on a positions far away, it does not
-matter in which order it is done (We can slide the wires).
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 2,
-        thick]
-        {braid={ 1, s_1}};
-    \end{tikzpicture}
-    \hspace{0cm}
-    \dots
-    \hspace{0cm}
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 2,
-        thick]
-        {braid={ s_1, 1 }};
-    \end{tikzpicture}
-    \hspace{1cm}
-    \begin{tikzpicture}
-        \draw [-stealth](0,0) -- node[anchor=south] {swap} (2,0);
-    \end{tikzpicture}
-    \hspace{1cm}
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 2,
-        thick]
-        {braid={ s_1, 1}};
-    \end{tikzpicture}
-    \hspace{0cm}
-    \dots
-    \hspace{0cm}
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 2,
-        thick]
-        {braid={ 1, s_1}};
-    \end{tikzpicture}
+      \end{tikzpicture}
+    \end{center}
+  \end{tabular}
+\]
 
-\item seen on a diagram (braid)
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 3,
-        thick]
+When swapping two pairs of elements in positions far away, it does not matter in
+which order the swapping happens, that is, we can slide the wires.
+
+\[
+  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+    \begin{center}
+      \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ 1, s_1}};
+        \end{tikzpicture}
+         &
+        \(\cdots\)
+         &
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ s_1, 1 }};
+        \end{tikzpicture}
+      \end{tabular}
+    \end{center}
+     &
+    \(\xlongrightarrow[]{\swap}\)
+     &
+    \begin{center}
+      \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ s_1, 1}};
+        \end{tikzpicture}
+         &
+        \(\cdots\)
+         &
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ 1, s_1}};
+        \end{tikzpicture}
+      \end{tabular}
+    \end{center}
+  \end{tabular}
+\]
+
+\[
+  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 3,
+          thick]
         {braid={ s_2, s_1, s_2}};
-    \end{tikzpicture}
-    \hspace{1cm}
-    \begin{tikzpicture}
-        \draw [-stealth](0,0) -- node[anchor=south] {braid} (2,0);
-    \end{tikzpicture}
-    \hspace{1cm}
-    \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd, 
-        number of strands = 3,
-        thick]
+      \end{tikzpicture}
+    \end{center}
+     &
+    \(\xlongrightarrow[]{\braid}\)
+     &
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 3,
+          thick]
         {braid={ s_1, s_2, s_1}};
-    \end{tikzpicture}
-
-\end{itemize}
+      \end{tikzpicture}
+    \end{center}
+  \end{tabular}
+\]
 
 Diagram of long-braid:
-\begin{tikzpicture}
-    \pic[local bounding box=my braid,braid/.cd, 
-    number of strands = 2,
-    thick]
-    {braid={1, 1, 1, 1, s_1, 1}};
-\end{tikzpicture}
-\hspace{0cm}
-\dots
-\hspace{0cm}
-\begin{tikzpicture}
-    \pic[local bounding box=my braid,braid/.cd, 
-    number of strands = 5,
-    thick]
-    {braid={ s_4, s_3, s_2, s_1, 1, s_4}};
-\end{tikzpicture}
-\hspace{1cm}
-\begin{tikzpicture}
-    \draw [-stealth](0,0) -- node[anchor=south] {long-braid} (2,0);
-\end{tikzpicture}
-\hspace{1cm}
-\begin{tikzpicture}
-    \pic[local bounding box=my braid,braid/.cd, 
-    number of strands = 2,
-    thick]
-    {braid={1, 1, 1, 1, 1, s_1}};
-\end{tikzpicture}
-\hspace{0cm}
-\dots
-\hspace{0cm}
-\begin{tikzpicture}
-    \pic[local bounding box=my braid,braid/.cd, 
-    number of strands = 5,
-    thick]
-    {braid={ s_3, s_4, s_3, s_2, s_1, 1}};
-\end{tikzpicture}
-\hspace{1cm}
 
+\[
+  \begin{tabular}{m{0.45\linewidth}m{0.1\linewidth}m{0.45\linewidth}}
+    \begin{tabular}{m{0.15\linewidth}m{0.05\linewidth}m{0.1\linewidth}}
+      \begin{center}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={1, 1, 1, 1, s_1, 1}};
+        \end{tikzpicture}
+      \end{center}
+       &
+      \(\cdots\)
+       &
+      \begin{center}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 5,
+            thick]
+          {braid={ s_4, s_3, s_2, s_1, 1, s_4}};
+        \end{tikzpicture}
+      \end{center}
+    \end{tabular}
+     &
+    \(\xlongrightarrow[]{\longbraid}\)
+     &
+    \begin{tabular}{m{0.15\linewidth}m{0.05\linewidth}m{0.1\linewidth}}
+      \begin{center}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={1, 1, 1, 1, 1, s_1}};
+        \end{tikzpicture}
+      \end{center}
+       &
+      \(\cdots\)
+       &
+      \begin{center}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 5,
+            thick]
+          {braid={ s_3, s_4, s_3, s_2, s_1, 1}};
+        \end{tikzpicture}
+      \end{center}
+    \end{tabular}
+  \end{tabular}
+\]
 
 This construction is called a Coxeter presentation. Writing it formally, we
 get the following definition
@@ -520,16 +555,16 @@ places.
   \begin{tabular}{c|p{0.75\linewidth}}
     (0, 0, 2, 0, 1)               & We start from an empty list $[]$                                                                 \\
     (\highlight{{0}}, 0, 2, 0, 1) & We read 0 as the left-most value from $l$. Thus, we append the element $\el{0}$ to our
-                                    list, getting $[\el{0}]$. The element is shifted $0$ places, so it remains in the
-                                    same place.                                                                                                                      \\
+    list, getting $[\el{0}]$. The element is shifted $0$ places, so it remains in the
+    same place.                                                                                                                      \\
     (0, \highlight{{0}}, 2, 0, 1) & Then, similarly, we read another 0 for the element $\el{1}$, append it to the
-                                    list getting $[\el{0}, \el{1}]$, and don't shift it either.                                                                      \\
+    list getting $[\el{0}, \el{1}]$, and don't shift it either.                                                                      \\
     (0, 0, \highlight{{2}}, 0, 1) & We read 2 for the next the element $\el{2}$ - we append $\el{2}$ to our list, getting
-                                    $[\el{0}, \el{1}, \el{2}]$, and shift it 2 places right, which results in a list $[\el{0}, \el{2}, \el{1}]$
-                                    \todo{Typeset it nicely, with arrows showing the shifting}.                                                                      \\
+    $[\el{0}, \el{1}, \el{2}]$, and shift it 2 places right, which results in a list $[\el{0}, \el{2}, \el{1}]$
+    \todo{Typeset it nicely, with arrows showing the shifting}.                                                                      \\
     (0, 0, 2, \highlight{{0}}, 1) & Then we read 0 - appending $\el{3}$ and not shifting, getting $[\el{0}, \el{2}, \el{1}, \el{3}]$ \\
     (0, 0, 2, 0, \highlight{{1}}) & Finally, reading 1 for element $\el{4}$ - appending $\el{4}$ to the list and shifting it
-                                    one place right results in the final list $[\el{0}, \el{2}, \el{1}, \el{4}, \el{3}]$                                             \\
+    one place right results in the final list $[\el{0}, \el{2}, \el{1}, \el{4}, \el{3}]$                                             \\
   \end{tabular}
 \end{center}
 \todo{figure}
@@ -565,12 +600,12 @@ provided. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n
   following chain of equivalences.
   \[\arraycolsep=0.5em\def\arraystretch{1.5}
     \begin{array}{rl}
-      & \Aut[\Fin[\suc[m]]] \\
+           & \Aut[\Fin[\suc[m]]]                                                               \\
       \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} \\
-      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \Fin[m]} \\
-      \eqv & \dsum{k : \Fin[\suc[m]]}{\Fin[m] \eqv \Fin[m]} \\
-      \eqv & \Fin[\suc[m]] \times \Aut[\Fin[m]] \\
-      \eqv & \Fin[\suc[m]] \times \Lehmer[m] \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \Fin[m]}                \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\Fin[m] \eqv \Fin[m]}                                    \\
+      \eqv & \Fin[\suc[m]] \times \Aut[\Fin[m]]                                                \\
+      \eqv & \Fin[\suc[m]] \times \Lehmer[m]                                                   \\
     \end{array}
   \]
 \end{proof}
@@ -598,11 +633,11 @@ We define a binary relation on $\List[\Fin[n]]$.
 \begin{definition}[$\cox$]
   \begin{align*}
     \cancel
-    & : \forall n \to (n \cons n \cons \nil) \cox \nil \\
+     & : \forall n \to (n \cons n \cons \nil) \cox \nil                                                     \\
     \swap
-    & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil) \\
+     & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil)              \\
     \braid
-    & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
+     & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
   \end{align*}
 \end{definition}
 
@@ -612,15 +647,15 @@ We define $\cox*$ as the congruence closure of $\cox$.
 \begin{definition}[$\cox*$]
   \begin{align*}
     \reflr{\cox}
-    & : \forall w \to w \cox* w \\
+     & : \forall w \to w \cox* w                                                                                                           \\
     \symr{\cox}
-    & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1} \\
+     & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1}                                                                  \\
     \transr{\cox}
-    & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3} \\
+     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3}                                    \\
     \congrf{\cox}{\append}
-    & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
+     & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
     \relr{\cox}
-    & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2} \\
+     & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2}                                                                   \\
   \end{align*}
 \end{definition}
 
@@ -637,7 +672,7 @@ rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundedne
           $w_{1} \cox* v \cox* w_{2}$.
     \item $\cox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \cox* v$.
           \review{Equivalently, the type $\dsum{v:\List[\Fin[n]]}{w \cox* v}$ is contractible, and $w \cox* v$ is a
-          proposition for every $w$ and $v$.}
+            proposition for every $w$ and $v$.}
   \end{enumerate}
 \end{proposition}
 
@@ -688,7 +723,7 @@ We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
 \begin{corollary}
   For all $n : \Nat$,
   \(
-    \Sn \eqv \Lehmer[n] \eqv \Aut[\Fin[n]]
+  \Sn \eqv \Lehmer[n] \eqv \Aut[\Fin[n]]
   \).
 \end{corollary}
 
