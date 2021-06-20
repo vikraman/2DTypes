@@ -5,13 +5,17 @@ module Pi+.Coxeter.Sn where
 open import lib.Base
 open import lib.Relation
 open import lib.PathGroupoid
+open import lib.Function
+open import lib.Function2
 open import lib.NType
 open import lib.types.SetQuotient public
 open import lib.types.List
 open import lib.types.Fin
+open import lib.types.Truncation
 
 open import Pi+.Extra
 open import Pi+.Coxeter.Coxeter
+open import Pi+.Coxeter.NonParametrized.LehmerCanonical
 open import Pi+.Misc
 
 Sn : (n : ℕ) → Type lzero
@@ -68,3 +72,39 @@ reverse-respects-≈ {S n} (respects-++ {l = l} {l' = l'} {r = r} {r' = r'} p1 p
 
 ::-respects-≈ : {n : ℕ} {x : Fin n} {l1 l2 : List (Fin n)} → l1 ≈* l2 → (x :: l1) ≈* (x :: l2)
 ::-respects-≈ {n = S n} p = respects-++ idp p
+
+open import Pi+.Coxeter.LehmerCoxeterEquiv
+
+norm : {n : ℕ} → (l : List (Fin n)) → List (Fin n)
+norm {O} nil = nil
+norm {S n} l = immersion code
+  where code = ListFin-to-Lehmer l .fst
+
+norm-≈* : {n : ℕ} → (l : List (Fin n)) → l ≈* norm l
+norm-≈* {O} nil = idp
+norm-≈* {S n} l = code≈*
+  where code = ListFin-to-Lehmer l .fst
+        code≈* = ListFin-to-Lehmer l .snd
+
+
+norm-norm : {n : ℕ} → (l : List (Fin n)) → norm l == norm (norm l)
+norm-norm {O} nil = idp
+norm-norm {S n} l =
+  let x = norm-≈* l ■ norm-≈* (norm l)
+  -- let x = immersion-is-injection (immersion⁻¹ l) (immersion⁻¹ (norm l)) (norm-≈* (norm l))
+  --     y = immersion⁻¹∘immersion (immersion⁻¹ l) ∙ x ∙ ! (immersion⁻¹∘immersion (immersion⁻¹ (norm l)))
+  --     z = ap immersion y
+  in {!!}
+  where code = ListFin-to-Lehmer l .fst
+        code≈* = ListFin-to-Lehmer l .snd
+        immersion-code = immersion⁻¹∘immersion code
+
+norm-has-contr-fibers : {n : ℕ} → (l : List (Fin n)) → is-contr (hfiber norm l)
+norm-has-contr-fibers l = has-level-in ((norm l , {!!}) , {!!})
+
+right-inv-surj : ∀ {i j} {A : Type i} {B : Type j} {f : A → B}
+               → Σ (B → A) (λ g → f ∘ g ∼ idf B) → is-surj f
+right-inv-surj {f = f} (g , ϕ) b = [ g b , ϕ b ]
+
+norm-is-surj : is-surj norm
+norm-is-surj = right-inv-surj (norm , {!!})
