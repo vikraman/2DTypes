@@ -383,43 +383,36 @@ The choice of generators for this presentation is important. \todo{Think about t
         the later sections.
 \end{itemize}
 
-We consider the generators for the Coxeter relations on $\List[\Fin[n]]$ as a
-rewriting system. Throwing out reflexivity, and symmetry, we observe that the
-right hand sides of the relations are strictly smaller than the left hand sides,
-in terms of the lexicographical ordering on words in $\Fin[n]$. By directing the
-relation from left to right, we would be able to prove a termination property
-out of the box.
+To consider solving the word problem for $\Sn$, we need to formalise the generators for the Coxeter relations on
+$\List[\Fin[n]]$ as a rewriting system $(\List[\Fin[n]],\cox*)$. The $\cox*$ relation as defined, does not produce a
+well-behaved rewriting system due to the symmetric closure. Throwing out reflexivity and symmetry, we observe that the
+right hand sides of the relations are strictly smaller than the left hand sides, in terms of the lexicographical
+ordering on words in $\Fin[n]$. By directing the relation from left to right, we would be able to prove a termination
+property out of the box.
 
-However, it is not at all obvious that the system would be confluent.
-There are many possible critical pairs, such as
-% https://q.uiver.app/?q=WzAsMyxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJcXGJyYWlkIiwxXSxbMCwyLCJcXGJyYWlkIiwxXV0=
-\[\begin{tikzcd}
-    && {\tau_2\tau_1\tau_2\tau_1\tau_2} \\
-    {\tau_1\tau_2\tau_1\tau_1\tau_2} &&&& {\tau_2\tau_1\tau_1\tau_2\tau_1}
-    \arrow["\braid"{description}, from=1-3, to=2-1]
-    \arrow["\braid"{description}, from=1-3, to=2-5]
-  \end{tikzcd}\]
-or
-% https://q.uiver.app/?q=WzAsMyxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFs0LDEsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiXFxicmFpZCIsMV0sWzAsMiwiXFxjYW5jZWwiLDFdXQ==
-\[\begin{tikzcd}
-    && {\tau_2\tau_1\tau_2\tau_2} \\
-    {\tau_1\tau_2\tau_1\tau_2} &&&& {\tau_2\tau_1}
-    \arrow["\braid"{description}, from=1-3, to=2-1]
-    \arrow["\cancel"{description}, from=1-3, to=2-5]
-  \end{tikzcd}\]
-Although in the cases above, critical pairs resolve, there are some examples where they do not. One of the simplest ones is the following:
-% https://q.uiver.app/?q=WzAsMyxbMiwwLCJcXHRhdV8zXFx0YXVfMlxcdGF1XzNcXHRhdV8xIl0sWzAsMSwiXFx0YXVfMlxcdGF1XzNcXHRhdV8yXFx0YXVfMSJdLFs0LDEsIlxcdGF1XzNcXHRhdV8yXFx0YXVfMVxcdGF1XzMiXSxbMCwxLCJcXGJyYWlkIiwxXSxbMCwyLCJcXHN3YXAiLDFdXQ==
-\[\begin{tikzcd}
-    && {\tau_3\tau_2\tau_3\tau_1} \\
-    {\tau_2\tau_3\tau_2\tau_1} &&&& {\tau_3\tau_2\tau_1\tau_3}
-    \arrow["\braid"{description}, from=1-3, to=2-1]
-    \arrow["\swap"{description}, from=1-3, to=2-5]
-  \end{tikzcd}\]
+A well-behaved rewriting system should also be confluent, however, it is not at all obvious from this definition. Due to
+overlapping reduction rules, there are many possible critical pairs, such as
 
-Because of this counterexample, the equations have to be fixed. We thus propose a new presentation, keeping the
-$\cancel$ and $\swap$ constructors, but replace $\braid$ with a more general $\longbraid$:
+\[
+  \begin{array}{lcr}
+    \gspan[\braid][\braid]{\tau_2\tau_1\tau_2\tau_1\tau_2}{\tau_1\tau_2\tau_1\tau_1\tau_2}{\tau_2\tau_1\tau_1\tau_2\tau_1}
+     &
+    \text{or}
+     &
+    \gspan[\braid][\cancel]{\tau_2\tau_1\tau_2\tau_2}{\tau_1\tau_2\tau_1\tau_2}{\tau_2\tau_1}
+  \end{array}
+\]
 
-Diagram of long-braid:
+For confluence, all critical pairs should converge. The pairs above can be resolved, but there are many examples where
+they do not. The following is a simple example.
+
+\[
+  \gspan[\braid][\swap]{\tau_3\tau_2\tau_3\tau_1}{\tau_2\tau_3\tau_2\tau_1}{\tau_3\tau_2\tau_1\tau_3}
+\]
+
+Because of this counterexample, the relations have to be changed. We propose a long form of the relations as a new
+presentation, where we allow $\cancel$ and $\swap$ reductions anywhere inside the list, called $\longcancel$ and
+$\longswap$, but replace $\braid$ with a more general $\longbraid$ relation.
 
 \[
   \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
@@ -445,62 +438,62 @@ Diagram of long-braid:
   \end{tabular}
 \]
 
+The directed $\longcox$ relation is defined formally with the following generators.
+
 \begin{definition}[$\longcox$]
   \begin{align*}
     \longcancel
-    & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r) \\
+     & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r)                                                                           \\
     \longswap
-    & : \forall k, n, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r) \\
+     & : \forall k, n, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r)                                    \\
     \longbraid
-    & : \forall n, l, r \to (l \append (n \downarrow 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downarrow 2 + k) \append r) \\
+     & : \forall n, l, r \to (l \append (n \downarrow 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downarrow 2 + k) \append r) \\
   \end{align*}
 \end{definition}
+
+Like before, we define the $\longcox*$ to be the closure of $\longcox$, but only under reflexivity and transitivity. The
+transitive extension is only performed on the right.
 
 \begin{definition}[$\longcox*$]
   \begin{align*}
     \reflr{\longcox}
-    & : \forall w \to w \longcox* w \\
+     & : \forall w \to w \longcox* w                                                                               \\
     \transr{\longcox}
-    & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3} \\
+     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3} \\
   \end{align*}
 \end{definition}
 
-\review{%
-  In return for increased complexity of the equations, it satisfies the diamond property (if we direct the equation).
-  Thus, together with the (preserved) termination, it creates a confluent rewriting system. Proof: All the critical
-  pairs resolve, in the appendix. Definition: A normal form is a list that cannot be reduced any further.%
-}
-
-Now, we state and prove that $(\List[\Fin[n]],\longcox*)$ is a confluent and strongly normalising rewriting system.
+Despite the increased complexity of the relations, the rewriting system $(\List[\Fin[n]],\longcox*)$ can be shown to
+satisfy confluence, that is, the Church-Rosser (diamond) property. Further, we can show that this system is strongly
+normalising, by producing a unique normal form that doesn't reduce any further. We follow the terminology
+of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results.
 
 \begin{proposition}
   \leavevmode
   \begin{enumerate}
-    \item $\longcox*$ is (locally) confluent. For every span $\longcoxspan{w_{1}}{w_{2}}{w_{3}}$, there is a matching
-          extended cospan $\longcoxcospan*{w_{2}}{w_{3}}{w}$.
-    \item $\longcox*$ is confluent. For every extended span $\longcoxspan*{w_{1}}{w_{2}}{w_{3}}$, there is a matching
-          extended cospan $\longcoxcospan*{w_{2}}{w_{3}}{w}$.
+    \item $\longcox$ is (locally) confluent. For every span $\coxspan{w_{1}}{w_{2}}{w_{3}}$, there is a matching
+          extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
+    \item $\longcox*$ is confluent. For every extended span $\coxspan*{w_{1}}{w_{2}}{w_{3}}$, there is a matching
+          extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
     \item $\longcox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \longcox* v$.
-    \item $\cox*$ and $\longcox*$ are equivalent. For every $w$ and $v$, $w \cox* v$ iff $w \longcox* v$.
   \end{enumerate}
+\end{proposition}
+
+Another property we're interested in is well-foundedness of the relation $\longcox*$.
+\todo{lexicographic order, accessibility predicate and well-foundedness}
+
+In the theory of group presentations, the Coxeter relations are generally presented in their short form~\todo{citation},
+but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}. The long form of the
+Coxeter relations are unwieldy and difficult to prove properties about by induction, and have little connection to the
+broader scope of computational group theory. However, we can prove that the closures of the two forms of the relations
+are equivalent, and work up to this equivalence!
+
+\begin{proposition}
+  $\cox*$ and $\longcox*$ are equivalent. For every $w$ and $v$, $w \cox* v$ iff $w \longcox* v$.
 \end{proposition}
 
 18. We define the equivalence classes on List (Fin n) to be precisely these
 elements that have the same normal form.
-
-19. However, the Long Coxeter relations are unwieldly and have no
-connectino to the broader scope of computational group theory - while the
-usual Coxeter presentation is to-go choice in this area (cite all these
-papers in Coq, this guy from Sweden(?) etc.).
-Thus, we prove:
-Proposition: Long Coxeter is equivalent to normal Coxeter.
-
-\todo{Long form of Coxeter relations and their equivalence.}
-
-19a. (Note: here we try to convince the reader about reusability badge) So,
-the Long Coxeter can be regarded as a trick to get the proof to pass - but
-the external user-facing interface is still that of the usual Coxeter
-presentation.
 
 20. Now, to prove the equivalence of 9, on one side we have Aut(Fin n), and
 on the other, equivalence classes of List (Fin n) wrt to the usual Coxeter
@@ -508,10 +501,6 @@ group, we would define two functions from and back. The easiest way to
 define a function out of the group presentation is to define them on the
 equivalence classes' representatives. But to do that, we have to know how
 do these representatives look like exactly.
-
-We state and prove two desirable properties of this relation on $\List[\Fin[n]]$ from the point of view of an abstract
-rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}. \vc{Not completely
-  formalised. Is this with Coxeter or LongCoxeter?}
 
 The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
 
