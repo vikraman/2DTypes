@@ -260,8 +260,8 @@ Swapping the same two elements two times in a row is the same as doing nothing:
   \end{tabular}
 \]
 
-When swapping two pairs of elements in positions far away, it does not matter in
-which order the swapping happens, that is, we can slide the wires.
+When swapping two pairs of elements in positions "far-away", it does not matter
+in which order the swapping happens, that is, we can slide the wires freely.
 
 \[
   \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
@@ -309,6 +309,8 @@ which order the swapping happens, that is, we can slide the wires.
   \end{tabular}
 \]
 
+\todo{explain braid in words, give some intution on why it holds}
+
 \[
   \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
     \begin{center}
@@ -333,71 +335,155 @@ which order the swapping happens, that is, we can slide the wires.
   \end{tabular}
 \]
 
+\todo{an example/motivation from book.pdf}
+
+This construction is called a Coxeter presentation. Writing it formally, we get
+the following definition for $\Sn$. We define a binary relation $\cox$ on
+$\List[\Fin[n]]$.
+
+\begin{definition}[$\cox$]
+  \begin{align*}
+    \cancel
+     & : \forall n \to (n \cons n \cons \nil) \cox \nil                                                     \\
+    \swap
+     & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil)              \\
+    \braid
+     & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
+  \end{align*}
+\end{definition}
+
+We define $\cox*$ as the congruence closure of $\cox$.
+
+\begin{definition}[$\cox*$]
+  \begin{align*}
+    \reflr{\cox}
+     & : \forall w \to w \cox* w                                                                                                           \\
+    \symr{\cox}
+     & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1}                                                                  \\
+    \transr{\cox}
+     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3}                                    \\
+    \congrf{\cox}{\append}
+     & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
+    \relr{\cox}
+     & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2}                                                                   \\
+  \end{align*}
+\end{definition}
+
+The choice of generators for this presentation is important. \todo{Think about this.}
+
+\begin{itemize}
+  \item It affects the difficulty of solving the word problem in $\Sn$ and
+        formalising the proof of its correctness.
+  \item It affects the proof of strong normalisation of reduction for the relations.
+  \item It dictates which words are normal forms in this presentation of $\Sn$.
+  \item It has to closely match the $\PiLang$ comobinators so that we can prove
+        completeness.
+  \item It dictates the choice of reversible gates in the synthesis and
+        normalisation of boolean circuits which are applications that we show in
+        the later sections.
+\end{itemize}
+
+We consider the generators for the Coxeter relations on $\List[\Fin[n]]$ as a
+rewriting system. Throwing out reflexivity, and symmetry, we observe that the
+right hand sides of the relations are strictly smaller than the left hand sides,
+in terms of the lexicographical ordering on words in $\Fin[n]$. By directing the
+relation from left to right, we would be able to prove a termination property
+out of the box.
+
+However, it is not at all obvious that the system would be confluent.
+There are many possible critical pairs, such as
+% https://q.uiver.app/?q=WzAsMyxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJcXGJyYWlkIiwxXSxbMCwyLCJcXGJyYWlkIiwxXV0=
+\[\begin{tikzcd}
+    && {\tau_2\tau_1\tau_2\tau_1\tau_2} \\
+    {\tau_1\tau_2\tau_1\tau_1\tau_2} &&&& {\tau_2\tau_1\tau_1\tau_2\tau_1}
+    \arrow["\braid"{description}, from=1-3, to=2-1]
+    \arrow["\braid"{description}, from=1-3, to=2-5]
+  \end{tikzcd}\]
+or
+% https://q.uiver.app/?q=WzAsMyxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFs0LDEsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiXFxicmFpZCIsMV0sWzAsMiwiXFxjYW5jZWwiLDFdXQ==
+\[\begin{tikzcd}
+    && {\tau_2\tau_1\tau_2\tau_2} \\
+    {\tau_1\tau_2\tau_1\tau_2} &&&& {\tau_2\tau_1}
+    \arrow["\braid"{description}, from=1-3, to=2-1]
+    \arrow["\cancel"{description}, from=1-3, to=2-5]
+  \end{tikzcd}\]
+Although in the cases above, critical pairs resolve, there are some examples where they do not. One of the simplest ones is the following:
+% https://q.uiver.app/?q=WzAsMyxbMiwwLCJcXHRhdV8zXFx0YXVfMlxcdGF1XzNcXHRhdV8xIl0sWzAsMSwiXFx0YXVfMlxcdGF1XzNcXHRhdV8yXFx0YXVfMSJdLFs0LDEsIlxcdGF1XzNcXHRhdV8yXFx0YXVfMVxcdGF1XzMiXSxbMCwxLCJcXGJyYWlkIiwxXSxbMCwyLCJcXHN3YXAiLDFdXQ==
+\[\begin{tikzcd}
+    && {\tau_3\tau_2\tau_3\tau_1} \\
+    {\tau_2\tau_3\tau_2\tau_1} &&&& {\tau_3\tau_2\tau_1\tau_3}
+    \arrow["\braid"{description}, from=1-3, to=2-1]
+    \arrow["\swap"{description}, from=1-3, to=2-5]
+  \end{tikzcd}\]
+
+Because of this counterexample, the equations have to be fixed. We thus propose a new presentation, keeping the
+$\cancel$ and $\swap$ constructors, but replace $\braid$ with a more general $\longbraid$:
+
 Diagram of long-braid:
 
 \[
   \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
-      \begin{center}
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 6,
-            thick]
-          {braid={s_5, s_4, s_3, s_2, s_1, s_5}};
-        \end{tikzpicture}
-      \end{center}
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 6,
+          thick]
+        {braid={s_5, s_4, s_3, s_2, s_1, s_5}};
+      \end{tikzpicture}
+    \end{center}
      &
     \(\xlongrightarrow[]{\longbraid}\)
      &
-      \begin{center}
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 6,
-            thick]
-            {braid={s_4, s_5, s_4, s_3, s_2, s_1}};
-        \end{tikzpicture}
-      \end{center}
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 6,
+          thick]
+        {braid={s_4, s_5, s_4, s_3, s_2, s_1}};
+      \end{tikzpicture}
+    \end{center}
   \end{tabular}
 \]
 
-This construction is called a Coxeter presentation. Writing it formally, we
-get the following definition
-Definition: Coxeter presentation.
+\begin{definition}[$\longcox$]
+  \begin{align*}
+    \longcancel
+    & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r) \\
+    \longswap
+    & : \forall k, n, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r) \\
+    \longbraid
+    & : \forall n, l, r \to (l \append (n \downarrow 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downarrow 2 + k) \append r) \\
+  \end{align*}
+\end{definition}
 
-13. There are two main considerations to this choice:
-13a. How well the presentation matches the syntactic side of Pi? This is,
-how closely does the operational semantics built from these particular
-primitive operations match the natural operational semantics of Pi?
-13b. How convenient is it to turn the presentation it into rewriting system
-and solve the word problem for it?
+\begin{definition}[$\longcox*$]
+  \begin{align*}
+    \reflr{\longcox}
+    & : \forall w \to w \longcox* w \\
+    \transr{\longcox}
+    & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3} \\
+  \end{align*}
+\end{definition}
 
-Thus, the argument:
-14. TODO I don't know what to write here, we have to think.
+\review{%
+  In return for increased complexity of the equations, it satisfies the diamond property (if we direct the equation).
+  Thus, together with the (preserved) termination, it creates a confluent rewriting system. Proof: All the critical
+  pairs resolve, in the appendix. Definition: A normal form is a list that cannot be reduced any further.%
+}
 
-15a. The equations that define Coxeter presentation have a nice property:
-as it is written, the LHS is smaller (lexicographically) than the RHS.
-Thus, if we could direct them from right to left, it would have a
-termination property out of the box.
-15b. However, it is not at all obvious that the system would be confluent.
-There are many possible critical pairs, such as
-TODO diagram 1212 (braid, braid)
-or
-TODO diagram 3233 (braid, cancel)
-As it turns out, there are instances of critical pairs that do not resolve.
-A simplest example is the following:
-TODO diagram 3213
+Now, we state and prove that $(\List[\Fin[n]],\longcox*)$ is a confluent and strongly normalising rewriting system.
 
-16. The equations have to be changed. We thus propose a new presentation.
-We keep the (cancel) and (swap) equations, but replace (braid) with a more
-general:
-TODO diagram:
-
-Definition: Long Coxeter presentation.
-
-17. In return for increased complexity of the equations, it satisfies the
-diamond property (if we direct the equation). Thus, together with the
-(preserved) termination, it creates a confluent rewriting system.
-Proof: All the critical pairs resolve, in the appendix.
-Definition: A normal form is a list that cannot be reduced any further.
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item $\longcox*$ is (locally) confluent. For every span $\longcoxspan{w_{1}}{w_{2}}{w_{3}}$, there is a matching
+          extended cospan $\longcoxcospan*{w_{2}}{w_{3}}{w}$.
+    \item $\longcox*$ is confluent. For every extended span $\longcoxspan*{w_{1}}{w_{2}}{w_{3}}$, there is a matching
+          extended cospan $\longcoxcospan*{w_{2}}{w_{3}}{w}$.
+    \item $\longcox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \longcox* v$.
+    \item $\cox*$ and $\longcox*$ are equivalent. For every $w$ and $v$, $w \cox* v$ iff $w \longcox* v$.
+  \end{enumerate}
+\end{proposition}
 
 18. We define the equivalence classes on List (Fin n) to be precisely these
 elements that have the same normal form.
@@ -408,6 +494,8 @@ usual Coxeter presentation is to-go choice in this area (cite all these
 papers in Coq, this guy from Sweden(?) etc.).
 Thus, we prove:
 Proposition: Long Coxeter is equivalent to normal Coxeter.
+
+\todo{Long form of Coxeter relations and their equivalence.}
 
 19a. (Note: here we try to convince the reader about reusability badge) So,
 the Long Coxeter can be regarded as a trick to get the proof to pass - but
@@ -420,6 +508,28 @@ group, we would define two functions from and back. The easiest way to
 define a function out of the group presentation is to define them on the
 equivalence classes' representatives. But to do that, we have to know how
 do these representatives look like exactly.
+
+We state and prove two desirable properties of this relation on $\List[\Fin[n]]$ from the point of view of an abstract
+rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}. \vc{Not completely
+  formalised. Is this with Coxeter or LongCoxeter?}
+
+The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
+
+\begin{definition}[$\Sn$]
+  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
+\end{definition}
+
+We will now prove the group structure of $\Sn$.
+
+\begin{proposition}
+  There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
+  inverse is given by list reversal.
+\end{proposition}
+
+\begin{proposition}
+  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
+  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
+\end{proposition}
 
 \subsection{Lehmer Codes}
 
@@ -583,90 +693,6 @@ provided. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n
     \end{array}
   \]
 \end{proof}
-
-\subsection{Symmetric groups}~\label{subsec:symmetric}
-
-There is an obvious group structure on $\Aut[\Fin[n]]$ given by identity,
-composition, and inverse. This is the symmetric group $S_n$ on $n$ symbols. In
-the rest of the section we will construct a convenient presentation of this
-group.
-
-\vc{this is just a rough draft for now}
-
-\todo{Reference T-algebra presentations as coequalisers (Mac Lane 6.7)}
-
-First, we formally define a presentation of a group.
-
-\todo{Free 1-group, needs to be truncated}
-
-
-\subsubsection{Coxeter Relations}
-
-We define a binary relation on $\List[\Fin[n]]$.
-
-\begin{definition}[$\cox$]
-  \begin{align*}
-    \cancel
-     & : \forall n \to (n \cons n \cons \nil) \cox \nil                                                     \\
-    \swap
-     & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil)              \\
-    \braid
-     & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
-  \end{align*}
-\end{definition}
-
-We define $\cox*$ as the congruence closure of $\cox$.
-\vc{This could be simplified a bit depending on our formalisation. $\cox$ is directed, use a different symbol?}
-
-\begin{definition}[$\cox*$]
-  \begin{align*}
-    \reflr{\cox}
-     & : \forall w \to w \cox* w                                                                                                           \\
-    \symr{\cox}
-     & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1}                                                                  \\
-    \transr{\cox}
-     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3}                                    \\
-    \congrf{\cox}{\append}
-     & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
-    \relr{\cox}
-     & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2}                                                                   \\
-  \end{align*}
-\end{definition}
-
-\todo{Long form of Coxeter relations and their equivalence.}
-
-We state and prove two desirable properties of this relation on $\List[\Fin[n]]$ from the point of view of an abstract
-rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}. \vc{Not completely
-  formalised. Is this with Coxeter or LongCoxeter?}
-
-\begin{proposition}
-  \leavevmode
-  \begin{enumerate}
-    \item $\cox$ is (locally) confluent. For every span $w_{1} \cox w \cox w_{2}$, there is a matching extended cospan
-          $w_{1} \cox* v \cox* w_{2}$.
-    \item $\cox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \cox* v$.
-          \review{Equivalently, the type $\dsum{v:\List[\Fin[n]]}{w \cox* v}$ is contractible, and $w \cox* v$ is a
-            proposition for every $w$ and $v$.}
-  \end{enumerate}
-\end{proposition}
-
-The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
-
-\begin{definition}[$\Sn$]
-  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
-\end{definition}
-
-We will now prove the group structure of $\Sn$.
-
-\begin{proposition}
-  There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
-  inverse is given by list reversal.
-\end{proposition}
-
-\begin{proposition}
-  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
-  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
-\end{proposition}
 
 We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
 
