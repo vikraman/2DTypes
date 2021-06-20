@@ -90,14 +90,11 @@ norm-≈* {S n} l = code≈*
 norm-norm : {n : ℕ} → (l : List (Fin n)) → norm l == norm (norm l)
 norm-norm {O} nil = idp
 norm-norm {S n} l =
-  let x = norm-≈* l ■ norm-≈* (norm l)
-  -- let x = immersion-is-injection (immersion⁻¹ l) (immersion⁻¹ (norm l)) (norm-≈* (norm l))
-  --     y = immersion⁻¹∘immersion (immersion⁻¹ l) ∙ x ∙ ! (immersion⁻¹∘immersion (immersion⁻¹ (norm l)))
-  --     z = ap immersion y
-  in {!!}
-  where code = ListFin-to-Lehmer l .fst
-        code≈* = ListFin-to-Lehmer l .snd
-        immersion-code = immersion⁻¹∘immersion code
+  let y = norm-≈* l
+      x = norm-≈* l ■ norm-≈* (norm l)
+      z = immersion-is-injection (immersion⁻¹ l) ((immersion⁻¹ (norm l))) (norm-≈* (norm l))
+      c = ap immersion z
+  in c
 
 norm-has-contr-fibers : {n : ℕ} → (l : List (Fin n)) → is-contr (hfiber norm l)
 norm-has-contr-fibers l = has-level-in ((norm l , {!!}) , {!!})
