@@ -103,8 +103,8 @@ hence possesses a rich algebraic structure which we exploit in the remainder of 
 \subsection{Denotational Semantics}
 
 \noindent A denotational semantics of $\Pi$ can be specified by mapping each type to a finite set and each combinator to
-a bijection between finite sets, that is, a permutation. In this section, we provide a simple semantics expressed in the
-metalanguage of set theory. This semantics is then extended to the metalanguage of homotopy type theory in
+a bijection between finite sets, that is, a permutation. In this section, we outline a simple semantics expressed in the
+metalanguage of set theory. This semantics is formalized and extended to the metalanguage of homotopy type theory in
 Sec.~\ref{sec:reversibletwo}.
 
 As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
@@ -121,7 +121,7 @@ is defined as follows:
 \end{array}\]
 \noindent For example, the 3 values $\inlv{\Acon{tt}}$, $\inrv{(\inlv{\Acon{tt}})}$, and $\inrv{(\inrv{\Acon{tt}})}$ of
 type $\onet + (\onet + \onet)$ are given indices 0, 1, and 2 respectively. Given this canonical order, the combinator
-$\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ would correspond to the permutation $(1 2 0)$ while the
+$\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ would correspond to the permutation $(1~2~0)$ while the
 combinator $\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ at the same type would correspond to the
 identity permutation.
 
