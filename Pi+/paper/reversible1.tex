@@ -1,4 +1,5 @@
-\section{A Reversible Programming Language: Set-Theoretic Semantics}~\label{sec:reversibleone}
+\section{A Reversible Programming Language: Set-Theoretic Semantics}
+\label{sec:reversibleone}
 
 The practice of programming languages is replete with \emph{ad hoc} instances of reversible computations: database
 transactions, mechanisms for data provenance, checkpoints, stack and exception traces, logs, backups, rollback
@@ -28,44 +29,37 @@ languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2
 \subsection{The $\Pi$ Family of Languages}
 
 A natural candidate for a semantic foundation for reversible programming languages is the notion of type
-isomorphism. Indeed, the type isomorphisms among finite types represent a universal language for reversible boolean
-circuits~\cite{James:2012:IE:2103656.2103667} and the extension with recursive types and trace
-operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
+isomorphism. Indeed, the type isomorphisms among finite types are sound and complete for all permutations on finite
+types~\cite{Fiore:2004,fiore-remarks} and hence they are \emph{complete} for expressing reversible combinational
+circuits~\cite{fredkin1982conservative, James:2012:IE:2103656.2103667,Toffoli:1980} and the extension with recursive
+types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
 language~\cite{James:2012:IE:2103656.2103667,rc2011}.
 
-Focusing on finite types, the building blocks of type theory are: the
-empty type ($\mathbb{0}$), the unit type ($\mathbb{1}$) containing
-just one value $\Acon{tt}$, the sum type ($+$) containing values of
-the form $\inlv{v}$ and $\inrv{v}$, and the product ($\times$) type
-containing pairs of values $(v_1,v_2)$. One may view each type $A$
-as a collection of physical wires that can transmit $|A|$ distinct
-values where $|A|$ is a natural number that indicates the size of a
-type, computed as: $| \mathbb{0} | = 0$; $| \mathbb{1} | = 1$;
-$| A + B | = | A | + |B |$; and
-$| A \times B | = | A | * |B |$.  Thus the type
-$\mathbb{B} = \mathbb{1} + \mathbb{1}$ corresponds to a wire that can
-transmit one of two values, i.e., bits, with the convention that
-$\inlv{\Acon{tt}}$ represents \AgdaFunction{𝔽} and
-$\inrv{\Acon{tt}}$ represents \AgdaFunction{𝕋}.  The type
-$\mathbb{B} \times \mathbb{B} \times \mathbb{B}$ corresponds to a
-collection of wires that can transmit three bits. From that
-perspective, a type isomorphism between types $A$ and $B$
-(such that $|A|=|B|=n$) models a \emph{reversible}
-combinational circuit that \emph{permutes} the $n$ different
-values. These type isomorphisms are collected in Fig.~\ref{pi-terms}.
+Focusing on finite types, the building blocks of type theory are: the empty type ($\zerot$), the unit type
+($\onet$) containing just one value $\Acon{tt}$, the sum type ($+$) containing values of the form $\inlv{v}$ and
+$\inrv{v}$, and the product ($\times$) type containing pairs of values $(v_1,v_2)$. For this fragment of types, the
+syntax of the language $\Pi$ consists of the following sorts:
+
+{\scalebox{\scalef}{$%
+\begin{array}{lrcl}
+\textit{Value types} & A,B,C,D &::=& \zerot \alt \onet \alt A+B \alt A\times B \\
+\textit{Values}      & v,w,x,y &::=& \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
+\textit{Program types} &&& A \iso B \\
+\textit{Programs} & c &::=& (\textrm{See Fig.~\ref{pi-terms}})
+\end{array}$}}
 \begin{figure}[t]
 {\scalebox{\scalef}{$%
 %%\noindent\begin{minipage}{.7\linewidth}
 \begin{array}{rrcll}
 \idc :& A & \iso & A &: \idc \\
 \\
-\identlp :&  \mathbb{0} + A & \iso & A &: \identrp \\
+\identlp :&  \zerot + A & \iso & A &: \identrp \\
 \swapp :&  A + B & \iso & B + A &: \swapp \\
 \assoclp :&  A + (B + C) & \iso & (A + B) + C &: \assocrp \\ [1.5ex]
-\identlt :&  \mathbb{1} \times A & \iso & A &: \identrt \\
+\identlt :&  \onet \times A & \iso & A &: \identrt \\
 \swapt :&  A \times B & \iso & B \times A &: \swapt \\
 \assoclt :&  A \times (B \times C) & \iso & (A \times B) \times C &: \assocrt \\ [1.5ex]
-\absorbr :&~ \mathbb{0} \times A & \iso & \mathbb{0} ~ &: \factorzl \\
+\absorbr :&~ \zerot \times A & \iso & \zerot ~ &: \factorzl \\
 \dist :&~ (A + B) \times C & \iso & (A \times C) + (B \times C)~ &: \factor
   \end{array}$}}
 
@@ -89,106 +83,52 @@ values. These type isomorphisms are collected in Fig.~\ref{pi-terms}.
 \label{pi-terms}
 \end{figure}
 
-Each line in the top part of the figure introduces a pair of dual constants that witness the type isomorphism in the
-middle.  These are the \emph{base} (non-reducible) terms of $\Pi$. The isomorphisms are extended to form a congruence
-relation by adding the three constructors at the bottom of the figure that witness equivalence and compatible
-closure. Although austere, this combinator-based language has the advantage of being amenable to formal analysis for at
-least two reasons: (i) it is conceptually simple and small, and (ii) it has direct and evident connections to type
-theory and category theory and hence possesses a rich algebraic structure which we exploit in the remainder of the
-paper.
-
-% Specifically, the type isomorphisms of~$\Pi$ are sound and complete for all permutations on finite
-% types~\cite{Fiore:2004,fiore-remarks} and hence they are \emph{complete} for expressing reversible combinational
-% circuits~\cite{fredkin1982conservative, James:2012:IE:2103656.2103667,Toffoli:1980}. Algebraically, these types and
-% combinators form a \emph{commutative semiring} (up to type isomorphism). Logically, they form a superstructural logic
-% capturing space-time trade-offs~\cite{superstructural}. Categorically, they form a \emph{distributive bimonoidal
-%   category}~\cite{laplaza72}.
-
-% For the fragment over finite types, the syntax of the language $\Pi$ consists of several sorts:
-
-%  {\scalebox{\scalef}{$%
-% \begin{array}{lrcl}
-% \textit{Value types} & A,B,C,D &::=& \mathbb{0} \alt \mathbb{1} \alt A+B \alt A\times B \\
-% \textit{Values}      & v,w,x,y &::=& \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
-% \textit{Program types} &&& A \leftrightarrow B \\
-% \textit{Programs} & c &::=& (\textrm{See Fig.~\ref{pi-terms}})
-% \end{array}$}}
-
-\begin{figure}[t]
-{\scalebox{\scalef}{%
-$\begin{array}{rclcrcl}
-\delta(\identlp,~\inrv{v}) & = & v & & \delta(\identrp,~v)        & = & \inrv{v}\\
-\delta(\swapp,~\inlv{v})     & = & \inrv{v}\\
-\delta(\swapp,~\inrv{v})     & = & \inlv{v}\\
-\delta(\assoclp,~\inlv{v})          & = & \inlv{(\inlv{v})} & & \delta(\assocrp,~\inlv{(\inlv{v})}) & = & \inlv{v}         \\
-\delta(\assoclp,~\inrv{(\inlv{v})}) & = & \inlv{(\inrv{v})} & & \delta(\assocrp,~\inlv{(\inrv{v})}) & = & \inrv{(\inlv{v})}\\
-\delta(\assoclp,~\inrv{(\inrv{v})}) & = & \inrv{v}          & & \delta(\assocrp,~\inrv{v})          & = & \inrv{(\inrv{v})}\\
-\delta(\identlt,~(\Acon{tt},v)) & = & v & & \delta(\identrt,~v)             & = & (\Acon{tt},v)\\
-\delta(\swapt,~(x,y))         & = & (y,x)    \\
-\delta(\assoclt,~(x,(y,z))) & = & ((x,y),z) & & \delta(\assocrt,~((x,y),z)) & = & (x,(y,z))\\
-\delta(\dist,~(\inlv{x},z)) & = & \inlv{(x,z)} & & \delta(\factor,~\inlv{(x,z)}) & = & (\inlv{x},z)\\
-\delta(\dist,~(\inrv{y},z)) & = & \inrv{(y,z)} & & \delta(\factor,~\inrv{(y,z)}) & = & (\inrv{y},z)
-\end{array}$}}
-\caption{Semantics of base combinators}\label{fig:delta}
-\end{figure}
+\noindent Intuitively, one may view each type $A$ as a collection of physical wires that can transmit $\sizet{A}$ distinct
+values where $\sizet{A}$ is a natural number that indicates the size of a type, computed as: $\sizet{\zerot} = 0$;
+$\sizet{\onet} = 1$; $\sizet{A + B} = \sizet{A} + \sizet{B}$; and $\sizet{A \times B} = \sizet{A} * \sizet{B}$.  Thus the type
+$\mathbb{B} = \onet + \onet$ corresponds to a wire that can transmit one of two values, i.e., bits, with the
+convention that $\inlv{\Acon{tt}}$ represents \AgdaFunction{𝔽} and $\inrv{\Acon{tt}}$ represents \AgdaFunction{𝕋}.  The
+type $\mathbb{B} \times \mathbb{B} \times \mathbb{B}$ corresponds to a collection of wires that can transmit three
+bits. From that perspective, a type isomorphism between types $A$ and $B$ (such that $\sizet{A}=\sizet{B}=n$) models a
+\emph{reversible} combinational circuit that \emph{permutes} the $n$ different values. These type isomorphisms form a
+\emph{commutative semiring} and are collected in Fig.~\ref{pi-terms}. Each line in the top part of the figure
+introduces a pair of dual constants that witness the type isomorphism in the middle.  These are the \emph{base}
+(non-reducible) terms of $\Pi$. The isomorphisms are extended to form a congruence relation by adding the three
+constructors at the bottom of the figure that witness equivalence and compatible closure. Although austere, this
+combinator-based language has the advantage of being amenable to formal analysis for at least two reasons: (i) it is
+conceptually simple and small, and (ii) it has direct and evident connections to type theory and category theory and
+hence possesses a rich algebraic structure which we exploit in the remainder of the paper.
 
 %%%%%%%%%
 \subsection{Denotational Semantics}
 
-\noindent A simple denotational semantics of $\Pi$ can be specified by mapping each type to a finite set and each
-combinator to a bijection between finite sets, that is, a permutation.
+\noindent A denotational semantics of $\Pi$ can be specified by mapping each type to a finite set and each combinator to
+a bijection between finite sets, that is, a permutation. In this section, we provide a simple semantics expressed in the
+metalanguage of set theory. This semantics is then extended to the metalanguage of homotopy type theory in
+Sec.~\ref{sec:reversibletwo}.
 
-Functions with finite sets as domains are finitely supported, that is, their outputs can be tabulated using the
-canonical ordering on $\Fin[n]$. For bijections, this gives a listed permutation. By observing the action of the
-combinators on the values of the finite set, we can define a denotational semantics which constructs the bijection.
+As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
+we have that $\sizet{A} = \sizet{B}$. Hence the denotation of a type $A$ with $n$-elements will be a finite set
+$\Fin[n]$ and the denotation of a combinator $c : A \iso B$ such that $\sizet{A} = \sizet{B} = n$ will be a function
+from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. In more detail, we enumerate the values $v : A$ where
+$\sizet{A} = n$ in a canonical order such that each value $v$ is given an index in $\{ 0,\cdots,n-1 \}$. The enumeration
+is defined as follows:
+\[\begin{array}{rcl}
+    \mathit{enum}(\zerot) &=& \emptyset \\
+    \mathit{enum}(\onet) &=& \{ \Acon{tt} \} \\
+    \mathit{enum}(A + B) &=& \mathit{map}~\Acon{inj₁}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₂}~\mathit{enum}(B) \\
+    \mathit{enum}(A \times B) &=& \mathit{concat}~(\mathit{map}~(\lambda w.\mathit{map}~(\lambda v. (v,w))~\mathit{enum}(A))~\mathit{enum}(B))
+\end{array}\]
+\noindent For example, the 3 values $\inlv{\Acon{tt}}$, $\inrv{(\inlv{\Acon{tt}})}$, and $\inrv{(\inrv{\Acon{tt}})}$ of
+type $\onet + (\onet + \onet)$ are given indices 0, 1, and 2 respectively. Given this canonical order, the combinator
+$\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ would correspond to the permutation $(1 2 0)$ while the
+combinator $\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ at the same type would correspond to the
+identity permutation.
 
-\note{\(\Fin[n] \to A \eqv \type{Vec_{n}}(A)\)}
-
-An alternative point of view is to work in the category of finite sets and functions, $\SetFin$, which is the category
-freely generated by finite coproduct completion of the terminal category. Objects of $\SetFin$ can be identified with
-sets of fixed cardinality, that is, $\Fin[n] \defeq \Set{0,1,\ldots,n-1}$. $\SetFin$ has finite coproducts and products,
-which lets us interpret the types of $\PiLang$. Combinators are intepreted as morphisms in $\SetFin$, but we have to
-restrict to invertible morphisms, that is, isomorphisms. This gives the \emph{groupoid} of finite sets and bijections,
-$\BFin \defeq \mathsf{core}(\SetFin)$. The isomorphisms satisfied by coproducts and products in $\SetFin$ lift to
-$\BFin$, but they're no longer categorical coproducts and products. They give two symmetric monoidal tensor products on
-$\BFin$, the additive and multiplicative ones, with the multiplicative tensor distributing over the additive tensor.
-
-\note{Explain code below as best as you can}
-
-% semT : (t : U) → Set
-% semT t = Fin ∣ t ∣
-
-% semC : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → Fin ∣ t₁ ∣ → Fin ∣ t₂ ∣
-% semC unite₊l = idf _
-% semC uniti₊l = idf _
-% semC {I × t₂} {t₂} unite⋆l = transport Fin (N.+-unit-r ∣ t₂ ∣)
-% semC {t₁} {I × t₁} uniti⋆l = transport Fin (! (N.+-unit-r ∣ t₁ ∣))
-% semC {t₁ + t₂} {t₂ + t₁} swap₊ = (comp+ t₂ t₁) ∘ (swap+Fin {t₁} {t₂}) ∘ (decomp+ t₁ t₂)
-% semC {t₁ × t₂} {t₂ × t₁} swap⋆ = (comp* t₂ t₁) ∘ (swap*Fin {t₁} {t₂}) ∘ (decomp* t₁ t₂)
-% semC {t₁ + (t₂ + t₃)} {(t₁ + t₂) + t₃} assocl₊ = transport Fin (! (N.+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)))
-% semC {(t₁ + t₂) + t₃} {t₁ + (t₂ + t₃)} assocr₊ = transport Fin (N.+-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
-% semC {t₁ × (t₂ × t₃)} {(t₁ × t₂) × t₃} assocl⋆ = transport Fin (! (*-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣)))
-% semC {(t₁ × t₂) × t₃} {t₁ × (t₂ × t₃)} assocr⋆ = transport Fin (*-assoc (∣ t₁ ∣) (∣ t₂ ∣) (∣ t₃ ∣))
-% semC absorbr ()
-% semC {t × O} {O} absorbl = transport Fin (*-unit-r ∣ t ∣)
-% semC factorzr ()
-% semC factorzl ()
-% semC {(t₁ + t₂) × t₃} {(t₁ × t₃) + (t₂ × t₃)} dist =
-%   comp+ (t₁ × t₃) (t₂ × t₃) ∘
-%   map+ (comp* t₁ t₃) (comp* t₂ t₃) ∘
-%   distNative ∘
-%   map* (decomp+ t₁ t₂) (idf _) ∘
-%   decomp* (t₁ + t₂) t₃
-% semC {(t₁ × t₃) + (t₂ × t₃)} {(t₁ + t₂) × t₃} factor =
-%   comp* (t₁ + t₂) t₃ ∘
-%   map* (comp+ t₁ t₂) (idf _) ∘
-%   factorNative ∘
-%   map+ (decomp* t₁ t₃) (decomp* t₂ t₃) ∘
-%   decomp+ (t₁ × t₃) (t₂ × t₃)
-% semC id⟷₁ = idf _
-% semC (c₁ ◎ c₂) = semC c₂ ∘ semC c₁
-% semC {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) = (comp+ t₃ t₄) ∘ map+ (semC c₁) (semC c₂) ∘ (decomp+ t₁ t₂)
-% semC {t₁ × t₂} {t₃ × t₄} (c₁ ⊗ c₂) = (comp* t₃ t₄) ∘ map* (semC c₁) (semC c₂) ∘ (decomp* t₁ t₂)
+% Such functions are finitely supported, that is, their outputs can be tabulated using the canonical ordering on
+% $\Fin[n]$. For bijections, this gives a listed permutation. By observing the action of the combinators on the values of
+% the finite set, we can define a denotational semantics which constructs the bijection.
+% \note{\(\Fin[n] \to A \eqv \type{Vec_{n}}(A)\)}
 
 %%%%%%%%%
 \subsection{Examples}
