@@ -15,6 +15,10 @@ private
   variable
     m n o p q r : ℕ
 
+raise : ∀ {m} n → Fin m → Fin (n N.+ m)
+raise O m = m
+raise (S n) m = Fin-S (raise n m)
+
 -- Types
 
 data U : Type₀ where
@@ -27,15 +31,61 @@ infixr 40 _+_ _×_
 infix 30 _⟷₁_
 infixr 50 _◎_ _⊕_
 
+private
+  variable
+    t t₁ t₂ t₃ t₄ t₅ t₆ : U
+
 ∣_∣ : U → ℕ
 ∣ O ∣ = 0
 ∣ I ∣ = 1
 ∣ t₁ + t₂ ∣ = ∣ t₁ ∣ N.+ ∣ t₂ ∣
 ∣ t₁ × t₂ ∣ = ∣ t₁ ∣ N.* ∣ t₂ ∣
 
-private
-  variable
-    t t₁ t₂ t₃ t₄ t₅ t₆ : U
+⟦_⟧ : U → Set
+⟦ O ⟧ = ⊥
+⟦ I ⟧ = ⊤
+⟦ t₁ + t₂ ⟧ = ⟦ t₁ ⟧ ⊎ ⟦ t₂ ⟧
+⟦ t₁ × t₂ ⟧ = ⟦ t₁ ⟧ X ⟦ t₂ ⟧
+
+semT : (t : U) → Set
+semT t = Fin ∣ t ∣
+
+semV : {t : U} → (v : ⟦ t ⟧) → semT t
+semV {O} ()
+semV {I} unit = (0 , N.ltS)
+semV {t₁ + t₂} (inj₁ v) = {! semV {t₁} v!}
+semV {t₁ + t₂} (inj₂ v) = raise ∣ t₁ ∣ (semV {t₂} v)
+semV {t₁ × t₂} (v , w) = {!!}
+
+decodeV : {t : U} → semT t → ⟦ t ⟧
+decodeV {I} (O , p) = unit
+decodeV {I} (S m , N.ltSR ())
+decodeV {t₁ + t₂} (O , p) = {!!}
+decodeV {t₁ + t₂} (S m , p) = {!!}
+decodeV {t₁ × t₂} (O , p) = {!!}
+decodeV {t₁ × t₂} (S m , p) = {!!}
+
+{--
+Canonical order of elements: any combinator that does not change the order
+is id (modulo some transport)
+
+The only really interesting combinator is swap:
+
+    swap the first m elements with the last n elements
+     [ v₀ , v₁   , v₂   , ... , vm-1 ,     vm , vm₊₁ , ... , vm+n-1 ]
+     ==>
+     [ vm , vm₊₁ , ... , vm+n-1 ,     v₀ , v₁   , v₂   , ... , vm-1 ]
+
+elems : (t : U) → List ⟦ t ⟧
+elems ZERO = []
+elems ONE = [ tt ]
+elems (PLUS t₁ t₂) = map inj₁ (elems t₁) ++ map inj₂ (elems t₂)
+elems (TIMES t₁ t₂) = concat
+                        (map
+                          (λ v₂ → map (λ v₁ → (v₁ , v₂)) (elems t₁))
+                         (elems t₂))
+
+--}
 
 -- 1-combinators
 
@@ -65,11 +115,11 @@ data _⟷₁_  : U → U → Type₀ where
 
 postulate
   *-unit-r : (n : ℕ) → n N.* 0 == 0
+  *-assoc : (k m n : ℕ) → (k * m) * n == k * (m * n)
   decomp+ : (t₁ t₂ : U) → Fin ∣ t₁ + t₂ ∣ → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣
   comp+ : (t₁ t₂ : U) → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣ → Fin ∣ t₁ + t₂ ∣
   decomp* : (t₁ t₂ : U) → Fin ∣ t₁ × t₂ ∣ → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣
   comp* : (t₁ t₂ : U) → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣ → Fin ∣ t₁ × t₂ ∣
-  *-assoc : (k m n : ℕ) → (k * m) * n == k * (m * n)
   map+ : {A B C D : Set} → (A → C) → (B → D) → (A ⊎ B → C ⊎ D)
   map* : {A B C D : Set} → (A → C) → (B → D) → (A X B → C X D)
   distNative : {A B C : Set} → (A ⊎ B) X C → (A X C) ⊎ (B X C)
@@ -81,30 +131,6 @@ swap+Fin (inj₂ v) = inj₁ v
 
 swap*Fin : {t₁ t₂ : U} → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣ → Fin ∣ t₂ ∣ X Fin ∣ t₁ ∣
 swap*Fin (v , w) = (w , v)
-
-semT : (t : U) → Set
-semT t = Fin ∣ t ∣
-
-{--
-Canonical order of elements: any combinator that does not change the order
-is id (modulo some transport)
-
-The only really interesting combinator is swap:
-
-    swap the first m elements with the last n elements
-     [ v₀ , v₁   , v₂   , ... , vm-1 ,     vm , vm₊₁ , ... , vm+n-1 ]
-     ==>
-     [ vm , vm₊₁ , ... , vm+n-1 ,     v₀ , v₁   , v₂   , ... , vm-1 ]
-
-elems : (t : U) → List ⟦ t ⟧
-elems ZERO = []
-elems ONE = [ tt ]
-elems (PLUS t₁ t₂) = map inj₁ (elems t₁) ++ map inj₂ (elems t₂)
-elems (TIMES t₁ t₂) = concat
-                        (map
-                          (λ v₂ → map (λ v₁ → (v₁ , v₂)) (elems t₁))
-                         (elems t₂))
---}
 
 semC : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → Fin ∣ t₁ ∣ → Fin ∣ t₂ ∣
 semC unite₊l = idf _
@@ -137,6 +163,9 @@ semC id⟷₁ = idf _
 semC (c₁ ◎ c₂) = semC c₂ ∘ semC c₁
 semC {t₁ + t₂} {t₃ + t₄} (c₁ ⊕ c₂) = (comp+ t₃ t₄) ∘ map+ (semC c₁) (semC c₂) ∘ (decomp+ t₁ t₂)
 semC {t₁ × t₂} {t₃ × t₄} (c₁ ⊗ c₂) = (comp* t₃ t₄) ∘ map* (semC c₁) (semC c₂) ∘ (decomp* t₁ t₂)
+
+eval : {t₁ t₂ : U} → (c : t₁ ⟷₁ t₂) → ⟦ t₁ ⟧ → ⟦ t₂ ⟧
+eval c v = decodeV (semC c (semV v))
 
 {--
 -- We refine the trivial relation used in level-(-2). We do not
