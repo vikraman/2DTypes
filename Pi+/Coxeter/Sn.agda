@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
 module Pi+.Coxeter.Sn where
 
@@ -8,6 +8,7 @@ open import lib.PathGroupoid
 open import lib.Function
 open import lib.Function2
 open import lib.NType
+open import lib.NType2
 open import lib.types.SetQuotient public
 open import lib.types.List
 open import lib.types.Fin
@@ -86,22 +87,66 @@ norm-≈* {S n} l = code≈*
   where code = ListFin-to-Lehmer l .fst
         code≈* = ListFin-to-Lehmer l .snd
 
-
 norm-norm : {n : ℕ} → (l : List (Fin n)) → norm l == norm (norm l)
 norm-norm {O} nil = idp
 norm-norm {S n} l =
-  let y = norm-≈* l
-      x = norm-≈* l ■ norm-≈* (norm l)
-      z = immersion-is-injection (immersion⁻¹ l) ((immersion⁻¹ (norm l))) (norm-≈* (norm l))
-      c = ap immersion z
-  in c
+  let z = immersion-is-injection (immersion⁻¹ l) ((immersion⁻¹ (norm l))) (norm-≈* (norm l))
+  in ap immersion z
 
-norm-has-contr-fibers : {n : ℕ} → (l : List (Fin n)) → is-contr (hfiber norm l)
-norm-has-contr-fibers l = has-level-in ((norm l , {!!}) , {!!})
+≈*-norm : {n : ℕ} {l1 l2 : List (Fin n)} → l1 ≈* l2 → norm l1 == norm l2
+≈*-norm {O} {nil} {nil} r = idp
+≈*-norm {S n} {l1} {l2} r = ap immersion (immersion⁻¹-respects≈ r)
 
-right-inv-surj : ∀ {i j} {A : Type i} {B : Type j} {f : A → B}
-               → Σ (B → A) (λ g → f ∘ g ∼ idf B) → is-surj f
-right-inv-surj {f = f} (g , ϕ) b = [ g b , ϕ b ]
+instance
+  List-level : ∀ {n} {i} {A : Type i} → {{_ : has-level n A}} → has-level n (List A)
+  List-level = TODO-
 
-norm-is-surj : is-surj norm
-norm-is-surj = right-inv-surj (norm , {!!})
+norm-inc : {n : ℕ} → Sn n → List (Fin n)
+norm-inc w =
+  SetQuot-rec ⦃ List-level {{Fin-is-set}} ⦄ norm ≈*-norm w
+
+norm-inc-right-inv : {n : ℕ} (w : Sn n) → q[ norm-inc w ] == w
+norm-inc-right-inv =
+  SetQuot-elim (λ l → quot-rel (comm (norm-≈* l))) λ r → prop-has-all-paths-↓
+
+module _ {i j} {A : Type i} {B : Type j} where
+
+  -- not a proposition, or is retraction
+
+  has-section : (f : A → B) → Type (lmax i j)
+  has-section f = Σ (B → A) (λ g → f ∘ g ∼ idf B)
+
+  has-hfiber-is-retract : {f : A → B} → ((b : B) → hfiber f b) → has-section f
+  has-hfiber-is-retract h = fst ∘ h , snd ∘ h
+
+  im : (f : A → B) → Type (lmax i j)
+  im f = Σ B (λ b → hfiber f b)
+
+  restrict : (f : A → B) → A → im f
+  restrict f a = f a , a , idp
+
+restrict-is-retract : ∀ {i j} {A : Type i} {B : Type j} {f : A → B} → has-section (restrict f)
+restrict-is-retract {f = f} = (λ { (b , a , p) → a }) , λ { (.(f a) , a , idp) → idp }
+
+module _ {i} {A : Type i} where
+
+  is-idempotent : (f : A → A) → Type i
+  is-idempotent f = (f ∘ f) ∼ f
+
+q-norm-has-section : {n : ℕ} → has-section (q[_] ∘ norm {n})
+q-norm-has-section =
+  norm-inc , SetQuot-elim (λ w → quot-rel (comm (norm-≈* w ■ norm-≈* (norm w))))
+                          (λ r → prop-has-all-paths-↓)
+
+is-norm : {n : ℕ} → List (Fin n) → Type₀
+is-norm l = norm l == l
+
+module _ {i} {A : Type i} {j} {R : Rel A j} where
+
+  q-is-surj : is-surj (q[_] {R = R})
+  q-is-surj =
+    SetQuot-elim ⦃ raise-level _ Trunc-level ⦄
+      (λ a → [ a , idp ]) λ r → prop-has-all-paths-↓
+
+norm-q-is-surj : {n : ℕ} → is-surj (q[_] {R = _≈*_})
+norm-q-is-surj {n} w = [ norm-inc {n} w , norm-inc-right-inv w ]
