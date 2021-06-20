@@ -15,6 +15,16 @@ private
   variable
     m n o p q r : ℕ
 
+postulate
+  *-unit-r : (n : ℕ) → n N.* 0 == 0
+  *-assoc : (k m n : ℕ) → (k * m) * n == k * (m * n)
+
+toℕ : ∀ {n} → Fin n → ℕ
+toℕ (i , _) = i
+
+inject : ∀ {m} n → Fin m → Fin (m N.+ n)
+inject {m} n fm = transport Fin (N.+-comm n m) (Fin-S^ n fm)
+
 raise : ∀ {m} n → Fin m → Fin (n N.+ m)
 raise O m = m
 raise (S n) m = Fin-S (raise n m)
@@ -53,17 +63,15 @@ semT t = Fin ∣ t ∣
 semV : {t : U} → (v : ⟦ t ⟧) → semT t
 semV {O} ()
 semV {I} unit = (0 , N.ltS)
-semV {t₁ + t₂} (inj₁ v) = {! semV {t₁} v!}
+semV {t₁ + t₂} (inj₁ v) = inject ∣ t₂ ∣ (semV {t₁} v)
 semV {t₁ + t₂} (inj₂ v) = raise ∣ t₁ ∣ (semV {t₂} v)
-semV {t₁ × t₂} (v , w) = {!!}
+semV {t₁ × t₂} (v , w) = {!(semV w) F+ (semV v F* ∣ t₂ ∣) !}
 
 decodeV : {t : U} → semT t → ⟦ t ⟧
 decodeV {I} (O , p) = unit
 decodeV {I} (S m , N.ltSR ())
-decodeV {t₁ + t₂} (O , p) = {!!}
-decodeV {t₁ + t₂} (S m , p) = {!!}
-decodeV {t₁ × t₂} (O , p) = {!!}
-decodeV {t₁ × t₂} (S m , p) = {!!}
+decodeV {t₁ + t₂} n = {!!}
+decodeV {t₁ × t₂} n = {!!}
 
 {--
 Canonical order of elements: any combinator that does not change the order
@@ -114,8 +122,6 @@ data _⟷₁_  : U → U → Type₀ where
 -- Simple denotational semantics
 
 postulate
-  *-unit-r : (n : ℕ) → n N.* 0 == 0
-  *-assoc : (k m n : ℕ) → (k * m) * n == k * (m * n)
   decomp+ : (t₁ t₂ : U) → Fin ∣ t₁ + t₂ ∣ → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣
   comp+ : (t₁ t₂ : U) → Fin ∣ t₁ ∣ ⊎ Fin ∣ t₂ ∣ → Fin ∣ t₁ + t₂ ∣
   decomp* : (t₁ t₂ : U) → Fin ∣ t₁ × t₂ ∣ → Fin ∣ t₁ ∣ X Fin ∣ t₂ ∣
