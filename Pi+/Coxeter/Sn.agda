@@ -13,6 +13,7 @@ open import lib.types.SetQuotient public
 open import lib.types.List
 open import lib.types.Fin
 open import lib.types.Truncation
+open import lib.types.Sigma
 
 open import Pi+.Extra
 open import Pi+.Coxeter.Coxeter
@@ -111,13 +112,13 @@ norm-inc-right-inv =
 
 module _ {i j} {A : Type i} {B : Type j} where
 
-  -- not a proposition, or is retraction
-
   has-section : (f : A → B) → Type (lmax i j)
   has-section f = Σ (B → A) (λ g → f ∘ g ∼ idf B)
 
-  has-hfiber-is-retract : {f : A → B} → ((b : B) → hfiber f b) → has-section f
-  has-hfiber-is-retract h = fst ∘ h , snd ∘ h
+  has-hfiber-has-section : {f : A → B} → ((b : B) → hfiber f b) → has-section f
+  has-hfiber-has-section h = fst ∘ h , snd ∘ h
+
+module _ {i j} {A : Type i} {B : Type j} where
 
   im : (f : A → B) → Type (lmax i j)
   im f = Σ B (λ b → hfiber f b)
@@ -125,18 +126,49 @@ module _ {i j} {A : Type i} {B : Type j} where
   restrict : (f : A → B) → A → im f
   restrict f a = f a , a , idp
 
-restrict-is-retract : ∀ {i j} {A : Type i} {B : Type j} {f : A → B} → has-section (restrict f)
-restrict-is-retract {f = f} = (λ { (b , a , p) → a }) , λ { (.(f a) , a , idp) → idp }
+  restrict-is-retract : {f : A → B} → has-section (restrict f)
+  restrict-is-retract {f} = (λ { (b , a , p) → a }) , (λ { (.(f a) , a , idp) → idp })
+
+module _ {i j} {A : Type i} {B : Type j} where
+
+  has-retraction : (f : A → B) → Type (lmax i j)
+  has-retraction f = Σ (B → A) (λ g → g ∘ f ∼ idf A)
+
+module _ {i j} {B : Type j} where
+
+  is-retract : Type i → Type (lmax i j)
+  is-retract A = Σ (A → B) (λ i → Σ (B → A) λ r → r ∘ i ∼ idf A )
 
 module _ {i} {A : Type i} where
 
   is-idempotent : (f : A → A) → Type i
   is-idempotent f = (f ∘ f) ∼ f
 
+  is-split-idempotent : (f : A → A) → Type (lsucc i)
+  is-split-idempotent f =
+    is-idempotent f × Σ (Type i) (λ B → Σ (A → B) (λ r → Σ (B → A) (λ s → (s ∘ r ∼ f) × (r ∘ s ∼ idf B))))
+
 q-norm-has-section : {n : ℕ} → has-section (q[_] ∘ norm {n})
 q-norm-has-section =
   norm-inc , SetQuot-elim (λ w → quot-rel (comm (norm-≈* w ■ norm-≈* (norm w))))
                           (λ r → prop-has-all-paths-↓)
+
+norm-is-idempotent : {n : ℕ} → is-idempotent (norm {n})
+norm-is-idempotent l = ! (norm-norm l)
+
+norm-is-split-idempotent : {n : ℕ} → is-split-idempotent norm
+norm-is-split-idempotent {n} =
+  norm-is-idempotent , Sn n , q[_] , norm-inc , (λ l → idp) , norm-inc-right-inv
+
+Sn-is-retract : {n : ℕ} → is-retract (Sn n)
+Sn-is-retract =
+  norm-inc , q[_] ,
+  SetQuot-elim (λ l → quot-rel (comm (norm-≈* l))) λ r → prop-has-all-paths-↓
+
+Sn-is-retract2 : {n : ℕ} → is-retract (Sn n)
+Sn-is-retract2 =
+  norm-inc , q[_] ∘ norm ,
+  SetQuot-elim (λ l → ! (quot-rel (norm-≈* l) ∙ quot-rel (norm-≈* (norm l)))) λ r → prop-has-all-paths-↓
 
 is-norm : {n : ℕ} → List (Fin n) → Type₀
 is-norm l = norm l == l
