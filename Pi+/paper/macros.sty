@@ -31,17 +31,16 @@
 \let\ps\perfectparens%
 
 \newcommand{\Nat}[0]{\mathbb{N}}
-\NewDocumentCommand{\suc}{O{}}{\mathop{\term{S}}{#1}}
+\newcommand{\zero}[0]{\term{0}}
+\NewDocumentCommand{\suc}{O{}}{\term{S}{#1}}
 \newcommand{\fac}[1]{{#1}\,!}
 
 \newcommand{\highlight}[1]{\textcolor{solarized-orange}{#1}}
 
 % finite types
-\NewDocumentCommand{\Fin}{O{}}{\type{Fin}\ifstrempty{#1}{}{_{#1}}}
+\NewDocumentCommand{\Fin}{O{}}{\type{Fin{\ifstrempty{#1}{}{_{\mathsmaller{#1}}}}}}
 \NewDocumentCommand{\FinExcept}{mO{}}{\term{Fin_{\mathsmaller{#1}}^{-}}\ifstrempty{#2}{}{({#2})}}
 \newcommand{\fzero}{f_0}
-
-\NewDocumentCommand{\Lehmer}{O{}}{\term{Lehmer}\ifstrempty{#1}{}{({#1})}}
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
 
 \newcommand{\encode}[1]{\mathop{\term{encode_{#1}}}}
@@ -53,6 +52,11 @@
 
 % permutations
 \newcommand{\el}[1]{\mathbf{#1}}
+
+% lehmer codes
+\NewDocumentCommand{\Lehmer}{O{}}{\term{Lehmer}\ifstrempty{#1}{}{({#1})}}
+\newcommand{\lzero}{\term{L0}}
+\NewDocumentCommand{\lsuc}{O{}}{\term{LS}\ifstrempty{#1}{}{({#1})}}
 
 % symmetric group
 \NewDocumentCommand{\Sn}{O{n}}{\type{S_{#1}}}
