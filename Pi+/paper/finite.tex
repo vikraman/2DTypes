@@ -10,15 +10,16 @@ finite types, and give \review{a computable presentation} for it.
 
 \todo{Check Brent Yorgey's thesis?}
 
-To do so, we will characterise the automorphisms on finite sets of cardinality
-$n$, and show them to be equivalent to the symmetric group $\Sn$, via the
-Coxeter presentation. We will do that in two steps,
+In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are equivalent to families of automorphisms
+of $\Fin{n}$ for every $n:\Nat$, that is, bijections on finite sets of size $n$. This is the extensional view of
+permutations. In the following sections, we will characterise these permutations, going through two intermediate steps.
+
+To do so, we will characterise the automorphisms on finite sets of cardinality $n$, and show them to be equivalent to
+the symmetric group $\Sn$, via the Coxeter presentation. We will do that in two steps,
 in~\cref*{subsec:permutations,subsec:lehmer,subsec:symmetric}.
 
 \todo{Big example: Start from a listed permutation, show Lehmer code, then adjacent swaps.}
 \todo{Justification for why we need group theory.}
-
-%% Coxeter presentation of $\Sn$ $\eqv$ $\Lehmer[n]$ $\eqv$ $\Aut[\Fin[n]]$
 
 \subsection{Groups}
 
@@ -337,8 +338,7 @@ in which order the swapping happens, that is, we can slide the wires freely.
 
 \todo{an example/motivation from book.pdf}
 
-This construction is called a Coxeter presentation. Writing it formally, we get
-the following definition for $\Sn$. We define a binary relation $\cox$ on
+This construction is called a Coxeter presentation. Writing it formally, we define a binary relation $\cox$ on
 $\List[\Fin[n]]$.
 
 \begin{definition}[$\cox$]
@@ -369,6 +369,12 @@ We define $\cox*$ as the congruence closure of $\cox$.
   \end{align*}
 \end{definition}
 
+The type $\Sn$ is then defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
+
+\begin{definition}[$\Sn$]
+  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
+\end{definition}
+
 The choice of generators for this presentation is important. \todo{Think about this.}
 
 \begin{itemize}
@@ -384,14 +390,12 @@ The choice of generators for this presentation is important. \todo{Think about t
 \end{itemize}
 
 To consider solving the word problem for $\Sn$, we need to formalise the generators for the Coxeter relations on
-$\List[\Fin[n]]$ as a rewriting system $(\List[\Fin[n]],\cox*)$. The $\cox*$ relation as defined, does not produce a
-well-behaved rewriting system due to the symmetric closure. Throwing out reflexivity and symmetry, we observe that the
-right hand sides of the relations are strictly smaller than the left hand sides, in terms of the lexicographical
-ordering on words in $\Fin[n]$. By directing the relation from left to right, we would be able to prove a termination
-property out of the box.
-
-A well-behaved rewriting system should also be confluent, however, it is not at all obvious from this definition. Due to
-overlapping reduction rules, there are many possible critical pairs, such as
+$\List[\Fin[n]]$ as a rewriting system $(\List[\Fin[n]],\cox*)$. A well-behaved rewriting system has to be strongly
+normalising and confluent. Throwing out reflexivity and symmetry, we observe that the right hand sides of the relations
+are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$. Thus, by
+directing the relation from left to right, we would be able to prove a termination property out of the box. For a system
+to be confluent, all critical pairs, that is, terms with overlapping possible reduction rules, have to converge. For
+example, the pairs below converge.
 
 \[
   \begin{array}{lcr}
@@ -403,16 +407,76 @@ overlapping reduction rules, there are many possible critical pairs, such as
   \end{array}
 \]
 
-For confluence, all critical pairs should converge. The pairs above can be resolved, but there are many examples where
-they do not. The following is a simple example.
+Unfortunately, in the system defined, this is not true for all critical pairs. One example is the following.
 
 \[
   \gspan[\braid][\swap]{\tau_3\tau_2\tau_3\tau_1}{\tau_2\tau_3\tau_2\tau_1}{\tau_3\tau_2\tau_1\tau_3}
 \]
 
-Because of this counterexample, the relations have to be changed. We propose a long form of the relations as a new
-presentation, where we allow $\cancel$ and $\swap$ reductions anywhere inside the list, called $\longcancel$ and
-$\longswap$, but replace $\braid$ with a more general $\longbraid$ relation.
+\subsection{Rewriting via Coxeter}
+
+Because of the counterexample discussed, the relations have to be changed. In this section, we will formally define a
+rewriting system partially based on the Coxeter relation, prove that it has good properties (confluence and strong
+normalisation).
+
+The reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$. We
+fix the problem discussed previously by changing $\braid$ to be a slightly more general relation. However, we do not
+want to lose the connection to the theory of group presentations, where Coxeter relations are a standard
+notion~\todo{citation}. To make the result broadly applicable, even though we use the reduction system for computation,
+we prove that its reflexive-transitive closure is indeed equivalent to the conguence closure of the standard Coxeter
+relation $\cox$.
+
+\todo {but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
+
+Formally, the directed $\longcox$ relation is defined with the following generators.
+
+\begin{definition}[$\longcox$]
+  \begin{align*}
+    \longcancel
+     & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r)                                                                           \\
+    \longswap
+     & : \forall k, n, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r)                                    \\
+    \longbraid
+     & : \forall n, l, r \to (l \append (n \downarrow 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downarrow 2 + k) \append r) \\
+  \end{align*}
+\end{definition}
+
+Like before, we define the $\longcox*$ to be the closure of $\longcox$, but only under reflexivity and transitivity. The
+transitive extension is only performed on the right.
+
+\begin{definition}[$\longcox*$]
+  \begin{align*}
+    \reflr{\longcox}
+     & : \forall w \to w \longcox* w                                                                               \\
+    \transr{\longcox}
+     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3} \\
+  \end{align*}
+\end{definition}
+
+Generators $\longcancel$ and $\longswap$ correspond directly to the generators of $\cox*$ and can be visualised in the
+same way as before. The generator $\longbraid$ uses a helper $n \downf k$, which produces the sequence
+\(k + n, k + n - 1 \ldots, n + 1\).
+
+\begin{definition}[$\downf : (n : \Nat) \to {\Fin[n]} \to {\List[\Fin[\suc[k + n]]]}$]
+  \begin{align*}
+    n \downf 0       & \defeq \nil                       \\
+    n \downf \suc[k] & \defeq (k + n) \cons (n \downf k)
+  \end{align*}
+\end{definition}
+
+As a sequence of transpositions, it moves the element $k - 1$ places. Expressed in terms of the braiding diagram, for
+$n = \dots$ and $k = \dots$, it has the following form:
+
+\[
+  \begin{tikzpicture}
+    \pic[local bounding box=my braid,braid/.cd,
+      number of strands = 6,
+      thick]
+    {braid={s_5, s_4, s_3, s_2, s_1}};
+  \end{tikzpicture}
+\]
+
+Now, the remaining constructor $\longbraid$ moves a transposition around such sequence, as in the diagram below.
 
 \[
   \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
@@ -438,35 +502,13 @@ $\longswap$, but replace $\braid$ with a more general $\longbraid$ relation.
   \end{tabular}
 \]
 
-The directed $\longcox$ relation is defined formally with the following generators.
+Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 2$.
 
-\begin{definition}[$\longcox$]
-  \begin{align*}
-    \longcancel
-     & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r)                                                                           \\
-    \longswap
-     & : \forall k, n, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r)                                    \\
-    \longbraid
-     & : \forall n, l, r \to (l \append (n \downarrow 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downarrow 2 + k) \append r) \\
-  \end{align*}
-\end{definition}
-
-Like before, we define the $\longcox*$ to be the closure of $\longcox$, but only under reflexivity and transitivity. The
-transitive extension is only performed on the right.
-
-\begin{definition}[$\longcox*$]
-  \begin{align*}
-    \reflr{\longcox}
-     & : \forall w \to w \longcox* w                                                                               \\
-    \transr{\longcox}
-     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3} \\
-  \end{align*}
-\end{definition}
-
-Despite the increased complexity of the relations, the rewriting system $(\List[\Fin[n]],\longcox*)$ can be shown to
-satisfy confluence, that is, the Church-Rosser (diamond) property. Further, we can show that this system is strongly
-normalising, by producing a unique normal form that doesn't reduce any further. We follow the terminology
-of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results.
+Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox*)$ has the properties
+we desire. It satisfies confluence, that is, the Church-Rosser (diamond) property, and it is strongly normalising,
+because it produces a unique irreducible normal form. Existence of the normal form is implied by the well-foundedness of
+the relation -- informally, it does not contain any infinite decreasing sequences. We follow the terminology
+of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results formally.~\vc{check!}
 
 \begin{proposition}
   \leavevmode
@@ -475,40 +517,38 @@ of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results.
           extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
     \item $\longcox*$ is confluent. For every extended span $\coxspan*{w_{1}}{w_{2}}{w_{3}}$, there is a matching
           extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
+    \item $\longcox*$ is well-founded. With $<$ the lexicographic ordering on $\List[\Fin[n]]$, and $w$ being
+          $<$-accessible if every $v < w$ is $<$-accessible, we have that every $w$ is $<$-accesible.
     \item $\longcox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \longcox* v$.
   \end{enumerate}
 \end{proposition}
 
-Another property we're interested in is well-foundedness of the relation $\longcox*$.
-\todo{lexicographic order, accessibility predicate and well-foundedness}
-
-In the theory of group presentations, the Coxeter relations are generally presented in their short form~\todo{citation},
-but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}. The long form of the
-Coxeter relations are unwieldy and difficult to prove properties about by induction, and have little connection to the
-broader scope of computational group theory. However, we can prove that the closures of the two forms of the relations
-are equivalent, and work up to this equivalence!
+The long form of the Coxeter relations are unwieldy and difficult to prove properties about by induction, and have
+little connection to the broader scope of computational group theory. However, we can prove that the closures of the two
+forms of the relations are equivalent, and work up to this equivalence!
 
 \begin{proposition}
   $\cox*$ and $\longcox*$ are equivalent. For every $w$ and $v$, $w \cox* v$ iff $w \longcox* v$.
 \end{proposition}
 
-By strong normalisation, we get a unique choice function that produces a normal form for terms of $\List[\Fin[n]]$.
-Equivalence classes on $\List[\Fin[n]]$ are precisely those terms that have the same normal form.
+By strong normalisation, we get a unique choice function $\normf : {\List[\Fin[n]]} \to {\List[\Fin[n]]}$ that produces
+a normal form for terms of $\List[\Fin[n]]$. Equivalence classes on $\List[\Fin[n]]$ are precisely those terms that have
+the same normal form. We state a few important properties that $\normf$ satisfies.
 
-20. Now, to prove the equivalence of 9, on one side we have Aut(Fin n), and
-on the other, equivalence classes of List (Fin n) wrt to the usual Coxeter
-group, we would define two functions from and back. The easiest way to
-define a function out of the group presentation is to define them on the
-equivalence classes' representatives. But to do that, we have to know how
-do these representatives look like exactly.
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item For all $l : \List[\Fin[n]]$, we have that $l \cox* \normf(l)$.
+    \item $\normf$ is idempotent, that is, $\normf \comp \normf \htpy \normf$.
+    \item $\normf$ splits, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n] \xrightarrow{r} {\List[\Fin[n]]}$
+          such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
+  \end{enumerate}
+\end{proposition}
 
-The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
+\vc{Remark that $w \cox* v$ is not a proposition.}
 
-\begin{definition}[$\Sn$]
-  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
-\end{definition}
-
-We will now prove the group structure of $\Sn$.
+Finally, we prove the group structure of $\Sn$, and show that it is indeed a group presentation, given by a quotient of
+the free group $F(\Fin[n])$.
 
 \begin{proposition}
   There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
@@ -517,27 +557,19 @@ We will now prove the group structure of $\Sn$.
 
 \begin{proposition}
   $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
-  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
+  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A \to A$.
 \end{proposition}
 
-\subsection{Lehmer Codes}
+\subsection{Lehmer Codes}~\label{subsec:lehmer}
 
-21. Enter: Lehmer codes.
-TODO diagram with List (Fin n) being divided into equivalence classes, and
-Lehmer codes being an image of immersion, being the normal form
-(representative) in each class.
+To prove the equivalence between $\Aut[\Fin[n]]$ and $\Sn[n]$, we will need to define functions back and forth between
+the two types. The terms in $\Sn$ can be identified with equivalence classes of terms in $\List[\Fin[n]]$ with respect
+to the Coxeter relation $\cox*$. The easiest way to define a function out of this presentation is to define it on the
+representatives. We know that these are the unique normal forms in the set-quotient given by $q \comp \normf$, but now
+we will describe what these representatives look like exactly, using Lehmer codes.
 
-\subsection{Permutations}~\label{subsec:permutations}
-
-In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are
-equivalent to families of automorphisms of $\Fin{n}$ for every $n:\Nat$, that
-is, bijections on finite sets of size $n$. This is the extensional view of
-permutations. In the following sections, we will characterise these
-permutations, going through two intermediate steps.
-
-\vc{This is obvious, maybe add something more here.}
-
-\subsection{Lehmer codes}~\label{subsec:lehmer}
+\todo{diagram with List (Fin n) being divided into equivalence classes, and Lehmer codes being an image of immersion,
+  being the normal form (representative) in each class.}
 
 From grade school combinatorics, we know that there are $\fac{n}$ permutations
 on a finite set with $n$ elements. The factorial function is defined by
