@@ -65,13 +65,13 @@ semV {O} ()
 semV {I} unit = (0 , N.ltS)
 semV {t₁ + t₂} (inj₁ v) = inject ∣ t₂ ∣ (semV {t₁} v)
 semV {t₁ + t₂} (inj₂ v) = raise ∣ t₁ ∣ (semV {t₂} v)
-semV {t₁ × t₂} (v , w) = {!(semV w) F+ (semV v F* ∣ t₂ ∣) !}
+semV {t₁ × t₂} (v , w) = TODO- -- (semV w) F+ (semV v F* ∣ t₂ ∣)
 
 decodeV : {t : U} → semT t → ⟦ t ⟧
 decodeV {I} (O , p) = unit
 decodeV {I} (S m , N.ltSR ())
-decodeV {t₁ + t₂} n = {!!}
-decodeV {t₁ × t₂} n = {!!}
+decodeV {t₁ + t₂} n = TODO-
+decodeV {t₁ × t₂} n = TODO-
 
 {--
 Canonical order of elements: any combinator that does not change the order
