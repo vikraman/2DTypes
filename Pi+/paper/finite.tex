@@ -10,15 +10,16 @@ finite types, and give \review{a computable presentation} for it.
 
 \todo{Check Brent Yorgey's thesis?}
 
-To do so, we will characterise the automorphisms on finite sets of cardinality
-$n$, and show them to be equivalent to the symmetric group $\Sn$, via the
-Coxeter presentation. We will do that in two steps,
+In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are equivalent to families of automorphisms
+of $\Fin{n}$ for every $n:\Nat$, that is, bijections on finite sets of size $n$. This is the extensional view of
+permutations. In the following sections, we will characterise these permutations, going through two intermediate steps.
+
+To do so, we will characterise the automorphisms on finite sets of cardinality $n$, and show them to be equivalent to
+the symmetric group $\Sn$, via the Coxeter presentation. We will do that in two steps,
 in~\cref*{subsec:permutations,subsec:lehmer,subsec:symmetric}.
 
 \todo{Big example: Start from a listed permutation, show Lehmer code, then adjacent swaps.}
 \todo{Justification for why we need group theory.}
-
-%% Coxeter presentation of $\Sn$ $\eqv$ $\Lehmer[n]$ $\eqv$ $\Aut[\Fin[n]]$
 
 \subsection{Groups}
 
@@ -32,14 +33,14 @@ In type theory, a group $G$ can be defined as an $\hSet$ $S$ with the following 
 \begin{enumerate}
   \item a unit or neutral element $e : S$
   \item a multiplication function $m : S \times S \to S$ written as $(g_{1}, g_{2}) \mapsto g_{1} \mult g_{2}$, that satisfies
-  \begin{enumerate}
-    \item the unit laws, for all $g : S$, that \( g \mult e \id g \) and \( e \mult g \id g \)
-    \item the associativity law, for all $g_{1}, g_{2}, g_{3} : S$, that \( g_{1} \mult (g_{2} \mult g_{3}) \id (g_{1} \mult g_{2}) \mult g_{3} \)
-  \end{enumerate}
+        \begin{enumerate}
+          \item the unit laws, for all $g : S$, that \( g \mult e \id g \) and \( e \mult g \id g \)
+          \item the associativity law, for all $g_{1}, g_{2}, g_{3} : S$, that \( g_{1} \mult (g_{2} \mult g_{3}) \id (g_{1} \mult g_{2}) \mult g_{3} \)
+        \end{enumerate}
   \item an inversion function $i : S \to S$ written as $g \mapsto \inv{g}$, that satisfies
-  \begin{enumerate}
-    \item the inverse laws, for all $g : S$, that \( g \mult \inv{g} \id e \) and \( \inv{g} \mult g \id e \)
-  \end{enumerate}
+        \begin{enumerate}
+          \item the inverse laws, for all $g : S$, that \( g \mult \inv{g} \id e \) and \( \inv{g} \mult g \id e \)
+        \end{enumerate}
 \end{enumerate}
 
 However, more conveniently, in HoTT, we can instead use groupoids to talk about groups. A group can be identified with a
@@ -99,26 +100,26 @@ this, we can state the universal property of free groups.
 \begin{proposition}[Universal Property of $F(A)$]~\label{prop:free-groups}
   Given a group $G$ and a map $f : A \to G$, there is a unique group
   homomorphism $\extend{f} : F(A) \to^G G$ such that $\extend{f} \comp \eta_A
-  \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
-  \to^G G \eqv A \to G$. Alternatively, the type of group homomorphisms $h :
-  F(A) \to^G G$ satisfying $h \comp \eta_A \htpy f$ is contractible.
+    \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
+    \to^G G \eqv A \to G$. Alternatively, the type of group homomorphisms $h :
+    F(A) \to^G G$ satisfying $h \comp \eta_A \htpy f$ is contractible.
 
   % https://q.uiver.app/?q=WzAsMyxbMCwyLCJBIl0sWzAsMCwiRihBKSJdLFsyLDAsIkciXSxbMCwxLCJcXGV0YV9BIl0sWzAsMiwiZiIsMl0sWzEsMiwiXFxleHRlbmR7Zn0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-\[\begin{tikzcd}
-	{F(A)} && G \\
-	\\
-	A
-	\arrow[""{name=0, anchor=center, inner sep=0}, "{\eta_A}", from=3-1, to=1-1]
-	\arrow[""{name=1, anchor=center, inner sep=0}, "f"', from=3-1, to=1-3]
-	\arrow["{\extend{f}}", dashed, from=1-1, to=1-3]
-	\arrow["\id", Rightarrow, draw=none, from=0, to=1]
-\end{tikzcd}\]
+  \[\begin{tikzcd}
+      {F(A)} && G \\
+      \\
+      A
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{\eta_A}", from=3-1, to=1-1]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "f"', from=3-1, to=1-3]
+      \arrow["{\extend{f}}", dashed, from=1-1, to=1-3]
+      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+    \end{tikzcd}\]
 \end{proposition}
 
 This definition of $F(A)$ however has lots of path constructors corresponding to
 each group axiom. Alternatively, the free group construction can be thought of
 as drawing letters from the generating set, while adding formal inverses, and
-constructing words which are sequences of these letters. 
+constructing words which are sequences of these letters.
 
 Each element in the sequence can either be an element drawn from the generating
 set $a$, or an inverse of such an element $\inv{a}$. If we take the disjoint
@@ -136,7 +137,7 @@ free monoid, that is, lists.
   $F(A) \defeq \quot{\List[A + A]}{\sim^{\ast}}$ has a group structure, with the
   empty list $\nil$ for the neutral element, multiplication given by list append
   $\append$, and inverse given by list reversal. Further, $F(A)$ with $\eta_A :
-  A \to F(A) \defeq \inl(a) \cons \nil$ satisfies the universal property of free
+    A \to F(A) \defeq \inl(a) \cons \nil$ satisfies the universal property of free
   groups.~\cref{prop:free-groups}
 \end{proposition}
 
@@ -146,7 +147,7 @@ One useful way of defining groups is by their presentations. A presentation of a
 group builds it by starting from the free group $F(A)$ and introducing a
 collection of equations that have to be satisfied in the resulting group. For
 example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an equation $1 + 1 + 1
-= 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$.
+  = 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$.
 
 The generators can be thought of as primitive operations in a (reversible)
 programming language, group structure gives the way of composing these
@@ -181,136 +182,394 @@ well-behaving rewriting system. In general, the word problem is proven to be und
 \todo{Universal property}
 \todo{Examples: empty relation, van Kampen of $\pi_{1}$}
 
-The above definition is correct because the universal property of the free group allows 
+The above definition is correct because the universal property of the free group allows
 for properly extending the relation on the generating set to the whole group.
 \jk{Turn that into a propostion?}
 
 \subsection{Permutation groups}
 
-Because $\Pi$ The group that we are interested in is the group of permutations on a
-fininte set. We can define it formally in two different ways:
-8a. Taking the type Aut (Fin n) and showing that it satisfies the group
-axiom.
-8b. Writing up a presentation - choosing generating set and equations that
-have to be satisfied.
+Because $\PiLang$ is used for reasoning about reversible functions on finite
+sets, the group that we are interested in is the group of permutations on a
+fininte set, which is classically know as the symmetric group on $n$ words,
+$\Sn$. We've already seen that we can define it formally by taking the
+automorphism group given by the type $\Aut[\Fin[n]]$, and showing that it has a
+group structure satisfying the group axioms. Alternatively, we can write a group
+presentation for $\Sn$ -- by defining a set of generators and a set of relations.
 
-9. By proving these two to be equivalent, we are bridging the gap between
-syntactic and semantic side in the whole proof - by assinging the meaning
-(a bijection) to a word (a program).
+The technical contribution of this section is a proof that these two
+descriptions are equivalent. By doing that, we bridge the gap between the
+syntactic and semantic notions in our completeness proof -- by establishing a
+correspondence between the meaning of a program (a bijection) and its syntax (a
+word).
 
-10. However, in the point 8b, there is an element of choice. One group can
-be presented in many different ways. For example, we could generate the
-permutations by using generators that:
- - swap i-th element with j-th element
- - swap i-th element with the first element
- - shift elements in a cyclic way: operation with label "i" leaves elements
-with numbers > i in place, and element j <= i goes to (j + 1) mod i.
+However, in giving a group presentation, there is an element of choice. A group
+can be presented in many different ways. For example, we could generate the
+permutation group on $\Fin[n]$ by using generators that:
 
-11. One way of thinking about these presentations is to compare them to
-sorting algorithms with different primitive operations. If using a set of
-operations, one can sort any list, then these operations generate the
-permutations group. One weird example: pancake sorting.
+\begin{itemize}
+  \item swap the $i$-the element with the $(i+1)$-th element, that is, adjacent swaps, or
+  \item swap the $i$-th element with the $j$-th element, for arbitrary $i$-s and $j$-s, or
+  \item swap the $i$-th element with an element at a fixed position, or
+  \item flip a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
+  \item cyclically shift any subset of $\Fin[n]$.
+\end{itemize}
+
+One way of thinking about these presentations is via sorting algorithms, which
+use different primitive operations. A sorting algorithm has to calculate a
+permutation of a list or a finite set, which satisfies the invariant of being a
+sorted sequence, which means, the primitive operations of a sorting algorithm
+should be able to generate all the permutations on a given list. If using a
+chosen set of reversible operations, one can write a sorting algorithm, then
+those operations generate the permutation group.
+
+For example, bubble sort uses the primitive operation of adjacent swaps,
+insertion sort and selection sort use the primitive operation of swapping the
+$i$-th element with the $j$-th element, cycle sort uses cyclical shifts of
+subsequences, pancake sort uses flips of prefixes of the list, et cetera.
+\todo{check!}
 
 \subsection{Coxeter Presentation}
 
-12. Here, we are choosing a presentation based on the adjacent
-transpositions generators - i.e. primitive operations of the form "swap
-i-th and i+1 elements". In the language of sorting, this corresponds to
-what the insertion sort or bubble sort are doing.
-In the explanations below, we will use diagrams to draw the permutations.
+We use a presentation based on adjacent transpositions, which is called the
+Coxeter presentation. The primitive operations are adjacent swaps. Further,
+there are three laws that these operations have to satisfy -- it is easiest to
+visualise them as braid diagrams.
 
-12a. There two very obvious laws that such operation has to preserve:
- - Swapping the same two elements two times in a row does not change
-anything (cancel)
-TODO diagram.
- - When swapping two pairs of elements on a positions far away, it does not
-matter in which order one does it (swap). (We can slide the wires).
-TODO diagram.
-But there is also one more law that these operations have to satisfy, in
-the situation when we are swapping adjacent pairs of elements. It is best
-seen on a diagram (braid)
-TODO diagram.
+Swapping the same two elements two times in a row is the same as doing nothing:
 
-This construction is called a Coxeter presentation. Writing it formally, we
-get the following definition
-Definition: Coxeter presentation.
+\[
+  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 2,
+          thick]
+        {braid={ s_1, s_1}};
+      \end{tikzpicture}
+    \end{center}
+     &
+    \(\xlongrightarrow[]{\cancel}\)
+     &
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 2,
+          thick]
+        {braid={1, 1}};
+      \end{tikzpicture}
+    \end{center}
+  \end{tabular}
+\]
 
-13. There are two main considerations to this choice:
-13a. How well the presentation matches the syntactic side of Pi? This is,
-how closely does the operational semantics built from these particular
-primitive operations match the natural operational semantics of Pi?
-13b. How convenient is it to turn the presentation it into rewriting system
-and solve the word problem for it?
+When swapping two pairs of elements in positions "far-away", it does not matter
+in which order the swapping happens, that is, we can slide the wires freely.
 
-Thus, the argument:
-14. TODO I don't know what to write here, we have to think.
+\[
+  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+    \begin{center}
+      \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ 1, s_1}};
+        \end{tikzpicture}
+         &
+        \(\cdots\)
+         &
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ s_1, 1 }};
+        \end{tikzpicture}
+      \end{tabular}
+    \end{center}
+     &
+    \(\xlongrightarrow[]{\swap}\)
+     &
+    \begin{center}
+      \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ s_1, 1}};
+        \end{tikzpicture}
+         &
+        \(\cdots\)
+         &
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 2,
+            thick]
+          {braid={ 1, s_1}};
+        \end{tikzpicture}
+      \end{tabular}
+    \end{center}
+  \end{tabular}
+\]
 
-15a. The equations that define Coxeter presentation have a nice property:
-as it is written, the LHS is smaller (lexicographically) than the RHS.
-Thus, if we could direct them from right to left, it would have a
-termination property out of the box.
-15b. However, it is not at all obvious that the system would be confluent.
-There are many possible critical pairs, such as
-TODO diagram 1212 (braid, braid)
-or
-TODO diagram 3233 (braid, cancel)
-As it turns out, there are instances of critical pairs that do not resolve.
-A simplest example is the following:
-TODO diagram 3213
+\todo{explain braid in words, give some intution on why it holds}
 
-16. The equations have to be changed. We thus propose a new presentation.
-We keep the (cancel) and (swap) equations, but replace (braid) with a more
-general:
-TODO diagram:
+\[
+  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 3,
+          thick]
+        {braid={ s_2, s_1, s_2}};
+      \end{tikzpicture}
+    \end{center}
+     &
+    \(\xlongrightarrow[]{\braid}\)
+     &
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 3,
+          thick]
+        {braid={ s_1, s_2, s_1}};
+      \end{tikzpicture}
+    \end{center}
+  \end{tabular}
+\]
 
-Definition: Long Coxeter presentation.
+\todo{an example/motivation from book.pdf}
 
-17. In return for increased complexity of the equations, it satisfies the
-diamond property (if we direct the equation). Thus, together with the
-(preserved) termination, it creates a confluent rewriting system.
-Proof: All the critical pairs resolve, in the appendix.
-Definition: A normal form is a list that cannot be reduced any further.
+This construction is called a Coxeter presentation. Writing it formally, we define a binary relation $\cox$ on
+$\List[\Fin[n]]$.
 
-18. We define the equivalence classes on List (Fin n) to be precisely these
-elements that have the same normal form.
+\begin{definition}[$\cox$]
+  \begin{align*}
+    \cancel
+     & : \forall n \to (n \cons n \cons \nil) \cox \nil                                                     \\
+    \swap
+     & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil)              \\
+    \braid
+     & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
+  \end{align*}
+\end{definition}
 
-19. However, the Long Coxeter relations are unwieldly and have no
-connectino to the broader scope of computational group theory - while the
-usual Coxeter presentation is to-go choice in this area (cite all these
-papers in Coq, this guy from Sweden(?) etc.).
-Thus, we prove:
-Proposition: Long Coxeter is equivalent to normal Coxeter.
+We define $\cox*$ as the congruence closure of $\cox$.
 
-19a. (Note: here we try to convince the reader about reusability badge) So,
-the Long Coxeter can be regarded as a trick to get the proof to pass - but
-the external user-facing interface is still that of the usual Coxeter
-presentation.
+\begin{definition}[$\cox*$]
+  \begin{align*}
+    \reflr{\cox}
+     & : \forall w \to w \cox* w                                                                                                           \\
+    \symr{\cox}
+     & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1}                                                                  \\
+    \transr{\cox}
+     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3}                                    \\
+    \congrf{\cox}{\append}
+     & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
+    \relr{\cox}
+     & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2}                                                                   \\
+  \end{align*}
+\end{definition}
 
-20. Now, to prove the equivalence of 9, on one side we have Aut(Fin n), and
-on the other, equivalence classes of List (Fin n) wrt to the usual Coxeter
-group, we would define two functions from and back. The easiest way to
-define a function out of the group presentation is to define them on the
-equivalence classes' representatives. But to do that, we have to know how
-do these representatives look like exactly.
+The type $\Sn$ is then defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
 
-\subsection{Lehmer Codes}
+\begin{definition}[$\Sn$]
+  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
+\end{definition}
 
-21. Enter: Lehmer codes.
-TODO diagram with List (Fin n) being divided into equivalence classes, and
-Lehmer codes being an image of immersion, being the normal form
-(representative) in each class.
+The choice of generators for this presentation is important. \todo{Think about this.}
 
-\subsection{Permutations}~\label{subsec:permutations}
+\begin{itemize}
+  \item It affects the difficulty of solving the word problem in $\Sn$ and
+        formalising the proof of its correctness.
+  \item It affects the proof of strong normalisation of reduction for the relations.
+  \item It dictates which words are normal forms in this presentation of $\Sn$.
+  \item It has to closely match the $\PiLang$ comobinators so that we can prove
+        completeness.
+  \item It dictates the choice of reversible gates in the synthesis and
+        normalisation of boolean circuits which are applications that we show in
+        the later sections.
+\end{itemize}
 
-In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are
-equivalent to families of automorphisms of $\Fin{n}$ for every $n:\Nat$, that
-is, bijections on finite sets of size $n$. This is the extensional view of
-permutations. In the following sections, we will characterise these
-permutations, going through two intermediate steps.
+To consider solving the word problem for $\Sn$, we need to formalise the generators for the Coxeter relations on
+$\List[\Fin[n]]$ as a rewriting system $(\List[\Fin[n]],\cox*)$. A well-behaved rewriting system has to be strongly
+normalising and confluent. Throwing out reflexivity and symmetry, we observe that the right hand sides of the relations
+are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$. Thus, by
+directing the relation from left to right, we would be able to prove a termination property out of the box. For a system
+to be confluent, all critical pairs, that is, terms with overlapping possible reduction rules, have to converge. For
+example, the pairs below converge.
 
-\vc{This is obvious, maybe add something more here.}
+\[
+  \begin{array}{lcr}
+    \gspan[\braid][\braid]{\tau_2\tau_1\tau_2\tau_1\tau_2}{\tau_1\tau_2\tau_1\tau_1\tau_2}{\tau_2\tau_1\tau_1\tau_2\tau_1}
+     &
+    \text{or}
+     &
+    \gspan[\braid][\cancel]{\tau_2\tau_1\tau_2\tau_2}{\tau_1\tau_2\tau_1\tau_2}{\tau_2\tau_1}
+  \end{array}
+\]
 
-\subsection{Lehmer codes}~\label{subsec:lehmer}
+Unfortunately, in the system defined, this is not true for all critical pairs. One example is the following.
+
+\[
+  \gspan[\braid][\swap]{\tau_3\tau_2\tau_3\tau_1}{\tau_2\tau_3\tau_2\tau_1}{\tau_3\tau_2\tau_1\tau_3}
+\]
+
+\subsection{Rewriting via Coxeter}
+
+Because of the counterexample discussed, the relations have to be changed. In this section, we will formally define a
+rewriting system partially based on the Coxeter relation, prove that it has good properties (confluence and strong
+normalisation).
+
+The reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$. We
+fix the problem discussed previously by changing $\braid$ to be a slightly more general relation. However, we do not
+want to lose the connection to the theory of group presentations, where Coxeter relations are a standard
+notion~\todo{citation}. To make the result broadly applicable, even though we use the reduction system for computation,
+we prove that its reflexive-transitive closure is indeed equivalent to the conguence closure of the standard Coxeter
+relation $\cox$.
+
+\todo {but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
+
+Formally, the directed $\longcox$ relation is defined with the following generators.
+
+\begin{definition}[$\longcox$]
+  \begin{align*}
+    \longcancel
+     & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r)                                                                           \\
+    \longswap
+     & : \forall k, n, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r)                                    \\
+    \longbraid
+     & : \forall n, l, r \to (l \append (n \downarrow 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downarrow 2 + k) \append r) \\
+  \end{align*}
+\end{definition}
+
+Like before, we define the $\longcox*$ to be the closure of $\longcox$, but only under reflexivity and transitivity. The
+transitive extension is only performed on the right.
+
+\begin{definition}[$\longcox*$]
+  \begin{align*}
+    \reflr{\longcox}
+     & : \forall w \to w \longcox* w                                                                               \\
+    \transr{\longcox}
+     & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3} \\
+  \end{align*}
+\end{definition}
+
+Generators $\longcancel$ and $\longswap$ correspond directly to the generators of $\cox*$ and can be visualised in the
+same way as before. The generator $\longbraid$ uses a helper $n \downf k$, which produces the sequence
+\(k + n, k + n - 1 \ldots, n + 1\).
+
+\begin{definition}[$\downf : (n : \Nat) \to {\Fin[n]} \to {\List[\Fin[\suc[k + n]]]}$]
+  \begin{align*}
+    n \downf 0       & \defeq \nil                       \\
+    n \downf \suc[k] & \defeq (k + n) \cons (n \downf k)
+  \end{align*}
+\end{definition}
+
+As a sequence of transpositions, it moves the element $k - 1$ places. Expressed in terms of the braiding diagram, for
+$n = \dots$ and $k = \dots$, it has the following form:
+
+\[
+  \begin{tikzpicture}
+    \pic[local bounding box=my braid,braid/.cd,
+      number of strands = 6,
+      thick]
+    {braid={s_5, s_4, s_3, s_2, s_1}};
+  \end{tikzpicture}
+\]
+
+Now, the remaining constructor $\longbraid$ moves a transposition around such sequence, as in the diagram below.
+
+\[
+  \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 6,
+          thick]
+        {braid={s_5, s_4, s_3, s_2, s_1, s_5}};
+      \end{tikzpicture}
+    \end{center}
+     &
+    \(\xlongrightarrow[]{\longbraid}\)
+     &
+    \begin{center}
+      \begin{tikzpicture}
+        \pic[local bounding box=my braid,braid/.cd,
+          number of strands = 6,
+          thick]
+        {braid={s_4, s_5, s_4, s_3, s_2, s_1}};
+      \end{tikzpicture}
+    \end{center}
+  \end{tabular}
+\]
+
+Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 2$.
+
+Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox*)$ has the properties
+we desire. It satisfies confluence, that is, the Church-Rosser (diamond) property, and it is strongly normalising,
+because it produces a unique irreducible normal form. Existence of the normal form is implied by the well-foundedness of
+the relation -- informally, it does not contain any infinite decreasing sequences. We follow the terminology
+of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results formally.~\vc{check!}
+
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item $\longcox$ is (locally) confluent. For every span $\coxspan{w_{1}}{w_{2}}{w_{3}}$, there is a matching
+          extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
+    \item $\longcox*$ is confluent. For every extended span $\coxspan*{w_{1}}{w_{2}}{w_{3}}$, there is a matching
+          extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
+    \item $\longcox*$ is well-founded. With $<$ the lexicographic ordering on $\List[\Fin[n]]$, and $w$ being
+          $<$-accessible if every $v < w$ is $<$-accessible, we have that every $w$ is $<$-accesible.
+    \item $\longcox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \longcox* v$.
+  \end{enumerate}
+\end{proposition}
+
+The long form of the Coxeter relations are unwieldy and difficult to prove properties about by induction, and have
+little connection to the broader scope of computational group theory. However, we can prove that the closures of the two
+forms of the relations are equivalent, and work up to this equivalence!
+
+\begin{proposition}
+  $\cox*$ and $\longcox*$ are equivalent. For every $w$ and $v$, $w \cox* v$ iff $w \longcox* v$.
+\end{proposition}
+
+By strong normalisation, we get a unique choice function $\normf : {\List[\Fin[n]]} \to {\List[\Fin[n]]}$ that produces
+a normal form for terms of $\List[\Fin[n]]$. Equivalence classes on $\List[\Fin[n]]$ are precisely those terms that have
+the same normal form. We state a few important properties that $\normf$ satisfies.
+
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item For all $l : \List[\Fin[n]]$, we have that $l \cox* \normf(l)$.
+    \item $\normf$ is idempotent, that is, $\normf \comp \normf \htpy \normf$.
+    \item $\normf$ splits, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n] \xrightarrow{r} {\List[\Fin[n]]}$
+          such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
+  \end{enumerate}
+\end{proposition}
+
+\vc{Remark that $w \cox* v$ is not a proposition.}
+
+Finally, we prove the group structure of $\Sn$, and show that it is indeed a group presentation, given by a quotient of
+the free group $F(\Fin[n])$.
+
+\begin{proposition}
+  There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
+  inverse is given by list reversal.
+\end{proposition}
+
+\begin{proposition}
+  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
+  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A \to A$.
+\end{proposition}
+
+\subsection{Lehmer Codes}~\label{subsec:lehmer}
+
+To prove the equivalence between $\Aut[\Fin[n]]$ and $\Sn[n]$, we will need to define functions back and forth between
+the two types. The terms in $\Sn$ can be identified with equivalence classes of terms in $\List[\Fin[n]]$ with respect
+to the Coxeter relation $\cox*$. The easiest way to define a function out of this presentation is to define it on the
+representatives. We know that these are the unique normal forms in the set-quotient given by $q \comp \normf$, but now
+we will describe what these representatives look like exactly, using Lehmer codes.
+
+\todo{diagram with List (Fin n) being divided into equivalence classes, and Lehmer codes being an image of immersion,
+  being the normal form (representative) in each class.}
 
 From grade school combinatorics, we know that there are $\fac{n}$ permutations
 on a finite set with $n$ elements. The factorial function is defined by
@@ -401,16 +660,16 @@ places.
   \begin{tabular}{c|p{0.75\linewidth}}
     (0, 0, 2, 0, 1)               & We start from an empty list $[]$                                                                 \\
     (\highlight{{0}}, 0, 2, 0, 1) & We read 0 as the left-most value from $l$. Thus, we append the element $\el{0}$ to our
-                                    list, getting $[\el{0}]$. The element is shifted $0$ places, so it remains in the
-                                    same place.                                                                                                                      \\
+    list, getting $[\el{0}]$. The element is shifted $0$ places, so it remains in the
+    same place.                                                                                                                      \\
     (0, \highlight{{0}}, 2, 0, 1) & Then, similarly, we read another 0 for the element $\el{1}$, append it to the
-                                    list getting $[\el{0}, \el{1}]$, and don't shift it either.                                                                      \\
+    list getting $[\el{0}, \el{1}]$, and don't shift it either.                                                                      \\
     (0, 0, \highlight{{2}}, 0, 1) & We read 2 for the next the element $\el{2}$ - we append $\el{2}$ to our list, getting
-                                    $[\el{0}, \el{1}, \el{2}]$, and shift it 2 places right, which results in a list $[\el{0}, \el{2}, \el{1}]$
-                                    \todo{Typeset it nicely, with arrows showing the shifting}.                                                                      \\
+    $[\el{0}, \el{1}, \el{2}]$, and shift it 2 places right, which results in a list $[\el{0}, \el{2}, \el{1}]$
+    \todo{Typeset it nicely, with arrows showing the shifting}.                                                                      \\
     (0, 0, 2, \highlight{{0}}, 1) & Then we read 0 - appending $\el{3}$ and not shifting, getting $[\el{0}, \el{2}, \el{1}, \el{3}]$ \\
     (0, 0, 2, 0, \highlight{{1}}) & Finally, reading 1 for element $\el{4}$ - appending $\el{4}$ to the list and shifting it
-                                    one place right results in the final list $[\el{0}, \el{2}, \el{1}, \el{4}, \el{3}]$                                             \\
+    one place right results in the final list $[\el{0}, \el{2}, \el{1}, \el{4}, \el{3}]$                                             \\
   \end{tabular}
 \end{center}
 \todo{figure}
@@ -446,99 +705,15 @@ provided. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n
   following chain of equivalences.
   \[\arraycolsep=0.5em\def\arraystretch{1.5}
     \begin{array}{rl}
-      & \Aut[\Fin[\suc[m]]] \\
+           & \Aut[\Fin[\suc[m]]]                                                               \\
       \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} \\
-      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \Fin[m]} \\
-      \eqv & \dsum{k : \Fin[\suc[m]]}{\Fin[m] \eqv \Fin[m]} \\
-      \eqv & \Fin[\suc[m]] \times \Aut[\Fin[m]] \\
-      \eqv & \Fin[\suc[m]] \times \Lehmer[m] \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\FinExcept{\suc[m]}[\fzero] \eqv \Fin[m]}                \\
+      \eqv & \dsum{k : \Fin[\suc[m]]}{\Fin[m] \eqv \Fin[m]}                                    \\
+      \eqv & \Fin[\suc[m]] \times \Aut[\Fin[m]]                                                \\
+      \eqv & \Fin[\suc[m]] \times \Lehmer[m]                                                   \\
     \end{array}
   \]
 \end{proof}
-
-\subsection{Symmetric groups}~\label{subsec:symmetric}
-
-There is an obvious group structure on $\Aut[\Fin[n]]$ given by identity,
-composition, and inverse. This is the symmetric group $S_n$ on $n$ symbols. In
-the rest of the section we will construct a convenient presentation of this
-group.
-
-\vc{this is just a rough draft for now}
-
-\todo{Reference T-algebra presentations as coequalisers (Mac Lane 6.7)}
-
-First, we formally define a presentation of a group.
-
-\todo{Free 1-group, needs to be truncated}
-
-
-\subsubsection{Coxeter Relations}
-
-We define a binary relation on $\List[\Fin[n]]$.
-
-\begin{definition}[$\cox$]
-  \begin{align*}
-    \cancel
-    & : \forall n \to (n \cons n \cons \nil) \cox \nil \\
-    \swap
-    & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil) \\
-    \braid
-    & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
-  \end{align*}
-\end{definition}
-
-We define $\cox*$ as the congruence closure of $\cox$.
-\vc{This could be simplified a bit depending on our formalisation. $\cox$ is directed, use a different symbol?}
-
-\begin{definition}[$\cox*$]
-  \begin{align*}
-    \reflr{\cox}
-    & : \forall w \to w \cox* w \\
-    \symr{\cox}
-    & : \forall w_{1}, w_{2} \to w_{1} \cox* w_{2} \to w_{2} \cox* w_{1} \\
-    \transr{\cox}
-    & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \cox* w_{2} \to w_{2} \cox* w_{3} \to w_{1} \cox* w_{3} \\
-    \congrf{\cox}{\append}
-    & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
-    \relr{\cox}
-    & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2} \\
-  \end{align*}
-\end{definition}
-
-\todo{Long form of Coxeter relations and their equivalence.}
-
-We state and prove two desirable properties of this relation on $\List[\Fin[n]]$ from the point of view of an abstract
-rewriting system. We follow the terminology of~\cite{krausCoherenceWellFoundednessTaming2020}. \vc{Not completely
-  formalised. Is this with Coxeter or LongCoxeter?}
-
-\begin{proposition}
-  \leavevmode
-  \begin{enumerate}
-    \item $\cox$ is (locally) confluent. For every span $w_{1} \cox w \cox w_{2}$, there is a matching extended cospan
-          $w_{1} \cox* v \cox* w_{2}$.
-    \item $\cox*$ is strongly normalising. For every $w$, there exists a unique $v$ such that $w \cox* v$.
-          \review{Equivalently, the type $\dsum{v:\List[\Fin[n]]}{w \cox* v}$ is contractible, and $w \cox* v$ is a
-          proposition for every $w$ and $v$.}
-  \end{enumerate}
-\end{proposition}
-
-The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
-
-\begin{definition}[$\Sn$]
-  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
-\end{definition}
-
-We will now prove the group structure of $\Sn$.
-
-\begin{proposition}
-  There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
-  inverse is given by list reversal.
-\end{proposition}
-
-\begin{proposition}
-  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
-  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $[\term{id},\term{id}] : A + A \to A$.
-\end{proposition}
 
 We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
 
@@ -569,96 +744,9 @@ We will now show how to generate a Lehmer code from a word in $\Sn$ and back.
 \begin{corollary}
   For all $n : \Nat$,
   \(
-    \Sn \eqv \Lehmer[n] \eqv \Aut[\Fin[n]]
+  \Sn \eqv \Lehmer[n] \eqv \Aut[\Fin[n]]
   \).
 \end{corollary}
-
-\subsection{Symmetric Monoidal structure}
-
-We describe the symmetric monoidal structure of the groupoid $\UFin$.
-
-First, we observe a few equivalences.
-
-\begin{proposition}
-  For any $n, m : \Nat$,
-  \begin{align*}
-    \Fin[0]                & \eqv \bot \\
-    \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m] \\
-  \end{align*}
-  and for any types $X, Y, Z$,
-  \begin{align*}
-    \bot \sqcup X          & \eqv X \\
-    X \sqcup \bot          & \eqv X \\
-    (X \sqcup Y) \sqcup Z  & \eqv X \sqcup (Y \sqcup Z) \\
-    X \sqcup Y             & \eqv Y \sqcup Y \\
-  \end{align*}
-\end{proposition}
-
-We lift these equivalences to $\UFin$ giving it the (additive) symmetric monoidal structure $(I, \oplus)$, with natural
-isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$, and the symmetry isomorphism $\mathcal{B}_{X,Y}$. Note that
-types in $\UFin$ are $\hSet$s since they're merely equivalent to $\Fin[n]$ for some $n : \Nat$.
-
-\begin{definition}
-  \begin{align*}
-    I           & \defeq F_{0}    \\
-    X \oplus Y & \defeq X \sqcup Y \\
-    \lambda_{X} & : I \oplus X \eqv X \\
-    \rho_{X} & : X \oplus I \eqv X \\
-    \alpha_{X,Y,Z} & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
-    \mathcal{B}_{X,Y} & : X \oplus Y \eqv Y \oplus X
-  \end{align*}
-\end{definition}
-
-These isomorphisms satisfy the Mac Lane coherence conditions for symmetric monoidal categories, that is, the triangle,
-pentagon, and hexagon identities, and the syllepsis of the braiding, upto 2-paths in $\UFin$.
-
-\begin{proposition}
-  % https://q.uiver.app/?q=WzAsNCxbMCwwLCIoWCBcXG9wbHVzIEkpIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyAoSSBcXG9wbHVzIFkpIl0sWzEsMSwiWCBcXG9wbHVzIFkiXSxbMCwxXSxbMCwxLCJcXGFscGhhX3tYLEksWX0iXSxbMCwyLCJcXHJob197WH0gXFxvcGx1cyAxX3tZfSIsMl0sWzEsMiwiMV97WH0gXFxvcGx1cyBcXGxhbWJkYV97WX0iXSxbNSw2LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      {(X \oplus I) \oplus Y} && {X \oplus (I \oplus Y)} \\
-      {} & {X \oplus Y}
-      \arrow["{\alpha_{X,I,Y}}", from=1-1, to=1-3]
-      \arrow[""{name=0, anchor=center, inner sep=0}, "{\rho_{X} \oplus 1_{Y}}"', from=1-1, to=2-2]
-      \arrow[""{name=1, anchor=center, inner sep=0}, "{1_{X} \oplus \lambda_{Y}}", from=1-3, to=2-2]
-      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
-    \end{tikzcd}\]
-  % https://q.uiver.app/?q=WzAsNSxbMCwxLCIoKFcgXFxvcGx1cyBYKSBcXG9wbHVzIFkpIFxcb3BsdXMgWiJdLFsxLDAsIihXIFxcb3BsdXMgWCkgXFxvcGx1cyAoWSBcXG9wbHVzIFopIl0sWzIsMSwiVyBcXG9wbHVzIChYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSkiXSxbMiwzLCJXIFxcb3BsdXMgKChYIFxcb3BsdXMgWSkgXFxvcGx1cyBaKSJdLFswLDMsIihXIFxcb3BsdXMgKFggXFxvcGx1cyBZKSkgXFxvcGx1cyBaIl0sWzAsMSwiXFxhbHBoYV97VyBcXG9wbHVzIFgsIFksIFp9Il0sWzEsMiwiXFxhbHBoYV97VyxYLFkgXFxvcGx1cyBafSJdLFszLDIsIjFfe1d9IFxcb3BsdXMgXFxhbHBoYV97WCxZLFp9IiwyXSxbMCw0LCJcXGFscGhhX3tXLFgsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzQsMywiXFxhbHBoYV97VyxYIFxcb3BsdXMgWSxafSIsMl0sWzAsMiwiXFxpZCIsMSx7Im9mZnNldCI6NSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      & {(W \oplus X) \oplus (Y \oplus Z)} \\
-      {((W \oplus X) \oplus Y) \oplus Z} && {W \oplus (X \oplus (Y \oplus Z))} \\
-      \\
-      {(W \oplus (X \oplus Y)) \oplus Z} && {W \oplus ((X \oplus Y) \oplus Z)}
-      \arrow["{\alpha_{W \oplus X, Y, Z}}", from=2-1, to=1-2]
-      \arrow["{\alpha_{W,X,Y \oplus Z}}", from=1-2, to=2-3]
-      \arrow["{1_{W} \oplus \alpha_{X,Y,Z}}"', from=4-3, to=2-3]
-      \arrow["{\alpha_{W,X,Y} \oplus 1_{Z}}"', from=2-1, to=4-1]
-      \arrow["{\alpha_{W,X \oplus Y,Z}}"', from=4-1, to=4-3]
-      \arrow["\id"{description}, shift right=5, draw=none, from=2-1, to=2-3]
-    \end{tikzcd}\]
-  % https://q.uiver.app/?q=WzAsNixbMSwwLCJYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSJdLFswLDEsIihYIFxcb3BsdXMgWSkgXFxvcGx1cyBaIl0sWzAsMiwiKFkgXFxvcGx1cyBYKSBcXG9wbHVzIFoiXSxbMSwzLCJZIFxcb3BsdXMgKFggXFxvcGx1cyBaKSJdLFsyLDIsIlkgXFxvcGx1cyAoWiBcXG9wbHVzIFgpIl0sWzIsMSwiKFkgXFxvcGx1cyBaKSBcXG9wbHVzIFgiXSxbMSwwLCJcXGFscGhhX3tYLFksWn0iXSxbMSwyLCJcXG1hdGhjYWx7Qn1fe1gsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzIsMywiXFxhbHBoYV97WSxYLFp9IiwyXSxbMyw0LCIxX3tZfSBcXG9wbHVzIFxcbWF0aGNhbHtCfV97WCxafSIsMl0sWzUsNCwiXFxhbHBoYV97WSxaLFh9Il0sWzAsNSwiXFxtYXRoY2Fse0J9X3tYLFkgXFxvcGx1cyBafSJdLFs3LDEwLCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      & {X \oplus (Y \oplus Z)} \\
-      {(X \oplus Y) \oplus Z} && {(Y \oplus Z) \oplus X} \\
-      {(Y \oplus X) \oplus Z} && {Y \oplus (Z \oplus X)} \\
-      & {Y \oplus (X \oplus Z)}
-      \arrow["{\alpha_{X,Y,Z}}", from=2-1, to=1-2]
-      \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y} \oplus 1_{Z}}"', from=2-1, to=3-1]
-      \arrow["{\alpha_{Y,X,Z}}"', from=3-1, to=4-2]
-      \arrow["{1_{Y} \oplus \mathcal{B}_{X,Z}}"', from=4-2, to=3-3]
-      \arrow[""{name=1, anchor=center, inner sep=0}, "{\alpha_{Y,Z,X}}", from=2-3, to=3-3]
-      \arrow["{\mathcal{B}_{X,Y \oplus Z}}", from=1-2, to=2-3]
-      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
-    \end{tikzcd}\]
-  % https://q.uiver.app/?q=WzAsMyxbMCwwLCJYIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyBZIl0sWzEsMSwiWSBcXG9wbHVzIFgiXSxbMCwxLCIxX3tYIFxcb3BsdXMgWX0iLDAseyJsZXZlbCI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIlxcbWF0aGNhbHtCfV97WCxZfSIsMl0sWzIsMSwiXFxtYXRoY2Fse0J9X3tZLFh9IiwyXSxbNCw1LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      {X \oplus Y} && {X \oplus Y} \\
-      & {Y \oplus X}
-      \arrow["{1_{X \oplus Y}}", Rightarrow, no head, from=1-1, to=1-3]
-      \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y}}"', from=1-1, to=2-2]
-      \arrow[""{name=1, anchor=center, inner sep=0}, "{\mathcal{B}_{Y,X}}"', from=2-2, to=1-3]
-      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
-    \end{tikzcd}\]
-\end{proposition}
 
 %%% Local Variables:
 %%% mode: latex

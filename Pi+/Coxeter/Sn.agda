@@ -1,14 +1,19 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
 module Pi+.Coxeter.Sn where
 
 open import lib.Base
 open import lib.Relation
 open import lib.PathGroupoid
+open import lib.Function
+open import lib.Function2
 open import lib.NType
+open import lib.NType2
 open import lib.types.SetQuotient public
 open import lib.types.List
 open import lib.types.Fin
+open import lib.types.Truncation
+open import lib.types.Sigma
 
 open import Pi+.Extra
 open import Pi+.Coxeter.Coxeter

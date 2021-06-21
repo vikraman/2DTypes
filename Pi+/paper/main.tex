@@ -1,11 +1,13 @@
 \documentclass[acmsmall,review,anonymous]{acmart}
 \settopmatter{printfolios=true,printccs=false,printacmref=false}
+\overfullrule=1mm
 
 \usepackage{cleveref}
 \usepackage{macros}
 \usepackage{hott}
 \usepackage{quiver}
 \usepackage{enumitem}
+\usepackage{extarrows}
 
 %% Some recommended packages.
 %% \usepackage{booktabs}   %% For formal tables:
@@ -50,6 +52,11 @@
 \input{tikzit.tikzstyles}
 \tikzset{>=latex}
 \usepackage{newunicodechar}
+
+% Braiding diagrams
+\usepackage{tikz}
+\usetikzlibrary{braids}
+\usepackage{mathtools}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}[theorem]{Corollary}
