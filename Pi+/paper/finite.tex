@@ -545,7 +545,13 @@ the same normal form. We state a few important properties that $\normf$ satisfie
   \end{enumerate}
 \end{proposition}
 
-\vc{Remark that $w \cox* v$ is not a proposition.}
+Note that this relation $\cox*$ is not $\hProp$-valued, that is, $w \cox* v$ is not a proposition because reductions are
+not unique. Because of this, the quotient $\Sn$ is not effective, that is, $\quotrel : w \cox* v \to q(w) \id q(v)$ is
+not an equivalence. We could truncate the relation to change this, but then the codomain of $\normf$ also needs to be
+truncated. Instead, using the $\normf$ function, we could define a new relation
+$(w \approx v) \defeq (\normf(w) \id \normf(v))$ which is $\hProp$-valued, and quotient $\List[\Fin[n]]$ by $\approx$.
+This is not necessary because our results hold for $\cox*$ using the properties of the rewriting system we proved, and
+we do not rely on the effectivity of the quotient.
 
 Finally, we prove the group structure of $\Sn$, and show that it is indeed a group presentation, given by a quotient of
 the free group $F(\Fin[n])$.
