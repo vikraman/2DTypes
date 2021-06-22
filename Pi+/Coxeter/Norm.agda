@@ -54,14 +54,22 @@ module _ {i j} {A : Type i} {B : Type j} where
 
 module _ {i j} {A : Type i} {B : Type j} where
 
-  im : (f : A → B) → Type (lmax i j)
-  im f = Σ B (λ b → hfiber f b)
+  im : (n : ℕ₋₂) (f : A → B) → Type (lmax i j)
+  im n f = Σ B (λ b → Trunc n (hfiber f b))
 
-  restrict : (f : A → B) → A → im f
-  restrict f a = f a , a , idp
+  restrict : {n : ℕ₋₂} (f : A → B) → A → im n f
+  restrict f a = f a , [ a , idp ]
 
-  restrict-is-retract : {f : A → B} → has-section (restrict f)
-  restrict-is-retract {f} = (λ { (b , a , p) → a }) , (λ { (.(f a) , a , idp) → idp })
+  restrict-has-section : {n : ℕ₋₂} {{_ : has-level n A}} {{_ : has-level (S n) B}} {f : A → B}
+                       → has-section (restrict {n = n} f)
+  restrict-has-section {n} {f} = s , s-is-section
+    where s : im n f → A
+          s (b , ϕ) = Trunc-rec fst ϕ
+          s-is-section : restrict f ∘ s ∼ idf (im n f)
+          s-is-section (b , ϕ) =
+            Trunc-elim {P = λ ψ → (restrict f ∘ s) (b , ψ) == idf (im n f) (b , ψ)}
+                       {{λ {x} → has-level-apply-instance {{Σ-level ⟨⟩ λ _ → raise-level _ ⟨⟩}}}}
+                       (λ { (a , idp) → idp }) ϕ
 
 module _ {i j} {A : Type i} {B : Type j} where
 
@@ -114,5 +122,23 @@ module _ {i} {A : Type i} {j} {R : Rel A j} where
     SetQuot-elim ⦃ raise-level _ Trunc-level ⦄
       (λ a → [ a , idp ]) λ r → prop-has-all-paths-↓
 
+  SetQuot≃im-q : SetQuot R ≃ im -1 (q[_] {R = R})
+  SetQuot≃im-q = equiv f g f-g g-f
+    where f : SetQuot R → im -1 q[_]
+          f = SetQuot-rec ⦃ Σ-level-instance {{⟨⟩}} {{raise-level _ ⟨⟩}} ⦄
+                          (λ a → q[ a ] , [ a , idp ])
+                          (λ r → pair= (quot-rel r) prop-has-all-paths-↓)
+          g : im -1 q[_] → SetQuot R
+          g = fst
+          f-g : (x : im (S ⟨-2⟩) q[_]) → f (g x) == x
+          f-g (x , ϕ) = Trunc-elim {P = λ ψ → f (g (x , ψ)) == x , ψ}
+                                   ⦃ has-level-apply (Σ-level-instance {{⟨⟩}} {{raise-level _ ⟨⟩}}) _ _ ⦄
+                                   (λ { (a , idp) → idp }) ϕ
+          g-f : (x : SetQuot R) → g (f x) == x
+          g-f = SetQuot-elim (λ a → idp) (λ r → prop-has-all-paths-↓)
+
 norm-q-is-surj : {n : ℕ} → is-surj (q[_] {R = _≈*_})
 norm-q-is-surj {n} w = [ norm-inc {n} w , norm-inc-right-inv w ]
+
+Sn≃im-norm : {n : ℕ} → Sn n ≃ im -1 ((q[_] {R = _≈*_}) ∘ norm {n})
+Sn≃im-norm = transport-equiv (im -1) (λ= (quot-rel ∘ norm-≈*)) ∘e SetQuot≃im-q
