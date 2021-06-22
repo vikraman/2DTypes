@@ -23,7 +23,23 @@ g(r,h) &=& (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
 \end{array}\]
 Wouldn't it be simpler to write this permutation and automatically derive a circuit from it?
 
-\note{Can we do this??}
+\note{Can we do this for the supplementary material??}
+
+In this section, we illustrate the idea in detail with a smaller circuit. The \Afun{cnot} function is a fundamental gate
+for reversible and quantum computing.
+
+
+% controlled : {t : Pi.U} → (c : t Pi.⟷₁ t) → (𝟚 Pi.× t Pi.⟷₁ 𝟚 Pi.× t)
+% controlled c = dist ◎ (id⟷₁ ⊕ (id⟷₁ ⊗ c)) ◎ factor
+
+% not : 𝟚 Pi.⟷₁ 𝟚
+% not = swap₊
+
+% cnot : 𝟚 Pi.× 𝟚 Pi.⟷₁ 𝟚 Pi.× 𝟚
+% cnot = controlled not
+
+Permutation on 4 bits that swaps 2 and 3
+
 
 
 
