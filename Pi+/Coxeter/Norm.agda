@@ -140,5 +140,25 @@ module _ {i} {A : Type i} {j} {R : Rel A j} where
 norm-q-is-surj : {n : ℕ} → is-surj (q[_] {R = _≈*_})
 norm-q-is-surj {n} w = [ norm-inc {n} w , norm-inc-right-inv w ]
 
-Sn≃im-norm : {n : ℕ} → Sn n ≃ im -1 ((q[_] {R = _≈*_}) ∘ norm {n})
-Sn≃im-norm = transport-equiv (im -1) (λ= (quot-rel ∘ norm-≈*)) ∘e SetQuot≃im-q
+Sn≃im-q-norm : {n : ℕ} → Sn n ≃ im -1 ((q[_] {R = _≈*_}) ∘ norm {n})
+Sn≃im-q-norm = transport-equiv (im -1) (λ= (quot-rel ∘ norm-≈*)) ∘e SetQuot≃im-q
+
+Sn≃im-norm : {n : ℕ} → Sn n ≃ im -1 (norm {n})
+Sn≃im-norm {n} = equiv f g f-g g-f
+  where instance _ = Fin-is-set
+        f : Sn n → im -1 (norm {n})
+        f = SetQuot-rec ⦃ Σ-level-instance {{⟨⟩}} {{raise-level _ ⟨⟩}} ⦄
+                        (λ w → norm w , [ w , idp ])
+                        (λ r → pair= (≈*-norm r) prop-has-all-paths-↓)
+        g : im -1 (norm {n}) → Sn n
+        g (l , ϕ) = q[ l ]
+        f-g : (x : im -1 norm) → f (g x) == x
+        f-g (l , ϕ) = Trunc-elim {P = λ ψ → f (g (l , ψ)) == l , ψ}
+                                 ⦃ has-level-apply (Σ-level-instance {{⟨⟩}} {{raise-level _ ⟨⟩}}) _ _ ⦄
+                                 (λ { (w , ψ) → pair= (! (norm-norm w ∙ ap norm ψ) ∙ ψ) prop-has-all-paths-↓ }) ϕ
+        g-f : (x : Sn n) → g (f x) == x
+        g-f = SetQuot-elim (λ l → quot-rel (comm (norm-≈* l)))
+                           (λ r → prop-has-all-paths-↓)
+
+im-q-im-norm : {n : ℕ} → im -1 (q[_] {R = _≈*_}) ≃ im -1 (norm {n})
+im-q-im-norm {n} = Sn≃im-norm ∘e  SetQuot≃im-q ⁻¹
