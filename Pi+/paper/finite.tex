@@ -695,7 +695,7 @@ We can show that the function $\immersion$ gives an equivalence betweeen $\Lehme
 
 We can also establish an equivalence between $\im{\normf}$ and $\Sn$, which gives the following.
 
-\begin{proposition}
+\begin{proposition}~\label{prop:sn-im-lehmer-equiv}
   For all $n : \Nat$, \( \Sn \eqv \im{\normf} \eqv \Lehmer[n] \).
 \end{proposition}
 
@@ -717,13 +717,13 @@ $\hSet$.
 
 We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$.
 
-\begin{proposition}
+\begin{proposition}~\label{prop:fin-finexcept}
   \leavevmode
   \begin{enumerate}
-    \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$.
-    \item For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$.
+    \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$.~\label{prop:fin-finexcept-1}
+    \item For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$.~\label{prop:fin-finexcept-2}
     \item For any $n : \Nat$,
-          \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}[k]} \).
+          \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}[k]} \).~\label{prop:fin-finexcept-3}
   \end{enumerate}
 \end{proposition}
 
@@ -737,18 +737,16 @@ We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts wi
   After fixing $k \defeq \phi(\zero)$, we need to compute the bijection in the second component. We remove the two
   elements $\zero$ and $k$ from $\Fin[\suc[n]]$ and construct an equivalence between the resulting types
   $\FinExcept{\suc[n]}[\zero]$ and $\FinExcept{\suc[n]}[k]$ as follows:
-  $\FinExcept{\suc[n]}[\zero] \eqv \dsum{k:\Fin[\suc[n]]}{(\phi(\zero) \neq \phi(k))} \eqv \FinExcept{\suc[n]}[k]$
+  $\FinExcept{\suc[n]}[\zero] \eqv \dsum{k:\Fin[\suc[n]]}{(\phi(\zero) \neq \phi(k))} \eqv \FinExcept{\suc[n]}[k]$.
 
   To go the other way, given a $k : \Fin[\suc[n]]$ and an equivalence
   $\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}[k]$ we compute an equivalence as follows:
   $\Fin[\suc[n]] \eqv \unit \sqcup \FinExcept{\suc[n]}[k] \eqv \unit \sqcup \Fin[n] \eqv \Fin[\suc[n]]$.
 \end{proof}
 
-To remind ourselves, in a Lehmer code, the element $\el{r}$ at postition $k$ counts the number of inversions of the
-element $\el{r}$. This corresponds exactly to what happens in the third proposition -- inserting element $\el{r}$ at the
-position $k$ shifts it by $k$ places.
+Using these facts, we can now prove the main result of this section.
 
-\begin{proposition}
+\begin{proposition}~\label{prop:lehmer-aut-equiv}
   For all $n:\Nat$, \( \Lehmer[n] \eqv \Aut[\Fin[\suc[n]]] \).
 \end{proposition}
 
@@ -763,17 +761,26 @@ position $k$ shifts it by $k$ places.
       \eqv & \Aut[\Fin[\suc[\zero]]] \\
     \end{array}
     \qquad\qquad
-    \begin{array}{rl}
-           & \Lehmer[\suc[m]]                                                                              \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                         \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                              \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \Fin[\suc[m]]}          \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} \\
-      \eqv & \Aut[\Fin[\suc[\suc[m]]]]
+    \begin{array}{rlr}
+           & \Lehmer[\suc[m]]                                                                              &                                                                 \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                         & \text{by definition}                                            \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                & \text{induction hypothesis}                                     \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                              & \text{$\Sigma$ over a constant family}                          \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \Fin[\suc[m]]}          & \text{by~\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-2}} \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} & \text{by~\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-2}} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                     & \text{by~\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-3}} \\
     \end{array}
   \end{gather*}
 \end{proof}
+
+\jk{TODO an example here}
+To remind ourselves, in a Lehmer code, the element $\el{r}$ at postition $k$ counts the number of inversions of the
+element $\el{r}$. This corresponds exactly to what happens in the \cref{prop:fin-finexcept-3}. Looking at the operation
+combinatorially, it is inserting element $\el{r}$ at the position $k$, meaning that it shifts the element
+$k$places.\jk{needs rewriting after the example is here}
+
+By composing~\cref{prop:lehmer-aut-equiv} and~\cref{prop:sn-im-lehmer-equiv}, we obtain the final
+equivalence.
 
 \begin{corollary}
   For all $n : \Nat$,
