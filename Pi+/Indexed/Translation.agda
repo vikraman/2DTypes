@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --exact-split --rewriting #-}
+{-# OPTIONS --without-K --exact-split --rewriting --allow-unsolved-metas #-}
 
 open import lib.Base
 open import lib.NType
@@ -24,6 +24,28 @@ eval₀ O = O
 eval₀ I = S O
 eval₀ (t₁ + t₂) = eval₀ t₁ N.+ eval₀ t₂
 eval₀ (t₁ × t₂) = eval₀ t₁ N.* eval₀ t₂
+
+eval₀-size : {t₁ t₂ : Pi.U} (c : t₁ ⟷₁ t₂) → eval₀ t₁ == eval₀ t₂
+eval₀-size unite₊l = idp
+eval₀-size uniti₊l = idp
+eval₀-size unite⋆l = +-unit-r (eval₀ _)
+eval₀-size uniti⋆l = ! (eval₀-size unite⋆l)
+eval₀-size swap₊ = +-comm (eval₀ _) (eval₀ _)
+eval₀-size swap⋆ = TODO-
+eval₀-size assocl₊ = +-assoc _ _ _
+eval₀-size assocr₊ = ! (+-assoc _ _ _)
+eval₀-size assocl⋆ = TODO-
+eval₀-size assocr⋆ = TODO-
+eval₀-size absorbr = idp
+eval₀-size absorbl = TODO-
+eval₀-size factorzr = ! (eval₀-size absorbl)
+eval₀-size factorzl = idp
+eval₀-size dist = TODO-
+eval₀-size factor = TODO-
+eval₀-size id⟷₁ = idp
+eval₀-size (c ◎ c₁) = ap eval₀ TODO-
+eval₀-size (c ⊕ c₁) = TODO-
+eval₀-size (c ⊗ c₁) = TODO-
 
 private
   variable
