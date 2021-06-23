@@ -1,0 +1,43 @@
+\ProvidesPackage{syntax}
+
+% Pi
+\newcommand{\PiLang}{\mathit{\Pi}}
+\newcommand{\PiPlusLang}{\mathit{{\Pi}^{+}}}
+\newcommand{\PiHatLang}{\mathit{{\Pi}^{\wedge}}}
+
+% Types
+\newcommand{\UPi}{\mathit{U}}
+\newcommand{\UPlus}{\mathit{U}^{+}}
+\newcommand{\UHat}{\mathit{{U}^{\wedge}}}
+
+% Combinators
+\newcommand{\iso}{\mathrel{\leftrightarrow}}
+\newcommand{\Iso}{\mathrel{\Leftrightarrow}}
+\newcommand{\isoh}{\mathrel{\leftrightarrow^{\wedge}}}
+\newcommand{\Isoh}{\mathrel{\Leftrightarrow^{\wedge}}}
+
+% Pi equivalence
+\NewDocumentCommand{\quotet}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{quote}}
+  {\term{quote_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
+\NewDocumentCommand{\evalt}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{eval}}
+  {\term{eval_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
+\NewDocumentCommand{\quoteh}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{quote^\wedge}}
+  {\term{quote^\wedge_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
+\NewDocumentCommand{\evalh}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{eval^\wedge}}
+  {\term{eval^\wedge_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
