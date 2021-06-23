@@ -162,6 +162,7 @@ reset^ = eval₁ ∘ reset
 reset+ : ∀ n → _
 reset+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ reset^
 
+{--
 reset+test : Fin 4 → Fin 4
 reset+test = –> (Pi+.eval₁ (reset+ 1))
 
@@ -176,6 +177,43 @@ reset+test-2 = fin= idp
 
 reset+test-3 : reset+test 3 == 3
 reset+test-3 = fin= idp
+--}
+
+reset+test : Fin 16 → Fin 16
+reset+test = –> (Pi+.eval₁ (reset+ 3))
+
+-- 0 b1 b2 b3 => or(b1,b2,b3) , b1 b2 b3
+-- 1 b1 b2 b3 => nor(b1,b2,b3) , b1 b2 b3
+
+reset+test-0 : reset+test 0 == 0
+reset+test-0 = fin= idp
+
+reset+test-1 : reset+test 1 == 9
+reset+test-1 = fin= idp
+
+reset+test-2 : reset+test 2 == 10
+reset+test-2 = fin= idp
+
+reset+test-3 : reset+test 3 == 11
+reset+test-3 = fin= idp
+
+reset+test-4 : reset+test 4 == 12
+reset+test-4 = fin= idp
+
+reset+test-5 : reset+test 5 == 13
+reset+test-5 = fin= idp
+
+reset+test-6 : reset+test 6 == 14
+reset+test-6 = fin= idp
+
+reset+test-7 : reset+test 7 == 15
+reset+test-7 = fin= idp
+
+reset+test-8 : reset+test 8 == 8
+reset+test-8 = fin= idp
+
+reset+test-9 : reset+test 9 == 1
+reset+test-9 = fin= idp
 
 fst2last : ∀ n → 𝔹 n Pi.⟷₁ 𝔹 n
 fst2last O = id⟷₁

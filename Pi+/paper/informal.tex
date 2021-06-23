@@ -80,6 +80,14 @@ we reach the last bit.
 
 % reset+ 2:
 
+% 1 + (1 + (1* + (1** + 0)))
+% 1 + ((1 + 1*) + (1** + 0))
+% 1 + ((1* + 1) + (1** + 0))
+% 1 + (1* + (1 + (1** + 0)))
+% 1 + (1* + (1** + (1 + 0)))
+% 1 + (1* + (1** + (1 + 0)))
+
+
 % (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 % (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 % (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
