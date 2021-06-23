@@ -7,41 +7,88 @@
   reversible language with $\leq 5$ bits, and examples of permutations and
   transpositions, and when they're equal.}
 
-Shor's quantum factoring algorithm requires, at its core, a classical reversible function for modular exponentiation. As
-explained in standard accounts of the algorithm (e.g., the Qiskit implementation), such efficient modular exponentiation
-circuits are not straightforward and are the bottleneck in Shor’s algorithm. Typical derivations of the circuit start
-from elementary gates, build a circuit for modular addition, which is used to build a circuit for modular
-multiplication, and then finally a circuit for modular exponentiation taking care at each step to avoid the exponential
-blowup~\cite{shorefficient}. Ultimately however the circuit has a simple specification as a \emph{permutation}. For
-example, consider the function $f(r) = 11^{r} \mod 15$. Using the Toffoli construction~\cite{Toffoli:1980}, we can embed
-this function $f$ into a reversible function $g$, shown below, such that $g(r,0) = (r,f(r))$:
-\[\begin{array}{rcll}
-g(r,h) &=& (r,h+1) & \mbox{when~$r$~even~and~$h$~even} \\
-g(r,h) &=& (r,h-1) & \mbox{when~$r$~even~and~$h$~odd} \\
-g(r,h) &=& (r,11-h) & \mbox{when~$r$~odd~and~$4 > h \geq 0$~or~$12 > h \geq 8$} \\
-g(r,h) &=& (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
-\end{array}\]
-Wouldn't it be simpler to write this permutation and automatically derive a circuit from it?
+% Shor's quantum factoring algorithm requires, at its core, a classical reversible function for modular exponentiation. As
+% explained in standard accounts of the algorithm (e.g., the Qiskit implementation), such efficient modular exponentiation
+% circuits are not straightforward and are the bottleneck in Shor’s algorithm. Typical derivations of the circuit start
+% from elementary gates, build a circuit for modular addition, which is used to build a circuit for modular
+% multiplication, and then finally a circuit for modular exponentiation taking care at each step to avoid the exponential
+% blowup~\cite{shorefficient}. Ultimately however the circuit has a simple specification as a \emph{permutation}. For
+% example, consider the function $f(r) = 11^{r} \mod 15$. Using the Toffoli construction~\cite{Toffoli:1980}, we can embed
+% this function $f$ into a reversible function $g$, shown below, such that $g(r,0) = (r,f(r))$:
+% \[\begin{array}{rcll}
+% g(r,h) &=& (r,h+1) & \mbox{when~$r$~even~and~$h$~even} \\
+% g(r,h) &=& (r,h-1) & \mbox{when~$r$~even~and~$h$~odd} \\
+% g(r,h) &=& (r,11-h) & \mbox{when~$r$~odd~and~$4 > h \geq 0$~or~$12 > h \geq 8$} \\
+% g(r,h) &=& (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
+% \end{array}\]
+% Wouldn't it be simpler to write this permutation and automatically derive a circuit from it?
 
-\note{Can we do this for the supplementary material??}
+% \note{Can we do this for the supplementary material??}
 
-In this section, we illustrate the idea in detail with a smaller circuit. The \Afun{cnot} function is a fundamental gate
-for reversible and quantum computing.
+A common idiom in reversible programs is to use a value for an intermediate computation and then reset it. An example of
+such a reversible circuit would be a function whose semantics can be summarized as follows:
+$\Afun{RESET}(b,b_1,\ldots,b_n) = (b \; \underline{\vee} \; (\bigvee_{i=1}^n b_i),b_1,\ldots,b_n)$ where $\vee$ is
+logical-or and $\underline{\vee}$ is exclusive-or. The natural definition for this function is recursive: modulo some
+re-shuffling of the bits, the strategy is to examine the bits $b_i$ one-by-one and as long as the current bit is false,
+keep making recursive calls. If we reach the last bit we negate it. The full implementation using 4 helpers is in the
+supplementary material. Unrolling the definition
+
+
+As shown in the last line of the
+definition, as long as we are in the first branch of the conditional
+(i.e., the current bit is false), we keep calling \Afun{RESET} until
+we reach the last bit.
+
+%%\begin{minipage}{.65\textwidth}
+%%  \PiRESET{}
+%%\end{minipage}
+%%\begin{minipage}{.30\textwidth}
+  \begin{center}
+  \resizebox{0.5\textwidth}{!}{\input{diagrams/reset.tikz}}
+  \end{center}
+%%\end{minipage}
+
+
 
 
 % controlled : {t : Pi.U} → (c : t Pi.⟷₁ t) → (𝟚 Pi.× t Pi.⟷₁ 𝟚 Pi.× t)
 % controlled c = dist ◎ (id⟷₁ ⊕ (id⟷₁ ⊗ c)) ◎ factor
 
-% not : 𝟚 Pi.⟷₁ 𝟚
-% not = swap₊
-
 % cnot : 𝟚 Pi.× 𝟚 Pi.⟷₁ 𝟚 Pi.× 𝟚
 % cnot = controlled not
 
-Permutation on 4 bits that swaps 2 and 3
+% cif : {t : Pi.U} → (c₁ c₂ : t Pi.⟷₁ t) → (𝟚 Pi.× t Pi.⟷₁ 𝟚 Pi.× t)
+% cif c₁ c₂ = dist ◎ ((id⟷₁ ⊗ c₁) ⊕ (id⟷₁ ⊗ c₂)) ◎ factor
 
+% rearrange : (t₁ t₂ t₃ : Pi.U) → t₁ Pi.× (t₂ Pi.× t₃) Pi.⟷₁ t₂ Pi.× (t₁ Pi.× t₃)
+% rearrange t₁ t₂ t₃ = assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 
+% reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
+% reset O = id⟷₁
+% reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
+% reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (reset (S n)) (swap₊ ⊗ id⟷₁) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 
+% reset 2 =
+
+% (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
+% (dist ◎
+%  ((id⟷₁ ⊗
+%    (swap⋆ ◎ (dist ◎ (id⟷₁ ⊕ (id⟷₁ ⊗ swap₊)) ◎ factor) ◎ swap⋆))
+%   ⊕ (id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)))
+%  ◎ factor)
+% ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
+
+% reset+ 2:
+
+% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
+
+% reset+ 5
+
+% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
 
 
 
