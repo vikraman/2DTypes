@@ -162,6 +162,21 @@ reset^ = eval₁ ∘ reset
 reset+ : ∀ n → _
 reset+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ reset^
 
+reset+test : Fin 4 → Fin 4
+reset+test = –> (Pi+.eval₁ (reset+ 1))
+
+reset+test-0 : reset+test 0 == 2
+reset+test-0 = fin= idp
+
+reset+test-1 : reset+test 1 == 1
+reset+test-1 = fin= idp
+
+reset+test-2 : reset+test 2 == 0
+reset+test-2 = fin= idp
+
+reset+test-3 : reset+test 3 == 3
+reset+test-3 = fin= idp
+
 fst2last : ∀ n → 𝔹 n Pi.⟷₁ 𝔹 n
 fst2last O = id⟷₁
 fst2last (S O) = id⟷₁
