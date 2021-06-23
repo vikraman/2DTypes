@@ -119,7 +119,7 @@ is defined as follows:
     \mathit{enum}(A + B) &=& \mathit{map}~\Acon{inj₂}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₁}~\mathit{enum}(B) \\
     \mathit{enum}(A \times B) &=& \mathit{concat}~(\mathit{map}~(\lambda v.\mathit{map}~(\lambda w. (v,w))~\mathit{enum}(B))~\mathit{enum}(A))
 \end{array}\]
-\noindent For example, the 3 values $\inlv{\Acon{tt}}$, $\inrv{(\inlv{\Acon{tt}})}$, and $\inrv{(\inrv{\Acon{tt}})}$ of
+\noindent For example, the 3 values $\inrv{(\inrv{\Acon{tt}})}$, $\inrv{(\inlv{\Acon{tt}})}$, and $\inlv{\Acon{tt}}$ of
 type $\onet + (\onet + \onet)$ are given indices 0, 1, and 2 respectively. Given this canonical order, the combinator
 $\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ would correspond to the permutation $(1~2~0)$ while the
 combinator $\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ at the same type would correspond to the
