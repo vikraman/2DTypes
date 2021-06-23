@@ -84,6 +84,18 @@ _ : (test1 (inr tt , inr tt) == 0) S.×
     (test1 (inl tt , inl tt) == 3)
 _ = fin= idp , fin= idp , fin= idp , fin= idp
 
+interp : {X : Pi.U} (c : X Pi.⟷₁ X) → ⟦ X ⟧ ≃ ⟦ X ⟧
+interp c = ⟦-⟧-eval₀ ⁻¹ ∘e Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
+
+swap2 : 𝔹 2 Pi.⟷₁ 𝔹 2
+swap2 = swap⋆
+
+_ : (–> (interp swap2) (inr tt , inr tt) == inr tt , inr tt) S.×
+    (–> (interp swap2) (inr tt , inl tt) == inl tt , inr tt) S.×
+    (–> (interp swap2) (inl tt , inr tt) == inr tt , inl tt) S.×
+    (–> (interp swap2) (inl tt , inl tt) == inl tt , inl tt)
+_ = idp , idp , idp , idp
+
 controlled : {t : Pi.U} → (c : t Pi.⟷₁ t) → (𝟚 Pi.× t Pi.⟷₁ 𝟚 Pi.× t)
 controlled c = dist ◎ ((id⟷₁ ⊗ c) ⊕ id⟷₁) ◎ factor
 
