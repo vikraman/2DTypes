@@ -706,15 +706,16 @@ normalising words in $\Sn$, we need to run it to produce a concrete bijection of
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
 between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$.
 
-To start, we define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except the
-one provided. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence an $\hSet$.
+To do so, we need to construct some equivalences by counting the elements of $\Fin[n]$ using its decidable equality.
+First, we define a helper type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
+the one in the argument. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence an
+$\hSet$.
 
 \begin{definition}
   \( \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j} \).
 \end{definition}
 
-We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$. \vc{These can be understood
-  using simple counting arguments using the pigeonhole principle, but we have to construct the equivalences.}
+We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$.
 
 \begin{proposition}
   \leavevmode
@@ -722,9 +723,30 @@ We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts wi
     \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$.
     \item For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$.
     \item For any $n : \Nat$,
-          \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}{k}} \).
+          \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}[k]} \).
   \end{enumerate}
 \end{proposition}
+
+\begin{proof}
+  The first and second propositions follow from simply constructing the bijections using the decidable equality of
+  $\Fin[n]$, and making sure to punch-in and punch-out the element $k$ at the right place.
+
+  The third proposition performs some interesting computations. On the left, we have the type of automorphisms of
+  $\Fin[\suc[n]]$. Assume a particular one $\phi : \Fin[\suc[n]] \xrightarrow{\sim} \Fin[\suc[n]]$. To construct an
+  element of the pair on the right, we pick the first component to be the image of the element $\zero$ under $\phi$.
+  After fixing $k \defeq \phi(\zero)$, we need to compute the bijection in the second component. We remove the two
+  elements $\zero$ and $k$ from $\Fin[\suc[n]]$ and construct an equivalence between the resulting types
+  $\FinExcept{\suc[n]}[\zero]$ and $\FinExcept{\suc[n]}[k]$ as follows:
+  $\FinExcept{\suc[n]}[\zero] \eqv \dsum{k:\Fin[\suc[n]]}{(\phi(\zero) \neq \phi(k))} \eqv \FinExcept{\suc[n]}[k]$
+
+  To go the other way, given a $k : \Fin[\suc[n]]$ and an equivalence
+  $\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}[k]$ we compute an equivalence as follows:
+  $\Fin[\suc[n]] \eqv \unit \sqcup \FinExcept{\suc[n]}[k] \eqv \unit \sqcup \Fin[n] \eqv \Fin[\suc[n]]$.
+\end{proof}
+
+To remind ourselves, in a Lehmer code, the element $\el{r}$ at postition $k$ counts the number of inversions of the
+element $\el{r}$. This corresponds exactly to what happens in the third proposition -- inserting element $\el{r}$ at the
+position $k$ shifts it by $k$ places.
 
 \begin{proposition}
   For all $n:\Nat$, \( \Lehmer[n] \eqv \Aut[\Fin[\suc[n]]] \).
@@ -742,13 +764,13 @@ We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts wi
     \end{array}
     \qquad\qquad
     \begin{array}{rl}
-           & \Aut[\Fin[\suc[\suc[m]]]]                                                                     \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \Fin[\suc[m]]}          \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                              \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                \\
+           & \Lehmer[\suc[m]]                                                                              \\
       \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                         \\
-      \eqv & \Lehmer[\suc[m]]
+      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                              \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \Fin[\suc[m]]}          \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]
     \end{array}
   \end{gather*}
 \end{proof}

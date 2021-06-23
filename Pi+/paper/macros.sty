@@ -40,7 +40,7 @@
 % finite types
 \NewDocumentCommand{\Fin}{O{}}{\type{Fin{\ifstrempty{#1}{}{_{\mathsmaller{#1}}}}}}
 \NewDocumentCommand{\FinExcept}{mO{}}{\term{Fin_{\mathsmaller{#1}}^{-}}\ifstrempty{#2}{}{({#2})}}
-\newcommand{\fzero}{f_0}
+\newcommand{\fzero}{\zero}
 \NewDocumentCommand{\isFin}{O{}}{\term{isFin}\ifstrempty{#1}{}{({#1})}}
 
 \newcommand{\encode}[1]{\mathop{\term{encode_{#1}}}}
