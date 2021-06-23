@@ -159,3 +159,6 @@ Sn≃im-norm {n} = equiv f g f-g g-f
         g-f : (x : Sn n) → g (f x) == x
         g-f = SetQuot-elim (λ l → quot-rel (comm (norm-≈* l)))
                            (λ r → prop-has-all-paths-↓)
+
+im-q-im-norm : {n : ℕ} → im -1 (q[_] {R = _≈*_}) ≃ im -1 (norm {n})
+im-q-im-norm {n} = Sn≃im-norm ∘e  SetQuot≃im-q ⁻¹
