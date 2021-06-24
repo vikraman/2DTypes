@@ -1,3 +1,4 @@
+\begin{code}[hide]
 {-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
 open import HoTT hiding (_<_ ; ltS ; ltSR ; _+_ ; _×_)
@@ -14,6 +15,7 @@ open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.SyntaxFull as Pi
 open import Pi+.Indexed.Translation
 import Pi+.Indexed.Equiv1 as Pi+
+import Pi+.Indexed.Equiv0Hat as Pi^
 import Pi+.Indexed.Equiv1Hat as Pi^
 import Pi+.Indexed.Equiv0Norm as Pi^
 import Pi+.Indexed.Equiv1Norm as Pi^
@@ -22,7 +24,7 @@ open import Pi+.UFin.Monoidal
 open import Pi+.Common.FinHelpers
 open import Pi+.Lehmer.FinHelpers
 
-module Pi+.Indexed.Examples where
+module Pi+.Indexed.ExamplesL where
 
 private
   variable
@@ -218,13 +220,74 @@ reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
 reset O = id⟷₁
 reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
 reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
+\end{code}
 
+\newcommand{\resetthree}{%
+\begin{code}
+reset3 : 𝟚 Pi.× 𝔹 3 Pi.⟷₁ 𝟚 Pi.× 𝔹 3
+reset3 =
+  (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
+  (dist ◎
+   ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
+    (id⟷₁ ⊗
+     ((assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
+      (dist ◎
+       ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
+        (id⟷₁ ⊗
+         (swap⋆ ◎ (dist ◎ ((id⟷₁ ⊗ swap₊) ⊕ id⟷₁) ◎ factor) ◎ swap⋆)))
+       ◎ factor)
+      ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆)))
+   ◎ factor)
+  ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
+\end{code}}
+
+\begin{code}[hide]
 reset^ : ∀ n → _
 reset^ = eval₁ ∘ reset
 
 reset+ : ∀ n → _
 reset+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ reset^
+\end{code}
 
+\newcommand{\resetnormthree}{%
+\begin{code}
+reset+3 : Pi^.quote^₀ 16 Pi+.⟷₁ Pi^.quote^₀ 16
+reset+3 =
+  (id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+  ◎
+  (id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+  ◎
+  (id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕
+   id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+  ◎ id⟷₁
+\end{code}}
+
+
+\begin{code}
 -- reset+test : Fin 4 → Fin 4
 -- reset+test = –> (Pi+.eval₁ (reset+ 1))
 
@@ -337,3 +400,4 @@ incr+test-2 = fin= idp
 
 incr+test-3 : incr+test 3 == 2
 incr+test-3 = fin= idp
+\end{code}

@@ -25,19 +25,14 @@
 
 % \note{Can we do this for the supplementary material??}
 
-A common idiom in reversible programs is to use a value for an intermediate computation and then reset it. An example of
-such a reversible circuit would be a function whose semantics can be summarized as follows:
+\paragraph*{Normalization by evaluation of reversible circuits.} Consider the following reversible function:
 $\Afun{RESET}(b,b_1,\ldots,b_n) = (b \; \underline{\vee} \; (\bigvee_{i=1}^n b_i),b_1,\ldots,b_n)$ where $\vee$ is
-logical-or and $\underline{\vee}$ is exclusive-or. The natural definition for this function is recursive: modulo some
-re-shuffling of the bits, the strategy is to examine the bits $b_i$ one-by-one and as long as the current bit is false,
-keep making recursive calls. If we reach the last bit we negate it. The full implementation using 4 helpers is in the
-supplementary material. Unrolling the definition
-
-
-As shown in the last line of the
-definition, as long as we are in the first branch of the conditional
-(i.e., the current bit is false), we keep calling \Afun{RESET} until
-we reach the last bit.
+logical-or and $\underline{\vee}$ is exclusive-or. The function sets or resets the first bit depending on whether any of
+the other bits is true or not. The natural definition for this function is recursive: modulo some re-shuffling of the
+bits, the strategy is to examine the bits $b_i$ one-by-one: if we encounter a true value, we negate the first bit and
+terminate; otherwise we continue making recursive calls until we reach the last bit at which point we return the
+incoming value with no change. A modular implementation using 4 helpers is provided in the supplementary
+material. Unrolling the definition of $\Afun{reset}~3$ and inlining all the helpers produces the following program:
 
 %%\begin{minipage}{.65\textwidth}
 %%  \PiRESET{}
@@ -48,8 +43,17 @@ we reach the last bit.
   \end{center}
 %%\end{minipage}
 
+  \resetthree{}
 
-% reset 2 =
+After normalization:
+
+  \resetnormthree{}
+
+Now imagine we want to write the following reversible function:
+
+0 -> 0
+8 -> 8
+n -> n + 8 `mod` 16
 
 % (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
 % (dist ◎
