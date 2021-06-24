@@ -49,55 +49,45 @@ we reach the last bit.
 %%\end{minipage}
 
 
-
-
-% controlled : {t : Pi.U} → (c : t Pi.⟷₁ t) → (𝟚 Pi.× t Pi.⟷₁ 𝟚 Pi.× t)
-% controlled c = dist ◎ (id⟷₁ ⊕ (id⟷₁ ⊗ c)) ◎ factor
-
-% cnot : 𝟚 Pi.× 𝟚 Pi.⟷₁ 𝟚 Pi.× 𝟚
-% cnot = controlled not
-
-% cif : {t : Pi.U} → (c₁ c₂ : t Pi.⟷₁ t) → (𝟚 Pi.× t Pi.⟷₁ 𝟚 Pi.× t)
-% cif c₁ c₂ = dist ◎ ((id⟷₁ ⊗ c₁) ⊕ (id⟷₁ ⊗ c₂)) ◎ factor
-
-% rearrange : (t₁ t₂ t₃ : Pi.U) → t₁ Pi.× (t₂ Pi.× t₃) Pi.⟷₁ t₂ Pi.× (t₁ Pi.× t₃)
-% rearrange t₁ t₂ t₃ = assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
-
-% reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
-% reset O = id⟷₁
-% reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
-% reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (reset (S n)) (swap₊ ⊗ id⟷₁) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
-
 % reset 2 =
 
 % (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
 % (dist ◎
-%  ((id⟷₁ ⊗
-%    (swap⋆ ◎ (dist ◎ (id⟷₁ ⊕ (id⟷₁ ⊗ swap₊)) ◎ factor) ◎ swap⋆))
-%   ⊕ (id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)))
+%  ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
+%   (id⟷₁ ⊗
+%    (swap⋆ ◎ (dist ◎ ((id⟷₁ ⊗ swap₊) ⊕ id⟷₁) ◎ factor) ◎ swap⋆)))
 %  ◎ factor)
 % ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 
 % reset+ 2:
 
-% 1 + (1 + (1* + (1** + 0)))
-% 1 + ((1 + 1*) + (1** + 0))
-% 1 + ((1* + 1) + (1** + 0))
-% 1 + (1* + (1 + (1** + 0)))
-% 1 + (1* + (1** + (1 + 0)))
-% 1 + (1* + (1** + (1 + 0)))
+% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% id⟷₁
 
+% reset 3 =
 
-% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
+% (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
+% (dist ◎
+%  ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
+%   (id⟷₁ ⊗
+%    ((assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
+%     (dist ◎
+%      ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
+%       (id⟷₁ ⊗
+%        (swap⋆ ◎ (dist ◎ ((id⟷₁ ⊗ swap₊) ⊕ id⟷₁) ◎ factor) ◎ swap⋆)))
+%      ◎ factor)
+%     ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆)))
+%  ◎ factor)
+% ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 
-% reset+ 5
+% reset+ 3
 
-% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
-
+% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)◎
+% id⟷₁
 
 
 \note{Motivation: There are two reversible circuits which describe the following permutation. They can be shown to be
