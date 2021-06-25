@@ -1,9 +1,14 @@
 \ProvidesPackage{syntax}
 
+\RequirePackage{agda}
+
 % Pi
 \newcommand{\PiLang}{\mathit{\Pi}}
 \newcommand{\PiPlusLang}{\mathit{{\Pi}^{+}}}
 \newcommand{\PiHatLang}{\mathit{{\Pi}^{\wedge}}}
+
+\newcommand{\PiHatCat}{\mathbf{\Pi^{\wedge}}}
+\newcommand{\PiPlusCat}{\mathbf{\Pi^{+}}}
 
 % Types
 \newcommand{\UPi}{\mathit{U}}
@@ -15,6 +20,13 @@
 \newcommand{\Iso}{\mathrel{\Leftrightarrow}}
 \newcommand{\isoh}{\mathrel{\leftrightarrow^{\wedge}}}
 \newcommand{\Isoh}{\mathrel{\Leftrightarrow^{\wedge}}}
+
+\newcommand{\swapc}{\AgdaInductiveConstructor{swap}}
+\newcommand{\compc}{\mathrel{\fatsemi}}
+\newcommand{\idlcc}{\AgdaInductiveConstructor{idl}}
+\newcommand{\idrcc}{\AgdaInductiveConstructor{idr}}
+
+\newcommand{\assoccc}{\AgdaInductiveConstructor{assoc}\compc}
 
 % Pi equivalence
 \NewDocumentCommand{\quotet}{E{_}{{}}O{}}{
@@ -39,5 +51,12 @@
   \ifstrempty{#1}
   {\term{eval^\wedge}}
   {\term{eval^\wedge_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
+
+\NewDocumentCommand{\normt}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{norm}}
+  {\term{norm_{#1}}}
   \ifstrempty{#2}{}{({#2})}
 }
