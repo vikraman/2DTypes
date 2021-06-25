@@ -408,7 +408,43 @@ example, the pairs below converge.
   \end{array}
 \]
 
-Unfortunately, in the system defined, this is not true for all critical pairs. One example is the following.
+\begin{proof}
+\begin{array}{lcr}
+% https://q.uiver.app/?q=WzAsNixbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwyLCJcXHRhdV8xXFx0YXVfMlxcdGF1XzIiXSxbMiwzLCJcXHRhdV8xIl0sWzQsMiwiXFx0YXVfMlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFswLDIsImJyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJjYW5jZWwiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFszLDQsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzIsNSwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbNSw0LCJjYW5jZWwiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
+\[\begin{tikzcd}
+	&& {\tau_2\tau_1\tau_2\tau_1\tau_2} \\
+	{\tau_1\tau_2\tau_1\tau_1\tau_2} &&&& {\tau_2\tau_1\tau_1\tau_2\tau_1} \\
+	{\tau_1\tau_2\tau_2} &&&& {\tau_2\tau_2\tau_1} \\
+	&& {\tau_1}
+	\arrow["braid"', squiggly, from=1-3, to=2-1]
+	\arrow["braid", squiggly, from=1-3, to=2-5]
+	\arrow["cancel"', squiggly, from=2-1, to=3-1]
+	\arrow["cancel"', squiggly, from=3-1, to=4-3]
+	\arrow["cancel", squiggly, from=2-5, to=3-5]
+	\arrow["cancel", squiggly, from=3-5, to=4-3]
+\end{tikzcd}\]
+&
+\text{and}
+&
+% https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsyLDQsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsxLDMsIlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzMsNCwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFs0LDIsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV1d
+\[\begin{tikzcd}
+	&& {\tau_2\tau_1\tau_2\tau_2} \\
+	{\tau_1\tau_2\tau_1\tau_2} \\
+	{\tau_1\tau_2\tau_1\tau_2} \\
+	& {\tau_1\tau_1\tau_2\tau_1} \\
+	&& {\tau_2\tau_1}
+	\arrow["braid"', squiggly, from=1-3, to=2-1]
+	\arrow["cancel", squiggly, from=1-3, to=5-3]
+	\arrow["braid"', squiggly, from=2-1, to=3-1]
+	\arrow["braid"', squiggly, from=3-1, to=4-2]
+	\arrow["cancel"', squiggly, from=4-2, to=5-3]
+\end{tikzcd}\]
+\end{array}
+\end{proof}
+
+Unfortunately, in the system defined, this is not true for all critical pairs.
+One example is the following, where both endpoints are normal with respect to
+$\cox*$ relation.
 
 \[
   \gspan[\braid][\swap]{\tau_3\tau_2\tau_3\tau_1}{\tau_2\tau_3\tau_2\tau_1}{\tau_3\tau_2\tau_1\tau_3}
