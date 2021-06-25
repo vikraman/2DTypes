@@ -16,13 +16,17 @@ open import Pi+.UFin.BAut
 open import Pi+.Misc
 open import Pi+.Extra
 
-
 inv : {n : ℕ} → Fin n → Fin n
 inv {S n} (O , _) = n , ltS
 inv {S n} (S k , f) = ⟨ inv (k , <-cancel-S f) ⟩
 
 inv-inv : {n : ℕ} → (k : Fin n) → inv (inv k) == k
-inv-inv k = TODO!
+inv-inv {S O} (O , ϕ) =
+  fin= idp
+inv-inv {S (S n)} (O , ϕ) =
+  fin= (ap fst (inv-inv {S n} (O , O<S n)))
+inv-inv {S n} (S k , ϕ) =
+  TODO!
 
 inv0 : (inv {6} (0 , ltSR (ltSR (ltSR (ltSR (ltSR ltS)))) )) .fst == 5
 inv0 = idp
@@ -39,7 +43,7 @@ inv5 = idp
 
 inv-equiv : {n : ℕ} → Aut (Fin n)
 inv-equiv {O} = ide _
-inv-equiv {S n} = equiv inv inv inv-inv inv-inv 
+inv-equiv {S n} = equiv inv inv inv-inv inv-inv
 
 -- given permutuation p
 -- k → n - p(n - k)
@@ -50,17 +54,18 @@ npnk-> p = (λ k → inv (–> p (inv k) ))
 <-npnk : {n : ℕ} → (p : Aut (Fin n)) → Fin n → Fin n
 <-npnk p = (λ k → inv (<– p (inv k) ))
 
-npnk-self-inv-l : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → <-npnk p (npnk-> p k) == k
-npnk-self-inv-l {n} p k = 
-    let q = ap (inv ∘ (<– p)) (inv-inv (–> p (inv k)))  
-        r = <–-inv-l p (inv k)
-    in  q ∙ ap inv r ∙ inv-inv k
+abstract
+  npnk-self-inv-l : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → <-npnk p (npnk-> p k) == k
+  npnk-self-inv-l {n} p k =
+      let q = ap (inv ∘ (<– p)) (inv-inv (–> p (inv k)))
+          r = <–-inv-l p (inv k)
+      in  q ∙ ap inv r ∙ inv-inv k
 
-npnk-self-inv-r : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → npnk-> p (<-npnk p k) == k
-npnk-self-inv-r {n} p k = 
-    let q = ap (inv ∘ (–> p)) (inv-inv (<– p (inv k)))  
-        r = <–-inv-r p (inv k)
-    in  q ∙ ap inv r ∙ inv-inv k
+  npnk-self-inv-r : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → npnk-> p (<-npnk p k) == k
+  npnk-self-inv-r {n} p k =
+      let q = ap (inv ∘ (–> p)) (inv-inv (<– p (inv k)))
+          r = <–-inv-r p (inv k)
+      in  q ∙ ap inv r ∙ inv-inv k
 
 inv-transform : {n : ℕ} → Aut (Fin n) → Aut (Fin n)
 inv-transform p = equiv (npnk-> p) (<-npnk p) (npnk-self-inv-r p) (npnk-self-inv-l p)
