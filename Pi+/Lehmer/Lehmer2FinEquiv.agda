@@ -2,7 +2,8 @@
 
 module Pi+.Lehmer.Lehmer2FinEquiv where
 
-open import HoTT
+open import HoTT hiding (_≤_; _<_; ≤-has-all-paths ; ltS ; ltSR)
+import lib.types.Nat as N
 
 open import Pi+.Misc
 open import Pi+.Lehmer.FinHelpers
