@@ -287,7 +287,7 @@ reset+3 =
 \end{code}}
 
 
-\begin{code}
+\begin{code}[hide]
 -- reset+test : Fin 4 → Fin 4
 -- reset+test = –> (Pi+.eval₁ (reset+ 1))
 

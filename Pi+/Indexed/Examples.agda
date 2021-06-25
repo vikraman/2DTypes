@@ -219,6 +219,19 @@ reset O = id⟷₁
 reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
 reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 
+{--
+
+Write another circuit that does this addition:
+
+0 -> 0
+8 -> 8
+n -> n + 8 `mod` 16
+
+when we normalize we should get the same as reset+
+
+
+--}
+
 reset^ : ∀ n → _
 reset^ = eval₁ ∘ reset
 

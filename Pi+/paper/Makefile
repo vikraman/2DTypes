@@ -13,9 +13,12 @@ $(foreach file,$(TARGETS),$(eval -include $(DEPS_DIR)/$(file)P))
 $(DEPS_DIR) :
 	mkdir $@
 
-%.pdf : %.tex
+%.pdf : %.tex latex/Pi+/Indexed/ExamplesL.tex
 	if [ ! -e $(DEPS_DIR) ]; then mkdir $(DEPS_DIR); fi
 	$(LATEXMK) -pdf -deps-out=$(DEPS_DIR)/$@P $<
+
+latex/Pi+/Indexed/ExamplesL.tex: ../Indexed/ExamplesL.lagda
+	agda --latex ../Indexed/ExamplesL.lagda
 
 clean:
 	latexmk -c

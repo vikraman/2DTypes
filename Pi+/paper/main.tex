@@ -22,10 +22,10 @@
 %% \usepackage{amsthm,proof}
 %% \usepackage{bbold,stmaryrd,bbm}
 \usepackage{bbold}
+\usepackage{newunicodechar}
 %% \usepackage{ucs}
 %% \usepackage{wrapfig}
 %% \usepackage[utf8x]{inputenc}
-%% \usepackage{newunicodechar}
 %% \usepackage{microtype}
 %% \usepackage{subcaption}
 %% \usepackage{agda}
@@ -53,6 +53,9 @@
 \input{tikzit.tikzstyles}
 \tikzset{>=latex}
 \usepackage{newunicodechar}
+
+\AgdaNoSpaceAroundCode
+\renewcommand{\AgdaCodeStyle}{\small}
 
 % Braiding diagrams
 \usepackage{tikz}
@@ -141,9 +144,6 @@ $\displaystyle
 \newunicodechar{𝟙}{$\mathbb{1}$}
 \newunicodechar{𝟚}{$\mathbb{2}$}
 \newunicodechar{𝟛}{$\mathbb{3}$}
-\DeclareUnicodeCharacter{9678}{\ensuremath{\odot}}
-\DeclareUnicodeCharacter{9636}{\ensuremath{\Box}}
-\DeclareUnicodeCharacter{10231}{\ensuremath{\leftrightarrow}}
 
 % agda --latex ../Indexed/ExamplesL.lagda
 \input{\detokenize{latex/Pi+/Indexed/ExamplesL.tex}}
