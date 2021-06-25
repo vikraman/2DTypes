@@ -261,8 +261,9 @@ Swapping the same two elements two times in a row is the same as doing nothing:
   \end{tabular}
 \]
 
-When swapping two pairs of elements in positions "far-away", it does not matter
-in which order the swapping happens, that is, we can slide the wires freely.
+When swapping two distinct pairs of elements (i.e. the indices of transpositions
+differ by at least 1), it does not matter in which order the swapping happens,
+that is, we can slide the wires freely.
 
 \[
   \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
@@ -523,7 +524,7 @@ of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results formally.
   \end{enumerate}
 \end{proposition}
 
-The long form of the Coxeter relations are unwieldy and difficult to prove properties about by induction, and have
+The modified form of the Coxeter relations are unwieldy and difficult to prove properties about by induction, and have
 little connection to the broader scope of computational group theory. However, we can prove that the closures of the two
 forms of the relations are equivalent, and work up to this equivalence!
 
@@ -773,11 +774,129 @@ Using these facts, we can now prove the main result of this section.
   \end{gather*}
 \end{proof}
 
-\jk{TODO an example here}
-To remind ourselves, in a Lehmer code, the element $\el{r}$ at postition $k$ counts the number of inversions of the
-element $\el{r}$. This corresponds exactly to what happens in the \cref{prop:fin-finexcept-3}. Looking at the operation
-combinatorially, it is inserting element $\el{r}$ at the position $k$, meaning that it shifts the element
-$k$places.\jk{needs rewriting after the example is here}
+To see how the proof works combinatorically, let us go through an example. We will start from a following bijection $p: \Aut[\Fin[4]]$:
+\begin{align*}
+    p(0) \mapsto & 1 \\
+    p(1) \mapsto & 3 \\
+    p(2) \mapsto & 0 \\
+    p(3) \mapsto & 2
+\end{align*}
+
+At first, we start from a full domain $\Fin[4]$ and full codomain $\Fin[4]$.
+\[
+    \begin{bmatrix}
+        0 \\
+        1 \\
+        2 \\
+        3
+    \end{bmatrix}
+    \mapsto
+    \begin{bmatrix}
+        0 \\
+        1 \\
+        2 \\
+        3
+    \end{bmatrix}
+\]
+
+As element $\el{0}$ is mapped to $\el{1}$, we remember that the last element of
+result tuple is $1$. The appropriate elements on both sides are removed,
+forming, respectively, $\FinExcept{4}[0]$ and $\FinExcept{4}[1]$. These are then
+both transformed to $\Fin[3]$ using
+\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-2}, as shown below.
+\[
+    \begin{bmatrix}
+        0 \\
+        1 \\
+        2
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        1 \\
+        2 \\
+        3
+    \end{bmatrix}
+    \mapsto
+    \begin{bmatrix}
+        0 \\
+        2 \\
+        3
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        0 \\
+        1 \\
+        2
+    \end{bmatrix}
+\]
+
+Then, the original permutation specified that the element $\el{1}$ has to be
+mapped to $\el{3}$. Since we performed renumbering, now it means that element is
+mapped to $\el{2}$ - the resulting tuple now looks like $[2, 1]$. We yet again remove these from the domain and codomain,
+forming $\FinExcept{0}[0]$ and $\FinExcept{0}[2]$.
+
+\[
+    \begin{bmatrix}
+        0 \\
+        1
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        1 \\
+        2
+    \end{bmatrix}
+    \mapsto
+    \begin{bmatrix}
+        0 \\
+        2
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        0 \\
+        1
+    \end{bmatrix}
+\]
+
+The situation repeats two more times: first, by assinging $\el{0}$ to $\el{1}$,
+giving the tuple $[0, 2, 1]$ and transforming the domain and codomain:
+\[
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        1
+    \end{bmatrix}
+    \mapsto
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+    \equiv
+    \begin{bmatrix}
+        0
+    \end{bmatrix}
+\]
+
+And finally, by assinging $\el{0}$ to $\el{0}$, forming a tuple $[0, 0, 2, 1]$ and 
+
+At this point we see that the renumbering of the domain is done in an orderly
+way (always shifting by 1), so it can be ignored. On the other hand, the
+ordering of the codomain is what matters. Each time we remove an element, all
+larger elemens are in effect decreased by one.
+
+To remind ourselves, when we introduced the combinatorial interpretation of
+Lehmer codes, the element $\el{r}$ at postition $k$ was said to count the number
+of inversions of the element $\el{r}$. Thus, this is exactly the meachanism in
+which the induction step works.
+
+This corresponds exactly to what happens in
+the \cref{prop:fin-finexcept-3}. Looking at the operation combinatorially, it is
+inserting element $\el{r}$ at the position $k$, meaning that it shifts the
+element $k$places.\jk{needs rewriting after the example is here}
+
+Viewing the codomain as a vector of four elements, element $\el{0}$ has zero
+inverses, element $\el{1}$ has 1 inverse, element $\el{2}$ has 1 inverse, and
+element $3$ has 
 
 By composing~\cref{prop:lehmer-aut-equiv} and~\cref{prop:sn-im-lehmer-equiv}, we obtain the final
 equivalence.
