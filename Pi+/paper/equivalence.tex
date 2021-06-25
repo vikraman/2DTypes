@@ -1,36 +1,62 @@
 \section{Equivalence between \texorpdfstring{$\PiPlusLang$}{Pi} and \texorpdfstring{$\UFin$}{UFin}}~\label{sec:equivalence}
 
-\subsection{$\PiLang$ to $\PiPlusLang$}
+In this section, we use the semantics developed in the previous sections define a fragment $\PiPlusLang$ of $\PiLang$
+and a normalised fragment of it $\PiHatLang$, interpret to $\UFin$ and back, and translate between the languages.
 
-We show how to translate $\PiLang$ programs to $\PiPlusLang$ programs.
+We only present the types and 1-combinators in the language, and the full set of 2-combinators is listed in the appendix
+and the accompanying Agda code.
 
-\subsection{$\PiPlusLang$ to $\PiHatLang$}
+\vc{We can translate types to types, terms to terms, theorem: preserves types, preserves equations.}
 
-We normalise $\PiPlusLang$ to $\PiHatLang$, and show that they are equivalent.
+\vc{Define maps quote/eval on 0,1,2-cells, and show commuting diagrams.}
+
+\subsection{$\PiHatLang$}
+
+We first present a language $\PiHatLang$ based on the theory of symmetric groups developed in~\cref{sec:finite}. The
+types in the language are unary natural numbers, and combinators are allowed to perform adjacent transpositions.
+
+\begin{figure}[t]
+  {\scalebox{\scalef}{$
+        \begin{array}{rrcll}
+          \idc :   & n             & \isoh & n             & : \idc   \\
+          \swapc : & \suc[\suc[n]] & \isoh & \suc[\suc[n]] & : \swapc \\
+        \end{array}
+      $}}
+
+  {\scalebox{\scalef}{
+      \Rule{}
+      {\jdg{}{}{c_1 : n \isoh m} \quad \vdash c_2 : m \isoh o}
+      {\jdg{}{}{c_1 \fatsemi c_2 : n \isoh o}}
+      {}
+
+      \Rule{}
+      {\jdg{}{}{c : n \isoh m}}
+      {\jdg{}{}{\oplus(c) : \suc[n] \isoh \suc[m]}}
+      {}
+    }}
+  \caption{$\PiHatLang$ syntax}
+  \label{fig:pihat}
+\end{figure}
+
+\begin{proposition}
+  We can form a weak 2-category $\PiHatCat$ with
+  \begin{itemize}
+    \item natural numbers for 0-cells,
+    \item for $n, m : \Nat$, a collection of 1-cells $n \isoh m$,
+    \item for $p, q : n \isoh m$, a collection of 2-cells $p \Isoh q$.
+  \end{itemize}
+\end{proposition}
+
+\begin{proposition}
+  There is a symmetric monoidal structure on $\PiHatCat$, with $0$ for the unit, and addition for the tensor.
+\end{proposition}
+
+Then we establish the completeness of $\PiHatLang$ with respect to $\UFin$. We define $\evalt$ and $\quotet$ for 0, 1,
+and 2-cells.
 
 \begin{definition}
   \begin{align*}
-    \evalh_{0} & : \UPlus n \to \UHat n                                                      \\
-    \evalh_{1} & : (c : t_{1} \iso t_{2}) \to \evalh_{0}(t_{1}) \isoh \evalh_{0}(t_{2})      \\
-    \evalh_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalh_{1}(c_{1}) \Isoh \evalh_{1}(c_{2}) \\
-  \end{align*}
-\end{definition}
-
-\begin{definition}
-  \begin{align*}
-    \quoteh_{0} & : \UHat n \to \UPlus n                                                        \\
-    \quoteh_{1} & : (p : X_{1} \isoh X_{2}) \to \quoteh_{0}(X_{1}) \iso \quoteh_{0}(X_{2})      \\
-    \quoteh_{2} & : (\alpha : p_{1} \Isoh p_{2}) \to \quoteh_{1}(p_{1}) \Iso \quoteh_{1}(p_{2}) \\
-  \end{align*}
-\end{definition}
-
-\subsection{$\PiHatLang$ to $\UFin$}
-
-Then we establish the completeness of $\PiHatLang$ with respect to $\UFin$.
-
-\begin{definition}
-  \begin{align*}
-    \evalt_{0} & : \UHat n \to \UFin[n]                                                     \\
+    \evalt_{0} & : \UHat \to \UFin                                                          \\
     \evalt_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2})      \\
     \evalt_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
   \end{align*}
@@ -38,33 +64,102 @@ Then we establish the completeness of $\PiHatLang$ with respect to $\UFin$.
 
 \begin{definition}
   \begin{align*}
-    \quotet_{0} & : \UFin[n] \to \UHat n                                                       \\
+    \quotet_{0} & : \UFin \to \UHat                                                            \\
     \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quoteh_{0}(X_{1}) \isoh \quoteh_{0}(X_{2})      \\
     \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2}) \\
   \end{align*}
 \end{definition}
 
-We use this to establish completeness for $\PiPlusLang$.
+\begin{proposition}
+  $\evalt/\quotet$ give a symmetric monoidal biequivalence between $\PiHatCat$ and $\UFin$.
+\end{proposition}
+
+\subsection{$\PiPlusLang$}
+
+Now, we present the additive fragment of $\PiLang$, called $\PiPlusLang$.
+
+\begin{figure}[t]
+  {\scalebox{\scalef}{$
+        \begin{array}{rrcll}
+          \idc :     & A           & \iso & A           & : \idc     \\
+          \identlp : & \zerot + A  & \iso & A           & : \identrp \\
+          \swapp :   & A + B       & \iso & B + A       & : \swapp   \\
+          \assoclp : & A + (B + C) & \iso & (A + B) + C & : \assocrp \\ [1.5ex]
+        \end{array}$}}
+
+  {\scalebox{\scalef}{
+      \Rule{}
+      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : B \iso C}
+      {\jdg{}{}{c_1 \fatsemi c_2 : A \iso C}}
+      {}
+
+      \Rule{}
+      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
+      {\jdg{}{}{c_1 \oplus c_2 : A + C \iso B + D}}
+      {}
+    }}
+  \caption{$\PiPlusLang$ syntax}
+  \label{fig:piplus}
+\end{figure}
+
+\begin{proposition}
+  We can form a weak 2-category $\PiPlusCat$ with
+  \begin{itemize}
+    \item $\PiPlusLang$ types for 0-cells,
+    \item for $X, Y : \UPlus$, a collection of 1-cells $X \iso Y$,
+    \item for $p, q : X \isoh Y$, a collection of 2-cells $p \Iso q$.
+  \end{itemize}
+\end{proposition}
+
+\begin{proposition}
+  There is a symmetric monoidal structure on $\PiPlusCat$, with $\zerot$ for the unit, and $+$ for the tensor.
+\end{proposition}
+
+We normalise $\PiPlusLang$ to $\PiHatLang$ and back, by giving $\evalh/\quoteh$ maps for 0, 1, and 2-cells.
 
 \begin{definition}
   \begin{align*}
-    \evalt_{0} & : \UPlus n \to \UFin[n]                                                   \\
-    \evalt_{1} & : (c : t_{1} \iso t_{2}) \to \evalt_{0}(t_{1}) \id \evalt_{0}(t_{2})      \\
-    \evalt_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
+    \evalh_{0} & : \UPlus \to \UHat                                                          \\
+    \evalh_{1} & : (c : t_{1} \iso t_{2}) \to \evalh_{0}(t_{1}) \isoh \evalh_{0}(t_{2})      \\
+    \evalh_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalh_{1}(c_{1}) \Isoh \evalh_{1}(c_{2}) \\
   \end{align*}
 \end{definition}
 
 \begin{definition}
   \begin{align*}
-    \quotet_{0} & : \UFin[n] \to U n                                                          \\
-    \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quotet_{0}(X_{1}) \iso \quotet_{0}(X_{2})      \\
-    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quotet_{1}(p_{1}) \Iso \quotet_{1}(p_{2}) \\
+    \quoteh_{0} & : \UHat \to \UPlus                                                            \\
+    \quoteh_{1} & : (p : X_{1} \isoh X_{2}) \to \quoteh_{0}(X_{1}) \iso \quoteh_{0}(X_{2})      \\
+    \quoteh_{2} & : (\alpha : p_{1} \Isoh p_{2}) \to \quoteh_{1}(p_{1}) \Iso \quoteh_{1}(p_{2}) \\
   \end{align*}
 \end{definition}
 
-\begin{theorem}
-  ${\quotet}/{\evalt}$ gives a symmetric monoidal equivalence between $\UPlus$ and $\UFin$.
-\end{theorem}
+\begin{proposition}
+  $\evalh/\quoteh$ give a symmetric monoidal biequivalence between $\PiPlusCat$ and $\PiHatCat$.
+\end{proposition}
+
+\subsection{$\PiLang$}
+
+Finally, We show how to translate $\PiLang$ programs to $\PiHatLang$ programs.
+
+\begin{definition}
+  \begin{align*}
+    \evalt_{0} & : U \to \Nat                                               \\
+    \evalt_{1} & : (c : X \iso Y) \to \evalt_{0}(X) \iso \evalt_{0}(Y)      \\
+    \evalt_{2} & : (\alpha : p \Iso q) \to \evalt_{1}(p) \Iso \evalt_{1}(q) \\
+  \end{align*}
+\end{definition}
+
+To normalise a $\PiLang$ circuit, we translate it to $\PiHatLang$ and quote it to $\PiPlusLang$.
+
+\begin{definition}
+  \begin{align*}
+    \normt_{0} & : U \to \UPlus                                        \\
+    \normt_{0} & = \quoteh_{0} \comp \evalt_{0}                        \\
+    \\
+    \normt_{1} & : (c : X \iso Y) \to \normt_{0}(X) \iso \normt_{0}(Y) \\
+    \normt_{1} & = \quoteh_{1} \comp \evalt_{1}                        \\
+  \end{align*}
+\end{definition}
 
 %%% Local Variables:
 %%% mode: latex
