@@ -46,49 +46,49 @@ inv-inv {S n} (S k , ϕ) =
     in  inv-⟨⟩ n (_ , p) ∙ fin= (ap S r)
 
 
--- inv0 : (inv {6} (0 , ltSR (ltSR (ltSR (ltSR (ltSR ltS)))) )) .fst == 5
--- inv0 = idp
--- inv1 : (inv {6} (1 , ltSR (ltSR (ltSR (ltSR ltS))) )) .fst == 4
--- inv1 = idp
--- inv2 : (inv {6} (2 , ltSR (ltSR (ltSR ltS)) )) .fst == 3
--- inv2 = idp
--- inv3 : (inv {6} (3 , ltSR (ltSR ltS) )) .fst == 2
--- inv3 = idp
--- inv4 : (inv {6} (4 , ltSR ltS )) .fst == 1
--- inv4 = idp
--- inv5 : (inv {6} (5 , ltS )) .fst == 0
--- inv5 = idp
+inv0 : (inv {6} (0 , ltSR (ltSR (ltSR (ltSR (ltSR ltS)))) )) .fst == 5
+inv0 = idp
+inv1 : (inv {6} (1 , ltSR (ltSR (ltSR (ltSR ltS))) )) .fst == 4
+inv1 = idp
+inv2 : (inv {6} (2 , ltSR (ltSR (ltSR ltS)) )) .fst == 3
+inv2 = idp
+inv3 : (inv {6} (3 , ltSR (ltSR ltS) )) .fst == 2
+inv3 = idp
+inv4 : (inv {6} (4 , ltSR ltS )) .fst == 1
+inv4 = idp
+inv5 : (inv {6} (5 , ltS )) .fst == 0
+inv5 = idp
 
--- inv-equiv : {n : ℕ} → Aut (Fin n)
--- inv-equiv {O} = ide _
--- inv-equiv {S n} = equiv inv inv inv-inv inv-inv
+inv-equiv : {n : ℕ} → Aut (Fin n)
+inv-equiv {O} = ide _
+inv-equiv {S n} = equiv inv inv inv-inv inv-inv
 
--- -- given permutuation p
--- -- k → n - p(n - k)
+-- given permutuation p
+-- k → n - p(n - k)
 
--- npnk-> : {n : ℕ} → (p : Aut (Fin n)) → Fin n → Fin n
--- npnk-> p = (λ k → inv (–> p (inv k) ))
+npnk-> : {n : ℕ} → (p : Aut (Fin n)) → Fin n → Fin n
+npnk-> p = (λ k → inv (–> p (inv k) ))
 
--- <-npnk : {n : ℕ} → (p : Aut (Fin n)) → Fin n → Fin n
--- <-npnk p = (λ k → inv (<– p (inv k) ))
+<-npnk : {n : ℕ} → (p : Aut (Fin n)) → Fin n → Fin n
+<-npnk p = (λ k → inv (<– p (inv k) ))
 
--- abstract
---   npnk-self-inv-l : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → <-npnk p (npnk-> p k) == k
---   npnk-self-inv-l {n} p k =
---       let q = ap (inv ∘ (<– p)) (inv-inv (–> p (inv k)))
---           r = <–-inv-l p (inv k)
---       in  q ∙ ap inv r ∙ inv-inv k
+abstract
+  npnk-self-inv-l : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → <-npnk p (npnk-> p k) == k
+  npnk-self-inv-l {n} p k =
+      let q = ap (inv ∘ (<– p)) (inv-inv (–> p (inv k)))
+          r = <–-inv-l p (inv k)
+      in  q ∙ ap inv r ∙ inv-inv k
 
---   npnk-self-inv-r : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → npnk-> p (<-npnk p k) == k
---   npnk-self-inv-r {n} p k =
---       let q = ap (inv ∘ (–> p)) (inv-inv (<– p (inv k)))
---           r = <–-inv-r p (inv k)
---       in  q ∙ ap inv r ∙ inv-inv k
+  npnk-self-inv-r : {n : ℕ} → (p : Aut (Fin n)) → (k : Fin n) → npnk-> p (<-npnk p k) == k
+  npnk-self-inv-r {n} p k =
+      let q = ap (inv ∘ (–> p)) (inv-inv (<– p (inv k)))
+          r = <–-inv-r p (inv k)
+      in  q ∙ ap inv r ∙ inv-inv k
 
--- inv-transform : {n : ℕ} → Aut (Fin n) → Aut (Fin n)
--- inv-transform p = equiv (npnk-> p) (<-npnk p) (npnk-self-inv-r p) (npnk-self-inv-l p)
+inv-transform : {n : ℕ} → Aut (Fin n) → Aut (Fin n)
+inv-transform p = equiv (npnk-> p) (<-npnk p) (npnk-self-inv-r p) (npnk-self-inv-l p)
 
--- inv-transform-equiv : {n : ℕ} → Aut (Fin n) ≃ Aut (Fin n)
--- inv-transform-equiv = equiv inv-transform inv-transform
---             (λ b → e= (λ y → inv-inv _ ∙ ap (–> b) (inv-inv y)))
---             (λ b → e= (λ y → inv-inv _ ∙ ap (–> b) (inv-inv y)))
+inv-transform-equiv : {n : ℕ} → Aut (Fin n) ≃ Aut (Fin n)
+inv-transform-equiv = equiv inv-transform inv-transform
+            (λ b → e= (λ y → inv-inv _ ∙ ap (–> b) (inv-inv y)))
+            (λ b → e= (λ y → inv-inv _ ∙ ap (–> b) (inv-inv y)))
