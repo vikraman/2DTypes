@@ -14,6 +14,7 @@ open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.SyntaxFull as Pi
 open import Pi+.Indexed.Translation
 import Pi+.Indexed.Equiv1 as Pi+
+import Pi+.Indexed.Equiv0Hat as Pi^
 import Pi+.Indexed.Equiv1Hat as Pi^
 import Pi+.Indexed.Equiv0Norm as Pi^
 import Pi+.Indexed.Equiv1Norm as Pi^
@@ -227,9 +228,11 @@ Write another circuit that does this addition:
 8 -> 8
 n -> n + 8 `mod` 16
 
+use algorithm in \cite{10.1145/775832.775915}
+
 when we normalize we should get the same as reset+
         f1    f2      f3      f4         f5     f6         f7          f8
-            cx(3,0) cx(2,0) ccx(3,4,0) cx(1,0) ccx(1,3,0) ccx(1,2,0) cccx(1,2,3,0)
+            cx(3,0) cx(2,0) ccx(2,3,0) cx(1,0) ccx(1,3,0) ccx(1,2,0) cccx(1,2,3,0)
 0000 - 0000  0000    0000    0000       0000   0000       0000        0000
 0001 - 1001  0001    0001    0001       0001   0001       0001        0001
 0010 - 1010  1010    0010    0010       0010   0010       0010        0010
@@ -247,14 +250,82 @@ when we normalize we should get the same as reset+
 1110 - 0110  0110    1110    1110       0110   0110       1110        1110
 1111 - 0111  1111    0111    1111       0111   1111       0111        1111
 
+circuit:
+
+  cccx(1,2,3,0);
+  ccx(1,2,0);
+  ccx(1,3,0);
+  cx(1,0);
+  ccx(2,3,0);
+  cx(2,0);
+  cx(3,0)
+
+check
+
+0000
+0001
+0010 1010
+0011 1011 0011 1011
+0100 1100
+0101 1101 0101 1101
+0110 1110 0110 1110
+0111 1111 0111 1111 0111 1111 0111 1111
+1000
+1001 0001
+1010 0010
+1011 0011 1011 0011
+1100 0100
+1101 0101 1101 0101
+1110 0110 1110 0110
+1111 0111 1111 0111 1111 0111 1111 0111
 
 --}
+
+adder : 𝔹 4 Pi.⟷₁ 𝔹 4
+adder = -- 0 x (1 x (2 x 3))
+  swap⋆ ◎ -- (1 x (2 x 3)) x 0
+  assocr⋆ ◎ -- 1 x ((2 x 3) x 0)
+  (id⟷₁ ⊗ assocr⋆) ◎ -- 1 x (2 x (3 x 0))
+  toffoli 4 ◎ -- 1 x (2 x (3 x 0))
+  (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) ◎ -- 1 x (2 x (0 x 3)
+  (id⟷₁ ⊗ assocl⋆) ◎ -- 1 x ((2 x 0) x 3)
+  assocl⋆ ◎ -- (1 x (2 x 0)) x 3
+  (toffoli 3 ⊗ id⟷₁) ◎ -- (1 x (2 x 0)) x 3
+  assocr⋆ ◎ -- 1 x ((2 x 0) x 3)
+  (id⟷₁ ⊗ swap⋆) ◎ -- 1 x (3 x (2 x 0))
+  (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) ◎ -- 1 x (3 x (0 x 2))
+  (id⟷₁ ⊗ assocl⋆) ◎ -- 1 x ((3 x 0) x 2)
+  assocl⋆ ◎ -- (1 x (3 x 0)) x 2
+  (toffoli 3 ⊗ id⟷₁) ◎ -- (1 x (3 x 0)) x 2
+  ((id⟷₁ ⊗ swap⋆) ⊗ id⟷₁) ◎ -- (1 x (0 x 3)) x 2
+  (assocl⋆ ⊗ id⟷₁) ◎ -- ((1 x 0) x 3) x 2
+  ((cnot ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((1 x 0) x 3) x 2
+  assocr⋆ ◎ -- (1 x 0) x (3 x 2)
+  (swap⋆ ⊗ id⟷₁) ◎ -- (0 x 1) x (3 x 2)
+  swap⋆ ◎ -- (3 x 2) x (0 x 1)
+  assocl⋆ ◎ -- ((3 x 2) x 0) x 1
+  (assocr⋆ ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
+  (toffoli 3 ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
+  ((id⟷₁ ⊗ cnot) ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
+  ((id⟷₁ ⊗ swap⋆) ⊗ id⟷₁) ◎ -- (3 x (0 x 2)) x 1
+  (assocl⋆ ⊗ id⟷₁) ◎ -- ((3 x 0) x 2) x 1
+  ((cnot ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((3 x 0) x 2) x 1
+  ((swap⋆ ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((0 x 3) x 2) x 1
+  (assocr⋆ ⊗ id⟷₁) ◎ -- (0 x (3 x 2)) x 1
+  assocr⋆ ◎ -- 0 x ((3 x 2) x 1)
+  (id⟷₁ ⊗ swap⋆) ◎ -- 0 x (1 x (3 x 2))
+  (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) -- 0 x (1 x (2 x 3))
 
 reset^ : ∀ n → _
 reset^ = eval₁ ∘ reset
 
 reset+ : ∀ n → _
 reset+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ reset^
+
+adder+ : Pi^.quote^₀ 16 Pi+.⟷₁ Pi^.quote^₀ 16
+adder+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) adder
+
+
 
 -- reset+test : Fin 4 → Fin 4
 -- reset+test = –> (Pi+.eval₁ (reset+ 1))
