@@ -37,7 +37,7 @@ _ : (–> (interp' swap2) (inr tt , inr tt) == inr tt , inr tt) S.×
 _ = idp , idp , idp , idp
 
 controlled : {t : Pi.U} → (c : t Pi.⟷₁ t) → (𝟚 Pi.× t Pi.⟷₁ 𝟚 Pi.× t)
-controlled c = dist ◎ (id⟷₁ ⊕ (id⟷₁ ⊗ c)) ◎ factor
+controlled c = dist ◎ ((id⟷₁ ⊗ c) ⊕ id⟷₁) ◎ factor
 
 controlled^ : {t : Pi.U} → (c : t Pi.⟷₁ t) → _
 controlled^ c = eval₁ (controlled c)
@@ -69,7 +69,7 @@ cnot^ = eval₁ cnot
 cnot^p : Fin 4 → Fin 4
 cnot^p = –> (Pi^.evalNorm₁ cnot^)
 
-_ : (cnot^p 0 == 0) S.× (cnot^p 1 == 1) S.× (cnot^p 2 == 3) S.× (cnot^p 3 == 2)
+_ : (cnot^p 0 == 1) S.× (cnot^p 1 == 0) S.× (cnot^p 2 == 2) S.× (cnot^p 3 == 3)
 _ = fin= idp , fin= idp , fin= idp , fin= idp
 
 toffoli₃ : 𝟚 Pi.× (𝟚 Pi.× 𝟚) Pi.⟷₁ 𝟚 Pi.× (𝟚 Pi.× 𝟚)
@@ -92,8 +92,8 @@ toffoli+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ toffol
 toffoli^2-perm : Aut (Fin 4)
 toffoli^2-perm = Pi^.evalNorm₁ (toffoli^ 2)
 
-swap23 : Aut (Fin 4)
-swap23 = equiv f f f-f f-f
+swap01 : Aut (Fin 4)
+swap01 = equiv f f f-f f-f
   where f : Fin 4 → Fin 4
         f (O , ϕ) = 1
         f (1 , ϕ) = 0
@@ -107,20 +107,20 @@ swap23 = equiv f f f-f f-f
         f-f (3 , ϕ) = fin= idp
         f-f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
 
-toffoli^2perm=swap23 : toffoli^2-perm == swap23
-toffoli^2perm=swap23 = e= ϕ
-  where ϕ : (f : Fin 4) → –> toffoli^2-perm f == –> swap23 f
+toffoli^2perm=swap01 : toffoli^2-perm == swap01
+toffoli^2perm=swap01 = e= ϕ
+  where ϕ : (f : Fin 4) → –> toffoli^2-perm f == –> swap01 f
         ϕ (O , ϕ) = fin= idp
         ϕ (1 , ϕ) = fin= idp
         ϕ (2 , ϕ) = fin= idp
         ϕ (3 , ϕ) = fin= idp
         ϕ (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
 
-swap23^ : 4 Pi^.⟷₁^ 4
-swap23^ = Pi^.quoteNorm₁ idp swap23
+swap01^ : 4 Pi^.⟷₁^ 4
+swap01^ = Pi^.quoteNorm₁ idp swap01
 
-toffoli^2=swap23^ : toffoli^ 2 Pi^.⟷₂^ swap23^
-toffoli^2=swap23^ = (((c₂ ⊡^ c₂) ⊡^ ((c₃ ⊡^ (c₄ ⊡^ (c₂ ⊡^ c₂))) ⊡^ (c₂ ⊡^ c₂))) ■^
+toffoli^2=swap01^ : toffoli^ 2 Pi^.⟷₂^ swap01^
+toffoli^2=swap01^ = (((c₂ ⊡^ c₂) ⊡^ ((c₃ ⊡^ (c₄ ⊡^ (c₂ ⊡^ c₂))) ⊡^ (c₂ ⊡^ c₂))) ■^
                     (idl◎l^ ⊡^ (idl◎l^ ⊡^ idl◎l^)) ■^
                     idl◎l^ ■^ idr◎l^ ■^ assoc◎l^ ■^ idr◎l^ ■^ idr◎l^) ■^ idr◎r^
   where c₂ : ⊕^ ⊕^ id⟷₁^ ⟷₂^ id⟷₁^
@@ -133,8 +133,8 @@ toffoli^2=swap23^ = (((c₂ ⊡^ c₂) ⊡^ ((c₃ ⊡^ (c₄ ⊡^ (c₂ ⊡^ c�
         c₄ : (swap₊^ ◎^ ⊕^ ⊕^ id⟷₁^) ⟷₂^ swap₊^
         c₄ = (id⟷₂^ ⊡^ c₂) ■^ idr◎l^
 
-swap23+ : 𝟜+ Pi+.⟷₁ 𝟜+
-swap23+ = Pi+.quote₁ idp swap23
+swap01+ : 𝟜+ Pi+.⟷₁ 𝟜+
+swap01+ = Pi+.quote₁ idp swap01
 
 toffoli2+ : 𝟜+ Pi+.⟷₁ 𝟜+
-toffoli2+ = Pi^.quote^₁ swap23^
+toffoli2+ = Pi^.quote^₁ swap01^
