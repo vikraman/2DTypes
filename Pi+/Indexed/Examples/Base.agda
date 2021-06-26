@@ -61,6 +61,10 @@ instance
   Fin-× {eval₀ t₁} {eval₀ t₂} ∘e
   ×-≃ (⟦-⟧-eval₀ {t₁}) (⟦-⟧-eval₀ {t₂})
 
+⟦-⟧^-eval₀ : ∀ {n} → ⟦ n ⟧^ ≃ Fin n
+⟦-⟧^-eval₀ {O} = Fin-equiv-Empty ⁻¹
+⟦-⟧^-eval₀ {S n} = (Fin-equiv-Coprod ⁻¹ ∘e ⊔-comm ⊤ (Fin n)) ∘e ⊔-≃ (ide ⊤) (⟦-⟧^-eval₀ {n})
+
 𝟚 : Pi.U
 𝟚 = I + I
 

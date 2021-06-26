@@ -65,6 +65,11 @@ interp^ id⟷₁^ = ide _
 interp^ (c₁ ◎^ c₂) = interp^ c₂ ∘e interp^ c₁
 interp^ (⊕^ c) = ⊔-≃ (ide ⊤) (interp^ c)
 
+encode : (X : Pi.U) → ⟦ X ⟧ ≃ ⟦ eval₀ X ⟧^
+encode O = ide ⊥
+encode I = ⊔-comm ⊥ ⊤ ∘e Coprod-unit-l _ ⁻¹
+encode (X + Y) = {!!}
+encode (X × Y) = {!!}
 
 -- sound : {X Y : Pi.U} (c : X Pi.⟷₁ Y)
 --       → Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
