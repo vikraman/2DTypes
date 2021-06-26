@@ -65,11 +65,42 @@ interp^ id⟷₁^ = ide _
 interp^ (c₁ ◎^ c₂) = interp^ c₂ ∘e interp^ c₁
 interp^ (⊕^ c) = ⊔-≃ (ide ⊤) (interp^ c)
 
+-- encode : (X : Pi.U) → ⟦ X ⟧ ≃ ⟦ eval₀ X ⟧^
+-- encode O = ide ⊥
+-- encode I = ⊔-comm ⊥ ⊤ ∘e Coprod-unit-l _ ⁻¹
+-- encode (X + Y) =
+--     let rx = encode X
+--         ry = encode Y
+--     in  {!  !}
+-- encode (X × Y) = {!!}
+
 encode : (X : Pi.U) → ⟦ X ⟧ ≃ ⟦ eval₀ X ⟧^
-encode O = ide ⊥
-encode I = ⊔-comm ⊥ ⊤ ∘e Coprod-unit-l _ ⁻¹
-encode (X + Y) = {!!}
-encode (X × Y) = {!!}
+encode X =
+    let r = ⟦-⟧-eval₀ {X}
+        s = ⟦-⟧^-eval₀ {eval₀ X}
+    in  s ⁻¹ ∘e r
+
+interp-interp^-eq : {X Y : Pi.U} (c : X Pi.⟷₁ Y) -> (interp c) == encode Y ⁻¹ ∘e interp^ (eval₁ c) ∘e encode X
+interp-interp^-eq unite₊l = {!   !}
+interp-interp^-eq uniti₊l = {!  !}
+interp-interp^-eq unite⋆l = {!   !}
+interp-interp^-eq uniti⋆l = {!   !}
+interp-interp^-eq swap₊ = {!   !}
+interp-interp^-eq swap⋆ = {!   !}
+interp-interp^-eq assocl₊ = {!   !}
+interp-interp^-eq assocr₊ = {!   !}
+interp-interp^-eq assocl⋆ = {!   !}
+interp-interp^-eq assocr⋆ = {!   !}
+interp-interp^-eq absorbr = {!   !}
+interp-interp^-eq absorbl = {!   !}
+interp-interp^-eq factorzr = {!   !}
+interp-interp^-eq factorzl = {!   !}
+interp-interp^-eq dist = {!   !}
+interp-interp^-eq factor = {!   !}
+interp-interp^-eq id⟷₁ = {!   !}
+interp-interp^-eq (c ◎ c₁) = {!   !}
+interp-interp^-eq (c ⊕ c₁) = {!   !}
+interp-interp^-eq (c ⊗ c₁) = {!   !}
 
 -- sound : {X Y : Pi.U} (c : X Pi.⟷₁ Y)
 --       → Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
