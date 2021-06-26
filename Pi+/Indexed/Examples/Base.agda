@@ -50,6 +50,22 @@ instance
 ⟦ O ⟧^ = ⊥
 ⟦ S n ⟧^ = ⊤ ⊔ ⟦ n ⟧^
 
+Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi+.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
+Fin-eval₀ {O} {t₂} = ide _
+Fin-eval₀ {I} {t₂} =
+  Coprod-unit-l (Fin (eval₀ t₂)) ∘e
+  ⊔-comm (Fin (eval₀ t₂)) ⊥ ∘e
+  ⊔-≃ (ide _) Fin-equiv-Empty ∘e
+  Fin-⊔ {eval₀ t₂} {O} ⁻¹
+Fin-eval₀ {t₁ + t₃} {t₂} =
+  let e₁ = Fin-eval₀ {t₁} {t₂}
+      e₂ = Fin-eval₀ {t₃} {t₂}
+  in {!!}
+Fin-eval₀ {t₁ × t₃} {t₂} =
+  let e₁ = Fin-eval₀ {t₁} {t₂}
+      e₂ = Fin-eval₀ {t₃} {t₂}
+  in {!!}
+
 ⟦-⟧-eval₀ : {X : Pi.U} → ⟦ X ⟧ ≃ Fin (eval₀ X)
 ⟦-⟧-eval₀ {O} =
   Fin-equiv-Empty ⁻¹
@@ -58,12 +74,10 @@ instance
 ⟦-⟧-eval₀ {t₁ + t₂} =
   Fin-⊔ {eval₀ t₁} {eval₀ t₂} ∘e
   ⊔-≃ (⟦-⟧-eval₀ {t₁}) (⟦-⟧-eval₀ {t₂})
-⟦-⟧-eval₀ {t₁ × t₂} = 
-    (UFin.transport-equiv Fin {{!   !}} {{!   !}} eval₀-card-aux-* ∘e 
-    Fin-× {eval₀ t₁} {eval₀ t₂}) ∘e 
+⟦-⟧-eval₀ {t₁ × t₂} =
+    {!!} ∘e
+    Fin-× {eval₀ t₁} {eval₀ t₂} ∘e
     ×-≃ (⟦-⟧-eval₀ {t₁}) (⟦-⟧-eval₀ {t₂})
---   Fin-× {eval₀ t₁} {eval₀ t₂} ∘e
---   ×-≃ (⟦-⟧-eval₀ {t₁}) (⟦-⟧-eval₀ {t₂})
 
 ⟦-⟧^-eval₀ : ∀ {n} → ⟦ n ⟧^ ≃ Fin n
 ⟦-⟧^-eval₀ {O} = Fin-equiv-Empty ⁻¹
@@ -99,7 +113,7 @@ _ : (test1 (inr tt , inr tt) == 0) S.×
     (test1 (inr tt , inl tt) == 1) S.×
     (test1 (inl tt , inr tt) == 2) S.×
     (test1 (inl tt , inl tt) == 3)
-_ = fin= idp , fin= idp , fin= idp , fin= idp
+_ = fin= TODO- , fin= TODO- , fin= TODO- , fin= TODO-
 
 interp' : {X : Pi.U} (c : X Pi.⟷₁ X) → ⟦ X ⟧ ≃ ⟦ X ⟧
 interp' c = ⟦-⟧-eval₀ ⁻¹ ∘e Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀

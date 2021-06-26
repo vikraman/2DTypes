@@ -31,7 +31,6 @@ private
 -- eval₀-card (t₁ + t₂) = eval₀-card t₁ N.+ eval₀-card t₂
 -- eval₀-card (t₁ × t₂) = eval₀-card t₁ N.* eval₀-card t₂
 
-
 eval₀-card-aux : NPi+.U → ℕ
 eval₀-card-aux O = O
 eval₀-card-aux I = S O
@@ -45,7 +44,7 @@ I * t₂ = t₂
 eval₀-card-aux-* : ∀ {t₁ t₂} → eval₀-card-aux (t₁ * t₂) == (eval₀-card-aux t₁) ** (eval₀-card-aux t₂)
 eval₀-card-aux-* {O} = idp
 eval₀-card-aux-* {I} = ! (N.+-unit-r _)
-eval₀-card-aux-* {t₁ = t₁ + t₂} {t₂ = t₄} = 
+eval₀-card-aux-* {t₁ = t₁ + t₂} {t₂ = t₄} =
     let r₁ = eval₀-card-aux-* {t₁} {t₄}
         r₂ = eval₀-card-aux-* {t₂} {t₄}
     in  ap2 (_++_) r₁ r₂ ∙ N.+-distr
@@ -58,6 +57,10 @@ eval₀-aux (t₁ × t₂) = eval₀-aux t₁ * eval₀-aux t₂
 
 eval₀ : Pi.U → ℕ
 eval₀ t = eval₀-card-aux (eval₀-aux t)
+
+eval₀-* : ∀ {t₁ t₂} → eval₀ (t₁ × t₂) == (eval₀ t₁) ** (eval₀ t₂)
+eval₀-* {t₁} {t₂} =
+  eval₀-card-aux-* {eval₀-aux t₁} {eval₀-aux t₂}
 
 eval₀-index : (t : NPi+.U) → Pi+.U (eval₀-card-aux t)
 eval₀-index O = O
@@ -86,7 +89,7 @@ dist* {t₁} {t₂ + t₄} {t₃} =
 
         e₁ = (assocr₊ ◎ (id⟷₁ ⊕ assocl₊))
         e₂ = ((id⟷₁ ⊕ assocr₊)) ◎ assocl₊
-    in  e₁ ◎ (id⟷₁ ⊕ swap₊ ⊕ id⟷₁) 
+    in  e₁ ◎ (id⟷₁ ⊕ swap₊ ⊕ id⟷₁)
         ◎ e₂ ◎ d₁ ⊕ d₂
 
 swap* : ∀ {t₁ t₂} → (t₁ * t₂) NPi+.⟷₁ (t₂ * t₁)
