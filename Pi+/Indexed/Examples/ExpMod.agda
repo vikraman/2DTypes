@@ -20,7 +20,9 @@ import Pi+.Indexed.Equiv1Hat as Pi^
 import Pi+.Indexed.Equiv1Norm as Pi^
 open import Pi+.Indexed.Examples
 
-module Pi+.Indexed.ExpMod where
+module Pi+.Indexed.Examples.ExpMod where
+
+open import Pi+.Indexed.Examples.Base
 
 {--
 
