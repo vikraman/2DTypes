@@ -30,13 +30,13 @@ immersion⁻¹-respects≈ :  {n : ℕ} ->  {m1 m2 : List (Fin n)} → m1 ≈* m
 immersion⁻¹-respects≈ {n} p = ap (–> Lehmer1-Lehmer2-equiv) (L1.immersion⁻¹-respects≈ p)
 
 immersion∘immersion⁻¹ : {n : ℕ} -> (m : List (Fin n)) → immersion (immersion⁻¹ m) ≈* m
-immersion∘immersion⁻¹ {n} c = 
+immersion∘immersion⁻¹ {n} c =
     let r = L1.immersion∘immersion⁻¹ c
         t = ap L1.immersion (<–-inv-l Lehmer1-Lehmer2-equiv (L1.immersion⁻¹ c))
     in  (idp≃ _ _ t) ■ r
 
 immersion⁻¹∘immersion : {n : ℕ} ->  (cl : Lehmer n) → immersion⁻¹ (immersion cl) == cl
-immersion⁻¹∘immersion {n} c = 
+immersion⁻¹∘immersion {n} c =
     let r = ap (–> Lehmer1-Lehmer2-equiv) $ L1.immersion⁻¹∘immersion (<– Lehmer1-Lehmer2-equiv c)
         t = <–-inv-r Lehmer1-Lehmer2-equiv c
     in  r ∙ t

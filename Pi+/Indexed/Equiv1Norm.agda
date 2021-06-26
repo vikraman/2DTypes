@@ -43,14 +43,14 @@ pi^2lehmer p = immersion⁻¹ (pi^2list p)
 pi^2pi^ : (c : (S n) ⟷₁^ (S m)) →
     (lehmer2pi^ (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) (pi^2lehmer c)) ⟷₂^ c
 pi^2pi^ {n} c with (⟷₁^-eq-size c)
-... | idp = 
+... | idp =
     let lemma : immersion (immersion⁻¹ (pi^2list c)) ≈* (pi^2list c)
         lemma = immersion∘immersion⁻¹ (pi^2list c)
     in  _■^_ (piRespectsCoxI (ℕ-S-is-inj _ _ (⟷₁^-eq-size c)) _ _ lemma) (pi^2list2pi^ c)
 
 lehmer2lehmer : {n : ℕ} → (p : Lehmer n) → pi^2lehmer (lehmer2pi^ idp p) == p
-lehmer2lehmer {n} p = 
-    ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p -- 
+lehmer2lehmer {n} p =
+    ap immersion⁻¹ (list2list (immersion p)) ∙ immersion⁻¹∘immersion p --
 
 evalNorm₁ : (c : n ⟷₁^ m) → Aut (Fin n)
 evalNorm₁ {O} c with (⟷₁^-eq-size c)
@@ -64,6 +64,10 @@ evalNorm₁ {S n} c with (⟷₁^-eq-size c)
         step2 = <– Fin≃Lehmer step1
 
     in  step2
+
+fastevalNorm₁ : (c : S n ⟷₁^ S n) → Lehmer n
+fastevalNorm₁ = pi^2lehmer
+
 
 quoteNorm₁ : {n m : ℕ} → (pn : n == m) → Aut (Fin n) → n ⟷₁^ m
 quoteNorm₁ {O} idp p = id⟷₁^
@@ -83,7 +87,7 @@ quote-evalNorm₁ {S n} p with (⟷₁^-eq-size p)
         cancelSn = <–-inv-r Fin≃Lehmer (pi^2lehmer p)
 
         sizes = (ℕ-S-is-inj _ _ (⟷₁^-eq-size p))
-        
+
         cancelNorm : lehmer2pi^ sizes (–> Fin≃Lehmer (<– Fin≃Lehmer (pi^2lehmer p))) ⟷₂^ p
         cancelNorm = transport (λ e -> lehmer2pi^ sizes e ⟷₂^ p) (! cancelSn) (pi^2pi^ p)
 

@@ -131,7 +131,7 @@ cnot^ = eval₁ cnot
 cnot^p : Fin 4 → Fin 4
 cnot^p = –> (Pi^.evalNorm₁ cnot^)
 
-_ : (cnot^p 0 == 0) S.× (cnot^p 1 == 1) S.× (cnot^p 2 == 3) S.× (cnot^p 3 == 2)
+_ : (cnot^p 0 == 1) S.× (cnot^p 1 == 0) S.× (cnot^p 2 == 2) S.× (cnot^p 3 == 3)
 _ = fin= idp , fin= idp , fin= idp , fin= idp
 
 toffoli₃ : 𝟚 Pi.× (𝟚 Pi.× 𝟚) Pi.⟷₁ 𝟚 Pi.× (𝟚 Pi.× 𝟚)
@@ -157,10 +157,10 @@ toffoli^2-perm = Pi^.evalNorm₁ (toffoli^ 2)
 swap23 : Aut (Fin 4)
 swap23 = equiv f f f-f f-f
   where f : Fin 4 → Fin 4
-        f (O , ϕ) = 0
-        f (1 , ϕ) = 1
-        f (2 , ϕ) = 3
-        f (3 , ϕ) = 2
+        f (O , ϕ) = 1
+        f (1 , ϕ) = 0
+        f (2 , ϕ) = 2
+        f (3 , ϕ) = 3
         f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
         f-f : (x : Fin 4) → f (f x) == x
         f-f (O , ϕ) = fin= idp

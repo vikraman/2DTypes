@@ -23,4 +23,19 @@ open import Pi+.UFin.Monoidal
 open import Pi+.Common.FinHelpers
 open import Pi+.Lehmer.FinHelpers
 
-module Pi+.Indexed.Examples where
+module Pi+.Indexed.Examples.Copy where
+
+open import Pi+.Indexed.Examples.Base
+open import Pi+.Indexed.Examples.Toffoli
+
+-- copy(𝔽,b₁,…,bₙ) = (b₁,b₁,…,bₙ)
+copy : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
+copy O = id⟷₁
+copy (S O) = swap⋆ ◎ cnot ◎ swap⋆
+copy (S (S n)) = assocl⋆ ◎ (copy (S O) ⊗ id⟷₁) ◎ assocr⋆
+
+copy^ : ∀ n → _
+copy^ = eval₁ ∘ copy
+
+copy+ : ∀ n → _
+copy+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ copy^
