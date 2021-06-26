@@ -72,19 +72,19 @@ reset-test = –> (Pi^.evalNorm₁ (eval₁ (reset 2)))
 
 -- -}
 
-_ : (reset+test 0 == 0) S.×
-    (reset+test 1 == 1) S.×
-    (reset+test 2 == 2) S.×
-    (reset+test 3 == 3) S.×
-    (reset+test 4 == 4) S.×
-    (reset+test 5 == 5) S.×
-    (reset+test 6 == 6) S.×
-    (reset+test 7 == 7)
-_ = fin= idp ,
-    fin= idp ,
-    fin= idp ,
-    fin= idp ,
-    fin= idp ,
-    fin= idp ,
-    fin= idp ,
-    fin= idp
+-- _ : (reset+test 0 == 0) S.×
+--     (reset+test 1 == 1) S.×
+--     (reset+test 2 == 2) S.×
+--     (reset+test 3 == 3) S.×
+--     (reset+test 4 == 4) S.×
+--     (reset+test 5 == 5) S.×
+--     (reset+test 6 == 6) S.×
+--     (reset+test 7 == 7)
+-- _ = fin= idp ,
+--     fin= idp ,
+--     fin= idp ,
+--     fin= idp ,
+--     fin= idp ,
+--     fin= idp ,
+--     fin= idp ,
+--     fin= idp

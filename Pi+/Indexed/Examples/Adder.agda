@@ -89,61 +89,77 @@ check
 
 --}
 
-adder4 : 𝔹 4 Pi.⟷₁ 𝔹 4
-adder4 = -- 0 x (1 x (2 x 3))
-  swap⋆ ◎ -- (1 x (2 x 3)) x 0
-  assocr⋆ ◎ -- 1 x ((2 x 3) x 0)
-  (id⟷₁ ⊗ assocr⋆) ◎ -- 1 x (2 x (3 x 0))
-  toffoli 4 ◎ -- 1 x (2 x (3 x 0))
-  (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) ◎ -- 1 x (2 x (0 x 3)
-  (id⟷₁ ⊗ assocl⋆) ◎ -- 1 x ((2 x 0) x 3)
-  assocl⋆ ◎ -- (1 x (2 x 0)) x 3
-  (toffoli 3 ⊗ id⟷₁) ◎ -- (1 x (2 x 0)) x 3
-  assocr⋆ ◎ -- 1 x ((2 x 0) x 3)
-  (id⟷₁ ⊗ swap⋆) ◎ -- 1 x (3 x (2 x 0))
-  (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) ◎ -- 1 x (3 x (0 x 2))
-  (id⟷₁ ⊗ assocl⋆) ◎ -- 1 x ((3 x 0) x 2)
-  assocl⋆ ◎ -- (1 x (3 x 0)) x 2
-  (toffoli 3 ⊗ id⟷₁) ◎ -- (1 x (3 x 0)) x 2
-  ((id⟷₁ ⊗ swap⋆) ⊗ id⟷₁) ◎ -- (1 x (0 x 3)) x 2
-  (assocl⋆ ⊗ id⟷₁) ◎ -- ((1 x 0) x 3) x 2
-  ((cnot ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((1 x 0) x 3) x 2
-  assocr⋆ ◎ -- (1 x 0) x (3 x 2)
-  (swap⋆ ⊗ id⟷₁) ◎ -- (0 x 1) x (3 x 2)
-  swap⋆ ◎ -- (3 x 2) x (0 x 1)
-  assocl⋆ ◎ -- ((3 x 2) x 0) x 1
-  (assocr⋆ ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
-  (toffoli 3 ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
-  ((id⟷₁ ⊗ cnot) ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
-  ((id⟷₁ ⊗ swap⋆) ⊗ id⟷₁) ◎ -- (3 x (0 x 2)) x 1
-  (assocl⋆ ⊗ id⟷₁) ◎ -- ((3 x 0) x 2) x 1
-  ((cnot ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((3 x 0) x 2) x 1
-  ((swap⋆ ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((0 x 3) x 2) x 1
-  (assocr⋆ ⊗ id⟷₁) ◎ -- (0 x (3 x 2)) x 1
-  assocr⋆ ◎ -- 0 x ((3 x 2) x 1)
-  (id⟷₁ ⊗ swap⋆) ◎ -- 0 x (1 x (3 x 2))
-  (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) -- 0 x (1 x (2 x 3))
+-- adder4 : 𝔹 4 Pi.⟷₁ 𝔹 4
+-- adder4 = -- 0 x (1 x (2 x 3))
+--   swap⋆ ◎ -- (1 x (2 x 3)) x 0
+--   assocr⋆ ◎ -- 1 x ((2 x 3) x 0)
+--   (id⟷₁ ⊗ assocr⋆) ◎ -- 1 x (2 x (3 x 0))
+--   toffoli 4 ◎ -- 1 x (2 x (3 x 0))
+--   (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) ◎ -- 1 x (2 x (0 x 3)
+--   (id⟷₁ ⊗ assocl⋆) ◎ -- 1 x ((2 x 0) x 3)
+--   assocl⋆ ◎ -- (1 x (2 x 0)) x 3
+--   (toffoli 3 ⊗ id⟷₁) ◎ -- (1 x (2 x 0)) x 3
+--   assocr⋆ ◎ -- 1 x ((2 x 0) x 3)
+--   (id⟷₁ ⊗ swap⋆) ◎ -- 1 x (3 x (2 x 0))
+--   (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) ◎ -- 1 x (3 x (0 x 2))
+--   (id⟷₁ ⊗ assocl⋆) ◎ -- 1 x ((3 x 0) x 2)
+--   assocl⋆ ◎ -- (1 x (3 x 0)) x 2
+--   (toffoli 3 ⊗ id⟷₁) ◎ -- (1 x (3 x 0)) x 2
+--   ((id⟷₁ ⊗ swap⋆) ⊗ id⟷₁) ◎ -- (1 x (0 x 3)) x 2
+--   (assocl⋆ ⊗ id⟷₁) ◎ -- ((1 x 0) x 3) x 2
+--   ((cnot ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((1 x 0) x 3) x 2
+--   assocr⋆ ◎ -- (1 x 0) x (3 x 2)
+--   (swap⋆ ⊗ id⟷₁) ◎ -- (0 x 1) x (3 x 2)
+--   swap⋆ ◎ -- (3 x 2) x (0 x 1)
+--   assocl⋆ ◎ -- ((3 x 2) x 0) x 1
+--   (assocr⋆ ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
+--   (toffoli 3 ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
+--   ((id⟷₁ ⊗ cnot) ⊗ id⟷₁) ◎ -- (3 x (2 x 0)) x 1
+--   ((id⟷₁ ⊗ swap⋆) ⊗ id⟷₁) ◎ -- (3 x (0 x 2)) x 1
+--   (assocl⋆ ⊗ id⟷₁) ◎ -- ((3 x 0) x 2) x 1
+--   ((cnot ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((3 x 0) x 2) x 1
+--   ((swap⋆ ⊗ id⟷₁) ⊗ id⟷₁) ◎ -- ((0 x 3) x 2) x 1
+--   (assocr⋆ ⊗ id⟷₁) ◎ -- (0 x (3 x 2)) x 1
+--   assocr⋆ ◎ -- 0 x ((3 x 2) x 1)
+--   (id⟷₁ ⊗ swap⋆) ◎ -- 0 x (1 x (3 x 2))
+--   (id⟷₁ ⊗ (id⟷₁ ⊗ swap⋆)) -- 0 x (1 x (2 x 3))
 
-adder4+ : Pi^.quote^₀ 16 Pi+.⟷₁ Pi^.quote^₀ 16
-adder4+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) adder4
+-- adder4+ : Pi^.quote^₀ 16 Pi+.⟷₁ Pi^.quote^₀ 16
+-- adder4+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) adder4
 
-adder4+test : Fin 16 → Fin 16
--- adder4+test = –> (Pi+.eval₁ (adder+))
-adder4+test = –> (Pi^.evalNorm₁ (eval₁ adder4))
+-- adder4+test : Fin 16 → Fin 16
+-- -- adder4+test = –> (Pi+.eval₁ (adder+))
+-- adder4+test = –> (Pi^.evalNorm₁ (eval₁ adder4))
 
-adder3 : 𝔹 3 Pi.⟷₁ 𝔹 3
-adder3 = -- 0 * (1 * 2)
+adder31 : 𝔹 3 Pi.⟷₁ 𝔹 3
+adder31 = -- 0 * (1 * 2)
   swap⋆ ◎ -- (1 * 2) * 0
   (swap⋆ ⊗ id⟷₁) ◎ -- (2 * 1) * 0
-  assocr⋆ ◎ -- 2 * (1 * 0)
+  assocr⋆ -- 2 * (1 * 0)
+
+adder32 : 𝔹 3 Pi.⟷₁ 𝔹 3
+adder32 =
   toffoli 3 ◎ -- 2 * (1 * 0)
-  (id⟷₁ ⊗ cnot) ◎ -- 2 * (1 * 0)
+  (id⟷₁ ⊗ cnot) -- 2 * (1 * 0)
+
+adder33 : 𝔹 3 Pi.⟷₁ 𝔹 3
+adder33 =
   assocl⋆ ◎ -- (2 * 1) * 0
   (swap⋆ ⊗ id⟷₁) ◎ -- (1 * 2) * 0
-  assocr⋆ ◎ -- 1 * (2 * 0)
+  assocr⋆ -- 1 * (2 * 0)
+
+adder34 : 𝔹 3 Pi.⟷₁ 𝔹 3
+adder34 =
   (id⟷₁ ⊗ cnot) ◎ -- 1 * (2 * 0)
   assocl⋆ ◎ -- (1 * 2) * 0
   swap⋆ -- 0 * (1 * 2)
+
+adder3 : 𝔹 3 Pi.⟷₁ 𝔹 3
+adder3 =
+  adder31 ◎
+  adder32 ◎
+  adder33 ◎
+  adder34
 
 -- adder3+test : Fin 8 → Fin 8
 -- adder4+test = –> (Pi+.eval₁ (adder3+))
@@ -161,9 +177,6 @@ fastadder3+test2 = eval₁ adder3
 fastadder3+test3 = (pi^2list fastadder3+test2)
 
 fastadder3+test4 = immersion⁻¹ fastadder3+test3
-
--- test : fastadder3+test == {!!}
--- test = {!!}
 
 adderPerm : Aut (Fin 8)
 adderPerm = equiv f f f-f f-f
@@ -193,3 +206,42 @@ adderPerm^ = Pi^.quoteNorm₁ idp adderPerm
 
 adderPerm+ : 𝟠+ Pi+.⟷₁ 𝟠+
 adderPerm+ = Pi^.quote^₁ adderPerm^
+
+fastadder+test231 = eval₁ adder31
+
+fastadder+test331 = (pi^2list fastadder+test231)
+
+fastadder+test431 = immersion⁻¹ fastadder+test331
+
+fastadder+test31 = Pi^.fastevalNorm₁ (eval₁ adder31)
+slowadder+test31 = Pi^.evalNorm₁ (eval₁ adder31)
+
+fastadder+test32 = Pi^.fastevalNorm₁ (eval₁ adder32)
+slowadder+test32 = Pi^.evalNorm₁ (eval₁ adder32)
+
+fastadder+test33 = Pi^.fastevalNorm₁ (eval₁ adder33)
+slowadder+test33 = Pi^.evalNorm₁ (eval₁ adder33)
+
+fastadder+test34 = Pi^.fastevalNorm₁ (eval₁ adder34)
+slowadder+test34 = Pi^.evalNorm₁ (eval₁ adder34)
+
+adder+test34-perm : Aut (Fin 8)
+adder+test34-perm =
+  slowadder+test34 ∘e slowadder+test33 ∘e slowadder+test32 ∘e slowadder+test31
+  -- compose in reverse order
+
+adder+test34+ : Pi^.quote^₀ 8 Pi+.⟷₁ Pi^.quote^₀ 8
+adder+test34+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp) adder+test34-perm
+
+adder+test34+-full : Pi^.quote^₀ 8 Pi+.⟷₁ Pi^.quote^₀ 8
+adder+test34+-full = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) adder3
+
+{-
+(assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
+-}
