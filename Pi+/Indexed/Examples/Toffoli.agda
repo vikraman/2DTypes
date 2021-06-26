@@ -27,6 +27,8 @@ module Pi+.Indexed.Examples.Toffoli where
 
 open import Pi+.Indexed.Examples.Base
 
+-- NOTE: Left is True
+
 swap2 : 𝔹 2 Pi.⟷₁ 𝔹 2
 swap2 = swap⋆
 
@@ -92,8 +94,8 @@ toffoli+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ toffol
 toffoli^2-perm : Aut (Fin 4)
 toffoli^2-perm = Pi^.evalNorm₁ (toffoli^ 2)
 
-swap01 : Aut (Fin 4)
-swap01 = equiv f f f-f f-f
+swap23 : Aut (Fin 4)
+swap23 = equiv f f f-f f-f
   where f : Fin 4 → Fin 4
         f (O , ϕ) = 1
         f (1 , ϕ) = 0
@@ -107,20 +109,20 @@ swap01 = equiv f f f-f f-f
         f-f (3 , ϕ) = fin= idp
         f-f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
 
-toffoli^2perm=swap01 : toffoli^2-perm == swap01
-toffoli^2perm=swap01 = e= ϕ
-  where ϕ : (f : Fin 4) → –> toffoli^2-perm f == –> swap01 f
+toffoli^2perm=swap23 : toffoli^2-perm == swap23
+toffoli^2perm=swap23 = e= ϕ
+  where ϕ : (f : Fin 4) → –> toffoli^2-perm f == –> swap23 f
         ϕ (O , ϕ) = fin= idp
         ϕ (1 , ϕ) = fin= idp
         ϕ (2 , ϕ) = fin= idp
         ϕ (3 , ϕ) = fin= idp
         ϕ (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))
 
-swap01^ : 4 Pi^.⟷₁^ 4
-swap01^ = Pi^.quoteNorm₁ idp swap01
+swap23^ : 4 Pi^.⟷₁^ 4
+swap23^ = Pi^.quoteNorm₁ idp swap23
 
-toffoli^2=swap01^ : toffoli^ 2 Pi^.⟷₂^ swap01^
-toffoli^2=swap01^ = (((c₂ ⊡^ c₂) ⊡^ ((c₃ ⊡^ (c₄ ⊡^ (c₂ ⊡^ c₂))) ⊡^ (c₂ ⊡^ c₂))) ■^
+toffoli^2=swap23^ : toffoli^ 2 Pi^.⟷₂^ swap23^
+toffoli^2=swap23^ = (((c₂ ⊡^ c₂) ⊡^ ((c₃ ⊡^ (c₄ ⊡^ (c₂ ⊡^ c₂))) ⊡^ (c₂ ⊡^ c₂))) ■^
                     (idl◎l^ ⊡^ (idl◎l^ ⊡^ idl◎l^)) ■^
                     idl◎l^ ■^ idr◎l^ ■^ assoc◎l^ ■^ idr◎l^ ■^ idr◎l^) ■^ idr◎r^
   where c₂ : ⊕^ ⊕^ id⟷₁^ ⟷₂^ id⟷₁^
@@ -133,8 +135,34 @@ toffoli^2=swap01^ = (((c₂ ⊡^ c₂) ⊡^ ((c₃ ⊡^ (c₄ ⊡^ (c₂ ⊡^ c�
         c₄ : (swap₊^ ◎^ ⊕^ ⊕^ id⟷₁^) ⟷₂^ swap₊^
         c₄ = (id⟷₂^ ⊡^ c₂) ■^ idr◎l^
 
-swap01+ : 𝟜+ Pi+.⟷₁ 𝟜+
-swap01+ = Pi+.quote₁ idp swap01
+swap23+ : 𝟜+ Pi+.⟷₁ 𝟜+
+swap23+ = Pi+.quote₁ idp swap23
 
 toffoli2+ : 𝟜+ Pi+.⟷₁ 𝟜+
-toffoli2+ = Pi^.quote^₁ swap01^
+toffoli2+ = Pi^.quote^₁ swap23^
+
+swap67 : Aut (Fin 8)
+swap67 = equiv f f f-f f-f
+  where f : Fin 8 → Fin 8
+        f (O , ϕ) = 1
+        f (1 , ϕ) = 0
+        f (2 , ϕ) = 2
+        f (3 , ϕ) = 3
+        f (4 , ϕ) = 4
+        f (5 , ϕ) = 5
+        f (6 , ϕ) = 6
+        f (7 , ϕ) = 7
+        f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))
+        f-f : (x : Fin 8) → f (f x) == x
+        f-f (O , ϕ) = fin= idp
+        f-f (1 , ϕ) = fin= idp
+        f-f (2 , ϕ) = fin= idp
+        f-f (3 , ϕ) = fin= idp
+        f-f (4 , ϕ) = fin= idp
+        f-f (5 , ϕ) = fin= idp
+        f-f (6 , ϕ) = fin= idp
+        f-f (7 , ϕ) = fin= idp
+        f-f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))
+
+swap67+ : _ Pi+.⟷₁ _
+swap67+ = Pi^.quote^₁ (Pi^.quoteNorm₁ idp swap67)

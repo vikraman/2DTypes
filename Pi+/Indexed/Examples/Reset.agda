@@ -34,7 +34,7 @@ rearrange t₁ t₂ t₃ = assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
 reset O = id⟷₁
 reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
-reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (reset (S n)) (not ⊗ id⟷₁) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
+reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 
 reset^ : ∀ n → _
 reset^ = eval₁ ∘ reset
@@ -47,6 +47,41 @@ reset+test = –> (Pi+.eval₁ (reset+ 2))
 
 reset-test : Fin 8 → Fin 8
 reset-test = –> (Pi^.evalNorm₁ (eval₁ (reset 2)))
+
+reset2-perm : Aut (Fin 8)
+reset2-perm = equiv f f f-f f-f
+  where f : Fin 8 → Fin 8
+        f (O , ϕ) = 0
+        f (1 , ϕ) = 5
+        f (2 , ϕ) = 6
+        f (3 , ϕ) = 7
+        f (4 , ϕ) = 4
+        f (5 , ϕ) = 1
+        f (6 , ϕ) = 2
+        f (7 , ϕ) = 3
+        f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))
+        f-f : (x : Fin 8) → f (f x) == x
+        f-f (O , ϕ) = fin= idp
+        f-f (1 , ϕ) = fin= idp
+        f-f (2 , ϕ) = fin= idp
+        f-f (3 , ϕ) = fin= idp
+        f-f (4 , ϕ) = fin= idp
+        f-f (5 , ϕ) = fin= idp
+        f-f (6 , ϕ) = fin= idp
+        f-f (7 , ϕ) = fin= idp
+        f-f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))
+
+reset2-perm+ : _
+reset2-perm+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp) reset2-perm
+
+-- ((true , true , true) , false , true , true) ::
+-- ((true , true , false) , false , true , false) ::
+-- ((true , false , true) , false , false , true) ::
+-- ((true , false , false) , true , false , false) ::
+-- ((false , true , true) , true , true , true) ::
+-- ((false , true , false) , true , true , false) ::
+-- ((false , false , true) , true , false , true) ::
+-- ((false , false , false) , false , false , false) :: nil
 
 -- 0 b1 b2 b3 => or(b1,b2,b3) , b1 b2 b3
 -- 1 b1 b2 b3 => nor(b1,b2,b3) , b1 b2 b3
@@ -80,6 +115,7 @@ reset-test = –> (Pi^.evalNorm₁ (eval₁ (reset 2)))
 --     (reset+test 5 == 5) S.×
 --     (reset+test 6 == 6) S.×
 --     (reset+test 7 == 7)
+
 -- _ = fin= idp ,
 --     fin= idp ,
 --     fin= idp ,
@@ -88,3 +124,102 @@ reset-test = –> (Pi^.evalNorm₁ (eval₁ (reset 2)))
 --     fin= idp ,
 --     fin= idp ,
 --     fin= idp
+
+{-
+
+(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕
+ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+◎
+(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+id⟷₁
+
+-}
+
+open import Pi+.Indexed.Examples.Interp
+
+test-interp-reset2 = interp-elems (reset 2)
+
+{-
+((true , true , true) , false , true , true) ::
+((true , true , false) , false , true , false) ::
+((true , false , true) , false , false , true) ::
+((true , false , false) , true , false , false) ::
+((false , true , true) , true , true , true) ::
+((false , true , false) , true , true , false) ::
+((false , false , true) , true , false , true) ::
+((false , false , false) , false , false , false) :: nil
+-}
+
+test-interp-reset2+ = interp-elems {t₁ = I + I + I + I + I + I + I + I + O} {t₂ =  I + I + I + I + I + I + I + I + O} x
+  where x = (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕
+             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+            ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕
+             id⟷₁ ⊕
+             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+            ◎
+            (id⟷₁ ⊕
+             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+            ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
+
+{-
+(inr (inr (inr (inr (inr (inr (inr true)))))) ,
+ inr (inr (inr true)))
+::
+(inr (inr (inr (inr (inr (inr true))))) , inr (inr true)) ::
+(inr (inr (inr (inr (inr true)))) , inr true) ::
+(inr (inr (inr (inr true))) ,
+ inr (inr (inr (inr (inr (inr (inr true)))))))
+::
+(inr (inr (inr true)) , inr (inr (inr (inr true)))) ::
+(inr (inr true) , inr (inr (inr (inr (inr (inr true)))))) ::
+(inr true , inr (inr (inr (inr (inr true))))) ::
+(true , true) :: nil
+
+-}
+
+test-interp-reset+2 = interp-elems {t₁ = I + I + I + I + I + I + I + I + O} {t₂ =  I + I + I + I + I + I + I + I + O} x
+  where x = (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            (id⟷₁ ⊕
+             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
+            ◎
+            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+            id⟷₁
+
+{-
+
+(inr (inr (inr (inr (inr (inr (inr true)))))) ,
+ inr (inr (inr (inr (inr (inr (inr true)))))))
+::
+(inr (inr (inr (inr (inr (inr true))))) ,
+ inr (inr (inr (inr true))))
+::
+(inr (inr (inr (inr (inr true)))) ,
+ inr (inr (inr (inr (inr true)))))
+::
+(inr (inr (inr (inr true))) ,
+ inr (inr (inr (inr (inr (inr true))))))
+::
+(inr (inr (inr true)) , inr (inr (inr true))) ::
+(inr (inr true) , inr (inr true)) ::
+(inr true , inr true) :: (true , true) :: nil
+
+-}
+
+open import Pi+.Indexed.Equiv1NormHelpers
+open import Pi+.Coxeter.LehmerCoxeterEquiv
+open import Pi+.Lehmer.LehmerFinEquiv
+reset^-list = pi^2list (reset^ 2)
+reset^-list+ = immersion (–> Fin≃Lehmer reset2-perm)

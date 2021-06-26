@@ -25,6 +25,8 @@ open import Pi+.Indexed.Examples.Base using (⟦_⟧ ; ⟦-⟧-eval₀)
 
 module Pi+.Indexed.Examples.Interp where
 
+open import Pi+.Indexed.Examples.Base
+
 interp : {X Y : Pi.U} (c : X Pi.⟷₁ Y) -> ⟦ X ⟧ ≃ ⟦ Y ⟧
 interp unite₊l = Coprod-unit-l _
 interp uniti₊l = Coprod-unit-l _ ⁻¹
@@ -47,6 +49,29 @@ interp (c₁ ◎ c₂) = interp c₂ ∘e interp c₁
 interp (c₁ ⊕ c₂) = ⊔-≃ (interp c₁) (interp c₂)
 interp (c₁ ⊗ c₂) = ×-≃ (interp c₁) (interp c₂)
 
+-- interp+ : {n : ℕ} {X Y : Pi+.U n} (c : X Pi+.⟷₁ Y) -> ⟦ X ⟧+ ≃ ⟦ Y ⟧+
+-- interp+ unite₊l = Coprod-unit-l _
+-- interp+ uniti₊l = Coprod-unit-l _ ⁻¹
+-- interp+ unite⋆l = ×₁-Unit _
+-- interp+ uniti⋆l = ×₁-Unit _ ⁻¹
+-- interp+ (swap₊ {t₁} {t₂}) = ⊔-comm ⟦ t₁ ⟧ ⟦ t₂ ⟧
+-- interp+ (swap⋆ {t₁} {t₂}) = ×-comm {A = ⟦ t₁ ⟧} {⟦ t₂ ⟧}
+-- interp+ assocl₊ = ⊔-assoc ⟦ _ ⟧ ⟦ _ ⟧ ⟦ _ ⟧ ⁻¹
+-- interp+ assocr₊ = ⊔-assoc _ _ _
+-- interp+ assocl⋆ = Σ-assoc ⁻¹
+-- interp+ assocr⋆ = Σ-assoc
+-- interp+ absorbr = ×₁-Empty _
+-- interp+ absorbl = ×₁-Empty _ ∘e ×-comm
+-- interp+ factorzr = (×₁-Empty _ ∘e ×-comm) ⁻¹
+-- interp+ factorzl = ×₁-Empty _ ⁻¹
+-- interp+ dist = ×-⊔-distrib _ _ _
+-- interp+ factor = ×-⊔-distrib _ _ _ ⁻¹
+-- interp+ id⟷₁ = ide _
+-- interp+ (c₁ ◎ c₂) = interp c₂ ∘e interp c₁
+-- interp+ (c₁ ⊕ c₂) = ⊔-≃ (interp+ c₁) (interp+ c₂)
+-- interp+ (c₁ ⊗ c₂) = ×-≃ (interp+ c₁) (interp+ c₂)
+
+
 -- sound : {X Y : Pi.U} (c : X Pi.⟷₁ Y)
 --       → Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
 --       == transport (λ n → ⟦ Y ⟧ ≃ Fin n)
@@ -66,3 +91,79 @@ sound-test2 :
 sound-test2 =
   e= λ { (inl x , inl x₁) → idp ; (inl x , inr x₁) → idp ;
          (inr x , inl x₁) → idp ; (inr x , inr x₁) → idp }
+
+elems : (t : Pi.U) → List ⟦ t ⟧
+elems O = nil
+elems I = tt :: nil
+elems (t₁ + t₂) = map inl (elems t₁) ++ map inr (elems t₂)
+elems (t₁ × t₂) = concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) (elems t₂)) (elems t₁))
+
+test : _
+test = elems (𝔹 3)
+
+interp-elems : ∀ {t₁ t₂} (c : t₁ Pi.⟷₁ t₂) → List (⟦ t₁ ⟧ S.× ⟦ t₂ ⟧)
+interp-elems {t₁ = t₁} c = map (λ v → (v , –> (interp c) v)) (elems t₁)
+
+open import Pi+.Indexed.Examples.Toffoli
+
+test-interp-elems : _
+test-interp-elems = interp-elems (toffoli 3)
+
+test-interp-id : _
+test-interp-id = interp-elems {t₁ = I + (I + I)} id⟷₁
+
+{-
+(true , true) ::
+(inr true , inr true) :: (inr false , inr false) :: nil
+-}
+
+id+ : (I + I + I + O) Pi+.⟷₁ (I + I + I + O)
+id+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) (id⟷₁ {t = I + (I + I)})
+
+test-interp-id+ : _
+test-interp-id+ = interp-elems {t₁ = (I + I + I + O)} id⟷₁
+
+{-
+(true , true) ::
+(inr true , inr true) :: (inr (inr true) , inr (inr true)) :: nil
+-}
+
+idx : (I + I + I + I + I + I + O) Pi+.⟷₁ (I + I + I + I + I + I + O)
+idx = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) (id⟷₁ {t = 𝟚 × (I + (I + I))})
+
+test-interp-idx : _
+test-interp-idx = interp-elems {t₁ = 𝟚 × (I + (I + I))} id⟷₁
+
+{-
+((true , true) , true , true) ::
+((true , inr true) , true , inr true) ::
+((true , inr false) , true , inr false) ::
+((false , true) , false , true) ::
+((false , inr true) , false , inr true) ::
+((false , inr false) , false , inr false) :: nil
+
+-------
+a1,b1 a1,b2 a1,b3
+-------
+a2,b1 a2,b2, a2,b3
+
+-}
+
+test-interp-id+x : _
+test-interp-id+x = interp-elems {t₁ = I + I + I + I + I + I + O} id⟷₁
+
+{-
+(true , true) ::
+(inr true , inr true) ::
+(inr (inr true) , inr (inr true)) ::
+(inr (inr (inr true)) , inr (inr (inr true))) ::
+(inr (inr (inr (inr true))) , inr (inr (inr (inr true)))) ::
+(inr (inr (inr (inr (inr true)))) ,
+ inr (inr (inr (inr (inr true)))))
+:: nil
+
+------
+a1,b1 a1,b2 a1,b3
+a2,b1 a2,b2 a2.b3
+
+-}
