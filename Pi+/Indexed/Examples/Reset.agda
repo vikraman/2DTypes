@@ -34,7 +34,7 @@ rearrange t₁ t₂ t₃ = assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
 reset O = id⟷₁
 reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
-reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
+reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (reset (S n)) (not ⊗ id⟷₁) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 
 reset^ : ∀ n → _
 reset^ = eval₁ ∘ reset
