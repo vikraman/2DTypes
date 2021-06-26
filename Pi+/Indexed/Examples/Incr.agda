@@ -60,3 +60,10 @@ incr+test-2 = fin= idp
 
 incr+test-3 : incr+test 3 == 0
 incr+test-3 = fin= idp
+
+open import Pi+.Indexed.Examples.Interp
+
+test-interp-incr2 = interp-elems (incr 2)
+test-interp-incr2+ = interp+-elems (Pi^.quote^₁ (eval₁ (incr 2)))
+test-interp-incr2^ = interp+-elems (incr+ 2)
+test-encode-interp-incr2 = map encode-interp-elems test-interp-incr2

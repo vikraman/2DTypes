@@ -153,6 +153,21 @@ test-interp-reset2 = interp-elems (reset 2)
 
 test-interp-reset2x+ = interp+-elems (Pi^.quote^₁ (eval₁ (reset 2)))
 
+private
+  x : _
+  x = map encode-interp-elems test-interp-reset2
+
+-- (true , inr (inr (inr (inr true)))) ::
+-- (inr true , inr (inr (inr (inr (inr true))))) ::
+-- (inr (inr true) , inr (inr (inr (inr (inr (inr true)))))) ::
+-- (inr (inr (inr true)) , inr (inr (inr true))) ::
+-- (inr (inr (inr (inr true))) , true) ::
+-- (inr (inr (inr (inr (inr true)))) , inr true) ::
+-- (inr (inr (inr (inr (inr (inr true))))) , inr (inr true)) ::
+-- (inr (inr (inr (inr (inr (inr (inr true)))))) ,
+--  inr (inr (inr (inr (inr (inr (inr true)))))))
+-- :: nil
+
 -- (true , true) ::
 -- (inr true , inr true) ::
 -- (inr (inr true) , inr (inr true)) ::

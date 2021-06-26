@@ -80,27 +80,27 @@ encode X =
         s = ⟦-⟧^-eval₀ {eval₀ X}
     in  s ⁻¹ ∘e r
 
-interp-interp^-eq : {X Y : Pi.U} (c : X Pi.⟷₁ Y) -> (interp c) == encode Y ⁻¹ ∘e interp^ (eval₁ c) ∘e encode X
-interp-interp^-eq unite₊l = {!   !}
-interp-interp^-eq uniti₊l = {!  !}
-interp-interp^-eq unite⋆l = {!   !}
-interp-interp^-eq uniti⋆l = {!   !}
-interp-interp^-eq swap₊ = {!   !}
-interp-interp^-eq swap⋆ = {!   !}
-interp-interp^-eq assocl₊ = {!   !}
-interp-interp^-eq assocr₊ = {!   !}
-interp-interp^-eq assocl⋆ = {!   !}
-interp-interp^-eq assocr⋆ = {!   !}
-interp-interp^-eq absorbr = {!   !}
-interp-interp^-eq absorbl = {!   !}
-interp-interp^-eq factorzr = {!   !}
-interp-interp^-eq factorzl = {!   !}
-interp-interp^-eq dist = {!   !}
-interp-interp^-eq factor = {!   !}
-interp-interp^-eq id⟷₁ = {!   !}
-interp-interp^-eq (c ◎ c₁) = {!   !}
-interp-interp^-eq (c ⊕ c₁) = {!   !}
-interp-interp^-eq (c ⊗ c₁) = {!   !}
+-- interp-interp^-eq : {X Y : Pi.U} (c : X Pi.⟷₁ Y) -> (interp c) == encode Y ⁻¹ ∘e interp^ (eval₁ c) ∘e encode X
+-- interp-interp^-eq unite₊l = {!!} -- e= (λ { (inr x) → {!!} })
+-- interp-interp^-eq uniti₊l = {!  !}
+-- interp-interp^-eq unite⋆l = {!   !}
+-- interp-interp^-eq uniti⋆l = {!   !}
+-- interp-interp^-eq swap₊ = {!   !}
+-- interp-interp^-eq swap⋆ = {!   !}
+-- interp-interp^-eq assocl₊ = {!   !}
+-- interp-interp^-eq assocr₊ = {!   !}
+-- interp-interp^-eq assocl⋆ = {!   !}
+-- interp-interp^-eq assocr⋆ = {!   !}
+-- interp-interp^-eq absorbr = {!   !}
+-- interp-interp^-eq absorbl = {!   !}
+-- interp-interp^-eq factorzr = {!   !}
+-- interp-interp^-eq factorzl = {!   !}
+-- interp-interp^-eq dist = {!   !}
+-- interp-interp^-eq factor = {!   !}
+-- interp-interp^-eq id⟷₁ =  {!!} ∙ {!!} ∙ {!!}
+-- interp-interp^-eq (c ◎ c₁) = {!   !}
+-- interp-interp^-eq (c ⊕ c₁) = {!   !}
+-- interp-interp^-eq (c ⊗ c₁) = {!   !}
 
 -- sound : {X Y : Pi.U} (c : X Pi.⟷₁ Y)
 --       → Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
@@ -149,66 +149,21 @@ interp+-elems {t₁ = t₁} c = map (λ v → (v , –> (interp+ c) v)) (elems+ 
 interp^-elems : ∀ {n m} (c : n Pi^.⟷₁^ m) → List (⟦ n ⟧^ S.× ⟦ m ⟧^)
 interp^-elems {n = n} c = map (λ v → (v , –> (interp^ c) v)) (elems^ n)
 
+encode-interp-elems : ∀ {t₁} {t₂} → ⟦ t₁ ⟧ S.× ⟦ t₂ ⟧ → ⟦ eval₀ t₁ ⟧^ S.× ⟦ eval₀ t₂ ⟧^
+encode-interp-elems (v1 , v2) = (–> (encode _) v1) , (–> (encode _) v2)
+
 open import Pi+.Indexed.Examples.Toffoli
 
-test-interp-elems : _
-test-interp-elems = interp-elems (toffoli 3)
+id2 : 𝟚 Pi.× 𝟚 Pi.⟷₁ 𝟚 Pi.× 𝟚
+id2 = toffoli 2
 
-test-interp-id : _
-test-interp-id = interp-elems {t₁ = I + (I + I)} id⟷₁
+id2^ : _
+id2^ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) id2
 
-{-
-(true , true) ::
-(inr true , inr true) :: (inr false , inr false) :: nil
--}
+test-interp-id2 = interp-elems id2
+test-interp-id2+ = interp+-elems (Pi^.quote^₁ (eval₁ id2))
+test-interp-id2^ = interp+-elems id2^
 
-id+ : (I + I + I + O) Pi+.⟷₁ (I + I + I + O)
-id+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) (id⟷₁ {t = I + (I + I)})
-
-test-interp-id+ : _
-test-interp-id+ = interp-elems {t₁ = (I + I + I + O)} id⟷₁
-
-{-
-(true , true) ::
-(inr true , inr true) :: (inr (inr true) , inr (inr true)) :: nil
--}
-
-idx : (I + I + I + I + I + I + O) Pi+.⟷₁ (I + I + I + I + I + I + O)
-idx = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) (id⟷₁ {t = 𝟚 × (I + (I + I))})
-
-test-interp-idx : _
-test-interp-idx = interp-elems {t₁ = 𝟚 × (I + (I + I))} id⟷₁
-
-{-
-((true , true) , true , true) ::
-((true , inr true) , true , inr true) ::
-((true , inr false) , true , inr false) ::
-((false , true) , false , true) ::
-((false , inr true) , false , inr true) ::
-((false , inr false) , false , inr false) :: nil
-
--------
-a1,b1 a1,b2 a1,b3
--------
-a2,b1 a2,b2, a2,b3
-
--}
-
-test-interp-id+x : _
-test-interp-id+x = interp-elems {t₁ = I + I + I + I + I + I + O} id⟷₁
-
-{-
-(true , true) ::
-(inr true , inr true) ::
-(inr (inr true) , inr (inr true)) ::
-(inr (inr (inr true)) , inr (inr (inr true))) ::
-(inr (inr (inr (inr true))) , inr (inr (inr (inr true)))) ::
-(inr (inr (inr (inr (inr true)))) ,
- inr (inr (inr (inr (inr true)))))
-:: nil
-
-------
-a1,b1 a1,b2 a1,b3
-a2,b1 a2,b2 a2.b3
-
--}
+private
+  x : _
+  x = map encode-interp-elems test-interp-id2
