@@ -21,9 +21,9 @@ open import Pi+.UFin
 open import Pi+.UFin.Monoidal
 open import Pi+.Common.FinHelpers
 open import Pi+.Lehmer.FinHelpers
-open import Pi+.Indexed.Examples using (⟦_⟧ ; ⟦-⟧-eval₀)
+open import Pi+.Indexed.Examples.Base using (⟦_⟧ ; ⟦-⟧-eval₀)
 
-module Pi+.Indexed.Interp where
+module Pi+.Indexed.Examples.Interp where
 
 interp : {X Y : Pi.U} (c : X Pi.⟷₁ Y) -> ⟦ X ⟧ ≃ ⟦ Y ⟧
 interp unite₊l = Coprod-unit-l _
@@ -53,12 +53,12 @@ interp (c₁ ⊗ c₂) = ×-≃ (interp c₁) (interp c₂)
 --                    (! (eval₀-size c)) ⟦-⟧-eval₀ ∘e
 --                    interp c
 
-sound-test1 :
-  let c = swap₊ {t₁ = I + I + I} {t₂ = I + I} in
-  Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀ ==  ⟦-⟧-eval₀ ∘e interp c
-sound-test1 =
-  e= λ { (inl true) → idp ; (inl (inr true)) → idp ; (inl (inr false)) → idp ;
-         (inr (inl x)) → idp ; (inr (inr x)) → idp }
+-- sound-test1 :
+--   let c = swap₊ {t₁ = I + I + I} {t₂ = I + I} in
+--   Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀ ==  ⟦-⟧-eval₀ ∘e interp c
+-- sound-test1 =
+--   e= λ { (inl true) → idp ; (inl (inr true)) → idp ; (inl (inr false)) → idp ;
+--          (inr (inl x)) → idp ; (inr (inr x)) → idp }
 
 sound-test2 :
   let c = swap⋆ {t₁ = I + I} {t₂ = I + I} in
