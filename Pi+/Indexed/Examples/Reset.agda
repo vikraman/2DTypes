@@ -151,72 +151,62 @@ test-interp-reset2 = interp-elems (reset 2)
 ((false , false , false) , false , false , false) :: nil
 -}
 
-test-interp-reset2+ = interp-elems {t₁ = I + I + I + I + I + I + I + I + O} {t₂ =  I + I + I + I + I + I + I + I + O} x
-  where x = (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕
-             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
-            ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕
-             id⟷₁ ⊕
-             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
-            ◎
-            (id⟷₁ ⊕
-             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
-            ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
+test-interp-reset2x+ = interp+-elems (Pi^.quote^₁ (eval₁ (reset 2)))
 
-{-
-(inr (inr (inr (inr (inr (inr (inr true)))))) ,
- inr (inr (inr true)))
-::
-(inr (inr (inr (inr (inr (inr true))))) , inr (inr true)) ::
-(inr (inr (inr (inr (inr true)))) , inr true) ::
-(inr (inr (inr (inr true))) ,
- inr (inr (inr (inr (inr (inr (inr true)))))))
-::
-(inr (inr (inr true)) , inr (inr (inr (inr true)))) ::
-(inr (inr true) , inr (inr (inr (inr (inr (inr true)))))) ::
-(inr true , inr (inr (inr (inr (inr true))))) ::
-(true , true) :: nil
+-- (true , true) ::
+-- (inr true , inr true) ::
+-- (inr (inr true) , inr (inr true)) ::
+-- (inr (inr (inr true)) , inr (inr (inr true))) ::
+-- (inr (inr (inr (inr true))) ,
+--  inr (inr (inr (inr (inr (inr true))))))
+-- ::
+-- (inr (inr (inr (inr (inr true)))) ,
+--  inr (inr (inr (inr (inr true)))))
+-- ::
+-- (inr (inr (inr (inr (inr (inr true))))) ,
+--  inr (inr (inr (inr true))))
+-- ::
+-- (inr (inr (inr (inr (inr (inr (inr true)))))) ,
+--  inr (inr (inr (inr (inr (inr (inr true)))))))
+-- :: nil
 
--}
+test-interp-reset2+ = interp+-elems (reset+ 2)
 
-test-interp-reset+2 = interp-elems {t₁ = I + I + I + I + I + I + I + I + O} {t₂ =  I + I + I + I + I + I + I + I + O} x
-  where x = (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            (id⟷₁ ⊕
-             id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
-            ◎
-            (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-            id⟷₁
+-- (true , true) ::
+-- (inr true , inr true) ::
+-- (inr (inr true) , inr (inr true)) ::
+-- (inr (inr (inr true)) , inr (inr (inr true))) ::
+-- (inr (inr (inr (inr true))) ,
+--  inr (inr (inr (inr (inr (inr true))))))
+-- ::
+-- (inr (inr (inr (inr (inr true)))) ,
+--  inr (inr (inr (inr (inr true)))))
+-- ::
+-- (inr (inr (inr (inr (inr (inr true))))) ,
+--  inr (inr (inr (inr true))))
+-- ::
+-- (inr (inr (inr (inr (inr (inr (inr true)))))) ,
+--  inr (inr (inr (inr (inr (inr (inr true)))))))
+-- :: nil
 
-{-
+test-interp-reset^2 = interp^-elems (reset^ 2)
 
-(inr (inr (inr (inr (inr (inr (inr true)))))) ,
- inr (inr (inr (inr (inr (inr (inr true)))))))
-::
-(inr (inr (inr (inr (inr (inr true))))) ,
- inr (inr (inr (inr true))))
-::
-(inr (inr (inr (inr (inr true)))) ,
- inr (inr (inr (inr (inr true)))))
-::
-(inr (inr (inr (inr true))) ,
- inr (inr (inr (inr (inr (inr true))))))
-::
-(inr (inr (inr true)) , inr (inr (inr true))) ::
-(inr (inr true) , inr (inr true)) ::
-(inr true , inr true) :: (true , true) :: nil
-
--}
+-- (true , true) ::
+-- (inr true , inr true) ::
+-- (inr (inr true) , inr (inr true)) ::
+-- (inr (inr (inr true)) , inr (inr (inr true))) ::
+-- (inr (inr (inr (inr true))) ,
+--  inr (inr (inr (inr (inr (inr true))))))
+-- ::
+-- (inr (inr (inr (inr (inr true)))) ,
+--  inr (inr (inr (inr (inr true)))))
+-- ::
+-- (inr (inr (inr (inr (inr (inr true))))) ,
+--  inr (inr (inr (inr true))))
+-- ::
+-- (inr (inr (inr (inr (inr (inr (inr true)))))) ,
+--  inr (inr (inr (inr (inr (inr (inr true)))))))
+-- :: nil
 
 open import Pi+.Indexed.Equiv1NormHelpers
 open import Pi+.Coxeter.LehmerCoxeterEquiv

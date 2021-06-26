@@ -45,6 +45,10 @@ instance
 ⟦ I ⟧+ = ⊤
 ⟦ t₁ + t₂ ⟧+ = ⟦ t₁ ⟧+ ⊔ ⟦ t₂ ⟧+
 
+⟦_⟧^ : ℕ → Type₀
+⟦ O ⟧^ = ⊥
+⟦ S n ⟧^ = ⊤ ⊔ ⟦ n ⟧^
+
 ⟦-⟧-eval₀ : {X : Pi.U} → ⟦ X ⟧ ≃ Fin (eval₀ X)
 ⟦-⟧-eval₀ {O} =
   Fin-equiv-Empty ⁻¹

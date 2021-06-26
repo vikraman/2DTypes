@@ -49,27 +49,21 @@ interp (c₁ ◎ c₂) = interp c₂ ∘e interp c₁
 interp (c₁ ⊕ c₂) = ⊔-≃ (interp c₁) (interp c₂)
 interp (c₁ ⊗ c₂) = ×-≃ (interp c₁) (interp c₂)
 
--- interp+ : {n : ℕ} {X Y : Pi+.U n} (c : X Pi+.⟷₁ Y) -> ⟦ X ⟧+ ≃ ⟦ Y ⟧+
--- interp+ unite₊l = Coprod-unit-l _
--- interp+ uniti₊l = Coprod-unit-l _ ⁻¹
--- interp+ unite⋆l = ×₁-Unit _
--- interp+ uniti⋆l = ×₁-Unit _ ⁻¹
--- interp+ (swap₊ {t₁} {t₂}) = ⊔-comm ⟦ t₁ ⟧ ⟦ t₂ ⟧
--- interp+ (swap⋆ {t₁} {t₂}) = ×-comm {A = ⟦ t₁ ⟧} {⟦ t₂ ⟧}
--- interp+ assocl₊ = ⊔-assoc ⟦ _ ⟧ ⟦ _ ⟧ ⟦ _ ⟧ ⁻¹
--- interp+ assocr₊ = ⊔-assoc _ _ _
--- interp+ assocl⋆ = Σ-assoc ⁻¹
--- interp+ assocr⋆ = Σ-assoc
--- interp+ absorbr = ×₁-Empty _
--- interp+ absorbl = ×₁-Empty _ ∘e ×-comm
--- interp+ factorzr = (×₁-Empty _ ∘e ×-comm) ⁻¹
--- interp+ factorzl = ×₁-Empty _ ⁻¹
--- interp+ dist = ×-⊔-distrib _ _ _
--- interp+ factor = ×-⊔-distrib _ _ _ ⁻¹
--- interp+ id⟷₁ = ide _
--- interp+ (c₁ ◎ c₂) = interp c₂ ∘e interp c₁
--- interp+ (c₁ ⊕ c₂) = ⊔-≃ (interp+ c₁) (interp+ c₂)
--- interp+ (c₁ ⊗ c₂) = ×-≃ (interp+ c₁) (interp+ c₂)
+interp+ : {n m : ℕ} {X : Pi+.U n} {Y : Pi+.U m} (c : X Pi+.⟷₁ Y) -> ⟦ X ⟧+ ≃ ⟦ Y ⟧+
+interp+ unite₊l = Coprod-unit-l _
+interp+ uniti₊l = Coprod-unit-l _ ⁻¹
+interp+ (swap₊ {t₁ = t₁} {t₂ = t₂}) = ⊔-comm ⟦ t₁ ⟧+ ⟦ t₂ ⟧+
+interp+ assocl₊ = ⊔-assoc ⟦ _ ⟧+ ⟦ _ ⟧+ ⟦ _ ⟧+ ⁻¹
+interp+ assocr₊ = ⊔-assoc _ _ _
+interp+ id⟷₁ = ide _
+interp+ (c₁ ◎ c₂) = interp+ c₂ ∘e interp+ c₁
+interp+ (c₁ ⊕ c₂) = ⊔-≃ (interp+ c₁) (interp+ c₂)
+
+interp^ : {n m : ℕ} (c : n Pi^.⟷₁^ m) -> ⟦ n ⟧^ ≃ ⟦ m ⟧^
+interp^ swap₊^ = ⊔-assoc ⊤ ⊤ _  ∘e ⊔-≃ (⊔-comm ⊤ ⊤) (ide _) ∘e ⊔-assoc ⊤ ⊤ _ ⁻¹
+interp^ id⟷₁^ = ide _
+interp^ (c₁ ◎^ c₂) = interp^ c₂ ∘e interp^ c₁
+interp^ (⊕^ c) = ⊔-≃ (ide ⊤) (interp^ c)
 
 
 -- sound : {X Y : Pi.U} (c : X Pi.⟷₁ Y)
@@ -98,11 +92,26 @@ elems I = tt :: nil
 elems (t₁ + t₂) = map inl (elems t₁) ++ map inr (elems t₂)
 elems (t₁ × t₂) = concat (map (λ v₁ → map (λ v₂ → (v₁ , v₂)) (elems t₂)) (elems t₁))
 
+elems+ : ∀ {n} (t : Pi+.U n) → List ⟦ t ⟧+
+elems+ O = nil
+elems+ I = tt :: nil
+elems+ (t₁ + t₂) = map inl (elems+ t₁) ++ map inr (elems+ t₂)
+
+elems^ : ∀ n → List ⟦ n ⟧^
+elems^ O = nil
+elems^ (S n) = inl tt :: map inr (elems^ n)
+
 test : _
 test = elems (𝔹 3)
 
 interp-elems : ∀ {t₁ t₂} (c : t₁ Pi.⟷₁ t₂) → List (⟦ t₁ ⟧ S.× ⟦ t₂ ⟧)
 interp-elems {t₁ = t₁} c = map (λ v → (v , –> (interp c) v)) (elems t₁)
+
+interp+-elems : ∀ {n m} {t₁ : Pi+.U n} {t₂ : Pi+.U m} (c : t₁ Pi+.⟷₁ t₂) → List (⟦ t₁ ⟧+ S.× ⟦ t₂ ⟧+)
+interp+-elems {t₁ = t₁} c = map (λ v → (v , –> (interp+ c) v)) (elems+ t₁)
+
+interp^-elems : ∀ {n m} (c : n Pi^.⟷₁^ m) → List (⟦ n ⟧^ S.× ⟦ m ⟧^)
+interp^-elems {n = n} c = map (λ v → (v , –> (interp^ c) v)) (elems^ n)
 
 open import Pi+.Indexed.Examples.Toffoli
 
