@@ -163,3 +163,10 @@ module _ {i} {A : Type i} where
 abstract
   fin= : {n : ℕ} {f g : Fin n} → f .fst == g .fst → f == g
   fin= p = pair= p prop-has-all-paths-↓
+
+
++-distr : ∀ {n m o} → (m * o) + (n * o) == (m + n) * o
++-distr {n} {O} {o} = idp
++-distr {n} {S m} {o} = 
+    let r = +-distr {n} {m} {o}
+    in  +-assoc o (m * o) (n * o) ∙ ap (o +_) r
