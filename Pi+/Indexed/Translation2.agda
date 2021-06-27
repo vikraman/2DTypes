@@ -41,13 +41,37 @@ O * t₂ = O
 I * t₂ = t₂
 (t₁ + t₃) * t₂ = (t₁ * t₂) + (t₃ * t₂)
 
+*-assoc : (t₁ t₂ t₃ : NPi+.U) → ((t₁ * t₂) * t₃) NPi+.⟷₁ (t₁ * (t₂ * t₃))
+*-assoc O t₂ t₃ = id⟷₁
+*-assoc I t₂ t₃ = id⟷₁
+*-assoc (t₁ + t₄) t₂ t₃ = *-assoc t₁ t₂ t₃ ⊕ *-assoc t₄ t₂ t₃
+
+
+*-comp-l : {t₁ t₂ t₃ : NPi+.U} → (t₁ NPi+.⟷₁ t₂) → ((t₁ * t₃) NPi+.⟷₁ (t₂ * t₃))
+*-comp-l unite₊l = unite₊l
+*-comp-l uniti₊l = uniti₊l
+*-comp-l swap₊ = swap₊
+*-comp-l assocl₊ = assocl₊
+*-comp-l assocr₊ = assocr₊
+*-comp-l id⟷₁ = id⟷₁
+*-comp-l (c ◎ c₁) = *-comp-l c ◎ *-comp-l c₁
+*-comp-l (c ⊕ c₁) = *-comp-l c ⊕ *-comp-l c₁
+
+*-comp-r : {t₁ t₂ t₃ : NPi+.U} → (t₁ NPi+.⟷₁ t₂) → ((t₃ * t₁) NPi+.⟷₁ (t₃ * t₂))
+*-comp-r {t₃ = O} c = id⟷₁
+*-comp-r {t₃ = I} c = c
+*-comp-r {t₃ = t₃ + t₄} c = *-comp-r c ⊕ *-comp-r c
+
+*-comp : {t₁ t₂ t₃ t₄ : NPi+.U} → (t₁ NPi+.⟷₁ t₃) → (t₂ NPi+.⟷₁ t₄) → ((t₁ * t₂) NPi+.⟷₁ (t₃ * t₄))
+*-comp c₁ c₂ = *-comp-l c₁ ◎ *-comp-r c₂
+
 eval₀-card-aux-* : ∀ {t₁ t₂} → eval₀-card-aux (t₁ * t₂) == (eval₀-card-aux t₁) ** (eval₀-card-aux t₂)
 eval₀-card-aux-* {O} = idp
 eval₀-card-aux-* {I} = ! (N.+-unit-r _)
 eval₀-card-aux-* {t₁ = t₁ + t₂} {t₂ = t₄} =
     let r₁ = eval₀-card-aux-* {t₁} {t₄}
         r₂ = eval₀-card-aux-* {t₂} {t₄}
-    in  ap2 (_++_) r₁ r₂ ∙ N.+-distr
+    in  ap2 (_++_) r₁ r₂ ∙ N.+-distr {eval₀-card-aux t₂} {eval₀-card-aux t₁} {eval₀-card-aux t₄}
 
 eval₀-aux : Pi.U → NPi+.U
 eval₀-aux O = O
@@ -106,8 +130,8 @@ eval₁-aux swap₊ = swap₊
 eval₁-aux (swap⋆ {t₁} {t₂}) = swap* {eval₀-aux t₁} {eval₀-aux t₂}
 eval₁-aux assocl₊ = assocl₊
 eval₁-aux assocr₊ = assocr₊
-eval₁-aux assocl⋆ = TODO!
-eval₁-aux assocr⋆ = TODO!
+eval₁-aux (assocl⋆ {t₁} {t₂} {t₃}) = NPi+.!⟷₁ (*-assoc (eval₀-aux t₁) (eval₀-aux t₂) (eval₀-aux t₃))
+eval₁-aux (assocr⋆ {t₁} {t₂} {t₃}) = *-assoc (eval₀-aux t₁) (eval₀-aux t₂) (eval₀-aux t₃)
 eval₁-aux absorbr = id⟷₁
 eval₁-aux absorbl = absorbr*
 eval₁-aux factorzr = NPi+.!⟷₁ absorbr*
@@ -117,7 +141,7 @@ eval₁-aux factor = id⟷₁
 eval₁-aux id⟷₁ = id⟷₁
 eval₁-aux (c₁ ◎ c₂) = eval₁-aux c₁ ◎ eval₁-aux c₂
 eval₁-aux (c₁ ⊕ c₂) = eval₁-aux c₁ ⊕ eval₁-aux c₂
-eval₁-aux (c₁ ⊗ c₂) = TODO!
+eval₁-aux (c₁ ⊗ c₂) = *-comp (eval₁-aux c₁) (eval₁-aux c₂)
 
 eval₁-index : ∀ {t₁} {t₂} → (t₁ NPi+.⟷₁ t₂) → eval₀-index t₁ Pi+.⟷₁ eval₀-index t₂
 eval₁-index unite₊l = unite₊l
