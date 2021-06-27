@@ -102,26 +102,6 @@ encode X =
 -- interp-interp^-eq (c ⊕ c₁) = {!   !}
 -- interp-interp^-eq (c ⊗ c₁) = {!   !}
 
--- sound : {X Y : Pi.U} (c : X Pi.⟷₁ Y)
---       → Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
---       == transport (λ n → ⟦ Y ⟧ ≃ Fin n)
---                    (! (eval₀-size c)) ⟦-⟧-eval₀ ∘e
---                    interp c
-
--- sound-test1 :
---   let c = swap₊ {t₁ = I + I + I} {t₂ = I + I} in
---   Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀ ==  ⟦-⟧-eval₀ ∘e interp c
--- sound-test1 =
---   e= λ { (inl true) → idp ; (inl (inr true)) → idp ; (inl (inr false)) → idp ;
---          (inr (inl x)) → idp ; (inr (inr x)) → idp }
-
-sound-test2 :
-  let c = swap⋆ {t₁ = I + I} {t₂ = I + I} in
-  Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀ == ⟦-⟧-eval₀ ∘e interp c
-sound-test2 =
-  e= λ { (inl x , inl x₁) → idp ; (inl x , inr x₁) → idp ;
-         (inr x , inl x₁) → idp ; (inr x , inr x₁) → idp }
-
 elems : (t : Pi.U) → List ⟦ t ⟧
 elems O = nil
 elems I = tt :: nil
@@ -167,3 +147,15 @@ test-interp-id2^ = interp+-elems id2^
 private
   x : _
   x = map encode-interp-elems test-interp-id2
+
+sound-test1 :
+  let c = swap₊ {t₁ = I + I + I} {t₂ = I + I} in
+  (interp^-elems (Pi^.quoteNorm₁ idp (Pi^.evalNorm₁ (eval₁ c)))) == map encode-interp-elems (interp-elems c)
+sound-test1 = idp
+
+sound-test2 :
+  let c = swap⋆ {t₁ = I + I} {t₂ = I + I} in
+  Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀ == ⟦-⟧-eval₀ ∘e interp c
+sound-test2 =
+  e= λ { (inl x , inl x₁) → idp ; (inl x , inr x₁) → idp ;
+         (inr x , inl x₁) → idp ; (inr x , inr x₁) → idp }

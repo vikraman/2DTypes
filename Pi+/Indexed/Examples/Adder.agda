@@ -12,7 +12,7 @@ open import Pi+.Indexed.Syntax as Pi+
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.SyntaxFull as Pi
-open import Pi+.Indexed.Translation
+open import Pi+.Indexed.Translation2
 import Pi+.Indexed.Equiv1 as Pi+
 import Pi+.Indexed.Equiv0Hat as Pi^
 import Pi+.Indexed.Equiv1Hat as Pi^
@@ -236,42 +236,56 @@ adder+test34+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp) adder+test34-perm
 adder+test34+-full : Pi^.quote^₀ 8 Pi+.⟷₁ Pi^.quote^₀ 8
 adder+test34+-full = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ eval₁) adder3
 
+open import Pi+.Indexed.Examples.Interp
+
+private
+  x = interp+-elems adder+test34+
+  y = interp+-elems adder+test34+-full
+
+{-
+(true , inr (inr (inr (inr true)))) ::
+(inr true , inr (inr (inr (inr (inr true))))) ::
+(inr (inr true) , inr (inr (inr (inr (inr (inr true)))))) ::
+(inr (inr (inr true)) , inr (inr (inr true))) ::
+(inr (inr (inr (inr true))) , true) ::
+(inr (inr (inr (inr (inr true)))) , inr true) ::
+(inr (inr (inr (inr (inr (inr true))))) , inr (inr true)) ::
+(inr (inr (inr (inr (inr (inr (inr true)))))) ,
+ inr (inr (inr (inr (inr (inr (inr true)))))))
+:: nil
+
+(true , inr (inr (inr (inr true)))) ::
+(inr true , inr (inr (inr (inr (inr true))))) ::
+(inr (inr true) , inr (inr (inr (inr (inr (inr true)))))) ::
+(inr (inr (inr true)) , inr (inr (inr true))) ::
+(inr (inr (inr (inr true))) , true) ::
+(inr (inr (inr (inr (inr true)))) , inr true) ::
+(inr (inr (inr (inr (inr (inr true))))) , inr (inr true)) ::
+(inr (inr (inr (inr (inr (inr (inr true)))))) ,
+ inr (inr (inr (inr (inr (inr (inr true)))))))
+:: nil
+
+-}
+
 {-
 adder3:
 
-(assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-(id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-(assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
--}
-
-{-
-reset2:
-
 (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-(id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-(assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
-
--}
-
-{-
-
-(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-(id⟷₁ ⊕
- id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
-◎
-(id⟷₁ ⊕
- id⟷₁ ⊕
- id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
-◎
+(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
 (id⟷₁ ⊕
  id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
 ◎
 (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
+(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+(id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
 
- -}
+-}

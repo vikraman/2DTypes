@@ -14,7 +14,7 @@ open import Pi+.Indexed.Syntax as Pi+
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.SyntaxFull as Pi
-open import Pi+.Indexed.Translation
+open import Pi+.Indexed.Translation2
 import Pi+.Indexed.Equiv1 as Pi+
 import Pi+.Indexed.Equiv1Hat as Pi^
 import Pi+.Indexed.Equiv1Norm as Pi^
