@@ -10,7 +10,7 @@ open import Pi+.UFin.BAut
 open import Pi+.Misc
 open import Pi+.Extra
 
-open import Pi+.Indexed.Syntax as Pi+
+open import Pi+.Indexed.Syntax as Pi+ renaming (_⟷₁_ to _⟷₁₊_)
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.SyntaxFull as Pi
@@ -32,7 +32,7 @@ open import Pi+.Indexed.Examples.Reset hiding (reset; reset2-perm)
 
 \newcommand{\resettwo}{%
 \begin{code}
-reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
+reset : ∀ n → 𝟚 × 𝔹 n ⟷₁ 𝟚 × 𝔹 n
 reset 0 = id⟷₁
 reset 1 = swap⋆ ◎ cnot ◎ swap⋆
 reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
@@ -40,7 +40,7 @@ reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (r
 
 \newcommand{\resetnormtwo}{%
 \begin{code}
-reset2Norm : 𝟠+ Pi+.⟷₁ 𝟠+
+reset2Norm : 𝟠+ ⟷₁₊ 𝟠+
 reset2Norm =  (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
               (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
               (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎

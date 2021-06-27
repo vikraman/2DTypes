@@ -83,21 +83,21 @@ syntax of the language $\Pi$ consists of the following sorts:
 \label{pi-terms}
 \end{figure}
 
-\noindent Intuitively, one may view each type $A$ as a collection of physical wires that can transmit $\sizet{A}$ distinct
-values where $\sizet{A}$ is a natural number that indicates the size of a type, computed as: $\sizet{\zerot} = 0$;
-$\sizet{\onet} = 1$; $\sizet{A + B} = \sizet{A} + \sizet{B}$; and $\sizet{A \times B} = \sizet{A} * \sizet{B}$.  Thus the type
-$\mathbb{B} = \onet + \onet$ corresponds to a wire that can transmit one of two values, i.e., bits, with the
-convention that $\inlv{\Acon{tt}}$ represents \AgdaFunction{𝔽} and $\inrv{\Acon{tt}}$ represents \AgdaFunction{𝕋}.  The
-type $\mathbb{B} \times \mathbb{B} \times \mathbb{B}$ corresponds to a collection of wires that can transmit three
-bits. From that perspective, a type isomorphism between types $A$ and $B$ (such that $\sizet{A}=\sizet{B}=n$) models a
-\emph{reversible} combinational circuit that \emph{permutes} the $n$ different values. These type isomorphisms form a
-\emph{commutative semiring} and are collected in Fig.~\ref{pi-terms}. Each line in the top part of the figure
-introduces a pair of dual constants that witness the type isomorphism in the middle.  These are the \emph{base}
-(non-reducible) terms of $\Pi$. The isomorphisms are extended to form a congruence relation by adding the three
-constructors at the bottom of the figure that witness equivalence and compatible closure. Although austere, this
-combinator-based language has the advantage of being amenable to formal analysis for at least two reasons: (i) it is
-conceptually simple and small, and (ii) it has direct and evident connections to type theory and category theory and
-hence possesses a rich algebraic structure which we exploit in the remainder of the paper.
+\noindent Intuitively, one may view each type $A$ as a collection of physical wires that can transmit $\sizet{A}$
+distinct values where $\sizet{A}$ is a natural number that indicates the size of a type, computed as:
+$\sizet{\zerot} = 0$; $\sizet{\onet} = 1$; $\sizet{A + B} = \sizet{A} + \sizet{B}$; and
+$\sizet{A \times B} = \sizet{A} * \sizet{B}$.  Thus the type $\mathbb{2} = \onet + \onet$ corresponds to a wire that can
+transmit one of two values, i.e., bits. The type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated
+$\mathbb{B}~3$) corresponds to a collection of wires that can transmit three bits. From that perspective, a type
+isomorphism between types $A$ and $B$ (such that $\sizet{A}=\sizet{B}=n$) models a \emph{reversible} combinational
+circuit that \emph{permutes} the $n$ different values. These type isomorphisms form a \emph{commutative semiring} and
+are collected in Fig.~\ref{pi-terms}. Each line in the top part of the figure introduces a pair of dual constants that
+witness the type isomorphism in the middle.  These are the \emph{base} (non-reducible) terms of $\Pi$. The isomorphisms
+are extended to form a congruence relation by adding the three constructors at the bottom of the figure that witness
+equivalence and compatible closure. Although austere, this combinator-based language has the advantage of being amenable
+to formal analysis for at least two reasons: (i) it is conceptually simple and small, and (ii) it has direct and evident
+connections to type theory and category theory and hence possesses a rich algebraic structure which we exploit in the
+remainder of the paper.
 
 %%%%%%%%%
 \subsection{Denotational Semantics}
@@ -146,47 +146,17 @@ would correspond to the permutation $(1~2~0)$ while the combinator $\assoclp : \
 
 %% \note{Revisit to pick examples relevant to the rest of the paper; also unify notation}
 
-\paragraph*{Booleans}
-Let us start with encoding booleans. We use the type \ensuremath{1{\sumtype}1} to
-represent booleans with \ensuremath{\mathit{left} ~()} representing \ensuremath{\mathit{true}} and
-\ensuremath{\mathit{right}~()} representing \ensuremath{\mathit{false}}.
-Boolean negation is straightforward to define:
+In order to understand the examples of Sec.~\ref{sec:informal}, we review how to represent collections of booleans and
+conditionals in $\Pi$. We use the type $\onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing
+\textsf{false} and $\inrv{\Acon{tt}}$ representing $\textsf{true}$. Boolean negation is straightforward to define using
+the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values.
+For example, we can express a 3-bit word reversal operation as follows:
 
-\ensuremath{\mathit{not} : \mathit{bool} \leftrightarrow \mathit{bool}}
+$\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
 
-\ensuremath{\mathit{not} = \swapp}
+$\Afun{reverse} = \swapt \fatsemi (\swapt  \otimes  \idc)~ \fatsemi \assocrt$
 
-\noindent
-It is easy to verify that \ensuremath{\mathit{not}} changes \ensuremath{\mathit{true}} to \ensuremath{\mathit{false}} and
-vice versa.
-
-\paragraph*{Bit Vectors.}
-We can represent $n$-bit words using an n-ary product of
-\ensuremath{\mathit{bool}}s. For example, we can represent a 3-bit word, \ensuremath{\mathit{word}_3},
-using the type \ensuremath{\mathit{bool} {\prodtype} (\mathit{bool} {\prodtype}  \mathit{bool})}.  We can perform various
-operations on these 3-bit words using combinators in \ensuremath{\Pi }. For
-instance the bitwise \ensuremath{\mathit{not}} operation is the parallel composition of
-three \ensuremath{\mathit{not}} operations:
-
-\ensuremath{\mathit{not}_{\mathit{word}_3} :: \mathit{word}_3 \leftrightarrow \mathit{word}_3}
-
-\ensuremath{\mathit{not}_{\mathit{word}_3} = \mathit{not}  {\prodtype}  (\mathit{not}  {\prodtype}  \mathit{not})}
-
-\noindent We can express a 3-bit word reversal operation as follows:
-
-\ensuremath{\mathit{reverse} : \mathit{word}_3 \leftrightarrow \mathit{word}_3}
-
-\ensuremath{\mathit{reverse} = \swapt \odot (\swapt  \otimes  \idc)~ \odot \assocrt}
-
-\noindent We can check that \ensuremath{\mathit{reverse}} does the right thing by
-applying it to a value \ensuremath{(v_1, (v_2, v_3))} and writing out the full
-derivation tree of the reduction.  The combinator \ensuremath{\mathit{reverse}}, like
-many others we will see in this paper, is formed by sequentially
-composing several simpler combinators. Instead of presenting the
-operation of \ensuremath{\mathit{reverse}} as a derivation tree, it is easier (purely
-for presentation reasons) to flatten the tree into a sequence of
-reductions as caused by each component. Such a sequence of reductions
-is given below:
+\noindent The manual trace of $\Afun{reverse}$ below confirms that it indeed reverses the three bits:
 \[\begin{array}{rlr}
  & (v_1, (v_2, v_3)) \\
  \swapt & ((v_2, v_3), v_1) \\
@@ -195,91 +165,28 @@ is given below:
  \end{array}\]
 %subcode source isomorphisms.tex:979
 
-\noindent On the first line is the initial value. On each subsequent
-line is a fragment of the \ensuremath{\mathit{reverse}} combinator and the value that
-results from applying this combinator to the value on the previous
-line. For example, \ensuremath{\swapt} transforms \ensuremath{(v_1, (v_2, v_3))} to
-\ensuremath{((v_2,v_3),v_1)}.  On the last line we see the expected result with
-the bits in reverse order.
+Even though \ensuremath{\Pi } lacks conditional expressions, they are expressible using the distributivity and factoring
+laws as shown below:
 
-We can also draw out the graphical representation of the 3-bit reverse
-combinator. In the graphical representation, it is clear that the
-combinator achieves the required shuffling.
+$\Afun{ifc}_{c_1,c_2} : \mathbb{2} \times A \iso \mathbb{2} \times B$
 
-% \inkscape{reverse-3-bit.pdf}
-
-\paragraph*{Conditionals.}
-Even though \ensuremath{\Pi } lacks conditional expressions, they are
-expressible using the distributivity and factoring laws. The
-diagrammatic representation of \ensuremath{\dist} shows that it redirects the flow
-of a value \ensuremath{v:b} based on the value of another one of type
-\ensuremath{b_1{\sumtype}b_2}. If we choose \ensuremath{1{\sumtype}1} to be
-\ensuremath{\mathit{bool}} and apply either \ensuremath{c_1:b_1\leftrightarrow
-b_2} or \ensuremath{c_2:b_1\leftrightarrow b_2} to the value \ensuremath{v},
-then we essentially have an `if' expression.
-
-\ensuremath{\mathit{if}_{c_1,c_2} : \mathit{bool}  {\prodtype}  b_1 \leftrightarrow \mathit{bool}  {\prodtype}  b_2}
-
-\ensuremath{\mathit{if}_{c_1,c_2} = \dist \odot ((\idc  \otimes\  c_1) {\sumtype} (\idc \otimes\  c_2)) \odot \factor}
+$\Afun{ifc}_{c_1,c_2} = \dist \fatsemi ((\idc  \otimes\  c_1) \oplus (\idc \otimes\  c_2)) \fatsemi \factor$
 
 
 % \inkscape{if-c1-c2.pdf}
 
 
-The diagram above shows the input value of type \ensuremath{(1{\sumtype}1) {\prodtype}  b_1}
-processed by the distribute operator \ensuremath{\dist}, which converts it into
-a value of type \ensuremath{(1 {\prodtype}  b_1){\sumtype}(1 {\prodtype}  b_1)}. In the
-\ensuremath{\mathit{left}} branch, which corresponds to the
-case when the boolean is \ensuremath{\mathit{true}} (i.e. the value was
-\ensuremath{\mathit{left} ~()}), the combinator~\ensuremath{c_1} is applied to
-the value of type~\ensuremath{b_1}. The right
-branch which corresponds to the boolean being \ensuremath{\mathit{false}} passes
-the value of type \ensuremath{b_1} through the combinator \ensuremath{c_2}.
-The inverse of \ensuremath{\dist}, namely \ensuremath{\factor} is applied
-to get the final result of type \ensuremath{(1{\sumtype}1) {\prodtype} b_2}.
-
-\paragraph*{Logic Gates}
-There are several universal primitives for conventional (irreversible)
-hardware circuits, such as \ensuremath{\mathit{nand}} and \ensuremath{\mathit{fanout}}. In the case
-of reversible hardware circuits, the canonical universal primitive is
-the Toffoli gate~\cite{Toffoli:1980}. The Toffoli gate takes three
-boolean inputs: if the first two inputs are \ensuremath{\mathit{true}} then the third
-bit is negated. In a traditional language, the Toffoli gate would be
-most conveniently expressed as a conditional expression like:
-
-\noindent
-\ensuremath{ \mathit{toffoli}(v_1,v_2,v_3) = \mathit{if} ~(v_1 ~\mathit{and} ~v_2) ~\mathit{then} ~(v_1, v_2, \mathit{not}(v_3)) ~\mathit{else} ~(v_1, v_2, v_3)}
-
-We will derive Toffoli gate in \ensuremath{\Pi } by first deriving a simpler
-logic gate called \ensuremath{\mathit{cnot}}.  Consider a one-armed version, \ensuremath{\mathit{if}_c},
-of the conditional derived above. If the \ensuremath{\mathit{bool}} is
-\ensuremath{\mathit{true}}, the value of type \ensuremath{b} is modified by the operator \ensuremath{c}.
-
-\begin{center}
-\scalebox{1.5}{
-%%subcode-line{pdfimage}[diagrams/if_c.pdf]
-% \includegraphics{inkscape/cnot.pdf}
-}
-\end{center}
-
-
-By choosing \ensuremath{b} to be \ensuremath{\mathit{bool}} and \ensuremath{c} to be \ensuremath{\mathit{not}}, we have the
-combinator \ensuremath{\mathit{if}_{\mathit{not}} : \mathit{bool} {\prodtype}  \mathit{bool}\leftrightarrow \mathit{bool} {\prodtype}  \mathit{bool}} which negates its
-second argument if the first argument is \ensuremath{\mathit{true}}. This gate
-\ensuremath{\mathit{if}_{\mathit{not}}} is often referred to as the \ensuremath{\mathit{cnot}} gate\cite{Toffoli:1980}.
-
-If we iterate this construction once more, the resulting combinator
-\ensuremath{\mathit{if}_{\mathit{cnot}}} has type \ensuremath{\mathit{bool} {\prodtype}  (\mathit{bool} {\prodtype}  \mathit{bool})\leftrightarrow \mathit{bool} {\prodtype}  (\mathit{bool} {\prodtype}  \mathit{bool})}. The
-resulting gate checks the first argument and if it is \ensuremath{\mathit{true}},
-proceeds to check the second argument. If that is also \ensuremath{\mathit{true}} then
-it will negate the third argument. Thus \ensuremath{\mathit{if}_{\mathit{cnot}}} is the required
-Toffoli gate.
-
-\begin{center}
-\scalebox{1.6}{
-% \includegraphics{inkscape/toffoli.pdf}
-}
-\end{center}
+\noindent The input value of type $\mathbb{2} \times A$ is processed by the distribute operator \ensuremath{\dist},
+which converts it into a value of type $(\onet \times A) + (\onet \times A)$. In the \ensuremath{\mathit{left}} branch,
+which corresponds to the case when the boolean is \ensuremath{\mathit{false}}, the combinator~\ensuremath{c_1} is
+applied to the value of type~\ensuremath{A}. The right branch which corresponds to the boolean being
+\ensuremath{\mathit{true}} passes the value of type $A$ through the combinator \ensuremath{c_2}.  The inverse of
+\ensuremath{\dist}, namely \ensuremath{\factor} is applied to get the final result. The full expressiveness of $\Pi$ is
+demonstrated by the following implementation of $\Afun{cnot}$ and $\Afun{toffoli}$ which are universal for reversible
+computation~\cite{Toffoli:1980}. The $\Afun{cnot}$ gates takes two input bits: a control bit and a target bit, and
+negates the target bit if the control bit is set. It is essentially a one-branch version of $\Afun{cif}$ above. The
+Toffoli gate generalizes the idea to a gate that takes 3 input bits: 2 control bits and one target bit: boolean inputs:
+it negates the target bit if both control bits are set.
 
 %%% Local Variables:
 %%% mode: latex
