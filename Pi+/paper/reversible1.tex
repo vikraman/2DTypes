@@ -102,10 +102,10 @@ hence possesses a rich algebraic structure which we exploit in the remainder of 
 %%%%%%%%%
 \subsection{Denotational Semantics}
 
-\noindent A denotational semantics of $\Pi$ can be specified by mapping each type to a finite set and each combinator to
-a bijection between finite sets, that is, a permutation. In this section, we outline a simple semantics expressed in the
-metalanguage of set theory. This semantics is formalized and extended to the metalanguage of homotopy type theory in
-Sec.~\ref{sec:reversibletwo}.
+\noindent The accompanying code includes a simple operational semantics for $\Pi$. A denotational semantics can be
+specified by mapping each type to a finite set and each combinator to a bijection between finite sets, that is, a
+permutation. In this section, we outline a simple semantics expressed in the metalanguage of set theory. This semantics
+is formalized and extended to the metalanguage of homotopy type theory in Sec.~\ref{sec:reversibletwo}.
 
 As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
 we have that $\sizet{A} = \sizet{B}$. Hence the denotation of a type $A$ with $n$-elements will be a finite set
@@ -114,23 +114,25 @@ from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. In more detail, we enume
 $\sizet{A} = n$ in a canonical order such that each value $v$ is given an index in $\{ 0,\cdots,n-1 \}$. The enumeration
 is defined as follows:
 \[\begin{array}{rcl}
-    \mathit{enum}(\zerot) &=& \emptyset \\
-    \mathit{enum}(\onet) &=& \{ \Acon{tt} \} \\
-    \mathit{enum}(A + B) &=& \mathit{map}~\Acon{inj₂}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₁}~\mathit{enum}(B) \\
+    \mathit{enum}(\zerot) &=& [~] \\
+    \mathit{enum}(\onet) &=& [ ~\Acon{tt}~ ] \\
+    \mathit{enum}(A + B) &=& \mathit{map}~\Acon{inj₁}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₂}~\mathit{enum}(B) \\
     \mathit{enum}(A \times B) &=& \mathit{concat}~(\mathit{map}~(\lambda v.\mathit{map}~(\lambda w. (v,w))~\mathit{enum}(B))~\mathit{enum}(A))
 \end{array}\]
-\noindent For example, the 3 values $\inrv{(\inrv{\Acon{tt}})}$, $\inrv{(\inlv{\Acon{tt}})}$, and $\inlv{\Acon{tt}}$ of
-type $\onet + (\onet + \onet)$ are given indices 0, 1, and 2 respectively. Given this canonical order, the combinator
-$\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ would correspond to the permutation $(1~2~0)$ while the
-combinator $\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$ at the same type would correspond to the
-identity permutation.
+\noindent The specification uses a Haskell-like notation for sequences with $\mathit{map}$ as the operation that applies
+a function to each element of a sequence, \textsf{+\!+} as the binary append operation, and $\mathit{concat}$ the
+operation that appends all the subsequences in a sequence. For example, the 3 values $\inlv{\Acon{tt}}$,
+$\inrv{(\inlv{\Acon{tt}})}$, and $\inrv{(\inrv{\Acon{tt}})}$ of type $\onet + (\onet + \onet)$ are given indices 0, 1, and 2
+respectively. Given this canonical order, the combinator $\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$
+would correspond to the permutation $(1~2~0)$ while the combinator $\assoclp : \onet + (\onet + \onet) \iso (\onet +
+\onet) + \onet$ at the same type would correspond to the identity permutation.
 
-\[\begin{array}{l}
-    \Tree[ {\small a} [ {\small b} {\small c} ] ] \\
-    2 \quad 1 \quad 0 \\
-    0 \quad 2 \quad 1 \\
-    \Tree[ [ {\small b}  {\small c} ] {\small a} ]
-\end{array}\]
+% \[\begin{array}{l}
+%     \Tree[ {\small a} [ {\small b} {\small c} ] ] \\
+%     2 \quad 1 \quad 0 \\
+%     0 \quad 2 \quad 1 \\
+%     \Tree[ [ {\small b}  {\small c} ] {\small a} ]
+% \end{array}\]
 
 % Such functions are finitely supported, that is, their outputs can be tabulated using the canonical ordering on
 % $\Fin[n]$. For bijections, this gives a listed permutation. By observing the action of the combinators on the values of
@@ -142,7 +144,7 @@ identity permutation.
 \label{sec:langRev-examples}
 \label{examples}
 
-\note{Revisit to pick examples relevant to the rest of the paper; also unify notation}
+%% \note{Revisit to pick examples relevant to the rest of the paper; also unify notation}
 
 \paragraph*{Booleans}
 Let us start with encoding booleans. We use the type \ensuremath{1{\sumtype}1} to
