@@ -16,14 +16,15 @@ open import Pi+.Coxeter.NonParametrized.ImpossibleLists
 
 open ≅*-Reasoning
 
-long-lemma : (n n1 k k1 t t1 : ℕ) -> (S n ≤ t) -> (S n1 ≤ t1) -> (r r1 : Listℕ) -> (n ↓ (2 + k)) ++ t ∷ r == (n1 ↓ (2 + k1)) ++ t1 ∷ r1
-             -> (n == n1) × ((n ↓ (2 + k)) == (n1 ↓ (2 + k1))) × (r == r1)
-long-lemma n n1 0 0 t t1 pnt pnt1 r r1 p rewrite (cut-t1 p) rewrite (cut-t2 p) rewrite (cut-t3 p) rewrite (cut-h3 p) = idp , (idp , idp)
-long-lemma n n1 0 (S k1) t t1 pnt pnt1 r r1 p rewrite (cut-t1 p) rewrite (cut-t2 p) rewrite (cut-t3 p) rewrite (cut-h3 p) = abs-suc pnt
-long-lemma n n1 (S k) 0 t t1 pnt pnt1 r r1 p rewrite ≡-sym (cut-t1 p) rewrite ≡-sym (cut-t2 p) rewrite ≡-sym (cut-t3 p) rewrite (cut-h3 p) = abs-suc pnt1
-long-lemma n n1 (S k) (S k1) t t1 pnt pnt1 r r1 p =
-  let rec-m , rec-l , rec-r = long-lemma n n1 k k1 t t1 pnt pnt1 r r1 (cut-head p)
-  in  rec-m , ((head+tail (cong S (cut-t2 p) ) rec-l) , rec-r)
+abstract
+  long-lemma : (n n1 k k1 t t1 : ℕ) -> (S n ≤ t) -> (S n1 ≤ t1) -> (r r1 : Listℕ) -> (n ↓ (2 + k)) ++ t ∷ r == (n1 ↓ (2 + k1)) ++ t1 ∷ r1
+               -> (n == n1) × ((n ↓ (2 + k)) == (n1 ↓ (2 + k1))) × (r == r1)
+  long-lemma n n1 0 0 t t1 pnt pnt1 r r1 p rewrite (cut-t1 p) rewrite (cut-t2 p) rewrite (cut-t3 p) rewrite (cut-h3 p) = idp , (idp , idp)
+  long-lemma n n1 0 (S k1) t t1 pnt pnt1 r r1 p rewrite (cut-t1 p) rewrite (cut-t2 p) rewrite (cut-t3 p) rewrite (cut-h3 p) = abs-suc pnt
+  long-lemma n n1 (S k) 0 t t1 pnt pnt1 r r1 p rewrite ≡-sym (cut-t1 p) rewrite ≡-sym (cut-t2 p) rewrite ≡-sym (cut-t3 p) rewrite (cut-h3 p) = abs-suc pnt1
+  long-lemma n n1 (S k) (S k1) t t1 pnt pnt1 r r1 p =
+    let rec-m , rec-l , rec-r = long-lemma n n1 k k1 t t1 pnt pnt1 r r1 (cut-head p)
+    in  rec-m , ((head+tail (cong S (cut-t2 p) ) rec-l) , rec-r)
 
 cancel-long-lemma-rev : (n k n1 : ℕ) -> (r l1 r1 : Listℕ) -> ((r ++ (1 + k + n) ∷ (n ↑ (2 + k))) == (r1 ++ n1 ∷ n1 ∷ l1)) -> Σ _ (λ mf -> (((((k + n) ∷ (n ↓ (2 + k)) ++ (rev r)) ≅* mf)) × ((((rev l1) ++ (rev r1))) ≅* mf)))
 cancel-long-lemma-rev n k n1 nil l1 nil p =

@@ -80,24 +80,24 @@ evalNorm₂-S {c₁ = c₁} {c₂ = c₂} (_■^_ α₁ α₂) with (⟷₁^-eq-
 evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
 ... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO!
 evalNorm₂-S (⊕id⟷₁⟷₂^ {n = O}) = idp
-evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
+evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = O}) = idp
-evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
+evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S hom◎⊕⟷₂^ = TODO!
 evalNorm₂-S (resp⊕⟷₂ {n = O} {c₁ = c₁} {c₂ = c₂} α) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-... | idp | idp = idp
+... | idp | idp = TODO!
 evalNorm₂-S (resp⊕⟷₂ {n = S n} {c₁ = c₁} {c₂ = c₂} α) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
 ... | p | q = TODO!
 evalNorm₂-S (hom⊕◎⟷₂^ {c₁ = c₁} {c₂ = c₂}) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
 ... | idp | idp = TODO!
 evalNorm₂-S (swapr₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S (swapr₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! }
+evalNorm₂-S (swapr₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! } -- FIXME: O case
 evalNorm₂-S (swapl₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S (swapl₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! }
-evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → idp }
-evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
-evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → idp }
-evalNorm₂-S (hexagonl₊r {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → idp }
+evalNorm₂-S (swapl₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! } -- FIXME: O case
+evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+evalNorm₂-S (hexagonl₊r {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 
 evalNorm₂ : {c₁ c₂ : n ⟷₁^ m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
 evalNorm₂ {n = O} = evalNorm₂-O

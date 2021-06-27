@@ -9,6 +9,7 @@ open import Pi+.Lehmer.FinHelpers
 open import Pi+.Lehmer.Lehmer
 open import Pi+.Common.InequalityEquiv
 open import Pi+.Common.Arithmetic
+open import Pi+.Coxeter.InvTransform
 
 open import Pi+.UFin.BAut
 open import Pi+.Misc
@@ -57,14 +58,17 @@ instance
         rec = Lehmer-level {n}
     in  equiv-preserves-level {B = Lehmer (S n)} ind {{×-level Fin-is-set rec}}
 
-Fin≃Lehmer : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
-Fin≃Lehmer {O} =
+Fin≃Lehmer-aux : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
+Fin≃Lehmer-aux {O} =
   Aut (Fin (S O)) ≃⟨ contr-equiv-Unit Aut-level ⟩
   Unit ≃⟨ contr-equiv-Unit Lehmer-O-level ⁻¹ ⟩
   Lehmer O ≃∎
-Fin≃Lehmer {S n} =
+Fin≃Lehmer-aux {S n} =
   Fin (S (S n)) ≃ Fin (S (S n))                              ≃⟨ i ⟩
   Σ (Fin (S (S n))) (λ k → (FinExcept fzero ≃ FinExcept k)) ≃⟨ Σ-cong-equiv-snd ii ⟩
-  Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                    ≃⟨ _ , (×-isemap-r (Fin (S (S n))) (snd (Fin≃Lehmer {n}))) ⟩
+  Fin (S (S n)) × (Fin (S n) ≃ Fin (S n))                    ≃⟨ _ , (×-isemap-r (Fin (S (S n))) (snd (Fin≃Lehmer-aux {n}))) ⟩
   Fin (S (S n)) × Lehmer n                                   ≃⟨ LehmerInd ⟩
   Lehmer (S n) ≃∎
+
+Fin≃Lehmer : {n : ℕ} -> Aut (Fin (S n)) ≃ Lehmer n
+Fin≃Lehmer = Fin≃Lehmer-aux ∘e inv-transform-equiv
