@@ -4,17 +4,16 @@ module Pi+.Indexed.ExamplesL where
 open import Pi+.Indexed.SyntaxFull as Pi
 open import Pi+.Indexed.Syntax as Pi+
 open import Pi+.Indexed.Examples.Base
-open import Pi+.Indexed.Examples.Reset
+open import Pi+.Indexed.Examples.Toffoli
+open import Pi+.Indexed.Examples.Reset hiding (reset)
 \end{code}
 
 \newcommand{\resettwo}{%
 \begin{code}
-reset2 : 𝟚 Pi.× 𝔹 2 Pi.⟷₁ 𝟚 Pi.× 𝔹 2
-reset2 =  (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
-          (dist  ◎ ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
-                    (id⟷₁ ⊗ (swap⋆ ◎ (dist ◎ ((id⟷₁ ⊗ swap₊) ⊕ id⟷₁) ◎ factor) ◎ swap⋆)))
-                 ◎ factor) ◎
-          assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
+reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
+reset O = id⟷₁
+reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
+reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 \end{code}}
 
 \newcommand{\resetnormtwo}{%

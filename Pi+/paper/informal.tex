@@ -31,8 +31,7 @@ logical-or and $\underline{\vee}$ is exclusive-or. The function sets or resets t
 the other bits is true or not. The natural definition for this function is recursive: modulo some re-shuffling of the
 bits, the strategy is to examine the bits $b_i$ one-by-one: if we encounter a true value, we negate the first bit and
 terminate; otherwise we continue making recursive calls until we reach the last bit at which point we return the
-incoming value with no change. A modular implementation using 4 helpers is provided in the supplementary
-material. Unrolling the definition of $\Afun{reset}~2$ and inlining all the helpers produces the following program:
+incoming value with no change:
 
 %%\begin{minipage}{.65\textwidth}
 %%  \PiRESET{}
@@ -45,12 +44,26 @@ material. Unrolling the definition of $\Afun{reset}~2$ and inlining all the help
 
   \resettwo{}
 
-The syntax will be explained in detail in the next section. For now, it is sufficient to know that there is some program
-that implements the reversible function of interest. Our Agda infrastructure provides tools to normalize all programs to
-their normal form. For \Afun{reset2} we get:
+\noindent The syntax will be explained in detail in the next section and the full definitions of the helpers are provided in the
+supplementary material. For now, it is sufficient to know that there is some program that implements the reversible
+function of interest. Our Agda infrastructure provides tools to normalize all programs to their normal form. For
+\Afun{reset 2} we get:
 
   \resetnormtwo{}
 
+In principle, the normalized program can be produced following two strategies: (i) by using our calculus of reversible
+functions (explained in Sec.~\ref{sec:reversibletwo}) and repeatedly applying rewrite rules, or (ii) in the case above
+by using a normalization-by-evaluation (NBE) process that evaluates the program to a permutation on a finite set of 8
+elements and reifies that permutation back to a program. The key idea of the NBE process is to rewrite permutations to
+sequences of adjacent swaps as illustrated in the following small example:
+
+
+
+
+
+
+
+  %% start from general reset; say normalization can happen with rewrite rules or NBE
   %% generate from permutation
   %% write adder and normalize
 
@@ -101,37 +114,37 @@ n -> n + 8 `mod` 16
 % id⟷₁
 
 
-\note{Motivation: There are two reversible circuits which describe the following permutation. They can be shown to be
-  equal using the 2-combinators.}
+% \note{Motivation: There are two reversible circuits which describe the following permutation. They can be shown to be
+%   equal using the 2-combinators.}
+
+% \[
+%   \begin{tikzpicture}
+%     \begin{knot}[clip width=5]
+%       \filldraw (0,5) circle (2pt) node[above] {0};
+%       \filldraw (1,5) circle (2pt) node[above] {1};
+%       \filldraw (2,5) circle (2pt) node[above] {2};
+%       \filldraw (3,5) circle (2pt) node[above] {3};
+%       \filldraw (4,5) circle (2pt) node[above] {4};
+%       \filldraw (0,0) circle (2pt) node[below] {1};
+%       \filldraw (1,0) circle (2pt) node[below] {4};
+%       \filldraw (2,0) circle (2pt) node[below] {0};
+%       \filldraw (3,0) circle (2pt) node[below] {3};
+%       \filldraw (4,0) circle (2pt) node[below] {2};
+%       \strand (0,5) .. controls (0.5,0.5) and (1.5,3.5) .. (2,0);
+%       \strand (1,5) .. controls (0.75,0.5) and (0.25,3.5) .. (0,0);
+%       \strand (2,5) .. controls (2.5,2.5) and (3.5,1.5) .. (4,0);
+%       \strand (3,5) .. controls (4.5,2.5) and (4,1.5) .. (3,0);
+%       \strand (4,5) .. controls (3.5,2.5) and (1.5,2.5) .. (1,0);
+%       \flipcrossings{4,5};
+%     \end{knot}
+%   \end{tikzpicture}
+% \]
+
+Example: We reduce $\mathsf{swap} : 2 + 2 \leftrightarrow 2 + 2$ to a sequence of adjacent swaps. This is an example of
+a translation from $\PiPlusLang$ to $\PiHatLang$.
 
 \[
-  \begin{tikzpicture}
-    \begin{knot}[clip width=5]
-      \filldraw (0,5) circle (2pt) node[above] {0};
-      \filldraw (1,5) circle (2pt) node[above] {1};
-      \filldraw (2,5) circle (2pt) node[above] {2};
-      \filldraw (3,5) circle (2pt) node[above] {3};
-      \filldraw (4,5) circle (2pt) node[above] {4};
-      \filldraw (0,0) circle (2pt) node[below] {1};
-      \filldraw (1,0) circle (2pt) node[below] {4};
-      \filldraw (2,0) circle (2pt) node[below] {0};
-      \filldraw (3,0) circle (2pt) node[below] {3};
-      \filldraw (4,0) circle (2pt) node[below] {2};
-      \strand (0,5) .. controls (0.5,0.5) and (1.5,3.5) .. (2,0);
-      \strand (1,5) .. controls (0.75,0.5) and (0.25,3.5) .. (0,0);
-      \strand (2,5) .. controls (2.5,2.5) and (3.5,1.5) .. (4,0);
-      \strand (3,5) .. controls (4.5,2.5) and (4,1.5) .. (3,0);
-      \strand (4,5) .. controls (3.5,2.5) and (1.5,2.5) .. (1,0);
-      \flipcrossings{4,5};
-    \end{knot}
-  \end{tikzpicture}
-\]
-
-\note{Example: We reduce $\mathsf{swap} : 2 + 2 \leftrightarrow 2 + 2$ to a sequence of adjacent swaps. This is an
-  example of a translation from $\PiPlusLang$ to $\PiHatLang$.}
-
-\[
-  \begin{tikzpicture}
+  \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
     \begin{knot}[clip width=4]
       \filldraw (0,4) circle (2pt) node[above] {0};
       \filldraw (1,4) circle (2pt) node[above] {1};
@@ -150,7 +163,7 @@ n -> n + 8 `mod` 16
 \]
 
 \begin{align*}
-  \begin{tikzpicture}
+  \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
     \begin{knot}[clip width=4]
       \filldraw (0,4) circle (2pt) node[above] {0};
       \filldraw (1,4) circle (2pt) node[above] {1};
@@ -167,7 +180,7 @@ n -> n + 8 `mod` 16
     \end{knot}
   \end{tikzpicture}
   &&
-    \begin{tikzpicture}
+    \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
       \begin{knot}[clip width=4]
         \filldraw (0,4) circle (2pt) node[above] {0};
         \filldraw (1,4) circle (2pt) node[above] {2};
@@ -183,8 +196,8 @@ n -> n + 8 `mod` 16
         \strand (3,4) to (3,0);
       \end{knot}
     \end{tikzpicture}
-  \\
-  \begin{tikzpicture}
+  &&
+  \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
     \begin{knot}[clip width=4]
       \filldraw (0,4) circle (2pt) node[above] {2};
       \filldraw (1,4) circle (2pt) node[above] {0};
@@ -201,7 +214,7 @@ n -> n + 8 `mod` 16
     \end{knot}
   \end{tikzpicture}
   &&
-    \begin{tikzpicture}
+    \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
       \begin{knot}[clip width=4]
         \filldraw (0,4) circle (2pt) node[above] {2};
         \filldraw (1,4) circle (2pt) node[above] {0};
