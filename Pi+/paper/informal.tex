@@ -1,11 +1,11 @@
-\section{The Underlying Ideas}
+\section{Informal Examples}
 
-\todo{Not the right title.}
+% \todo{Not the right title.}
 
-\note{This section should explain the main technical parts of the paper
-  informally, without using any technology. Use an example, such as, a
-  reversible language with $\leq 5$ bits, and examples of permutations and
-  transpositions, and when they're equal.}
+% \note{This section should explain the main technical parts of the paper
+%   informally, without using any technology. Use an example, such as, a
+%   reversible language with $\leq 5$ bits, and examples of permutations and
+%   transpositions, and when they're equal.}
 
 % Shor's quantum factoring algorithm requires, at its core, a classical reversible function for modular exponentiation. As
 % explained in standard accounts of the algorithm (e.g., the Qiskit implementation), such efficient modular exponentiation
@@ -25,7 +25,7 @@
 
 % \note{Can we do this for the supplementary material??}
 
-\paragraph*{Normalization by evaluation of reversible circuits.} Consider the following reversible function:
+\paragraph*{Normalization by evaluation.} Consider the following reversible function:
 $\Afun{RESET}(b,b_1,\ldots,b_n) = (b \; \underline{\vee} \; (\bigvee_{i=1}^n b_i),b_1,\ldots,b_n)$ where $\vee$ is
 logical-or and $\underline{\vee}$ is exclusive-or. The function sets or resets the first bit depending on whether any of
 the other bits is true or not. The natural definition for this function is recursive: modulo some re-shuffling of the
@@ -42,77 +42,21 @@ incoming value with no change:
 %%  \end{center}
 %%\end{minipage}
 
-  \resettwo{}
+\resettwo{}
 
 \noindent The syntax will be explained in detail in the next section and the full definitions of the helpers are provided in the
 supplementary material. For now, it is sufficient to know that there is some program that implements the reversible
 function of interest. Our Agda infrastructure provides tools to normalize all programs to their normal form. For
 \Afun{reset 2} we get:
 
-  \resetnormtwo{}
+\resetnormtwo{}
 
-In principle, the normalized program can be produced following two strategies: (i) by using our calculus of reversible
-functions (explained in Sec.~\ref{sec:reversibletwo}) and repeatedly applying rewrite rules, or (ii) in the case above
-by using a normalization-by-evaluation (NBE) process that evaluates the program to a permutation on a finite set of 8
-elements and reifies that permutation back to a program. The key idea of the NBE process is to rewrite permutations to
-sequences of adjacent swaps as illustrated in the following small example:
-
-
-
-
-
-
-
-  %% start from general reset; say normalization can happen with rewrite rules or NBE
-  %% generate from permutation
-  %% write adder and normalize
-
-
-
-Now imagine we want to write the following reversible function:
-
-0 -> 0
-8 -> 8
-n -> n + 8 `mod` 16
-
-% (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
-% (dist ◎
-%  ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
-%   (id⟷₁ ⊗
-%    (swap⋆ ◎ (dist ◎ ((id⟷₁ ⊗ swap₊) ⊕ id⟷₁) ◎ factor) ◎ swap⋆)))
-%  ◎ factor)
-% ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
-
-% reset+ 2:
-
-% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% id⟷₁
-
-% reset 3 =
-
-% (assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
-% (dist ◎
-%  ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
-%   (id⟷₁ ⊗
-%    ((assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆) ◎
-%     (dist ◎
-%      ((id⟷₁ ⊗ (swap₊ ⊗ id⟷₁)) ⊕
-%       (id⟷₁ ⊗
-%        (swap⋆ ◎ (dist ◎ ((id⟷₁ ⊗ swap₊) ⊕ id⟷₁) ◎ factor) ◎ swap⋆)))
-%      ◎ factor)
-%     ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆)))
-%  ◎ factor)
-% ◎ assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
-
-% reset+ 3
-
-% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-% (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)◎
-% id⟷₁
-
+In principle, the normalized program can be produced following two strategies: (i) by repeatedly applying the rewrite
+rules of our calculus of reversible functions (explained in Sec.~\ref{sec:reversibletwo}), or (ii) in the case above by
+using a normalization-by-evaluation (NBE) process that evaluates the program to a permutation on a finite set of 8
+elements and reifies that permutation back to a program. The key idea of the NBE process is a systematic way to express
+permutations as sequences of adjacent swaps as illustrated in the following small example where the permutation on the
+left is compiled the sequence of four adjacent transpositions on the right:
 
 % \note{Motivation: There are two reversible circuits which describe the following permutation. They can be shown to be
 %   equal using the 2-combinators.}
@@ -140,12 +84,12 @@ n -> n + 8 `mod` 16
 %   \end{tikzpicture}
 % \]
 
-Example: We reduce $\mathsf{swap} : 2 + 2 \leftrightarrow 2 + 2$ to a sequence of adjacent swaps. This is an example of
-a translation from $\PiPlusLang$ to $\PiHatLang$.
+% Example: We reduce $\mathsf{swap} : 2 + 2 \leftrightarrow 2 + 2$ to a sequence of adjacent swaps. This is an example of
+% a translation from $\PiPlusLang$ to $\PiHatLang$.
 
-\[
-  \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
-    \begin{knot}[clip width=4]
+\begin{align*}
+  \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+    \begin{knot}[clip width=3]
       \filldraw (0,4) circle (2pt) node[above] {0};
       \filldraw (1,4) circle (2pt) node[above] {1};
       \filldraw (2,4) circle (2pt) node[above] {2};
@@ -160,11 +104,9 @@ a translation from $\PiPlusLang$ to $\PiHatLang$.
       \strand (3,4) .. controls (2.5,1.5) and (2.5,2.5) .. (1,0);
     \end{knot}
   \end{tikzpicture}
-\]
-
-\begin{align*}
-  \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
-    \begin{knot}[clip width=4]
+\quad=\quad
+  \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+    \begin{knot}[clip width=3]
       \filldraw (0,4) circle (2pt) node[above] {0};
       \filldraw (1,4) circle (2pt) node[above] {1};
       \filldraw (2,4) circle (2pt) node[above] {2};
@@ -180,8 +122,8 @@ a translation from $\PiPlusLang$ to $\PiHatLang$.
     \end{knot}
   \end{tikzpicture}
   &&
-    \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
-      \begin{knot}[clip width=4]
+    \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+      \begin{knot}[clip width=3]
         \filldraw (0,4) circle (2pt) node[above] {0};
         \filldraw (1,4) circle (2pt) node[above] {2};
         \filldraw (2,4) circle (2pt) node[above] {1};
@@ -197,8 +139,8 @@ a translation from $\PiPlusLang$ to $\PiHatLang$.
       \end{knot}
     \end{tikzpicture}
   &&
-  \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
-    \begin{knot}[clip width=4]
+  \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+    \begin{knot}[clip width=3]
       \filldraw (0,4) circle (2pt) node[above] {2};
       \filldraw (1,4) circle (2pt) node[above] {0};
       \filldraw (2,4) circle (2pt) node[above] {1};
@@ -214,8 +156,8 @@ a translation from $\PiPlusLang$ to $\PiHatLang$.
     \end{knot}
   \end{tikzpicture}
   &&
-    \begin{tikzpicture}[scale=0.3,every node/.style={scale=0.3}]
-      \begin{knot}[clip width=4]
+    \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+      \begin{knot}[clip width=3]
         \filldraw (0,4) circle (2pt) node[above] {2};
         \filldraw (1,4) circle (2pt) node[above] {0};
         \filldraw (2,4) circle (2pt) node[above] {3};
@@ -232,7 +174,32 @@ a translation from $\PiPlusLang$ to $\PiHatLang$.
     \end{tikzpicture}
 \end{align*}
 
-\note{This might be followed by a section which explains the syntax of Pi.}
+\paragraph*{Program synthesis.} The NBE process embodies a quoting mechanism that synthesizes programs from
+permutations. Indeed, instead of writing a program for \Afun{reset 2}, one might simply specify the desired permutation as:
+
+\resetperm{}
+
+\noindent The permutation uses the canonical encoding of sequences of bits as natural numbers (e.g., (\textsf{false},
+\textsf{true},\textsf{true}) is encoded as 011 or 3).  Simply ``quoting'' this permutation generates the same normalized
+program \Afun{reset2Norm} above.
+
+\paragraph*{Program equivalence.} The permutation above reveals another way to think about the desired program: it is a
+special addition circuit that keeps 0 and 4 fixed but otherwise adds 4 modulo 8 to its input. From this specification,
+one can use a standard synthesis algorithm for reversible circuits~\cite{10.1145/775832.775915} to generate the
+following program:
+
+\adder{}
+
+The \Afun{adder3} program looks nothing like the original \Afun{reset 2} program and yet they both have the same normal
+form thus establishing their equivalence.
+
+% Now imagine we want to write the following reversible function:
+
+% 0 -> 0
+% 8 -> 8
+% n -> n + 8 `mod` 16
+
+% \note{This might be followed by a section which explains the syntax of Pi.}
 
 %%% Local Variables:
 %%% mode: latex
