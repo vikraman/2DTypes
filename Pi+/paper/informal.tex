@@ -32,22 +32,28 @@ the other bits is true or not. The natural definition for this function is recur
 bits, the strategy is to examine the bits $b_i$ one-by-one: if we encounter a true value, we negate the first bit and
 terminate; otherwise we continue making recursive calls until we reach the last bit at which point we return the
 incoming value with no change. A modular implementation using 4 helpers is provided in the supplementary
-material. Unrolling the definition of $\Afun{reset}~3$ and inlining all the helpers produces the following program:
+material. Unrolling the definition of $\Afun{reset}~2$ and inlining all the helpers produces the following program:
 
 %%\begin{minipage}{.65\textwidth}
 %%  \PiRESET{}
 %%\end{minipage}
 %%\begin{minipage}{.30\textwidth}
-  \begin{center}
-  \resizebox{0.5\textwidth}{!}{\input{diagrams/reset.tikz}}
-  \end{center}
+%%  \begin{center}
+%%  \resizebox{0.5\textwidth}{!}{\input{diagrams/reset.tikz}}
+%%  \end{center}
 %%\end{minipage}
 
-  \resetthree{}
+  \resettwo{}
 
-After normalization:
+The syntax will be explained in detail in the next section. For now, it is sufficient to know that there is some program
+that implements the reversible function of interest. Our Agda infrastructure provides tools to normalize all programs to
+their normal form. For \Afun{reset2} we get:
 
-  \resetnormthree{}
+  \resetnormtwo{}
+
+
+
+
 
 Now imagine we want to write the following reversible function:
 
