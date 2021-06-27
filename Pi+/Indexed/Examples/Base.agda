@@ -2,7 +2,7 @@
 
 module Pi+.Indexed.Examples.Base where
 
-open import HoTT hiding (_<_ ; ltS ; ltSR ; _+_ ; _×_) public
+open import HoTT hiding (_<_ ; ltS ; ltSR ; _+_ ; _×_ ; _++_) public
 import lib.types.Nat as N
 import lib.types.Sigma as S
 
@@ -50,21 +50,32 @@ instance
 ⟦ O ⟧^ = ⊥
 ⟦ S n ⟧^ = ⊤ ⊔ ⟦ n ⟧^
 
+Fin-eval₀-+ : ∀ {t₁ t₂} → Fin (eval₀ t₁ N.+ eval₀ t₂) ≃ Fin (eval₀ (t₁ + t₂))
+Fin-eval₀-+ = ide _
+
+Fin-≃ : ∀ {m n} → (n == m) → (Fin n ≃ Fin m)
+Fin-≃ {O} {O} p = ide _
+Fin-≃ {S n} {S m} p = Fin-equiv-Coprod ⁻¹ ∘e  ⊔-≃ (Fin-≃ (N.ℕ-S-is-inj _ _ p)) (ide ⊤) ∘e Fin-equiv-Coprod
+
 Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi+.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
-Fin-eval₀ {O} {t₂} = ide _
-Fin-eval₀ {I} {t₂} =
-  Coprod-unit-l (Fin (eval₀ t₂)) ∘e
-  ⊔-comm (Fin (eval₀ t₂)) ⊥ ∘e
-  ⊔-≃ (ide _) Fin-equiv-Empty ∘e
-  Fin-⊔ {eval₀ t₂} {O} ⁻¹
-Fin-eval₀ {t₁ + t₃} {t₂} =
-  let e₁ = Fin-eval₀ {t₁} {t₂}
-      e₂ = Fin-eval₀ {t₃} {t₂}
-  in {!!}
-Fin-eval₀ {t₁ × t₃} {t₂} =
-  let e₁ = Fin-eval₀ {t₁} {t₂}
-      e₂ = Fin-eval₀ {t₃} {t₂}
-  in {!!}
+Fin-eval₀ {t₁} {t₂} = Fin-≃ (! (eval₀-* {t₁} {t₂}))
+
+-- Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi+.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
+-- Fin-eval₀ {O} {t₂} = ide _
+-- Fin-eval₀ {I} {t₂} =
+--   Coprod-unit-l (Fin (eval₀ t₂)) ∘e
+--   ⊔-comm (Fin (eval₀ t₂)) ⊥ ∘e
+--   ⊔-≃ (ide _) Fin-equiv-Empty ∘e
+--   Fin-⊔ {eval₀ t₂} {O} ⁻¹
+-- Fin-eval₀ {t₁ + t₃} {t₂} =
+--   let e₁ = Fin-eval₀ {t₁} {t₂}
+--       e₂ = Fin-eval₀ {t₃} {t₂}
+--   in {!  !}
+-- Fin-eval₀ {t₁ × t₃} {t₂} =
+--   let e₁ = Fin-eval₀ {t₁} {t₂}
+--       e₂ = Fin-eval₀ {t₃} {t₂}
+--   in {!  !}
+
 
 ⟦-⟧-eval₀ : {X : Pi.U} → ⟦ X ⟧ ≃ Fin (eval₀ X)
 ⟦-⟧-eval₀ {O} =
@@ -75,7 +86,7 @@ Fin-eval₀ {t₁ × t₃} {t₂} =
   Fin-⊔ {eval₀ t₁} {eval₀ t₂} ∘e
   ⊔-≃ (⟦-⟧-eval₀ {t₁}) (⟦-⟧-eval₀ {t₂})
 ⟦-⟧-eval₀ {t₁ × t₂} =
-    {!!} ∘e
+    Fin-eval₀ {t₁} {t₂} ∘e
     Fin-× {eval₀ t₁} {eval₀ t₂} ∘e
     ×-≃ (⟦-⟧-eval₀ {t₁}) (⟦-⟧-eval₀ {t₂})
 
@@ -113,7 +124,7 @@ _ : (test1 (inr tt , inr tt) == 0) S.×
     (test1 (inr tt , inl tt) == 1) S.×
     (test1 (inl tt , inr tt) == 2) S.×
     (test1 (inl tt , inl tt) == 3)
-_ = fin= TODO- , fin= TODO- , fin= TODO- , fin= TODO-
+_ = fin= idp , fin= idp , fin= idp , fin= idp
 
 interp' : {X : Pi.U} (c : X Pi.⟷₁ X) → ⟦ X ⟧ ≃ ⟦ X ⟧
 interp' c = ⟦-⟧-eval₀ ⁻¹ ∘e Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
