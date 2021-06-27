@@ -33,8 +33,8 @@ open import Pi+.Indexed.Examples.Reset hiding (reset; reset2-perm)
 \newcommand{\resettwo}{%
 \begin{code}
 reset : ∀ n → 𝟚 Pi.× 𝔹 n Pi.⟷₁ 𝟚 Pi.× 𝔹 n
-reset O = id⟷₁
-reset (S O) = swap⋆ ◎ cnot ◎ swap⋆
+reset 0 = id⟷₁
+reset 1 = swap⋆ ◎ cnot ◎ swap⋆
 reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 \end{code}}
 
@@ -63,7 +63,7 @@ reset2Norm =  (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) �
 reset2-perm : Aut (Fin 8)
 reset2-perm = equiv f f f-f f-f
   where f : Fin 8 → Fin 8
-        f (O , ϕ) = 0
+        f (0 , ϕ) = 0
         f (1 , ϕ) = 5 -- one of the two right bits in 001 is set, so we set the leftmost bit
         f (2 , ϕ) = 6
         f (3 , ϕ) = 7
@@ -76,7 +76,7 @@ reset2-perm = equiv f f f-f f-f
         -- elided
 \end{code}}
 \begin{code}[hide]
-        f-f (O , ϕ) = fin= idp
+        f-f (0 , ϕ) = fin= idp
         f-f (1 , ϕ) = fin= idp
         f-f (2 , ϕ) = fin= idp
         f-f (3 , ϕ) = fin= idp
