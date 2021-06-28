@@ -49,6 +49,12 @@ $\Set{\inl(\inl(\ttt)) \mapsto 1, \inl(\inr(\ttt)) \mapsto 2, \inr(\ttt) \mapsto
 Since $f_{1}$ and $f_{2}$ produce the same enumeration of the elements of $X$, they are identified by a homotopy $h$
 which is encoded in the 2-cell between them.
 
+At level 0, all we know is that if $X : \UFin[3]$, then X is merely equal to $\Fin[3]$, that is
+$\Trunc[-1]{X \id \Fin[3]}$, and we don't have access to the bijection. At level 1, if we know that both $X$ and $Y$ are
+\emph{equal} in $\UFin[3]$, then we can extract an equivalence between them, that is, $(X \id Y) \to (X \eqv Y)$.
+$\UFin[3]$ being a univalent subuniverse asserts that there are as many elements (upto higher homotopy) in $X \id Y$ as
+there are $X \eqv Y$.
+
 Given an operational model of how a type A reduces to a type B
 Given a denotational model of which types A and B are equivalent
 Want soundness and completeness results
