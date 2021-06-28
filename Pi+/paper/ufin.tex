@@ -28,6 +28,27 @@ identified. This guarantees that we can get a proper, sound and complete, semant
 \end{tikzpicture}
 \end{center}
 
+\[
+  \begin{tikzcd}
+    \Fin[3]
+    \arrow[""{name=0, anchor=center, inner sep=0}, "{f_{3}}", no head, loop, distance=4em, in=115, out=65]
+    \arrow[""{name=0, anchor=center, inner sep=0}, "{f_{2}}", no head, loop, distance=8em, in=125, out=55]
+    \arrow[""{name=1, anchor=center, inner sep=0}, "{f_{1}}"', no head, loop, distance=12em, in=135, out=45]
+    \arrow["", "{h}", shorten <=3pt, shorten >=3pt, Rightarrow, no head, from=0, to=1]
+  \end{tikzcd}
+\]
+
+We have $\Fin[3] & = \Set{0,1,2} \eqv \unit \sqcup (\unit \sqcup \unit)$ which fixes a particular enumeration of the
+elements. Suppose we have a set $X = (\unit \sqcup \unit) \sqcup \unit$, it has the same cardinality as $\Fin[3]$, so it
+is represented by the same 0-cell. But, $X$ can be made equivalent to $\Fin[3]$ in many different ways since there are
+many bijections between them. One bijection is
+$\Set{\inl(\inl(\ttt)) \mapsto 0, \inl(\inr(\ttt)) \mapsto 1, \inr(\ttt) \mapsto 2}$ which can be written in two
+different ways by composing more primitive operations, $f_{1} = \assocrp$, or
+$f_{2} = \swapp \compc \assoclp \compc \swapp$. Another bijection is
+$\Set{\inl(\inl(\ttt)) \mapsto 1, \inl(\inr(\ttt)) \mapsto 2, \inr(\ttt) \mapsto 0}$ which is given by $f_{3} = \ldots$.
+Since $f_{1}$ and $f_{2}$ produce the same enumeration of the elements of $X$, they are identified by a homotopy $h$
+which is encoded in the 2-cell between them.
+
 Given an operational model of how a type A reduces to a type B
 Given a denotational model of which types A and B are equivalent
 Want soundness and completeness results
