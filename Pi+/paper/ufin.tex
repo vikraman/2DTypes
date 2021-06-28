@@ -1,44 +1,43 @@
-\section{The Universe of Finite Types}
+\section{The (Sub)Universe of Finite Types}
 \label{sec:ufin}
+
+In the previous section, we have picked a particular encoding of finite types: as sequences of elements in some
+canonical order.
+
+This is not a ``free'' presentation. Some properties of the encoding might pollute our semantics. We want to make that
+any theorems / properties of the semantics we prove apply to the source language (under various interpretations).
+
+This motivates us to use a different semantic representation: a univalent universe of finite types which contains the
+finite types and nothing but the finite types and is defined such as alternative representations of finite types are
+identified. This guarantees that we can get a proper, sound and complete, semantics for our language.
+
+
+\begin{center}
+\begin{tikzpicture}[scale=1,every node/.style={scale=1}]
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes}
+\node[ultra thick, draw=blue, ellipse, minimum width=300pt, minimum height=300pt, align=center] {};
+\node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (a) {$\{ 1 , 2 \} \uplus \{ 3 \}$};
+\node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (b) at ([shift=({70pt,-70pt})]a) {$\{ 1 \} \uplus \{ 2, 3 \}$};
+\node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (c) at
+([shift=({-70pt,-70pt})]a) {$\{ 10 \} \uplus \{ 20, 30 \}$};
+\node (d) at ([shift=({50pt,-10pt})]a) {$\cdots$};
+\draw[thick,-] (a) to node[draw=none,right] {$\equiv$} (b);
+\draw[thick,-] (b) to node[draw=none,below] {$\equiv$} (c);
+\draw[thick,-] (a) to node[draw=none,left] {$\equiv$} (c);
+\end{tikzpicture}
+\end{center}
+
+Given an operational model of how a type A reduces to a type B
+Given a denotational model of which types A and B are equivalent
+Want soundness and completeness results
+Guarantee that the two notions of equality are themselves “equivalent”
+Generalized “identity of indiscernibles”
 
 Previous semantics adequate for reasoning about evaluation and for checking the equivalence of two circuits.
 
 Want NBE, want rewriting system of program equivalence, what else? So we need to move to proof-relevant higher-category
 groupoid semantics instead of set-theoretic.
-
-The lambda calculus is classically presented with types, terms, and
-$\beta\eta$-equations. This can be turned into a 1-category, with 0-cells for
-types, and 1-cells for programs quotiented by congruence closure of the
-$\beta\eta$-equations.
-
-Then there is the free CCC, which is a 1-category constructed using
-0-cells and 1-cells with universal properties that hold upto the notion
-of equality that from the ambient metatheory.
-
-Lambek/Scott show that these are equivalent. In modern language, this is
-a 1-equivalence of (1,1)-categories.
-
-Now, lets work without quotients in a proof-relevant metatheory.
-
-The lambda calculus can now be presented with 0-cells for types, 1-cells
-for terms, and 2-cells for equations/rewrites. This is a
-(2,1)-category. Then, you can give a description of the free 2-CCC,
-where universal properties hold upto canonical isomorphism.
-
-Then we can show that there is a 2-equivalence of these
-(2,1)-categories. (Actually, it can be weaker than (2,1)-categories, in
-fact it holds for bicategories.)
-
-Now, lets go to our result.
-
-For Pi/Pi+, we present it as a (2,0)-category (or 1-groupoid à la HoTT),
-with 0-cells for types, 1-cells for reversible programs, 2-cells for
-rewrites/equations. And we present different descriptions (Pi+, Ufin)
-of the free (2,0)-SMC (or 1-SMG) and show they're 2-equivalent.
-
-So this is just a difference of presentation, in going from the (1,r) to
-the (2,r) category. We have simply made the equations/rewrites
-first-class in the presentation.
 
 Now the question is, what does it mean for a compiler?
 
