@@ -100,19 +100,29 @@ connections to type theory and category theory and hence possesses a rich algebr
 remainder of the paper.
 
 %%%%%%%%%
-\subsection{Denotational Semantics}
+\subsection{Denotational Semantics (Outline)}
 
-\noindent The accompanying code includes a simple operational semantics for $\Pi$. A denotational semantics can be
+\noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be
 specified by mapping each type to a finite set and each combinator to a bijection between finite sets, that is, a
-permutation. In this section, we outline a simple semantics expressed in the metalanguage of set theory. This semantics
-is formalized and extended to the metalanguage of homotopy type theory in Sec.~\ref{sec:reversibletwo}.
+permutation. In this section, we outline a simple semantics expressed in the metalanguage of sets and functions. This
+semantics will be formalized and extended to the metalanguage of homotopy type theory in Sec.~\ref{sec:reversibletwo}.
 
 As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
-we have that $\sizet{A} = \sizet{B}$. Hence the denotation of a type $A$ with $n$-elements will be a finite set
-$\Fin[n]$ and the denotation of a combinator $c : A \iso B$ such that $\sizet{A} = \sizet{B} = n$ will be a function
-from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. In more detail, we enumerate the values $v : A$ where
-$\sizet{A} = n$ in a canonical order such that each value $v$ is given an index in $\{ 0,\cdots,n-1 \}$. The enumeration
-is defined as follows:
+we have that $\sizet{A} = \sizet{B}$. Hence, the denotation $\denot{A}$ of a type $A$ with $n$-elements can be the finite
+set $\Fin[n] = \{ 0, 1, \cdots, n-1\}$; the denotation of a value $v : A$ such that $\sizet{A}=n$ will be an index in
+the range $[0,n-1]$, and the denotation $\denot{c}$ of a combinator $c : A \iso B$ such that
+$\sizet{A} = \sizet{B} = n$ will be a function from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. Thus, all types
+with 3 elements will denote $\Fin[3]$ and combinators between them will denote permutations on $\Fin[3]$, e.g.:
+\[\begin{array}{rcl}
+    \denot{\onet + (\onet + \onet)} &=& \{ 0,1,2 \} \\
+    \denot{(\onet + \onet) + \onet} &=& \{ 0,1,2 \} \\
+    \\
+    \denot{\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (0~1~2) \\
+    \denot{\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (2~0~1)
+\end{array}\]
+where we have used the one-line notation for permutations with $(a~b~c)$ representing the
+permutation that maps 0 to $a$, 1 to $b$, and 2 to $c$. To make the denotation of values precise, we compute a canonical
+enumeration of the elements of each type:
 \[\begin{array}{rcl}
     \mathit{enum}(\zerot) &=& [~] \\
     \mathit{enum}(\onet) &=& [ ~\Acon{tt}~ ] \\
@@ -121,11 +131,17 @@ is defined as follows:
 \end{array}\]
 \noindent The specification uses a Haskell-like notation for sequences with $\mathit{map}$ as the operation that applies
 a function to each element of a sequence, \textsf{+\!+} as the binary append operation, and $\mathit{concat}$ the
-operation that appends all the subsequences in a sequence. For example, the 3 values $\inlv{\Acon{tt}}$,
-$\inrv{(\inlv{\Acon{tt}})}$, and $\inrv{(\inrv{\Acon{tt}})}$ of type $\onet + (\onet + \onet)$ are given indices 0, 1, and 2
-respectively. Given this canonical order, the combinator $\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet$
-would correspond to the permutation $(1~2~0)$ while the combinator $\assoclp : \onet + (\onet + \onet) \iso (\onet +
-\onet) + \onet$ at the same type would correspond to the identity permutation.
+operation that appends all the subsequences in a sequence.
+
+Using the definition, we have:
+\[\begin{array}{rcl}
+    \mathit{enum}(\onet + (\onet + \onet)) &=& [ \inlv{\Acon{tt}},\inrv{(\inlv{\Acon{tt}})}, \inrv{(\inrv{\Acon{tt}})} ] \\
+    \mathit{enum}((\onet + \onet) + \onet) &=& [ \inlv{(\inlv{\Acon{tt}})},  \inlv{(\inrv{\Acon{tt}})}, \inrv{\Acon{tt}} ]
+  \end{array}\]
+Thus, $\assoclp~(\inlv{\Acon{tt}})$ applies the permutation $(0~1~2)$ to the index of $\inlv{\Acon{tt}}$ which is 0 and
+produces index 0 in the $(\onet + \onet) + \onet$ type corresponding to value $\inlv{(\inlv{\Acon{tt}})}$. Similarly,
+$\swapp~(\inlv{\Acon{tt}})$ applies the permutation $(2~0~1)$ to the index of $\inlv{\Acon{tt}}$ which is 0 and produces
+index 2 in the $(\onet + \onet) + \onet)$ type corresponding to value $\inrv{\Acon{tt}}$.
 
 % \[\begin{array}{l}
 %     \Tree[ {\small a} [ {\small b} {\small c} ] ] \\
