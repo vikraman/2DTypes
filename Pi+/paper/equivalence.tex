@@ -139,17 +139,35 @@ We normalise $\PiPlusLang$ to $\PiHatLang$ and back, by giving $\evalh/\quoteh$ 
 
 \subsection{$\PiLang$}
 
-Finally, We show how to translate $\PiLang$ programs to $\PiHatLang$ programs.
+Finally, we show how to translate $\PiLang$ programs to $\PiPlusLang$ programs. $\PiLang$ has two symmetric monoidal
+structure, the additive and the multiplicative one. In $\PiPlusLang$, the additive structure can be used to build the
+multiplicative structure, by defining multiplication as repeated addition.
 
 \begin{definition}
   \begin{align*}
-    \evalt_{0} & : U \to \Nat                                               \\
+    O \times Y           & \defeq O                       \\
+    I \times Y           & \defeq Y                       \\
+    (X_1 + X_2) \times Y & \defeq X_1 \times Y + X_2 \times Y
+  \end{align*}
+\end{definition}
+
+\begin{proposition}
+  $\PiPlusCat$ has a symmetric monoidal structure with $I$ for the unit and $\times$ for the tensor product. With the
+  two tensor products and the distributivity combinator, $\PiPlusCat$ has a rig structure.
+\end{proposition}
+
+Using this rig structure, we translate $\PiLang$ to $\PiPlusLang$.
+
+\begin{definition}
+  \begin{align*}
+    \evalt_{0} & : U \to \UPlus                                             \\
     \evalt_{1} & : (c : X \iso Y) \to \evalt_{0}(X) \iso \evalt_{0}(Y)      \\
     \evalt_{2} & : (\alpha : p \Iso q) \to \evalt_{1}(p) \Iso \evalt_{1}(q) \\
   \end{align*}
 \end{definition}
 
-To normalise a $\PiLang$ circuit, we translate it to $\PiHatLang$ and quote it to $\PiPlusLang$.
+To normalise a $\PiLang$ circuit, we translate it to $\PiHatLang$, compute a permutation, and quote back it to
+$\PiPlusLang$.
 
 \begin{definition}
   \begin{align*}

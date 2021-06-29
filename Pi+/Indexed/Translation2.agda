@@ -158,3 +158,37 @@ eval₁-plus = eval₁-index ∘ eval₁-aux
 
 eval₁ : ∀ {t₁} {t₂} → (t₁ Pi.⟷₁ t₂) → eval₀ t₁ Pi^.⟷₁^ eval₀ t₂
 eval₁ = eval^₁ ∘ eval₁-index ∘ eval₁-aux
+
+eval₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ Pi.⟷₁ t₂} → (α : c₁ Pi.⟷₂ c₂) → (eval₁-aux c₁) NPi+.⟷₂ (eval₁-aux c₂)
+eval₂-aux = TODO-
+
+quote₀-aux : NPi+.U → Pi.U 
+quote₀-aux = TODO-
+
+quote₁-aux : ∀ {t₁} {t₂} → t₁ NPi+.⟷₁ t₂ → (quote₀-aux t₁) Pi.⟷₁ (quote₀-aux t₂) 
+quote₁-aux = TODO-
+
+quote₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ NPi+.⟷₁ t₂} → (α : c₁ NPi+.⟷₂ c₂) → (quote₁-aux c₁) Pi.⟷₂ (quote₁-aux c₂)
+quote₂-aux = TODO-
+
+eval-quote₀-aux : (t : NPi+.U) → eval₀-aux (quote₀-aux t) NPi+.⟷₁ t
+eval-quote₀-aux = TODO-
+
+{- 
+eval-quote₁-aux : ∀ {t₁} {t₂} → (c : t₁ NPi+.⟷₁ t₂) → eval₁-aux (quote₁-aux c) NPi+.⟷₂ c
+eval-quote₁-aux = TODO-
+
+eval-quote₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ NPi+.⟷₁ t₂} → (α : c₁ NPi+.⟷₂ c₂) → eval₂-aux (quote₂-aux α) NPi+.⟷₃ α
+eval-quote₂-aux = TODO-
+ -}
+
+quote-eval₀-aux : (t : Pi.U) → quote₀-aux (eval₀-aux t) Pi.⟷₁ t
+quote-eval₀-aux = TODO-
+
+{- 
+quote-eval₁-aux : ∀ {t₁} {t₂} → (c : t₁ Pi.⟷₁ t₂) → quote₁-aux (eval₁-aux c) Pi.⟷₂ c
+quote-eval₁-aux = TODO-
+
+quote-eval₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ Pi.⟷₁ t₂} → (α : c₁ Pi.⟷₂ c₂) → quote₂-aux (eval₂-aux α) Pi.⟷₃ α
+quote-eval₂-aux = TODO-
+ -}

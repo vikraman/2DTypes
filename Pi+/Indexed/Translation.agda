@@ -151,3 +151,5 @@ eval₁ id⟷₁ = id⟷₁^
 eval₁ (c₁ ◎ c₂) = eval₁ c₁ ◎^ eval₁ c₂
 eval₁ (c₁ ⊕ c₂) = ++^-⊕ (eval₁ c₁) (eval₁ c₂)
 eval₁ (c₁ ⊗ c₂) = **^-⊗ (eval₁ c₁) (eval₁ c₂)
+
+
