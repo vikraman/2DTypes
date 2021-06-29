@@ -12,21 +12,30 @@ finite types, and give \review{a computable presentation} for it.
 
 In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are equivalent to families of automorphisms
 of $\Fin{n}$ for every $n:\Nat$, that is, bijections on finite sets of size $n$. This is the extensional view of
-permutations. In the following sections, we will characterise these permutations, going through two intermediate steps.
+permutations. In the following sections, we will characterise these permutations syntactically- specifically, using a concept of \textit{a presentation} from the group theory. 
 
-To do so, we will characterise the automorphisms on finite sets of cardinality $n$, and show them to be equivalent to
-the symmetric group $\Sn$, via the Coxeter presentation. We will do that in two steps,
-in~\cref*{subsec:permutations,subsec:lehmer,subsec:symmetric}.
+Although the meaning of a permutation - that is, the specific bijective function that it represents - is in some sense all there is, manipulating them syntactically still has its advantages. By writing reversible programs, we think of them in an intensional way. Comparing two programs for equality by evaluating them on all points in the domain is a very crude - and maybe even inefficient - way of doing that. 
+
+It is crude, because there is no way of enforcing additional constraints on the process of transforming one program into another, and no way of inspecting what transformation occured. We can imagine a practical situation in which reversible circuts admit one kind of optimization \jk{FPGA?}, but do not admit another, even though they are equivalent in the extensional sense - or maybe one of these transformations is cheaper than another, or maybe it is important to know which transformation did occur for the \jk{producer(?)} to focus their resources of improving this kind of transformations. By comparing the circuits extensionally, the proof object = the path from one into the other - does not have any structure,  it is just a check that the values match.
+
+On the other hand, even though in general, the equality of circuits requires exponential time jk{triple check}, the proof object can be still very small. This creates structure that can possibly be exploited in a heurisic way. \jk{Additionally, if the goal is to convince third-party that two circuits are the same, we can just present the proof instead of showing the equality directly - for example, by choosing a particularly short one}.
+
+Taking all this into account, it is clear that we must seek a syntactic way of computing the meaning of the circuit, instead of just directly evaluating it to $\Aut[\Fin[n]]$ - since when we go back and quote the permutation as a circuit (in a normal form), there was no "trace" left to see what transformation (what sequence of 2-paths) maps the old one into the new one.
+
+Fortunately, group theory already has language in which such problems are expressed - we will be looking at solving the \textit{word problem}. Because $\PiLang$ is used for reasoning about reversible functions on finite sets, the group that we are interested in is the group of permutations on a fininte set, which is classically know as the symmetric group on $n$ words,
+$\Sn$. Putting it in this form allows us to connect to the broader scope of the computational group theory and reuse some of the ideas from there. For example, during the proof, we will use \emph{Lehmer codes} (introduced at \cref{subsec:lehmer}) - a concept used widely in this context, which makes for a very convenient and compact method of representing permutations on a computer.
+
+We begin the section with a brief introduction on doing group theory in HoTT, and state the main results using this language in the subsequent sections.
 
 \todo{Big example: Start from a listed permutation, show Lehmer code, then adjacent swaps.}
 \todo{Justification for why we need group theory.}
 
 \subsection{Groups}
 
-From universal algebra, a group is simply a set with a 0-ary constant, the neutral element, a binary operation for group
-multiplication, and a unary inverse operation. A simple example is $\mathbb{Z}/n\mathbb{Z}$, where the neutral element
-is 0, the inverse of $k$ is $-k$, and the group multiplication is given by addition modulo $n$. The neutral element has
+From universal algebra, a group is simply a set with a 0-ary constant (the neutral element), a binary operation for group multiplication, and a unary inverse operation. The neutral element has
 to satisfy unit and inverse laws, and the multiplication has to be associative.
+
+A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the group multiplication is given by integer addition.
 
 In type theory, a group $G$ can be defined as an $\hSet$ $S$ with the following pieces of data:
 
@@ -61,16 +70,15 @@ corresponding automorphism group structure.
 
 \subsection{Free groups}
 
-Given a generating set $A$, we can naively construct a \emph{free group on $A$},
+Given any set $A$, we can naively construct a \emph{free group on $A$},
 whose elements are drawn from the alphabet $A$, and closed under the group
 operations of multiplication and inverse, identified by the group axioms.
-For example, the singleton set generates the additive group of integers,
-$\mathbb{Z}$.
+For example, the singleton set generates the additive group of integers $\mathbb{Z}$ we introduced before. In this context, we will call $A$ the generating set of $F(A)$.
 
 Usually, there are are many equations, besides the group axioms, that hold for
-the elements of the group. For example, in the group $\mathbb{Z}/3\mathbb{Z}$,
-we have an equation $1 + 1 + 1 = 0$. A free group has the property that has no
-other relations than the ones directly implied by the group axioms.
+the elements of the group. For example, in the group of $\mathbb{Z}/3\mathbb{Z}$, where group multiplication is given by the addition modulo 3, we have an equation $1 + 1 + 1 = 0$, which is not a consequence of group axioms, but rather it is specific to the particular group $\mathbb{Z}/3\mathbb{Z}$. A free group can also be defined by its property that no other equations, except the ones directly implied by the group axioms, such as $g \dot g^[-1] = e$, hold for it. Thus, $\mathbb{Z}/3\mathbb{Z}$ is not a free group.
+
+Working in HoTT, as before, we can again use higher inductive types to define the free group.
 
 \todo{What's the best notation for HITs?}
 \begin{definition}
@@ -96,6 +104,7 @@ other relations than the ones directly implied by the group axioms.
 A group homomorphism between groups is a function between the underlying sets
 that preserves the group structure, which we write as $G_1 \to^G G_2$. With
 this, we can state the universal property of free groups.
+\jk{In the HoTT version, which we now use, there is no underlying set}.
 
 \begin{proposition}[Universal Property of $F(A)$]~\label{prop:free-groups}
   Given a group $G$ and a map $f : A \to G$, there is a unique group
@@ -116,16 +125,13 @@ this, we can state the universal property of free groups.
     \end{tikzcd}\]
 \end{proposition}
 
-This definition of $F(A)$ however has lots of path constructors corresponding to
-each group axiom. Alternatively, the free group construction can be thought of
-as drawing letters from the generating set, while adding formal inverses, and
-constructing words which are sequences of these letters.
+We already mentioned that the structure of a free group $F(A)$ is fully specified by its generating set $A$. Thus, the univerasal property states that if we know how the mapping $f$ acts on the generating set $A$, we also know how does it act on every element of the group $F(A)$.
 
-Each element in the sequence can either be an element drawn from the generating
-set $a$, or an inverse of such an element $\inv{a}$. If we take the disjoint
-union of $A$ with itself, that is, $A + A$ as the underlying set, we can use
-$\inl/\inr$ to mark the elements. Hence, we can encode the free group using the
-free monoid, that is, lists.
+The HoTT definition of $F(A)$ has lots of path constructors corresponding to
+each group axiom. \jk{why did we introduced it? Why is it bad?}. 
+
+Instead, in the proof, we will think about the free group as it was introduced at the beginning: elements of the free group as words over an alphabet of letters from generating set and the set of their formal inverses. If we take the disjoint union of $A$ with itself, that is, $A + A$ as the group's underlying set, we can use $\inl/\inr$ to mark the elements - for example, by stating that $\inl(a)}$ means $a$ and $\inr(a)$ means $\inv{a}$. 
+Hence, we can encode the free group using the free monoid - which is to say, lists on $A + A$. Additionally, we need to ensure that group laws hold, so words identified by the group equations are equalt. Thus, elements of the group will actually be equivalence classes of lists on $A + A$.
 
 \begin{definition}
   Let $A$ be an $\hSet$, and $\List[\blank]$ the free monoid. The free group
@@ -136,32 +142,33 @@ free monoid, that is, lists.
 \begin{proposition}
   $F(A) \defeq \quot{\List[A + A]}{\sim^{\ast}}$ has a group structure, with the
   empty list $\nil$ for the neutral element, multiplication given by list append
-  $\append$, and inverse given by list reversal. Further, $F(A)$ with $\eta_A :
+  $\append$, and inverse given by list reversal (\jk{THIS IS NOT TRUE}). Further, $F(A)$ with $\eta_A :
     A \to F(A) \defeq \inl(a) \cons \nil$ satisfies the universal property of free
-  groups.~\cref{prop:free-groups}
+  groups, as stated in the ~\cref{prop:free-groups}.
 \end{proposition}
 
-\subsubsection{Group presentations}
+\subsection{Group presentations}
 
-One useful way of defining groups is by their presentations. A presentation of a
-group builds it by starting from the free group $F(A)$ and introducing a
+We already talked about the semantic view of groups, but did not yet mention on how to syntactically represent them - which is the role of group presentations.
+
+A presentation of a group builds it by starting from the free group $F(A)$ and introducing a
 collection of equations that have to be satisfied in the resulting group. For
 example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an equation $1 + 1 + 1
-  = 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$.
+  = 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$. Note that not all groups have finite (or even recursively enumerable) presentations, and that a group can have any number of presentations. \jk{citation}
 
 The generators can be thought of as primitive operations in a (reversible)
 programming language, group structure gives the way of composing these
 operations and inverting them, and relations describe how these primitive
 operations interact with each other.
 
-Instead of opereating directly in the semantics of the group operation, here the
+As we mentioned, instead of opereating directly in the semantics of the group operation, here the
 focus is on the syntax. While before, the equality of elements (such as the
-result of multiplication of two elements) had to be computed externally, now it is
-reduced to a \emph{word problem}, i.e., deciding one word can be reduced to another
+result of multiplication of two elements) had to be computed in some external way, now it is
+reduced to a \emph{word problem}, i.e., deciding one word - representative of the group elements' equivalence class - can be reduced to another word,
 using group's equations.
 
 However, because equations are not directed, is not always possible to construct a
-well-behaving rewriting system. In general, the word problem is proven to be undecidable.
+well-behaving rewriting system. In general, the word problem is proven to be undecidable. There exists an algorithm, due to Knuth and Bendix \jk{citation}, that, when succeeds, constructs a well-behaving rewriting system for an arbitrary finite set of (undirected) equations. However, this algorithm produced a system that is often large and hard to reason about \jk{definitely a citation if we can find it}.
 
 \jk{Example?}
 
@@ -188,21 +195,10 @@ for properly extending the relation on the generating set to the whole group.
 
 \subsection{Presentation of permutation groups}
 
-Because $\PiLang$ is used for reasoning about reversible functions on finite
-sets, the group that we are interested in is the group of permutations on a
-fininte set, which is classically know as the symmetric group on $n$ words,
-$\Sn$. We've already seen that we can define it formally by taking the
-automorphism group given by the type $\Aut[\Fin[n]]$, and showing that it has a
-group structure satisfying the group axioms. Alternatively, we can write a group
-presentation for $\Sn$ -- by defining a set of generators and a set of relations.
+We have already seen that the group of permutations, symmetric group $\Sn$, can be defined by taking the type $\Aut[\Fin[n]]$, and showing that it has the appropriate
+group structure. Alternatively, we talked on how one can define a group by its presentation,defining a set of generators and a set of relations. However, until now, we did not show any specific presentationation for $\Sn$.
 
-The technical contribution of this section is a proof that these two
-descriptions are equivalent. By doing that, we bridge the gap between the
-syntactic and semantic notions in our completeness proof -- by establishing a
-correspondence between the meaning of a program (a bijection) and its syntax (a
-word).
-
-However, in giving a group presentation, there is an element of choice. A group
+In giving a group presentation, there is an element of choice - as we already mentioned, a group
 can be presented in many different ways. For example, we could generate the
 permutation group on $\Fin[n]$ by using generators that:
 
@@ -228,12 +224,28 @@ $i$-th element with the $j$-th element, cycle sort uses cyclical shifts of
 subsequences, pancake sort uses flips of prefixes of the list, et cetera.
 \todo{check!}
 
-\subsection{Coxeter Presentation}
+The choice of generators for a presentation is important. \todo{Think about this.}
 
-We use a presentation based on adjacent transpositions, which is called the
-Coxeter presentation. The primitive operations are adjacent swaps. Further,
-there are three laws that these operations have to satisfy -- it is easiest to
-visualise them as braid diagrams.
+\begin{itemize}
+  \item It affects the difficulty of solving the word problem in $\Sn$ and
+        formalising the proof of its correctness.
+  \item It affects the proof of strong normalisation of reduction for the relations.
+  \item It dictates which words are normal forms in this presentation of $\Sn$.
+  \item It has to closely match the $\PiLang$ comobinators so that we can prove
+        completeness.
+  \item It dictates the choice of reversible gates in the synthesis and
+        normalisation of boolean circuits which are applications that we show in
+        the later sections.
+\end{itemize}
+
+Connecting it all back to the language $\PiLang$ we are dealing with, it is possible to construct a simlar, yet simplified language $\PiLangHat$ (introduced at \cref{sec:equivalence}), which operates on adjacent transpositions, but still preservers much of $\PiLang$ structure. Thus, for the proof, a presentation based on adjacent transpositions is used, called \emph{Coxeter presentation}. Not only is this then, in some sense, the natural choice, but it is also a presentation for which we can solve the word problem in a relatively easy, and which is used broadely in such context \jk{by other people? get citations}.
+
+The technical contribution of this section is a proof that the two descriptions of permutation group - $\Aut[\Fin[n]]$ and the Coxeter presentation - are equivalent. By doing that, we bridge the gap between the syntactic and semantic notions in our completeness proof -- by establishing a
+correspondence between the meaning of a program (a bijection) and its syntax (a word).
+
+\subsubsection{Coxeter Presentation}
+
+We already mentioned that the Coxter presentation, which is the one will use, is based on adjacent transpositions, meaning that the primitive operations we use are adjacent swaps. However, $\Sn$ is not a free group, and so we also have to specify the relations of the presentaiton -- the laws that such generators have to satisfy. there are three of them -- and it is easiest to visualise them as braid diagrams.
 
 Swapping the same two elements two times in a row is the same as doing nothing:
 
@@ -311,7 +323,7 @@ that is, we can slide the wires freely.
   \end{tabular}
 \]
 
-\todo{explain braid in words, give some intution on why it holds}
+The previous two cases were for the transpositions that either completely overlap, or not overlap at all. The third case is thus left -- what happens if we perform transpositions that move the same elements. If the next transposition in the sequence is equal to the the first one, we can write a third law -- braiding relation.
 
 \[
   \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
@@ -376,27 +388,13 @@ The type $\Sn$ is then defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*
   \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
 
-The choice of generators for this presentation is important. \todo{Think about this.}
+The approach to solving the word problem for $\Sn$ we use is to turn the relations $\cox*$ on
+$\List[\Fin[n]]$ to a rewriting system $(\List[\Fin[n]],\cox*)$. A normal form of an element can then be computed by following the rewrite rules, and two words can be compared for $\cox*$-equality by comparing their normal forms.
 
-\begin{itemize}
-  \item It affects the difficulty of solving the word problem in $\Sn$ and
-        formalising the proof of its correctness.
-  \item It affects the proof of strong normalisation of reduction for the relations.
-  \item It dictates which words are normal forms in this presentation of $\Sn$.
-  \item It has to closely match the $\PiLang$ comobinators so that we can prove
-        completeness.
-  \item It dictates the choice of reversible gates in the synthesis and
-        normalisation of boolean circuits which are applications that we show in
-        the later sections.
-\end{itemize}
+A well-behaved rewriting system has to be strongly normalising and confluent. First, we observe that after throwing out reflexivity and symmetry, the right hand sides of the relations $\cox*$
+are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$. Thus, by directing the relation from left to right, we would get the termination property out of the box.
 
-To consider solving the word problem for $\Sn$, we need to formalise the generators for the Coxeter relations on
-$\List[\Fin[n]]$ as a rewriting system $(\List[\Fin[n]],\cox*)$. A well-behaved rewriting system has to be strongly
-normalising and confluent. Throwing out reflexivity and symmetry, we observe that the right hand sides of the relations
-are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$. Thus, by
-directing the relation from left to right, we would be able to prove a termination property out of the box. For a system
-to be confluent, all critical pairs, that is, terms with overlapping possible reduction rules, have to converge. For
-example, the pairs below converge.
+The system also has to be confluent, meaning that all critical pairs, that is, terms with overlapping possible reduction rules, have to converge. For example, the pairs below converge.
 
 \[
   \begin{array}{lcr}
@@ -444,7 +442,7 @@ example, the pairs below converge.
 \]
 \end{proof}
 
-Unfortunately, in the system defined, this is not true for all critical pairs.
+Unfortunately, in the system we defined, this is not true for all critical pairs.
 One example is the following, where both endpoints are normal with respect to
 $\cox*$ relation.
 
@@ -454,16 +452,11 @@ $\cox*$ relation.
 
 \subsection{Rewriting via Coxeter}
 
-Because of the counterexample discussed, the relations have to be changed. In this section, we will formally define a
-rewriting system partially based on the Coxeter relation, prove that it has good properties (confluence and strong
-normalisation).
+Because of the counter-example discussed, the relations have to be changed. In this section, we will formally define a rewriting system partially based on the Coxeter relation, prove that it has the desired properties of confluence and strong normalisation.
 
-The reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$. We
-fix the problem discussed previously by changing $\braid$ to be a slightly more general relation. However, we do not
-want to lose the connection to the theory of group presentations, where Coxeter relations are a standard
-notion~\todo{citation}. To make the result broadly applicable, even though we use the reduction system for computation,
-we prove that its reflexive-transitive closure is indeed equivalent to the conguence closure of the standard Coxeter
-relation $\cox$.
+Fortunately, the change from the rewriting system described before will be small. Thus, we will not lose the connection to the theory of group presentations, where Coxeter relations are a standard notion~\todo{citation} -- to make the result broadly applicable, even though we use the reduction system for computation, we prove that its reflexive-transitive closure is indeed equivalent to the conguence closure of the standard Coxeter relation $\cox$.
+
+The new reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$. We fix the problem of the non-converging critical pair discussed previously by changing $\braid$ to be a slightly more general relation $\longbraid$.
 
 \todo {but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
 
