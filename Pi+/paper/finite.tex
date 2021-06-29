@@ -245,9 +245,11 @@ correspondence between the meaning of a program (a bijection) and its syntax (a 
 
 \subsubsection{Coxeter Presentation}
 
-We already mentioned that the Coxter presentation, which is the one will use, is based on adjacent transpositions, meaning that the primitive operations we use are adjacent swaps. However, $\Sn$ is not a free group, and so we also have to specify the relations of the presentaiton -- the laws that such generators have to satisfy. there are three of them -- and it is easiest to visualise them as braid diagrams.
+We already mentioned that the Coxter presentation, which is the one will use, is based on adjacent transpositions, meaning that the primitive operations we use are adjacent swaps. When dealing with permutations on an $n + 1$-element set, there are $n$ adjacent transpositions, transposition number $k$ swapping elements $\el{k}$ and $\el{k+1}$. Thus, the generating set would be $\Fin[n]$.
 
-Swapping the same two elements two times in a row is the same as doing nothing:
+However, $\Sn$ is not a free group, and so we also have to specify the relations of the presentaiton -- the laws that such generators have to satisfy. there are three of them -- it is easiest to visualise them as braid diagrams.
+
+First, swapping the same two elements two times in a row is the same as doing nothing:
 
 \[
   \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
@@ -273,7 +275,7 @@ Swapping the same two elements two times in a row is the same as doing nothing:
   \end{tabular}
 \]
 
-When swapping two distinct pairs of elements (i.e. when the indices of two transpositions
+Second, when swapping two distinct pairs of elements (i.e. when the indices of two transpositions
 differ by at least 1), it does not matter in which order the swapping happens,
 that is, we can slide the wires freely.
 
@@ -351,8 +353,7 @@ The previous two cases were for the transpositions that either completely overla
 
 \todo{an example/motivation from book.pdf}
 
-This construction is called a Coxeter presentation. Writing it formally, we define a binary relation $\cox$ on
-$\List[\Fin[n]]$.
+This construction is called a Coxeter presentation. Writing it formally, we take the generating set to be $\Fin[n]$, where the element $k$ corresponds to an adjacent transpositions $\tau_k$, which swaps elements $\el{k}$ and $\el{k+1}$. Then, we define a binary relation $\cox$ on the $\List[\Fin[n]]$, which encodes the laws discussed above.
 
 \begin{definition}[$\cox$]
   \begin{align*}
@@ -458,6 +459,31 @@ Fortunately, the change from the rewriting system described before will be small
 
 The new reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$. We fix the problem of the non-converging critical pair discussed previously by changing $\braid$ to be a slightly more general relation $\longbraid$.
 
+First, we need a helper function $n \downf k$.
+
+\begin{definition}[$\downf : (n : \Nat) \to (k : \Nat) \to {\List[\Fin[\suc[k + n]]]}$]
+  \begin{align*}
+    n \downf \zero   & \defeq \nil                       \\
+    n \downf \suc[k] & \defeq (k + n) \cons (n \downf k)
+  \end{align*}
+\end{definition}
+
+The reuslt of this function is the sequence \(k + n, k + n - 1, k + n - 2, \ldots, n + 1\). If we think of the element $m$ as the transposition which swaps elements $\el{m}$ and $\el{m+1}$, the role of this helper function is to produce a sequence of transpositions - a permutation - which moves element $n$ $k$ places right.
+
+
+As a sequence of transpositions, it moves the element $k - 1$ places. Expressed in terms of the braiding diagram, for
+$n = \dots$ and $k = \dots$, it has the following form:
+
+\[
+  \begin{tikzpicture}
+    \pic[local bounding box=my braid,braid/.cd,
+      number of strands = 6,
+      thick]
+    {braid={s_5, s_4, s_3, s_2, s_1}};
+  \end{tikzpicture}
+\]
+
+
 \todo {but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
 
 Formally, the directed $\longcox$ relation is defined with the following generators.
@@ -486,27 +512,7 @@ transitive extension is only performed on the right.
 \end{definition}
 
 Generators $\longcancel$ and $\longswap$ correspond directly to the generators of $\cox*$ and can be visualised in the
-same way as before. The generator $\longbraid$ uses a helper $n \downf k$, which produces the sequence
-\(k + n, k + n - 1 \ldots, n + 1\).
-
-\begin{definition}[$\downf : (n : \Nat) \to (k : \Nat) \to {\List[\Fin[\suc[k + n]]]}$]
-  \begin{align*}
-    n \downf \zero   & \defeq \nil                       \\
-    n \downf \suc[k] & \defeq (k + n) \cons (n \downf k)
-  \end{align*}
-\end{definition}
-
-As a sequence of transpositions, it moves the element $k - 1$ places. Expressed in terms of the braiding diagram, for
-$n = \dots$ and $k = \dots$, it has the following form:
-
-\[
-  \begin{tikzpicture}
-    \pic[local bounding box=my braid,braid/.cd,
-      number of strands = 6,
-      thick]
-    {braid={s_5, s_4, s_3, s_2, s_1}};
-  \end{tikzpicture}
-\]
+same way as before. The generator $\longbraid$ 
 
 Now, the remaining constructor $\longbraid$ moves a transposition around such sequence, as in the diagram below.
 
