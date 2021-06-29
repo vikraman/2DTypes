@@ -25,11 +25,28 @@ type formers $+$ and $\times$ are binary function symbols, the 1-combinators are
 theories are given by algebras of (finitary) monads on $\SetCat$, models of 2-theories are given by algebras of 2-monads
 on $\CatCat$. The particular one we're interested in here is the free symmetric monoidal completion 2-monad.
 
-\paragraph{Free Symmetric Monoidal Category} The forgetful functor from $\SymMonCat$, the 2-category of symmetric
-monoidal categories, strong symmetric monoidal functors, and symmetric monoidal natural transformations, to the
-2-category $\CatCat$, has a left adjoint.
+\paragraph{Free Symmetric Monoidal Category} The forgetful functor from $\SymMonCat$, the 2-category of (small)
+symmetric monoidal categories, strong symmetric monoidal functors, and symmetric monoidal natural transformations, to
+the 2-category $\CatCat$, has a left adjoint giving the free symmetric monoidal category $\FSM[\CCat{C}]$ on a category
+$\CCat{C}$. This is a 2-monad on $\CatCat$~\cite{blackwellTwodimensionalMonadTheory1989}, and its construction is known
+in the literature~\cite{abramskyAbstractScalarsLoops2005}. Concretely, the objects of $\FSM[\CCat{C}]$ are given by
+lists of objects of $\CCat{C}$, that is, a pair $(n:\Nat, A:[n] \to \CCat{C}_{0})$. An morphism between $(n,A)$ and
+$(n,B)$ is given by a pair $(\pi,\lambda)$ where $\pi$ is a permutation of $[n]$, and
+$\lambda_{i} : A_{i} \to B_{\pi(i)}$ for $1 \leq i \leq n$. Abstractly, this is given by the Grothendieck construction
+$\int F$ of the functor $F : \BFin \to \CatCat$ from the groupoid of finite sets and bijections to $\CatCat$, assigning
+each natural number $n$ to the $n$-power $C^{n}$ of $C$, and each permutation on $[n]$ inducing an endofunctor on
+$C^{n}$ by action. $\BFin$ is the free symmetric monoidal category (groupoid) on one generator, $\FSM[\unit]$. The free
+symmetric monoidal category has been used to study concurrency~\cite{hylandSymmetricMonoidalSketches2004}, petri
+nets~\cite{baezCategoriesNets2021}, combinatorial structures~\cite{fioreCartesianClosedBicategory2008}, quantum
+mechanics~\cite{abramskyAbstractScalarsLoops2005}, bicategorical models of (differential) linear
+logic~\cite{melliesTemplateGamesDifferential2019}. In HoTT, the free symmetric monoidal groupoid $\FSM[A]$ over a
+groupoid $A$ can be given by $\dsum{X:\UFin}{A^{X}}$, or it can be presented as an algebraic 2-theory using 1-HITs.
+These HITs and the proof of their universal property have been considered
+in~\citet*{piceghelloCoherenceSymmetricMonoidal2019,choudhuryFinitemultisetConstructionHoTT2019}.
 
-Curry-Howard-Lambek correspondence.
+\paragraph{Curry-Howard-Lambek correspondence} In~\citet{curryCurryEssaysCombinatory1980}, Lambek extended the
+Curry-Howard correspondence to cartesian-closed categories. In this work, we have established a correspondence between a
+fragment of the $\PiLang$ family of languages and symmetric monoidal groupoids.
 
 Univalent Subuniverses, Univalent Typoids.
 
