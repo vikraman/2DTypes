@@ -11,22 +11,21 @@ This motivates us to use a different semantic representation: a univalent univer
 finite types and nothing but the finite types and is defined such as alternative representations of finite types are
 identified. This guarantees that we can get a proper, sound and complete, semantics for our language.
 
-
-\begin{center}
-\begin{tikzpicture}[scale=1,every node/.style={scale=1}]
-\usetikzlibrary{arrows}
-\usetikzlibrary{shapes}
-\node[ultra thick, draw=blue, ellipse, minimum width=300pt, minimum height=300pt, align=center] {};
-\node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (a) {$\{ 1 , 2 \} \uplus \{ 3 \}$};
-\node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (b) at ([shift=({70pt,-70pt})]a) {$\{ 1 \} \uplus \{ 2, 3 \}$};
-\node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (c) at
-([shift=({-70pt,-70pt})]a) {$\{ 10 \} \uplus \{ 20, 30 \}$};
-\node (d) at ([shift=({50pt,-10pt})]a) {$\cdots$};
-\draw[thick,-] (a) to node[draw=none,right] {$\equiv$} (b);
-\draw[thick,-] (b) to node[draw=none,below] {$\equiv$} (c);
-\draw[thick,-] (a) to node[draw=none,left] {$\equiv$} (c);
-\end{tikzpicture}
-\end{center}
+% \begin{center}
+% \begin{tikzpicture}[scale=1,every node/.style={scale=1}]
+% \usetikzlibrary{arrows}
+% \usetikzlibrary{shapes}
+% \node[ultra thick, draw=blue, ellipse, minimum width=300pt, minimum height=300pt, align=center] {};
+% \node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (a) {$\{ 1 , 2 \} \uplus \{ 3 \}$};
+% \node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (b) at ([shift=({70pt,-70pt})]a) {$\{ 1 \} \uplus \{ 2, 3 \}$};
+% \node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (c) at
+% ([shift=({-70pt,-70pt})]a) {$\{ 10 \} \uplus \{ 20, 30 \}$};
+% \node (d) at ([shift=({50pt,-10pt})]a) {$\cdots$};
+% \draw[thick,-] (a) to node[draw=none,right] {$\equiv$} (b);
+% \draw[thick,-] (b) to node[draw=none,below] {$\equiv$} (c);
+% \draw[thick,-] (a) to node[draw=none,left] {$\equiv$} (c);
+% \end{tikzpicture}
+% \end{center}
 
 \[
   \begin{tikzcd}
