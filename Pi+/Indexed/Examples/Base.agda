@@ -128,3 +128,24 @@ _ = fin= idp , fin= idp , fin= idp , fin= idp
 
 interp' : {X : Pi.U} (c : X Pi.⟷₁ X) → ⟦ X ⟧ ≃ ⟦ X ⟧
 interp' c = ⟦-⟧-eval₀ ⁻¹ ∘e Pi^.evalNorm₁ (eval₁ c) ∘e ⟦-⟧-eval₀
+
+infixr 60 _::_
+
+data Vec {i} (A : Type i) : ℕ → Type i where
+  nil : Vec A 0
+  _::_ : {n : ℕ} → A → Vec A n → Vec A (S n)
+
+tabulate : ∀ {i} {A : Type i} {n : ℕ} → (Fin n → A) → Vec A n
+tabulate {n = O} f = nil
+tabulate {n = S n} f = f (0 , O<S n) :: tabulate (f ∘ S⟨_⟩)
+
+allFin : (n : ℕ) → Vec (Fin n) n
+allFin n = tabulate (idf (Fin n))
+
+lookup : ∀ {i} {A : Type i} {n : ℕ} → Vec A n → (Fin n → A)
+lookup {n = S n} (x :: xs) (O , ϕ) = x
+lookup {n = S n} (x :: xs) (S k , ϕ) = lookup xs (k , <-cancel-S ϕ)
+
+private
+  f : Fin 8 → Fin 8
+  f = lookup (0 :: 5 :: 6 :: 7 :: 4 :: 1 :: 2 :: 3 :: nil)
