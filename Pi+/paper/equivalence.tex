@@ -1,82 +1,76 @@
-\section{Equivalence between \texorpdfstring{$\PiPlusLang$}{Pi} and \texorpdfstring{$\UFin$}{UFin}}~\label{sec:equivalence}
+\section{Going from \texorpdfstring{$\PiLang$}{Pi} to \texorpdfstring{$\UFin$}{UFin} and back}~\label{sec:equivalence}
 
-In this section, we use the semantics developed in the previous sections define a fragment $\PiPlusLang$ of $\PiLang$
-and a normalised fragment of it $\PiHatLang$, interpret to $\UFin$ and back, and translate between the languages.
+% https://q.uiver.app/?q=WzAsNCxbMCwwLCJcXFBpTGFuZyJdLFsyLDAsIlxcUGlQbHVzTGFuZyJdLFs0LDAsIlxcUGlIYXRMYW5nIl0sWzYsMCwiXFxVRmluIl0sWzAsMSwiXFxldmFsdCJdLFsxLDIsIlxcZXZhbGgiLDAseyJjdXJ2ZSI6LTR9XSxbMiwzLCJcXGV2YWx0IiwwLHsiY3VydmUiOi00fV0sWzIsMSwiXFxxdW90ZWgiLDAseyJjdXJ2ZSI6LTR9XSxbMywyLCJcXHF1b3RldCIsMCx7ImN1cnZlIjotNH1dXQ==
+\[\begin{tikzcd}
+    \PiLang && \PiPlusLang && \PiHatLang && \UFin
+    \arrow["\evalt", from=1-1, to=1-3]
+    \arrow["\evalp", curve={height=-24pt}, from=1-3, to=1-5]
+    \arrow["\evalh", curve={height=-24pt}, from=1-5, to=1-7]
+    \arrow["\quotep", curve={height=-24pt}, from=1-5, to=1-3]
+    \arrow["\quoteh", curve={height=-24pt}, from=1-7, to=1-5]
+  \end{tikzcd}\]
 
-We only present the types and 1-combinators in the language, and the full set of 2-combinators is listed in the appendix
-and the accompanying Agda code.
+In this section, we consider the additive fragment $\PiPlusLang$ of $\PiLang$. This is the language that we interpret to
+$\UFin$ and back, using the tools developed in the previous sections. Further, we go through an intermediate step of the
+language $\PiHatLang$, which is a simplified variant of $\PiPlusLang$ that uses adjacent transpositions for combinators,
+but still preserving all the required structure.
 
-\vc{We can translate types to types, terms to terms, theorem: preserves types, preserves equations.}
+We present the types and 1-combinators of $\PiPlusLang$ and $\PiHatLang$ in~\cref*{fig:piplus,fig:pihat} respectively,
+eliding the 2-combinators for brevity. \note{We enforce that there is a unique 2-combinator between compatible
+  1-combinators, by introducing a level 3, which is trivial in the same way as in the case of $\PiLang$, as described
+  before.} They can be found in the appendix and in the accompanying Agda code.
 
-\vc{Define maps quote/eval on 0,1,2-cells, and show commuting diagrams.}
+The translations between the languages are defined separately on types, 1-combinators, and 2-combinators. Following the
+terminology of Normalisation by Evaluation, the translations from the left to the right, going from the syntax towards
+the semantics, are called $\evalt$ and the translations the other way are called $\quotet$.
 
-\subsection{$\PiHatLang$}
+To state our results formally, we organise the syntax for each language using a technical device, called a syntactic
+category. Since the language have higher-dimensional structure, the syntactic categories here are actually
+(locally-strict) weak 2-categories. We define them formally in the appendix, and only state our results here.
 
-We first present a language $\PiHatLang$ based on the theory of symmetric groups developed in~\cref{sec:finite}. The
-types in the language are unary natural numbers, and combinators are allowed to perform adjacent transpositions.
+For each of the $\PiLang$, $\PiPlusLang$ and $\PiHatLang$ languages, their syntactic categories, respectively $\PiCat$,
+$\PiPlusCat$ and $\PiHatCat$, have 0-cells for types, 1-cells for 1-combinators, and 2-cells for 2-combinators. We can
+show that these are $(2,0)$-categories, since all the 1-cells and 2-cells are invertible. They are also locally-strict,
+or locally-posetal, because there is at most one 2-cell between compatible 1-cells.
 
-\begin{figure}[t]
-  {\scalebox{\scalef}{$
-        \begin{array}{rrcll}
-          \idc :   & n             & \isoh & n             & : \idc   \\
-          \swapc : & \suc[\suc[n]] & \isoh & \suc[\suc[n]] & : \swapc \\
-        \end{array}
-      $}}
+\begin{toappendix}
+  \todo{What is U?}
+  \begin{proposition}
+    We can form a weak 2-category $\PiCat$ with
+    \begin{itemize}
+      \item $\PiLang$ types for 0-cells,
+      \item for $X, Y : U$, a collection of 1-cells $X \iso Y$,
+      \item for $p, q : X \iso Y$, a collection of 2-cells $p \Iso q$.
+    \end{itemize}
+  \end{proposition}
 
-  {\scalebox{\scalef}{
-      \Rule{}
-      {\jdg{}{}{c_1 : n \isoh m} \quad \vdash c_2 : m \isoh o}
-      {\jdg{}{}{c_1 \fatsemi c_2 : n \isoh o}}
-      {}
+  \begin{proposition}
+    We can form a weak 2-category $\PiPlusCat$ with
+    \begin{itemize}
+      \item $\PiPlusLang$ types for 0-cells,
+      \item for $X, Y : \UPlus$, a collection of 1-cells $X \isop Y$,
+      \item for $p, q : X \isop Y$, a collection of 2-cells $p \Isop q$.
+    \end{itemize}
+  \end{proposition}
 
-      \Rule{}
-      {\jdg{}{}{c : n \isoh m}}
-      {\jdg{}{}{\oplus(c) : \suc[n] \isoh \suc[m]}}
-      {}
-    }}
-  \caption{$\PiHatLang$ syntax}
-  \label{fig:pihat}
-\end{figure}
+  \begin{proposition}
+    We can form a weak 2-category $\PiHatCat$ with
+    \begin{itemize}
+      \item $\PiHatCat$ types for 0-cells,
+      \item for $X, Y : \UHat$, a collection of 1-cells $X \isoh Y$,
+      \item for $p, q : X \isoh Y$, a collection of 2-cells $p \Isoh q$.
+    \end{itemize}
+  \end{proposition}
+\end{toappendix}
 
-\begin{proposition}
-  We can form a weak 2-category $\PiHatCat$ with
-  \begin{itemize}
-    \item natural numbers for 0-cells,
-    \item for $n, m : \Nat$, a collection of 1-cells $n \isoh m$,
-    \item for $p, q : n \isoh m$, a collection of 2-cells $p \Isoh q$.
-  \end{itemize}
-\end{proposition}
+We use the $\evalt/\quotet$ translation maps to construct functors between these categories. We only name the maps on
+the 0, 1, and 2-cells -- the coherences hold by definition or by calculation, which is shown in our accompanying Agda
+code. We use these functors to state our results establishing the equivalences between the languages.
 
-\begin{proposition}
-  There is a symmetric monoidal structure on $\PiHatCat$, with $0$ for the unit, and addition for the tensor.
-\end{proposition}
+\subsection{$\PiLang$ to $\PiPlusLang$}
 
-Then we establish the completeness of $\PiHatLang$ with respect to $\UFin$. We define $\evalt$ and $\quotet$ for 0, 1,
-and 2-cells.
-
-\begin{definition}
-  \begin{align*}
-    \evalt_{0} & : \UHat \to \UFin                                                          \\
-    \evalt_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2})      \\
-    \evalt_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
-  \end{align*}
-\end{definition}
-
-\begin{definition}
-  \begin{align*}
-    \quotet_{0} & : \UFin \to \UHat                                                            \\
-    \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quoteh_{0}(X_{1}) \isoh \quoteh_{0}(X_{2})      \\
-    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2}) \\
-  \end{align*}
-\end{definition}
-
-\begin{proposition}
-  $\evalt/\quotet$ give a symmetric monoidal biequivalence between $\PiHatCat$ and $\UFin$.
-\end{proposition}
-
-\subsection{$\PiPlusLang$}
-
-Now, we present the additive fragment of $\PiLang$, called $\PiPlusLang$.
+First, we show how to translate $\PiLang$ programs to $\PiPlusLang$, which is the additive fragment of $\PiLang$. The
+syntax is given in~\cref{fig:piplus}.
 
 \begin{figure}[t]
   {\scalebox{\scalef}{$
@@ -102,20 +96,75 @@ Now, we present the additive fragment of $\PiLang$, called $\PiPlusLang$.
   \label{fig:piplus}
 \end{figure}
 
-\begin{proposition}
-  We can form a weak 2-category $\PiPlusCat$ with
-  \begin{itemize}
-    \item $\PiPlusLang$ types for 0-cells,
-    \item for $X, Y : \UPlus$, a collection of 1-cells $X \iso Y$,
-    \item for $p, q : X \isoh Y$, a collection of 2-cells $p \Iso q$.
-  \end{itemize}
-\end{proposition}
+$\PiLang$ has two 0-ary type constructors, and two binary type constructors -- the additive tensor product and the
+multiplicative one. $\PiPlusLang$ has all the type constructors of $\PiLang$ except multiplication. However, we will
+show how to recover the multiplicative structure, by defining multiplication as repeated addition. We encode $\times$ in
+terms of $+$ as follows.
+
+\begin{definition}[$\times : \UPlus \to \UPlus \to \UPlus$]
+  \begin{align*}
+    \zerot \times Y      & \defeq \zerot                      \\
+    \onet \times Y       & \defeq Y                           \\
+    (X_1 + X_2) \times Y & \defeq X_1 \times Y + X_2 \times Y
+  \end{align*}
+\end{definition}
 
 \begin{proposition}
-  There is a symmetric monoidal structure on $\PiPlusCat$, with $\zerot$ for the unit, and $+$ for the tensor.
+  There are two symmetric monoidal structures on $\PiPlusCat$, given by $(\zerot, +)$ and $(\onet, \times)$, with
+  $\times$ distributing over $+$, giving it a rig structure, as described in \todo{cite earlier section}.
+\end{proposition}
+\todo{either prove it or cite something}
+
+Using this rig structure, we translate $\PiLang$ to $\PiPlusLang$, constructing a rig functor from $\PiCat$ to
+$\PiPlusCat$.
+
+\begin{definition}
+  \begin{align*}
+    \evalt_{0} & : U \to \UPlus                                             \\
+    \evalt_{1} & : (c : X \iso Y) \to \evalt_{0}(X) \iso \evalt_{0}(Y)      \\
+    \evalt_{2} & : (\alpha : p \Iso q) \to \evalt_{1}(p) \Iso \evalt_{1}(q) \\
+  \end{align*}
+\end{definition}
+
+\subsection{$\PiPlusLang$ to $\PiHatLang$}
+
+Next, we show how to translate $\PiPlusLang$ programs to $\PiHatLang$ and back. $\PiHatLang$ is a simplified variant of
+$\PiPlusLang$, with (unary) natural numbers for types, constructed by $\zero$ and $\suc$, 1-combinators generated by
+adjacent transpositions, and an appropriate set of 2-combinators. We give the syntax, again omitting 2-combinators,
+in~\cref{fig:pihat}. \vc{Something about PROPs.}
+
+\begin{figure}[t]
+  {\scalebox{\scalef}{$
+        \begin{array}{rrcll}
+          \idc :   & n             & \isoh & n             & : \idc   \\
+          \swapc : & \suc[\suc[n]] & \isoh & \suc[\suc[n]] & : \swapc \\
+        \end{array}
+      $}}
+
+  {\scalebox{\scalef}{
+      \Rule{}
+      {\jdg{}{}{c_1 : n \isoh m} \quad \vdash c_2 : m \isoh o}
+      {\jdg{}{}{c_1 \fatsemi c_2 : n \isoh o}}
+      {}
+
+      \Rule{}
+      {\jdg{}{}{c : n \isoh m}}
+      {\jdg{}{}{\oplus(c) : \suc[n] \isoh \suc[m]}}
+      {}
+    }}
+  \caption{$\PiHatLang$ syntax}
+  \label{fig:pihat}
+\end{figure}
+
+As described, $\PiHatLang$ doesn't have a tensor product, but we can build it simply by adding up natural numbers.
+However, we need to verify that this indeed equips $\PiHatCat$ with a symmetric monoidal strucuture.
+
+\begin{proposition}
+  $\PiHatCat$ has a symmetric monoidal structure, with the unit given by 0 and the tensor product given by natural
+  number addition.
 \end{proposition}
 
-We normalise $\PiPlusLang$ to $\PiHatLang$ and back, by giving $\evalh/\quoteh$ maps for 0, 1, and 2-cells.
+Using this symmetric monoidal structure, we translate from $\PiPlusLang$ to $\PiHatLang$.
 
 \begin{definition}
   \begin{align*}
@@ -124,6 +173,11 @@ We normalise $\PiPlusLang$ to $\PiHatLang$ and back, by giving $\evalh/\quoteh$ 
     \evalh_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalh_{1}(c_{1}) \Isoh \evalh_{1}(c_{2}) \\
   \end{align*}
 \end{definition}
+
+To go back from $\PiHatLang$ to $\PiPlusLang$, we turn a natural number into a $\PiPlusLang$ type, using right-biased
+addition, that is, the natural number $n$ gets mapped to the type $\onet + (\onet + (\onet + \ldots + \zerot))$. The
+non-trivial part is coherently generating a $\PiPlusLang$ combinator from $\PiHatLang$ combinators, using adjacent swaps
+to generate big swaps.
 
 \begin{definition}
   \begin{align*}
@@ -137,37 +191,46 @@ We normalise $\PiPlusLang$ to $\PiHatLang$ and back, by giving $\evalh/\quoteh$ 
   $\evalh/\quoteh$ give a symmetric monoidal biequivalence between $\PiPlusCat$ and $\PiHatCat$.
 \end{proposition}
 
-\subsection{$\PiLang$}
+\subsection{$\PiHatLang$ to $\UFin$}
 
-Finally, we show how to translate $\PiLang$ programs to $\PiPlusLang$ programs. $\PiLang$ has two symmetric monoidal
-structure, the additive and the multiplicative one. In $\PiPlusLang$, the additive structure can be used to build the
-multiplicative structure, by defining multiplication as repeated addition.
+Finally, we show how to interpret $\PiHatLang$ to $\UFin$, and go back from $\UFin$ to $\PiHatLang$.
+
+\todo{Sn/Lehmer/Aut(Fin n) diagram here?}
+
+Types in $\PiHatLang$ are interpreted as 0-cells in $\UFin$, that is, a natural number $n$ is mapped to $\Fin[n]$. The
+1-combinators in $\PiHatLang$ are mapped to 1-paths in $\UFin$, that is, 1-loops $\Aut[\Fin[n]]$, or permutations, in
+each connected component. Finally, 2-combinators are mapped to 2-paths between loops in $\UFin$.
 
 \begin{definition}
   \begin{align*}
-    O \times Y           & \defeq O                       \\
-    I \times Y           & \defeq Y                       \\
-    (X_1 + X_2) \times Y & \defeq X_1 \times Y + X_2 \times Y
+    \evalt_{0} & : \UHat \to \UFin                                                          \\
+    \evalt_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2})      \\
+    \evalt_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
   \end{align*}
 \end{definition}
+
+0-cells in $\UFin$ are mapped to their cardinalities in $\PiHatLang$, 1-loops are decoded to words in $\Sn$ to generate
+a sequence of adjacent transpositions, producing a 1-combinator in $\PiHatLang$. 2-paths are quoted back to
+2-combinators in $\PiHatLang$.
+
+\begin{definition}
+  \begin{align*}
+    \quotet_{0} & : \UFin \to \UHat                                                            \\
+    \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quoteh_{0}(X_{1}) \isoh \quoteh_{0}(X_{2})      \\
+    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2}) \\
+  \end{align*}
+\end{definition}
+
+$\UFin$ as a 1-groupoid, is a (locally strict) weak $(2,0)$-category.
 
 \begin{proposition}
-  $\PiPlusCat$ has a symmetric monoidal structure with $I$ for the unit and $\times$ for the tensor product. With the
-  two tensor products and the distributivity combinator, $\PiPlusCat$ has a rig structure.
+  $\evalt/\quotet$ give a symmetric monoidal biequivalence between $\PiHatCat$ and $\UFin$.
 \end{proposition}
 
-Using this rig structure, we translate $\PiLang$ to $\PiPlusLang$.
+\subsection{$\PiLang$ circuit normalization}
 
-\begin{definition}
-  \begin{align*}
-    \evalt_{0} & : U \to \UPlus                                             \\
-    \evalt_{1} & : (c : X \iso Y) \to \evalt_{0}(X) \iso \evalt_{0}(Y)      \\
-    \evalt_{2} & : (\alpha : p \Iso q) \to \evalt_{1}(p) \Iso \evalt_{1}(q) \\
-  \end{align*}
-\end{definition}
-
-To normalise a $\PiLang$ circuit, we translate it to $\PiHatLang$, compute a permutation, and quote back it to
-$\PiPlusLang$.
+To normalise a $\PiLang$ circuit, we translate it to $\PiHatLang$, compute a permutation, and quote it back to
+$\PiPlusLang$. Note that the normalisation happens in going from $\PiHatLang$ to $\UFin$ to $\PiHatLang$.
 
 \begin{definition}
   \begin{align*}
@@ -178,6 +241,7 @@ $\PiPlusLang$.
     \normt_{1} & = \quoteh_{1} \comp \evalt_{1}                        \\
   \end{align*}
 \end{definition}
+
 
 %%% Local Variables:
 %%% mode: latex

@@ -9,6 +9,7 @@
 \usepackage{quiver}
 \usepackage{enumitem}
 \usepackage{extarrows}
+\usepackage{apxproof}
 
 %% Some recommended packages.
 %% \usepackage{booktabs}   %% For formal tables:
@@ -234,13 +235,13 @@ $\displaystyle
 %% The abstract is a short summary of the work to be presented in the
 %% article.
 \begin{abstract}
-Reversible computing is an alternative model of computation motivated by the physical nature of computational processes, where computations are required to preserve information. Several reversible programming languages have been proposed which permit hardware-independent, low-level and high-level descriptions of reversible circuits.
+  Reversible computing is an alternative model of computation motivated by the physical nature of computational processes, where computations are required to preserve information. Several reversible programming languages have been proposed which permit hardware-independent, low-level and high-level descriptions of reversible circuits.
 
-The $\PiLang$ family of reversible programming languages were proposed by~\citet{jamesInformationEffects2012} in which all computations are logically reversible. Formally, it is presented as a language of 1-combinators witnessing type isomorphisms, and an equational theory given by 2-combinators witnessing 1-combinator optimisations.
+  The $\PiLang$ family of reversible programming languages were proposed by~\citet{jamesInformationEffects2012} in which all computations are logically reversible. Formally, it is presented as a language of 1-combinators witnessing type isomorphisms, and an equational theory given by 2-combinators witnessing 1-combinator optimisations.
 
-In this paper, we present a denotational semantics for this language, using the language of groupoids \`{a} la Homotopy Type Theory (HoTT). We establish a correspondence between the syntactic groupoid of the language and a formally presented univalent subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and 2-combinators to 2-paths in the universe, which is shown to be sound and complete for both levels. The result suggests a Curry-Howard-Lambek/Lawvere correspondence between Reversible Logic, Reversible Programming Languages, and Symmetric Monoidal Groupoids, similar to the well-known correspondence of Intuitionistic Logic, Simply Typed Lambda Calculus, and Cartesian Closed Categories.
+  In this paper, we present a denotational semantics for this language, using the language of groupoids \`{a} la Homotopy Type Theory (HoTT). We establish a correspondence between the syntactic groupoid of the language and a formally presented univalent subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and 2-combinators to 2-paths in the universe, which is shown to be sound and complete for both levels. The result suggests a Curry-Howard-Lambek/Lawvere correspondence between Reversible Logic, Reversible Programming Languages, and Symmetric Monoidal Groupoids, similar to the well-known correspondence of Intuitionistic Logic, Simply Typed Lambda Calculus, and Cartesian Closed Categories.
 
-Using soundness and completeness, we show how to perform Normalisation by Evaluation (NbE) for boolean reversible circuits, motivated by a few examples of reversible logic gates used in Quantum Computing. We also show how to synthesise normal forms for reversible circuits starting from the extensional view of permutations of bits.
+  Using soundness and completeness, we show how to perform Normalisation by Evaluation (NbE) for boolean reversible circuits, motivated by a few examples of reversible logic gates used in Quantum Computing. We also show how to synthesise normal forms for reversible circuits starting from the extensional view of permutations of bits.
 \end{abstract}
 
 %%
@@ -249,37 +250,37 @@ Using soundness and completeness, we show how to perform Normalisation by Evalua
 %%
 \begin{CCSXML}
   <ccs2012>
-   <concept>
-       <concept_id>10003752.10003790.10011740</concept_id>
-       <concept_desc>Theory of computation~Type theory</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10003752.10010124.10010131.10010137</concept_id>
-       <concept_desc>Theory of computation~Categorical semantics</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10003752.10010124.10010131.10010133</concept_id>
-       <concept_desc>Theory of computation~Denotational semantics</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10011007.10011006.10011008.10011009.10011012</concept_id>
-       <concept_desc>Software and its engineering~Functional languages</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10011007.10011006.10011039.10011040</concept_id>
-       <concept_desc>Software and its engineering~Syntax</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
-   <concept>
-       <concept_id>10011007.10011006.10011039.10011311</concept_id>
-       <concept_desc>Software and its engineering~Semantics</concept_desc>
-       <concept_significance>500</concept_significance>
-       </concept>
- </ccs2012>
+  <concept>
+  <concept_id>10003752.10003790.10011740</concept_id>
+  <concept_desc>Theory of computation~Type theory</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  <concept>
+  <concept_id>10003752.10010124.10010131.10010137</concept_id>
+  <concept_desc>Theory of computation~Categorical semantics</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  <concept>
+  <concept_id>10003752.10010124.10010131.10010133</concept_id>
+  <concept_desc>Theory of computation~Denotational semantics</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  <concept>
+  <concept_id>10011007.10011006.10011008.10011009.10011012</concept_id>
+  <concept_desc>Software and its engineering~Functional languages</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  <concept>
+  <concept_id>10011007.10011006.10011039.10011040</concept_id>
+  <concept_desc>Software and its engineering~Syntax</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  <concept>
+  <concept_id>10011007.10011006.10011039.10011311</concept_id>
+  <concept_desc>Software and its engineering~Semantics</concept_desc>
+  <concept_significance>500</concept_significance>
+  </concept>
+  </ccs2012>
 \end{CCSXML}
 
 \ccsdesc[500]{Theory of computation~Type theory}

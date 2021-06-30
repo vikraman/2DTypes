@@ -1,15 +1,46 @@
 \section{The (Sub)Universe of Finite Types}
 \label{sec:ufin}
 
-In the previous section, we have picked a particular encoding of finite types: as sequences of elements in some
-canonical order.
+In the previous section, we gave a sound denotational semantics for $\PiLang$ using the groupoid of finite sets and
+bijections $\BFin$. Types are interpreted as objects in $\BFin$, and 1-combinators are interpreted as isomorphisms in
+$\BFin$. We also showed that if there is a 2-combinator between two 1-combinators, then their interpretations are
+extensionally equal in $\BFin$.
 
-This is not a ``free'' presentation. Some properties of the encoding might pollute our semantics. We want to make that
-any theorems / properties of the semantics we prove apply to the source language (under various interpretations).
+However, we want to go a step further, and claim completeness for this semantics, that is, we want to quote back from
+the semantics to the syntax. Given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
+equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted 1-combinators.
 
-This motivates us to use a different semantic representation: a univalent universe of finite types which contains the
-finite types and nothing but the finite types and is defined such as alternative representations of finite types are
-identified. This guarantees that we can get a proper, sound and complete, semantics for our language.
+The groupoid $\BFin$ that we presented, is strict, that is, two equal permutations are extensionally identified, without
+an explicit witness for the equality. Our first step is to weaken this groupoid $\BFin$ into a weak 2-category. In a
+weak category, equational axioms of the category are replaced by higher invertible cells. For example, there are higher
+invertible cells for the left and right units of composition and associativity. The higher cells have their own
+coherences as well, the 2-cells can be composed with 1-cells by whiskering, and so on.
+
+HoTT provides a rich internal language for working with weak higher groupoids, using the ``Types are weak
+$\infty$-groupoids'' correspondence. We will make this precise by observing that a 1-groupoid in HoTT gives a locally
+strict $(2,0)$-category, using the identity type for the higher cells. The groupoid $\BFin$ can be written in HoTT as a
+type $\UFin$, which is a 1-groupoid.
+
+Secondly, we would like to like to give a syntactic presentation for this groupoid, by describing exactly how the
+1-cells and 2-cells are generated. Note that, in $\BFin$, the set of bijections on a finite set of cardinality $n$ has a
+group structure, the identity function is the neutral element, group multiplication is given by function composition,
+and the group inverse is given by inverting the bijection. This is the automorphism group of the finite set, which is
+also known to be the finite symmetric group $\Sn[n]$.
+
+Groups can be defined by listing the carrier set and the operations of the group, or they can be described using a group
+presentation, which gives the generators and relations of a group. The last step of our technical development is to use
+a group presentation for $\Sn$ to give a presentation for the higher cells of the groupoid $\UFin$. Using this
+characterisation, we will obtain our completeness result.
+
+% In the previous section, we have picked a particular encoding of finite types: as sequences of elements in some
+% canonical order.
+
+% This is not a ``free'' presentation. Some properties of the encoding might pollute our semantics. We want to make that
+% any theorems / properties of the semantics we prove apply to the source language (under various interpretations).
+
+% This motivates us to use a different semantic representation: a univalent universe of finite types which contains the
+% finite types and nothing but the finite types and is defined such as alternative representations of finite types are
+% identified. This guarantees that we can get a proper, sound and complete, semantics for our language.
 
 % \begin{center}
 % \begin{tikzpicture}[scale=1,every node/.style={scale=1}]
@@ -76,7 +107,7 @@ on the choices made by the compiler writer, but we can think about that.
 
 In order to define the semantics, we seek a mathematical structure satisfying the following properties: (i) it contains structures corresponding to all the finite types and nothing but the finite types, and (ii) it is robust enough to ensure that equivalent encodings of finite types are identified.
 
- In this section, we introduce some basic concepts and notation that we use in Homotopy Type Theory. Then, we define
+In this section, we introduce some basic concepts and notation that we use in Homotopy Type Theory. Then, we define
 univalent subuniverses and discuss some specific examples.
 
 \subsection{The Type Theory}~\label{subsec:type-theory}
@@ -110,14 +141,14 @@ laws that are provable using path induction.
 
 \begin{gather*}
   \begin{aligned}
-    \term{sym} & : (x \id_{A} y) \to (y \id_{A} x) \\
+    \term{sym}   & : (x \id_{A} y) \to (y \id_{A} x)                   \\
     \term{\comp} & : (x \id_{A} y) \to (y \id_{A} z) \to (x \id_{A} z)
   \end{aligned}
   \qquad
   \begin{aligned}
-    \term{assoc} & : (p : x \id_{A} y)  (q : y \id_{A} z) (r : z \id_{A} w) \\
-    & \to (p \comp q) \comp r \id p \comp (q \comp r) \\
-    \term{invr} & : (p : x \id_{A} y) \to p \comp \term{sym}(p) \id \refl_{x}
+    \term{assoc} & : (p : x \id_{A} y)  (q : y \id_{A} z) (r : z \id_{A} w)    \\
+                 & \to (p \comp q) \comp r \id p \comp (q \comp r)             \\
+    \term{invr}  & : (p : x \id_{A} y) \to p \comp \term{sym}(p) \id \refl_{x}
   \end{aligned}
 \end{gather*}
 
@@ -265,8 +296,8 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
       \Fin[n] & \defeq \dsum{k:\Nat}{k < n}
     \end{aligned}
     \begin{aligned}
-      & \Fin[0] \defeq \bot \\
-      & \Fin[\suc[n]] \defeq \top \sqcup \Fin[n]
+       & \Fin[0] \defeq \bot                      \\
+       & \Fin[\suc[n]] \defeq \top \sqcup \Fin[n]
     \end{aligned}
   \end{gather*}
   Note that $\Fin[n]$ is a $\hSet$, and we use the definitions interchangeably.
@@ -348,6 +379,24 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
   \]
 \end{corollary}
 
+\[
+  \begin{tikzcd}
+    F_{0}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    & F_{1}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    & F_{2}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
+    & \ldots
+    & F_{n}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=12em, in=135, out=45]
+    & \ldots
+  \end{tikzcd}
+\]
+
 \subsection{Rig structure}~\label{subsec:rig}
 
 \todo{rig}
@@ -359,29 +408,49 @@ First, we observe a few equivalences.
 \begin{proposition}
   For any $n, m : \Nat$,
   \begin{align*}
-    \Fin[0]                & \eqv \bot \\
+    \Fin[0]                & \eqv \bot        \\
     \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m] \\
   \end{align*}
   and for any types $X, Y, Z$,
   \begin{align*}
-    \bot \sqcup X          & \eqv X \\
-    X \sqcup \bot          & \eqv X \\
-    (X \sqcup Y) \sqcup Z  & \eqv X \sqcup (Y \sqcup Z) \\
-    X \sqcup Y             & \eqv Y \sqcup Y \\
+    \bot \sqcup X         & \eqv X                     \\
+    X \sqcup \bot         & \eqv X                     \\
+    (X \sqcup Y) \sqcup Z & \eqv X \sqcup (Y \sqcup Z) \\
+    X \sqcup Y            & \eqv Y \sqcup Y            \\
   \end{align*}
 \end{proposition}
 
-We lift these equivalences to $\UFin$ giving it the (additive) symmetric monoidal structure $(I, \oplus)$, with natural
-isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$, and the symmetry isomorphism $\mathcal{B}_{X,Y}$. Note that
-types in $\UFin$ are $\hSet$s since they're merely equivalent to $\Fin[n]$ for some $n : \Nat$.
+\begin{proposition}
+  For any $n, m : \Nat$,
+  \begin{align*}
+    \Fin[1]                & \eqv \top        \\
+    \Fin[n] \times \Fin[m] & \eqv \Fin[n * m] \\
+  \end{align*}
+  and for any types $X, Y, Z$,
+  \begin{align*}
+    \top \times X         & \eqv X                                \\
+    X \times \top         & \eqv X                                \\
+    (X \times Y) \times Z & \eqv X \times (Y \times Z)            \\
+    X \times Y            & \eqv Y \times X                       \\
+    X \times \bot         & \eqv \bot                             \\
+    X \times (Y \sqcup Z) & \eqv (X \times Y) \sqcup (X \times Z)
+  \end{align*}
+\end{proposition}
+
+We lift these equivalences to $\UFin$ giving it the additive and multiplicative symmetric monoidal structures,
+$(O, \oplus)$ and $(I, \otimes)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$,
+and the symmetry isomorphism $\mathcal{B}_{X,Y}$. Note that types in $\UFin$ are $\hSet$s since they're merely
+equivalent to $\Fin[n]$ for some $n : \Nat$.
+
+\todo{combine both symmetric monoidal structures}
 
 \begin{definition}
   \begin{align*}
-    I           & \defeq F_{0}    \\
-    X \oplus Y & \defeq X \sqcup Y \\
-    \lambda_{X} & : I \oplus X \eqv X \\
-    \rho_{X} & : X \oplus I \eqv X \\
-    \alpha_{X,Y,Z} & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
+    I                 & \defeq F_{0}                                       \\
+    X \oplus Y        & \defeq X \sqcup Y                                  \\
+    \lambda_{X}       & : I \oplus X \eqv X                                \\
+    \rho_{X}          & : X \oplus I \eqv X                                \\
+    \alpha_{X,Y,Z}    & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
     \mathcal{B}_{X,Y} & : X \oplus Y \eqv Y \oplus X
   \end{align*}
 \end{definition}
