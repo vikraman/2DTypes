@@ -7,6 +7,7 @@
 \newcommand{\PiPlusLang}{\mathit{{\Pi}^{+}}}
 \newcommand{\PiHatLang}{\mathit{{\Pi}^{\wedge}}}
 
+\newcommand{\PiCat}{\mathbf{\Pi}}
 \newcommand{\PiHatCat}{\mathbf{\Pi^{\wedge}}}
 \newcommand{\PiPlusCat}{\mathbf{\Pi^{+}}}
 
@@ -16,8 +17,10 @@
 \newcommand{\UHat}{\mathit{{U}^{\wedge}}}
 
 % Combinators
-\newcommand{\iso}{\mathrel{\leftrightarrow}_1}
+\newcommand{\iso}{\mathrel{\leftrightarrow}}
 \newcommand{\Iso}{\mathrel{\Leftrightarrow}}
+\newcommand{\isop}{\mathrel{\leftrightarrow^{+}}}
+\newcommand{\Isop}{\mathrel{\Leftrightarrow^{+}}}
 \newcommand{\isoh}{\mathrel{\leftrightarrow^{\wedge}}}
 \newcommand{\Isoh}{\mathrel{\Leftrightarrow^{\wedge}}}
 
@@ -51,6 +54,18 @@
   \ifstrempty{#1}
   {\term{eval^\wedge}}
   {\term{eval^\wedge_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
+\NewDocumentCommand{\quotep}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{quote^+}}
+  {\term{quote^+_{#1}}}
+  \ifstrempty{#2}{}{({#2})}
+}
+\NewDocumentCommand{\evalp}{E{_}{{}}O{}}{
+  \ifstrempty{#1}
+  {\term{eval^+}}
+  {\term{eval^+_{#1}}}
   \ifstrempty{#2}{}{({#2})}
 }
 
