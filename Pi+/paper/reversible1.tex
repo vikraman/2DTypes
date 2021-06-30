@@ -135,13 +135,21 @@ operation that appends all the subsequences in a sequence.
 
 Using the definition, we have:
 \[\begin{array}{rcl}
-    \mathit{enum}(\onet + (\onet + \onet)) &=& [ \inlv{\Acon{tt}},\inrv{(\inlv{\Acon{tt}})}, \inrv{(\inrv{\Acon{tt}})} ] \\
-    \mathit{enum}((\onet + \onet) + \onet) &=& [ \inlv{(\inlv{\Acon{tt}})},  \inlv{(\inrv{\Acon{tt}})}, \inrv{\Acon{tt}} ]
-  \end{array}\]
-Thus, $\assoclp~(\inlv{\Acon{tt}})$ applies the permutation $(0~1~2)$ to the index of $\inlv{\Acon{tt}}$ which is 0 and
-produces index 0 in the $(\onet + \onet) + \onet$ type corresponding to value $\inlv{(\inlv{\Acon{tt}})}$. Similarly,
-$\swapp~(\inlv{\Acon{tt}})$ applies the permutation $(2~0~1)$ to the index of $\inlv{\Acon{tt}}$ which is 0 and produces
-index 2 in the $(\onet + \onet) + \onet)$ type corresponding to value $\inrv{\Acon{tt}}$.
+    \mathit{enum}(\onet + (\onet + \onet)) &=& [ \inlv{\Acon{tt}},~\inrv{(\inlv{\Acon{tt}})},~\inrv{(\inrv{\Acon{tt}})} ] \\
+    \mathit{enum}((\onet + \onet) + \onet) &=& [ \inlv{(\inlv{\Acon{tt}})},~\inlv{(\inrv{\Acon{tt}})},~\inrv{\Acon{tt}} ]
+\end{array}\]
+Thus, as shown in the diagrams below, $\assoclp~(\inlv{\Acon{tt}})$ applies the permutation $(0~1~2)$ to the index of
+$\inlv{\Acon{tt}}$ which is 0 and produces index 0 in the $(\onet + \onet) + \onet$ type corresponding to value
+$\inlv{(\inlv{\Acon{tt}})}$. Similarly, $\swapp~(\inlv{\Acon{tt}})$ applies the permutation $(2~0~1)$ to the index of
+$\inlv{\Acon{tt}}$ which is 0 and produces index 2 in the $(\onet + \onet) + \onet)$ type corresponding to value
+$\inrv{\Acon{tt}}$.
+
+\begin{center}
+  \input{assoc-perm.tikz}
+  \qquad
+  \input{swap-perm.tikz}
+\end{center}
+
 
 % \[\begin{array}{l}
 %     \Tree[ {\small a} [ {\small b} {\small c} ] ] \\
