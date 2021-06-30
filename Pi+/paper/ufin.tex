@@ -1,15 +1,46 @@
 \section{The (Sub)Universe of Finite Types}
 \label{sec:ufin}
 
-In the previous section, we have picked a particular encoding of finite types: as sequences of elements in some
-canonical order.
+In the previous section, we gave a sound denotational semantics for $\PiLang$ using the groupoid of finite sets and
+bijections $\BFin$. Types are interpreted as objects in $\BFin$, and 1-combinators are interpreted as isomorphisms in
+$\BFin$. We also showed that if there is a 2-combinator between two 1-combinators, then their interpretations are
+extensionally equal in $\BFin$.
 
-This is not a ``free'' presentation. Some properties of the encoding might pollute our semantics. We want to make that
-any theorems / properties of the semantics we prove apply to the source language (under various interpretations).
+However, we want to go a step further, and claim completeness for this semantics, that is, we want to quote back from
+the semantics to the syntax. Given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
+equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted 1-combinators.
 
-This motivates us to use a different semantic representation: a univalent universe of finite types which contains the
-finite types and nothing but the finite types and is defined such as alternative representations of finite types are
-identified. This guarantees that we can get a proper, sound and complete, semantics for our language.
+The groupoid $\BFin$ that we presented, is strict, that is, two equal permutations are extensionally identified, without
+an explicit witness for the equality. Our first step is to weaken this groupoid $\BFin$ into a weak 2-category. In a
+weak category, equational axioms of the category are replaced by higher invertible cells. For example, there are higher
+invertible cells for the left and right units of composition and associativity. The higher cells have their own
+coherences as well, the 2-cells can be composed with 1-cells by whiskering, and so on.
+
+HoTT provides a rich internal language for working with weak higher groupoids, using the ``Types are weak
+$\infty$-groupoids'' correspondence. We will make this precise by observing that a 1-groupoid in HoTT gives a locally
+strict $(2,0)$-category, using the identity type for the higher cells. The groupoid $\BFin$ can be written in HoTT as a
+type $\UFin$, which is a 1-groupoid.
+
+Secondly, we would like to like to give a syntactic presentation for this groupoid, by describing exactly how the
+1-cells and 2-cells are generated. Note that, in $\BFin$, the set of bijections on a finite set of cardinality $n$ has a
+group structure, the identity function is the neutral element, group multiplication is given by function composition,
+and the group inverse is given by inverting the bijection. This is the automorphism group of the finite set, which is
+also known to be the finite symmetric group $\Sn[n]$.
+
+Groups can be defined by listing the carrier set and the operations of the group, or they can be described using a group
+presentation, which gives the generators and relations of a group. The last step of our technical development is to use
+a group presentation for $\Sn$ to give a presentation for the higher cells of the groupoid $\UFin$. Using this
+characterisation, we will obtain our completeness result.
+
+% In the previous section, we have picked a particular encoding of finite types: as sequences of elements in some
+% canonical order.
+
+% This is not a ``free'' presentation. Some properties of the encoding might pollute our semantics. We want to make that
+% any theorems / properties of the semantics we prove apply to the source language (under various interpretations).
+
+% This motivates us to use a different semantic representation: a univalent universe of finite types which contains the
+% finite types and nothing but the finite types and is defined such as alternative representations of finite types are
+% identified. This guarantees that we can get a proper, sound and complete, semantics for our language.
 
 % \begin{center}
 % \begin{tikzpicture}[scale=1,every node/.style={scale=1}]
