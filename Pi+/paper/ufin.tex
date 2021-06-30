@@ -76,7 +76,7 @@ on the choices made by the compiler writer, but we can think about that.
 
 In order to define the semantics, we seek a mathematical structure satisfying the following properties: (i) it contains structures corresponding to all the finite types and nothing but the finite types, and (ii) it is robust enough to ensure that equivalent encodings of finite types are identified.
 
- In this section, we introduce some basic concepts and notation that we use in Homotopy Type Theory. Then, we define
+In this section, we introduce some basic concepts and notation that we use in Homotopy Type Theory. Then, we define
 univalent subuniverses and discuss some specific examples.
 
 \subsection{The Type Theory}~\label{subsec:type-theory}
@@ -110,14 +110,14 @@ laws that are provable using path induction.
 
 \begin{gather*}
   \begin{aligned}
-    \term{sym} & : (x \id_{A} y) \to (y \id_{A} x) \\
+    \term{sym}   & : (x \id_{A} y) \to (y \id_{A} x)                   \\
     \term{\comp} & : (x \id_{A} y) \to (y \id_{A} z) \to (x \id_{A} z)
   \end{aligned}
   \qquad
   \begin{aligned}
-    \term{assoc} & : (p : x \id_{A} y)  (q : y \id_{A} z) (r : z \id_{A} w) \\
-    & \to (p \comp q) \comp r \id p \comp (q \comp r) \\
-    \term{invr} & : (p : x \id_{A} y) \to p \comp \term{sym}(p) \id \refl_{x}
+    \term{assoc} & : (p : x \id_{A} y)  (q : y \id_{A} z) (r : z \id_{A} w)    \\
+                 & \to (p \comp q) \comp r \id p \comp (q \comp r)             \\
+    \term{invr}  & : (p : x \id_{A} y) \to p \comp \term{sym}(p) \id \refl_{x}
   \end{aligned}
 \end{gather*}
 
@@ -265,8 +265,8 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
       \Fin[n] & \defeq \dsum{k:\Nat}{k < n}
     \end{aligned}
     \begin{aligned}
-      & \Fin[0] \defeq \bot \\
-      & \Fin[\suc[n]] \defeq \top \sqcup \Fin[n]
+       & \Fin[0] \defeq \bot                      \\
+       & \Fin[\suc[n]] \defeq \top \sqcup \Fin[n]
     \end{aligned}
   \end{gather*}
   Note that $\Fin[n]$ is a $\hSet$, and we use the definitions interchangeably.
@@ -348,6 +348,24 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
   \]
 \end{corollary}
 
+\[
+  \begin{tikzcd}
+    F_{0}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    & F_{1}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    & F_{2}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
+    & \ldots
+    & F_{n}
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
+    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=12em, in=135, out=45]
+    & \ldots
+  \end{tikzcd}
+\]
+
 \subsection{Rig structure}~\label{subsec:rig}
 
 \todo{rig}
@@ -359,29 +377,49 @@ First, we observe a few equivalences.
 \begin{proposition}
   For any $n, m : \Nat$,
   \begin{align*}
-    \Fin[0]                & \eqv \bot \\
+    \Fin[0]                & \eqv \bot        \\
     \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m] \\
   \end{align*}
   and for any types $X, Y, Z$,
   \begin{align*}
-    \bot \sqcup X          & \eqv X \\
-    X \sqcup \bot          & \eqv X \\
-    (X \sqcup Y) \sqcup Z  & \eqv X \sqcup (Y \sqcup Z) \\
-    X \sqcup Y             & \eqv Y \sqcup Y \\
+    \bot \sqcup X         & \eqv X                     \\
+    X \sqcup \bot         & \eqv X                     \\
+    (X \sqcup Y) \sqcup Z & \eqv X \sqcup (Y \sqcup Z) \\
+    X \sqcup Y            & \eqv Y \sqcup Y            \\
   \end{align*}
 \end{proposition}
 
-We lift these equivalences to $\UFin$ giving it the (additive) symmetric monoidal structure $(I, \oplus)$, with natural
-isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$, and the symmetry isomorphism $\mathcal{B}_{X,Y}$. Note that
-types in $\UFin$ are $\hSet$s since they're merely equivalent to $\Fin[n]$ for some $n : \Nat$.
+\begin{proposition}
+  For any $n, m : \Nat$,
+  \begin{align*}
+    \Fin[1]                & \eqv \top        \\
+    \Fin[n] \times \Fin[m] & \eqv \Fin[n * m] \\
+  \end{align*}
+  and for any types $X, Y, Z$,
+  \begin{align*}
+    \top \times X         & \eqv X                                \\
+    X \times \top         & \eqv X                                \\
+    (X \times Y) \times Z & \eqv X \times (Y \times Z)            \\
+    X \times Y            & \eqv Y \times X                       \\
+    X \times \bot         & \eqv \bot                             \\
+    X \times (Y \sqcup Z) & \eqv (X \times Y) \sqcup (X \times Z)
+  \end{align*}
+\end{proposition}
+
+We lift these equivalences to $\UFin$ giving it the additive and multiplicative symmetric monoidal structures,
+$(O, \oplus)$ and $(I, \otimes)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$,
+and the symmetry isomorphism $\mathcal{B}_{X,Y}$. Note that types in $\UFin$ are $\hSet$s since they're merely
+equivalent to $\Fin[n]$ for some $n : \Nat$.
+
+\todo{combine both symmetric monoidal structures}
 
 \begin{definition}
   \begin{align*}
-    I           & \defeq F_{0}    \\
-    X \oplus Y & \defeq X \sqcup Y \\
-    \lambda_{X} & : I \oplus X \eqv X \\
-    \rho_{X} & : X \oplus I \eqv X \\
-    \alpha_{X,Y,Z} & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
+    I                 & \defeq F_{0}                                       \\
+    X \oplus Y        & \defeq X \sqcup Y                                  \\
+    \lambda_{X}       & : I \oplus X \eqv X                                \\
+    \rho_{X}          & : X \oplus I \eqv X                                \\
+    \alpha_{X,Y,Z}    & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
     \mathcal{B}_{X,Y} & : X \oplus Y \eqv Y \oplus X
   \end{align*}
 \end{definition}
