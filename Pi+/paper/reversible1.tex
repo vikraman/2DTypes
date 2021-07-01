@@ -102,7 +102,56 @@ connections to type theory and category theory and hence possesses a rich algebr
 remainder of the paper.
 
 %%%%%%%%%
-\subsection{Denotational Semantics (Outline)}
+\subsection{Informal Semantics and Examples}
+\label{sec:langRev-examples}
+\label{examples}
+
+%% \note{Revisit to pick examples relevant to the rest of the paper; also unify notation}
+
+In order to understand the examples of Sec.~\ref{sec:informal}, we review how to represent collections of booleans and
+conditionals in $\Pi$. We use the type $\onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing
+\textsf{false} and $\inrv{\Acon{tt}}$ representing $\textsf{true}$. Boolean negation is straightforward to define using
+the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values.
+For example, we can express a 3-bit word reversal operation as follows:
+
+$\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
+
+$\Afun{reverse} = \swapt \fatsemi (\swapt  \otimes  \idc)~ \fatsemi \assocrt$
+
+\noindent The manual trace of $\Afun{reverse}$ below confirms that it indeed reverses the three bits:
+\[\begin{array}{rlr}
+ & (v_1, (v_2, v_3)) \\
+ \swapt & ((v_2, v_3), v_1) \\
+ \swapt \otimes  \idc & ((v_3, v_2), v_1) \\
+ \assocrt & (v_3, (v_2, v_1)) \\
+ \end{array}\]
+%subcode source isomorphisms.tex:979
+
+Even though \ensuremath{\Pi } lacks conditional expressions, they are expressible using the distributivity and factoring
+laws as shown below:
+
+$\Afun{ifc}_{c_1,c_2} : \mathbb{2} \times A \iso \mathbb{2} \times B$
+
+$\Afun{ifc}_{c_1,c_2} = \dist \fatsemi ((\idc  \otimes\  c_1) \oplus (\idc \otimes\  c_2)) \fatsemi \factor$
+
+
+% \inkscape{if-c1-c2.pdf}
+
+
+\noindent The input value of type $\mathbb{2} \times A$ is processed by the distribute operator \ensuremath{\dist},
+which converts it into a value of type $(\onet \times A) + (\onet \times A)$. In the \ensuremath{\mathit{left}} branch,
+which corresponds to the case when the boolean is \ensuremath{\mathit{false}}, the combinator~\ensuremath{c_1} is
+applied to the value of type~\ensuremath{A}. The right branch which corresponds to the boolean being
+\ensuremath{\mathit{true}} passes the value of type $A$ through the combinator \ensuremath{c_2}.  The inverse of
+\ensuremath{\dist}, namely \ensuremath{\factor} is applied to get the final result. The full expressiveness of $\Pi$ is
+demonstrated by an implementation of $\Afun{cnot}$ and $\Afun{toffoli}$ which are universal for reversible
+computation~\cite{Toffoli:1980}. The $\Afun{cnot}$ gates takes two input bits: a control bit and a target bit, and
+negates the target bit if the control bit is set. It is essentially a one-branch version of $\Afun{cif}$ above. The
+Toffoli gate generalizes the idea to a gate that takes 3 input bits: 2 control bits and one target bit: boolean inputs:
+it negates the target bit if both control bits are set.
+
+%%%%%%%%%
+\subsection{Denotational Semantics}
 
 \noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be
 specified by mapping each type to a finite set and each combinator to a bijection between finite sets, that is, a
@@ -377,55 +426,6 @@ a+(b+c) \arrow [ur, "\idd\oplus\swapp"] \arrow [r, "\assoclp"]
  \arrow[Rightarrow, from=U, to=D, "\mathit{hexagon}\oplus{r}\, \boxdot\, \idf"]
  \arrow[Rightarrow, from=Z, to=DD, swap, "\idf\boxdot\mathit{linv}\odot{l}\,\boxdot\,\idf"]
 \end{tikzcd}
-
-%%%%%%%%%
-\subsection{Examples}
-\label{sec:langRev-examples}
-\label{examples}
-
-%% \note{Revisit to pick examples relevant to the rest of the paper; also unify notation}
-
-In order to understand the examples of Sec.~\ref{sec:informal}, we review how to represent collections of booleans and
-conditionals in $\Pi$. We use the type $\onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing
-\textsf{false} and $\inrv{\Acon{tt}}$ representing $\textsf{true}$. Boolean negation is straightforward to define using
-the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values.
-For example, we can express a 3-bit word reversal operation as follows:
-
-$\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
-
-$\Afun{reverse} = \swapt \fatsemi (\swapt  \otimes  \idc)~ \fatsemi \assocrt$
-
-\noindent The manual trace of $\Afun{reverse}$ below confirms that it indeed reverses the three bits:
-\[\begin{array}{rlr}
- & (v_1, (v_2, v_3)) \\
- \swapt & ((v_2, v_3), v_1) \\
- \swapt \otimes  \idc & ((v_3, v_2), v_1) \\
- \assocrt & (v_3, (v_2, v_1)) \\
- \end{array}\]
-%subcode source isomorphisms.tex:979
-
-Even though \ensuremath{\Pi } lacks conditional expressions, they are expressible using the distributivity and factoring
-laws as shown below:
-
-$\Afun{ifc}_{c_1,c_2} : \mathbb{2} \times A \iso \mathbb{2} \times B$
-
-$\Afun{ifc}_{c_1,c_2} = \dist \fatsemi ((\idc  \otimes\  c_1) \oplus (\idc \otimes\  c_2)) \fatsemi \factor$
-
-
-% \inkscape{if-c1-c2.pdf}
-
-
-\noindent The input value of type $\mathbb{2} \times A$ is processed by the distribute operator \ensuremath{\dist},
-which converts it into a value of type $(\onet \times A) + (\onet \times A)$. In the \ensuremath{\mathit{left}} branch,
-which corresponds to the case when the boolean is \ensuremath{\mathit{false}}, the combinator~\ensuremath{c_1} is
-applied to the value of type~\ensuremath{A}. The right branch which corresponds to the boolean being
-\ensuremath{\mathit{true}} passes the value of type $A$ through the combinator \ensuremath{c_2}.  The inverse of
-\ensuremath{\dist}, namely \ensuremath{\factor} is applied to get the final result. The full expressiveness of $\Pi$ is
-demonstrated by the following implementation of $\Afun{cnot}$ and $\Afun{toffoli}$ which are universal for reversible
-computation~\cite{Toffoli:1980}. The $\Afun{cnot}$ gates takes two input bits: a control bit and a target bit, and
-negates the target bit if the control bit is set. It is essentially a one-branch version of $\Afun{cif}$ above. The
-Toffoli gate generalizes the idea to a gate that takes 3 input bits: 2 control bits and one target bit: boolean inputs:
-it negates the target bit if both control bits are set.
 
 %%% Local Variables:
 %%% mode: latex

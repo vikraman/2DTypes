@@ -181,8 +181,9 @@ permutations. Indeed, instead of writing a program for \Afun{reset 2}, one might
 \resetperm{}
 
 \noindent The permutation uses the canonical encoding of sequences of bits as natural numbers (e.g., (\textsf{false},
-\textsf{true},\textsf{true}) is encoded as 011 or 3).  Simply ``quoting'' this permutation generates the same normalized
-program \Afun{reset2Norm} above.
+\textsf{true},\textsf{true}) is encoded as 011 or 3).  The second entry maps index 1 (= 001) to the value 5 (= 101)
+which states that since one of the right bits is set in 001 then the leftmost bit in the output is set. Simply
+``quoting'' this permutation generates the same normalized program \Afun{reset2Norm} above.
 
 \paragraph*{Program equivalence.} The permutation above reveals another way to think about the desired program: it is a
 special addition circuit that keeps 0 and 4 fixed but otherwise adds 4 modulo 8 to its input. From this specification,

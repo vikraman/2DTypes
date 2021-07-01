@@ -63,15 +63,7 @@ reset2Norm =  (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) �
 reset2-perm : Aut (Fin 8)
 reset2-perm = equiv f f f-f f-f
   where f : Fin 8 → Fin 8
-        f (0 , ϕ) = 0
-        f (1 , ϕ) = 5 -- one of the two right bits in 001 is set, so we set the leftmost bit
-        f (2 , ϕ) = 6
-        f (3 , ϕ) = 7
-        f (4 , ϕ) = 4
-        f (5 , ϕ) = 1 -- one of the two right bits in 101 is set, so we reset the leftmost bit
-        f (6 , ϕ) = 2
-        f (7 , ϕ) = 3
-        f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))
+        f = lookup (0 :: 5 :: 6 :: 7 :: 4 :: 1 :: 2 :: 3 :: nil)
         f-f : (x : Fin 8) → f (f x) == x
         -- elided
 \end{code}}
