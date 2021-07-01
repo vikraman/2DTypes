@@ -6,6 +6,8 @@ bijections $\BFin$. Types are interpreted as objects in $\BFin$, and 1-combinato
 $\BFin$. We also showed that if there is a 2-combinator between two 1-combinators, then their interpretations are
 extensionally equal in $\BFin$.
 
+
+
 However, we want to go a step further, and claim completeness for this semantics, that is, we want to quote back from
 the semantics to the syntax. Given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
 equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted 1-combinators.
@@ -100,6 +102,105 @@ Now the question is, what does it mean for a compiler?
 
 My opinion is that it is still the same, what rewrites to apply depends
 on the choices made by the compiler writer, but we can think about that.
+
+%%%
+\subsection{To Put Somewhere or Delete}
+
+This approach is sufficient to prove the semantics forms a 1-category but ignores the rich structure at the next
+level~\cite{DBLP:conf/esop/CaretteS16}.
+As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
+we have that $\sizet{A} = \sizet{B}$. Hence, the denotation $\denot{A}$ of a type $A$ with $n$-elements can be the finite
+set $\Fin[n] = \{ 0, 1, \cdots, n-1\}$; the denotation of a value $v : A$ such that $\sizet{A}=n$ will be an index in
+the range $[0,n-1]$, and the denotation $\denot{c}$ of a combinator $c : A \iso B$ such that
+$\sizet{A} = \sizet{B} = n$ will be a function from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. Thus, all types
+with 3 elements will denote $\Fin[3]$ and combinators between them will denote permutations on $\Fin[3]$, e.g.:
+\[\begin{array}{rcl}
+    \denot{\onet + (\onet + \onet)} &=& \{ 0,1,2 \} \\
+    \denot{(\onet + \onet) + \onet} &=& \{ 0,1,2 \} \\
+    \\
+    \denot{\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (0~1~2) \\
+    \denot{\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (2~0~1)
+\end{array}\]
+where we have used the one-line notation for permutations with $(a~b~c)$ representing the
+permutation that maps 0 to $a$, 1 to $b$, and 2 to $c$. To make the denotation of values precise, we compute a canonical
+enumeration of the elements of each type:
+\[\begin{array}{rcl}
+    \mathit{enum}(\zerot) &=& [~] \\
+    \mathit{enum}(\onet) &=& [ ~\Acon{tt}~ ] \\
+    \mathit{enum}(A + B) &=& \mathit{map}~\Acon{inj₁}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₂}~\mathit{enum}(B) \\
+    \mathit{enum}(A \times B) &=& \mathit{concat}~(\mathit{map}~(\lambda v.\mathit{map}~(\lambda w. (v,w))~\mathit{enum}(B))~\mathit{enum}(A))
+\end{array}\]
+\noindent The specification uses a Haskell-like notation for sequences with $\mathit{map}$ as the operation that applies
+a function to each element of a sequence, \textsf{+\!+} as the binary append operation, and $\mathit{concat}$ the
+operation that appends all the subsequences in a sequence.
+
+Using the definition, we have:
+\[\begin{array}{rcl}
+    \mathit{enum}(\onet + (\onet + \onet)) &=& [ \inlv{\Acon{tt}},~\inrv{(\inlv{\Acon{tt}})},~\inrv{(\inrv{\Acon{tt}})} ] \\
+    \mathit{enum}((\onet + \onet) + \onet) &=& [ \inlv{(\inlv{\Acon{tt}})},~\inlv{(\inrv{\Acon{tt}})},~\inrv{\Acon{tt}} ]
+\end{array}\]
+Thus, as shown in the diagrams below, $\assoclp~(\inlv{\Acon{tt}})$ applies the permutation $(0~1~2)$ to the index of
+$\inlv{\Acon{tt}}$ which is 0 and produces index 0 in the $(\onet + \onet) + \onet$ type corresponding to value
+$\inlv{(\inlv{\Acon{tt}})}$. Similarly, $\swapp~(\inlv{\Acon{tt}})$ applies the permutation $(2~0~1)$ to the index of
+$\inlv{\Acon{tt}}$ which is 0 and produces index 2 in the $(\onet + \onet) + \onet)$ type corresponding to value
+$\inrv{\Acon{tt}}$.
+
+\begin{center}
+  \input{assoc-perm.tikz}
+  \qquad
+  \input{swap-perm.tikz}
+\end{center}
+
+
+We choose a canonical set of size $n$, called $\mathsf{Fin}~n$, whose elements are natural numbers less than $n$. To
+compute the denotation of a type $A$, we first calculate its size $n = \sizet{A}$. We then construct the canonical set
+$\mathsf{Fin}~n$ and provide the (trivial) evidence that this set is identical to $(\mathsf{Fin}~n)$:
+
+\[\begin{array}{rcll}
+\sem{A} &=& (\mathsf{Fin}~n, [ n , \mathsf{refl} ]) & \mbox{where}~\sizet{A} = n
+\end{array}\]
+
+\noindent The denotation $\sem{c}$ of a combinator $c : A \isot B$ is a path between $\sem{A}$ and $\sem{B}$. If the
+size of $A$ is $m$ and the size of $B$ is $n$, the desired path is between $(\mathsf{Fin}~m, [ m , \mathsf{refl} ])$ and
+$(\mathsf{Fin}~n, [ n , \mathsf{refl} ])$. This path is directly constructed using $\mathit{ap}$ and the fact that $m=n$
+since combinators are always between types of the same size.
+
+\noindent Finally, given two combinators $p , q : A \isot_1 B$ and a 2-combinator $\alpha : p \Iso q$, the denotation
+$\sem{\alpha}$ of $\alpha$ is a path between $\sem{p}$ and $\sem{q}$.
+
+\note{We use the rig structure of $\UFin$ in~\cref{subsec:rig} to interpret $\PiLang$.}
+
+
+We need a formal definition of normal form (canonical form)
+
+Recalling that the $\lambda$-calculus arises as the internal language of Cartesian Closed Categories
+(Elliott~\cite{Elliott-2017} gives a particularly readable account of this), we can think of $\Pi$ in similar terms, but
+for symmetric Rig Groupoids instead. For example, we can ask what does the equivalence above represent? It is actually a
+``linear'' representation of a 2-categorial commutative diagram! In fact, it is a painfully verbose version thereof, as
+it includes many \emph{refocusing} steps because our language does not build associativity into its syntax. Categorical
+diagrams usually do.  Thus if we rewrite the example in diagrammatic form, eliding all uses of associativity, but
+keeping explicit uses of identity transformations, we get that \AgdaFunction{swap{-}fl2⇔swap{-}fl1} represents
+
+\vspace*{3mm}
+\begin{tikzcd}[column sep=normal, row sep=normal]
+ && (a+c)+b \arrow [r, "\swapp \oplus\idd", ""{name=U, below}] & (c+a)+b \arrow [dr, "\assocrp"] && \\
+ & a+(c+b) \arrow [ur, "\assoclp"] & & & c+(a+b) \arrow [dr, "\idd\oplus\swapp"] &  \\
+a+(b+c) \arrow [ur, "\idd\oplus\swapp"] \arrow [r, "\assoclp"]
+  \arrow [dr, "\assoclp"]
+  \arrow [ddr, swap, "\assoclp"]
+    & (a+b)+c \arrow [r, "\swapp"] &
+    c+(a+b) \arrow [r, swap, "\assoclp", ""{name=D, above}]
+    & |[alias=Z]| (c+a)+b \arrow [r, "\assocrp"] &c+(a+b) \arrow [r, "\idd\oplus\swapp"] & c+(b+a) \\
+ & (a+b)+c \arrow [dr, "\swapp"] &&&& \\
+ & (a+b)+c \arrow [dr, swap, "\swapp"] & c+(a+b) \arrow [rr, swap, "\idd", ""{name=DD, above}]
+             \arrow [d, Rightarrow, "\idf\, \mathit{idl}\odot{l}"] &&
+    c+(a+b) \arrow [ruu, "\idd\oplus\swapp"] & \\
+ && c+(a+b) \arrow [rrruuu, bend right = 40, swap, "\idd\oplus\swapp"] && \\
+ \arrow[Rightarrow, from=U, to=D, "\mathit{hexagon}\oplus{r}\, \boxdot\, \idf"]
+ \arrow[Rightarrow, from=Z, to=DD, swap, "\idf\boxdot\mathit{linv}\odot{l}\,\boxdot\,\idf"]
+\end{tikzcd}
+
+
 
 %%%
 \subsection{Univalent Subuniverses}

@@ -10,7 +10,7 @@ open import Pi+.UFin.BAut
 open import Pi+.Misc
 open import Pi+.Extra
 
-open import Pi+.Indexed.Syntax as Pi+ renaming (_⟷₁_ to _⟷₁₊_)
+open import Pi+.Indexed.Syntax as Pi+ renaming (_⟷₁_ to _⟷₁₊_; U to U+)
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.SyntaxFull as Pi
@@ -86,4 +86,11 @@ adder3 =  swap⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆ ◎
           toffoli 3 ◎ (id⟷₁ ⊗ cnot) ◎
           assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆ ◎
           (id⟷₁ ⊗ cnot) ◎ assocl⋆ ◎ swap⋆
+\end{code}}
+
+\newcommand{\rotate}{%
+\begin{code}
+swaplr1 swaplr2 : {A B C : U} → A + (B + C) ⟷₁ C + (B + A)
+swaplr1 = assocl₊ ◎ swap₊ ◎ (id⟷₁ ⊕ swap₊)
+swaplr2 = (id⟷₁ ⊕ swap₊) ◎ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ swap₊)
 \end{code}}

@@ -156,51 +156,153 @@ it negates the target bit if both control bits are set.
 \noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be
 specified by mapping each type to a finite set and each combinator to a bijection between finite sets, that is, a
 permutation. In this section, we outline a simple semantics expressed in the metalanguage of sets and functions. This
-semantics will be formalized and extended to the metalanguage of homotopy type theory in Sec.~\ref{sec:reversibletwo}.
+semantics will be extended to the metalanguage of homotopy type theory in the remainder of the paper.
 
-As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
-we have that $\sizet{A} = \sizet{B}$. Hence, the denotation $\denot{A}$ of a type $A$ with $n$-elements can be the finite
-set $\Fin[n] = \{ 0, 1, \cdots, n-1\}$; the denotation of a value $v : A$ such that $\sizet{A}=n$ will be an index in
-the range $[0,n-1]$, and the denotation $\denot{c}$ of a combinator $c : A \iso B$ such that
-$\sizet{A} = \sizet{B} = n$ will be a function from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. Thus, all types
-with 3 elements will denote $\Fin[3]$ and combinators between them will denote permutations on $\Fin[3]$, e.g.:
+The denotation of types is straightforward:
 \[\begin{array}{rcl}
-    \denot{\onet + (\onet + \onet)} &=& \{ 0,1,2 \} \\
-    \denot{(\onet + \onet) + \onet} &=& \{ 0,1,2 \} \\
-    \\
-    \denot{\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (0~1~2) \\
-    \denot{\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (2~0~1)
+\denot{\zerot} &=& \emptyset \\
+\denot{\onet} &=& \{ \Acon{tt} \} \\
+\denot{A + B} &=& \denot{A} \uplus \denot{B} \\
+\denot{A \times B} &=& \denot{A} \times \denot{B}
 \end{array}\]
-where we have used the one-line notation for permutations with $(a~b~c)$ representing the
-permutation that maps 0 to $a$, 1 to $b$, and 2 to $c$. To make the denotation of values precise, we compute a canonical
-enumeration of the elements of each type:
+where $\emptyset$ is the empty set, $\uplus$ is the disjoint union of sets, and $\times$ is the cartesian product of
+sets. The denotation of a combinator $c : A \isot B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
 \[\begin{array}{rcl}
-    \mathit{enum}(\zerot) &=& [~] \\
-    \mathit{enum}(\onet) &=& [ ~\Acon{tt}~ ] \\
-    \mathit{enum}(A + B) &=& \mathit{map}~\Acon{inj₁}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₂}~\mathit{enum}(B) \\
-    \mathit{enum}(A \times B) &=& \mathit{concat}~(\mathit{map}~(\lambda v.\mathit{map}~(\lambda w. (v,w))~\mathit{enum}(B))~\mathit{enum}(A))
-\end{array}\]
-\noindent The specification uses a Haskell-like notation for sequences with $\mathit{map}$ as the operation that applies
-a function to each element of a sequence, \textsf{+\!+} as the binary append operation, and $\mathit{concat}$ the
-operation that appends all the subsequences in a sequence.
+\denot{\identlp} (\inlv{v}) &=& v \\
+\denot{\identrp} v &=& \inlv{v} \\
+\denot{\swapp} (\inlv{v}) &=& \inrv{v} \\
+\denot{\swapp} (\inrv{v}) &=& \inlv{v} \\
+\denot{\assoclp} (\inlv{v})  &=& \inlv{(\inlv{v})} \\
+\denot{\assoclp} (\inrv{(\inlv{v})}) &=& \inlv{(\inrv{v})} \\
+\denot{\assoclp} (\inrv{(\inrv{v})}) &=& \inrv{v} \\
+\denot{\assocrp} (\inlv{(\inlv{v})}) &=& \inlv{v} \\
+\denot{\assocrp} (\inlv{(\inrv{v})}) &=& \inrv{(\inlv{v})} \\
+\denot{\assocrp} (\inrv{v})  &=& \inrv{(\inrv{v})} \\
+\denot{\identlp} (\Acon{tt} , v)  &=& v \\
+\denot{\identrp} v &=& (\Acon{tt} , v) \\
+\denot{\swapt}  (v_1 , v_2) &=& (v_2 , v_1) \\
+\denot{\assoclt} (v_1 , (v_2 , v_3)) &=& ((v_1 , v_2) , v_3) \\
+\denot{\assocrt} ((v_1 , v_2) , v_3) &=& (v_1 , (v_2 , v_3)) \\
+\denot{\dist} (\inlv{v_1} , v_3)  &=& \inlv{(v_1 , v_3)} \\
+\denot{\dist} (\inrv{v_2 , v_3})  &=& \inrv{(v_2 , v_3)} \\
+\denot{\factor}  (\inlv{(v_1 , v_3)}) &=& (\inlv{v_1} , v_3) \\
+\denot{\factor}  (\inrv{(v_2 , v_3)}) &=& (\inrv{v_2} , v_3) \\
+\denot{\idc} v &=& v \\
+\denot{(c_1 \fatsemi c_2)} v &=& (\denot{c_2} \circ \denot{c_1}) v \\
+\denot{(c_1 \oplus c_2)} (\inlv{v}) &=& \inlv{(\denot{c_1}~v)} \\
+\denot{(c_1 \oplus c_2)} (\inrv{v}) &=& \inrv{(\denot{c_2}~v)} \\
+\denot{(c_1 \otimes c_2)} (v_1 , v_2) &=& (\denot{c_1} v_1 , \denot{c_2} v_2)
+  \end{array}\]
 
-Using the definition, we have:
-\[\begin{array}{rcl}
-    \mathit{enum}(\onet + (\onet + \onet)) &=& [ \inlv{\Acon{tt}},~\inrv{(\inlv{\Acon{tt}})},~\inrv{(\inrv{\Acon{tt}})} ] \\
-    \mathit{enum}((\onet + \onet) + \onet) &=& [ \inlv{(\inlv{\Acon{tt}})},~\inlv{(\inrv{\Acon{tt}})},~\inrv{\Acon{tt}} ]
-\end{array}\]
-Thus, as shown in the diagrams below, $\assoclp~(\inlv{\Acon{tt}})$ applies the permutation $(0~1~2)$ to the index of
-$\inlv{\Acon{tt}}$ which is 0 and produces index 0 in the $(\onet + \onet) + \onet$ type corresponding to value
-$\inlv{(\inlv{\Acon{tt}})}$. Similarly, $\swapp~(\inlv{\Acon{tt}})$ applies the permutation $(2~0~1)$ to the index of
-$\inlv{\Acon{tt}}$ which is 0 and produces index 2 in the $(\onet + \onet) + \onet)$ type corresponding to value
-$\inrv{\Acon{tt}}$.
+% \begin{center}
+% \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
+%   \draw[>=latex,<->,double,red,thick] (2.25,-1.2) -- (2.25,-2.9) ;
+%   \draw[fill] (-2,-1.5) circle [radius=0.025];
+%   \node[below] at (-2.1,-1.5) {$A$};
+%   \node[below] at (-2.1,-1.9) {$+$};
+%   \draw[fill] (-2,-2.5) circle [radius=0.025];
+%   \node[below] at (-2.1,-2.5) {$B$};
 
-\begin{center}
-  \input{assoc-perm.tikz}
-  \qquad
-  \input{swap-perm.tikz}
-\end{center}
+%   \draw[fill] (6.5,-1.5) circle [radius=0.025];
+%   \node[below] at (6.7,-1.5) {$C$};
+%   \node[below] at (6.7,-1.9) {$+$};
+%   \draw[fill] (6.5,-2.5) circle [radius=0.025];
+%   \node[below] at (6.7,-2.5) {$D$};
 
+%   \draw[<-] (-2,-1.5) to[bend left] (1,0.5) ;
+%   \draw[<-] (-2,-2.5) to[bend left] (1,-0.5) ;
+%   \draw[->] (3.5,0.5) to[bend left] (6.5,-1.45) ;
+%   \draw[->] (3.5,-0.5) to[bend left] (6.5,-2.45) ;
+
+%   \draw[<-] (-2,-1.5) to[bend right] (1,-3.5) ;
+%   \draw[<-] (-2,-2.5) to[bend right] (1,-4.5) ;
+%   \draw[->] (3.5,-3.5) to[bend right] (6.5,-1.55) ;
+%   \draw[->] (3.5,-4.5) to[bend right] (6.5,-2.55) ;
+
+
+%   \draw     (2,0.5)  -- (2.5,0.5)  ;
+%   \draw     (2,-0.5) -- (2.5,-0.5) ;
+
+%   \draw     (2.5,0.5)  -- (3.5,-0.5)  ;
+%   \draw     (2.5,-0.5) -- (3.5,0.5) ;
+
+%   \draw     (1,-3.5)  -- (2,-4.5)    ;
+%   \draw     (1,-4.5) -- (2,-3.5)   ;
+
+%   \draw     (2,-3.5)  -- (2.5,-3.5)    ;
+%   \draw     (2,-4.5) -- (2.5,-4.5)   ;
+
+%   \path (1.5,0.5) node (tc1) [func] {$c_1$};
+%   \path (1.5,-0.5) node (tc2) [func] {$c_2$};
+%   \path (3,-4.5) node (bc1) [func] {$c_1$};
+%   \path (3,-3.5) node (bc2) [func] {$c_2$};
+% \end{tikzpicture}
+% \end{center}
+% The top path is the $\Pi$ program $(c_1~\oplus~c_2)~\odot~\swapp$ which acts on the type $A$ by $c_1$, acts on the type
+% $B$ by $c_2$, and acts on the resulting value by a twist that exchanges the two injections into the sum type. The bottom
+% path performs the twist first and then acts on the type $A$ by $c_1$ and on the type $B$ by $c_2$ as before. One could
+% imagine the paths are physical \emph{elastic} wires in $3$ space, where the programs $c_1$ and $c_2$ as arbitrary
+% deformations on these wires, and the twists do not touch but are in fact well-separated. Then, holding the points $A$,
+% $B$, $C$, and $D$ fixed, it is possible to imagine sliding $c_1$ and $c_2$ from the top wire rightward past the twist,
+% and then using the elasticity of the wires, pull the twist back to line up with that of the bottom --- thus making both
+% parts of the diagram identical.  Each of these moves can be undone (reversed), and doing so would take the bottom part
+% of the diagram into the top part.  In other words, there exists an equivalence of the program
+% $(c_1~\oplus~c_2)~\odot~\swapp$ to the program $\swapp \odot (c_2~\oplus~c_1)$. We can also show that this means that,
+% as permutations, $(c_1~\oplus~c_2)~\odot~\swapp$ and $\swapp \odot (c_2~\oplus~c_1)$ are equal. And, of course, not all
+% programs between the same types can be deformed into one another. The simplest example of inequivalent deformations are
+% the two automorphisms of $1+1$, namely $\idc$ and $\swapp$.
+
+The denotational semantics can be used to evaluate programs and to check equivalence of programs. For example, it is
+straightforward to verify that $\denot{(c_1~\oplus~c_2)~\fatsemi~\swapp} = \denot{\swapp \fatsemi (c_2~\oplus~c_1)}$. A
+slightly more involved example are the following two programs:
+
+\rotate{}
+
+\noindent The first program performs the following sequence of transformations:
+\[
+\Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
+\Tree [ [ {\small a} {\small b} ] {\small c} ] ~\to~
+\Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
+\Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
+\]
+\noindent
+while the second evaluates as follows:
+\[
+\Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
+\Tree [ {\small a} [ {\small c} {\small b} ] ] ~\to~
+\Tree [ [ {\small a} {\small c} ] {\small b} ] ~\to~
+\Tree [ [ {\small c} {\small a} ] {\small b} ] ~\to~
+\Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
+\Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
+\]
+
+The semantics above can be packaged in the category of finite sets and functions, $\SetFin$, which is the category
+freely generated by finite coproduct completion of the terminal category. Objects of $\SetFin$ can be identified with
+sets of fixed cardinality, that is, $\Fin[n] \defeq \Set{0,1,\ldots,n-1}$. $\SetFin$ has finite coproducts and products,
+which lets us interpret the types of $\PiLang$. Combinators are intepreted as morphisms in $\SetFin$, but we have to
+restrict to invertible morphisms, that is, isomorphisms. This gives the \emph{groupoid} of finite sets and bijections,
+$\BFin \defeq \mathsf{core}(\SetFin)$. The isomorphisms satisfied by coproducts and products in $\SetFin$ lift to
+$\BFin$, but they're no longer categorical coproducts and products. They give two symmetric monoidal tensor products on
+$\BFin$, the additive and multiplicative ones, with the multiplicative tensor distributing over the additive tensor.
+
+\begin{theorem}\label{thm:grp}
+  Let $\sim$ be the following equivalence relation on combinators $c_1 \sim c_2$ iff $\denot{c_1} = \denot{c_2}$
+  identifying combinators with the same denotation.  The notation $[c]_{\sim}$ refers to a representative combinator
+  from a $\sim$-equivalence class. Using this relation, we define the
+  category $\mathcal{C}$ as follows:
+  \begin{itemize}
+    \item $\mathit{Obj}(\mathcal{C})$ is the set of $\Pi$-types, and
+    \item $\mathit{Hom}(A,B) = [c : A \isot B]_{\sim}$
+    \end{itemize}
+  The category $\mathcal{C}$ is a groupoid.
+\end{theorem}
+\begin{proof}
+The relation $\sim$ identifies $c$, $\idc \circ c$, and $c \circ \idc$, and is associative. Furthermore, the denotation
+of each combinator is a reversible function thus making every morphism into an isomorphism.
+\end{proof}
+
+\note{Then say that $\mathcal{C}$ is ``the same'' as $\BFin$ We can say here that the relation $\sim$ also identifies
+ $(c_1~\oplus~c_2)~\fatsemi~\swapp$ and $\swapp \fatsemi (c_2~\oplus~c_1)$ and other properties. ?? }
 
 % \[\begin{array}{l}
 %     \Tree[ {\small a} [ {\small b} {\small c} ] ] \\
@@ -214,218 +316,12 @@ $\inrv{\Acon{tt}}$.
 % the finite set, we can define a denotational semantics which constructs the bijection.
 % \note{\(\Fin[n] \to A \eqv <\type{Vec_{n}}(A)\)}
 
-
-An alternative point of view for the semantics in Sec.~\ref{reversibleone} is to consider it  as expressed in the
-category of finite sets and functions, $\SetFin$, which is the category freely generated by finite coproduct completion
-of the terminal category. Objects of $\SetFin$ can be identified with sets of fixed cardinality, that is,
-$\Fin[n] \defeq \Set{0,1,\ldots,n-1}$. $\SetFin$ has finite coproducts and products, which lets us interpret the types
-of $\PiLang$. Combinators are intepreted as morphisms in $\SetFin$, but we have to restrict to invertible morphisms,
-that is, isomorphisms. This gives the \emph{groupoid} of finite sets and bijections,
-$\BFin \defeq \mathsf{core}(\SetFin)$. The isomorphisms satisfied by coproducts and products in $\SetFin$ lift to
-$\BFin$, but they're no longer categorical coproducts and products. They give two symmetric monoidal tensor products on
-$\BFin$, the additive and multiplicative ones, with the multiplicative tensor distributing over the additive tensor.
-
-We choose a canonical set of size $n$, called $\mathsf{Fin}~n$, whose elements are natural numbers less than $n$. To
-compute the denotation of a type $A$, we first calculate its size $n = \sizet{A}$. We then construct the canonical set
-$\mathsf{Fin}~n$ and provide the (trivial) evidence that this set is identical to $(\mathsf{Fin}~n)$:
-
-\[\begin{array}{rcll}
-\sem{A} &=& (\mathsf{Fin}~n, [ n , \mathsf{refl} ]) & \mbox{where}~\sizet{A} = n
-\end{array}\]
-
-\noindent The denotation $\sem{c}$ of a combinator $c : A \isot B$ is a path between $\sem{A}$ and $\sem{B}$. If the
-size of $A$ is $m$ and the size of $B$ is $n$, the desired path is between $(\mathsf{Fin}~m, [ m , \mathsf{refl} ])$ and
-$(\mathsf{Fin}~n, [ n , \mathsf{refl} ])$. This path is directly constructed using $\mathit{ap}$ and the fact that $m=n$
-since combinators are always between types of the same size.
-
-\noindent Finally, given two combinators $p , q : A \isot_1 B$ and a 2-combinator $\alpha : p \Iso q$, the denotation
-$\sem{\alpha}$ of $\alpha$ is a path between $\sem{p}$ and $\sem{q}$.
-
-\note{We use the rig structure of $\UFin$ in~\cref{subsec:rig} to interpret $\PiLang$.}
-
-
-We need a formal definition of normal form (canonical form)
-
-In the previous section, we examined equivalences between conventional data structures, i.e., structured trees of
-values. We now consider a richer but foundational notion of data: programs themselves. Indeed, universal computation
-models crucially rely on the fact that \emph{programs are (or can be encoded as) data}, e.g., a Turing machine can be
-encoded as a string that another Turing machine (or even the same machine) can manipulate. Similarly, first-class
-functions are the \emph{only} values in the $\lambda$-calculus.  In our setting, we ask whether the programs developed
-in the previous section can themselves be subject to (higher-level) equivalences?
-
-We will explain the ideas using two small exaamples. Consider the following two programs mapping between the types
-$A + B$ and $C+D$:
-
-\begin{center}
-\begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
-  \draw[>=latex,<->,double,red,thick] (2.25,-1.2) -- (2.25,-2.9) ;
-  \draw[fill] (-2,-1.5) circle [radius=0.025];
-  \node[below] at (-2.1,-1.5) {$A$};
-  \node[below] at (-2.1,-1.9) {$+$};
-  \draw[fill] (-2,-2.5) circle [radius=0.025];
-  \node[below] at (-2.1,-2.5) {$B$};
-
-  \draw[fill] (6.5,-1.5) circle [radius=0.025];
-  \node[below] at (6.7,-1.5) {$C$};
-  \node[below] at (6.7,-1.9) {$+$};
-  \draw[fill] (6.5,-2.5) circle [radius=0.025];
-  \node[below] at (6.7,-2.5) {$D$};
-
-  \draw[<-] (-2,-1.5) to[bend left] (1,0.5) ;
-  \draw[<-] (-2,-2.5) to[bend left] (1,-0.5) ;
-  \draw[->] (3.5,0.5) to[bend left] (6.5,-1.45) ;
-  \draw[->] (3.5,-0.5) to[bend left] (6.5,-2.45) ;
-
-  \draw[<-] (-2,-1.5) to[bend right] (1,-3.5) ;
-  \draw[<-] (-2,-2.5) to[bend right] (1,-4.5) ;
-  \draw[->] (3.5,-3.5) to[bend right] (6.5,-1.55) ;
-  \draw[->] (3.5,-4.5) to[bend right] (6.5,-2.55) ;
-
-
-  \draw     (2,0.5)  -- (2.5,0.5)  ;
-  \draw     (2,-0.5) -- (2.5,-0.5) ;
-
-  \draw     (2.5,0.5)  -- (3.5,-0.5)  ;
-  \draw     (2.5,-0.5) -- (3.5,0.5) ;
-
-  \draw     (1,-3.5)  -- (2,-4.5)    ;
-  \draw     (1,-4.5) -- (2,-3.5)   ;
-
-  \draw     (2,-3.5)  -- (2.5,-3.5)    ;
-  \draw     (2,-4.5) -- (2.5,-4.5)   ;
-
-  \path (1.5,0.5) node (tc1) [func] {$c_1$};
-  \path (1.5,-0.5) node (tc2) [func] {$c_2$};
-  \path (3,-4.5) node (bc1) [func] {$c_1$};
-  \path (3,-3.5) node (bc2) [func] {$c_2$};
-\end{tikzpicture}
-\end{center}
-The top path is the $\Pi$ program $(c_1~\oplus~c_2)~\odot~\swapp$ which acts on the type $A$ by $c_1$, acts on the type
-$B$ by $c_2$, and acts on the resulting value by a twist that exchanges the two injections into the sum type. The bottom
-path performs the twist first and then acts on the type $A$ by $c_1$ and on the type $B$ by $c_2$ as before. One could
-imagine the paths are physical \emph{elastic} wires in $3$ space, where the programs $c_1$ and $c_2$ as arbitrary
-deformations on these wires, and the twists do not touch but are in fact well-separated. Then, holding the points $A$,
-$B$, $C$, and $D$ fixed, it is possible to imagine sliding $c_1$ and $c_2$ from the top wire rightward past the twist,
-and then using the elasticity of the wires, pull the twist back to line up with that of the bottom --- thus making both
-parts of the diagram identical.  Each of these moves can be undone (reversed), and doing so would take the bottom part
-of the diagram into the top part.  In other words, there exists an equivalence of the program
-$(c_1~\oplus~c_2)~\odot~\swapp$ to the program $\swapp \odot (c_2~\oplus~c_1)$. We can also show that this means that,
-as permutations, $(c_1~\oplus~c_2)~\odot~\swapp$ and $\swapp \odot (c_2~\oplus~c_1)$ are equal. And, of course, not all
-programs between the same types can be deformed into one another. The simplest example of inequivalent deformations are
-the two automorphisms of $1+1$, namely $\idc$ and $\swapp$.
-
-As another example, consider consider a circuit that takes an input type consisting of three values \Tree [ {\small a} [
-{\small b} {\small c} ] ]~ and swaps the leftmost value with the rightmost value to produce \Tree [ {\small c} [ {\small
-  b} {\small a} ] ]~.  We can implement two such circuits using our Agda library for $\Pi$:
-
-\begin{code}%
-\>[0]\AgdaFunction{swap{-}fl1}\AgdaSpace{}%
-\AgdaFunction{swap{-}fl2}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaSymbol{\{}\AgdaBound{a}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSpace{}%
-\AgdaSymbol{:}\AgdaSpace{}%
-\AgdaDatatype{U}\AgdaSymbol{\}}\AgdaSpace{}%
-\AgdaSymbol{→}\AgdaSpace{}%
-\AgdaInductiveConstructor{PLUS}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{PLUS}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaDatatype{⟷}\AgdaSpace{}%
-\AgdaInductiveConstructor{PLUS}\AgdaSpace{}%
-\AgdaBound{c}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{PLUS}\AgdaSpace{}%
-\AgdaBound{b}\AgdaSpace{}%
-\AgdaBound{a}\AgdaSymbol{)}\<%
-\\
-\>[0]\AgdaFunction{swap{-}fl1}\AgdaSpace{}%
-\AgdaSymbol{=}\AgdaSpace{}%
-\AgdaInductiveConstructor{assocl₊}\AgdaSpace{}%
-\AgdaInductiveConstructor{◎}\AgdaSpace{}%
-\AgdaInductiveConstructor{swap₊}\AgdaSpace{}%
-\AgdaInductiveConstructor{◎}\AgdaSpace{}%
-\AgdaSymbol{(}\AgdaInductiveConstructor{id⟷}\AgdaSpace{}%
-\AgdaInductiveConstructor{⊕}\AgdaSpace{}%
-\AgdaInductiveConstructor{swap₊}\AgdaSymbol{)}\<%
-\\
-%
-\\[\AgdaEmptyExtraSkip]%
-\>[0]\AgdaFunction{swap{-}fl2}\AgdaSpace{}%
-\AgdaSymbol{=}%
-\>[52I]\AgdaSymbol{(}\AgdaInductiveConstructor{id⟷}\AgdaSpace{}%
-\AgdaInductiveConstructor{⊕}\AgdaSpace{}%
-\AgdaInductiveConstructor{swap₊}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaInductiveConstructor{◎}\<%
-\\
-\>[.]\<[52I]%
-\>[11]\AgdaInductiveConstructor{assocl₊}\AgdaSpace{}%
-\AgdaInductiveConstructor{◎}\<%
-\\
-%
-\>[11]\AgdaSymbol{(}\AgdaInductiveConstructor{swap₊}\AgdaSpace{}%
-\AgdaInductiveConstructor{⊕}\AgdaSpace{}%
-\AgdaInductiveConstructor{id⟷}\AgdaSymbol{)}\AgdaSpace{}%
-\AgdaInductiveConstructor{◎}\<%
-\\
-%
-\>[11]\AgdaInductiveConstructor{assocr₊}\AgdaSpace{}%
-\AgdaInductiveConstructor{◎}\<%
-\\
-%
-\>[11]\AgdaSymbol{(}\AgdaInductiveConstructor{id⟷}\AgdaSpace{}%
-\AgdaInductiveConstructor{⊕}\AgdaSpace{}%
-\AgdaInductiveConstructor{swap₊}\AgdaSymbol{)}\<%
-\end{code}
-
-\noindent The first implementation rewrites the incoming values as follows:
-\[
-\Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
-\Tree [ [ {\small a} {\small b} ] {\small c} ] ~\to~
-\Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
-\Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
-\]
-\noindent
-The second implementation rewrites the incoming values as follows:
-\[
-\Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
-\Tree [ {\small a} [ {\small c} {\small b} ] ] ~\to~
-\Tree [ [ {\small a} {\small c} ] {\small b} ] ~\to~
-\Tree [ [ {\small c} {\small a} ] {\small b} ] ~\to~
-\Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
-\Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
-\]
-\noindent The two circuits are extensionally equal. Using the level-2
-isomorphisms we can \emph{explicitly} construct a sequence of
-rewriting steps that transforms the second circuit to the first.
-
-Recalling that the $\lambda$-calculus arises as the internal language of Cartesian Closed Categories
-(Elliott~\cite{Elliott-2017} gives a particularly readable account of this), we can think of $\Pi$ in similar terms, but
-for symmetric Rig Groupoids instead. For example, we can ask what does the equivalence above represent? It is actually a
-``linear'' representation of a 2-categorial commutative diagram! In fact, it is a painfully verbose version thereof, as
-it includes many \emph{refocusing} steps because our language does not build associativity into its syntax. Categorical
-diagrams usually do.  Thus if we rewrite the example in diagrammatic form, eliding all uses of associativity, but
-keeping explicit uses of identity transformations, we get that \AgdaFunction{swap{-}fl2⇔swap{-}fl1} represents
-
-\vspace*{3mm}
-\begin{tikzcd}[column sep=normal, row sep=normal]
- && (a+c)+b \arrow [r, "\swapp \oplus\idd", ""{name=U, below}] & (c+a)+b \arrow [dr, "\assocrp"] && \\
- & a+(c+b) \arrow [ur, "\assoclp"] & & & c+(a+b) \arrow [dr, "\idd\oplus\swapp"] &  \\
-a+(b+c) \arrow [ur, "\idd\oplus\swapp"] \arrow [r, "\assoclp"]
-  \arrow [dr, "\assoclp"]
-  \arrow [ddr, swap, "\assoclp"]
-    & (a+b)+c \arrow [r, "\swapp"] &
-    c+(a+b) \arrow [r, swap, "\assoclp", ""{name=D, above}]
-    & |[alias=Z]| (c+a)+b \arrow [r, "\assocrp"] &c+(a+b) \arrow [r, "\idd\oplus\swapp"] & c+(b+a) \\
- & (a+b)+c \arrow [dr, "\swapp"] &&&& \\
- & (a+b)+c \arrow [dr, swap, "\swapp"] & c+(a+b) \arrow [rr, swap, "\idd", ""{name=DD, above}]
-             \arrow [d, Rightarrow, "\idf\, \mathit{idl}\odot{l}"] &&
-    c+(a+b) \arrow [ruu, "\idd\oplus\swapp"] & \\
- && c+(a+b) \arrow [rrruuu, bend right = 40, swap, "\idd\oplus\swapp"] && \\
- \arrow[Rightarrow, from=U, to=D, "\mathit{hexagon}\oplus{r}\, \boxdot\, \idf"]
- \arrow[Rightarrow, from=Z, to=DD, swap, "\idf\boxdot\mathit{linv}\odot{l}\,\boxdot\,\idf"]
-\end{tikzcd}
+% In the previous section, we examined equivalences between conventional data structures, i.e., structured trees of
+% values. We now consider a richer but foundational notion of data: programs themselves. Indeed, universal computation
+% models crucially rely on the fact that \emph{programs are (or can be encoded as) data}, e.g., a Turing machine can be
+% encoded as a string that another Turing machine (or even the same machine) can manipulate. Similarly, first-class
+% functions are the \emph{only} values in the $\lambda$-calculus.  In our setting, we ask whether the programs developed
+% in the previous section can themselves be subject to (higher-level) equivalences?
 
 %%% Local Variables:
 %%% mode: latex
