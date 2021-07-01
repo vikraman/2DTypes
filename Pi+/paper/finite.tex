@@ -238,7 +238,7 @@ The choice of generators for a presentation is important. \todo{Think about this
         the later sections.
 \end{itemize}
 
-Connecting it all back to the language $\PiLang$ we are dealing with, it is possible to construct a simlar, yet simplified language $\PiLangHat$ (introduced at \cref{sec:equivalence}), which operates on adjacent transpositions, but still preservers much of $\PiLang$ structure. Thus, for the proof, a presentation based on adjacent transpositions is used, called \emph{Coxeter presentation}. Not only is this then, in some sense, the natural choice, but it is also a presentation for which we can solve the word problem in a relatively easy, and which is used broadely in such context \jk{by other people? get citations}.
+Connecting it all back to the language $\PiLang$ we are dealing with, it is possible to construct a simlar, yet simplified language $\PiHatLang$ (introduced at \cref{sec:equivalence}), which operates on adjacent transpositions, but still preservers much of $\PiLang$ structure. Thus, for the proof, a presentation based on adjacent transpositions is used, called \emph{Coxeter presentation}. Not only is this then, in some sense, the natural choice, but it is also a presentation for which we can solve the word problem in a relatively easy, and which is used broadely in such context \jk{by other people? get citations}.
 
 The technical contribution of this section is a proof that the two descriptions of permutation group - $\Aut[\Fin[n]]$ and the Coxeter presentation - are equivalent. By doing that, we bridge the gap between the syntactic and semantic notions in our completeness proof -- by establishing a
 correspondence between the meaning of a program (a bijection) and its syntax (a word).
@@ -409,10 +409,10 @@ The system also has to be confluent, meaning that all critical pairs, that is, t
 \]
 
 \begin{proof}
-\[
-    \begin{array}{lcr}
+  \[
+    \begin{array}{lr}
     % https://q.uiver.app/?q=WzAsNixbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwyLCJcXHRhdV8xXFx0YXVfMlxcdGF1XzIiXSxbMiwzLCJcXHRhdV8xIl0sWzQsMiwiXFx0YXVfMlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFswLDIsImJyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJjYW5jZWwiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFszLDQsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzIsNSwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbNSw0LCJjYW5jZWwiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
-    \[\begin{tikzcd}
+    \begin{tikzcd}
         && {\tau_2\tau_1\tau_2\tau_1\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_1\tau_2} &&&& {\tau_2\tau_1\tau_1\tau_2\tau_1} \\
         {\tau_1\tau_2\tau_2} &&&& {\tau_2\tau_2\tau_1} \\
@@ -423,12 +423,10 @@ The system also has to be confluent, meaning that all critical pairs, that is, t
         \arrow["cancel"', squiggly, from=3-1, to=4-3]
         \arrow["cancel", squiggly, from=2-5, to=3-5]
         \arrow["cancel", squiggly, from=3-5, to=4-3]
-    \end{tikzcd}\]
-    &
-    \text{and}
+    \end{tikzcd}
     &
     % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsyLDQsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsxLDMsIlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzMsNCwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFs0LDIsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV1d
-    \[\begin{tikzcd}
+    \begin{tikzcd}
         && {\tau_2\tau_1\tau_2\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_2} \\
@@ -439,9 +437,9 @@ The system also has to be confluent, meaning that all critical pairs, that is, t
         \arrow["braid"', squiggly, from=2-1, to=3-1]
         \arrow["braid"', squiggly, from=3-1, to=4-2]
         \arrow["cancel"', squiggly, from=4-2, to=5-3]
-    \end{tikzcd}\]
+    \end{tikzcd}
     \end{array}
-\]
+  \]
 \end{proof}
 
 Unfortunately, in the system we defined, this is not true for all critical pairs.
