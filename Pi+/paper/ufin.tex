@@ -167,8 +167,6 @@ defined by path induction. If $P : A \to \UU$ is a type family, then for a path 
   \transport{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \to P(y)}
 \]
 
-\todo{Diagram.}
-
 A type family can also be seen as a fibration, from the topological viewpoint. For a type family $P : A \to \UU$ and a
 point $x : A$, the type $P(x)$ gives the fiber over $x$. The type $\dsum{x:A}{P(x)}$ is the collection of all the fibers
 and is called the total space of $P$. The first projection ${\pi_1 : \dsum{x:A}{P(x)} \to A}$ from the total space to
@@ -180,6 +178,20 @@ Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a point in the 
 \]
 
 where $\tr{p}{u}$ is shorthand for $\transport{P,p}(u)$.
+
+\begin{center}
+  \begin{tikzpicture}[yscale=.5,xscale=2]
+    \draw (0,0) arc (-90:170:8ex) node[anchor=south east] {$A$} arc (170:270:8ex);
+    \draw (0,6) arc (-90:170:10ex) node[anchor=south east] {$\dsum{x:A}{P(x)}$} arc (170:270:10ex);
+    \draw[->] (0,5.8) -- node[auto] {$\fst$} (0,3.2);
+    \node[circle,fill,inner sep=1pt,label=left:{$x$}] (b1) at (-.5,1.4) {};
+    \node[circle,fill,inner sep=1pt,label=right:{$y$}] (b2) at (.5,1.4) {};
+    \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto,swap] {$p$} (b2);
+    \node[circle,fill,inner sep=1pt,label=left:{$\pair{x,u}$}] (b1) at (-.5,7.2) {};
+    \node[circle,fill,inner sep=1pt,label=right:{$\pair{y,\tr{p}{u}}$}] (b2) at (.5,7.2) {};
+    \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto] {$\term{lift}(u,p)$} (b2);
+  \end{tikzpicture}
+\end{center}
 
 Further, using the groupoid structure of $A$, we can show that $\term{transport}$ lifts paths to equivalences, we define
 
