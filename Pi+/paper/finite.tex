@@ -259,7 +259,6 @@ First, swapping the same two elements two times in a row should be the same as d
 
 \[
   \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
-  \resizebox{0.5}{!}{
     \begin{center}
       \begin{tikzpicture}
         \pic[local bounding box=my braid,braid/.cd,
@@ -269,7 +268,7 @@ First, swapping the same two elements two times in a row should be the same as d
       \end{tikzpicture}
     \end{center}
      &
-    \resizebox{2.0}{!}{\(\xlongrightarrow[]{\cancel}\)}
+    \(\xlongrightarrow[]{\cancel}\)
      &
     \begin{center}
       \begin{tikzpicture}
@@ -279,7 +278,6 @@ First, swapping the same two elements two times in a row should be the same as d
         {braid={1, 1}};
       \end{tikzpicture}
     \end{center}
-       }
   \end{tabular}
 \]
 
@@ -394,20 +392,28 @@ We define $\cox*$ as the congruence closure of $\cox$.
   \end{align*}
 \end{definition}
 
-\jk{maybe change that?}
-Group persentation, as given in the ~\label{def:presentation}, requires the relation to be on the set of $A + A$, where the right copy corresponded to the set of formal inverses of the generators. However, in our case, we can observe that that the constructor $\cancel$ specifies that the inverse of each element is again the same element. Thus, the type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$.
+The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$,
 
 \begin{definition}[$\Sn$]
   \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
 
-The approach to solving the word problem for $\Sn$ we use is to turn the relations $\cox*$ on
-$\List[\Fin[n]]$ to a rewriting system $(\List[\Fin[n]],\cox*)$. A normal form of an element can then be computed by following the rewrite rules, and two words can be compared for $\cox*$-equality by comparing their normal forms.
+A group presentation, as defined in~\label{def:presentation}, requires the relation to be on the set of words $A + A$,
+where the right copy corresponds to the set of formal inverses of the generators. We will resolve this mismatch later
+in~\cref{prop:lift-codiag}.
 
-A well-behaved rewriting system has to be strongly normalising and confluent. First, we observe that after throwing out reflexivity and symmetry, the right hand sides of the relations $\cox*$
-are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$. Thus, by directing the relation from left to right, we would get the termination property out of the box.
+\todo{check: However, in our case, the constructor $\cancel$ specifies that the inverse of each element is again the
+  same element.}
 
-The system also has to be confluent, meaning that all critical pairs, that is, terms with overlapping possible reduction rules, have to converge. For example, the pairs below converge.
+To solve the word problem for $\Sn$, we turn the relations into a rewriting system $(\List[\Fin[n]],\cox*)$. A normal
+form of an element can then be computed by following the rewrite rules, and two words can be compared for
+$\cox*$-equality by comparing their normal forms. A well-behaved rewriting system has to be strongly normalising and
+confluent. First, we observe that after throwing out reflexivity and symmetry, the right hand sides of the relations
+$\cox*$ are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$.
+Thus, by directing the relation from left to right, we would get the termination property out of the box.
+
+The system also has to be confluent, meaning that all critical pairs, that is, terms with overlapping possible reduction
+rules, have to converge. For example, the pairs below converge.
 
 \[
   \begin{array}{lcr}
@@ -453,9 +459,8 @@ The system also has to be confluent, meaning that all critical pairs, that is, t
   \]
 \end{proof}
 
-Unfortunately, in the system we defined, this is not true for all critical pairs.
-One example is the following, where both endpoints are normal with respect to
-$\cox*$ relation.
+Unfortunately, in the system we defined, this is not true for all critical pairs. One example is the following, where
+both endpoints are normal with respect to $\cox*$ relation.
 
 \[
   \gspan[\braid][\swap]{\tau_3\tau_2\tau_3\tau_1}{\tau_2\tau_3\tau_2\tau_1}{\tau_3\tau_2\tau_1\tau_3}
@@ -463,13 +468,20 @@ $\cox*$ relation.
 
 \subsection{Rewriting via Coxeter}
 
-Because of the counter-example discussed, the relations have to be changed. In this section, we will formally define a rewriting system partially based on the Coxeter relation, prove that it has the desired properties of confluence and strong normalisation.
+Because of the counter-example discussed, the relations have to be changed. In this section, we will formally define a
+rewriting system partially based on the Coxeter relations, and prove that it has the desired properties of confluence
+and strong normalisation.
 
-Fortunately, the change from the rewriting system described before will be small. Thus, we will not lose the connection to the theory of group presentations, where Coxeter relations are a standard notion~\todo{citation} -- to make the result broadly applicable, even though we use the reduction system for computation, we prove that the \jk{relation it gives} is indeed equivalent to the conguence closure of the standard Coxeter relation $\cox$.
+The Coxeter relations are a standard notion in the theory of group presentation~\todo{citation} -- even though we change
+the relations a bit, we will not lose the connection. In fact, we will prove that the new relations are equivalent, in a
+technical sense, to the standard Coxeter relations $\cox*$.
 
-The new reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$. We fix the problem of the non-converging critical pair discussed previously by changing $\braid$ to be a slightly more general relation $\longbraid$.
+The new reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$.
+We fix the problem of the non-converging critical pairs discussed previously by changing $\braid$ to be a slightly more
+general relation $\longbraid$. \review{Further, we also inline the congruence closure in $\longcox$, allowing arbitrary
+  reductions inside the list.}
 
-\todo {but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
+\todo{but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
 
 First, we need to define a helper function $n \downf k$.
 
@@ -480,8 +492,11 @@ First, we need to define a helper function $n \downf k$.
   \end{align*}
 \end{definition}
 
-The result of this function is the sequence \(k + n, k + n - 1, k + n - 2, \ldots, n + 1\). Since we think of the number $m$ as the transposition $\tau_m$ which swaps elements $\el{m}$ and $\el{m+1}$, the role of this helper function is to produce a sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ by $k$ places left, shifting all the elements in between one place right. Expressed in terms of the braiding diagram, for
-$n = 0$ and $k = 4$, it has the following form:
+The result of this function is the sequence \(k + n, k + n - 1, k + n - 2, \ldots, n + 1\). Since we think of the number
+$m$ as the transposition $\tau_m$ which swaps elements $\el{m}$ and $\el{m+1}$, the role of this helper function is to
+produce a sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ $k$ places left, shifting all
+the elements in between one place right. Expressed in terms of the braiding diagram, for $n = 0$ and $k = 4$, it has the
+following form:
 
 \[
   \begin{tikzpicture}
@@ -505,8 +520,10 @@ Then, the directed relation $\longcox$ is defined with the following generators.
   \end{align*}
 \end{definition}
 
-Constructors $\longcancel$ and $\longswap$ correspond directly to the approproiate constructors of $\cox$ and can be visualised in the same way as before. The remaining constructor uses the helper function to exchange the order of a long sequence of transpositions and a single transposition afterwards. For example, for $n = 2$ and $k = 4$, it allows for the reduction
-$[7, 6, 5, 4, 3, 7] \longcox* [6, 7, 6, 5, 4, 3]$. Visualized on the braid diagram, it looks as follows:
+Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and can be
+visualised in the same way as before. The remaining constructor uses the helper function to exchange the order of a long
+sequence of transpositions and a single transposition afterwards. For example, for $n = 2$ and $k = 4$, it allows for
+the reduction $[7, 6, 5, 4, 3, 7] \longcox* [6, 7, 6, 5, 4, 3]$. Visualised on the braid diagram, it looks as follows:
 
 \[
   \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
@@ -532,9 +549,12 @@ $[7, 6, 5, 4, 3, 7] \longcox* [6, 7, 6, 5, 4, 3]$. Visualized on the braid diagr
   \end{tabular}
 \]
 
-Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 0$.
+Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 0$. Also, as before, the left-hand
+sides of the relation are strictly larger than the right-hand sides, in terms of the lexicographic order on
+$\List[\Fin[n]]$.
 
-Like before, we define the $\longcox*$ to be the closure of $\longcox$, but only under reflexivity and transitivity.
+We define the relation $\longcox*$ to be the closure of $\longcox$, under reflexivity and (right-step extended)
+transitivity.
 
 \begin{definition}[$\longcox*$]
   \begin{align*}
@@ -564,27 +584,33 @@ of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results formally.
   \end{enumerate}
 \end{proposition}
 
-The modified form of the Coxeter relations are unwieldy and difficult to prove properties about by induction, and, as we mentioned, have little connection to the broader scope of computational group theory. However, we can prove that the closures of the two forms of the relations are equivalent, and work up to this equivalence!
+The modified form of the Coxeter relations are unwieldy and difficult to prove properties about by induction. However,
+we can use the following observation to be able to use the more standard $\cox*$ relation.~\todo{Check Huet's paper for
+  this property.}
 
 \begin{proposition}~\label{prop:coxlongcox}
-  $\cox*$ and $\longcox*$ are equivalent in the following sense: for every $w$ and $v$, $w \cox* v$ iff there is a $u$ such that $w \longcox* u$ and $v \longcox* u$.
+  $\cox*$ and $\longcox*$ are equivalent in the following sense: for every $w$ and $v$, $w \cox* v$ iff there is a $u$
+  such that $w \longcox* u$ and $v \longcox* u$.
 \end{proposition}
-\jk{does the construction above has a name? It is analogous to the one we do in lambda calculus, when taking $\equiv_{\beta}$. We have to write something about this proof using the Church-Rosser idea.}
 
 By strong normalisation, we get a unique choice function $\normf : {\List[\Fin[n]]} \to {\List[\Fin[n]]}$ that produces
-a normal form for terms of $\List[\Fin[n]]$. Equivalence classes on $\List[\Fin[n]]$ are precisely those terms that have
-the same normal form. We state a few important properties that $\normf$ satisfies.
+a normal form for terms of $\List[\Fin[n]]$. Equivalence classes on $\List[\Fin[n]]$ are defined to be those terms that
+have the same normal form. We state a few important properties that $\normf$ satisfies.
 
 \begin{proposition}
   \leavevmode
   \begin{enumerate}
     \item For all $l : \List[\Fin[n]]$, we have that $l \cox* \normf(l)$.
     \item $\normf$ is idempotent, that is, $\normf \comp \normf \htpy \normf$.
-    \item $\normf$ splits, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n] \xrightarrow{r} {\List[\Fin[n]]}$
-          such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
+    \item $\normf$ splits into a section-retraction pair, that is, we have
+          ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n] \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$
+          and $r \comp s \htpy \idfunc_{\Sn[n]}$.
     \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \).
   \end{enumerate}
 \end{proposition}
+
+\todo{We set out to solve the word problem for $\Sn$ \ldots}
+\todo{Revise this section by introducing $\Sn$ here.}
 
 Note that this relation $\cox*$ is not $\hProp$-valued, that is, $w \cox* v$ is not a proposition because reductions are
 not unique. Because of this, the quotient $\Sn$ is not effective, that is, $\quotrel : w \cox* v \to q(w) \id q(v)$ is
@@ -602,7 +628,7 @@ the free group $F(\Fin[n])$.
   inverse is given by list reversal.
 \end{proposition}
 
-\begin{proposition}
+\begin{proposition}~\label{prop:lift-codiag}
   $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
   $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A \to A$.
 \end{proposition}
@@ -646,14 +672,18 @@ $\Nat$, or as a type family generated by two constructors.
 
 \todo{Explain why the two definitions are equivalent?}
 
-For a permutation $\sigma : \Aut[\Fin[n]]$, for any element $i: \Fin[n]$, we can define the inversion count of $i$ as the number of elements smaller than it appearing after in the permutation.
+For a permutation $\sigma : \Aut[\Fin[n]]$, for any element $i: \Fin[n]$, we can define the inversion count of $i$ as
+the number of smaller elements appearing after it in the permutation.
+
 \todo{typify}
 \begin{definition}
-    Given $\sigma : \Aut[\Fin[n]]$, the inversion count of $k: \Fin[n]$ is given by
-    $|\{j < i : \sigma(j) > \sigma(i)\}|$.
+  Given $\sigma : \Aut[\Fin[n]]$, the inversion count of $k: \Fin[n]$ is given by
+  $|\Set{j < i | \sigma(j) > \sigma(i)}|$.
 \end{definition}
 
-It turns out that knowing just the inversion counts for all the elements, one can reconstruct the starting permutation. Also, observe that the inversion count for element $i$ is guaranteed to be smaller than $i$, thus fitting in the $i$-th place of a Lehmer code tuple. As an example, consider the following tabulated presentation of the permutation:
+It turns out that knowing just the inversion counts for all the elements, one can reconstruct the starting permutation.
+Also, observe that the inversion count for element $i$ is guaranteed to be smaller than $i$, thus fitting in the $i$-th
+place of a Lehmer code tuple. As an example, consider the following tabulated presentation of the permutation:
 
 \todo{fix this figure}
 
@@ -672,10 +702,14 @@ It turns out that knowing just the inversion counts for all the elements, one ca
 % |2|0|1|4|3|
 % -----------
 
-The inversion count for $\el{0}$ is 0 (because there are no smaller elements at all), for $\el{1}$ is 0 (because of $\el{0}$ appearing after), for $\el{2}$ is 2 (because of $\el{0}$ and $\el{1}$), for $\el{3}$ is 0 (because it is last in the sequence), and for $\el{4}$ is 1 (because of $\el{3}$). Thus, the Lehmer code for the permutation $\sigma$ is the 5-tuple $l = (0, 1, 2, 0, 1)$.
+The inversion count for $\el{0}$ is 0 (because there are no smaller elements at all), for $\el{1}$ is 0 (because of
+$\el{0}$ appearing after), for $\el{2}$ is 2 (because of $\el{0}$ and $\el{1}$), for $\el{3}$ is 0 (because it comes
+last in the sequence), and for $\el{4}$ is 1 (because of $\el{3}$). Thus, the Lehmer code for the permutation $\sigma$
+is the 5-tuple $l = (0, 1, 2, 0, 1)$.
 
-To construct the presentation of the permutation from the Lehmer code, written using adjacent transpositions, we perform an algorithm similar to \emph{insertion sort}. Starting from the left-most position of the tuple $l$, we'll read the value $v$, insert the new
-element at the end of the newly created list, and shift it backward $v$ places.
+To construct the presentation of the permutation from the Lehmer code, written using adjacent transpositions, we perform
+an algorithm similar to \emph{insertion sort}. Starting from the left-most position of the tuple $l$, we'll read the
+value $v$, insert the new element at the end of the newly created list, and shift it backward $v$ places.
 
 \begin{center}
   \begin{tabular}{c|p{0.75\linewidth}}
@@ -728,7 +762,7 @@ We can also establish an equivalence between $\im{\normf}$ and $\Sn$, which give
   For all $n : \Nat$, \( \Sn \eqv \im{\normf} \eqv \Lehmer[n] \).
 \end{proposition}
 
-\todo{So now, finally, give an explict example of a normal form, Lehmer immersion}.
+\todo{So now, finally, give an explicit example of a normal form, Lehmer immersion}.
 
 \subsection{Running Lehmer codes}
 
