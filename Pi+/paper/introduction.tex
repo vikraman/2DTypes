@@ -16,8 +16,7 @@ g(r,h) &=& (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
 
 Wouldn't it be simpler to write this permutation and automatically derive a circuit from it? This is exactly what we accomplish. We can take the permutation above, generate a circuit from it, \emph{and most importantly} generate a proof of correctness along with the circuit. As part of the infrastructure we provide a sound and complete calculus of reversible functions that can be used to (i) generate circuits from permutations like above, (ii) translate circuits to a normal form, (iii) reason about equivalence of circuits, (iv) and provide a framework for reasoning about trade-offs among optimizing tranformations.
 
-Technically, the main result is a soundness and completeness theorem relating a 2-level reversible programming language with a univalent universe of finite types expressed as a weak groupoid in the metalanguage of HoTT. Along the way, we \ldots \note{copy relevant pieces from below}
-
+Technically, the main result is a soundness and completeness theorem relating a 2-level reversible programming language with a univalent universe of finite types expressed as a weak groupoid in the metalanguage of HoTT. On the HoTT we start with a univalent subuniverse specification of finite types, equivalences between them, and homotopies between the equivalences. This is a concise description of everything we need to know about circuits and transformations among them. Along the way, we \ldots \note{copy relevant pieces from below}
 
 
 \subsection*{Outline and Contributions}
