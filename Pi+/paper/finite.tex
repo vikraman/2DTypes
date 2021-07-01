@@ -130,7 +130,7 @@ We already mentioned that the structure of a free group $F(A)$ is fully specifie
 The HoTT definition of $F(A)$ has lots of path constructors corresponding to
 each group axiom. \jk{why did we introduced it? Why is it bad?}. 
 
-Instead, in the proof, we will think about the free group as it was introduced at the beginning: elements of the free group as words over an alphabet of letters from generating set and the set of their formal inverses. If we take the disjoint union of $A$ with itself, that is, $A + A$ as the group's underlying set, we can use $\inl/\inr$ to mark the elements - for example, by stating that $\inl(a)}$ means $a$ and $\inr(a)$ means $\inv{a}$. 
+Instead, in the proof, we will think about the free group as it was introduced at the beginning: elements of the free group as words over an alphabet of letters from generating set and the set of their formal inverses. If we take the disjoint union of $A$ with itself, that is, $A + A$ as the group's underlying set, we can use $\inl/\inr$ to mark the elements - for example, by stating that $\inl{a}$ means $a$ and $\inr{a}$ means $\inv{a}$. 
 Hence, we can encode the free group using the free monoid - which is to say, lists on $A + A$. Additionally, we need to ensure that group laws hold, so words identified by the group equations are equalt. Thus, elements of the group will actually be equivalence classes of lists on $A + A$.
 
 \begin{definition}~\label{def:presentation}
