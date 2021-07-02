@@ -677,59 +677,48 @@ the number of smaller elements appearing after it in the permutation.
 
 \todo{typify}
 \begin{definition}
-  Given $\sigma : \Aut[\Fin[n]]$, the inversion count of $k: \Fin[n]$ is given by
-  $|\Set{j < i | \sigma(j) > \sigma(i)}|$.
+  Given a permutation $\sigma : \Aut[\Fin[n]]$, the inversion count of $k: \Fin[n]$ is given by
+  \[ |\Set{j < i | \sigma(j) > \sigma(i)}|. \]
 \end{definition}
 
-It turns out that knowing just the inversion counts for all the elements, one can reconstruct the starting permutation.
-Also, observe that the inversion count for element $i$ is guaranteed to be smaller than $i$, thus fitting in the $i$-th
-place of a Lehmer code tuple. As an example, consider the following tabulated presentation of the permutation:
-
-\todo{fix this figure}
+It turns out that from knowing just the inversion counts for all the elements, one can reconstruct the starting
+permutation. Also, observe that the inversion count for element $i$ is guaranteed to be smaller than $i$, thus fitting
+in the $i$-th place of a Lehmer code tuple. As an example, consider the following tabulated presentation of a
+permutation of $\Fin[5]$.
 
 \[
   \sigma =
-  \begin{array}{ccccccccccccccc}
-    | & 0      & | & 1      & | & 2      & | & 3      & | & 4      & | \\
-    \hline                                                             \\
-    | & \el{2} & | & \el{1} & | & \el{4} & | & \el{0} & | & \el{3} & | \\
-    \hline                                                             \\
-  \end{array}
+  \begin{pmatrix}
+    0      & 1      & 2      & 3      & 4      \\
+    \el{2} & \el{1} & \el{4} & \el{0} & \el{3} \\
+  \end{pmatrix}
 \]
 
-%  0 1 2 3 4
-% -----------
-% |2|0|1|4|3|
-% -----------
-
-The inversion count for $\el{0}$ is 0 (because there are no smaller elements at all), for $\el{1}$ is 0 (because of
+The inversion count for $\el{0}$ is 0 (because there are no smaller elements at all), for $\el{1}$ is 1 (because of
 $\el{0}$ appearing after), for $\el{2}$ is 2 (because of $\el{0}$ and $\el{1}$), for $\el{3}$ is 0 (because it comes
-last in the sequence), and for $\el{4}$ is 1 (because of $\el{3}$). Thus, the Lehmer code for the permutation $\sigma$
-is the 5-tuple $l = (0, 1, 2, 0, 1)$.
+last in the sequence), and for $\el{4}$ is 2 (because of $\el{3}$ and $\el{0}$). Thus, the Lehmer code for the permutation $\sigma$
+is the 5-tuple $l = (0, 1, 2, 0, 2)$.
 
-To construct the presentation of the permutation from the Lehmer code, written using adjacent transpositions, we perform
-an algorithm similar to \emph{insertion sort}. Starting from the left-most position of the tuple $l$, we'll read the
-value $v$, insert the new element at the end of the newly created list, and shift it backward $v$ places.
+To decode the permutation back from this Lehmer code, we perform an algorithm similar to \emph{insertion sort}. The
+element of the Lehmer code being currently processed is highlighted in the left column of the table below. Starting from
+a sorted list, the element at index $k$ has to be given $l[k]$ inversions. Because of the the invariant that all the
+elements before newly processed one are smaller than it, the proper number of inversions is created by simply shifting
+the element $l[k]$ places left.
 
 \begin{center}
-  \begin{tabular}{c|p{0.75\linewidth}}
-    (0, 0, 2, 0, 1)               & We start from an empty list $[]$                                                                 \\
-    (\highlight{{0}}, 0, 2, 0, 1) & We read 0 as the left-most value from $l$. Thus, we append the element $\el{0}$ to our
-    list, getting $[\el{0}]$. The element is shifted $0$ places, so it remains in the
-    same place.                                                                                                                      \\
-    (0, \highlight{{0}}, 2, 0, 1) & Then, similarly, we read another 0 for the element $\el{1}$, append it to the
-    list getting $[\el{0}, \el{1}]$, and don't shift it either.                                                                      \\
-    (0, 0, \highlight{{2}}, 0, 1) & We read 2 for the next the element $\el{2}$ - we append $\el{2}$ to our list, getting
-    $[\el{0}, \el{1}, \el{2}]$, and shift it 2 places right, which results in a list $[\el{0}, \el{2}, \el{1}]$
-    \todo{Typeset it nicely, with arrows showing the shifting}.                                                                      \\
-    (0, 0, 2, \highlight{{0}}, 1) & Then we read 0 - appending $\el{3}$ and not shifting, getting $[\el{0}, \el{2}, \el{1}, \el{3}]$ \\
-    (0, 0, 2, 0, \highlight{{1}}) & Finally, reading 1 for element $\el{4}$ - appending $\el{4}$ to the list and shifting it
-    one place right results in the final list $[\el{0}, \el{2}, \el{1}, \el{4}, \el{3}]$                                             \\
+  \begin{tabular}{l|r}
+    (\highlight{{0}}, 1, 2, 0, 2) & $[\highlightAlt{\el{0}}, \el{1}, \el{2}, \el{3}, \el{4}]$ \\
+    (0, \highlight{{1}}, 2, 0, 2) & $[\highlightAlt{\el{1}}, \el{0}, \el{2}, \el{3}, \el{4}]$ \\
+    (0, 1, \highlight{{2}}, 0, 2) & $[\highlightAlt{\el{2}}, \el{1}, \el{0}, \el{3}, \el{4}]$ \\
+    (0, 1, 2, \highlight{{0}}, 2) & $[\el{2}, \el{1}, \el{0}, \highlightAlt{\el{3}}, \el{4}]$ \\
+    (0, 1, 2, 0, \highlight{{2}}) & $[\el{2}, \el{1}, \highlightAlt{\el{4}}, \el{0}, \el{3}]$ \\
   \end{tabular}
 \end{center}
-\todo{figure}
 
-Writing formally, to turn a code into a permutation written in the Coxeter presentation, we use $\immersion$:
+Writing formally, to turn a code into a permutation written in the Coxeter presentation, we define a function
+$\immersion$. As described above, the number $r$ at position $k$ in the tuple describes how many inversions the element
+$\el{k}$ has. Thus, we need to perform $r$ many adjacent transpositions to get to the desired position, which is given
+by $(\suc[n] - r) \downf r$.
 
 \begin{definition}[$\immersion : (n : \Nat) \to {\Lehmer[n]} \to {\List[\Fin[\suc[n]]]}$]
   \begin{align*}
@@ -738,12 +727,8 @@ Writing formally, to turn a code into a permutation written in the Coxeter prese
   \end{align*}
 \end{definition}
 
-As described above, the number $r$ at the position $k$ in the tuple describes how many inversions the element $\el{k}$
-has. Thus, we need to perform $r$ many adjacent transpositions to get to the desired position, which is given by
-$(\suc[n] - r) \downf r$.
-
 As an example, let us look at the code $c = (4, 3, 2, 1, 0)$. The list $\immersion(c)$ is then going to be $[0, 1, 0, 2,
-1, 0, 3, 2, 1, 0, 4, 3, 2, 1, 0]$. It is a concatenation of a sequence of decreasing lists. Where could a reduction
+      1, 0, 3, 2, 1, 0, 4, 3, 2, 1, 0]$. It is a concatenation of a sequence of decreasing lists. Where could a reduction
 happen? First, it can't happen inside any of the decreasing components: $\longcancel$ requires repeating elements,
 $\longswap$ acts when a smaller number precedes a larger one, and $\longbraid$ has a non-monotone sequence on the left.
 This leaves the case of a reduction happening on a fragment that borders two subsequences. Again, $\longcancel$ requires
