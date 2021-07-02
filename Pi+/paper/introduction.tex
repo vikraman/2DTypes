@@ -1,11 +1,6 @@
 \section{Introduction}~\label{sec:introduction}
 
-\todo{Spiel about reversible computing and logical reversibility}
-\todo{Spiel about using groupoids for denotational semantics}
-
-\paragraph*{Synthesis of Reversible Core of Quantum Circuits.}
-
-Most current quantum algorithms start with generating superpositions, evolving them using a unitary transformation, and then projecting them with a measurement operator. The middle stage is essentially a reversible classical computation (executed in a quantum-parallel fashion). We illustrate that middle stage in detail by synthesizing a reversible circuit implementing boolean disjunction ($\vee$). Following~\citet{Toffoli:1980}, the first step is to write a specification for the desired reversible function:
+\paragraph*{Synthesis of Reversible Core of Quantum Circuits.} Most current quantum algorithms start with generating superpositions, evolving them using a unitary transformation, and then projecting them with a measurement operator. The middle stage is essentially a reversible classical computation (executed in a quantum-parallel fashion). We illustrate that middle stage in detail by synthesizing a reversible circuit implementing boolean disjunction ($\vee$). Following~\citet{Toffoli:1980}, the first step is to write a specification for the desired reversible function:
 \[
 \mathit{reversibleOr}(h,b_1,b_2) ~=~ (h \,\underline{\vee}\, (b_1 \vee b_2), ~b_1, ~b_2)
 \]
@@ -99,107 +94,114 @@ which is used to build a circuit for modular multiplication, and then finally a 
 taking care at each step to avoid the exponential blowup (e.g., by implementing exponentiation by squaring instead of repeated
 multiplication)~\cite{shorefficient}.
 
-\paragraph*{Our Technical Results.} The main result of the paper is that the category of finite sets and bijections,
-with the two monoidal structures given by sum and product, is the free rig groupoid.
+\paragraph*{Our Technical Results.} The main result of the paper is a proof, formalized in the HoTT-Agda library, that
+the category of finite sets and bijections is the free rig groupoid; its structure is illustrated diagrammatically below:
 
-\begin{verbatim}
-significance of result mathematically
+\[\begin{tikzcd}
+    \PiLang && \PiPlusLang && \PiHatLang && \UFin
+    \arrow["\evalt", from=1-1, to=1-3]
+    \arrow["\evalp", curve={height=-24pt}, from=1-3, to=1-5]
+    \arrow["\evalh", curve={height=-24pt}, from=1-5, to=1-7]
+    \arrow["\quotep", curve={height=-24pt}, from=1-5, to=1-3]
+    \arrow["\quoteh", curve={height=-24pt}, from=1-7, to=1-5]
+  \end{tikzcd}\]
 
-the proof has some additional interesting sub-results:
-  sound and complete calculus
-  3 way table
-  Curry-Howard-Lambek
-  other things?
+\noindent The nodes $\PiLang$, $\PiPlusLang$, and $\PiHatLang$ each represent a syntactic weak 2-category (groupoid
+actually as all morphisms are isomorphisms) where the 0-cells represent types, the 1-cells represent reversible
+circuits, and the 2-cells represent circuit equivalences. In $\PiLang$, the circuits represent arbitrary permutations
+among finite sets with products and coproducts; in $\PiPlusLang$, the circuits represent arbitrary permutations among
+finite sets with only coproducts; and in $\PiHatLang$, the permutations are expressed using adjacent transpositions. The
+node $\UFin$ is the \emph{univalent subuniverse of all finite types} which expresses for each $n$, the permutation group
+on $\Fin[n]$ or the symmetric group $\Sn$. The syntactic groupoid $\PiPlusLang$ is the free rig groupoid; the universe
+$\UFin$ is the groupoid of finite sets and bijections; the $\evalp/\quotep$ and $\evalh/\quoteh$ arrows establish a
+\emph{symmetric monoidal biequivalence} between these two groupoids. To get a taste of the involved complexity of this
+result, consider the obvious fact that, semantically, i.e., in $\UFin$, it is obvious that there is only one bijection
+from the empty set to itself. However, in the free groupoid, there are an infinite number of isomorphisms from the empty
+type to itself that go through arbitrary complex subtypes, e.g.,
+$\zerot \isot \zerot \times A \isot \zerot \times (A + \zerot) \isot (\zerot \times A) + (\zerot \times \zerot) \isot
+(\zerot \times \zerot) + (\zerot \times A) \isot \zerot + (\zerot \times A) \isot \zerot + \zerot \isot \zerot$, and all
+such isomorphisms must be identified using appropriate coherence laws. The technical device to achieve this
+normalization is as
+follows. First, we observe that 1-paths in $\UFin$ are permutations on finite sets with a fixed cardinality $n$, given by $\Aut[\Fin[n]]$,
+which produce the permutation group on $\Fin[n]$, or the symmetric group $\Sn$. By giving a presentation of $\Sn$ using
+generators and relations, we build a rewriting system using the Coxeter relations~\cite{XXX} on the set of words $\List[\Fin[n]]$,
+and show that it is (locally) confluent and strongly normalizing. We then establish that the symmetric group $\Sn$ is the
+set-quotient of $\List[\Fin[n]]$ by the Coxeter relations, and show that it produces a group presentation, as a quotient
+of the free group. Using this strongly normalizing rewriting system, we establish that normal forms for words in $\Sn$
+are Lehmer codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a convenient and compact representation of
+permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations
+$\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
 
-what the result implies for circuits:
-  NBE, equivalence, synthesis with correctness proof, etc.
-\end{verbatim}
+The technical result implies several immediate applications to reversible circuits: (i) a reversible circuit expressed in
+$\PiPlusLang$ can be automatically generated from a permutation in $\UFin$ \emph{and the generation comes equipped with
+  a proof of correctness establishing its equivalence between the circuit and the original permutation}; (ii) circuits in
+  $\PiLang$ or $\PiPlusLang$ can be reduced to a normal form using a normalization by evaluation process that evaluates
+  them to a permutation in $\UFin$ and quotes it back; (iii) equivalence
+  of circuits in either $\PiLang$ or $\PiPlusLang$ can be decided by reducing them to normal forms; (iv) the induced
+  circuit equivalences in $\PiLang$ and $\PiPlusLang$ form a sound and complete calculus for reasoning about and
+  optimizing circuits. (See Sec.~\ref{sec:informal} for more details.)
 
-synthesis algorithms (no correctness)
+  \note{perhaps a note about the result being folklore; assumed in many places; but no proof; and certainly none
+    formalized in a proof assistant. In some sense, what we have done is to take MacLane's coherence theorem and
+    formalized it in HoTT, and given presentations for it using Pi's syntax. Also relevant is that the equivalence
+    result hides implicit isomorphisms that have computational relevance. For example, transporting properties across
+    equivalences of finite types can be done via executing permutations, something which has a clear computational cost
+    and which itself depends on the choice of representations of the permutations.}
 
-programming from scratch (manual / perhaps better; also no correctness embedded)
+% \begin{itemize}[leftmargin=*]
+%   \item We take the $\PiLang$ family of reversible languages~\cite{jamesInformationEffects2012} and show how to encode
+%         various boolean reversible circuits in the language. The circuits are implemented using 1-combinators in the
+%         language, and circuit optimisations are realized as 2-combinators between these reversible programs.
+%   \item We show how to encode reversible circuits on a fixed number of bits as permutations of finite sets with the
+%         appropriate cardinality. We observe that reversible programs can be translated to bijective functions between
+%         finite sets and equality of reversible programs can be witnessed as extensional equality of these bijective
+%         functions.
+%   \item We review a few basics of Homotopy Type Theory~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}, and
+%         exhibit some results that we use in our technical development. We define the notion of a universe \`{a} la
+%         Tarski internally in HoTT, which is given by a type for codes $U$ and a decoding function to a univalent
+%         universe $\El : U \to \UU$. We say that this universe is univalent, if the decoding fibration is univalent, that
+%         is, the decoding function $\El$ reflects the path space of the underlying univalent universe. We exhibit some
+%         examples of univalent subuniverses, in particular, we define the subuniverse of finite types, $\UFin$, which
+%         classifies all finite types, and show that it is univalent. Using this, we establish a characterization of the
+%         path space of the universe of finite types.
+%   \item We observe that 1-paths in $\UFin$ are permutations on finite sets with a fixed cardinality $n$, given by
+%         $\Aut[\Fin[n]]$, which produces the permutation group on $\Fin[n]$, or the symmetric group $\Sn$. We then
+%         proceed to give a presentation of $\Sn$ using generators and relations, by defining the Coxeter relations. We
+%         build a rewriting system using the Coxeter relations on the set of words $\List[\Fin[n]]$, and show that it is
+%         (locally) confluent and strongly normalising. We define the the symmetric group $\Sn$ to be the set-quotient of
+%         $\List[\Fin[n]]$ by the Coxeter relations, and show that it produces a group presentation, as a quotient of the
+%         free group. Using our strongly normalising rewriting system, we establish that normal forms for words in $\Sn$
+%         are Lehmer codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a convenient and compact representation
+%         of permutations for permutations. Finally, we show that there is an equivalence between Lehmer codes and
+%         permutations $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
+%   \item Finally, we show how to interpret the language $\PiLang$ into our groupoid $\UFin$, in stages. First we define a
+%         subset of the language $\PiPlusLang$ which only includes the additive monoidal structure. We translate $\PiLang$
+%         programs to $\PiPlusLang$ by defining multiplication as repeated addition. Then, we further define a normalized
+%         form for for this language called $\PiHatLang$, which has normalized 1-combinators and 2-combinators
+%         corresponding to adjacent transpositions. We show that $\PiPlusLang$ can be translated to $\PiHatLang$ and back,
+%         using adjacent transpositions to generate arbitrary swaps. Then, we show how to interpret this language
+%         $\PiHatLang$ into $\UFin$ -- the 1-combinators are translated into permutations via words in $\Sn$, and
+%         2-combinators are interpreted as 2-paths in $\UFin$. We further show how to quote back a permutation in $\UFin$
+%         into a 1-combinator using the normal form for words in $\Sn$.
+%   \item We give some applications of this translation by showing how to normalise a circuit written in $\PiLang$ to a
+%         normal form in $\PiPlusLang$ and $\PiHatLang$, which uses fewer gates.~\todo{Here, or earlier?}
+% \end{itemize}
 
-for complex circuits correctness not evident
+% Our results are formalized in the proof assistant Agda using the HoTT-Agda library.
 
-
-The circuit must be built from reversible primitives and guaranteed to have the same functionality as the original bijective function.
-
-It would be good if we could write a 3 way correspondence in a table like this, but I'm not sure where:
-
-Pi types -- Natural number -- Finite sets
-1-combinator -- Generators of Sn -- 1-paths
-2-combinator -- Relations of Sn -- 2-paths
-
-This review does make me very nervous, basically all we've done is taken MacLane's coherence theorem and formalized it in HoTT, and given presentations for it using Pi's syntax. There's nothing "new", but the new idea is that we can use this for reversible circuit equivalence and normalisation.
-
-But we do have a complete proof that UFin is the free sym. mon. groupoid, which wasn't there earlier
-
-Wouldn't it be simpler to write this permutation and automatically derive a circuit from it? This is exactly what we accomplish. We can take the permutation above, generate a circuit from it, \emph{and most importantly} generate a proof of correctness along with the circuit. As part of the infrastructure we provide a sound and complete calculus of reversible functions that can be used to (i) generate circuits from permutations like above, (ii) translate circuits to a normal form, (iii) reason about equivalence of circuits, (iv) and provide a framework for reasoning about trade-offs among optimizing tranformations.
-
-Technically, the main result is a soundness and completeness theorem relating a 2-level reversible programming language with a univalent universe of finite types expressed as a weak groupoid in the metalanguage of HoTT. On the HoTT we start with a univalent subuniverse specification of finite types, equivalences between them, and homotopies between the equivalences. This is a concise description of everything we need to know about circuits and transformations among them. Along the way, we \ldots \note{copy relevant pieces from below}
-
-
-\note{Could we include a short paragraph about entropy and bits and logical reversibility?}
-
-  Indeed some of the connections above are trivial in "conventional
-mathematics"; however some of those same connections hide implicit
-isomorphisms (changes of representations) that are important
-computationally.  Our construction shows, for example, that
-transporting properties across equivalences of finite types can be
-done via executing permutations, something which has a clear
-computational cost and which itself depends on the choice of
-representations of the permutations.
-
-\subsection*{Outline and Contributions}
-
-\begin{itemize}[leftmargin=*]
-  \item We take the $\PiLang$ family of reversible languages~\cite{jamesInformationEffects2012} and show how to encode
-        various boolean reversible circuits in the language. The circuits are implemented using 1-combinators in the
-        language, and circuit optimisations are realized as 2-combinators between these reversible programs.
-  \item We show how to encode reversible circuits on a fixed number of bits as permutations of finite sets with the
-        appropriate cardinality. We observe that reversible programs can be translated to bijective functions between
-        finite sets and equality of reversible programs can be witnessed as extensional equality of these bijective
-        functions.
-  \item We review a few basics of Homotopy Type Theory~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}, and
-        exhibit some results that we use in our technical development. We define the notion of a universe \`{a} la
-        Tarski internally in HoTT, which is given by a type for codes $U$ and a decoding function to a univalent
-        universe $\El : U \to \UU$. We say that this universe is univalent, if the decoding fibration is univalent, that
-        is, the decoding function $\El$ reflects the path space of the underlying univalent universe. We exhibit some
-        examples of univalent subuniverses, in particular, we define the subuniverse of finite types, $\UFin$, which
-        classifies all finite types, and show that it is univalent. Using this, we establish a characterization of the
-        path space of the universe of finite types.
-  \item We observe that 1-paths in $\UFin$ are permutations on finite sets with a fixed cardinality $n$, given by
-        $\Aut[\Fin[n]]$, which produces the permutation group on $\Fin[n]$, or the symmetric group $\Sn$. We then
-        proceed to give a presentation of $\Sn$ using generators and relations, by defining the Coxeter relations. We
-        build a rewriting system using the Coxeter relations on the set of words $\List[\Fin[n]]$, and show that it is
-        (locally) confluent and strongly normalising. We define the the symmetric group $\Sn$ to be the set-quotient of
-        $\List[\Fin[n]]$ by the Coxeter relations, and show that it produces a group presentation, as a quotient of the
-        free group. Using our strongly normalising rewriting system, we establish that normal forms for words in $\Sn$
-        are Lehmer codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a convenient and compact representation
-        of permutations for permutations. Finally, we show that there is an equivalence between Lehmer codes and
-        permutations $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
-  \item Finally, we show how to interpret the language $\PiLang$ into our groupoid $\UFin$, in stages. First we define a
-        subset of the language $\PiPlusLang$ which only includes the additive monoidal structure. We translate $\PiLang$
-        programs to $\PiPlusLang$ by defining multiplication as repeated addition. Then, we further define a normalized
-        form for for this language called $\PiHatLang$, which has normalized 1-combinators and 2-combinators
-        corresponding to adjacent transpositions. We show that $\PiPlusLang$ can be translated to $\PiHatLang$ and back,
-        using adjacent transpositions to generate arbitrary swaps. Then, we show how to interpret this language
-        $\PiHatLang$ into $\UFin$ -- the 1-combinators are translated into permutations via words in $\Sn$, and
-        2-combinators are interpreted as 2-paths in $\UFin$. We further show how to quote back a permutation in $\UFin$
-        into a 1-combinator using the normal form for words in $\Sn$.
-  \item We give some applications of this translation by showing how to normalise a circuit written in $\PiLang$ to a
-        normal form in $\PiPlusLang$ and $\PiHatLang$, which uses fewer gates.~\todo{Here, or earlier?}
-\end{itemize}
-
-Our results are formalized in the proof assistant Agda using the HoTT-Agda library.
-
-\note{Novel interpretation of the univalence axiom, operational and denotational semantics and adequacy.}
-
-\todo{Redo this figure}
 \begin{center}
   \includegraphics[scale=0.3]{outline.png}
 \end{center}
 
+\note{Redo this figure or delete ??}
+
+\note{Spiel about reversible computing and logical reversibility ??}
+
+\note{Spiel about using groupoids for denotational semantics ??}
+
+\note{Could we include a short paragraph about entropy and bits and logical reversibility ??}
+
+\note{Novel interpretation of the univalence axiom, operational and denotational semantics and adequacy.}
 
 %%% Local Variables:
 %%% mode: latex
