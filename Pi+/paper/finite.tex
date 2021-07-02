@@ -751,13 +751,11 @@ $\im{\normf}$.
   Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
 \end{proposition}
 
-We can also establish an equivalence between $\im{\normf}$ and $\Sn$, which gives the following.
+We also established an equivalence between $\im{\normf}$ and $\Sn$, which gives the following.
 
 \begin{proposition}~\label{prop:sn-im-lehmer-equiv}
   For all $n : \Nat$, \( \Sn \eqv \im{\normf} \eqv \Lehmer[n] \).
 \end{proposition}
-
-\todo{So now, finally, give an explicit example of a normal form, Lehmer immersion}.
 
 \subsection{Running Lehmer codes}
 
@@ -780,10 +778,10 @@ We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts wi
 \begin{proposition}~\label{prop:fin-finexcept}
   \leavevmode
   \begin{enumerate}
-    \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$.~\label{prop:fin-finexcept-1}
-    \item For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$.~\label{prop:fin-finexcept-2}
-    \item For any $n : \Nat$,
-          \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}[k]} \).~\label{prop:fin-finexcept-3}
+    % \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-1}
+    \item For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-2}
+    \item For any $n : \Nat$, \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
+            \FinExcept{\suc[n]}[n - k]} \). \label{prop:fin-finexcept-3}
   \end{enumerate}
 \end{proposition}
 
@@ -791,17 +789,15 @@ We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts wi
   The first and second propositions follow from simply constructing the bijections using the decidable equality of
   $\Fin[n]$, and making sure to punch-in and punch-out the element $k$ at the right place.
 
-  The third proposition performs some interesting computations. On the left, we have the type of automorphisms of
-  $\Fin[\suc[n]]$. Assume a particular one $\phi : \Fin[\suc[n]] \xrightarrow{\sim} \Fin[\suc[n]]$. To construct an
-  element of the pair on the right, we pick the first component to be the image of the element $\zero$ under $\phi$.
-  After fixing $k \defeq \phi(\zero)$, we need to compute the bijection in the second component. We remove the two
-  elements $\zero$ and $k$ from $\Fin[\suc[n]]$ and construct an equivalence between the resulting types
-  $\FinExcept{\suc[n]}[\zero]$ and $\FinExcept{\suc[n]}[k]$ as follows:
-  $\FinExcept{\suc[n]}[\zero] \eqv \dsum{k:\Fin[\suc[n]]}{(\phi(\zero) \neq \phi(k))} \eqv \FinExcept{\suc[n]}[k]$.
+  The third proposition performs some combinatorial tricks. On the left, we have the type of automorphisms of
+  $\Fin[\suc[n]]$. Assume a particular $\sigma : \Fin[\suc[n]] \xrightarrow{\sim} \Fin[\suc[n]]$. Pick $k$ to be the
+  inversion count of $n$, the largest element in $\Fin[\suc[n]]$. Then, the image of $n$ under $\phi$ has to be $n - k$,
+  since all other elements in the set are smaller. Removing those two from the domain and codomain of $\phi$, the rest
+  of the elements are fixed by $\sigma$, so we compute the bijection between the rest of the elements.
 
-  To go the other way, given a $k : \Fin[\suc[n]]$ and an equivalence
-  $\FinExcept{\suc[n]}[\fzero] \eqv \FinExcept{\suc[n]}[k]$ we compute an equivalence as follows:
-  $\Fin[\suc[n]] \eqv \unit \sqcup \FinExcept{\suc[n]}[k] \eqv \unit \sqcup \Fin[n] \eqv \Fin[\suc[n]]$.
+  For the other direction, if we are given a $k$ and a bijection $\pi$ between $\FinExcept{\suc[n]}[n]$ and
+  $\FinExcept{\suc[n]}[n - k]$, we can extend $\pi$ to $\sigma : \Fin[\suc[n]] \eqv \Fin[\suc[n]]$ by inserting the
+  element $n$ at the position $n - k$, resulting in the element $n$ having inversion count $k$.
 \end{proof}
 
 Using these facts, we can now prove the main result of this section.
@@ -822,143 +818,18 @@ Using these facts, we can now prove the main result of this section.
     \end{array}
     \qquad\qquad
     \begin{array}{rlr}
-           & \Lehmer[\suc[m]]                                                                              &                                                                 \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                         & \text{by definition}                                            \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                & \text{induction hypothesis}                                     \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                              & \text{$\Sigma$ over a constant family}                          \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \Fin[\suc[m]]}          & \text{by~\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-2}} \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[\fzero] \eqv \FinExcept{\suc[m]}[k]} & \text{by~\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-2}} \\
-      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                     & \text{by~\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-3}} \\
+           & \Lehmer[\suc[m]]                                                                                   &                                                                 \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                              & \text{by definition}                                            \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                     & \text{induction hypothesis}                                     \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                          \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                          & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}} \\
     \end{array}
   \end{gather*}
 \end{proof}
 
-To see how the proof works combinatorically, let us go through an example. We will start from a following bijection $p: \Aut[\Fin[4]]$:
-\begin{align*}
-  p(0) \mapsto & 1 \\
-  p(1) \mapsto & 3 \\
-  p(2) \mapsto & 0 \\
-  p(3) \mapsto & 2
-\end{align*}
-
-At first, we start from a full domain $\Fin[4]$ and full codomain $\Fin[4]$.
-\[
-  \begin{bmatrix}
-    0 \\
-    1 \\
-    2 \\
-    3
-  \end{bmatrix}
-  \mapsto
-  \begin{bmatrix}
-    0 \\
-    1 \\
-    2 \\
-    3
-  \end{bmatrix}
-\]
-
-We remember that the last element of result tuple is $k - 1 = 2$. The appropriate elements on both sides are removed,
-forming, respectively, $\FinExcept{4}[0]$ and $\FinExcept{4}[1]$. These are then
-both transformed to $\Fin[3]$ using
-\cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-2}, as shown below.
-
-\[
-  \begin{bmatrix}
-    0 \\
-    1 \\
-    2
-  \end{bmatrix}
-  \equiv
-  \begin{bmatrix}
-    1 \\
-    2 \\
-    3
-  \end{bmatrix}
-  \mapsto
-  \begin{bmatrix}
-    0 \\
-    2 \\
-    3
-  \end{bmatrix}
-  \equiv
-  \begin{bmatrix}
-    0 \\
-    1 \\
-    2
-  \end{bmatrix}
-\]
-
-Then, the original permutation specified that the element $\el{1}$ has to be
-mapped to $\el{3}$. Since we performed renumbering, now it means that element is
-mapped to $\el{2}$ - the resulting tuple now looks like $[2, 1]$. We yet again remove these from the domain and codomain,
-forming $\FinExcept{0}[0]$ and $\FinExcept{0}[2]$.
-
-\[
-  \begin{bmatrix}
-    0 \\
-    1
-  \end{bmatrix}
-  \equiv
-  \begin{bmatrix}
-    1 \\
-    2
-  \end{bmatrix}
-  \mapsto
-  \begin{bmatrix}
-    0 \\
-    2
-  \end{bmatrix}
-  \equiv
-  \begin{bmatrix}
-    0 \\
-    1
-  \end{bmatrix}
-\]
-
-The situation repeats two more times: first, by assinging $\el{0}$ to $\el{1}$,
-giving the tuple $[0, 2, 1]$ and transforming the domain and codomain:
-\[
-  \begin{bmatrix}
-    0
-  \end{bmatrix}
-  \equiv
-  \begin{bmatrix}
-    1
-  \end{bmatrix}
-  \mapsto
-  \begin{bmatrix}
-    0
-  \end{bmatrix}
-  \equiv
-  \begin{bmatrix}
-    0
-  \end{bmatrix}
-\]
-
-And finally, by assinging $\el{0}$ to $\el{0}$, forming a tuple $[0, 0, 2, 1]$ and
-
-At this point we see that the renumbering of the domain is done in an orderly
-way (always shifting by 1), so it can be ignored. On the other hand, the
-ordering of the codomain is what matters. Each time we remove an element, all
-larger elemens are in effect decreased by one.
-
-To remind ourselves, when we introduced the combinatorial interpretation of
-Lehmer codes, the element $\el{r}$ at postition $k$ was said to count the number
-of inversions of the element $\el{r}$. Thus, this is exactly the meachanism in
-which the induction step works.
-
-This corresponds exactly to what happens in
-the \cref{prop:fin-finexcept-3}. Looking at the operation combinatorially, it is
-inserting element $\el{r}$ at the position $k$, meaning that it shifts the
-element $k$places.\jk{needs rewriting after the example is here}
-
-Viewing the codomain as a vector of four elements, element $\el{0}$ has zero
-inverses, element $\el{1}$ has 1 inverse, element $\el{2}$ has 1 inverse, and
-element $3$ has
-
-By composing~\cref{prop:lehmer-aut-equiv} and~\cref{prop:sn-im-lehmer-equiv}, we obtain the final
-equivalence.
+By composing~\cref{prop:lehmer-aut-equiv} and~\cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.
 
 \begin{corollary}
   For all $n : \Nat$,
