@@ -79,16 +79,30 @@ The evaluation of this circuit prints the same truth table as above confirming t
 
 The situation for Shor's algorithm is just as described above but with a more involved function of the form $f(r) = a^{r} \mod N$ for fixed $a$ and $N$. The specification of the circuit is relatively straightforward to calculate. Here it is for $a=11$ and $N=15$:
 \[\begin{array}{rcll}
-g(r,h) &=& (r,h+1) & \mbox{when~$r$~even~and~$h$~even} \\
-(r,h) &=& (r,h-1) & \mbox{when~$r$~even~and~$h$~odd} \\
-g(r,h) &=& (r,11-h) & \mbox{when~$r$~odd~and~$4 > h \geq 0$~or~$12 > h \geq 8$} \\
-g(r,h) &=& (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
+g(r,h) &=& \left\{ \begin{array}{ll}
+                     (r,h+1) & \mbox{when~$r$~even~and~$h$~even} \\
+                     (r,h-1) & \mbox{when~$r$~even~and~$h$~odd} \\
+                     (r,11-h) & \mbox{when~$r$~odd~and~$4 > h \geq 0$~or~$12 > h \geq 8$} \\
+                     (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
+                                \end{array}\right.
 \end{array}\]
 However, as explained in standard accounts of the algorithm (e.g., the Qiskit implementation), such efficient modular exponentiation circuits are not straightforward to derive and are the bottleneck in Shor’s algorithm. Typical derivations of the circuit start from elementary gates, build a circuit for modular addition, which is used to build a circuit for modular multiplication, and then finally a circuit for modular exponentiation taking care at each step to avoid the exponential blowup~\cite{shorefficient}.
 
-\paragraph*{Our Technical Results.}
+\paragraph*{Our Technical Results.} The main result of the paper is that the category of finite sets and bijections,
+with the two monoidal structures given by sum and product, is the free rig groupoid.
 
+\begin{verbatim}
+significance of result mathematically
 
+the proof has some additional interesting sub-results:
+  sound and complete calculus
+  3 way table
+  Curry-Howard-Lambek
+  other things?
+
+what the result implies for circuits:
+  NBE, equivalence, synthesis with correctness proof, etc.
+\end{verbatim}
 
 synthesis algorithms (no correctness)
 
@@ -116,10 +130,6 @@ Technically, the main result is a soundness and completeness theorem relating a 
 
 \note{Could we include a short paragraph about entropy and bits and logical reversibility?}
 
- Referee 4 states that "The main result of the paper is that the
-  category of finite sets and bijections, with the two monoidal
-  structures given by sum and product, is the free rig groupoid."
-
   Indeed some of the connections above are trivial in "conventional
 mathematics"; however some of those same connections hide implicit
 isomorphisms (changes of representations) that are important
@@ -128,11 +138,6 @@ transporting properties across equivalences of finite types can be
 done via executing permutations, something which has a clear
 computational cost and which itself depends on the choice of
 representations of the permutations.
-
-\subsection*{A Complete Example}
-
-
-
 
 \subsection*{Outline and Contributions}
 
