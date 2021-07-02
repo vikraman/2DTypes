@@ -17,10 +17,10 @@ The early developments of reversible programming languages started
 with a conventional programming language, e.g., an extended
 $\lambda$-calculus, and either:
 \begin{enumerate}
-\item extended the language with a history
-mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
-\item imposed constraints on the control flow constructs to make them
-reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
+  \item extended the language with a history
+        mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
+  \item imposed constraints on the control flow constructs to make them
+        reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
 \end{enumerate}
 More foundational approaches recognize that reversible programming languages require a fresh approach and should be
 designed from first principles without the detour via conventional irreversible
@@ -43,46 +43,46 @@ $\inrv{v}$, and the product ($\times$) type containing pairs of values $(v_1,v_2
 syntax of the language $\Pi$ consists of the following sorts:
 
 {\scalebox{\scalef}{$%
-\begin{array}{lrcl}
-\textit{Value types} & A,B,C,D &::=& \zerot \alt \onet \alt A+B \alt A\times B \\
-\textit{Values}      & v,w,x,y &::=& \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
-\textit{Program types} &&& A \iso B \\
-\textit{Programs} & c &::=& (\textrm{See Fig.~\ref{pi-terms}})
-\end{array}$}}
+    \begin{array}{lrcl}
+      \textit{Value types}   & A,B,C,D & ::= & \zerot \alt \onet \alt A+B \alt A\times B        \\
+      \textit{Values}        & v,w,x,y & ::= & \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
+      \textit{Program types} &         &     & A \iso B                                         \\
+      \textit{Programs}      & c       & ::= & (\textrm{See Fig.~\ref{pi-terms}})
+    \end{array}$}}
 \begin{figure}[t]
-{\scalebox{\scalef}{$%
-%%\noindent\begin{minipage}{.7\linewidth}
-\begin{array}{rrcll}
-\idc :& A & \iso & A &: \idc \\
-\\
-\identlp :&  \zerot + A & \iso & A &: \identrp \\
-\swapp :&  A + B & \iso & B + A &: \swapp \\
-\assoclp :&  A + (B + C) & \iso & (A + B) + C &: \assocrp \\ [1.5ex]
-\identlt :&  \onet \times A & \iso & A &: \identrt \\
-\swapt :&  A \times B & \iso & B \times A &: \swapt \\
-\assoclt :&  A \times (B \times C) & \iso & (A \times B) \times C &: \assocrt \\ [1.5ex]
-\absorbr :&~ \zerot \times A & \iso & \zerot ~ &: \factorzl \\
-\dist :&~ (A + B) \times C & \iso & (A \times C) + (B \times C)~ &: \factor
-  \end{array}$}}
+  {\scalebox{\scalef}{$%
+        %%\noindent\begin{minipage}{.7\linewidth}
+        \begin{array}{rrcll}
+          \idc :     & A                     & \iso & A                            & : \idc      \\
+          \\
+          \identlp : & \zerot + A            & \iso & A                            & : \identrp  \\
+          \swapp :   & A + B                 & \iso & B + A                        & : \swapp    \\
+          \assoclp : & A + (B + C)           & \iso & (A + B) + C                  & : \assocrp  \\ [1.5ex]
+          \identlt : & \onet \times A        & \iso & A                            & : \identrt  \\
+          \swapt :   & A \times B            & \iso & B \times A                   & : \swapt    \\
+          \assoclt : & A \times (B \times C) & \iso & (A \times B) \times C        & : \assocrt  \\ [1.5ex]
+          \absorbr : & ~ \zerot \times A     & \iso & \zerot ~                     & : \factorzl \\
+          \dist :    & ~ (A + B) \times C    & \iso & (A \times C) + (B \times C)~ & : \factor
+        \end{array}$}}
 
-{\scalebox{\scalef}{%
-\Rule{}
-{\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : B \iso C}
-{\jdg{}{}{c_1 \fatsemi c_2 : A \iso C}}
-{}
+  {\scalebox{\scalef}{%
+      \Rule{}
+      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : B \iso C}
+      {\jdg{}{}{c_1 \fatsemi c_2 : A \iso C}}
+      {}
 
-\Rule{}
-{\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
-{\jdg{}{}{c_1 \oplus c_2 : A + C \iso B + D}}
-{}
+      \Rule{}
+      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
+      {\jdg{}{}{c_1 \oplus c_2 : A + C \iso B + D}}
+      {}
 
-\Rule{}
-{\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
-{\jdg{}{}{c_1 \otimes c_2 : A \times C \iso B \times D}}
-{}
-}}
-\caption{$\Pi$-terms, combinators, and their types.}
-\label{pi-terms}
+      \Rule{}
+      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
+      {\jdg{}{}{c_1 \otimes c_2 : A \times C \iso B \times D}}
+      {}
+    }}
+  \caption{$\Pi$-terms, combinators, and their types.}
+  \label{pi-terms}
 \end{figure}
 
 \noindent Intuitively, one may view each type $A$ as a collection of physical wires that can transmit $\sizet{A}$
@@ -120,11 +120,11 @@ $\Afun{reverse} = \swapt \fatsemi (\swapt  \otimes  \idc)~ \fatsemi \assocrt$
 
 \noindent The manual trace of $\Afun{reverse}$ below confirms that it indeed reverses the three bits:
 \[\begin{array}{rlr}
- & (v_1, (v_2, v_3)) \\
- \swapt & ((v_2, v_3), v_1) \\
- \swapt \otimes  \idc & ((v_3, v_2), v_1) \\
- \assocrt & (v_3, (v_2, v_1)) \\
- \end{array}\]
+                         & (v_1, (v_2, v_3)) \\
+    \swapt               & ((v_2, v_3), v_1) \\
+    \swapt \otimes  \idc & ((v_3, v_2), v_1) \\
+    \assocrt             & (v_3, (v_2, v_1)) \\
+  \end{array}\]
 %subcode source isomorphisms.tex:979
 
 Even though \ensuremath{\Pi } lacks conditional expressions, they are expressible using the distributivity and factoring
@@ -159,40 +159,49 @@ permutation. In this section, we outline a simple semantics expressed in the met
 semantics will be extended to the metalanguage of homotopy type theory in the remainder of the paper.
 
 The denotation of types is straightforward:
-\[\begin{array}{rcl}
-\denot{\zerot} &=& \emptyset \\
-\denot{\onet} &=& \{ \Acon{tt} \} \\
-\denot{A + B} &=& \denot{A} \uplus \denot{B} \\
-\denot{A \times B} &=& \denot{A} \times \denot{B}
-\end{array}\]
+
+\begin{align*}
+  \denot{\zerot}     & = \emptyset                  \\
+  \denot{\onet}      & = \{ \Acon{tt} \}            \\
+  \denot{A + B}      & = \denot{A} \uplus \denot{B} \\
+  \denot{A \times B} & = \denot{A} \times \denot{B}
+\end{align*}
+
 where $\emptyset$ is the empty set, $\uplus$ is the disjoint union of sets, and $\times$ is the cartesian product of
 sets. The denotation of a combinator $c : A \isot B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
-\[\begin{array}{rcl}
-\denot{\identlp} (\inlv{v}) &=& v \\
-\denot{\identrp} v &=& \inlv{v} \\
-\denot{\swapp} (\inlv{v}) &=& \inrv{v} \\
-\denot{\swapp} (\inrv{v}) &=& \inlv{v} \\
-\denot{\assoclp} (\inlv{v})  &=& \inlv{(\inlv{v})} \\
-\denot{\assoclp} (\inrv{(\inlv{v})}) &=& \inlv{(\inrv{v})} \\
-\denot{\assoclp} (\inrv{(\inrv{v})}) &=& \inrv{v} \\
-\denot{\assocrp} (\inlv{(\inlv{v})}) &=& \inlv{v} \\
-\denot{\assocrp} (\inlv{(\inrv{v})}) &=& \inrv{(\inlv{v})} \\
-\denot{\assocrp} (\inrv{v})  &=& \inrv{(\inrv{v})} \\
-\denot{\identlp} (\Acon{tt} , v)  &=& v \\
-\denot{\identrp} v &=& (\Acon{tt} , v) \\
-\denot{\swapt}  (v_1 , v_2) &=& (v_2 , v_1) \\
-\denot{\assoclt} (v_1 , (v_2 , v_3)) &=& ((v_1 , v_2) , v_3) \\
-\denot{\assocrt} ((v_1 , v_2) , v_3) &=& (v_1 , (v_2 , v_3)) \\
-\denot{\dist} (\inlv{v_1} , v_3)  &=& \inlv{(v_1 , v_3)} \\
-\denot{\dist} (\inrv{v_2 , v_3})  &=& \inrv{(v_2 , v_3)} \\
-\denot{\factor}  (\inlv{(v_1 , v_3)}) &=& (\inlv{v_1} , v_3) \\
-\denot{\factor}  (\inrv{(v_2 , v_3)}) &=& (\inrv{v_2} , v_3) \\
-\denot{\idc} v &=& v \\
-\denot{(c_1 \fatsemi c_2)} v &=& (\denot{c_2} \circ \denot{c_1}) v \\
-\denot{(c_1 \oplus c_2)} (\inlv{v}) &=& \inlv{(\denot{c_1}~v)} \\
-\denot{(c_1 \oplus c_2)} (\inrv{v}) &=& \inrv{(\denot{c_2}~v)} \\
-\denot{(c_1 \otimes c_2)} (v_1 , v_2) &=& (\denot{c_1} v_1 , \denot{c_2} v_2)
-  \end{array}\]
+
+\begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+  \denot{\identlp}           & (\inlv{v})           & = & v                                   \\
+  \denot{\identrp}           & v                    & = & \inlv{v}                            \\
+  \denot{\swapp}             & (\inlv{v})           & = & \inrv{v}                            \\
+  \denot{\swapp}             & (\inrv{v})           & = & \inlv{v}                            \\
+  \denot{\assoclp}           & (\inlv{v})           & = & \inlv{(\inlv{v})}                   \\
+  \denot{\assoclp}           & (\inrv{(\inlv{v})})  & = & \inlv{(\inrv{v})}                   \\
+  \denot{\assoclp}           & (\inrv{(\inrv{v})})  & = & \inrv{v}                            \\
+  \denot{\assocrp}           & (\inlv{(\inlv{v})})  & = & \inlv{v}                            \\
+  \denot{\assocrp}           & (\inlv{(\inrv{v})})  & = & \inrv{(\inlv{v})}                   \\
+  \denot{\assocrp}           & (\inrv{v})           & = & \inrv{(\inrv{v})}                   \\
+  \denot{\identlt}           & (\Acon{tt} , v)      & = & v                                   \\
+  \denot{\identrt}           & v                    & = & (\Acon{tt} , v)                     \\
+  \denot{\swapt}             & (v_1 , v_2)          & = & (v_2 , v_1)                         \\
+  \denot{\assoclt}           & (v_1 , (v_2 , v_3))  & = & ((v_1 , v_2) , v_3)                 \\
+  \denot{\assocrt}           & ((v_1 , v_2) , v_3)  & = & (v_1 , (v_2 , v_3))                 \\
+  \denot{\dist}              & (\inlv{v_1} , v_3)   & = & \inlv{(v_1 , v_3)}                  \\
+  \denot{\dist}              & (\inrv{v_2 , v_3})   & = & \inrv{(v_2 , v_3)}                  \\
+  \denot{\factor}            & (\inlv{(v_1 , v_3)}) & = & (\inlv{v_1} , v_3)                  \\
+  \denot{\factor}            & (\inrv{(v_2 , v_3)}) & = & (\inrv{v_2} , v_3)                  \\
+  \denot{\idc}               & v                    & = & v                                   \\
+  \denot{(c_1 \fatsemi c_2)} & v                    & = & (\denot{c_2} \circ \denot{c_1}) v   \\
+  \denot{(c_1 \oplus c_2)}   & (\inlv{v})           & = & \inlv{(\denot{c_1}~v)}              \\
+  \denot{(c_1 \oplus c_2)}   & (\inrv{v})           & = & \inrv{(\denot{c_2}~v)}              \\
+  \denot{(c_1 \otimes c_2)}  & (v_1 , v_2)          & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
+\end{longtable}
+
+% \begingroup
+% \allowdisplaybreaks
+% \begin{align*}
+% \end{align*}
+% \endgroup
 
 % \begin{center}
 % \begin{tikzpicture}[scale=0.7,every node/.style={scale=0.8}]
@@ -260,20 +269,20 @@ slightly more involved example are the following two programs:
 
 \noindent The first program performs the following sequence of transformations:
 \[
-\Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
-\Tree [ [ {\small a} {\small b} ] {\small c} ] ~\to~
-\Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
-\Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
+  \Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
+  \Tree [ [ {\small a} {\small b} ] {\small c} ] ~\to~
+  \Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
+  \Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
 \]
 \noindent
 while the second evaluates as follows:
 \[
-\Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
-\Tree [ {\small a} [ {\small c} {\small b} ] ] ~\to~
-\Tree [ [ {\small a} {\small c} ] {\small b} ] ~\to~
-\Tree [ [ {\small c} {\small a} ] {\small b} ] ~\to~
-\Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
-\Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
+  \Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
+  \Tree [ {\small a} [ {\small c} {\small b} ] ] ~\to~
+  \Tree [ [ {\small a} {\small c} ] {\small b} ] ~\to~
+  \Tree [ [ {\small c} {\small a} ] {\small b} ] ~\to~
+  \Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
+  \Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
 \]
 
 The semantics above can be packaged in the category of finite sets and functions, $\SetFin$, which is the category
@@ -287,7 +296,7 @@ $\BFin$, the additive and multiplicative ones, with the multiplicative tensor di
 
 \note{change thm:
   1. Each function is a bijection. 2. If there is a 2-combinator, the denotations of the 1-combinators are equal
-  }
+}
 
 \begin{theorem}\label{thm:grp}
   Let $\sim$ be the following equivalence relation on combinators $c_1 \sim c_2$ iff $\denot{c_1} = \denot{c_2}$
@@ -297,16 +306,16 @@ $\BFin$, the additive and multiplicative ones, with the multiplicative tensor di
   \begin{itemize}
     \item $\mathit{Obj}(\mathcal{C})$ is the set of $\Pi$-types, and
     \item $\mathit{Hom}(A,B) = [c : A \isot B]_{\sim}$
-    \end{itemize}
+  \end{itemize}
   The category $\mathcal{C}$ is a groupoid.
 \end{theorem}
 \begin{proof}
-The relation $\sim$ identifies $c$, $\idc \circ c$, and $c \circ \idc$, and is associative. Furthermore, the denotation
-of each combinator is a reversible function thus making every morphism into an isomorphism.
+  The relation $\sim$ identifies $c$, $\idc \circ c$, and $c \circ \idc$, and is associative. Furthermore, the denotation
+  of each combinator is a reversible function thus making every morphism into an isomorphism.
 \end{proof}
 
 \note{Then say that $\mathcal{C}$ is ``the same'' as $\BFin$ We can say here that the relation $\sim$ also identifies
- $(c_1~\oplus~c_2)~\fatsemi~\swapp$ and $\swapp \fatsemi (c_2~\oplus~c_1)$ and other properties. ?? }
+  $(c_1~\oplus~c_2)~\fatsemi~\swapp$ and $\swapp \fatsemi (c_2~\oplus~c_1)$ and other properties. ?? }
 
 % \[\begin{array}{l}
 %     \Tree[ {\small a} [ {\small b} {\small c} ] ] \\

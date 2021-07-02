@@ -10,6 +10,7 @@
 \usepackage{enumitem}
 \usepackage{extarrows}
 \usepackage{apxproof}
+\usepackage{longtable}
 
 %% Some recommended packages.
 %% \usepackage{booktabs}   %% For formal tables:
@@ -69,8 +70,10 @@
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem*{remark}{Remark}
 
-\newcommand{\denot}[1]{\llbracket #1 \rrbracket}
-\newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+% \newcommand{\denot}[1]{\llbracket #1 \rrbracket}
+% \newcommand{\sem}[1]{\llbracket #1 \rrbracket}
+\DeclarePairedDelimiter{\denot}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\sem}{\llbracket}{\rrbracket}
 \newcommand{\sizet}[1]{| #1 |}
 \newcommand{\idd}{\mathit{id}\leftrightarrow}
 \newcommand{\idf}{\mathit{id}\Leftrightarrow}
