@@ -645,9 +645,6 @@ representatives. We know that these are the unique normal forms in the set-quoti
 but now we will describe what these representatives exactly look like, using an encoding called Lehmer
 codes~\cite{lehmerTeachingCombinatorialTricks1960}.
 
-\todo{diagram with List (Fin n) being divided into equivalence classes, and Lehmer codes being an image of immersion,
-  being the normal form (representative) in each class.}
-
 There are many ways to represent permutations, e.g. inversions, or cycles, or matrices. Lehmer codes are known in
 Combinatorial Analysis~\cite{bellmanCombinatorialAnalysis1960} where they are sometimes called "subexcedant sequences",
 or "factoriadics", which give the factorial number system. They are a particularly convenient way of representing
@@ -745,12 +742,23 @@ As described above, the number $r$ at the position $k$ in the tuple describes ho
 has. Thus, we need to perform $r$ many adjacent transpositions to get to the desired position, which is given by
 $(\suc[n] - r) \downf r$.
 
-We can show that the function $\immersion$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
+As an example, let us look at the code $c = (4, 3, 2, 1, 0)$. The list $\immersion(c)$ is then going to be $[0, 1, 0, 2,
+1, 0, 3, 2, 1, 0, 4, 3, 2, 1, 0]$. It is a concatenation of a sequence of decreasing lists. Where could a reduction
+happen? First, it can't happen inside any of the decreasing components: $\longcancel$ requires repeating elements,
+$\longswap$ acts when a smaller number precedes a larger one, and $\longbraid$ has a non-monotone sequence on the left.
+This leaves the case of a reduction happening on a fragment that borders two subsequences. Again, $\longcancel$ requires
+two equal consecutive numbers, which have to be the last one in some decreasing sequence and the first one in the next
+one. But the first number in a sequence is always larger than every number in the sequence before it - which also shows
+why $\longswap$ cannot happen. The remaining case of $\longbraid$ is proven on similar grounds, since it requires the
+number appearing after the decreasing sequence to be equal to the first one in the sequence.
+
+Using this idea, we can show that the function $\immersion$ gives an equivalence betweeen $\Lehmer[n]$ and
+$\im{\normf}$.
 
 \begin{proposition}
   \leavevmode
   \begin{enumerate}
-    \item For any Lehmer code $c$, $\immersion(c)$ is a normal form with resepct to $\cox*$, that is, $\immersion(c)$ is
+    \item For any Lehmer code $c$, $\immersion(c)$ is a normal form with resepct to $\longcox*$, that is, $\immersion(c)$ is
           in $\im{\normf}$.
     \item Any element of $\im{\normf}$ can be constructed from a unique Lehmer code by $\immersion$, that is, the fibers
           of $\immersion: \Lehmer[n] \to {\im{\normf}}$ are contractible.
