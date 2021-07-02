@@ -392,19 +392,6 @@ We define $\cox*$ as the congruence closure of $\cox$.
   \end{align*}
 \end{definition}
 
-The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$,
-
-\begin{definition}[$\Sn$]
-  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
-\end{definition}
-
-A group presentation, as defined in~\label{def:presentation}, requires the relation to be on the set of words $A + A$,
-where the right copy corresponds to the set of formal inverses of the generators. We will resolve this mismatch later
-in~\cref{prop:lift-codiag}.
-
-\todo{check: However, in our case, the constructor $\cancel$ specifies that the inverse of each element is again the
-  same element.}
-
 To solve the word problem for $\Sn$, we turn the relations into a rewriting system $(\List[\Fin[n]],\cox*)$. A normal
 form of an element can then be computed by following the rewrite rules, and two words can be compared for
 $\cox*$-equality by comparing their normal forms. A well-behaved rewriting system has to be strongly normalising and
@@ -428,8 +415,8 @@ rules, have to converge. For example, the pairs below converge.
 \begin{proof}
   \[
     \begin{array}{lr}
-    % https://q.uiver.app/?q=WzAsNixbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwyLCJcXHRhdV8xXFx0YXVfMlxcdGF1XzIiXSxbMiwzLCJcXHRhdV8xIl0sWzQsMiwiXFx0YXVfMlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFswLDIsImJyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJjYW5jZWwiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFszLDQsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzIsNSwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbNSw0LCJjYW5jZWwiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
-    \begin{tikzcd}
+      % https://q.uiver.app/?q=WzAsNixbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwyLCJcXHRhdV8xXFx0YXVfMlxcdGF1XzIiXSxbMiwzLCJcXHRhdV8xIl0sWzQsMiwiXFx0YXVfMlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFswLDIsImJyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJjYW5jZWwiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFszLDQsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzIsNSwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbNSw0LCJjYW5jZWwiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
+      \begin{tikzcd}
         && {\tau_2\tau_1\tau_2\tau_1\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_1\tau_2} &&&& {\tau_2\tau_1\tau_1\tau_2\tau_1} \\
         {\tau_1\tau_2\tau_2} &&&& {\tau_2\tau_2\tau_1} \\
@@ -440,10 +427,10 @@ rules, have to converge. For example, the pairs below converge.
         \arrow["cancel"', squiggly, from=3-1, to=4-3]
         \arrow["cancel", squiggly, from=2-5, to=3-5]
         \arrow["cancel", squiggly, from=3-5, to=4-3]
-    \end{tikzcd}
-    &
-    % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsyLDQsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsxLDMsIlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzMsNCwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFs0LDIsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV1d
-    \begin{tikzcd}
+      \end{tikzcd}
+       &
+      % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsyLDQsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsxLDMsIlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzMsNCwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFs0LDIsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV1d
+      \begin{tikzcd}
         && {\tau_2\tau_1\tau_2\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_2} \\
@@ -454,7 +441,7 @@ rules, have to converge. For example, the pairs below converge.
         \arrow["braid"', squiggly, from=2-1, to=3-1]
         \arrow["braid"', squiggly, from=3-1, to=4-2]
         \arrow["cancel"', squiggly, from=4-2, to=5-3]
-    \end{tikzcd}
+      \end{tikzcd}
     \end{array}
   \]
 \end{proof}
@@ -594,44 +581,60 @@ we can use the following observation to be able to use the more standard $\cox*$
 \end{proposition}
 
 By strong normalisation, we get a unique choice function $\normf : {\List[\Fin[n]]} \to {\List[\Fin[n]]}$ that produces
-a normal form for terms of $\List[\Fin[n]]$. Equivalence classes on $\List[\Fin[n]]$ are defined to be those terms that
-have the same normal form. We state a few important properties that $\normf$ satisfies.
+a normal form for terms of $\List[\Fin[n]]$. We state and prove a couple of important properties enjoyed by $\normf$.
 
 \begin{proposition}
   \leavevmode
   \begin{enumerate}
     \item For all $l : \List[\Fin[n]]$, we have that $l \cox* \normf(l)$.
     \item $\normf$ is idempotent, that is, $\normf \comp \normf \htpy \normf$.
-    \item $\normf$ splits into a section-retraction pair, that is, we have
-          ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n] \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$
-          and $r \comp s \htpy \idfunc_{\Sn[n]}$.
-    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \).
   \end{enumerate}
 \end{proposition}
 
-\todo{We set out to solve the word problem for $\Sn$ \ldots}
-\todo{Revise this section by introducing $\Sn$ here.}
+The type $\Sn$ is defined as the set-quotient of $\List[\Fin[n]]$ by $\cox*$,
+
+\begin{definition}[$\Sn$]
+  \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
+\end{definition}
 
 Note that this relation $\cox*$ is not $\hProp$-valued, that is, $w \cox* v$ is not a proposition because reductions are
 not unique. Because of this, the quotient $\Sn$ is not effective, that is, $\quotrel : w \cox* v \to q(w) \id q(v)$ is
 not an equivalence. We could truncate the relation to change this, but then the codomain of $\normf$ also needs to be
-truncated. Instead, using the $\normf$ function, we could define a new relation
-$(w \approx v) \defeq (\normf(w) \id \normf(v))$ which is $\hProp$-valued, and quotient $\List[\Fin[n]]$ by $\approx$.
-This is not necessary because our results hold for $\cox*$ using the properties of the rewriting system we proved, and
-we do not rely on the effectivity of the quotient.
+truncated.
 
-Finally, we prove the group structure of $\Sn$, and show that it is indeed a group presentation, given by a quotient of
-the free group $F(\Fin[n])$.
+We could also define equivalence classes on $\List[\Fin[n]]$ to be those terms that have the same normal form. Using the
+$\normf$ function, we could define a new relation $(w \approx v) \defeq (\normf(w) \id \normf(v))$ which is
+$\hProp$-valued, and quotient $\List[\Fin[n]]$ by $\approx$. Using the properties of the rewriting system we proved, we
+make a few observations.
 
 \begin{proposition}
-  There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
-  inverse is given by list reversal.
+  \leavevmode
+  \begin{enumerate}
+    \item $\normf$ splits into a section-retraction pair, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n]
+            \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
+    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \).
+  \end{enumerate}
 \end{proposition}
 
-\begin{proposition}~\label{prop:lift-codiag}
-  $\Sn$ is equivalent to the generated group given by the normal closure of $\cox*$ extended to
-  $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A \to A$.
+Notice however, that a group presentation, as defined in~\cref{def:presentation}, requires the relation to be on the set
+of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The constructor
+$\cancel$ specifies that the inverse of each element is again the same element, using which we can show that our
+definition of $\Sn$ is equivalent to the definition of a presented group, by lifting the $\cox*$ relation.
+
+\begin{proposition}
+  \leavevmode
+  \begin{enumerate}
+    \item There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list
+          append, and inverse is given by list reversal.
+    \item $\Sn$ is equivalent to the group presented by generators $\Fin[n] + \Fin[n]$ with the relations given by the
+          normal closure of $\cox*$ extended to $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A
+          \to A$.
+  \end{enumerate}
 \end{proposition}
+
+We set out to solve the word problem for $\Sn$. To decide if two words in $\List[\Fin[n]]$ are equal, we simply have to
+compute their normal forms using $\normf$ and check if they're equal on the nose. If they do, they correspond to the
+same permutation.
 
 \subsection{Lehmer Codes}~\label{subsec:lehmer}
 
@@ -840,27 +843,27 @@ Using these facts, we can now prove the main result of this section.
 
 To see how the proof works combinatorically, let us go through an example. We will start from a following bijection $p: \Aut[\Fin[4]]$:
 \begin{align*}
-    p(0) \mapsto & 1 \\
-    p(1) \mapsto & 3 \\
-    p(2) \mapsto & 0 \\
-    p(3) \mapsto & 2
+  p(0) \mapsto & 1 \\
+  p(1) \mapsto & 3 \\
+  p(2) \mapsto & 0 \\
+  p(3) \mapsto & 2
 \end{align*}
 
 At first, we start from a full domain $\Fin[4]$ and full codomain $\Fin[4]$.
 \[
-    \begin{bmatrix}
-        0 \\
-        1 \\
-        2 \\
-        3
-    \end{bmatrix}
-    \mapsto
-    \begin{bmatrix}
-        0 \\
-        1 \\
-        2 \\
-        3
-    \end{bmatrix}
+  \begin{bmatrix}
+    0 \\
+    1 \\
+    2 \\
+    3
+  \end{bmatrix}
+  \mapsto
+  \begin{bmatrix}
+    0 \\
+    1 \\
+    2 \\
+    3
+  \end{bmatrix}
 \]
 
 We remember that the last element of result tuple is $k - 1 = 2$. The appropriate elements on both sides are removed,
@@ -869,29 +872,29 @@ both transformed to $\Fin[3]$ using
 \cref{prop:fin-finexcept}.~\ref{prop:fin-finexcept-2}, as shown below.
 
 \[
-    \begin{bmatrix}
-        0 \\
-        1 \\
-        2
-    \end{bmatrix}
-    \equiv
-    \begin{bmatrix}
-        1 \\
-        2 \\
-        3
-    \end{bmatrix}
-    \mapsto
-    \begin{bmatrix}
-        0 \\
-        2 \\
-        3
-    \end{bmatrix}
-    \equiv
-    \begin{bmatrix}
-        0 \\
-        1 \\
-        2
-    \end{bmatrix}
+  \begin{bmatrix}
+    0 \\
+    1 \\
+    2
+  \end{bmatrix}
+  \equiv
+  \begin{bmatrix}
+    1 \\
+    2 \\
+    3
+  \end{bmatrix}
+  \mapsto
+  \begin{bmatrix}
+    0 \\
+    2 \\
+    3
+  \end{bmatrix}
+  \equiv
+  \begin{bmatrix}
+    0 \\
+    1 \\
+    2
+  \end{bmatrix}
 \]
 
 Then, the original permutation specified that the element $\el{1}$ has to be
@@ -900,45 +903,45 @@ mapped to $\el{2}$ - the resulting tuple now looks like $[2, 1]$. We yet again r
 forming $\FinExcept{0}[0]$ and $\FinExcept{0}[2]$.
 
 \[
-    \begin{bmatrix}
-        0 \\
-        1
-    \end{bmatrix}
-    \equiv
-    \begin{bmatrix}
-        1 \\
-        2
-    \end{bmatrix}
-    \mapsto
-    \begin{bmatrix}
-        0 \\
-        2
-    \end{bmatrix}
-    \equiv
-    \begin{bmatrix}
-        0 \\
-        1
-    \end{bmatrix}
+  \begin{bmatrix}
+    0 \\
+    1
+  \end{bmatrix}
+  \equiv
+  \begin{bmatrix}
+    1 \\
+    2
+  \end{bmatrix}
+  \mapsto
+  \begin{bmatrix}
+    0 \\
+    2
+  \end{bmatrix}
+  \equiv
+  \begin{bmatrix}
+    0 \\
+    1
+  \end{bmatrix}
 \]
 
 The situation repeats two more times: first, by assinging $\el{0}$ to $\el{1}$,
 giving the tuple $[0, 2, 1]$ and transforming the domain and codomain:
 \[
-    \begin{bmatrix}
-        0
-    \end{bmatrix}
-    \equiv
-    \begin{bmatrix}
-        1
-    \end{bmatrix}
-    \mapsto
-    \begin{bmatrix}
-        0
-    \end{bmatrix}
-    \equiv
-    \begin{bmatrix}
-        0
-    \end{bmatrix}
+  \begin{bmatrix}
+    0
+  \end{bmatrix}
+  \equiv
+  \begin{bmatrix}
+    1
+  \end{bmatrix}
+  \mapsto
+  \begin{bmatrix}
+    0
+  \end{bmatrix}
+  \equiv
+  \begin{bmatrix}
+    0
+  \end{bmatrix}
 \]
 
 And finally, by assinging $\el{0}$ to $\el{0}$, forming a tuple $[0, 0, 2, 1]$ and
