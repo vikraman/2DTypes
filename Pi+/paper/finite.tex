@@ -472,18 +472,18 @@ general relation $\longbraid$. \review{Further, we also inline the congruence cl
 
 First, we need to define a helper function $n \downf k$.
 
-\begin{definition}[$\downf : (n : \Nat) \to (k : \Nat) \to {\List[\Fin[\suc[k + n]]]}$]
+\begin{definition}[$\downf : (n : \Nat) \to (k : \Nat) \to {\List[\Fin[k + n]]}$]
   \begin{align*}
     n \downf \zero   & \defeq \nil                       \\
     n \downf \suc[k] & \defeq (k + n) \cons (n \downf k)
   \end{align*}
 \end{definition}
 
-The result of this function is the sequence \(k + n, k + n - 1, k + n - 2, \ldots, n + 1\). Since we think of the number
-$m$ as the transposition $\tau_m$ which swaps elements $\el{m}$ and $\el{m+1}$, the role of this helper function is to
-produce a sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ $k$ places left, shifting all
-the elements in between one place right. Expressed in terms of the braiding diagram, for $n = 0$ and $k = 4$, it has the
-following form:
+The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\). Since we think of the
+number $m$ as the transposition $\tau_m$ which swaps elements $\el{m}$ and $\el{m+1}$, the role of this helper function
+is to produce a sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ $k$ places left,
+shifting all the elements in between one place right. Expressed in terms of the braiding diagram, for $n = 0$ and $k =
+  4$, it has the following form:
 
 \[
   \begin{tikzpicture}
@@ -509,8 +509,8 @@ Then, the directed relation $\longcox$ is defined with the following generators.
 
 Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and can be
 visualised in the same way as before. The remaining constructor uses the helper function to exchange the order of a long
-sequence of transpositions and a single transposition afterwards. For example, for $n = 2$ and $k = 4$, it allows for
-the reduction $[7, 6, 5, 4, 3, 7] \longcox* [6, 7, 6, 5, 4, 3]$. Visualised on the braid diagram, it looks as follows:
+sequence of transpositions and a single transposition afterwards. For example, for $n = 2$ and $k = 3$, it allows for
+the reduction $[6, 5, 4, 3, 2, 6] \longcox* [5, 6, 5, 4, 3, 2]$. Visualised on the braid diagram, it looks as follows:
 
 \[
   \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
@@ -628,7 +628,7 @@ definition of $\Sn$ is equivalent to the definition of a presented group, by lif
           append, and inverse is given by list reversal.
     \item $\Sn$ is equivalent to the group presented by generators $\Fin[n] + \Fin[n]$ with the relations given by the
           normal closure of $\cox*$ extended to $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A
-          \to A$.
+            \to A$.
   \end{enumerate}
 \end{proposition}
 
@@ -734,7 +734,7 @@ value $v$, insert the new element at the end of the newly created list, and shif
 
 Writing formally, to turn a code into a permutation written in the Coxeter presentation, we use $\immersion$:
 
-\begin{definition}[$\immersion : (n : \Nat) \to {\Lehmer[n]} \to {\List[\Fin[n]]}$]
+\begin{definition}[$\immersion : (n : \Nat) \to {\Lehmer[n]} \to {\List[\Fin[\suc[n]]]}$]
   \begin{align*}
     \immersion(\zero, \zero)    & \defeq \nil                                              \\
     \immersion(\suc[n], (r, l)) & \defeq \immersion(n, l) \append ((\suc[n] - r) \downf r)
@@ -742,8 +742,7 @@ Writing formally, to turn a code into a permutation written in the Coxeter prese
 \end{definition}
 
 As described above, the number $r$ at the position $k$ in the tuple describes how many inversions the element $\el{k}$
-has. Thus, we need to perform $r$ many adjacent transpositions to get to the desired position. The function that
-constructs a sequence of $r$ adjacent transpositions $[\suc[n], \suc[n] - 1, \suc[n] - 2, \ldots \suc[n] - r]$ is
+has. Thus, we need to perform $r$ many adjacent transpositions to get to the desired position, which is given by
 $(\suc[n] - r) \downf r$.
 
 We can show that the function $\immersion$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
