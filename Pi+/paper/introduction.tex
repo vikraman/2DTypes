@@ -24,7 +24,7 @@ where $\underline{\vee}$ is the exclusive-or operation. From the definition of $
 
 \noindent where it is evident that it is a bijective function, i.e., reversible.
 
-The above embedding of an irreversible function into a reversible function with additional inputs and outputs is completely general and is the starting point for specifications of quantum circuits. The challenge is to synthesize a program / circuit from this specification. Of course, writing this program in a conventional (irreversible) language defeats the purpose. The challenge is to construct the desired program / circuit exclusively using reversible primitives, e.g., the standard set of universal reversible gates used in frameworks like Qiskit which consists of the computational gates \textsf{not} (boolean negation, called \verb|x|), \textsf{cnot} (conditional negation of the second input if the first is true; called \verb|cx|), and \textsf{toffoli} (conditional negation of the third input if both the first two inputs are true; called \verb|ccx|) gates, and the ability re-arrange the layout of wires. For concretness, here is a possible implementation of the desired function in Qiskit:
+The above embedding of an irreversible function into a reversible function with additional inputs and outputs is completely general and is the starting point for specifications of quantum circuits. The challenge is to synthesize a program / circuit from this specification. Of course, writing this program in a conventional (irreversible) language defeats the purpose. The challenge is to construct the desired program / circuit exclusively using reversible primitives, e.g., the standard set of universal reversible gates used in frameworks like Qiskit which consists of the computational gates \textsf{not} (boolean negation, called \verb|x|), \textsf{cnot} (conditional negation of the second input if the first is true; called \verb|cx|), and \textsf{toffoli} (conditional negation of the third input if both the first two inputs are true; called \verb|ccx|) gates, and the ability re-arrange the layout of wires. For concreteness, here is a possible implementation of the desired function in Qiskit:
 
 \begin{center}
   \begin{minipage}[c]{0.4\linewidth}
@@ -54,9 +54,12 @@ reversibleOr.qasm:
   \includegraphics[scale=0.7]{reversibleOr.png}
 \end{center}
 
-This implementation was manually produced using a standard synthesis algorithm for reversible circuits~\cite{10.1145/775832.775915}. To gain some intuition, we trace the evaluation of the circuit for input \verb|011|. In this context, the most significant bit is at index 0. Thus the first \verb|ccx| gate negates \verb|q[0]| since both \verb|q[1]| and \verb|q[2]| are true producing \verb|111|; the following \verb|cx| gate negates produces \verb|011|; finally the last \verb|cx| produces the final result \verb|111|.
+\noindent This implementation was manually produced using a standard synthesis algorithm for reversible
+circuits~\cite{10.1145/775832.775915}. To gain some intuition, we trace the evaluation of the circuit for input
+\verb|011|. In this context, the most significant bit is at index 0. Thus the first \verb|ccx| gate negates \verb|q[0]|
+since both \verb|q[1]| and \verb|q[2]| are true producing \verb|111|; the following \verb|cx| gate negates produces \verb|011|; finally the last \verb|cx| produces the final result \verb|111|.
 
-There is wealth of manual and algorithmic approaches for such synthesis problems each optimizing along  different dimensions~\cite{XXX}. Here is the circuiit produced using an approach that analyzes the recursive structure of the circuit (and would generalize to computing the disjunction of more than two inputs):
+There is wealth of manual and algorithmic approaches for such synthesis problems each optimizing along  different dimensions~\cite{XXX}. Here is the circuit produced using an approach that analyzes the recursive structure of the circuit (and would generalize to computing the disjunction of more than two inputs):
 
 \begin{center}
   \begin{minipage}[c]{0.4\linewidth}
@@ -75,7 +78,8 @@ reversibleOr2.qasm:
   \includegraphics[scale=0.7]{reversibleOr2.png}
 \end{center}
 
-The evaluation of this circuit prints the same truth table as above confirming their equivalence. Tracing the evaluation on the same value \verb|111| goes through the stages \verb|011|, \verb|111|, \verb|101|, \verb|101|, and finally \verb|111|.
+\noindent The evaluation of this circuit prints the same truth table as above confirming their equivalence. Tracing the
+evaluation on the same input value \verb|011| goes through the stages \verb|111|, \verb|101|, \verb|101|, and finally \verb|111|.
 
 The situation for Shor's algorithm is just as described above but with a more involved function of the form $f(r) = a^{r} \mod N$ for fixed $a$ and $N$. The specification of the circuit is relatively straightforward to calculate. Here it is for $a=11$ and $N=15$:
 \[\begin{array}{rcll}
@@ -86,7 +90,14 @@ g(r,h) &=& \left\{ \begin{array}{ll}
                      (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
                                 \end{array}\right.
 \end{array}\]
-However, as explained in standard accounts of the algorithm (e.g., the Qiskit implementation), such efficient modular exponentiation circuits are not straightforward to derive and are the bottleneck in Shor’s algorithm. Typical derivations of the circuit start from elementary gates, build a circuit for modular addition, which is used to build a circuit for modular multiplication, and then finally a circuit for modular exponentiation taking care at each step to avoid the exponential blowup~\cite{shorefficient}.
+
+\noindent However, as explained in standard accounts of the algorithm (e.g., the Qiskit implementation), such efficient
+modular exponentiation circuits are not straightforward to derive and are the bottleneck in Shor’s algorithm. Typical
+derivations of the circuit start from elementary gates, build a circuit for reversible disjunction and conjunction of
+booleans, a circuit for a half-adder, a circuit for computing the carry, progressing to a circuit for modular addition,
+which is used to build a circuit for modular multiplication, and then finally a circuit for modular exponentiation
+taking care at each step to avoid the exponential blowup (e.g., by implementing exponentiation by squaring instead of repeated
+multiplication)~\cite{shorefficient}.
 
 \paragraph*{Our Technical Results.} The main result of the paper is that the category of finite sets and bijections,
 with the two monoidal structures given by sum and product, is the free rig groupoid.
@@ -106,7 +117,7 @@ what the result implies for circuits:
 
 synthesis algorithms (no correctness)
 
-programming from sccratch (manual / perhaps better; also no correctness embedded)
+programming from scratch (manual / perhaps better; also no correctness embedded)
 
 for complex circuits correctness not evident
 
@@ -119,7 +130,7 @@ Pi types -- Natural number -- Finite sets
 1-combinator -- Generators of Sn -- 1-paths
 2-combinator -- Relations of Sn -- 2-paths
 
-This review does make me very nervous, basically all we've done is taken MacLane's coherence theorem and formalised it in HoTT, and given presentations for it using Pi's syntax. There's nothing "new", but the new idea is that we can use this for reversible circuit equivalence and normalisation.
+This review does make me very nervous, basically all we've done is taken MacLane's coherence theorem and formalized it in HoTT, and given presentations for it using Pi's syntax. There's nothing "new", but the new idea is that we can use this for reversible circuit equivalence and normalisation.
 
 But we do have a complete proof that UFin is the free sym. mon. groupoid, which wasn't there earlier
 
@@ -144,7 +155,7 @@ representations of the permutations.
 \begin{itemize}[leftmargin=*]
   \item We take the $\PiLang$ family of reversible languages~\cite{jamesInformationEffects2012} and show how to encode
         various boolean reversible circuits in the language. The circuits are implemented using 1-combinators in the
-        language, and circuit optimisations are realised as 2-combinators between these reversible programs.
+        language, and circuit optimisations are realized as 2-combinators between these reversible programs.
   \item We show how to encode reversible circuits on a fixed number of bits as permutations of finite sets with the
         appropriate cardinality. We observe that reversible programs can be translated to bijective functions between
         finite sets and equality of reversible programs can be witnessed as extensional equality of these bijective
@@ -155,7 +166,7 @@ representations of the permutations.
         universe $\El : U \to \UU$. We say that this universe is univalent, if the decoding fibration is univalent, that
         is, the decoding function $\El$ reflects the path space of the underlying univalent universe. We exhibit some
         examples of univalent subuniverses, in particular, we define the subuniverse of finite types, $\UFin$, which
-        classifies all finite types, and show that it is univalent. Using this, we establish a characterisation of the
+        classifies all finite types, and show that it is univalent. Using this, we establish a characterization of the
         path space of the universe of finite types.
   \item We observe that 1-paths in $\UFin$ are permutations on finite sets with a fixed cardinality $n$, given by
         $\Aut[\Fin[n]]$, which produces the permutation group on $\Fin[n]$, or the symmetric group $\Sn$. We then
@@ -169,8 +180,8 @@ representations of the permutations.
         permutations $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
   \item Finally, we show how to interpret the language $\PiLang$ into our groupoid $\UFin$, in stages. First we define a
         subset of the language $\PiPlusLang$ which only includes the additive monoidal structure. We translate $\PiLang$
-        programs to $\PiPlusLang$ by defining multiplication as repeated addition. Then, we further define a normalised
-        form for for this language called $\PiHatLang$, which has normalised 1-combinators and 2-combinators
+        programs to $\PiPlusLang$ by defining multiplication as repeated addition. Then, we further define a normalized
+        form for for this language called $\PiHatLang$, which has normalized 1-combinators and 2-combinators
         corresponding to adjacent transpositions. We show that $\PiPlusLang$ can be translated to $\PiHatLang$ and back,
         using adjacent transpositions to generate arbitrary swaps. Then, we show how to interpret this language
         $\PiHatLang$ into $\UFin$ -- the 1-combinators are translated into permutations via words in $\Sn$, and
@@ -180,7 +191,7 @@ representations of the permutations.
         normal form in $\PiPlusLang$ and $\PiHatLang$, which uses fewer gates.~\todo{Here, or earlier?}
 \end{itemize}
 
-Our results are formalised in the proof assistant Agda using the HoTT-Agda library.
+Our results are formalized in the proof assistant Agda using the HoTT-Agda library.
 
 \note{Novel interpretation of the univalence axiom, operational and denotational semantics and adequacy.}
 
