@@ -133,6 +133,99 @@ are Lehmer codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a conve
 permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations
 $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
 
+Below we reduce $\mathsf{swap} : 2 + 2 \leftrightarrow 2 + 2$ to a sequence of adjacent swaps. This is an example of
+a translation from $\PiPlusLang$ to $\PiHatLang$.
+
+\begin{align*}
+  \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+    \begin{knot}[clip width=3]
+      \filldraw (0,4) circle (2pt) node[above] {0};
+      \filldraw (1,4) circle (2pt) node[above] {1};
+      \filldraw (2,4) circle (2pt) node[above] {2};
+      \filldraw (3,4) circle (2pt) node[above] {3};
+      \filldraw (0,0) circle (2pt) node[below] {2};
+      \filldraw (1,0) circle (2pt) node[below] {3};
+      \filldraw (2,0) circle (2pt) node[below] {0};
+      \filldraw (3,0) circle (2pt) node[below] {1};
+      \strand (0,4) .. controls (0.5,1.5) and (1.5,2.5) .. (2,0);
+      \strand (1,4) .. controls (1.5,1.5) and (2.5,2.5) .. (3,0);
+      \strand (2,4) .. controls (1.5,1.5) and (1.5,2.5) .. (0,0);
+      \strand (3,4) .. controls (2.5,1.5) and (2.5,2.5) .. (1,0);
+    \end{knot}
+  \end{tikzpicture}
+\quad=\quad
+  \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+    \begin{knot}[clip width=3]
+      \filldraw (0,4) circle (2pt) node[above] {0};
+      \filldraw (1,4) circle (2pt) node[above] {1};
+      \filldraw (2,4) circle (2pt) node[above] {2};
+      \filldraw (3,4) circle (2pt) node[above] {3};
+      \filldraw (0,0) circle (2pt) node[below] {0};
+      \filldraw (1,0) circle (2pt) node[below] {2};
+      \filldraw (2,0) circle (2pt) node[below] {1};
+      \filldraw (3,0) circle (2pt) node[below] {3};
+      \strand (0,4) to (0,0);
+      \strand (1,4) .. controls (0.5,2) and (2.5,2) .. (2,0);
+      \strand (2,4) .. controls (2.5,2) and (0.5,2) .. (1,0);
+      \strand (3,4) to (3,0);
+    \end{knot}
+  \end{tikzpicture}
+  &&
+    \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+      \begin{knot}[clip width=3]
+        \filldraw (0,4) circle (2pt) node[above] {0};
+        \filldraw (1,4) circle (2pt) node[above] {2};
+        \filldraw (2,4) circle (2pt) node[above] {1};
+        \filldraw (3,4) circle (2pt) node[above] {3};
+        \filldraw (0,0) circle (2pt) node[below] {2};
+        \filldraw (1,0) circle (2pt) node[below] {0};
+        \filldraw (2,0) circle (2pt) node[below] {1};
+        \filldraw (3,0) circle (2pt) node[below] {3};
+        \strand (0,4) .. controls (-0.5,2) and (1.5,2) .. (1,0);
+        \strand (1,4) .. controls (1.5,2) and (-0.5,2) .. (0,0);
+        \strand (2,4) to (2,0);
+        \strand (3,4) to (3,0);
+      \end{knot}
+    \end{tikzpicture}
+  &&
+  \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+    \begin{knot}[clip width=3]
+      \filldraw (0,4) circle (2pt) node[above] {2};
+      \filldraw (1,4) circle (2pt) node[above] {0};
+      \filldraw (2,4) circle (2pt) node[above] {1};
+      \filldraw (3,4) circle (2pt) node[above] {3};
+      \filldraw (0,0) circle (2pt) node[below] {2};
+      \filldraw (1,0) circle (2pt) node[below] {0};
+      \filldraw (2,0) circle (2pt) node[below] {3};
+      \filldraw (3,0) circle (2pt) node[below] {1};
+      \strand (0,4) to (0,0);
+      \strand (1,4) to (1,0);
+      \strand (2,4) .. controls (1.5,2) and (3.5,2) .. (3,0);
+      \strand (3,4) .. controls (3.5,2) and (1.5,2) .. (2,0);
+    \end{knot}
+  \end{tikzpicture}
+  &&
+    \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+      \begin{knot}[clip width=3]
+        \filldraw (0,4) circle (2pt) node[above] {2};
+        \filldraw (1,4) circle (2pt) node[above] {0};
+        \filldraw (2,4) circle (2pt) node[above] {3};
+        \filldraw (3,4) circle (2pt) node[above] {1};
+        \filldraw (0,0) circle (2pt) node[below] {2};
+        \filldraw (1,0) circle (2pt) node[below] {3};
+        \filldraw (2,0) circle (2pt) node[below] {0};
+        \filldraw (3,0) circle (2pt) node[below] {1};
+        \strand (0,4) to (0,0);
+        \strand (1,4) .. controls (0.5,2) and (2.5,2) .. (2,0);
+        \strand (2,4) .. controls (2.5,2) and (0.5,2) .. (1,0);
+        \strand (3,4) to (3,0);
+      \end{knot}
+    \end{tikzpicture}
+\end{align*}
+
+\note{Show codes; normalize; explain the dense paragraph above using that example}
+
+
 The technical result implies several immediate applications to reversible circuits: (i) a reversible circuit expressed
 in $\PiPlusLang$ can be automatically generated from a permutation in $\UFin$ \emph{and the generation comes equipped
   with a proof of correctness establishing its equivalence between the circuit and the original permutation}; (ii)
