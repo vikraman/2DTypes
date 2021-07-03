@@ -52,7 +52,7 @@ reversibleOr.qasm:
 \noindent This implementation was manually produced using a standard synthesis algorithm for reversible
 circuits~\cite{10.1145/775832.775915}. To gain some intuition, we trace the evaluation of the circuit for input
 \verb|011|. In this context, the most significant bit is at index 0. Thus the first \verb|ccx| gate negates \verb|q[0]|
-since both \verb|q[1]| and \verb|q[2]| are true producing \verb|111|; the following \verb|cx| gate negates produces \verb|011|; finally the last \verb|cx| produces the final result \verb|111|.
+since both \verb|q[1]| and \verb|q[2]| are true producing \verb|111|; the following \verb|cx| gate produces \verb|011|; finally the last \verb|cx| produces the result \verb|111|.
 
 There is wealth of manual and algorithmic approaches for such synthesis problems each optimizing along  different dimensions~\cite{XXX}. Here is the circuit produced using an approach that analyzes the recursive structure of the circuit (and would generalize to computing the disjunction of more than two inputs):
 
@@ -86,8 +86,8 @@ g(r,h) &=& \left\{ \begin{array}{ll}
                                 \end{array}\right.
 \end{array}\]
 
-\noindent However, as explained in standard accounts of the algorithm (e.g., the Qiskit implementation), such efficient
-modular exponentiation circuits are not straightforward to derive and are the bottleneck in Shor’s algorithm. Typical
+\noindent However, as explained in standard accounts of the algorithm (e.g., the Qiskit implementation), producing an efficient
+modular exponentiation circuit from this specification  is not straightforward and is actually the bottleneck in Shor’s algorithm. Typical
 derivations of the circuit start from elementary gates, build a circuit for reversible disjunction and conjunction of
 booleans, a circuit for a half-adder, a circuit for computing the carry, progressing to a circuit for modular addition,
 which is used to build a circuit for modular multiplication, and then finally a circuit for modular exponentiation
@@ -106,16 +106,17 @@ the category of finite sets and bijections is the free rig groupoid; its structu
     \arrow["\quoteh", curve={height=-24pt}, from=1-7, to=1-5]
   \end{tikzcd}\]
 
-\noindent The nodes $\PiLang$, $\PiPlusLang$, and $\PiHatLang$ each represent a syntactic weak 2-category (groupoid
-actually as all morphisms are isomorphisms) where the 0-cells represent types, the 1-cells represent reversible
-circuits, and the 2-cells represent circuit equivalences. In $\PiLang$, the circuits represent arbitrary permutations
-among finite sets with products and coproducts; in $\PiPlusLang$, the circuits represent arbitrary permutations among
-finite sets with only coproducts; and in $\PiHatLang$, the permutations are expressed using adjacent transpositions. The
-node $\UFin$ is the \emph{univalent subuniverse of all finite types} which expresses for each $n$, the permutation group
-on $\Fin[n]$ or the symmetric group $\Sn$. The syntactic groupoid $\PiPlusLang$ is the free rig groupoid; the universe
-$\UFin$ is the groupoid of finite sets and bijections; the $\evalp/\quotep$ and $\evalh/\quoteh$ arrows establish a
+\noindent The nodes $\PiLang$, $\PiPlusLang$, and $\PiHatLang$ in the diagram each represent a syntactic weak 2-category
+(groupoid actually as all morphisms are isomorphisms) where the 0-cells represent types, the 1-cells represent
+reversible circuits, and the 2-cells represent circuit equivalences. In $\PiLang$, the circuits represent arbitrary
+permutations among finite sets with products and coproducts; in $\PiPlusLang$, the circuits represent arbitrary
+permutations among finite sets with only coproducts; and in $\PiHatLang$, the permutations are expressed using adjacent
+transpositions.
+
+The syntactic groupoid $\PiPlusLang$ is the free rig groupoid; $\UFin$ is the groupoid of finite sets and bijections
+represented as the \emph{univalent subuniverse of all finite types}. The $\evalp/\quotep$ and $\evalh/\quoteh$ arrows establish a
 \emph{symmetric monoidal biequivalence} between these two groupoids. To get a taste of the involved complexity of this
-result, consider the obvious fact that, semantically, i.e., in $\UFin$, it is obvious that there is only one bijection
+result, consider the obvious fact that, semantically, i.e., in $\UFin$, there is only one bijection
 from the empty set to itself. However, in the free groupoid, there are an infinite number of isomorphisms from the empty
 type to itself that go through arbitrary complex subtypes, e.g.,
 $\zerot \isot \zerot \times A \isot \zerot \times (A + \zerot) \isot (\zerot \times A) + (\zerot \times \zerot) \isot
@@ -132,14 +133,14 @@ are Lehmer codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a conve
 permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations
 $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
 
-The technical result implies several immediate applications to reversible circuits: (i) a reversible circuit expressed in
-$\PiPlusLang$ can be automatically generated from a permutation in $\UFin$ \emph{and the generation comes equipped with
-  a proof of correctness establishing its equivalence between the circuit and the original permutation}; (ii) circuits in
-  $\PiLang$ or $\PiPlusLang$ can be reduced to a normal form using a normalization by evaluation process that evaluates
-  them to a permutation in $\UFin$ and quotes it back; (iii) equivalence
-  of circuits in either $\PiLang$ or $\PiPlusLang$ can be decided by reducing them to normal forms; (iv) the induced
-  circuit equivalences in $\PiLang$ and $\PiPlusLang$ form a sound and complete calculus for reasoning about and
-  optimizing circuits. (See Sec.~\ref{sec:informal} for more details.)
+The technical result implies several immediate applications to reversible circuits: (i) a reversible circuit expressed
+in $\PiPlusLang$ can be automatically generated from a permutation in $\UFin$ \emph{and the generation comes equipped
+  with a proof of correctness establishing its equivalence between the circuit and the original permutation}; (ii)
+circuits in $\PiLang$ or $\PiPlusLang$ can be reduced to a circuit normal form using a normalization by evaluation
+process that evaluates them to a permutation in $\UFin$ and quotes it back; (iii) equivalence of circuits in either
+$\PiLang$ or $\PiPlusLang$ can be decided by reducing them to normal forms; (i) a circuit can be verified against a
+given permutation by evaluating it; and (v) the induced circuit equivalences in $\PiLang$ and $\PiPlusLang$ form a sound
+and complete calculus for reasoning about and optimizing circuits. (See Sec.~\ref{sec:informal} for more details.)
 
   \note{perhaps a note about the result being folklore; assumed in many places; but no proof; and certainly none
     formalized in a proof assistant. In some sense, what we have done is to take MacLane's coherence theorem and

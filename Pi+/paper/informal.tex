@@ -8,6 +8,9 @@
 %   reversible language with $\leq 5$ bits, and examples of permutations and
 %   transpositions, and when they're equal.}
 
+Instead of working with circuits operating on sequences of bits, we work with circuits operating on algebraic data
+types.
+
 \paragraph*{Normalization by evaluation.} Consider the following reversible function:
 $\Afun{RESET}(b,b_1,\ldots,b_n) = (b \; \underline{\vee} \; (\bigvee_{i=1}^n b_i),b_1,\ldots,b_n)$ where $\vee$ is
 logical-or and $\underline{\vee}$ is exclusive-or. The function sets or resets the first bit depending on whether any of
@@ -27,10 +30,11 @@ incoming value with no change:
 
 \resettwo{}
 
-\noindent The syntax will be explained in detail in the next section and the full definitions of the helpers are provided in the
-supplementary material. For now, it is sufficient to know that there is some program that implements the reversible
-function of interest. Our Agda infrastructure provides tools to normalize all programs to their normal form. For
-\Afun{reset 2} we get:
+\noindent The syntax will be explained in detail in the next section and the full definitions of the helpers are
+provided in the supplementary material. For now, it is sufficient to know that there is some program that implements the
+reversible function of interest and that applying \Afun{reset} to 2 produces \verb|reversibleOr2| from the
+introduction. Our Agda infrastructure provides tools to normalize all programs to their normal form. For \Afun{reset 2}
+we get:
 
 \resetnormtwo{}
 
@@ -175,7 +179,8 @@ following program:
 \adder{}
 
 \noindent The \Afun{adder3} program looks nothing like the original \Afun{reset 2} program and yet they both have the
-same normal form thus establishing their equivalence.
+same normal form thus establishing their equivalence. The reader can check that this circuit is the same as
+\verb|reversibleOr1| from the introduction.
 
 % Now imagine we want to write the following reversible function:
 
