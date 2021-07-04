@@ -10,7 +10,9 @@ open import Pi+.UFin.BAut
 open import Pi+.Misc
 open import Pi+.Extra
 
-open import Pi+.Indexed.Syntax as Pi+ renaming (_⟷₁_ to _⟷₁₊_; U to U+)
+open import Pi+.Indexed.Syntax as Pi+
+  renaming (_⟷₁_ to _⟷₁₊_; _⟷₂_ to _⟷₂₊_; !⟷₁ to !⟷₁₊; U to U+;
+  idr◎l to idr◎l+; swapl₊⟷₂ to swapl₊⟷₂+)
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
 open import Pi+.Indexed.SyntaxFull as Pi
@@ -26,11 +28,21 @@ open import Pi+.Common.FinHelpers
 open import Pi+.Lehmer.FinHelpers
 
 open import Pi+.Indexed.Examples.Base
-open import Pi+.Indexed.Examples.Toffoli
+open import Pi+.Indexed.Examples.Toffoli hiding (cif)
 open import Pi+.Indexed.Examples.Reset hiding (reset; reset2-perm)
+
+private
+  variable
+    A B C D E F : U
 \end{code}
 
-\newcommand{\resettwo}{%
+\newcommand{\cif}{%
+\begin{code}
+cif : (c₁ c₂ : A ⟷₁ A) → (𝟚 × A ⟷₁ 𝟚 × A)
+cif c₁ c₂ = dist ◎ ((id⟷₁ ⊗ c₁) ⊕ (id⟷₁ ⊗ c₂)) ◎ factor
+\end{code}}
+
+\newcommand{\resetn}{%
 \begin{code}
 reset : ∀ n → 𝟚 × 𝔹 n ⟷₁ 𝟚 × 𝔹 n
 reset 0 = id⟷₁
@@ -77,20 +89,61 @@ reset2-perm = equiv f f f-f f-f
         f-f (6 , ϕ) = fin= idp
         f-f (7 , ϕ) = fin= idp
         f-f (n , N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR (N.ltSR ()))))))))
+
+ccx = toffoli 3
+cx = cnot
+x = not
+
+A[BC]-C[BA] : {A B C : U} → A × (B × C) ⟷₁ C × (B × A)
+A[BC]-C[BA] = swap⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
+
+C[BA]-[CA]B : {A B C : U} → C × (B × A) ⟷₁ (C × A) × B
+C[BA]-[CA]B = (id⟷₁ ⊗ swap⋆) ◎ assocl⋆
+
+[CA]B-A[BC] : {A B C : U} → (C × A) × B ⟷₁ A × (B × C)
+[CA]B-A[BC] = !⟷₁ C[BA]-[CA]B ◎ !⟷₁ A[BC]-C[BA]
+
+A[BC]-B[AC] : {t₁ t₂ t₃ : Pi.U} → t₁ Pi.× (t₂ Pi.× t₃) Pi.⟷₁ t₂ Pi.× (t₁ Pi.× t₃)
+A[BC]-B[AC] = assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
+
+A[BC]-B[CA] : {t₁ t₂ t₃ : Pi.U} → t₁ Pi.× (t₂ Pi.× t₃) Pi.⟷₁ t₂ Pi.× (t₃ Pi.× t₁)
+A[BC]-B[CA] = swap⋆ ◎ assocr⋆
+
+B[CA]-A[BC] : {t₁ t₂ t₃ : Pi.U} → t₂ Pi.× (t₃ Pi.× t₁) Pi.⟷₁ t₁ Pi.× (t₂ Pi.× t₃)
+B[CA]-A[BC] = assocl⋆ ◎ swap⋆
 \end{code}
 
 \newcommand{\adder}{%
 \begin{code}
-adder3 : 𝔹 3 Pi.⟷₁ 𝔹 3
-adder3 =  swap⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆ ◎
-          toffoli 3 ◎ (id⟷₁ ⊗ cnot) ◎
-          assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆ ◎
-          (id⟷₁ ⊗ cnot) ◎ assocl⋆ ◎ swap⋆
+reversibleOr1 : 𝔹 3 ⟷₁ 𝔹 3
+reversibleOr1 = A[BC]-C[BA] ◎ ccx ◎ (id⟷₁ ⊗ cx) ◎ C[BA]-[CA]B ◎ (cx ⊗ id⟷₁) ◎ [CA]B-A[BC]
 \end{code}}
+
+\newcommand{\resettwo}{%
+\begin{code}
+reversibleOr2 : 𝔹 3 ⟷₁ 𝔹 3
+reversibleOr2 = A[BC]-B[CA] ◎ cif (x ⊗ id⟷₁) cx ◎ B[CA]-A[BC]
+\end{code}}
+
 
 \newcommand{\rotate}{%
 \begin{code}
 swaplr1 swaplr2 : {A B C : U} → A + (B + C) ⟷₁ C + (B + A)
 swaplr1 = assocl₊ ◎ swap₊ ◎ (id⟷₁ ⊕ swap₊)
 swaplr2 = (id⟷₁ ⊕ swap₊) ◎ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ swap₊)
+\end{code}}
+
+\newcommand{\orequiv}{%
+\begin{code}
+orEquiv : reversibleOr1 ⟷₂ reversibleOr2
+orEquiv = TODO
+\end{code}}
+
+\begin{code}[hide]
+postulate
+\end{code}
+\newcommand{\combtwo}{%
+\begin{code}
+  idr◎l       : {c : A ⟷₁ B} → (c ◎ id⟷₁) ⟷₂ c
+  swapl₊⟷₂  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} → (swap₊ ◎ (c₁ ⊕ c₂)) ⟷₂ ((c₂ ⊕ c₁) ◎ swap₊)
 \end{code}}

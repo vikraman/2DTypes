@@ -1,167 +1,187 @@
+\begin{figure}[t]
+  {\scalebox{\scalef}{$%
+        %%\noindent\begin{minipage}{.7\linewidth}
+        \begin{array}{rrcll}
+          \idc :     & A                     & \isoone & A                            & : \idc      \\
+          \\
+          \identlp : & \zerot + A            & \isoone & A                            & : \identrp  \\
+          \swapp :   & A + B                 & \isoone & B + A                        & : \swapp    \\
+          \assoclp : & A + (B + C)           & \isoone & (A + B) + C                  & : \assocrp  \\ [1.5ex]
+          \identlt : & \onet \times A        & \isoone & A                            & : \identrt  \\
+          \swapt :   & A \times B            & \isoone & B \times A                   & : \swapt    \\
+          \assoclt : & A \times (B \times C) & \isoone & (A \times B) \times C        & : \assocrt  \\ [1.5ex]
+          \absorbr : & ~ \zerot \times A     & \isoone & \zerot ~                     & : \factorzl \\
+          \dist :    & ~ (A + B) \times C    & \isoone & (A \times C) + (B \times C)~ & : \factor
+        \end{array}$}}
+
+    \medskip
+
+    {\scalebox{\scalef}{%
+      \Rule{}
+      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : B \isoone C}
+      {\jdg{}{}{c_1 \fatsemi c_2 : A \isoone C}}
+      {}
+
+      \Rule{}
+      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
+      {\jdg{}{}{c_1 \oplus c_2 : A + C \isoone B + D}}
+      {}
+
+      \Rule{}
+      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
+      {\jdg{}{}{c_1 \otimes c_2 : A \times C \isoone B \times D}}
+      {}
+    }}
+  \caption{$\Pi$-terms, combinators, and their types.}
+  \label{fig:pi-terms}
+\end{figure}
+
 \section{A Reversible Programming Language: Set-Theoretic Semantics}
+%% ~3 pages
 \label{sec:reversibleone}
 \label{sec:reversibletwo}
 \label{langeqeq}
 \label{sec:informal}
 
-%%%%%%%%%%%%%%%%%
-\subsection{Coherence Conditions}
-
-\note{Start with conherence conditions and folklore result; cite ESOP paper as a syntactic presentation; then go into Pi details}
+The circuit model of reversible computation discussed in the introduction is a useful abstraction close to the hardware
+platform. However, since its main data abstraction is a \emph{sequence of wires}, it only provides an ``assembly''
+programming abstraction (e.g., \verb|qasm|). A mathematical model based on permutations of finite sets provides a richer
+algebraic model which we review in this section.
 
 %%%%%%%%%%%%%%%%%
 \subsection{The $\Pi$ Family of Languages}
+\label{sec:langRev-examples}
+\label{examples}
 
-\note{Discuss level 2; even if briefly}
+A specialized language for programming with permutations on finite sets can be built using ideas going back to Mac
+Lane~\cite{XXX} that the commutative semiring (also known as the commutative rig) of natural numbers exactly
+characterizes permutations on finite sets. In programming parlance, as shown in Fig.~\ref{fig:pi-terms}, each primitive
+algebraic identity of commutative rigs becomes a constant in the programming language and the algebraic closure
+operators become composition operators in the programming language. Once equipped with a notion of values and types, we
+get the following syntactic presentation of a programming language for
+permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
 
-The practice of programming languages is replete with \emph{ad hoc} instances of reversible computations: database
-transactions, mechanisms for data provenance, checkpoints, stack and exception traces, logs, backups, rollback
-recoveries, version control systems, reverse engineering, software transactional memories, continuations, backtracking
-search, and multiple-level undo features in commercial applications. In the early nineties,
-\citet{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class, treatment of reversibility. But intensive
-research in full-fledged reversible models of computations and reversible programming languages was only sparked by the
-discovery of deep connections between physics and
-computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275, Hey:1999:FCE:304763,fredkin1982conservative}, and by the
-potential for efficient quantum computation~\cite{springerlink:10.1007/BF02650179}.
+% The practice of programming languages is replete with \emph{ad hoc} instances of reversible computations: database
+% transactions, mechanisms for data provenance, checkpoints, stack and exception traces, logs, backups, rollback
+% recoveries, version control systems, reverse engineering, software transactional memories, continuations, backtracking
+% search, and multiple-level undo features in commercial applications. In the early nineties,
+% \citet{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class, treatment of reversibility. But intensive
+% research in full-fledged reversible models of computations and reversible programming languages was only sparked by the
+% discovery of deep connections between physics and
+% computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275, Hey:1999:FCE:304763,fredkin1982conservative}, and by the
+% potential for efficient quantum computation~\cite{springerlink:10.1007/BF02650179}.
 
-The early developments of reversible programming languages started
-with a conventional programming language, e.g., an extended
-$\lambda$-calculus, and either:
-\begin{enumerate}
-  \item extended the language with a history
-        mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
-  \item imposed constraints on the control flow constructs to make them
-        reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
-\end{enumerate}
-More foundational approaches recognize that reversible programming languages require a fresh approach and should be
-designed from first principles without the detour via conventional irreversible
-languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047,
-  rc2011,James:2012:IE:2103656.2103667,Carette2016}.
+% The early developments of reversible programming languages started
+% with a conventional programming language, e.g., an extended
+% $\lambda$-calculus, and either:
+% \begin{enumerate}
+%   \item extended the language with a history
+%         mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or
+%   \item imposed constraints on the control flow constructs to make them
+%         reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.
+% \end{enumerate}
+% More foundational approaches recognize that reversible programming languages require a fresh approach and should be
+% designed from first principles without the detour via conventional irreversible
+% languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047,
+%   rc2011, James:2012:IE:2103656.2103667, Carette2016}.
 
-A natural candidate for a semantic foundation for reversible programming languages is the notion of type
-isomorphism. Indeed, the type isomorphisms among finite types are sound and complete for all permutations on finite
-types~\cite{Fiore:2004,fiore-remarks} and hence they are \emph{complete} for expressing reversible combinational
-circuits~\cite{fredkin1982conservative, James:2012:IE:2103656.2103667,Toffoli:1980} and the extension with recursive
-types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
-language~\cite{James:2012:IE:2103656.2103667,rc2011}.
-
-Focusing on finite types, the building blocks of type theory are: the empty type ($\zerot$), the unit type
-($\onet$) containing just one value $\Acon{tt}$, the sum type ($+$) containing values of the form $\inlv{v}$ and
-$\inrv{v}$, and the product ($\times$) type containing pairs of values $(v_1,v_2)$. For this fragment of types, the
-syntax of the language $\Pi$ consists of the following sorts:
+\medskip
 
 {\scalebox{\scalef}{$%
     \begin{array}{lrcl}
       \textit{Value types}   & A,B,C,D & ::= & \zerot \alt \onet \alt A+B \alt A\times B        \\
       \textit{Values}        & v,w,x,y & ::= & \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
-      \textit{Program types} &         &     & A \iso B                                         \\
-      \textit{Programs}      & c       & ::= & (\textrm{See Fig.~\ref{pi-terms}})
+      \textit{Program types} &         &     & A \isoone B                                         \\
+      \textit{Programs}      & c       & ::= & (\textrm{See Fig.~\ref{fig:pi-terms}})
     \end{array}$}}
-\begin{figure}[t]
-  {\scalebox{\scalef}{$%
-        %%\noindent\begin{minipage}{.7\linewidth}
-        \begin{array}{rrcll}
-          \idc :     & A                     & \iso & A                            & : \idc      \\
-          \\
-          \identlp : & \zerot + A            & \iso & A                            & : \identrp  \\
-          \swapp :   & A + B                 & \iso & B + A                        & : \swapp    \\
-          \assoclp : & A + (B + C)           & \iso & (A + B) + C                  & : \assocrp  \\ [1.5ex]
-          \identlt : & \onet \times A        & \iso & A                            & : \identrt  \\
-          \swapt :   & A \times B            & \iso & B \times A                   & : \swapt    \\
-          \assoclt : & A \times (B \times C) & \iso & (A \times B) \times C        & : \assocrt  \\ [1.5ex]
-          \absorbr : & ~ \zerot \times A     & \iso & \zerot ~                     & : \factorzl \\
-          \dist :    & ~ (A + B) \times C    & \iso & (A \times C) + (B \times C)~ & : \factor
-        \end{array}$}}
 
-  {\scalebox{\scalef}{%
-      \Rule{}
-      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : B \iso C}
-      {\jdg{}{}{c_1 \fatsemi c_2 : A \iso C}}
-      {}
+\medskip\noindent The language of types is built from the empty type ($\zerot$), the unit type
+($\onet$) containing just one value~$\Acon{tt}$, the sum type ($+$) containing values of the form $\inlv{v}$ and
+$\inrv{v}$, and the product ($\times$) type containing pairs of values $(v_1,v_2)$.
+%
+% A natural candidate for a semantic foundation for reversible programming languages is the notion of type
+% isomorphism. Indeed, the type isomorphisms among finite types are sound and complete for all permutations on finite
+% types~\cite{Fiore:2004,fiore-remarks} and hence they are \emph{complete} for expressing reversible combinational
+% circuits~\cite{fredkin1982conservative, James:2012:IE:2103656.2103667,Toffoli:1980} and the extension with recursive
+% types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
+% language~\cite{James:2012:IE:2103656.2103667,rc2011}.
 
-      \Rule{}
-      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
-      {\jdg{}{}{c_1 \oplus c_2 : A + C \iso B + D}}
-      {}
-
-      \Rule{}
-      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
-      {\jdg{}{}{c_1 \otimes c_2 : A \times C \iso B \times D}}
-      {}
-    }}
-  \caption{$\Pi$-terms, combinators, and their types.}
-  \label{pi-terms}
-\end{figure}
-
-\noindent Intuitively, one may view each type $A$ as a collection of physical wires that can transmit $\sizet{A}$
-distinct values where $\sizet{A}$ is a natural number that indicates the size of a type, computed as:
-$\sizet{\zerot} = 0$; $\sizet{\onet} = 1$; $\sizet{A + B} = \sizet{A} + \sizet{B}$; and
-$\sizet{A \times B} = \sizet{A} * \sizet{B}$.  Thus the type $\mathbb{2} = \onet + \onet$ corresponds to a wire that can
-transmit one of two values, i.e., bits. The type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated
-$\mathbb{B}~3$) corresponds to a collection of wires that can transmit three bits. From that perspective, a type
-isomorphism between types $A$ and $B$ (such that $\sizet{A}=\sizet{B}=n$) models a \emph{reversible} combinational
-circuit that \emph{permutes} the $n$ different values. These type isomorphisms form a \emph{commutative semiring} and
-are collected in Fig.~\ref{pi-terms}. Each line in the top part of the figure introduces a pair of dual constants that
-witness the type isomorphism in the middle.  These are the \emph{base} (non-reducible) terms of $\Pi$. The isomorphisms
-are extended to form a congruence relation by adding the three constructors at the bottom of the figure that witness
-equivalence and compatible closure. Although austere, this combinator-based language has the advantage of being amenable
-to formal analysis for at least two reasons: (i) it is conceptually simple and small, and (ii) it has direct and evident
-connections to type theory and category theory and hence possesses a rich algebraic structure which we exploit in the
-remainder of the paper.
-
-%%%%%%%%%
-\subsection{Informal Semantics and Examples}
-\label{sec:langRev-examples}
-\label{examples}
-
-%% \note{Revisit to pick examples relevant to the rest of the paper; also unify notation}
-
-In order to understand the examples of Sec.~\ref{sec:informal}, we review how to represent collections of booleans and
-conditionals in $\Pi$. We use the type $\onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing
-\textsf{false} and $\inrv{\Acon{tt}}$ representing $\textsf{true}$. Boolean negation is straightforward to define using
-the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values.
-For example, we can express a 3-bit word reversal operation as follows:
-
-$\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
-
-$\Afun{reverse} = \swapt \fatsemi (\swapt  \otimes  \idc)~ \fatsemi \assocrt$
-
-\noindent The manual trace of $\Afun{reverse}$ below confirms that it indeed reverses the three bits:
-\[\begin{array}{rlr}
-                         & (v_1, (v_2, v_3)) \\
-    \swapt               & ((v_2, v_3), v_1) \\
-    \swapt \otimes  \idc & ((v_3, v_2), v_1) \\
-    \assocrt             & (v_3, (v_2, v_1)) \\
-  \end{array}\]
+To see how this language is expresses reversible circuits, we present a few examples. First it is possible to directly
+mimic the \verb|qasm|-perspective by defining types that describe sequences of booleans. We use the type
+$\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing \textsf{true} and
+$\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean negation (the \verb|x|-gate) is straightforward to define using
+the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values, thus the
+type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated $\mathbb{B}~3$) corresponds to a collection of
+wires that can transmit three bits.
+%
+% For example, we can express a 3-bit word reversal operation as follows:
+% $\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
+% $\Afun{reverse} = \swapt \fatsemi (\swapt  \otimes  \idc)~ \fatsemi \assocrt$
+% \noindent The manual trace of $\Afun{reverse}$ below confirms that it indeed reverses the three bits:
+% \[\begin{array}{rlr}
+%                          & (v_1, (v_2, v_3)) \\
+%     \swapt               & ((v_2, v_3), v_1) \\
+%     \swapt \otimes  \idc & ((v_3, v_2), v_1) \\
+%     \assocrt             & (v_3, (v_2, v_1)) \\
+%   \end{array}\]
 %subcode source isomorphisms.tex:979
+%
+To express the \verb|cx| and \verb|ccx| gates, we need to encode a notion of conditional expression. Such conditionals
+turn out to be expressible using the distributivity and factoring identities of rigs as shown below:
 
-Even though \ensuremath{\Pi } lacks conditional expressions, they are expressible using the distributivity and factoring
-laws as shown below:
+\medskip
 
-$\Afun{ifc}_{c_1,c_2} : \mathbb{2} \times A \iso \mathbb{2} \times B$
-
-$\Afun{ifc}_{c_1,c_2} = \dist \fatsemi ((\idc  \otimes\  c_1) \oplus (\idc \otimes\  c_2)) \fatsemi \factor$
-
-
-% \inkscape{if-c1-c2.pdf}
-
+\cif{}
 
 \noindent The input value of type $\mathbb{2} \times A$ is processed by the distribute operator \ensuremath{\dist},
-which converts it into a value of type $(\onet \times A) + (\onet \times A)$. In the \ensuremath{\mathit{left}} branch,
-which corresponds to the case when the boolean is \ensuremath{\mathit{false}}, the combinator~\ensuremath{c_1} is
-applied to the value of type~\ensuremath{A}. The right branch which corresponds to the boolean being
-\ensuremath{\mathit{true}} passes the value of type $A$ through the combinator \ensuremath{c_2}.  The inverse of
-\ensuremath{\dist}, namely \ensuremath{\factor} is applied to get the final result. The full expressiveness of $\Pi$ is
-demonstrated by an implementation of $\Afun{cnot}$ and $\Afun{toffoli}$ which are universal for reversible
-computation~\cite{Toffoli:1980}. The $\Afun{cnot}$ gates takes two input bits: a control bit and a target bit, and
-negates the target bit if the control bit is set. It is essentially a one-branch version of $\Afun{cif}$ above. The
-Toffoli gate generalizes the idea to a gate that takes 3 input bits: 2 control bits and one target bit: boolean inputs:
-it negates the target bit if both control bits are set.
+which converts it into a value of type $(\onet \times A) + (\onet \times A)$. In the left branch, which corresponds to
+the case when the boolean is \textsf{true}, the combinator~\ensuremath{c_1} is applied to the value of
+type~\ensuremath{A}. The right branch which corresponds to the boolean being \textsf{false} passes the value of type $A$
+through the combinator \ensuremath{c_2}.  The inverse of \ensuremath{\dist}, namely \ensuremath{\factor} is applied to
+get the final result. Using this conditional operator, \verb|cx| is defined as $\Afun{cif}~\verb|x|~\idc$ and
+\verb|ccx| is defined as $\Afun{cif}~\verb|cx|~\idc$. With these conventions, the first circuit in the introduction
+is transcribed as follows:
 
-Explain how Pi can be used to represent circuit; perhaps show how ifc corresponds to two cnots with negation surrounding
-the second one; talk about sequences of wires as a terrible representation
+\medskip
 
-% \todo{Not the right title.}
+\adder{}
+
+\noindent where we clearly see the sequences of the three operations \verb|ccx|, \verb|cx|, and \verb|cx| but, instead
+of using the indices in the sequence of wires to identify the relevant parameters, here we use structural isomorphisms
+(elided above) to re-shuffle the types. For the second circuit, instead of transcribing it directly, we express it using
+a slightly more abstract notation:
+
+\medskip
+
+\resettwo{}
+
+\noindent Like the original circuit, we examine the bit at index 1 (corresponding to the component $B$ in a tuple
+$(A,(B,C))$): if the bit is true, we perform an \verb|x| operation on component $A$, and otherwise we perform a
+\verb|cx| operation on $C,A$. The two uses of \verb|x| gates in the circuit are now unnecessary as they were only needed
+to encode a two-way conditional expression using a sequence of one-way conditional expressions (the only ones available in
+the linear circuit model).
+
+All of this is only half the story as the correspondence between the syntactic commutative rig (the syntax of $\PiLang$)
+and permutations on finite sets includes \emph{coherence conditions} that identify different syntactic representations
+of the same permutation~\cite{laplaza72,Carette2016}. These coherence conditions will be reflected in a second level of $\PiLang$
+syntax as level-2 combinators whose types are of the form $c_1 \isotwo c_2$ for appropriate $c_1$ and $c_2$ of the same
+level-1 type $A \isoone B$. For example, we have:
+
+\medskip
+
+\combtwo{}
+
+\noindent where the first level-2 combinator states the obvious fact that compositions with the identity can be
+optimized and the second level-2 combinator states the more interesting observation that swapping the two sides of a sum
+type and then applying $c_1$ to the left and $c_2$ to the right is equivalent to applying $c_2$ to the left and $c_1$ to
+the right and then swapping. The full set of level-2 combinators is large and is only listed in the accompanying code.
+
+% and that impose various coherence conditions on the level-1 combinators. In the remainder of this section, we show how
+% to use a subset of these level-2 combinators to show the equivalence of \Afun{reversibleOr1} and \Afun{reversibleOr2}.
+
+% \medskip
+
+% \orequiv{}
 
 % \note{This section should explain the main technical parts of the paper
 %   informally, without using any technology. Use an example, such as, a
@@ -171,10 +191,11 @@ the second one; talk about sequences of wires as a terrible representation
 %%%%%%%%%
 \subsection{Denotational Semantics}
 
-\noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be
-specified by mapping each type to a finite set and each combinator to a bijection between finite sets, that is, a
-permutation. In this section, we outline a simple semantics expressed in the metalanguage of sets and functions. This
-semantics will be extended to the metalanguage of homotopy type theory in the remainder of the paper.
+\noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be specified
+by mapping each type to a finite set and each combinator to a permutation between finite sets. In this section, we
+outline a simple denotational semantics expressed in the metalanguage of sets and functions that collapses the level-2
+combinators. This semantics will be extended in the next two sections to the metalanguage of homotopy type theory to
+properly model the level-2 combinators.
 
 The denotation of types is straightforward:
 
@@ -185,35 +206,46 @@ The denotation of types is straightforward:
   \denot{A \times B} & = \denot{A} \times \denot{B}
 \end{align*}
 
-where $\emptyset$ is the empty set, $\uplus$ is the disjoint union of sets, and $\times$ is the cartesian product of
-sets. The denotation of a combinator $c : A \isot B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
+\noindent where $\emptyset$ is the empty set, $\uplus$ is the disjoint union of sets, and $\times$ is the cartesian product of
+sets. The denotation of a combinator $c : A \isoone B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
 
-\begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
-  \denot{\identlp}           & (\inlv{v})           & = & v                                   \\
-  \denot{\identrp}           & v                    & = & \inlv{v}                            \\
-  \denot{\swapp}             & (\inlv{v})           & = & \inrv{v}                            \\
-  \denot{\swapp}             & (\inrv{v})           & = & \inlv{v}                            \\
-  \denot{\assoclp}           & (\inlv{v})           & = & \inlv{(\inlv{v})}                   \\
-  \denot{\assoclp}           & (\inrv{(\inlv{v})})  & = & \inlv{(\inrv{v})}                   \\
-  \denot{\assoclp}           & (\inrv{(\inrv{v})})  & = & \inrv{v}                            \\
-  \denot{\assocrp}           & (\inlv{(\inlv{v})})  & = & \inlv{v}                            \\
-  \denot{\assocrp}           & (\inlv{(\inrv{v})})  & = & \inrv{(\inlv{v})}                   \\
-  \denot{\assocrp}           & (\inrv{v})           & = & \inrv{(\inrv{v})}                   \\
-  \denot{\identlt}           & (\Acon{tt} , v)      & = & v                                   \\
-  \denot{\identrt}           & v                    & = & (\Acon{tt} , v)                     \\
-  \denot{\swapt}             & (v_1 , v_2)          & = & (v_2 , v_1)                         \\
-  \denot{\assoclt}           & (v_1 , (v_2 , v_3))  & = & ((v_1 , v_2) , v_3)                 \\
-  \denot{\assocrt}           & ((v_1 , v_2) , v_3)  & = & (v_1 , (v_2 , v_3))                 \\
-  \denot{\dist}              & (\inlv{v_1} , v_3)   & = & \inlv{(v_1 , v_3)}                  \\
-  \denot{\dist}              & (\inrv{v_2 , v_3})   & = & \inrv{(v_2 , v_3)}                  \\
-  \denot{\factor}            & (\inlv{(v_1 , v_3)}) & = & (\inlv{v_1} , v_3)                  \\
-  \denot{\factor}            & (\inrv{(v_2 , v_3)}) & = & (\inrv{v_2} , v_3)                  \\
-  \denot{\idc}               & v                    & = & v                                   \\
-  \denot{(c_1 \fatsemi c_2)} & v                    & = & (\denot{c_2} \circ \denot{c_1}) v   \\
-  \denot{(c_1 \oplus c_2)}   & (\inlv{v})           & = & \inlv{(\denot{c_1}~v)}              \\
-  \denot{(c_1 \oplus c_2)}   & (\inrv{v})           & = & \inrv{(\denot{c_2}~v)}              \\
-  \denot{(c_1 \otimes c_2)}  & (v_1 , v_2)          & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
-\end{longtable}
+\begin{multicols}{2}
+%%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+\[\begin{array}[t]{rcl}
+  \denot{\identlp}     ~      (\inlv{v})           & = & v                                   \\
+  \denot{\identrp}      ~      v                    & = & \inlv{v}                            \\
+  \denot{\swapp}        ~      (\inlv{v})           & = & \inrv{v}                            \\
+  \denot{\swapp}        ~      (\inrv{v})           & = & \inlv{v}                            \\
+  \denot{\assoclp}      ~      (\inlv{v})           & = & \inlv{(\inlv{v})}                   \\
+  \denot{\assoclp}      ~      (\inrv{(\inlv{v})})  & = & \inlv{(\inrv{v})}                   \\
+  \denot{\assoclp}      ~      (\inrv{(\inrv{v})})  & = & \inrv{v}                            \\
+  \denot{\assocrp}      ~      (\inlv{(\inlv{v})})  & = & \inlv{v}                            \\
+  \denot{\assocrp}      ~      (\inlv{(\inrv{v})})  & = & \inrv{(\inlv{v})}                   \\
+  \denot{\assocrp}      ~      (\inrv{v})           & = & \inrv{(\inrv{v})}
+\end{array}\]
+
+\[\begin{array}[t]{rcl}
+  \denot{\identlt}      ~      (\Acon{tt} , v)      & = & v                                   \\
+  \denot{\identrt}      ~      v                    & = & (\Acon{tt} , v)                     \\
+  \denot{\swapt}        ~      (v_1 , v_2)          & = & (v_2 , v_1)                         \\
+  \denot{\assoclt}      ~      (v_1 , (v_2 , v_3))  & = & ((v_1 , v_2) , v_3)                 \\
+  \denot{\assocrt}      ~      ((v_1 , v_2) , v_3)  & = & (v_1 , (v_2 , v_3))                 \\
+  \denot{\dist}         ~      (\inlv{v_1} , v_3)   & = & \inlv{(v_1 , v_3)}                  \\
+  \denot{\dist}         ~      (\inrv{v_2 , v_3})   & = & \inrv{(v_2 , v_3)}                  \\
+  \denot{\factor}       ~      (\inlv{(v_1 , v_3)}) & = & (\inlv{v_1} , v_3)                  \\
+  \denot{\factor}       ~      (\inrv{(v_2 , v_3)}) & = & (\inrv{v_2} , v_3)
+\end{array}\]
+
+%%\end{longtable}
+\end{multicols}
+
+  \[\begin{array}{rcl}
+  \denot{\idc}          ~      v                    & = & v                                   \\
+  \denot{(c_1 \fatsemi c_2)} ~ v                    & = & (\denot{c_2} \circ \denot{c_1}) v   \\
+  \denot{(c_1 \oplus c_2)}   ~ (\inlv{v})           & = & \inlv{(\denot{c_1}~v)}              \\
+  \denot{(c_1 \oplus c_2)}   ~ (\inrv{v})           & = & \inrv{(\denot{c_2}~v)}              \\
+  \denot{(c_1 \otimes c_2)}  ~ (v_1 , v_2)          & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
+  \end{array}\]
 
 % \begingroup
 % \allowdisplaybreaks
@@ -279,61 +311,71 @@ sets. The denotation of a combinator $c : A \isot B$ is a (bijective) function m
 % programs between the same types can be deformed into one another. The simplest example of inequivalent deformations are
 % the two automorphisms of $1+1$, namely $\idc$ and $\swapp$.
 
-The denotational semantics can be used to evaluate programs and to check equivalence of programs. For example, it is
-straightforward to verify that $\denot{(c_1~\oplus~c_2)~\fatsemi~\swapp} = \denot{\swapp \fatsemi (c_2~\oplus~c_1)}$. A
-slightly more involved example are the following two programs:
+% The denotational semantics can be used to evaluate programs and to check equivalence of programs. For example, it is
+% straightforward to verify that $\denot{(c_1~\oplus~c_2)~\fatsemi~\swapp} = \denot{\swapp \fatsemi (c_2~\oplus~c_1)}$. A
+% slightly more involved example are the following two programs:
 
-\rotate{}
+% \rotate{}
 
-\noindent The first program performs the following sequence of transformations:
-\[
-  \Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
-  \Tree [ [ {\small a} {\small b} ] {\small c} ] ~\to~
-  \Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
-  \Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
-\]
-\noindent
-while the second evaluates as follows:
-\[
-  \Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
-  \Tree [ {\small a} [ {\small c} {\small b} ] ] ~\to~
-  \Tree [ [ {\small a} {\small c} ] {\small b} ] ~\to~
-  \Tree [ [ {\small c} {\small a} ] {\small b} ] ~\to~
-  \Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
-  \Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
-\]
+% \noindent The first program performs the following sequence of transformations:
+% \[
+%   \Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
+%   \Tree [ [ {\small a} {\small b} ] {\small c} ] ~\to~
+%   \Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
+%   \Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
+% \]
+% \noindent
+% while the second evaluates as follows:
+% \[
+%   \Tree [ {\small a} [ {\small b} {\small c} ] ] ~\to~
+%   \Tree [ {\small a} [ {\small c} {\small b} ] ] ~\to~
+%   \Tree [ [ {\small a} {\small c} ] {\small b} ] ~\to~
+%   \Tree [ [ {\small c} {\small a} ] {\small b} ] ~\to~
+%   \Tree [ {\small c} [ {\small a} {\small b} ] ] ~\to~
+%   \Tree [ {\small c} [ {\small b} {\small a} ] ] ~.
+% \]
 
-The semantics above can be packaged in the category of finite sets and functions, $\SetFin$, which is the category
-freely generated by finite coproduct completion of the terminal category. Objects of $\SetFin$ can be identified with
-sets of fixed cardinality, that is, $\Fin[n] \defeq \Set{0,1,\ldots,n-1}$. $\SetFin$ has finite coproducts and products,
-which lets us interpret the types of $\PiLang$. Combinators are intepreted as morphisms in $\SetFin$, but we have to
-restrict to invertible morphisms, that is, isomorphisms. This gives the \emph{groupoid} of finite sets and bijections,
-$\BFin \defeq \mathsf{core}(\SetFin)$. The isomorphisms satisfied by coproducts and products in $\SetFin$ lift to
-$\BFin$, but they're no longer categorical coproducts and products. They give two symmetric monoidal tensor products on
-$\BFin$, the additive and multiplicative ones, with the multiplicative tensor distributing over the additive tensor.
+% The semantics above can be packaged in the category of finite sets and functions, $\SetFin$, which is the category
+% freely generated by finite coproduct completion of the terminal category. Objects of $\SetFin$ can be identified with
+% sets of fixed cardinality, that is, $\Fin[n] \defeq \Set{0,1,\ldots,n-1}$. $\SetFin$ has finite coproducts and products,
+% which lets us interpret the types of $\PiLang$. Combinators are interpreted as morphisms in $\SetFin$, but we have to
+% restrict to invertible morphisms, that is, isomorphisms. This gives the \emph{groupoid} of finite sets and bijections,
+% $\BFin \defeq \mathsf{core}(\SetFin)$. The isomorphisms satisfied by coproducts and products in $\SetFin$ lift to
+% $\BFin$, but they're no longer categorical coproducts and products. They give two symmetric monoidal tensor products on
+% $\BFin$, the additive and multiplicative ones, with the multiplicative tensor distributing over the additive tensor.
 
-\note{change thm:
-  1. Each function is a bijection. 2. If there is a 2-combinator, the denotations of the 1-combinators are equal
-}
+% \note{change thm:
+%   1. Each function is a bijection. 2. If there is a 2-combinator, the denotations of the 1-combinators are equal
+% }
 
-\begin{theorem}\label{thm:grp}
-  Let $\sim$ be the following equivalence relation on combinators $c_1 \sim c_2$ iff $\denot{c_1} = \denot{c_2}$
-  identifying combinators with the same denotation.  The notation $[c]_{\sim}$ refers to a representative combinator
-  from a $\sim$-equivalence class. Using this relation, we define the
-  category $\mathcal{C}$ as follows:
+\begin{theorem}\label{thm:semone}
+  The denotational semantics is sound in the following sense:
   \begin{itemize}
-    \item $\mathit{Obj}(\mathcal{C})$ is the set of $\Pi$-types, and
-    \item $\mathit{Hom}(A,B) = [c : A \isot B]_{\sim}$
+    \item For every level-1 combinator $c : A \isoone B$, we have that $\denot{c}$ is a bijection between $\denot{A}$ and $\denot{B}$.
+      \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
+        combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using the
+        extensional equivalence of functions.
   \end{itemize}
-  The category $\mathcal{C}$ is a groupoid.
 \end{theorem}
-\begin{proof}
-  The relation $\sim$ identifies $c$, $\idc \circ c$, and $c \circ \idc$, and is associative. Furthermore, the denotation
-  of each combinator is a reversible function thus making every morphism into an isomorphism.
-\end{proof}
+%% proof?
 
-\note{Then say that $\mathcal{C}$ is ``the same'' as $\BFin$ We can say here that the relation $\sim$ also identifies
-  $(c_1~\oplus~c_2)~\fatsemi~\swapp$ and $\swapp \fatsemi (c_2~\oplus~c_1)$ and other properties. ?? }
+%   Let $\sim$ be the following equivalence relation on combinators $c_1 \sim c_2$ iff $\denot{c_1} = \denot{c_2}$
+%   identifying combinators with the same denotation.  The notation $[c]_{\sim}$ refers to a representative combinator
+%   from a $\sim$-equivalence class. Using this relation, we define the
+%   category $\mathcal{C}$ as follows:
+%   \begin{itemize}
+%     \item $\mathit{Obj}(\mathcal{C})$ is the set of $\Pi$-types, and
+%     \item $\mathit{Hom}(A,B) = [c : A \isot B]_{\sim}$
+%   \end{itemize}
+%   The category $\mathcal{C}$ is a groupoid.
+% \end{theorem}
+% \begin{proof}
+%   The relation $\sim$ identifies $c$, $\idc \circ c$, and $c \circ \idc$, and is associative. Furthermore, the denotation
+%   of each combinator is a reversible function thus making every morphism into an isomorphism.
+% \end{proof}
+
+% \note{Then say that $\mathcal{C}$ is ``the same'' as $\BFin$ We can say here that the relation $\sim$ also identifies
+%   $(c_1~\oplus~c_2)~\fatsemi~\swapp$ and $\swapp \fatsemi (c_2~\oplus~c_1)$ and other properties. ?? }
 
 % \[\begin{array}{l}
 %     \Tree[ {\small a} [ {\small b} {\small c} ] ] \\

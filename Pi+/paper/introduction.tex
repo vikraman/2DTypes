@@ -114,24 +114,25 @@ permutations among finite sets with only coproducts; and in $\PiHatLang$, the pe
 transpositions.
 
 The syntactic groupoid $\PiPlusLang$ is the free rig groupoid; $\UFin$ is the groupoid of finite sets and bijections
-represented as the \emph{univalent subuniverse of all finite types}. The $\evalp/\quotep$ and $\evalh/\quoteh$ arrows establish a
-\emph{symmetric monoidal biequivalence} between these two groupoids. To get a taste of the involved complexity of this
-result, consider the obvious fact that, semantically, i.e., in $\UFin$, there is only one bijection
+represented as the \emph{univalent subuniverse of all finite types}. The $\evalp/\quotep$ and $\evalh/\quoteh$ arrows
+establish a \emph{symmetric monoidal biequivalence} between these two groupoids. To get a taste of the involved
+complexity of this result, consider the obvious fact that, semantically, i.e., in $\UFin$, there is only one bijection
 from the empty set to itself. However, in the free groupoid, there are an infinite number of isomorphisms from the empty
-type to itself that go through arbitrary complex subtypes, e.g.,
-$\zerot \isot \zerot \times A \isot \zerot \times (A + \zerot) \isot (\zerot \times A) + (\zerot \times \zerot) \isot
-(\zerot \times \zerot) + (\zerot \times A) \isot \zerot + (\zerot \times A) \isot \zerot + \zerot \isot \zerot$, and all
-such isomorphisms must be identified using appropriate coherence laws. The technical device to achieve this
-normalization is as
-follows. First, we observe that 1-paths in $\UFin$ are permutations on finite sets with a fixed cardinality $n$, given by $\Aut[\Fin[n]]$,
-which produce the permutation group on $\Fin[n]$, or the symmetric group $\Sn$. By giving a presentation of $\Sn$ using
-generators and relations, we build a rewriting system using the Coxeter relations~\cite{XXX} on the set of words $\List[\Fin[n]]$,
-and show that it is (locally) confluent and strongly normalizing. We then establish that the symmetric group $\Sn$ is the
-set-quotient of $\List[\Fin[n]]$ by the Coxeter relations, and show that it produces a group presentation, as a quotient
-of the free group. Using this strongly normalizing rewriting system, we establish that normal forms for words in $\Sn$
-are Lehmer codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a convenient and compact representation of
-permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations
-$\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
+type to itself that go through arbitrary complex subtypes, e.g., letting $\isoone$ be the type constructor for type
+isomorphisms we can have a sequence of syntactic equivalences
+$\zerot \isoone \zerot \times A \isoone \zerot \times (A + \zerot) \isoone (\zerot \times A) + (\zerot \times \zerot)
+\isoone (\zerot \times \zerot) + (\zerot \times A) \isoone \zerot + (\zerot \times A) \isoone \zerot + \zerot \isoone
+\zerot$, and all such isomorphisms must be identified using appropriate coherence laws. The technical device to achieve
+this normalization is as follows. First, we observe that 1-paths in $\UFin$ are permutations on finite sets with a fixed
+cardinality $n$, given by $\Aut[\Fin[n]]$, which produce the permutation group on $\Fin[n]$, or the symmetric group
+$\Sn$. By giving a presentation of $\Sn$ using generators and relations, we build a rewriting system using the Coxeter
+relations~\cite{XXX} on the set of words $\List[\Fin[n]]$, and show that it is (locally) confluent and strongly
+normalizing. We then establish that the symmetric group $\Sn$ is the set-quotient of $\List[\Fin[n]]$ by the Coxeter
+relations, and show that it produces a group presentation, as a quotient of the free group. Using this strongly
+normalizing rewriting system, we establish that normal forms for words in $\Sn$ are Lehmer
+codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a convenient and compact representation of
+permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations $\Aut[\Fin[n]]$ given
+by the Lehmer encode-decode algorithm.
 
 Below we reduce $\mathsf{swap} : 2 + 2 \leftrightarrow 2 + 2$ to a sequence of adjacent swaps. This is an example of
 a translation from $\PiPlusLang$ to $\PiHatLang$.
