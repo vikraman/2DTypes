@@ -157,7 +157,7 @@ a slightly more abstract notation:
 
 \noindent Like the original circuit, we examine the bit at index 1 (corresponding to the component $B$ in a tuple
 $(A,(B,C))$): if the bit is true, we perform an \verb|x| operation on component $A$, and otherwise we perform a
-\verb|cx| operation on $C,A$. The two uses of \verb|x| gates in the circuit are now unnecessary as they were only needed
+\verb|cx| operation on $(C,A)$. The two uses of \verb|x| gates in the circuit are now unnecessary as they were only needed
 to encode a two-way conditional expression using a sequence of one-way conditional expressions (the only ones available in
 the linear circuit model).
 
@@ -361,12 +361,19 @@ $}}
   The denotational semantics is sound in the following sense:
   \begin{itemize}
     \item For every level-1 combinator $c : A \isoone B$, we have that $\denot{c}$ is a bijection between $\denot{A}$ and $\denot{B}$.
-      \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
+    \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
         combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using
         extensional equivalence of functions.
   \end{itemize}
 \end{theorem}
-%% proof?
+\begin{proof}
+  For every primitive combinator $c$ listed on one side of Fig.~\ref{fig:pi-terms}, let $!c$ be the combinator listed on
+  the other side. Thus $! \assoclp$ is $\assocrp$ and $! \swapp$ is $\swapp$ itself. Then we have that $\denot{c}$ and
+  $\denot{!c}$ is an equivalence. For the level-2 combinator \Afun{idr◎l}, we check
+  $\denot{\AgdaBound{c}~\AgdaOperator{\AgdaInductiveConstructor{◎}}~\AgdaInductiveConstructor{id⟷₁}}
+  = \mathit{id} \circ \denot{c} = \denot{c}$. The other cases are only slightly more involved calculations.
+\end{proof}
+
 
 %   Let $\sim$ be the following equivalence relation on combinators $c_1 \sim c_2$ iff $\denot{c_1} = \denot{c_2}$
 %   identifying combinators with the same denotation.  The notation $[c]_{\sim}$ refers to a representative combinator
