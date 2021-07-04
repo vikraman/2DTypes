@@ -114,12 +114,12 @@ $\infty$-groupoids'' correspondence. Using the identity type for morphisms, a 1-
       \sem{A} & = & (\mathsf{Fin}~n, [ n , \mathsf{refl} ]) & \mbox{where}~\sizet{A} = n
     \end{array}\]
 
-  \noindent The denotation $\sem{c}$ of a combinator $c : A \isot B$ is a path between $\sem{A}$ and $\sem{B}$. If the
+  \noindent The denotation $\sem{c}$ of a combinator $c : A \isoone B$ is a path between $\sem{A}$ and $\sem{B}$. If the
   size of $A$ is $m$ and the size of $B$ is $n$, the desired path is between $(\mathsf{Fin}~m, [ m , \mathsf{refl} ])$ and
   $(\mathsf{Fin}~n, [ n , \mathsf{refl} ])$. This path is directly constructed using $\mathit{ap}$ and the fact that $m=n$
   since combinators are always between types of the same size.
 
-  \noindent Finally, given two combinators $p , q : A \isot_1 B$ and a 2-combinator $\alpha : p \Iso q$, the denotation
+  \noindent Finally, given two combinators $p , q : A \isoone B$ and a 2-combinator $\alpha : p \isotwo q$, the denotation
   $\sem{\alpha}$ of $\alpha$ is a path between $\sem{p}$ and $\sem{q}$.
 
   \note{We use the rig structure of $\UFin$ in~\cref{subsec:rig} to interpret $\PiLang$.}
