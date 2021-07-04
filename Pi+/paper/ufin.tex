@@ -11,11 +11,10 @@ the semantics to the syntax. Given a morphism in $\BFin$, we want to produce a 1
 equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted 1-combinators.
 
 The groupoid $\BFin$ that we presented is strict, that is, two equal permutations are extensionally identified, without
-an explicit witness for the equality. Our first step is to weaken this groupoid $\BFin$ into a weak 2-category. In a
-weak category, equational axioms of the category are replaced by higher invertible cells. For example, there are higher
-invertible cells for the left and right units of composition, and associativity. The higher cells come with their own
-coherence data as well, such as vertical composition, and horizontal composition, or whiskering.\todo{define 2-category
-  in appendix.}
+an explicit witness for the equality. Our first step is to weaken this groupoid $\BFin$. In a weak category, equational
+axioms of the category are replaced by higher invertible cells. For example, there are higher invertible cells for the
+left and right units of composition, and associativity. The higher cells come with their own coherence data as well,
+such as vertical composition, and horizontal composition, or whiskering.\todo{define 2-category in appendix.}
 
 HoTT provides a rich internal language for working with weak higher groupoids, using the ``Types are weak
 $\infty$-groupoids'' correspondence. Using the identity type for morphisms, a 1-groupoid in HoTT has points for 0-cells,
@@ -197,16 +196,22 @@ some laws that are provable using path induction.
 
 \begin{gather*}
   \begin{aligned}
-    \term{sym}   & : (x \id_{A} y) \to (y \id_{A} x)                   \\
-    \term{\comp} & : (x \id_{A} y) \to (y \id_{A} z) \to (x \id_{A} z)
+    \term{\inv{\blank}}      & : (x \id_{A} y) \to (y \id_{A} x)                   \\
+    \term{\blank\comp\blank} & : (x \id_{A} y) \to (y \id_{A} z) \to (x \id_{A} z)
   \end{aligned}
   \qquad
   \begin{aligned}
-    \term{assoc} & : (p : x \id_{A} y)  (q : y \id_{A} z) (r : z \id_{A} w)    \\
-                 & \to (p \comp q) \comp r \id p \comp (q \comp r)             \\
-    \term{invr}  & : (p : x \id_{A} y) \to p \comp \term{sym}(p) \id \refl_{x}
+    \term{assoc} & : (p : x \id_{A} y)  (q : y \id_{A} z) (r : z \id_{A} w) \\
+                 & \to (p \comp q) \comp r \id p \comp (q \comp r)          \\
+    \term{invr}  & : (p : x \id_{A} y) \to p \comp \inv{p} \id \refl_{x}
   \end{aligned}
 \end{gather*}
+
+A homotopy between functions $f \htpy g$ is given by pointwise equality between them $\dfun{x:A}{f(x) \id_{B} g(x)}$.
+The identity type for functions is equivalent to homotopies between them ${(f \id_{A \to B} g)} \eqv {(f \htpy g)}$, by
+function extensionality. An equivalent between types $A \eqv B$ is given by a pair of functions between them which
+compose to the identity, $f \comp g \htpy \idfunc_{B}$ and $g \comp f \htpy \idfunc_{A}$. This is equivalent to the
+identity type for the universe, $(A \id_{\UU} B) \eqv (A \eqv B)$, by univalence.
 
 Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
 the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to the
@@ -250,31 +255,26 @@ total space. Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a 
   \label{fig:lift}
 \end{figure}
 
-Further, using the groupoid structure of $A$, we can show that $\term{transport}$ lifts paths to equivalences of fibers.
+Further, using the groupoid structure of $A$, we can show that $\transport{P}{p}{\blank}$ and
+$\transport{P}{\inv{p}}{\blank}$ form an equivalence -- we name the map $\tptEqv{P}$ which lifts paths to equivalences
+of fibers.
 
 \[
   \tptEqv{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \eqv P(y)}
 \]
 
 \todo{Diagram.}
+The type families (or fibrations) we're interested in are the ones where paths in the base space completely determine
+the equivalences in the fibers -- these are called univalent fibrations.
 
 \begin{definition}[Univalent Fibration]
   $P$ is a univalent type family (or, $\fst : {\dsum{x:A}{P(x)}} \to A$ is a univalent fibration) if $\tptEqv{P}$ is an
   equivalence.
 \end{definition}
 
-\subsubsection{Univalence}
-
-Voevodsky's \emph{univalence} principle characterises paths in the universe. It says that equivalent types are equal, or,
-the following function is an equivalence.
-
-\[
-  \ua : A \id_{\UU} B \to A \eqv B
-\]
-
-\todo{Revise.}
-
-Alternatively, one can say that the identity type family $\term{id} : \UU \to \UU$ is univalent.
+The use of the word \emph{univalent} here is a reference to Voevodsky's \emph{univalence} principle. Indeed, univalence
+characterises paths in the universe as equivalences between types, which follows from the canonical fibration $\idfunc :
+\UU \to \UU$ being univalent.
 
 \subsubsection{Homotopy Types}
 
