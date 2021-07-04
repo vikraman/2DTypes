@@ -165,23 +165,19 @@ section, we develop the tools necessary to construct $\UFin$, starting with a qu
 % (i) it contains structures corresponding to all the finite types and nothing but the finite types, and (ii) it is robust
 % enough to ensure that equivalent encodings of finite types are identified.
 
-To define the weak groupoid we're after, we first introduce some basic concepts and notation from Homotopy Type Theory
-that we use.~\footnote{We use the language of the HoTT book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013},
-that is, we use intensional Martin-L\"{o}f Type Theory, with a (univalent) universe $\UU$, and a few Higher Inductive
-Types (HITs) for propositional truncation and set quotients. All arguments will hold in a Cubical Type Theory as well,
-such
+We review some basic concepts and notation from Homotopy Type Theory that we use in the appendix.~\footnote{We use the
+language of the HoTT book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}, that is, we use intensional
+Martin-L\"{o}f Type Theory, with a (univalent) universe $\UU$, and a few Higher Inductive Types (HITs) for propositional
+truncation and set quotients. All arguments will hold in a Cubical Type Theory as well, such
 as~\cite*{cohenCubicalTypeTheory2018,angiuliComputationalSemanticsCartesianCubical2019,vezzosiCubicalAgdaDependently2019}.}
 For more details about HoTT, we refer the reader to the HoTT
-book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}. By formalising our results in HoTT, we're also able to
-use a proof assistant to computer-check our proofs, and our results are formalised in the Agda proof assistant using the
-HoTT-Agda library. Using the formalisation of our semantics, we are able to extract a computable procedure for
-performing NbE and synthesis of reversible circuits, as motivated in~\cref{sec:introduction}.
+book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}.
 
-The weak groupoid structure of types is given by the identity type in HoTT, where points are given by terms of the type,
-and higher morphisms are given by the iterated identity type. Functions between types are functors between groupoids,
-and type families, or functions to the universe, are indexed families of groupoids. A type family $P : A \to \UU$ comes
-equipped with a functor $\pi_1 : \dsum{x:A}{P(x)} \to \UU$ which has a lifting operation giving it the structure of a
-fibration (see the appendix for details).
+To recap, types in HoTT have a weak groupoid structure given by the identity type, where points are given by terms of
+the type, and higher morphisms are given by the iterated identity type. Functions between types are functors between
+groupoids, and type families, or functions to the universe, are indexed families of groupoids. A type family $P : A \to
+\UU$ comes equipped with a functor $\pi_1 : \dsum{x:A}{P(x)} \to \UU$ which has a lifting operation giving it the
+structure of a fibration (see the appendix for details).
 
 \begin{toappendix}
 \subsubsection{Identity Types}
@@ -215,8 +211,8 @@ some laws that are provable using path induction.
 
 A homotopy between functions $f \htpy g$ is given by pointwise equality between them $\dfun{x:A}{f(x) \id_{B} g(x)}$.
 The identity type for functions is equivalent to homotopies between them ${(f \id_{A \to B} g)} \eqv {(f \htpy g)}$, by
-function extensionality. An equivalent between types $A \eqv B$ is given by a pair of functions between them which
-compose to the identity, $f \comp g \htpy \idfunc_{B}$ and $g \comp f \htpy \idfunc_{A}$. This is equivalent to the
+function extensionality. An equivalence between types $A \eqv B$ is given by a pair of functions between them which
+compose to the identity, $f \comp g \htpy \idfunc_{B}$ and $g \comp f \htpy \idfunc_{A}$, and this is equivalent to the
 identity type for the universe, $(A \id_{\UU} B) \eqv (A \eqv B)$, by univalence.
 
 Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
@@ -262,6 +258,8 @@ total space. Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a 
 \end{figure}
   
 \end{toappendix}
+
+\subsection{Univalent Fibrations}
 
 The $\term{transport}$ operation lifts paths in the base space to maps between the fibers. Using the groupoid structure
 of $A$, we can show that $\transport{P}{p}{\blank}$ and $\transport{P}{\inv{p}}{\blank}$ form an equivalence -- we name
