@@ -19,8 +19,9 @@ such as vertical composition, and horizontal composition, or whiskering.\todo{de
 HoTT provides a rich internal language for working with weak higher groupoids, using the ``Types are weak
 $\infty$-groupoids'' correspondence. Using the identity type for morphisms, a 1-groupoid in HoTT has points for 0-cells,
 1-paths for 1-cells, and 2-paths for 2-cells, but there is at most one 2-cell between compatible 1-cells.~\footnote{This
-  is a locally-strict $(2,0)$-category, since every cell above 0 is invertible, and the hom-categories are posets, that
-  is, truth-value enriched.} The groupoid $\BFin$ can be written in HoTT as a type $\UFin$, which is a 1-groupoid.
+is a locally-strict $(2,0)$-category, since every cell above 0 is invertible, and the hom-categories are posets, that
+is, truth-value enriched.} The groupoid $\BFin$ can be written in HoTT as a type $\UFin$, which is a 1-groupoid. In this
+section, we develop the tools necessary to construct $\UFin$, starting with a quick review of HoTT.
 
 
 \begin{toappendix}
@@ -176,6 +177,13 @@ use a proof assistant to computer-check our proofs, and our results are formalis
 HoTT-Agda library. Using the formalisation of our semantics, we are able to extract a computable procedure for
 performing NbE and synthesis of reversible circuits, as motivated in~\cref{sec:introduction}.
 
+The weak groupoid structure of types is given by the identity type in HoTT, where points are given by terms of the type,
+and higher morphisms are given by the iterated identity type. Functions between types are functors between groupoids,
+and type families, or functions to the universe, are indexed families of groupoids. A type family $P : A \to \UU$ comes
+equipped with a functor $\pi_1 : \dsum{x:A}{P(x)} \to \UU$ which has a lifting operation giving it the structure of a
+fibration (see the appendix for details).
+
+\begin{toappendix}
 \subsubsection{Identity Types}
 
 Given two terms $x:A$ and $y:A$, we write $x \id_{A} y$, or simply $x \id y$, for the identity type, which is the type
@@ -186,13 +194,11 @@ Using the iterated identity type for morphisms, each type is equipped with the s
 where each morphism satisfies groupoid laws only upto a higher one. Given an arbitrary type (or groupoid) $A$, we list
 some laws that are provable using path induction.
 
-\begin{toappendix}
   \begin{definition}[Path Induction]
     \label{def:path-induction}
     Given a type family $C : \dfun{x,y:A}{(x \id_A y)} \to \UU$, and a function $c : \dfun{x:A}{C(x,x,\refl_x)}$, there is
     a function $f : \dfun{x,y:A}{\dfun{p:x \id_A y}{C(x,y,p)}}$ such that $f(x,x,\refl_x) \defeq c(x)$.
   \end{definition}
-\end{toappendix}
 
 \begin{gather*}
   \begin{aligned}
@@ -254,16 +260,17 @@ total space. Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a 
   \caption{Lifting operation in $P$}
   \label{fig:lift}
 \end{figure}
+  
+\end{toappendix}
 
-Further, using the groupoid structure of $A$, we can show that $\transport{P}{p}{\blank}$ and
-$\transport{P}{\inv{p}}{\blank}$ form an equivalence -- we name the map $\tptEqv{P}$ which lifts paths to equivalences
-of fibers.
+The $\term{transport}$ operation lifts paths in the base space to maps between the fibers. Using the groupoid structure
+of $A$, we can show that $\transport{P}{p}{\blank}$ and $\transport{P}{\inv{p}}{\blank}$ form an equivalence -- we name
+this map $\tptEqv{P}$ which lifts paths to equivalences of fibers.
 
 \[
   \tptEqv{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \eqv P(y)}
 \]
 
-\todo{Diagram.}
 The type families (or fibrations) we're interested in are the ones where paths in the base space completely determine
 the equivalences in the fibers -- these are called univalent fibrations.
 
@@ -275,6 +282,8 @@ the equivalences in the fibers -- these are called univalent fibrations.
 The use of the word \emph{univalent} here is a reference to Voevodsky's \emph{univalence} principle. Indeed, univalence
 characterises paths in the universe as equivalences between types, which follows from the canonical fibration $\idfunc :
 \UU \to \UU$ being univalent.
+
+\begin{toappendix}
 
 \subsubsection{Homotopy Types}
 
@@ -306,7 +315,6 @@ proposition. It is given by a HIT with a point constructor $\trunc{\blank} : A \
 $\term{trunc}(x,y) : x \id_{\Trunc{A}} y$, which equates every pair of points in the truncation
 (see~\cref{def:prop-trunc}).
 
-\begin{toappendix}
   \begin{definition}[Propositional Truncation]
     \label{def:prop-trunc}
     Given a type $A$, the propositional truncation $\Trunc[-1]{A}$, or simply $\Trunc{A}$, is a higher inductive type
@@ -326,7 +334,6 @@ $\term{trunc}(x,y) : x \id_{\Trunc{A}} y$, which equates every pair of points in
       \item for each $x, y : \Trunc{A}$, $\ap{f}{\term{trunc}(x,y)} \id_{B} \term{trunc*}(f(x),f(y))$.
     \end{itemize}
   \end{definition}
-\end{toappendix}
 
 Another HIT that we use is the set-quotient $\quot{A}{R}$ which takes an $\hSet$ $A$ and a relation $R : A \to A \to
   \UU$. It has an inclusion of points $q : A \to \quot{A}{R}$, and adds paths between related pairs of elements
@@ -334,7 +341,6 @@ $\quotrel : R(x,y) \to q(x) \id_{\quot{A}{R}} q(y)$ (see~\cref{def:set-quot}).  
 \emph{effective} if $R$ is a prop-valued equivalence relation, that is, $R(x,y)$ holds iff $(q(x) \id_{\quot{A}{R}}
   q(y))$.
 
-\begin{toappendix}
   \begin{definition}[Set Quotient]
     \label{def:set-quot}
     Given a type $A$ which is an $\hSet$, and a relation $R : A \to A \to \hProp$, the set-quotient $\quot{A}{R}$ is the
@@ -346,14 +352,15 @@ $\quotrel : R(x,y) \to q(x) \id_{\quot{A}{R}} q(y)$ (see~\cref{def:set-quot}).  
     \end{itemize}
     with \review{an appropriate induction principle.}
   \end{definition}
+  
 \end{toappendix}
 
 \subsection{Univalent Subuniverses}
 
 Starting from a univalent universe which classifies all types, we want to define a subuniverse which classifies only
 certain types, for example, types that satisfy some desired property. We use a prop-valued type family, that is, a
-predicate, which picks out only those types, and collect them into a univalent subuniverse. Being univalent ensures that
-the equality type of the ambient universe is reflected in the subuniverse.
+predicate on the universe, which picks out only those types, and collect them into a univalent subuniverse. Being
+univalent ensures that the equality type of the ambient universe is reflected in the subuniverse.
 
 \begin{definition}[Universe]
   A universe \`{a} la Tarski is given by the following pieces of data,
@@ -365,12 +372,13 @@ the equality type of the ambient universe is reflected in the subuniverse.
 \end{definition}
 
 \begin{definition}[Subuniverse]
-  A subtype is a type family $P : \UU \to \UU$ whose fibers are prop-valued, that is, $P(X)$ is a proposition for every
-  $X$. A subuniverse generated by a subtype has $U \defeq \dsum{X:\UU}{P(X)}$ and $\El \defeq \fst$.
+  A universe predicate is a type family $P : \UU \to \UU$ whose fibers are prop-valued, that is, $P(X)$ is a proposition
+  for every $X$. A subuniverse generated by $P$ is given by its total space $U \defeq \dsum{X:\UU}{P(X)}$ and $\El
+  \defeq \fst$.
 \end{definition}
 
 \begin{proposition}[Univalent Subuniverse]
-  Subuniverses generated by subtypes are univalent.
+  Subuniverses generated by predicates are univalent.
 \end{proposition}
 
 \begin{appendixproof}
@@ -382,8 +390,7 @@ the equality type of the ambient universe is reflected in the subuniverse.
 \end{appendixproof}
 
 The types we're interested in are the finite types. In constructive mathematics, the notion of finiteness is subtle. We
-define a type to be (Bishop-) finite if it is equal to some finite set, and we setup the predicate $\isFin$ to do so.
-
+define a type to be (Bishop) finite if it is equal to some finite set, and we setup the predicate $\isFin$ to do so.
 \todo{Cite Brent Yorgey's thesis?}
 
 \begin{definition}[$\Fin$]
@@ -442,7 +449,8 @@ We also consider a different way of thinking about $\UFin$, using the subunivers
 \end{definition}
 
 Using $\BAut$, we can talk about types that have a specified cardinality, for example, the subuniverse of 2-element sets
-is given by $\BAut[\Bool]$. This can be used to give the denotational semantics of a 1-bit reversible
+is given by $\BAut[\Bool]$. This has been used to construct the real projective spaces in
+HoTT~\cite{buchholtzRealProjectiveSpaces2017}, and also to give the denotational semantics for a 1-bit reversible
 language~\cite{caretteReversibleProgramsUnivalent2018}.
 
 \begin{definition}
@@ -478,10 +486,16 @@ the automorphism group of $T$.
 \end{appendixproof}
 
 \begin{corollary}
-  $\UFin$ is a pointed, connected, 1-type, that is, a 1-groupoid. For every $n:\Nat$, \( \loopspace[\UFin[n],F_{n}] \eqv
-  \Aut[\Fin[n]] \).
+  $\UFin$ is a pointed, connected, 1-groupoid. For every $n:\Nat$, \( \loopspace[\UFin[n],F_{n}] \eqv \Aut[\Fin[n]] \).
 \end{corollary}
-\note{Diagram below?}
+
+The loopspace of a pointed type automatically has the structure of a group, that is, with $\refl_{\pt}$ for the neutral
+element, path composition for the group multiplication, and path inverse for the group inverse operation. The group
+axioms are then given by the higher paths corresponding to groupoid laws. We have shown that loops in $\UFin$ exactly
+encode the automorphism group $\Aut[\Fin[n]]$ for every $n$. This is a general technique called delooping, where a group
+can be identified with a 1-object groupoid, internally in HoTT.~\footnote{This technique also allows defining higher
+groups in HoTT, as done in~\cite{buchholtzHigherGroupsHomotopy2018}.}
+
 % \[
 %   \begin{tikzcd}
 %     F_{0}

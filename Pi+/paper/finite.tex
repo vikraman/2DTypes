@@ -42,17 +42,17 @@ group multiplication is given by integer addition.
   \end{definition}
 \end{toappendix}
 
-However, more conveniently, in HoTT, we can instead use groupoids to talk about groups internally. A group can be
-identified with a 1-object groupoid, using a technique called delooping. The delooping of a group $G$ is a groupoid
-$\B{G}$, with a unique object $\pt$, where the group elements are encoded as self-loops $\pt \id_{\B{G}} \pt$.
+% However, more conveniently, in HoTT, we can instead use groupoids to talk about groups internally. A group can be
+% identified with a 1-object groupoid, using a technique called delooping. The delooping of a group $G$ is a groupoid
+% $\B{G}$, with a unique object $\pt$, where the group elements are encoded as self-loops $\pt \id_{\B{G}} \pt$.
 
-The group operations are automatically given by operations on the identity type, with $\refl_{\pt}$ for the neutral
-element, path composition for the group multiplication, and path inverse for the group inverse. These satisfy the group
-laws, up to the identity type, using the groupoid coherence laws.
+% The group operations are automatically given by operations on the identity type, with $\refl_{\pt}$ for the neutral
+% element, path composition for the group multiplication, and path inverse for the group inverse. These satisfy the group
+% laws, up to the identity type, using the groupoid coherence laws.
 
-Since groups are sets, these 2-paths are propositions, making $\B{G}$ a 1-groupoid. Hence, a group is simply given by a
-pointed, connected 1-type~\cite*{buchholtzHigherGroupsHomotopy2018,symmetryBook2021}. \footnote{This technique also
-  allows defining higher groups in HoTT, as done in~\cite{buchholtzHigherGroupsHomotopy2018}.}
+% Since groups are sets, these 2-paths are propositions, making $\B{G}$ a 1-groupoid. Hence, a group is simply given by a
+% pointed, connected 1-type~\cite*{buchholtzHigherGroupsHomotopy2018,symmetryBook2021}. \footnote{This technique also
+%   allows defining higher groups in HoTT, as done in~\cite{buchholtzHigherGroupsHomotopy2018}.}
 
 % For example, given a pointed type $(A:\UU, a:A)$, the automorphism group structure at $a$ is given by $a \id_{A} a$. Of
 % course, for 1-groups we will require that $a \id_{A} a$ is a set, which is enforced by having $A$ be a groupoid. In our

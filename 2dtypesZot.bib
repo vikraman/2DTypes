@@ -152,6 +152,23 @@
   language = {en}
 }
 
+@inproceedings{buchholtzRealProjectiveSpaces2017,
+  title = {The Real Projective Spaces in Homotopy Type Theory},
+  booktitle = {Proceedings of the 32nd {{Annual ACM}}/{{IEEE Symposium}} on {{Logic}} in {{Computer Science}}},
+  author = {Buchholtz, Ulrik and Rijke, Egbert},
+  year = {2017},
+  month = jun,
+  pages = {1--8},
+  publisher = {{IEEE Press}},
+  address = {{Reykjav\'ik, Iceland}},
+  abstract = {Homotopy type theory is a version of Martin-L\"of type theory taking advantage of its homotopical models. In particular, we can use and construct objects of homotopy theory and reason about them using higher inductive types. In this article, we construct the real projective spaces, key players in homotopy theory, as certain higher inductive types in homotopy type theory. The classical definition of RPn, as the quotient space identifying antipodal points of the n-sphere, does not translate directly to homotopy type theory. Instead, we define RPn by induction on n simultaneously with its tautological bundle of 2-element sets. As the base case, we take RP-1 to be the empty type. In the inductive step, we take RPn+1 to be the mapping cone of the projection map of the tautological bundle of RPn, and we use its universal property and the univalence axiom to define the tautological bundle on RPn+1. By showing that the total space of the tautological bundle of RPn is the n-sphere Sn, we retrieve the classical description of RPn+1 as RPn with an (n + 1)-disk attached to it. The infinite dimensional real projective space RP{$\infty$}, defined as the sequential colimit of RPn with the canonical inclusion maps, is equivalent to the Eilenberg-MacLane space K(Z/2Z, 1), which here arises as the subtype of the universe consisting of 2-element types. Indeed, the infinite dimensional projective space classifies the 0-sphere bundles, which one can think of as synthetic line bundles. These constructions in homotopy type theory further illustrate the utility of homotopy type theory, including the interplay of type theoretic and homotopy theoretic ideas.},
+  annotation = {ZSCC: 0000014},
+  file = {/home/vikraman/Zotero/storage/3MZT5ZT6/Buchholtz_Rijke_2017_The real projective spaces in homotopy type theory.pdf},
+  isbn = {978-1-5090-3018-7},
+  keywords = {higher inductive types,homotopy type theory,real projective spaces,univalence axiom},
+  series = {{{LICS}} '17}
+}
+
 @article{caretteReversibleProgramsUnivalent2018,
   title = {From {{Reversible Programs}} to {{Univalent Universes}} and {{Back}}},
   author = {Carette, Jacques and Chen, Chao-Hong and Choudhury, Vikraman and Sabry, Amr},
@@ -170,6 +187,25 @@
   keywords = {Agda,Reversible programming,unilance},
   language = {en},
   series = {The {{Thirty}}-Third {{Conference}} on the {{Mathematical Foundations}} of {{Programming Semantics}} ({{MFPS XXXIII}})}
+}
+
+@article{chenComputationalInterpretationCompact2021,
+  title = {A Computational Interpretation of Compact Closed Categories: Reversible Programming with Negative and Fractional Types},
+  shorttitle = {A Computational Interpretation of Compact Closed Categories},
+  author = {Chen, Chao-Hong and Sabry, Amr},
+  year = {2021},
+  month = jan,
+  volume = {5},
+  pages = {9:1--9:29},
+  doi = {10.1145/3434290},
+  url = {https://doi.org/10.1145/3434290},
+  urldate = {2021-07-02},
+  abstract = {Compact closed categories include objects representing higher-order functions and are well-established as models of linear logic, concurrency, and quantum computing. We show that it is possible to construct such compact closed categories for conventional sum and product types by defining a dual to sum types, a negative type, and a dual to product types, a fractional type. Inspired by the categorical semantics, we define a sound operational semantics for negative and fractional types in which a negative type represents a computational effect that ``reverses execution flow'' and a fractional type represents a computational effect that ``garbage collects'' particular values or throws exceptions. Specifically, we extend a first-order reversible language of type isomorphisms with negative and fractional types, specify an operational semantics for each extension, and prove that each extension forms a compact closed category. We furthermore show that both operational semantics can be merged using the standard combination of backtracking and exceptions resulting in a smooth interoperability of negative and fractional types. We illustrate the expressiveness of this combination by writing a reversible SAT solver that uses backtracking search along freshly allocated and de-allocated locations. The operational semantics, most of its meta-theoretic properties, and all examples are formalized in a supplementary Agda package.},
+  annotation = {ZSCC: 0000001},
+  file = {/home/vikraman/Zotero/storage/JFXJTHAY/Chen_Sabry_2021_A computational interpretation of compact closed categories.pdf},
+  journal = {Proceedings of the ACM on Programming Languages},
+  keywords = {Abstract Machines,Duality of Computation,Higher-Order Reversible Programming,Termination Proofs,Type Isomorphisms},
+  number = {POPL}
 }
 
 @article{choudhuryFinitemultisetConstructionHoTT2019,
@@ -350,6 +386,24 @@
   copyright = {MIT},
   howpublished = {Homotopy Type Theory},
   keywords = {agda,homotopy,hott,univalence}
+}
+
+@article{huetConfluentReductionsAbstract1980a,
+  title = {Confluent {{Reductions}}: {{Abstract Properties}} and {{Applications}} to {{Term Rewriting Systems}}: {{Abstract Properties}} and {{Applications}} to {{Term Rewriting Systems}}},
+  shorttitle = {Confluent {{Reductions}}},
+  author = {Huet, G{\'e}rard},
+  year = {1980},
+  month = oct,
+  volume = {27},
+  pages = {797--821},
+  issn = {0004-5411},
+  doi = {10.1145/322217.322230},
+  url = {10.1145/322217.322230},
+  urldate = {2021-07-02},
+  annotation = {ZSCC: 0001631},
+  file = {/home/vikraman/Zotero/storage/UTX5VVU9/Huet_1980_Confluent Reductions.pdf},
+  journal = {Journal of the ACM},
+  number = {4}
 }
 
 @article{hylandClassicalLambdaCalculus2017,
