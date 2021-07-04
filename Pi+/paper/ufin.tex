@@ -6,239 +6,194 @@ bijections $\BFin$. Types are interpreted as objects in $\BFin$, and 1-combinato
 $\BFin$. We also showed that if there is a 2-combinator between two 1-combinators, then their interpretations are
 extensionally equal in $\BFin$.
 
-
-
 However, we want to go a step further, and claim completeness for this semantics, that is, we want to quote back from
 the semantics to the syntax. Given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
 equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted 1-combinators.
 
-The groupoid $\BFin$ that we presented, is strict, that is, two equal permutations are extensionally identified, without
+The groupoid $\BFin$ that we presented is strict, that is, two equal permutations are extensionally identified, without
 an explicit witness for the equality. Our first step is to weaken this groupoid $\BFin$ into a weak 2-category. In a
 weak category, equational axioms of the category are replaced by higher invertible cells. For example, there are higher
-invertible cells for the left and right units of composition and associativity. The higher cells have their own
-coherences as well, the 2-cells can be composed with 1-cells by whiskering, and so on.
+invertible cells for the left and right units of composition, and associativity. The higher cells come with their own
+coherence data as well, such as vertical composition, and horizontal composition, or whiskering.\todo{define 2-category
+  in appendix.}
 
 HoTT provides a rich internal language for working with weak higher groupoids, using the ``Types are weak
-$\infty$-groupoids'' correspondence. We will make this precise by observing that a 1-groupoid in HoTT gives a locally
-strict $(2,0)$-category, using the identity type for the higher cells. The groupoid $\BFin$ can be written in HoTT as a
-type $\UFin$, which is a 1-groupoid.
-
-Secondly, we would like to like to give a syntactic presentation for this groupoid, by describing exactly how the
-1-cells and 2-cells are generated. Note that, in $\BFin$, the set of bijections on a finite set of cardinality $n$ has a
-group structure, the identity function is the neutral element, group multiplication is given by function composition,
-and the group inverse is given by inverting the bijection. This is the automorphism group of the finite set, which is
-also known to be the finite symmetric group $\Sn[n]$.
-
-Groups can be defined by listing the carrier set and the operations of the group, or they can be described using a group
-presentation, which gives the generators and relations of a group. The last step of our technical development is to use
-a group presentation for $\Sn$ to give a presentation for the higher cells of the groupoid $\UFin$. Using this
-characterisation, we will obtain our completeness result.
-
-% In the previous section, we have picked a particular encoding of finite types: as sequences of elements in some
-% canonical order.
-
-% This is not a ``free'' presentation. Some properties of the encoding might pollute our semantics. We want to make that
-% any theorems / properties of the semantics we prove apply to the source language (under various interpretations).
-
-% This motivates us to use a different semantic representation: a univalent universe of finite types which contains the
-% finite types and nothing but the finite types and is defined such as alternative representations of finite types are
-% identified. This guarantees that we can get a proper, sound and complete, semantics for our language.
-
-% \begin{center}
-% \begin{tikzpicture}[scale=1,every node/.style={scale=1}]
-% \usetikzlibrary{arrows}
-% \usetikzlibrary{shapes}
-% \node[ultra thick, draw=blue, ellipse, minimum width=300pt, minimum height=300pt, align=center] {};
-% \node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (a) {$\{ 1 , 2 \} \uplus \{ 3 \}$};
-% \node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (b) at ([shift=({70pt,-70pt})]a) {$\{ 1 \} \uplus \{ 2, 3 \}$};
-% \node[ultra thick, draw=blue, ellipse, minimum width=70pt, minimum height=40pt, align=center] (c) at
-% ([shift=({-70pt,-70pt})]a) {$\{ 10 \} \uplus \{ 20, 30 \}$};
-% \node (d) at ([shift=({50pt,-10pt})]a) {$\cdots$};
-% \draw[thick,-] (a) to node[draw=none,right] {$\equiv$} (b);
-% \draw[thick,-] (b) to node[draw=none,below] {$\equiv$} (c);
-% \draw[thick,-] (a) to node[draw=none,left] {$\equiv$} (c);
-% \end{tikzpicture}
-% \end{center}
-
-\[
-  \begin{tikzcd}
-    \Fin[3]
-    \arrow[""{name=0, anchor=center, inner sep=0}, "{f_{3}}", no head, loop, distance=4em, in=115, out=65]
-    \arrow[""{name=0, anchor=center, inner sep=0}, "{f_{2}}", no head, loop, distance=8em, in=125, out=55]
-    \arrow[""{name=1, anchor=center, inner sep=0}, "{f_{1}}"', no head, loop, distance=12em, in=135, out=45]
-    \arrow["", "{h}", shorten <=3pt, shorten >=3pt, Rightarrow, no head, from=0, to=1]
-  \end{tikzcd}
-\]
-
-We have $\Fin[3] = \Set{0,1,2} \eqv \unit \sqcup (\unit \sqcup \unit)$ which fixes a particular enumeration of the
-elements. Suppose we have a set $X = (\unit \sqcup \unit) \sqcup \unit$, it has the same cardinality as $\Fin[3]$, so it
-is represented by the same 0-cell. But, $X$ can be made equivalent to $\Fin[3]$ in many different ways since there are
-many bijections between them. One bijection is
-$\Set{\inl(\inl(\ttt)) \mapsto 0, \inl(\inr(\ttt)) \mapsto 1, \inr(\ttt) \mapsto 2}$ which can be written in two
-different ways by composing more primitive operations, $f_{1} = \assocrp$, or
-$f_{2} = \swapp \compc \assoclp \compc \swapp$. Another bijection is
-$\Set{\inl(\inl(\ttt)) \mapsto 1, \inl(\inr(\ttt)) \mapsto 2, \inr(\ttt) \mapsto 0}$ which is given by $f_{3} = \ldots$.
-Since $f_{1}$ and $f_{2}$ produce the same enumeration of the elements of $X$, they are identified by a homotopy $h$
-which is encoded in the 2-cell between them.
-
-At level 0, all we know is that if $X : \UFin[3]$, then X is merely equal to $\Fin[3]$, that is
-$\Trunc[-1]{X \id \Fin[3]}$, and we don't have access to the bijection. At level 1, if we know that both $X$ and $Y$ are
-\emph{equal} in $\UFin[3]$, then we can extract an equivalence between them, that is, $(X \id Y) \to (X \eqv Y)$.
-$\UFin[3]$ being a univalent subuniverse asserts that there are as many elements (upto higher homotopy) in $X \id Y$ as
-there are $X \eqv Y$.
-
-Given an operational model of how a type A reduces to a type B
-Given a denotational model of which types A and B are equivalent
-Want soundness and completeness results
-Guarantee that the two notions of equality are themselves “equivalent”
-Generalized “identity of indiscernibles”
-
-Previous semantics adequate for reasoning about evaluation and for checking the equivalence of two circuits.
-
-Want NBE, want rewriting system of program equivalence, what else? So we need to move to proof-relevant higher-category
-groupoid semantics instead of set-theoretic.
-
-Now the question is, what does it mean for a compiler?
-
-My opinion is that it is still the same, what rewrites to apply depends
-on the choices made by the compiler writer, but we can think about that.
-
-%%%
-\subsection{To Put Somewhere or Delete}
-
-This approach is sufficient to prove the semantics forms a 1-category but ignores the rich structure at the next
-level~\cite{DBLP:conf/esop/CaretteS16}.
-As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
-we have that $\sizet{A} = \sizet{B}$. Hence, the denotation $\denot{A}$ of a type $A$ with $n$-elements can be the finite
-set $\Fin[n] = \{ 0, 1, \cdots, n-1\}$; the denotation of a value $v : A$ such that $\sizet{A}=n$ will be an index in
-the range $[0,n-1]$, and the denotation $\denot{c}$ of a combinator $c : A \iso B$ such that
-$\sizet{A} = \sizet{B} = n$ will be a function from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. Thus, all types
-with 3 elements will denote $\Fin[3]$ and combinators between them will denote permutations on $\Fin[3]$, e.g.:
-\[\begin{array}{rcl}
-    \denot{\onet + (\onet + \onet)} &=& \{ 0,1,2 \} \\
-    \denot{(\onet + \onet) + \onet} &=& \{ 0,1,2 \} \\
-    \\
-    \denot{\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (0~1~2) \\
-    \denot{\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} &=& (2~0~1)
-\end{array}\]
-where we have used the one-line notation for permutations with $(a~b~c)$ representing the
-permutation that maps 0 to $a$, 1 to $b$, and 2 to $c$. To make the denotation of values precise, we compute a canonical
-enumeration of the elements of each type:
-\[\begin{array}{rcl}
-    \mathit{enum}(\zerot) &=& [~] \\
-    \mathit{enum}(\onet) &=& [ ~\Acon{tt}~ ] \\
-    \mathit{enum}(A + B) &=& \mathit{map}~\Acon{inj₁}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₂}~\mathit{enum}(B) \\
-    \mathit{enum}(A \times B) &=& \mathit{concat}~(\mathit{map}~(\lambda v.\mathit{map}~(\lambda w. (v,w))~\mathit{enum}(B))~\mathit{enum}(A))
-\end{array}\]
-\noindent The specification uses a Haskell-like notation for sequences with $\mathit{map}$ as the operation that applies
-a function to each element of a sequence, \textsf{+\!+} as the binary append operation, and $\mathit{concat}$ the
-operation that appends all the subsequences in a sequence.
-
-Using the definition, we have:
-\[\begin{array}{rcl}
-    \mathit{enum}(\onet + (\onet + \onet)) &=& [ \inlv{\Acon{tt}},~\inrv{(\inlv{\Acon{tt}})},~\inrv{(\inrv{\Acon{tt}})} ] \\
-    \mathit{enum}((\onet + \onet) + \onet) &=& [ \inlv{(\inlv{\Acon{tt}})},~\inlv{(\inrv{\Acon{tt}})},~\inrv{\Acon{tt}} ]
-\end{array}\]
-Thus, as shown in the diagrams below, $\assoclp~(\inlv{\Acon{tt}})$ applies the permutation $(0~1~2)$ to the index of
-$\inlv{\Acon{tt}}$ which is 0 and produces index 0 in the $(\onet + \onet) + \onet$ type corresponding to value
-$\inlv{(\inlv{\Acon{tt}})}$. Similarly, $\swapp~(\inlv{\Acon{tt}})$ applies the permutation $(2~0~1)$ to the index of
-$\inlv{\Acon{tt}}$ which is 0 and produces index 2 in the $(\onet + \onet) + \onet)$ type corresponding to value
-$\inrv{\Acon{tt}}$.
-
-\begin{center}
-  \input{assoc-perm.tikz}
-  \qquad
-  \input{swap-perm.tikz}
-\end{center}
+$\infty$-groupoids'' correspondence. Using the identity type for morphisms, a 1-groupoid in HoTT has points for 0-cells,
+1-paths for 1-cells, and 2-paths for 2-cells, but there is at most one 2-cell between compatible 1-cells.~\footnote{This
+  is a locally-strict $(2,0)$-category, since every cell above 0 is invertible, and the hom-categories are posets, that
+  is, truth-value enriched.} The groupoid $\BFin$ can be written in HoTT as a type $\UFin$, which is a 1-groupoid.
 
 
-We choose a canonical set of size $n$, called $\mathsf{Fin}~n$, whose elements are natural numbers less than $n$. To
-compute the denotation of a type $A$, we first calculate its size $n = \sizet{A}$. We then construct the canonical set
-$\mathsf{Fin}~n$ and provide the (trivial) evidence that this set is identical to $(\mathsf{Fin}~n)$:
+\begin{toappendix}
+  We give an example of the groupoid structure on a 3-element set.
 
-\[\begin{array}{rcll}
-\sem{A} &=& (\mathsf{Fin}~n, [ n , \mathsf{refl} ]) & \mbox{where}~\sizet{A} = n
-\end{array}\]
+  \[
+    \begin{tikzcd}
+      \Fin[3]
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{f_{3}}", no head, loop, distance=4em, in=115, out=65]
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{f_{2}}", no head, loop, distance=8em, in=125, out=55]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "{f_{1}}"', no head, loop, distance=12em, in=135, out=45]
+      \arrow["", "{h}", shorten <=3pt, shorten >=3pt, Rightarrow, no head, from=0, to=1]
+    \end{tikzcd}
+  \]
 
-\noindent The denotation $\sem{c}$ of a combinator $c : A \isoone B$ is a path between $\sem{A}$ and $\sem{B}$. If the
-size of $A$ is $m$ and the size of $B$ is $n$, the desired path is between $(\mathsf{Fin}~m, [ m , \mathsf{refl} ])$ and
-$(\mathsf{Fin}~n, [ n , \mathsf{refl} ])$. This path is directly constructed using $\mathit{ap}$ and the fact that $m=n$
-since combinators are always between types of the same size.
+  We have $\Fin[3] = \Set{0,1,2} \eqv \unit \sqcup (\unit \sqcup \unit)$ which fixes a particular enumeration of the
+  elements. Suppose we have a set $X = (\unit \sqcup \unit) \sqcup \unit$, it has the same cardinality as $\Fin[3]$, so it
+  is represented by the same 0-cell. But, $X$ can be made equivalent to $\Fin[3]$ in many different ways since there are
+  many bijections between them. One bijection is
+  $\Set{\inl(\inl(\ttt)) \mapsto 0, \inl(\inr(\ttt)) \mapsto 1, \inr(\ttt) \mapsto 2}$ which can be written in two
+  different ways by composing more primitive operations, $f_{1} = \assocrp$, or
+  $f_{2} = \swapp \compc \assoclp \compc \swapp$. Another bijection is
+  $\Set{\inl(\inl(\ttt)) \mapsto 1, \inl(\inr(\ttt)) \mapsto 2, \inr(\ttt) \mapsto 0}$ which is given by $f_{3} = \ldots$.
+  Since $f_{1}$ and $f_{2}$ produce the same enumeration of the elements of $X$, they are identified by a homotopy $h$
+  which is encoded in the 2-cell between them.
 
-\noindent Finally, given two combinators $p , q : A \isoone B$ and a 2-combinator $\alpha : p \isotwo q$, the denotation
-$\sem{\alpha}$ of $\alpha$ is a path between $\sem{p}$ and $\sem{q}$.
+  At level 0, all we know is that if $X : \UFin[3]$, then X is merely equal to $\Fin[3]$, that is
+  $\Trunc[-1]{X \id \Fin[3]}$, and we don't have access to the bijection. At level 1, if we know that both $X$ and $Y$ are
+  \emph{equal} in $\UFin[3]$, then we can extract an equivalence between them, that is, $(X \id Y) \to (X \eqv Y)$.
+  $\UFin[3]$ being a univalent subuniverse asserts that there are as many elements (upto higher homotopy) in $X \id Y$ as
+  there are $X \eqv Y$.
 
-\note{We use the rig structure of $\UFin$ in~\cref{subsec:rig} to interpret $\PiLang$.}
+\end{toappendix}
+
+\begin{toappendix}
+
+  \subsection{To Put Somewhere or Delete}
+
+  This approach is sufficient to prove the semantics forms a 1-category but ignores the rich structure at the next
+  level~\cite{DBLP:conf/esop/CaretteS16}.
+  As explained in the previous section, a $\Pi$-type $A$ has $\sizet{A}$-elements and for all combinators $c : A \iso B$
+  we have that $\sizet{A} = \sizet{B}$. Hence, the denotation $\denot{A}$ of a type $A$ with $n$-elements can be the finite
+  set $\Fin[n] = \{ 0, 1, \cdots, n-1\}$; the denotation of a value $v : A$ such that $\sizet{A}=n$ will be an index in
+  the range $[0,n-1]$, and the denotation $\denot{c}$ of a combinator $c : A \iso B$ such that
+  $\sizet{A} = \sizet{B} = n$ will be a function from $\Fin[n]$ to $\Fin[n]$ that permutes the elements. Thus, all types
+  with 3 elements will denote $\Fin[3]$ and combinators between them will denote permutations on $\Fin[3]$, e.g.:
+  \[\begin{array}{rcl}
+      \denot{\onet + (\onet + \onet)}                                         & = & \{ 0,1,2 \} \\
+      \denot{(\onet + \onet) + \onet}                                         & = & \{ 0,1,2 \} \\
+      \\
+      \denot{\assoclp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet} & = & (0~1~2)     \\
+      \denot{\swapp : \onet + (\onet + \onet) \iso (\onet + \onet) + \onet}   & = & (2~0~1)
+    \end{array}\]
+  where we have used the one-line notation for permutations with $(a~b~c)$ representing the
+  permutation that maps 0 to $a$, 1 to $b$, and 2 to $c$. To make the denotation of values precise, we compute a canonical
+  enumeration of the elements of each type:
+  \[\begin{array}{rcl}
+      \mathit{enum}(\zerot)     & = & [~]                                                                                                          \\
+      \mathit{enum}(\onet)      & = & [ ~\Acon{tt}~ ]                                                                                              \\
+      \mathit{enum}(A + B)      & = & \mathit{map}~\Acon{inj₁}~\mathit{enum}(A) ~\textsf{+\!+}~ \mathit{map}~\Acon{inj₂}~\mathit{enum}(B)          \\
+      \mathit{enum}(A \times B) & = & \mathit{concat}~(\mathit{map}~(\lambda v.\mathit{map}~(\lambda w. (v,w))~\mathit{enum}(B))~\mathit{enum}(A))
+    \end{array}\]
+  \noindent The specification uses a Haskell-like notation for sequences with $\mathit{map}$ as the operation that applies
+  a function to each element of a sequence, \textsf{+\!+} as the binary append operation, and $\mathit{concat}$ the
+  operation that appends all the subsequences in a sequence.
+
+  Using the definition, we have:
+  \[\begin{array}{rcl}
+      \mathit{enum}(\onet + (\onet + \onet)) & = & [ \inlv{\Acon{tt}},~\inrv{(\inlv{\Acon{tt}})},~\inrv{(\inrv{\Acon{tt}})} ] \\
+      \mathit{enum}((\onet + \onet) + \onet) & = & [ \inlv{(\inlv{\Acon{tt}})},~\inlv{(\inrv{\Acon{tt}})},~\inrv{\Acon{tt}} ]
+    \end{array}\]
+  Thus, as shown in the diagrams below, $\assoclp~(\inlv{\Acon{tt}})$ applies the permutation $(0~1~2)$ to the index of
+  $\inlv{\Acon{tt}}$ which is 0 and produces index 0 in the $(\onet + \onet) + \onet$ type corresponding to value
+  $\inlv{(\inlv{\Acon{tt}})}$. Similarly, $\swapp~(\inlv{\Acon{tt}})$ applies the permutation $(2~0~1)$ to the index of
+  $\inlv{\Acon{tt}}$ which is 0 and produces index 2 in the $(\onet + \onet) + \onet)$ type corresponding to value
+  $\inrv{\Acon{tt}}$.
+
+  \begin{center}
+    \input{assoc-perm.tikz}
+    \qquad
+    \input{swap-perm.tikz}
+  \end{center}
 
 
-We need a formal definition of normal form (canonical form)
+  We choose a canonical set of size $n$, called $\mathsf{Fin}~n$, whose elements are natural numbers less than $n$. To
+  compute the denotation of a type $A$, we first calculate its size $n = \sizet{A}$. We then construct the canonical set
+  $\mathsf{Fin}~n$ and provide the (trivial) evidence that this set is identical to $(\mathsf{Fin}~n)$:
 
-Recalling that the $\lambda$-calculus arises as the internal language of Cartesian Closed Categories
-(Elliott~\cite{Elliott-2017} gives a particularly readable account of this), we can think of $\Pi$ in similar terms, but
-for symmetric Rig Groupoids instead. For example, we can ask what does the equivalence above represent? It is actually a
-``linear'' representation of a 2-categorial commutative diagram! In fact, it is a painfully verbose version thereof, as
-it includes many \emph{refocusing} steps because our language does not build associativity into its syntax. Categorical
-diagrams usually do.  Thus if we rewrite the example in diagrammatic form, eliding all uses of associativity, but
-keeping explicit uses of identity transformations, we get that \AgdaFunction{swap{-}fl2⇔swap{-}fl1} represents
+  \[\begin{array}{rcll}
+      \sem{A} & = & (\mathsf{Fin}~n, [ n , \mathsf{refl} ]) & \mbox{where}~\sizet{A} = n
+    \end{array}\]
 
-\vspace*{3mm}
-\begin{tikzcd}[column sep=normal, row sep=normal]
- && (a+c)+b \arrow [r, "\swapp \oplus\idd", ""{name=U, below}] & (c+a)+b \arrow [dr, "\assocrp"] && \\
- & a+(c+b) \arrow [ur, "\assoclp"] & & & c+(a+b) \arrow [dr, "\idd\oplus\swapp"] &  \\
-a+(b+c) \arrow [ur, "\idd\oplus\swapp"] \arrow [r, "\assoclp"]
-  \arrow [dr, "\assoclp"]
-  \arrow [ddr, swap, "\assoclp"]
+  \noindent The denotation $\sem{c}$ of a combinator $c : A \isot B$ is a path between $\sem{A}$ and $\sem{B}$. If the
+  size of $A$ is $m$ and the size of $B$ is $n$, the desired path is between $(\mathsf{Fin}~m, [ m , \mathsf{refl} ])$ and
+  $(\mathsf{Fin}~n, [ n , \mathsf{refl} ])$. This path is directly constructed using $\mathit{ap}$ and the fact that $m=n$
+  since combinators are always between types of the same size.
+
+  \noindent Finally, given two combinators $p , q : A \isot_1 B$ and a 2-combinator $\alpha : p \Iso q$, the denotation
+  $\sem{\alpha}$ of $\alpha$ is a path between $\sem{p}$ and $\sem{q}$.
+
+  \note{We use the rig structure of $\UFin$ in~\cref{subsec:rig} to interpret $\PiLang$.}
+
+
+  We need a formal definition of normal form (canonical form)
+
+  Recalling that the $\lambda$-calculus arises as the internal language of Cartesian Closed Categories
+  (Elliott~\cite{Elliott-2017} gives a particularly readable account of this), we can think of $\Pi$ in similar terms, but
+  for symmetric Rig Groupoids instead. For example, we can ask what does the equivalence above represent? It is actually a
+  ``linear'' representation of a 2-categorial commutative diagram! In fact, it is a painfully verbose version thereof, as
+  it includes many \emph{refocusing} steps because our language does not build associativity into its syntax. Categorical
+  diagrams usually do.  Thus if we rewrite the example in diagrammatic form, eliding all uses of associativity, but
+  keeping explicit uses of identity transformations, we get that \AgdaFunction{swap{-}fl2⇔swap{-}fl1} represents
+
+  \vspace*{3mm}
+  \begin{tikzcd}[column sep=normal, row sep=normal]
+    && (a+c)+b \arrow [r, "\swapp \oplus\idd", ""{name=U, below}] & (c+a)+b \arrow [dr, "\assocrp"] && \\
+    & a+(c+b) \arrow [ur, "\assoclp"] & & & c+(a+b) \arrow [dr, "\idd\oplus\swapp"] &  \\
+    a+(b+c) \arrow [ur, "\idd\oplus\swapp"] \arrow [r, "\assoclp"]
+    \arrow [dr, "\assoclp"]
+    \arrow [ddr, swap, "\assoclp"]
     & (a+b)+c \arrow [r, "\swapp"] &
     c+(a+b) \arrow [r, swap, "\assoclp", ""{name=D, above}]
     & |[alias=Z]| (c+a)+b \arrow [r, "\assocrp"] &c+(a+b) \arrow [r, "\idd\oplus\swapp"] & c+(b+a) \\
- & (a+b)+c \arrow [dr, "\swapp"] &&&& \\
- & (a+b)+c \arrow [dr, swap, "\swapp"] & c+(a+b) \arrow [rr, swap, "\idd", ""{name=DD, above}]
-             \arrow [d, Rightarrow, "\idf\, \mathit{idl}\odot{l}"] &&
+    & (a+b)+c \arrow [dr, "\swapp"] &&&& \\
+    & (a+b)+c \arrow [dr, swap, "\swapp"] & c+(a+b) \arrow [rr, swap, "\idd", ""{name=DD, above}]
+    \arrow [d, Rightarrow, "\idf\, \mathit{idl}\odot{l}"] &&
     c+(a+b) \arrow [ruu, "\idd\oplus\swapp"] & \\
- && c+(a+b) \arrow [rrruuu, bend right = 40, swap, "\idd\oplus\swapp"] && \\
- \arrow[Rightarrow, from=U, to=D, "\mathit{hexagon}\oplus{r}\, \boxdot\, \idf"]
- \arrow[Rightarrow, from=Z, to=DD, swap, "\idf\boxdot\mathit{linv}\odot{l}\,\boxdot\,\idf"]
-\end{tikzcd}
+    && c+(a+b) \arrow [rrruuu, bend right = 40, swap, "\idd\oplus\swapp"] && \\
+    \arrow[Rightarrow, from=U, to=D, "\mathit{hexagon}\oplus{r}\, \boxdot\, \idf"]
+    \arrow[Rightarrow, from=Z, to=DD, swap, "\idf\boxdot\mathit{linv}\odot{l}\,\boxdot\,\idf"]
+  \end{tikzcd}
 
-
+\end{toappendix}
 
 %%%
-\subsection{Univalent Subuniverses}
-\label{sec:univalent}
-
-In order to define the semantics, we seek a mathematical structure satisfying the following properties: (i) it contains structures corresponding to all the finite types and nothing but the finite types, and (ii) it is robust enough to ensure that equivalent encodings of finite types are identified.
-
-In this section, we introduce some basic concepts and notation that we use in Homotopy Type Theory. Then, we define
-univalent subuniverses and discuss some specific examples.
-
 \subsection{The Type Theory}~\label{subsec:type-theory}
+% \subsection{Univalent Subuniverses}
+% \label{sec:univalent}
 
-We work in Homotopy Type Theory (HoTT), and use the language of the HoTT
-book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}, that is, we use intensional Martin-L\"{o}f Type Theory,
-with a univalent universe $\UU$, and we use Higher Inductive Types (HITs) for propositional truncations and set
-quotients. All arguments will hold in a cubical type theory as well, such
-as~\cite*{cohenCubicalTypeTheory2018,angiuliComputationalSemanticsCartesianCubical2019}. We recall a few basic facts to
-familiarise the reader with the notation we use. For more details about basics of HoTT, we refer the reader to the HoTT
-book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}.
+% In order to define the weak groupoid we're after, we seek a mathematical structure satisfying the following properties:
+% (i) it contains structures corresponding to all the finite types and nothing but the finite types, and (ii) it is robust
+% enough to ensure that equivalent encodings of finite types are identified.
 
-Our denotational semantics is given using groupoids, and HoTT provides a rich internal language for describing (weak
-$\infty$-)groupoids. By formalising our results using general tools and principles from HoTT, we're able to use a proof
-assistant to computer-check our proofs. Our results are formalised in the Agda proof assistant using the HoTT-Agda
-library, though it could also be formalised using Cubical Agda~\cite{vezzosiCubicalAgdaDependently2019}. \review{Using
-  the formalisation of the semantics, we are also able to extract a computable procedure for performing normalisation of
-  circuits.}
+To define the weak groupoid we're after, we first introduce some basic concepts and notation from Homotopy Type Theory
+that we use.~\footnote{We use the language of the HoTT book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013},
+that is, we use intensional Martin-L\"{o}f Type Theory, with a (univalent) universe $\UU$, and a few Higher Inductive
+Types (HITs) for propositional truncation and set quotients. All arguments will hold in a Cubical Type Theory as well,
+such
+as~\cite*{cohenCubicalTypeTheory2018,angiuliComputationalSemanticsCartesianCubical2019,vezzosiCubicalAgdaDependently2019}.}
+For more details about HoTT, we refer the reader to the HoTT
+book~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}. By formalising our results in HoTT, we're also able to
+use a proof assistant to computer-check our proofs, and our results are formalised in the Agda proof assistant using the
+HoTT-Agda library. Using the formalisation of our semantics, we are able to extract a computable procedure for
+performing NbE and synthesis of reversible circuits, as motivated in~\cref{sec:introduction}.
 
 \subsubsection{Identity Types}
 
-\vc{I'm explaining everything starting from the categorical language. We do care more about the groupoid structure of
-  types, and how to encode groupoids using types, since that's what we use in~\cref{sec:finite}.}
+Given two terms $x:A$ and $y:A$, we write $x \id_{A} y$, or simply $x \id y$, for the identity type, which is the type
+of equalities or identifications between them. The identity type is generated by reflexivity $\refl_{x} : x \id_{A} x$,
+and the eliminator for the identity type is given by path induction or the $J$-rule (\cref{def:path-induction}). This
+construction can be iterated, giving the identity type between two terms of an identity type, repeating ad infinitum.
+Using the iterated identity type for morphisms, each type is equipped with the structure of a weak $\infty$-groupoid,
+where each morphism satisfies groupoid laws only upto a higher one. Given an arbitrary type (or groupoid) $A$, we list
+some laws that are provable using path induction.
 
-In HoTT, the identity type or the equality type is the type of paths or equalities between two terms of the same type.
-Given two terms $x:A$ and $y:A$, we write $x \id_{A} y$, or simply $x \id y$, for the equality type between them. In
-book HoTT, the identity type is generated by reflexivity $\refl_{x} : x \id_{A} x$, and the eliminator for the identity
-type is given by path induction or the $J$-rule. The identity type equips each type with the structure of a weak
-$\infty$-groupoid, or a homotopy type. For example, given an arbitrary type (or groupoid) $A$, we list some groupoid
-laws that are provable using path induction.
+\begin{toappendix}
+  \begin{definition}[Path Induction]
+    \label{def:path-induction}
+    Given a type family $C : \dfun{x,y:A}{(x \id_A y)} \to \UU$, and a function $c : \dfun{x:A}{C(x,x,\refl_x)}$, there is
+    a function $f : \dfun{x,y:A}{\dfun{p:x \id_A y}{C(x,y,p)}}$ such that $f(x,x,\refl_x) \defeq c(x)$.
+  \end{definition}
+\end{toappendix}
 
 \begin{gather*}
   \begin{aligned}
@@ -253,48 +208,49 @@ laws that are provable using path induction.
   \end{aligned}
 \end{gather*}
 
-Functions between types are functors between groupoids. Given a function $f : A \to B$, the functorial action
-$\term{ap}_{f}(\blank)$ is given by path induction.
+Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
+the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to the
+universe, such as $A \to \UU$. For a type family $P : A \to \UU$ and a point $x : A$, the type $P(x)$ is called the
+fiber over $x$.  The $\term{transport}$ operation, named $\term{tr}$, lifts paths in the indexing type to functions
+between fibers.
+%which is an $A$-indexed family of groupoids.
 
-\[
+\begin{gather*}
   \term{ap}_{f} : \dfun{x,y:A}{x \id_{A} y \to f(x) \id_{B} f(y)}
-\]
+  \qquad
+  \term{tr}_{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \to P(y)}
+\end{gather*}
 
-Type families are functions from a type to the universe, such as $A \to \UU$, which is an $A$-indexed family of
-groupoids. The $\term{transport}$ operation gives the functorial action of paths in the indexing type, which is also
-defined by path induction. If $P : A \to \UU$ is a type family, then for a path $x \id_{A} y$, we have
-
-\[
-  \transport{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \to P(y)}
-\]
-
-A type family can also be seen as a fibration, from the topological viewpoint. For a type family $P : A \to \UU$ and a
-point $x : A$, the type $P(x)$ gives the fiber over $x$. The type $\dsum{x:A}{P(x)}$ is the collection of all the fibers
-and is called the total space of $P$. The first projection ${\pi_1 : \dsum{x:A}{P(x)} \to A}$ from the total space to
-the base space $A$ is then a fibration. The lifting operation lifts paths in the base space to paths in the total space.
-Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a point in the fiber over $x$, we have
+The type $\dsum{x:A}{P(x)}$ is the collection of all the fibers and is called the total space of $P$. The first
+projection ${\pi_1 : \dsum{x:A}{P(x)} \to A}$ from the total space to the base space $A$ has the structure of a
+fibration, that is, there is a lifting operation (\cref{fig:lift}) which lifts paths in the base space to paths in the
+total space. Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a point in the fiber over $x$, we have
 
 \[
-  \term{lift}(u,p) : (x , u) \id_{\dsum{x:A}{P(x)}} (y , \tr{p}{u})
+  \term{lift}(u,p) : (x , u) \id_{\dsum{x:A}{P(x)}} (y , \transport{P}{p}{u})
 \]
 
-where $\tr{p}{u}$ is shorthand for $\transport{P,p}(u)$.
+% where $\tr{p}{u}$ is shorthand for $$.
 
-\begin{center}
-  \begin{tikzpicture}[yscale=.5,xscale=2]
-    \draw (0,0) arc (-90:170:8ex) node[anchor=south east] {$A$} arc (170:270:8ex);
-    \draw (0,6) arc (-90:170:10ex) node[anchor=south east] {$\dsum{x:A}{P(x)}$} arc (170:270:10ex);
-    \draw[->] (0,5.8) -- node[auto] {$\fst$} (0,3.2);
-    \node[circle,fill,inner sep=1pt,label=left:{$x$}] (b1) at (-.5,1.4) {};
-    \node[circle,fill,inner sep=1pt,label=right:{$y$}] (b2) at (.5,1.4) {};
-    \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto,swap] {$p$} (b2);
-    \node[circle,fill,inner sep=1pt,label=left:{$\pair{x,u}$}] (b1) at (-.5,7.2) {};
-    \node[circle,fill,inner sep=1pt,label=right:{$\pair{y,\tr{p}{u}}$}] (b2) at (.5,7.2) {};
-    \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto] {$\term{lift}(u,p)$} (b2);
-  \end{tikzpicture}
-\end{center}
+\begin{figure}
+  \begin{center}
+    \begin{tikzpicture}[yscale=.5,xscale=2]
+      \draw (0,0) arc (-90:170:8ex) node[anchor=south east] {$A$} arc (170:270:8ex);
+      \draw (0,6) arc (-90:170:10ex) node[anchor=south east] {$\dsum{x:A}{P(x)}$} arc (170:270:10ex);
+      \draw[->] (0,5.8) -- node[auto] {$\fst$} (0,3.2);
+      \node[circle,fill,inner sep=1pt,label=left:{$x$}] (b1) at (-.5,1.4) {};
+      \node[circle,fill,inner sep=1pt,label=right:{$y$}] (b2) at (.5,1.4) {};
+      \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto,swap] {$p$} (b2);
+      \node[circle,fill,inner sep=1pt,label=left:{$\pair{x,u}$}] (b1) at (-.5,7.2) {};
+      \node[circle,fill,inner sep=1pt,label=right:{$\pair{y,\transport{P}{p}{u}}$}] (b2) at (.5,7.2) {};
+      \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto] {$\term{lift}(u,p)$} (b2);
+    \end{tikzpicture}
+  \end{center}
+  \caption{Lifting operation in $P$}
+  \label{fig:lift}
+\end{figure}
 
-Further, using the groupoid structure of $A$, we can show that $\term{transport}$ lifts paths to equivalences, we define
+Further, using the groupoid structure of $A$, we can show that $\term{transport}$ lifts paths to equivalences of fibers.
 
 \[
   \tptEqv{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \eqv P(y)}
@@ -303,12 +259,13 @@ Further, using the groupoid structure of $A$, we can show that $\term{transport}
 \todo{Diagram.}
 
 \begin{definition}[Univalent Fibration]
-  $P$ is a univalent type family (or simply a univalent fibration) if $\tptEqv{P}$ is an equivalence.
+  $P$ is a univalent type family (or, $\fst : {\dsum{x:A}{P(x)}} \to A$ is a univalent fibration) if $\tptEqv{P}$ is an
+  equivalence.
 \end{definition}
 
 \subsubsection{Univalence}
 
-Voevodsky's \emph{univalence} principle characterises paths in the universe. It says that equivalent types are equal, or
+Voevodsky's \emph{univalence} principle characterises paths in the universe. It says that equivalent types are equal, or,
 the following function is an equivalence.
 
 \[
@@ -319,95 +276,124 @@ the following function is an equivalence.
 
 Alternatively, one can say that the identity type family $\term{id} : \UU \to \UU$ is univalent.
 
+\subsubsection{Homotopy Types}
+
+A type is \emph{contractible} (-2-type) if it has a unique element, that is, there is a center of contraction and every
+other point is equal to it. A type is a \emph{proposition} (-1-type) if its equality types are contractible, that is, it
+has at most one inhabitant. Iterating this, we can define sets or 0-types (whose equality types are propositions) and
+1-groupoids or 1-types (whose equality types are sets), and similarly, higher homotopy $n$-types.
+
+\begin{gather*}
+  \begin{aligned}
+    \isContr{A} & \defeq \dsum{x:A}{\dfun{y:A}{y \id x}} \\
+    \isProp{A}  & \defeq \dfun{x,y:A}{\isContr{x \id y}}
+  \end{aligned}
+  \qquad
+  \begin{aligned}
+    \isSet{A} & \defeq \dfun{x,y:A}{\isProp{x \id y}} \\
+    \isGpd{A} & \defeq \dfun{x,y:A}{\isSet{x \id y}}
+  \end{aligned}
+\end{gather*}
+
 \subsubsection{Higher Inductive Types}
 
-\todo{Explain homotopy types, $\hProp$, $\hSet$, etc.}
+Higher Inductive Types generalise Inductive Types, by allowing path constructors besides point constructors. While point
+constructors generate the elements of the type, path constructors generate equalities between points in the type. We
+describe a few basic HITs that we use.
 
-\vc{These are placeholder definitions, need informal explanations and references to the book.}
+Given a type $A$, the propositional truncation $\Trunc[-1]{A}$, squashes the elements of $A$ turning it into a
+proposition. It is given by a HIT with a point constructor $\trunc{\blank} : A \to \Trunc{A}$, and a path constructor
+$\term{trunc}(x,y) : x \id_{\Trunc{A}} y$, which equates every pair of points in the truncation
+(see~\cref{def:prop-trunc}).
 
-\begin{definition}[Propositional Truncation]
-  Given a type $A$, the propositional truncation $\Trunc[-1]{A}$, or simply $\Trunc{A}$, is a higher inductive type
-  generated by the following constructors,
-  \begin{itemize}
-    \item an inclusion function $\trunc{\blank} : A \to \Trunc{A}$,
-    \item for each $x, y : \Trunc{A}$, a path $\term{trunc}(x,y) : x \id_{\Trunc{A}} y$,
-  \end{itemize}
-  such that, given any type $B$ with
-  \begin{itemize}
-    \item a function $g : A \to B$,
-    \item for each $x, y : B$, a path $\term{trunc*}(x,y) : x \id_{B} y$,
-  \end{itemize}
-  there is a unique function $f : \Trunc{A} \to B$ such that,
-  \begin{itemize}
-    \item $f(\trunc{a}) \equiv g(a)$
-    \item for each $x, y : \Trunc{A}$, $\ap{f}{\term{trunc}(x,y)} \id_{B} \term{trunc*}(f(x),f(y))$.
-  \end{itemize}
-\end{definition}
+\begin{toappendix}
+  \begin{definition}[Propositional Truncation]
+    \label{def:prop-trunc}
+    Given a type $A$, the propositional truncation $\Trunc[-1]{A}$, or simply $\Trunc{A}$, is a higher inductive type
+    generated by the following constructors,
+    \begin{itemize}
+      \item an inclusion function $\trunc{\blank} : A \to \Trunc{A}$,
+      \item for each $x, y : \Trunc{A}$, a path $\term{trunc}(x,y) : x \id_{\Trunc{A}} y$,
+    \end{itemize}
+    such that, given any type $B$ with
+    \begin{itemize}
+      \item a function $g : A \to B$,
+      \item for each $x, y : B$, a path $\term{trunc*}(x,y) : x \id_{B} y$,
+    \end{itemize}
+    there is a unique function $f : \Trunc{A} \to B$ such that,
+    \begin{itemize}
+      \item $f(\trunc{a}) \equiv g(a)$
+      \item for each $x, y : \Trunc{A}$, $\ap{f}{\term{trunc}(x,y)} \id_{B} \term{trunc*}(f(x),f(y))$.
+    \end{itemize}
+  \end{definition}
+\end{toappendix}
 
-\begin{definition}[Set Quotient]
-  Given a type $A$ which is an $\hSet$, and a relation $R : A \to A \to \hProp$, the set-quotient $\quot{A}{R}$ is the
-  higher inductive type generated by
-  \begin{itemize}
-    \item an inclusion function $q : A \to \quot{A}{R}$,
-    \item for each $x, y : A$ such that $R(x,y)$, a path $q(x) \id_{\quot{A}{R}} q(y)$,
-    \item a set truncation, for each $x, y : \quot{A}{R}$ and $r, s : x \id_{\quot{A}{R}} y$, we have $r \id s$,
-  \end{itemize}
-  with \review{an appropriate induction principle.}
-\end{definition}
+Another HIT that we use is the set-quotient $\quot{A}{R}$ which takes an $\hSet$ $A$ and a relation $R : A \to A \to
+  \UU$. It has an inclusion of points $q : A \to \quot{A}{R}$, and adds paths between related pairs of elements
+$\quotrel : R(x,y) \to q(x) \id_{\quot{A}{R}} q(y)$ (see~\cref{def:set-quot}).  We recall that the quotient is
+\emph{effective} if $R$ is a prop-valued equivalence relation, that is, $R(x,y)$ holds iff $(q(x) \id_{\quot{A}{R}}
+  q(y))$.
 
-We recall that quotients in HoTT are \emph{effective}, that is, if $R$ is an equivalence relation, we have
-$R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
+\begin{toappendix}
+  \begin{definition}[Set Quotient]
+    \label{def:set-quot}
+    Given a type $A$ which is an $\hSet$, and a relation $R : A \to A \to \hProp$, the set-quotient $\quot{A}{R}$ is the
+    higher inductive type generated by
+    \begin{itemize}
+      \item an inclusion function $q : A \to \quot{A}{R}$,
+      \item for each $x, y : A$ such that $R(x,y)$, a path $q(x) \id_{\quot{A}{R}} q(y)$,
+      \item a set truncation, for each $x, y : \quot{A}{R}$ and $r, s : x \id_{\quot{A}{R}} y$, we have $r \id s$,
+    \end{itemize}
+    with \review{an appropriate induction principle.}
+  \end{definition}
+\end{toappendix}
 
 \subsection{Univalent Subuniverses}
 
-\todo{Explain motivation. Starting from a univalent universe which classifies all types, we want to define a subuniverse
-  which classifies only certain types, for example, types that satisfy some property that we want.}
+Starting from a univalent universe which classifies all types, we want to define a subuniverse which classifies only
+certain types, for example, types that satisfy some desired property. We use a prop-valued type family, that is, a
+predicate, which picks out only those types, and collect them into a univalent subuniverse. Being univalent ensures that
+the equality type of the ambient universe is reflected in the subuniverse.
 
 \begin{definition}[Universe]
   A universe \`{a} la Tarski is given by the following pieces of data,
   \begin{itemize}
     \item a code $U : \UU$,
-    \item a decoding function $\El : U \to \UU$.
+    \item a decoding type family $\El : U \to \UU$.
   \end{itemize}
-  If $\El$ is a univalent fibration, $U$ is a univalent universe.
+  If $\El$ is univalent, $U$ is a univalent universe.
 \end{definition}
 
 \begin{definition}[Subuniverse]
-  A subtype is a type family $P : \UU \to \UU$ whose fibers are prop-valued, that is, $\forall x, \isProp{P(x)}$. A
-  subuniverse generated by a subtype has $U \defeq \dsum{X:\UU}{P(X)}$ and $\El \defeq \fst$.
+  A subtype is a type family $P : \UU \to \UU$ whose fibers are prop-valued, that is, $P(X)$ is a proposition for every
+  $X$. A subuniverse generated by a subtype has $U \defeq \dsum{X:\UU}{P(X)}$ and $\El \defeq \fst$.
 \end{definition}
 
 \begin{proposition}[Univalent Subuniverse]
   Subuniverses generated by subtypes are univalent.
 \end{proposition}
 
-\begin{proof}
+\begin{appendixproof}
   Suppose $(U, \El) \defeq (\dsum{X:\UU}{P(X)}, \fst)$ is a subuniverse generated by a subtype $P : \UU \to \UU$. For
   any $X, Y : \UU$ such that $\phi : P(X)$ and $\psi : P(Y)$, we want to show that
   $\tptEqv{\fst} : (X,\phi) \id (Y,\psi) \to X \eqv Y$ is an equivalence. We construct
   $X \eqv Y \to (X,\phi) \id (Y,\psi)$ by $\ua$ and using the fact that $P(\blank)$ is a proposition. That it is an
   inverse follows by calculation using the appropriate computation rules.
-\end{proof}
+\end{appendixproof}
 
-\begin{example}[$\BAut$]
-  The type of self-equivalences on a type $T$ is defined as $\Aut[T] \defeq T \eqv T$, which is an $\infty$-group. The
-  subuniverse of types that are merely equal to $T$ is given by $\BAut[T] \defeq \Sub{T}$. This turns out to be the
-  classifying space of $\Aut[T]$, as justified by~\cref{lem:loop-deloop}. We write $T_{o} \defeq (T, \trunc{\refl_{T}})$
-  for the image of the inclusion of $T$.
-\end{example}
+The types we're interested in are the finite types. In constructive mathematics, the notion of finiteness is subtle. We
+define a type to be (Bishop-) finite if it is equal to some finite set, and we setup the predicate $\isFin$ to do so.
 
-\begin{example}
-  The univalent subuniverse of types merely equal to $\Bool$ is given by $\BAut[\Bool]$. This can be used to give the
-  denotational semantics of a 2-bit reversible language~\cite{caretteReversibleProgramsUnivalent2018}.
-\end{example}
+\todo{Cite Brent Yorgey's thesis?}
 
 \begin{definition}[$\Fin$]
-  The type family $\Fin : \Nat \to \UU$ is the type of finite sets indexed by cardinality. It is defined equivalently in
-  two different ways,
+  The type family $\Fin : \Nat \to \UU$ is the type of finite sets indexed by their cardinality. It is defined
+  equivalently in two different ways,
   \begin{gather*}
     \begin{aligned}
       \Fin[n] & \defeq \dsum{k:\Nat}{k < n}
     \end{aligned}
+    \qquad
     \begin{aligned}
        & \Fin[0] \defeq \bot                      \\
        & \Fin[\suc[n]] \defeq \top \sqcup \Fin[n]
@@ -415,12 +401,6 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
   \end{gather*}
   Note that $\Fin[n]$ is a $\hSet$, and we use the definitions interchangeably.
 \end{definition}
-
-\begin{example}
-  For any $n : \Nat$, we define the univalent subuniverse of types merely equal to $\Fin[n]$ as $\BAut[\Fin[n]]$. This
-  is the universe of finite sets with cardinality equal to $n$. We write $F_{n} \defeq (\Fin[n], \trunc{\refl})$ for the
-  image of the inclusion of $\Fin[n]$.
-\end{example}
 
 \begin{definition}[$\isFin$]
   We say that a type is finite if it is merely equal to $\Fin[n]$ for some $n$.
@@ -434,190 +414,196 @@ $R(x,y) \eqv (q(x) \id_{\quot{A}{R}} q(y))$.
   For any type $X$, $\isFin[X]$ is a proposition.
 \end{proposition}
 
-\begin{proof}
+\begin{appendixproof}
   Suppose we have $(n,\phi) : \isFin[X]$ and $(m,\psi) : \isFin[X]$, we need to show that $(n,\phi) \id (m,\psi)$. It is
   enough to show that $n \id m$. Since $\Nat$ is a set, this is a proposition, so we can use the induction principle of
   propositional truncation to eliminate to $n \id m$, applying it on $\phi$ and $\psi$ respectively. This gives us the
   equalities $X \id \Fin[n]$ and $X \id \Fin[m]$, which gives us $\Fin[n] \id \Fin[m]$, from which $n \id m$ follows by
   applying the first projection.
-\end{proof}
+\end{appendixproof}
 
-\begin{example}
+\begin{definition}
   The univalent subuniverse of \emph{all finite types} is given by
   \[
     \UFin \defeq \dsum{X:\UU}{\isFin[X]}.
   \]
-  We write $F_{n} \defeq (\Fin[n], n, \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$. We use this as the
-  denotational semantics to interpret our reversible programming language $\PiPlusLang$.
-\end{example}
+  We write $F_{n} \defeq (\Fin[n], n, \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$.
+\end{definition}
 
-\review{We characterise the path space of univalent subuniverses.}
+We also consider a different way of thinking about $\UFin$, using the subuniverse $\BAut[T]$.
+
+\begin{definition}[$\BAut$]
+  The predicate $P(X) \defeq \Trunc[-1]{X \id T}$ picks out exactly those types that are merely equal to $T$, and this
+  generates the subuniverse
+  \[
+    \BAut[T] \defeq \Sub{T}.
+  \]
+  We write $T_0 \defeq (T, \trunc{\refl_{T}})$ for the image of the inclusion of $T$ in $\BAut[T]$
+\end{definition}
+
+Using $\BAut$, we can talk about types that have a specified cardinality, for example, the subuniverse of 2-element sets
+is given by $\BAut[\Bool]$. This can be used to give the denotational semantics of a 1-bit reversible
+language~\cite{caretteReversibleProgramsUnivalent2018}.
+
+\begin{definition}
+  For any $n : \Nat$, we define $\UFin[n] \defeq \BAut[\Fin[n]]$ to be the univalent subuniverse of $n$-element sets.
+  Note that, $\UFin$ can be equivalently seen as the collection of all types of finite cardinality, that is, $\UFin \eqv
+    \displaystyle\sqcup_{n:\Nat} \UFin[n]$.
+\end{definition}
+
+Since $\BAut[T]$ is a univalent subuniverse, we can characterise its path space. The intuition is that $\BAut[T]$ only
+has one point $T_0$, and 1-paths $T_0 \id_{\BAut[T]} T_0$, that is, loops, and higher paths between these loops. The
+type of loops on $T_0$, $\loopspace[\BAut[T],T_{0}]$ is shown to be equivalent to $\Aut[T] \defeq T \eqv T$, which is
+the automorphism group of $T$.
 
 \begin{proposition}
-  If $T$ is an $n$-type, $\BAut[T]$ is an $(n+1)$-type.
+  \leavevmode
+  \begin{enumerate}
+    \item If $T$ is an $n$-type, $\BAut[T]$ is an $(n+1)$-type.
+    \item For any $T : \UU$, $\BAut[T]$ is 0-connected.
+    \item For any $T : \UU$, \( \loopspace[\BAut[T],T_{0}] \eqv \Aut[T] \). \label{lem:loop-deloop}
+  \end{enumerate}
 \end{proposition}
 
-\begin{proof}
+\begin{appendixproof}
   We need to show that the equality type of $\BAut[T]$ is an $n$-type. Assume $X, Y : \BAut[T]$. Since $\BAut[T]$ is a
   univalent subuniverse, we have $(X \id Y) \eqv (\fst(X) \eqv \fst(Y))$. Note that being an $n$-type is a proposition.
   Since $T$ is an $n$-type, and $\fst(X)$ and $\fst(Y)$ are merely equal to $T$, they're also $n$-types. It follows that
   $\fst(X) \eqv \fst(Y)$ is an $n$-type, and hence $X \id Y$ is an $n$-type.
-\end{proof}
 
-\begin{proposition}
-  For any $T : \UU$, $\BAut[T]$ is 0-connected.
-\end{proposition}
-
-\begin{corollary}
-  $\UFin$ is a pointed, connected, 1-type, that is, a 1-groupoid, or has h-level 3.
-\end{corollary}
-
-\begin{lemma}~\label{lem:loop-deloop}
-  \[
-    \loopspace[\BAut[T],T_{0}] \eqv \Aut[T]
-  \]
-\end{lemma}
-
-\begin{proof}
   Since $\BAut[T]$ is a univalent universe, it follows that
   \[
     (T_{0} \id_{\BAut[T]} T_{0}) \eqv (\fst(T_{0}) \eqv \fst(T_{0})) \equiv (T \eqv T) \equiv \Aut[T].
   \]
-\end{proof}
+\end{appendixproof}
 
 \begin{corollary}
-  For every $n:\Nat$,
-  \[
-    \loopspace[\UFin[n],F_{n}] \eqv \Aut[\Fin[n]]
-  \]
+  $\UFin$ is a pointed, connected, 1-type, that is, a 1-groupoid. For every $n:\Nat$, \( \loopspace[\UFin[n],F_{n}] \eqv
+  \Aut[\Fin[n]] \).
 \end{corollary}
-
-\[
-  \begin{tikzcd}
-    F_{0}
-    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
-    & F_{1}
-    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
-    & F_{2}
-    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
-    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
-    & \ldots
-    & F_{n}
-    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
-    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
-    \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=12em, in=135, out=45]
-    & \ldots
-  \end{tikzcd}
-\]
+\note{Diagram below?}
+% \[
+%   \begin{tikzcd}
+%     F_{0}
+%     \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+%     & F_{1}
+%     \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+%     & F_{2}
+%     \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+%     \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
+%     & \ldots
+%     & F_{n}
+%     \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=4em, in=115, out=65]
+%     \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=8em, in=125, out=55]
+%     \arrow[""{anchor=center, inner sep=0}, no head, loop, distance=12em, in=135, out=45]
+%     & \ldots
+%   \end{tikzcd}
+% \]
 
 \subsection{Rig structure}~\label{subsec:rig}
 
-\todo{rig}
-
-We describe the symmetric monoidal structure of the groupoid $\UFin$.
-
-First, we observe a few equivalences.
+The groupoid $\UFin$ has two symmetric monoidal structures, the additive and the multiplicative one, and the
+multiplicative tensor product distributes over the additive one. To construct these, we first define some equivalences
+on $\Fin$, and some general type isomorphisms.
 
 \begin{proposition}
   For any $n, m : \Nat$,
-  \begin{align*}
-    \Fin[0]                & \eqv \bot        \\
-    \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m] \\
-  \end{align*}
+  \begin{gather*}
+    \begin{aligned}
+      \Fin[0]                & \eqv \bot        \\
+      \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m] \\
+    \end{aligned}
+    \qquad
+    \begin{aligned}
+      \Fin[1]                & \eqv \top        \\
+      \Fin[n] \times \Fin[m] & \eqv \Fin[n * m] \\
+    \end{aligned}
+  \end{gather*}
   and for any types $X, Y, Z$,
-  \begin{align*}
-    \bot \sqcup X         & \eqv X                     \\
-    X \sqcup \bot         & \eqv X                     \\
-    (X \sqcup Y) \sqcup Z & \eqv X \sqcup (Y \sqcup Z) \\
-    X \sqcup Y            & \eqv Y \sqcup Y            \\
-  \end{align*}
+  \begin{gather*}
+    \begin{aligned}
+      \bot \sqcup X         & \eqv X                     \\
+      X \sqcup \bot         & \eqv X                     \\
+      (X \sqcup Y) \sqcup Z & \eqv X \sqcup (Y \sqcup Z) \\
+      X \sqcup Y            & \eqv Y \sqcup Y            \\
+    \end{aligned}
+    \qquad
+    \begin{aligned}
+      \top \times X         & \eqv X                                \\
+      X \times \top         & \eqv X                                \\
+      (X \times Y) \times Z & \eqv X \times (Y \times Z)            \\
+      X \times Y            & \eqv Y \times X                       \\
+      X \times \bot         & \eqv \bot                             \\
+      X \times (Y \sqcup Z) & \eqv (X \times Y) \sqcup (X \times Z)
+    \end{aligned}
+  \end{gather*}
 \end{proposition}
 
-\begin{proposition}
-  For any $n, m : \Nat$,
-  \begin{align*}
-    \Fin[1]                & \eqv \top        \\
-    \Fin[n] \times \Fin[m] & \eqv \Fin[n * m] \\
-  \end{align*}
-  and for any types $X, Y, Z$,
-  \begin{align*}
-    \top \times X         & \eqv X                                \\
-    X \times \top         & \eqv X                                \\
-    (X \times Y) \times Z & \eqv X \times (Y \times Z)            \\
-    X \times Y            & \eqv Y \times X                       \\
-    X \times \bot         & \eqv \bot                             \\
-    X \times (Y \sqcup Z) & \eqv (X \times Y) \sqcup (X \times Z)
-  \end{align*}
-\end{proposition}
+We lift these equivalences to $\UFin$ giving it the additive and multiplicative symmetric monoidal structures, $(F_0,
+  \sqcup)$ and $(F_1, \times)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$, and
+the braiding isomorphism $\mathcal{B}_{X,Y}$. These isomorphisms satisfy the Mac Lane coherence conditions for symmetric
+monoidal categories, that is, the triangle, pentagon, and hexagon identities, and the symmetry of the braiding, upto
+2-paths in $\UFin$.
 
-We lift these equivalences to $\UFin$ giving it the additive and multiplicative symmetric monoidal structures,
-$(O, \oplus)$ and $(I, \otimes)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$,
-and the symmetry isomorphism $\mathcal{B}_{X,Y}$. Note that types in $\UFin$ are $\hSet$s since they're merely
-equivalent to $\Fin[n]$ for some $n : \Nat$.
-
-\todo{combine both symmetric monoidal structures}
-
-\begin{definition}
-  \begin{align*}
-    I                 & \defeq F_{0}                                       \\
-    X \oplus Y        & \defeq X \sqcup Y                                  \\
-    \lambda_{X}       & : I \oplus X \eqv X                                \\
-    \rho_{X}          & : X \oplus I \eqv X                                \\
-    \alpha_{X,Y,Z}    & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
-    \mathcal{B}_{X,Y} & : X \oplus Y \eqv Y \oplus X
-  \end{align*}
-\end{definition}
-
-These isomorphisms satisfy the Mac Lane coherence conditions for symmetric monoidal categories, that is, the triangle,
-pentagon, and hexagon identities, and the syllepsis of the braiding, upto 2-paths in $\UFin$.
-
-\begin{proposition}
-  % https://q.uiver.app/?q=WzAsNCxbMCwwLCIoWCBcXG9wbHVzIEkpIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyAoSSBcXG9wbHVzIFkpIl0sWzEsMSwiWCBcXG9wbHVzIFkiXSxbMCwxXSxbMCwxLCJcXGFscGhhX3tYLEksWX0iXSxbMCwyLCJcXHJob197WH0gXFxvcGx1cyAxX3tZfSIsMl0sWzEsMiwiMV97WH0gXFxvcGx1cyBcXGxhbWJkYV97WX0iXSxbNSw2LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      {(X \oplus I) \oplus Y} && {X \oplus (I \oplus Y)} \\
-      {} & {X \oplus Y}
-      \arrow["{\alpha_{X,I,Y}}", from=1-1, to=1-3]
-      \arrow[""{name=0, anchor=center, inner sep=0}, "{\rho_{X} \oplus 1_{Y}}"', from=1-1, to=2-2]
-      \arrow[""{name=1, anchor=center, inner sep=0}, "{1_{X} \oplus \lambda_{Y}}", from=1-3, to=2-2]
-      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
-    \end{tikzcd}\]
-  % https://q.uiver.app/?q=WzAsNSxbMCwxLCIoKFcgXFxvcGx1cyBYKSBcXG9wbHVzIFkpIFxcb3BsdXMgWiJdLFsxLDAsIihXIFxcb3BsdXMgWCkgXFxvcGx1cyAoWSBcXG9wbHVzIFopIl0sWzIsMSwiVyBcXG9wbHVzIChYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSkiXSxbMiwzLCJXIFxcb3BsdXMgKChYIFxcb3BsdXMgWSkgXFxvcGx1cyBaKSJdLFswLDMsIihXIFxcb3BsdXMgKFggXFxvcGx1cyBZKSkgXFxvcGx1cyBaIl0sWzAsMSwiXFxhbHBoYV97VyBcXG9wbHVzIFgsIFksIFp9Il0sWzEsMiwiXFxhbHBoYV97VyxYLFkgXFxvcGx1cyBafSJdLFszLDIsIjFfe1d9IFxcb3BsdXMgXFxhbHBoYV97WCxZLFp9IiwyXSxbMCw0LCJcXGFscGhhX3tXLFgsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzQsMywiXFxhbHBoYV97VyxYIFxcb3BsdXMgWSxafSIsMl0sWzAsMiwiXFxpZCIsMSx7Im9mZnNldCI6NSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      & {(W \oplus X) \oplus (Y \oplus Z)} \\
-      {((W \oplus X) \oplus Y) \oplus Z} && {W \oplus (X \oplus (Y \oplus Z))} \\
-      \\
-      {(W \oplus (X \oplus Y)) \oplus Z} && {W \oplus ((X \oplus Y) \oplus Z)}
-      \arrow["{\alpha_{W \oplus X, Y, Z}}", from=2-1, to=1-2]
-      \arrow["{\alpha_{W,X,Y \oplus Z}}", from=1-2, to=2-3]
-      \arrow["{1_{W} \oplus \alpha_{X,Y,Z}}"', from=4-3, to=2-3]
-      \arrow["{\alpha_{W,X,Y} \oplus 1_{Z}}"', from=2-1, to=4-1]
-      \arrow["{\alpha_{W,X \oplus Y,Z}}"', from=4-1, to=4-3]
-      \arrow["\id"{description}, shift right=5, draw=none, from=2-1, to=2-3]
-    \end{tikzcd}\]
-  % https://q.uiver.app/?q=WzAsNixbMSwwLCJYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSJdLFswLDEsIihYIFxcb3BsdXMgWSkgXFxvcGx1cyBaIl0sWzAsMiwiKFkgXFxvcGx1cyBYKSBcXG9wbHVzIFoiXSxbMSwzLCJZIFxcb3BsdXMgKFggXFxvcGx1cyBaKSJdLFsyLDIsIlkgXFxvcGx1cyAoWiBcXG9wbHVzIFgpIl0sWzIsMSwiKFkgXFxvcGx1cyBaKSBcXG9wbHVzIFgiXSxbMSwwLCJcXGFscGhhX3tYLFksWn0iXSxbMSwyLCJcXG1hdGhjYWx7Qn1fe1gsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzIsMywiXFxhbHBoYV97WSxYLFp9IiwyXSxbMyw0LCIxX3tZfSBcXG9wbHVzIFxcbWF0aGNhbHtCfV97WCxafSIsMl0sWzUsNCwiXFxhbHBoYV97WSxaLFh9Il0sWzAsNSwiXFxtYXRoY2Fse0J9X3tYLFkgXFxvcGx1cyBafSJdLFs3LDEwLCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      & {X \oplus (Y \oplus Z)} \\
-      {(X \oplus Y) \oplus Z} && {(Y \oplus Z) \oplus X} \\
-      {(Y \oplus X) \oplus Z} && {Y \oplus (Z \oplus X)} \\
-      & {Y \oplus (X \oplus Z)}
-      \arrow["{\alpha_{X,Y,Z}}", from=2-1, to=1-2]
-      \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y} \oplus 1_{Z}}"', from=2-1, to=3-1]
-      \arrow["{\alpha_{Y,X,Z}}"', from=3-1, to=4-2]
-      \arrow["{1_{Y} \oplus \mathcal{B}_{X,Z}}"', from=4-2, to=3-3]
-      \arrow[""{name=1, anchor=center, inner sep=0}, "{\alpha_{Y,Z,X}}", from=2-3, to=3-3]
-      \arrow["{\mathcal{B}_{X,Y \oplus Z}}", from=1-2, to=2-3]
-      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
-    \end{tikzcd}\]
-  % https://q.uiver.app/?q=WzAsMyxbMCwwLCJYIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyBZIl0sWzEsMSwiWSBcXG9wbHVzIFgiXSxbMCwxLCIxX3tYIFxcb3BsdXMgWX0iLDAseyJsZXZlbCI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIlxcbWF0aGNhbHtCfV97WCxZfSIsMl0sWzIsMSwiXFxtYXRoY2Fse0J9X3tZLFh9IiwyXSxbNCw1LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-  \[\begin{tikzcd}
-      {X \oplus Y} && {X \oplus Y} \\
-      & {Y \oplus X}
-      \arrow["{1_{X \oplus Y}}", Rightarrow, no head, from=1-1, to=1-3]
-      \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y}}"', from=1-1, to=2-2]
-      \arrow[""{name=1, anchor=center, inner sep=0}, "{\mathcal{B}_{Y,X}}"', from=2-2, to=1-3]
-      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
-    \end{tikzcd}\]
-\end{proposition}
+\begin{toappendix}
+  \begin{definition}
+    \begin{align*}
+      O                 & \defeq F_{0}                                       \\
+      X \oplus Y        & \defeq X \sqcup Y                                  \\
+      \lambda_{X}       & : O \oplus X \eqv X                                \\
+      \rho_{X}          & : X \oplus O \eqv X                                \\
+      \alpha_{X,Y,Z}    & : (X \oplus Y) \oplus Z \eqv X \oplus (Y \oplus Z) \\
+      \mathcal{B}_{X,Y} & : X \oplus Y \eqv Y \oplus X
+    \end{align*}
+  \end{definition}
+  \begin{proposition}
+    % https://q.uiver.app/?q=WzAsNCxbMCwwLCIoWCBcXG9wbHVzIEkpIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyAoSSBcXG9wbHVzIFkpIl0sWzEsMSwiWCBcXG9wbHVzIFkiXSxbMCwxXSxbMCwxLCJcXGFscGhhX3tYLEksWX0iXSxbMCwyLCJcXHJob197WH0gXFxvcGx1cyAxX3tZfSIsMl0sWzEsMiwiMV97WH0gXFxvcGx1cyBcXGxhbWJkYV97WX0iXSxbNSw2LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        {(X \oplus I) \oplus Y} && {X \oplus (I \oplus Y)} \\
+        {} & {X \oplus Y}
+        \arrow["{\alpha_{X,I,Y}}", from=1-1, to=1-3]
+        \arrow[""{name=0, anchor=center, inner sep=0}, "{\rho_{X} \oplus 1_{Y}}"', from=1-1, to=2-2]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "{1_{X} \oplus \lambda_{Y}}", from=1-3, to=2-2]
+        \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+      \end{tikzcd}\]
+    % https://q.uiver.app/?q=WzAsNSxbMCwxLCIoKFcgXFxvcGx1cyBYKSBcXG9wbHVzIFkpIFxcb3BsdXMgWiJdLFsxLDAsIihXIFxcb3BsdXMgWCkgXFxvcGx1cyAoWSBcXG9wbHVzIFopIl0sWzIsMSwiVyBcXG9wbHVzIChYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSkiXSxbMiwzLCJXIFxcb3BsdXMgKChYIFxcb3BsdXMgWSkgXFxvcGx1cyBaKSJdLFswLDMsIihXIFxcb3BsdXMgKFggXFxvcGx1cyBZKSkgXFxvcGx1cyBaIl0sWzAsMSwiXFxhbHBoYV97VyBcXG9wbHVzIFgsIFksIFp9Il0sWzEsMiwiXFxhbHBoYV97VyxYLFkgXFxvcGx1cyBafSJdLFszLDIsIjFfe1d9IFxcb3BsdXMgXFxhbHBoYV97WCxZLFp9IiwyXSxbMCw0LCJcXGFscGhhX3tXLFgsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzQsMywiXFxhbHBoYV97VyxYIFxcb3BsdXMgWSxafSIsMl0sWzAsMiwiXFxpZCIsMSx7Im9mZnNldCI6NSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        & {(W \oplus X) \oplus (Y \oplus Z)} \\
+        {((W \oplus X) \oplus Y) \oplus Z} && {W \oplus (X \oplus (Y \oplus Z))} \\
+        \\
+        {(W \oplus (X \oplus Y)) \oplus Z} && {W \oplus ((X \oplus Y) \oplus Z)}
+        \arrow["{\alpha_{W \oplus X, Y, Z}}", from=2-1, to=1-2]
+        \arrow["{\alpha_{W,X,Y \oplus Z}}", from=1-2, to=2-3]
+        \arrow["{1_{W} \oplus \alpha_{X,Y,Z}}"', from=4-3, to=2-3]
+        \arrow["{\alpha_{W,X,Y} \oplus 1_{Z}}"', from=2-1, to=4-1]
+        \arrow["{\alpha_{W,X \oplus Y,Z}}"', from=4-1, to=4-3]
+        \arrow["\id"{description}, shift right=5, draw=none, from=2-1, to=2-3]
+      \end{tikzcd}\]
+    % https://q.uiver.app/?q=WzAsNixbMSwwLCJYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSJdLFswLDEsIihYIFxcb3BsdXMgWSkgXFxvcGx1cyBaIl0sWzAsMiwiKFkgXFxvcGx1cyBYKSBcXG9wbHVzIFoiXSxbMSwzLCJZIFxcb3BsdXMgKFggXFxvcGx1cyBaKSJdLFsyLDIsIlkgXFxvcGx1cyAoWiBcXG9wbHVzIFgpIl0sWzIsMSwiKFkgXFxvcGx1cyBaKSBcXG9wbHVzIFgiXSxbMSwwLCJcXGFscGhhX3tYLFksWn0iXSxbMSwyLCJcXG1hdGhjYWx7Qn1fe1gsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzIsMywiXFxhbHBoYV97WSxYLFp9IiwyXSxbMyw0LCIxX3tZfSBcXG9wbHVzIFxcbWF0aGNhbHtCfV97WCxafSIsMl0sWzUsNCwiXFxhbHBoYV97WSxaLFh9Il0sWzAsNSwiXFxtYXRoY2Fse0J9X3tYLFkgXFxvcGx1cyBafSJdLFs3LDEwLCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        & {X \oplus (Y \oplus Z)} \\
+        {(X \oplus Y) \oplus Z} && {(Y \oplus Z) \oplus X} \\
+        {(Y \oplus X) \oplus Z} && {Y \oplus (Z \oplus X)} \\
+        & {Y \oplus (X \oplus Z)}
+        \arrow["{\alpha_{X,Y,Z}}", from=2-1, to=1-2]
+        \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y} \oplus 1_{Z}}"', from=2-1, to=3-1]
+        \arrow["{\alpha_{Y,X,Z}}"', from=3-1, to=4-2]
+        \arrow["{1_{Y} \oplus \mathcal{B}_{X,Z}}"', from=4-2, to=3-3]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "{\alpha_{Y,Z,X}}", from=2-3, to=3-3]
+        \arrow["{\mathcal{B}_{X,Y \oplus Z}}", from=1-2, to=2-3]
+        \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+      \end{tikzcd}\]
+    % https://q.uiver.app/?q=WzAsMyxbMCwwLCJYIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyBZIl0sWzEsMSwiWSBcXG9wbHVzIFgiXSxbMCwxLCIxX3tYIFxcb3BsdXMgWX0iLDAseyJsZXZlbCI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIlxcbWF0aGNhbHtCfV97WCxZfSIsMl0sWzIsMSwiXFxtYXRoY2Fse0J9X3tZLFh9IiwyXSxbNCw1LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        {X \oplus Y} && {X \oplus Y} \\
+        & {Y \oplus X}
+        \arrow["{1_{X \oplus Y}}", Rightarrow, no head, from=1-1, to=1-3]
+        \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y}}"', from=1-1, to=2-2]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "{\mathcal{B}_{Y,X}}"', from=2-2, to=1-3]
+        \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+      \end{tikzcd}\]
+  \end{proposition}
+\end{toappendix}
 
 %%% Local Variables:
 %%% mode: latex

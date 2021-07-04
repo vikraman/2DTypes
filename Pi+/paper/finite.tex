@@ -1,121 +1,106 @@
 \section{The groupoid of finite types}~\label{sec:finite}
 
-In this section, we describe \review{the algebraic structure} of the groupoid of
-finite types, and give \review{a computable presentation} for it.
+In the previous~\cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin{n}$
+for every $n:\Nat$, that is, automorphisms of finite sets of size $n$. The loopspace has a group structure -- the
+identity function is the neutral element, group multiplication is given by function composition, and the group inverse
+is given by inverting the bijection. This is also known to be the finite symmetric group $\Sn[n]$. In the following
+sections, we will characterise these permutations syntactically.
 
-\vc{The groupoid of finite types is the free symmetric monoidal groupoid on one
-  generator. This can be presented as an algebraic 2-theory, which is our syntax
-  for $\PiHatLang$. Vertical categorification of natural numbers as a free
-  commutative monoid. See groupoidification.}
+In order to study syntactic descriptions of permutations, we need to decide whether two descriptions refer to the same
+permutation. This problem is well known in group theory as the \emph{word problem} for $\Sn$. Putting it in this form
+also allows us to connect to the broader scope of computational group theory and combinatorics -- we borrow ideas such
+as Coxeter relations and Lehmer codes from there.
 
-\todo{Check Brent Yorgey's thesis?}
-
-In the previous~\cref{sec:univalent}, we established that paths in $\UFin$ are equivalent to families of automorphisms
-of $\Fin{n}$ for every $n:\Nat$, that is, bijections on finite sets of size $n$. This is the extensional view of
-permutations. In the following sections, we will characterise these permutations syntactically- specifically, using a concept of \textit{a presentation} from the group theory.
-
-\todo{Move.}
-
-Although the meaning of a permutation - that is, the specific bijective function that it represents - is in some sense all there is, manipulating them syntactically still has its advantages. By writing reversible programs, we think of them in an intensional way. Comparing two programs for equality by evaluating them on all points in the domain is a very crude - and maybe even inefficient - way of doing that.
-
-It is crude, because there is no way of enforcing additional constraints on the process of transforming one program into another, and no way of inspecting what transformation occured. We can imagine a practical situation in which reversible circuts admit one kind of optimization \jk{FPGA?}, but do not admit another, even though they are equivalent in the extensional sense - or maybe one of these transformations is cheaper than another, or maybe it is important to know which transformation did occur for the \jk{producer(?)} to focus their resources of improving this kind of transformations. By comparing the circuits extensionally, the proof object = the path from one into the other - does not have any structure,  it is just a check that the values match.
-
-On the other hand, even though in general, the equality of circuits requires exponential time jk{triple check}, the proof object can be still very small. This creates structure that can possibly be exploited in a heurisic way. \jk{Additionally, if the goal is to convince third-party that two circuits are the same, we can just present the proof instead of showing the equality directly - for example, by choosing a particularly short one}.
-
-Taking all this into account, it is clear that we must seek a syntactic way of computing the meaning of the circuit, instead of just directly evaluating it to $\Aut[\Fin[n]]$ - since when we go back and quote the permutation as a circuit (in a normal form), there was no "trace" left to see what transformation (what sequence of 2-paths) maps the old one into the new one.
-
-Fortunately, group theory already has language in which such problems are expressed - we will be looking at solving the \textit{word problem}. Because $\PiLang$ is used for reasoning about reversible functions on finite sets, the group that we are interested in is the group of permutations on a finite set, which is classically known as the symmetric group,
-$\Sn$. Putting it in this form allows us to connect to the broader scope of computational group theory and reuse ideas from there. For example, during the proof, we will use \emph{Lehmer codes} (introduced in \cref{subsec:lehmer}) - a concept used widely in this context, which makes for a very convenient and compact method of representing permutations on a computer.
-
-The goal of this section is to reconcile two different approaches to defining the symmetric group. We already defined
-$\UFin$ in the previous section, and showed how its loopspace encodes the automorphism group. Now, we're going to define
-the same group in a different way, in terms of the symmetric group presented using generators and relations, and show
-how the two points of view are equivalent.
-
-\todo{Big example: Start from a listed permutation, show Lehmer code, then adjacent swaps.}
-\todo{Justification for why we need group theory.}
+The goal of this section is to reconcile two different approaches to defining the symmetric group -- as an automorphism
+group, and as a group presented using generators and relations.
 
 \subsection{Groups}
 
-From universal algebra, a group is simply a set with a 0-ary constant (the neutral element), a binary operation for group multiplication, and a unary inverse operation. The neutral element has
-to satisfy unit and inverse laws, and the multiplication has to be associative.
+From universal algebra, a group is simply a set with a 0-ary constant $e$ (the neutral element), a binary operation
+$\blank\mult\blank$ for group multiplication, and a unary inverse operation $\inv{\blank}$. The neutral element has to
+satisfy unit and inverse laws, and the multiplication has to be associative (see~\cref{def:group}).
 
-A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the group multiplication is given by integer addition.
+A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the
+group multiplication is given by integer addition.
 
-In type theory, a group $G$ can be defined as an $\hSet$ $S$ with the following pieces of data:
+\begin{toappendix}
+  \begin{definition}~\label{def:group}
+    In type theory, a group $G$ can be defined as a set $S$ with the following pieces of data:
 
-\begin{enumerate}
-  \item a unit or neutral element $e : S$
-  \item a multiplication function $m : S \times S \to S$ written as $(g_{1}, g_{2}) \mapsto g_{1} \mult g_{2}$, that satisfies
-        \begin{enumerate}
-          \item the unit laws, for all $g : S$, that \( g \mult e \id g \) and \( e \mult g \id g \)
-          \item the associativity law, for all $g_{1}, g_{2}, g_{3} : S$, that \( g_{1} \mult (g_{2} \mult g_{3}) \id (g_{1} \mult g_{2}) \mult g_{3} \)
-        \end{enumerate}
-  \item an inversion function $i : S \to S$ written as $g \mapsto \inv{g}$, that satisfies
-        \begin{enumerate}
-          \item the inverse laws, for all $g : S$, that \( g \mult \inv{g} \id e \) and \( \inv{g} \mult g \id e \)
-        \end{enumerate}
-\end{enumerate}
+    \begin{enumerate}
+      \item a unit or neutral element $e : S$
+      \item a multiplication function $m : S \times S \to S$ written as $(g_{1}, g_{2}) \mapsto g_{1} \mult g_{2}$, that satisfies
+            \begin{enumerate}
+              \item the unit laws, for all $g : S$, that \( g \mult e \id g \) and \( e \mult g \id g \)
+              \item the associativity law, for all $g_{1}, g_{2}, g_{3} : S$, that \( g_{1} \mult (g_{2} \mult g_{3}) \id (g_{1} \mult g_{2}) \mult g_{3} \)
+            \end{enumerate}
+      \item an inversion function $i : S \to S$ written as $g \mapsto \inv{g}$, that satisfies
+            \begin{enumerate}
+              \item the inverse laws, for all $g : S$, that \( g \mult \inv{g} \id e \) and \( \inv{g} \mult g \id e \)
+            \end{enumerate}
+    \end{enumerate}
+  \end{definition}
+\end{toappendix}
 
 However, more conveniently, in HoTT, we can instead use groupoids to talk about groups internally. A group can be
 identified with a 1-object groupoid, using a technique called delooping. The delooping of a group $G$ is a groupoid
-$\B{G}$ given by a unique object $\pt$ with self-loops that are 1-paths $\pt \id_{\B{G}} \pt$ corresponding to the
-elements of $G$. Note that the group operations are automatically given by operations on the identity type, with
-$\refl_{\pt}$ for the neutral element, path composition for the group multiplication, and path inverse for the group
-inverse. These satisfy the group laws as well, up to the identity type, using the groupoid coherence laws. Moreover, for
-1-groups which are supposed to be sets, these 2-paths should be propositions, so we have to restrict $\B{G}$ to be a
-1-groupoid. Hence, a group is simply given by a pointed, connected
-1-type~\cite*{buchholtzHigherGroupsHomotopy2018,symmetryBook2021}.
+$\B{G}$, with a unique object $\pt$, where the group elements are encoded as self-loops $\pt \id_{\B{G}} \pt$.
 
-For example, given a pointed type $(A:\UU, a:A)$, the automorphism group structure at $a$ is given by $a \id_{A} a$. Of
-course, for 1-groups we will require that $a \id_{A} a$ is an $\hSet$, which is enforced by having $A$ be a groupoid. In
-our running example for the permutation group on finite sets, we have that $\Fin[n]$ is an $\hSet$, and hence,
-$\UFin[n] \defeq \BAut[\Fin[n]]$ is a pointed, connected 1-type, whose loopspace $\loopspace[\BAut[\Fin[n]],F_{n}]$ is
-equivalent to $\Aut[\Fin[n]] \defeq (\Fin[n] \eqv \Fin[n]) \eqv (\Fin[n] \id_{\UU} \Fin[n])$, which has the
-corresponding automorphism group structure.
+The group operations are automatically given by operations on the identity type, with $\refl_{\pt}$ for the neutral
+element, path composition for the group multiplication, and path inverse for the group inverse. These satisfy the group
+laws, up to the identity type, using the groupoid coherence laws.
+
+Since groups are sets, these 2-paths are propositions, making $\B{G}$ a 1-groupoid. Hence, a group is simply given by a
+pointed, connected 1-type~\cite*{buchholtzHigherGroupsHomotopy2018,symmetryBook2021}. \footnote{This technique also
+  allows defining higher groups in HoTT, as done in~\cite{buchholtzHigherGroupsHomotopy2018}.}
+
+% For example, given a pointed type $(A:\UU, a:A)$, the automorphism group structure at $a$ is given by $a \id_{A} a$. Of
+% course, for 1-groups we will require that $a \id_{A} a$ is a set, which is enforced by having $A$ be a groupoid. In our
+% running example for the permutation group on finite sets, we have that $\Fin[n]$ is a set, and hence, $\UFin[n] \defeq
+% \BAut[\Fin[n]]$ is a pointed, connected 1-type. Its loopspace $\loopspace[\BAut[\Fin[n]],F_{n}]$ is equivalent to
+% $\Aut[\Fin[n]] \defeq (\Fin[n] \eqv \Fin[n]) \eqv (\Fin[n] \id_{\UU} \Fin[n])$, which has the corresponding automorphism
+% group structure.
 
 \subsection{Free groups}
 
 Usually, there are are many equations, besides the group axioms, that hold for the elements of a group. For example, in
-the group $\mathbb{Z}/3\mathbb{Z}$, where group multiplication is given by addition modulo 3, we have an equation
-$1 + 1 + 1 = 0$, which is not a consequence of group axioms, but is specific to the particular group
-$\mathbb{Z}/3\mathbb{Z}$. A free group has the property that no other equations except the ones directly implied by the
-group axioms, such as $g \mult \inv{g} = e$, hold. Thus, $\mathbb{Z}/3\mathbb{Z}$ is not a free group. To be able to
-give an equational presentation of a group, we start by constructing the free group, then show how to add new equations
-to it.
+the group $\Aut[\Bool]$, or $\mathbb{Z}_2$, we have an equation $1 + 1 = 0$, which is not a consequence of the group
+axioms, but is specific to this particular group. A free group has the property that no other equations hold except the
+ones directly implied by the group axioms. To be able to give an equational presentation of a group, we start by
+constructing the free group, then show how to add new equations to it.
 
-Given any set $A$, we can describe the free group $F(A)$ on $A$. We draw the elements from the alphabet $A$, close them
-under the group operations of multiplication and inverse, and identify them by the group axioms. For example, the
-singleton set generates the additive group of integers $\mathbb{Z}$ we introduced before. In this context, we will call
-$A$ the generating set of $F(A)$. Working in HoTT, as before, we can simply use higher inductive types to define the
-free group, by adding path constructors for the axioms we want.
+Given any set $A$, we can describe the free group $F(A)$ -- we call $A$ the generating set of $F(A)$. We draw the
+elements from $A$, close them under the group operations, and identify them by the group axioms. For example, the
+additive group of integers $\mathbb{Z}$ is the free group on the singleton. In HoTT, we can use a higher inductive type
+to define the free group, by adding path constructors for the axioms we want (see~\cref{def:free-group}).
 
-\todo{Better notation for HITs?}
-\begin{definition}
-  Given an $\hSet$ $A$, the free group $F(A)$ on it is given by a higher
-  inductive type with the following point and path constructors. Notice the
-  similarity with the definition of a group structure in~\ref{subsec:groups},
-  but note that each operation here is a generator for the type $F(A)$\dots.
-  \begin{itemize}
-    \item An inclusion function $\eta_{A} : A \to F(A)$
-    \item A multiplication function $m : F(A) \times F(A) \to F(A)$
-    \item An element $e : F(A)$
-    \item An inverse function $i : F(A) \to F(A)$
-  \end{itemize}
-  \smallskip
-  \begin{itemize}
-    \item For every $x, y, z : F(A)$, a path $\term{assoc} : m(x, m(y, z)) \id m(m(x, y), z)$
-    \item For every $x : F(A)$, paths $\term{unitr} : m(x, e) \id x$ and $\term{unitl} : m(e, x) \id x$
-    \item For every $x : F(A)$, paths $\term{invr} : m(x, i(x)) \id e$ and $\term{invl} : m(i(x), x) \id e$
-    \item A 0-truncation, for every $x, y : F(A)$ and $p, q : x \id y$, a 2-path $\term{trunc} : p \id q$
-  \end{itemize}
-\end{definition}
+\begin{toappendix}
+  \begin{definition}
+    \label{def:free-group}
+    Given a set $A$, the free group $F(A)$ on it is given by a higher inductive type with the following point and path
+    constructors. Notice the similarity with the definition of a group structure (\cref{def:group}), but note that each
+    operation here is a generator for $F(A)$.
+    \begin{itemize}
+      \item An inclusion function $\eta_{A} : A \to F(A)$
+      \item A multiplication function $m : F(A) \times F(A) \to F(A)$
+      \item An element $e : F(A)$
+      \item An inverse function $i : F(A) \to F(A)$
+    \end{itemize}
+    \smallskip
+    \begin{itemize}
+      \item For every $x, y, z : F(A)$, a path $\term{assoc} : m(x, m(y, z)) \id m(m(x, y), z)$
+      \item For every $x : F(A)$, paths $\term{unitr} : m(x, e) \id x$ and $\term{unitl} : m(e, x) \id x$
+      \item For every $x : F(A)$, paths $\term{invr} : m(x, i(x)) \id e$ and $\term{invl} : m(i(x), x) \id e$
+      \item A 0-truncation, for every $x, y : F(A)$ and $p, q : x \id y$, a 2-path $\term{trunc} : p \id q$
+    \end{itemize}
+  \end{definition}
+\end{toappendix}
 
-A group homomorphism between groups is a function between the underlying sets that preserves the group structure, which
-we write as $G_1 \to^G G_2$. Using the induction principle for $F(A)$, we can easily prove the universal property of
-free groups, stemming from the free-forgetful adjucntion between the category of groups and sets. Informally, the
-universal property states that if we know how a map $f$ acts on the generating set $A$, we know exactly how it acts on
-every element of the group $F(A)$.
+A group homomorphism between groups $G$ and $H$, which we write as $G \to^G H$, is a function between the underlying
+sets that preserves the group structure. The universal property of free groups, stemming from the free-forgetful
+adjunction between the category of groups and sets, follows from the induction principle for $F(A)$. Informally, it
+states that if we know how a map $f$ acts on the generating set $A$, we know exactly how it acts on every element of the
+group $F(A)$.
 
 \begin{proposition}[Universal Property of $F(A)$]~\label{prop:free-groups}
   Given a group $G$ and a map $f : A \to G$, there is a unique group
@@ -136,58 +121,49 @@ every element of the group $F(A)$.
     \end{tikzcd}\]
 \end{proposition}
 
-Although this definition is close to the intuitive universal-algebraic definition, it is not the most convenient one to
-work with. Besides being interested in the elements of the group, we also want to characterise the path space of the
-group. This HIT definition of $F(A)$ has lots of path constructors corresponding to each group axiom, making it
-difficult to describe its path space.
+Although the description of $F(A)$ discussed above is close to the intuitive universal-algebraic definition, it is not
+the most convenient one to work with. Besides the elements of the group, we also want to characterise its the path
+space. This definition of $F(A)$ has lots of path constructors corresponding to each group axiom, making it difficult to
+describe its path space.
 
 Instead, we will think about elements of the free group as words over an alphabet of letters drawn from the generating
 set \emph{and} the set of their formal inverses. If we take the disjoint union of $A$ with itself, that is, $A + A$ as
 the group's underlying set, we can use $\inl/\inr$ to mark the elements -- $\inl{a}$ means $a$ and $\inr{a}$ means
-$\inv{a}$. Hence, we can encode the free group using the free monoid, that is, lists of $A + A$. Additionally, we need
-to ensure that group laws hold, so words identified by the group equations are equal. Thus, elements of the free group
-will actually be equivalence classes of lists on $A + A$.
+$\inv{a}$. Then, we can encode the free group using the free monoid, that is, lists of $A + A$. Additionally, we need to
+ensure that the inverse laws hold, so we have to coalesce adjacent occurences of $a$ and $\inv{a}$.
 
-\begin{definition}~\label{def:presentation}
-  Let $A$ be an $\hSet$, and $\List[\blank]$ the free monoid. The free group
-  $F(A)$ on $A$ is the set-quotient of $\List[A + A]$ by the congruence closure
-  of the relation $a \cons \inv{a} \cons \nil \sim \nil$.
+\begin{definition}
+  \label{def:presentation}
+  Let $A$ be a set, and $\List[\blank]$ the free monoid. The free group $F(A)$ on $A$ is the set-quotient of $\List[A +
+  A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons a \cons \nil
+  \sim \nil$.
 \end{definition}
 
 \begin{proposition}
   $F(A) \defeq \quot{\List[A + A]}{\sim^{\ast}}$ has a group structure, with the empty list $\nil$ for the neutral
   element, multiplication given by list append $\append$, and inverse given by flipping $\inl$ and $\inr$, followed by
-  reversing the list. Further, $F(A)$ with $\eta_A : A \to F(A) \defeq \inl(a) \cons \nil$ satisfies the universal
-  property of free groups, as stated in~\cref{prop:free-groups}.
+  reversing the list. Further, $F(A)$ with $\eta_A(a) \defeq \inl(a) \cons \nil$ satisfies the universal property of
+  free groups, as stated in~\cref{prop:free-groups}.
 \end{proposition}
 
 \subsection{Group presentations}
 
-\review{We have already seen many examples of groups, that is, sets carrying a group structure, but now we'll see how to
-  syntactically represent them -- which is the role of group presentations.}
-
 A presentation of a group builds it by starting from the free group $F(A)$ and introducing a collection of equations
 that have to be satisfied in the resulting group. For example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an
-equation $1 + 1 + 1 = 0$, the resulting group would be $\mathbb{Z}/3\mathbb{Z}$. Note that not all groups have finite
-(or computable) presentations, and, a group can have any number of presentations.
+equation $1 + 1 = 0$, the resulting group would be $\mathbb{Z}_2 \eqv \Aut[\Bool]$. Note that not all groups have finite
+(or computable) presentations, and, a group can have any number of different presentations.
 
 \begin{definition}
-  Let $A$ be an $\hSet$ and $R : (A + A) \to (A + A) \to \UU$ a binary relation on $A + A$. The group
+  Let $A$ be a set and $R : \List[A + A] \to \List[A + A] \to \UU$ a binary relation on $\List[A + A]$. The group
   $F(\langle A ; R \rangle)$ presented by $A$ and $R$, is given by the set-quotient of the free group $F(A)$ by the
-  closure of $R$, or equivalently, as the coequaliser
-  \[\begin{tikzcd}
-      FR && FA && F(\langle A ; R \rangle)
-      \arrow[shift right=2, from=1-1, to=1-3]
-      \arrow[shift left=2, from=1-1, to=1-3]
-      \arrow[two heads, from=1-3, to=1-5]
-    \end{tikzcd}\]
+  closure of $R$.
 \end{definition}
 
 The universal property of the above definition allows for properly extending the relation on the generating set to the
 whole group.\vc{check!}
 
 \begin{proposition}[Universal property of $F(\langle A ; R \rangle)$]
-  Given a group $G$ and a map $f : A \to G$ that respects $R$, there is a unique group homomorphism
+  Given a group $G$ and a map $f : A \to G$ that respects $R$, there is a unique group homomorphism 
   $\extend{f} : F(\langle A ; R \rangle) \to^G G$ such that $\extend{f} \comp \eta_A \htpy f$.
 \end{proposition}
 

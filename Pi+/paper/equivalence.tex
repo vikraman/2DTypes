@@ -10,6 +10,10 @@
     \arrow["\quoteh", curve={height=-24pt}, from=1-7, to=1-5]
   \end{tikzcd}\]
 
+\vc{ The groupoid of finite types is the free symmetric monoidal groupoid on one generator. This can be presented as an
+  algebraic 2-theory, which is our syntax for $\PiHatLang$. Vertical categorification of natural numbers as a free
+  commutative monoid. See groupoidification. }
+
 In this section, we consider the additive fragment $\PiPlusLang$ of $\PiLang$. This is the language that we interpret to
 $\UFin$ and back, using the tools developed in the previous sections. Further, we go through an intermediate step of the
 language $\PiHatLang$, which is a simplified variant of $\PiPlusLang$ that uses adjacent transpositions for combinators,
@@ -277,8 +281,8 @@ we get:
 
 In principle, the normalized program can be produced following two strategies: (i) by repeatedly applying the rewrite
 rules of our calculus of reversible functions (explained in Sec.~\ref{sec:reversibletwo}), or (ii) in the case above by
-using a normalization-by-evaluation (NBE) process that evaluates the program to a permutation on a finite set of 8
-elements and reifies that permutation back to a program. The key idea of the NBE process is a systematic way to express
+using a normalization-by-evaluation (NbE) process that evaluates the program to a permutation on a finite set of 8
+elements and reifies that permutation back to a program. The key idea of the NbE process is a systematic way to express
 permutations as sequences of adjacent swaps as illustrated in the following small example where the permutation on the
 left is compiled to the sequence of four adjacent transpositions on the right:
 
@@ -308,7 +312,7 @@ left is compiled to the sequence of four adjacent transpositions on the right:
 %   \end{tikzpicture}
 % \]
 
-\paragraph*{Program synthesis.} The NBE process embodies a quoting mechanism that synthesizes programs from
+\paragraph*{Program synthesis.} The NbE process embodies a quoting mechanism that synthesizes programs from
 permutations. Indeed, instead of writing a program for \Afun{reset 2}, one might simply specify the desired permutation as:
 
 \resetperm{}
