@@ -97,7 +97,7 @@ permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
 
 \medskip\noindent The language of types is built from the empty type ($\zerot$), the unit type
 ($\onet$) containing just one value~$\Acon{tt}$, the sum type ($+$) containing values of the form $\inlv{v}$ and
-$\inrv{v}$, and the product ($\times$) type containing pairs of values $(v_1,v_2)$.
+$\inrv{v}$, and the product type ($\times$) containing pairs of values $(v_1,v_2)$.
 %
 % A natural candidate for a semantic foundation for reversible programming languages is the notion of type
 % isomorphism. Indeed, the type isomorphisms among finite types are sound and complete for all permutations on finite
@@ -106,7 +106,7 @@ $\inrv{v}$, and the product ($\times$) type containing pairs of values $(v_1,v_2
 % types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
 % language~\cite{James:2012:IE:2103656.2103667,rc2011}.
 
-To see how this language is expresses reversible circuits, we present a few examples. First it is possible to directly
+To see how this language expresses reversible circuits, we present a few examples. First it is possible to directly
 mimic the \verb|qasm|-perspective by defining types that describe sequences of booleans. We use the type
 $\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing \textsf{true} and
 $\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean negation (the \verb|x|-gate) is straightforward to define using
@@ -161,9 +161,9 @@ $(A,(B,C))$): if the bit is true, we perform an \verb|x| operation on component 
 to encode a two-way conditional expression using a sequence of one-way conditional expressions (the only ones available in
 the linear circuit model).
 
-All of this is only half the story as the correspondence between the syntactic commutative rig (the syntax of $\PiLang$)
+All of this is only half the story however as the correspondence between the syntactic commutative rig (the syntax of $\PiLang$)
 and permutations on finite sets includes \emph{coherence conditions} that identify different syntactic representations
-of the same permutation~\cite{laplaza72,Carette2016}. These coherence conditions will be reflected in a second level of $\PiLang$
+of the same permutation~\cite{laplaza72,Carette2016}. These coherence conditions are collected in a second level of $\PiLang$
 syntax as level-2 combinators whose types are of the form $c_1 \isotwo c_2$ for appropriate $c_1$ and $c_2$ of the same
 level-1 type $A \isoone B$. For example, we have:
 
@@ -362,7 +362,7 @@ $}}
   \begin{itemize}
     \item For every level-1 combinator $c : A \isoone B$, we have that $\denot{c}$ is a bijection between $\denot{A}$ and $\denot{B}$.
       \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
-        combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using the
+        combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using
         extensional equivalence of functions.
   \end{itemize}
 \end{theorem}
