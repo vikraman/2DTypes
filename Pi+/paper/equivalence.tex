@@ -277,8 +277,8 @@ we get:
 
 In principle, the normalized program can be produced following two strategies: (i) by repeatedly applying the rewrite
 rules of our calculus of reversible functions (explained in Sec.~\ref{sec:reversibletwo}), or (ii) in the case above by
-using a normalization-by-evaluation (NBE) process that evaluates the program to a permutation on a finite set of 8
-elements and reifies that permutation back to a program. The key idea of the NBE process is a systematic way to express
+using a normalization-by-evaluation (NbE) process that evaluates the program to a permutation on a finite set of 8
+elements and reifies that permutation back to a program. The key idea of the NbE process is a systematic way to express
 permutations as sequences of adjacent swaps as illustrated in the following small example where the permutation on the
 left is compiled to the sequence of four adjacent transpositions on the right:
 
@@ -308,7 +308,7 @@ left is compiled to the sequence of four adjacent transpositions on the right:
 %   \end{tikzpicture}
 % \]
 
-\paragraph*{Program synthesis.} The NBE process embodies a quoting mechanism that synthesizes programs from
+\paragraph*{Program synthesis.} The NbE process embodies a quoting mechanism that synthesizes programs from
 permutations. Indeed, instead of writing a program for \Afun{reset 2}, one might simply specify the desired permutation as:
 
 \resetperm{}

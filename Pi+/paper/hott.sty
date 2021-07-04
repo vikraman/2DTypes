@@ -19,7 +19,11 @@
 
 % universes
 \newcommand{\UU}{\mathcal{U}}
-\NewDocumentCommand{\UFin}{O{}}{{\UU_{\type{Fin}}}\ifstrempty{#1}{}{\ps{#1}}}
+\NewDocumentCommand{\UFin}{O{}}{
+  \ifstrempty{#1}
+  {\UU_{\Fin}}
+  {\UU_{\Fin[#1]}}
+}
 \newcommand{\El}{\term{El}}
 \newcommand{\SubP}[2]{\Trunc[-1]{{#1} \id_{\UU} {#2}}}
 \newcommand{\Sub}[1]{\dsum{X:\UU}{\SubP{X}{#1}}}
@@ -53,7 +57,7 @@
 \newcommand{\ap}[2]{\term{ap}_{#1}({#2})}
 \newcommand{\apd}[2]{\term{apd}_{#1}({#2})}
 \newcommand{\coe}[1]{\term{coe}({#1})}
-\newcommand{\transport}[1]{\term{transport}({#1})}
+\newcommand{\transport}[3]{\term{tr}_{#1}^{#2}({#3})}
 \newcommand{\tr}[2]{{#1}_{\star}({#2})}
 \newcommand{\ua}{\term{ua}}
 \newcommand{\tptEqv}[1]{\term{transport-equiv}({#1})}
@@ -89,6 +93,8 @@
 % propositions
 \newcommand{\isContr}[1]{\mathop{\term{isContr}}({#1})}
 \newcommand{\isProp}[1]{\mathop{\term{isProp}}({#1})}
+\newcommand{\isSet}[1]{\mathop{\term{isSet}}({#1})}
+\newcommand{\isGpd}[1]{\mathop{\term{isGpd}}({#1})}
 \newcommand{\isEquiv}[1]{\mathop{\term{isEquiv}}({#1})}
 
 % loops
