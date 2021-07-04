@@ -494,6 +494,38 @@ Two-dimensional monad theory~\cite{blackwellTwodimensionalMonadTheory1989}.
 
 %%
 
+Although the meaning of a permutation - that is, the specific bijective function
+that it represents - is in some sense all there is, manipulating them
+syntactically still has its advantages. By writing reversible programs, we think
+of them in an intensional way. Comparing two programs for equality by evaluating
+them on all points in the domain is a very crude - and maybe even inefficient -
+way of doing that.
+
+It is crude, because there is no way of enforcing additional constraints on the
+process of transforming one program into another, and no way of inspecting what
+transformation occured. We can imagine a practical situation in which reversible
+circuts admit one kind of optimization \jk{FPGA?}, but do not admit another,
+even though they are equivalent in the extensional sense - or maybe one of these
+transformations is cheaper than another, or maybe it is important to know which
+transformation did occur for the \jk{producer(?)} to focus their resources of
+improving this kind of transformations. By comparing the circuits extensionally,
+the proof object = the path from one into the other - does not have any
+structure,  it is just a check that the values match.
+
+On the other hand, even though in general, the equality of circuits requires
+exponential time jk{triple check}, the proof object can be still very small.
+This creates structure that can possibly be exploited in a heurisic way.
+\jk{Additionally, if the goal is to convince third-party that two circuits are
+the same, we can just present the proof instead of showing the equality directly
+- for example, by choosing a particularly short one}.
+
+Taking all this into account, it is clear that we must seek a syntactic way of
+computing the meaning of the circuit, instead of just directly evaluating it to
+$\Aut[\Fin[n]]$ - since when we go back and quote the permutation as a circuit
+(in a normal form), there was no "trace" left to see what transformation (what
+sequence of 2-paths) maps the old one into the new one.
+
+
 \paragraph*{Categorical Connections.}
 
 Natural numbers under addition form the free commutative monoid on one generator. Categorifying this, we get the free
