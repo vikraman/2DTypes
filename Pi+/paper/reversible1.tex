@@ -199,53 +199,62 @@ properly model the level-2 combinators.
 
 The denotation of types is straightforward:
 
-\begin{align*}
-  \denot{\zerot}     & = \emptyset                  \\
-  \denot{\onet}      & = \{ \Acon{tt} \}            \\
-  \denot{A + B}      & = \denot{A} \uplus \denot{B} \\
-  \denot{A \times B} & = \denot{A} \times \denot{B}
-\end{align*}
+\begin{center}
+{\scalebox{\scalef}{$%
+\begin{array}{rcl}
+  \denot{\zerot}     & = & \emptyset                  \\
+  \denot{\onet}      & = & \{ \Acon{tt} \}            \\
+  \denot{A + B}      & = & \denot{A} \uplus \denot{B} \\
+  \denot{A \times B} & = & \denot{A} \times \denot{B}
+\end{array}$}}
+\end{center}
 
 \noindent where $\emptyset$ is the empty set, $\uplus$ is the disjoint union of sets, and $\times$ is the cartesian product of
 sets. The denotation of a combinator $c : A \isoone B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
 
 \begin{multicols}{2}
 %%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
-\[\begin{array}[t]{rcl}
-  \denot{\identlp}     ~      (\inlv{v})           & = & v                                   \\
-  \denot{\identrp}      ~      v                    & = & \inlv{v}                            \\
-  \denot{\swapp}        ~      (\inlv{v})           & = & \inrv{v}                            \\
-  \denot{\swapp}        ~      (\inrv{v})           & = & \inlv{v}                            \\
-  \denot{\assoclp}      ~      (\inlv{v})           & = & \inlv{(\inlv{v})}                   \\
-  \denot{\assoclp}      ~      (\inrv{(\inlv{v})})  & = & \inlv{(\inrv{v})}                   \\
-  \denot{\assoclp}      ~      (\inrv{(\inrv{v})})  & = & \inrv{v}                            \\
-  \denot{\assocrp}      ~      (\inlv{(\inlv{v})})  & = & \inlv{v}                            \\
-  \denot{\assocrp}      ~      (\inlv{(\inrv{v})})  & = & \inrv{(\inlv{v})}                   \\
-  \denot{\assocrp}      ~      (\inrv{v})           & = & \inrv{(\inrv{v})}
-\end{array}\]
+{\scalebox{\scalef}{$%
+\begin{array}[t]{rlcl}
+  \denot{\identlp}     &      (\inlv{v})           & = & v                                   \\
+  \denot{\identrp}     &      v                    & = & \inlv{v}                            \\
+  \denot{\swapp}       &     (\inlv{v})           & = & \inrv{v}                            \\
+  \denot{\swapp}       &      (\inrv{v})           & = & \inlv{v}                            \\
+  \denot{\assoclp}     &      (\inlv{v})           & = & \inlv{(\inlv{v})}                   \\
+  \denot{\assoclp}     &      (\inrv{(\inlv{v})})  & = & \inlv{(\inrv{v})}                   \\
+  \denot{\assoclp}     &      (\inrv{(\inrv{v})})  & = & \inrv{v}                            \\
+  \denot{\assocrp}     &      (\inlv{(\inlv{v})})  & = & \inlv{v}                            \\
+  \denot{\assocrp}     &      (\inlv{(\inrv{v})})  & = & \inrv{(\inlv{v})}                   \\
+  \denot{\assocrp}     &      (\inrv{v})           & = & \inrv{(\inrv{v})}
+\end{array}$}}
 
-\[\begin{array}[t]{rcl}
-  \denot{\identlt}      ~      (\Acon{tt} , v)      & = & v                                   \\
-  \denot{\identrt}      ~      v                    & = & (\Acon{tt} , v)                     \\
-  \denot{\swapt}        ~      (v_1 , v_2)          & = & (v_2 , v_1)                         \\
-  \denot{\assoclt}      ~      (v_1 , (v_2 , v_3))  & = & ((v_1 , v_2) , v_3)                 \\
-  \denot{\assocrt}      ~      ((v_1 , v_2) , v_3)  & = & (v_1 , (v_2 , v_3))                 \\
-  \denot{\dist}         ~      (\inlv{v_1} , v_3)   & = & \inlv{(v_1 , v_3)}                  \\
-  \denot{\dist}         ~      (\inrv{v_2 , v_3})   & = & \inrv{(v_2 , v_3)}                  \\
-  \denot{\factor}       ~      (\inlv{(v_1 , v_3)}) & = & (\inlv{v_1} , v_3)                  \\
-  \denot{\factor}       ~      (\inrv{(v_2 , v_3)}) & = & (\inrv{v_2} , v_3)
-\end{array}\]
+{\scalebox{\scalef}{$%
+\begin{array}[t]{rlcl}
+  \denot{\identlt}      &      (\Acon{tt} , v)      & = & v                                   \\
+  \denot{\identrt}      &      v                    & = & (\Acon{tt} , v)                     \\
+  \denot{\swapt}        &      (v_1 , v_2)          & = & (v_2 , v_1)                         \\
+  \denot{\assoclt}     &      (v_1 , (v_2 , v_3))  & = & ((v_1 , v_2) , v_3)                 \\
+  \denot{\assocrt}     &      ((v_1 , v_2) , v_3)  & = & (v_1 , (v_2 , v_3))                 \\
+  \denot{\dist}       &      (\inlv{v_1} , v_3)   & = & \inlv{(v_1 , v_3)}                  \\
+  \denot{\dist}        &      (\inrv{v_2 , v_3})   & = & \inrv{(v_2 , v_3)}                  \\
+  \denot{\factor}       &      (\inlv{(v_1 , v_3)}) & = & (\inlv{v_1} , v_3)                  \\
+  \denot{\factor}      &      (\inrv{(v_2 , v_3)}) & = & (\inrv{v_2} , v_3)
+\end{array}$}}
 
 %%\end{longtable}
 \end{multicols}
 
-  \[\begin{array}{rcl}
-  \denot{\idc}          ~      v                    & = & v                                   \\
-  \denot{(c_1 \fatsemi c_2)} ~ v                    & = & (\denot{c_2} \circ \denot{c_1}) v   \\
-  \denot{(c_1 \oplus c_2)}   ~ (\inlv{v})           & = & \inlv{(\denot{c_1}~v)}              \\
-  \denot{(c_1 \oplus c_2)}   ~ (\inrv{v})           & = & \inrv{(\denot{c_2}~v)}              \\
-  \denot{(c_1 \otimes c_2)}  ~ (v_1 , v_2)          & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
-  \end{array}\]
+\begin{center}
+{\scalebox{\scalef}{$%
+\begin{array}{rlcl}
+  \denot{\idc}         &      v                    & = & v                                   \\
+  \denot{(c_1 \fatsemi c_2)} & v                    & = & (\denot{c_2} \circ \denot{c_1}) v   \\
+  \denot{(c_1 \oplus c_2)}   & (\inlv{v})           & = & \inlv{(\denot{c_1}~v)}              \\
+  \denot{(c_1 \oplus c_2)}   & (\inrv{v})           & = & \inrv{(\denot{c_2}~v)}              \\
+  \denot{(c_1 \otimes c_2)}  & (v_1 , v_2)          & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
+  \end{array}
+$}}
+\end{center}
 
 % \begingroup
 % \allowdisplaybreaks
