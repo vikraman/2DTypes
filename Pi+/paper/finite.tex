@@ -193,7 +193,7 @@ relations. However, these equations are not directed, so it is not always possib
 system. In general, the word problem for groups is known to be undecidable.\jk{Example?}\todo{Examples: empty relation,
   full relation, van Kampen of $\pi_{1}$}
 
-% This can be thought of as word reductions in a rewriting system. 
+% This can be thought of as word reductions in a rewriting system.
 
 \subsubsection{Coxeter Presentation}
 
@@ -421,7 +421,7 @@ in a technical sense, to the standard Coxeter relation $\cox*$.
 % technical sense, to the standard Coxeter relations $\cox*$.
 % The system has generators corresponding to $\swap$, $\cancel$
 % and $\braid$, the problem of the non-converging critical pairs discussed previously is fixed by changing $\braid$ to be
-% a slightly more general relation $\longbraid$. 
+% a slightly more general relation $\longbraid$.
 
 \review{Further, we also inline the congruence closure in $\longcox$, allowing arbitrary reductions inside the list.}
 
@@ -535,9 +535,10 @@ formally.~\vc{check!}
 The modified form of the Coxeter relations are unwieldy and difficult to prove properties about by induction. However,
 we can use the following observation relating it to $\cox*$.~\todo{Check Huet's paper for this property.}
 
-\begin{proposition}~\label{prop:coxlongcox}
-  $\cox*$ and $\longcox*$ are equivalent in the following sense: for every $w$ and $v$, $w \cox* v$ iff there is a $u$
-  such that $w \longcox* u$ and $v \longcox* u$.
+\begin{proposition}
+  \label{prop:coxlongcox}
+  The relations $\cox*$ and $\longcox*$ are equivalent in the following sense: for every $w$ and $v$, $w \cox* v$ iff
+  there is a $u$ such that $w \longcox* u$ and $v \longcox* u$.
 \end{proposition}
 
 By strong normalisation, we get a unique choice function $\normf : {\List[\Fin[n]]} \to {\List[\Fin[n]]}$ that produces

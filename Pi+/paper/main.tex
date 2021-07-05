@@ -17,17 +17,15 @@
 \usepackage[utf8]{inputenc}
 \usepackage{newunicodechar}
 
-\usepackage{macros}
-\usepackage{hott}
-\usepackage{syntax}
-\usepackage{quiver}
+\let\Bbbk\relax
+\usepackage{amssymb}
+\usepackage{newtxmath}
 
 \usepackage{agda}
 \AgdaNoSpaceAroundCode
 \renewcommand{\AgdaCodeStyle}{\footnotesize}
 
 \usepackage{tikz}
-\usetikzlibrary{cd}
 \usetikzlibrary{decorations.markings}
 \usetikzlibrary{quotes,fit,positioning}
 \usetikzlibrary{knots}
@@ -36,6 +34,11 @@
 \tikzset{>=latex}
 \usepackage{tikzit}
 \input{tikzit.tikzstyles}
+\usepackage{quiver}
+
+\usepackage{macros}
+\usepackage{hott}
+\usepackage{syntax}
 
 %% Some recommended packages.
 %% \usepackage{booktabs}   %% For formal tables:

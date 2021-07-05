@@ -10,6 +10,8 @@
 \RequirePackage{array}
 \RequirePackage{xspace}
 \RequirePackage{perfectcut}
+\RequirePackage{stackengine}
+\RequirePackage{graphicx}
 
 % eucal keeping mathcal
 \let\oldmathcal\mathcal
@@ -74,18 +76,18 @@
 \newcommand{\Grp}{\type{Grp}}
 \NewDocumentCommand{\cox}{s}{
   \IfBooleanTF{#1}
-  {\mathrel{\leftrightsquigarrow^{\ast}}}
+  {\mathrel{\xlrsquigarrow{\ast}}}
   {\mathrel{\leftrightsquigarrow}}
 }
 \NewDocumentCommand{\longcox}{s}{
   \IfBooleanTF{#1}
-  {\mathrel{\mathbf{\rightsquigarrow^{\ast}}}}
-  {\mathrel{\mathbf{\rightsquigarrow}}}
+  {\mathrel{\xrsquigarrow{\ast}}}
+  {\mathrel{\rightsquigarrow}}
 }
 \NewDocumentCommand{\longcoxinv}{s}{
   \IfBooleanTF{#1}
-  {\mathrel{\mathbf{{}^{\ast}\leftsquigarrow}}}
-  {\mathrel{\mathbf{\leftsquigarrow}}}
+  {\mathrel{{}^{\ast}\leftsquigarrow}}
+  {\mathrel{\leftsquigarrow}}
 }
 \newcommand{\cancel}{\term{cancel}}
 \newcommand{\swap}{\term{swap}}
@@ -128,28 +130,14 @@
 }
 
 \NewDocumentCommand{\coxspan}{smmm}{
-  \begin{tikzcd}[ampersand replacement=\&]
-    \& {#2} \\
-    {#3} \&\& {#4}
-    \IfBooleanTF{#1}
-    {\arrow["{\ast}"', squiggly, from=1-2, to=2-1]}
-    {{\arrow[squiggly, from=1-2, to=2-1]}}
-    \IfBooleanTF{#1}
-    {\arrow["{\ast}", squiggly, from=1-2, to=2-3]}
-    {\arrow[squiggly, from=1-2, to=2-3]}
-  \end{tikzcd}
+  \IfBooleanTF{#1}
+  {{#3} \xlsquigarrow{\ast} {#2} \xrsquigarrow{\ast} {#4}}
+  {{#3} \leftsquigarrow {#2} \rightsquigarrow {#4}}
 }
 \NewDocumentCommand{\coxcospan}{smmm}{
-  \begin{tikzcd}[ampersand replacement=\&]
-    {#2} \&\& {#3} \\
-    \& {#4}
-    \IfBooleanTF{#1}
-    {\arrow["{\ast}"', squiggly, from=1-1, to=2-2]}
-    {{\arrow[squiggly, from=1-1, to=2-2]}}
-    \IfBooleanTF{#1}
-    {\arrow["{\ast}", squiggly, from=1-3, to=2-2]}
-    {\arrow[squiggly, from=1-3, to=2-2]}
-  \end{tikzcd}
+  \IfBooleanTF{#1}
+  {{#2} \xrsquigarrow{\ast} {#4} \xlsquigarrow{\ast} {#3}}
+  {{#2} \rightsquigarrow {#4} \leftsquigarrow {#3}}
 }
 \NewDocumentCommand{\coxdiamond}{smmmm}{
   \begin{tikzcd}[ampersand replacement=\&]
@@ -183,3 +171,21 @@
 \newcommand{\SymMonCat}{\matheucal{S}\mathrm{ymMonCat}}
 \NewDocumentCommand{\FSM}{O{}}{\matheucal{F}{_\mathrm{\mathsmaller{SM}}}\ifstrempty{#1}{}{({#1})}}
 \newcommand{\CCat}[1]{\mathcal{#1}}
+
+% custom arrows
+
+\renewcommand{\leftsquigarrow}{%
+  \mathrel{\mathpalette\reflect@squig\relax}%
+}
+\newcommand{\reflect@squig}[2]{%
+  \reflectbox{$\m@th#1\rightsquigarrow$}%
+}
+\newcommand{\xlsquigarrow}[1]{
+  \mathrel{\stackon[2pt]{$\leftsquigarrow$}{$\scriptscriptstyle#1$}}
+}
+\newcommand{\xrsquigarrow}[1]{
+  \mathrel{\stackon[2pt]{$\rightsquigarrow$}{$\scriptscriptstyle#1$}}
+}
+\newcommand{\xlrsquigarrow}[1]{
+  \mathrel{\stackon[2pt]{$\leftrightsquigarrow$}{$\scriptscriptstyle#1$}}
+}
