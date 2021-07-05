@@ -1,5 +1,32 @@
 \section{Introduction}~\label{sec:introduction}
 
+Boolean circuits are fundamental to the study of computation -- they encode boolean functions $\{0,1\}^{n}\to\{0,1\}$
+which are logic gates used in models of computation. Motivated by connections between physics and computation,
+reversible and quantum boolean circuits are the fundamental building blocks used in reversible computing and quantum
+computing. Reversible boolean circuits, by themeselves are an interesting object of study, since quantum circuits also
+are also built from a reversible core.
+
+Reversible circuits encode reversible logic gates which are bijective functions $\{0,1\}^{n} \to \{0,1\}^{n}$, on a
+fixed number of bits $n$. Bijective functions between finite sets of the same cardinality are simply permutations, and
+it is known that reversible logic gates can be studied using permutation groups.
+
+Motivated by the idea of logical reversibility, \citet{jamesInformationEffects2012} proposed the $\PiLang$ family of
+first-order reversible languages, which is a high-level typed programming language for constructing reversible boolean
+circuits and reasoning about their equivalences. The language supports $\zerot$ and $\onet$ types corresponding to the
+bits 0 and 1, and allows type constructors $+$ and $\times$ for composing bits in sequential or parallel order.
+Corresponding to bijective functions between bits, the language provides 1-combinators for building reversible
+functions, and 2-combinators for their equivalences. The syntax for the language is motivated by type isomorphisms of
+finite types with sums and products, for which a complete axiomatisation is known.
+
+Groupoids are natural algebraic gadgets for studying the semantics of a typed-reversible language, since they
+horizontally categorify groups. The observation made in~\cite{caretteComputingSemiringsWeak2016} that $\PiLang$ can be
+presented as a weak rig groupoid, that is, a groupoid with interacting additive and multiplicative symmetric monoidal
+structures. In this paper, we strenghten this correspondence by relating it to the groupoid of finite sets and
+bijections, which is the free symmetric monoidal groupoid on one generator.
+
+\note{Outline of the main technical results}
+\note{Applications to normalisation and synthesis}
+
 The relatively recent discovery of deep connections between physics and
 computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275,
   Hey:1999:FCE:304763,fredkin1982conservative, springerlink:10.1007/BF02650179} has renewed interest in connections
