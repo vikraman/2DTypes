@@ -24,14 +24,14 @@ coherence conditions to identify this infinite collection of programs from the e
 bijection on the empty set.
 
 Our main technical result is a proof, in the homotopy type theory (HoTT) metatheory, of this equivalence between the
-semantic and syntactic groupoids. By formalising the problem in HoTT, we are able to use the HoTT-Agda library to
-computer-check the proof. The Agda formalization including all supporting definitions, proofs, examples, and testing
-infrastructure is about 7,500 lines of code, excluding comments and blank lines. The steps in formalising the main
-theorem are as follows:
+semantic and syntactic groupoids. The proof itself is novel XXX. Most in Agda but not all. By formalising the problem in
+HoTT, we are able to use the HoTT-Agda library to computer-check the proof. The Agda formalization including all
+supporting definitions, proofs, examples, and testing infrastructure is about 7,500 lines of code, excluding comments
+and blank lines. The steps in formalising the main theorem are as follows:
 \begin{itemize}
 \item Define the syntactic groupoid by giving inductive definitions of the types, isomorphisms between types, and
   coherence conditions for these isomorphisms.
-\item Define the semantic groupoid as a higher-inductive type (HIT) in HoTT (about 300 lines of code).
+\item Define the semantic groupoid as a univalent subuniverse in HoTT (about 300 lines of code).
 \item Mediate between the syntactic presentation of the groupoid and the semantic one using ideas inspired by computational
   group theory, sorting algorithms, and term rewriting systems (about 4,500 lines of code).
 \item Compose the maps from syntax to semantics and back and establish that they form an equivalence (about 2,500 lines
