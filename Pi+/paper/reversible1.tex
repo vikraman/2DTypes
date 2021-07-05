@@ -45,20 +45,20 @@
 
 The circuit model of reversible computation discussed in the introduction is a useful abstraction close to the hardware
 platform. However, since its main data abstraction is a \emph{sequence of wires}, it only provides an ``assembly''
-programming abstraction (e.g., \verb|qasm|). A mathematical model based on permutations of finite sets provides a richer
-algebraic model which we review in this section.
+programming abstraction (e.g., \verb|qasm|). As motivated by \citet{LAFONT2003257}, a mathematical model based on
+permutations of finite sets provides a richer algebraic model which we review in this section.
 
 %%%%%%%%%%%%%%%%%
 \subsection{The $\Pi$ Family of Languages}
 \label{sec:langRev-examples}
 \label{examples}
 
-A specialized language for programming with permutations on finite sets can be built using ideas going back to Mac
-Lane~\cite{XXX} that the commutative semiring (also known as the commutative rig) of natural numbers exactly
-characterizes permutations on finite sets. In programming parlance, as shown in Fig.~\ref{fig:pi-terms}, each primitive
-algebraic identity of commutative rigs becomes a constant in the programming language and the algebraic closure
-operators become composition operators in the programming language. Once equipped with a notion of values and types, we
-get the following syntactic presentation of a programming language for
+A specialized language for programming with permutations on finite sets can be built using ideas going back to Kelly,
+Laplaza, and Mac Lane~\cite{laplaza72,kelly74,KELLY197197} that the commutative semiring (also known as the commutative
+rig) of natural numbers exactly characterizes permutations on finite sets. In programming parlance, as shown in
+Fig.~\ref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes a constant in the programming
+language and the algebraic closure operators become composition operators in the programming language. Once equipped
+with a notion of values and types, we get the following syntactic presentation of a programming language for
 permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
 
 % The practice of programming languages is replete with \emph{ad hoc} instances of reversible computations: database
