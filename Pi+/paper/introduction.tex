@@ -403,7 +403,7 @@ that it represents - is in some sense all there is, manipulating them
 syntactically still has its advantages. By writing reversible programs, we think
 of them in an intensional way. Comparing two programs for equality by evaluating
 them on all points in the domain is a very crude - and maybe even inefficient -
-way of doing that.
+way of doing that. ~\cite{Kuehlmann:2006:RBR:2298470.2300327,10.1007/978-3-540-24605-3_4,Yamashita:2010:FEQ:1835957.1835965}.
 
 It is crude, because there is no way of enforcing additional constraints on the
 process of transforming one program into another, and no way of inspecting what
@@ -428,6 +428,46 @@ computing the meaning of the circuit, instead of just directly evaluating it to
 $\Aut[\Fin[n]]$ - since when we go back and quote the permutation as a circuit
 (in a normal form), there was no "trace" left to see what transformation (what
 sequence of 2-paths) maps the old one into the new one.
+
+We are additionally experimenting with user annotations that can guide
+the search. Each level-2 combinator can be annotated with various
+``cost'' annotations indicating whether it reduces the number of
+gates, reduces the number of choice points, or other cost
+functions. Then one can ask for a proof that takes no more than a
+certain number of steps or a proof that does not create more than a
+certain number of additional wires etc. We illustrate these ideas by
+defining a simple cost function and using it to annotate level-2
+combinators.
+
+We define the \emph{length} $L(c)$ of a composite circuit $c$ as
+follows: the length of a sequential composition of circuits is the sum
+of the lengths of the subcircuits $L(f \odot g) = L(f) + L(g)$; and
+the length of choice or parallel composition is the maximum of either
+branch $L(f \oplus g) = L(f \otimes g) = \max(L(f),L(g))$. For
+primitive gates, the length needs to be postulated to reflect the
+``length'' of the computation involved in applying that primitive. As
+examples, consider the following two level-2 combinators:
+
+% \begin{code}
+% linv◎l'  :  {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ id⟷
+% idl◎l'   :  {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (id⟷ ◎ c) ⇔ c
+% \end{code}
+% \AgdaHide{
+% \begin{code}
+% linv◎l'  = ?
+% idl◎l'   = ?
+% \end{code}
+% }
+
+\noindent Assuming that $\idc$ takes a unit length of computation, the
+first can be annotated with $L(c)*2 \isotwo 1$ and the second with $L(c)+1 \isotwo
+L(c)$ indicating that the first combinator reduces the length of the
+circuit from twice the length of $c$ to 1 and the second combinator
+reduces the length of the circuit by 1. Such annotations can then be
+used to constrain or guide the search for transformations between
+circuits.
+
+we can transfer theorems about permutations from one representation to another
 
 
 Natural numbers under addition form the free commutative monoid on one generator. Categorifying this, we get the free
