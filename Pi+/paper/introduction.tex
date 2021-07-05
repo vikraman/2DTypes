@@ -497,4 +497,10 @@ go through mails about paper
 
 update popl sub
 
-open tabs and files
+I pushed some new changes and merged to master.
+The most interesting thing: a proof of the base case, which we have been fighting with for quite long. (it's in Equiv2Hat.agda)
+
+% c₊⟷₂id⟷₁ : (c : O ⟷₁ O) → c ⟷₂ id⟷₁
+% c₊⟷₂id⟷₁ c =
+%         let x = quote^₂ (eval^₂-O c)
+%         in  ((idr◎r ■ idl◎r) ■ !⟷₂ (quote-eval^₁ c)) ■ x
