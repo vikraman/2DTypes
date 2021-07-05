@@ -3,15 +3,38 @@
 \overfullrule=1mm
 
 \usepackage{cleveref}
-\usepackage{macros}
-\usepackage{hott}
-\usepackage{syntax}
-\usepackage{quiver}
 \usepackage{enumitem}
 \usepackage{extarrows}
 \usepackage{apxproof}
 \usepackage{longtable}
 \usepackage{adjustbox}
+\usepackage{url}
+\usepackage{multicol}
+\usepackage{stmaryrd}
+\usepackage{proof}
+\usepackage{subcaption}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+
+\usepackage{macros}
+\usepackage{hott}
+\usepackage{syntax}
+\usepackage{quiver}
+
+\usepackage{agda}
+\AgdaNoSpaceAroundCode
+\renewcommand{\AgdaCodeStyle}{\footnotesize}
+
+\usepackage{tikz}
+\usetikzlibrary{cd}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{quotes,fit,positioning}
+\usetikzlibrary{knots}
+\tikzstyle{func}=[rectangle,draw,fill=black!20,minimum size=1.9em,text width=2.4em, text centered]
+\usetikzlibrary{braids}
+\tikzset{>=latex}
+\usepackage{tikzit}
+\input{tikzit.tikzstyles}
 
 %% Some recommended packages.
 %% \usepackage{booktabs}   %% For formal tables:
@@ -24,46 +47,16 @@
 %% \usepackage{fdsymbol}
 %% \usepackage{amsthm,proof}
 %% \usepackage{bbold,stmaryrd,bbm}
-\usepackage{bbold}
-\usepackage{newunicodechar}
 %% \usepackage{ucs}
 %% \usepackage{wrapfig}
 %% \usepackage[utf8x]{inputenc}
 %% \usepackage{microtype}
-\usepackage{subcaption}
 %% \usepackage{agda}
-\usepackage{tikz}
-\usetikzlibrary{cd}
-\usetikzlibrary{quotes}
-\usetikzlibrary{decorations.markings}
-\usetikzlibrary{quotes,fit,positioning,decorations}
-\usetikzlibrary{knots}
-\tikzstyle{func}=[rectangle,draw,fill=black!20,minimum size=1.9em,text width=2.4em, text centered]
-
-\usepackage[utf8]{inputenc}
-\usepackage{agda}
-\usepackage[nocenter]{qtree}
-\usepackage{amsthm,amsmath}
-\usepackage{url}
-\usepackage{tikz}
-\usepackage{tikz-cd}
-\usepackage{listings}
-\usepackage{multicol}
-\usepackage{stmaryrd}
-\usepackage{proof}
-\usetikzlibrary{quotes,fit,positioning,decorations}
-\usepackage{tikzit}
-\input{tikzit.tikzstyles}
-\tikzset{>=latex}
-\usepackage{newunicodechar}
-
-\AgdaNoSpaceAroundCode
-\renewcommand{\AgdaCodeStyle}{\footnotesize}
-
-% Braiding diagrams
-\usepackage{tikz}
-\usetikzlibrary{braids}
-\usepackage{mathtools}
+%% \usepackage{mathtools}
+%% \usepackage{amsthm,amsmath}
+%% \usepackage{bbold}
+%% \usepackage[nocenter]{qtree}
+%% \usepackage{listings}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{corollary}[theorem]{Corollary}
@@ -315,7 +308,7 @@ $\displaystyle
 \input{discussion}   % sec 6 context and conclusions        % 2 pages
 %% \input{extra}
 
-%% Acks: Chao-Hong and Jac<ques
+%% Acks: Chao-Hong and Jacques
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{2dtypesZot,survey} %% ,chen}

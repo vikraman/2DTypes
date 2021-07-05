@@ -108,7 +108,7 @@ circuits~\cite{10.1145/775832.775915}. To gain some intuition, we trace the eval
 \verb|011|. In this context, the most significant bit is at index 0. Thus the first \verb|ccx| gate negates \verb|q[0]|
 since both \verb|q[1]| and \verb|q[2]| are true producing \verb|111|; the following \verb|cx| gate produces \verb|011|; finally the last \verb|cx| produces the result \verb|111|.
 
-There is wealth of manual and algorithmic approaches for such synthesis problems each optimizing along  different dimensions~\cite{XXX}. Here is the circuit produced using an approach that analyzes the recursive structure of the circuit (and would generalize to computing the disjunction of more than two inputs):
+There is wealth of manual and algorithmic approaches for such synthesis problems each optimizing along  different dimensions~\cite{maslov:2003:rls:1087512,1201583}. Here is the circuit produced using an approach that analyzes the recursive structure of the circuit (and would generalize to computing the disjunction of more than two inputs):
 
 \begin{center}
   \begin{minipage}[c]{0.4\linewidth}
