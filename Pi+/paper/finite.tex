@@ -1,29 +1,69 @@
 \section{The Group of Permutations}~\label{sec:finite}
 
-In the previous~\cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin{n}$
-for every $n:\Nat$, that is, automorphisms of finite sets of size $n$. The loopspace has a group structure -- the
-identity function is the neutral element, group multiplication is given by function composition, and the group inverse
-is given by inverting the bijection. This is also known to be the finite symmetric group $\Sn[n]$. In the following
-sections, we will characterise these permutations syntactically.
+In~\cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin[n]$ for every
+$n:\Nat$, that is, automorphisms of finite sets of size $n$, with the loopspace encoding the automorphism group.This is
+also known to be the finite symmetric group $\Sn[n]$. In the following sections, we will describe this group
+syntactically.
 
 In order to study syntactic descriptions of permutations, we need to decide whether two descriptions refer to the same
-permutation. This problem is well known in group theory as the \emph{word problem} for $\Sn$. Putting it in this form
-also allows us to connect to the broader scope of computational group theory and combinatorics -- we borrow ideas such
-as Coxeter relations and Lehmer codes from there.
+permutation. This is the \emph{word problem} for $\Sn$. Putting it in this form also allows us to connect it to the
+broader scope of computational group theory and combinatorics -- we borrow ideas such as Coxeter relations and Lehmer
+codes from there.
 
 The goal of this section is to reconcile two different approaches to defining the symmetric group -- as an automorphism
-group, and as a group presented using generators and relations.
+group, and as a group presented using generators and relations. The generators of the group can be thought of as the
+primitive combinators in a (reversible) programming language, the group structure gives the composition and inverse
+operations, and the relations describe how these primitive combinators interact with each other.
 
-\subsection{Groups}
+\subsection{Presenting the permutation group}
 
-From universal algebra, a group is simply a set with a 0-ary constant $e$ (the neutral element), a binary operation
-$\blank\mult\blank$ for group multiplication, and a unary inverse operation $\inv{\blank}$. The neutral element has to
-satisfy unit and inverse laws, and the multiplication has to be associative (see~\cref{def:group}).
+One way of thinking about presentations of $\Sn$ is via sorting algorithms, which use different primitive operations. A
+sorting algorithm has to calculate a permutation of a list or a finite set, which satisfies the invariant of being a
+sorted sequence, which means, the primitive operations of a sorting algorithm are able to generate all the permutations
+on a given list. So, a chosen set of reversible operations in a sorting algorithm can be a good candidate for the
+generators of a permutation group. For example, we could generate the permutation group on $\Fin[n]$ by using generators
+(primitive operations) that:
 
-A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the
-group multiplication is given by integer addition.
+\begin{itemize}
+  \item swap the $i$-th element with the $(i+1)$-th element, that is, adjacent swaps, or
+  \item swap the $i$-th element with the $j$-th element, for arbitrary $i$-s and $j$-s, or
+  \item swap the $i$-th element with an element at a fixed position, or
+  \item flip a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
+  \item cyclically shift any subset of $\Fin[n]$.
+\end{itemize}
+
+Bubble sort uses the primitive operation of adjacent swaps, insertion sort and selection sort use the primitive
+operation of swapping the $i$-th element with the $j$-th element, cycle sort uses cyclical shifts of subsequences,
+pancake sort uses flips of prefixes of the list, et cetera~\todo{check!}. The choice of generators for our presentation
+is important for the following reasons.
+
+\begin{itemize}
+  \item It affects the difficulty of solving the word problem in $\Sn$ and formalising the proof of its correctness. In
+        the following subsections, we build a rewriting system using the generators and relations, and we need to prove
+        and formalise strong normalisation for this system.
+  \item The choice of generators dictates which words become normal forms in this presentation of $\Sn$. These normal
+        forms dictate the shape of the synthesised and normalised boolean circuits, which is the application we have in
+        mind.
+  \item Finally, the generators have to closely match the $\PiLang$ combinators so that we can quote back a permutation
+        to a $\PiLang$ program, for the proof of completeness.
+\end{itemize}
+
+We use a presentation based on adjacent transpositions for generators, called a~\emph{Coxeter presentation}, which we
+also use to solve the word problem for $\Sn$. Connecting it back to the language $\PiLang$, we will show that it is
+possible to encode all $\PiLang$ combinators using adjacent transpositions (in~\cref{sec:equivalence}). The rest of this
+section develops these intuitions formally. Group presentations are built by adding equations to a \emph{free group},
+which we define first.
 
 \begin{toappendix}
+  \subsection{Groups}
+
+  From universal algebra, a group is simply a set with a 0-ary constant $e$ (the neutral element), a binary operation
+  $\blank\mult\blank$ for group multiplication, and a unary inverse operation $\inv{\blank}$. The neutral element has to
+  satisfy unit and inverse laws, and the multiplication has to be associative (see~\cref{def:group}).
+
+  A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the
+  group multiplication is given by integer addition.
+
   \begin{definition}~\label{def:group}
     In type theory, a group $G$ can be defined as a set $S$ with the following pieces of data:
 
@@ -42,37 +82,13 @@ group multiplication is given by integer addition.
   \end{definition}
 \end{toappendix}
 
-% However, more conveniently, in HoTT, we can instead use groupoids to talk about groups internally. A group can be
-% identified with a 1-object groupoid, using a technique called delooping. The delooping of a group $G$ is a groupoid
-% $\B{G}$, with a unique object $\pt$, where the group elements are encoded as self-loops $\pt \id_{\B{G}} \pt$.
-
-% The group operations are automatically given by operations on the identity type, with $\refl_{\pt}$ for the neutral
-% element, path composition for the group multiplication, and path inverse for the group inverse. These satisfy the group
-% laws, up to the identity type, using the groupoid coherence laws.
-
-% Since groups are sets, these 2-paths are propositions, making $\B{G}$ a 1-groupoid. Hence, a group is simply given by a
-% pointed, connected 1-type~\cite*{buchholtzHigherGroupsHomotopy2018,symmetryBook2021}. \footnote{This technique also
-%   allows defining higher groups in HoTT, as done in~\cite{buchholtzHigherGroupsHomotopy2018}.}
-
-% For example, given a pointed type $(A:\UU, a:A)$, the automorphism group structure at $a$ is given by $a \id_{A} a$. Of
-% course, for 1-groups we will require that $a \id_{A} a$ is a set, which is enforced by having $A$ be a groupoid. In our
-% running example for the permutation group on finite sets, we have that $\Fin[n]$ is a set, and hence, $\UFin[n] \defeq
-% \BAut[\Fin[n]]$ is a pointed, connected 1-type. Its loopspace $\loopspace[\BAut[\Fin[n]],F_{n}]$ is equivalent to
-% $\Aut[\Fin[n]] \defeq (\Fin[n] \eqv \Fin[n]) \eqv (\Fin[n] \id_{\UU} \Fin[n])$, which has the corresponding automorphism
-% group structure.
-
 \subsection{Free groups}
 
 Usually, there are are many equations, besides the group axioms, that hold for the elements of a group. For example, in
 the group $\Aut[\Bool]$, or $\mathbb{Z}_2$, we have an equation $1 + 1 = 0$, which is not a consequence of the group
 axioms, but is specific to this particular group. A free group has the property that no other equations hold except the
-ones directly implied by the group axioms. To be able to give an equational presentation of a group, we start by
-constructing the free group, then show how to add new equations to it.
-
-Given any set $A$, we can describe the free group $F(A)$ -- we call $A$ the generating set of $F(A)$. We draw the
-elements from $A$, close them under the group operations, and identify them by the group axioms. For example, the
-additive group of integers $\mathbb{Z}$ is the free group on the singleton. In HoTT, we can use a higher inductive type
-to define the free group, by adding path constructors for the axioms we want (see~\cref{def:free-group}).
+ones directly implied by the group axioms. For example, the additive group of integers $\mathbb{Z}$ is the free group on
+the singleton set.
 
 \begin{toappendix}
   \begin{definition}
@@ -97,12 +113,15 @@ to define the free group, by adding path constructors for the axioms we want (se
 \end{toappendix}
 
 A group homomorphism between groups $G$ and $H$, which we write as $G \to^G H$, is a function between the underlying
-sets that preserves the group structure. The universal property of free groups, stemming from the free-forgetful
-adjunction between the category of groups and sets, follows from the induction principle for $F(A)$. Informally, it
-states that if we know how a map $f$ acts on the generating set $A$, we know exactly how it acts on every element of the
-group $F(A)$.
+sets that preserves the group structure. Giving a group homomorphism out of the free group is equivalent to giving a
+function out of the generating set. This is the universal property of free groups, stemming from the free-forgetful
+adjunction between the category of groups and sets.
 
-\begin{proposition}[Universal Property of $F(A)$]~\label{prop:free-groups}
+% Informally, it states that if we know how a map $f$ acts on the
+% generating set $A$, we know exactly how it acts on every element of the group $F(A)$.
+
+\begin{proposition}[Universal Property of $F(A)$]
+  \label{prop:free-groups}
   Given a group $G$ and a map $f : A \to G$, there is a unique group
   homomorphism $\extend{f} : F(A) \to^G G$ such that $\extend{f} \comp \eta_A
     \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
@@ -121,10 +140,10 @@ group $F(A)$.
     \end{tikzcd}\]
 \end{proposition}
 
-Although the description of $F(A)$ discussed above is close to the intuitive universal-algebraic definition, it is not
-the most convenient one to work with. Besides the elements of the group, we also want to characterise its the path
-space. This definition of $F(A)$ has lots of path constructors corresponding to each group axiom, making it difficult to
-describe its path space.
+Following the universal-algebraic definition, in HoTT, we could use a naive higher inductive type to define the free
+group, which enforces the group axioms by adding path constructors (see~\cref{def:free-group} for the full definition).
+Using the induction principle, we can easily verify the universal property. However, since this definition of $F(A)$ has
+lots of path constructors corresponding to each group axiom, characterising its path space is difficult.
 
 Instead, we will think about elements of the free group as words over an alphabet of letters drawn from the generating
 set \emph{and} the set of their formal inverses. If we take the disjoint union of $A$ with itself, that is, $A + A$ as
@@ -135,8 +154,8 @@ ensure that the inverse laws hold, so we have to coalesce adjacent occurences of
 \begin{definition}
   \label{def:presentation}
   Let $A$ be a set, and $\List[\blank]$ the free monoid. The free group $F(A)$ on $A$ is the set-quotient of $\List[A +
-  A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons a \cons \nil
-  \sim \nil$.
+      A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons a \cons \nil
+    \sim \nil$.
 \end{definition}
 
 \begin{proposition}
@@ -148,199 +167,145 @@ ensure that the inverse laws hold, so we have to coalesce adjacent occurences of
 
 \subsection{Group presentations}
 
-A presentation of a group builds it by starting from the free group $F(A)$ and introducing a collection of equations
-that have to be satisfied in the resulting group. For example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an
-equation $1 + 1 = 0$, the resulting group would be $\mathbb{Z}_2 \eqv \Aut[\Bool]$. Note that not all groups have finite
-(or computable) presentations, and, a group can have any number of different presentations.
+A presentation of a group builds it by starting from the free group $F(A)$ and introducing additional equations that are
+satisfied in the resulting group. For example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an equation $1 + 1 = 0$,
+the resulting group would be $\mathbb{Z}_2 \eqv \Aut[\Bool]$. Note that not all groups have finite (or computable)
+presentations, and, a group can have any number of different presentations.
 
 \begin{definition}
   Let $A$ be a set and $R : \List[A + A] \to \List[A + A] \to \UU$ a binary relation on $\List[A + A]$. The group
   $F(\langle A ; R \rangle)$ presented by $A$ and $R$, is given by the set-quotient of the free group $F(A)$ by the
-  closure of $R$.
+  congruence closure of $R$.
 \end{definition}
 
-The universal property of the above definition allows for properly extending the relation on the generating set to the
-whole group.\vc{check!}
+The universal property of the above definition is similar to~\cref{prop:free-groups} except the relation has to be
+preserved by the function mapping out of the generating set.
 
 \begin{proposition}[Universal property of $F(\langle A ; R \rangle)$]
-  Given a group $G$ and a map $f : A \to G$ that respects $R$, there is a unique group homomorphism 
-  $\extend{f} : F(\langle A ; R \rangle) \to^G G$ such that $\extend{f} \comp \eta_A \htpy f$.
+  Given a group $G$ and a map $f : A \to G$, such that $f$ extended to $F(A)$ respects $R$, there is a unique group
+  homomorphism $\extend{f} : F(\langle A ; R \rangle) \to^G G$ such that $\extend{f} \comp \eta_A \htpy f$.
 \end{proposition}
 
-To relate this to our original problem, the generators of the group can be thought of as the primitive combinators in a
-(reversible) programming language, the group structure gives the composition and inversion operations, and the relations
-describe how these primitive operations interact with each other.
+Before, the only way to decide the equality of two elements in a group was to compute and check them on the nose, but in
+a group presentation, this is reduced to a \emph{word problem}, that is, deciding whether one word -- a representative
+of the equivalence class of the group's elements, can be reduced to another word, using the group's relations. However,
+these equations are not directed, so it is not always possible to construct a well-behaved rewriting system. In general,
+the word problem for groups is known to be undecidable.\jk{Example?}\todo{Examples: empty relation, full relation, van
+  Kampen of $\pi_{1}$}
 
-As we mentioned, instead of operating directly with a particular group, we focus on the syntactic presentation. While
-before, the only way to decide the equality of two elements in the group was to compute and check them on the nose, now
-it is reduced to a \emph{word problem}, that is, deciding whether one word -- a representative of the group elements'
-equivalence class, can be reduced to another word, using the group's relations. This can be thought of as a rewriting
-system. However, these equations are not directed, so it is not always possible to construct a well-behaved rewriting
-system. In general, the word problem for groups is proven to be undecidable.
-
-\jk{Example?}
-\todo{Examples: empty relation, full relation, van Kampen of $\pi_{1}$}
-
-\subsection{Presenting the permutation group}
-
-We have already seen that the group of permutations, or the symmetric group $\Sn$, can be defined by taking the type
-$\Aut[\Fin[n]]$ as the underlying set, and showing that it has the appropriate group structure. Now we're going to give
-a presentation for it, by defining a set of generators and relations.
-
-There is an element of choice here -- as we already mentioned, a group can be presented in many different ways. For
-example, we could generate the permutation group on $\Fin[n]$ by using generators that:
-
-\begin{itemize}
-  \item swap the $i$-the element with the $(i+1)$-th element, that is, adjacent swaps, or
-  \item swap the $i$-th element with the $j$-th element, for arbitrary $i$-s and $j$-s, or
-  \item swap the $i$-th element with an element at a fixed position, or
-  \item flip a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
-  \item cyclically shift any subset of $\Fin[n]$.
-\end{itemize}
-
-One way of thinking about these presentations is via sorting algorithms, which use different primitive operations. A
-sorting algorithm has to calculate a permutation of a list or a finite set, which satisfies the invariant of being a
-sorted sequence, which means, the primitive operations of a sorting algorithm are able to generate all the permutations
-on a given list. So, a chosen set of reversible operations in a sorting algorithm can be a good candidate for the
-generators of a permutation group.
-
-For example, bubble sort uses the primitive operation of adjacent swaps, insertion sort and selection sort use the
-primitive operation of swapping the $i$-th element with the $j$-th element, cycle sort uses cyclical shifts of
-subsequences, pancake sort uses flips of prefixes of the list, et cetera~\todo{check!}. The choice of generators for our
-presentation is important for the following reasons.
-
-\begin{itemize}
-  \item It affects the difficulty of solving the word problem in $\Sn$ and formalising the proof of its correctness. In
-        the following subsections, we build a rewriting system using the generators and relations, and we need to prove
-        and formalise strong normalisation for this system.
-  \item The choice of generators dictates which words become normal forms in this presentation of $\Sn$. These normal
-        forms dictate the shape of the synthesised and normalised boolean circuits, which is the application we have in
-        mind.
-  \item Finally, the generators have to closely match the $\PiLang$ combinators so that we can quote back a permutation
-        to a $\PiLang$ program, for the proof of completeness.
-\end{itemize}
-
-We use a presentation based on adjacent transpositions for generators, called a~\emph{Coxeter presentation}, which we
-also use to solve the word problem for $\Sn$. Connecting it back to the language $\PiLang$, we will show that it is
-possible to encode all $\PiLang$ combinators using adjacent transpositions (in~\cref{sec:equivalence}).
+% This can be thought of as word reductions in a rewriting system. 
 
 \subsubsection{Coxeter Presentation}
 
-The primitive operations we use are going to be adjacent swaps. When dealing with permutations on an $n + 1$-element
-set, there are $n$ adjacent transpositions, transposition number $k$ swapping elements $\el{k}$ and $\el{k+1}$. Thus,
-the generating set would be $\Fin[n]$. There are three relations that we're going to specify for this presentation --
-these are the laws that these generators should satisfy. It is easiest to visualise them as braid diagrams.
+To present the group $\Sn$, the primitive operations we are going to use will be adjacent swaps. When dealing with
+permutations on an $n + 1$-element set, there are $n$ adjacent transpositions, transposition number $k$ swapping
+elements $(\el{k}, \el{k+1})$. Thus, the generating set would be $\Fin[n]$. There are three relations that we're going
+to specify for this presentation -- these are the equations that these generators should satisfy. We visualise them as
+braid diagrams in~\cref{fig:coxeter-braid}.
 
-First, swapping the same two elements two times in a row should be the same as doing nothing:
+\begin{enumerate}
+  \item[\labelcref{fig:coxeter-a}] Swapping the same two elements two times in a row should be the same as doing nothing
+  \item[\labelcref{fig:coxeter-b}] When swapping two distinct pairs of elements, it should not matter in which order the
+    swapping happens, that is, we can slide the wires freely.
+  \item[\labelcref{fig:coxeter-c}] If the next transposition in the sequence is equal to the the first one, the order of
+    operations can be reversed.
+\end{enumerate}
 
-\[
-  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
-    \begin{center}
-      \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd,
-          number of strands = 2,
-          thick]
-        {braid={ s_1, s_1}};
-      \end{tikzpicture}
-    \end{center}
-     &
-    \(\xlongrightarrow[]{\cancel}\)
-     &
-    \begin{center}
-      \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd,
-          number of strands = 2,
-          thick]
-        {braid={1, 1}};
-      \end{tikzpicture}
-    \end{center}
-  \end{tabular}
-\]
-
-Second, when swapping two distinct pairs of elements (i.e. when the indices of two transpositions differ by at least 1),
-it should not matter in which order the swapping happens, that is, we can slide the wires freely.
-
-\[
-  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
-    \begin{center}
-      \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 2,
-            thick]
-          {braid={ 1, s_1}};
-        \end{tikzpicture}
-         &
-        \(\cdots\)
-         &
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 2,
-            thick]
-          {braid={ s_1, 1 }};
-        \end{tikzpicture}
-      \end{tabular}
-    \end{center}
-     &
-    \(\xlongrightarrow[]{\swap}\)
-     &
-    \begin{center}
-      \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 2,
-            thick]
-          {braid={ s_1, 1}};
-        \end{tikzpicture}
-         &
-        \(\cdots\)
-         &
-        \begin{tikzpicture}
-          \pic[local bounding box=my braid,braid/.cd,
-            number of strands = 2,
-            thick]
-          {braid={ 1, s_1}};
-        \end{tikzpicture}
-      \end{tabular}
-    \end{center}
-  \end{tabular}
-\]
-
-The previous two cases were for the transpositions that either completely overlap, or not overlap at all. The third case
-says what happens if we perform transpositions that move the same elements. If the next transposition in the sequence is
-equal to the the first one, we endorce a third law -- the braiding relation.
-
-\[
-  \begin{tabular}{m{0.3\linewidth}m{0.1\linewidth}m{0.3\linewidth}}
-    \begin{center}
-      \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd,
-          number of strands = 3,
-          thick]
-        {braid={ s_2, s_1, s_2}};
-      \end{tikzpicture}
-    \end{center}
-     &
-    \(\xlongrightarrow[]{\braid}\)
-     &
-    \begin{center}
-      \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd,
-          number of strands = 3,
-          thick]
-        {braid={ s_1, s_2, s_1}};
-      \end{tikzpicture}
-    \end{center}
-  \end{tabular}
-\]
-
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.3\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \pic[local bounding box=my braid,braid/.cd,
+        number of strands = 2,
+        width = 0.6cm,
+        height = 0.4cm,
+        border height = 0.3cm,
+        thick] at (0, 0)
+      {braid={ s_1, s_1}};
+      \node[font=\Huge] at (2, 0.7) {\(\rightarrow\)};
+      \pic[local bounding box=my braid,braid/.cd,
+        number of strands = 2,
+        width = 0.6cm,
+        height = 0.4cm,
+        border height = 0.3cm,
+        thick] at (3, 0)
+      {braid={ 1, 1}};
+    \end{tikzpicture}
+    \caption{$\cancel$}
+    \label{fig:coxeter-a}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \pic[local bounding box=my braid,braid/.cd, 
+      number of strands = 2,
+      width = 0.6cm,
+      height = 0.4cm,
+      border height = 0.3cm,
+      thick] at (0, 0)
+      {braid={ 1, s_1}};
+      \node[] at (1, 0.7) {\(\dots\)};
+      \pic[local bounding box=my braid,braid/.cd, 
+      number of strands = 2,
+      width = 0.6cm,
+      height = 0.4cm,
+      border height = 0.3cm,
+      thick] at (1.5, 0)
+      {braid={ s_1, 1}};
+      \node[font=\Huge] at (3, 0.7) {\(\rightarrow\)};
+      \pic[local bounding box=my braid,braid/.cd, 
+      number of strands = 2,
+      width = 0.6cm,
+      height = 0.4cm,
+      border height = 0.3cm,
+      thick] at (4, 0)
+      {braid={ 1, s_1}};
+      \node[] at (5.2, 0.7) {\(\dots\)};
+      \pic[local bounding box=my braid,braid/.cd, 
+      number of strands = 2,
+      width = 0.6cm,
+      height = 0.4cm,
+      border height = 0.3cm,
+      thick] at (5.5, 0)
+      {braid={ s_1, 1}};
+  \end{tikzpicture}
+    \caption{$\swap$}
+    \label{fig:coxeter-b}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[b]{\textwidth}
+    \centering
+    \begin{tikzpicture}
+      \pic[local bounding box=my braid,braid/.cd,
+        number of strands = 3,
+        width = 0.6cm,
+        height = 0.4cm,
+        border height = 0.1cm,
+        thick] at (0, 0)
+      {braid={ s_2, s_1, s_2}};
+      \node[font=\Huge] at (2, 0.7) {\(\rightarrow\)};
+      \pic[local bounding box=my braid,braid/.cd,
+        number of strands = 3,
+        width = 0.6cm,
+        height = 0.4cm,
+        border height = 0.1cm,
+        thick] at (3, 0)
+      {braid={ s_1, s_2, s_1}};
+    \end{tikzpicture}
+    \caption{$\braid$}
+    \label{fig:coxeter-c}
+  \end{subfigure}
+  \caption{Braiding diarams for Coxeter relations.}
+  \label{fig:coxeter-braid}
+\end{figure}
 \todo{an example/motivation from book.pdf}
 
-This construction is called a Coxeter presentation. Writing it formally, we take the generating set to be $\Fin[n]$,
-where the element $k$ corresponds to an adjacent transpositions $\tau_k$, which swaps elements $\el{k}$ and $\el{k+1}$.
-Then, we define a binary relation $\cox$ on $\List[\Fin[n]]$, which encodes the laws discussed above.
+This construction is called a Coxeter presentation of $\Sn$. Writing it formally, we encode the rules discussed above
+using a relation $\cox$ on $\List[\Fin[n]]$, and then take its congruence closure $\cox*$.
 
-\begin{definition}[$\cox$]
+\begin{definition}[$\cox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \begin{align*}
     \cancel
      & : \forall n \to (n \cons n \cons \nil) \cox \nil                                                     \\
@@ -350,10 +315,7 @@ Then, we define a binary relation $\cox$ on $\List[\Fin[n]]$, which encodes the 
      & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
   \end{align*}
 \end{definition}
-
-We define $\cox*$ as the congruence closure of $\cox$.
-
-\begin{definition}[$\cox*$]
+\begin{definition}[$\cox* : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \begin{align*}
     \reflr{\cox}
      & : \forall w \to w \cox* w                                                                                                           \\
@@ -368,81 +330,94 @@ We define $\cox*$ as the congruence closure of $\cox$.
   \end{align*}
 \end{definition}
 
-To solve the word problem for $\Sn$, we turn the relations into a rewriting system $(\List[\Fin[n]],\cox*)$. A normal
-form of an element can then be computed by following the rewrite rules, and two words can be compared for
-$\cox*$-equality by comparing their normal forms. A well-behaved rewriting system has to be strongly normalising and
-confluent. First, we observe that after throwing out reflexivity and symmetry, the right hand sides of the relations
-$\cox*$ are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$.
-Thus, by directing the relation from left to right, we would get the termination property out of the box.
+The idea for solving the word problem for $\Sn$ is to turn these undirected relations into a terminating rewriting
+system $(\List[\Fin[n]],\cox*)$, so that, by repeatedly applying the reduction rules as long as possible, any two
+$\cox*$-equal terms would eventually converge to the same normal form.
 
-The system also has to be confluent, meaning that all critical pairs, that is, terms with overlapping possible reduction
-rules, have to converge. For example, the pairs below converge.
+For this to work, we first need the system to have the strong normalisation property, meaning that there are no infinite
+reductions. We observe that after throwing out reflexivity and symmetry, the right hand sides of the relations $\cox*$
+are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$ (which is
+well-founded). Thus, by directing the relation from left to right, we would get the termination property out of the box.
+Second, we need the normal forms to be unique, so that we can get a normalisation function. This will be true if the
+rewriting system is confluent -- meaning that all critical pairs, that is, terms with overlapping possible reduction
+rules, have to converge. For example, in our system, the pairs in~\cref{fig:critical-pairs-converge} converge.
+Unfortunately, this is not true for all critical pairs -- an  example is in~\cref{fig:critical-pairs-non-converging},
+where both endpoints are normal with respect to the $\cox*$ relation.
 
-\[
-  \begin{array}{lcr}
-    \gspan[\braid][\braid]{\tau_2\tau_1\tau_2\tau_1\tau_2}{\tau_1\tau_2\tau_1\tau_1\tau_2}{\tau_2\tau_1\tau_1\tau_2\tau_1}
-     &
-    \text{or}
-     &
-    \gspan[\braid][\cancel]{\tau_2\tau_1\tau_2\tau_2}{\tau_1\tau_2\tau_1\tau_2}{\tau_2\tau_1}
-  \end{array}
-\]
+% \begin{figure}
+% \[
+%   \begin{array}{lcr}
+%     \gspan[\braid][\braid]{\tau_2\tau_1\tau_2\tau_1\tau_2}{\tau_1\tau_2\tau_1\tau_1\tau_2}{\tau_2\tau_1\tau_1\tau_2\tau_1}
+%      &
+%     \text{or}
+%      &
+%     \gspan[\braid][\cancel]{\tau_2\tau_1\tau_2\tau_2}{\tau_1\tau_2\tau_1\tau_2}{\tau_2\tau_1}
+%   \end{array}
+% \]
+% \caption{Critical pairs}
+% \label{fig:critical-pairs}
+% \end{figure}
 
-\begin{proof}
-  \[
-    \begin{array}{lr}
-      % https://q.uiver.app/?q=WzAsNixbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwyLCJcXHRhdV8xXFx0YXVfMlxcdGF1XzIiXSxbMiwzLCJcXHRhdV8xIl0sWzQsMiwiXFx0YXVfMlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFswLDIsImJyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJjYW5jZWwiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFszLDQsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzIsNSwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbNSw0LCJjYW5jZWwiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
+\begin{figure}
+  \begin{subfigure}[b]{0.45\textwidth}
+    % https://q.uiver.app/?q=WzAsNixbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzQsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwyLCJcXHRhdV8xXFx0YXVfMlxcdGF1XzIiXSxbMiwzLCJcXHRhdV8xIl0sWzQsMiwiXFx0YXVfMlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFswLDIsImJyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJjYW5jZWwiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFszLDQsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzIsNSwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbNSw0LCJjYW5jZWwiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
+    \adjustbox{scale=\scalef,center}{
       \begin{tikzcd}
         && {\tau_2\tau_1\tau_2\tau_1\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_1\tau_2} &&&& {\tau_2\tau_1\tau_1\tau_2\tau_1} \\
         {\tau_1\tau_2\tau_2} &&&& {\tau_2\tau_2\tau_1} \\
         && {\tau_1}
-        \arrow["braid"', squiggly, from=1-3, to=2-1]
-        \arrow["braid", squiggly, from=1-3, to=2-5]
-        \arrow["cancel"', squiggly, from=2-1, to=3-1]
-        \arrow["cancel"', squiggly, from=3-1, to=4-3]
-        \arrow["cancel", squiggly, from=2-5, to=3-5]
-        \arrow["cancel", squiggly, from=3-5, to=4-3]
+        \arrow["\braid"', squiggly, from=1-3, to=2-1]
+        \arrow["\braid", squiggly, from=1-3, to=2-5]
+        \arrow["\cancel"', squiggly, from=2-1, to=3-1]
+        \arrow["\cancel"', squiggly, from=3-1, to=4-3]
+        \arrow["\cancel", squiggly, from=2-5, to=3-5]
+        \arrow["\cancel", squiggly, from=3-5, to=4-3]
       \end{tikzcd}
-       &
-      % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsyLDQsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsxLDMsIlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzMsNCwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFs0LDIsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV1d
+    }
+  \end{subfigure}
+  \begin{subfigure}[]{0.45\textwidth}
+    % https://q.uiver.app/?q=WzAsNSxbMiwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8yIl0sWzAsMSwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsyLDQsIlxcdGF1XzJcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFsxLDMsIlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzMsNCwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFs0LDIsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV1d
+    \adjustbox{scale=\scalef,center}{
       \begin{tikzcd}
         && {\tau_2\tau_1\tau_2\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_2} \\
         {\tau_1\tau_2\tau_1\tau_2} \\
         & {\tau_1\tau_1\tau_2\tau_1} \\
         && {\tau_2\tau_1}
-        \arrow["braid"', squiggly, from=1-3, to=2-1]
-        \arrow["cancel", squiggly, from=1-3, to=5-3]
-        \arrow["braid"', squiggly, from=2-1, to=3-1]
-        \arrow["braid"', squiggly, from=3-1, to=4-2]
-        \arrow["cancel"', squiggly, from=4-2, to=5-3]
+        \arrow["\braid"', squiggly, from=1-3, to=2-1]
+        \arrow["\cancel", squiggly, from=1-3, to=5-3]
+        \arrow["\braid"', squiggly, from=2-1, to=3-1]
+        \arrow["\braid"', squiggly, from=3-1, to=4-2]
+        \arrow["\cancel"', squiggly, from=4-2, to=5-3]
       \end{tikzcd}
-    \end{array}
-  \]
-\end{proof}
+    }
+  \end{subfigure}
+  \caption{Converging critical pairs}
+  \label{fig:critical-pairs-converge}
+\end{figure}
 
-Unfortunately, in the system we defined, this is not true for all critical pairs. One example is the following, where
-both endpoints are normal with respect to $\cox*$ relation.
-
-\[
-  \gspan[\braid][\swap]{\tau_3\tau_2\tau_3\tau_1}{\tau_2\tau_3\tau_2\tau_1}{\tau_3\tau_2\tau_1\tau_3}
-\]
+\begin{figure}
+  $\gspan[\braid][\swap]{\tau_3\tau_2\tau_3\tau_1}{\tau_2\tau_3\tau_2\tau_1}{\tau_3\tau_2\tau_1\tau_3}$
+  \caption{Non-converging critical pairs}
+  \label{fig:critical-pairs-non-converging}
+\end{figure}
 
 \subsection{Rewriting via Coxeter}
 
-Because of the counter-example discussed, the relations have to be changed. In this section, we will formally define a
-rewriting system partially based on the Coxeter relations, and prove that it has the desired properties of confluence
-and strong normalisation.
+Because of this counter-example, the relations have to be changed. In this section, we formally define a rewriting
+system $(\List[\Fin[n]], \longcox*)$, partially based on the Coxeter relations, and prove that it has the desired
+properties of confluence and strong normalisation. We prove that the new relation defined by this system is equivalent,
+in a technical sense, to the standard Coxeter relation $\cox*$.
 
-The Coxeter relations are a standard notion in the theory of group presentation~\todo{citation} -- even though we change
-the relations a bit, we will not lose the connection. In fact, we will prove that the new relations are equivalent, in a
-technical sense, to the standard Coxeter relations $\cox*$.
+% The Coxeter relations are a standard notion in the theory of group presentation~\todo{citation} -- even though we change
+% the relations a bit, we will not lose the connection. In fact, we will prove that the new relations are equivalent, in a
+% technical sense, to the standard Coxeter relations $\cox*$.
+% The system has generators corresponding to $\swap$, $\cancel$
+% and $\braid$, the problem of the non-converging critical pairs discussed previously is fixed by changing $\braid$ to be
+% a slightly more general relation $\longbraid$. 
 
-The new reduction system $(\List[\Fin[n]], \longcox*)$ has generators corresponding to $\swap$, $\cancel$ and $\braid$.
-We fix the problem of the non-converging critical pairs discussed previously by changing $\braid$ to be a slightly more
-general relation $\longbraid$. \review{Further, we also inline the congruence closure in $\longcox$, allowing arbitrary
-  reductions inside the list.}
+\review{Further, we also inline the congruence closure in $\longcox$, allowing arbitrary reductions inside the list.}
 
 \todo{but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
 
@@ -456,19 +431,22 @@ First, we need to define a helper function $n \downf k$.
 \end{definition}
 
 The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\). Since we think of the
-number $m$ as the transposition $\tau_m$ which swaps elements $\el{m}$ and $\el{m+1}$, the role of this helper function
-is to produce a sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ $k$ places left,
-shifting all the elements in between one place right. Expressed in terms of the braiding diagram, for $n = 0$ and $k =
-  4$, it has the following form:
+number $m$ as the transposition swapping elements $(\el{m}, \el{m+1})$, the role of this helper function
+is to produce a sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ by $k$ places left,
+shifting all the elements in between one place right (see~\cref{fig:downf}).
 
-\[
-  \begin{tikzpicture}
-    \pic[local bounding box=my braid,braid/.cd,
-      number of strands = 5,
-      thick]
-    {braid={s_4, s_3, s_2, s_1}};
-  \end{tikzpicture}
-\]
+\begin{figure}
+  \[
+    \begin{tikzpicture}
+      \pic[local bounding box=my braid,braid/.cd,
+        number of strands = 5,
+        thick]
+      {braid={s_4, s_3, s_2, s_1}};
+    \end{tikzpicture}
+  \]
+  \caption{Braiding diagram for $0 \downf 4$}
+  \label{fig:downf}
+\end{figure}
 
 Then, the directed relation $\longcox$ is defined with the following generators.
 
@@ -486,31 +464,35 @@ Then, the directed relation $\longcox$ is defined with the following generators.
 Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and can be
 visualised in the same way as before. The remaining constructor uses the helper function to exchange the order of a long
 sequence of transpositions and a single transposition afterwards. For example, for $n = 2$ and $k = 3$, it allows for
-the reduction $[6, 5, 4, 3, 2, 6] \longcox* [5, 6, 5, 4, 3, 2]$. Visualised on the braid diagram, it looks as follows:
-
-\[
-  \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
-    \begin{center}
-      \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd,
-          number of strands = 6,
-          thick]
-        {braid={s_5, s_4, s_3, s_2, s_1, s_5}};
-      \end{tikzpicture}
-    \end{center}
-     &
-    \(\xlongrightarrow[]{\longbraid}\)
-     &
-    \begin{center}
-      \begin{tikzpicture}
-        \pic[local bounding box=my braid,braid/.cd,
-          number of strands = 6,
-          thick]
-        {braid={s_4, s_5, s_4, s_3, s_2, s_1}};
-      \end{tikzpicture}
-    \end{center}
-  \end{tabular}
-\]
+the reduction $[6, 5, 4, 3, 2, 6] \longcox* [5, 6, 5, 4, 3, 2]$ (for the appropriate braid diagram,
+see~\cref{fig:longcox}).
+\begin{figure}
+  \[
+    \begin{tabular}{m{0.4\linewidth}m{0.1\linewidth}m{0.4\linewidth}}
+      \begin{center}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 6,
+            thick]
+          {braid={s_5, s_4, s_3, s_2, s_1, s_5}};
+        \end{tikzpicture}
+      \end{center}
+       &
+      \(\xlongrightarrow[]{\longbraid}\)
+       &
+      \begin{center}
+        \begin{tikzpicture}
+          \pic[local bounding box=my braid,braid/.cd,
+            number of strands = 6,
+            thick]
+          {braid={s_4, s_5, s_4, s_3, s_2, s_1}};
+        \end{tikzpicture}
+      \end{center}
+    \end{tabular}
+  \]
+  \caption{Braiding diagram for $\longcox$ with $n = 0$ and $k = 3$}
+  \label{fig:longcox}
+\end{figure}
 
 Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 0$. Also, as before, the left-hand
 sides of the relation are strictly larger than the right-hand sides, in terms of the lexicographic order on
@@ -530,8 +512,7 @@ transitivity.
 
 Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox*)$ has the properties
 we desire. It satisfies confluence, that is, the Church-Rosser (diamond) property, and it is strongly normalising,
-because it produces a unique irreducible normal form. Existence of the normal form is implied by the well-foundedness of
-the relation -- informally, it does not contain any infinite decreasing sequences. We follow the terminology
+because it produces a unique irreducible normal form. We follow the terminology
 of~\cite{krausCoherenceWellFoundednessTaming2020} to state our results formally.~\vc{check!}
 
 \begin{proposition}
