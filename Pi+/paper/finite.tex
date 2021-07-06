@@ -450,7 +450,7 @@ shifting all the elements in between one place right (see~\cref{fig:downf}).
         height = 0.4cm,
         border height = 0.1cm,
         thick]
-      {braid={s_4, s_3, s_2, s_1}};
+      {braid={s_1, s_2, s_3, s_4}};
     \end{tikzpicture}
   \]
   \caption{Braiding diagram for $0 \downf 4$}
@@ -472,8 +472,8 @@ Then, the directed relation $\longcox$ is defined with the following generators.
 
 Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and can be
 visualised in the same way as before. The remaining constructor uses the helper function to exchange the order of a long
-sequence of transpositions and a single transposition afterwards. For example, for $n = 2$ and $k = 3$, it allows for
-the reduction $[6, 5, 4, 3, 2, 6] \longcox* [5, 6, 5, 4, 3, 2]$ (see~\cref{fig:longcox} for the braid diagram).
+sequence of transpositions and a single transposition afterwards. For example, for $n = 0$ and $k = 3$, it allows for
+the reduction $[4, 3, 2, 1, 0, 4] \longcox* [3, 4, 3, 2, 1, 0]$ (see~\cref{fig:longcox}).
 
 \begin{figure}
   \begin{tikzpicture}
@@ -483,7 +483,7 @@ the reduction $[6, 5, 4, 3, 2, 6] \longcox* [5, 6, 5, 4, 3, 2]$ (see~\cref{fig:l
       height = 0.4cm,
       border height = 0.1cm,
       thick] at (0, 0)
-    {braid={s_5, s_4, s_3, s_2, s_1, s_5}};
+    {braid={s_5, s_1, s_2, s_3, s_4, s_5}};
     \node[font=\Huge] at (4, 1.3) {\(\rightarrow\)};
     \pic[local bounding box=my braid,braid/.cd,
       number of strands = 6,
@@ -491,7 +491,7 @@ the reduction $[6, 5, 4, 3, 2, 6] \longcox* [5, 6, 5, 4, 3, 2]$ (see~\cref{fig:l
       height = 0.4cm,
       border height = 0.1cm,
       thick] at (5, 0)
-    {braid={s_4, s_5, s_4, s_3, s_2, s_1}};
+    {braid={s_1, s_2, s_3, s_4, s_5, s_4}};
   \end{tikzpicture}
   \caption{Braiding diagram for $\longcox$ with $n = 0$ and $k = 3$}
   \label{fig:longcox}
