@@ -22,7 +22,7 @@ each other.
 
 % High-level explanation of technical devices
 First, we will define the required notions of free groups and group presentations, and state some of their most
-important properties. Then, we introduce our chosen \emph{Coxeter} presentation for $\Sn$. To solve the word problem for
+important properties. Then, we introduce our chosen \emph{Coxeter presentation} for $\Sn$. To solve the word problem for
 $\Sn$, we will use a rewriting system, with a suitable, well behaved collection of reduction rules corresponding to the
 Coxeter presentation. Finally, we describe the normal forms in this rewriting system, using Lehmer codes, and prove the
 correspondence between them and the type $\Aut[\Fin[n]]$ of automorphisms on a finite set. The generators and relations
@@ -153,7 +153,7 @@ adjunction between the category of groups and sets.
 \end{proposition}
 
 Following the universal-algebraic definition, in HoTT, we could use a naive higher inductive type to define the free
-group, which enforces the group axioms by adding path constructors (see~\cref{def:free-group} for the full definition).
+group, which enforces the group axioms by adding path constructors (see~\cref{def:free-group}).
 Using the induction principle, we can easily verify the universal property. However, since this definition of $F(A)$ has
 lots of path constructors corresponding to each group axiom, characterising its path space is difficult.
 
@@ -422,17 +422,17 @@ where both endpoints are normal with respect to the $\cox*$ relation.
   \end{subfigure}
   \begin{subfigure}[b]{0.50\textwidth}
     \adjustbox{scale=\scalef,center}{
-      % https://q.uiver.app/?q=WzAsMyxbMCwwLCJcXHRhdV8zXFx0YXVfMlxcdGF1XzNcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMlxcdGF1XzNcXHRhdV8yXFx0YXVfMSJdLFsyLDEsIlxcdGF1XzNcXHRhdV8yXFx0YXVfMVxcdGF1XzMiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiYnJhaWQiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFsyLDEsIlxcYnJhaWQqIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XV0=
-      \begin{tikzcd}
-        {\tau_3\tau_2\tau_3\tau_1} \\
-        && {\tau_3\tau_2\tau_1\tau_3} \\
-        {\tau_2\tau_3\tau_2\tau_1}
-        \arrow["\braid"', squiggly, from=1-1, to=3-1]
-        \arrow["\braid", squiggly, from=1-1, to=2-3]
-        \arrow["{\longbraid}", squiggly, from=2-3, to=3-1]
-      \end{tikzcd}
+    % https://q.uiver.app/?q=WzAsMyxbMSwwLCJcXHRhdV8zXFx0YXVfMlxcdGF1XzNcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMlxcdGF1XzNcXHRhdV8yXFx0YXVfMSJdLFszLDEsIlxcdGF1XzNcXHRhdV8yXFx0YXVfMVxcdGF1XzMiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiYnJhaWQiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFsyLDEsIlxcbG9uZ2JyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XV0=
+    \begin{tikzcd}
+      & {\tau_3\tau_2\tau_3\tau_1} \\
+      &&& {\tau_3\tau_2\tau_1\tau_3} \\
+      {\tau_2\tau_3\tau_2\tau_1}
+      \arrow["braid"', squiggly, from=1-2, to=3-1]
+      \arrow["braid", squiggly, from=1-2, to=2-4]
+      \arrow["\longbraid", squiggly, from=2-4, to=3-1]
+    \end{tikzcd}
     }
-    \caption{Non-converging critical pairs converging in $\longcox*$}
+    \caption{A non-converging critical pair in $\cox*$ converging in $\longcox*$}
     \label{fig:critical-pairs-non-converging}
   \end{subfigure}
 
