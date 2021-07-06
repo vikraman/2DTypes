@@ -325,7 +325,7 @@ using a relation $\cox$ on $\List[\Fin[n]]$ (\cref{def:cox}), and then take its 
     \swap
      & : \forall k, n \to (\suc[k] < n) \to (n \cons k \cons \nil) \cox (k \cons n \cons \nil)              \\
     \braid
-     & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil) \\
+     & : \forall n \to (\suc[n] \cons n \cons \suc[n] \cons \nil) \cox (n \cons \suc[n] \cons n \cons \nil)
   \end{align*}
 \end{definition}
 
@@ -342,7 +342,7 @@ using a relation $\cox$ on $\List[\Fin[n]]$ (\cref{def:cox}), and then take its 
       \congrf{\cox}{\append}
        & : \forall w_{1}, w_{2}, w_{3}, w_{4} \to  w_{1} \cox* w_{2} \to w_{3} \cox* w_{4} \to w_{1} \append w_{3} \cox* w_{2} \append w_{4} \\
       \relr{\cox}
-       & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2}                                                                   \\
+       & : \forall w_{1}, w_{2} \to w_{1} \cox w_{2} \to w_{1} \cox* w_{2}
     \end{align*}
   \end{definition}
 \end{toappendix}
@@ -496,7 +496,7 @@ Then, the directed relation $\longcox$ is defined with the following generators.
     \longswap
      & : \forall k, n, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r)                            \\
     \longbraid
-     & : \forall n, l, r \to (l \append (n \downf 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downf 2 + k) \append r) \\
+     & : \forall n, l, r \to (l \append (n \downf 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downf 2 + k) \append r)
   \end{align*}
 \end{definition}
 
@@ -541,7 +541,7 @@ transitivity (see~\cref{def:longcox-star}).
       \reflr{\longcox}
        & : \forall w \to w \longcox* w                                                                               \\
       \transr{\longcox}
-       & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3} \\
+       & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3}
     \end{align*}
   \end{definition}
 \end{toappendix}
@@ -808,7 +808,7 @@ Using these facts, we can now prove the main result of this section.
     \begin{array}{rl}
            & \Lehmer[\zero]          \\
       \eqv & \unit                   \\
-      \eqv & \Aut[\Fin[\suc[\zero]]] \\
+      \eqv & \Aut[\Fin[\suc[\zero]]] 
     \end{array}
     \qquad\qquad
     \begin{array}{rlr}
@@ -818,7 +818,7 @@ Using these facts, we can now prove the main result of this section.
       \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                          \\
       \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
       \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
-      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                          & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                          & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}}
     \end{array}
   \end{gather*}
 \end{proof}

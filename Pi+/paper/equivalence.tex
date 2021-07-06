@@ -126,7 +126,7 @@ $\PiPlusCat$.
   \begin{align*}
     \evalt_{0} & : U \to \UPlus                                             \\
     \evalt_{1} & : (c : X \iso Y) \to \evalt_{0}(X) \iso \evalt_{0}(Y)      \\
-    \evalt_{2} & : (\alpha : p \Iso q) \to \evalt_{1}(p) \Iso \evalt_{1}(q) \\
+    \evalt_{2} & : (\alpha : p \Iso q) \to \evalt_{1}(p) \Iso \evalt_{1}(q)
   \end{align*}
 \end{definition}
 
@@ -175,7 +175,7 @@ Using this symmetric monoidal structure, we translate from $\PiPlusLang$ to $\Pi
   \begin{align*}
     \evalh_{0} & : \UPlus \to \UHat                                                          \\
     \evalh_{1} & : (c : t_{1} \iso t_{2}) \to \evalh_{0}(t_{1}) \isoh \evalh_{0}(t_{2})      \\
-    \evalh_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalh_{1}(c_{1}) \Isoh \evalh_{1}(c_{2}) \\
+    \evalh_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalh_{1}(c_{1}) \Isoh \evalh_{1}(c_{2})
   \end{align*}
 \end{definition}
 
@@ -188,7 +188,7 @@ to generate the braiding.
   \begin{align*}
     \quoteh_{0} & : \UHat \to \UPlus                                                            \\
     \quoteh_{1} & : (p : X_{1} \isoh X_{2}) \to \quoteh_{0}(X_{1}) \iso \quoteh_{0}(X_{2})      \\
-    \quoteh_{2} & : (\alpha : p_{1} \Isoh p_{2}) \to \quoteh_{1}(p_{1}) \Iso \quoteh_{1}(p_{2}) \\
+    \quoteh_{2} & : (\alpha : p_{1} \Isoh p_{2}) \to \quoteh_{1}(p_{1}) \Iso \quoteh_{1}(p_{2})
   \end{align*}
 \end{definition}
 
@@ -212,7 +212,7 @@ words in $\Sn$ and then to automorphisms using~\cref{prop:sn-lehmer-fin-equiv}. 
   \begin{align*}
     \evalt_{0} & : \UHat \to \UFin                                                          \\
     \evalt_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2})      \\
-    \evalt_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2}) \\
+    \evalt_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2})
   \end{align*}
 \end{definition}
 
@@ -224,7 +224,7 @@ a sequence of adjacent transpositions, producing a 1-combinator in $\PiHatLang$.
   \begin{align*}
     \quotet_{0} & : \UFin \to \UHat                                                            \\
     \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quoteh_{0}(X_{1}) \isoh \quoteh_{0}(X_{2})      \\
-    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2}) \\
+    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2})
   \end{align*}
 \end{definition}
 
@@ -245,7 +245,7 @@ $\PiPlusLang$. Note that the normalisation happens in going from $\PiHatLang$ to
     \normt_{0} & = \quoteh_{0} \comp \evalt_{0}                        \\
     \\
     \normt_{1} & : (c : X \iso Y) \to \normt_{0}(X) \iso \normt_{0}(Y) \\
-    \normt_{1} & = \quoteh_{1} \comp \evalt_{1}                        \\
+    \normt_{1} & = \quoteh_{1} \comp \evalt_{1}
   \end{align*}
 \end{definition}
 
