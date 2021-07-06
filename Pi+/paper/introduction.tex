@@ -65,6 +65,19 @@ and blank lines. The steps in formalising the main theorem are as follows:
   of code).
 \end{itemize}
 
+\jk{Mediating between the syntactic and the semantic side is done in a novel way by introducing an explicit collection 
+of reduction rules, that make the words in the permutation group into a confluent, strongly-terminating rewriting system, 
+which allows us to extract the normalization function.
+There has been already some attempts to solve this problem. In particular~\cite{LAFONT2003257} give a similar treatment, writing 
+the \emph{Coxeter equations} as a rewriting system, but chooses to make the problematic commutation rule implicit, which, 
+by being un-directed, would cause the system to be non-terminating. There is also a formulation 
+by~\cite{Florent Hiver Coq code}, inspired by an unpublished~\cite{The symmetric group, Lascoux}, which, instead of 
+using a rewriting system, describes an explicit procedure for inserting a new transposition into a sequence of already 
+normalized ones.
+Ultimately, in all cases, the normal form ends up being closely related to \emph{Lehmer code} description of permutations. 
+To show its equivalence to the type of bijections on a finite set, we describe a (slightly modified version of) 
+unpublished proof due to~\cite{Martin Molzer cubical proof}.}
+
 \paragraph*{Synthesis of Reversible Core of Quantum Circuits.} To make the connection to reversible computing explicit,
 we use the Agda formalisation of our technical result to extract various computational procedures to synthesise,
 normalise, optimise, and verify reversible circuits. In this introduction, we use the popular IBM Qiskit platform for
