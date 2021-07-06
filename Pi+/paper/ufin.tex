@@ -1,14 +1,15 @@
 \section{The Groupoid of Finite Types}
 \label{sec:ufin}
 
-The denotational semantics for $\PiLang$ in the previous section forms a groupoid $\BFin$ whose objects are finite sets
-and whose morphisms as bijections between finite sets. The semantics interprets types as objects in~$\BFin$,
-1-combinators as isomorphisms in~$\BFin$, and for every pair of 1-combinators related by a 2-combinator, their
-interpretations are extensionally equal in~$\BFin$. In other words, this groupoid is strict: two equal permutations are
-extensionally identified, without an explicit witness for the equality. In order to establish completeness, we want to
-quote back from the semantics to the syntax. Specifically, given a morphism in $\BFin$, we want to produce a
-1-combinator in $\PiLang$, and given two extensionally equal morphisms in $\BFin$, we want to produce a 2-combinator
-witnessing the equality of the quoted 1-combinators.
+The denotational semantics for $\PiLang$ in the previous section forms a commutative rig groupoid $\BFin$ whose objects
+are finite sets, whose morphisms as bijections between finite sets, and whose monoidal structures are induced by the
+properties $\sqcup$ and $\times$. The semantics interprets types as objects in~$\BFin$, 1-combinators as isomorphisms
+in~$\BFin$, and for every pair of 1-combinators related by a 2-combinator, their interpretations are extensionally equal
+in~$\BFin$. In other words, this groupoid is strict: two equal permutations are extensionally identified, without an
+explicit witness for the equality. In order to establish completeness, we want to quote back from the semantics to the
+syntax. Specifically, given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
+extensionally equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted
+1-combinators.
 
 Our first step is therefore to expose the implicit equalities by \emph{weakening} the groupoid $\BFin$, i.e., by
 replacing the equational axioms of the category by higher invertible cells. In a weak category, the identity and
@@ -20,7 +21,11 @@ way to acquire such an ability is to ensure that the groupoid is ``univalent,'' 
 the semantic equivalences using the elements of the identity type, i.e., using objects whose equality is equipped with
 an induction principle. We will therefore work within a HoTT metatheory which provides an ambient univalent universe of
 types and introduce the novel idea of a \emph{univalent subuniverse} to carve out $\UFin$: a weakened, univalent,
-version of the groupoid $\BFin$.
+version of the groupoid $\BFin$ which is then extended with the appropriate commutative rig structure. The main
+technical result of this section that is exploited in the next section is that, for each finite type $T$, we have
+transferred the structure of the space of equivalences $T \eqv T$ to the structure of paths in $\UFin$. Since the space
+equivalences forms the automorphism group of $T$, we can now use the tools of computational group theory together with
+the induction principle of paths and term rewriting theory to describe the paths in $\UFin$.
 
 % HoTT provides a rich internal language for working with weak higher groupoids, using the ``types are weak
 % $\infty$-groupoids'' correspondence. In this section, we show that the weakened version of the groupoid $\BFin$ can be
