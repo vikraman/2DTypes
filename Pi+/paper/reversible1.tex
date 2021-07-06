@@ -194,51 +194,52 @@ the right and then swapping. The full set of level-2 combinators is large and is
 \noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be specified
 by mapping each type to a finite set and each combinator to a permutation between finite sets. In this section, we
 outline a simple denotational semantics expressed in the metalanguage of sets and functions that collapses the level-2
-combinators. This semantics will be extended in the next two sections to the metalanguage of homotopy type theory to
-properly model the level-2 combinators.
+combinators. This semantics will be extended in the next two sections to the HoTT metalanguage to properly model the
+level-2 combinators.
 
 The denotation of types is straightforward:
 
 \begin{center}
 {\scalebox{\scalef}{$%
 \begin{array}{rcl}
-  \denot{\zerot}     & = & \emptyset                  \\
-  \denot{\onet}      & = & \{ \Acon{tt} \}            \\
-  \denot{A + B}      & = & \denot{A} \uplus \denot{B} \\
+  \denot{\zerot}     & = & \bot                  \\
+  \denot{\onet}      & = & \top \\
+  \denot{A + B}      & = & \denot{A} \sqcup \denot{B} \\
   \denot{A \times B} & = & \denot{A} \times \denot{B}
 \end{array}$}}
 \end{center}
 
-\noindent where $\emptyset$ is the empty set, $\uplus$ is the disjoint union of sets, and $\times$ is the cartesian product of
-sets. The denotation of a combinator $c : A \isoone B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
+\noindent where $\bot$ is the empty set, $\top$ is a singleton set, $\sqcup$ is the disjoint union of sets, and $\times$
+is the cartesian product of sets. The denotation of a combinator $c : A \isoone B$ is a (bijective) function mapping
+$\denot{A}$ to $\denot{B}$:
 
 \begin{multicols}{2}
 %%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
 {\scalebox{\scalef}{$%
 \begin{array}[t]{rlcl}
-  \denot{\identlp}     &      (\inlv{v})           & = & v                                   \\
-  \denot{\identrp}     &      v                    & = & \inlv{v}                            \\
-  \denot{\swapp}       &     (\inlv{v})           & = & \inrv{v}                            \\
-  \denot{\swapp}       &      (\inrv{v})           & = & \inlv{v}                            \\
-  \denot{\assoclp}     &      (\inlv{v})           & = & \inlv{(\inlv{v})}                   \\
-  \denot{\assoclp}     &      (\inrv{(\inlv{v})})  & = & \inlv{(\inrv{v})}                   \\
-  \denot{\assoclp}     &      (\inrv{(\inrv{v})})  & = & \inrv{v}                            \\
-  \denot{\assocrp}     &      (\inlv{(\inlv{v})})  & = & \inlv{v}                            \\
-  \denot{\assocrp}     &      (\inlv{(\inrv{v})})  & = & \inrv{(\inlv{v})}                   \\
-  \denot{\assocrp}     &      (\inrv{v})           & = & \inrv{(\inrv{v})}
+  \denot{\identlp}     &      (\inl{v})           & = & v                                   \\
+  \denot{\identrp}     &      v                    & = & \inl{v}                            \\
+  \denot{\swapp}       &     (\inl{v})           & = & \inr{v}                            \\
+  \denot{\swapp}       &      (\inr{v})           & = & \inl{v}                            \\
+  \denot{\assoclp}     &      (\inl{v})           & = & \inl{(\inl{v})}                   \\
+  \denot{\assoclp}     &      (\inr{(\inl{v})})  & = & \inl{(\inr{v})}                   \\
+  \denot{\assoclp}     &      (\inr{(\inr{v})})  & = & \inr{v}                            \\
+  \denot{\assocrp}     &      (\inl{(\inl{v})})  & = & \inl{v}                            \\
+  \denot{\assocrp}     &      (\inl{(\inr{v})})  & = & \inr{(\inl{v})}                   \\
+  \denot{\assocrp}     &      (\inr{v})           & = & \inr{(\inr{v})}
 \end{array}$}}
 
 {\scalebox{\scalef}{$%
 \begin{array}[t]{rlcl}
-  \denot{\identlt}      &      (\Acon{tt} , v)      & = & v                                   \\
-  \denot{\identrt}      &      v                    & = & (\Acon{tt} , v)                     \\
+  \denot{\identlt}      &      (\ttt , v)      & = & v                                   \\
+  \denot{\identrt}      &      v                    & = & (\ttt , v)                     \\
   \denot{\swapt}        &      (v_1 , v_2)          & = & (v_2 , v_1)                         \\
   \denot{\assoclt}     &      (v_1 , (v_2 , v_3))  & = & ((v_1 , v_2) , v_3)                 \\
   \denot{\assocrt}     &      ((v_1 , v_2) , v_3)  & = & (v_1 , (v_2 , v_3))                 \\
-  \denot{\dist}       &      (\inlv{v_1} , v_3)   & = & \inlv{(v_1 , v_3)}                  \\
-  \denot{\dist}        &      (\inrv{v_2 , v_3})   & = & \inrv{(v_2 , v_3)}                  \\
-  \denot{\factor}       &      (\inlv{(v_1 , v_3)}) & = & (\inlv{v_1} , v_3)                  \\
-  \denot{\factor}      &      (\inrv{(v_2 , v_3)}) & = & (\inrv{v_2} , v_3)
+  \denot{\dist}       &      (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}                  \\
+  \denot{\dist}        &      (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}                  \\
+  \denot{\factor}       &      (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)                  \\
+  \denot{\factor}      &      (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)
 \end{array}$}}
 
 %%\end{longtable}
@@ -249,8 +250,8 @@ sets. The denotation of a combinator $c : A \isoone B$ is a (bijective) function
 \begin{array}{rlcl}
   \denot{\idc}         &      v                    & = & v                                   \\
   \denot{(c_1 \fatsemi c_2)} & v                    & = & (\denot{c_2} \circ \denot{c_1}) v   \\
-  \denot{(c_1 \oplus c_2)}   & (\inlv{v})           & = & \inlv{(\denot{c_1}~v)}              \\
-  \denot{(c_1 \oplus c_2)}   & (\inrv{v})           & = & \inrv{(\denot{c_2}~v)}              \\
+  \denot{(c_1 \oplus c_2)}   & (\inl{v})           & = & \inl{(\denot{c_1}~v)}              \\
+  \denot{(c_1 \oplus c_2)}   & (\inr{v})           & = & \inr{(\denot{c_2}~v)}              \\
   \denot{(c_1 \otimes c_2)}  & (v_1 , v_2)          & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
   \end{array}
 $}}
@@ -369,7 +370,7 @@ $}}
 \begin{proof}
   For every primitive combinator $c$ listed on one side of Fig.~\ref{fig:pi-terms}, let $!c$ be the combinator listed on
   the other side. Thus $! \assoclp$ is $\assocrp$ and $! \swapp$ is $\swapp$ itself. Then we have that $\denot{c}$ and
-  $\denot{!c}$ is an equivalence. For the level-2 combinator \Afun{idr◎l}, we check
+  $\denot{!c}$ form an equivalence. For the level-2 combinator \Afun{idr◎l}, we check
   $\denot{\AgdaBound{c}~\AgdaOperator{\AgdaInductiveConstructor{◎}}~\AgdaInductiveConstructor{id⟷₁}}
   = \mathit{id} \circ \denot{c} = \denot{c}$. The other cases are only slightly more involved calculations.
 \end{proof}

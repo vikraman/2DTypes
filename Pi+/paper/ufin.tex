@@ -1,27 +1,25 @@
 \section{The Groupoid of Finite Types}
 \label{sec:ufin}
 
-In the previous section, we gave a sound denotational semantics for $\PiLang$ using the groupoid of finite sets and
-bijections $\BFin$. Types are interpreted as objects in $\BFin$, and 1-combinators are interpreted as isomorphisms in
-$\BFin$. We also showed that if there is a 2-combinator between two 1-combinators, then their interpretations are
-extensionally equal in $\BFin$.
+The denotational semantics for $\PiLang$ in the previous section forms a groupoid $\BFin$ whose objects are sets and
+whose (iso)morphisms as bijections. The semantics interprets types as objects in $\BFin$, 1-combinators as isomorphisms
+in $\BFin$, and for every pair of 1-combinators related by a 2-combinator, their interpretations are extensionally equal
+in $\BFin$. This groupoid is strict: two equal permutations are extensionally identified, without an explicit witness
+for the equality. In order to establish completeness, we want to quote back from the semantics to the
+syntax. Specifically, given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
+extensionally equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted
+1-combinators. Our first step is therefore to \emph{weaken} this groupoid $\BFin$.
 
-However, we want to go a step further, and claim completeness for this semantics, that is, we want to quote back from
-the semantics to the syntax. Given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
-equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted 1-combinators.
-
-The groupoid $\BFin$ that we presented is strict, that is, two equal permutations are extensionally identified, without
-an explicit witness for the equality. Our first step is to weaken this groupoid $\BFin$. In a weak category, equational
-axioms of the category are replaced by higher invertible cells. For example, there are higher invertible cells for the
-left and right units of composition, and associativity. The higher cells come with their own coherence data as well,
-such as vertical composition, and horizontal composition, or whiskering.\todo{define 2-category in appendix.}
-
-HoTT provides a rich internal language for working with weak higher groupoids, using the ``Types are weak
-$\infty$-groupoids'' correspondence. Using the identity type for morphisms, a 1-groupoid in HoTT has points for 0-cells,
-1-paths for 1-cells, and 2-paths for 2-cells, but there is at most one 2-cell between compatible 1-cells.~\footnote{This
-is a locally-strict $(2,0)$-category, since every cell above 0 is invertible, and the hom-categories are posets, that
-is, truth-value enriched.} The groupoid $\BFin$ can be written in HoTT as a type $\UFin$, which is a 1-groupoid. In this
-section, we develop the tools necessary to construct $\UFin$, starting with a quick review of HoTT.
+In a weak category, equational axioms of the category are replaced by higher invertible cells. For example, there are
+higher invertible cells for the left and right units of composition, and associativity. The higher cells come with their
+own coherence data as well, such as vertical composition, and horizontal composition, or whiskering.\todo{define
+  2-category in appendix.} HoTT provides a rich internal language for working with weak higher groupoids, using the
+``Types are weak $\infty$-groupoids'' correspondence. Using the identity type for morphisms, a 1-groupoid in HoTT has
+points for 0-cells, 1-paths for 1-cells, and 2-paths for 2-cells, but there is at most one 2-cell between compatible
+1-cells.~\footnote{This is a locally-strict $(2,0)$-category, since every cell above 0 is invertible, and the
+  hom-categories are posets, that is, truth-value enriched.} The groupoid $\BFin$ can be written in HoTT as a type
+$\UFin$, which is a 1-groupoid. In this section, we develop the tools necessary to construct $\UFin$, starting with a
+quick review of HoTT.
 
 
 \begin{toappendix}
