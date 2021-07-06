@@ -1,26 +1,30 @@
 \section{The Groupoid of Finite Types}
 \label{sec:ufin}
 
-The denotational semantics for $\PiLang$ in the previous section forms a groupoid $\BFin$ whose objects are sets and
-whose (iso)morphisms as bijections. The semantics interprets types as objects in $\BFin$, 1-combinators as isomorphisms
-in $\BFin$, and for every pair of 1-combinators related by a 2-combinator, their interpretations are extensionally equal
-in $\BFin$. This groupoid is strict: two equal permutations are extensionally identified, without an explicit witness
-for the equality. In order to establish completeness, we want to quote back from the semantics to the
-syntax. Specifically, given a morphism in $\BFin$, we want to produce a 1-combinator in $\PiLang$, and given two
-extensionally equal morphisms in $\BFin$, we want to produce a 2-combinator witnessing the equality of the quoted
-1-combinators. Our first step is therefore to \emph{weaken} this groupoid $\BFin$.
+The denotational semantics for $\PiLang$ in the previous section forms a groupoid $\BFin$ whose objects are finite sets
+and whose (iso)morphisms as bijections between finite sets. The semantics interprets types as objects in~$\BFin$,
+1-combinators as isomorphisms in~$\BFin$, and for every pair of 1-combinators related by a 2-combinator, their
+interpretations are extensionally equal in~$\BFin$. In other words, this groupoid is strict: two equal permutations are
+extensionally identified, without an explicit witness for the equality. In order to establish completeness, we want to
+quote back from the semantics to the syntax. Specifically, given a morphism in $\BFin$, we want to produce a
+1-combinator in $\PiLang$, and given two extensionally equal morphisms in $\BFin$, we want to produce a 2-combinator
+witnessing the equality of the quoted 1-combinators. Our first step is therefore to \emph{weaken} this groupoid $\BFin$
+by replacing the equational axioms of the category by higher invertible cells. In a weak category, the identity and
+associativity equational conditions are replaced by higher invertible cells for the left and right units of composition
+and for associativity; these higher cells come with their own coherence data as well, such as vertical composition, and
+horizontal composition, or whiskering as detailed in Appendix~\ref{app:twocat}.
 
-In a weak category, equational axioms of the category are replaced by higher invertible cells. For example, there are
-higher invertible cells for the left and right units of composition, and associativity. The higher cells come with their
-own coherence data as well, such as vertical composition, and horizontal composition, or whiskering.\todo{define
-  2-category in appendix.} HoTT provides a rich internal language for working with weak higher groupoids, using the
-``Types are weak $\infty$-groupoids'' correspondence. Using the identity type for morphisms, a 1-groupoid in HoTT has
-points for 0-cells, 1-paths for 1-cells, and 2-paths for 2-cells, but there is at most one 2-cell between compatible
-1-cells.~\footnote{This is a locally-strict $(2,0)$-category, since every cell above 0 is invertible, and the
-  hom-categories are posets, that is, truth-value enriched.} The groupoid $\BFin$ can be written in HoTT as a type
-$\UFin$, which is a 1-groupoid. In this section, we develop the tools necessary to construct $\UFin$, starting with a
-quick review of HoTT.
+HoTT provides a rich internal language for working with weak higher groupoids, using the ``types are weak
+$\infty$-groupoids'' correspondence. In this section, we show that the weakened version of the groupoid $\BFin$ can be
+written in HoTT as a type $\UFin$, which is a 1-groupoid that has points for 0-cells, 1-paths for 1-cells, 2-paths for
+2-cells with at most one 2-cell between compatible 1-cells.
 
+%% In this section, we develop the tools necessary to construct $\UFin$, starting with a quick review of HoTT.
+%% Using the identity type for morphisms, a 1-groupoid in HoTT
+
+IS THAT FOOTNOTE NECESSARY ??? We should avoid using footnotes as much as possible.\footnote{This is a locally-strict
+  $(2,0)$-category, since every cell above 0 is invertible, and the hom-categories are posets, that is, truth-value
+  enriched.}
 
 \begin{toappendix}
   We give an example of the groupoid structure on a 3-element set.
