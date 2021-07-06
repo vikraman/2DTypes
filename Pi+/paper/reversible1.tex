@@ -414,6 +414,12 @@ $}}
 % functions are the \emph{only} values in the $\lambda$-calculus.  In our setting, we ask whether the programs developed
 % in the previous section can themselves be subject to (higher-level) equivalences?
 
+Using categorical language, the denotational semantics for $\PiLang$ is using the category of finite sets and functions
+$\SetFin$. However, we only use the bijective functions for the semantics, which means, we use the groupoid $\BFin =
+\term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and finite
+products $(\unit, \times)$, which we use to interpret our types. In $\BFin$, the coproducts and products restrict to
+additive and multiplicative symmetric monoidal structures, respectively, making $\BFin$ a symmetric rig groupoid.
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"
