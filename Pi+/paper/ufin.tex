@@ -2,22 +2,30 @@
 \label{sec:ufin}
 
 The denotational semantics for $\PiLang$ in the previous section forms a groupoid $\BFin$ whose objects are finite sets
-and whose (iso)morphisms as bijections between finite sets. The semantics interprets types as objects in~$\BFin$,
+and whose morphisms as bijections between finite sets. The semantics interprets types as objects in~$\BFin$,
 1-combinators as isomorphisms in~$\BFin$, and for every pair of 1-combinators related by a 2-combinator, their
 interpretations are extensionally equal in~$\BFin$. In other words, this groupoid is strict: two equal permutations are
 extensionally identified, without an explicit witness for the equality. In order to establish completeness, we want to
 quote back from the semantics to the syntax. Specifically, given a morphism in $\BFin$, we want to produce a
 1-combinator in $\PiLang$, and given two extensionally equal morphisms in $\BFin$, we want to produce a 2-combinator
-witnessing the equality of the quoted 1-combinators. Our first step is therefore to \emph{weaken} this groupoid $\BFin$
-by replacing the equational axioms of the category by higher invertible cells. In a weak category, the identity and
+witnessing the equality of the quoted 1-combinators.
+
+Our first step is therefore to expose the implicit equalities by \emph{weakening} the groupoid $\BFin$, i.e., by
+replacing the equational axioms of the category by higher invertible cells. In a weak category, the identity and
 associativity equational conditions are replaced by higher invertible cells for the left and right units of composition
 and for associativity; these higher cells come with their own coherence data as well, such as vertical composition, and
-horizontal composition, or whiskering as detailed in Appendix~\ref{app:twocat}.
+horizontal composition, or whiskering as detailed in Appendix~\ref{app:twocat}. However, although weakening the groupoid
+exposes some implicit equalities, it does not, by itself, give us a handle to characterize such equalities. One elegant
+way to acquire such an ability is to ensure that the groupoid is ``univalent,'' as this provides a way to characterize
+the semantic equivalences using the elements of the identity type, i.e., using objects whose equality is equipped with
+an induction principle. We will therefore work within a HoTT metatheory which provides an ambient univalent universe of
+types and introduce the novel idea of a \emph{univalent subuniverse} to carve out $\UFin$: a weakened, univalent,
+version of the groupoid $\BFin$.
 
-HoTT provides a rich internal language for working with weak higher groupoids, using the ``types are weak
-$\infty$-groupoids'' correspondence. In this section, we show that the weakened version of the groupoid $\BFin$ can be
-written in HoTT as a type $\UFin$, which is a 1-groupoid that has points for 0-cells, 1-paths for 1-cells, 2-paths for
-2-cells with at most one 2-cell between compatible 1-cells.
+% HoTT provides a rich internal language for working with weak higher groupoids, using the ``types are weak
+% $\infty$-groupoids'' correspondence. In this section, we show that the weakened version of the groupoid $\BFin$ can be
+% written in HoTT as a type $\UFin$, which is a 1-groupoid that has points for 0-cells, 1-paths for 1-cells, 2-paths for
+% 2-cells with at most one 2-cell between compatible 1-cells.
 
 %% In this section, we develop the tools necessary to construct $\UFin$, starting with a quick review of HoTT.
 %% Using the identity type for morphisms, a 1-groupoid in HoTT
