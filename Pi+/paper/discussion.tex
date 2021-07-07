@@ -2,22 +2,17 @@
 
 In this paper, we \ldots
 
-
-Pi types -- Natural number -- Finite sets
-1-combinator -- Generators of Sn -- 1-paths
-2-combinator -- Relations of Sn -- 2-paths
-
-In HoTT, univalence characterises the path type in the universe as equivalences of types. The map $\term{idtoeqv} : A
-\id_{\UU} B \to A \eqv B$ can be easily constructed using path induction. The term $\term{ua} : A \eqv B \to A \id_{\UU}
-B$, its computation rule $\term{ua-\beta} : (e : A \eqv B) \to \term{idtoeqv}(\term{ua}(e)) \id e$, and its
-extensionality rule $\term{ua-\eta} : (p : A \id_{\UU} B) \to p == \term{ua}(\term{idtoeqv(p)})$ are generally added as
-postulates when formalising in Agda. Together, $\term{ua}$ and $\term{ua}-\beta$ give the full univalence axiom $(A \eqv
-B) \eqv (A \id_{\UU} B)$.
+\paragraph{Computing with Univalence} In HoTT, univalence characterises the path type in the universe as equivalences of
+types. The map $\term{idtoeqv} : A \id_{\UU} B \to A \eqv B$ can be easily constructed using path induction. The term
+$\term{ua} : A \eqv B \to A \id_{\UU} B$, its computation rule $\term{ua-\beta} : (e : A \eqv B) \to
+    \term{idtoeqv}(\term{ua}(e)) \id e$, and its extensionality rule $\term{ua-\eta} : (p : A \id_{\UU} B) \to p ==
+    \term{ua}(\term{idtoeqv(p)})$ are generally added as postulates when formalising in Agda. Together, $\term{ua}$ and
+$\term{ua}-\beta$ give the full univalence axiom $(A \eqv B) \eqv (A \id_{\UU} B)$.
 
 % Let's think of the $\PiLang$ combinators as describing the inhabitants of the dentity type of finite types. 
 
 By giving a computable presentation for a univalent subuniverse, we are able to describe the path space of it
-syntactically, by giving a complete equational axiomatisation of the equivalences between types in the subuniverse. 
+syntactically, by giving a complete equational axiomatisation of the equivalences between types in the subuniverse.
 % By the property of being univalent, this subuniverse gives a model of the univalence axiom. 
 The $\term{idtoeqv}$ corresponds to giving a denotation for a program (1-combinator), which is easily done by induction.
 The $\term{ua}$ map corresponds to synthesing a program from an equivalence (which, in general, is of course
@@ -61,7 +56,7 @@ symmetric monoidal categories, strong symmetric monoidal functors, and monoidal 
 $\CCat{C}$. This is a 2-monad on $\CatCat$~\cite{blackwellTwodimensionalMonadTheory1989}, whose algebras are (strict)
 symmetric monoidal categories. Its construction is known in the literature~\cite{abramskyAbstractScalarsLoops2005}.
 Concretely, the objects of $\FSM[\CCat{C}]$ are given by lists of objects of $\CCat{C}$, that is, a pair $(n:\Nat, A:[n]
-\to \CCat{C}_{0})$. An morphism between $(n,A)$ and $(n,B)$ is given by a pair $(\pi,\lambda)$ where $\pi$ is a
+    \to \CCat{C}_{0})$. An morphism between $(n,A)$ and $(n,B)$ is given by a pair $(\pi,\lambda)$ where $\pi$ is a
 permutation of $[n]$, and $\lambda_{i} : A_{i} \to B_{\pi(i)}$ for $1 \leq i \leq n$. Abstractly, this is given by the
 Grothendieck construction $\int F$ of the functor $F : \BFin \to \CatCat$ from the groupoid of finite sets and
 bijections to $\CatCat$, assigning each natural number $n$ to the $n$-power $C^{n}$ of $C$, and each permutation on
@@ -69,15 +64,15 @@ $[n]$ inducing an endofunctor on $C^{n}$ by action. $\BFin$ is the free symmetri
 generator, $\FSM[\unit]$. The free symmetric monoidal category has been used to study
 concurrency~\cite{hylandSymmetricMonoidalSketches2004}, petri nets~\cite{baezCategoriesNets2021}, combinatorial
 structures~\cite{fioreCartesianClosedBicategory2008}, quantum mechanics~\cite{abramskyAbstractScalarsLoops2005},
-bicategorical models of (differential) linear logic~\cite{melliesTemplateGamesDifferential2019}. 
+bicategorical models of (differential) linear logic~\cite{melliesTemplateGamesDifferential2019}.
 
 Coherence and normalisation problems for monoids in constructive type theory using coherence for monoidal categories was
 studied in~\cite{beylinExtractingProofCoherence1996}. In HoTT, coherence for the free monoidal groupoid over a groupoid
-and the proof of its universal property has been considered in~\cite{piceghelloCoherenceMonoidalGroupoids2020}. 
+and the proof of its universal property has been considered in~\cite{piceghelloCoherenceMonoidalGroupoids2020}.
 
 Free commutative monoids in type theory have been studied in~\cite{gylterudMultisetsTypeTheory2020}, and using HoTT
 in~\cite{choudhuryFinitemultisetConstructionHoTT2019}. The free symmetric monoidal groupoid $\FSM[A]$ over a groupoid
-$A$ can be given by $\dsum{X:\UFin}{A^{X}}$, or it can be presented as an algebraic 2-theory using 1-HITs. These HITs
+$A$ can be given by $\dsum*{X:\UFin}{A^{X}}$, or it can be presented as an algebraic 2-theory using 1-HITs. These HITs
 and the proof of their universal property have been considered
 in~\cite*{piceghelloCoherenceSymmetricMonoidal2019,choudhuryFinitemultisetConstructionHoTT2019}.
 
@@ -90,6 +85,72 @@ theory.
 Curry-Howard correspondence to cartesian-closed categories. In this work, we have established a correspondence between a
 fragment of the $\PiLang$ family of reversible programming languages and symmetric monoidal groupoids. The Curry-Howard
 part of this correspondence with reversible logic was established in~\cite{sparksSuperstructuralReversibleLogic2014}.
+
+\begin{center}
+    \begin{tabular}{c c c}
+        \hline
+        $\PiLang$     & $\Sn$               & $\UFin$     \\
+        \hline
+        types         & Natural numbers     & Finite sets \\
+        \hline
+        1-combinators & Generators of $\Sn$ & 1-paths     \\
+        \hline
+        2-combinators & Relations of $\Sn$  & 2-paths     \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{c c c}
+        \hline
+        Logic                              & Program                       & Algebra                     \\
+        \hline
+        Propositions                       & Types                         & Objects                     \\
+        \hline
+        Proofs                             & Terms                         & Morphisms                   \\
+        \hline
+        $\blank$                           & Equations                     & Homotopies                  \\
+        \hline
+        Intuitionistic propositional logic & Simply typed Lambda Calculus  & Cartesian Closed Categories \\
+        \hline
+        Superstructural Reversible logic   & Reversible Language $\PiLang$ & Symmetric Rig Groupoids     \\
+        \hline
+        Connectives                        & Type constructors             & Bifunctors                  \\
+        \hline
+        ?                                  & Type normalization            & ?                           \\
+        \hline
+        ?                                  & Program normalization         & ?                           \\
+        \hline
+        ?                                  & Soundness of 2-combinators    & ?                           \\
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{c c c}
+        \hline
+        Reversible Logic             & Reversible Programming                  & Algebra                  \\
+        \hline
+        Free commutative rig         & Free symmetric rig groupoid             & $\UFin$                  \\
+        \hline
+        Propositions                 & Types                                   & Objects                  \\
+        \hline
+        Entailment?                  & Reversible programs                     & Isomorphisms             \\
+        \hline
+        $\blank$                     & 2-combinators                           & Homotopies               \\
+        \hline
+        Conjunction?                 & $\times$                                & $\otimes$                \\
+        \hline
+        Disjunction?                 & $+$                                     & $\oplus$                 \\
+        \hline
+        $A \land B \vdash B \land A$ & $\swapt$                                & $\mathcal{B}_{A,B}$      \\
+        \hline
+        True proposition             & $\onet$                                 & $F_1$                    \\
+        \hline
+        Decidability                 & Program Synthesis                       & Reachability in a graph? \\
+        \hline
+        Soundness/Completeness       & Soundness/Completeness of 1-combinators & ?                        \\
+    \end{tabular}
+\end{center}
 
 \paragraph{Rewriting} We presented a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem.
 
