@@ -358,7 +358,7 @@ Second, we need the normal forms to be unique, so that we can get a normalisatio
 rewriting system is confluent -- meaning that all critical pairs, that is, terms with overlapping possible reduction
 rules, have to converge. For example, in our system, the pairs in~\Cref{fig:critical-pairs-converging} converge.
 Unfortunately, this is not true for all critical pairs -- an  example is in~\Cref{fig:critical-pairs-non-converging},
-where both endpoints are normal with respect to the $\cox*$ relation.
+where left and right endpoints are normal with respect to the $\cox*$ relation.
 
 % \begin{figure}
 % \[
@@ -430,7 +430,7 @@ where both endpoints are normal with respect to the $\cox*$ relation.
         \arrow["\longbraid", squiggly, from=2-4, to=3-1]
       \end{tikzcd}
     }
-    \caption{A non-converging critical pair in $\cox*$ converging in $\longcox*$}
+    \caption{A non-converging critical pair in $\cox*$ converges with $\longbraid$}
     \label{fig:critical-pairs-non-converging}
   \end{subfigure}
 
@@ -491,37 +491,88 @@ the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\Cref{fig:lo
   \begin{subfigure}[b]{0.3\textwidth}
     \centering
     \begin{tikzpicture}
+      \def\nstrandsdf{7}
       \pic[local bounding box=my braid,braid/.cd,
-        number of strands = 7,
+        number of strands = \nstrandsdf,
         width = 0.4cm,
         height = 0.4cm,
         border height = 0.1cm,
-        thick]
+        thick,
+        name prefix=braid]
       {braid={s_1, s_2, s_3, s_4, s_5, s_6}};
+      % \draw[thick] % draws the top/bottom bars
+      % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+      % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+      \foreach \n in {1,...,\nstrandsdf}{
+          \pgfmathtruncatemacro{\nminusone}{\n - 1}
+          \node at (braid-\n-s)[yshift = 2.8cm] {\nminusone};
+        }
+      % labels the bottom bar
+      \node at (braid-1-e)[yshift = -2.8cm] {5};
+      \node at (braid-2-e)[yshift = -2.8cm] {6};
+      \node at (braid-3-e)[yshift = -2.8cm] {0};
+      \node at (braid-4-e)[yshift = -2.8cm] {1};
+      \node at (braid-5-e)[yshift = -2.8cm] {2};
+      \node at (braid-6-e)[yshift = -2.8cm] {3};
+      \node at (braid-7-e)[yshift = -2.8cm] {4};
     \end{tikzpicture}
     \caption{$0 \downf 6$}
     \label{fig:downf}
   \end{subfigure}
+  \hfill
   \begin{subfigure}[b]{0.6\textwidth}
     \centering
     \begin{tikzpicture}
+      \def\nstrandsbl{6}
       \pic[local bounding box=my braid,braid/.cd,
-        number of strands = 6,
+        number of strands = \nstrandsbl, % number of  strands
         width = 0.4cm,
         height = 0.4cm,
         border height = 0.1cm,
-        thick] at (0, 0)
+        thick,
+        name prefix=braid] at (0, 0)
       {braid={s_5, s_1, s_2, s_3, s_4, s_5}};
       \node[font=\large] at (3, 1.3) {\(\rightarrow\)};
+      % \draw[thick] % draws the top/bottom bars
+      % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+      % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+      \foreach \n in {1,...,\nstrandsbl}{
+          \pgfmathtruncatemacro{\nminusone}{\n - 1}
+          \node at (braid-\n-s)[yshift = 2.8cm] {\nminusone};
+        }
+      % labels the bottom bar
+      \node at (braid-1-e)[yshift = -2.8cm] {3};
+      \node at (braid-2-e)[yshift = -2.8cm] {5};
+      \node at (braid-3-e)[yshift = -2.8cm] {0};
+      \node at (braid-4-e)[yshift = -2.8cm] {1};
+      \node at (braid-5-e)[yshift = -2.8cm] {4};
+      \node at (braid-6-e)[yshift = -2.8cm] {2};
+
+      \def\nstrandsbr{6}
       \pic[local bounding box=my braid,braid/.cd,
-        number of strands = 6,
+        number of strands = \nstrandsbr,
         width = 0.4cm,
         height = 0.4cm,
         border height = 0.1cm,
-        thick] at (4, 0)
+        thick,
+        name prefix=braid] at (4, 0)
       {braid={s_1, s_2, s_3, s_4, s_5, s_4}};
+      % \draw[thick] % draws the top/bottom bars
+      % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+      % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+      \foreach \n in {1,...,\nstrandsbl}{
+          \pgfmathtruncatemacro{\nminusone}{\n - 1}
+          \node at (braid-\n-s)[yshift = 2.8cm] {\nminusone};
+        }
+      % labels the bottom bar
+      \node at (braid-1-e)[yshift = -2.8cm] {3};
+      \node at (braid-2-e)[yshift = -2.8cm] {5};
+      \node at (braid-3-e)[yshift = -2.8cm] {0};
+      \node at (braid-4-e)[yshift = -2.8cm] {1};
+      \node at (braid-5-e)[yshift = -2.8cm] {4};
+      \node at (braid-6-e)[yshift = -2.8cm] {2};
     \end{tikzpicture}
-    \caption{$\longbraid$ with $n = 0$ and $k = 3$}
+    \caption{ $\longbraid$ with $n = 0$ and $k = 3$}
     \label{fig:longcox}
   \end{subfigure}
   \caption{Braiding diarams for modified Coxeter relations.}
