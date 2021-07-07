@@ -174,9 +174,9 @@ Using this symmetric monoidal structure, we translate from $\PiPlusLang$ to $\Pi
 
 \begin{definition}
   \begin{align*}
-    \evalh_{0} & : \UPlus \to \UHat                                                          \\
-    \evalh_{1} & : (c : t_{1} \iso t_{2}) \to \evalh_{0}(t_{1}) \isoh \evalh_{0}(t_{2})      \\
-    \evalh_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalh_{1}(c_{1}) \Isoh \evalh_{1}(c_{2})
+    \evalp_{0} & : \UPlus \to \UHat                                                          \\
+    \evalp_{1} & : (c : t_{1} \iso t_{2}) \to \evalp_{0}(t_{1}) \isoh \evalp_{0}(t_{2})      \\
+    \evalp_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalp_{1}(c_{1}) \Isoh \evalp_{1}(c_{2})
   \end{align*}
 \end{definition}
 
@@ -187,14 +187,14 @@ to generate the braiding.
 
 \begin{definition}
   \begin{align*}
-    \quoteh_{0} & : \UHat \to \UPlus                                                            \\
-    \quoteh_{1} & : (p : X_{1} \isoh X_{2}) \to \quoteh_{0}(X_{1}) \iso \quoteh_{0}(X_{2})      \\
-    \quoteh_{2} & : (\alpha : p_{1} \Isoh p_{2}) \to \quoteh_{1}(p_{1}) \Iso \quoteh_{1}(p_{2})
+    \quotep_{0} & : \UHat \to \UPlus                                                            \\
+    \quotep_{1} & : (p : X_{1} \isoh X_{2}) \to \quotep_{0}(X_{1}) \iso \quotep_{0}(X_{2})      \\
+    \quotep_{2} & : (\alpha : p_{1} \Isoh p_{2}) \to \quotep_{1}(p_{1}) \Iso \quotep_{1}(p_{2})
   \end{align*}
 \end{definition}
 
 \begin{proposition}
-  $\evalh/\quoteh$ give a symmetric monoidal biequivalence between $\PiPlusCat$ and $\PiHatCat$.
+  $\evalp/\quotep$ give a symmetric monoidal biequivalence between $\PiPlusCat$ and $\PiHatCat$.
 \end{proposition}
 
 \subsection{$\PiHatLang$ to $\UFin$}
@@ -211,9 +211,9 @@ words in $\Sn$ and then to automorphisms using~\cref{prop:sn-lehmer-fin-equiv}. 
 
 \begin{definition}
   \begin{align*}
-    \evalt_{0} & : \UHat \to \UFin                                                          \\
-    \evalt_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2})      \\
-    \evalt_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalt_{1}(c_{1}) \id \evalt_{1}(c_{2})
+    \evalh_{0} & : \UHat \to \UFin                                                          \\
+    \evalh_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2})      \\
+    \evalh_{2} & : (\alpha : c_{1} \Isoh c_{2}) \to \evalh_{1}(c_{1}) \id \evalh_{1}(c_{2})
   \end{align*}
 \end{definition}
 
@@ -223,16 +223,31 @@ a sequence of adjacent transpositions, producing a 1-combinator in $\PiHatLang$.
 
 \begin{definition}
   \begin{align*}
-    \quotet_{0} & : \UFin \to \UHat                                                            \\
-    \quotet_{1} & : (p : X_{1} \id X_{2}) \to \quoteh_{0}(X_{1}) \isoh \quoteh_{0}(X_{2})      \\
-    \quotet_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2})
+    \quoteh_{0} & : \UFin \to \UHat                                                            \\
+    \quoteh_{1} & : (p : X_{1} \id X_{2}) \to \quoteh_{0}(X_{1}) \isoh \quoteh_{0}(X_{2})      \\
+    \quoteh_{2} & : (\alpha : p_{1} \id p_{2}) \to \quoteh_{1}(p_{1}) \Isoh \quotet_{1}(p_{2})
   \end{align*}
 \end{definition}
 
 $\UFin$ as a 1-groupoid, is a (locally strict) weak $(2,0)$-category, and we use this to state our final equivalence.
 
 \begin{proposition}
-  $\evalt/\quotet$ give a symmetric monoidal biequivalence between $\PiHatCat$ and $\UFin$.
+  $\evalh/\quoteh$ give a symmetric monoidal biequivalence between $\PiHatCat$ and $\UFin$.
+\end{proposition}
+
+The semantics that we presented here takes a different route to constructing the permutation from a $\PiLang$
+combinator, compared to the direct interpretation given using the big-step interpreter in~\cref{subsec:denotational}. We
+verify that the two semantics agree, establishing that the semantics is adequate and fully abstract.
+
+\begin{definition}[${\gdenot{\blank}} : U \to {\UFin}$]
+  \begin{align*}
+    \gdenot{\blank}_{0} & = \evalh_{0} \comp \evalp_{0} \comp \evalt_{0} \\
+    \gdenot{\blank}_{1} & = \evalh_{1} \comp \evalp_{1} \comp \evalt_{1}
+  \end{align*}
+\end{definition}
+
+\begin{proposition}
+  If $c_1, c_2 : X \iso Y$, then $\denot{c_1} = \denot{c_2}$ iff $\gdenot{c_1}_{1} = \gdenot{c_2}_{1}$.
 \end{proposition}
 
 \subsection{$\PiLang$ circuit normalisation}
@@ -242,11 +257,11 @@ $\PiPlusLang$. Note that the normalisation happens in going from $\PiHatLang$ to
 
 \begin{definition}
   \begin{align*}
-    \normt_{0} & : U \to \UPlus                                        \\
-    \normt_{0} & = \quoteh_{0} \comp \evalt_{0}                        \\
+    \normt_{0} & : U \to \UPlus                                            \\
+    \normt_{0} & = \quotep_{0} \comp \quoteh_{0} \comp \gdenot{\blank}_{0} \\
     \\
-    \normt_{1} & : (c : X \iso Y) \to \normt_{0}(X) \iso \normt_{0}(Y) \\
-    \normt_{1} & = \quoteh_{1} \comp \evalt_{1}
+    \normt_{1} & : (c : X \iso Y) \to \normt_{0}(X) \iso \normt_{0}(Y)     \\
+    \normt_{1} & = \quotep_{1} \comp \quoteh_{1} \comp \gdenot{\blank}_{1}
   \end{align*}
 \end{definition}
 
