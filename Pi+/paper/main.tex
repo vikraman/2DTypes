@@ -219,9 +219,34 @@ $\displaystyle
 %% The "title" command has an optional parameter,
 %% allowing the author to define a "short title" to be used in page headers.
 
-%% \title{Reversible Programming with Univalent Finite Types}
+\title{The Symmetries of Reversible Circuits}
+\subtitle{Correspondence between Reversible Circuits and Symmetric Rig Groupoids}
 
-\title[Reversible Circuits and Symmetric Rig Groupoids]{Curry-Lambek Correspondence between Reversible Circuits and Symmetric Rig Groupoids}
+% Reversible Programming with Univalent Finite Types
+% Curry-Lambek Correspondence between Reversible Circuits and Symmetric Rig Groupoids
+% Reversible Curry-(Howard)-Lambek Correspondence
+
+% Symmetries in Reversible Computing: 
+%   From Reversible Circuits to Symmetric Rig Groupoids and Back
+%   Lambek Correspondence for Reversible Circuits and Symmetric Rig Groupoids
+%   Symmetric Rig Groupoids for Reversible Circuits
+
+% Symmetry in Reversible Computing (and its Lambek Correspondence)
+% (The) Symmetry of Reversible Circuits
+% (The) Symmetry of Reversible Programming
+% The Symmetries of Reversible Computing
+% Symmetry in Reversible Programming Languages
+% Symmetry from a Reversible Perspective
+% Symmetry in a Reversible Framework
+
+% Computing with Univalent Subuniverses
+% Programming with Computable Univalent Subuniverses
+% Reversible Programming with Univalent Subuniverse
+% The Computational Content of Univalent Subuniverses
+% The Computational Content of Finite Type Isomorphisms
+% Computational Content of Weak Rig Groupoids
+
+% Univalent Curry-Howard-Lambek by Quantuum Circuts NbE
 
 %%
 %% The "author" command and its associated commands are used to define
@@ -242,42 +267,113 @@ $\displaystyle
 %%
 %% The abstract is a short summary of the work to be presented in the
 %% article.
+
 \begin{abstract}
+  The reversible model of computation is motivated by the physical nature of computational processes and proposes
+  information-preserving computation. The primitive building blocks in this paradigm are reversible boolean gates, which
+  can also be formalised as permutations of sets of bits, or combinators for type isomorphisms. We unify these
+  approaches by giving a sound and complete denotational semantics for a first-order reversible programming language
+  $\PiLang$ for reversible circuits and circuit equivalences.
 
-  Reversible boolean circuits are formalized both as isomorphisms between finite types and as permutations between
-  finite sets. The first perspective is the basis of two-level reversible programming languages where programs in the
-  level-1 denote type isomorphisms and programs in level-2 denote equivalences of level-1 programs. The second
-  perspective rests on group theory and its categorification using symmetric rig categories. It is folklore that these
-  two perspectives match but a full proof of this statement requires a non-trivial construction to establish that the
-  algebraic presentation of \emph{free symmetric rig groupoid} (the syntax of the two level programming language) is
-  equivalent to the \emph{weak symmetric rig of finite sets and bijections} (the categorification of the symmetric
-  groups on finite sets).
-
-  Our main result is this proof of equivalence thus establishing a sound and complete Curry-Lambek correspondence between the programming
-  language and the categorical semantics. The proof, formalised in Agda, induces automatic processes for the
-  synthesis of reversible circuits from permutations, for the verification of reversible circuits, and for normalising reversible circuits using
-  normalisation-by-evaluation.
-
-  % Reversible computing is an alternative model of computation motivated by the physical nature of computational
-  % processes, where computations are required to preserve information. Several reversible programming languages have been
-  % proposed which permit hardware-independent, low-level and high-level descriptions of reversible circuits.
-
-  % The $\PiLang$ family of reversible programming languages were proposed by~\citet{jamesInformationEffects2012} in which
-  % all computations are logically reversible. Formally, it is presented as a language of 1-combinators witnessing type
-  % isomorphisms, and an equational theory given by 2-combinators witnessing 1-combinator optimisations.
-
-  % In this paper, we present a denotational semantics for this language, using the language of groupoids \`{a} la
-  % Homotopy Type Theory (HoTT). We establish a correspondence between the syntactic groupoid of the language and a
-  % formally presented univalent subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and
-  % 2-combinators to 2-paths in the universe, which is shown to be sound and complete for both levels. The result suggests
-  % a Curry-Howard-Lambek/Lawvere correspondence between Reversible Logic, Reversible Programming Languages, and Symmetric
-  % Monoidal Groupoids, similar to the well-known correspondence of Intuitionistic Logic, Simply Typed Lambda Calculus,
-  % and Cartesian Closed Categories.
-
-  % Using soundness and completeness, we show how to perform Normalisation by Evaluation (NbE) for boolean reversible
-  % circuits, motivated by a few examples of reversible logic gates used in Quantum Computing. We also show how to
-  % synthesise normal forms for reversible circuits starting from the extensional view of permutations of bits.
+  We establish a correspondence between $\PiLang$ and the groupoid of finite sets and bijections. The result suggests a
+  Curry-Howard-Lambek correspondence between Reversible Logic, Reversible Programming Languages, and Symmetric Monoidal
+  Groupoids. Using the formalisation of our result, we show how to perform normalisation, verification, and synthesis of
+  reversible and quantum circuits.
 \end{abstract}
+
+% proposed by~\cite{jamesInformationEffects2012}, settling a conjecture by~\citet{caretteComputingSemiringsWeak2016}.
+
+% Reversible computing is an alternative model of computation motivated by the physical nature of computational
+% processes, where computations are required to preserve information. Reversibility is encoded using reversible logic
+% gates, or reversible boolean functions, which can be formalised as reversible programming languages of isomorphisms
+% between finite types, or as permutations of finite sets.
+
+% Several reversible programming languages have been
+% proposed which permit hardware-independent, low-level and high-level descriptions of reversible circuits.
+
+% Reversible boolean circuits are formalized both as isomorphisms between finite types and as permutations between
+% finite sets. The first perspective is the basis of two-level reversible programming languages where programs in the
+% level-1 denote type isomorphisms and programs in level-2 denote equivalences of level-1 programs. The second
+% perspective rests on group theory and its categorification using symmetric rig categories. It is folklore that these
+% two perspectives match but a full proof of this statement requires a non-trivial construction to establish that the
+% algebraic presentation of \emph{free symmetric rig groupoid} (the syntax of the two level programming language) is
+% equivalent to the \emph{weak symmetric rig of finite sets and bijections} (the categorification of the symmetric
+% groups on finite sets).
+
+% Our main result is this proof of equivalence thus establishing a sound and complete Curry-Lambek correspondence between the programming
+% language and the categorical semantics. The proof, formalised in Agda, induces automatic processes for the
+% synthesis of reversible circuits from permutations, for the verification of reversible circuits, and for normalising reversible circuits using
+% normalisation-by-evaluation.
+
+
+% we extract procedures for performing verification, syntehsis and Normalisation
+% by Evaluation (NbE) for boolean reversible circuits, motivated by a examples of reversible logic gates used in Quantum
+% Computing. Working in a HoTT, we provide a syntactic presentation of a \emph{univalent subuniverse of finite types},
+% and explain how the properties of the theory correspond to our programming-language results.
+
+% Using the sound and complete denotational semantics, we show how to perform Normalisation by Evaluation (NbE) for
+% reversible boolean circuits, motivated by examples of reversible logic gates used in Quantum Computing. We also show
+% how to decide equivalences of two reversible boolean circuits, and synthesise normal forms for reversible circuits
+% starting from the extensional view of permutations of bits.
+
+% The reversible model of computation motivated by the physical nature of computational processes, proposes reversible
+% boolean circuits and reversible logic gates to perform computation. Several reversible programming languages have been
+% proposed which permit hardware-independent, low-level and high-level descriptions of reversible circuits.
+
+% The $\PiLang$ family of reversible languages were proposed by~\citet{jamesInformationEffects2012} as a first-order
+% programming language for describing reversible circuits, using type isomorphisms of finite types. 
+
+% Reversible boolean functions can also be realised as permutations of finite sets of bits, and can be studied using
+% permutation groups, and their horizontal categorification, groupoids. It was conjectured
+% in~\cite{caretteComputingSemiringsWeak2016} that these two perspectives are the same.
+
+% In this paper, we resolve this question by establishing a correspondence between $\PiLang$ and the groupoid of finite
+% sets and bijections, establishing that the syntactic category of $\PiLang$ is equivalent to the free symmetric rig
+% groupoid on one generator. This result suggests a Curry-Howard-Lambek correspondence between $\PiLang$ and symmetric
+% monoidal groupoids.
+
+% Using the sound and complete denotational semantics, we show how to perform Normalisation by Evaluation (NbE) for
+% reversible boolean circuits, motivated by examples of reversible logic gates used in Quantum Computing. We also show
+% how to decide equivalences of two reversible boolean circuits, and synthesise normal forms for reversible circuits
+% starting from the extensional view of permutations of bits.
+
+% --------
+
+% Reversible paradigm, motivated by the physical nature of computational processes, argues for the advantages of doing
+% computation in an information-preserving way. The primitive building blocks of such can be thought of in several ways:
+% as reversible boolean gates, as permutations on a finite set, and as type isomorphisms. We propose an approach that
+% unifies and relates all of those perspectives. By constructing an algebraic semantics for a reversible language with
+% type isomorphisms and (optimizations?), we relate Reversible Logic, Reversible Programming Languages and Symmetric
+% Monoidal Categories, in a way reminescent of the Curry-Howard-Lambek correspondence between Intuitionistic Logic,
+% Simply Typed Lambda Calculus and Cartesian Closed Categories. 
+
+% The result is formalized in the Homotopy Type Theory setting, in the Agda proof assistant. Using soundness and
+% completeness on both program and program-optimization levels, we extract procedures for performing verification, syntehsis and
+% Normalisation by Evaluation (NbE) for boolean reversible circuits, motivated by a examples of reversible logic gates
+% used in Quantum Computing. Working in a HoTT, we provide a syntactic presentation of a \emph{univalent subuniverse of 
+% finite types}, and explain how the properties of the theory correspond to our programming-language results.
+
+% ----------
+
+% Reversible computing is an alternative model of computation motivated by the physical nature of computational
+% processes, where computations are required to preserve information. Several reversible programming languages have been
+% proposed which permit hardware-independent, low-level and high-level descriptions of reversible circuits.
+
+% The $\PiLang$ family of reversible programming languages were proposed by~\citet{jamesInformationEffects2012} in which
+% all computations are logically reversible. Formally, it is presented as a language of 1-combinators witnessing type
+% isomorphisms, and an equational theory given by 2-combinators witnessing 1-combinator optimisations.
+
+% In this paper, we present a denotational semantics for this language, using the language of groupoids \`{a} la
+% Homotopy Type Theory (HoTT). We establish a correspondence between the syntactic groupoid of the language and a
+% formally presented univalent subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and
+% 2-combinators to 2-paths in the universe, which is shown to be sound and complete for both levels. The result suggests
+% a Curry-Howard-Lambek/Lawvere correspondence between Reversible Logic, Reversible Programming Languages, and Symmetric
+% Monoidal Groupoids, similar to the well-known correspondence of Intuitionistic Logic, Simply Typed Lambda Calculus,
+% and Cartesian Closed Categories.
+
+% Using soundness and completeness, we show how to perform Normalisation by Evaluation (NbE) for boolean reversible
+% circuits, motivated by a few examples of reversible logic gates used in Quantum Computing. We also show how to
+% synthesise normal forms for reversible circuits starting from the extensional view of permutations of bits.
 
 %%
 %% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
