@@ -14,9 +14,9 @@
           \dist :    & ~ (A + B) \times C    & \isoone & (A \times C) + (B \times C)~ & : \factor
         \end{array}$}}
 
-    \medskip
+  \medskip
 
-    {\scalebox{\scalef}{%
+  {\scalebox{\scalef}{%
       \Rule{}
       {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : B \isoone C}
       {\jdg{}{}{c_1 \fatsemi c_2 : A \isoone C}}
@@ -45,22 +45,43 @@
 \label{sec:informal}
 
 The circuit model of reversible computation discussed in the introduction is a useful abstraction close to the hardware
-platform. However, since its main data abstraction is a \emph{sequence of wires}, it only provides an ``assembly''
+platform. However, since its main data abstraction is a \emph{sequence of wires}, it only provides an ``assembly-level''
 programming abstraction (e.g., \verb|qasm|). As motivated by \citet{LAFONT2003257}, a mathematical model based on
-permutations of finite sets provides a richer algebraic model which we review in this section.
+permutations of finite sets provides a richer algebraic structure which we review in this section.
 
 %%%%%%%%%%%%%%%%%
 \subsection{The $\Pi$ Family of Languages}
 \label{sec:langRev-examples}
 \label{examples}
 
-A specialized language for programming with permutations on finite sets can be built using ideas going back to Kelly,
-Laplaza, and Mac Lane~\cite{laplaza72,kelly74,KELLY197197} that the commutative semiring (also known as the commutative
-rig) of natural numbers exactly characterizes permutations on finite sets. In programming parlance, as shown in
-Fig.~\ref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes a constant in the programming
-language and the algebraic closure operators become composition operators in the programming language. Once equipped
-with a notion of values and types, we get the following syntactic presentation of a programming language for
-permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
+In a reversible boolean circuit, the number of input bits matches the number of output bits. Circuits can be composed
+sequentially, vertically, or horizontally, respectively preserving the number of bits, adding up the number of bits or
+multiplying them. So, to program with reversible circuits, all we need to do is make sure that each primitive operation
+preserves the number of bits, which is just a natural number. Natural numbers are the free commutative semiring (or,
+commutative rig) on one generator, with $(0,+)$ for addition, and $(1,\times)$ for multiplication, so the commutative
+semirig identities can be used to design a logic for reversible programming. This inspired the syntax for various
+first-order reversible logics and reversible programming
+languages~\cite*{sparksSuperstructuralReversibleLogic2014,jamesInformationEffects2012}.
+
+Natural number identities have no computational content. To obtain a computational interpretation of the commutative rig
+structure, the logic needs to be equipped with values and types, and a notion of operational semantics and contextual
+equivalence~\cite{jamesInformationEffects2012}. This is a programming language which embodies the computational content
+of isomorphisms of finite types, or permutations. On the semantic side, we need to consider the groupoidification of a
+commutative rig, that is, a symmetric rig groupoid. A sound semantics for $\PiLang$ in weak rig groupoids was
+established in~\cite{caretteComputingSemiringsWeak2016}, and conjectured to be complete.
+
+% In programming parlance, as shown in~\cref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes
+% a reversible combinator in the programming language and the algebraic closure operators become composition operators in
+% the programming language. Once equipped with a notion of values and types, we get the following syntactic presentation
+% of a programming language for permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
+
+% A specialised language for programming with permutations on finite sets can be built using ideas going back to Kelly,
+% Laplaza, and Mac Lane~\cite{laplaza72,kelly74,KELLY197197} that the commutative semiring (also known as the commutative
+% rig) of natural numbers exactly characterizes permutations on finite sets. In programming parlance, as shown in
+% Fig.~\ref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes a constant in the programming
+% language and the algebraic closure operators become composition operators in the programming language. Once equipped
+% with a notion of values and types, we get the following syntactic presentation of a programming language for
+% permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
 
 % The practice of programming languages is replete with \emph{ad hoc} instances of reversible computations: database
 % transactions, mechanisms for data provenance, checkpoints, stack and exception traces, logs, backups, rollback
@@ -89,12 +110,12 @@ permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
 \medskip
 
 {\scalebox{\scalef}{$%
-    \begin{array}{lrcl}
-      \textit{Value types}   & A,B,C,D & ::= & \zerot \alt \onet \alt A+B \alt A\times B        \\
-      \textit{Values}        & v,w,x,y & ::= & \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
-      \textit{Program types} &         &     & A \isoone B                                         \\
-      \textit{Programs}      & c       & ::= & (\textrm{See Fig.~\ref{fig:pi-terms}})
-    \end{array}$}}
+      \begin{array}{lrcl}
+        \textit{Value types}   & A,B,C,D & ::= & \zerot \alt \onet \alt A+B \alt A\times B        \\
+        \textit{Values}        & v,w,x,y & ::= & \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
+        \textit{Program types} &         &     & A \isoone B                                      \\
+        \textit{Programs}      & c       & ::= & (\textrm{See Fig.~\ref{fig:pi-terms}})
+      \end{array}$}}
 
 \medskip\noindent The language of types is built from the empty type ($\zerot$), the unit type
 ($\onet$) containing just one value~$\Acon{tt}$, the sum type ($+$) containing values of the form $\inlv{v}$ and
@@ -191,6 +212,7 @@ the right and then swapping. The full set of level-2 combinators is large and is
 
 %%%%%%%%%
 \subsection{Denotational Semantics}
+\label{subsec:denotational}
 
 \noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be specified
 by mapping each type to a finite set and each combinator to a permutation between finite sets. In this section, we
@@ -201,13 +223,13 @@ level-2 combinators.
 The denotation of types is straightforward:
 
 \begin{center}
-{\scalebox{\scalef}{$%
-\begin{array}{rcl}
-  \denot{\zerot}     & = & \bot                  \\
-  \denot{\onet}      & = & \top \\
-  \denot{A + B}      & = & \denot{A} \sqcup \denot{B} \\
-  \denot{A \times B} & = & \denot{A} \times \denot{B}
-\end{array}$}}
+  {\scalebox{\scalef}{$%
+        \begin{array}{rcl}
+          \denot{\zerot}     & = & \bot                       \\
+          \denot{\onet}      & = & \top                       \\
+          \denot{A + B}      & = & \denot{A} \sqcup \denot{B} \\
+          \denot{A \times B} & = & \denot{A} \times \denot{B}
+        \end{array}$}}
 \end{center}
 
 \noindent where $\bot$ is the empty set, $\top$ is a singleton set, $\sqcup$ is the disjoint union of sets, and $\times$
@@ -215,47 +237,47 @@ is the cartesian product of sets. The denotation of a combinator $c : A \isoone 
 $\denot{A}$ to $\denot{B}$:
 
 \begin{multicols}{2}
-%%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
-{\scalebox{\scalef}{$%
-\begin{array}[t]{rlcl}
-  \denot{\identlp}     &      (\inl{v})           & = & v                                   \\
-  \denot{\identrp}     &      v                    & = & \inl{v}                            \\
-  \denot{\swapp}       &     (\inl{v})           & = & \inr{v}                            \\
-  \denot{\swapp}       &      (\inr{v})           & = & \inl{v}                            \\
-  \denot{\assoclp}     &      (\inl{v})           & = & \inl{(\inl{v})}                   \\
-  \denot{\assoclp}     &      (\inr{(\inl{v})})  & = & \inl{(\inr{v})}                   \\
-  \denot{\assoclp}     &      (\inr{(\inr{v})})  & = & \inr{v}                            \\
-  \denot{\assocrp}     &      (\inl{(\inl{v})})  & = & \inl{v}                            \\
-  \denot{\assocrp}     &      (\inl{(\inr{v})})  & = & \inr{(\inl{v})}                   \\
-  \denot{\assocrp}     &      (\inr{v})           & = & \inr{(\inr{v})}
-\end{array}$}}
+  %%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+  {\scalebox{\scalef}{$%
+        \begin{array}[t]{rlcl}
+          \denot{\identlp} & (\inl{v})         & = & v               \\
+          \denot{\identrp} & v                 & = & \inl{v}         \\
+          \denot{\swapp}   & (\inl{v})         & = & \inr{v}         \\
+          \denot{\swapp}   & (\inr{v})         & = & \inl{v}         \\
+          \denot{\assoclp} & (\inl{v})         & = & \inl{(\inl{v})} \\
+          \denot{\assoclp} & (\inr{(\inl{v})}) & = & \inl{(\inr{v})} \\
+          \denot{\assoclp} & (\inr{(\inr{v})}) & = & \inr{v}         \\
+          \denot{\assocrp} & (\inl{(\inl{v})}) & = & \inl{v}         \\
+          \denot{\assocrp} & (\inl{(\inr{v})}) & = & \inr{(\inl{v})} \\
+          \denot{\assocrp} & (\inr{v})         & = & \inr{(\inr{v})}
+        \end{array}$}}
 
-{\scalebox{\scalef}{$%
-\begin{array}[t]{rlcl}
-  \denot{\identlt}      &      (\ttt , v)      & = & v                                   \\
-  \denot{\identrt}      &      v                    & = & (\ttt , v)                     \\
-  \denot{\swapt}        &      (v_1 , v_2)          & = & (v_2 , v_1)                         \\
-  \denot{\assoclt}     &      (v_1 , (v_2 , v_3))  & = & ((v_1 , v_2) , v_3)                 \\
-  \denot{\assocrt}     &      ((v_1 , v_2) , v_3)  & = & (v_1 , (v_2 , v_3))                 \\
-  \denot{\dist}       &      (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}                  \\
-  \denot{\dist}        &      (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}                  \\
-  \denot{\factor}       &      (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)                  \\
-  \denot{\factor}      &      (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)
-\end{array}$}}
+  {\scalebox{\scalef}{$%
+        \begin{array}[t]{rlcl}
+          \denot{\identlt} & (\ttt , v)          & = & v                   \\
+          \denot{\identrt} & v                   & = & (\ttt , v)          \\
+          \denot{\swapt}   & (v_1 , v_2)         & = & (v_2 , v_1)         \\
+          \denot{\assoclt} & (v_1 , (v_2 , v_3)) & = & ((v_1 , v_2) , v_3) \\
+          \denot{\assocrt} & ((v_1 , v_2) , v_3) & = & (v_1 , (v_2 , v_3)) \\
+          \denot{\dist}    & (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}   \\
+          \denot{\dist}    & (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}   \\
+          \denot{\factor}  & (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)   \\
+          \denot{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)
+        \end{array}$}}
 
-%%\end{longtable}
+  %%\end{longtable}
 \end{multicols}
 
 \begin{center}
-{\scalebox{\scalef}{$%
-\begin{array}{rlcl}
-  \denot{\idc}         &      v                    & = & v                                   \\
-  \denot{(c_1 \fatsemi c_2)} & v                    & = & (\denot{c_2} \circ \denot{c_1}) v   \\
-  \denot{(c_1 \oplus c_2)}   & (\inl{v})           & = & \inl{(\denot{c_1}~v)}              \\
-  \denot{(c_1 \oplus c_2)}   & (\inr{v})           & = & \inr{(\denot{c_2}~v)}              \\
-  \denot{(c_1 \otimes c_2)}  & (v_1 , v_2)          & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
-  \end{array}
-$}}
+  {\scalebox{\scalef}{$%
+        \begin{array}{rlcl}
+          \denot{\idc}               & v           & = & v                                   \\
+          \denot{(c_1 \fatsemi c_2)} & v           & = & (\denot{c_2} \circ \denot{c_1}) v   \\
+          \denot{(c_1 \oplus c_2)}   & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
+          \denot{(c_1 \oplus c_2)}   & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
+          \denot{(c_1 \otimes c_2)}  & (v_1 , v_2) & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
+        \end{array}
+      $}}
 \end{center}
 
 % \begingroup
@@ -364,8 +386,8 @@ $}}
   \begin{itemize}
     \item For every level-1 combinator $c : A \isoone B$, we have that $\denot{c}$ is a bijection between $\denot{A}$ and $\denot{B}$.
     \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
-        combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using
-        extensional equivalence of functions.
+          combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using
+          extensional equivalence of functions.
   \end{itemize}
 \end{theorem}
 \begin{proof}
@@ -373,7 +395,7 @@ $}}
   the other side. Thus $! \assoclp$ is $\assocrp$ and $! \swapp$ is $\swapp$ itself. Then we have that $\denot{c}$ and
   $\denot{!c}$ form an equivalence. For the level-2 combinator \Afun{idr◎l}, we check
   $\denot{\AgdaBound{c}~\AgdaOperator{\AgdaInductiveConstructor{◎}}~\AgdaInductiveConstructor{id⟷₁}}
-  = \mathit{id} \circ \denot{c} = \denot{c}$. The other cases are only slightly more involved calculations.
+    = \mathit{id} \circ \denot{c} = \denot{c}$. The other cases are only slightly more involved calculations.
 \end{proof}
 
 
@@ -416,7 +438,7 @@ $}}
 
 Using categorical language, the denotational semantics for $\PiLang$ is using the category of finite sets and functions
 $\SetFin$. However, we only use the bijective functions for the semantics, which means, we use the groupoid $\BFin =
-\term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and finite
+  \term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and finite
 products $(\unit, \times)$, which we use to interpret our types. In $\BFin$, the coproducts and products restrict to
 additive and multiplicative symmetric monoidal structures, respectively, making $\BFin$ a symmetric rig groupoid.
 
