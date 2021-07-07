@@ -957,6 +957,21 @@
 \AgdaInductiveConstructor{swap₊}\AgdaSymbol{)}\<%
 \end{code}}
 
+\begin{code}[hide]%
+\>[0]\AgdaKeyword{open}\AgdaSpace{}%
+\AgdaKeyword{import}\AgdaSpace{}%
+\AgdaModule{Pi+.Indexed.Equiv1NormHelpers}\<%
+\\
+\>[0]\AgdaFunction{step1}\AgdaSpace{}%
+\AgdaSymbol{=}\AgdaSpace{}%
+\AgdaFunction{pi\textasciicircum{}2list}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{eval₁}\AgdaSpace{}%
+\AgdaSymbol{(}\AgdaFunction{swaplr1}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaInductiveConstructor{I}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaInductiveConstructor{I}\AgdaSymbol{\}}\AgdaSpace{}%
+\AgdaSymbol{\{}\AgdaInductiveConstructor{I}\AgdaSymbol{\}))}\<%
+\end{code}
+
 \newcommand{\orequiv}{%
 \begin{code}%
 \>[0]\AgdaFunction{orEquiv}\AgdaSpace{}%

@@ -88,6 +88,78 @@ Other applications of symmetric groups.
 
 Actions of symmetric groups, permutation groupoids.
 
+\paragraph{Extensional vs. Intensional View of Permutations.}
+Although the meaning of a permutation - that is, the specific bijective function
+that it represents - is in some sense all there is, manipulating them
+syntactically still has its advantages. By writing reversible programs, we think
+of them in an intensional way. Comparing two programs for equality by evaluating
+them on all points in the domain is a very crude - and maybe even inefficient -
+way of doing that. ~\cite{Kuehlmann:2006:RBR:2298470.2300327,10.1007/978-3-540-24605-3_4,Yamashita:2010:FEQ:1835957.1835965}.
+
+It is crude, because there is no way of enforcing additional constraints on the
+process of transforming one program into another, and no way of inspecting what
+transformation occurred. We can imagine a practical situation in which reversible
+circuits admit one kind of optimization FPGA?, but do not admit another,
+even though they are equivalent in the extensional sense - or maybe one of these
+transformations is cheaper than another, or maybe it is important to know which
+transformation did occur for the producer(?) to focus their resources of
+improving this kind of transformations. By comparing the circuits extensionally,
+the proof object = the path from one into the other - does not have any
+structure,  it is just a check that the values match.
+
+On the other hand, even though in general, the equality of circuits requires
+exponential time jk{triple check}, the proof object can be still very small.
+This creates structure that can possibly be exploited in a heuristic way.
+Additionally, if the goal is to convince third-party that two circuits are
+the same, we can just present the proof instead of showing the equality directly
+- for example, by choosing a particularly short one.
+
+Taking all this into account, it is clear that we must seek a syntactic way of
+computing the meaning of the circuit, instead of just directly evaluating it to
+$\Aut[\Fin[n]]$ - since when we go back and quote the permutation as a circuit
+(in a normal form), there was no "trace" left to see what transformation (what
+sequence of 2-paths) maps the old one into the new one.
+
+We are additionally experimenting with user annotations that can guide
+the search. Each level-2 combinator can be annotated with various
+``cost'' annotations indicating whether it reduces the number of
+gates, reduces the number of choice points, or other cost
+functions. Then one can ask for a proof that takes no more than a
+certain number of steps or a proof that does not create more than a
+certain number of additional wires etc. We illustrate these ideas by
+defining a simple cost function and using it to annotate level-2
+combinators.
+
+We define the \emph{length} $L(c)$ of a composite circuit $c$ as
+follows: the length of a sequential composition of circuits is the sum
+of the lengths of the subcircuits $L(f \odot g) = L(f) + L(g)$; and
+the length of choice or parallel composition is the maximum of either
+branch $L(f \oplus g) = L(f \otimes g) = \max(L(f),L(g))$. For
+primitive gates, the length needs to be postulated to reflect the
+``length'' of the computation involved in applying that primitive. As
+examples, consider the following two level-2 combinators:
+
+% \begin{code}
+% linv◎l'  :  {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (c ◎ ! c) ⇔ id⟷
+% idl◎l'   :  {t₁ t₂ : U} {c : t₁ ⟷ t₂} → (id⟷ ◎ c) ⇔ c
+% \end{code}
+% \AgdaHide{
+% \begin{code}
+% linv◎l'  = ?
+% idl◎l'   = ?
+% \end{code}
+% }
+
+\noindent Assuming that $\idc$ takes a unit length of computation, the
+first can be annotated with $L(c)*2 \isotwo 1$ and the second with $L(c)+1 \isotwo
+L(c)$ indicating that the first combinator reduces the length of the
+circuit from twice the length of $c$ to 1 and the second combinator
+reduces the length of the circuit by 1. Such annotations can then be
+used to constrain or guide the search for transformations between
+circuits.
+
+
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "main"

@@ -133,6 +133,11 @@ swaplr1 = assocl₊ ◎ swap₊ ◎ (id⟷₁ ⊕ swap₊)
 swaplr2 = (id⟷₁ ⊕ swap₊) ◎ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ swap₊)
 \end{code}}
 
+\begin{code}[hide]
+open import Pi+.Indexed.Equiv1NormHelpers
+step1 = pi^2list (eval₁ (swaplr1 {I} {I} {I}))
+\end{code}
+
 \newcommand{\orequiv}{%
 \begin{code}
 orEquiv : reversibleOr1 ⟷₂ reversibleOr2
