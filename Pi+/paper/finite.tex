@@ -2,7 +2,7 @@
 \label{sec:finite}
 
 % Recap of the previous section
-In~\cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin[n]$ for every
+In~\Cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin[n]$ for every
 $n:\Nat$, that is, automorphisms of finite sets of size $n$, with the loopspace encoding the automorphism group. This is
 also known to be the finite symmetric group $\Sn[n]$. In the following sections, we will describe this group
 syntactically.
@@ -26,7 +26,7 @@ important properties. Then, we introduce our chosen \emph{Coxeter presentation} 
 $\Sn$, we will use a rewriting system, with a suitable, well behaved collection of reduction rules corresponding to the
 Coxeter presentation. Finally, we describe the normal forms in this rewriting system, using Lehmer codes, and prove the
 correspondence between them and the type $\Aut[\Fin[n]]$ of automorphisms on a finite set. The generators and relations
-we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~\cref{sec:equivalence}).
+we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~\Cref{sec:equivalence}).
 
 \subsection{Presenting the permutation group}
 
@@ -61,7 +61,7 @@ important for the following reasons.
 
 We use a presentation based on adjacent transpositions for generators, called a~\emph{Coxeter presentation}, which we
 also use to solve the word problem for $\Sn$. Connecting it back to the language $\PiLang$, we will show that it is
-possible to encode all $\PiLang$ combinators using adjacent transpositions (in~\cref{sec:equivalence}). The rest of this
+possible to encode all $\PiLang$ combinators using adjacent transpositions (in~\Cref{sec:equivalence}). The rest of this
 section develops these intuitions formally. Group presentations are built by adding equations to a \emph{free group},
 which we define first.
 
@@ -70,7 +70,7 @@ which we define first.
 
   From universal algebra, a group is simply a set with a 0-ary constant $e$ (the neutral element), a binary operation
   $\blank\mult\blank$ for group multiplication, and a unary inverse operation $\inv{\blank}$. The neutral element has to
-  satisfy unit and inverse laws, and the multiplication has to be associative (see~\cref{def:group}).
+  satisfy unit and inverse laws, and the multiplication has to be associative (see~\Cref{def:group}).
 
   A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the
   group multiplication is given by integer addition.
@@ -105,7 +105,7 @@ the singleton set.
   \begin{definition}
     \label{def:free-group}
     Given a set $A$, the free group $F(A)$ on it is given by a higher inductive type with the following point and path
-    constructors. Notice the similarity with the definition of a group structure (\cref{def:group}), but note that each
+    constructors. Notice the similarity with the definition of a group structure (\Cref{def:group}), but note that each
     operation here is a generator for $F(A)$.
     \begin{itemize}
       \item An inclusion function $\eta_{A} : A \to F(A)$
@@ -153,7 +153,7 @@ adjunction between the category of groups and sets.
 \end{proposition}
 
 Following the universal-algebraic definition, in HoTT, we could use a naive higher inductive type to define the free
-group, which enforces the group axioms by adding path constructors (see~\cref{def:free-group}).
+group, which enforces the group axioms by adding path constructors (see~\Cref{def:free-group}).
 Using the induction principle, we can easily verify the universal property. However, since this definition of $F(A)$ has
 lots of path constructors corresponding to each group axiom, characterising its path space is difficult.
 
@@ -174,7 +174,7 @@ ensure that the inverse laws hold, so we have to coalesce adjacent occurences of
   $F(A) \defeq \quot{\List[A + A]}{\sim^{\ast}}$ has a group structure, with the empty list $\nil$ for the neutral
   element, multiplication given by list append $\append$, and inverse given by flipping $\inl$ and $\inr$, followed by
   reversing the list. Further, $F(A)$ with $\eta_A(a) \defeq \inl(a) \cons \nil$ satisfies the universal property of
-  free groups, as stated in~\cref{prop:free-groups}.
+  free groups, as stated in~\Cref{prop:free-groups}.
 \end{proposition}
 
 \subsection{Group presentations}
@@ -190,7 +190,7 @@ presentations, and, a group can have any number of different presentations.
   congruence closure of $R$.
 \end{definition}
 
-The universal property of the above definition is similar to~\cref{prop:free-groups} except the relation has to be
+The universal property of the above definition is similar to~\Cref{prop:free-groups} except the relation has to be
 preserved by the function mapping out of the generating set.
 
 \begin{proposition}[Universal property of $F(\langle A ; R \rangle)$]
@@ -213,7 +213,7 @@ To present the group $\Sn$, the primitive operations we are going to use will be
 permutations on an $n + 1$-element set, there are $n$ adjacent transpositions, transposition number $k$ swapping
 elements $(\el{k}, \el{k+1})$. Thus, the generating set would be $\Fin[n]$. There are three relations that we're going
 to specify for this presentation -- these are the equations that these generators should satisfy. We visualise them as
-braid diagrams in~\cref{fig:coxeter-braid}.
+braid diagrams in~\Cref{fig:coxeter-braid}.
 
 \begin{enumerate}
   \item[\labelcref{fig:coxeter-a}] Swapping the same two elements two times in a row should be the same as doing nothing
@@ -315,8 +315,8 @@ braid diagrams in~\cref{fig:coxeter-braid}.
 \todo{an example/motivation from book.pdf}
 
 This construction is called a Coxeter presentation of $\Sn$. Writing it formally, we encode the rules discussed above
-using a relation $\cox$ on $\List[\Fin[n]]$ (\cref{def:cox}), and then take its congruence closure $\cox*$
-(\cref{def:coxstar}).
+using a relation $\cox$ on $\List[\Fin[n]]$ (\Cref{def:cox}), and then take its congruence closure $\cox*$
+(\Cref{def:coxstar}).
 
 \begin{definition}[$\cox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \label{def:cox}
@@ -358,8 +358,8 @@ are strictly smaller than the left hand sides, in terms of the lexicographical o
 well-founded). Thus, by directing the relation from left to right, we would get the termination property out of the box.
 Second, we need the normal forms to be unique, so that we can get a normalisation function. This will be true if the
 rewriting system is confluent -- meaning that all critical pairs, that is, terms with overlapping possible reduction
-rules, have to converge. For example, in our system, the pairs in~\cref{fig:critical-pairs-converging} converge.
-Unfortunately, this is not true for all critical pairs -- an  example is in~\cref{fig:critical-pairs-non-converging},
+rules, have to converge. For example, in our system, the pairs in~\Cref{fig:critical-pairs-converging} converge.
+Unfortunately, this is not true for all critical pairs -- an  example is in~\Cref{fig:critical-pairs-non-converging},
 where both endpoints are normal with respect to the $\cox*$ relation.
 
 % \begin{figure}
@@ -470,7 +470,7 @@ First, we need to define a helper function $n \downf k$.
 The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\). Since we think of the
 number $m$ as the transposition swapping elements $(\el{m}, \el{m+1})$, the role of this helper function
 is to produce a sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ by $k$ places left,
-shifting all the elements in between one place right (see~\cref{fig:downf}).
+shifting all the elements in between one place right (see~\Cref{fig:downf}).
 
 \begin{figure}
   \[
@@ -504,7 +504,7 @@ Then, the directed relation $\longcox$ is defined with the following generators.
 Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and can be
 visualised in the same way as before. The remaining constructor uses the helper function to exchange the order of a long
 sequence of transpositions and a single transposition afterwards. For example, for $n = 0$ and $k = 3$, it allows for
-the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\cref{fig:longcox}).
+the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\Cref{fig:longcox}).
 
 \begin{figure}
   \begin{tikzpicture}
@@ -533,7 +533,7 @@ sides of the relation are strictly larger than the right-hand sides, in terms of
 $\List[\Fin[n]]$.
 
 We define the relation $\longcox*$ to be the closure of $\longcox$, under reflexivity and (right-step extended)
-transitivity (see~\cref{def:longcox-star}).
+transitivity (see~\Cref{def:longcox-star}).
 
 \begin{toappendix}
   \begin{definition}[$\longcox*$]
@@ -576,7 +576,7 @@ we can make the following observation relating it to $\cox*$.
   there is a $u$ such that $w \longcox* u$ and $v \longcox* u$.
 \end{proposition}
 
-By~\cref{prop:nf}~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
+By~\Cref{prop:nf}~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
   {\List[\Fin[n]]}$ that produces a normal form for terms of $\List[\Fin[n]]$. We state and prove a couple of important
 properties enjoyed by $\normf$.
 
@@ -615,7 +615,7 @@ quotient $\List[\Fin[n]]$ by $\approx$, obtaining an equivalent definition for $
   \end{enumerate}
 \end{proposition}
 
-Notice however, that a group presentation, as defined in~\cref{def:presentation}, requires the relation to be on the set
+Notice however, that a group presentation, as defined in~\Cref{def:presentation}, requires the relation to be on the set
 of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The constructor
 $\cancel$ specifies that the inverse of each element is again the same element, using which we can show that our
 definition of $\Sn$ is equivalent to the definition of a presented group, by lifting the $\cox*$ relation.
@@ -809,7 +809,7 @@ Using these facts, we can now prove the main result of this section.
     \begin{array}{rl}
            & \Lehmer[\zero]          \\
       \eqv & \unit                   \\
-      \eqv & \Aut[\Fin[\suc[\zero]]] 
+      \eqv & \Aut[\Fin[\suc[\zero]]]
     \end{array}
     \qquad\qquad
     \begin{array}{rlr}
@@ -817,16 +817,17 @@ Using these facts, we can now prove the main result of this section.
       \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                              & \text{by definition}                                            \\
       \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                     & \text{induction hypothesis}                                     \\
       \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                          \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
-      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                          & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}}
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\Cref{prop:fin-finexcept}~\Cref{prop:fin-finexcept-2}} \\
+      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\Cref{prop:fin-finexcept}~\Cref{prop:fin-finexcept-2}} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                          & \text{by~\Cref{prop:fin-finexcept}~\Cref{prop:fin-finexcept-3}}
     \end{array}
   \end{gather*}
 \end{proof}
 
-By composing~\cref{prop:lehmer-aut-equiv} and~\cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.
+By composing~\Cref{prop:lehmer-aut-equiv} and~\Cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.
 
 \begin{corollary}
+  \label{prop:sn-lehmer-fin-equiv}
   For all $n : \Nat$,
   \(
   \Sn \eqv \Lehmer[n] \eqv \Aut[\Fin[\suc[n]]]
