@@ -716,7 +716,7 @@ $\Fin[k]$. Since the 0-th position is trivial, in practice it is ignored, and th
 \begin{definition}[$\Lehmer : \Nat \to \UU$]
   \begin{align*}
     \Lehmer[\zero]   & \defeq \Fin[\suc[\zero]]                     \\
-    \Lehmer[\suc[n]] & \defeq \Fin[\suc[\suc[n]]] \times \Lehmer[n]
+    \Lehmer[\suc[n]] & \defeq \Lehmer[n] \times \Fin[\suc[\suc[n]]]
   \end{align*}
   % \begin{aligned}
   %   \lzero & : \Lehmer[\zero]                                                     \\
@@ -793,18 +793,37 @@ We can show that the function $\immersion$ gives an equivalence betweeen $\Lehme
   Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
 \end{proposition}
 
-\jk{Review:}
-To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code $c =
-  (4, 3, 2, 1, 0)$. The list $\immersion(c)$ is then going to be $[0, 1, 0, 2, 1, 0, 3, 2, 1, 0, 4, 3, 2, 1, 0]$. It is a
-concatenation of five decreasing lists. Where could a reduction happen?
+\begin{proof}
+\jk{Only for part 1 of the proposition!}
+For any code $c : \Lehmer[n]$, we have that 
+\[
+  \immersion(n, c) = (r_0 \downf k_0) \append (r_1 \downf k_1) \append \dots \append (r_{m-1} \downf k_{m-1})
+\]
+is concatenation of $m \geq 0$ non-empty strictly decreasing lists. Reduction $\longcox$ cannot happen inside any of the strictly
+decreasing $(r \downf k)$: $\longcancel$ requires repeating elements, $\longswap$ acts when consecutive numbers differ
+by at least 2, and $\longbraid$ acts on a non-monotone sequence. This leaves the case of reduction happening on a
+fragment that borders two (or more) subsequences. Again, $\longcancel$ requires two equal consecutive numbers, which
+would then have to be the last one in some $(r_i \downf k_i)$ sequence, and the first one in the next $(r_{i+1} \downf k_{i+1})$.
+But the first number in a sequence $(r_{i+1} \downf k_{i+1})$ is larger than every number in $(r_{i} \downf k_i)$ -- which also
+shows why $\longswap$ cannot happen. The remaining case of $\longbraid$ follows similarly, since its argument is a
+decreasing sequence followed immediately by a number equal to the first element of this sequence.
+\end{proof}
+% \jk{Review:}
+% To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code
+% $c = (0, 1, 2, 3, 4)$ -- for the full proof, see accompanying Agda code. We have that 
+% \[
+%   \immersion(c) = (0 \downf 1) \append (0 \downf 2) \append (0 \downf 3) \append (0 \downf 4) = [0, 1, 0, 2, 1, 0, 3, 2, 1, 0]
+% \]
+% is concatenation of four decreasing lists . Where could a reduction happen?
 
-First, it can't happen inside any of the decreasing components: $\longcancel$ requires repeating elements, $\longswap$
-acts when a smaller number precedes a larger one, and $\longbraid$ has a non-monotone sequence on the left. This leaves
-the case of a reduction happening on a fragment that borders two subsequences. Again, $\longcancel$ requires two equal
-consecutive numbers, which have to be the last one in some decreasing sequence, and the first one in the next sequence.
-But the first number in a sequence is always larger than every number in the sequence before it -- which also shows why
-$\longswap$ cannot happen. The remaining case of $\longbraid$ follows similarly, since it requires the number appearing
-after the decreasing sequence to be equal to the first one in the sequence.
+% First, it can't happen inside any of the strictly decreasing $(n \downf k)$: $\longcancel$ requires repeating elements,
+% $\longswap$ acts when consecutive numbers differ by at least 2, and $\longbraid$ acts on a non-monotone
+% sequence. This leaves the case of reduction happening on a fragment that borders two (or more) subsequences. Again,
+% $\longcancel$ requires two equal consecutive numbers, which would then have to be the last one in some $(0 \downf k)$
+% sequence, and the first one in the next $(0 \downf \suc[k])$. But the first number in a sequence $(0 \downf \suc[k])$ is
+% larger than every number in $(0 \downf k)$ -- which also shows why $\longswap$ cannot happen. The remaining case of
+% $\longbraid$ follows similarly, since its argument is a decreasing sequence followed immediately by a number equal to
+% the first element of the list.
 
 % We also established an equivalence between $\im{\normf}$ and $\Sn$, which gives the following.
 \begin{corollary}
