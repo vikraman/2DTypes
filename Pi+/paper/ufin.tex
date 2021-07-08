@@ -489,8 +489,8 @@ equivalent to a finite set (\Cref{def:finite-set} and \Cref{def:isfin}).
 \end{definition}
 
 \begin{propositionrep}
-\label{prop:isFin}
-For any type $X$, $\isFin[X]$ is a proposition.
+  \label{prop:isFin}
+  For any type $X$, $\isFin[X]$ is a proposition.
 \end{propositionrep}
 
 \begin{proof}
@@ -641,8 +641,8 @@ the univalence principle.
 \end{proposition}
 
 \begin{toappendix}
-  \begin{definition}
-    \label{app:defone}
+  \begin{definition}[Additive symmetric monoidal structure]
+    \label{def:additive}
     \begin{align*}
       O                 & \defeq F_{0}                                       \\
       X \oplus Y        & \defeq X \sqcup Y                                  \\
@@ -653,7 +653,7 @@ the univalence principle.
     \end{align*}
   \end{definition}
   \begin{proposition}
-    \label{app:propone}
+    \label{prop:additive}
     % https://q.uiver.app/?q=WzAsNCxbMCwwLCIoWCBcXG9wbHVzIEkpIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyAoSSBcXG9wbHVzIFkpIl0sWzEsMSwiWCBcXG9wbHVzIFkiXSxbMCwxXSxbMCwxLCJcXGFscGhhX3tYLEksWX0iXSxbMCwyLCJcXHJob197WH0gXFxvcGx1cyAxX3tZfSIsMl0sWzEsMiwiMV97WH0gXFxvcGx1cyBcXGxhbWJkYV97WX0iXSxbNSw2LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
     \[\begin{tikzcd}
         {(X \oplus I) \oplus Y} && {X \oplus (I \oplus Y)} \\
@@ -699,6 +699,85 @@ the univalence principle.
         \arrow[""{name=1, anchor=center, inner sep=0}, "{\mathcal{B}_{Y,X}}"', from=2-2, to=1-3]
         \arrow["\id", Rightarrow, draw=none, from=0, to=1]
       \end{tikzcd}\]
+  \end{proposition}
+\end{toappendix}
+
+\begin{toappendix}
+  \begin{definition}[Multiplicative symmetric monoidal structure]
+    \label{def:multiplicative}
+    \begin{align*}
+      I                 & \defeq F_{1}                                           \\
+      X \otimes Y       & \defeq X \times Y                                      \\
+      \lambda_{X}       & : I \times X \eqv X                                    \\
+      \rho_{X}          & : X \times I \eqv X                                    \\
+      \alpha_{X,Y,Z}    & : (X \otimes Y) \otimes Z \eqv X \otimes (Y \otimes Z) \\
+      \mathcal{B}_{X,Y} & : X \otimes Y \eqv Y \otimes X
+    \end{align*}
+  \end{definition}
+  \begin{proposition}
+    \label{prop:multiplicative}
+    % https://q.uiver.app/?q=WzAsNCxbMCwwLCIoWCBcXG9wbHVzIEkpIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyAoSSBcXG9wbHVzIFkpIl0sWzEsMSwiWCBcXG9wbHVzIFkiXSxbMCwxXSxbMCwxLCJcXGFscGhhX3tYLEksWX0iXSxbMCwyLCJcXHJob197WH0gXFxvcGx1cyAxX3tZfSIsMl0sWzEsMiwiMV97WH0gXFxvcGx1cyBcXGxhbWJkYV97WX0iXSxbNSw2LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        {(X \otimes I) \otimes Y} && {X \otimes (I \otimes Y)} \\
+        {} & {X \otimes Y}
+        \arrow["{\alpha_{X,I,Y}}", from=1-1, to=1-3]
+        \arrow[""{name=0, anchor=center, inner sep=0}, "{\rho_{X} \otimes 1_{Y}}"', from=1-1, to=2-2]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "{1_{X} \otimes \lambda_{Y}}", from=1-3, to=2-2]
+        \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+      \end{tikzcd}\]
+    % https://q.uiver.app/?q=WzAsNSxbMCwxLCIoKFcgXFxvcGx1cyBYKSBcXG9wbHVzIFkpIFxcb3BsdXMgWiJdLFsxLDAsIihXIFxcb3BsdXMgWCkgXFxvcGx1cyAoWSBcXG9wbHVzIFopIl0sWzIsMSwiVyBcXG9wbHVzIChYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSkiXSxbMiwzLCJXIFxcb3BsdXMgKChYIFxcb3BsdXMgWSkgXFxvcGx1cyBaKSJdLFswLDMsIihXIFxcb3BsdXMgKFggXFxvcGx1cyBZKSkgXFxvcGx1cyBaIl0sWzAsMSwiXFxhbHBoYV97VyBcXG9wbHVzIFgsIFksIFp9Il0sWzEsMiwiXFxhbHBoYV97VyxYLFkgXFxvcGx1cyBafSJdLFszLDIsIjFfe1d9IFxcb3BsdXMgXFxhbHBoYV97WCxZLFp9IiwyXSxbMCw0LCJcXGFscGhhX3tXLFgsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzQsMywiXFxhbHBoYV97VyxYIFxcb3BsdXMgWSxafSIsMl0sWzAsMiwiXFxpZCIsMSx7Im9mZnNldCI6NSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        & {(W \otimes X) \otimes (Y \otimes Z)} \\
+        {((W \otimes X) \otimes Y) \otimes Z} && {W \otimes (X \otimes (Y \otimes Z))} \\
+        \\
+        {(W \otimes (X \otimes Y)) \otimes Z} && {W \otimes ((X \otimes Y) \otimes Z)}
+        \arrow["{\alpha_{W \otimes X, Y, Z}}", from=2-1, to=1-2]
+        \arrow["{\alpha_{W,X,Y \otimes Z}}", from=1-2, to=2-3]
+        \arrow["{1_{W} \otimes \alpha_{X,Y,Z}}"', from=4-3, to=2-3]
+        \arrow["{\alpha_{W,X,Y} \otimes 1_{Z}}"', from=2-1, to=4-1]
+        \arrow["{\alpha_{W,X \otimes Y,Z}}"', from=4-1, to=4-3]
+        \arrow["\id"{description}, shift right=5, draw=none, from=2-1, to=2-3]
+      \end{tikzcd}\]
+    % https://q.uiver.app/?q=WzAsNixbMSwwLCJYIFxcb3BsdXMgKFkgXFxvcGx1cyBaKSJdLFswLDEsIihYIFxcb3BsdXMgWSkgXFxvcGx1cyBaIl0sWzAsMiwiKFkgXFxvcGx1cyBYKSBcXG9wbHVzIFoiXSxbMSwzLCJZIFxcb3BsdXMgKFggXFxvcGx1cyBaKSJdLFsyLDIsIlkgXFxvcGx1cyAoWiBcXG9wbHVzIFgpIl0sWzIsMSwiKFkgXFxvcGx1cyBaKSBcXG9wbHVzIFgiXSxbMSwwLCJcXGFscGhhX3tYLFksWn0iXSxbMSwyLCJcXG1hdGhjYWx7Qn1fe1gsWX0gXFxvcGx1cyAxX3tafSIsMl0sWzIsMywiXFxhbHBoYV97WSxYLFp9IiwyXSxbMyw0LCIxX3tZfSBcXG9wbHVzIFxcbWF0aGNhbHtCfV97WCxafSIsMl0sWzUsNCwiXFxhbHBoYV97WSxaLFh9Il0sWzAsNSwiXFxtYXRoY2Fse0J9X3tYLFkgXFxvcGx1cyBafSJdLFs3LDEwLCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        & {X \otimes (Y \otimes Z)} \\
+        {(X \otimes Y) \otimes Z} && {(Y \otimes Z) \otimes X} \\
+        {(Y \otimes X) \otimes Z} && {Y \otimes (Z \otimes X)} \\
+        & {Y \otimes (X \otimes Z)}
+        \arrow["{\alpha_{X,Y,Z}}", from=2-1, to=1-2]
+        \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y} \otimes 1_{Z}}"', from=2-1, to=3-1]
+        \arrow["{\alpha_{Y,X,Z}}"', from=3-1, to=4-2]
+        \arrow["{1_{Y} \otimes \mathcal{B}_{X,Z}}"', from=4-2, to=3-3]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "{\alpha_{Y,Z,X}}", from=2-3, to=3-3]
+        \arrow["{\mathcal{B}_{X,Y \otimes Z}}", from=1-2, to=2-3]
+        \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+      \end{tikzcd}\]
+    % https://q.uiver.app/?q=WzAsMyxbMCwwLCJYIFxcb3BsdXMgWSJdLFsyLDAsIlggXFxvcGx1cyBZIl0sWzEsMSwiWSBcXG9wbHVzIFgiXSxbMCwxLCIxX3tYIFxcb3BsdXMgWX0iLDAseyJsZXZlbCI6Miwic3R5bGUiOnsiaGVhZCI6eyJuYW1lIjoibm9uZSJ9fX1dLFswLDIsIlxcbWF0aGNhbHtCfV97WCxZfSIsMl0sWzIsMSwiXFxtYXRoY2Fse0J9X3tZLFh9IiwyXSxbNCw1LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+    \[\begin{tikzcd}
+        {X \otimes Y} && {X \otimes Y} \\
+        & {Y \otimes X}
+        \arrow["{1_{X \otimes Y}}", Rightarrow, no head, from=1-1, to=1-3]
+        \arrow[""{name=0, anchor=center, inner sep=0}, "{\mathcal{B}_{X,Y}}"', from=1-1, to=2-2]
+        \arrow[""{name=1, anchor=center, inner sep=0}, "{\mathcal{B}_{Y,X}}"', from=2-2, to=1-3]
+        \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+      \end{tikzcd}\]
+  \end{proposition}
+\end{toappendix}
+
+\begin{toappendix}
+  \begin{proposition}[Distributivity]
+    \label{prop:distributivity}
+    \begin{gather*}
+      \begin{aligned}
+        \delta_{l} : X \otimes (Y \oplus Z) & \eqv (X \otimes Y) \oplus (X \otimes Z) \\
+        \delta_{r} : (X \oplus Y) \otimes Z & \eqv (X \otimes Z) \oplus (Y \otimes Z)
+      \end{aligned}
+      \qquad
+      \begin{aligned}
+        a_{l} : X \otimes O \eqv O \\
+        a_{r} : O \otimes X \eqv O
+      \end{aligned}
+    \end{gather*}
   \end{proposition}
 \end{toappendix}
 
