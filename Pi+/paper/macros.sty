@@ -80,9 +80,13 @@
   {\mathrel{\leftrightsquigarrow}}
 }
 \NewDocumentCommand{\longcox}{s}{
-  \IfBooleanTF{#1}
-  {\mathrel{\xrsquigarrow{\ast}}}
   {\mathrel{\rightsquigarrow}}
+}
+\NewDocumentCommand{\longcoxstar}{s}{
+  {\mathrel{\xrsquigarrow{\ast}}}
+}
+\NewDocumentCommand{\longcoxplus}{s}{
+  {\mathrel{\xrsquigarrow{+}}}
 }
 \NewDocumentCommand{\longcoxinv}{s}{
   \IfBooleanTF{#1}

@@ -441,7 +441,7 @@ where left and right endpoints are normal with respect to the $\cox*$ relation.
 \subsection{Rewriting via Coxeter}
 
 Because of this counter-example, the relations have to be changed. In this section, we formally define a rewriting
-system $(\List[\Fin[n]], \longcox*)$, partially based on the Coxeter relations, and prove that it has the desired
+system $(\List[\Fin[n]], \longcox)$, partially based on the Coxeter relations, and prove that it has the desired
 properties of confluence and termination. We prove that the new relation defined by this system is equivalent,
 in a technical sense, to the standard Coxeter relation $\cox*$.
 
@@ -584,22 +584,31 @@ Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k 
 sides of the relation are strictly larger than the right-hand sides, in terms of the lexicographic order on
 $\List[\Fin[n]]$.
 
-We define the relation $\longcox*$ to be the closure of $\longcox$, under reflexivity and (right-step extended)
-transitivity (see~\Cref{def:longcox-star}).
-
 \begin{toappendix}
-  \begin{definition}[$\longcox*$]
+  \begin{definition}[$\longcoxstar$]
     \label{def:longcox-star}
     \begin{align*}
       \reflr{\longcox}
-       & : \forall w \to w \longcox* w                                                                               \\
+       & : \forall w \to w \longcoxstar w                                                                               \\
       \transr{\longcox}
-       & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcox* w_{3} \to w_{1} \longcox* w_{3}
+       & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcoxstar w_{3} \to w_{1} \longcoxstar w_{3}
+    \end{align*}
+  \end{definition}
+  \begin{definition}[$\longcoxplus$]
+    \label{def:longcox-plus}
+    \begin{align*}
+      \relr{\longcoxplus}
+       & : \forall w_{1}, w_{2} \to w_{1} \longcox w_{2} \to w_{1} \longcoxplus w_{2}
+      \transr{\longcoxplus}
+       & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcoxplus w_{3} \to w_{1} \longcoxplus w_{3}
     \end{align*}
   \end{definition}
 \end{toappendix}
 
-Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox*)$ has the properties
+We define $\longcoxplus$ to be the transitive closure (\Cref{def:longcox-star}) and $\longcoxstar$ to be
+reflexive-transitive closure (\Cref{def:longcox-plus})) of $\longcox$.
+
+Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox)$ has the properties
 we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property, and it is terminating, so, by
 Newman's lemma, it produces a unique normal form. We follow the terminology
 of~\cite*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results
@@ -611,11 +620,11 @@ formally.~\vc{check!}
   \begin{enumerate}
     \item $\longcox$ is (locally) confluent. For every span $\coxspan{w_{1}}{w_{2}}{w_{3}}$, there is a matching
           extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
-    \item $\longcox*$ is terminating. For every $w \longcox v$, it holds that $v < w$, where $<$ is the (well-founded)
+    \item $\longcoxplus$ is terminating. For every $w \longcoxplus v$, it holds that $v < w$, where $<$ is the (well-founded)
           lexicographic ordering on $\List[\Fin[n]]$.
-    \item $\longcox*$ is confluent. For every extended span $\coxspan*{w_{1}}{w_{2}}{w_{3}}$, there is a matching
+    \item $\longcoxstar$ is confluent. For every extended span $\coxspan*{w_{1}}{w_{2}}{w_{3}}$, there is a matching
           extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
-    \item For every $w$, there exists a unique normal form $v$ such that $w \longcox* v$.~\label{prop:nf-uniqueness}
+    \item For every $w$, there exists a unique normal form $v$ such that $w \longcoxstar v$.~\label{prop:nf-uniqueness}
   \end{enumerate}
 \end{proposition}
 
@@ -624,8 +633,8 @@ we can make the following observation relating it to $\cox*$.
 
 \begin{proposition}
   \label{prop:coxlongcox}
-  The relations $\cox*$ and $\longcox*$ are equivalent in the following sense: for every $w$ and $v$, $w \cox* v$ iff
-  there is a $u$ such that $w \longcox* u$ and $v \longcox* u$.
+  The relations $\cox*$ and $\longcoxstar$ are equivalent in the following sense: for every $w$ and $v$, $w \cox* v$ iff
+  there is a $u$ such that $w \longcoxstar u$ and $v \longcoxstar u$.
 \end{proposition}
 
 By~\Cref{prop:nf}~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
@@ -776,7 +785,7 @@ We can show that the function $\immersion$ gives an equivalence betweeen $\Lehme
 \begin{proposition}
   \leavevmode
   \begin{enumerate}
-    \item For any Lehmer code $c$, $\immersion(c)$ is a normal form with resepct to $\longcox*$, that is, $\immersion(c)$ is
+    \item For any Lehmer code $c$, $\immersion(c)$ is a normal form with resepct to $\longcoxstar$, that is, $\immersion(c)$ is
           in $\im{\normf}$.
     \item Any element of $\im{\normf}$ can be constructed from a unique Lehmer code by $\immersion$, that is, the fibers
           of $\immersion: \Lehmer[n] \to {\im{\normf}}$ are contractible.
@@ -785,7 +794,7 @@ We can show that the function $\immersion$ gives an equivalence betweeen $\Lehme
 \end{proposition}
 
 \jk{Review:}
-To see that Lehmer codes under $\immersion$ are normal with respect to $\longcox*$, let us look at the example code $c =
+To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code $c =
   (4, 3, 2, 1, 0)$. The list $\immersion(c)$ is then going to be $[0, 1, 0, 2, 1, 0, 3, 2, 1, 0, 4, 3, 2, 1, 0]$. It is a
 concatenation of five decreasing lists. Where could a reduction happen?
 
