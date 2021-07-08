@@ -386,7 +386,7 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 %   1. Each function is a bijection. 2. If there is a 2-combinator, the denotations of the 1-combinators are equal
 % }
 
-\begin{theorem}\label{thm:semone}
+\begin{theoremrep}\label{thm:semone}
   The semantics is sound in the following sense:
   \begin{itemize}
     \item For every level-1 combinator $c : A \isoone B$, we have that $\denot{c}$ is a bijection between $\denot{A}$ and $\denot{B}$.
@@ -394,14 +394,14 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
           combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using
           extensional equivalence of functions.
   \end{itemize}
-\end{theorem}
-\begin{appendixproof}
+\end{theoremrep}
+\begin{proof}
   For every primitive combinator $c$ listed on one side of Fig.~\ref{fig:pi-terms}, let $!c$ be the combinator listed on
   the other side. Thus $! \assoclp$ is $\assocrp$ and $! \swapp$ is $\swapp$ itself. Then we have that $\denot{c}$ and
   $\denot{!c}$ form an equivalence. For the level-2 combinator \Afun{idr◎l}, we check
   $\denot{\AgdaBound{c}~\AgdaOperator{\AgdaInductiveConstructor{◎}}~\AgdaInductiveConstructor{id⟷₁}}
     = \mathit{id} \circ \denot{c} = \denot{c}$. The other cases are only slightly more involved calculations.
-\end{appendixproof}
+\end{proof}
 
 %   Let $\sim$ be the following equivalence relation on combinators $c_1 \sim c_2$ iff $\denot{c_1} = \denot{c_2}$
 %   identifying combinators with the same denotation.  The notation $[c]_{\sim}$ refers to a representative combinator

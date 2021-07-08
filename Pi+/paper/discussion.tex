@@ -1,6 +1,7 @@
-\section{Discussion \& Related Work}~\label{sec:discussion}
+\section{Discussion \& Related Work}
+\label{sec:discussion}
 
-In this paper, we \ldots
+% In this paper, we \ldots
 
 \paragraph{Computing with Univalence} In HoTT, univalence characterises the path type in the universe as equivalences of
 types. The map $\term{idtoeqv} : A \id_{\UU} B \to A \eqv B$ can be easily constructed using path induction. The term
@@ -117,9 +118,9 @@ part of this correspondence with reversible logic was established in~\cite{spark
         \hline
         Connectives                        & Type constructors             & Bifunctors                  \\
         \hline
-        ?                                  & Type normalization            & ?                           \\
+        ?                                  & Type normalisation            & ?                           \\
         \hline
-        ?                                  & Program normalization         & ?                           \\
+        ?                                  & Program normalisation         & ?                           \\
         \hline
         ?                                  & Soundness of 2-combinators    & ?                           \\
     \end{tabular}
@@ -258,7 +259,7 @@ examples, consider the following two level-2 combinators:
 
 \noindent Assuming that $\idc$ takes a unit length of computation, the
 first can be annotated with $L(c)*2 \isotwo 1$ and the second with $L(c)+1 \isotwo
-L(c)$ indicating that the first combinator reduces the length of the
+    L(c)$ indicating that the first combinator reduces the length of the
 circuit from twice the length of $c$ to 1 and the second combinator
 reduces the length of the circuit by 1. Such annotations can then be
 used to constrain or guide the search for transformations between

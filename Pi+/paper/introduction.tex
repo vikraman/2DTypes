@@ -312,7 +312,7 @@ of technical devices for reasoning about reversible circuits.
 % \jk{Mediating between the syntactic and the semantic side is done in a novel way
 %   by introducing an explicit collection of reduction rules, that make the words
 %   in the permutation group into a confluent, strongly-terminating rewriting
-%   system, which allows us to extract the normalization function.  There has been
+%   system, which allows us to extract the normalisation function.  There has been
 %   already some attempts to solve this problem. In
 %   particular~\cite{LAFONT2003257} give a similar treatment, writing the
 %   \emph{Coxeter equations} as a rewriting system, but chooses to make the
@@ -320,7 +320,7 @@ of technical devices for reasoning about reversible circuits.
 %   cause the system to be non-terminating. There is also a formulation
 %   by~\cite{Hiver-coq}, which, instead of using a rewriting system, describes an
 %   explicit procedure for inserting a new transposition into a sequence of
-%   already normalized ones.  Ultimately, in all cases, the normal form ends up
+%   already normalised ones.  Ultimately, in all cases, the normal form ends up
 %   being closely related to \emph{Lehmer code} description of permutations.  To
 %   show its equivalence to the type of bijections on a finite set, we describe a
 %   (slightly modified version of) unpublished proof due
@@ -443,7 +443,7 @@ of technical devices for reasoning about reversible circuits.
 % automatically generated from a permutation in $\UFin$ \emph{and the generation
 %   comes equipped with a proof of correctness establishing its equivalence
 %   between the circuit and the original permutation}; (ii) circuits in $\PiLang$
-% or $\PiPlusLang$ can be reduced to a circuit normal form using a normalization
+% or $\PiPlusLang$ can be reduced to a circuit normal form using a normalisation
 % by evaluation process that evaluates them to a permutation in $\UFin$ and quotes
 % it back; (iii) equivalence of circuits in either $\PiLang$ or $\PiPlusLang$ can
 % be decided by reducing them to normal forms; (i) a circuit can be verified
@@ -604,7 +604,7 @@ of technical devices for reasoning about reversible circuits.
 %     \end{tikzpicture}
 % \end{align*}
 
-% \note{Show codes; normalize; explain the dense paragraph above using that example}
+% \note{Show codes; normalise; explain the dense paragraph above using that example}
 
 % \note{perhaps a note about the result being folklore; assumed in many places;
 % but no proof; and certainly none
@@ -641,7 +641,7 @@ of technical devices for reasoning about reversible circuits.
 %   HoTT is type theory for weak infty groupoids(first)
 %   Correspondence between TT and categories are fruitful:
 %   answer hard questions about syntax without worrying about presentation
-%   normalization of lcal with strong sums: if you have specific syntax; no obvious induction on syntax
+%   normalisation of lcal with strong sums: if you have specific syntax; no obvious induction on syntax
 %   Lawvere thesis
 
 % * Rig groupoids are interesting! WHY????
@@ -652,16 +652,16 @@ of technical devices for reasoning about reversible circuits.
 %   * What is the corresponding type theory ?  We give it for the free symmetric
 %   groupoid; for other groupoids build on it and add more
 
-% The technical device to achieve this normalization is as follows. First, we
+% The technical device to achieve this normalisation is as follows. First, we
 % observe that 1-paths in $\UFin$ are permutations on finite sets with a fixed
 % cardinality $n$, given by $\Aut[\Fin[n]]$, which produce the permutation group
 % on $\Fin[n]$, or the symmetric group $\Sn$. By giving a presentation of $\Sn$
 % using generators and relations, we build a rewriting system using the Coxeter
 % relations~\cite{XXX} on the set of words $\List[\Fin[n]]$, and show that it is
-% (locally) confluent and strongly normalizing. We then establish that the
+% (locally) confluent and strongly normalising. We then establish that the
 % symmetric group $\Sn$ is the set-quotient of $\List[\Fin[n]]$ by the Coxeter
 % relations, and show that it produces a group presentation, as a quotient of
-% the free group. Using this strongly normalizing rewriting system, we establish
+% the free group. Using this strongly normalising rewriting system, we establish
 % that normal forms for words in $\Sn$ are Lehmer
 % codes~, which are a convenient and
 % compact representation of permutations. Finally, we show that there is an
