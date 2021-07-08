@@ -88,7 +88,7 @@ Without going into proofs, let us try to answer the question for the original ex
                   \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
                   \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
             \end{tikzpicture}
-            \caption{$c_1$}
+            \caption{}
             \label{fig:cone-braid}
       \end{subfigure}
       \begin{subfigure}[b]{0.3\textwidth}
@@ -115,7 +115,7 @@ Without going into proofs, let us try to answer the question for the original ex
                   \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
                   \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
             \end{tikzpicture}
-            \caption{$c_2$}
+            \caption{}
             \label{fig:ctwo-braid}
       \end{subfigure}
       \begin{subfigure}[b]{0.3\textwidth}
@@ -142,7 +142,7 @@ Without going into proofs, let us try to answer the question for the original ex
                   \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
                   \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
             \end{tikzpicture}
-            \caption{Normal form}
+            \caption{}
             \label{fig:norm-braid}
       \end{subfigure}
 
@@ -158,20 +158,21 @@ First, we normalise the types to a list-like representation $A + (B + (C + \zero
 In this representation, each type is identified with its index, $A$ has index 0, $B$ has index 1, and $C$ has index 2.
 Then, we need to compile each primitive isomorphism to a list of adjacent transpositions, and then compose by appending
 the lists. A small swap is trivially implemented as a single adjacent transposition. To compile a big swap into adjacent
-transpositions, we need to recursively swap elements from the left by transposing them across the elements in the middle
--- this generates a large number of adjacent transpositions, some of which might be redundant. For the two programs, we
-get the following two lists: $[1,0,1,1,1]$ and $[1,0,1]$, where the number $k$ encodes a transposition of elements at
-indices $k$ and $k+1$.
+transpositions, we need to traverse the subtrees in-order and recursively swap elements from the left by transposing
+them across the ones in the middle -- this generates a large number of adjacent transpositions. For the two programs, we
+get the following two lists: $[1,0,1,1,1]$ (\cref{fig:cone-braid}) and $[1,0,1]$ (\cref{fig:ctwo-braid}), where the
+number $k$ encodes a transposition of elements at indices $k$ and $k+1$.
 
-Swapping is symmetric, and the first list contains redundant operations that swap two elements and immediately swap them
-back. To eliminate such redundancies, we have to normalise the lists, which we will do by setting up an appropriate
-rewriting system. This system will normalise both lists to $[0,1,0]$, which is lexicographically the smallest list that
-corresponds to this permutation. Since both programs have same normal forms, they're equivalent!
+Swapping is symmetric, that is, swapping two elements and immediately swapping them back produces the same permutation.
+The first list contains such redundant operations, so to eliminate these, we have to normalise the lists, which we will
+do by setting up reduction relations and an appropriate rewriting system. This system will normalise both lists to
+$[0,1,0]$ (\cref{fig:norm-braid}), which is lexicographically the smallest list that corresponds to this permutation.
+Since both programs have the same normal forms, they're equivalent!
 
 The crux of designing an equational theory for $\PiLang$ relies on the choice of relations we use to design this
-rewriting system. Having designed such a rewriting system, we can design an equational theory for $\PiLang$, so that,
-first, there are enough equations relating the programs to their normalised forms, and second, there are enough
-equations corresponding to the reduction rules. \note{These correspond to the coherence}.
+rewriting system. First, there should be enough equations relating the programs to their normalised forms, and second,
+there should be enough equations corresponding to the reduction rules. We will show that these correspond to the
+coherence conditions for symmetric rig groupoids.
 
 From the normalised list $[0,1,0]$, we can constuct a permutation on a list of 3 elements $[a,b,c]$ as follows. We think
 of it as insertion-sorting the elements of the list. Starting from the list $[a, b, c]$, we first insert $b$ at the
