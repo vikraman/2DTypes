@@ -64,42 +64,104 @@ Without going into proofs, let us try to answer the question for the original ex
 \end{figure}
 
 \begin{figure}
-      \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-            \begin{knot}[clip width=3]
-                  \filldraw (0,2) circle (2pt) node[above] {A};
-                  \filldraw (1,2) circle (2pt) node[above] {B};
-                  \filldraw (2,2) circle (2pt) node[above] {C};
-                  \filldraw (0,0) circle (2pt) node[below] {C};
-                  \filldraw (1,0) circle (2pt) node[below] {A};
-                  \filldraw (2,0) circle (2pt) node[below] {B};
-                  \strand (0,2) to (1,0);
-                  \strand (1,2) to (2,0);
-                  \strand (2,2) to (0,0);
-            \end{knot}
-      \end{tikzpicture}
-      \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
-            \begin{knot}[clip width=3]
-                  \filldraw (0,2) circle (2pt) node[above] {A};
-                  \filldraw (1,2) circle (2pt) node[above] {B};
-                  \filldraw (2,2) circle (2pt) node[above] {C};
-                  \filldraw (0,0) circle (2pt) node[below] {C};
-                  \filldraw (1,0) circle (2pt) node[below] {A};
-                  \filldraw (2,0) circle (2pt) node[below] {B};
-                  \strand (0,2) to (0,0);
-                  \strand (1,2) to (2,0);
-                  \strand (2,2) to (1,0);
-            \end{knot}
-      \end{tikzpicture}
-      \caption{Type isomorphisms as combinator permutations}
+      \begin{subfigure}[b]{0.3\textwidth}
+            \centering
+            \begin{tikzpicture}
+                  \def\nstrandsdf{3}
+                  \pic[local bounding box=my braid,braid/.cd,
+                        number of strands = \nstrandsdf,
+                        width = 0.8cm,
+                        height = 0.3cm,
+                        border height = 0.1cm,
+                        thick,
+                        name prefix=braid]
+                  {braid={s_2, s_2, s_2, s_1, s_2}};
+                  %   \draw[thick] % draws the top/bottom bars
+                  % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+                  % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+                  \node at (braid-1-s)[yshift = 2.0cm] {\tiny A};
+                  \node at (braid-2-s)[yshift = 2.0cm] {\tiny B};
+                  \node at (braid-3-s)[yshift = 2.0cm] {\tiny C};
+
+                  % labels the bottom bar
+                  \node at (braid-1-e)[yshift = -2.0cm] {\tiny A};
+                  \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
+                  \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
+            \end{tikzpicture}
+            \caption{$c_1$}
+            \label{fig:cone-braid}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.3\textwidth}
+            \centering
+            \begin{tikzpicture}
+                  \def\nstrandsdf{3}
+                  \pic[local bounding box=my braid,braid/.cd,
+                        number of strands = \nstrandsdf,
+                        width = 0.8cm,
+                        height = 0.3cm,
+                        border height = 0.1cm,
+                        thick,
+                        name prefix=braid]
+                  {braid={1, s_2,, s_1, s_2, 1}};
+                  %   \draw[thick] % draws the top/bottom bars
+                  % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+                  % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+                  \node at (braid-1-s)[yshift = 2.0cm] {\tiny A};
+                  \node at (braid-2-s)[yshift = 2.0cm] {\tiny B};
+                  \node at (braid-3-s)[yshift = 2.0cm] {\tiny C};
+
+                  % labels the bottom bar
+                  \node at (braid-1-e)[yshift = -2.0cm] {\tiny A};
+                  \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
+                  \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
+            \end{tikzpicture}
+            \caption{$c_2$}
+            \label{fig:ctwo-braid}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.3\textwidth}
+            \centering
+            \begin{tikzpicture}
+                  \def\nstrandsdf{3}
+                  \pic[local bounding box=my braid,braid/.cd,
+                        number of strands = \nstrandsdf,
+                        width = 0.8cm,
+                        height = 0.3cm,
+                        border height = 0.1cm,
+                        thick,
+                        name prefix=braid]
+                  {braid={1, s_1,, s_2, s_1, 1}};
+                  %   \draw[thick] % draws the top/bottom bars
+                  % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+                  % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+                  \node at (braid-1-s)[yshift = 2.0cm] {\tiny A};
+                  \node at (braid-2-s)[yshift = 2.0cm] {\tiny B};
+                  \node at (braid-3-s)[yshift = 2.0cm] {\tiny C};
+
+                  % labels the bottom bar
+                  \node at (braid-1-e)[yshift = -2.0cm] {\tiny A};
+                  \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
+                  \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
+            \end{tikzpicture}
+            \caption{Normal form}
+            \label{fig:norm-braid}
+      \end{subfigure}
+
+      \label{fig:example-braid}
+      \caption{Type isomorphisms as braid diagrams}
 \end{figure}
 
+The first step is to realise that the use of associativity is uninteresting, and the only steps with interesting
+computational content are the swaps. The swaps can be either big or small -- they can happen between leaf nodes, or
+between bigger subtrees, respectively.
 
-The first step is to realise that the use of associativity is uninteresting, and the only step with interesting
-computational content is the swap. To achieve this, we normalise the types to a list-like representation $A + (B + (C +
-      \zerot))$, where $\zerot$ is the empty type. In this representation, each type is identified with its index, $A$ has
-index 0, $B$ has index 1, and $C$ has index 2. Then, we will compile each primitive isomorphism to a list of adjacent
-transpositions, and then compose by appending the lists. For the two programs, we get the following two lists:
-$[1,0,1,1,1]$ and $[1,0,1]$, where the number $k$ encodes a transposition of elements at indices $k$ and $k+1$.
+First, we normalise the types to a list-like representation $A + (B + (C + \zerot))$, where $\zerot$ is the empty type.
+In this representation, each type is identified with its index, $A$ has index 0, $B$ has index 1, and $C$ has index 2.
+Then, we need to compile each primitive isomorphism to a list of adjacent transpositions, and then compose by appending
+the lists. A small swap is trivially implemented as a single adjacent transposition. To compile a big swap into adjacent
+transpositions, we need to recursively swap elements from the left by transposing them across the elements in the middle
+-- this generates a large number of adjacent transpositions, some of which might be redundant. For the two programs, we
+get the following two lists: $[1,0,1,1,1]$ and $[1,0,1]$, where the number $k$ encodes a transposition of elements at
+indices $k$ and $k+1$.
 
 Swapping is symmetric, and the first list contains redundant operations that swap two elements and immediately swap them
 back. To eliminate such redundancies, we have to normalise the lists, which we will do by setting up an appropriate
@@ -177,7 +239,7 @@ of technical devices for reasoning about reversible circuits.
 % the elided (routine) definitions.
 
 % Not only can we compare the equivalence of two programs, but using the normalisation procedure, we can synthesise a
-% normalised program that uses a smaller set of primitive isomorphisms. 
+% normalised program that uses a smaller set of primitive isomorphisms.
 
 % Sn and normal forms gives us the equational theory.
 
