@@ -43,6 +43,57 @@ generator. Our main result formally establishes this correspondence.
 
 Without going into proofs, let us try to answer the question for the original example.
 
+\begin{figure}
+      \[
+            \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow{\assoclp}~
+            \Tree [ [ {\tiny A} {\tiny B} ] {\tiny C} ] ~\xrightarrow{\swapp}~
+            \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+            \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
+      \]
+
+      \[
+            \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+            \Tree [ {\tiny A} [ {\tiny C} {\tiny B} ] ] ~\xrightarrow{\assoclp}~
+            \Tree [ [ {\tiny A} {\tiny C} ] {\tiny B} ] ~\xrightarrow[\swapp\phantom{x}]{\phantom{x}\idc}~
+            \Tree [ [ {\tiny C} {\tiny A} ] {\tiny B} ] ~\xrightarrow{\assocrp}~
+            \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+            \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
+      \]
+      \label{fig:example-first-stage}
+      \caption{Type isomorphisms as tree transformations}
+\end{figure}
+
+\begin{figure}
+      \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+            \begin{knot}[clip width=3]
+                  \filldraw (0,2) circle (2pt) node[above] {A};
+                  \filldraw (1,2) circle (2pt) node[above] {B};
+                  \filldraw (2,2) circle (2pt) node[above] {C};
+                  \filldraw (0,0) circle (2pt) node[below] {C};
+                  \filldraw (1,0) circle (2pt) node[below] {A};
+                  \filldraw (2,0) circle (2pt) node[below] {B};
+                  \strand (0,2) to (1,0);
+                  \strand (1,2) to (2,0);
+                  \strand (2,2) to (0,0);
+            \end{knot}
+      \end{tikzpicture}
+      \begin{tikzpicture}[scale=0.4,every node/.style={scale=0.4}]
+            \begin{knot}[clip width=3]
+                  \filldraw (0,2) circle (2pt) node[above] {A};
+                  \filldraw (1,2) circle (2pt) node[above] {B};
+                  \filldraw (2,2) circle (2pt) node[above] {C};
+                  \filldraw (0,0) circle (2pt) node[below] {C};
+                  \filldraw (1,0) circle (2pt) node[below] {A};
+                  \filldraw (2,0) circle (2pt) node[below] {B};
+                  \strand (0,2) to (0,0);
+                  \strand (1,2) to (2,0);
+                  \strand (2,2) to (1,0);
+            \end{knot}
+      \end{tikzpicture}
+      \caption{Type isomorphisms as combinator permutations}
+\end{figure}
+
+
 The first step is to realise that the use of associativity is uninteresting, and the only step with interesting
 computational content is the swap. To achieve this, we normalise the types to a list-like representation $A + (B + (C +
       \zerot))$, where $\zerot$ is the empty type. In this representation, each type is identified with its index, $A$ has
