@@ -217,13 +217,15 @@ the right and then swapping. The full set of level-2 combinators is large and is
 \subsection{Semantics}
 \label{subsec:denotational}
 
-\noindent Below we present a semantic map that dually serves as an operational semantics and a denotational
-semantics. As an operational semantics, each $\PiLang$ type $A$ is mapped to an Agda type $\denot{A}$ and each
-combinator $c : A \isoone B$ is mapped to an Agda function $\denot{A} \to \denot{B}$. As a denotational semantics, each
-$\PiLang$ type $A$ is mapped to a finite set $\denot{A}$ and each combinator $c : A \isoone B$ is mapped to bijection
-between $\denot{A} \to \denot{B}$.
+\noindent Below we present a simple denotational semantics for our language, using finite types and type isomorphisms.
+Each $\PiLang$ type $A$ is mapped to a (finite) set $\denot{A}$ and each combinator $c : A \isoone B$ is mapped to a
+(bijective) function $\denot{A} \to \denot{B}$. We describe this semantics by writing an interpreter in Agda. First, we
+state the semantics for types, where $\bot$ is the empty set, $\top$ is the singleton set, $\sqcup$ is the disjoint
+union of sets, and $\times$ is the cartesian product of sets.
 
-The semantics of types is straightforward:
+% semantic map that dually serves as an operational semantics and a denotational semantics. As an operational semantics,
+% As a denotational semantics, each $\PiLang$ type $A$ is mapped to a finite set $\denot{A}$ and each combinator $c : A
+% \isoone B$ is mapped to bijection between $\denot{A} \to \denot{B}$.
 
 \begin{center}
   {\scalebox{\scalef}{$%
@@ -235,9 +237,10 @@ The semantics of types is straightforward:
         \end{array}$}}
 \end{center}
 
-\noindent where $\bot$ is the empty set, $\top$ is a singleton set, $\sqcup$ is the disjoint union of sets, and $\times$
-is the cartesian product of sets. The semantics of a combinator $c : A \isoone B$ is a (bijective) function mapping
-$\denot{A}$ to $\denot{B}$:
+For combinators, we show explcitly how values reduce along each combinator, similar to a big-step operational
+semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
+
+% The semantics of a combinator $c : A \isoone B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
 
 \begin{multicols}{2}
   %%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
@@ -265,16 +268,15 @@ $\denot{A}$ to $\denot{B}$:
           \denot{\dist}    & (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}   \\
           \denot{\dist}    & (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}   \\
           \denot{\factor}  & (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)   \\
-          \denot{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)
+          \denot{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)   \\
+          \denot{\idc}     & v                   & = & v
         \end{array}$}}
-
   %%\end{longtable}
 \end{multicols}
 
 \begin{center}
   {\scalebox{\scalef}{$%
         \begin{array}{rlcl}
-          \denot{\idc}               & v           & = & v                                   \\
           \denot{(c_1 \fatsemi c_2)} & v           & = & (\denot{c_2} \circ \denot{c_1}) v   \\
           \denot{(c_1 \oplus c_2)}   & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
           \denot{(c_1 \oplus c_2)}   & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
@@ -393,14 +395,13 @@ $\denot{A}$ to $\denot{B}$:
           extensional equivalence of functions.
   \end{itemize}
 \end{theorem}
-\begin{proof}
+\begin{appendixproof}
   For every primitive combinator $c$ listed on one side of Fig.~\ref{fig:pi-terms}, let $!c$ be the combinator listed on
   the other side. Thus $! \assoclp$ is $\assocrp$ and $! \swapp$ is $\swapp$ itself. Then we have that $\denot{c}$ and
   $\denot{!c}$ form an equivalence. For the level-2 combinator \Afun{idr◎l}, we check
   $\denot{\AgdaBound{c}~\AgdaOperator{\AgdaInductiveConstructor{◎}}~\AgdaInductiveConstructor{id⟷₁}}
     = \mathit{id} \circ \denot{c} = \denot{c}$. The other cases are only slightly more involved calculations.
-\end{proof}
-
+\end{appendixproof}
 
 %   Let $\sim$ be the following equivalence relation on combinators $c_1 \sim c_2$ iff $\denot{c_1} = \denot{c_2}$
 %   identifying combinators with the same denotation.  The notation $[c]_{\sim}$ refers to a representative combinator
