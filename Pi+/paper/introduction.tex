@@ -41,48 +41,101 @@ generator. Our main result formally establishes this correspondence.
 
 \subsection*{Equivalence by Example}
 
-The first step in the $\mathit{eval}$ map is to separate the ``uninteresting'' uses of associativity from the
-``interesting'' uses of swap. This is achieved by normalizing the types to a list-like representation $A + (B + (C +
-      \zerot))$ where $\zerot$ is the empty type. In that representation we identify $A$ with index 0, $B$ with index 1, and
-$C$ with index 2 and compile each isomorphism to a sequence of transpositions swapping elements at index $k$ and $k+1$.
-For the particular isomorphisms above, we get the following two lists: $[1,0,1,1,1]$ and $[1,0,1]$ where entry $k$ means
-swap the elements $\el{k}$ and $\el{k+1}$. Clearly the first list includes redundant operations that swap two elements
-and immediately swaps them back. To eliminate such redundancies, a subsequent stage of $\mathit{eval}$ uses a confluent
-terminating rewriting system to normalize lists of transpositions to a normal form. In our running examples, both lists
-are normalized to $[0,1,0]$. This list is then translated to the Lehmer
-code~\cite{lehmerTeachingCombinatorialTricks1960} instructions $[0, 1, 2]$ for an insertion sorting algorithm, where the
-instruction at position $i$ gives the number of left-shifts for the value at index $i$. Thus starting with an input
-$[a,b,c]$, the action of instruction $0$ is to shift $a$ by 0 positions to the right which has no effect. The next
-instruction shifts $b$ by 1 position to the right producing $[b, a, c]$ and the final instruction shifts $c$ by 2
-positions to the right producing the final result $[c,b,a]$. It is now straightforward in a final stage of
-$\mathit{eval}$ and a first stage of $\mathit{quote}$ to map back and forth between the Lehmer codes and bijections on
-the canonical finite set of three elements $\Fin[3]$~\citet{Molzer-cubical}. The next stage of $\mathit{quote}$
-reconstructs the normalized list of transpositions $[0,1,0]$ from which a normalized $\Pi$ program realizing the
-following sequence of isomorphisms is directly generated
+Without going into proofs, let us try to answer the question for the original example.
 
-      {\scalebox{\scalef}{$%
-                        A + (B + (C + \zerot)) \isoone
-                        B + (A + (C + \zerot)) \isoone
-                        B + (C + (A + \zerot)) \isoone
-                        C + (B + (A + \zerot))
-                  $}}
+The first step is to realise that the use of associativity is uninteresting, and the only step with interesting
+computational content is the swap. To achieve this, we normalise the types to a list-like representation $A + (B + (C +
+      \zerot))$, where $\zerot$ is the empty type. In this representation, each type is identified with its index, $A$ has
+index 0, $B$ has index 1, and $C$ has index 2. Then, we will compile each primitive isomorphism to a list of adjacent
+transpositions, and then compose by appending the lists. For the two programs, we get the following two lists:
+$[1,0,1,1,1]$ and $[1,0,1]$, where the number $k$ encodes a transposition of elements at indices $k$ and $k+1$.
 
-Our main result is a proof of the soundness and completeness of $\PiLang$ with respect to its semantics in the weak rig
-groupoid, using tools from Homotopy Type Theory, Category Theory, and Computational Group Theory. We state our result as
-a Curry-Howard-Lambek correspondence for Reversible Logic, Reversible Programming Languages, and Symmetric Monoidal
-Groupoids, using which we can build a toolbox of technical devices for reasoning about reversible circuits.
+Swapping is symmetric, and the first list contains redundant operations that swap two elements and immediately swap them
+back. To eliminate such redundancies, we have to normalise the lists, which we will do by setting up an appropriate
+rewriting system. This system will normalise both lists to $[0,1,0]$, which is lexicographically the smallest list that
+corresponds to this permutation. Since both programs have same normal forms, they're equivalent!
 
-Our results are stated using HoTT~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}, and formalised using the
-HoTT-Agda library, with computer-checked proofs of all the coherences and computation (around 7,500 lines of code).
-Using the formalisation, we are able to extract a procedure for
-\begin{enumerate*}[label=\alph*]
-      \item the synthesis of a reversible circuit from a permutation on a finite set,
-      \item the verification that a reversible circuit realises a given permutation on finite sets,
-      \item a normalisation-by-evaluation procedure that reduces reversible circuits to canonical normal forms,
-      \item a decision procedure for the equivalence of reversible circuits,
-      \item a sound and complete calculus for reasoning about and optimising reversible circuits, and
-      \item the transfer of theorems about permutations and reversible circuits from one representation to the other.
-\end{enumerate*}
+The crux of designing an equational theory for $\PiLang$ relies on the choice of relations we use to design this
+rewriting system. Having designed such a rewriting system, we can design an equational theory for $\PiLang$, so that,
+first, there are enough equations relating the programs to their normalised forms, and second, there are enough
+equations corresponding to the reduction rules. \note{These correspond to the coherence}.
+
+From the normalised list $[0,1,0]$, we can constuct a permutation on a list of 3 elements $[a,b,c]$ as follows. We think
+of it as insertion-sorting the elements of the list. Starting from the list $[a, b, c]$, we first insert $b$ at the
+right place -- by applying transposition $0$, we get the list $[b, a, c]$. Then, element $c$ is inserted in the right
+place by applying transpositions $1$ and $0$ -- as a result, we get the desired permutation $[c, b, a]$. Notice that we
+could specify a more compact way of describing this process, since the key information was only how many shifts we
+needed to apply to an element. We could describe this procedure using a code $(0, 1, 2)$, which says how many inversions
+to apply to elements $a$, $b$, and $c$, respectively.
+
+Using this algorithm, we can turn a type isomorphism into a permutation of finite sets, relating the operational
+semantics of $\PiLang$ as permutations of finite sets of bits, to our denotational semantics. This allows us to
+establish full abstraction and adequacy.
+
+\paragraph{Outline and Contributions} Our main result is a proof of the soundness and completeness of the additive
+fragment of $\PiLang$ with respect to its semantics in the weak rig groupoid, using tools from Homotopy Type Theory,
+Category Theory, and Computational Group Theory. We state our result as a Curry-Howard-Lambek correspondence for
+Reversible Logic, Reversible Programming Languages, and Symmetric Monoidal Groupoids, using which we can build a toolbox
+of technical devices for reasoning about reversible circuits.
+
+\begin{itemize}[leftmargin=*]
+      \item We start in~\Cref{sec:qiskit} by presenting a few reversible circuits in the popular IBM Qiskit framework to
+            serve as running examples throughout the paper.
+      \item In~\Cref{sec:pi}, we introduce the two-level language
+            $\PiLang$~\cite{James:2012:IE:2103656.2103667,Carette2016} and illustrate how to write reversible circuits
+            and their optimisations using 1-combinators and 2-combinators respectively. We give a semantic account of
+            the language by translating each level-1 program to a bijection between finite sets, and verifying that
+            programs identified by level-2 constructs denote the same bijection.
+      \item ~\Cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
+            Homotopy Type Theory. We define and characterise the notion of a univalent subuniverse, and construct
+            $\UFin$ as a univalent subuniverse which classifies all finite types. We establish that paths in $\UFin$ are
+            familiies of loops on finite sets of specified cardinality, given by $\Aut[\Fin[n]]$, which produces the
+            permutation group on $\Fin[n]$.
+      \item In~\Cref{sec:finite}, we proceed to give a presentation of the permutation group, as the symmetric group
+            $\Sn$ with generators and relations, and solve its word problem. In particular, we present $\Sn$ as a
+            Coxeter group, build a rewriting system based on Coxeter relations, and prove confluence and termination.
+            Using our rewriting system, we establish that normal forms for words in $\Sn$ are equivalent to Lehmer
+            codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a convenient and compact representation of
+            permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations
+            $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm~\cite{Molzer-cubical}.
+      \item In~\Cref{sec:equivalence}, we show how to interpret the language $\PiLang$ into the groupoid $\UFin$, in
+            stages. First we define a subset $\PiPlusLang$ of the language which only includes the additive monoidal
+            structure, and show how to translate $\PiLang$ programs to $\PiPlusLang$ programs. Then, we further define a
+            normalised form for this language called $\PiHatLang$, which has normalised 1-combinators and 2-combinators
+            corresponding to adjacent transpositions. We show that $\PiPlusLang$ can be translated to $\PiHatLang$ and
+            back. Then, we show how to interpret this language $\PiHatLang$ into $\UFin$ -- the 1-combinators are
+            translated into permutations via words in $\Sn$, and 2-combinators are interpreted as 2-paths in $\UFin$. We
+            further show how to quote back a permutation in $\UFin$ into a 1-combinator using the normal forms for words
+            in $\Sn$. The main result of this section is a symmetric monoidal biequivalence between the syntactic
+            groupoids of $\PiPlusLang$ and $\PiHatLang$, with $\UFin$. Finally, we also establish full abstraction and
+            adequacy of this model with respect to the operational semantics. In~\Cref{sec:applications}, we show
+            applications of our results to reversible circuits, using our formalisation.
+      \item Our results are stated using HoTT~\cite{univalentfoundationsprogramHomotopyTypeTheory2013}, and formalised
+            using the HoTT-Agda library, with computer-checked proofs of all the coherences and computation (around
+            7,500 lines of code). Using the formalisation, we are able to extract a procedure for
+            \begin{enumerate*}
+                  \item the synthesis of a reversible circuit from a permutation on a finite set,
+                  \item the verification that a reversible circuit realises a given permutation on finite sets,
+                  \item a normalisation-by-evaluation procedure that reduces reversible circuits to canonical normal forms,
+                  \item a decision procedure for the equivalence of reversible circuits,
+                  \item a sound and complete calculus for reasoning about and optimising reversible circuits, and
+                  \item the transfer of theorems about permutations and reversible circuits from one representation to the other.
+            \end{enumerate*}
+\end{itemize}
+% Throughout the paper, we defer longer proofs to a technical appendix and refer to the accompanying Agda code for some of
+% the elided (routine) definitions.
+
+% Not only can we compare the equivalence of two programs, but using the normalisation procedure, we can synthesise a
+% normalised program that uses a smaller set of primitive isomorphisms. 
+
+% Sn and normal forms gives us the equational theory.
+
+% Lehmer and Aut(Fin n) give us adequacy and full abstraction?
+
+% Not only can we compare the equivalence of two programs, but also synthesise programs from a permutation.
+
+% Thus, we can get a handle on the normal forms of lists, by putting them in an equivalence with such codes.
+
 
 % In technical terms, the main result is that we define \emph{eval / quote} maps that give a symmetric monoidal
 % biequivalence between a programming language $\Pi$ and a space of denotations $\UFin$. The language $\Pi$ is specialized
@@ -91,79 +144,27 @@ Using the formalisation, we are able to extract a procedure for
 % \emph{eval / quote} maps are composed from smaller maps that we trace through with a small representative example before
 % giving a more technical outline.
 
-The above presentation rests on two key technical contributions:
+% The above presentation rests on two key technical contributions:
 
-\begin{itemize}
-      \item First, the definition of the weak symmetric rig groupoid $\UFin$ of finite sets and bijections in
-            Sec.~\ref{sec:ufin} builds on a notion of \emph{univalent subuniverse} expressed in the HoTT metalanguage, and
-            whose definition and properties are our first technical contribution.
-      \item The definition of $\UFin$ as a univalent subuniverse implies that, for each finite type $T$ of $n$-elements, the
-            structure of the symmetric group $S_n$ is reflected in the elements of the identity type (i.e., the 1-paths).
-            This observation reduces the bulk of the definition of $\mathit{quote}$ to the problem of describing $S_n$
-            syntactically using 1-paths. We do this in a novel way in Sec.~\ref{sec:finite} by first observing that $S_n$ is
-            a \emph{Coxeter group} and hence admits a formal description which we formulate using the explicit collection of
-            reduction rules alluded to in the example above. These rules organize the words of the permutation group as a
-            confluent, strongly-normalising rewriting system whose normal forms are the \emph{Lehmer code} description of
-            permutations. We note that there have been already some attempts to solve this problem. In
-            particular~\citet{LAFONT2003257} follows a similar approach, writing the Coxeter equations as a rewriting
-            system, but chooses to make the problematic commutation rule implicit, which, being undirected, would cause our
-            system to be non-terminating. There is also a formulation by~\citet{Hiver-coq}, which, instead of using a
-            rewriting system, describes an explicit algorithm for producing normal forms. That approach could provide an
-            alternative to our rewriting system.
-\end{itemize}
+% \begin{itemize}
+%       \item First, the definition of the weak symmetric rig groupoid $\UFin$ of finite sets and bijections in
+%             Sec.~\ref{sec:ufin} builds on a notion of \emph{univalent subuniverse} expressed in the HoTT metalanguage, and
+%             whose definition and properties are our first technical contribution.
+%       \item The definition of $\UFin$ as a univalent subuniverse implies that, for each finite type $T$ of $n$-elements, the
+%             structure of the symmetric group $S_n$ is reflected in the elements of the identity type (i.e., the 1-paths).
+%             This observation reduces the bulk of the definition of $\mathit{quote}$ to the problem of describing $S_n$
+%             syntactically using 1-paths. We do this in a novel way in Sec.~\ref{sec:finite} by first observing that $S_n$ is
+%             a \emph{Coxeter group} and hence admits a formal description which we formulate using the explicit collection of
+%             reduction rules alluded to in the example above. These rules organize the words of the permutation group as a
+%             confluent, strongly-normalising rewriting system whose normal forms are the \emph{Lehmer code} description of
+%             permutations. We note that there have been already some attempts to solve this problem. In
+%             particular~\citet{LAFONT2003257} follows a similar approach, writing the Coxeter equations as a rewriting
+%             system, but chooses to make the problematic commutation rule implicit, which, being undirected, would cause our
+%             system to be non-terminating. There is also a formulation by~\citet{Hiver-coq}, which, instead of using a
+%             rewriting system, describes an explicit algorithm for producing normal forms. That approach could provide an
+%             alternative to our rewriting system.
+% \end{itemize}
 
-We conclude this section with an outline of the remainder of the paper:
-
-\begin{itemize}[leftmargin=*]
-      \item We start in Sec.~\ref{sec:qiskit} by presenting a few reversible circuits in the popular IBM Qiskit framework to
-            serve as running examples through the paper.
-      \item In Sec.~\ref{sec:pi}, we introduce the two-level language
-            $\PiLang$~\cite{James:2012:IE:2103656.2103667,Carette2016} and illustrate how to write reversible circuits and
-            their optimizations using level-1 and 2 respectively. We give a first semantic account of the language by
-            translating each level-1 program to a bijection between finite sets and verifying that programs identified by
-            level-2 constructs denote the same bijection.
-      \item Sec.~\ref{sec:ufin} is devoted to the definition of $\UFin$. It includes a short review of the HoTT concepts
-            necessary to define the notion of a universe \`{a} la Tarski internally in HoTT and conditions that guarantee
-            that this universe is univalent. The section concludes with a definition of the subuniverse $\UFin$ which
-            classifies all finite types, show that it is univalent, and establish that its 1-paths are permutations on
-            finite sets with a fixed cardinality $n$, given by $\Aut[\Fin[n]]$, which produces the permutation group on
-            $\Fin[n]$, or the symmetric group $\Sn$.
-            % , which is given by a type
-            % for codes $U$ and a decoding function to a univalent universe
-            % $\El : U \to \UU$. We say that this universe is univalent, if the decoding
-            % fibration is univalent, that is, the decoding function $\El$ reflects the
-            % path space of the underlying univalent universe. We exhibit some examples of
-            % univalent subuniverses, in particular, we define the subuniverse of finite
-            % types, $\UFin$, which classifies all finite types, and show that it is
-            % univalent. Using this, we establish a characterization of the path space of
-            % the universe of finite types.
-      \item In Sec.~\ref{sec:finite}, we proceed to give a presentation of $\Sn$ using generators and relations.
-            Specifically, we build a rewriting system using the Coxeter relations on the set of words $\List[\Fin[n]]$, show
-            that it is (locally) confluent and strongly normalising, prove that the symmetric group $\Sn$ is the
-            set-quotient of $\List[\Fin[n]]$ by the Coxeter relations, and show that it produces a group presentation, as a
-            quotient of the free group.
-            % Using our strongly normalising
-            % rewriting system, we establish that normal forms for words in $\Sn$ are
-            % Lehmer codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a
-            % convenient and compact representation of permutations for
-            % permutations. Finally, we show that there is an equivalence between Lehmer
-            % codes and permutations $\Aut[\Fin[n]]$ given by the Lehmer encode-decode
-            % algorithm.
-      \item Finally, in Sec.~\ref{sec:equivalence}, we show how to interpret the language $\PiLang$ into our groupoid
-            $\UFin$, in stages. First we define a subset of the language $\PiPlusLang$ which only includes the additive
-            monoidal structure. We translate $\PiLang$ programs to $\PiPlusLang$ by defining multiplication as repeated
-            addition. Then, we further define a normalized form for for this language called $\PiHatLang$, which has
-            normalized 1-combinators and 2-combinators corresponding to adjacent transpositions. We show that $\PiPlusLang$
-            can be translated to $\PiHatLang$ and back, using adjacent transpositions to generate arbitrary swaps. Then, we
-            show how to interpret this language $\PiHatLang$ into $\UFin$ -- the 1-combinators are translated into
-            permutations via words in $\Sn$, and 2-combinators are interpreted as 2-paths in $\UFin$. We further show how to
-            quote back a permutation in $\UFin$ into a 1-combinator using the normal form for words in $\Sn$.
-      \item Before concluding and putting our work in perspective in Sec.~\ref{sec:discussion}, we show how to normalise
-            circuits written in $\PiLang$ to a normal form in $\PiPlusLang$ and $\PiHatLang$, which uses fewer gates.
-\end{itemize}
-
-Throughout the paper, we defer longer proofs to a technical appendix and refer to the accompanying Agda code for some of
-the elided (routine) definitions.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% ***
