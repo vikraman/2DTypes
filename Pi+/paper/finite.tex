@@ -131,26 +131,27 @@ adjunction between the category of groups and sets.
 % Informally, it states that if we know how a map $f$ acts on the
 % generating set $A$, we know exactly how it acts on every element of the group $F(A)$.
 
-\begin{proposition}[Universal Property of $F(A)$]
+\begin{propositionrep}[Universal Property of $F(A)$]
   \label{prop:free-groups}
   Given a group $G$ and a map $f : A \to G$, there is a unique group
   homomorphism $\extend{f} : F(A) \to^G G$ such that $\extend{f} \comp \eta_A
     \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
     \to^G G \eqv A \to G$. Alternatively, the type of group homomorphisms $h :
     F(A) \to^G G$ satisfying $h \comp \eta_A \htpy f$ is contractible.
-  \begin{toappendix}
-    % https://q.uiver.app/?q=WzAsMyxbMCwyLCJBIl0sWzAsMCwiRihBKSJdLFsyLDAsIkciXSxbMCwxLCJcXGV0YV9BIl0sWzAsMiwiZiIsMl0sWzEsMiwiXFxleHRlbmR7Zn0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
-    \[\begin{tikzcd}
-        {F(A)} && G \\
-        \\
-        A
-        \arrow[""{name=0, anchor=center, inner sep=0}, "{\eta_A}", from=3-1, to=1-1]
-        \arrow[""{name=1, anchor=center, inner sep=0}, "f"', from=3-1, to=1-3]
-        \arrow["{\extend{f}}", dashed, from=1-1, to=1-3]
-        \arrow["\id", Rightarrow, draw=none, from=0, to=1]
-      \end{tikzcd}\]
-  \end{toappendix}
-\end{proposition}
+\end{propositionrep}
+
+\begin{toappendix}
+  % https://q.uiver.app/?q=WzAsMyxbMCwyLCJBIl0sWzAsMCwiRihBKSJdLFsyLDAsIkciXSxbMCwxLCJcXGV0YV9BIl0sWzAsMiwiZiIsMl0sWzEsMiwiXFxleHRlbmR7Zn0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
+  \[\begin{tikzcd}
+      {F(A)} && G \\
+      \\
+      A
+      \arrow[""{name=0, anchor=center, inner sep=0}, "{\eta_A}", from=3-1, to=1-1]
+      \arrow[""{name=1, anchor=center, inner sep=0}, "f"', from=3-1, to=1-3]
+      \arrow["{\extend{f}}", dashed, from=1-1, to=1-3]
+      \arrow["\id", Rightarrow, draw=none, from=0, to=1]
+    \end{tikzcd}\]
+\end{toappendix}
 
 Following the universal-algebraic definition, in HoTT, we could use a naive higher inductive type to define the free
 group, which enforces the group axioms by adding path constructors (see~\Cref{def:free-group}).
