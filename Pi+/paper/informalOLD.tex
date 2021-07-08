@@ -11,7 +11,7 @@
 Instead of working with circuits operating on sequences of bits, we work with circuits operating on algebraic data
 types.
 
-\paragraph*{Normalization by evaluation.} Consider the following reversible function:
+\paragraph*{Normalisation by evaluation.} Consider the following reversible function:
 $\Afun{RESET}(b,b_1,\ldots,b_n) = (b \; \underline{\vee} \; (\bigvee_{i=1}^n b_i),b_1,\ldots,b_n)$ where $\vee$ is
 logical-or and $\underline{\vee}$ is exclusive-or. The function sets or resets the first bit depending on whether any of
 the other bits is true or not. The natural definition for this function is recursive: modulo some re-shuffling of the
@@ -33,14 +33,14 @@ incoming value with no change:
 \noindent The syntax will be explained in detail in the next section and the full definitions of the helpers are
 provided in the supplementary material. For now, it is sufficient to know that there is some program that implements the
 reversible function of interest and that applying \Afun{reset} to 2 produces \verb|reversibleOr2| from the
-introduction. Our Agda infrastructure provides tools to normalize all programs to their normal form. For \Afun{reset 2}
+introduction. Our Agda infrastructure provides tools to normalise all programs to their normal form. For \Afun{reset 2}
 we get:
 
 \resetnormtwo{}
 
-In principle, the normalized program can be produced following two strategies: (i) by repeatedly applying the rewrite
+In principle, the normalised program can be produced following two strategies: (i) by repeatedly applying the rewrite
 rules of our calculus of reversible functions (explained in Sec.~\ref{sec:reversibletwo}), or (ii) in the case above by
-using a normalization-by-evaluation (NbE) process that evaluates the program to a permutation on a finite set of 8
+using a normalisation-by-evaluation (NbE) process that evaluates the program to a permutation on a finite set of 8
 elements and reifies that permutation back to a program. The key idea of the NbE process is a systematic way to express
 permutations as sequences of adjacent swaps as illustrated in the following small example where the permutation on the
 left is compiled to the sequence of four adjacent transpositions on the right:
@@ -79,7 +79,7 @@ permutations. Indeed, instead of writing a program for \Afun{reset 2}, one might
 \noindent The permutation uses the canonical encoding of sequences of bits as natural numbers (e.g., (\textsf{false},
 \textsf{true},\textsf{true}) is encoded as 011 or 3).  The second entry maps index 1 (= 001) to the value 5 (= 101)
 which states that since one of the right bits is set in 001 then the leftmost bit in the output is set. Simply
-``quoting'' this permutation generates the same normalized program \Afun{reset2Norm} above.
+``quoting'' this permutation generates the same normalised program \Afun{reset2Norm} above.
 
 \paragraph*{Program equivalence.} The permutation above reveals another way to think about the desired program: it is a
 special addition circuit that keeps 0 and 4 fixed but otherwise adds 4 modulo 8 to its input. From this specification,
