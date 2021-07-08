@@ -124,24 +124,25 @@ the singleton set.
   \end{definition}
 \end{toappendix}
 
-A group homomorphism between groups $G$ and $H$, which we write as $G \to^G H$, is a function between the underlying
-sets that preserves the group structure. Giving a group homomorphism out of the free group is equivalent to giving a
-function out of the generating set. This is the universal property of free groups, stemming from the free-forgetful
-adjunction between the category of groups and sets.
+A group homomorphism between groups $G$ and $H$ is a function $f : G \to H$ between the underlying sets that preserves
+the group structure. Giving a group homomorphism out of the free group is equivalent to giving a function out of the
+generating set. This is the universal property of free groups, stemming from the free-forgetful adjunction between the
+category of groups and sets.
 
 % Informally, it states that if we know how a map $f$ acts on the
 % generating set $A$, we know exactly how it acts on every element of the group $F(A)$.
 
 \begin{propositionrep}[Universal Property of $F(A)$]
   \label{prop:free-groups}
-  Given a group $G$ and a map $f : A \to G$, there is a unique group
-  homomorphism $\extend{f} : F(A) \to^G G$ such that $\extend{f} \comp \eta_A
-    \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence $F(A)
-    \to^G G \eqv A \to G$. Alternatively, the type of group homomorphisms $h :
-    F(A) \to^G G$ satisfying $h \comp \eta_A \htpy f$ is contractible.
+  Given a group $G$ and a map $f : A \to G$, there is a unique group homomorphism $\extend{f} : \term{Hom}(F(A), G)$
+  such that $\extend{f} \comp \eta_A \htpy f$. Equivalently, composition with $\eta_A$ gives an equivalence
+  $\term{Hom}(F(A),G) \eqv A \to G$.
 \end{propositionrep}
 
 \begin{toappendix}
+ Alternatively, the type of group homomorphisms $h : \term{Hom}(F(A),G)$ satisfying $h \comp \eta_A \htpy f$ is
+ contractible.
+
   % https://q.uiver.app/?q=WzAsMyxbMCwyLCJBIl0sWzAsMCwiRihBKSJdLFsyLDAsIkciXSxbMCwxLCJcXGV0YV9BIl0sWzAsMiwiZiIsMl0sWzEsMiwiXFxleHRlbmR7Zn0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
   \[\begin{tikzcd}
       {F(A)} && G \\
