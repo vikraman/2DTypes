@@ -79,19 +79,14 @@
   {\mathrel{\xlrsquigarrow{\ast}}}
   {\mathrel{\leftrightsquigarrow}}
 }
-\NewDocumentCommand{\longcox}{s}{
-  {\mathrel{\rightsquigarrow}}
+\newcommand{\longcox}[0]{
+  \mathrel{\rightsquigarrow}
 }
-\NewDocumentCommand{\longcoxstar}{s}{
-  {\mathrel{\xrsquigarrow{\ast}}}
+\newcommand{\longcoxstar}{
+  \mathrel{\xrsquigarrow{\phantom{X}\ast}}
 }
-\NewDocumentCommand{\longcoxplus}{s}{
-  {\mathrel{\xrsquigarrow{+}}}
-}
-\NewDocumentCommand{\longcoxinv}{s}{
-  \IfBooleanTF{#1}
-  {\mathrel{{}^{\ast}\leftsquigarrow}}
-  {\mathrel{\leftsquigarrow}}
+\newcommand{\longcoxplus}{
+  \mathrel{\xrsquigarrow{\phantom{X}+}}
 }
 \newcommand{\cancel}{\term{cancel}}
 \newcommand{\swap}{\term{swap}}
@@ -135,12 +130,12 @@
 
 \NewDocumentCommand{\coxspan}{smmm}{
   \IfBooleanTF{#1}
-  {{#3} \xlsquigarrow{\ast} {#2} \xrsquigarrow{\ast} {#4}}
+  {{#3} \xlsquigarrow{\ast\phantom{X}} {#2} \xrsquigarrow{\phantom{X}\ast} {#4}}
   {{#3} \leftsquigarrow {#2} \rightsquigarrow {#4}}
 }
 \NewDocumentCommand{\coxcospan}{smmm}{
   \IfBooleanTF{#1}
-  {{#2} \xrsquigarrow{\ast} {#4} \xlsquigarrow{\ast} {#3}}
+  {{#2} \xrsquigarrow{\phantom{X}\ast} {#4} \xlsquigarrow{\ast\phantom{X}} {#3}}
   {{#2} \rightsquigarrow {#4} \leftsquigarrow {#3}}
 }
 \NewDocumentCommand{\coxdiamond}{smmmm}{
