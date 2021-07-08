@@ -26,7 +26,7 @@ important properties. Then, we introduce our chosen \emph{Coxeter presentation} 
 $\Sn$, we will use a rewriting system, with a suitable, well behaved collection of reduction rules corresponding to the
 Coxeter presentation. Finally, we describe the normal forms in this rewriting system, using Lehmer codes, and prove the
 correspondence between them and the type $\Aut[\Fin[n]]$ of automorphisms on a finite set. The generators and relations
-we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~\Cref{sec:equivalence}).
+we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~\cref{sec:equivalence}).
 
 \subsection{Presenting the permutation group}
 
@@ -67,10 +67,11 @@ which we define first.
 
 \begin{toappendix}
   \subsection{Groups}
+  \label{subsec:groups}
 
   From universal algebra, a group is simply a set with a 0-ary constant $e$ (the neutral element), a binary operation
   $\blank\mult\blank$ for group multiplication, and a unary inverse operation $\inv{\blank}$. The neutral element has to
-  satisfy unit and inverse laws, and the multiplication has to be associative (see~\Cref{def:group}).
+  satisfy unit and inverse laws, and the multiplication has to be associative (see~\cref{def:group}).
 
   A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the
   group multiplication is given by integer addition.
@@ -105,7 +106,7 @@ the singleton set.
   \begin{definition}
     \label{def:free-group}
     Given a set $A$, the free group $F(A)$ on it is given by a higher inductive type with the following point and path
-    constructors. Notice the similarity with the definition of a group structure (\Cref{def:group}), but note that each
+    constructors. Notice the similarity with the definition of a group structure (\cref{def:group}), but note that each
     operation here is a generator for $F(A)$.
     \begin{itemize}
       \item An inclusion function $\eta_{A} : A \to F(A)$
@@ -154,9 +155,9 @@ adjunction between the category of groups and sets.
 \end{toappendix}
 
 Following the universal-algebraic definition, in HoTT, we could use a naive higher inductive type to define the free
-group, which enforces the group axioms by adding path constructors (see~\Cref{def:free-group}).
-Using the induction principle, we can easily verify the universal property. However, since this definition of $F(A)$ has
-lots of path constructors corresponding to each group axiom, characterising its path space is difficult.
+group, which enforces the group axioms by adding path constructors (see~\cref{def:free-group}). Using the induction
+principle, we can easily verify the universal property. However, since this definition of $F(A)$ has lots of path
+constructors corresponding to each group axiom, characterising its path space is difficult.
 
 Instead, we will think about elements of the free group as words over an alphabet of letters drawn from the generating
 set \emph{and} the set of their formal inverses. If we take the disjoint union of $A$ with itself, that is, $A + A$ as
@@ -203,10 +204,7 @@ Before, the only way to decide the equality of two elements in a group was to ev
 in a group presentation, this is reduced to a \emph{word problem}, that is, deciding whether one word -- a
 representative of the equivalence class of the group's elements, can be reduced to another word, using the group's
 relations. However, these equations are not directed, so it is not always possible to construct a well-behaved rewriting
-system. In general, the word problem for groups is known to be undecidable.\jk{Example?}\todo{Examples: empty relation,
-  full relation, van Kampen of $\pi_{1}$}
-
-% This can be thought of as word reductions in a rewriting system.
+system. In general, the word problem for groups is known to be undecidable.
 
 \subsubsection{Coxeter Presentation}
 
@@ -219,9 +217,9 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
 \begin{enumerate}
   \item[\labelcref{fig:coxeter-a}] Swapping the same two elements two times in a row should be the same as doing nothing
   \item[\labelcref{fig:coxeter-b}] When swapping two distinct pairs of elements, it should not matter in which order the
-    swapping happens, that is, we can slide the wires freely.
+        swapping happens, that is, we can slide the wires freely.
   \item[\labelcref{fig:coxeter-c}] If the next transposition in the sequence is equal to the the first one, the order of
-    operations can be reversed.
+        operations can be reversed.
 \end{enumerate}
 
 \begin{figure}
@@ -311,11 +309,10 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
   \caption{Braiding diarams for Coxeter relations.}
   \label{fig:coxeter-braid}
 \end{figure}
-\todo{an example/motivation from book.pdf}
 
 This construction is called a Coxeter presentation of $\Sn$. Writing it formally, we encode the rules discussed above
-using a relation $\cox$ on $\List[\Fin[n]]$ (\Cref{def:cox}), and then take its congruence closure $\cox*$
-(\Cref{def:coxstar}).
+using a relation $\cox$ on $\List[\Fin[n]]$ (\cref{def:cox}), and then take its congruence closure $\cox*$
+(\cref{def:coxstar}).
 
 \begin{definition}[$\cox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \label{def:cox}
@@ -357,7 +354,7 @@ are strictly smaller than the left hand sides, in terms of the lexicographical o
 well-founded). Thus, by directing the relation from left to right, we would get the termination property out of the box.
 Second, we need the normal forms to be unique, so that we can get a normalisation function. This will be true if the
 rewriting system is confluent -- meaning that all critical pairs, that is, terms with overlapping possible reduction
-rules, have to converge. For example, in our system, the pairs in~\Cref{fig:critical-pairs-converging} converge.
+rules, have to converge. For example, in our system, the pair in~\Cref{fig:critical-pairs-converging} converges.
 Unfortunately, this is not true for all critical pairs -- an  example is in~\Cref{fig:critical-pairs-non-converging},
 where left and right endpoints are normal with respect to the $\cox*$ relation.
 
@@ -397,6 +394,7 @@ where left and right endpoints are normal with respect to the $\cox*$ relation.
 %    \label{fig:critical-pairs-non-converging}
 %  \end{subfigure}
 
+% a + \UOLoverbrace{b +}[c + d]ˆx \UOLunderbrace{+ e}_y + f
 
 \begin{figure}
   \centering
@@ -404,9 +402,9 @@ where left and right endpoints are normal with respect to the $\cox*$ relation.
     % https://q.uiver.app/?q=WzAsNixbMSwwLCJcXHRhdV8yXFx0YXVfMVxcdGF1XzJcXHRhdV8xXFx0YXVfMiJdLFswLDEsIlxcdGF1XzFcXHRhdV8yXFx0YXVfMVxcdGF1XzFcXHRhdV8yIl0sWzIsMSwiXFx0YXVfMlxcdGF1XzFcXHRhdV8xXFx0YXVfMlxcdGF1XzEiXSxbMCwyLCJcXHRhdV8xXFx0YXVfMlxcdGF1XzIiXSxbMSwzLCJcXHRhdV8xIl0sWzIsMiwiXFx0YXVfMlxcdGF1XzJcXHRhdV8xIl0sWzAsMSwiYnJhaWQiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFswLDIsImJyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbMSwzLCJjYW5jZWwiLDIseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFszLDQsImNhbmNlbCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzIsNSwiY2FuY2VsIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XSxbNSw0LCJjYW5jZWwiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dXQ==
     \adjustbox{scale=\scalef,center}{
       \begin{tikzcd}
-        & {\tau_2\tau_1\tau_2\tau_1\tau_2} \\
-        {\tau_1\tau_2\tau_1\tau_1\tau_2} && {\tau_2\tau_1\tau_1\tau_2\tau_1} \\
-        {\tau_1\tau_2\tau_2} && {\tau_2\tau_2\tau_1} \\
+        & {\UOLoverline{\tau_2\tau_1}[\tau_2]\UOLunderline{\tau_1\tau_2}} \\
+        {\tau_1\tau_2\overline{\tau_1\tau_1}\tau_2} && {\tau_2\underline{\tau_1\tau_1}\tau_2\tau_1} \\
+        {\tau_1\overline{\tau_2\tau_2}} && {\underline{\tau_2\tau_2}\tau_1} \\
         & {\tau_1}
         \arrow["\braid"', squiggly, from=1-2, to=2-1]
         \arrow["\braid", squiggly, from=1-2, to=2-3]
@@ -416,26 +414,26 @@ where left and right endpoints are normal with respect to the $\cox*$ relation.
         \arrow["\cancel", squiggly, from=3-3, to=4-2]
       \end{tikzcd}
     }
-    \caption{A converging critical pair in $\cox*$}
+    \caption{Converging critical pair}
     \label{fig:critical-pairs-converging}
   \end{subfigure}
   \begin{subfigure}[b]{0.55\textwidth}
     \adjustbox{scale=\scalef,center}{
       % https://q.uiver.app/?q=WzAsMyxbMSwwLCJcXHRhdV8zXFx0YXVfMlxcdGF1XzNcXHRhdV8xIl0sWzAsMiwiXFx0YXVfMlxcdGF1XzNcXHRhdV8yXFx0YXVfMSJdLFszLDEsIlxcdGF1XzNcXHRhdV8yXFx0YXVfMVxcdGF1XzMiXSxbMCwxLCJicmFpZCIsMix7InN0eWxlIjp7ImJvZHkiOnsibmFtZSI6InNxdWlnZ2x5In19fV0sWzAsMiwiYnJhaWQiLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJzcXVpZ2dseSJ9fX1dLFsyLDEsIlxcbG9uZ2JyYWlkIiwwLHsic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoic3F1aWdnbHkifX19XV0=
       \begin{tikzcd}
-        & {\tau_3\tau_2\tau_3\tau_1} \\
-        &&& {\tau_3\tau_2\tau_1\tau_3} \\
+        & {\UOLoverline{\tau_3\tau_2}[\tau_3]\UOLunderline{\tau_1}} \\
+        &&& {\underline{\tau_3\tau_2\tau_1\tau_3}} \\
         {\tau_2\tau_3\tau_2\tau_1}
-        \arrow["braid"', squiggly, from=1-2, to=3-1]
-        \arrow["braid", squiggly, from=1-2, to=2-4]
+        \arrow["\braid"', squiggly, from=1-2, to=3-1]
+        \arrow["\swap", squiggly, from=1-2, to=2-4]
         \arrow["\longbraid", squiggly, from=2-4, to=3-1]
       \end{tikzcd}
     }
-    \caption{A non-converging critical pair in $\cox*$ converges with $\longbraid$}
+    \caption{Non-converging critical pair that converges with $\longbraid$}
     \label{fig:critical-pairs-non-converging}
   \end{subfigure}
 
-  \caption{Critical Pairs}
+  \caption{Critical Pairs in $\cox*$}
   \label{fig:critical-pairs}
 \end{figure}
 
@@ -446,18 +444,7 @@ system $(\List[\Fin[n]], \longcox)$, partially based on the Coxeter relations, a
 properties of confluence and termination. We prove that the new relation defined by this system is equivalent,
 in a technical sense, to the standard Coxeter relation $\cox*$.
 
-% The Coxeter relations are a standard notion in the theory of group presentation~\todo{citation} -- even though we change
-% the relations a bit, we will not lose the connection. In fact, we will prove that the new relations are equivalent, in a
-% technical sense, to the standard Coxeter relations $\cox*$.
-% The system has generators corresponding to $\swap$, $\cancel$
-% and $\braid$, the problem of the non-converging critical pairs discussed previously is fixed by changing $\braid$ to be
-% a slightly more general relation $\longbraid$.
-
-\review{Further, we also inline the congruence closure in $\longcox$, allowing arbitrary reductions inside the list.}
-
-\todo{but computation is usually done by using Coxeter matrices~\cite{davisGeometryTopologyCoxeter2008}.}
-
-First, we need to define a helper function $n \downf k$.
+First, we need to define a function $n \downf k$.
 
 \begin{definition}[$\downf : (n : \Nat) \to (k : \Nat) \to {\List[\Fin[k + n]]}$]
   \begin{align*}
@@ -467,10 +454,10 @@ First, we need to define a helper function $n \downf k$.
 \end{definition}
 
 The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\). Since we think of the
-number $m$ as the transposition swapping elements $(\el{m}, \el{m+1})$, the role of this helper function is to produce a
-sequence of transpositions -- a permutation -- which moves element $\el{k + n}$ by $k$ places left, shifting all the
-elements in between one place right (see~\Cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the
-following generators.
+number $m$ as the transposition swapping elements $(\el{m}, \el{m+1})$, the role of this function is to produce a
+sequence of transpositions which moves element $\el{k + n}$ left by $k$ places, shifting all the elements in between one
+place right (see~\cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the following generators,
+inlining the congruence closure in $\longcox$, allowing arbitrary reductions inside the list.
 
 \begin{definition}[$\longcox$]
   \begin{align*}
@@ -484,10 +471,11 @@ following generators.
 \end{definition}
 
 Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and can be
-visualised in the same way as before. The remaining constructor uses the helper function to exchange the order of a long
-sequence of transpositions and a single transposition afterwards. For example, for $n = 0$ and $k = 3$, it allows for
-the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\Cref{fig:longcox} -- note the distinction between
-wires, where numbers represent the values, and transpositions, where numbers represent which wires are crossing).
+visualised in the same way as before. The remaining constructor $\longbraid$ uses the $\downf$ function to exchange the
+order of a long sequence of transpositions and a single transposition afterwards. For example, for $n = 0$ and $k = 3$,
+it allows for the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\cref{fig:longcox} -- note the
+distinction between wires, where numbers represent the values, and transpositions, where numbers represent which wires
+are crossing).
 
 \begin{figure}
   \begin{subfigure}[b]{0.3\textwidth}
@@ -577,7 +565,7 @@ wires, where numbers represent the values, and transpositions, where numbers rep
     \caption{ $\longbraid$ with $n = 0$ and $k = 3$}
     \label{fig:longcox}
   \end{subfigure}
-  \caption{Braiding diarams for modified Coxeter relations.}
+  \caption{Braiding diagrams for modified Coxeter relations.}
   \label{fig:coxeter-braid-mod}
 \end{figure}
 
@@ -590,30 +578,30 @@ $\List[\Fin[n]]$.
     \label{def:longcox-star}
     \begin{align*}
       \reflr{\longcox}
-       & : \forall w \to w \longcoxstar w                                                                               \\
+       & : \forall w \to w \longcoxstar w                                                                                  \\
       \transr{\longcox}
        & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcoxstar w_{3} \to w_{1} \longcoxstar w_{3}
     \end{align*}
   \end{definition}
+
   \begin{definition}[$\longcoxplus$]
     \label{def:longcox-plus}
     \begin{align*}
       \relr{\longcoxplus}
-       & : \forall w_{1}, w_{2} \to w_{1} \longcox w_{2} \to w_{1} \longcoxplus w_{2}
+       & : \forall w_{1}, w_{2} \to w_{1} \longcox w_{2} \to w_{1} \longcoxplus w_{2}                                      \\
       \transr{\longcoxplus}
        & : \forall w_{1}, w_{2}, w_{3} \to  w_{1} \longcox w_{2} \to w_{2} \longcoxplus w_{3} \to w_{1} \longcoxplus w_{3}
     \end{align*}
   \end{definition}
 \end{toappendix}
 
-We define $\longcoxplus$ to be the transitive closure (\Cref{def:longcox-star}) and $\longcoxstar$ to be
-reflexive-transitive closure (\Cref{def:longcox-plus})) of $\longcox$.
+For the relation $\longcox$, we define its transitive closure to be $\longcoxplus$ (\cref{def:longcox-plus}) and its
+reflexive-transitive closure to be $\longcoxstar$ (\cref{def:longcox-star}).
 
 Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox)$ has the properties
 we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property, and it is terminating, so, by
 Newman's lemma, it produces a unique normal form. We follow the terminology
-of~\cite*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results
-formally.~\vc{check!}
+of~\cite*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results formally.
 
 \begin{proposition}
   \label{prop:nf}
@@ -656,12 +644,6 @@ Finally, we define the type $\Sn$ as the set-quotient of $\List[\Fin[n]]$ by $\c
   \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
 
-% Note that this relation $\cox*$ is not prop-valued, that is, $w \cox* v$ is not a proposition because reductions need
-% not be unique. So, the quotient $\Sn$ is not effective, that is, $\quotrel : w \cox* v \to q(w) \id q(v)$ is not an
-% equivalence. We could instead define equivalence classes on $\List[\Fin[n]]$ to be those terms that have the same normal
-% form, using the $\normf$ function. Defining a new relation $(w \approx v) \defeq (\normf(w) \id \normf(v))$ which is
-% prop-valued, we could quotient $\List[\Fin[n]]$ by $\approx$. This is an equivalent definition for $\Sn$.
-
 Note that this relation $\cox*$ is not prop-valued, that is, $w \cox* v$ is not a proposition because reductions need
 not be unique. So, the quotient $\Sn$ is not effective, that is, $\quotrel : w \cox* v \to q(w) \id q(v)$ is not an
 equivalence. Using the $\normf$ function, we could instead define a new relation $\approx$ to equate those terms that
@@ -694,7 +676,7 @@ definition of $\Sn$ is equivalent to the definition of a presented group, by lif
 
 We set out to solve the word problem for $\Sn$. To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply
 have to compute their normal forms using $\normf$. They correspond to the same permutation if and only if these normal
-forms are equal.
+forms are equal, which is decidable for $\List[\Fin[n]]$.
 
 \subsection{Lehmer Codes}~\label{subsec:lehmer}
 
@@ -706,8 +688,9 @@ but now we will explicitly describe what these representatives look like, using 
 codes~\cite{lehmerTeachingCombinatorialTricks1960}.
 
 Lehmer codes are known in Combinatorial Analysis~\cite{bellmanCombinatorialAnalysis1960} where they are sometimes called
-"subexcedant sequences", or "factoriadics", which give the factorial number system. They are a convenient way of
-representing permutations on a computer, partly because they are
+"subexcedant sequences", or "factoriadics". They can be written as a decimal number in the factorial number system, or
+as a tuple encoding the digits~\cite*{knuthArtComputerProgramming1997,laisantNumerationFactorielleApplication1888}. This
+gives a convenient way of representing permutations on a computer, partly because they are
 bitwise-optimal~\cite{bergerTeachingOrdinalPatterns2019a}.
 
 Formally, we define $\Lehmer[n]$ to be an $n+1$-element tuple, where the position $k \leq n$ stores an element of
@@ -776,38 +759,38 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
 
 \begin{definition}[$\immersion : (n : \Nat) \to {\Lehmer[n]} \to {\List[\Fin[\suc[n]]]}$]
   \begin{align*}
-    \immersion(\zero, \zero)    & \defeq \nil                                              \\
-    \immersion(\suc[n], (r, l)) & \defeq \immersion(n, l) \append ((\suc[n] - r) \downf r)
+    \immersion_{\zero}(\zero)    & \defeq \nil                                              \\
+    \immersion_{\suc[n]}((r, l)) & \defeq \immersion_{n}(l) \append ((\suc[n] - r) \downf r)
   \end{align*}
 \end{definition}
 
-We can show that the function $\immersion$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
+We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
 
-\begin{proposition}
+\begin{propositionrep}
   \leavevmode
   \begin{enumerate}
-    \item For any Lehmer code $c$, $\immersion(c)$ is a normal form with resepct to $\longcoxstar$, that is, $\immersion(c)$ is
-          in $\im{\normf}$.
+    \item For any Lehmer code $c$, $\immersion_{n}(c)$ is a normal form with resepct to $\longcoxstar$, that is,
+          $\immersion_{n}(c)$ is in $\im{\normf}$.
     \item Any element of $\im{\normf}$ can be constructed from a unique Lehmer code by $\immersion$, that is, the fibers
-          of $\immersion: \Lehmer[n] \to {\im{\normf}}$ are contractible.
+          of $\immersion_{n} : \Lehmer[n] \to {\im{\normf}}$ are contractible.
   \end{enumerate}
   Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
-\end{proposition}
+\end{propositionrep}
 
 \begin{proof}
-\jk{Only for part 1 of the proposition!}
-For any code $c : \Lehmer[n]$, we have that 
-\[
-  \immersion(n, c) = (r_0 \downf k_0) \append (r_1 \downf k_1) \append \dots \append (r_{m-1} \downf k_{m-1})
-\]
-is concatenation of $n \geq m \geq 0$ non-empty strictly decreasing lists. Reduction $\longcox$ cannot happen inside any of the strictly
-decreasing $(r \downf k)$: $\longcancel$ requires repeating elements, $\longswap$ acts when consecutive numbers differ
-by at least 2, and $\longbraid$ acts on a non-monotone sequence. This leaves the case of reduction happening on a
-fragment that borders two (or more) subsequences. Again, $\longcancel$ requires two equal consecutive numbers, which
-would then have to be the last one in some $(r_i \downf k_i)$ sequence, and the first one in the next $(r_{i+1} \downf k_{i+1})$.
-But the first number in a sequence $(r_{i+1} \downf k_{i+1})$ is larger than every number in $(r_{i} \downf k_i)$ -- which also
-shows why $\longswap$ cannot happen. The remaining case of $\longbraid$ follows similarly, since its argument is a
-decreasing sequence followed immediately by a number equal to the first element of this sequence.
+  For any code $c : \Lehmer[n]$, we have that
+  \[
+    \immersion_{n}(c) = (r_0 \downf k_0) \append (r_1 \downf k_1) \append \dots \append (r_{m-1} \downf k_{m-1})
+  \]
+  is a concatenation of $n \geq m \geq 0$ non-empty strictly decreasing lists. Reductions in $\longcox$ cannot happen
+  inside any of the strictly decreasing $(r \downf k)$: $\longcancel$ requires repeating elements, $\longswap$ acts when
+  consecutive numbers differ by at least 2, and $\longbraid$ acts on a non-monotone sequence. This leaves the case of
+  reduction happening on a fragment that borders two (or more) subsequences. Again, $\longcancel$ requires two equal
+  consecutive numbers, which would then have to be the last one in some $(r_i \downf k_i)$ sequence, and the first one
+  in the next $(r_{i+1} \downf k_{i+1})$. But the first number in a sequence $(r_{i+1} \downf k_{i+1})$ is larger than
+  every number in $(r_{i} \downf k_i)$ -- which also shows why $\longswap$ cannot happen. The remaining case of
+  $\longbraid$ follows similarly, since its argument is a decreasing sequence followed immediately by a number equal to
+  the first element of this sequence.
 \end{proof}
 % \jk{Review:}
 % To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code
@@ -841,7 +824,7 @@ between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$.~\footnote{Note that th
   we ignored the 0-position in the Lehmer code.}
 
 To do so, we need to construct some equivalences by counting the elements of $\Fin[n]$ using its decidable equality.
-First, we define a helper type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
+First, we define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
 the one in the argument. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence an
 $\hSet$.
 
@@ -849,9 +832,10 @@ $\hSet$.
   \( \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j} \).
 \end{definition}
 
-We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$.
+We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$, these are obtained by
+counting arguments using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
 
-\begin{proposition}~\label{prop:fin-finexcept}
+\begin{propositionrep}~\label{prop:fin-finexcept}
   \leavevmode
   \begin{enumerate}
     % \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-1}
@@ -859,9 +843,9 @@ We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts wi
     \item For any $n : \Nat$, \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
             \FinExcept{\suc[n]}[n - k]} \). \label{prop:fin-finexcept-3}
   \end{enumerate}
-\end{proposition}
+\end{propositionrep}
 
-\begin{appendixproof}
+\begin{proof}
   The first and second propositions follow from simply constructing the bijections using the decidable equality of
   $\Fin[n]$, and making sure to punch-in and punch-out the element $k$ at the right place.
 
@@ -874,7 +858,7 @@ We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts wi
   For the other direction, if we are given a $k$ and a bijection $\pi$ between $\FinExcept{\suc[n]}[n]$ and
   $\FinExcept{\suc[n]}[n - k]$, we can extend $\pi$ to $\sigma : \Fin[\suc[n]] \eqv \Fin[\suc[n]]$ by inserting the
   element $n$ at the position $n - k$, resulting in the element $n$ having inversion count $k$.
-\end{appendixproof}
+\end{proof}
 
 Using these facts, we can now prove the main result of this section.
 
