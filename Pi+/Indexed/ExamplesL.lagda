@@ -97,12 +97,6 @@ x = not
 A[BC]-C[BA] : {A B C : U} → A × (B × C) ⟷₁ C × (B × A)
 A[BC]-C[BA] = swap⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 
-C[BA]-[CA]B : {A B C : U} → C × (B × A) ⟷₁ (C × A) × B
-C[BA]-[CA]B = (id⟷₁ ⊗ swap⋆) ◎ assocl⋆
-
-[CA]B-A[BC] : {A B C : U} → (C × A) × B ⟷₁ A × (B × C)
-[CA]B-A[BC] = !⟷₁ C[BA]-[CA]B ◎ !⟷₁ A[BC]-C[BA]
-
 A[BC]-B[AC] : {t₁ t₂ t₃ : Pi.U} → t₁ Pi.× (t₂ Pi.× t₃) Pi.⟷₁ t₂ Pi.× (t₁ Pi.× t₃)
 A[BC]-B[AC] = assocl⋆ ◎ (swap⋆ ⊗ id⟷₁) ◎ assocr⋆
 
@@ -114,6 +108,15 @@ B[CA]-A[BC] = assocl⋆ ◎ swap⋆
 \end{code}
 
 \newcommand{\adder}{%
+\begin{code}
+C[BA]-[CA]B : C × (B × A) ⟷₁ (C × A) × B
+C[BA]-[CA]B = (id⟷₁ ⊗ swap⋆) ◎ assocl⋆
+\end{code}}
+\begin{code}[hide]
+[CA]B-A[BC] : {A B C : U} → (C × A) × B ⟷₁ A × (B × C)
+[CA]B-A[BC] = !⟷₁ C[BA]-[CA]B ◎ !⟷₁ A[BC]-C[BA]
+\end{code}
+\newcommand{\addertwo}{%
 \begin{code}
 reversibleOr1 : 𝔹 3 ⟷₁ 𝔹 3
 reversibleOr1 = A[BC]-C[BA] ◎ ccx ◎ (id⟷₁ ⊗ cx) ◎ C[BA]-[CA]B ◎ (cx ⊗ id⟷₁) ◎ [CA]B-A[BC]

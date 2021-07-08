@@ -54,21 +54,21 @@ permutations of finite sets provides a richer algebraic structure which we revie
 \label{sec:langRev-examples}
 \label{examples}
 
-In a reversible boolean circuit, the number of input bits matches the number of output bits. Circuits can be composed
-sequentially, vertically, or horizontally, respectively preserving the number of bits, adding up the number of bits or
-multiplying them. So, to program with reversible circuits, all we need to do is make sure that each primitive operation
-preserves the number of bits, which is just a natural number. Natural numbers are the free commutative semiring (or,
-commutative rig) on one generator, with $(0,+)$ for addition, and $(1,\times)$ for multiplication, so the commutative
-semirig identities can be used to design a logic for reversible programming. This inspired the syntax for various
-first-order reversible logics and reversible programming
-languages~\cite*{sparksSuperstructuralReversibleLogic2014,jamesInformationEffects2012}.
+In reversible boolean circuits, the number of input bits matches the number of output bits. Thus, a key insight for a
+programming language of reversible circuits is to ensure that each primitive operation preserves the number of bits,
+which is just a natural number. The algebraic structure of natural numbers as the free commutative semiring (or,
+commutative rig) on one generator, with $(0,+)$ for addition, and $(1,\times)$ for multiplication then provides
+sequential, vertical, and horizontal circuit composition operators.
 
-Natural number identities have no computational content. To obtain a computational interpretation of the commutative rig
-structure, the logic needs to be equipped with values and types, and a notion of operational semantics and contextual
-equivalence~\cite{jamesInformationEffects2012}. This is a programming language which embodies the computational content
-of isomorphisms of finite types, or permutations. On the semantic side, we need to consider the groupoidification of a
-commutative rig, that is, a symmetric rig groupoid. A sound semantics for $\PiLang$ in weak rig groupoids was
-established in~\cite{caretteComputingSemiringsWeak2016}, and conjectured to be complete.
+These commutative semirig identities can be used to design a logic for reversible
+programming~\cite*{sparksSuperstructuralReversibleLogic2014}. But as natural number identities have no computational
+content, the logic needs to be equipped with values and types, and a notion of operational semantics and contextual
+equivalence to obtain a computational interpretation of the commutative rig
+structure~\cite{jamesInformationEffects2012}.  On the semantic side, the natural space to consider is the
+groupoidification of a commutative rig, that is, a symmetric rig groupoid.
+
+Putting these ideas together, the programming language $\PiLang$, whose syntax is given below, embodies the
+computational content of isomorphisms of finite types, or permutations.
 
 % In programming parlance, as shown in~\Cref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes
 % a reversible combinator in the programming language and the algebraic closure operators become composition operators in
@@ -158,19 +158,21 @@ turn out to be expressible using the distributivity and factoring identities of 
 \noindent The input value of type $\mathbb{2} \times A$ is processed by the distribute operator \ensuremath{\dist},
 which converts it into a value of type $(\onet \times A) + (\onet \times A)$. In the left branch, which corresponds to
 the case when the boolean is \textsf{true}, the combinator~\ensuremath{c_1} is applied to the value of
-type~\ensuremath{A}. The right branch which corresponds to the boolean being \textsf{false} passes the value of type $A$
+type~\ensuremath{A}. The right branch, which corresponds to the boolean being \textsf{false}, passes the value of type $A$
 through the combinator \ensuremath{c_2}.  The inverse of \ensuremath{\dist}, namely \ensuremath{\factor} is applied to
 get the final result. Using this conditional operator, \verb|cx| is defined as $\Afun{cif}~\verb|x|~\idc$ and
-\verb|ccx| is defined as $\Afun{cif}~\verb|cx|~\idc$. With these conventions, the first circuit in the introduction
+\verb|ccx| is defined as $\Afun{cif}~\verb|cx|~\idc$. With these conventions, the first circuit in the previous section
 is transcribed as follows:
 
 \medskip
 
 \adder{}
 
+\addertwo{}
+
 \noindent where we clearly see the sequences of the three operations \verb|ccx|, \verb|cx|, and \verb|cx| but, instead
 of using the indices in the sequence of wires to identify the relevant parameters, here we use structural isomorphisms
-(elided above) to re-shuffle the types. For the second circuit, instead of transcribing it directly, we express it using
+to re-shuffle the types. We only show one of these re-shuffling isomorphisms and elide the others. For the second circuit, instead of transcribing it directly, we express it using
 a slightly more abstract notation:
 
 \medskip
@@ -183,11 +185,12 @@ $(A,(B,C))$): if the bit is true, we perform an \verb|x| operation on component 
 to encode a two-way conditional expression using a sequence of one-way conditional expressions (the only ones available in
 the linear circuit model).
 
-All of this is only half the story however as the correspondence between the syntactic commutative rig (the syntax of $\PiLang$)
-and permutations on finite sets includes \emph{coherence conditions} that identify different syntactic representations
-of the same permutation~\cite{laplaza72,Carette2016}. These coherence conditions are collected in a second level of $\PiLang$
-syntax as level-2 combinators whose types are of the form $c_1 \isotwo c_2$ for appropriate $c_1$ and $c_2$ of the same
-level-1 type $A \isoone B$. For example, we have:
+All of this is only half the story, however. A sound semantics for $\PiLang$ in weak rig
+groupoids was established by \citet{caretteComputingSemiringsWeak2016}, and conjectured to be complete. For this
+semantics, rig groupoid \emph{coherence conditions} that identify different syntactic representations of the same
+permutation~\cite{laplaza72,Carette2016} were collected  in a
+second level of $\PiLang$ syntax as level-2 combinators.  Each level-2 combinator is of the form $c_1 \isotwo c_2$ for appropriate
+$c_1$ and $c_2$ of the same level-1 type $A \isoone B$ and asserts that $c_1$ and $c_2$ denote the same bijection. For example, we have:
 
 \medskip
 
@@ -211,16 +214,16 @@ the right and then swapping. The full set of level-2 combinators is large and is
 %   transpositions, and when they're equal.}
 
 %%%%%%%%%
-\subsection{Denotational Semantics}
+\subsection{Semantics}
 \label{subsec:denotational}
 
-\noindent The accompanying code includes an operational semantics for $\Pi$. A denotational semantics can be specified
-by mapping each type to a finite set and each combinator to a permutation between finite sets. In this section, we
-outline a simple denotational semantics expressed in the metalanguage of sets and functions that collapses the level-2
-combinators. This semantics will be extended in the next two sections to the HoTT metalanguage to properly model the
-level-2 combinators.
+\noindent Below we present a semantic map that dually serves as an operational semantics and a denotational
+semantics. As an operational semantics, each $\PiLang$ type $A$ is mapped to an Agda type $\denot{A}$ and each
+combinator $c : A \isoone B$ is mapped to an Agda function $\denot{A} \to \denot{B}$. As a denotational semantics, each
+$\PiLang$ type $A$ is mapped to a finite set $\denot{A}$ and each combinator $c : A \isoone B$ is mapped to bijection
+between $\denot{A} \to \denot{B}$.
 
-The denotation of types is straightforward:
+The semantics of types is straightforward:
 
 \begin{center}
   {\scalebox{\scalef}{$%
@@ -233,7 +236,7 @@ The denotation of types is straightforward:
 \end{center}
 
 \noindent where $\bot$ is the empty set, $\top$ is a singleton set, $\sqcup$ is the disjoint union of sets, and $\times$
-is the cartesian product of sets. The denotation of a combinator $c : A \isoone B$ is a (bijective) function mapping
+is the cartesian product of sets. The semantics of a combinator $c : A \isoone B$ is a (bijective) function mapping
 $\denot{A}$ to $\denot{B}$:
 
 \begin{multicols}{2}
@@ -382,7 +385,7 @@ $\denot{A}$ to $\denot{B}$:
 % }
 
 \begin{theorem}\label{thm:semone}
-  The denotational semantics is sound in the following sense:
+  The semantics is sound in the following sense:
   \begin{itemize}
     \item For every level-1 combinator $c : A \isoone B$, we have that $\denot{c}$ is a bijection between $\denot{A}$ and $\denot{B}$.
     \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
@@ -436,8 +439,8 @@ $\denot{A}$ to $\denot{B}$:
 % functions are the \emph{only} values in the $\lambda$-calculus.  In our setting, we ask whether the programs developed
 % in the previous section can themselves be subject to (higher-level) equivalences?
 
-Using categorical language, the denotational semantics for $\PiLang$ is using the category of finite sets and functions
-$\SetFin$. However, we only use the bijective functions for the semantics, which means, we use the groupoid $\BFin =
+Using categorical language, the denotations of types and combinators are objects and morphisms in the category of finite sets and functions
+$\SetFin$. However, as we only use the bijective functions for the semantics, we use the groupoid $\BFin =
   \term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and finite
 products $(\unit, \times)$, which we use to interpret our types. In $\BFin$, the coproducts and products restrict to
 additive and multiplicative symmetric monoidal structures, respectively, making $\BFin$ a symmetric rig groupoid.
