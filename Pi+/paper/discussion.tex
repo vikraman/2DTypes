@@ -191,12 +191,26 @@ categories, and using the fact that the finite symmetric group $\Sn$ encodes the
 existence of the proof is folklore. We have produced a proof and formalised it in constructive type theory.
 
 %%%%%%%%%%%%%%
-\paragraph{Reversible Programming Languages}
-
-Pi has other extensions (fractional/negative/recursive types).
-What are the free X monoidal structures they're describing?
-
-
+\paragraph{Reversible Programming Languages} The practice of programming languages is replete with \emph{ad hoc}
+instances of reversible computations: database transactions, mechanisms for data provenance, checkpoints, stack and
+exception traces, logs, backups, rollback recoveries, version control systems, reverse engineering, software
+transactional memories, continuations, backtracking search, and multiple-level undo features in commercial
+applications. In the early nineties, \citet{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class,
+treatment of reversibility. But intensive research in full-fledged reversible models of computations and reversible
+programming languages was only sparked by the discovery of deep connections between physics and
+computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275,Hey:1999:FCE:304763,fredkin1982conservative},
+and by the potential for efficient quantum computation~\cite{springerlink:10.1007/BF02650179}. The early developments of
+reversible programming languages started with a conventional programming language, e.g., an extended $\lambda$-calculus,
+and either (i) extended the language with a history
+mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or (ii) imposed constraints on the control
+flow constructs to make them reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.  More modern approaches recognize that
+reversible programming languages require a fresh approach and should be designed from first principles without the
+detour via conventional irreversible
+languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}. The version of
+$\PiLang$ studied in this paper is restricted to finite types and terminating total computations. It would be
+interesting to understand which versions of free monoidal structures correspond to extensions of $\Pi$ with recursive
+types~\cite{James:2012:IE:2103656.2103667,rc2011} and negative/fractional
+types~\cite{chenComputationalInterpretationCompact2021}.
 
 %%%%%%%%%%%%%%
 \paragraph{Extensional vs. Intensional View of Permutations.}
