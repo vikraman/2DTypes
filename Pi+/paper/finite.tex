@@ -24,7 +24,7 @@ each other.
 First, we will define the required notions of free groups and group presentations, and state some of their most
 important properties. Then, we introduce our chosen \emph{Coxeter presentation} for $\Sn$. To solve the word problem for
 $\Sn$, we will use a rewriting system, with a suitable, well behaved collection of reduction rules corresponding to the
-Coxeter presentation. Finally, we describe the normal forms in this rewriting system, using Lehmer codes, and prove the
+Coxeter presentation equations. Finally, we describe the normal forms in this rewriting system, using Lehmer codes, and prove the
 correspondence between them and the type $\Aut[\Fin[n]]$ of automorphisms on a finite set. The generators and relations
 we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~\cref{sec:equivalence}).
 
@@ -59,11 +59,9 @@ important for the following reasons.
         to a $\PiLang$ program, for the proof of completeness.
 \end{itemize}
 
-We use a presentation based on adjacent transpositions for generators, called a~\emph{Coxeter presentation}, which we
-also use to solve the word problem for $\Sn$. Connecting it back to the language $\PiLang$, we will show that it is
-possible to encode all $\PiLang$ combinators using adjacent transpositions (in~\Cref{sec:equivalence}). The rest of this
-section develops these intuitions formally. Group presentations are built by adding equations to a \emph{free group},
-which we define first.
+We will show that it is possible to encode all $\PiLang$ combinators using adjacent transpositions
+(in~\cref{sec:equivalence}). Group presentations are built by adding equations to a \emph{free group}, which we define
+first.
 
 \begin{toappendix}
   \subsection{Groups}
@@ -202,10 +200,10 @@ preserved by the function mapping out of the generating set.
 \end{proposition}
 
 Before, the only way to decide the equality of two elements in a group was to evaluate and check them on the nose, but
-in a group presentation, this is reduced to a \emph{word problem}, that is, deciding whether one word -- a
-representative of the equivalence class of the group's elements, can be reduced to another word, using the group's
-relations. However, these equations are not directed, so it is not always possible to construct a well-behaved rewriting
-system. In general, the word problem for groups is known to be undecidable.
+in a group presentation, this is reduced to deciding whether one word -- a representative of the equivalence class of
+the group's elements, can be reduced to another word, using the group's relations. However, these equations are not
+directed, so it is not always possible to construct a well-behaved rewriting system. In general, the word problem for
+groups is known to be undecidable.
 
 \subsubsection{Coxeter Presentation}
 
@@ -656,7 +654,8 @@ quotient $\List[\Fin[n]]$ by $\approx$, obtaining an equivalent definition for $
   \begin{enumerate}
     \item $\normf$ splits into a section-retraction pair, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n]
             \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
-    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc$ is the inclusion into the quotient.
+    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc$ is the inclusion into the quotient, and
+    $\im{f}$ denotes the image of $f$ (see~\cref{def:im}).
   \end{enumerate}
 \end{proposition}
 
@@ -675,9 +674,9 @@ definition of $\Sn$ is equivalent to the definition of a presented group, by lif
   \end{enumerate}
 \end{proposition}
 
-We set out to solve the word problem for $\Sn$. To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply
-have to compute their normal forms using $\normf$. They correspond to the same permutation if and only if these normal
-forms are equal, which is decidable for $\List[\Fin[n]]$.
+To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply have to compute their normal forms using
+$\normf$. They correspond to the same permutation if and only if these normal forms are equal, which is decidable for
+$\List[\Fin[n]]$.
 
 \subsection{Lehmer Codes}~\label{subsec:lehmer}
 
