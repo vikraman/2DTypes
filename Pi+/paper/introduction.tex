@@ -3,7 +3,7 @@
 % Consider two programs that implement the type isomorphism {$A + (B + C) \isoone C + (B + A)$}, written as two different
 % sequences of primitive isomorphisms:
 
-Consider two programs that implement the same type isomorphim:
+Consider two programs that implement the same permutation using different sequences of type isomorphisms:
 \begin{align*}
       A + (B + C) \isoone
       (A + B) + C & \isoone
@@ -18,30 +18,28 @@ Consider two programs that implement the same type isomorphim:
       C + (B + A)
 \end{align*}
 
-These permutations are written as sequences of primitive operations: associativity, symmetry, and composition. Can we
-find necessary and sufficient equations to identify \emph{all} such equivalent sequences of type isomorphisms?
+\noindent These permutations are written as sequences of primitive operations: associativity, symmetry, and
+composition. Can we find necessary and sufficient equations to identify \emph{all} such equivalent sequences of type
+isomorphisms?
 
-Reversible boolean circuits, which are at the core of quantum computing, are typically formalised as permutations
-$\{0,1\}^k \to \{0,1\}^k$ on bit strings of some length $k$~\cite{aaronson_et_al:LIPIcs:2017:8173,1201583}. From the
-perspective of programming languages, reversible circuits can be more conveniently expressed as isomorphisms over
-algebraic datatypes. The $\PiLang$ family of languages were developed by~\citet*{jamesInformationEffects2012,theseus}
-for writing reversible programs, whose syntax is inspired by the sound and complete axiomatisation of type
-isomorphisms~\cite{fioreRemarksIsomorphismsTyped2002}, with respect to the bicartesian structure, that is, coproducts
-and products.
-
-The programs expressing the two type isomorphisms can be written as $\PiLang$ programs, and the problem is to give an
-equational theory for this language. In this paper, we are going to give exactly the equations necessary to decide
-equivalence of $\PiLang$ programs. As conjectured in~\cite{caretteComputingSemiringsWeak2016}, these are going to
-correspond to the \emph{coherence conditions of symmetric rig groupoids} (explained later), hence answering the
-conjecture in the positive.
+Such sequences of type isomorphisms are pervasive in reversible boolean circuits, which are at the core of quantum
+computing. Typically, they might be formalised as permutations $\{0,1\}^k \to \{0,1\}^k$ on bit strings of some length
+$k$~\cite{aaronson_et_al:LIPIcs:2017:8173,1201583}. But from the perspective of programming languages, permutations and
+reversible circuits can be more conveniently expressed as isomorphisms over algebraic datatypes as proposed in the
+$\PiLang$ family of reversible languages~\cite*{jamesInformationEffects2012,theseus} whose syntax is inspired by the
+sound and complete axiomatisation of type isomorphisms~\cite{fioreRemarksIsomorphismsTyped2002}, with respect to the
+bicartesian structure, that is, coproducts and products. Since $\PiLang$ programs correspond to type isomorphisms of
+finite types, our observation is that the syntax of $\PiLang$ is a presentation of the free symmetric rig groupoid on
+one generator.
 
 It is folklore that the groupoid of finite sets and permutations is the free symmetric rig groupoid on one
-generator~\cite{laplaza72,kelly74,baez2000finite}. Since $\PiLang$ programs correspond to type isomorphisms of finite
-types, our observation is that the syntax of $\PiLang$ is a presentation of the same free symmetric rig groupoid on one
-generator. Our main result formally establishes this correspondence.
+generator~\cite{laplaza72,kelly74,baez2000finite}. Our main result formally establishes this correspondence by giving an
+equational theory for $\PiLang$ that exactly includes all the necessary equations to decide equivalence of $\PiLang$
+programs. As conjectured by \citet{caretteComputingSemiringsWeak2016}, these equations correspond to the \emph{coherence
+  conditions of symmetric rig groupoids}, answering the conjecture in the positive.
 
 \paragraph{Equivalence by Example} Without going into proofs, let us try to answer the question for the original
-example.
+pair of examples.
 
 \begin{figure}
       \[
@@ -174,7 +172,7 @@ rewriting system. First, there should be enough equations relating the programs 
 there should be enough equations corresponding to the reduction rules. We will show that these correspond to the
 coherence conditions for symmetric rig groupoids.
 
-From the normalised list $[0,1,0]$, we can constuct a permutation on a list of 3 elements $[a,b,c]$ as follows. We think
+From the normalised list $[0,1,0]$, we can construct a permutation on a list of 3 elements $[a,b,c]$ as follows. We think
 of it as insertion-sorting the elements of the list. Starting from the list $[a, b, c]$, we first insert $b$ at the
 right place -- by applying transposition $0$, we get the list $[b, a, c]$. Then, element $c$ is inserted in the right
 place by applying transpositions $1$ and $0$ -- as a result, we get the desired permutation $[c, b, a]$. Notice that we
@@ -203,7 +201,7 @@ of technical devices for reasoning about reversible circuits.
       \item ~\Cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
             Homotopy Type Theory. We define and characterise the notion of a univalent subuniverse, and construct
             $\UFin$ as a univalent subuniverse which classifies all finite types. We establish that paths in $\UFin$ are
-            familiies of loops on finite sets of specified cardinality, given by $\Aut[\Fin[n]]$, which produces the
+            families of loops on finite sets of specified cardinality, given by $\Aut[\Fin[n]]$, which produces the
             permutation group on $\Fin[n]$.
       \item In~\Cref{sec:finite}, we proceed to give a presentation of the permutation group, as the symmetric group
             $\Sn$ with generators and relations, and solve its word problem. In particular, we present $\Sn$ as a
