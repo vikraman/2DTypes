@@ -1,4 +1,4 @@
-\section{Going from \texorpdfstring{$\PiLang$}{Pi} to \texorpdfstring{$\UFin$}{UFin} and back}
+\section{Correspondence between \texorpdfstring{$\PiLang$}{Pi} and \texorpdfstring{$\UFin$}{UFin}}
 \label{sec:equivalence}
 
 % https://q.uiver.app/?q=WzAsNCxbMCwwLCJcXFBpTGFuZyJdLFsyLDAsIlxcUGlQbHVzTGFuZyJdLFs0LDAsIlxcUGlIYXRMYW5nIl0sWzYsMCwiXFxVRmluIl0sWzAsMSwiXFxldmFsdCJdLFsxLDIsIlxcZXZhbGgiLDAseyJjdXJ2ZSI6LTR9XSxbMiwzLCJcXGV2YWx0IiwwLHsiY3VydmUiOi00fV0sWzIsMSwiXFxxdW90ZWgiLDAseyJjdXJ2ZSI6LTR9XSxbMywyLCJcXHF1b3RldCIsMCx7ImN1cnZlIjotNH1dXQ==
@@ -11,28 +11,26 @@
     \arrow["\quoteh", curve={height=-24pt}, from=1-7, to=1-5]
   \end{tikzcd}\]
 
-In this section, we consider the additive fragment $\PiPlusLang$ of $\PiLang$. This is the language that we interpret to
-$\UFin$ and back, using the tools developed in the previous sections. Further, we go through an intermediate step of the
-language $\PiHatLang$, which is a simplified variant of $\PiPlusLang$ that uses adjacent transpositions for combinators,
-while preserving all the required structure.
+In this section, we first translate $\PiLang$ to its additive fragment $\PiPlusLang$. This is the language that we
+interpret to $\UFin$ and back, using the tools developed in the previous sections. Further, we go through an
+intermediate step of the language $\PiHatLang$, which is a simplified variant of $\PiPlusLang$ that uses adjacent
+transpositions for combinators, while preserving all the required structure.
 
 We present the types and 1-combinators of $\PiPlusLang$ and $\PiHatLang$ in~\Cref*{fig:piplus,fig:pihat} respectively,
-eliding the 2-combinators for brevity. \note{We enforce that there is a unique 2-combinator between compatible
-1-combinators, by introducing a level 3, which is trivial in the same way as in the case of $\PiLang$, as described
-before.} They can be found in the appendix and in the accompanying Agda code.
+eliding the 2-combinators for brevity. We enforce that there is a unique 2-combinator between compatible 1-combinators,
+by relating them with a truncation. These can be found in the appendix and in the accompanying Agda code
+(~\cref{app:level-two}).
 
 The translations between the languages are defined separately on types, 1-combinators, and 2-combinators. Following the
 terminology of Normalisation by Evaluation, the translations from the left to the right, going from the syntax towards
 the semantics, are called $\evalt$ and the translations the other way are called $\quotet$.
 
 To state our results formally, we organise the syntax for each language using a technical device, called a syntactic
-category. Since the languages have higher-dimensional structure, the syntactic categories here are actually
-(locally-strict) weak 2-categories. We define them formally in the appendix, and only state our results here.
-
-For each of the $\PiLang$, $\PiPlusLang$ and $\PiHatLang$ languages, their syntactic categories, respectively $\PiCat$,
-$\PiPlusCat$ and $\PiHatCat$, have 0-cells for types, 1-cells for 1-combinators, and 2-cells for 2-combinators. We can
-show that these are $(2,0)$-categories, since all the 1-cells and 2-cells are invertible. They are also locally-strict,
-or locally-posetal, because there is at most one 2-cell between compatible 1-cells.
+category. We define them formally in the appendix, and only state our results here. For each of the $\PiLang$,
+$\PiPlusLang$ and $\PiHatLang$ languages, their syntactic categories, respectively $\PiCat$, $\PiPlusCat$ and
+$\PiHatCat$, have 0-cells for types, 1-cells for 1-combinators, and 2-cells for 2-combinators. We can shoe that these
+syntactic categories here are actually $(2,0)$-categories, since all the 1-cells and 2-cells are invertible. They are
+also locally-strict, or locally-posetal, because there is at most one 2-cell between compatible 1-cells.
 
 \begin{toappendix}
   \todo{What is U?}
@@ -112,9 +110,8 @@ terms of $+$ as follows.
 
 \begin{proposition}
   There are two symmetric monoidal structures on $\PiPlusCat$, given by $(\zerot, +)$ and $(\onet, \times)$, with
-  $\times$ distributing over $+$, giving it a rig structure, as described in \todo{cite earlier section}.
+  $\times$ distributing over $+$, giving it a rig structure.
 \end{proposition}
-\todo{either prove it or cite something}
 
 Using this rig structure, we translate $\PiLang$ to $\PiPlusLang$, constructing a rig equivalence from $\PiCat$ to
 $\PiPlusCat$.
@@ -128,7 +125,7 @@ $\PiPlusCat$.
 \end{definition}
 
 \begin{proposition}
-  $\evalt$ gives a rig biequivalence between $\PiCat$ and $\PiPlusCat$.
+  $\evalt$ gives a rig equivalence between $\PiCat$ and $\PiPlusCat$.
 \end{proposition}
 
 \subsection{$\PiPlusLang$ to $\PiHatLang$}
@@ -194,7 +191,7 @@ to generate the braiding.
 \end{definition}
 
 \begin{proposition}
-  $\evalp/\quotep$ give a symmetric monoidal biequivalence between $\PiPlusCat$ and $\PiHatCat$.
+  $\evalp/\quotep$ give a symmetric monoidal equivalence between $\PiPlusCat$ and $\PiHatCat$.
 \end{proposition}
 
 \subsection{$\PiHatLang$ to $\UFin$}
@@ -230,7 +227,7 @@ a sequence of adjacent transpositions, producing a 1-combinator in $\PiHatLang$.
 $\UFin$ as a 1-groupoid, is a (locally strict) weak $(2,0)$-category, and we use this to state our final equivalence.
 
 \begin{proposition}
-  $\evalh/\quoteh$ give a symmetric monoidal biequivalence between $\PiHatCat$ and $\UFin$.
+  $\evalh/\quoteh$ give a symmetric monoidal equivalence between $\PiHatCat$ and $\UFin$.
 \end{proposition}
 
 The semantics that we presented here takes a different route to constructing the permutation from a $\PiLang$
