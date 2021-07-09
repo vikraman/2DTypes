@@ -795,7 +795,7 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
 \end{proof}
 % \jk{Review:}
 % To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code
-% $c = (0, 1, 2, 3, 4)$ -- for the full proof, see accompanying Agda code. We have that 
+% $c = (0, 1, 2, 3, 4)$ -- for the full proof, see accompanying Agda code. We have that
 % \[
 %   \immersion(c) = (0 \downf 1) \append (0 \downf 2) \append (0 \downf 3) \append (0 \downf 4) = [0, 1, 0, 2, 1, 0, 3, 2, 1, 0]
 % \]
@@ -821,8 +821,9 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
 Finally, it is time to complete our goal of characterising the permutation groups. Having produced a Lehmer code by
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
-between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$.~\footnote{Note that the indices for the type of permutations
-are off-by-one, because we chose $\Fin[n-1]$ to represent generators for permutations on $\Fin[n]$.}
+between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea of this proof is borrowed from~\cite{Molzer-cubical}
+~\footnote{Note that the indices for the type of permutations are off-by-one, because we chose $\Fin[n-1]$ to represent
+  generators for permutations on $\Fin[n]$.}
 
 To do so, we need to construct some equivalences by counting the elements of $\Fin[n]$ using its decidable equality.
 First, we define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
