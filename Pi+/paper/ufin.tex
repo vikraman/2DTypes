@@ -52,7 +52,7 @@ $\infty$-groupoids'' correspondence.
 % Fourth - explain the tool we use for fixing it
 Every type in HoTT is a weak $\infty$-groupoid whose points are the terms of the type, and the (iterated) identity type
 gives the (higher) morphisms. The groupoid we are interested in has types as points, type equivalences for 1-cells, and
-higher homotopies for higher cells. (See App.~\ref{app:grpdexample} for an example on a 3-element set.) This is the
+higher homotopies for higher cells. (See~\cref{app:grpdexample} for an example on a 3-element set.) This is the
 groupoid structure for the universe type $\UU$, since the identity type on types can be characterised as type
 equivalences (by \emph{univalence}). But, we only want to carve out a \emph{subuniverse} of \emph{finite types}, still
 satisfying univalence, to get the groupoid structure. In this section, we formally define \emph{univalent subuniverses},
@@ -226,7 +226,8 @@ and proceed to construct the particular instance for finite types, $\UFin$ (\cre
 % \end{toappendix}
 
 %%%
-\subsection{The Type Theory}~\label{subsec:type-theory}
+\subsection{The Type Theory}
+\label{subsec:type-theory}
 % \subsection{Univalent Subuniverses}
 % \label{sec:univalent}
 
@@ -238,8 +239,8 @@ We use the type theory of the HoTT book~\cite{univalentfoundationsprogramHomotop
 intensional Martin-L\"{o}f Type Theory, with a (univalent) universe $\UU$, and a few Higher Inductive Types (HITs) for
 propositional and set truncation, and set-quotients. All arguments will hold in a Cubical Type
 Theory~\cite*{cohenCubicalTypeTheory2018,angiuliComputationalSemanticsCartesianCubical2019,vezzosiCubicalAgdaDependently2019}
-as well.  In App.~\ref{app:identitytypes}, App.~\ref{app:homotopytypes}, and App~\ref{app:hits}, we review the basics of
-identity types, homotopy types, and HITs and refer the reader to the book for more details.
+as well.  In~\cref{app:identitytypes},~\cref{app:homotopytypes}, and~\cref{app:hits}, we review the basics of identity
+types, homotopy types, and HITs and refer the reader to the book for more details.
 
 % To recap, types in HoTT have a weak groupoid structure given by the identity type, where points are given by terms of
 % the type, and higher morphisms are given by the iterated identity type. Functions between types are functors between
@@ -283,17 +284,17 @@ identity types, homotopy types, and HITs and refer the reader to the book for mo
   identity type for the universe, $(A \id_{\UU} B) \eqv (A \eqv B)$, by univalence.
 
 
-  Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
-  the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to the
-  universe, such as $A \to \UU$. For a type family $P : A \to \UU$ and a point $x : A$, the type $P(x)$ is called the
-  fiber over $x$.  The $\term{transport}$ operation, named $\term{tr}$, lifts paths in the indexing type to functions
-  between fibers.
+  Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action
+  on the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to
+  the universe, such as $A \to \UU$. For a type family $P : A \to \UU$ and a point $x : A$, the type $P(x)$ is called
+  the fiber over $x$.  The $\term{transport}$ operation, named $\term{transport}/term{tr}$, lifts paths in the indexing
+  type to functions between fibers.
   %which is an $A$-indexed family of groupoids.
 
   \begin{gather*}
     \term{ap}_{f} : \dfun{x,y:A}{x \id_{A} y \to f(x) \id_{B} f(y)}
     \qquad
-    \term{tr}_{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \to P(y)}
+    \term{transport}_{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \to P(y)}
   \end{gather*}
 
   The type $\dsum*{x:A}{P(x)}$ is the collection of all the fibers and is called the total space of $P$. The first
@@ -317,7 +318,7 @@ identity types, homotopy types, and HITs and refer the reader to the book for mo
         \node[circle,fill,inner sep=1pt,label=right:{$y$}] (b2) at (.5,1.4) {};
         \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto,swap] {$p$} (b2);
         \node[circle,fill,inner sep=1pt,label=left:{$\pair{x,u}$}] (b1) at (-.5,7.2) {};
-        \node[circle,fill,inner sep=1pt,label=right:{$\pair{y,\transport{P}{p}{u}}$}] (b2) at (.5,7.2) {};
+        \node[circle,fill,inner sep=1pt,label=right:{$\pair{y,\transport*{P}{p}{u}}$}] (b2) at (.5,7.2) {};
         \draw[decorate,decoration={snake,amplitude=1}] (b1) -- node[auto] {$\term{lift}(u,p)$} (b2);
       \end{tikzpicture}
     \end{center}
@@ -331,14 +332,12 @@ identity types, homotopy types, and HITs and refer the reader to the book for mo
 
 Functions between types are functors between groupoids, and type families (or functions to the universe) are indexed
 families of groupoids. A type family $P : A \to \UU$ comes equipped with a functor $\pi_1 : \dsum*{x:A}{P(x)} \to \UU$
-which has a lifting operation giving it the structure of a fibration. The
-$\term{transport}$ operation $\transport{P}{p}{\blank}$ lifts paths in the base space to equivalences between the fibers:
-% Using the groupoid structure of
-% $A$, we can show that $\transport{P}{p}{\blank}$ and $\transport{P}{\inv{p}}{\blank}$ form an equivalence.
-% We name
-% this map $\tptEqv{P}$ which lifts paths to equivalences of fibers.
+which has a lifting operation giving it the structure of a fibration. The $\term{transport}$ operation lifts paths in
+the base space to functions between the fibers.  Using the groupoid structure of $A$, for a path $p : x \id_{A} y$,
+$\term{transport}(p)$ and $\term{transport}(\inv{p})$ form an equivalence.
+% We name this map $\tptEqv{P}$ which lifts paths to equivalences of fibers.
 \[
-  \tptEqv{P} : \dfun{x,y:A}{x \id_{A} y \to P(x) \eqv P(y)}
+  \tptEqv{P} : \dfun*{x,y:A}{(x \id_{A} y) \to (P(x) \eqv P(y))}
 \]
 
 \noindent The type families (or fibrations) we are interested in are the ones where paths in the base space completely determine
@@ -350,9 +349,9 @@ fibrations~\cite*{kapulkinUnivalenceSimplicialSets2018,kapulkinSimplicialModelUn
   equivalence.
 \end{definition}
 
-The use of the word \emph{univalent} here is a reference to Voevodsky's \emph{univalence} principle. Indeed, univalence
-characterises paths in the universe as equivalences between types, which follows from the canonical fibration
-$\idfunc : \UU \to \UU$ being univalent.
+Univalent fibrations were introduced by~\citet*{kapulkinUnivalenceSimplicialSets2018}, to build a model of Voevodsky's
+\emph{univalence} principle in simplicial sets. Indeed, univalence characterises paths in the universe as equivalences
+between types, which follows from the canonical fibration $\idfunc : \UU \to \UU$ being univalent.
 
 \begin{toappendix}
 
@@ -472,8 +471,9 @@ univalent ensures that the equality type of the ambient universe is reflected in
 \begin{propositionrep}[Univalent Subuniverse]
   \label{prop:univsub}
   A universe predicate is a type family $P : \UU \to \UU$ whose fibers are propositions, that is, $P(X)$ is a
-  proposition for every $X$. Given such a predicate, the fibration ${\fst : \dsum*{X:\UU}{P(X)} \to \UU}$ is univalent and generates a
-  univalent subuniverse $\UU_{P} \defeq (\dsum{X:\UU}{P(X)}, \fst)$.
+  proposition for every $X$. Given such a predicate, the fibration ${\fst : \dsum*{X:\UU}{P(X)} \to \UU}$ is univalent
+  and generates a univalent subuniverse $\UU_{P} \defeq (\dsum{X:\UU}{P(X)}, \fst)$.~\footnote{Univalent
+    typoids~\cite{petrakisUnivalentTypoids2019a} are a different presentation of univalent subuniverses.}
 \end{propositionrep}
 
 \begin{proof}
@@ -486,7 +486,7 @@ univalent ensures that the equality type of the ambient universe is reflected in
 
 The types we are interested in are the finite types. In constructive mathematics, the notion of finiteness is
 subtle~\cite{spiwackConstructivelyFinite2010}. We use the notion of Bishop-finiteness: a type is finite if it is merely
-equivalent to a finite set (\cref{def:finite-set} and \cref{def:isfin}).
+equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
 
 \begin{definition}[$\Fin$]
   \label{def:finite-set}
@@ -541,6 +541,8 @@ Since $\isFin[X]$ is a predicate on the universe $\UU$, we easily get our unival
 
 While $\UFin$ has \emph{all} the finite types, we are also interested in constructing a subuniverse of finite types of a
 specified cardinality. To do so, we will start with the subuniverse $\BAut[T]$.
+\footnote{Characterisations of univalent fibrations using the $\BAut$ construction have been studied
+  by~\citet{christensenCharacterizationUnivalentFibrations2015}.}
 
 \begin{definition}[$\BAut$]
   The predicate $P(X) \defeq \Trunc[-1]{X \id T}$ picks out exactly those types that are merely equal to $T$, and this
@@ -618,7 +620,8 @@ given by the higher paths corresponding to groupoid laws.
 %   \end{tikzcd}
 % \]
 
-\subsection{Rig structure}~\label{subsec:rig}
+\subsection{Rig structure}
+\label{subsec:rig}
 
 Similar to $\BFin$, the groupoid $\UFin$ has two symmetric monoidal structures, the additive and the multiplicative one,
 and the multiplicative tensor product distributes over the additive one. To construct these, we first state and prove
@@ -626,34 +629,29 @@ some equivalences on $\Fin$, and some general type isomorphisms. Then we simply 
 the univalence principle.
 
 \begin{proposition}
-  For any $n, m : \Nat$,
+  For any $n, m : \Nat$, and for any types $X, Y, Z$,
+
   \begin{gather*}
     \begin{aligned}
-      \Fin[0]                & \eqv \bot        \\
-      \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m]
+      \Fin[0]                & \eqv \bot                  \\
+      \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m]           \\
+      \\
+      \bot \sqcup X          & \eqv X                     \\
+      X \sqcup \bot          & \eqv X                     \\
+      (X \sqcup Y) \sqcup Z  & \eqv X \sqcup (Y \sqcup Z) \\
+      X \sqcup Y             & \eqv Y \sqcup Y            \\
+      X \times \bot          & \eqv \bot
     \end{aligned}
     \qquad
     \begin{aligned}
-      \Fin[1]                & \eqv \top        \\
-      \Fin[n] \times \Fin[m] & \eqv \Fin[n * m]
-    \end{aligned}
-  \end{gather*}
-  and for any types $X, Y, Z$,
-  \begin{gather*}
-    \begin{aligned}
-      \bot \sqcup X         & \eqv X                     \\
-      X \sqcup \bot         & \eqv X                     \\
-      (X \sqcup Y) \sqcup Z & \eqv X \sqcup (Y \sqcup Z) \\
-      X \sqcup Y            & \eqv Y \sqcup Y            \\
-      X \times \bot         & \eqv \bot
-    \end{aligned}
-    \qquad
-    \begin{aligned}
-      \top \times X         & \eqv X                                \\
-      X \times \top         & \eqv X                                \\
-      (X \times Y) \times Z & \eqv X \times (Y \times Z)            \\
-      X \times Y            & \eqv Y \times X                       \\
-      X \times (Y \sqcup Z) & \eqv (X \times Y) \sqcup (X \times Z)
+      \Fin[1]                & \eqv \top                             \\
+      \Fin[n] \times \Fin[m] & \eqv \Fin[n * m]                      \\
+      \\
+      \top \times X          & \eqv X                                \\
+      X \times \top          & \eqv X                                \\
+      (X \times Y) \times Z  & \eqv X \times (Y \times Z)            \\
+      X \times Y             & \eqv Y \times X                       \\
+      X \times (Y \sqcup Z)  & \eqv (X \times Y) \sqcup (X \times Z)
     \end{aligned}
   \end{gather*}
 \end{proposition}

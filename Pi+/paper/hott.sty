@@ -57,10 +57,14 @@
 \newcommand{\ap}[2]{\term{ap}_{#1}({#2})}
 \newcommand{\apd}[2]{\term{apd}_{#1}({#2})}
 \newcommand{\coe}[1]{\term{coe}({#1})}
-\newcommand{\transport}[3]{\term{tr}_{#1}^{#2}({#3})}
+\NewDocumentCommand{\transport}{smmm}{
+  \IfBooleanTF{#1}
+  {\term{tr}_{#2}^{#3}({#4})}
+  {\term{transport}_{#2}^{#3}({#4})}
+}
 \newcommand{\tr}[2]{{#1}_{\star}({#2})}
 \newcommand{\ua}{\term{ua}}
-\newcommand{\tptEqv}[1]{\term{tr-equiv}({#1})}
+\newcommand{\tptEqv}[1]{\term{transport-equiv}({#1})}
 \NewDocumentCommand{\loopspace}{O{}}{
   \ifstrempty{#1}
   {\Omega}
@@ -107,7 +111,11 @@
 \NewDocumentCommand{\BAut}{O{}}{\B{\mathsf{Aut}\ifstrempty{#1}{}{\ps{#1}}}}
 
 % dependent function
-\newcommand{\dfun}[2]{\prod\limits_{\mathsmaller{#1}}{#2}}
+\NewDocumentCommand{\dfun}{smm}{
+  \IfBooleanTF{#1}
+  {\prod_{{#2}}{#3}}
+  {\prod\limits_{\mathsmaller{#2}}{#3}}
+}
 
 % dependent sum
 \NewDocumentCommand{\dsum}{smm}{

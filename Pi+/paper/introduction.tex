@@ -24,9 +24,10 @@ find necessary and sufficient equations to identify \emph{all} such equivalent s
 Reversible boolean circuits, which are at the core of quantum computing, are typically formalised as permutations
 $\{0,1\}^k \to \{0,1\}^k$ on bit strings of some length $k$~\cite{aaronson_et_al:LIPIcs:2017:8173,1201583}. From the
 perspective of programming languages, reversible circuits can be more conveniently expressed as isomorphisms over
-algebraic datatypes. The $\PiLang$ family of languages were developed by~\citet*{James:2012:IE:2103656.2103667,theseus}
+algebraic datatypes. The $\PiLang$ family of languages were developed by~\citet*{jamesInformationEffects2012,theseus}
 for writing reversible programs, whose syntax is inspired by the sound and complete axiomatisation of type
-isomorphisms~\cite{fiore-remarks}, with respect to the bicartesian structure, that is, coproducts and products.
+isomorphisms~\cite{fioreRemarksIsomorphismsTyped2002}, with respect to the bicartesian structure, that is, coproducts
+and products.
 
 The programs expressing the two type isomorphisms can be written as $\PiLang$ programs, and the problem is to give an
 equational theory for this language. In this paper, we are going to give exactly the equations necessary to decide
@@ -195,10 +196,10 @@ of technical devices for reasoning about reversible circuits.
       \item We start in~\Cref{sec:qiskit} by presenting a few reversible circuits in the popular IBM Qiskit framework to
             serve as running examples throughout the paper.
       \item In~\Cref{sec:pi}, we introduce the two-level language
-            $\PiLang$~\cite{James:2012:IE:2103656.2103667,Carette2016} and illustrate how to write reversible circuits
-            and their optimisations using 1-combinators and 2-combinators respectively. We give a semantic account of
-            the language by translating each level-1 program to a bijection between finite sets, and verifying that
-            programs identified by level-2 constructs denote the same bijection.
+            $\PiLang$~\cite{jamesInformationEffects2012,caretteComputingSemiringsWeak2016} and illustrate how to write
+            reversible circuits and their optimisations using 1-combinators and 2-combinators respectively. We give a
+            semantic account of the language by translating each level-1 program to a bijection between finite sets, and
+            verifying that programs identified by level-2 constructs denote the same bijection.
       \item ~\Cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
             Homotopy Type Theory. We define and characterise the notion of a univalent subuniverse, and construct
             $\UFin$ as a univalent subuniverse which classifies all finite types. We establish that paths in $\UFin$ are

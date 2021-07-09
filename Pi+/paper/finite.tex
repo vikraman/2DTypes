@@ -74,7 +74,8 @@ first.
   A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the
   group multiplication is given by integer addition.
 
-  \begin{definition}~\label{def:group}
+  \begin{definition}
+  \label{def:group}
     In type theory, a group $G$ can be defined as a set $S$ with the following pieces of data:
 
     \begin{enumerate}
@@ -835,7 +836,8 @@ $\hSet$.
 We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$, these are obtained by
 counting arguments using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
 
-\begin{propositionrep}~\label{prop:fin-finexcept}
+\begin{propositionrep}
+  \label{prop:fin-finexcept}
   \leavevmode
   \begin{enumerate}
     % \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-1}
@@ -862,7 +864,8 @@ counting arguments using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have d
 
 Using these facts, we can now prove the main result of this section.
 
-\begin{proposition}~\label{prop:lehmer-aut-equiv}
+\begin{proposition}
+  \label{prop:lehmer-aut-equiv}
   For all $n:\Nat$, \( \Lehmer[n] \eqv \Aut[\Fin[\suc[n]]] \).
 \end{proposition}
 
