@@ -233,20 +233,25 @@ The semantics that we presented here takes a different route to constructing the
 combinator, compared to the direct interpretation given using the big-step interpreter in~\Cref{subsec:denotational}. We
 verify that the two semantics agree, establishing that the semantics is adequate and fully abstract.
 
-\begin{definition}
+\begin{definition}[${\gdenot{\blank}}$]
   \begin{gather*}
     \begin{aligned}
+      \gdenot{\blank}_{0} &: U \to \UFin \\
       \gdenot{\blank}_{0} &\defeq \evalh_{0} \comp \evalp_{0} \comp \evalt_{0}
     \end{aligned}
     \qquad
     \begin{aligned}
+      \gdenot{\blank}_{0} &: X \iso Y \to \gdenot{X}_{0} \id_{\UFin} \gdenot{Y}_{0} \\
       \gdenot{\blank}_{1} &\defeq \evalh_{1} \comp \evalp_{1} \comp \evalt_{1}
     \end{aligned}
   \end{gather*}
 \end{definition}
 
 \begin{theorem}[Full Abstraction and Adequacy]
-  If $c_1, c_2 : X \iso Y$, then $\denot{c_1} = \denot{c_2}$ iff $\gdenot{c_1}_{1} = \gdenot{c_2}_{1}$.
+  For any $c_1, c_2 : X \iso Y$, we have that
+  \[
+    \denot{c_1} = \denot{c_2} \text{ if and only if } \gdenot{c_1}_{1} = \gdenot{c_2}_{1}
+  \]
 \end{theorem}
 
 \section{Normalisation of Reversible Circuits}
