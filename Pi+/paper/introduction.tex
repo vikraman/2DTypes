@@ -223,8 +223,8 @@ of technical devices for reasoning about reversible circuits.
             adequacy of this model with respect to the operational semantics.
       \item In~\Cref{sec:applications}, we show applications of our results to reversible circuits, using our
             formalisation. Our results are stated using HoTT~\cite{univalentfoundationsprogramHomotopyTypeTheory2013},
-            and formalised using the HoTT-Agda library, with computer-checked proofs of all the coherences and
-            computation (around 7,500 lines of code). Using the formalisation, we are able to extract a procedure for
+            and formalised using the HoTT-Agda library (around 7,500 lines of code). Using the formalisation, we are
+            able to extract procedures for:
             \begin{enumerate*}
                   \item the synthesis of a reversible circuit from a permutation on a finite set,
                   \item the verification that a reversible circuit realises a given permutation on finite sets,
@@ -233,6 +233,12 @@ of technical devices for reasoning about reversible circuits.
                   \item the transfer of theorems about permutations and reversible circuits from one representation to the other.
             \end{enumerate*}
 \end{itemize}
+
+\noindent
+The proofs of some of our lemmas and propositions and theorems, as well as additional material, are given in the
+supplementary appendices, and we refer to them in the text. Our accompanying Agda code contains the formalisation of the
+full syntax, and most of our proofs.
+
 % Throughout the paper, we defer longer proofs to a technical appendix and refer to the accompanying Agda code for some of
 % the elided (routine) definitions.
 

@@ -777,7 +777,7 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
   Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
 \end{theoremrep}
 
-\begin{proof}
+\begin{proofsketch}
   For any code $c : \Lehmer[n]$, we have that
   \[
     \immersion_{n}(c) = (r_0 \downf k_0) \append (r_1 \downf k_1) \append \dots \append (r_{m-1} \downf k_{m-1})
@@ -791,7 +791,7 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
   every number in $(r_{i} \downf k_i)$ -- which also shows why $\longswap$ cannot happen. The remaining case of
   $\longbraid$ follows similarly, since its argument is a decreasing sequence followed immediately by a number equal to
   the first element of this sequence.
-\end{proof}
+\end{proofsketch}
 % \jk{Review:}
 % To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code
 % $c = (0, 1, 2, 3, 4)$ -- for the full proof, see accompanying Agda code. We have that
