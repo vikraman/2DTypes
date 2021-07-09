@@ -80,21 +80,16 @@ In the remainder of this section, we discuss some broader related work.
 % \end{center}
 
 %%%%%%%%%%%%%%
-\paragraph{Rewriting} We presented a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem.
-
-There exists an algorithm, due to~\citet{knuthSimpleWordProblems1970}, that, when succeeds, constructs a well-behaved
-rewriting system for an arbitrary finite set of (undirected) equations. It did not work for us, producing too many
-equations, and proving correctness and termination was intractable.
-
-We chose to encode permutations as adjacent transpositions corresponding to words in $\Sn$, since that closely
-corresponds to the syntax of $\PiLang$ combinators. Other representations of permutations would give a different
-denotational semantics for $\PiLang$ combinators. Permutations can be encoded as listed vectors or matrices, inductively
-generated trees (Motzkin trees), Young diagrams, or String diagrams, but the difficulty of formalising them in type
-theory varies depending on the encoding.
-
-Rewriting systems and word problems have a long history of being formalised in proof assistants. In the recent past,
-higher order rewriting systems have been formalised in proof assistants like {homotopy.io} and Lean and Coq. The use of
-HoTT to study rewriting has been considered in~\cite{krausCoherenceWellFoundednessTaming2020}.
+\paragraph{Rewriting} Term-rewriting systems and word problems have a long history of being formalised in proof
+assistants. In the recent past, higher order rewriting systems have been formalised in {homotopy.io}, Lean, Coq, and
+HoTT~\citet{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main result, we developed a rewriting
+system for the Coxeter relations for $\Sn$ to solve its word problem and formalised its correctness and termination in a
+proof assistant. Our design based on encoding permutations as adjacent transpositions led to an intuitive whose
+correctness was straightforward to establish and whose termination only required slightly modified variations on
+Church-Rosser theorems. Other encodings of permutations as listed vectors, matrices, inductively generated trees
+(Motzkin trees), Young diagrams, or string diagrams, proved either difficult formalise in type theory or difficult to
+relate directly to the primitive type isomorphisms of $\PiLang$. The automatic \citet{knuthSimpleWordProblems1970}
+produced too many equations making proving correctness and termination intractable.
 
 %%%%%%%%%%%%%%
 \paragraph{Extensional vs. Intensional View of Permutations.}
