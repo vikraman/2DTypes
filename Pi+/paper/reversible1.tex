@@ -44,10 +44,11 @@
 \label{langeqeq}
 \label{sec:informal}
 
-The circuit model of reversible computation discussed in the previous section is a useful abstraction close to the hardware
-platform. However, since its main data abstraction is a \emph{sequence of wires}, it only provides an ``assembly-level''
-programming abstraction (e.g., \verb|qasm|). As motivated by \citet{LAFONT2003257}, a mathematical model based on
-permutations of finite sets provides a richer algebraic structure which we review in this section.
+The circuit model of reversible computation discussed in the previous section is a useful abstraction close to the
+hardware platform. However, since its main data abstraction is a \emph{sequence of wires}, it only provides an
+``assembly-level'' programming abstraction (e.g., \verb|qasm|). As motivated by \citet{LAFONT2003257}, a mathematical
+model based on permutations of finite sets provides a richer algebraic structure, using which we describe a reversible
+programming language in this section.
 
 %%%%%%%%%%%%%%%%%
 \subsection{The $\Pi$ Family of Languages}
@@ -61,11 +62,11 @@ commutative rig) on one generator, with $(0,+)$ for addition, and $(1,\times)$ f
 sequential, vertical, and horizontal circuit composition operators.
 
 These commutative rig identities can be used to design a logic for reversible
-programming~\cite*{sparksSuperstructuralReversibleLogic2014}. But as natural number identities have no computational
-content, the logic needs to be equipped with values and types, and a notion of operational semantics and contextual
-equivalence to obtain a computational interpretation of the commutative rig
-structure~\cite{jamesInformationEffects2012}.  On the semantic side, the natural space to consider is the
-groupoidification of a commutative rig, that is, a symmetric rig groupoid.
+programming~\cite*{sparksSuperstructuralReversibleLogic2014}. To interpret natural number identities as reversible programs,
+the logic needs to be equipped with values and types, and a notion of operational semantics and contextual equivalence,
+giving a computational interpretation of the commutative rig structure~\cite{jamesInformationEffects2012}. On the
+semantic side, the natural space to consider is the groupoidification of a commutative rig, that is, a symmetric rig
+groupoid.
 
 Putting these ideas together, the programming language $\PiLang$, whose syntax is given below, embodies the
 computational content of isomorphisms of finite types, or permutations.
@@ -188,8 +189,8 @@ the linear circuit model).
 
 All of this is only half the story, however. A sound semantics for $\PiLang$ in weak rig
 groupoids was established by \citet{caretteComputingSemiringsWeak2016}, and conjectured to be complete. For this
-semantics, rig groupoid \emph{coherence conditions} that identify different syntactic representations of the same
-permutation~\cite{laplaza72,caretteComputingSemiringsWeak2016} were collected  in a
+semantics, \emph{coherence conditions} for symmetric rig groupoids that identify different syntactic representations of the same
+permutation~\cite{laplaza72,caretteComputingSemiringsWeak2016}, were collected  in a
 second level of $\PiLang$ syntax as level-2 combinators.  Each level-2 combinator is of the form $c_1 \isotwo c_2$ for appropriate
 $c_1$ and $c_2$ of the same level-1 type $A \isoone B$ and asserts that $c_1$ and $c_2$ denote the same bijection. For
 example, we have the following level-2 combinators dealing with associativity:

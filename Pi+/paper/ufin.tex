@@ -4,7 +4,7 @@
 % First - recap the previous section
 % Second - say what was wrong
 
-Using categorical language, the setting for the semantics in the previous section is the category of finite sets and
+In categorical language, the setting for the semantics in the previous section is the category of finite sets and
 functions $\SetFin$. However, as $\PiLang$ only refers to bijective functions, a more precise setting is the groupoid
 $\BFin = \term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and
 finite products $(\unit, \times)$ and in $\BFin$ these restrict to additive and multiplicative symmetric monoidal
@@ -30,8 +30,8 @@ completeness for $\PiLang$, we want a witness for this equality, so that we can 
 % Third - say how are we fixing it
 
 We observe that the implicit equalities between the isomorphisms are pointwise equalities of functions, that is,
-homotopies. We therefore \emph{weaken} the groupoid $\BFin$, exposing these homotopies, by using higher invertible cells
-and work in HoTT (Univalent Foundations) as it provides a proof-relevant, constructive metatheory to get a handle
+homotopies. We therefore \emph{weaken} the groupoid $\BFin$, exposing these homotopies, by using higher invertible cells.
+We work in HoTT (Univalent Foundations) as it provides a proof-relevant, constructive metatheory to get a handle
 on these equalities and provides a rich internal language for describing weak groupoids, using the ``types are weak
 $\infty$-groupoids'' correspondence.
 
@@ -562,7 +562,7 @@ programming language~\cite{caretteReversibleProgramsUnivalent2018}.
 \end{definition}
 
 Since $\BAut[T]$ is a univalent subuniverse, we can characterise its path space. The intuition is that $\BAut[T]$ only
-has one point $T_0$, and 1-paths $T_0 \id_{\BAut[T]} T_0$, that is, loops, and higher paths between these loops. The
+has one point $T_0$, and 1-paths $T_0 \id T_0$, that is, loops, and higher paths between these loops. The
 type of loops on $T_0$, $\loopspace[\BAut[T],T_{0}]$, is shown to be equivalent to $\Aut[T] \defeq T \eqv T$, which is
 the group of automorphisms of $T$.
 

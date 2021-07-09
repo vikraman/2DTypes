@@ -27,7 +27,7 @@ the semantics, are called $\evalt$ and the translations the other way are called
 To state our results formally, we organise the syntax for each language using a technical device, called a syntactic
 category. We define them formally in the appendix, and only state our results here. For each of the $\PiLang$,
 $\PiPlusLang$ and $\PiHatLang$ languages, their syntactic categories, respectively $\PiCat$, $\PiPlusCat$ and
-$\PiHatCat$, have 0-cells for types, 1-cells for 1-combinators, and 2-cells for 2-combinators. We can shoe that these
+$\PiHatCat$, have 0-cells for types, 1-cells for 1-combinators, and 2-cells for 2-combinators. We can show that these
 syntactic categories here are actually $(2,0)$-categories, since all the 1-cells and 2-cells are invertible. They are
 also locally-strict, or locally-posetal, because there is at most one 2-cell between compatible 1-cells.
 
@@ -173,8 +173,8 @@ in~\cref{fig:plusplusswap}. The challenging part is showing that these moves are
       \Tree [ {\tiny m} [ {\tiny n} {\tiny 1} ] ] ~\xrightarrow{}~
       \Tree [ {\tiny m} [ {\tiny 1} {\tiny n} ] ] ~
     \]
-  \label{fig:plusplusswap}
-  \caption{Braiding from transpositions, recursive case}
+    \caption{Braiding from transpositions, recursive case}
+    \label{fig:plusplusswap}
 \end{figure}
 
 \begin{lemma}
@@ -199,13 +199,13 @@ $\PiPlusLang$, as shown in~\cref{fig:transpfrombraid}. Again, these are shown to
 
 \begin{figure}
   \[
-     \Tree [ {\tiny I} [ {\tiny I} {\tiny n} ] ] ~\xrightarrow{\assoclp}~
-     \Tree [ [ {\tiny I} {\tiny I} ] {\tiny n} ] ~\xrightarrow[\swapp\phantom{xx}]{\phantom{xx}\idc}~
-     \Tree [ [ {\tiny I} {\tiny I} ] {\tiny n} ] ~\xrightarrow{\assocrp}~
-     \Tree [ {\tiny I} [ {\tiny I} {\tiny n} ] ] ~
-   \]
- \label{fig:transpfrombraid}
- \caption{Transpositions from braiding}
+    \Tree [ {\tiny $\onet$} [ {\tiny $\onet$} {\tiny X} ] ] ~\xrightarrow{\assoclp}~
+    \Tree [ [ {\tiny $\onet$} {\tiny $\onet$} ] {\tiny X} ] ~\xrightarrow[\swapp\phantom{xx}]{\phantom{xx}\idc}~
+    \Tree [ [ {\tiny $\onet$} {\tiny $\onet$} ] {\tiny X} ] ~\xrightarrow{\assocrp}~
+    \Tree [ {\tiny $\onet$} [ {\tiny $\onet$} {\tiny X} ] ] ~
+  \]
+  \caption{Transpositions from braiding}
+  \label{fig:transpfrombraid}
 \end{figure}
 
 \begin{definition}[$\quotep$]
@@ -267,7 +267,7 @@ verify that the two semantics agree, establishing that the semantics is adequate
     \end{aligned}
     \qquad
     \begin{aligned}
-      \gdenot{\blank}_{0} & : X \iso Y \to \gdenot{X}_{0} \id_{\UFin} \gdenot{Y}_{0} \\
+      \gdenot{\blank}_{1} & : (c : X \iso Y) \to \gdenot{X}_{0} \id_{\UFin} \gdenot{Y}_{0} \\
       \gdenot{\blank}_{1} & \defeq \evalh_{1} \comp \evalp_{1} \comp \evalt_{1}
     \end{aligned}
   \end{gather*}
@@ -307,8 +307,8 @@ quoting permutations. More general, user-guided, reasoning can be done using the
 combinators to rewrite $\PiLang$ programs.
 
 Recall the specification of reversible disjunction from \Cref{sec:examples}, the two Qiskit circuits for implementing it, and the
-corresponding $\PiLang$ definitions \Afun{reversibleOr1} and \Afun{reversibleOr2}. The normal for both circuit is
-computed to be, establishing their equivalence:
+corresponding $\PiLang$ definitions \Afun{reversibleOr1} and \Afun{reversibleOr2}. The normal forms for both circuit is
+computes to the following, establishing their equivalence:
 
 \medskip
 \resetnormtwo{}
