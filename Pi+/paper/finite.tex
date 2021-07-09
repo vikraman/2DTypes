@@ -74,7 +74,7 @@ first.
   A very simple example of a group is $\mathbb{Z}$, where the neutral element is 0, the inverse of $k$ is $-k$, and the
   group multiplication is given by integer addition.
 
-  \begin{definition}
+  \begin{definition}[Group]
     \label{def:group}
     In type theory, a group $G$ can be defined as a set $S$ with the following pieces of data:
 
@@ -102,7 +102,7 @@ ones directly implied by the group axioms. For example, the additive group of in
 the singleton set.
 
 \begin{toappendix}
-  \begin{definition}
+  \begin{definition}[Free group]
     \label{def:free-group}
     Given a set $A$, the free group $F(A)$ on it is given by a higher inductive type with the following point and path
     constructors. Notice the similarity with the definition of a group structure (\cref{def:group}), but note that each
@@ -165,7 +165,7 @@ the group's underlying set, we can use $\inl/\inr$ to mark the elements -- $\inl
 $\inv{a}$. Then, we can encode the free group using the free monoid, that is, lists of $A + A$. Additionally, we need to
 ensure that the inverse laws hold, so we have to coalesce adjacent occurences of $a$ and $\inv{a}$.
 
-\begin{definition}
+\begin{definition}[Free group]
   \label{def:presentation}
   Let $A$ be a set, and $\List[\blank]$ the free monoid. The free group $F(A)$ on $A$ is the set-quotient of $\List[A +
       A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons a \cons \nil
@@ -186,7 +186,7 @@ satisfied in the resulting group. For example, if we take $F(\unit) \defeq \math
 the resulting group would be $\mathbb{Z}_2 \eqv \Aut[\Bool]$. Note that not all groups have finite (or computable)
 presentations, and, a group can have any number of different presentations.
 
-\begin{definition}
+\begin{definition}[Group presentation]
   Let $A$ be a set and $R : \List[A + A] \to \List[A + A] \to \UU$ a binary relation on $\List[A + A]$. The group
   $F(\langle A ; R \rangle)$ presented by $A$ and $R$, is given by the set-quotient of the free group $F(A)$ by the
   congruence closure of $R$.
@@ -218,10 +218,8 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
   \item[\labelcref{fig:coxeter-a}] Swapping the same two elements two times in a row should be the same as doing nothing
   \item[\labelcref{fig:coxeter-b}] When swapping two distinct pairs of elements, it should not matter in which order the
         swapping happens, that is, we can slide the wires freely.
-  \item[\labelcref{fig:coxeter-c}] \jk{If the next transposition in the sequence is equal to the the first one, the order of
-        operations can be reversed}.
-
->>>>>>> ee83d6f6650c383d20e046a4ada0de4cb9c42dca
+  \item[\labelcref{fig:coxeter-c}] There are two equivalent ways of swapping the first and the last element in a
+  three-element sequence.
 \end{enumerate}
 
 \begin{figure}
@@ -236,7 +234,7 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
         border height = 0.3cm,
         thick] at (0, 0)
       {braid={ s_1, s_1}};
-      \node[font=\large] at (1, 0.7) {\(\rightarrow\)};
+      \node[font=\large] at (1, 0.7) {\(=\)};
       \pic[local bounding box=my braid,braid/.cd,
         number of strands = 2,
         width = 0.4cm,
@@ -266,7 +264,7 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
         border height = 0.3cm,
         thick] at (1, 0)
       {braid={ 1, s_1 }};
-      \node[font=\large] at (1.9, 0.7) {\(\rightarrow\)};
+      \node[font=\large] at (1.9, 0.7) {\(=\)};
       \pic[local bounding box=my braid,braid/.cd,
         number of strands = 2,
         width = 0.4cm,
@@ -296,7 +294,7 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
         border height = 0.1cm,
         thick] at (0, 0)
       {braid={ s_2, s_1, s_2}};
-      \node[font=\large] at (1.4, 0.7) {\(\rightarrow\)};
+      \node[font=\large] at (1.4, 0.7) {\(=\)};
       \pic[local bounding box=my braid,braid/.cd,
         number of strands = 3,
         width = 0.4cm,
@@ -605,7 +603,7 @@ $\longbraid$, we can now show the problematic critical pair \cref{fig:critical-p
 terminating, so, Newman's lemma, it produces a unique normal form. We follow the terminology
 of~\cite*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results formally.
 
-\begin{proposition}
+\begin{theorem}
   \label{prop:nf}
   \leavevmode
   \begin{enumerate}
@@ -617,7 +615,7 @@ of~\cite*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTami
           extended cospan $\coxcospan*{w_{2}}{w_{3}}{w}$.
     \item For every $w$, there exists a unique normal form $v$ such that $w \longcoxstar v$.~\label{prop:nf-uniqueness}
   \end{enumerate}
-\end{proposition}
+\end{theorem}
 
 The modified form of the Coxeter relations are unwieldy and difficult to prove properties about by induction. However,
 we can make the following observation relating it to $\cox*$.
@@ -667,7 +665,7 @@ of words $A + A$, where the right copy corresponds to the set of formal inverses
 $\cancel$ specifies that the inverse of each element is again the same element, using which we can show that our
 definition of $\Sn$ is equivalent to the definition of a presented group, by lifting the $\cox*$ relation.
 
-\begin{proposition}
+\begin{theorem}
   \leavevmode
   \begin{enumerate}
     \item There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list
@@ -675,7 +673,7 @@ definition of $\Sn$ is equivalent to the definition of a presented group, by lif
     \item $\Sn$ is equivalent to the group presented by generators $\Fin[n]$ with the relations given by $\cox*$
           extended to $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A \to A$.
   \end{enumerate}
-\end{proposition}
+\end{theorem}
 
 To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply have to compute their normal forms using
 $\normf$. They correspond to the same permutation if and only if these normal forms are equal, which is decidable for
@@ -714,7 +712,7 @@ $\Fin[k]$. Since the 0-th position is trivial, in practice it is ignored, and th
 Given a permutation $\sigma : \Aut[\Fin[n]]$, for any element $i: \Fin[n]$, we can define the inversion count of $i$ as
 the number of smaller elements appearing after it in the permutation.
 
-\begin{definition}
+\begin{definition}[Inversion count]
   Given a permutation $\sigma : \Aut[\Fin[n]]$, the inversion count of $k: \Fin[n]$ is given by
   \[ \invcount{i} = \#\Set{j < i | \sigma(j) > \sigma(i)}. \]
 \end{definition}
@@ -768,7 +766,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
 
 We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
 
-\begin{propositionrep}
+\begin{theoremrep}
   \leavevmode
   \begin{enumerate}
     \item For any Lehmer code $c$, $\immersion_{n}(c)$ is a normal form with resepct to $\longcoxstar$, that is,
@@ -777,7 +775,7 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
           of $\immersion_{n} : \Lehmer[n] \to {\im{\normf}}$ are contractible.
   \end{enumerate}
   Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
-\end{propositionrep}
+\end{theoremrep}
 
 \begin{proof}
   For any code $c : \Lehmer[n]$, we have that
@@ -826,19 +824,18 @@ between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea of this proof
 ~\footnote{Note that the indices for the type of permutations are off-by-one, because we chose $\Fin[n-1]$ to represent
   generators for permutations on $\Fin[n]$.}
 
-To do so, we need to construct some equivalences by counting the elements of $\Fin[n]$ using its decidable equality.
-First, we define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
-the one in the argument. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence a
-set.
-
-\begin{definition}
-  \( \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j} \).
+\begin{definition}[${\FinExcept{n}} : {\Fin[n]} \to \UU$]
+  For $n : \Nat$, the type family $\FinExcept{n}$ picks out all elements in $\Fin[n]$ except the one in the argument.
+  \[
+    \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j} \).
+  \]
 \end{definition}
 
-We state and prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$, these are obtained by
-counting arguments using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
+Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence a set. We state and prove a few
+auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$ -- these are obtained by counting arguments using the
+fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
 
-\begin{propositionrep}
+\begin{lemmarep}
   \label{prop:fin-finexcept}
   \leavevmode
   \begin{enumerate}
@@ -847,7 +844,7 @@ counting arguments using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have d
     \item For any $n : \Nat$, \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
             \FinExcept{\suc[n]}[n - k]} \). \label{prop:fin-finexcept-3}
   \end{enumerate}
-\end{propositionrep}
+\end{lemmarep}
 
 \begin{proof}
   The first and second propositions follow from simply constructing the bijections using the decidable equality of
@@ -866,10 +863,10 @@ counting arguments using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have d
 
 Using these facts, we can now prove the main result of this section.
 
-\begin{proposition}
+\begin{theorem}
   \label{prop:lehmer-aut-equiv}
   For all $n:\Nat$, \( \Lehmer[n] \eqv \Aut[\Fin[\suc[n]]] \).
-\end{proposition}
+\end{theorem}
 
 \begin{proof}
   For $n = \zero$, note that $\Lehmer[\zero]$ is contractible, and so is $\Aut[\Fin[\suc[\zero]]]$. For $n = \suc[m]$,

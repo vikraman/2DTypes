@@ -299,9 +299,8 @@ types, homotopy types, and HITs and refer the reader to the book for more detail
 
   The type $\dsum*{x:A}{P(x)}$ is the collection of all the fibers and is called the total space of $P$. The first
   projection ${\pi_1 : \dsum*{x:A}{P(x)} \to A}$ from the total space to the base space $A$ has the structure of a
-  fibration, that is, there is a lifting operation (\Cref{fig:lift}) which lifts paths in the base space to paths in the
+  fibration, that is, there is a lifting operation (\cref{fig:lift}) which lifts paths in the base space to paths in the
   total space. Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a point in the fiber over $x$, we have:
-
   \[
     \term{lift}(u,p) : (x , u) \id_{\dsum{x:A}{P(x)}} (y , \transport{P}{p}{u})
   \]
@@ -423,14 +422,14 @@ between types, which follows from the canonical fibration $\idfunc : \UU \to \UU
     \]
   \end{definition}
 
-  \begin{proposition}
+  \begin{lemma}
     The following are equivalent.
     \begin{enumerate}
       \item $f : A \to B$ is an equivalence.
       \item $f$ has a left and right inverse.
       \item $f$ has contractible fibers.
     \end{enumerate}
-  \end{proposition}
+  \end{lemma}
 
   Another HIT that we use is the set-quotient $\quot{A}{R}$ which takes an set $A$ and a relation $R : A \to A \to \UU$.
   It has an inclusion of points $\quotinc : A \to \quot{A}{R}$, and adds paths between related pairs of elements
@@ -512,10 +511,10 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
   Note that the natural number $n$ need not be truncated, as justified below.
 \end{definition}
 
-\begin{propositionrep}
+\begin{lemmarep}
   \label{prop:isFin}
   For any type $X$, $\isFin[X]$ is a proposition.
-\end{propositionrep}
+\end{lemmarep}
 
 \begin{proof}
   Suppose we have $(n,\phi) : \isFin[X]$ and $(m,\psi) : \isFin[X]$, we need to show that $(n,\phi) \id (m,\psi)$. It is
@@ -525,7 +524,7 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
   applying the first projection.
 \end{proof}
 
-Since $\isFin[X]$ is a predicate on the universe $\UU$, we easily get our univalent subuniverse $\UFin$.
+Since $\isFin$ is a predicate on the universe $\UU$, we easily get our univalent subuniverse $\UFin$.
 
 \begin{definition}
   \label{def:ufin}
@@ -545,9 +544,9 @@ $\BAut[T]$. \footnote{Characterisations of univalent fibrations using the $\BAut
 \begin{definition}[$\BAut$]
   The predicate $P(X) \defeq \Trunc[-1]{X \id T}$ picks out exactly those types that are merely equal to $T$, and this
   generates the subuniverse
-  $
+  \[
     \BAut[T] \defeq \Sub{T}.
-  $
+  \]
   We write $T_0 \defeq (T, \trunc{\refl_{T}})$ for the image of the inclusion of $T$ in $\BAut[T]$.
 \end{definition}
 
@@ -556,7 +555,7 @@ subuniverse of 2-element sets is given by $\BAut[\Bool]$. This has been used to 
 HoTT~\cite{buchholtzRealProjectiveSpaces2017}, and also to give the denotational semantics for a 1-bit reversible
 programming language~\cite{caretteReversibleProgramsUnivalent2018}.
 
-\begin{definition}
+\begin{definition}[$\UFin[n]$]
   For any $n : \Nat$, we define $\UFin[n] \defeq \BAut[\Fin[n]]$ to be the univalent subuniverse of $n$-element sets.
   Note that, $\UFin$ can be equivalently seen as the collection of all types of finite cardinality, that is,
   $\UFin \eqv \dsum*{n:\Nat}{\UFin[n]}$.
@@ -567,14 +566,14 @@ has one point $T_0$, and 1-paths $T_0 \id_{\BAut[T]} T_0$, that is, loops, and h
 type of loops on $T_0$, $\loopspace[\BAut[T],T_{0}]$, is shown to be equivalent to $\Aut[T] \defeq T \eqv T$, which is
 the group of automorphisms of $T$.
 
-\begin{propositionrep}
+\begin{lemmarep}
   \leavevmode
   \begin{enumerate}
     \item If $T$ is an $n$-type, $\BAut[T]$ is an $(n+1)$-type.
     \item For any $T : \UU$, $\BAut[T]$ is 0-connected.
     \item For any $T : \UU$, \( \loopspace[\BAut[T],T_{0}] \eqv \Aut[T] \). \label{lem:loop-deloop}
   \end{enumerate}
-\end{propositionrep}
+\end{lemmarep}
 
 \begin{proof}
   We need to show that the equality type of $\BAut[T]$ is an $n$-type. Assume $X, Y : \BAut[T]$. Since $\BAut[T]$ is a
@@ -588,10 +587,10 @@ the group of automorphisms of $T$.
   \]
 \end{proof}
 
-\begin{corollary}
+\begin{theorem}
   $\UFin[n]$ is a pointed, connected, 1-groupoid for every $n:\Nat$, and \( \loopspace[\UFin[n],F_{n}] \eqv
   \Aut[\Fin[n]] \). $\UFin$ is a 1-groupoid with connected components for every $n:\Nat$.
-\end{corollary}
+\end{theorem}
 
 We have shown that loops in $\UFin$ exactly encode the automorphism group $\Aut[\Fin[n]]$ for every~$n$. This is a
 general technique called \emph{delooping}, where a group can be identified with a 1-object groupoid, internally in
@@ -653,13 +652,13 @@ the univalence principle.
   \end{gather*}
 \end{proposition}
 
-\begin{proposition}
+\begin{theorem}
   $\UFin$ has a symmetric rig structure, with the additive and multiplicative symmetric monoidal structures given by
   $(F_0, \sqcup)$ and $(F_1, \times)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$,
   $\alpha_{X,Y,Z}$, and the braiding isomorphism $\mathcal{B}_{X,Y}$ upto 1-paths in $\UFin$. These isomorphisms satisfy
   the Mac Lane coherence conditions for symmetric monoidal categories, that is, the triangle, pentagon, and hexagon
-  identities, and the symmetry of the braiding, upto 2-paths in $\UFin$.
-\end{proposition}
+  identities, and the symmetry of the braiding, upto 2-paths in $\UFin$. \todo{Add rig}
+\end{theorem}
 
 \begin{toappendix}
   \begin{definition}[Additive symmetric monoidal structure]
