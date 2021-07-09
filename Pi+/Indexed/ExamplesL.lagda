@@ -12,10 +12,10 @@ open import Pi+.Extra
 
 open import Pi+.Indexed.Syntax as Pi+
   renaming (_⟷₁_ to _⟷₁₊_; _⟷₂_ to _⟷₂₊_; !⟷₁ to !⟷₁₊; U to U+;
-  idr◎l to idr◎l+; swapl₊⟷₂ to swapl₊⟷₂+)
+  idr◎l to idr◎l+; swapl₊⟷₂ to swapl₊⟷₂+; unite₊r to unite₊r+)
 open import Pi+.Indexed.SyntaxHat as Pi^
 open import Pi+.Indexed.SyntaxHatHelpers as Pi^
-open import Pi+.Indexed.SyntaxFull as Pi
+open import Pi+.Indexed.SyntaxFull as Pi hiding (_⟷₂_)
 open import Pi+.Indexed.Translation2
 import Pi+.Indexed.Equiv1 as Pi+
 import Pi+.Indexed.Equiv0Hat as Pi^
@@ -143,8 +143,64 @@ step1 = pi^2list (eval₁ (swaplr1 {I} {I} {I}))
 
 \newcommand{\orequiv}{%
 \begin{code}
-orEquiv : reversibleOr1 ⟷₂ reversibleOr2
-orEquiv = TODO
+--orEquiv : reversibleOr1 ⟷₂ reversibleOr2
+--orEquiv = TODO
+\end{code}}
+
+\begin{code}[hide]
+data _⟷₂_ : {X : U} {Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
+\end{code}
+
+\newcommand{\leveltwoblockone}{%
+\begin{code}
+  assoc◎l   : {c₁ : A ⟷₁ B} {c₂ : B ⟷₁ C} {c₃ : C ⟷₁ D} → (c₁ ◎ (c₂ ◎ c₃)) ⟷₂ ((c₁ ◎ c₂) ◎ c₃)
+  assoc◎r   : {c₁ : A ⟷₁ B} {c₂ : B ⟷₁ C} {c₃ : C ⟷₁ D} → ((c₁ ◎ c₂) ◎ c₃) ⟷₂ (c₁ ◎ (c₂ ◎ c₃))
+  assocl₊l  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} {c₃ : E ⟷₁ F} → ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊) ⟷₂ (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃))
+  assocl₊r  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} {c₃ : E ⟷₁ F} → (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃)) ⟷₂ ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊)
+  assocr₊r  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} {c₃ : E ⟷₁ F} → (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊) ⟷₂ (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃)))
+  assocr₊l  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} {c₃ : E ⟷₁ F} → (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃))) ⟷₂ (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊)
+\end{code}}
+
+\newcommand{\leveltwoblocktwo}{%
+\begin{code}
+  idl◎l   : {c : A ⟷₁ B} → (id⟷₁ ◎ c) ⟷₂ c
+  idl◎r   : {c : A ⟷₁ B} → c ⟷₂ id⟷₁ ◎ c
+  idr◎l   : {c : A ⟷₁ B} → (c ◎ id⟷₁) ⟷₂ c
+  idr◎r   : {c : A ⟷₁ B} → c ⟷₂ (c ◎ id⟷₁)
+
+  linv◎l  : {c : A ⟷₁ B} → (c ◎ !⟷₁ c) ⟷₂ id⟷₁
+  linv◎r  : {c : A ⟷₁ B} → id⟷₁ ⟷₂ (c ◎ !⟷₁ c)
+  rinv◎l  : {c : A ⟷₁ B} → (!⟷₁ c ◎ c) ⟷₂ id⟷₁
+  rinv◎r  : {c : A ⟷₁ B} → id⟷₁ ⟷₂ (!⟷₁ c ◎ c)
+
+  unite₊l⟷₂l  : {c₁ : O ⟷₁ O} {c₂ : A ⟷₁ B} → (unite₊l ◎ c₂) ⟷₂ ((c₁ ⊕ c₂) ◎ unite₊l)
+  unite₊l⟷₂r  : {c₁ : O ⟷₁ O} {c₂ : A ⟷₁ B} → ((c₁ ⊕ c₂) ◎ unite₊l) ⟷₂ (unite₊l ◎ c₂)
+  uniti₊l⟷₂l  : {c₁ : O ⟷₁ O} {c₂ : A ⟷₁ B} → (uniti₊l ◎ (c₁ ⊕ c₂)) ⟷₂ (c₂ ◎ uniti₊l)
+  uniti₊l⟷₂r  : {c₁ : O ⟷₁ O} {c₂ : A ⟷₁ B} → (c₂ ◎ uniti₊l) ⟷₂ (uniti₊l ◎ (c₁ ⊕ c₂))
+  swapl₊⟷₂    : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} → (swap₊ ◎ (c₁ ⊕ c₂)) ⟷₂ ((c₂ ⊕ c₁) ◎ swap₊)
+  swapr₊⟷₂    : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} → ((c₂ ⊕ c₁) ◎ swap₊) ⟷₂ (swap₊ ◎ (c₁ ⊕ c₂))
+
+  id⟷₂     : {c : A ⟷₁ B} → c ⟷₂ c
+  _■_      : {c₁ c₂ c₃ : A ⟷₁ B} → (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
+  _⊡_      : {c₁ : A ⟷₁ B} {c₂ : B ⟷₁ C} {c₃ : A ⟷₁ B} {c₄ : B ⟷₁ C} → (c₁ ⟷₂ c₃) → (c₂ ⟷₂ c₄) → (c₁ ◎ c₂) ⟷₂ (c₃ ◎ c₄)
+  resp⊕⟷₂  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} {c₃ : A ⟷₁ B} {c₄ : C ⟷₁ D} → (c₁ ⟷₂ c₃) → (c₂ ⟷₂ c₄) → (c₁ ⊕ c₂) ⟷₂ (c₃ ⊕ c₄)
+
+  id⟷₁⊕id⟷₁⟷₂  : (id⟷₁ {A} ⊕ id⟷₁ {B}) ⟷₂ id⟷₁
+  split⊕-id⟷₁  : (id⟷₁ {A + B}) ⟷₂ (id⟷₁ ⊕ id⟷₁)
+  hom⊕◎⟷₂      : {c₁ : E ⟷₁ A} {c₂ : F ⟷₁ B} {c₃ : A ⟷₁ C} {c₄ : B ⟷₁ D} → ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄)) ⟷₂ ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄))
+  hom◎⊕⟷₂      : {c₁ : E ⟷₁ A} {c₂ : F ⟷₁ B} {c₃ : A ⟷₁ C} {c₄ : B ⟷₁ D} → ((c₁ ⊕ c₂) ◎ (c₃ ⊕ c₄)) ⟷₂ ((c₁ ◎ c₃) ⊕ (c₂ ◎ c₄))
+
+  triangle₊l  : (unite₊r {A} ⊕ id⟷₁ {B}) ⟷₂ assocr₊ ◎ (id⟷₁ ⊕ unite₊l)
+  triangle₊r  : assocr₊ ◎ (id⟷₁ {A} ⊕ unite₊l {B}) ⟷₂ unite₊r ⊕ id⟷₁
+  pentagon₊l  : assocr₊ ◎ (assocr₊ {A} {B} {C + D}) ⟷₂ ((assocr₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ assocr₊)
+  pentagon₊r  : ((assocr₊ {A} {B} {C} ⊕ id⟷₁ {D}) ◎ assocr₊) ◎ (id⟷₁ ⊕ assocr₊) ⟷₂ assocr₊ ◎ assocr₊
+
+  unite₊l-coh-l  : unite₊l {A} ⟷₂ swap₊ ◎ unite₊r
+  unite₊l-coh-r  : swap₊ ◎ unite₊r ⟷₂ unite₊l {A}
+  hexagonr₊l     : (assocr₊ ◎ swap₊) ◎ assocr₊ {A} {B} {C} ⟷₂ ((swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ swap₊)
+  hexagonr₊r     : ((swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ (id⟷₁ ⊕ swap₊) ⟷₂ (assocr₊ ◎ swap₊) ◎ assocr₊ {A} {B} {C}
+  hexagonl₊l     : (assocl₊ ◎ swap₊) ◎ assocl₊ {A} {B} {C} ⟷₂ ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁)
+  hexagonl₊r     : ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ⟷₂ (assocl₊ ◎ swap₊) ◎ assocl₊ {A} {B} {C}
 \end{code}}
 
 \begin{code}[hide]
@@ -152,6 +208,6 @@ postulate
 \end{code}
 \newcommand{\combtwo}{%
 \begin{code}
-  idr◎l       : {c : A ⟷₁ B} → (c ◎ id⟷₁) ⟷₂ c
-  swapl₊⟷₂  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} → (swap₊ ◎ (c₁ ⊕ c₂)) ⟷₂ ((c₂ ⊕ c₁) ◎ swap₊)
+  xidr◎l       : {c : A ⟷₁ B} → (c ◎ id⟷₁) ⟷₂ c
+  xswapl₊⟷₂  : {c₁ : A ⟷₁ B} {c₂ : C ⟷₁ D} → (swap₊ ◎ (c₁ ⊕ c₂)) ⟷₂ ((c₂ ⊕ c₁) ◎ swap₊)
 \end{code}}

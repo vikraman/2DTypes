@@ -128,13 +128,14 @@ $\inrv{v}$, and the product type ($\times$) containing pairs of values $(v_1,v_2
 % types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
 % language~\cite{James:2012:IE:2103656.2103667,rc2011}.
 
-To see how this language expresses reversible circuits, we present a few examples. First it is possible to directly
-mimic the \verb|qasm|-perspective by defining types that describe sequences of booleans. We use the type
-$\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing \textsf{true} and
-$\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean negation (the \verb|x|-gate) is straightforward to define using
-the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values, thus the
-type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated $\mathbb{B}~3$) corresponds to a collection of
-wires that can transmit three bits.
+To see how this language expresses reversible circuits, we present a few examples in the Agda embedding of the
+language. The Agda syntax is almost identical to the syntax in Fig.~\ref{fig:pi-terms} except that sequential
+composition is written using $\circledcirc$. First it is possible to directly mimic the \verb|qasm|-perspective by
+defining types that describe sequences of booleans. We use the type $\mathbb{2} = \onet + \onet$ to represent booleans
+with $\inlv{\Acon{tt}}$ representing \textsf{true} and $\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean
+negation (the \verb|x|-gate) is straightforward to define using the primitive combinator $\swapp$. We can represent
+$n$-bit words using an n-ary product of boolean values, thus the type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$
+(abbreviated $\mathbb{B}~3$) corresponds to a collection of wires that can transmit three bits.
 %
 % For example, we can express a 3-bit word reversal operation as follows:
 % $\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
@@ -190,16 +191,23 @@ groupoids was established by \citet{caretteComputingSemiringsWeak2016}, and conj
 semantics, rig groupoid \emph{coherence conditions} that identify different syntactic representations of the same
 permutation~\cite{laplaza72,caretteComputingSemiringsWeak2016} were collected  in a
 second level of $\PiLang$ syntax as level-2 combinators.  Each level-2 combinator is of the form $c_1 \isotwo c_2$ for appropriate
-$c_1$ and $c_2$ of the same level-1 type $A \isoone B$ and asserts that $c_1$ and $c_2$ denote the same bijection. For example, we have:
+$c_1$ and $c_2$ of the same level-1 type $A \isoone B$ and asserts that $c_1$ and $c_2$ denote the same bijection. For
+example, we have the following level-2 combinators dealing with associativity:
 
 \medskip
 
-\combtwo{}
+\leveltwoblockone{}
 
-\noindent where the first level-2 combinator states the obvious fact that compositions with the identity can be
-optimised and the second level-2 combinator states the more interesting observation that swapping the two sides of a sum
-type and then applying $c_1$ to the left and $c_2$ to the right is equivalent to applying $c_2$ to the left and $c_1$ to
-the right and then swapping. The full set of level-2 combinators is large and is only listed in the accompanying code.
+\noindent The full set of level-2 combinators is large; the remaining combinators are listed in App.~\ref{app:leveltwo}.
+
+\begin{toappendix}
+  \label{app:leveltwo}
+
+  The additional level-2 combinators:
+
+  \medskip
+  \leveltwoblocktwo{}
+\end{toappendix}
 
 % and that impose various coherence conditions on the level-1 combinators. In the remainder of this section, we show how
 % to use a subset of these level-2 combinators to show the equivalence of \Afun{reversibleOr1} and \Afun{reversibleOr2}.
