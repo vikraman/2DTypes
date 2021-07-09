@@ -821,8 +821,8 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
 Finally, it is time to complete our goal of characterising the permutation groups. Having produced a Lehmer code by
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
-between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$.~\footnote{Note that the permutations are off-by-one, because
-  we ignored the 0-position in the Lehmer code.}
+between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$.~\footnote{Note that the indices for the type of permutations
+are off-by-one, because we chose $\Fin[n-1]$ to represent generators for permutations on $\Fin[n]$.}
 
 To do so, we need to construct some equivalences by counting the elements of $\Fin[n]$ using its decidable equality.
 First, we define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
