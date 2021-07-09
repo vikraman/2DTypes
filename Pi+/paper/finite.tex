@@ -60,8 +60,7 @@ important for the following reasons.
 \end{itemize}
 
 We will show that it is possible to encode all $\PiLang$ combinators using adjacent transpositions
-(in~\cref{sec:equivalence}). Group presentations are built by adding equations to a \emph{free group}, which we define
-first.
+(in~\cref{sec:equivalence}). Group presentations are built by adding equations to a \emph{free group}.
 
 \begin{toappendix}
   \subsection{Groups}
@@ -204,22 +203,19 @@ Before, the only way to decide the equality of two elements in a group was to ev
 in a group presentation, this is reduced to deciding whether one word -- a representative of the equivalence class of
 the group's elements, can be reduced to another word, using the group's relations. However, these equations are not
 directed, so it is not always possible to construct a well-behaved rewriting system. In general, the word problem for
-groups is known to be undecidable.
+groups is undecidable.
 
-\subsubsection{Coxeter Presentation}
+\paragraph{Coxeter Presentation} To present the group $\Sn$, the primitive operations we use will be adjacent swaps.
+When dealing with permutations on an $n + 1$-element set, there are $n$ adjacent transpositions -- transposition number
+$k$ swaps elements at indices $k$ and $k+1$. Thus, the generating set is $\Fin[n]$. There are three relations that we're
+going to specify for this presentation -- we visualise them as braid diagrams in~\Cref{fig:coxeter-braid}.
 
-To present the group $\Sn$, the primitive operations we are going to use will be adjacent swaps. When dealing with
-permutations on an $n + 1$-element set, there are $n$ adjacent transpositions, transposition number $k$ swapping
-elements at indices $k$ and $k+1$. Thus, the generating set would be $\Fin[n]$. There are three relations that we're going
-to specify for this presentation -- these are the equations that these generators should satisfy. We visualise them as
-braid diagrams in~\Cref{fig:coxeter-braid}.
-
-\begin{enumerate}
-  \item[\labelcref{fig:coxeter-a}] Swapping the same two elements two times in a row should be the same as doing nothing
-  \item[\labelcref{fig:coxeter-b}] When swapping two distinct pairs of elements, it should not matter in which order the
-        swapping happens, that is, we can slide the wires freely.
-  \item[\labelcref{fig:coxeter-c}] There are two equivalent ways of swapping the first and the last element in a
-  three-element sequence.
+\begin{enumerate}[leftmargin=*]
+  \item[\labelcref{fig:coxeter-a}] Swapping the same two elements twice in a row should be the same as doing nothing.
+  \item[\labelcref{fig:coxeter-b}] When swapping two distinct pairs of elements, the order in which swapping happens
+        should not matter, that is, we can slide the wires freely.
+  \item[\labelcref{fig:coxeter-c}] There are two equivalent ways of swapping the first and last elements in a sequence
+        of three elements.
 \end{enumerate}
 
 \begin{figure}
@@ -441,10 +437,8 @@ where left and right endpoints are normal with respect to the $\cox*$ relation.
 
 Because of this counter-example, the relations have to be changed. In this section, we formally define a rewriting
 system $(\List[\Fin[n]], \longcox)$, partially based on the Coxeter relations, and prove that it has the desired
-properties of confluence and termination. We prove that the new relation defined by this system is equivalent,
-in a technical sense, to the standard Coxeter relation $\cox*$.
-
-First, we need to define a function $n \downf k$.
+properties of confluence and termination. We prove that the new relation defined by this system is equivalent, in a
+technical sense, to the standard Coxeter relation $\cox*$. First, we need to define a function $n \downf k$.
 
 \begin{definition}[$\downf : (n : \Nat) \to (k : \Nat) \to {\List[\Fin[k + n]]}$]
   \begin{align*}
@@ -453,10 +447,10 @@ First, we need to define a function $n \downf k$.
   \end{align*}
 \end{definition}
 
-The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\). The role of this function
-is to produce a sequence of transpositions which moves element at index $k + n$ left by $k$ places, shifting all the
-elements in between one place right (see~\cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the
-following generators, inlining the congruence closure in $\longcox$, allowing arbitrary reductions inside the list.
+\noindent The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\), which is a
+sequence of transpositions that moves the element at index $k + n$ left by $k$ places, shifting all the elements in
+between one place right (see~\cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the following
+generators (inlining the congruence closure in $\longcox$, allowing arbitrary reductions inside the list).
 
 \begin{definition}[$\longcox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \begin{align*}
@@ -469,12 +463,12 @@ following generators, inlining the congruence closure in $\longcox$, allowing ar
   \end{align*}
 \end{definition}
 
-Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and can be
-visualised in the same way as before. The remaining constructor $\longbraid$ uses the $\downf$ function to exchange the
-order of a long sequence of transpositions and a single transposition afterwards. For example, for $n = 0$ and $k = 3$,
-it allows for the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\cref{fig:longcox} -- note the
-distinction between wires, where numbers represent the values, and transpositions, where numbers represent which wires
-are crossing).
+\noindent Constructors $\longcancel$ and $\longswap$ correspond directly to the appropriate constructors of $\cox$ and
+can be visualised in the same way as before. The remaining constructor $\longbraid$ uses the $\downf$ function to
+exchange the order of a long sequence of transpositions and a single transposition afterwards. For example, for $n = 0$
+and $k = 3$, it allows for the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\cref{fig:longcox} --
+note the distinction between wires, where numbers represent the values, and transpositions, where numbers represent
+which wires are crossing).
 
 \begin{figure}
   \begin{subfigure}[b]{0.3\textwidth}
@@ -567,10 +561,7 @@ are crossing).
   \caption{Braiding diagrams for modified Coxeter relations.}
   \label{fig:coxeter-braid-mod}
 \end{figure}
-
-Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 0$. Also, as before, the left-hand
-sides of the relation are strictly larger than the right-hand sides, in terms of the lexicographic order on
-$\List[\Fin[n]]$.
+% in terms of the lexicographic order on $\List[\Fin[n]]$.
 
 \begin{toappendix}
   \begin{definition}[$\longcoxstar : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
@@ -594,14 +585,16 @@ $\List[\Fin[n]]$.
   \end{definition}
 \end{toappendix}
 
-For the relation $\longcox$, we define its transitive closure to be $\longcoxplus$ (\cref{def:longcox-plus}) and its
-reflexive-transitive closure to be $\longcoxstar$ (\cref{def:longcox-star}).
+Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 0$. As before, the left-hand sides of
+the relation are (lexicographically) strictly larger than the right-hand sides. We define the transitive closure of
+$\longcox$ to be $\longcoxplus$ (\cref{def:longcox-plus}) and its reflexive-transitive closure to be $\longcoxstar$
+(\cref{def:longcox-star}).
 
 Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox)$ has the properties
-we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property (for example, using
-$\longbraid$, we can now show the problematic critical pair \cref{fig:critical-pairs-non-converging} to converge), and it is
-terminating, so, Newman's lemma, it produces a unique normal form. We follow the terminology
-of~\cite*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results formally.
+we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property -- for example, using
+$\longbraid$, we can now show the problematic critical pair \cref{fig:critical-pairs-non-converging} converges, and, it
+is terminating, so by Newman's lemma, it produces a unique normal form. We follow the terminology
+of~\citet*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results formally.
 
 \begin{theorem}
   \label{prop:nf}
@@ -627,8 +620,8 @@ we can make the following observation relating it to $\cox*$.
 \end{proposition}
 
 By~\Cref{prop:nf}~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
-  {\List[\Fin[n]]}$ that produces a normal form for terms of $\List[\Fin[n]]$. We state and prove a couple of important
-properties enjoyed by $\normf$.
+  {\List[\Fin[n]]}$ that produces a normal form for terms of $\List[\Fin[n]]$. We state two important properties enjoyed
+by $\normf$.
 
 \begin{proposition}
   \leavevmode
@@ -638,17 +631,17 @@ properties enjoyed by $\normf$.
   \end{enumerate}
 \end{proposition}
 
-Finally, we define the type $\Sn$ as the set-quotient of $\List[\Fin[n]]$ by $\cox*$,
+\noindent Finally, we define the type $\Sn$ as the set-quotient of $\List[\Fin[n]]$ by $\cox*$,
 
 \begin{definition}[$\Sn$]
   \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*}\)
 \end{definition}
 
-Note that this relation $\cox*$ is not prop-valued, that is, $w \cox* v$ is not a proposition because reductions need
-not be unique. So, the quotient $\Sn$ is not effective, that is, $\quotrel : w \cox* v \to q(w) \id q(v)$ is not an
-equivalence. Using the $\normf$ function, we could instead define a new relation $\approx$ to equate those terms that
-have the same normal form, $(w \approx v) \defeq (\normf(w) \id \normf(v))$. This relation is prop-valued, and we could
-quotient $\List[\Fin[n]]$ by $\approx$, obtaining an equivalent definition for $\Sn$.
+\noindent Note that reductions need not be unique, hence $w \cox* v$ is not necessarily a proposition. So, the quotient
+$\Sn$ is not effective, that is, $\quotrel : w \cox* v \to q(w) \id q(v)$ is not an equivalence. Using the $\normf$
+function, we could instead define a new relation $\approx$ to equate those terms that have the same normal form, $(w
+  \approx v) \defeq (\normf(w) \id \normf(v))$. This relation is prop-valued, and we could quotient $\List[\Fin[n]]$ by
+$\approx$, obtaining an equivalent definition for $\Sn$.
 
 \begin{proposition}
   \leavevmode
@@ -679,7 +672,8 @@ To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply have to 
 $\normf$. They correspond to the same permutation if and only if these normal forms are equal, which is decidable for
 $\List[\Fin[n]]$.
 
-\subsection{Lehmer Codes}~\label{subsec:lehmer}
+\subsection{Lehmer Codes}
+\label{subsec:lehmer}
 
 To prove the equivalence between $\Aut[\Fin[n]]$ and $\Sn[n]$, we will need to define functions back and forth between
 the two types. The terms in $\Sn$ can be identified with equivalence classes of terms in $\List[\Fin[n]]$ with respect
@@ -695,8 +689,8 @@ gives a convenient way of representing permutations on a computer, partly becaus
 bitwise-optimal~\cite{bergerTeachingOrdinalPatterns2019a}.
 
 Formally, we define $\Lehmer[n]$ to be an $n+1$-element tuple, where the position $k \leq n$ stores an element of
-$\Fin[k]$. Since the 0-th position is trivial, in practice it is ignored, and the sequence starts at
-1~\cite{duboisTestsProofsCustom2018,vajnovszkiNewEulerMahonian2011}.
+$\Fin[k]$. Since the 0-th position is trivial, in practice it is
+ignored~\cite{duboisTestsProofsCustom2018,vajnovszkiNewEulerMahonian2011}.
 
 \begin{definition}[$\Lehmer : \Nat \to \UU$]
   \begin{align*}
@@ -717,8 +711,8 @@ the number of smaller elements appearing after it in the permutation.
   \[ \invcount{i} = \#\Set{j < i | \sigma(j) > \sigma(i)}. \]
 \end{definition}
 
-From knowing just the inversion counts for all the elements, one can reconstruct the starting permutation. Also, observe
-that $\invcount{i} < i$, thus fitting in the $i$-th place of a Lehmer code tuple. As an example, consider the following
+Just knowing the inversion counts for all the elements, one can reconstruct the starting permutation. Also, observe that
+$\invcount{i} < i$, thus fitting in the $i$-th place of a Lehmer code tuple. As an example, consider the following
 tabulated presentation of a permutation of $\Fin[5]$.
 \[
   \sigma =
@@ -732,16 +726,16 @@ tabulated presentation of a permutation of $\Fin[5]$.
 % $\el{0}$ appearing after), for $\el{2}$ is 2 (because of $\el{0}$ and $\el{1}$), for $\el{3}$ is 0 (because it comes
 % last in the sequence), and for $\el{4}$ is 2 (because of $\el{3}$ and $\el{0}$).
 
-The Lehmer code for the permutation $\sigma$ is then the 5-tuple
+\noindent The Lehmer code for the permutation $\sigma$ is then the 5-tuple
 \[
   l = (\invcount{0}, \invcount{1}, \invcount{2}, \invcount{3}, \invcount{4}) = (0, 1, 2, 0, 2)
 \]
 
-To decode the permutation back from this Lehmer code, we perform an algorithm similar to \emph{insertion sort}. The
-element of the Lehmer code being currently processed is highlighted in the left column of the table below. Starting from
-a sorted list, the element at index $k$ has to be given $l[k]$ inversions. Because of the the invariant that all the
-elements before newly processed one are smaller than it, the proper number of inversions is created by simply shifting
-the element $l[k]$ places left.
+\noindent To decode the permutation back from this Lehmer code, we perform an algorithm similar to \emph{insertion
+  sort}. The element of the Lehmer code being currently processed is highlighted in the left column of the table below.
+Starting from a sorted list, the element at index $k$ has to be given $l[k]$ inversions. Because of the the invariant
+that all the elements before newly processed one are smaller than it, the proper number of inversions is created by
+simply shifting the element $l[k]$ places left.
 
 \begin{center}
   \begin{tabular}{l|r}
@@ -764,7 +758,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
   \end{align*}
 \end{definition}
 
-We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
+\noindent We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
 
 \begin{theoremrep}
   \leavevmode
@@ -777,7 +771,7 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
   Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
 \end{theoremrep}
 
-\begin{proofsketch}
+\begin{proof}
   For any code $c : \Lehmer[n]$, we have that
   \[
     \immersion_{n}(c) = (r_0 \downf k_0) \append (r_1 \downf k_1) \append \dots \append (r_{m-1} \downf k_{m-1})
@@ -791,7 +785,7 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
   every number in $(r_{i} \downf k_i)$ -- which also shows why $\longswap$ cannot happen. The remaining case of
   $\longbraid$ follows similarly, since its argument is a decreasing sequence followed immediately by a number equal to
   the first element of this sequence.
-\end{proofsketch}
+\end{proof}
 % \jk{Review:}
 % To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code
 % $c = (0, 1, 2, 3, 4)$ -- for the full proof, see accompanying Agda code. We have that
@@ -820,9 +814,9 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
 Finally, it is time to complete our goal of characterising the permutation groups. Having produced a Lehmer code by
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
-between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea of this proof is borrowed from~\cite{Molzer-cubical}
-~\footnote{Note that the indices for the type of permutations are off-by-one, because we chose $\Fin[n-1]$ to represent
-  generators for permutations on $\Fin[n]$.}
+between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea for this proof is borrowed
+from~\cite{Molzer-cubical}. ~\footnote{Note that the indices for the type of permutations are off-by-one, because we
+  chose $\Fin[n]$ to represent generators for permutations on $\Fin[\suc[n]]$.}
 
 \begin{definition}[${\FinExcept{n}} : {\Fin[n]} \to \UU$]
   For $n : \Nat$, the type family $\FinExcept{n}$ picks out all elements in $\Fin[n]$ except the one in the argument.
@@ -831,17 +825,17 @@ between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea of this proof
   \]
 \end{definition}
 
-Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence a set. We state and prove a few
-auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$ -- these are obtained by counting arguments using the
-fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
+\noindent Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence a set. We state and
+prove a few auxiliary lemmas about how $\FinExcept{n}$ interacts with $\Fin$ -- these are obtained by counting arguments
+using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
 
 \begin{lemmarep}
   \label{prop:fin-finexcept}
   \leavevmode
   \begin{enumerate}
     % \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-1}
-    \item For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-2}
-    \item For any $n : \Nat$, \( \Aut[\Fin[\suc[n]]] \eqv \dsum*{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
+    \item For any $k : \Fin[\suc[n]]$, we have $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-2}
+    \item For any $n : \Nat$, we have \( \Aut[\Fin[\suc[n]]] \eqv \dsum*{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
             \FinExcept{\suc[n]}[n - k]} \). \label{prop:fin-finexcept-3}
   \end{enumerate}
 \end{lemmarep}
@@ -861,7 +855,7 @@ fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
   element $n$ at the position $n - k$, resulting in the element $n$ having inversion count $k$.
 \end{proof}
 
-Using these facts, we can now prove the main result of this section.
+\noindent Using these facts, we can now prove the main result of this section.
 
 \begin{theorem}
   \label{prop:lehmer-aut-equiv}
@@ -880,18 +874,18 @@ Using these facts, we can now prove the main result of this section.
     \end{array}
     \qquad\qquad
     \begin{array}{rlr}
-           & \Lehmer[\suc[m]]                                                                                    &                                                              \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                               & \text{by definition}                                         \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                      & \text{induction hypothesis}                                  \\
-      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                       \\
-      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
-      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
-      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                           & \text{\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}}
+           & \Lehmer[\suc[m]]                                                                                    &                                                                 \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                               & \text{by definition}                                            \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                      & \text{induction hypothesis}                                     \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                          \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                           & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}}
     \end{array}
   \end{gather*}
 \end{proof}
 
-By composing~\Cref{prop:lehmer-aut-equiv} and~\Cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.
+\noindent By composing~\Cref{prop:lehmer-aut-equiv} and~\Cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.
 
 \begin{corollary}
   \label{prop:sn-lehmer-fin-equiv}

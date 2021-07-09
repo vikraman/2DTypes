@@ -593,11 +593,11 @@ the group of automorphisms of $T$.
 \end{theorem}
 
 We have shown that loops in $\UFin$ exactly encode the automorphism group $\Aut[\Fin[n]]$ for every~$n$. This is a
-general technique called \emph{delooping}, where a group can be identified with a 1-object groupoid, internally in
-HoTT. This technique also allows defining higher groups in HoTT~\cite{buchholtzHigherGroupsHomotopy2018}. The loopspace
-of a pointed type automatically has the structure of a group, with $\refl_{\pt}$ for the neutral element, path
-composition for the group multiplication, and path inverse for the group inverse operation. The group axioms are then
-given by the higher paths corresponding to groupoid laws.
+general technique called \emph{delooping}, where a group can be identified with a 1-object groupoid, internally in HoTT.
+This technique also allows defining higher groups~\cite{buchholtzHigherGroupsHomotopy2018}. The loopspace of a pointed
+type automatically has the structure of a group, with $\refl_{\pt}$ for the neutral element, path composition for the
+group multiplication, and path inverse for the group inverse operation. The group axioms are given by the higher paths
+corresponding to groupoid laws.
 
 % \[
 %   \begin{tikzcd}
@@ -653,11 +653,13 @@ the univalence principle.
 \end{proposition}
 
 \begin{theorem}
-  $\UFin$ has a symmetric rig structure, with the additive and multiplicative symmetric monoidal structures given by
-  $(F_0, \sqcup)$ and $(F_1, \times)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$,
-  $\alpha_{X,Y,Z}$, and the braiding isomorphism $\mathcal{B}_{X,Y}$ upto 1-paths in $\UFin$. These isomorphisms satisfy
-  the Mac Lane coherence conditions for symmetric monoidal categories, that is, the triangle, pentagon, and hexagon
-  identities, and the symmetry of the braiding, upto 2-paths in $\UFin$. \todo{Add rig}
+  $\UFin$ has two symmetric monoidal structures, the additive and multiplicative ones, given by $(F_0, \sqcup)$ and
+  $(F_1, \times)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$, and the braiding
+  isomorphism $\mathcal{B}_{X,Y}$ upto 1-paths in $\UFin$. These isomorphisms satisfy the Mac Lane coherence conditions
+  for symmetric monoidal categories~\cite{maclaneNaturalAssociativityCommutativity1963}, that is, the triangle,
+  pentagon, and hexagon identities, and the symmetry of the braiding, upto 2-paths in $\UFin$. The multiplicative
+  structure distributes over the additive structure and satisfies the Laplaza coherence conditions for rig
+  categories~\cite{laplaza72}.
 \end{theorem}
 
 \begin{toappendix}

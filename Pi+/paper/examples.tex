@@ -2,15 +2,13 @@
 \label{sec:qiskit}
 \label{sec:examples}
 
-Classical reversible boolean circuits are at the core of most quantum algorithms and
-hence are supported by popular platforms for quantum computing such as IBM
-Qiskit. Specifically, the Qiskit framework provides the following universal set
-of gates for reversible computing: \textsf{not} (boolean negation, called
-\verb|x|), \textsf{cnot} (conditional negation of the second input if the first
-is true; called \verb|cx|), and \textsf{toffoli} (conditional negation of the
-third input if both the first two inputs are true; called \verb|ccx|)
-gates. Additionally, Qiskit allows implicit re-shuffling of bits by allowing
-each operation to specify the indices of its input bits.
+Classical reversible boolean circuits are at the core of most quantum algorithms and hence are supported by popular
+platforms for quantum computing such as IBM Qiskit~\cite{aleksandrowiczQiskitOpensourceFramework2019}. Specifically, the
+Qiskit framework provides the following universal set of gates for reversible computing: \textsf{not} (boolean negation,
+called \verb|x|), \textsf{cnot} (conditional negation of the second input if the first is true; called \verb|cx|), and
+\textsf{toffoli} (conditional negation of the third input if both the first two inputs are true; called \verb|ccx|)
+gates. Additionally, Qiskit allows implicit re-shuffling of bits by allowing each operation to specify the indices of
+its input bits.
 
 For concreteness, we demonstrate two different circuits that implement the
 following reversible function specification
