@@ -11,73 +11,73 @@ cartesian-closed categories~\cite{curryCurryEssaysCombinatory1980}. For reversib
 correspondence was established by~\citet{sparksSuperstructuralReversibleLogic2014} and the Lambek correspondence
 suggested by~\citet{Carette2016} and~\citet{threemodels} and established in this work.
 
+\begin{center}
+    \begin{tabular}{c c c}
+        \hline
+        $\PiLang$     & $\Sn$               & $\UFin$     \\
+        \hline
+        types         & Natural numbers     & Finite sets \\
+        \hline
+        1-combinators & Generators of $\Sn$ & 1-paths     \\
+        \hline
+        2-combinators & Relations of $\Sn$  & 2-paths     \\
+        \hline
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{c c c}
+        \hline
+        Logic                              & Program                       & Algebra                     \\
+        \hline
+        Propositions                       & Types                         & Objects                     \\
+        \hline
+        Proofs                             & Terms                         & Morphisms                   \\
+        \hline
+        $\blank$                           & Equations                     & Homotopies                  \\
+        \hline
+        Intuitionistic propositional logic & Simply typed Lambda Calculus  & Cartesian Closed Categories \\
+        \hline
+        Superstructural Reversible logic   & Reversible Language $\PiLang$ & Symmetric Rig Groupoids     \\
+        \hline
+        Connectives                        & Type constructors             & Bifunctors                  \\
+        \hline
+        ?                                  & Type normalisation            & ?                           \\
+        \hline
+        ?                                  & Program normalisation         & ?                           \\
+        \hline
+        ?                                  & Soundness of 2-combinators    & ?                           \\
+    \end{tabular}
+\end{center}
+
+\begin{center}
+    \begin{tabular}{c c c}
+        \hline
+        Reversible Logic             & Reversible Programming                  & Algebra                  \\
+        \hline
+        Free commutative rig         & Free symmetric rig groupoid             & $\UFin$                  \\
+        \hline
+        Propositions                 & Types                                   & Objects                  \\
+        \hline
+        Entailment?                  & Reversible programs                     & Isomorphisms             \\
+        \hline
+        $\blank$                     & 2-combinators                           & Homotopies               \\
+        \hline
+        Conjunction?                 & $\times$                                & $\otimes$                \\
+        \hline
+        Disjunction?                 & $+$                                     & $\oplus$                 \\
+        \hline
+        $A \land B \vdash B \land A$ & $\swapt$                                & $\mathcal{B}_{A,B}$      \\
+        \hline
+        True proposition             & $\onet$                                 & $F_1$                    \\
+        \hline
+        Decidability                 & Program Synthesis                       & Reachability in a graph? \\
+        \hline
+        Soundness/Completeness       & Soundness/Completeness of 1-combinators & ?                        \\
+    \end{tabular}
+\end{center}
+
 In the remainder of this section, we discuss some broader related work.
-
-% \begin{center}
-%     \begin{tabular}{c c c}
-%         \hline
-%         $\PiLang$     & $\Sn$               & $\UFin$     \\
-%         \hline
-%         types         & Natural numbers     & Finite sets \\
-%         \hline
-%         1-combinators & Generators of $\Sn$ & 1-paths     \\
-%         \hline
-%         2-combinators & Relations of $\Sn$  & 2-paths     \\
-%         \hline
-%     \end{tabular}
-% \end{center}
-
-% \begin{center}
-%     \begin{tabular}{c c c}
-%         \hline
-%         Logic                              & Program                       & Algebra                     \\
-%         \hline
-%         Propositions                       & Types                         & Objects                     \\
-%         \hline
-%         Proofs                             & Terms                         & Morphisms                   \\
-%         \hline
-%         $\blank$                           & Equations                     & Homotopies                  \\
-%         \hline
-%         Intuitionistic propositional logic & Simply typed Lambda Calculus  & Cartesian Closed Categories \\
-%         \hline
-%         Superstructural Reversible logic   & Reversible Language $\PiLang$ & Symmetric Rig Groupoids     \\
-%         \hline
-%         Connectives                        & Type constructors             & Bifunctors                  \\
-%         \hline
-%         ?                                  & Type normalisation            & ?                           \\
-%         \hline
-%         ?                                  & Program normalisation         & ?                           \\
-%         \hline
-%         ?                                  & Soundness of 2-combinators    & ?                           \\
-%     \end{tabular}
-% \end{center}
-
-% \begin{center}
-%     \begin{tabular}{c c c}
-%         \hline
-%         Reversible Logic             & Reversible Programming                  & Algebra                  \\
-%         \hline
-%         Free commutative rig         & Free symmetric rig groupoid             & $\UFin$                  \\
-%         \hline
-%         Propositions                 & Types                                   & Objects                  \\
-%         \hline
-%         Entailment?                  & Reversible programs                     & Isomorphisms             \\
-%         \hline
-%         $\blank$                     & 2-combinators                           & Homotopies               \\
-%         \hline
-%         Conjunction?                 & $\times$                                & $\otimes$                \\
-%         \hline
-%         Disjunction?                 & $+$                                     & $\oplus$                 \\
-%         \hline
-%         $A \land B \vdash B \land A$ & $\swapt$                                & $\mathcal{B}_{A,B}$      \\
-%         \hline
-%         True proposition             & $\onet$                                 & $F_1$                    \\
-%         \hline
-%         Decidability                 & Program Synthesis                       & Reachability in a graph? \\
-%         \hline
-%         Soundness/Completeness       & Soundness/Completeness of 1-combinators & ?                        \\
-%     \end{tabular}
-% \end{center}
 
 %%%%%%%%%%%%%%
 \paragraph{Rewriting} Higher-order term-rewriting systems and word problems have a long history of being formalised in
