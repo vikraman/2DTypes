@@ -5,11 +5,11 @@
 
 The main theme of our work is the semantic foundation of reversible languages. We prove that a programming language
 presentation of reversible programming based on algebraic types matches---exactly---the categorified group-theoretic
-semantics, thereby closing the circle on a complete Curry-Howard-Lambek correspondence for reversible
-languages. Historically, the first such correspondence was between the $\lambda$-calculus, intuitionistic logic, and
+semantics, thereby closing the circle on a complete Curry-Howard-Lambek correspondence for reversible languages.
+Historically, the first such correspondence was between the $\lambda$-calculus, intuitionistic logic, and
 cartesian-closed categories~\cite{curryCurryEssaysCombinatory1980}. For reversible languages, the Curry-Howard
 correspondence was established by~\citet{sparksSuperstructuralReversibleLogic2014} and the Lambek correspondence
-suggested by~\citet{Carette2016} and~\citet{threemodels} and established in this work.
+suggested by~\citet{caretteComputingSemiringsWeak2016} and~\citet{threemodels} and established in this work.
 
 \begin{center}
     \begin{tabular}{c c c}
@@ -80,36 +80,50 @@ suggested by~\citet{Carette2016} and~\citet{threemodels} and established in this
 In the remainder of this section, we discuss some broader related work.
 
 %%%%%%%%%%%%%%
-\paragraph{Rewriting} Higher-order term-rewriting systems and word problems have a long history of being formalised in
-proof assistants like {homotopy.io}, Lean, Coq, and HoTT~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the
-proof of our main result, we developed a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem
-and formalised its correctness and termination in Agda. Our design based on encoding permutations as
-adjacent transpositions led to an intuitive system whose correctness was straightforward to establish and whose termination
-only required slightly modified variations on Church-Rosser theorems. Other encodings of permutations as listed vectors,
-matrices, inductively generated trees (Motzkin trees), Young diagrams, or string diagrams, proved either difficult
-formalise in type theory or difficult to relate directly to the primitive type isomorphisms of $\PiLang$. The automatic
+\paragraph{Coherence and Rewriting}
+
+Higher-order term-rewriting systems and word problems have a long history of being formalised in proof assistants like
+{homotopy.io}, Lean, Coq, and HoTT~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main
+result, we developed a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem and formalised its
+correctness and termination. \citet{Hiver-coq} describes an explicit algorithm for producing normal forms. could provide
+an alternative to our rewriting system. Other encodings of permutations as listed vectors, matrices, inductively
+generated trees (Motzkin trees), Young diagrams, or string diagrams, proved either difficult formalise in type theory or
+difficult to relate directly to the primitive type isomorphisms of $\PiLang$. The automatic
 \citet{knuthSimpleWordProblems1970} completion produced too many equations making proving correctness and termination
 intractable.
+
+Coherence theorems are famous problems in (higher) category theory, and Mac Lane's coherence
+theorem~\cite{maclaneNaturalAssociativityCommutativity1963,joyalBraidedTensorCategories1993,gurskiInfiniteLoopSpaces2013}
+for monoidal categories is a particular one. The use of rewriting theory and proof assistants to establish coherence
+theorems for various higher categorical structures has a long history as well,
+see~\cite*{forestCoherenceGrayCategories2018,beylinExtractingProofCoherence1996}.
 
 %%%%%%%%%%%%%%
 \paragraph{Computing with Univalence} In HoTT, univalence characterises the path type in the universe as equivalences of
 types. The map $\term{idtoeqv} : A \id_{\UU} B \to A \eqv B$ can be easily constructed using path induction. The term
-$\term{ua} : A \eqv B \to A \id_{\UU} B$, its computation rule $\term{ua_\beta} : (e : A \eqv B) \to
-    \term{idtoeqv}(\term{ua}(e)) \id e$, and its extensionality rule $\term{ua_\eta} : (p : A \id_{\UU} B) \to p ==
-    \term{ua}(\term{idtoeqv(p)})$ are generally added as postulates when formalising in Agda. Together, $\term{ua}$ and
-$\term{ua}_\beta$ give the full univalence axiom $(A \eqv B) \eqv (A \id_{\UU} B)$.
+$\term{ua} : A \eqv B \to A \id_{\UU} B$, its computation rule
+$\term{ua_\beta} : (e : A \eqv B) \to \term{idtoeqv}(\term{ua}(e)) \id e$, and its extensionality rule
+$\term{ua_\eta} : (p : A \id_{\UU} B) \to p \id \term{ua}(\term{idtoeqv(p)})$ are generally added as postulates when
+formalising in Agda. Together, $\term{ua}$ and $\term{ua}_\beta$ give the full univalence axiom
+$(A \eqv B) \eqv (A \id_{\UU} B)$.
 % Let's think of the $\PiLang$ combinators as describing the inhabitants of the identity type of finite types.
 By giving a computable presentation for a univalent subuniverse, we are able to describe its path space syntactically
 via a complete equational axiomatisation of the equivalences between types in the subuniverse.
 % By the property of being univalent, this subuniverse gives a model of the univalence axiom.
 In the subuniverse of finite types, $\term{idtoeqv}$ corresponds to giving a denotation for a program (1-combinator),
-which is easily done by induction.  The $\term{ua}$ map corresponds to synthesising a program from an equivalence
-(which, in general, is of course undecidable~\cite{krogmeierDecidableSynthesisPrograms2020}). In case of reversible
-boolean circuits, it is decidable, as we have shown, but still far from trivial, which matches the need to assert the
-existence of $\term{ua}$ without giving a constructive argument. Then, the computation rule $\term{ua_\beta}$ expresses
-the fact that program synthesis is sound, while $\term{ua_\eta}$ corresponds to the soundness of the equational theory
-($\PiLang$ 2-combinators). Thus, our results suggests a new computational interpretation of the univalence principle, which
+which is easily done by induction. The $\term{ua}$ map corresponds to synthesising a program from an equivalence (which,
+in general, is of course undecidable~\cite{krogmeierDecidableSynthesisPrograms2020}). In case of reversible boolean
+circuits, it is decidable, as we have shown, but still far from trivial, which matches the need to assert the existence
+of $\term{ua}$ without giving a constructive argument. Then, the computation rule $\term{ua_\beta}$ expresses the fact
+that program synthesis is sound, while $\term{ua_\eta}$ corresponds to the soundness of the equational theory ($\PiLang$
+2-combinators). Thus, our results suggests a new computational interpretation of the univalence principle, which
 provides an intuition on why certain constructions are hard (or impossible in the general case).
+
+There are other, different approaches to computing with univalence,
+in~\cite*{angiuliInternalizingRepresentationIndependence2021,tabareauMarriageUnivalenceParametricity2021}, and in
+Cubical Type
+Theory\cite*{cohenCubicalTypeTheory2018,angiuliComputationalSemanticsCartesianCubical2019,vezzosiCubicalAgdaDependently2019},
+univalence computes.
 
 % We could present a dependent type theory for the topos $\SetFin$, with an identity type for terms (generated by
 % $\refl$), and one for types (generated by $\PiLang$ combinators). We can't talk about universes in $\SetFin$ since it
@@ -190,6 +204,9 @@ the universal property of $\FSM$ is asserted by appealing to Mac Lane's coherenc
 categories, and using the fact that the finite symmetric group $\Sn$ encodes the permutation group on a finite set. The
 existence of the proof is folklore. We have produced a proof and formalised it in constructive type theory.
 
+A stronger universal property that $\BFin$ is biinitial in the 2-category of rig categories, was established
+in~\cite{elguetaGroupoidFiniteSets2021}.
+
 %%%%%%%%%%%%%%
 \paragraph{Reversible Programming Languages} The practice of programming languages is replete with \emph{ad hoc}
 instances of reversible computations: database transactions, mechanisms for data provenance, checkpoints, stack and
@@ -209,7 +226,7 @@ detour via conventional irreversible
 languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}. The version of
 $\PiLang$ studied in this paper is restricted to finite types and terminating total computations. It would be
 interesting to understand which versions of free monoidal structures correspond to extensions of $\Pi$ with recursive
-types~\cite{James:2012:IE:2103656.2103667,rc2011} and negative/fractional
+types~\cite{jamesInformationEffects2012,rc2011} and negative/fractional
 types~\cite{chenComputationalInterpretationCompact2021}.
 
 %%%%%%%%%%%%%%
