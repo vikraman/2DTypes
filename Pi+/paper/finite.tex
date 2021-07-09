@@ -827,7 +827,7 @@ between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea of this proof
 \begin{definition}[${\FinExcept{n}} : {\Fin[n]} \to \UU$]
   For $n : \Nat$, the type family $\FinExcept{n}$ picks out all elements in $\Fin[n]$ except the one in the argument.
   \[
-    \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j}
+    \FinExcept{n}[i] \defeq \dsum*{j : \Fin[n]}{i \neq j}
   \]
 \end{definition}
 
@@ -841,7 +841,7 @@ fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
   \begin{enumerate}
     % \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-1}
     \item For any $k : \Fin[\suc[n]]$, $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-2}
-    \item For any $n : \Nat$, \( \Aut[\Fin[\suc[n]]] \eqv \dsum{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
+    \item For any $n : \Nat$, \( \Aut[\Fin[\suc[n]]] \eqv \dsum*{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
             \FinExcept{\suc[n]}[n - k]} \). \label{prop:fin-finexcept-3}
   \end{enumerate}
 \end{lemmarep}
