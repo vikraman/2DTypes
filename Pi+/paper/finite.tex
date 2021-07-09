@@ -826,8 +826,8 @@ between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$.~\footnote{Note that th
 
 To do so, we need to construct some equivalences by counting the elements of $\Fin[n]$ using its decidable equality.
 First, we define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
-the one in the argument. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence an
-$\hSet$.
+the one in the argument. Note that $\FinExcept{n}[i]$ for $i : \Fin[n]$ is a subtype of $\Fin[n]$ and is hence a
+set.
 
 \begin{definition}
   \( \FinExcept{n}[i] \defeq \dsum{j : \Fin[n]}{i \neq j} \).
