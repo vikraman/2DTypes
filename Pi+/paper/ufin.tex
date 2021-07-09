@@ -470,8 +470,8 @@ univalent ensures that the equality type of the ambient universe is reflected in
 \begin{propositionrep}[Univalent Subuniverse]
   \label{prop:univsub}
   A universe predicate is a type family $P : \UU \to \UU$ whose fibers are propositions, that is, $P(X)$ is a
-  proposition for every $X$. Given such a predicate, the fibration ${\fst : \dsum*{X:\UU}{P(X)} \to \UU}$ is univalent
-  and generates a univalent subuniverse $\UU_{P} \defeq (\dsum{X:\UU}{P(X)}, \fst)$.~\footnote{Univalent
+  proposition for every $X$. Given such a predicate $P$, the fibration ${\fst : \dsum*{X:\UU}{P(X)} \to \UU}$ is
+  univalent and generates a univalent subuniverse ${\UU_{P} \defeq (\dsum*{X:\UU}{P(X)}, \fst)}$.~\footnote{Univalent
     typoids~\cite{petrakisUnivalentTypoids2019a} are a different presentation of univalent subuniverses.}
 \end{propositionrep}
 
@@ -492,7 +492,7 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
   The type family $\Fin : \Nat \to \UU$ is the type of finite sets indexed by their cardinality. It is defined
   equivalently in two different ways,
   \begin{gather*}
-    \Fin[n] \defeq \dsum{k:\Nat}{k < n}
+    \Fin[n] \defeq \dsum*{k:\Nat}{k < n}
     \qquad\qquad \text{or} \qquad\qquad
     \begin{aligned}
        & \Fin[0] \defeq \bot                      \\
@@ -506,7 +506,7 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
   \label{def:isfin}
   We say that a type is finite if it is merely equal to $\Fin[n]$ for some $n : \Nat$.
   \[
-    \isFin[X] \defeq \dsum{n:\Nat}{\SubP{X}{\Fin[n]}}
+    \isFin[X] \defeq \dsum*{n:\Nat}{\SubP{X}{\Fin[n]}}
   \]
   Note that the natural number $n$ need not be truncated, as justified below.
 \end{definition}
@@ -530,7 +530,7 @@ Since $\isFin$ is a predicate on the universe $\UU$, we easily get our univalent
   \label{def:ufin}
   The univalent subuniverse of \emph{all finite types} is given by
   $
-    \UFin \defeq \dsum{X:\UU}{\isFin[X]}.
+    \UFin \defeq \dsum*{X:\UU}{\isFin[X]}.
   $
   We write $F_{n} \defeq (\Fin[n], n, \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$.
 \end{definition}
