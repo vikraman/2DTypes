@@ -75,7 +75,7 @@ first.
   group multiplication is given by integer addition.
 
   \begin{definition}
-  \label{def:group}
+    \label{def:group}
     In type theory, a group $G$ can be defined as a set $S$ with the following pieces of data:
 
     \begin{enumerate}
@@ -139,8 +139,8 @@ category of groups and sets.
 \end{propositionrep}
 
 \begin{toappendix}
- Alternatively, the type of group homomorphisms $h : \term{Hom}(F(A),G)$ satisfying $h \comp \eta_A \htpy f$ is
- contractible.
+  Alternatively, the type of group homomorphisms $h : \term{Hom}(F(A),G)$ satisfying $h \comp \eta_A \htpy f$ is
+  contractible.
 
   % https://q.uiver.app/?q=WzAsMyxbMCwyLCJBIl0sWzAsMCwiRihBKSJdLFsyLDAsIkciXSxbMCwxLCJcXGV0YV9BIl0sWzAsMiwiZiIsMl0sWzEsMiwiXFxleHRlbmR7Zn0iLDAseyJzdHlsZSI6eyJib2R5Ijp7Im5hbWUiOiJkYXNoZWQifX19XSxbMyw0LCJcXGlkIiwwLHsic2hvcnRlbiI6eyJzb3VyY2UiOjIwLCJ0YXJnZXQiOjIwfSwic3R5bGUiOnsiYm9keSI6eyJuYW1lIjoibm9uZSJ9LCJoZWFkIjp7Im5hbWUiOiJub25lIn19fV1d
   \[\begin{tikzcd}
@@ -220,6 +220,8 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
         swapping happens, that is, we can slide the wires freely.
   \item[\labelcref{fig:coxeter-c}] \jk{If the next transposition in the sequence is equal to the the first one, the order of
         operations can be reversed}.
+
+>>>>>>> ee83d6f6650c383d20e046a4ada0de4cb9c42dca
 \end{enumerate}
 
 \begin{figure}
@@ -656,7 +658,7 @@ quotient $\List[\Fin[n]]$ by $\approx$, obtaining an equivalent definition for $
     \item $\normf$ splits into a section-retraction pair, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n]
             \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
     \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc$ is the inclusion into the quotient, and
-    $\im{f}$ denotes the image of $f$ (see~\cref{def:im}).
+          $\im{f}$ denotes the image of $f$ (see~\cref{def:im}).
   \end{enumerate}
 \end{proposition}
 
@@ -759,7 +761,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
 
 \begin{definition}[$\immersion : (n : \Nat) \to {\Lehmer[n]} \to {\List[\Fin[\suc[n]]]}$]
   \begin{align*}
-    \immersion_{\zero}(\zero)    & \defeq \nil                                              \\
+    \immersion_{\zero}(\zero)    & \defeq \nil                                               \\
     \immersion_{\suc[n]}((r, l)) & \defeq \immersion_{n}(l) \append ((\suc[n] - r) \downf r)
   \end{align*}
 \end{definition}
@@ -794,7 +796,7 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
 \end{proof}
 % \jk{Review:}
 % To see that Lehmer codes under $\immersion$ are normal with respect to $\longcoxstar$, let us look at the example code
-% $c = (0, 1, 2, 3, 4)$ -- for the full proof, see accompanying Agda code. We have that 
+% $c = (0, 1, 2, 3, 4)$ -- for the full proof, see accompanying Agda code. We have that
 % \[
 %   \immersion(c) = (0 \downf 1) \append (0 \downf 2) \append (0 \downf 3) \append (0 \downf 4) = [0, 1, 0, 2, 1, 0, 3, 2, 1, 0]
 % \]
@@ -820,8 +822,9 @@ We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\L
 Finally, it is time to complete our goal of characterising the permutation groups. Having produced a Lehmer code by
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
-between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$.~\footnote{Note that the indices for the type of permutations
-are off-by-one, because we chose $\Fin[n-1]$ to represent generators for permutations on $\Fin[n]$.}
+between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea of this proof is borrowed from~\cite{Molzer-cubical}
+~\footnote{Note that the indices for the type of permutations are off-by-one, because we chose $\Fin[n-1]$ to represent
+  generators for permutations on $\Fin[n]$.}
 
 To do so, we need to construct some equivalences by counting the elements of $\Fin[n]$ using its decidable equality.
 First, we define a type family $\FinExcept{n} : \Fin[n] \to \UU$ which picks out all elements in $\Fin[n]$ except
@@ -880,13 +883,13 @@ Using these facts, we can now prove the main result of this section.
     \end{array}
     \qquad\qquad
     \begin{array}{rlr}
-           & \Lehmer[\suc[m]]                                                                                   &                                                                 \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                              & \text{by definition}                                            \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                     & \text{induction hypothesis}                                     \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                          \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\Cref{prop:fin-finexcept}~\Cref{prop:fin-finexcept-2}} \\
-      \eqv & \dsum{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\Cref{prop:fin-finexcept}~\Cref{prop:fin-finexcept-2}} \\
-      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                          & \text{by~\Cref{prop:fin-finexcept}~\Cref{prop:fin-finexcept-3}}
+           & \Lehmer[\suc[m]]                                                                                    &                                                              \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                               & \text{by definition}                                         \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                      & \text{induction hypothesis}                                  \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                       \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                           & \text{\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}}
     \end{array}
   \end{gather*}
 \end{proof}

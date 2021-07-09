@@ -9,7 +9,7 @@ functions $\SetFin$. However, as $\PiLang$ only refers to bijective functions, a
 $\BFin = \term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and
 finite products $(\unit, \times)$ and in $\BFin$ these restrict to additive and multiplicative symmetric monoidal
 structures, respectively, making $\BFin$ a symmetric rig groupoid -- the \emph{vertical categorification} of the
-commutative rig of natural numbers $\Nat$~\cite{baezHIGHERDIMENSIONALALGEBRA}.
+commutative rig of natural numbers $\Nat$~\cite{baezHIGHERDIMENSIONALALGEBRA2010}.
 
 The semantics interprets $\PiLang$-types as objects in $\BFin$, 1-combinators as isomorphisms, and for every pair of 1-combinators
 related by a 2-combinator, their interpretations in~$\BFin$ are equal.  The groupoid $\BFin$ is strict, since the
@@ -59,7 +59,7 @@ satisfying univalence, to get the groupoid structure. In this section, we formal
 and proceed to construct the particular instance for finite types, $\UFin$ (\cref{def:ufin}).
 
 % The way to describe such groupoid in HoTT is to construct a type which has the types themselves as points, i.e. a
-% universe. Then, equivalences between those types can be characterized using elements of the equality type. For this to
+% universe. Then, equivalences between those types can be characterised using elements of the equality type. For this to
 % work, the universe in question has be a \emph{univalent subuniverse}.
 
 % In HoTT, every type carries a groupoid structure, with terms for points, and the (iterated) identity type for (higher)
@@ -536,9 +536,10 @@ Since $\isFin[X]$ is a predicate on the universe $\UU$, we easily get our unival
   We write $F_{n} \defeq (\Fin[n], n, \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$.
 \end{definition}
 
-While $\UFin$ has \emph{all} the finite types, we are also interested in constructing a subuniverse of finite types of a
-specified cardinality. To do so, we will start with the subuniverse $\BAut[T]$.
-\footnote{Characterisations of univalent fibrations using the $\BAut$ construction have been studied
+This definition of the groupoid of finite types has also been considered
+in~\cite{yorgeyCombinatorialSpeciesLabelled2014}. While $\UFin$ has \emph{all} the finite types, we are also interested
+in constructing a subuniverse of finite types of a specified cardinality. To do so, we will start with the subuniverse
+$\BAut[T]$. \footnote{Characterisations of univalent fibrations using the $\BAut$ construction have been studied
   by~\citet{christensenCharacterizationUnivalentFibrations2015}.}
 
 \begin{definition}[$\BAut$]
