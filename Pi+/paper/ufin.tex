@@ -493,10 +493,8 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
   The type family $\Fin : \Nat \to \UU$ is the type of finite sets indexed by their cardinality. It is defined
   equivalently in two different ways,
   \begin{gather*}
-    \begin{aligned}
-      \Fin[n] & \defeq \dsum{k:\Nat}{k < n}
-    \end{aligned}
-    \qquad\qquad \qquad\qquad
+    \Fin[n] \defeq \dsum{k:\Nat}{k < n}
+    \qquad\qquad \text{or} \qquad\qquad
     \begin{aligned}
        & \Fin[0] \defeq \bot                      \\
        & \Fin[\suc[n]] \defeq \top \sqcup \Fin[n]
@@ -507,7 +505,7 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
 
 \begin{definition}[$\isFin$]
   \label{def:isfin}
-  We say that a type is finite if it is merely equal to $\Fin[n]$ for some $n$.
+  We say that a type is finite if it is merely equal to $\Fin[n]$ for some $n : \Nat$.
   \[
     \isFin[X] \defeq \dsum{n:\Nat}{\SubP{X}{\Fin[n]}}
   \]
@@ -520,7 +518,6 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
 \end{propositionrep}
 
 \begin{proof}
-  (of Prop.~\ref{prop.isFin})
   Suppose we have $(n,\phi) : \isFin[X]$ and $(m,\psi) : \isFin[X]$, we need to show that $(n,\phi) \id (m,\psi)$. It is
   enough to show that $n \id m$. Since $\Nat$ is a set, this is a proposition, so we can use the induction principle of
   propositional truncation to eliminate to $n \id m$, applying it on $\phi$ and $\psi$ respectively. This gives us the
@@ -566,7 +563,7 @@ programming language~\cite{caretteReversibleProgramsUnivalent2018}.
 
 Since $\BAut[T]$ is a univalent subuniverse, we can characterise its path space. The intuition is that $\BAut[T]$ only
 has one point $T_0$, and 1-paths $T_0 \id_{\BAut[T]} T_0$, that is, loops, and higher paths between these loops. The
-type of loops on $T_0$, $\loopspace[\BAut[T],T_{0}]$ is shown to be equivalent to $\Aut[T] \defeq T \eqv T$, which is
+type of loops on $T_0$, $\loopspace[\BAut[T],T_{0}]$, is shown to be equivalent to $\Aut[T] \defeq T \eqv T$, which is
 the group of automorphisms of $T$.
 
 \begin{propositionrep}
@@ -630,7 +627,6 @@ the univalence principle.
 
 \begin{proposition}
   For any $n, m : \Nat$, and for any types $X, Y, Z$,
-
   \begin{gather*}
     \begin{aligned}
       \Fin[0]                & \eqv \bot                  \\

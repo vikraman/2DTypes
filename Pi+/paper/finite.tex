@@ -210,7 +210,7 @@ groups is known to be undecidable.
 
 To present the group $\Sn$, the primitive operations we are going to use will be adjacent swaps. When dealing with
 permutations on an $n + 1$-element set, there are $n$ adjacent transpositions, transposition number $k$ swapping
-elements $(\el{k}, \el{k+1})$. Thus, the generating set would be $\Fin[n]$. There are three relations that we're going
+elements at indices $k$ and $k+1$. Thus, the generating set would be $\Fin[n]$. There are three relations that we're going
 to specify for this presentation -- these are the equations that these generators should satisfy. We visualise them as
 braid diagrams in~\Cref{fig:coxeter-braid}.
 
@@ -218,8 +218,8 @@ braid diagrams in~\Cref{fig:coxeter-braid}.
   \item[\labelcref{fig:coxeter-a}] Swapping the same two elements two times in a row should be the same as doing nothing
   \item[\labelcref{fig:coxeter-b}] When swapping two distinct pairs of elements, it should not matter in which order the
         swapping happens, that is, we can slide the wires freely.
-  \item[\labelcref{fig:coxeter-c}] If the next transposition in the sequence is equal to the the first one, the order of
-        operations can be reversed.
+  \item[\labelcref{fig:coxeter-c}] \jk{If the next transposition in the sequence is equal to the the first one, the order of
+        operations can be reversed}.
 \end{enumerate}
 
 \begin{figure}
@@ -453,13 +453,12 @@ First, we need to define a function $n \downf k$.
   \end{align*}
 \end{definition}
 
-The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\). Since we think of the
-number $m$ as the transposition swapping elements $(\el{m}, \el{m+1})$, the role of this function is to produce a
-sequence of transpositions which moves element $\el{k + n}$ left by $k$ places, shifting all the elements in between one
-place right (see~\cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the following generators,
-inlining the congruence closure in $\longcox$, allowing arbitrary reductions inside the list.
+The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\). The role of this function
+is to produce a sequence of transpositions which moves element at index $k + n$ left by $k$ places, shifting all the
+elements in between one place right (see~\cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the
+following generators, inlining the congruence closure in $\longcox$, allowing arbitrary reductions inside the list.
 
-\begin{definition}[$\longcox$]
+\begin{definition}[$\longcox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \begin{align*}
     \longcancel
      & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r)                                                                      \\
@@ -574,7 +573,7 @@ sides of the relation are strictly larger than the right-hand sides, in terms of
 $\List[\Fin[n]]$.
 
 \begin{toappendix}
-  \begin{definition}[$\longcoxstar$]
+  \begin{definition}[$\longcoxstar : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
     \label{def:longcox-star}
     \begin{align*}
       \reflr{\longcox}
@@ -584,7 +583,7 @@ $\List[\Fin[n]]$.
     \end{align*}
   \end{definition}
 
-  \begin{definition}[$\longcoxplus$]
+  \begin{definition}[$\longcoxplus : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
     \label{def:longcox-plus}
     \begin{align*}
       \relr{\longcoxplus}
@@ -599,8 +598,9 @@ For the relation $\longcox$, we define its transitive closure to be $\longcoxplu
 reflexive-transitive closure to be $\longcoxstar$ (\cref{def:longcox-star}).
 
 Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox)$ has the properties
-we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property, and it is terminating, so, by
-Newman's lemma, it produces a unique normal form. We follow the terminology
+we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property (for example, using
+$\longbraid$, we can now show the problematic critical pair \cref{fig:critical-pairs-non-converging} to converge), and it is
+terminating, so, Newman's lemma, it produces a unique normal form. We follow the terminology
 of~\cite*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results formally.
 
 \begin{proposition}
@@ -720,7 +720,6 @@ the number of smaller elements appearing after it in the permutation.
 From knowing just the inversion counts for all the elements, one can reconstruct the starting permutation. Also, observe
 that $\invcount{i} < i$, thus fitting in the $i$-th place of a Lehmer code tuple. As an example, consider the following
 tabulated presentation of a permutation of $\Fin[5]$.
-
 \[
   \sigma =
   \begin{pmatrix}

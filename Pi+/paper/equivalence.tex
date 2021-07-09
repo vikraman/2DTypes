@@ -172,8 +172,8 @@ Using this symmetric monoidal structure, we translate from $\PiPlusLang$ to $\Pi
 \begin{definition}
   \begin{align*}
     \evalp_{0} & : \UPlus \to \UHat                                                          \\
-    \evalp_{1} & : (c : t_{1} \iso t_{2}) \to \evalp_{0}(t_{1}) \isoh \evalp_{0}(t_{2})      \\
-    \evalp_{2} & : (\alpha : c_{1} \Iso c_{2}) \to \evalp_{1}(c_{1}) \Isoh \evalp_{1}(c_{2})
+    \evalp_{1} & : (c : t_{1} \isop t_{2}) \to \evalp_{0}(t_{1}) \isoh \evalp_{0}(t_{2})      \\
+    \evalp_{2} & : (\alpha : c_{1} \Isop c_{2}) \to \evalp_{1}(c_{1}) \Isoh \evalp_{1}(c_{2})
   \end{align*}
 \end{definition}
 
@@ -234,7 +234,7 @@ The semantics that we presented here takes a different route to constructing the
 combinator, compared to the direct interpretation given using the big-step interpreter in~\Cref{subsec:denotational}. We
 verify that the two semantics agree, establishing that the semantics is adequate and fully abstract.
 
-\begin{definition}[${\gdenot{\blank}} : U \to {\UFin}$]
+\begin{definition}
   \begin{gather*}
     \begin{aligned}
       \gdenot{\blank}_{0} &\defeq \evalh_{0} \comp \evalp_{0} \comp \evalt_{0}
