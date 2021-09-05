@@ -332,11 +332,11 @@ types, homotopy types, and HITs and refer the reader to the book for more detail
 Functions between types are functors between groupoids, and type families (or functions to the universe) are indexed
 families of groupoids. A type family $P : A \to \UU$ comes equipped with a functor $\pi_1 : \dsum*{x:A}{P(x)} \to A$
 which has a lifting operation giving it the structure of a fibration. The $\term{transport}$ operation lifts paths in
-the base space to functions between the fibers.  Using the groupoid structure of $A$, for a path $p : x \id_{A} y$,
-$\term{transport}(p)$ and $\term{transport}(\inv{p})$ form an equivalence.
+the base space to functions between the fibers.  Using the groupoid structure of $A$, for any $x, y : A$ and a path 
+$p : x \id_{A} y$, $\term{transport}(p)$ and $\term{transport}(\inv{p})$ form an equivalence.
 % We name this map $\tptEqv{P}$ which lifts paths to equivalences of fibers.
 \[
-  \tptEqv{P} : \dfun*{x,y:A}{(x \id_{A} y) \to (P(x) \eqv P(y))}
+  \tptEqv{P} : (x \id_{A} y) \to (P(x) \eqv P(y))
 \]
 
 \noindent The type families (or fibrations) we are interested in are the ones where paths in the base space completely determine
