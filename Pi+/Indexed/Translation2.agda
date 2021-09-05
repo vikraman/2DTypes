@@ -14,7 +14,7 @@ module Pi+.Indexed.Translation2 where
 open import Pi+.NonIndexed.Syntax as NPi+
 open import Pi+.Indexed.Syntax as Pi+
 open import Pi+.Indexed.SyntaxHat as Pi^
-open import Pi+.Indexed.SyntaxFull as Pi
+open import Pi+.Indexed.SyntaxFullPiForPaper as Pi
 open import Pi+.Indexed.Equiv1Hat
 
 private
@@ -142,6 +142,8 @@ eval₁-aux id⟷₁ = id⟷₁
 eval₁-aux (c₁ ◎ c₂) = eval₁-aux c₁ ◎ eval₁-aux c₂
 eval₁-aux (c₁ ⊕ c₂) = eval₁-aux c₁ ⊕ eval₁-aux c₂
 eval₁-aux (c₁ ⊗ c₂) = *-comp (eval₁-aux c₁) (eval₁-aux c₂)
+eval₁-aux distl = NPi+.!⟷₁ dist*
+eval₁-aux factorl = dist*
 
 eval₁-index : ∀ {t₁} {t₂} → (t₁ NPi+.⟷₁ t₂) → eval₀-index t₁ Pi+.⟷₁ eval₀-index t₂
 eval₁-index unite₊l = unite₊l
@@ -163,32 +165,147 @@ eval₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ Pi.⟷₁ t₂} → (α : 
 eval₂-aux = TODO-
 
 quote₀-aux : NPi+.U → Pi.U 
-quote₀-aux = TODO-
+quote₀-aux O = O
+quote₀-aux I = I
+quote₀-aux (x₁ + x₂) = quote₀-aux x₁ + quote₀-aux x₂
 
 quote₁-aux : ∀ {t₁} {t₂} → t₁ NPi+.⟷₁ t₂ → (quote₀-aux t₁) Pi.⟷₁ (quote₀-aux t₂) 
-quote₁-aux = TODO-
+quote₁-aux unite₊l = unite₊l
+quote₁-aux uniti₊l = uniti₊l
+quote₁-aux swap₊ = swap₊
+quote₁-aux assocl₊ = assocl₊
+quote₁-aux assocr₊ = assocr₊
+quote₁-aux id⟷₁ = id⟷₁
+quote₁-aux (c ◎ c₁) = quote₁-aux c ◎ quote₁-aux c₁
+quote₁-aux (c ⊕ c₁) = quote₁-aux c ⊕ quote₁-aux c₁
+
+quote₁-aux-! : ∀ {t₁} {t₂} → (c : t₁ NPi+.⟷₁ t₂) → (quote₁-aux (NPi+.!⟷₁ c)) Pi.⟷₂ (Pi.!⟷₁ (quote₁-aux c))
+quote₁-aux-! unite₊l = id⟷₂
+quote₁-aux-! uniti₊l = id⟷₂
+quote₁-aux-! swap₊ = id⟷₂
+quote₁-aux-! assocl₊ = id⟷₂
+quote₁-aux-! assocr₊ = id⟷₂
+quote₁-aux-! id⟷₁ = id⟷₂
+quote₁-aux-! (c ◎ c₁) = quote₁-aux-! c₁ ⊡ quote₁-aux-! c
+quote₁-aux-! (c ⊕ c₁) = resp⊕⟷₂ (quote₁-aux-! c) (quote₁-aux-! c₁)
 
 quote₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ NPi+.⟷₁ t₂} → (α : c₁ NPi+.⟷₂ c₂) → (quote₁-aux c₁) Pi.⟷₂ (quote₁-aux c₂)
-quote₂-aux = TODO-
+quote₂-aux assoc◎l = assoc◎l
+quote₂-aux assoc◎r = assoc◎r
+quote₂-aux assocl₊l = assocl⊕l
+quote₂-aux assocl₊r = assocl⊕r
+quote₂-aux assocr₊r = assocr⊕r
+quote₂-aux assocr₊l = assocr⊕l
+quote₂-aux idl◎l = idl◎l
+quote₂-aux idl◎r = idl◎r
+quote₂-aux idr◎l = idr◎l
+quote₂-aux idr◎r = idr◎r
+quote₂-aux linv◎l = trans⟷₂ (id⟷₂ ⊡ quote₁-aux-! _) linv◎l
+quote₂-aux linv◎r = trans⟷₂ linv◎r (id⟷₂ ⊡ Pi.!⟷₂ (quote₁-aux-! _))
+quote₂-aux rinv◎l = trans⟷₂ ((quote₁-aux-! _) ⊡ Pi.!⟷₂ (!!⟷₁ _) ) linv◎l
+quote₂-aux rinv◎r = Pi.!⟷₂ (trans⟷₂ (quote₁-aux-! _ ⊡ id⟷₂) rinv◎l)
+quote₂-aux unite₊l⟷₂l = unite₊l⟷₂l
+quote₂-aux unite₊l⟷₂r = unite₊l⟷₂r
+quote₂-aux uniti₊l⟷₂l = uniti₊l⟷₂l
+quote₂-aux uniti₊l⟷₂r = uniti₊l⟷₂r
+quote₂-aux swapl₊⟷₂ = swapl₊⟷₂
+quote₂-aux swapr₊⟷₂ = swapr₊⟷₂
+quote₂-aux id⟷₂ = id⟷₂
+quote₂-aux (trans⟷₂ α α₁) = trans⟷₂ (quote₂-aux α) (quote₂-aux α₁)
+quote₂-aux (α ⊡ α₁) = quote₂-aux α ⊡ quote₂-aux α₁
+quote₂-aux (resp⊕⟷₂ α α₁) = resp⊕⟷₂ (quote₂-aux α) (quote₂-aux α₁)
+quote₂-aux id⟷₁⊕id⟷₁⟷₂ = id⟷⊕id⟷⟷₂
+quote₂-aux split⊕-id⟷₁ = split⊕-id⟷
+quote₂-aux hom⊕◎⟷₂ = hom⊕◎⟷₂
+quote₂-aux hom◎⊕⟷₂ = hom◎⊕⟷₂
+quote₂-aux triangle₊l = triangle⊕l
+quote₂-aux triangle₊r = triangle⊕r
+quote₂-aux pentagon₊l = pentagon⊕l
+quote₂-aux pentagon₊r = pentagon⊕r
+quote₂-aux unite₊l-coh-l = unite₊l-coh-l
+quote₂-aux unite₊l-coh-r = unite₊l-coh-r
+quote₂-aux hexagonr₊l = hexagonr⊕l
+quote₂-aux hexagonr₊r = hexagonr⊕r
+quote₂-aux hexagonl₊l = hexagonl⊕l
+quote₂-aux hexagonl₊r = hexagonl⊕r
 
 eval-quote₀-aux : (t : NPi+.U) → eval₀-aux (quote₀-aux t) NPi+.⟷₁ t
-eval-quote₀-aux = TODO-
+eval-quote₀-aux O = id⟷₁
+eval-quote₀-aux I = id⟷₁
+eval-quote₀-aux (t + t₁) = eval-quote₀-aux t ⊕ eval-quote₀-aux t₁
 
-{- 
-eval-quote₁-aux : ∀ {t₁} {t₂} → (c : t₁ NPi+.⟷₁ t₂) → eval₁-aux (quote₁-aux c) NPi+.⟷₂ c
-eval-quote₁-aux = TODO-
+eval-quote₁-aux : ∀ {t₁} {t₂} → (c : t₁ NPi+.⟷₁ t₂) → eval₁-aux (quote₁-aux c) NPi+.⟷₂ eval-quote₀-aux _ ◎ c ◎ NPi+.!⟷₁ (eval-quote₀-aux _)
+eval-quote₁-aux unite₊l = TODO!
+eval-quote₁-aux uniti₊l = TODO!
+eval-quote₁-aux {t₃ + t₄} {t₄ + t₃} swap₊ =  
+  trans⟷₂ (
+    trans⟷₂ (
+      trans⟷₂ (
+        trans⟷₂ (
+          trans⟷₂ idl◎r (split⊕-id⟷₁ ⊡ id⟷₂)) ((resp⊕⟷₂ linv◎r linv◎r ⊡ id⟷₂))) (hom⊕◎⟷₂ ⊡ id⟷₂)) assoc◎r) (id⟷₂ ⊡ swapr₊⟷₂)
+eval-quote₁-aux assocl₊ = TODO!
+eval-quote₁-aux assocr₊ = TODO!
+eval-quote₁-aux id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
+eval-quote₁-aux (c ◎ c₁) = TODO!
+eval-quote₁-aux (c ⊕ c₁) = TODO!
 
-eval-quote₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ NPi+.⟷₁ t₂} → (α : c₁ NPi+.⟷₂ c₂) → eval₂-aux (quote₂-aux α) NPi+.⟷₃ α
-eval-quote₂-aux = TODO-
- -}
+-- eval-quote₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ NPi+.⟷₁ t₂} → (α : c₁ NPi+.⟷₂ c₂) → eval₂-aux (quote₂-aux α) NPi+.⟷₃ α
+-- eval-quote₂-aux = TODO-
 
+
+-- mutual
+--   quote₀-aux-* : (t₁ t₂ : Pi.U) → quote₀-aux (eval₀-aux t₁ * eval₀-aux t₂) Pi.⟷₁ t₁ × t₂
+--   quote₀-aux-* O t₂ = factorzl
+--   quote₀-aux-* I t₂ = quote-eval₀-aux t₂ ◎ uniti⋆l
+--   quote₀-aux-* (t₁ + t₃) t₂ = (quote₀-aux-* t₁ t₂ ⊕ quote₀-aux-* t₃ t₂) ◎ factor
+--   quote₀-aux-* (t₁ × t₃) t₂ = 
+--     let r = quote₀-aux-* t₁ (t₃ × t₂)
+--     in  TODO! ◎ r ◎  assocl⋆
+
+--   quote-eval₀-aux : (t : Pi.U) → quote₀-aux (eval₀-aux t) Pi.⟷₁ t
+--   quote-eval₀-aux O = id⟷₁
+--   quote-eval₀-aux I = id⟷₁
+--   quote-eval₀-aux (t + t₁) = quote-eval₀-aux t ⊕ quote-eval₀-aux t₁
+--   quote-eval₀-aux (t × t₁) = quote₀-aux-* t t₁
+
+{-# TERMINATING #-}
 quote-eval₀-aux : (t : Pi.U) → quote₀-aux (eval₀-aux t) Pi.⟷₁ t
-quote-eval₀-aux = TODO-
+quote-eval₀-aux O = id⟷₁
+quote-eval₀-aux I = id⟷₁
+quote-eval₀-aux (t + t₁) = quote-eval₀-aux t ⊕ quote-eval₀-aux t₁
+quote-eval₀-aux (O × t₁) = factorzl
+quote-eval₀-aux (I × t₁) = quote-eval₀-aux t₁ ◎ uniti⋆l
+quote-eval₀-aux ((t + t₂) × t₁) = (quote-eval₀-aux (t × t₁) ⊕ quote-eval₀-aux (t₂ × t₁)) ◎ factor
+quote-eval₀-aux ((t × t₂) × t₁) = 
+  let r = quote-eval₀-aux (t × (t₂ × t₁))
+  in  quote₁-aux (*-assoc (eval₀-aux t) (eval₀-aux t₂) (eval₀-aux t₁)) ◎ r ◎ assocl⋆
 
-{- 
-quote-eval₁-aux : ∀ {t₁} {t₂} → (c : t₁ Pi.⟷₁ t₂) → quote₁-aux (eval₁-aux c) Pi.⟷₂ c
-quote-eval₁-aux = TODO-
 
+quote-eval₁-aux : ∀ {t₁} {t₂} → (c : t₁ Pi.⟷₁ t₂) → quote₁-aux (eval₁-aux c) Pi.⟷₂ quote-eval₀-aux _ ◎ c ◎ Pi.!⟷₁ (quote-eval₀-aux _)
+quote-eval₁-aux unite₊l = TODO!
+quote-eval₁-aux uniti₊l = TODO!
+quote-eval₁-aux unite⋆l = TODO!
+quote-eval₁-aux uniti⋆l = TODO!
+quote-eval₁-aux swap₊ = TODO!
+quote-eval₁-aux swap⋆ = TODO!
+quote-eval₁-aux assocl₊ = TODO!
+quote-eval₁-aux assocr₊ = TODO!
+quote-eval₁-aux assocl⋆ = TODO!
+quote-eval₁-aux assocr⋆ = TODO!
+quote-eval₁-aux absorbr = TODO!
+quote-eval₁-aux absorbl = TODO!
+quote-eval₁-aux factorzr = TODO!
+quote-eval₁-aux factorzl = TODO!
+quote-eval₁-aux dist = TODO!
+quote-eval₁-aux distl = TODO!
+quote-eval₁-aux factor = TODO!
+quote-eval₁-aux factorl = TODO!
+quote-eval₁-aux id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
+quote-eval₁-aux (c ◎ c₁) = TODO!
+quote-eval₁-aux (c ⊕ c₁) = TODO!
+quote-eval₁-aux (c ⊗ c₁) = TODO!
+
+{-
 quote-eval₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ Pi.⟷₁ t₂} → (α : c₁ Pi.⟷₂ c₂) → quote₂-aux (eval₂-aux α) Pi.⟷₃ α
 quote-eval₂-aux = TODO-
  -}

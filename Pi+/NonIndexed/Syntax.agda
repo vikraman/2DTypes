@@ -139,12 +139,16 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
   hexagonl₊r : {t₁ t₂ t₃ : U} →
     ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ⟷₂
     (assocl₊ ◎ swap₊) ◎ assocl₊ {t₁} {t₂} {t₃}
-  -- Braiding compatible with unitors (redundant; provable from above
-  -- axioms. See for example Thm. 10 in "On MacLane's Conditions for
-  -- Coherence of Natural Associativities, Commutativities, etc.
-  -- Kelly 1964)
-  unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
-  braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
+
+-- Braiding compatible with unitors (redundant; provable from above
+-- axioms. See for example Thm. 10 in "On MacLane's Conditions for
+-- Coherence of Natural Associativities, Commutativities, etc.
+-- Kelly 1964)
+unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
+unit-braid = TODO!
+
+braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
+braid-unit = TODO!
 
 -- Equational reasoning
 
@@ -209,8 +213,8 @@ _ ⟷₂∎ = id⟷₂
 !⟷₂ hexagonr₊r = hexagonr₊l
 !⟷₂ hexagonl₊l = hexagonl₊r
 !⟷₂ hexagonl₊r = hexagonl₊l
-!⟷₂ unit-braid = braid-unit
-!⟷₂ braid-unit = unit-braid
+-- !⟷₂ unit-braid = braid-unit
+-- !⟷₂ braid-unit = unit-braid
 
 !⟷₁⟷₂ : {t₁ t₂ : U} {c₁ c₂ : t₁ ⟷₁ t₂} → (α : c₁ ⟷₂ c₂) → (!⟷₁ c₁ ⟷₂ !⟷₁ c₂)
 !⟷₁⟷₂ assoc◎l = assoc◎r
@@ -257,8 +261,8 @@ _ ⟷₂∎ = id⟷₂
 !⟷₁⟷₂ hexagonr₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonl₊r) assoc◎r
 !⟷₁⟷₂ hexagonl₊l = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊l) assoc◎r
 !⟷₁⟷₂ hexagonl₊r = trans⟷₂ (trans⟷₂ assoc◎l hexagonr₊r) assoc◎r
-!⟷₁⟷₂ unit-braid = TODO-
-!⟷₁⟷₂ braid-unit = TODO-
+-- !⟷₁⟷₂ unit-braid = TODO-
+-- !⟷₁⟷₂ braid-unit = TODO-
 
 -- 3-combinators trivial
 

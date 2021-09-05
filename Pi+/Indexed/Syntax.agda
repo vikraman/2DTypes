@@ -170,12 +170,12 @@ data _⟷₂_ : {X : U m} {Y : U n} → X ⟷₁ Y → X ⟷₁ Y → Set where
   hexagonl₊r :
     ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁) ⟷₂
     (assocl₊ ◎ swap₊) ◎ assocl₊ {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}
-  -- Braiding compatible with unitors (redundant; provable from above
-  -- axioms. See for example Thm. 10 in "On MacLane's Conditions for
-  -- Coherence of Natural Associativities, Commutativities, etc.
-  -- Kelly 1964)
-  -- unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
-  -- braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
+-- Braiding compatible with unitors (redundant; provable from above
+-- axioms. See for example Thm. 10 in "On MacLane's Conditions for
+-- Coherence of Natural Associativities, Commutativities, etc.
+-- Kelly 1964)
+-- unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
+-- braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
 
 -- -- Equational reasoning
 
