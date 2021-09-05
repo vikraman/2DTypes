@@ -84,17 +84,16 @@ remainder of this section, we discuss some broader related work.
 Higher-order term-rewriting systems and word problems have a long history of being formalised in proof assistants like
 {homotopy.io}, Agda, Coq and Lean~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main
 result, we developed a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem. \citet{Hiver-coq}
-describes an explicit algorithm for producing normal forms. could provide an alternative to our rewriting system. Other
+describes an explicit algorithm for producing normal forms. It could provide an alternative to our rewriting system. Other
 encodings of permutations as listed vectors, matrices, inductively generated trees (Motzkin trees), Young diagrams, or
-string diagrams, proved either difficult formalise in type theory or difficult to relate directly to the primitive type
+string diagrams, proved either difficult to formalise in type theory or difficult to relate directly to the primitive type
 isomorphisms of $\PiLang$. The automatic \citet{knuthSimpleWordProblems1970} completion produced too many equations
 making proving correctness and termination intractable.
 
 Coherence theorems are famous problems in category theory, and Mac Lane's coherence
 theorem~\cite{maclaneNaturalAssociativityCommutativity1963,joyalBraidedTensorCategories1993,gurskiInfiniteLoopSpaces2013}
 for monoidal categories is a particular one. The use of rewriting and proof assistants to prove coherence theorems
-for higher categorical structures has a long history
-see~\cite*{forestCoherenceGrayCategories2018,beylinExtractingProofCoherence1996}.
+for higher categorical structures has a long history, see~\cite*{forestCoherenceGrayCategories2018,beylinExtractingProofCoherence1996}.
 
 %%%%%%%%%%%%%%
 \paragraph{Computing with Univalence} In HoTT, univalence characterises the path type in the universe as equivalences of
@@ -114,7 +113,7 @@ in general, is of course undecidable~\cite{krogmeierDecidableSynthesisPrograms20
 circuits, it is decidable, as we have shown, but still far from trivial, which matches the need to assert the existence
 of $\term{ua}$ without giving a constructive argument. Then, the computation rule $\term{ua_\beta}$ expresses the fact
 that program synthesis is sound, while $\term{ua_\eta}$ corresponds to the soundness of the equational theory ($\PiLang$
-2-combinators). Thus, our results suggests a new computational interpretation of the univalence principle, which
+2-combinators). Thus, our results suggest a new computational interpretation of the univalence principle, which
 provides an intuition on why certain constructions are hard (or impossible in the general case). There are other,
 different approaches to computing with univalence,
 in~\cite*{angiuliInternalizingRepresentationIndependence2021,tabareauMarriageUnivalenceParametricity2021}, and in

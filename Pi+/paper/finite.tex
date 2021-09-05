@@ -197,7 +197,7 @@ preserved by the function mapping out of the generating set.
 
 \begin{proposition}[Universal property of $F(\langle A ; R \rangle)$]
   Given a group $G$ and a map $f : A \to G$, such that $f$ extended to $F(A)$ respects $R$, there is a unique group
-  homomorphism $\extend{f} : F(\langle A ; R \rangle) \to^G G$ such that $\extend{f} \comp \eta_A \htpy f$.
+  homomorphism $\extend{f} : \term{Hom}(F(\langle A ; R \rangle), G)$ such that $\extend{f} \comp \eta_A \htpy f$.
 \end{proposition}
 
 Before, the only way to decide the equality of two elements in a group was to evaluate and check them on the nose, but
@@ -649,7 +649,7 @@ $\approx$, obtaining an equivalent definition for $\Sn$.
   \begin{enumerate}
     \item $\normf$ splits into a section-retraction pair, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n]
             \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
-    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc$ is the inclusion into the quotient, and
+    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc$ is the mapping into the quotient, and
           $\im{f}$ denotes the image of $f$ (see~\cref{def:im}).
   \end{enumerate}
 \end{proposition}
@@ -708,7 +708,7 @@ Given a permutation $\sigma : \Aut[\Fin[n]]$, for any element $i: \Fin[n]$, we c
 the number of smaller elements appearing after it in the permutation.
 
 \begin{definition}[Inversion count]
-  Given a permutation $\sigma : \Aut[\Fin[n]]$, the inversion count of $k: \Fin[n]$ is given by
+  Given a permutation $\sigma : \Aut[\Fin[n]]$, the inversion count of $i: \Fin[n]$ is given by
   \[ \invcount{i} = \#\Set{j < i | \sigma(j) > \sigma(i)}. \]
 \end{definition}
 
@@ -734,7 +734,7 @@ tabulated presentation of a permutation of $\Fin[5]$.
 
 \noindent To decode the permutation back from this Lehmer code, we perform an algorithm similar to \emph{insertion
   sort}. The element of the Lehmer code being currently processed is highlighted in the left column of the table below.
-Starting from a sorted list, the element at index $k$ has to be given $l[k]$ inversions. Because of the the invariant
+Starting from a sorted list, the element at index $k$ has to be given $l[k]$ inversions. Because of the invariant
 that all the elements before newly processed one are smaller than it, the proper number of inversions is created by
 simply shifting the element $l[k]$ places left.
 
@@ -764,7 +764,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
 \begin{theoremrep}
   \leavevmode
   \begin{enumerate}
-    \item For any Lehmer code $c$, $\immersion_{n}(c)$ is a normal form with resepct to $\longcoxstar$, that is,
+    \item For any Lehmer code $c$, $\immersion_{n}(c)$ is a normal form with respect to $\longcoxstar$, that is,
           $\immersion_{n}(c)$ is in $\im{\normf}$.
     \item Any element of $\im{\normf}$ can be constructed from a unique Lehmer code by $\immersion$, that is, the fibers
           of $\immersion_{n} : \Lehmer[n] \to {\im{\normf}}$ are contractible.
@@ -836,8 +836,8 @@ using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
   \begin{enumerate}
     % \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-1}
     \item For any $k : \Fin[\suc[n]]$, we have $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-2}
-    \item For any $n : \Nat$, we have \( \Aut[\Fin[\suc[n]]] \eqv \dsum*{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
-            \FinExcept{\suc[n]}[n - k]} \). \label{prop:fin-finexcept-3}
+    \item For any $n : \Nat$, we have \( \Aut[\Fin[\suc[n]]] \eqv \dsum*{k : \Fin[\suc[n]]}{(\FinExcept{\suc[n]}[n] \eqv
+            \FinExcept{\suc[n]}[n - k])} \). \label{prop:fin-finexcept-3}
   \end{enumerate}
 \end{lemmarep}
 
