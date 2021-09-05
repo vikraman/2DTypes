@@ -330,7 +330,7 @@ types, homotopy types, and HITs and refer the reader to the book for more detail
 \subsection{Univalent Fibrations}
 
 Functions between types are functors between groupoids, and type families (or functions to the universe) are indexed
-families of groupoids. A type family $P : A \to \UU$ comes equipped with a functor $\pi_1 : \dsum*{x:A}{P(x)} \to \UU$
+families of groupoids. A type family $P : A \to \UU$ comes equipped with a functor $\pi_1 : \dsum*{x:A}{P(x)} \to A$
 which has a lifting operation giving it the structure of a fibration. The $\term{transport}$ operation lifts paths in
 the base space to functions between the fibers.  Using the groupoid structure of $A$, for a path $p : x \id_{A} y$,
 $\term{transport}(p)$ and $\term{transport}(\inv{p})$ form an equivalence.
@@ -538,8 +538,8 @@ Since $\isFin$ is a predicate on the universe $\UU$, we easily get our univalent
 This definition of the groupoid of finite types has also been considered
 in~\cite{yorgeyCombinatorialSpeciesLabelled2014}. While $\UFin$ has \emph{all} the finite types, we are also interested
 in constructing a subuniverse of finite types of a specified cardinality. To do so, we will start with the subuniverse
-$\BAut[T]$. \footnote{Characterisations of univalent fibrations using the $\BAut$ construction have been studied
-  by~\citet{christensenCharacterizationUnivalentFibrations2015}.}
+$\BAut[T]$, for any type $T : \UU$. \footnote{Characterisations of univalent fibrations using the $\BAut$ construction
+have been studied by~\citet{christensenCharacterizationUnivalentFibrations2015}.}
 
 \begin{definition}[$\BAut$]
   The predicate $P(X) \defeq \Trunc[-1]{X \id T}$ picks out exactly those types that are merely equal to $T$, and this
@@ -620,7 +620,7 @@ corresponding to groupoid laws.
 \subsection{Rig structure}
 \label{subsec:rig}
 
-Similar to $\BFin$, the groupoid $\UFin$ has two symmetric monoidal structures, the additive and the multiplicative one,
+Similar to $\BFin$, the groupoid $\UFin$ has two symmetric monoidal structures, the additive and the multiplicative ones,
 and the multiplicative tensor product distributes over the additive one. To construct these, we first state and prove
 some equivalences on $\Fin$, and some general type isomorphisms. Then we simply lift these equivalences to $\UFin$, by
 the univalence principle.
@@ -635,7 +635,7 @@ the univalence principle.
       \bot \sqcup X          & \eqv X                     \\
       X \sqcup \bot          & \eqv X                     \\
       (X \sqcup Y) \sqcup Z  & \eqv X \sqcup (Y \sqcup Z) \\
-      X \sqcup Y             & \eqv Y \sqcup Y            \\
+      X \sqcup Y             & \eqv Y \sqcup X            \\
       X \times \bot          & \eqv \bot
     \end{aligned}
     \qquad
