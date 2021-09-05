@@ -836,8 +836,8 @@ using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
   \begin{enumerate}
     % \item For any $k : \Fin[n]$, $\unit \sqcup \FinExcept{n}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-1}
     \item For any $k : \Fin[\suc[n]]$, we have $\FinExcept{\suc[n]}[k] \eqv \Fin[n]$. \label{prop:fin-finexcept-2}
-    \item For any $n : \Nat$, we have \( \Aut[\Fin[\suc[n]]] \eqv \dsum*{k : \Fin[\suc[n]]}{\FinExcept{\suc[n]}[n] \eqv
-            \FinExcept{\suc[n]}[n - k]} \). \label{prop:fin-finexcept-3}
+    \item For any $n : \Nat$, we have \( \Aut[\Fin[\suc[n]]] \eqv \dsum*{k : \Fin[\suc[n]]}{(\FinExcept{\suc[n]}[n] \eqv
+            \FinExcept{\suc[n]}[n - k])} \). \label{prop:fin-finexcept-3}
   \end{enumerate}
 \end{lemmarep}
 
