@@ -26,13 +26,6 @@ infixr 40 _+_
 infix 30 _⟷₁_
 infixr 50 _◎_ _⊕_
 
--- postulate
---   =↦ : ∀ {i} {A : Type i} {a b : A} → a == b → a ↦ b
-
--- +-assoc-↦ : (k m n : ℕ) → (k N.+ m) N.+ n ↦ k N.+ (m N.+ n)
--- +-assoc-↦ k m n = =↦ (N.+-assoc k m n)
--- {-# REWRITE +-assoc-↦ #-}
-
 private
   variable
     t t₁ t₂ t₃ t₄ t₅ t₆ : U n
@@ -72,10 +65,6 @@ _⟷₁∎ t = id⟷₁
 ⟷₁-eq-size (c ⊕ c₁) = ap2 N._+_ (⟷₁-eq-size c) (⟷₁-eq-size c₁)
 
 -- Coherence
-
--- +-unit-r-↦ : (m : ℕ) → m N.+ 0 ↦ m
--- +-unit-r-↦ m = =↦ (N.+-unit-r m)
--- {-# REWRITE +-unit-r-↦ #-}
 
 unite₊r : {t : U n} → t + O ⟷₁ t
 unite₊r = swap₊ ◎ unite₊l

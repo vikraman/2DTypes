@@ -14,7 +14,7 @@ module Pi.Indexed.Translation2 where
 open import Pi.NonIndexed.Syntax as NPi+
 open import Pi.Indexed.Syntax as Pi+
 open import Pi.Indexed.SyntaxHat as Pi^
-open import Pi.Indexed.SyntaxFullPiForPaper as Pi
+open import Pi.Indexed.SyntaxFull as Pi
 open import Pi.Indexed.Equiv1Hat
 
 private
