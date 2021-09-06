@@ -18,7 +18,6 @@ open import Pi.Equiv.Translation2
 import Pi.Equiv.Equiv1 as Pi+
 import Pi.Equiv.Equiv1Hat as Pi^
 import Pi.Equiv.Equiv1Norm as Pi^
-open import Pi.Examples
 
 module Pi.Examples.ExpMod where
 

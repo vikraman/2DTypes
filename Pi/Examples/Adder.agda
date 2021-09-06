@@ -1,4 +1,4 @@
-{-# OPTIONS --overlapping-instances #-}
+{-# OPTIONS --without-K --overlapping-instances #-}
 
 open import HoTT hiding (_<_ ; ltS ; ltSR ; _+_ ; _×_)
 import lib.types.Nat as N
