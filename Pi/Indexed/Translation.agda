@@ -41,7 +41,9 @@ eval₀-size absorbl = TODO-
 eval₀-size factorzr = ! (eval₀-size absorbl)
 eval₀-size factorzl = idp
 eval₀-size dist = TODO-
+eval₀-size distl = TODO-
 eval₀-size factor = TODO-
+eval₀-size factorl = TODO-
 eval₀-size id⟷₁ = idp
 eval₀-size (c ◎ c₁) = ap eval₀ TODO-
 eval₀-size (c ⊕ c₁) = TODO-
@@ -146,7 +148,9 @@ eval₁ (absorbl {t = t}) = **^-absorb-r (eval₀ t)
 eval₁ (factorzr {t = t}) = !⟷₁^ (**^-absorb-r (eval₀ t))
 eval₁ (factorzl {t = t}) = !⟷₁^ (**^-absorb-l (eval₀ t))
 eval₁ (dist {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}) = dist^-r (eval₀ t₁) (eval₀ t₂) (eval₀ t₃)
+eval₁ distl = TODO-
 eval₁ (factor {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}) = !⟷₁^ (dist^-r (eval₀ t₁) (eval₀ t₂) (eval₀ t₃))
+eval₁ (factorl {t₁ = t₁} {t₂ = t₂} {t₃ = t₃}) = TODO-
 eval₁ id⟷₁ = id⟷₁^
 eval₁ (c₁ ◎ c₂) = eval₁ c₁ ◎^ eval₁ c₂
 eval₁ (c₁ ⊕ c₂) = ++^-⊕ (eval₁ c₁) (eval₁ c₂)
