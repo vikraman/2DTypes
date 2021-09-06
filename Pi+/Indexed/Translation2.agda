@@ -46,7 +46,6 @@ I * t₂ = t₂
 *-assoc I t₂ t₃ = id⟷₁
 *-assoc (t₁ + t₄) t₂ t₃ = *-assoc t₁ t₂ t₃ ⊕ *-assoc t₄ t₂ t₃
 
-
 *-comp-l : {t₁ t₂ t₃ : NPi+.U} → (t₁ NPi+.⟷₁ t₂) → ((t₁ * t₃) NPi+.⟷₁ (t₂ * t₃))
 *-comp-l unite₊l = unite₊l
 *-comp-l uniti₊l = uniti₊l
@@ -164,12 +163,12 @@ eval₁ = eval^₁ ∘ eval₁-index ∘ eval₁-aux
 eval₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ Pi.⟷₁ t₂} → (α : c₁ Pi.⟷₂ c₂) → (eval₁-aux c₁) NPi+.⟷₂ (eval₁-aux c₂)
 eval₂-aux = TODO-
 
-quote₀-aux : NPi+.U → Pi.U 
+quote₀-aux : NPi+.U → Pi.U
 quote₀-aux O = O
 quote₀-aux I = I
 quote₀-aux (x₁ + x₂) = quote₀-aux x₁ + quote₀-aux x₂
 
-quote₁-aux : ∀ {t₁} {t₂} → t₁ NPi+.⟷₁ t₂ → (quote₀-aux t₁) Pi.⟷₁ (quote₀-aux t₂) 
+quote₁-aux : ∀ {t₁} {t₂} → t₁ NPi+.⟷₁ t₂ → (quote₀-aux t₁) Pi.⟷₁ (quote₀-aux t₂)
 quote₁-aux unite₊l = unite₊l
 quote₁-aux uniti₊l = uniti₊l
 quote₁-aux swap₊ = swap₊
@@ -237,7 +236,7 @@ eval-quote₀-aux (t + t₁) = eval-quote₀-aux t ⊕ eval-quote₀-aux t₁
 eval-quote₁-aux : ∀ {t₁} {t₂} → (c : t₁ NPi+.⟷₁ t₂) → eval₁-aux (quote₁-aux c) NPi+.⟷₂ eval-quote₀-aux _ ◎ c ◎ NPi+.!⟷₁ (eval-quote₀-aux _)
 eval-quote₁-aux unite₊l = TODO!
 eval-quote₁-aux uniti₊l = TODO!
-eval-quote₁-aux {t₃ + t₄} {t₄ + t₃} swap₊ =  
+eval-quote₁-aux {t₃ + t₄} {t₄ + t₃} swap₊ =
   trans⟷₂ (
     trans⟷₂ (
       trans⟷₂ (
@@ -258,7 +257,7 @@ eval-quote₁-aux (c ⊕ c₁) = TODO!
 --   quote₀-aux-* O t₂ = factorzl
 --   quote₀-aux-* I t₂ = quote-eval₀-aux t₂ ◎ uniti⋆l
 --   quote₀-aux-* (t₁ + t₃) t₂ = (quote₀-aux-* t₁ t₂ ⊕ quote₀-aux-* t₃ t₂) ◎ factor
---   quote₀-aux-* (t₁ × t₃) t₂ = 
+--   quote₀-aux-* (t₁ × t₃) t₂ =
 --     let r = quote₀-aux-* t₁ (t₃ × t₂)
 --     in  TODO! ◎ r ◎  assocl⋆
 
@@ -276,7 +275,7 @@ quote-eval₀-aux (t + t₁) = quote-eval₀-aux t ⊕ quote-eval₀-aux t₁
 quote-eval₀-aux (O × t₁) = factorzl
 quote-eval₀-aux (I × t₁) = quote-eval₀-aux t₁ ◎ uniti⋆l
 quote-eval₀-aux ((t + t₂) × t₁) = (quote-eval₀-aux (t × t₁) ⊕ quote-eval₀-aux (t₂ × t₁)) ◎ factor
-quote-eval₀-aux ((t × t₂) × t₁) = 
+quote-eval₀-aux ((t × t₂) × t₁) =
   let r = quote-eval₀-aux (t × (t₂ × t₁))
   in  quote₁-aux (*-assoc (eval₀-aux t) (eval₀-aux t₂) (eval₀-aux t₁)) ◎ r ◎ assocl⋆
 
