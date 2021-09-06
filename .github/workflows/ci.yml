@@ -51,13 +51,13 @@ jobs:
       - name: Build Pi+ paper
         uses: xu-cheng/latex-action@v2
         with:
-          working_directory: Pi+/paper
+          working_directory: Pi/paper
           root_file: main.tex
       - name: Upload Pi+ paper
         uses: actions/upload-artifact@v2
         with:
           name: pdf
-          path: Pi+/paper/main.pdf
+          path: Pi/paper/main.pdf
   release:
     name: release
     runs-on: ubuntu-latest
@@ -67,7 +67,7 @@ jobs:
       - name: Build Pi+ paper
         uses: xu-cheng/latex-action@v2
         with:
-          working_directory: Pi+/paper
+          working_directory: Pi/paper
           root_file: main.tex
       - name: Release Pi+ paper
         id: create_release
@@ -85,6 +85,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Pi+/paper/main.pdf
+          asset_path: Pi/paper/main.pdf
           asset_name: main.pdf
           asset_content_type: pdf
