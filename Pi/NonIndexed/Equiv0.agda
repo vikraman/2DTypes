@@ -2,7 +2,7 @@
 
 module Pi.NonIndexed.Equiv0 where
 
-open import Pi.NonIndexed.Syntax as Pi
+open import Pi.Syntax.Pi+.NonIndexed as Pi
 open import Pi.UFin
 open import Pi.NonIndexed.Level0
 open import Pi.Extra

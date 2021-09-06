@@ -4,7 +4,7 @@ open import lib.Base
 open import lib.NType
 open import Pi.Extra
 
-module Pi.NonIndexed.Syntax where
+module Pi.Syntax.Pi+.NonIndexed where
 
 -- Types
 

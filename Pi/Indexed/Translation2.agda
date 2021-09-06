@@ -11,10 +11,10 @@ open import Pi.Extra
 
 module Pi.Indexed.Translation2 where
 
-open import Pi.NonIndexed.Syntax as NPi+
-open import Pi.Syntax.Syntax as Pi+
-open import Pi.Syntax.SyntaxHat as Pi^
-open import Pi.Syntax.SyntaxFull as Pi
+open import Pi.Syntax.Pi+.NonIndexed as NPi+
+open import Pi.Syntax.Pi+.Indexed as Pi+
+open import Pi.Syntax.Pi^ as Pi^
+open import Pi.Syntax.Pi as Pi
 open import Pi.Indexed.Equiv1Hat
 
 private

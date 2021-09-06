@@ -11,7 +11,7 @@ open import lib.types.Fin
 open import lib.types.List
 open import lib.NType
 
-open import Pi.NonIndexed.Syntax
+open import Pi.Syntax.Pi+.NonIndexed
 open import Pi.Misc
 open import Pi.Extra
 

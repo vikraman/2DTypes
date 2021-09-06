@@ -10,12 +10,12 @@ open import Pi.UFin.BAut
 open import Pi.Misc
 open import Pi.Extra
 
-open import Pi.Syntax.Syntax as Pi+
+open import Pi.Syntax.Pi+.Indexed as Pi+
   renaming (_⟷₁_ to _⟷₁₊_; _⟷₂_ to _⟷₂₊_; !⟷₁ to !⟷₁₊; U to U+;
   idr◎l to idr◎l+; swapl₊⟷₂ to swapl₊⟷₂+; unite₊r to unite₊r+)
-open import Pi.Syntax.SyntaxHat as Pi^
-open import Pi.Syntax.SyntaxHatHelpers as Pi^
-open import Pi.Syntax.SyntaxFull as Pi hiding (_⟷₂_)
+open import Pi.Syntax.Pi^ as Pi^
+open import Pi.Syntax.Pi^Helpers as Pi^
+open import Pi.Syntax.Pi as Pi hiding (_⟷₂_)
 open import Pi.Indexed.Translation2
 import Pi.Indexed.Equiv1 as Pi+
 import Pi.Indexed.Equiv0Hat as Pi^

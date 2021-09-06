@@ -9,7 +9,7 @@ open import lib.types.Fin
 open import lib.types.Sigma
 open import lib.PathGroupoid
 
-open import Pi.NonIndexed.Syntax as Pi
+open import Pi.Syntax.Pi+.NonIndexed as Pi
 
 
 -- swap i-th and j-th position

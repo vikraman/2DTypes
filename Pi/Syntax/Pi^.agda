@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K  --rewriting #-}
 
-module Pi.Syntax.SyntaxHat where
+module Pi.Syntax.Pi^ where
 
 open import lib.Base
 open import lib.NType

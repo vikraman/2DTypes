@@ -11,9 +11,9 @@ open import lib.types.Fin
 open import lib.types.List
 open import lib.NType
 
-open import Pi.Syntax.Syntax as Pi
-open import Pi.Syntax.SyntaxHat as Pi^
-open import Pi.Syntax.SyntaxHatHelpers as Pi^
+open import Pi.Syntax.Pi+.Indexed as Pi
+open import Pi.Syntax.Pi^ as Pi^
+open import Pi.Syntax.Pi^Helpers as Pi^
 open import Pi.Indexed.Equiv0Norm
 open import Pi.Indexed.Equiv0Hat
 open import Pi.Indexed.Equiv1Hat

@@ -6,7 +6,7 @@ import lib.types.Nat as N
 open import Pi.Misc as N
 open import Pi.Extra
 
-module Pi.Syntax.SyntaxFull where
+module Pi.Syntax.Pi where
 
 private
   variable
