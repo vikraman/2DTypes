@@ -1,10 +1,10 @@
 {-# OPTIONS --without-K  --rewriting #-}
 
-module Pi.Indexed.SyntaxHatHelpers where
+module Pi.Syntax.SyntaxHatHelpers where
 
 open import HoTT hiding (_++_) renaming (_+_ to _++_)
 
-open import Pi.Indexed.SyntaxHat as Pi^
+open import Pi.Syntax.SyntaxHat as Pi^
 open import Pi.Extra
 
 private

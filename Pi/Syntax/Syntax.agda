@@ -9,7 +9,7 @@ import lib.types.Nat as N
 open import Pi.Misc
 open import Pi.Extra
 
-module Pi.Indexed.Syntax where
+module Pi.Syntax.Syntax where
 
 private
   variable

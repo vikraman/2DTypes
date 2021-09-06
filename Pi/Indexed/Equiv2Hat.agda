@@ -2,9 +2,9 @@
 
 module Pi.Indexed.Equiv2Hat where
 
-open import Pi.Indexed.Syntax as Pi
-open import Pi.Indexed.SyntaxHat as Pi^
-open import Pi.Indexed.SyntaxHatHelpers as Pi^
+open import Pi.Syntax.Syntax as Pi
+open import Pi.Syntax.SyntaxHat as Pi^
+open import Pi.Syntax.SyntaxHatHelpers as Pi^
 open import Pi.Indexed.Equiv1NormHelpers
 open import Pi.Indexed.Equiv2HatHelpers
 open import Pi.UFin

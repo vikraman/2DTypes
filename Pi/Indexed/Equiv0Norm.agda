@@ -2,8 +2,8 @@
 
 module Pi.Indexed.Equiv0Norm where
 
-open import Pi.Indexed.Syntax as Pi
-open import Pi.Indexed.SyntaxHat as Pi^
+open import Pi.Syntax.Syntax as Pi
+open import Pi.Syntax.SyntaxHat as Pi^
 open import Pi.UFin
 open import Pi.Extra
 

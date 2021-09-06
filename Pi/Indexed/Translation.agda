@@ -11,9 +11,9 @@ open import Pi.Extra
 
 module Pi.Indexed.Translation where
 
-open import Pi.Indexed.SyntaxHat as Pi^
-open import Pi.Indexed.SyntaxHatHelpers as Pi^
-open import Pi.Indexed.SyntaxFull as Pi
+open import Pi.Syntax.SyntaxHat as Pi^
+open import Pi.Syntax.SyntaxHatHelpers as Pi^
+open import Pi.Syntax.SyntaxFull as Pi
 
 private
   variable
