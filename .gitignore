@@ -226,3 +226,5 @@ MAlonzo
 # upi.lagda
 upi.tex
 upi.pdf
+
+*.tar.gz

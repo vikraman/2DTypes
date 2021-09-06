@@ -41,50 +41,50 @@ jobs:
       - name: Install Agda
         run: stack --resolver lts-17.2 --system-ghc install Agda-2.6.1.3
 
-      - name: Check Pi+
-        run: make -j3 Pi+
+      - name: Check Pi
+        run: make -j3 Pi
   latex:
     name: latex
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build Pi+ paper
+      - name: Build Pi paper
         uses: xu-cheng/latex-action@v2
         with:
-          working_directory: Pi+/paper
+          working_directory: Pi/paper
           root_file: main.tex
-      - name: Upload Pi+ paper
+      - name: Upload Pi paper
         uses: actions/upload-artifact@v2
         with:
           name: pdf
-          path: Pi+/paper/main.pdf
+          path: Pi/paper/main.pdf
   release:
     name: release
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-      - name: Build Pi+ paper
+      - name: Build Pi paper
         uses: xu-cheng/latex-action@v2
         with:
-          working_directory: Pi+/paper
+          working_directory: Pi/paper
           root_file: main.tex
-      - name: Release Pi+ paper
+      - name: Release Pi paper
         id: create_release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: Pi+
-          release_name: Pi+
+          tag_name: Pi
+          release_name: Pi
           draft: true
           prerelease: true
-      - name: Release Pi+ paper
+      - name: Release Pi paper
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: Pi+/paper/main.pdf
+          asset_path: Pi/paper/main.pdf
           asset_name: main.pdf
           asset_content_type: pdf
