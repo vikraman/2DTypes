@@ -9,7 +9,7 @@ is the main entrypoint to the project.
   - `Coxeter`: Definition and properties of Coxete relation and the rewriting system based on it.
   - `Equiv`: The main proof of equivalence between Pi and UFin.
   - `Examples`: Examples of reversible boolean circuits showing applications of the semantics.
-  - `Experiments`: Various experiments and earlier results.
+  - `Experiments`: Various experiments, alternative approaches and earlier results.
   - `FSMG`: Free symmetric monoidal groupoids.
   - `Lehmer`: Lehmer codes.
   - `Syntax`: Syntax of Pi and its variants.
@@ -42,3 +42,5 @@ in the main directory.
     decidable equality and case matches to define large functions and reductions and then proving things about them is
     tedious. Some parts of the formalisation have been left as TODOs but we provide references for them, or show how to
     prove them on paper.
+  - `FSMG` is incomplete and left as future work. `Experiments` contains alternative definitions using HITs and some
+    earlier attempts at proving the main equivalence.
