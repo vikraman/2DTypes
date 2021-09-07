@@ -4,6 +4,7 @@ This directory contains a collection of examples showing how to perform normalis
 Boolean reversible circuits, along with various tests.
 
 ## Code structure
+
      - `Adder.agda`: Reversible 3-bit/4-bit adder.
      - `Base.agda`: Helpers and tests.
      - `Copy.agda`: Reversible copy.

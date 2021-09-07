@@ -3,6 +3,7 @@
 This directory contains some general definitions and lemmas used thourought the proof.
 
 ## Code structure
+
   - `Arithmetic.agda` 
     - defines the ≤ order on ℕ (replicates the definition from Agda stdlib instead of using the one from HoTT stdlib for historic reasons)
     - defines the minus operation ∸

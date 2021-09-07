@@ -6,6 +6,7 @@ Part of the code proving that Lehmer is equivalent to Aut(Fin n) modified from h
 License in included in the `LICENSE_cubical` file.
 
 ## Code structure
+
     - `FinExcept.agda`: The definition of Fin^{-1}, as given in the paper
     - `Lehmer.agda`: a definiton of Lehmer codes
     - `Lehmer2.agda`: alternative definiton of Lehmer codes
