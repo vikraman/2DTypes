@@ -21,7 +21,8 @@ The formalisation has been checked using [Agda 2.6.1.3](https://hackage.haskell.
 (Andrew Swan's fork)](https://github.com/awswan/HoTT-Agda/tree/agda-2.6.1-compatible).
 
 To typecheck, run
-```make
+```bash
+make
 ```
 in the main directory.
 
