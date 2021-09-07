@@ -7,7 +7,7 @@ import lib.types.Nat as N
 import lib.types.Sigma as S
 
 open import Pi.UFin.BAut
-open import Pi.UFin as UFin
+open import Pi.UFin.UFin as UFin
 open import Pi.Misc
 open import Pi.Extra
 
