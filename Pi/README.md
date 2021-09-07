@@ -1,12 +1,12 @@
 # README
 
-This directory contains code attempting to prove the soundness and completeness of Π wrt to UFin, thus proving that the "+" fragment of Pi presents a univalent subuniverse.
+This directory contains code proving the soundness and completeness of Π wrt to UFin. In particular, this proves that the "+" fragment of Pi presents a univalent subuniverse.
 
 ## Code structure
 
 The interesting content in the proof is the following chain of equivalences:
 ```agda
-Pi combinators ≃ Lists of transpositions ≃ Lists of adjacent transpositions (Coxeter presentation of Sn) ≃ Lehmer n ≃ (Fin n ≃ Fin n)
+Pi combinators ≃ Coxeter presentation of Sn ≃ Lehmer n ≃ (Fin n ≃ Fin n) ≃ UFin n
 ```
 
 The first two equivalences are unknown at the moment.

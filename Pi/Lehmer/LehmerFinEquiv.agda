@@ -6,7 +6,7 @@ open import HoTT hiding (_≤_; _<_; ≤-has-all-paths ; ltS ; ltSR)
 import lib.types.Nat as N
 
 open import Pi.Common.Extra
-open import Pi.Lehmer.FinHelpers
+open import Pi.Lehmer.FinExcept
 open import Pi.Lehmer.Lehmer
 open import Pi.Common.InequalityEquiv
 open import Pi.Common.Arithmetic

@@ -24,7 +24,7 @@ import Pi.Equiv.Equiv1Norm as Pi^
 open import Pi.UFin.UFin
 open import Pi.UFin.Monoidal
 open import Pi.Common.FinHelpers
-open import Pi.Lehmer.FinHelpers
+open import Pi.Lehmer.FinExcept
 
 variable
   m n o p q r : ℕ
@@ -59,22 +59,6 @@ Fin-≃ {S n} {S m} p = Fin-equiv-Coprod ⁻¹ ∘e  ⊔-≃ (Fin-≃ (N.ℕ-S-i
 
 Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi.Common.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
 Fin-eval₀ {t₁} {t₂} = Fin-≃ (! (eval₀-* {t₁} {t₂}))
-
--- Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi.Common.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
--- Fin-eval₀ {O} {t₂} = ide _
--- Fin-eval₀ {I} {t₂} =
---   Coprod-unit-l (Fin (eval₀ t₂)) ∘e
---   ⊔-comm (Fin (eval₀ t₂)) ⊥ ∘e
---   ⊔-≃ (ide _) Fin-equiv-Empty ∘e
---   Fin-⊔ {eval₀ t₂} {O} ⁻¹
--- Fin-eval₀ {t₁ + t₃} {t₂} =
---   let e₁ = Fin-eval₀ {t₁} {t₂}
---       e₂ = Fin-eval₀ {t₃} {t₂}
---   in {!  !}
--- Fin-eval₀ {t₁ × t₃} {t₂} =
---   let e₁ = Fin-eval₀ {t₁} {t₂}
---       e₂ = Fin-eval₀ {t₃} {t₂}
---   in {!  !}
 
 
 ⟦-⟧-eval₀ : {X : Pi.U} → ⟦ X ⟧ ≃ Fin (eval₀ X)

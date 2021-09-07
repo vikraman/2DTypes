@@ -25,7 +25,7 @@ import Pi.Equiv.Equiv1Norm as Pi^
 open import Pi.UFin.UFin
 open import Pi.UFin.Monoidal
 open import Pi.Common.FinHelpers
-open import Pi.Lehmer.FinHelpers
+open import Pi.Lehmer.FinExcept
 
 open import Pi.Examples.Base
 open import Pi.Examples.Toffoli hiding (cif)

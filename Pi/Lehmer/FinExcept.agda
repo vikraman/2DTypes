@@ -1,6 +1,6 @@
 {-# OPTIONS --rewriting --without-K --exact-split --overlapping-instances #-}
 
-module Pi.Lehmer.FinHelpers where
+module Pi.Lehmer.FinExcept where
 
 open import HoTT hiding (⟨_⟩)
 
