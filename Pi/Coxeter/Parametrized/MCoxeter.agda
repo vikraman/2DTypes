@@ -10,7 +10,7 @@ open import lib.types.List
 open import lib.types.Fin
 open import lib.Equivalence
 
-open import Pi.Misc
+open import Pi.Common.Misc
 open import Pi.Common.ListFinLListEquiv
 open import Pi.Coxeter.Parametrized.ReductionRel
 open import Pi.Coxeter.NonParametrized.Diamond

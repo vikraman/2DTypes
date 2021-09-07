@@ -18,8 +18,8 @@ open import Pi.Equiv.Equiv0Norm
 open import Pi.Equiv.Equiv0Hat
 open import Pi.Equiv.Equiv1Hat
 
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 open import Pi.UFin.Base
 open import Pi.Common.FinHelpers
 open import Pi.Coxeter.Coxeter

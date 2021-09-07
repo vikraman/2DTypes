@@ -3,8 +3,8 @@
 open import lib.Base
 import lib.types.Nat as N
 
-open import Pi.Misc as N
-open import Pi.Extra
+open import Pi.Common.Misc as N
+open import Pi.Common.Extra
 
 module Pi.Syntax.Pi where
 

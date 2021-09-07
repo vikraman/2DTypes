@@ -2,8 +2,8 @@
 
 open import HoTT
 
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 module Pi.Coxeter.GeneratedGroupIsoGeneralised
   {i j} (A : Type i) {{_ : is-set A}}

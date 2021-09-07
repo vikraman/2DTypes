@@ -5,7 +5,7 @@ module Pi.Syntax.Pi^Helpers where
 open import HoTT hiding (_++_) renaming (_+_ to _++_)
 
 open import Pi.Syntax.Pi^ as Pi^
-open import Pi.Extra
+open import Pi.Common.Extra
 
 private
   variable

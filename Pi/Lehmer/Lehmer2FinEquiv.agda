@@ -5,13 +5,13 @@ module Pi.Lehmer.Lehmer2FinEquiv where
 open import HoTT hiding (_≤_; _<_; ≤-has-all-paths ; ltS ; ltSR)
 import lib.types.Nat as N
 
-open import Pi.Misc
+open import Pi.Common.Misc
 open import Pi.Lehmer.FinHelpers
 open import Pi.Lehmer.Lehmer2
 open import Pi.Coxeter.InvTransform
 
 open import Pi.UFin.BAut
-open import Pi.Extra
+open import Pi.Common.Extra
 
 open import Pi.Lehmer.FinHelpers
 

@@ -5,8 +5,8 @@ open import HoTT
 open import Pi.Coxeter.Sn hiding (Sn)
 open import Pi.Coxeter.Coxeter
 open import Pi.Coxeter.Group
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 module Pi.Coxeter.GeneratedGroup (n : ℕ) where
 

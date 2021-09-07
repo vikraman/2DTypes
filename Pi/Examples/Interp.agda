@@ -5,8 +5,8 @@ import lib.types.Nat as N
 import lib.types.Sigma as S
 
 open import Pi.UFin.BAut
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 open import Pi.Syntax.Pi+.Indexed as Pi+
 open import Pi.Syntax.Pi^ as Pi^

@@ -6,8 +6,8 @@ open import lib.PathFunctor
 open import lib.PathGroupoid
 import lib.types.Nat as N
 
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 module Pi.Syntax.Pi+.Indexed where
 

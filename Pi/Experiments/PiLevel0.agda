@@ -8,8 +8,8 @@ import lib.types.Nat as N
 open import lib.types.Sigma renaming (_×_ to _X_)
 open import lib.types.Fin
 
-open import Pi.Misc as N
-open import Pi.Extra
+open import Pi.Common.Misc as N
+open import Pi.Common.Extra
 
 private
   variable

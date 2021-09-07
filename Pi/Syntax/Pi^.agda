@@ -13,8 +13,8 @@ open import lib.PathGroupoid
 open import lib.Equivalence
 import lib.types.Nat as N
 
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 private
     variable

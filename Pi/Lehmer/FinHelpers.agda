@@ -5,7 +5,7 @@ module Pi.Lehmer.FinHelpers where
 open import HoTT hiding (⟨_⟩)
 
 open import Pi.Common.FinHelpers public
-open import Pi.Misc
+open import Pi.Common.Misc
 
 private
   variable

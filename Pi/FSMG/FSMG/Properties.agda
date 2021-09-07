@@ -10,7 +10,7 @@ open import lib.PathGroupoid
 open import lib.NType
 open import lib.types.Truncation
 
-open import Pi.Extra
+open import Pi.Common.Extra
 open import Pi.FSMG.FSMG as F
 open import Pi.FSMG.SMG
 

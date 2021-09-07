@@ -8,7 +8,7 @@ open import Pi.Syntax.Pi^Helpers as Pi^
 open import Pi.Equiv.Equiv1NormHelpers
 open import Pi.Equiv.Equiv2HatHelpers
 open import Pi.UFin.UFin
-open import Pi.Extra
+open import Pi.Common.Extra
 open import Pi.UFin.BAut
 
 open import Pi.Equiv.Equiv0Hat

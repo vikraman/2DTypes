@@ -6,7 +6,7 @@ open import HoTT
 
 open import Pi.Lehmer.Lehmer2
 open import Pi.Lehmer.Lehmer2FinEquiv
-open import Pi.Extra
+open import Pi.Common.Extra
 open import Pi.UFin.UFin
 
 module _ {n : ℕ} where

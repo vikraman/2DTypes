@@ -13,8 +13,8 @@ open import lib.types.SetQuotient public
 open import lib.types.List
 open import lib.types.Fin
 
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 open import Pi.Common.LList
 open import Pi.Common.InequalityEquiv
 open import Pi.Common.ListFinLListEquiv

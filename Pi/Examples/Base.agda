@@ -8,8 +8,8 @@ import lib.types.Sigma as S
 
 open import Pi.UFin.BAut
 open import Pi.UFin.UFin as UFin
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 open import Pi.Syntax.Pi+.Indexed as Pi+
 open import Pi.Syntax.Pi^ as Pi^
@@ -57,10 +57,10 @@ Fin-≃ : ∀ {m n} → (n == m) → (Fin n ≃ Fin m)
 Fin-≃ {O} {O} p = ide _
 Fin-≃ {S n} {S m} p = Fin-equiv-Coprod ⁻¹ ∘e  ⊔-≃ (Fin-≃ (N.ℕ-S-is-inj _ _ p)) (ide ⊤) ∘e Fin-equiv-Coprod
 
-Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
+Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi.Common.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
 Fin-eval₀ {t₁} {t₂} = Fin-≃ (! (eval₀-* {t₁} {t₂}))
 
--- Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
+-- Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi.Common.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
 -- Fin-eval₀ {O} {t₂} = ide _
 -- Fin-eval₀ {I} {t₂} =
 --   Coprod-unit-l (Fin (eval₀ t₂)) ∘e

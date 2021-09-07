@@ -16,8 +16,8 @@ open import Pi.Lehmer.Lehmer renaming (Lehmer to Lehmer1)
 open import Pi.Coxeter.Sn
 open import Pi.Coxeter.Coxeter
 import Pi.Coxeter.LehmerCoxeterEquiv as L1
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 open import Pi.UFin.UFin
 
 immersion : {n : ℕ} -> Lehmer n -> List (Fin n)

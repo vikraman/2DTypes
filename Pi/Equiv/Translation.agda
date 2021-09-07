@@ -6,8 +6,8 @@ open import lib.PathFunctor
 open import lib.PathGroupoid
 open import lib.types.Nat as N renaming (_+_ to _++_)
 
-open import Pi.Misc as N renaming (_*_ to _**_)
-open import Pi.Extra
+open import Pi.Common.Misc as N renaming (_*_ to _**_)
+open import Pi.Common.Extra
 
 module Pi.Equiv.Translation where
 

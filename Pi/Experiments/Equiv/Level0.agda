@@ -12,8 +12,8 @@ open import lib.types.List
 open import lib.NType
 
 open import Pi.Syntax.Pi+.NonIndexed
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 open import Pi.Common.FinHelpers
 open import Pi.Coxeter.Coxeter

@@ -5,7 +5,7 @@ module Pi.Experiments.Equiv.Equiv1 where
 open import Pi.Syntax.Pi+.NonIndexed as Pi
 open import Pi.UFin.UFin
 
-open import Pi.Extra
+open import Pi.Common.Extra
 
 open import Pi.Lehmer.Lehmer
 

@@ -2,7 +2,7 @@
 
 open import lib.Base
 open import lib.NType
-open import Pi.Extra
+open import Pi.Common.Extra
 
 module Pi.Syntax.Pi+.NonIndexed where
 

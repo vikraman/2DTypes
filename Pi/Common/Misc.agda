@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
 
-module Pi.Misc where
+module Pi.Common.Misc where
 
 open import HoTT hiding (_*_)
 

@@ -7,8 +7,8 @@ import lib.types.Nat as N
 import lib.types.Sigma as S
 
 open import Pi.UFin.BAut
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 open import Pi.Syntax.Pi+.Indexed as Pi+
   renaming (_⟷₁_ to _⟷₁₊_; _⟷₂_ to _⟷₂₊_; !⟷₁ to !⟷₁₊; U to U+;

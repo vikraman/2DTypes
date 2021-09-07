@@ -14,8 +14,8 @@ open import Pi.Lehmer.Lehmer as L1
 open import Pi.Common.Arithmetic
 open import Pi.Common.InequalityEquiv
 
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 variable
     n : ℕ

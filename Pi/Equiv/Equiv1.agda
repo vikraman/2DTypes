@@ -8,8 +8,8 @@ open import Pi.Syntax.Pi^ as Pi^
 open import Pi.Common.FinHelpers
 
 open import Pi.UFin.UFin
-open import Pi.Extra
-open import Pi.Misc using (transport2)
+open import Pi.Common.Extra
+open import Pi.Common.Misc using (transport2)
 
 open import Pi.Equiv.Equiv0Norm
 open import Pi.Equiv.Equiv0Hat

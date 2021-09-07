@@ -12,8 +12,8 @@ open import Pi.Lehmer.Lehmer renaming (Lehmer to Lehmer1)
 open import Pi.Lehmer.LehmerFinEquiv
   using (LehmerInd)
   renaming (Lehmer-O-level to Lehmer1-O-level)
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 Lehmer2 = Lehmer
 

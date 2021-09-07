@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K #-}
 
-module Pi.Extra where
+module Pi.Common.Extra where
 
 postulate
   TODO! : ∀ {i} {A : Set i} → A

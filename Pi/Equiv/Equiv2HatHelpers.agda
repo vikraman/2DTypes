@@ -13,7 +13,7 @@ open import Pi.Equiv.Equiv1Hat
 
 open import HoTT hiding (_++_)
 
-open import Pi.Extra
+open import Pi.Common.Extra
 
 private
     variable
