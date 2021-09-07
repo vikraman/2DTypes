@@ -18,7 +18,7 @@ open import Pi.Coxeter.Coxeter
 import Pi.Coxeter.LehmerCoxeterEquiv as L1
 open import Pi.Extra
 open import Pi.Misc
-open import Pi.UFin
+open import Pi.UFin.UFin
 
 immersion : {n : ℕ} -> Lehmer n -> List (Fin n)
 immersion {n} c = L1.immersion (<– Lehmer1-Lehmer2-equiv c)

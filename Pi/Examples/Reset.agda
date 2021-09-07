@@ -18,7 +18,7 @@ import Pi.Equiv.Equiv0Hat as Pi^
 import Pi.Equiv.Equiv1Hat as Pi^
 import Pi.Equiv.Equiv0Norm as Pi^
 import Pi.Equiv.Equiv1Norm as Pi^
-open import Pi.UFin
+open import Pi.UFin.UFin
 open import Pi.UFin.Monoidal
 open import Pi.Common.FinHelpers
 open import Pi.Lehmer.FinHelpers

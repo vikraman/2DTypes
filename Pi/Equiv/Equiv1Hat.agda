@@ -5,7 +5,7 @@ module Pi.Equiv.Equiv1Hat where
 open import Pi.Syntax.Pi+.Indexed as Pi
 open import Pi.Syntax.Pi^ as Pi^
 open import Pi.Syntax.Pi^Helpers as Pi^
-open import Pi.UFin
+open import Pi.UFin.UFin
 open import Pi.Extra
 
 open import Pi.Equiv.Equiv0Hat

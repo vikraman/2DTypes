@@ -5,7 +5,7 @@ module Pi.Equiv.Equiv1Norm where
 open import Pi.Syntax.Pi+.Indexed as Pi
 open import Pi.Syntax.Pi^ as Pi^
 
-open import Pi.UFin
+open import Pi.UFin.UFin
 open import Pi.Extra
 
 open import Pi.Lehmer.Lehmer2 using (Lehmer)
@@ -13,7 +13,7 @@ open import Pi.Lehmer.Lehmer2FinEquiv
 open import Pi.Coxeter.Lehmer2CoxeterEquiv
 open import Pi.Coxeter.Sn
 open import Pi.Coxeter.Coxeter
-open import Pi.UFinLehmer2Equiv
+open import Pi.UFin.UFinLehmer2Equiv
 
 open import Pi.Equiv.Equiv0Norm
 open import Pi.Equiv.Equiv1NormHelpers

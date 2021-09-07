@@ -7,7 +7,7 @@ open import Pi.Syntax.Pi^ as Pi^
 
 open import Pi.Common.FinHelpers
 
-open import Pi.UFin
+open import Pi.UFin.UFin
 open import Pi.Extra
 open import Pi.Misc using (transport2)
 
