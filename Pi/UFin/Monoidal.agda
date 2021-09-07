@@ -6,8 +6,8 @@ open import HoTT
 open import homotopy.FinSet public
 
 open import Pi.UFin.Base
-open import Pi.Misc as N
-open import Pi.Extra
+open import Pi.Common.Misc as N
+open import Pi.Common.Extra
 
 ⊔-comm : (A B : Type₀) -> (A ⊔ B) ≃ (B ⊔ A)
 ⊔-comm A B = equiv f g f-g g-f

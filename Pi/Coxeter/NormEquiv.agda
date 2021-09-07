@@ -14,8 +14,8 @@ open import Pi.Lehmer.Lehmer as L1
 open import Pi.Common.Arithmetic
 open import Pi.Common.InequalityEquiv
 
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 variable
     n : ℕ
@@ -42,9 +42,11 @@ immersion' {S n} (CanS c {k} ϕ) =
 
 -- immersion {S n} (CanS l {r} r≤1+n) = (immersion l) ++ (((S n) ∸ r) ↓ r)
 
+{-
 norm-immersion : {n : ℕ} (c : L1.Lehmer n) → norm (immersionFull c) == immersionFull c
 norm-immersion {O} CanZ = idp
 norm-immersion {S n} c = TODO-
+-}
 
-Lemer≃im-norm : {n : ℕ} → L1.Lehmer n ≃ im -1 (norm {n})
-Lemer≃im-norm = Sn≃im-norm ∘e Lehmer≃Coxeter
+Lehmer≃im-norm : {n : ℕ} → L1.Lehmer n ≃ im -1 (norm {n})
+Lehmer≃im-norm = Sn≃im-norm ∘e Lehmer≃Coxeter

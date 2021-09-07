@@ -6,7 +6,7 @@ open import lib.Base
 open import lib.types.Nat using (_+_)
 open import lib.PathGroupoid
 
-open import Pi.Misc
+open import Pi.Common.Misc
 open import Pi.Common.Arithmetic
 open import Pi.Common.ListN
 

@@ -2,8 +2,8 @@
 
 open import HoTT
 
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 -- If we have a group structure S on (List A, R)
 -- then we can lift it uniquely to (List (PlusMinus A), R')

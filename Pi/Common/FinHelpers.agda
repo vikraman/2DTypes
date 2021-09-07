@@ -3,7 +3,7 @@
 module Pi.Common.FinHelpers where
 
 open import HoTT hiding (⟨_⟩)
-open import Pi.Misc
+open import Pi.Common.Misc
 
 ⟨_⟩ : ∀ {n} → Fin n → Fin (S n)
 ⟨_⟩ = Fin-S

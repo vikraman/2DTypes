@@ -11,8 +11,8 @@ open import lib.PathGroupoid
 open import Pi.Common.Arithmetic
 open import Pi.Common.ListN
 open import Pi.Common.LList
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 open import Pi.Lehmer.Lehmer public
 

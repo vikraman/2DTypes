@@ -1,7 +1,8 @@
 AGDA_SRCS = $(shell find . -type f -name '*.agda')
 AGDA_BINS = $(subst .agda,.agdai,$(AGDA_SRCS))
 
-all: $(AGDA_BINS)
+all: Everything.agdai
+reallyall: $(AGDA_BINS)
 
 %.agdai: %.agda
 	agda $<

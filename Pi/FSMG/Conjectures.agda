@@ -2,9 +2,9 @@
 
 module Pi.FSMG.Conjectures where
 
-open import Pi.NonIndexed.Syntax as Pi
+open import Pi.Syntax.Pi+.NonIndexed as Pi
 open import Pi.FSMG.FSMG as FSMG
-open import Pi.Extra
+open import Pi.Common.Extra
 
 open import lib.Basics
 

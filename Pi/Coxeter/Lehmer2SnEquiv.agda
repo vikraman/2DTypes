@@ -15,7 +15,7 @@ open import Pi.Lehmer.Lehmer2
 open import Pi.Coxeter.Lehmer2CoxeterEquiv
 open import Pi.Coxeter.Sn
 open import Pi.Coxeter.Coxeter
-open import Pi.Misc
+open import Pi.Common.Misc
 
 Lehmer≃Coxeter : {n : ℕ} -> Lehmer n ≃ Sn n
 Lehmer≃Coxeter = equiv f g f-g g-f

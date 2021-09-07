@@ -9,7 +9,7 @@ open import lib.types.Sigma
 open import lib.PathGroupoid
 open import lib.NType
 
-open import Pi.Misc
+open import Pi.Common.Misc
 open import Pi.Common.Arithmetic
 open import Pi.Common.ListN
 open import Pi.Common.LList

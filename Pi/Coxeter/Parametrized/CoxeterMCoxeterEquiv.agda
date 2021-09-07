@@ -10,8 +10,8 @@ open import lib.types.Fin
 open import lib.Equivalence
 open import lib.types.List
 
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 open import Pi.Common.ListFinLListEquiv
 open import Pi.Common.FinHelpers
 open import Pi.Common.LList

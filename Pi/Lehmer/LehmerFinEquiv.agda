@@ -5,16 +5,16 @@ module Pi.Lehmer.LehmerFinEquiv where
 open import HoTT hiding (_≤_; _<_; ≤-has-all-paths ; ltS ; ltSR)
 import lib.types.Nat as N
 
-open import Pi.Extra
-open import Pi.Lehmer.FinHelpers
+open import Pi.Common.Extra
+open import Pi.Lehmer.FinExcept
 open import Pi.Lehmer.Lehmer
 open import Pi.Common.InequalityEquiv
 open import Pi.Common.Arithmetic
 open import Pi.Coxeter.InvTransform
 
 open import Pi.UFin.BAut
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 ≤→< : {k n : ℕ} -> (k ≤ n) -> (k < S n)
 ≤→< z≤n = s≤s z≤n

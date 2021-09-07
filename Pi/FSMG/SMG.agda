@@ -10,7 +10,7 @@ open import lib.PathGroupoid
 open import lib.types.Truncation
 
 open import Pi.FSMG.Paths
-open import Pi.Extra
+open import Pi.Common.Extra
 
 record SMGStructure {i} (El : Type i) {{El-level : has-level 1 El}} : Type i where
   constructor smg-structure

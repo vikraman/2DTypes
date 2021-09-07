@@ -13,8 +13,8 @@ open import lib.types.Nat
 
 open import Pi.Common.FinHelpers
 open import Pi.UFin.BAut
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 inv : {n : ℕ} → Fin n → Fin n
 inv {S n} (O , _) = n , ltS

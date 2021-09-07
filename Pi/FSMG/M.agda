@@ -8,7 +8,7 @@ open import lib.PathOver
 open import lib.PathGroupoid
 
 open import Pi.FSMG.Paths
-open import Pi.Extra
+open import Pi.Common.Extra
 
 module _ {i} where
   postulate

@@ -23,9 +23,9 @@ open import Pi.Coxeter.Parametrized.ReductionRel
 open import Pi.Coxeter.Parametrized.CoxeterMCoxeterEquiv
 open import Pi.Coxeter.Parametrized.MCoxeter
 open import Pi.Coxeter.Coxeter
-open import Pi.Extra
-open import Pi.Misc
-open import Pi.UFin
+open import Pi.Common.Extra
+open import Pi.Common.Misc
+open import Pi.UFin.UFin
 
 immersion : {n : ℕ} -> Lehmer n -> List (Fin n)
 immersion {O} CanZ = nil

@@ -6,8 +6,8 @@ open import HoTT
 
 open import Pi.Coxeter.Coxeter
 open import Pi.Coxeter.Sn
-open import Pi.Misc
-open import Pi.Extra
+open import Pi.Common.Misc
+open import Pi.Common.Extra
 
 module _ (n : ℕ) where
 

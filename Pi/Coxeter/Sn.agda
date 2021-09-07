@@ -15,9 +15,9 @@ open import lib.types.Fin
 open import lib.types.Truncation
 open import lib.types.Sigma
 
-open import Pi.Extra
+open import Pi.Common.Extra
 open import Pi.Coxeter.Coxeter
-open import Pi.Misc
+open import Pi.Common.Misc
 
 Sn : (n : ℕ) → Type lzero
 Sn n = SetQuot (_≈*_ {n})

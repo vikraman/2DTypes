@@ -22,7 +22,7 @@ UFin A = Σ FinSet λ X → X .fst → A
 open import Pi.FSMG.SMG
 open import Pi.UFin.BAut
 
-open import Pi.Extra
+open import Pi.Common.Extra
 
 instance
   BAut-Fin-level : {n : ℕ} → has-level 1 (BAut (Fin n))

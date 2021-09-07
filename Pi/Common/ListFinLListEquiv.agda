@@ -10,7 +10,7 @@ open import lib.types.Fin
 open import lib.Equivalence
 open import lib.types.List
 
-open import Pi.Extra
+open import Pi.Common.Extra
 open import Pi.Common.Arithmetic
 open import Pi.Common.InequalityEquiv
 open import Pi.Common.ListN renaming (_++_ to _++ℕ_)

@@ -6,7 +6,7 @@ open import lib.Base
 open import lib.types.Nat using (_+_ ; ℕ-S-is-inj)
 open import lib.PathGroupoid
 open import lib.NType
-open import Pi.Misc
+open import Pi.Common.Misc
 
 infix 4 _≤_ _<_
 

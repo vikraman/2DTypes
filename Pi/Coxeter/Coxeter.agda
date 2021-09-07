@@ -8,7 +8,7 @@ open import lib.NType
 open import lib.PathGroupoid
 open import lib.types.Fin
 open import lib.types.List
-open import Pi.Extra
+open import Pi.Common.Extra
 
 open import Pi.Common.FinHelpers
 

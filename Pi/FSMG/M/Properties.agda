@@ -7,7 +7,7 @@ open import lib.Equivalence
 open import lib.NType
 open import lib.types.Truncation
 
-open import Pi.Extra
+open import Pi.Common.Extra
 open import Pi.FSMG.M as M
 open import Pi.FSMG.SMG
 

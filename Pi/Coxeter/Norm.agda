@@ -8,8 +8,8 @@ open import Pi.Coxeter.Sn
 open import Pi.Coxeter.Coxeter
 open import Pi.Coxeter.LehmerCoxeterEquiv
 
-open import Pi.Extra
-open import Pi.Misc
+open import Pi.Common.Extra
+open import Pi.Common.Misc
 
 norm : {n : ℕ} → (l : List (Fin n)) → List (Fin n)
 norm {O} nil = nil
