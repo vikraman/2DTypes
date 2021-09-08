@@ -6,6 +6,6 @@ $(SUBDIRS):
 	$(MAKE) -C $@
 
 dist:
-	tar acvf Pi.tar.gz Pi/Common/ Pi/Coxeter/ Pi/Indexed/ Pi/Lehmer/ Pi/NonIndexed/ Pi/UFin/ Pi/Extra.agda Pi/Misc.agda Pi/UFinLehmer2Equiv.agda
+	tar acvf Pi.tar.gz Pi/Common Pi/Coxeter Pi/Equiv Pi/Everything.agda Pi/Examples Pi/Experiments Pi/FSMG Pi/Lehmer Pi/Makefile Pi/README.md Pi/Syntax Pi/UFin
 
 .PHONY: all dist $(SUBDIRS)
