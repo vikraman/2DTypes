@@ -72,7 +72,7 @@ quote^₂ (swapl₊⟷₂^ {c = c}) =
 quote^₂ hexagonl₊l =
     let s₁ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
         s₂ = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
-    in  s₁ ◎ (id⟷₁ ⊕ s₂) ◎ s₁ ⟷₂⟨ TODO! ⟩
+    in  s₁ ◎ (id⟷₁ ⊕ s₂) ◎ s₁          ⟷₂⟨ TODO! ⟩ -- last step in MacLane's CWM proof
         (id⟷₁ ⊕ s₂) ◎ s₁ ◎ (id⟷₁ ⊕ s₂) ⟷₂∎
 quote^₂ hexagonl₊r =
     let r = (quote^₂ hexagonl₊l)
@@ -144,16 +144,16 @@ eval^₂ (uniti₊l⟷₂l {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
 ... | α = (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idr◎r^)
 eval^₂ (uniti₊l⟷₂r {c₁ = c₁}) with (c₊⟷₂id⟷₁ c₁)
 ... | α = !⟷₂^ (idl◎l^ ■^ (++^-⊕-◎-l (eval^₂-O c₁)) ■^ idr◎r^)
-eval^₂ swapl₊⟷₂ = TODO!
-eval^₂ swapr₊⟷₂ = TODO!
+eval^₂ swapl₊⟷₂ = TODO! -- naturality of ++-swap
+eval^₂ swapr₊⟷₂ = TODO! -- naturality of ++-swap
 eval^₂ id⟷₂ = id⟷₂^
 eval^₂ (_■_ α₁ α₂) = _■^_ (eval^₂ α₁) (eval^₂ α₂)
 eval^₂ (α₁ ⊡ α₂) = eval^₂ α₁ ⊡^ eval^₂ α₂
 eval^₂ (resp⊕⟷₂ α₁ α₂) = ++^-⊕-◎ (eval^₂ α₁) (eval^₂ α₂)
 eval^₂ (id⟷₁⊕id⟷₁⟷₂ {n}) = ++^-⊕-id-l {n = _} {m = _} {o = n} (id⟷₁^ {n = _}) ■^ ++^-l-id
 eval^₂ (split⊕-id⟷₁ {n}) = !⟷₂^ (++^-⊕-id-l {n = _} {m = _} {o = n} (id⟷₁^ {n = _}) ■^ ++^-l-id)
-eval^₂ hom⊕◎⟷₂ = TODO!
-eval^₂ hom◎⊕⟷₂ = TODO!
+eval^₂ hom⊕◎⟷₂ = TODO- -- functoriality of ++^-⊕
+eval^₂ hom◎⊕⟷₂ = TODO- -- functoriality of ++^-⊕
 eval^₂ (triangle₊l {n}) =
     _ ⟷₂^⟨ (++^-⊕-id-r (++^-swap n 0)) ⊡^ ++^-⊕-id-r (id⟷₁^ {n}) ⟩
     _ ⟷₂^⟨ idr◎l^  ⟩

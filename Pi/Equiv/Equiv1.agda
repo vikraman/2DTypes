@@ -107,7 +107,7 @@ quote-eval²₀ {S n} t =
   let rec = quote-eval²₀ {n} (quote₀ (pFin _))
   in  _ ⟷₂⟨ id⟷₂ ⊡ resp⊕⟷₂ id⟷₂ rec ⟩
       _ ⟷₂⟨ TODO! ⟩ -- Goal: (((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ unite₊r ⊕ id⟷₁) ⟷₂ id⟷₁
-      _ ⟷₂∎
+      _ ⟷₂∎         -- Proof in Tensor Categories book, page 6, prop 1.2.1
 
 quote-eval₁ : {t₁ : U n} {t₂ : U m} → (c : t₁ ⟷₁ t₂) → (quote₁ (⟷₁-eq-size c) (eval₁ c)) ⟷₂ denorm c
 quote-eval₁ {t₁ = t₁} {t₂ = t₂} c =
