@@ -12,7 +12,7 @@ open import Pi.Syntax.Pi+.Indexed as Pi+
 open import Pi.Syntax.Pi^ as Pi^
 open import Pi.Syntax.Pi^Helpers as Pi^
 open import Pi.Syntax.Pi as Pi
-open import Pi.Equiv.Translation
+open import Pi.Equiv.Translation2
 import Pi.Equiv.Equiv1 as Pi+
 import Pi.Equiv.Equiv0Hat as Pi^
 import Pi.Equiv.Equiv1Hat as Pi^

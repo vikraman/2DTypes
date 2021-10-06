@@ -9,7 +9,7 @@ open import lib.types.Nat as N renaming (_+_ to _++_)
 open import Pi.Common.Misc as N renaming (_*_ to _**_)
 open import Pi.Common.Extra
 
-module Pi.Equiv.Translation where
+module Pi.Experiments.Translation where
 
 open import Pi.Syntax.Pi^ as Pi^
 open import Pi.Syntax.Pi^Helpers as Pi^

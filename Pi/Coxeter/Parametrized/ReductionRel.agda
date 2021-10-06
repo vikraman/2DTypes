@@ -34,11 +34,6 @@ DownArrowH m O (S k) np kp (ltSR ())
 
 DownArrow : {m : ℕ} -> (n : Fin m) -> (k : Fin m) -> (k ≤^ n) -> List (Fin (S m))
 DownArrow {m} (n , np) (k , kp) p = DownArrowH m n k np kp p
--- DownArrow n (O , kp) p = S⟨ n ⟩ :: (⟨ n ⟩ :: nil )
--- DownArrow {S m} (S n , np) (S k , kp) p =
---     let rec = DownArrow {m} (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p)
---     in  S⟨ (S n , np) ⟩ :: map ⟨_⟩ rec
--- DownArrow {S m} (O , np) (S k , kp) (ltSR ())
 
 DownArrow-== : {m : ℕ} -> {n n' k k' : ℕ} -> {p : k < S n} -> {p' : k' < S n'} -> {pn : n < m} -> {pn' : n' < m} -> {pk : k < m} -> {pk' : k' < m}
     -> (n == n') -> (k == k') -> ((n , pn) ↓⟨ p ⟩ (k , pk)) == ((n' , pn') ↓⟨ p' ⟩ (k' , pk'))
@@ -47,13 +42,7 @@ DownArrow-== {m} {n} {n} {k} {k} {p} {p'} {pn} {pn'} {pk} {pk'} idp idp =
     ((n , pn') ↓⟨ p ⟩ (k , pk')) =⟨ ap (λ e -> _ ↓⟨ e ⟩ k , pk') (<-has-all-paths p p') ⟩
     ((n , pn') ↓⟨ p' ⟩ (k , pk')) =∎
 
--- map=⟨⟩ : {m : ℕ} -> (n : Fin m) -> (k : Fin m) -> (p : k ≤^ n) -> (map ⟨_⟩ (n ↓⟨ p ⟩ k)) == (⟨ n ⟩ ↓⟨ p ⟩ ⟨ k ⟩)
--- map=⟨⟩ {S m} n (O , snd₁) p = idp
--- map=⟨⟩ {S m} (O , np) (S k , kp) (ltSR ())
--- map=⟨⟩ {S m} (S n , np) (S k , kp) p =
---     let rec = map=⟨⟩ {m} (n , <-cancel-S np) (k , <-cancel-S kp) (<-cancel-S p)
---     in  List=-out (idp , (ap (map ⟨_⟩) (rec ∙ DownArrow-== idp idp)))
-
+-- This is saying that toLList preserves down arrow
 toLList-↓-w : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n)
     -> (toLList ((n , np) ↓⟨ p ⟩ (k , kp))) == (((n ∸ k) ↓ (S (S k))) , >>-↓ (S m) (n ∸ k) (S (S k))
         (–> <N≃< (<-ap-S (transport (λ e → e < m) (! (plus-minus (≤-down2 (–> <N≃< p)))) np))))
@@ -68,6 +57,7 @@ toLList-↓ : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n) -> 
     -> (toLList ((n , np) ↓⟨ p ⟩ (k , kp))) == (((n ∸ k) ↓ (S (S k))) , pl)
 toLList-↓ m n k np kp p pl = LList-eq (ap fst (toLList-↓-w m n k np kp p))
 
+-- And that fromLList also preserves down arrow
 fromLList-↓ : (m n k : ℕ) -> (np : n < m) -> (kp : k < m) -> (p : k < S n) -> (pl : S m >> ((n ∸ k) ↓ (S (S k))))
     -> ((n , np) ↓⟨ p ⟩ (k , kp)) == fromLList (((n ∸ k) ↓ (S (S k))) , pl)
 fromLList-↓ m n k np kp p pl =
@@ -180,6 +170,7 @@ reduction-implies->> {n} (s , sp) sf (trans≅ (long≅ {m} k l r .s mf defm def
         Sn>>m↓Sk++r = >>-++ (>>-↓ n m (S k) Sn>k+m) Sn>>r
     in  reduction-implies->> (mf , transport (λ e -> n >> e) (! defmf) (>>-++ Sn>>l (>>-++ ((k + m) :⟨ Sn>k+m ⟩: nil) (S (k + m) :⟨ Sn>Sk+m ⟩: Sn>>m↓Sk++r)))) sf p --
 
+-- Transferring reduction from the case of (LList n) to the case of List (Fin n)
 reduction-fromLList : {n : ℕ} -> (s sf : LList (S n)) -> (p : (s .fst) ≅ (sf .fst)) -> (<– List≃LList s ≅[ n ] <– List≃LList sf)
 reduction-fromLList {n} s sf (cancel≅ {m} l r .(s .fst) .(sf .fst) defm defmf) =
     let m<n = >>-implies-> (s .snd) defm
@@ -270,6 +261,7 @@ reduction-fromLList* {n} s sf (trans≅ {m2 = m2} x p) =
         rec = reduction-fromLList* {n} _ sf p
     in  transN≅ c rec
 
+-- And from List (Fin n) to LList n
 reduction-toLList : {n : ℕ} -> (s sf : List (Fin (S n))) -> (p : s ≅[ n ] sf) -> ((–> List≃LList s) .fst) ≅ ((–> List≃LList sf) .fst)
 reduction-toLList _ _ (cancelN≅ l r m) =
     let ll = (–> List≃LList l) .fst

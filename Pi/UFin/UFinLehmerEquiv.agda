@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K --rewriting #-}
+{-# OPTIONS --without-K --rewriting --overlapping-instances #-}
 
 module Pi.UFin.UFinLehmerEquiv where
 
@@ -20,9 +20,13 @@ module _ {n : ℕ} where
             g : ΩBAut (Fin n) → Ω ⊙[ UFin , FinFS n ]
             g p = pair= (fst= p) prop-has-all-paths-↓
             f-g : (p : ΩBAut (Fin n)) → f (g p) == p
-            f-g p = TODO-
+            f-g p = pair== (fst=-β (fst= p) prop-has-all-paths-↓)
+                           (prop-has-all-paths-↓ {{transport is-prop (ua (to-transp-equiv _ (fst= p) ⁻¹)) ⟨⟩}})
+                  ∙ ! (pair=-η p)
             g-f : (p : Ω ⊙[ UFin , FinFS n ]) → g (f p) == p
-            g-f p = TODO-
+            g-f p = pair== (fst=-β (fst= p) prop-has-all-paths-↓)
+                           (prop-has-all-paths-↓ {{transport is-prop (ua (to-transp-equiv _ (fst= p) ⁻¹)) ⟨⟩}})
+                  ∙ ! (pair=-η p)
 
     UFin≃Fin : Ω ⊙[ UFin , FinFS n ] ≃ Aut (Fin n)
     UFin≃Fin = Fin-loop-equiv n ∘e UFin≃BAut

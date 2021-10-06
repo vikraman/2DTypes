@@ -43,11 +43,9 @@ private
 fzero : Fin (S k)
 fzero = (0 , O<S _)
 
--- Conversion back to ℕ is trivial...
 toℕ : Fin k → ℕ
 toℕ = fst
 
--- ... and injective.
 abstract
   toℕ-inj : {fj fk : Fin k} → toℕ fj == toℕ fk → fj == fk
   toℕ-inj {fj = fj} {fk} p = pair= p prop-has-all-paths-↓

@@ -18,6 +18,8 @@ open import Pi.Coxeter.NonParametrized.Diamond
 
 syntax MCoxeterN n l1 l2 = l1 ↔[ n ] l2
 
+-- Using ReductionRel to define a symmetric relation - l1 and l2 are related if there is a cospan
+-- l1 ← v → l2
 data MCoxeterN : (m : ℕ) -> List (Fin (S m)) -> List (Fin (S m)) -> Set where
   MC : {m : ℕ} -> {l1 l2 lf : List (Fin (S m))} -> (p1 : l1 ≅*[ m ] lf) -> (p2 : l2 ≅*[ m ] lf) -> l1 ↔[ m ] l2
 
@@ -27,6 +29,7 @@ refl↔ m = MC idpN idpN
 comm↔ : {m : ℕ} -> (l1 l2 : List (Fin (S m))) -> (l1 ↔[ m ] l2) -> (l2 ↔[ m ] l1)
 comm↔ l1 l2 (MC p1 p2) = MC p2 p1
 
+-- to prove that MC is indeed transitive, we need diamond lemma
 abstract
   trans↔ : {m : ℕ} -> (l1 l2 l3 : List (Fin (S m))) -> (r1 : l1 ↔[ m ] l2) -> (r2 : l2 ↔[ m ] l3) -> (l1 ↔[ m ] l3)
   trans↔ {m} l1 l2 l3 (MC {lf = lf1} p1 p2) (MC {lf = lf2} p3 p4) =
