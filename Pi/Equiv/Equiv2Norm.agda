@@ -11,6 +11,7 @@ open import Pi.UFin.BAut
 open import Pi.Equiv.Equiv0Norm
 open import Pi.Equiv.Equiv1Norm
 open import Pi.Coxeter.Coxeter
+open import Pi.Common.FinHelpers
 
 open import Pi.Equiv.Equiv1NormHelpers using (pi^2list; pi^2list-!^-β)
 open import Pi.Lehmer.Lehmer2FinEquiv using (Fin≃Lehmer)
@@ -40,7 +41,7 @@ module _ {c₁ c₂ : O ⟷₁^ m} where
   evalNorm₂-O α = e= λ { (n , ()) }
 
 exchange-swap : {n m : ℕ} → (c : n ⟷₁^ m) → pi^2list (swap₊^ ◎^ ⊕^ ⊕^ c) ≈* pi^2list ((⊕^ ⊕^ c) ◎^ swap₊^)
-exchange-swap c = TODO
+exchange-swap c = TODO! -- [0] ++ map (+2) l ≈* map (+2) l ++ [0] by a sequence of swaps
 
 evalNorm₂-S : {c₁ c₂ : S n ⟷₁^ S m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
 evalNorm₂-S (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
@@ -96,14 +97,14 @@ evalNorm₂-S (swapr₊⟷₂^ {n = O} {c = c}) with (⟷₁^-eq-size c)
 ... | idp = e= λ { (O , p) → idp ; (S .0 , ltS) → idp
                                  ; (S n , ltSR (ltSR ())) }
 evalNorm₂-S (swapr₊⟷₂^ {n = S n} {c = c}) with (⟷₁^-eq-size c)
-... | idp = e= λ { (O , p) → TODO! ; (S n , p) → TODO! }
+... | idp = e= λ { (O , p) → TODO! ; (S n , p) → TODO! } -- the same as below
 evalNorm₂-S (swapl₊⟷₂^ {n = O} {c = c}) with (⟷₁^-eq-size c)
 ... | idp = e= λ { (O , p) → idp ; (S .0 , ltS) → idp
                                  ; (S n , ltSR (ltSR ())) }
-evalNorm₂-S (swapl₊⟷₂^ {n = S n} {c = c}) with (⟷₁^-eq-size c)
-... | idp = e= λ f → 
-  let rel = immersion⁻¹-respects≈ (exchange-swap c)
-  in  ap (λ x → (–> (is-equiv.g (snd Fin≃Lehmer) x) f)) TODO
+evalNorm₂-S (swapl₊⟷₂^ {n = S n} {m} {c = c}) with (⟷₁^-eq-size c)
+... | idp =
+  let rel = immersion⁻¹-respects≈ (exchange-swap {n = S n} {m} c)
+  in  ap (<– (Fin≃Lehmer {S (S n)})) rel
 evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
