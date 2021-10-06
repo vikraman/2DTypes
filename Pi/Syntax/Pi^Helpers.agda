@@ -26,11 +26,22 @@ private
 ++^-l-id {n} {O} = id⟷₂^
 ++^-l-id {n} {S o} = resp⊕⟷₂ ++^-l-id ■^ ⊕id⟷₁⟷₂^
 
+-- ++^-bigswap : {n m : ℕ} → (n ⟷₁^ m) → (2 ++ n) ⟷₁^ (2 ++ m)
+-- ++^-bigswap swap₊^ = swap₊^ ◎^ ⊕^ ⊕^ swap₊^
+-- ++^-bigswap id⟷₁^ = swap₊^
+-- ++^-bigswap (c ◎^ c₁) = ++^-bigswap c ◎^ (⊕^ (⊕^ c₁))
+-- ++^-bigswap (⊕^ c) = swap₊^ ◎^ ⊕^ (⊕^ (⊕^ c))
+
 ++^-bigswap : {n m : ℕ} → (n ⟷₁^ m) → (2 ++ n) ⟷₁^ (2 ++ m)
-++^-bigswap swap₊^ = swap₊^ ◎^ ⊕^ ⊕^ swap₊^
-++^-bigswap id⟷₁^ = swap₊^
-++^-bigswap (c ◎^ c₁) = ++^-bigswap c ◎^ (⊕^ (⊕^ c₁))
-++^-bigswap (⊕^ c) = swap₊^ ◎^ ⊕^ (⊕^ (⊕^ c))
+++^-bigswap c = swap₊^ ◎^ ⊕^ ⊕^ c
+
+-- lemma : {n m : ℕ} → (c : n ⟷₁^ m) → ++^-bigswap c ⟷₂^ swap₊^ ◎^ ⊕^ ⊕^ c
+-- lemma swap₊^ = id⟷₂^
+-- lemma id⟷₁^ = idr◎r^ ■^ (id⟷₂^ ⊡^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ !⊕id⟷₁⟷₂^))
+-- lemma (c ◎^ c₁) = 
+--   let r = lemma c
+--   in  (r ⊡^ id⟷₂^) ■^ assoc◎r^ ■^ (id⟷₂^ ⊡^ (hom◎⊕⟷₂^ ■^ resp⊕⟷₂ hom◎⊕⟷₂^))
+-- lemma (⊕^ c) = id⟷₂^
 
 ++^-l-! : {o : ℕ} → (++^-l {o = o} (!⟷₁^ c)) ⟷₂^ !⟷₁^ (++^-l {o = o} c)
 ++^-l-! {o = O} = id⟷₂^
@@ -118,7 +129,7 @@ private
 ++^-⊕-id-l {o = S o} c = resp⊕⟷₂ (++^-⊕-id-l {o = o} c)
 
 ++^-⊕-id-r : {n m o : ℕ} → (c : n ⟷₁^ m) → (++^-⊕ c (id⟷₁^ {o})) ⟷₂^ ++^-r c
-++^-⊕-id-r (swap₊^ {O}) = id⟷₂^
+++^-⊕-id-r (swap₊^ {O}) = !⟷₂^ (idr◎r^ ■^ (id⟷₂^ ⊡^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ !⊕id⟷₁⟷₂^)))
 ++^-⊕-id-r {S (S (S n))} {m} {o} (swap₊^ {S n}) =
   _ ⟷₂^⟨ (id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (resp⊕⟷₂ (++^-⊕-id-l (id⟷₁^ {o}))))) ⟩
   _ ⟷₂^⟨ (id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ (resp⊕⟷₂ ++^-l-id))) ⟩

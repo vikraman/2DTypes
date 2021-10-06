@@ -77,9 +77,10 @@ eval-quote^₁ (swap₊^ {n = n}) =
         _ ⟷₂^⟨ idl◎l^ ⟩
         _ ⟷₂^⟨ idr◎l^ ⟩
         _ ⟷₂^⟨ idl◎l^ ⟩
-        _ ⟷₂^⟨ id⟷₂^ ⊡^ idl◎l^ ⟩
+        _ ⟷₂^⟨ idr◎l^ ⊡^ idr◎l^ ⟩
         _ ⟷₂^⟨ idr◎l^ ⟩
-        _ ⟷₂^⟨ idr◎l^ ⟩
+        _ ⟷₂^⟨ id⟷₂^ ⊡^ resp⊕⟷₂ ⊕id⟷₁⟷₂^ ⟩
+        _ ⟷₂^⟨ (id⟷₂^ ⊡^ ⊕id⟷₁⟷₂^) ■^ idr◎l^ ⟩
         swap₊^ ⟷₂^∎
 eval-quote^₁ id⟷₁^ = id⟷₂^
 eval-quote^₁ (c₁ ◎^ c₂) = eval-quote^₁ c₁ ⊡^ eval-quote^₁ c₂

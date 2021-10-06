@@ -86,9 +86,9 @@ data _⟷₂^_ : n ⟷₁^ m → n ⟷₁^ m → Set where
   hom⊕◎⟷₂^ : {c₁ : (n) ⟷₁^ (m)} {c₂ : (m) ⟷₁^ (o)} →
          ⊕^ (c₁ ◎^ c₂) ⟷₂^ ((⊕^ c₁) ◎^ (⊕^ c₂))
 
-  swapr₊⟷₂^ : {c : (n) ⟷₁^ (n)}
+  swapr₊⟷₂^ : {c : (n) ⟷₁^ (m)}
     → (⊕^ (⊕^ c)) ◎^ swap₊^ ⟷₂^ swap₊^ ◎^ (⊕^ (⊕^ c))
-  swapl₊⟷₂^ : {c : (n) ⟷₁^ (n)}
+  swapl₊⟷₂^ : {c : (n) ⟷₁^ (m)}
     → swap₊^ ◎^ (⊕^ (⊕^ c)) ⟷₂^ (⊕^ (⊕^ c)) ◎^ swap₊^
 
   hexagonl₊l : (swap₊^ {S n}) ◎^ ((⊕^ (swap₊^ {n})) ◎^ swap₊^)

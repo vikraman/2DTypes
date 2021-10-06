@@ -54,10 +54,41 @@ eval^₁-◎ (c₁ ⊕ c₃) c₂ = id⟷₂^
 +-assoc' 0     m n = idp
 +-assoc' (S k) m n = ap S (+-assoc' k m n)
 
-++^-assoc-⊕ : ∀ {c₁ : n₁ ⟷₁^ m₁} {c₂ : n₂ ⟷₁^ m₂} {c₃ : n₃ ⟷₁^ m₃} →
+++^-⊕-l-r : (c₁ : n₁ ⟷₁^ m₁) → (c₂ : n₂ ⟷₁^ m₂) → ++^-⊕ c₁ c₂ ⟷₂^ (++^-l c₂ ◎^ ++^-r c₁)
+++^-⊕-l-r swap₊^ c₂ = swapl₊⟷₂^ ■^ (resp⊕⟷₂ (resp⊕⟷₂ (++^-⊕-id-l c₂)) ⊡^ id⟷₂^)
+++^-⊕-l-r {O} id⟷₁^ c₂ = idr◎r^
+++^-⊕-l-r {S n₁} id⟷₁^ c₂ = 
+  let r = ++^-⊕-l-r {n₁} id⟷₁^ c₂
+  in  resp⊕⟷₂ r ■^ resp⊕⟷₂ idr◎l^ ■^ idr◎r^
+++^-⊕-l-r (c₁ ◎^ c₃) c₂ = 
+  let r = ++^-⊕-l-r c₁ c₂ 
+  in  (r ⊡^ ++^-⊕-id-r c₃) ■^ assoc◎r^
+++^-⊕-l-r (⊕^ c₁) c₂ = resp⊕⟷₂ (++^-⊕-l-r c₁ c₂) ■^ hom⊕◎⟷₂^
+
+private
+  lemma : {n n₂ n₃ m₂ m₃ : ℕ} {c₂ : n₂ ⟷₁^ m₂} {c₃ : n₃ ⟷₁^ m₃} → 
+      (++^-assoc n n₂ n₃ ◎^ ++^-l {o = n} (++^-⊕ c₂ c₃)) ⟷₂^ (++^-l c₃ ◎^ ++^-r {o = m₃} (++^-⊕ id⟷₁^ c₂) ◎^ ++^-assoc n m₂ m₃)
+  lemma {O} {n₂} {n₃} {m₂} {m₃} {c₁} {c₂} = idl◎l^ ■^ ++^-⊕-l-r c₁ c₂ ■^ (id⟷₂^ ⊡^ idr◎r^)
+  lemma {S n} {n₂} {n₃} {m₂} {m₃} {c₁} {c₂} = hom◎⊕⟷₂^ ■^ resp⊕⟷₂ (lemma {n} {n₂} {n₃} {m₂} {m₃} {c₁} {c₂}) ■^ hom⊕◎⟷₂^ ■^ (id⟷₂^ ⊡^ hom⊕◎⟷₂^)
+
+++^-assoc-⊕ : {n₁ n₂ n₃ m₁ m₂ m₃ : ℕ} {c₁ : n₁ ⟷₁^ m₁} {c₂ : n₂ ⟷₁^ m₂} {c₃ : n₃ ⟷₁^ m₃} →
         (++^-assoc n₁ n₂ n₃) ◎^ (++^-⊕ c₁ (++^-⊕ c₂ c₃)) ⟷₂^
         (++^-⊕ (++^-⊕ c₁ c₂) c₃) ◎^ (++^-assoc m₁ m₂ m₃)
-++^-assoc-⊕ {c₁ = (swap₊^ {n})} {c₂ = c₂} {c₃ = c₃} = TODO!
+++^-assoc-⊕ {n₁ = n₁} {n₂ = n₂} {n₃ = n₃} {m₁ = m₁} {m₂ = m₂} {m₃ = m₃} {c₁ = (swap₊^ {n})} {c₂ = c₂} {c₃ = c₃} = 
+  (_ ◎^ swap₊^ ◎^ _)  ⟷₂^⟨ assoc◎l^ ⟩
+  (_ ◎^ swap₊^) ◎^ _ ⟷₂^⟨ swapr₊⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ ((++^-⊕-id-l {n₂ ++ n₃} {m₂ ++ m₃} {n} (++^-⊕ c₂ c₃)))) ⟩
+  (swap₊^ ◎^ _) ◎^ _ ⟷₂^⟨ assoc◎r^ ⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ hom◎⊕⟷₂^ ⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ resp⊕⟷₂ hom◎⊕⟷₂^ ⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ resp⊕⟷₂ (resp⊕⟷₂ lemma) ⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ (resp⊕⟷₂ hom⊕◎⟷₂^) ⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ hom⊕◎⟷₂^ ⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ ((id⟷₂^ ⊡^ resp⊕⟷₂ hom⊕◎⟷₂^)) ⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ (id⟷₂^ ⊡^ hom⊕◎⟷₂^ )⟩
+  (swap₊^ ◎^ _) ⟷₂^⟨ id⟷₂^ ⊡^ (resp⊕⟷₂ (resp⊕⟷₂ (!⟷₂^ (++^-⊕-id-l c₃))) ⊡^ (resp⊕⟷₂ (resp⊕⟷₂ (!⟷₂^ (++^-⊕-id-r (++^-⊕ id⟷₁^ c₂)))) ⊡^ id⟷₂^)) ⟩
+  _ ⟷₂^⟨ assoc◎l^ ⟩
+  _ ⟷₂^⟨ assoc◎l^ ⟩
+  _ ⟷₂^∎
 ++^-assoc-⊕ {O} {c₁ = id⟷₁^} = idl◎l^ ■^ idr◎r^
 ++^-assoc-⊕ {S n₁} {c₁ = id⟷₁^} {c₂} {c₃} = 
     let r = ++^-assoc-⊕ {n₁} {c₁ = id⟷₁^} {c₂} {c₃}
