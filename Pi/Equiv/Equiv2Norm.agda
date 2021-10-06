@@ -10,6 +10,7 @@ open import Pi.UFin.BAut
 
 open import Pi.Equiv.Equiv0Norm
 open import Pi.Equiv.Equiv1Norm
+open import Pi.Coxeter.Coxeter
 
 open import Pi.Equiv.Equiv1NormHelpers using (pi^2list; pi^2list-!^-β)
 open import Pi.Lehmer.Lehmer2FinEquiv using (Fin≃Lehmer)
@@ -38,6 +39,9 @@ module _ {c₁ c₂ : O ⟷₁^ m} where
   evalNorm₂-O : c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
   evalNorm₂-O α = e= λ { (n , ()) }
 
+exchange-swap : {n m : ℕ} → (c : n ⟷₁^ m) → pi^2list (swap₊^ ◎^ ⊕^ ⊕^ c) ≈* pi^2list ((⊕^ ⊕^ c) ◎^ swap₊^)
+exchange-swap c = TODO
+
 evalNorm₂-S : {c₁ c₂ : S n ⟷₁^ S m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
 evalNorm₂-S (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
 ... | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
@@ -59,7 +63,6 @@ evalNorm₂-S (linv◎l^ {c = c}) with (⟷₁^-eq-size c)
   in  ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → pi^2list c ++ e) (pi^2list-!^-β c)) ∙ r)
 evalNorm₂-S (linv◎r^ {c = c}) with (⟷₁^-eq-size c)
 ... | idp =
-  -- why can't I use the above case?
   let r = (immersion⁻¹-respects≈ {_} {pi^2list c ++ reverse (pi^2list c)} {nil} (≈-inv-r (pi^2list c)))
   in  ! (ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → pi^2list c ++ e) (pi^2list-!^-β c)) ∙ r))
 evalNorm₂-S (rinv◎l^ {c = c}) with (⟷₁^-eq-size c)
@@ -68,7 +71,6 @@ evalNorm₂-S (rinv◎l^ {c = c}) with (⟷₁^-eq-size c)
   in  (ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → e ++ pi^2list c) (pi^2list-!^-β c)) ∙ r))
 evalNorm₂-S (rinv◎r^ {c = c}) with (⟷₁^-eq-size c)
 ... | idp =
-  -- why can't I use the above case?
   let r = (immersion⁻¹-respects≈ {_} {reverse (pi^2list c) ++ pi^2list c} {nil} (≈-inv-l (pi^2list c)))
   in  ! (ap (<– Fin≃Lehmer) (ap immersion⁻¹ (ap (λ e → e ++ pi^2list c) (pi^2list-!^-β c)) ∙ r))
 evalNorm₂-S id⟷₂^ = idp
@@ -90,10 +92,18 @@ evalNorm₂-S (resp⊕⟷₂ {n = S n} {c₁ = c₁} {c₂ = c₂} α) with (⟷
 ... | p | q = TODO!
 evalNorm₂-S (hom⊕◎⟷₂^ {c₁ = c₁} {c₂ = c₂}) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
 ... | idp | idp = TODO!
-evalNorm₂-S (swapr₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S (swapr₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! } -- FIXME: O case
-evalNorm₂-S (swapl₊⟷₂^ {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S (swapl₊⟷₂^ {n = S n}) = e= λ { (O , p) → TODO! ; (S n , p) → TODO! } -- FIXME: O case
+evalNorm₂-S (swapr₊⟷₂^ {n = O} {c = c}) with (⟷₁^-eq-size c)
+... | idp = e= λ { (O , p) → idp ; (S .0 , ltS) → idp
+                                 ; (S n , ltSR (ltSR ())) }
+evalNorm₂-S (swapr₊⟷₂^ {n = S n} {c = c}) with (⟷₁^-eq-size c)
+... | idp = e= λ { (O , p) → TODO! ; (S n , p) → TODO! }
+evalNorm₂-S (swapl₊⟷₂^ {n = O} {c = c}) with (⟷₁^-eq-size c)
+... | idp = e= λ { (O , p) → idp ; (S .0 , ltS) → idp
+                                 ; (S n , ltSR (ltSR ())) }
+evalNorm₂-S (swapl₊⟷₂^ {n = S n} {c = c}) with (⟷₁^-eq-size c)
+... | idp = e= λ f → 
+  let rel = immersion⁻¹-respects≈ (exchange-swap c)
+  in  ap (λ x → (–> (is-equiv.g (snd Fin≃Lehmer) x) f)) TODO
 evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
