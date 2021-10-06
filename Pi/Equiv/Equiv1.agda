@@ -47,7 +47,6 @@ quote₁ {t₁ = t₁} {t₂ = t₂} p e =
     let c = quote^₁ {n = eval^₀ t₁} {m = eval^₀ t₂} (quoteNorm₁ p e)
     in  denorm← c
 
-
 id-⊕-== : (pi^2list (⊕^ (id⟷₁^ {n = n}))) == nil
 id-⊕-== {O} = idp
 id-⊕-== {S n} = idp
@@ -61,7 +60,6 @@ pi^2list-nil {S n}
   rewrite (ℕ-p (+-assoc 0 0 1))
   rewrite (id-⊕-== {n = n}) = ap (map S⟨_⟩) ((ap (_++ nil) (++-unit-r _) ∙ ++-unit-r _) ∙ pi^2list-nil {n})
 
--- second proof, much simpler, but more code duplication
 pi^2list-!-nil : pi^2list (⊕^ eval^₁ (!⟷₁ (quote-eval^₀ (quote^₀ n)))) == nil
 pi^2list-!-nil {O} = idp
 pi^2list-!-nil {S n}
@@ -70,16 +68,6 @@ pi^2list-!-nil {S n}
   rewrite (ℕ-p (+-unit-r 1))
   rewrite (ℕ-p (+-assoc 0 0 1))
   rewrite (id-⊕-== {n = n}) = ap (map S⟨_⟩) ((ap (_++ nil) (++-unit-r _) ∙ ++-unit-r _) ∙ pi^2list-!-nil {n})
-
--- second possible proof of pi^2list-!-nil with a few things left out
--- uses unfinished stuff from Equiv1NormHelpers.agda
-
--- pi^2list-!-nil' : pi^2list (⊕^ eval^₁ (!⟷₁ (quote-eval^₀ (quote^₀ n)))) == nil
--- pi^2list-!-nil' {n} =
---   ap (λ x → pi^2list (⊕^ x)) (eval^₁-! (quote-eval^₀ (quote^₀ n))) ∙
---   pi^2list-! (⊕^ (eval^₁ (quote-eval^₀ (quote^₀ n)))) ∙
---   transport (λ e → transport (λ k → List (Fin k)) e (reverse (pi^2list (⊕^ eval^₁ (quote-eval^₀ (quote^₀ n))))) == nil) (ℕ-p idp) (ap reverse pi^2list-nil)
-
 
 eval-quote₁ : (e : Aut (Fin n)) → (eval₁ {t₁ = (quote₀ (pFin _))} {t₂ = (quote₀ (pFin _))} (quote₁ idp e)) == e
 eval-quote₁ {O} e = contr-has-all-paths {{Aut-FinO-level}} _ _
@@ -97,8 +85,9 @@ eval-quote₁ {S n} e
     let s = eval-quoteNorm₁ e
     in  (ap ((<– Fin≃Lehmer) ∘ immersion⁻¹) (++-unit-r _)) ∙ q ∙ s
 
+-- NOTE: This is a harmless rewrite that uses uip for ℕ. We need it to simplify the proofs of the next two lemmas.
 postulate
-    eq-size-rewrite : {t₁ : U n} {t₂ : U m} {c : t₁ ⟷₁ t₂} → (⟷₁^-eq-size (eval^₁ c)) ↦ (⟷₁-eq-size c) -- because proof of == in ℕ
+    eq-size-rewrite : {t₁ : U n} {t₂ : U m} {c : t₁ ⟷₁ t₂} → (⟷₁^-eq-size (eval^₁ c)) ↦ (⟷₁-eq-size c)
     {-# REWRITE eq-size-rewrite #-}
 
 quote-eval²₀ : (t : U n) → quote-eval^₀ (quote^₀ (eval^₀ t)) ⟷₂ id⟷₁
