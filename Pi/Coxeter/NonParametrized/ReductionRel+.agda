@@ -47,37 +47,3 @@ trans*+ (trans≅ x p) q = trans≅+ x (ext* (trans*+ p q))
 
 ++r+ : {m1 m2 : Listℕ} -> (r : Listℕ) -> (m1 ≅+ m2) -> ((m1 ++ r) ≅+ (m2 ++ r))
 ++r+ r (trans≅+ x p) = trans≅+ (++r≅ _ _ r x) (++r r p)
-
--- ≅-abs-l : {x : ℕ} -> (x ∷ nil) ≅ nil -> ⊥
--- ≅-abs-l (cancel≅ nil r .(_ ∷ nil) .nil () defmf)
--- ≅-abs-l (cancel≅ (x ∷ nil) r .(_ ∷ nil) .nil () defmf)
--- ≅-abs-l (cancel≅ (x ∷ x₁ ∷ l) r .(_ ∷ nil) .nil () defmf)
--- ≅-abs-l (swap≅ x nil r .(_ ∷ nil) .nil () defmf)
--- ≅-abs-l (swap≅ x (x₁ ∷ nil) r .(_ ∷ nil) .nil () defmf)
--- ≅-abs-l (swap≅ x (x₁ ∷ x₂ ∷ l) r .(_ ∷ nil) .nil () defmf)
--- ≅-abs-l (long≅ k nil r .(_ ∷ nil) .nil defm ())
--- ≅-abs-l (long≅ k (x ∷ l) r .(_ ∷ nil) .nil defm ())
-
--- ≅-abs-r : {x : ℕ} -> nil ≅ (x ∷ nil) -> ⊥
--- ≅-abs-r (cancel≅ nil r .nil .(_ ∷ nil) () defmf)
--- ≅-abs-r (cancel≅ (x ∷ l) r .nil .(_ ∷ nil) () defmf)
--- ≅-abs-r (swap≅ x nil r .nil .(_ ∷ nil) () defmf)
--- ≅-abs-r (swap≅ x (x₁ ∷ l) r .nil .(_ ∷ nil) () defmf)
--- ≅-abs-r (long≅ k nil r .nil .(_ ∷ nil) () defmf)
--- ≅-abs-r (long≅ k (x ∷ l) r .nil .(_ ∷ nil) () defmf)
--- --
--- empty-reduction : {m : Listℕ} -> (nil ≅ m) -> ⊥
--- empty-reduction (cancel≅ nil r .nil _ () defmf)
--- empty-reduction (cancel≅ (x ∷ l) r .nil _ () defmf)
--- empty-reduction (swap≅ x nil r .nil _ () defmf)
--- empty-reduction (swap≅ x (x₁ ∷ l) r .nil _ () defmf)
--- empty-reduction (long≅ k nil r .nil mf () defmf)
--- empty-reduction (long≅ k (x ∷ l) r .nil mf () defmf)
-
--- one-reduction : {x : ℕ} -> {m : Listℕ} -> ([ x ] ≅ m) -> ⊥
--- one-reduction {x} (cancel≅ (x₁ ∷ nil) r .(x ∷ nil) mf () defmf)
--- one-reduction {x} (cancel≅ (x₁ ∷ x₂ ∷ l) r .(x ∷ nil) mf () defmf)
--- one-reduction {x} (swap≅ x₁ (x₂ ∷ nil) r .(x ∷ nil) mf () defmf)
--- one-reduction {x} (swap≅ x₁ (x₂ ∷ x₃ ∷ l) r .(x ∷ nil) mf () defmf)
--- one-reduction {x} (long≅ k (x₁ ∷ nil) r .(x ∷ nil) mf () defmf)
--- one-reduction {x} (long≅ k (x₁ ∷ x₂ ∷ l) r .(x ∷ nil) mf () defmf)

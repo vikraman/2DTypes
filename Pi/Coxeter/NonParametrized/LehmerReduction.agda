@@ -23,24 +23,20 @@ open import Pi.Coxeter.NonParametrized.LehmerCanonical
 
 open ≅*-Reasoning
 
--- LehmerProper represents Lehmers with a non-empty last sequence
+-- LehmerProper represents these Lehmer codes for which the last value is not 0
 data LehmerProper : (n : ℕ) -> Type₀ where
   CanZ : LehmerProper 0
   CanS : {n : ℕ} -> {nf : ℕ} -> (n < nf) -> (l : LehmerProper n) -> {r : ℕ} -> (r < nf) -> LehmerProper nf
 
-
 immersionProper : {n : ℕ} -> LehmerProper n -> Listℕ
 immersionProper {0} CanZ = nil
 immersionProper {S n} (CanS _ l {r} _) = (immersionProper l) ++ ((n ∸ r) ↓ (1 + r))
-
--- (20 ∸ 8) ↓ (1 + 3) = 15 ∷ 14 ∷ 13 ∷ 12 ∷ nil
 
 immersion-transport : {n1 n2 : ℕ} -> (pn : n1 == n2) -> (l : Lehmer n1) -> (immersion l == immersion (transport Lehmer pn l))
 immersion-transport {n1} {.n1} idp l = idp
 
 immersionProper-transport : {n1 n2 : ℕ} -> (pn : n1 == n2) -> (l : LehmerProper n1) -> (immersionProper l == immersionProper (transport LehmerProper pn l))
 immersionProper-transport {n1} {.n1} idp l = idp
-
 
 properize : {n : ℕ} -> (cl : Lehmer n) -> Σ _ (λ nf -> Σ _ (λ clf -> (immersion {n} cl == immersionProper {nf} clf) × (nf ≤ n)))
 properize CanZ = O , CanZ , idp , z≤n
@@ -62,62 +58,6 @@ immersionProper->> : {n : ℕ} -> (cl : LehmerProper n) -> n >> immersionProper 
 immersionProper->> {n} cl =
   let clp , clp-r = unproperize cl
   in  transport (λ e -> n >> e) (! clp-r) (immersion->> clp)
-
-
--- properize-fn : {n : ℕ} -> (cl : Lehmer n) -> Σ _ (λ nf → LehmerProper nf)
--- properize-fn cl = let (nf , clf , _) = properize cl in (nf , clf)
-
--- unproperize-fn : {n : ℕ} -> (cl : LehmerProper n) -> Lehmer n
--- unproperize-fn = fst ∘ unproperize
-
--- properize∘unproperize-fn-n : {n : ℕ} -> (cl : LehmerProper n) -> n == fst (properize-fn (unproperize-fn cl))
--- properize∘unproperize-fn-n {O} CanZ = idp
--- properize∘unproperize-fn-n {S n} (CanS x cl x₁) = idp
-
--- properize∘unproperize-fn : {n : ℕ} -> (cl : LehmerProper n) → PathOver LehmerProper (properize∘unproperize-fn-n cl) cl (snd (properize-fn (unproperize-fn cl)))
--- properize∘unproperize-fn {O} CanZ = idp
--- properize∘unproperize-fn {S n} (CanS x cl x₁) =
---   let rec = properize∘unproperize-fn cl
---       t = ap↓ (λ e -> CanS x e x₁) rec
---   in  {!   !}
-
--- ≡immersionProper : {nf : ℕ} -> (cl1 cl2 : LehmerProper nf) -> (immersionProper {nf} cl1 == immersionProper {nf} cl2) -> cl1 == cl2
--- ≡immersionProper {nf} cl1 cl2 p =
---   let clu1 , clu1-p = unproperize cl1
---       clu2 , clu2-p = unproperize cl2
---       q : unproperize-fn cl1 == unproperize-fn cl2
---       q = ≡immersion clu1 clu2 (! clu1-p ∙ p ∙ clu2-p)
-
---       -- LehmerProper (fst (properize (fst (unproperize cl1))))
---       qap : PathOver (λ e → LehmerProper (fst (properize e))) q (snd (properize-fn {nf} (unproperize-fn cl1))) (snd (properize-fn {nf} (unproperize-fn cl2)))
---       qap = apd (λ e -> snd (properize-fn {nf} e)) q
-
---       question : fst (properize-fn {nf} (unproperize-fn cl1)) == fst (properize-fn {nf} (unproperize-fn cl2))
---       question = ap (λ e -> fst (properize e)) q
-
---       qap' : PathOver LehmerProper question (snd (properize-fn {nf} (unproperize-fn cl1))) ((snd (properize-fn {nf} (unproperize-fn cl2))))
---       qap' = ↓-ap-in LehmerProper (λ x →  fst (properize x)) qap
-
---       -- ↓-ap-in : u == v [ C ∘ f ↓ p ] → u == v [ C ↓ ap f p ]  -- book, 2.7.somethin
---       -- transport P p u = coe (ap P p) u
---       -- transport P (ap f q) u = coe (ap P (ap f q)) u = coe (ap (P ∘ f) q) u
-
---       cl1-r' : PathOver LehmerProper (properize∘unproperize-fn-n cl1) cl1 (snd (properize-fn {nf} (unproperize-fn cl1)))
---       cl1-r' = properize∘unproperize-fn cl1
---       cl2-r' : PathOver LehmerProper (properize∘unproperize-fn-n cl2) cl2 (snd (properize-fn {nf} (unproperize-fn cl2)))
---       cl2-r' = properize∘unproperize-fn cl2
-
---       ttp : nf == nf
---       ttp = (properize∘unproperize-fn-n cl1 ∙ question ∙ ! (properize∘unproperize-fn-n cl2))
---       ttp-idp : ttp == idp
---       ttp-idp = prop-has-all-paths {{has-level-apply ℕ-level nf nf}} ttp idp
-
---       tt : PathOver LehmerProper ttp cl1 cl2
---       tt = cl1-r' ∙ᵈ qap' ∙ᵈ (!ᵈ cl2-r')
-
---       t : cl1 == cl2
---       t = transport (λ z → PathOver LehmerProper z cl1 cl2) ttp-idp tt
---   in  t
 
 extractProper-r : {k : ℕ} -> LehmerProper (S k) -> ℕ
 extractProper-r (CanS _ _ {r} _) = r

@@ -1,6 +1,6 @@
 {-# OPTIONS --without-K --rewriting #-}
 
-module Pi.Coxeter.Parametrized.CoxeterHIT where
+module Pi.Experiments.CoxeterHIT where
 
 open import lib.Base
 open import lib.Base

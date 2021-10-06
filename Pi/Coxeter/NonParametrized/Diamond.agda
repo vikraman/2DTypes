@@ -17,7 +17,7 @@ open import Pi.Coxeter.NonParametrized.CritPairsLong
 
 open ≅*-Reasoning
 
--- and this should do something like: if ir1 = (ir p1) and ir2 = (ir p2) are non-overlapping, use force-non-crit-pair
+-- This is saying the following: if ir1 = (ir p1) and ir2 = (ir p2) are non-overlapping, use force-non-crit-pair
 -- otherwise, take the ir1 ∪ ir2 , force it into one of the critical pairs and then reduce critical pair
 {-# TERMINATING #-}
 diamond : (m1 m2 m3 : Listℕ) -> (m1 ≅ m2) -> (m1 ≅ m3) -> Σ _ (λ m -> (m2 ≅* m) × (m3 ≅* m))
