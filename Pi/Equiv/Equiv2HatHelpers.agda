@@ -54,23 +54,13 @@ eval^₁-◎ (c₁ ⊕ c₃) c₂ = id⟷₂^
 +-assoc' 0     m n = idp
 +-assoc' (S k) m n = ap S (+-assoc' k m n)
 
-
--- ++^-assoc-id : (++^-id (+-assoc' n m o)) ⟷₂^ ++^-assoc n m o
--- ++^-assoc-id {O} {m} {o} = id⟷₂^
--- ++^-assoc-id {S n} {m} {o} =
---   let r = ++^-assoc-id {n} {m} {o}
---   in  {!   !} ■^ {!   !}
-
--- postulate
---         -- Temporary
---         -- theorem : ++^-⊕-id-l
---     plus-rewrite : {n m o : ℕ} {c : n ⟷₁^ m} → ++^-⊕ (id⟷₁^ {o}) c ↦ ++^-l c -- because proof of == in ℕ
---     {-# REWRITE plus-rewrite #-}
-
 ++^-assoc-⊕ : ∀ {c₁ : n₁ ⟷₁^ m₁} {c₂ : n₂ ⟷₁^ m₂} {c₃ : n₃ ⟷₁^ m₃} →
         (++^-assoc n₁ n₂ n₃) ◎^ (++^-⊕ c₁ (++^-⊕ c₂ c₃)) ⟷₂^
         (++^-⊕ (++^-⊕ c₁ c₂) c₃) ◎^ (++^-assoc m₁ m₂ m₃)
 ++^-assoc-⊕ {c₁ = (swap₊^ {n})} {c₂ = c₂} {c₃ = c₃} = TODO!
-++^-assoc-⊕ {c₁ = id⟷₁^} = TODO!
-++^-assoc-⊕ {c₁ = c₁ ◎^ c₂} = TODO!
+++^-assoc-⊕ {O} {c₁ = id⟷₁^} = idl◎l^ ■^ idr◎r^
+++^-assoc-⊕ {S n₁} {c₁ = id⟷₁^} {c₂} {c₃} = 
+    let r = ++^-assoc-⊕ {n₁} {c₁ = id⟷₁^} {c₂} {c₃}
+    in  (hom◎⊕⟷₂^ ■^ resp⊕⟷₂ r) ■^ hom⊕◎⟷₂^
+++^-assoc-⊕ {c₁ = c ◎^ d} {c₂} {c₃} = TODO! -- Use ++^-⊕-id-r to reduce ++^-⊕ to ++^-r and use recursive call
 ++^-assoc-⊕ {c₁ = ⊕^ c₁} = hom◎⊕⟷₂^ ■^ resp⊕⟷₂ (++^-assoc-⊕ {c₁ = c₁}) ■^ (!⟷₂^ hom◎⊕⟷₂^)

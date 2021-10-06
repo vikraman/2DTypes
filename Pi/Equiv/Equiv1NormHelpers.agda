@@ -29,8 +29,9 @@ private
   variable
     n m o : ℕ
 
+-- NOTE: This is just an equality of two propositions.
 postulate
-    ℕ-S-is-inj-rewrite : {n : ℕ} -> (ℕ-S-is-inj n n idp) ↦ idp -- path in ℕ
+    ℕ-S-is-inj-rewrite : {n : ℕ} -> (ℕ-S-is-inj n n idp) ↦ idp
     {-# REWRITE ℕ-S-is-inj-rewrite #-}
 
 ℕ-S-is-inj-idp : {n : ℕ} -> ℕ-S-is-inj (S n) (S n) idp == idp
@@ -47,7 +48,7 @@ list2pi^ (fn :: xs) = transpos2pi^ fn ◎^ list2pi^ xs
 list2pi^++ : {m : ℕ} → (l r : List (Fin m)) →
               list2pi^ (l ++ r) ⟷₂^ list2pi^ l ◎^ list2pi^ r
 list2pi^++ nil r = idl◎r^
-list2pi^++ (n :: l) r = _■^_ (id⟷₂^ ⊡^ (list2pi^++ l r)) assoc◎l^
+list2pi^++ (n :: l) r = (id⟷₂^ ⊡^ (list2pi^++ l r)) ■^ assoc◎l^
 
 transpos-cancel^ : {n : ℕ} {k : Fin n} →
                   transpos2pi^ k ◎^ transpos2pi^ k ⟷₂^ id⟷₁^
@@ -151,14 +152,14 @@ pi^2list2pi^ (c₁ ◎^ c₂) with (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c�
   let r₁ = pi^2list2pi^ c₁
       r₂ = pi^2list2pi^ c₂
       lemma = list2pi^++ (pi^2list c₁) (pi^2list c₂)
-  in  _■^_ lemma (r₁ ⊡^ r₂)
+  in  lemma ■^ (r₁ ⊡^ r₂)
 pi^2list2pi^ {O} (⊕^ c) with (⟷₁^-eq-size c)
-... | idp = !⟷₂^ (_■^_ (resp⊕⟷₂ (c₊⟷₂id⟷₁^ c)) ⊕id⟷₁⟷₂^)
+... | idp = !⟷₂^ ((resp⊕⟷₂ (c₊⟷₂id⟷₁^ c)) ■^ ⊕id⟷₁⟷₂^)
 pi^2list2pi^ {S n} (⊕^ c) with (⟷₁^-eq-size c)
 ... | idp =
   let rec = pi^2list2pi^ c
       l = eval₁-map-S ((pi^2list c))
-  in  _■^_ l (resp⊕⟷₂ rec)
+  in  l ■^ (resp⊕⟷₂ rec)
 
 pi^2list-id : {n : ℕ} → pi^2list (⊕^ (id⟷₁^ {n = n})) == nil
 pi^2list-id {O} = idp

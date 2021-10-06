@@ -41,7 +41,6 @@ private
 ++^-r id⟷₁^ = id⟷₁^
 ++^-r (c₁ ◎^ c₂) = ++^-r c₁ ◎^ ++^-r c₂
 ++^-r (⊕^ c) = ⊕^ (++^-r c)
--- ++^-r c = ++^-id (⟷₁-size-eq c)
 
 
 ++^-r-! : {o : ℕ} → (++^-r {o = o} (!⟷₁^ c)) ⟷₂^ !⟷₁^ (++^-r {o = o} c)
@@ -113,9 +112,6 @@ private
 ++^-⊕ {S n} id⟷₁^ c₂ = ⊕^ (++^-⊕ {n} id⟷₁^ c₂)
 ++^-⊕ (c₁ ◎^ c₃) c₂ = (++^-⊕ c₁ c₂) ◎^ ++^-⊕ c₃ id⟷₁^
 ++^-⊕ (⊕^ c₁) c₂ = ⊕^ (++^-⊕ c₁ c₂)
--- FIXME can we define it as follows?
--- ++^-⊕ {n} {m} {o} {p} c₁ c₂ with ⟷₁^-eq-size c₁
--- ... | idp = ++^-l c₂
 
 ++^-⊕-id-l : (c : n ⟷₁^ m) → (++^-⊕ (id⟷₁^ {n = o}) c) ⟷₂^ (++^-l {o = o} c)
 ++^-⊕-id-l {o = O} c = id⟷₂^
@@ -179,17 +175,6 @@ private
 ++^-cons-assoc O m = TODO-
 ++^-cons-assoc (S n) m = TODO-
 
--- c₁ = ⊕^ ++^-swap n (m ++ o)
--- c₂ = ++^-⊕ (++^-cons (m ++ o)) (id⟷₁^ {n})
--- c = c₁ ◎^ c₂
-
--- d₁ = ++^-⊕ (++^-swap (S n) m) (id⟷₁^ {o})
--- d₂ = ++^-⊕ (id⟷₁^ {m}) (++^-swap (S n) o)
--- d = d₁ ◎^ ++^-assoc m (S n) o ◎^ d₂
-
--- lemma : (++^-l {o = 1 ++ m} (++^-swap n o)) ◎^ ++^-r {o = n} (++^-cons (m ++ o)) ⟷₂^
---   (++^-r {o = n ++ o} (++^-cons m)) ◎^ (++^-l {o = m ++ 1} (++^-swap n o)) ◎^ (++^-l {o = m} (++^-r {o = n} (++^-cons o)))
-
 ++^-cons-S : (n m : ℕ) → S (n ++ m) ⟷₁^ n ++ S m
 ++^-cons-S O m = id⟷₁^
 ++^-cons-S (S n) m = ⊕^ ++^-cons-S n m
@@ -229,6 +214,12 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 ++^-hexagon O m o = TODO!
 ++^-hexagon (S n) m o =
   let r = ++^-hexagon n m o
+      c₁ = ⊕^ ++^-swap n (m ++ o)
+      c₂ = ++^-⊕ (++^-cons (m ++ o)) (id⟷₁^ {n})
+      c = c₁ ◎^ c₂
+      d₁ = ++^-⊕ (++^-swap (S n) m) (id⟷₁^ {o})
+      d₂ = ++^-⊕ (id⟷₁^ {m}) (++^-swap (S n) o)
+      d = d₁ ◎^ ++^-assoc m (S n) o ◎^ d₂
   in  _ ◎^ ((_ ◎^ (_ ◎^ (_ ◎^ _))) ◎^ _)  ⟷₂^⟨ id⟷₂^ ⊡^ assoc◎r^ ⟩
       _ ◎^ (_ ◎^ (_ ◎^ (_ ◎^ _)) ◎^ _) ⟷₂^⟨ assoc◎l^ ⟩
       (_ ◎^ _) ◎^ ((_ ◎^ (_ ◎^ _)) ◎^ _) ⟷₂^⟨ idr◎r^ ⊡^ id⟷₂^ ⟩
@@ -240,23 +231,6 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
       (⊕^ ((_ ◎^ (_ ◎^ _)) ◎^ _)) ◎^ ((_ ◎^ (_ ◎^ _)) ◎^ _) ⟷₂^⟨ resp⊕⟷₂ (++^-hexagon n m o ⊡^ id⟷₂^) ⊡^ id⟷₂^ ⟩
       _ ⟷₂^⟨ TODO! ⟩
       _ ⟷₂^∎
-
-  --     c₁ = ⊕^ ++^-swap n (m ++ o)
-  --     c₂ = ++^-⊕ (++^-cons (m ++ o)) (id⟷₁^ {n})
-  --     c = c₁ ◎^ c₂
-
-  --     d₁ = ++^-⊕ (++^-swap (S n) m) (id⟷₁^ {o})
-  --     d₂ = ++^-⊕ (id⟷₁^ {m}) (++^-swap (S n) o)
-  --     d = d₁ ◎^ ++^-assoc m (S n) o ◎^ d₂
-  -- in  {!   !}
-  -- in  {!   !} ⟷₂^⟨ {!   !} ⟩
-  --     (⊕^ ++^-assoc n m o) ◎^ (d ◎^ ++^-assoc (m ++ o) 1 n ◎^ ++^-assoc m o (1 ++ n)) ⟷₂^⟨ {!   !} ⟩
-  --     c ⟷₂^⟨ {!   !} ⟩
-  --     {!   !} ⟷₂^∎
-
--- ++^-hexagon O O o = idl◎l^ □^ idl◎l^ □^ idr◎l^ □^ idl◎l^
--- ++^-hexagon O (S m) o = {!   !}
--- ++^-hexagon (S n) m o = TODO!
 
 ++^-swap-unit : (n : ℕ) → !⟷₁^ (++^-unit-r n) ◎^ ++^-swap n 0 ⟷₂^ id⟷₁^
 ++^-swap-unit O = idl◎l^
@@ -280,13 +254,12 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 ++^-swap-S-assoc n m = TODO!
 
 -- ++-cons (m ++ n) in terms of ++-cons m and ++-cons n
--- should be provable from ++^-cons-assoc
 ++^-cons-++ : (n m : ℕ) →
         (((++^-cons (m ++ n) ◎^  ++^-assoc m n 1 ◎^ !⟷₁^ (++^-l (++^-cons n)))
           ◎^ !⟷₁^ (++^-assoc m 1 n))
           ◎^ ++^-r (!⟷₁^ (++^-cons m)))
         ⟷₂^ id⟷₁^
-++^-cons-++ n m = TODO!
+++^-cons-++ n m = TODO! -- provable from ++^-cons-assoc
 
 ++^-symm : (n m : ℕ) → ++^-swap n m ◎^ ++^-swap m n ⟷₂^ id⟷₁^
 ++^-symm O m = ++^-symm-O m

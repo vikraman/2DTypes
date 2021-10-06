@@ -182,8 +182,8 @@ eval^₂ (unite₊l-coh-l {t₁ = t₁}) =
   idl◎r^ ■^ (!⟷₂^ (++^-swap-unit (eval^₀ t₁)) ⊡^ id⟷₂^) ■^ assoc◎r^
 eval^₂ (unite₊l-coh-r {t₁ = t₁}) =
   assoc◎l^ ■^ (++^-swap-unit (eval^₀ t₁) ⊡^ id⟷₂^) ■^ idl◎l^
-eval^₂ hexagonr₊l = TODO!
-eval^₂ hexagonr₊r = TODO!
-eval^₂ hexagonl₊l = TODO!
-eval^₂ hexagonl₊r = TODO!
+eval^₂ hexagonr₊l = TODO! -- application of Pi^Helpers.++^-hexagon
+eval^₂ hexagonr₊r = TODO! -- application of Pi^Helpers.++^-hexagon
+eval^₂ hexagonl₊l = TODO! -- application of Pi^Helpers.++^-hexagon
+eval^₂ hexagonl₊r = TODO! -- application of Pi^Helpers.++^-hexagon
 

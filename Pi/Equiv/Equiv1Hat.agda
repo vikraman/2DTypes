@@ -97,10 +97,10 @@ quote-eval^₁ swap₊ = !⟷₂ (
     _ ⟷₂⟨ id⟷₂ ⊡ assoc◎l ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ (linv◎l ⊡ id⟷₂) ⟩
     _ ⟷₂⟨ id⟷₂ ⊡ idl◎l ⟩
-    _ ⟷₂⟨ TODO! ⟩
+    _ ⟷₂⟨ TODO! ⟩ -- prove by computing quote^₁ on ++^-swap
     _ ⟷₂∎)
-quote-eval^₁ assocl₊ = TODO!
-quote-eval^₁ assocr₊ = TODO!
+quote-eval^₁ assocl₊ = TODO! -- prove by computing quote^₁ on ++^-assoc
+quote-eval^₁ assocr₊ = TODO! -- prove by computing quote^₁ on ++^-assoc
 quote-eval^₁ id⟷₁ = linv◎r ■ (id⟷₂ ⊡ idl◎r)
 quote-eval^₁ (c₁ ◎ c₂) =
     let r₁ = quote-eval^₁ c₁
@@ -114,5 +114,5 @@ quote-eval^₁ (c₁ ⊕ c₂) =
     in !⟷₂ (
        _ ⟷₂⟨ denorm-⊕-β _ _ ⟩
        _ ⟷₂⟨ (id⟷₂ ⊡ (resp⊕⟷₂ r₁ r₂ ⊡ id⟷₂)) ⟩
-       _ ⟷₂⟨ TODO! ⟩
+       _ ⟷₂⟨ TODO! ⟩ -- prove by computing quote^₁ on ++^-⊕
        _ ⟷₂∎)
