@@ -120,3 +120,9 @@ Fin-× {S n} {m} =
   ⊔-≃ (ide _) (×₁-Unit (Fin m)) ∘e
   ×-⊔-distrib (Fin n) ⊤ (Fin m) ∘e
   ×-≃ Fin-equiv-Coprod (ide (Fin m))
+
+_⊓_ : FinSet -> FinSet → FinSet
+(X , ϕ) ⊓ (Y , ψ) = X × Y , Trunc-fmap2 tx ϕ ψ
+  where
+    tx : Σ ℕ (λ n → Fin n == X) → Σ ℕ (λ n → Fin n == Y) → Σ ℕ (λ n → Fin n == X × Y)
+    tx (n , α) (m , β)= (n N.* m) , ua ((Fin-× ∘e transport2-equiv (λ x y ->  x × y) (! α) (! β)) ⁻¹)

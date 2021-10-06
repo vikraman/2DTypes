@@ -35,6 +35,7 @@ instance
   ltSR : {m n : ℕ} → {{m N.< n}} → m N.< (S n)
   ltSR {m} {n} {{ϕ}} = N.ltSR ϕ
 
+
 ⟦_⟧ : Pi.U → Type₀
 ⟦ O ⟧ = ⊥
 ⟦ I ⟧ = ⊤
@@ -50,6 +51,7 @@ instance
 ⟦ O ⟧^ = ⊥
 ⟦ S n ⟧^ = ⊤ ⊔ ⟦ n ⟧^
 
+
 Fin-eval₀-+ : ∀ {t₁ t₂} → Fin (eval₀ t₁ N.+ eval₀ t₂) ≃ Fin (eval₀ (t₁ + t₂))
 Fin-eval₀-+ = ide _
 
@@ -59,7 +61,6 @@ Fin-≃ {S n} {S m} p = Fin-equiv-Coprod ⁻¹ ∘e  ⊔-≃ (Fin-≃ (N.ℕ-S-i
 
 Fin-eval₀ : ∀ {t₁ t₂} → Fin (eval₀ t₁ Pi.Common.Misc.* eval₀ t₂) ≃ Fin (eval₀ (t₁ × t₂))
 Fin-eval₀ {t₁} {t₂} = Fin-≃ (! (eval₀-* {t₁} {t₂}))
-
 
 ⟦-⟧-eval₀ : {X : Pi.U} → ⟦ X ⟧ ≃ Fin (eval₀ X)
 ⟦-⟧-eval₀ {O} =
@@ -74,9 +75,19 @@ Fin-eval₀ {t₁} {t₂} = Fin-≃ (! (eval₀-* {t₁} {t₂}))
     Fin-× {eval₀ t₁} {eval₀ t₂} ∘e
     ×-≃ (⟦-⟧-eval₀ {t₁}) (⟦-⟧-eval₀ {t₂})
 
+⟦-⟧+-eval₀ : {n : ℕ} → {X : Pi+.U n} → ⟦ X ⟧+ ≃ Fin (Pi^.eval^₀ X)
+⟦-⟧+-eval₀ {X = O} =
+  Fin-equiv-Empty ⁻¹
+⟦-⟧+-eval₀ {X = I} =
+  contr-equiv-Unit Fin1-level ⁻¹
+⟦-⟧+-eval₀ {X = t₁ + t₂} =
+  Fin-⊔ {Pi^.eval^₀ t₁} {Pi^.eval^₀ t₂} ∘e
+  ⊔-≃ (⟦-⟧+-eval₀ {X = t₁}) (⟦-⟧+-eval₀ {X = t₂})
+
 ⟦-⟧^-eval₀ : ∀ {n} → ⟦ n ⟧^ ≃ Fin n
 ⟦-⟧^-eval₀ {O} = Fin-equiv-Empty ⁻¹
 ⟦-⟧^-eval₀ {S n} = (Fin-equiv-Coprod ⁻¹ ∘e ⊔-comm ⊤ (Fin n)) ∘e ⊔-≃ (ide ⊤) (⟦-⟧^-eval₀ {n})
+
 
 𝟚 : Pi.U
 𝟚 = I + I
@@ -91,6 +102,7 @@ Fin-eval₀ {t₁} {t₂} = Fin-≃ (! (eval₀-* {t₁} {t₂}))
 𝔹 O = I
 𝔹 (S O) = 𝟚
 𝔹 (S (S n)) = 𝟚 × 𝔹 (S n)
+
 
 test0 : ⟦ 𝟚 Pi.+ 𝟚 ⟧ → Fin 4
 test0 = –> ⟦-⟧-eval₀

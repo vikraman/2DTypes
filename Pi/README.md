@@ -14,7 +14,7 @@ is the main entrypoint to the project.
   - `Lehmer`: Lehmer codes.
   - `Syntax`: Syntax of Pi and its variants.
   - `UFin`: Construction of UFin and various properties.
-  
+
 ## Checking the code
 
 The formalisation has been checked using [Agda 2.6.1.3](https://hackage.haskell.org/package/Agda-2.6.1.3) and [HoTT-Agda

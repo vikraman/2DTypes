@@ -44,7 +44,7 @@ module _ {i} (T : Type i) where
 -- NOTE: We're defining it from scratch because we need this to compute, it
 -- could be defined simply using ≃-level, but that uses ≃-contr which is marked
 -- abstract.
---
+
 instance
   Aut-level : ∀ {i} {T : Type i} {n : ℕ₋₂} {{_ : has-level n T}} → has-level n (Aut T)
   Aut-level {n = ⟨-2⟩} =
