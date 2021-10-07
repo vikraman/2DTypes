@@ -145,10 +145,10 @@ data _⟷₂_ : {X Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
 -- Coherence of Natural Associativities, Commutativities, etc.
 -- Kelly 1964)
 unit-braid : unite₊l {O} ⟷₂ swap₊ ◎ unite₊l
-unit-braid = TODO!
+unit-braid = TODO! -- see above comment
 
 braid-unit : swap₊ ◎ unite₊l ⟷₂ unite₊l {O}
-braid-unit = TODO!
+braid-unit = TODO! -- see above comment
 
 -- Equational reasoning
 

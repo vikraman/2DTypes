@@ -41,8 +41,10 @@ module _ {c₁ c₂ : O ⟷₁^ m} where
   evalNorm₂-O α = e= λ { (n , ()) }
 
 exchange-swap : {n m : ℕ} → (c : n ⟷₁^ m) → pi^2list (swap₊^ ◎^ ⊕^ ⊕^ c) ≈* pi^2list ((⊕^ ⊕^ c) ◎^ swap₊^)
-exchange-swap c = TODO! -- [0] ++ map (+2) l ≈* map (+2) l ++ [0] by a sequence of swaps
+exchange-swap c = TODO! -- [fzero] ++ map S⟨ S⟨_⟩ ⟩ l ≈* map S⟨ S⟨_⟩ ⟩ l ++ [fzero] by a sequence of swaps
 
+-- all cases in here should either compute, or be a direct application of the immersion⁻¹-respects≈
+-- (in such a form as the lemma above). 
 evalNorm₂-S : {c₁ c₂ : S n ⟷₁^ S m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
 evalNorm₂-S (assoc◎l^ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃}) with (⟷₁^-eq-size (c₁ ◎^ c₂ ◎^ c₃))
 ... | idp with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃)
@@ -81,35 +83,34 @@ evalNorm₂-S {c₁ = c₁} {c₂ = c₂} (_■^_ α₁ α₂) with (⟷₁^-eq-
       r₂ = evalNorm₂-S α₂
   in  r₁ ∙ r₂
 evalNorm₂-S (_⊡^_ {c₁ = c₁} {c₂ = c₂} {c₃ = c₃} {c₄ = c₄} α₁ α₂) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂) | (⟷₁^-eq-size c₃) | (⟷₁^-eq-size c₄)
-... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO!
+... | idp | idp | p | q rewrite loop-η p rewrite loop-η q = TODO! -- ≈* respects
 evalNorm₂-S (⊕id⟷₁⟷₂^ {n = O}) = idp
-evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+evalNorm₂-S (⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! } -- ! of the case below
 evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = O}) = idp
-evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S hom◎⊕⟷₂^ = TODO!
+evalNorm₂-S (!⊕id⟷₁⟷₂^ {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! } -- trivial, induction over id
+evalNorm₂-S hom◎⊕⟷₂^ = TODO! -- ! of the case below
 evalNorm₂-S (resp⊕⟷₂ {n = O} {c₁ = c₁} {c₂ = c₂} α) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-... | idp | idp = TODO!
+... | idp | idp = TODO! -- induction with map S⟨ S⟨_⟩ ⟩ on the pi^2list
 evalNorm₂-S (resp⊕⟷₂ {n = S n} {c₁ = c₁} {c₂ = c₂} α) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-... | p | q = TODO!
+... | p | q = TODO!  -- induction with map (+1) on the pi^2list
 evalNorm₂-S (hom⊕◎⟷₂^ {c₁ = c₁} {c₂ = c₂}) with (⟷₁^-eq-size c₁) | (⟷₁^-eq-size c₂)
-... | idp | idp = TODO!
+... | idp | idp = TODO! -- map S⟨_⟩ l1 ++ map S⟨_⟩ l2 == map S⟨_⟩ (l1 ++ l2)
 evalNorm₂-S (swapr₊⟷₂^ {n = O} {c = c}) with (⟷₁^-eq-size c)
 ... | idp = e= λ { (O , p) → idp ; (S .0 , ltS) → idp
                                  ; (S n , ltSR (ltSR ())) }
 evalNorm₂-S (swapr₊⟷₂^ {n = S n} {c = c}) with (⟷₁^-eq-size c)
-... | idp = e= λ { (O , p) → TODO! ; (S n , p) → TODO! } -- the same as below
+... | idp = e= λ { (O , p) → TODO! ; (S n , p) → TODO! } -- ! of the case below
 evalNorm₂-S (swapl₊⟷₂^ {n = O} {c = c}) with (⟷₁^-eq-size c)
 ... | idp = e= λ { (O , p) → idp ; (S .0 , ltS) → idp
                                  ; (S n , ltSR (ltSR ())) }
 evalNorm₂-S (swapl₊⟷₂^ {n = S n} {m} {c = c}) with (⟷₁^-eq-size c)
 ... | idp =
   let rel = immersion⁻¹-respects≈ (exchange-swap {n = S n} {m} c)
-  in  TODO -- should be: ap (<– (Fin≃Lehmer {S (S n)})) rel
-  -- but in some versions of Agda, it gets stuck
-evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
-evalNorm₂-S (hexagonl₊r {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
+  in  TODO -- should be: ap (<– (Fin≃Lehmer {S (S n)})) rel, but in some versions of Agda, it gets stuck
+evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! } -- a concrete 1-combinator, use immersion⁻¹-respects≈
+evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! } -- a concrete 1-combinator, use immersion⁻¹-respects≈
+evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! } -- a concrete 1-combinator, use immersion⁻¹-respects≈
+evalNorm₂-S (hexagonl₊r {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! } -- a concrete 1-combinator, use immersion⁻¹-respects≈
 
 evalNorm₂ : {c₁ c₂ : n ⟷₁^ m} → c₁ ⟷₂^ c₂ → evalNorm₁ c₁ == evalNorm₁ c₂
 evalNorm₂ {n = O} = evalNorm₂-O
