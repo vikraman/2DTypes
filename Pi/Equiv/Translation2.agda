@@ -25,12 +25,7 @@ private
   variable
     t t₁ t₂ t₃ t₄ t₅ t₆ : Pi.U
 
--- eval₀-card : Pi.U → ℕ
--- eval₀-card O = O
--- eval₀-card I = S O
--- eval₀-card (t₁ + t₂) = eval₀-card t₁ N.+ eval₀-card t₂
--- eval₀-card (t₁ × t₂) = eval₀-card t₁ N.* eval₀-card t₂
-
+-- the convention is that functions marked with -aux suffix work with NonIndexed version of Pi+
 eval₀-card-aux : NPi+.U → ℕ
 eval₀-card-aux O = O
 eval₀-card-aux I = S O
@@ -233,6 +228,7 @@ eval-quote₀-aux O = id⟷₁
 eval-quote₀-aux I = id⟷₁
 eval-quote₀-aux (t + t₁) = eval-quote₀-aux t ⊕ eval-quote₀-aux t₁
 
+-- The only problematic case here would be swap
 eval-quote₁-aux : ∀ {t₁} {t₂} → (c : t₁ NPi+.⟷₁ t₂) → eval₁-aux (quote₁-aux c) NPi+.⟷₂ eval-quote₀-aux _ ◎ c ◎ NPi+.!⟷₁ (eval-quote₀-aux _)
 eval-quote₁-aux unite₊l = TODO!
 eval-quote₁-aux uniti₊l = TODO!
@@ -248,25 +244,6 @@ eval-quote₁-aux id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
 eval-quote₁-aux (c ◎ c₁) = TODO!
 eval-quote₁-aux (c ⊕ c₁) = TODO!
 
--- eval-quote₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ NPi+.⟷₁ t₂} → (α : c₁ NPi+.⟷₂ c₂) → eval₂-aux (quote₂-aux α) NPi+.⟷₃ α
--- eval-quote₂-aux = TODO-
-
-
--- mutual
---   quote₀-aux-* : (t₁ t₂ : Pi.U) → quote₀-aux (eval₀-aux t₁ * eval₀-aux t₂) Pi.⟷₁ t₁ × t₂
---   quote₀-aux-* O t₂ = factorzl
---   quote₀-aux-* I t₂ = quote-eval₀-aux t₂ ◎ uniti⋆l
---   quote₀-aux-* (t₁ + t₃) t₂ = (quote₀-aux-* t₁ t₂ ⊕ quote₀-aux-* t₃ t₂) ◎ factor
---   quote₀-aux-* (t₁ × t₃) t₂ =
---     let r = quote₀-aux-* t₁ (t₃ × t₂)
---     in  TODO! ◎ r ◎  assocl⋆
-
---   quote-eval₀-aux : (t : Pi.U) → quote₀-aux (eval₀-aux t) Pi.⟷₁ t
---   quote-eval₀-aux O = id⟷₁
---   quote-eval₀-aux I = id⟷₁
---   quote-eval₀-aux (t + t₁) = quote-eval₀-aux t ⊕ quote-eval₀-aux t₁
---   quote-eval₀-aux (t × t₁) = quote₀-aux-* t t₁
-
 {-# TERMINATING #-}
 quote-eval₀-aux : (t : Pi.U) → quote₀-aux (eval₀-aux t) Pi.⟷₁ t
 quote-eval₀-aux O = id⟷₁
@@ -279,32 +256,5 @@ quote-eval₀-aux ((t × t₂) × t₁) =
   let r = quote-eval₀-aux (t × (t₂ × t₁))
   in  quote₁-aux (*-assoc (eval₀-aux t) (eval₀-aux t₂) (eval₀-aux t₁)) ◎ r ◎ assocl⋆
 
-
 quote-eval₁-aux : ∀ {t₁} {t₂} → (c : t₁ Pi.⟷₁ t₂) → quote₁-aux (eval₁-aux c) Pi.⟷₂ quote-eval₀-aux _ ◎ c ◎ Pi.!⟷₁ (quote-eval₀-aux _)
-quote-eval₁-aux unite₊l = TODO!
-quote-eval₁-aux uniti₊l = TODO!
-quote-eval₁-aux unite⋆l = TODO!
-quote-eval₁-aux uniti⋆l = TODO!
-quote-eval₁-aux swap₊ = TODO!
-quote-eval₁-aux swap⋆ = TODO!
-quote-eval₁-aux assocl₊ = TODO!
-quote-eval₁-aux assocr₊ = TODO!
-quote-eval₁-aux assocl⋆ = TODO!
-quote-eval₁-aux assocr⋆ = TODO!
-quote-eval₁-aux absorbr = TODO!
-quote-eval₁-aux absorbl = TODO!
-quote-eval₁-aux factorzr = TODO!
-quote-eval₁-aux factorzl = TODO!
-quote-eval₁-aux dist = TODO!
-quote-eval₁-aux distl = TODO!
-quote-eval₁-aux factor = TODO!
-quote-eval₁-aux factorl = TODO!
-quote-eval₁-aux id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
-quote-eval₁-aux (c ◎ c₁) = TODO!
-quote-eval₁-aux (c ⊕ c₁) = TODO!
-quote-eval₁-aux (c ⊗ c₁) = TODO!
-
-{-
-quote-eval₂-aux : ∀ {t₁} {t₂} → {c₁ c₂ : t₁ Pi.⟷₁ t₂} → (α : c₁ Pi.⟷₂ c₂) → quote₂-aux (eval₂-aux α) Pi.⟷₃ α
-quote-eval₂-aux = TODO-
- -}
+quote-eval₁-aux c = TODO- -- Coherence of distributivity
