@@ -148,7 +148,6 @@ private
 ++^-⊕-id-r (c₁ ◎^ c₂) = ++^-⊕-id-r c₁ ⊡^ ++^-⊕-id-r c₂
 ++^-⊕-id-r (⊕^ c) = resp⊕⟷₂ (++^-⊕-id-r c)
 
-
 ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) (c₂ : o ⟷₁^ p)
         → (++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂)) ⟷₂^ (!⟷₁^ (++^-⊕ c₁ c₂))
 ++^-⊕-! swap₊^ c₂ = TODO- -- compute the ! on ++^-r and use swapl₊⟷₂
@@ -158,20 +157,20 @@ private
 ++^-⊕-! (c₁ ◎^ c₃) c₂ =
   (++^-⊕-! c₃ c₂ ⊡^ ++^-⊕-id-r (!⟷₁^ c₁)) ■^
   (id⟷₂^ ⊡^ ++^-r-!) ■^
-  TODO-
+  TODO- -- reduce ++^-r to ++^-r and ++^-l
 ++^-⊕-! (⊕^ c₁) c₂ = resp⊕⟷₂ (++^-⊕-! c₁ c₂)
 
 ++^-⊕-◎-l : {n m o p : ℕ} {c₁ c₂ : n ⟷₁^ m} {c₃ : o ⟷₁^ p} (α : c₁ ⟷₂^ c₂)
           → (++^-⊕ c₁ c₃) ⟷₂^ (++^-⊕ c₂ c₃)
-++^-⊕-◎-l α = TODO-
+++^-⊕-◎-l α = TODO- -- reduce ++^ to ++^-l and ++^-r using ++^-⊕-l-r and use ++^-r⟷₂
 
 ++^-⊕-◎-r : {n m o p : ℕ} → {c₁ : n ⟷₁^ m} {c₂ c₃ : o ⟷₁^ p} (α : c₂ ⟷₂^ c₃)
           → (++^-⊕ c₁ c₂) ⟷₂^ (++^-⊕ c₁ c₃)
-++^-⊕-◎-r α = TODO-
+++^-⊕-◎-r α = TODO- -- reduce ++^ to ++^-l and ++^-r using ++^-⊕-l-r and use ++^-l⟷₂
 
 ++^-⊕-◎ : {n m o p : ℕ} → {c₁ c₂ : n ⟷₁^ m} {c₃ c₄ : o ⟷₁^ p} (α : c₁ ⟷₂^ c₂) (β : c₃ ⟷₂^ c₄)
         → (++^-⊕ c₁ c₃) ⟷₂^ (++^-⊕ c₂ c₄)
-++^-⊕-◎ α = TODO-
+++^-⊕-◎ α = TODO- -- composition of the lemmas above
 
 ++^-triangle : (n m : ℕ)
              → (++^-assoc n O m) ◎^ ++^-l (++^-unit-l m) ⟷₂^ ++^-r (++^-unit-r n)
@@ -187,8 +186,8 @@ private
   ((!⟷₂^ hom◎⊕⟷₂^) ■^ (id⟷₂^ ⊡^ hom⊕◎⟷₂^)))
 
 ++^-cons-assoc : (n m : ℕ) → ++^-r {o = m} (++^-cons n) ◎^ ++^-assoc n 1 m ⟷₂^ ++^-cons (n ++ m) ◎^ ++^-assoc n m 1 ◎^ !⟷₁^ (++^-l {o = n} (++^-cons m))
-++^-cons-assoc O m = TODO-
-++^-cons-assoc (S n) m = TODO-
+++^-cons-assoc O m = TODO- -- reduce both sides to id⟷₁^
+++^-cons-assoc (S n) m = TODO- -- recursive call and naturality of swap₊^
 
 ++^-cons-S : (n m : ℕ) → S (n ++ m) ⟷₁^ n ++ S m
 ++^-cons-S O m = id⟷₁^
@@ -202,7 +201,7 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 ... | idp = swapr₊⟷₂^
 
 -- ++^-swap is defined by induction on the left paramter
--- here, we show how does it behave by induction on the right parameter
+-- here, we show how it behaves by induction on the right parameter
 ++^-swap-S : (n m : ℕ) → ++^-swap n (S m) ⟷₂^ !⟷₁^ (++^-assoc n 1 m) ◎^ (++^-r (!⟷₁^ (++^-cons n))) ◎^ (⊕^ (++^-swap n m))
 ++^-swap-S O m = idl◎r^ ■^ idl◎r^
 ++^-swap-S (S n) m =
@@ -226,7 +225,7 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 ++^-hexagon : (n m o : ℕ)
             → (++^-assoc n m o) ◎^ ++^-swap n (m ++ o) ◎^ ++^-assoc m o n ⟷₂^
               ++^-r {o = o} (++^-swap n m) ◎^ ++^-assoc m n o ◎^ ++^-l {o = m} (++^-swap n o)
-++^-hexagon O m o = TODO!
+++^-hexagon O m o = TODO- -- reduce to ++^-unit-l and use triangle coherence
 ++^-hexagon (S n) m o =
   let r = ++^-hexagon n m o
       c₁ = ⊕^ ++^-swap n (m ++ o)
@@ -244,7 +243,7 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
       (⊕^ ((_ ◎^ _ ) ◎^ (_ ◎^ _))) ◎^ ((_ ◎^ (_ ◎^ _)) ◎^ _) ⟷₂^⟨ resp⊕⟷₂ assoc◎l^ ⊡^ id⟷₂^ ⟩
       (⊕^ (((_ ◎^ _ ) ◎^ _) ◎^ _)) ◎^ ((_ ◎^ (_ ◎^ _)) ◎^ _) ⟷₂^⟨ (resp⊕⟷₂ (assoc◎r^ ⊡^ id⟷₂^)) ⊡^ id⟷₂^ ⟩
       (⊕^ ((_ ◎^ (_ ◎^ _)) ◎^ _)) ◎^ ((_ ◎^ (_ ◎^ _)) ◎^ _) ⟷₂^⟨ resp⊕⟷₂ (++^-hexagon n m o ⊡^ id⟷₂^) ⊡^ id⟷₂^ ⟩
-      _ ⟷₂^⟨ TODO! ⟩
+      _ ⟷₂^⟨ TODO! ⟩ -- proved on paper
       _ ⟷₂^∎
 
 ++^-swap-unit : (n : ℕ) → !⟷₁^ (++^-unit-r n) ◎^ ++^-swap n 0 ⟷₂^ id⟷₁^
@@ -266,7 +265,7 @@ swapr₊⟷₂^-gen c with (⟷₁^-eq-size c)
 ++^-swap-S-assoc : (n m : ℕ)
                  → ++^-swap (S n) m  ◎^ ++^-l {o = m} (++^-swap 1 n)  ⟷₂^
                    (⊕^ ++^-swap n m) ◎^ ++^-swap 1 (m ++ n) ◎^ (++^-assoc m n 1)
-++^-swap-S-assoc n m = TODO!
+++^-swap-S-assoc n m = TODO! -- reduce ++^-swap by induction and use naturality
 
 -- ++-cons (m ++ n) in terms of ++-cons m and ++-cons n
 ++^-cons-++ : (n m : ℕ) →
