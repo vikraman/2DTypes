@@ -104,7 +104,8 @@ evalNorm₂-S (swapl₊⟷₂^ {n = O} {c = c}) with (⟷₁^-eq-size c)
 evalNorm₂-S (swapl₊⟷₂^ {n = S n} {m} {c = c}) with (⟷₁^-eq-size c)
 ... | idp =
   let rel = immersion⁻¹-respects≈ (exchange-swap {n = S n} {m} c)
-  in  ap (<– (Fin≃Lehmer {S (S n)})) rel
+  in  TODO -- should be: ap (<– (Fin≃Lehmer {S (S n)})) rel
+  -- but in some versions of Agda, it gets stuck
 evalNorm₂-S (hexagonl₊l {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S (hexagonl₊l {n = S n}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
 evalNorm₂-S (hexagonl₊r {n = O}) = e= λ { (O , p) → idp ; (S n , p) → TODO! }
