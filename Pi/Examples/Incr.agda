@@ -63,7 +63,8 @@ incr+test-3 = fin= idp
 
 open import Pi.Examples.Interp
 
-test-interp-incr2 = interp-elems (incr 2)
-test-interp-incr2+ = interp+-elems (Pi^.quote^₁ (eval₁ (incr 2)))
-test-interp-incr2^ = interp+-elems (incr+ 2)
-test-encode-interp-incr2 = map encode-interp-elems test-interp-incr2
+private
+  test-interp-incr2 = interp-elems (incr 2)
+  test-interp-incr2+ = interp+-elems (Pi^.quote^₁ (eval₁ (incr 2)))
+  test-interp-incr2^ = interp+-elems (incr+ 2)
+  test-encode-interp-incr2 = map encode-interp-elems test-interp-incr2

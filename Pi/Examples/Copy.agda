@@ -42,12 +42,13 @@ copy+ = Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp ∘ Pi^.evalNorm₁ ∘ copy^
 
 open import Pi.Examples.Interp
 
-test-interp-copy1 = interp-elems (copy 1)
-test-interp-copy1+ = interp+-elems (Pi^.quote^₁ (eval₁ (copy 1)))
-test-interp-copy1^ = interp+-elems (copy+ 1)
-test-encode-interp-copy1 = map encode-interp-elems test-interp-copy1
+private
+  test-interp-copy1 = interp-elems (copy 1)
+  test-interp-copy1+ = interp+-elems (Pi^.quote^₁ (eval₁ (copy 1)))
+  test-interp-copy1^ = interp+-elems (copy+ 1)
+  test-encode-interp-copy1 = map encode-interp-elems test-interp-copy1
 
-test-interp-copy2 = interp-elems (copy 2)
-test-interp-copy2+ = interp+-elems (Pi^.quote^₁ (eval₁ (copy 2)))
-test-interp-copy2^ = interp+-elems (copy+ 2)
-test-encode-interp-copy2 = map encode-interp-elems test-interp-copy2
+  test-interp-copy2 = interp-elems (copy 2)
+  test-interp-copy2+ = interp+-elems (Pi^.quote^₁ (eval₁ (copy 2)))
+  test-interp-copy2^ = interp+-elems (copy+ 2)
+  test-encode-interp-copy2 = map encode-interp-elems test-interp-copy2

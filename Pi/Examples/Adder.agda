@@ -89,6 +89,7 @@ check
 
 --}
 
+-- NOTE: This takes hours to normalise!
 -- adder4 : 𝔹 4 Pi.⟷₁ 𝔹 4
 -- adder4 = -- 0 x (1 x (2 x 3))
 --   swap⋆ ◎ -- (1 x (2 x 3)) x 0

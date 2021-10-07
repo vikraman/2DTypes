@@ -107,38 +107,10 @@ reset2-perm+ = (Pi^.quote^₁ ∘ Pi^.quoteNorm₁ idp) reset2-perm
 
 -- -}
 
--- _ : (reset+test 0 == 0) S.×
---     (reset+test 1 == 1) S.×
---     (reset+test 2 == 2) S.×
---     (reset+test 3 == 3) S.×
---     (reset+test 4 == 4) S.×
---     (reset+test 5 == 5) S.×
---     (reset+test 6 == 6) S.×
---     (reset+test 7 == 7)
-
--- _ = fin= idp ,
---     fin= idp ,
---     fin= idp ,
---     fin= idp ,
---     fin= idp ,
---     fin= idp ,
---     fin= idp ,
---     fin= idp
-
-{-
-
-(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-(id⟷₁ ⊕
- id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊)
-◎
-(id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-id⟷₁
-
--}
-
 open import Pi.Examples.Interp
 
-test-interp-reset2 = interp-elems (reset 2)
+private
+  test-interp-reset2 = interp-elems (reset 2)
 
 {-
 ((true , true , true) , false , true , true) ::
@@ -151,8 +123,9 @@ test-interp-reset2 = interp-elems (reset 2)
 ((false , false , false) , false , false , false) :: nil
 -}
 
-test-interp-reset2x+ = interp+-elems (Pi^.quote^₁ (eval₁ (reset 2)))
-test-encode-interp-reset2 = map encode-interp-elems test-interp-reset2
+private
+  test-interp-reset2x+ = interp+-elems (Pi^.quote^₁ (eval₁ (reset 2)))
+  test-encode-interp-reset2 = map encode-interp-elems test-interp-reset2
 
 -- (true , inr (inr (inr (inr true)))) ::
 -- (inr true , inr (inr (inr (inr (inr true))))) ::
@@ -182,7 +155,8 @@ test-encode-interp-reset2 = map encode-interp-elems test-interp-reset2
 --  inr (inr (inr (inr (inr (inr (inr true)))))))
 -- :: nil
 
-test-interp-reset2+ = interp+-elems (reset+ 2)
+private 
+  test-interp-reset2+ = interp+-elems (reset+ 2)
 
 -- (true , true) ::
 -- (inr true , inr true) ::
@@ -201,7 +175,8 @@ test-interp-reset2+ = interp+-elems (reset+ 2)
 --  inr (inr (inr (inr (inr (inr (inr true)))))))
 -- :: nil
 
-test-interp-reset^2 = interp^-elems (reset^ 2)
+private
+  test-interp-reset^2 = interp^-elems (reset^ 2)
 
 -- (true , true) ::
 -- (inr true , inr true) ::
@@ -223,8 +198,10 @@ test-interp-reset^2 = interp^-elems (reset^ 2)
 open import Pi.Equiv.Equiv1NormHelpers
 open import Pi.Coxeter.LehmerCoxeterEquiv
 open import Pi.Lehmer.LehmerFinEquiv
-reset^-list = pi^2list (reset^ 2)
-reset^-list+ = immersion (–> Fin≃Lehmer reset2-perm)
+
+private
+  reset^-list = pi^2list (reset^ 2)
+  reset^-list+ = immersion (–> Fin≃Lehmer reset2-perm)
 
 {-
 reset+ 2:
