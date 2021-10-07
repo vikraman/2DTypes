@@ -21,11 +21,11 @@ module _ {n : ℕ} where
             g p = pair= (fst= p) prop-has-all-paths-↓
             f-g : (p : ΩBAut (Fin n)) → f (g p) == p
             f-g p = pair== (fst=-β (fst= p) prop-has-all-paths-↓)
-                           (prop-has-all-paths-↓ {{transport is-prop (ua (to-transp-equiv _ (fst= p) ⁻¹)) ⟨⟩}})
+                           (prop-has-all-paths-↓ {{↓-preserves-level ⟨⟩}})
                   ∙ ! (pair=-η p)
             g-f : (p : Ω ⊙[ UFin , FinFS n ]) → g (f p) == p
             g-f p = pair== (fst=-β (fst= p) prop-has-all-paths-↓)
-                           (prop-has-all-paths-↓ {{transport is-prop (ua (to-transp-equiv _ (fst= p) ⁻¹)) ⟨⟩}})
+                           (prop-has-all-paths-↓ {{↓-preserves-level ⟨⟩}})
                   ∙ ! (pair=-η p)
 
     UFin≃Fin : Ω ⊙[ UFin , FinFS n ] ≃ Aut (Fin n)
