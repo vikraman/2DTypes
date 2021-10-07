@@ -230,19 +230,19 @@ eval-quote₀-aux (t + t₁) = eval-quote₀-aux t ⊕ eval-quote₀-aux t₁
 
 -- The only problematic case here would be swap
 eval-quote₁-aux : ∀ {t₁} {t₂} → (c : t₁ NPi+.⟷₁ t₂) → eval₁-aux (quote₁-aux c) NPi+.⟷₂ eval-quote₀-aux _ ◎ c ◎ NPi+.!⟷₁ (eval-quote₀-aux _)
-eval-quote₁-aux unite₊l = TODO!
-eval-quote₁-aux uniti₊l = TODO!
+eval-quote₁-aux unite₊l = TODO- -- see the comment above
+eval-quote₁-aux uniti₊l = TODO- -- see the comment above
 eval-quote₁-aux {t₃ + t₄} {t₄ + t₃} swap₊ =
   trans⟷₂ (
     trans⟷₂ (
       trans⟷₂ (
         trans⟷₂ (
           trans⟷₂ idl◎r (split⊕-id⟷₁ ⊡ id⟷₂)) ((resp⊕⟷₂ linv◎r linv◎r ⊡ id⟷₂))) (hom⊕◎⟷₂ ⊡ id⟷₂)) assoc◎r) (id⟷₂ ⊡ swapr₊⟷₂)
-eval-quote₁-aux assocl₊ = TODO!
-eval-quote₁-aux assocr₊ = TODO!
+eval-quote₁-aux assocl₊ = TODO- -- see the comment above
+eval-quote₁-aux assocr₊ = TODO- -- see the comment above
 eval-quote₁-aux id⟷₁ = trans⟷₂ linv◎r (id⟷₂ ⊡ idl◎r)
-eval-quote₁-aux (c ◎ c₁) = TODO!
-eval-quote₁-aux (c ⊕ c₁) = TODO!
+eval-quote₁-aux (c ◎ c₁) = TODO- -- see the comment above
+eval-quote₁-aux (c ⊕ c₁) = TODO- -- see the comment above
 
 {-# TERMINATING #-}
 quote-eval₀-aux : (t : Pi.U) → quote₀-aux (eval₀-aux t) Pi.⟷₁ t

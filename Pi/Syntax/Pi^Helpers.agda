@@ -12,6 +12,10 @@ private
     n m o p : ℕ
     c c₁ c₂ : n ⟷₁^ m
 
+-- NOTE: This file builds the symmetric monoidal structure of Pi^ using the minimal PROP equations. To prove each
+-- equation, we need to do an induction on the appropriate combinator or cardinality, to get each derived combinator to
+-- reduce. Naturality is proved by composing naturality of adjacent swaps.
+
 ++^-id : (n == m) → n ⟷₁^ m
 ++^-id p = transport (λ n → _ ⟷₁^ n) p id⟷₁^
 
@@ -26,22 +30,23 @@ private
 ++^-l-id {n} {O} = id⟷₂^
 ++^-l-id {n} {S o} = resp⊕⟷₂ ++^-l-id ■^ ⊕id⟷₁⟷₂^
 
--- ++^-bigswap : {n m : ℕ} → (n ⟷₁^ m) → (2 ++ n) ⟷₁^ (2 ++ m)
--- ++^-bigswap swap₊^ = swap₊^ ◎^ ⊕^ ⊕^ swap₊^
--- ++^-bigswap id⟷₁^ = swap₊^
--- ++^-bigswap (c ◎^ c₁) = ++^-bigswap c ◎^ (⊕^ (⊕^ c₁))
--- ++^-bigswap (⊕^ c) = swap₊^ ◎^ ⊕^ (⊕^ (⊕^ c))
-
 ++^-bigswap : {n m : ℕ} → (n ⟷₁^ m) → (2 ++ n) ⟷₁^ (2 ++ m)
 ++^-bigswap c = swap₊^ ◎^ ⊕^ ⊕^ c
 
--- lemma : {n m : ℕ} → (c : n ⟷₁^ m) → ++^-bigswap c ⟷₂^ swap₊^ ◎^ ⊕^ ⊕^ c
--- lemma swap₊^ = id⟷₂^
--- lemma id⟷₁^ = idr◎r^ ■^ (id⟷₂^ ⊡^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ !⊕id⟷₁⟷₂^))
--- lemma (c ◎^ c₁) = 
---   let r = lemma c
---   in  (r ⊡^ id⟷₂^) ■^ assoc◎r^ ■^ (id⟷₂^ ⊡^ (hom◎⊕⟷₂^ ■^ resp⊕⟷₂ hom◎⊕⟷₂^))
--- lemma (⊕^ c) = id⟷₂^
+-- alternate but equivalent definition
+++^-bigswap' : {n m : ℕ} → (n ⟷₁^ m) → (2 ++ n) ⟷₁^ (2 ++ m)
+++^-bigswap' swap₊^ = swap₊^ ◎^ ⊕^ ⊕^ swap₊^
+++^-bigswap' id⟷₁^ = swap₊^
+++^-bigswap' (c ◎^ c₁) = ++^-bigswap' c ◎^ (⊕^ (⊕^ c₁))
+++^-bigswap' (⊕^ c) = swap₊^ ◎^ ⊕^ (⊕^ (⊕^ c))
+
+++^-bigswap-η : {n m : ℕ} → (c : n ⟷₁^ m) → ++^-bigswap' c ⟷₂^ ++^-bigswap c
+++^-bigswap-η swap₊^ = id⟷₂^
+++^-bigswap-η id⟷₁^ = idr◎r^ ■^ (id⟷₂^ ⊡^ (!⊕id⟷₁⟷₂^ ■^ resp⊕⟷₂ !⊕id⟷₁⟷₂^))
+++^-bigswap-η (c ◎^ c₁) = 
+  let r = ++^-bigswap-η c
+  in  (r ⊡^ id⟷₂^) ■^ assoc◎r^ ■^ (id⟷₂^ ⊡^ (hom◎⊕⟷₂^ ■^ resp⊕⟷₂ hom◎⊕⟷₂^))
+++^-bigswap-η (⊕^ c) = id⟷₂^
 
 ++^-l-! : {o : ℕ} → (++^-l {o = o} (!⟷₁^ c)) ⟷₂^ !⟷₁^ (++^-l {o = o} c)
 ++^-l-! {o = O} = id⟷₂^
@@ -52,7 +57,6 @@ private
 ++^-r id⟷₁^ = id⟷₁^
 ++^-r (c₁ ◎^ c₂) = ++^-r c₁ ◎^ ++^-r c₂
 ++^-r (⊕^ c) = ⊕^ (++^-r c)
-
 
 ++^-r-! : {o : ℕ} → (++^-r {o = o} (!⟷₁^ c)) ⟷₂^ !⟷₁^ (++^-r {o = o} c)
 ++^-r-! {c = swap₊^} = id⟷₂^
@@ -147,7 +151,7 @@ private
 
 ++^-⊕-! : {n m o p : ℕ} → (c₁ : n ⟷₁^ m) (c₂ : o ⟷₁^ p)
         → (++^-⊕ (!⟷₁^ c₁) (!⟷₁^ c₂)) ⟷₂^ (!⟷₁^ (++^-⊕ c₁ c₂))
-++^-⊕-! swap₊^ c₂ = TODO-
+++^-⊕-! swap₊^ c₂ = TODO- -- compute the ! on ++^-r and use swapl₊⟷₂
 ++^-⊕-! id⟷₁^ c₂ =
   ++^-⊕-id-l (!⟷₁^ c₂) ■^
   (++^-l-! {c = c₂} ■^ resp!⟷₂ (!⟷₂^ (++^-⊕-id-l c₂)))
