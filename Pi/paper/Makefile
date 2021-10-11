@@ -1,4 +1,4 @@
-TARGETS = main.pdf
+TARGETS = main.pdf arxiv.pdf
 DEPS_DIR = .deps
 LATEXMK = latexmk -recorder -use-make -deps
 
