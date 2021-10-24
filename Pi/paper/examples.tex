@@ -13,8 +13,7 @@ its input bits.
 For concreteness, we demonstrate two different circuits that implement the
 following reversible function specification
 $\mathit{reversibleOr}(h,b_1,b_2) ~=~ (h \,\underline{\vee}\, (b_1 \vee b_2),
-~b_1, ~b_2)$ where $\vee$ is boolean disjunction and $\underline{\vee}$ is the
-exclusive-or operation. The circuits are presented in both the textual interface
+~b_1, ~b_2)$ where~$\vee$ is disjunction and~$\underline{\vee}$ is exclusive-disjunction. The circuits are presented in both the textual interface
 \verb|qasm| and the graphical interface:
 
 \medskip
@@ -41,12 +40,13 @@ exclusive-or operation. The circuits are presented in both the textual interface
 
 \medskip
 
-There is a wealth of manual and algorithmic approaches for producing circuits such
-as the two above~\cite{maslov:2003:rls:1087512,1201583}. The circuit on the left
-was manually produced using a standard synthesis algorithm for reversible
+There is a wealth of manual and algorithmic approaches for producing circuits
+such as the two above~\cite{maslov:2003:rls:1087512,1201583}. The circuit on the
+left was manually produced using a standard synthesis algorithm for reversible
 circuits~\cite{10.1145/775832.775915}. The circuit on the right was produced
-using an approach that analyzes the recursive structure of the circuit (and
-would generalise to computing the disjunction of more than two inputs):
+using an approach that analyzes the recursive structure of
+$\mathit{reversibleOr}$ (and would generalise to computing the disjunction of
+more than two inputs):
 
 From the specification of the circuit, we expect input \verb|011| to be mapped
 to \verb|111|. To gain some intuition, we trace the evaluation of each circuit for
@@ -58,19 +58,25 @@ second circuit, the trace of the execution on the same input value \verb|011| go
 
 Although rather trivial, the examples above illustrate the general idea. A more
 interesting example would be the classical core of Shor's algorithm which
-requires a circuit implementing $f(r) = a^{r} \mod N$ for fixed $a$ and $N$. The
-specification of the circuit is relatively straightforward to calculate. Here it
-is for $a=11$ and $N=15$:
-\[\begin{array}{rcll}
-g(r,h) &=& \left\{ \begin{array}{ll}
-                     (r,h+1) & \mbox{when~$r$~even~and~$h$~even} \\
-                     (r,h-1) & \mbox{when~$r$~even~and~$h$~odd} \\
-                     (r,11-h) & \mbox{when~$r$~odd~and~$4 > h \geq 0$~or~$12 > h \geq 8$} \\
-                     (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
-                                \end{array}\right.
-\end{array}\]
-
-\noindent However, as explained in standard accounts of the algorithm (e.g., the
+requires a circuit implementing modular exponentiation $f(r) = a^{r} \mod N$ for
+fixed $a$ and $N$. Using Toffoli's construction~\citeyearpar{Toffoli:1980}, a
+reversible specification of this function is $f^R(r,h) = (r, f(r)
+~\underline{\vee}~ h)$ where the exclusive disjunction~$\underline{\vee}$ is
+applied bitwise. When $h=0$ the second component of the result of $f^R$ is the
+result of the original modular exponentiation $f$.
+%%
+%% the specification of the circuit is relatively straightforward to
+%% calculate. Here it is for $a=11$ and $N=15$:
+%% \[\begin{array}{rcll}
+%% g(r,h) &=& \left\{ \begin{array}{ll}
+%%                      (r,h+1) & \mbox{when~$r$~even~and~$h$~even} \\
+%%                      (r,h-1) & \mbox{when~$r$~even~and~$h$~odd} \\
+%%                      (r,11-h) & \mbox{when~$r$~odd~and~$4 > h \geq 0$~or~$12 > h \geq 8$} \\
+%%                      (r,19-h) & \mbox{when~$r$~odd~and~$8 > h \geq 4$~or~$16 > h \geq 12$}
+%%                                 \end{array}\right.
+%% \end{array}\]
+%%
+However, as explained in standard accounts of the algorithm (e.g., the
 Qiskit implementation), producing an efficient modular exponentiation circuit
 from this specification is not straightforward and is actually the bottleneck in
 Shor’s algorithm. Typical derivations of the circuit start from elementary
