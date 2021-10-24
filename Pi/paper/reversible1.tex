@@ -19,7 +19,7 @@
   {\scalebox{\scalef}{%
       \Rule{}
       {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : B \isoone C}
-      {\jdg{}{}{c_1 \fatsemi c_2 : A \isoone C}}
+      {\jdg{}{}{c_1 \circledcirc c_2 : A \isoone C}}
       {}
 
       \Rule{}
@@ -129,18 +129,17 @@ $\inrv{v}$, and the product type ($\times$) containing pairs of values $(v_1,v_2
 % types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
 % language~\cite{James:2012:IE:2103656.2103667,rc2011}.
 
-To see how this language expresses reversible circuits, we present a few examples in the Agda embedding of the
-language. The Agda syntax is almost identical to the syntax in Fig.~\ref{fig:pi-terms} except that sequential
-composition is written using $\circledcirc$. First it is possible to directly mimic the \verb|qasm|-perspective by
-defining types that describe sequences of booleans. We use the type $\mathbb{2} = \onet + \onet$ to represent booleans
-with $\inlv{\Acon{tt}}$ representing \textsf{true} and $\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean
-negation (the \verb|x|-gate) is straightforward to define using the primitive combinator $\swapp$. We can represent
-$n$-bit words using an n-ary product of boolean values, thus the type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$
-(abbreviated $\mathbb{B}~3$) corresponds to a collection of wires that can transmit three bits.
+To see how this language expresses reversible circuits, we present a few examples in the Agda embedding of the language.
+First it is possible to directly mimic the \verb|qasm|-perspective by defining types that describe sequences of
+booleans. We use the type $\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing
+\textsf{true} and $\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean negation (the \verb|x|-gate) is
+straightforward to define using the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product
+of boolean values, thus the type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated $\mathbb{B}~3$)
+corresponds to a collection of wires that can transmit three bits.
 %
 % For example, we can express a 3-bit word reversal operation as follows:
 % $\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
-% $\Afun{reverse} = \swapt \fatsemi (\swapt  \otimes  \idc)~ \fatsemi \assocrt$
+% $\Afun{reverse} = \swapt \circledcirc (\swapt  \otimes  \idc)~ \circledcirc \assocrt$
 % \noindent The manual trace of $\Afun{reverse}$ below confirms that it indeed reverses the three bits:
 % \[\begin{array}{rlr}
 %                          & (v_1, (v_2, v_3)) \\
@@ -288,7 +287,7 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 \begin{center}
   {\scalebox{\scalef}{$%
         \begin{array}{rlcl}
-          \denot{(c_1 \fatsemi c_2)} & v           & = & (\denot{c_2} \circ \denot{c_1}) v   \\
+          \denot{(c_1 \circledcirc c_2)} & v           & = & (\denot{c_2} \circ \denot{c_1}) v   \\
           \denot{(c_1 \oplus c_2)}   & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
           \denot{(c_1 \oplus c_2)}   & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
           \denot{(c_1 \otimes c_2)}  & (v_1 , v_2) & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
@@ -361,7 +360,7 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 % the two automorphisms of $1+1$, namely $\idc$ and $\swapp$.
 
 % The denotational semantics can be used to evaluate programs and to check equivalence of programs. For example, it is
-% straightforward to verify that $\denot{(c_1~\oplus~c_2)~\fatsemi~\swapp} = \denot{\swapp \fatsemi (c_2~\oplus~c_1)}$. A
+% straightforward to verify that $\denot{(c_1~\oplus~c_2)~\circledcirc~\swapp} = \denot{\swapp \circledcirc (c_2~\oplus~c_1)}$. A
 % slightly more involved example are the following two programs:
 
 % \rotate{}
@@ -430,7 +429,7 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 % \end{proof}
 
 % \note{Then say that $\mathcal{C}$ is ``the same'' as $\BFin$ We can say here that the relation $\sim$ also identifies
-%   $(c_1~\oplus~c_2)~\fatsemi~\swapp$ and $\swapp \fatsemi (c_2~\oplus~c_1)$ and other properties. ?? }
+%   $(c_1~\oplus~c_2)~\circledcirc~\swapp$ and $\swapp \circledcirc (c_2~\oplus~c_1)$ and other properties. ?? }
 
 % \[\begin{array}{l}
 %     \Tree[ {\small a} [ {\small b} {\small c} ] ] \\
