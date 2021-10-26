@@ -18,7 +18,7 @@ $(DEPS_DIR) :
 	$(LATEXMK) -pdf -deps-out=$(DEPS_DIR)/$@P $<
 
 ExamplesL.tex: latex/Pi/Examples/ExamplesL.tex
-	ln -s latex/Pi/Examples/ExamplesL.tex .
+	if [ ! -e ExamplesL.tex ]; then ln -s latex/Pi/Examples/ExamplesL.tex . ; fi
 
 latex/Pi/Examples/ExamplesL.tex: ../Examples/ExamplesL.lagda
 	agda --latex ../Examples/ExamplesL.lagda
