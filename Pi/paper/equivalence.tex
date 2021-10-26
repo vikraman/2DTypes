@@ -27,9 +27,10 @@ the semantics, are called $\evalt$ and the translations the other way are called
 To state our results formally, we organise the syntax for each language using a technical device, called a syntactic
 category. We define them formally in the appendix, and only state our results here. For each of the $\PiLang$,
 $\PiPlusLang$ and $\PiHatLang$ languages, their syntactic categories, respectively $\PiCat$, $\PiPlusCat$ and
-$\PiHatCat$, have 0-cells for types, 1-cells for 1-combinators, and 2-cells for 2-combinators. We can show that these
-syntactic categories here are actually $(2,0)$-categories, since all the 1-cells and 2-cells are invertible. They are
-also locally-strict, or locally-posetal, because there is at most one 2-cell between compatible 1-cells.
+$\PiHatCat$, have 0-cells for types ($U$, $\UPlus$, and $\UHat$), 1-cells for 1-combinators ($\iso$, $\isop$, and
+$\isoh$), and 2-cells for 2-combinators ($\Iso$, $\Isop$, and $\Isoh$). We can show that these syntactic categories here
+are actually $(2,0)$-categories, since all the 1-cells and 2-cells are invertible. They are also locally-strict, or
+locally-posetal, because there is at most one 2-cell between compatible 1-cells.
 
 \begin{toappendix}
   \begin{proposition}
@@ -72,21 +73,21 @@ syntax for 1-combinators is given in~\Cref{fig:piplus}.
 \begin{figure}[t]
   {\scalebox{\scalef}{$
         \begin{array}{rrcll}
-          \idc :     & A           & \iso & A           & : \idc     \\
-          \identlp : & \zerot + A  & \iso & A           & : \identrp \\
-          \swapp :   & A + B       & \iso & B + A       & : \swapp   \\
-          \assoclp : & A + (B + C) & \iso & (A + B) + C & : \assocrp \\ [1.5ex]
+          \idc :     & A           & \isop & A           & : \idc     \\
+          \identlp : & \zerot + A  & \isop & A           & : \identrp \\
+          \swapp :   & A + B       & \isop & B + A       & : \swapp   \\
+          \assoclp : & A + (B + C) & \isop & (A + B) + C & : \assocrp \\ [1.5ex]
         \end{array}$}}
 
   {\scalebox{\scalef}{
       \Rule{}
-      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : B \iso C}
-      {\jdg{}{}{c_1 \circledcirc c_2 : A \iso C}}
+      {\jdg{}{}{c_1 : A \isop B} \quad \vdash c_2 : B \isop C}
+      {\jdg{}{}{c_1 \circledcirc c_2 : A \isop C}}
       {}
 
       \Rule{}
-      {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : C \iso D}
-      {\jdg{}{}{c_1 \oplus c_2 : A + C \iso B + D}}
+      {\jdg{}{}{c_1 : A \isop B} \quad \vdash c_2 : C \isop D}
+      {\jdg{}{}{c_1 \oplus c_2 : A + C \isop B + D}}
       {}
     }}
   \caption{$\PiPlusLang$ syntax}
