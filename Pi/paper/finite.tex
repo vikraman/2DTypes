@@ -166,7 +166,6 @@ $\inv{a}$. Then, we can encode the free group using the free monoid, that is, li
 ensure that the inverse laws hold, so we have to coalesce adjacent occurences of $a$ and $\inv{a}$.
 
 \begin{definition}[Free group]
-  \label{def:presentation}
   Let $A$ be a set, and $\List[\blank]$ the free monoid. The free group $F(A)$ on $A$ is the set-quotient of $\List[A +
       A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons a \cons \nil
     \sim \nil$.
@@ -187,6 +186,7 @@ the resulting group would be $\mathbb{Z}_2 \eqv \Aut[\Bool]$. Note that not all 
 presentations, and, a group can have any number of different presentations.
 
 \begin{definition}[Group presentation]
+  \label{def:presentation}
   Let $A$ be a set and $R : \List[A + A] \to \List[A + A] \to \UU$ a binary relation on $\List[A + A]$. The group
   $F(\langle A ; R \rangle)$ presented by $A$ and $R$, is given by the set-quotient of the free group $F(A)$ by the
   congruence closure of $R$.
@@ -654,22 +654,45 @@ $\approx$, obtaining an equivalent definition for $\Sn$.
   \end{enumerate}
 \end{proposition}
 
-Notice however, that a group presentation, as defined in~\Cref{def:presentation}, requires the relation to be on the set
-of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The constructor
-$\cancel$ specifies that the inverse of each element is again the same element, using which we can show that our
-definition of $\Sn$ is equivalent to the definition of a presented group, by lifting the $\cox*$ relation.
+\noindent
+Finally, we need to show that $\Sn$ and is indeed a group presentation.
 
-\begin{theorem}
-  \leavevmode
-  \begin{enumerate}
-    \item There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list
-          append, and inverse is given by list reversal.
-    \item $\Sn$ is equivalent to the group presented by generators $\Fin[n]$ with the relations given by $\cox*$
-          extended to $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A \to A$.
-  \end{enumerate}
-\end{theorem}
+\begin{propositionrep}
+  \label{prop:group-structure-Sn}
+  There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
+  inverse is given by list reversal.
+\end{propositionrep}
 
-To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply have to compute their normal forms using
+\begin{proof}
+   The operation $\append$ is associative, with $\nil$ as the neutral element, and the constructor $\cancel$ makes each
+   element an inverse of itself, so the inverse in the group is indeed given by list reversal.
+\end{proof}
+
+\noindent
+Notice however, that for a group presentation, as defined in~\Cref{def:presentation}, the relation needs to be on the
+set of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The following
+proposition lets us lift a group structure on $\List[A]$ to a group presentation.
+
+\begin{propositionrep}
+  \label{prop:generated-group-generalised}
+  Given a set $A$ and a congruence relation $R$ on $\List[A]$ with the group structure given by append and reversal,
+  there is a generated group structure $F(\langle A ; \liftrel{R} \rangle)$, where $\liftrel{R}$ is the relation $R$
+  lifted to $\List[A+A]$ along the codiagonal map $\nabla_{A} : A + A \to A$.
+\end{propositionrep}
+
+\begin{proof}
+  Let $G$ be the group on $\List[A]$. We construct the group homomorphism from $F(\langle A ; \liftrel{R} \rangle)$ to
+  $G$ using the universal property of the group presentation, where the map on generators is given by taking the
+  singleton list. To construct the group homomorphism from $G$, we use the universal property of the set quotient, where
+  the map on the underlying set is given by mapping $\inl$ on the list. Using that the relation is a congruence, we show
+  that this consttitutes a group isomorphism.
+\end{proof}
+
+\begin{corollary}
+  The group $\Sn$ is isomorphic to the group presentation given by ${F(\langle \Fin[n] ; \liftrel{\cox*} \rangle)}$.
+\end{corollary}
+
+\noindent To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply have to compute their normal forms using
 $\normf$. They correspond to the same permutation if and only if these normal forms are equal, which is decidable for
 $\List[\Fin[n]]$.
 
