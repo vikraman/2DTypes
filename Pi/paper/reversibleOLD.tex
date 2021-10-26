@@ -72,7 +72,7 @@ values. These type isomorphisms are collected in Fig.~\ref{pi-terms}.
 {\scalebox{\scalef}{%
 \Rule{}
 {\jdg{}{}{c_1 : A \iso B} \quad \vdash c_2 : B \iso C}
-{\jdg{}{}{c_1 \fatsemi c_2 : A \iso C}}
+{\jdg{}{}{c_1 \circledcirc c_2 : A \iso C}}
 {}
 
 \Rule{}
@@ -145,7 +145,7 @@ $\begin{array}{rclcrcl}
 \\
  \infer{\interp{\idc}{v} \Downarrow v}{}
 \qquad
-\infer{\interp{c_1\fatsemi c_2}{v} \Downarrow v_2}
+\infer{\interp{c_1\circledcirc c_2}{v} \Downarrow v_2}
     {\interp{c_1}{v} \Downarrow v_1 \quad \interp{c_2}{v_1} \Downarrow v_2}
 \qquad
 \infer{\interp{c_1\otimes c_2}{(v_1 , v_2)} \Downarrow (w_1 , w_2)}
