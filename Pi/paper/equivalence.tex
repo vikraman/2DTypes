@@ -307,18 +307,19 @@ quoting permutations. More general, user-guided, reasoning can be done using the
 combinators to rewrite $\PiLang$ programs.
 
 Recall the specification of reversible disjunction from \Cref{sec:examples}, the two Qiskit circuits for implementing
-it, and the corresponding $\PiLang$ definitions \Afun{reversibleOr1} and \Afun{reversibleOr2}. The normal forms for both
-circuits compute to the following, establishing their equivalence:
+it, and the corresponding $\PiLang$ definitions \Afun{reversibleOr1} and \Afun{reversibleOr2}. The type $\mathbb{B}\ 3$
+normalises to $\mathbb{8}+ = \mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} +
+(\mathbb{1} + \mathbb{0})))))))$, and normal forms for both circuits compute to the following, establishing their equivalence:
 
 \medskip
 \resetnormtwo{}
 
-Instead of manually producing $\Pi$-programs to implement the reversible disjunction specification, it is also possible
-to simply quote the desired permutation:
+Instead of manually producing $\Pi$-programs to implement the reversible disjunction specification, it is possible to
+simply quote the desired permutation (using a function $\term{lookup}$ to read a tabulated version for readability):
 
 \medskip
 \resetperm{}
-
+ 
 \noindent The permutation uses the canonical encoding of sequences of bits as natural numbers (e.g., (\textsf{false},
 \textsf{true},\textsf{true}) is encoded as 011 or 3).  The second entry maps index 1 (= 001) to the value 5 (= 101)
 which states that since one of the right bits is set in 001 then the leftmost bit in the output is set. Quoting this
