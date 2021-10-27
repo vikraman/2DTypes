@@ -190,26 +190,26 @@ Curry-Howard-Lambek correspondence for Reversible Logic, Reversible Programming 
 using which we can build a toolbox of technical devices for reasoning about reversible circuits.
 
 \begin{itemize}[leftmargin=*]
-      \item We start in~\Cref{sec:qiskit} by presenting a few reversible circuits in the popular IBM Qiskit framework to
+      \item We start in~\cref{sec:qiskit} by presenting a few reversible circuits in the popular IBM Qiskit framework to
             serve as running examples throughout the paper.
-      \item In~\Cref{sec:pi}, we introduce the two-level language
+      \item In~\cref{sec:pi}, we introduce the two-level language
             $\PiLang$~\cite{jamesInformationEffects2012,caretteComputingSemiringsWeak2016} and illustrate how to write
             reversible circuits and their equivalences using 1-combinators and 2-combinators respectively. We give a
             semantic account of the language by translating each level-1 program to a bijection between finite sets, and
             verifying that programs identified by level-2 constructs denote the same bijection.
-      \item ~\Cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
+      \item ~\cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
             Homotopy Type Theory. We define and characterise the notion of a univalent subuniverse, and construct
             $\UFin$ as a univalent subuniverse which classifies all finite types. We establish that paths in $\UFin$ are
             families of loops on finite sets of specified cardinality, given by $\Aut[\Fin[n]]$, which produces the
             permutation group on $\Fin[n]$.
-      \item In~\Cref{sec:finite}, we proceed to give a presentation of the permutation group, as the symmetric group
+      \item In~\cref{sec:finite}, we proceed to give a presentation of the permutation group, as the symmetric group
             $\Sn$ with generators and relations, and solve its word problem. In particular, we present $\Sn$ as a
             Coxeter group, build a rewriting system based on Coxeter relations, and prove confluence and termination.
             Using our rewriting system, we establish that normal forms for words in $\Sn$ are equivalent to Lehmer
             codes~\cite{lehmerTeachingCombinatorialTricks1960}, which are a convenient and compact representation of
             permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations
             $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
-      \item In~\Cref{sec:equivalence}, we show how to interpret the language $\PiLang$ into the groupoid $\UFin$, in
+      \item In~\cref{sec:equivalence}, we show how to interpret the language $\PiLang$ into the groupoid $\UFin$, in
             stages. First we define a subset $\PiPlusLang$ of the language which only includes the additive monoidal
             structure, and show how to translate $\PiLang$ programs to $\PiPlusLang$ programs. Then, we further define a
             normalised form for this language called $\PiHatLang$, which has normalised 1-combinators and 2-combinators
@@ -220,7 +220,7 @@ using which we can build a toolbox of technical devices for reasoning about reve
             in $\Sn$. The main result of this section is a symmetric monoidal equivalence between the syntactic
             groupoids of $\PiPlusLang$ and $\PiHatLang$, with $\UFin$. Finally, we also establish full abstraction and
             adequacy of this model with respect to the operational semantics.
-      \item In~\Cref{sec:applications}, we show applications of our results to reversible circuits, using our
+      \item In~\cref{sec:applications}, we show applications of our results to reversible circuits, using our
             formalisation. Our results are stated using HoTT~\cite{univalentfoundationsprogramHomotopyTypeTheory2013},
             and formalised using the HoTT-Agda library (around 7,500 lines of code). Using the formalisation, we are
             able to extract procedures for:
