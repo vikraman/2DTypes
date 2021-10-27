@@ -595,7 +595,7 @@ Despite the increased complexity of the generators, the rewriting system $(\List
 we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property -- for example, using
 $\longbraid$, we can now show the problematic critical pair \cref{fig:critical-pairs-non-converging} converges, and, it
 is terminating, so by Newman's lemma, it produces a unique normal form. We follow the terminology
-of~\citet*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results formally.
+of~\citet*{huetConfluentReductionsAbstract1980,krausCoherenceWellFoundednessTaming2020} to state our results formally.
 
 \begin{theorem}
   \label{prop:nf}
@@ -649,8 +649,8 @@ $\approx$, obtaining an equivalent definition for $\Sn$.
   \begin{enumerate}
     \item $\normf$ splits into a section-retraction pair, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n]
             \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
-    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc$ is the mapping into the quotient, and
-          $\im{f}$ denotes the image of $f$ (see~\cref{def:im}).
+    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc : \List[\Fin[n]] \to \Sn$ is the mapping into
+    the quotient.
   \end{enumerate}
 \end{proposition}
 
