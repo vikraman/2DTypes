@@ -86,8 +86,10 @@
 
 % \newcommand{\denot}[1]{\llbracket #1 \rrbracket}
 % \newcommand{\sem}[1]{\llbracket #1 \rrbracket}
-\DeclarePairedDelimiter{\denot}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\denotpair}{\llbracket}{\rrbracket}
 \DeclarePairedDelimiter{\sem}{\llbracket}{\rrbracket}
+\newcommand{\denot}[1]{\denotpair{\ensuremath{~#1~}}}
+\newcommand{\pdenot}[1]{\denotpair{\parbox{1.2cm}{\centering\ensuremath{#1}}}}
 \newcommand{\sizet}[1]{| #1 |}
 \newcommand{\idd}{\mathit{id}\leftrightarrow}
 \newcommand{\idf}{\mathit{id}\Leftrightarrow}
