@@ -26,7 +26,7 @@
 }
 \newcommand{\El}{\term{El}}
 \newcommand{\SubP}[2]{\Trunc[-1]{{#1} \id_{\UU} {#2}}}
-\newcommand{\Sub}[1]{\dsum{X:\UU}{\SubP{X}{#1}}}
+\newcommand{\Sub}[1]{\dsum*{X:\UU}{\SubP{X}{#1}}}
 
 \newcommand{\hProp}{\type{hProp}}
 \newcommand{\hSet}{\type{hSet}}
@@ -113,14 +113,14 @@
 % dependent function
 \NewDocumentCommand{\dfun}{smm}{
   \IfBooleanTF{#1}
-  {\prod_{{#2}}{#3}}
+  {\textstyle\prod_{{#2}}{#3}}
   {\prod\limits_{\mathsmaller{#2}}{#3}}
 }
 
 % dependent sum
 \NewDocumentCommand{\dsum}{smm}{
   \IfBooleanTF{#1}
-  {\sum_{{#2}}{#3}}
+  {\textstyle\sum_{{#2}}{#3}}
   {\sum\limits_{\mathsmaller{#2}}{#3}}
 }
 \newcommand{\pair}[1]{\ps{#1}}
