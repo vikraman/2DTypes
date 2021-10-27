@@ -285,10 +285,10 @@ weak $\infty$-groupoid, where each morphism satisfies groupoid laws only upto a 
 
 A homotopy between functions $f, g : A \to B$, written $f \htpy g$, is given by pointwise equality between them,
 $\dfun*{x:A}{f(x) \id_{B} g(x)}$. The identity type for functions is equivalent to homotopies between them ${(f \id_{A
-        \to B} g)} \eqv {(f \htpy g)}$, by $\term{funext}$ and $\term{happly}$. An equivalence between types $A \eqv B$ is given
+\to B} g)} \eqv {(f \htpy g)}$, by $\term{funext}$ and $\term{happly}$. An equivalence between types $A \eqv B$ is given
 by a pair of functions between them which compose to the identity, $f \comp g \htpy \idfunc_{B}$ and $g \comp f \htpy
-  \idfunc_{A}$ (also see~\cref{prop:three-chars-equiv} in the appendix), and this is equivalent to the identity type for
-the universe, $(A \id_{\UU} B) \eqv (A \eqv B)$, which is the univalence principle.
+\idfunc_{A}$ (also see~\cref{prop:three-chars-equiv}), and this is equivalent to the identity type for the universe, $(A
+\id_{\UU} B) \eqv (A \eqv B)$, which is the univalence principle.
 
 Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
 the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to the
@@ -354,25 +354,6 @@ Univalent fibrations were introduced by~\citet*{kapulkinUnivalenceSimplicialSets
 \emph{univalence} principle in simplicial sets. Indeed, univalence characterises paths in the universe as equivalences
 between types, which follows from the canonical fibration $\idfunc : \UU \to \UU$ being univalent.
 
-\subsection{Homotopy Types}
-\label{app:homotopytypes}
-
-A type is \emph{contractible} (-2-type) if it has a unique element, that is, there is a center of contraction and every
-other point is equal to it. A type is a \emph{proposition} (-1-type) if its equality types are contractible, that is, it
-has at most one inhabitant. Iterating this, we can define sets or 0-types (whose equality types are propositions) and
-1-groupoids or 1-types (whose equality types are sets), and similarly, higher homotopy $n$-types.
-\begin{gather*}
-  \begin{aligned}
-    \isContr{A} & \defeq \dsum*{x:A}{\dfun*{y:A}{y \id x}} \\
-    \isProp{A}  & \defeq \dfun*{x,y:A}{\isContr{x \id y}}
-  \end{aligned}
-  \qquad
-  \begin{aligned}
-    \isSet{A} & \defeq \dfun*{x,y:A}{\isProp{x \id y}} \\
-    \isGpd{A} & \defeq \dfun*{x,y:A}{\isSet{x \id y}}
-  \end{aligned}
-\end{gather*}
-
 \subsection{Higher Inductive Types}
 \label{app:hits}
 
@@ -407,34 +388,6 @@ $\term{trunc}(x,y) : x \id_{\Trunc{A}} y$, which equates every pair of points in
   \end{definition}
 \end{toappendix}
 
-\begin{toappendix}
-  \begin{definition}[${\fib_{f}} : B \to \UU$]
-    \label{def:fib}
-    The fiber of $f : A \to B$ at $b : B$ is
-    \[
-      \fib_{f}(b) \defeq \dsum*{a:A}{f(a) \id_{B} b}.
-    \]
-  \end{definition}
-
-  \begin{definition}[${\term{im}} : (f : A \to B) \to \UU$]
-    \label{def:im}
-    The image of $f$ is the (-1)-truncation of its fiber.
-    \[
-      \im{f} \defeq \dsum*{b:B}{\Trunc[-1]{\fib_{f}(b)}}
-    \]
-  \end{definition}
-
-  \begin{proposition}
-    \label{prop:three-chars-equiv}
-    The following are equivalent.
-    \begin{enumerate}
-      \item $f : A \to B$ is an equivalence.
-      \item $f$ has a left and right inverse.
-      \item $f$ has contractible fibers.
-    \end{enumerate}
-  \end{proposition}
-\end{toappendix}
-
 Another HIT that we use is the set-quotient $\quot{A}{R}$ which takes a set $A$ and a binary relation $R : {A \to A \to
   \UU}$. It has a mapping of points $\quotinc : A \to \quot{A}{R}$, and a constructor that adds paths between related
 pairs of elements $\quotrel : R(x,y) \to \quotinc(x) \id_{\quot{A}{R}} \quotinc(y)$ (see~\cref{def:set-quot}).  We
@@ -454,6 +407,44 @@ $(q(x) \id_{\quot{A}{R}} q(y))$.
     with an appropriate induction principle.
   \end{definition}
 \end{toappendix}
+
+\subsection{Homotopy Types}
+\label{app:homotopytypes}
+
+A type is \emph{contractible} (-2-type) if it has a unique element, that is, there is a center of contraction and every
+other point is equal to it. A type is a \emph{proposition} (-1-type) if its equality types are contractible, that is, it
+has at most one inhabitant. Iterating this, we can define sets or 0-types (whose equality types are propositions) and
+1-groupoids or 1-types (whose equality types are sets), and similarly, higher homotopy $n$-types.
+\begin{gather*}
+  \begin{aligned}
+    \isContr{A} & \defeq \dsum*{x:A}{\dfun*{y:A}{y \id x}} \\
+    \isProp{A}  & \defeq \dfun*{x,y:A}{\isContr{x \id y}}
+  \end{aligned}
+  \qquad
+  \begin{aligned}
+    \isSet{A} & \defeq \dfun*{x,y:A}{\isProp{x \id y}} \\
+    \isGpd{A} & \defeq \dfun*{x,y:A}{\isSet{x \id y}}
+  \end{aligned}
+\end{gather*}
+
+\noindent
+Given a function $f : A \to B$, there is an associated fibration over $B$, given by the homotopy fiber. The image of $f$
+is defined to be the (-1)-truncation of its fiber.
+\begin{gather*}
+  \fib_{f}(b) \defeq \dsum*{a:A}{f(a) \id_{B} b}
+  \qquad
+  \im{f} \defeq \dsum*{b:B}{\Trunc[-1]{\fib_{f}(b)}}
+\end{gather*}
+
+\begin{proposition}
+  \label{prop:three-chars-equiv}
+  The following propositions are equivalent.
+  \begin{enumerate}
+    \item $f : A \to B$ is an equivalence.
+    \item $f$ has a left and right inverse.
+    \item $f$ has contractible fibers.
+  \end{enumerate}
+\end{proposition}
 
 \subsection{Univalent Subuniverses}
 
