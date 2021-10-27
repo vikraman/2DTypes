@@ -71,7 +71,7 @@ groupoid.
 Putting these ideas together, the programming language $\PiLang$, whose syntax is given below, embodies the
 computational content of isomorphisms of finite types, or permutations.
 
-% In programming parlance, as shown in~\Cref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes
+% In programming parlance, as shown in~\cref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes
 % a reversible combinator in the programming language and the algebraic closure operators become composition operators in
 % the programming language. Once equipped with a notion of values and types, we get the following syntactic presentation
 % of a programming language for permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
@@ -255,43 +255,43 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 \begin{multicols}{2}
   %%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
   {\scalebox{\scalef}{$%
-        \begin{array}[t]{rlcl}
-          \denot{\identlp} & (\inl{v})         & = & v               \\
-          \denot{\identrp} & v                 & = & \inl{v}         \\
-          \denot{\swapp}   & (\inl{v})         & = & \inr{v}         \\
-          \denot{\swapp}   & (\inr{v})         & = & \inl{v}         \\
-          \denot{\assoclp} & (\inl{v})         & = & \inl{(\inl{v})} \\
-          \denot{\assoclp} & (\inr{(\inl{v})}) & = & \inl{(\inr{v})} \\
-          \denot{\assoclp} & (\inr{(\inr{v})}) & = & \inr{v}         \\
-          \denot{\assocrp} & (\inl{(\inl{v})}) & = & \inl{v}         \\
-          \denot{\assocrp} & (\inl{(\inr{v})}) & = & \inr{(\inl{v})} \\
-          \denot{\assocrp} & (\inr{v})         & = & \inr{(\inr{v})}
-        \end{array}$}}
+        \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+          \pdenot{\identlp} & (\inl{v})         & = & v               \\
+          \pdenot{\identrp} & v                 & = & \inl{v}         \\
+          \pdenot{\swapp}   & (\inl{v})         & = & \inr{v}         \\
+          \pdenot{\swapp}   & (\inr{v})         & = & \inl{v}         \\
+          \pdenot{\assoclp} & (\inl{v})         & = & \inl{(\inl{v})} \\
+          \pdenot{\assoclp} & (\inr{(\inl{v})}) & = & \inl{(\inr{v})} \\
+          \pdenot{\assoclp} & (\inr{(\inr{v})}) & = & \inr{v}         \\
+          \pdenot{\assocrp} & (\inl{(\inl{v})}) & = & \inl{v}         \\
+          \pdenot{\assocrp} & (\inl{(\inr{v})}) & = & \inr{(\inl{v})} \\
+          \pdenot{\assocrp} & (\inr{v})         & = & \inr{(\inr{v})}
+        \end{tabular}$}}
 
   {\scalebox{\scalef}{$%
-        \begin{array}[t]{rlcl}
-          \denot{\identlt} & (\ttt , v)          & = & v                   \\
-          \denot{\identrt} & v                   & = & (\ttt , v)          \\
-          \denot{\swapt}   & (v_1 , v_2)         & = & (v_2 , v_1)         \\
-          \denot{\assoclt} & (v_1 , (v_2 , v_3)) & = & ((v_1 , v_2) , v_3) \\
-          \denot{\assocrt} & ((v_1 , v_2) , v_3) & = & (v_1 , (v_2 , v_3)) \\
-          \denot{\dist}    & (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}   \\
-          \denot{\dist}    & (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}   \\
-          \denot{\factor}  & (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)   \\
-          \denot{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)   \\
-          \denot{\idc}     & v                   & = & v
-        \end{array}$}}
+        \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+          \pdenot{\identlt} & (\ttt , v)          & = & v                   \\
+          \pdenot{\identrt} & v                   & = & (\ttt , v)          \\
+          \pdenot{\swapt}   & (v_1 , v_2)         & = & (v_2 , v_1)         \\
+          \pdenot{\assoclt} & (v_1 , (v_2 , v_3)) & = & ((v_1 , v_2) , v_3) \\
+          \pdenot{\assocrt} & ((v_1 , v_2) , v_3) & = & (v_1 , (v_2 , v_3)) \\
+          \pdenot{\dist}    & (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}   \\
+          \pdenot{\dist}    & (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}   \\
+          \pdenot{\factor}  & (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)   \\
+          \pdenot{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)   \\
+          \pdenot{\idc}     & v                   & = & v
+        \end{tabular}$}}
   %%\end{longtable}
 \end{multicols}
 
 \begin{center}
   {\scalebox{\scalef}{$%
-        \begin{array}{rlcl}
-          \denot{(c_1 \circledcirc c_2)} & v           & = & (\denot{c_2} \circ \denot{c_1}) v   \\
-          \denot{(c_1 \oplus c_2)}   & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
-          \denot{(c_1 \oplus c_2)}   & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
-          \denot{(c_1 \otimes c_2)}  & (v_1 , v_2) & = & (\denot{c_1} v_1 , \denot{c_2} v_2)
-        \end{array}
+        \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+          \pdenot{(c_1 \circledcirc c_2)} & v           & = & \denot{c_2} (\denot{c_1}~v)         \\
+          \pdenot{(c_1 \oplus c_2)}       & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
+          \pdenot{(c_1 \oplus c_2)}       & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
+          \pdenot{(c_1 \otimes c_2)}      & (v_1 , v_2) & = & (\denot{c_1}~v_1 , \denot{c_2}~v_2)
+        \end{tabular}
       $}}
 \end{center}
 
@@ -399,14 +399,14 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 \begin{theoremrep}\label{thm:semone}
   The semantics is sound in the following sense:
   \begin{itemize}
-    \item For every level-1 combinator $c : A \isoone B$, we have that $\denot{c}$ is a bijection between $\denot{A}$ and $\denot{B}$.
+    \item For every level-1 combinator $c : A \isoone B$, we have a bijection $\denot{c}$ between $\denot{A}$ and $\denot{B}$.
     \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
-          combinator $\alpha$ such that $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using
-          extensional equivalence of functions.
+          combinator $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using extensional equivalence of
+          functions.
   \end{itemize}
 \end{theoremrep}
 \begin{proof}
-  For every primitive combinator $c$ listed on one side of Fig.~\ref{fig:pi-terms}, let $!c$ be the combinator listed on
+  For every primitive combinator $c$ listed on one side of~\cref{fig:pi-terms}, let $!c$ be the combinator listed on
   the other side. Thus $! \assoclp$ is $\assocrp$ and $! \swapp$ is $\swapp$ itself. Then we have that $\denot{c}$ and
   $\denot{!c}$ form an equivalence. For the level-2 combinator \Afun{idr◎l}, we check
   $\denot{\AgdaBound{c}~\AgdaOperator{\AgdaInductiveConstructor{◎}}~\AgdaInductiveConstructor{id⟷₁}}

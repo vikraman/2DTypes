@@ -2,7 +2,7 @@
 \label{sec:finite}
 
 % Recap of the previous section
-In~\Cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin[n]$ for every
+In~\cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin[n]$ for every
 $n:\Nat$, that is, automorphisms of finite sets of size $n$, with the loopspace encoding the automorphism group.  This
 is also known to be the finite symmetric group $\Sn[n]$, making $\UFin$ the \emph{horizontal categorification} of $\Sn$
 for every $n$. In this section, we will describe this group syntactically.
@@ -166,7 +166,6 @@ $\inv{a}$. Then, we can encode the free group using the free monoid, that is, li
 ensure that the inverse laws hold, so we have to coalesce adjacent occurences of $a$ and $\inv{a}$.
 
 \begin{definition}[Free group]
-  \label{def:presentation}
   Let $A$ be a set, and $\List[\blank]$ the free monoid. The free group $F(A)$ on $A$ is the set-quotient of $\List[A +
       A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons a \cons \nil
     \sim \nil$.
@@ -176,7 +175,7 @@ ensure that the inverse laws hold, so we have to coalesce adjacent occurences of
   $F(A) \defeq \quot{\List[A + A]}{\sim^{\ast}}$ has a group structure, with the empty list $\nil$ for the neutral
   element, multiplication given by list append $\append$, and inverse given by flipping $\inl$ and $\inr$, followed by
   reversing the list. Further, $F(A)$ with $\eta_A(a) \defeq \inl(a) \cons \nil$ satisfies the universal property of
-  free groups, as stated in~\Cref{prop:free-groups}.
+  free groups, as stated in~\cref{prop:free-groups}.
 \end{proposition}
 
 \subsection{Group presentations}
@@ -187,12 +186,13 @@ the resulting group would be $\mathbb{Z}_2 \eqv \Aut[\Bool]$. Note that not all 
 presentations, and, a group can have any number of different presentations.
 
 \begin{definition}[Group presentation]
+  \label{def:presentation}
   Let $A$ be a set and $R : \List[A + A] \to \List[A + A] \to \UU$ a binary relation on $\List[A + A]$. The group
   $F(\langle A ; R \rangle)$ presented by $A$ and $R$, is given by the set-quotient of the free group $F(A)$ by the
   congruence closure of $R$.
 \end{definition}
 
-The universal property of the above definition is similar to~\Cref{prop:free-groups} except the relation has to be
+The universal property of the above definition is similar to~\cref{prop:free-groups} except the relation has to be
 preserved by the function mapping out of the generating set.
 
 \begin{proposition}[Universal property of $F(\langle A ; R \rangle)$]
@@ -209,7 +209,7 @@ groups is undecidable.
 \paragraph{Coxeter Presentation} To present the group $\Sn$, the primitive operations we use will be adjacent swaps.
 When dealing with permutations on an $n + 1$-element set, there are $n$ adjacent transpositions -- transposition number
 $k$ swaps elements at indices $k$ and $k+1$. Thus, the generating set is $\Fin[n]$. There are three relations that we're
-going to specify for this presentation -- we visualise them as braid diagrams in~\Cref{fig:coxeter-braid}.
+going to specify for this presentation -- we visualise them as braid diagrams in~\cref{fig:coxeter-braid}.
 
 \begin{enumerate}[leftmargin=*]
   \item[\labelcref{fig:coxeter-a}] Swapping the same two elements twice in a row should be the same as doing nothing.
@@ -351,8 +351,8 @@ are strictly smaller than the left hand sides, in terms of the lexicographical o
 well-founded). Thus, by directing the relation from left to right, we would get the termination property out of the box.
 Second, we need the normal forms to be unique, so that we can get a normalisation function. This will be true if the
 rewriting system is confluent -- meaning that all critical pairs, that is, terms with overlapping possible reduction
-rules, have to converge. For example, in our system, the pair in~\Cref{fig:critical-pairs-converging} converges.
-Unfortunately, this is not true for all critical pairs -- an  example is in~\Cref{fig:critical-pairs-non-converging},
+rules, have to converge. For example, in our system, the pair in~\cref{fig:critical-pairs-converging} converges.
+Unfortunately, this is not true for all critical pairs -- an  example is in~\cref{fig:critical-pairs-non-converging},
 where left and right endpoints are normal with respect to the $\cox*$ relation.
 
 % \begin{figure}
@@ -595,7 +595,7 @@ Despite the increased complexity of the generators, the rewriting system $(\List
 we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property -- for example, using
 $\longbraid$, we can now show the problematic critical pair \cref{fig:critical-pairs-non-converging} converges, and, it
 is terminating, so by Newman's lemma, it produces a unique normal form. We follow the terminology
-of~\citet*{huetConfluentReductionsAbstract1980a,krausCoherenceWellFoundednessTaming2020} to state our results formally.
+of~\citet*{huetConfluentReductionsAbstract1980,krausCoherenceWellFoundednessTaming2020} to state our results formally.
 
 \begin{theorem}
   \label{prop:nf}
@@ -620,7 +620,7 @@ we can make the following observation relating it to $\cox*$.
   there is a $u$ such that $\coxcospan*{w}{v}{u}$.
 \end{proposition}
 
-By~\Cref{prop:nf}~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
+By~\cref{prop:nf}~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
   {\List[\Fin[n]]}$ that produces a normal form for terms of $\List[\Fin[n]]$. We state two important properties enjoyed
 by $\normf$.
 
@@ -649,27 +649,50 @@ $\approx$, obtaining an equivalent definition for $\Sn$.
   \begin{enumerate}
     \item $\normf$ splits into a section-retraction pair, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n]
             \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
-    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc$ is the mapping into the quotient, and
-          $\im{f}$ denotes the image of $f$ (see~\cref{def:im}).
+    \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc : \List[\Fin[n]] \to \Sn$ is the mapping into
+    the quotient.
   \end{enumerate}
 \end{proposition}
 
-Notice however, that a group presentation, as defined in~\Cref{def:presentation}, requires the relation to be on the set
-of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The constructor
-$\cancel$ specifies that the inverse of each element is again the same element, using which we can show that our
-definition of $\Sn$ is equivalent to the definition of a presented group, by lifting the $\cox*$ relation.
+\noindent
+Finally, we need to show that $\Sn$ and is indeed a group presentation.
 
-\begin{theorem}
-  \leavevmode
-  \begin{enumerate}
-    \item There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list
-          append, and inverse is given by list reversal.
-    \item $\Sn$ is equivalent to the group presented by generators $\Fin[n]$ with the relations given by $\cox*$
-          extended to $\List(\Fin[n] + \Fin[n])$ along the codiagonal map $\nabla_{A} : A + A \to A$.
-  \end{enumerate}
-\end{theorem}
+\begin{propositionrep}
+  \label{prop:group-structure-Sn}
+  There is a group structure on $\Sn$, where the identity element is $\nil$, multiplication is given by list append, and
+  inverse is given by list reversal.
+\end{propositionrep}
 
-To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply have to compute their normal forms using
+\begin{proof}
+   The operation $\append$ is associative, with $\nil$ as the neutral element, and the constructor $\cancel$ makes each
+   element an inverse of itself, so the inverse in the group is indeed given by list reversal.
+\end{proof}
+
+\noindent
+Notice however, that for a group presentation, as defined in~\cref{def:presentation}, the relation needs to be on the
+set of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The following
+proposition lets us lift a group structure on $\List[A]$ to a group presentation.
+
+\begin{propositionrep}
+  \label{prop:generated-group-generalised}
+  Given a set $A$ and a congruence relation $R$ on $\List[A]$ with the group structure given by append and reversal,
+  there is a generated group structure $F(\langle A ; \liftrel{R} \rangle)$, where $\liftrel{R}$ is the relation $R$
+  lifted to $\List[A+A]$ along the codiagonal map $\nabla_{A} : A + A \to A$.
+\end{propositionrep}
+
+\begin{proof}
+  Let $G$ be the group on $\List[A]$. We construct the group homomorphism from $F(\langle A ; \liftrel{R} \rangle)$ to
+  $G$ using the universal property of the group presentation, where the map on generators is given by taking the
+  singleton list. To construct the group homomorphism from $G$, we use the universal property of the set quotient, where
+  the map on the underlying set is given by mapping $\inl$ on the list. Using that the relation is a congruence, we show
+  that this consttitutes a group isomorphism.
+\end{proof}
+
+\begin{corollary}
+  The group $\Sn$ is isomorphic to the group presentation given by ${F(\langle \Fin[n] ; \liftrel{\cox*} \rangle)}$.
+\end{corollary}
+
+\noindent To decide if two words in $\List[\Fin[n]]$ are $\cox*$-equal, we simply have to compute their normal forms using
 $\normf$. They correspond to the same permutation if and only if these normal forms are equal, which is decidable for
 $\List[\Fin[n]]$.
 
@@ -769,7 +792,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
     \item Any element of $\im{\normf}$ can be constructed from a unique Lehmer code by $\immersion$, that is, the fibers
           of $\immersion_{n} : \Lehmer[n] \to {\im{\normf}}$ are contractible.
   \end{enumerate}
-  Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
+  Therefore, there is an equivalence between $\Lehmer[n]$ and $\im{\normf}$ (see~\cref{prop:three-chars-equiv}).
 \end{theoremrep}
 
 \begin{proof}
@@ -886,7 +909,7 @@ using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
   \end{gather*}
 \end{proof}
 
-\noindent By composing~\Cref{prop:lehmer-aut-equiv} and~\Cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.
+\noindent By composing~\cref{prop:lehmer-aut-equiv} and~\cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.
 
 \begin{corollary}
   \label{prop:sn-lehmer-fin-equiv}

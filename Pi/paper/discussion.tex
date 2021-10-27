@@ -102,7 +102,7 @@ $\term{ua} : A \eqv B \to A \id_{\UU} B$, its computation rule
 $\term{ua_\beta} : (e : A \eqv B) \to \term{idtoeqv}(\term{ua}(e)) \id e$, and its extensionality rule
 $\term{ua_\eta} : (p : A \id_{\UU} B) \to p \id \term{ua}(\term{idtoeqv(p)})$ are generally added as postulates when
 formalising in Agda. Together, $\term{ua}$ and $\term{ua}_\beta$ give the full univalence axiom
-$(A \eqv B) \eqv (A \id_{\UU} B)$.
+$(A \eqv B) \eqv (A \id_{\UU} B)$~\cite[Theorem 3.5]{ortonDecomposingUnivalenceAxiom2018}.
 % Let's think of the $\PiLang$ combinators as describing the inhabitants of the identity type of finite types.
 By giving a computable presentation for a univalent subuniverse, we are able to describe its path space syntactically
 via a complete equational axiomatisation of the equivalences between types in the subuniverse.
@@ -191,14 +191,15 @@ Coherence and normalisation problems for monoids in constructive type theory usi
 were studied by \citet{beylinExtractingProofCoherence1996}. In HoTT, coherence for the free monoidal groupoid over a
 groupoid and the proof of its universal property has been considered
 by~\citet{piceghelloCoherenceMonoidalGroupoids2020}. Free commutative monoids in type theory have been studied by
-\citet{gylterudMultisetsTypeTheory2020}, and using HoTT by \citet{choudhuryFinitemultisetConstructionHoTT2019}. The free
-symmetric monoidal groupoid $\FSM[A]$ over a groupoid $A$ can be given by $\dsum*{X:\UFin}{A^{X}}$, or it can be
-presented as an algebraic 2-theory using 1-HITs. These HITs and the proof of their universal property have been
-considered by \citet{piceghelloCoherenceSymmetricMonoidal2019,choudhuryFinitemultisetConstructionHoTT2019}. The proof of
-the universal property of $\FSM$ is asserted by appealing to Mac Lane's coherence theorem for symmetric monoidal
-categories, and using the fact that the finite symmetric group $\Sn$ encodes the permutation group on a finite set. The
-existence of the proof is folklore. We have produced a proof and formalised it in constructive type theory. A stronger
-universal property that $\BFin$ is biinitial in $\term{RigCat}$, is in~\cite{elguetaGroupoidFiniteSets2021}.
+\citet{gylterudMultisetsTypeTheory2020}, and in HoTT by
+\citet*{choudhuryFinitemultisetConstructionHoTT2019,choudhuryFreeCommutativeMonoids2021}. The free symmetric monoidal
+groupoid $\FSM[A]$ over a groupoid $A$ can be given by $\dsum*{X:\UFin}{A^{X}}$, or it can be presented as an algebraic
+2-theory using 1-HITs. These HITs and the proof of their universal property have been considered by
+\citet*{piceghelloCoherenceSymmetricMonoidal2019,choudhuryFinitemultisetConstructionHoTT2019}. The proof of the
+universal property of $\FSM$ is asserted by appealing to Mac Lane's coherence theorem for symmetric monoidal categories,
+and using the fact that the finite symmetric group $\Sn$ encodes the permutation group on a finite set. The existence of
+the proof is folklore. We have produced a proof and formalised it in constructive type theory. A stronger universal
+property that $\BFin$ is biinitial in $\term{RigCat}$, is in~\cite{elguetaGroupoidFiniteSets2021}.
 
 %%%%%%%%%%%%%%
 \paragraph{Reversible Programming Languages} The practice of programming languages is replete with \emph{ad hoc}
