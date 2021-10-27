@@ -10,42 +10,40 @@ called \verb|x|), \textsf{cnot} (conditional negation of the second input if the
 gates. Additionally, Qiskit allows implicit re-shuffling of bits by allowing each operation to specify the indices of
 its input bits.
 
-For concreteness, we demonstrate two different circuits that implement the
-following reversible function specification
-$\mathit{reversibleOr}(h,b_1,b_2) ~=~ (h \,\underline{\vee}\, (b_1 \vee b_2),
-~b_1, ~b_2)$ where~$\vee$ is disjunction and~$\underline{\vee}$ is exclusive-disjunction. The circuits are presented in both the textual interface
-\verb|qasm| and the graphical interface:
+For concreteness, we demonstrate two different circuits that implement the following reversible function specification
+$\mathit{reversibleOr}(h,b_1,b_2) ~=~ (h \,\underline{\vee}\, (b_1 \vee b_2), ~b_1, ~b_2)$ where~$\vee$ is disjunction
+and~$\underline{\vee}$ is exclusive-disjunction. The circuits are presented in both the textual interface \verb|qasm|
+and the graphical interface in~\cref{fig:qiskit}.
 
-\medskip
-\begin{tabular}{c@{\qquad}c}
-\begin{minipage}[t]{0.42\linewidth}
-  \begin{verbatim}
+\begin{figure}
+  \begin{tabular}{c@{\qquad}c}
+    \begin{minipage}[t]{0.42\linewidth}
+      \begin{verbatim}
   ccx q[1], q[2], q[0];
   cx  q[1], q[0];
   cx  q[2], q[0];
   \end{verbatim}
-  \includegraphics[scale=0.7]{reversibleOr.png}
-  \end{minipage}
-&
-\begin{minipage}[t]{0.43\linewidth}
-  \begin{verbatim}
+      \includegraphics[scale=0.7]{reversibleOr.png}
+    \end{minipage}
+     &
+    \begin{minipage}[t]{0.43\linewidth}
+      \begin{verbatim}
   cx  q[1], q[0];
   x   q[1];
   ccx q[1], q[2], q[0];
   x   q[1];
   \end{verbatim}
-  \includegraphics[scale=0.6]{reversibleOr2.png}
-  \end{minipage}
-\end{tabular}
+      \includegraphics[scale=0.6]{reversibleOr2.png}
+    \end{minipage}
+  \end{tabular}
+  \caption{$\mathit{reversibleOr}$ in Qiskit}
+  \label{fig:qiskit}
+\end{figure}
 
-\medskip
-
-There is a wealth of manual and algorithmic approaches for producing circuits
-such as the two above~\cite{maslov:2003:rls:1087512,1201583}. The circuit on the
-left was manually produced using a standard synthesis algorithm for reversible
-circuits~\cite{10.1145/775832.775915}. The circuit on the right was produced
-using an approach that analyzes the recursive structure of
-$\mathit{reversibleOr}$ (and would generalise to computing the disjunction of
+There is a wealth of manual and algorithmic approaches for producing circuits such as these
+two~\cite{maslov:2003:rls:1087512,1201583}. The circuit on the left was manually produced using a standard synthesis
+algorithm for reversible circuits~\cite{10.1145/775832.775915}. The circuit on the right was produced using an approach
+that analyzes the recursive structure of $\mathit{reversibleOr}$ (and would generalise to computing the disjunction of
 more than two inputs):
 
 From the specification of the circuit, we expect input \verb|011| to be mapped
@@ -56,14 +54,12 @@ the first circuit, the \verb|ccx| gate negates \verb|q[0]| since both \verb|q[1]
 \verb|011|; finally the last \verb|cx| produces the result \verb|111|. For the
 second circuit, the trace of the execution on the same input value \verb|011| goes through the stages \verb|111|, \verb|101|, \verb|101|, and finally \verb|111|.
 
-Although rather trivial, the examples above illustrate the general idea. A more
-interesting example would be the classical core of Shor's algorithm which
-requires a circuit implementing modular exponentiation $f(r) = a^{r} \mod N$ for
-fixed $a$ and $N$. Using Toffoli's construction~\citeyearpar{Toffoli:1980}, a
-reversible specification of this function is $f^R(r,h) = (r, f(r)
-~\underline{\vee}~ h)$ where the exclusive disjunction~$\underline{\vee}$ is
-applied bitwise. When $h=0$ the second component of the result of $f^R$ is the
-result of the original modular exponentiation $f$.
+Although rather trivial, the examples above illustrate the general idea. A more interesting example would be the
+classical core of Shor's algorithm which requires a circuit implementing modular exponentiation $f(r) = a^{r} \mod N$
+for fixed $a$ and $N$. Using Toffoli's construction~\citeyearpar{Toffoli:1980}, a reversible specification of this
+function is $f^R(r,h) = (r, f(r)~\underline{\vee}~ h)$ where the exclusive disjunction~$\underline{\vee}$ is applied
+bitwise. When $h=0$ the second component of the result of $f^R$ is the result of the original modular exponentiation
+$f$.
 %%
 %% the specification of the circuit is relatively straightforward to
 %% calculate. Here it is for $a=11$ and $N=15$:
