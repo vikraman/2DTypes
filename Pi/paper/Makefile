@@ -1,6 +1,14 @@
-TARGETS = main.pdf arxiv.pdf
+TARGETS = popl22-rev.pdf
 DEPS_DIR = .deps
 LATEXMK = latexmk -recorder -use-make -deps
+PDFTK = pdftk
+
+# Builds both full and stripped versions, counts the pages in the
+# stripped version, then cuts that many pages from the full version
+popl22-rev.pdf: main.pdf popl22-rev-strip.pdf
+	$(eval NUMPAGES=$(shell $(PDFTK) popl22-rev-strip.pdf dump_data | grep NumberOfPages | grep -o -E '[[:digit:]]+'))
+	@echo Number of pages in final version is: $(NUMPAGES)
+	$(PDFTK) main.pdf cat 1-$(NUMPAGES) output popl22-rev.pdf
 
 all: $(TARGETS)
 continuous: LATEXMK += -f -interaction=nonstopmode -pvc

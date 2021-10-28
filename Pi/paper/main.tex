@@ -1,10 +1,14 @@
 \documentclass[acmsmall]{acmart}
 \settopmatter{printfolios=true,printccs=true,printacmref=true}
 
+\usepackage{currfile}
+\ifcurrfilename{popl22-rev-strip.tex}%
+{\usepackage[appendix=strip]{apxproof}}%
+{\usepackage[appendix=append]{apxproof}}
+
 \usepackage[capitalise,noabbrev]{cleveref}
 \usepackage[inline]{enumitem}
 \usepackage{extarrows}
-\usepackage{apxproof}
 \usepackage{longtable}
 \usepackage{adjustbox}
 \usepackage{url}
