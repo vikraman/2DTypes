@@ -193,7 +193,7 @@ open import Pi.Coxeter.Coxeter
 ≃*-preserved α =   TODO!
 
 ≃*-preservers-parity : ∀ {m} → {l₁ l₂ : List (Fin m)} → (l₁ ≈* l₂) → (list-len-parity l₁ == list-len-parity l₂)
-≃*-preservers-parity = TODO!
+≃*-preservers-parity q = TODO!
 
 parity-preserved : {n m : ℕ} → (c₁ c₂ : S n Pi^.⟷₁^ S m) → (α : c₁ Pi^.⟷₂^ c₂) → parity c₁ == parity c₂
 parity-preserved c₁ c₂ α =
@@ -201,12 +201,15 @@ parity-preserved c₁ c₂ α =
       s₂ = pi^2list c₂
   in  TODO!
 
-parity-preserved-composition : {n m : ℕ} → (c : S n Pi^.⟷₁^ S n) → parity c == inl tt → parity (c ◎^ c) == inl tt
-parity-preserved-composition c p =  TODO!
+parity-preserved-composition : {n m : ℕ} → (c d : S n Pi^.⟷₁^ S n) → (parity c == inl tt) → (parity d == inl tt) → parity (c ◎^ d) == inl tt
+parity-preserved-composition c d p q rewrite (list-len-parity-++ (pi^2list c) (pi^2list d)) rewrite p rewrite q = idp
 
 n-times : {m : ℕ} → (n : ℕ) → (c : S m Pi^.⟷₁^ S m) → S m Pi^.⟷₁^ S m
 n-times O c = id⟷₁^
 n-times (S n) c = c ◎^ (n-times n c)
 
 parity-preserved-arbitrary : {m : ℕ} → (n : ℕ) → (c : S m Pi^.⟷₁^ S m) → parity c == inl tt → parity (n-times n c) == inl tt
-parity-preserved-arbitrary n c p = TODO!
+parity-preserved-arbitrary O c p = idp
+parity-preserved-arbitrary {m = m} (S n) c p = 
+  let r = parity-preserved-composition {m = m} c (n-times {m} n c) p
+  in  r (parity-preserved-arbitrary n c p)
