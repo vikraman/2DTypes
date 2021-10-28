@@ -1,41 +1,3 @@
-\begin{figure}[t]
-  {\scalebox{\scalef}{$%
-        %%\noindent\begin{minipage}{.7\linewidth}
-        \begin{array}{rrcll}
-          \idc :     & A                     & \isoone & A                            & : \idc      \\
-          \\
-          \identlp : & \zerot + A            & \isoone & A                            & : \identrp  \\
-          \swapp :   & A + B                 & \isoone & B + A                        & : \swapp    \\
-          \assoclp : & A + (B + C)           & \isoone & (A + B) + C                  & : \assocrp  \\ [1.5ex]
-          \identlt : & \onet \times A        & \isoone & A                            & : \identrt  \\
-          \swapt :   & A \times B            & \isoone & B \times A                   & : \swapt    \\
-          \assoclt : & A \times (B \times C) & \isoone & (A \times B) \times C        & : \assocrt  \\ [1.5ex]
-          \absorbr : & ~ \zerot \times A     & \isoone & \zerot ~                     & : \factorzl \\
-          \dist :    & ~ (A + B) \times C    & \isoone & (A \times C) + (B \times C)~ & : \factor
-        \end{array}$}}
-
-  \medskip
-
-  {\scalebox{\scalef}{%
-      \Rule{}
-      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : B \isoone C}
-      {\jdg{}{}{c_1 \circledcirc c_2 : A \isoone C}}
-      {}
-
-      \Rule{}
-      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
-      {\jdg{}{}{c_1 \oplus c_2 : A + C \isoone B + D}}
-      {}
-
-      \Rule{}
-      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
-      {\jdg{}{}{c_1 \otimes c_2 : A \times C \isoone B \times D}}
-      {}
-    }}
-  \caption{$\Pi$-terms, combinators, and their types.}
-  \label{fig:pi-terms}
-\end{figure}
-
 \section{A Reversible Programming Language}
 %% ~3 pages
 \label{sec:pi}
@@ -59,14 +21,14 @@ In reversible boolean circuits, the number of input bits matches the number of o
 programming language of reversible circuits is to ensure that each primitive operation preserves the number of bits,
 which is just a natural number. The algebraic structure of natural numbers as the free commutative semiring (or,
 commutative rig), with $(0,+)$ for addition, and $(1,\times)$ for multiplication then provides sequential, vertical, and
-horizontal circuit composition operators.
+horizontal circuit composition.
 
 These commutative rig identities can be used to design a logic for reversible
-programming~\cite*{sparksSuperstructuralReversibleLogic2014}. To interpret natural number identities as reversible programs,
-the logic needs to be equipped with values and types, and a notion of operational semantics and contextual equivalence,
-giving a computational interpretation of the commutative rig structure~\cite{jamesInformationEffects2012}. On the
-semantic side, the natural space to consider is the groupoidification of a commutative rig, that is, a symmetric rig
-groupoid.
+programming~\cite*{jamesInformationEffects2012,sparksSuperstructuralReversibleLogic2014}. To interpret natural number
+identities as reversible programs, the logic needs to be equipped with values and types, and a notion of operational
+semantics and contextual equivalence, giving a computational interpretation of the commutative rig
+structure~\cite{jamesInformationEffects2012}. On the semantic side, the natural space to consider is the
+groupoidification of a commutative rig, that is, a symmetric rig groupoid.
 
 Putting these ideas together, the programming language $\PiLang$, whose syntax is given below, embodies the
 computational content of isomorphisms of finite types, or permutations.
@@ -115,8 +77,45 @@ computational content of isomorphisms of finite types, or permutations.
         \textit{Value types}   & A,B,C,D & ::= & \zerot \alt \onet \alt A+B \alt A\times B        \\
         \textit{Values}        & v,w,x,y & ::= & \Acon{tt} \alt \inlv{v} \alt \inrv{v} \alt (v,w) \\
         \textit{Program types} &         &     & A \isoone B                                      \\
-        \textit{Programs}      & c       & ::= & (\textrm{See Fig.~\ref{fig:pi-terms}})
+        \textit{Programs}      & c       & ::= & (\textrm{See~\cref{fig:pi-terms}})
       \end{array}$}}
+
+\begin{figure}
+  {\scalebox{\scalef}{$%
+        %%\noindent\begin{minipage}{.7\linewidth}
+        \begin{array}{rrcll}
+          \idc :     & A                     & \isoone & A                            & : \idc      \\ [1.5ex]
+          \identlp : & \zerot + A            & \isoone & A                            & : \identrp  \\
+          \swapp :   & A + B                 & \isoone & B + A                        & : \swapp    \\
+          \assoclp : & A + (B + C)           & \isoone & (A + B) + C                  & : \assocrp  \\ [1.5ex]
+          \identlt : & \onet \times A        & \isoone & A                            & : \identrt  \\
+          \swapt :   & A \times B            & \isoone & B \times A                   & : \swapt    \\
+          \assoclt : & A \times (B \times C) & \isoone & (A \times B) \times C        & : \assocrt  \\ [1.5ex]
+          \absorbr : & ~ \zerot \times A     & \isoone & \zerot ~                     & : \factorzl \\
+          \dist :    & ~ (A + B) \times C    & \isoone & (A \times C) + (B \times C)~ & : \factor
+        \end{array}$}}
+
+  \medskip
+
+  {\scalebox{\scalef}{%
+      \Rule{}
+      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : B \isoone C}
+      {\jdg{}{}{c_1 \circledcirc c_2 : A \isoone C}}
+      {}
+
+      \Rule{}
+      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
+      {\jdg{}{}{c_1 \oplus c_2 : A + C \isoone B + D}}
+      {}
+
+      \Rule{}
+      {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
+      {\jdg{}{}{c_1 \otimes c_2 : A \times C \isoone B \times D}}
+      {}
+    }}
+  \caption{$\Pi$-terms, combinators, and their types.}
+  \label{fig:pi-terms}
+\end{figure}
 
 \medskip\noindent The language of types is built from the empty type ($\zerot$), the unit type
 ($\onet$) containing just one value~$\Acon{tt}$, the sum type ($+$) containing values of the form $\inlv{v}$ and
@@ -129,13 +128,14 @@ $\inrv{v}$, and the product type ($\times$) containing pairs of values $(v_1,v_2
 % types and trace operators~\cite{Hasegawa:1997:RCS:645893.671607} is a Turing-complete reversible
 % language~\cite{James:2012:IE:2103656.2103667,rc2011}.
 
-To see how this language expresses reversible circuits, we present a few examples in the Agda embedding of the language.
-First it is possible to directly mimic the \verb|qasm|-perspective by defining types that describe sequences of
-booleans. We use the type $\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing
-\textsf{true} and $\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean negation (the \verb|x|-gate) is
-straightforward to define using the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product
-of boolean values, thus the type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated $\mathbb{B}~3$)
-corresponds to a collection of wires that can transmit three bits.
+To see how this language expresses reversible circuits, we present a few examples using the Agda embedding of the
+language~\cite{choudhuryArtifactSymmetriesReversible2021}. First it is possible to directly mimic the
+\verb|qasm|-perspective by defining types that describe sequences of booleans ($\mathbb{2}^{n}$). We use the type
+$\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing \textsf{true}, and
+$\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean negation (the \verb|x|-gate) is straightforward to define
+using the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values, thus
+the type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated $\mathbb{B}~3$) corresponds to a collection of
+wires that can transmit three bits.
 %
 % For example, we can express a 3-bit word reversal operation as follows:
 % $\Afun{reverse} : \mathbb{B}~3 \iso \mathbb{B}~3$
@@ -173,21 +173,22 @@ is transcribed as follows:
 
 \noindent where we clearly see the sequences of the three operations \verb|ccx|, \verb|cx|, and \verb|cx| but, instead
 of using the indices in the sequence of wires to identify the relevant parameters, here we use structural isomorphisms
-to re-shuffle the types. We only show one of these re-shuffling isomorphisms and elide the others. For the second circuit, instead of transcribing it directly, we express it using
-a slightly more abstract notation:
+to re-shuffle the types. We only show one of these re-shuffling isomorphisms and elide the others. For the second
+circuit, instead of transcribing it directly, we express it using $\Afun{cif}$.
 
 \medskip
 
 \resettwo{}
 
-\noindent Like the original circuit, we examine the bit at index 1 (corresponding to the component $B$ in a tuple
-$(A,(B,C))$): if the bit is true, we perform an \verb|x| operation on component $A$, and otherwise we perform a
-\verb|cx| operation on $(C,A)$. The two uses of \verb|x| gates in the circuit are now unnecessary as they were only needed
-to encode a two-way conditional expression using a sequence of one-way conditional expressions (the only ones available in
-the linear circuit model).
+\noindent
+Like the original circuit, we examine the bit at index 1 (corresponding to the component $B$ in a tuple $(A,(B,C))$): if
+the bit is true, we perform an \verb|x| operation on component $A$, and otherwise we perform a \verb|cx| operation on
+$(C,A)$. The two uses of \verb|x| gates in the circuit are now unnecessary as they were only needed to encode a two-way
+conditional expression using a sequence of one-way conditional expressions (the only ones available in the linear
+circuit model).
 
-All of this is only half the story, however. A sound semantics for $\PiLang$ in weak rig
-groupoids was established by \citet{caretteComputingSemiringsWeak2016}, and conjectured to be complete. For this
+All of this is only half the story, however. A sound semantics for $\PiLang$ using weak rig
+groupoids was established by~\citet{caretteComputingSemiringsWeak2016}, and conjectured to be complete. For this
 semantics, \emph{coherence conditions} for symmetric rig groupoids that identify different syntactic representations of the same
 permutation~\cite{laplaza72,caretteComputingSemiringsWeak2016}, were collected  in a
 second level of $\PiLang$ syntax as level-2 combinators.  Each level-2 combinator is of the form $c_1 \isotwo c_2$ for appropriate
@@ -252,8 +253,8 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 
 % The semantics of a combinator $c : A \isoone B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
 
-\begin{multicols}{2}
-  %%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+\begin{center}
+\begin{tabular}[t]{c @{\hspace{5em}} c}
   {\scalebox{\scalef}{
       \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
         \denotbox{\identlp} & (\inl{v})         & = & v               \\
@@ -267,7 +268,7 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
         \denotbox{\assocrp} & (\inl{(\inr{v})}) & = & \inr{(\inl{v})} \\
         \denotbox{\assocrp} & (\inr{v})         & = & \inr{(\inr{v})}
       \end{tabular}}}
-
+  &
   {\scalebox{\scalef}{
       \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
         \denotbox{\identlt} & (\ttt , v)          & = & v                   \\
@@ -281,8 +282,8 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
         \denotbox{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)   \\
         \denotbox{\idc}     & v                   & = & v
       \end{tabular}}}
-  %%\end{longtable}
-\end{multicols}
+\end{tabular}
+\end{center}
 
 \begin{center}
   {\scalebox{\scalef}{
@@ -400,7 +401,7 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
   \begin{itemize}
     \item For every level-1 combinator $c : A \isoone B$, we have a bijection $\denot{c}$ between $\denot{A}$ and $\denot{B}$.
     \item For every pair of combinators $c_1$ and $c_2$ of the same type $A \isoone B$, if there exists a level-2
-          combinator $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$ using extensional equivalence of
+          combinator $\alpha : c_1 \isotwo c_2$, then $\denot{c_1} = \denot{c_2}$, using extensional equivalence of
           functions.
   \end{itemize}
 \end{theoremrep}
