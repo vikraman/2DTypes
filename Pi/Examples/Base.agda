@@ -148,3 +148,65 @@ lookup {n = S n} (x :: xs) (S k , ϕ) = lookup xs (k , <-cancel-S ϕ)
 private
   f : Fin 8 → Fin 8
   f = lookup (0 :: 5 :: 6 :: 7 :: 4 :: 1 :: 2 :: 3 :: nil)
+
+-- inl is true
+B : _
+B = ⊤ ⊔ ⊤
+
+negate : B → B
+negate (inl x) = inr x
+negate (inr x) = inl x
+
+plus : B → B → B
+plus (inl x) (inl x₁) = inl tt
+plus (inl x) (inr x₁) = inr tt
+plus (inr x) (inl x₁) = inr tt
+plus (inr x) (inr x₁) = inl tt
+
+list-len-parity-h : ∀ {i} {A : Type i} → List A → ⊤ ⊔ ⊤ → ⊤ ⊔ ⊤
+list-len-parity-h nil x = x
+list-len-parity-h (x :: l) v = negate (list-len-parity-h l v)
+
+list-len-parity : ∀ {i} {A : Type i} → List A → ⊤ ⊔ ⊤
+list-len-parity l =  list-len-parity-h l (inl tt)
+
+list-len-parity-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → (list-len-parity (l₁ HoTT.++ l₂)) == plus (list-len-parity l₁) (list-len-parity l₂)
+list-len-parity-++ l₁ l₂ = TODO!
+
+
+open import Pi.Equiv.Equiv1NormHelpers using (pi^2list)
+
+-- parity : {n m : Pi.U} → (c : X P.⟷₁ Y) → ⊤ ⊔ ⊤
+-- parity {X} {Y} c =
+-- let r = eval₁ c
+--     s = pi^2list {!r!}
+-- in {!!}
+
+parity : {n m : ℕ} → (c : S n Pi^.⟷₁^ S m) → ⊤ ⊔ ⊤
+parity {X} {Y} c =
+ let s = pi^2list c
+ in list-len-parity s
+
+open import Pi.Coxeter.Coxeter
+
+≃*-preserved : {n m : ℕ} → {c₁ c₂ : S n Pi^.⟷₁^ S m} → (α : c₁ Pi^.⟷₂^ c₂) → pi^2list c₁ ≈* pi^2list c₂
+≃*-preserved α =   TODO!
+
+≃*-preservers-parity : ∀ {m} → {l₁ l₂ : List (Fin m)} → (l₁ ≈* l₂) → (list-len-parity l₁ == list-len-parity l₂)
+≃*-preservers-parity = TODO!
+
+parity-preserved : {n m : ℕ} → (c₁ c₂ : S n Pi^.⟷₁^ S m) → (α : c₁ Pi^.⟷₂^ c₂) → parity c₁ == parity c₂
+parity-preserved c₁ c₂ α =
+  let s₁ = pi^2list c₁
+      s₂ = pi^2list c₂
+  in  TODO!
+
+parity-preserved-composition : {n m : ℕ} → (c : S n Pi^.⟷₁^ S n) → parity c == inl tt → parity (c ◎^ c) == inl tt
+parity-preserved-composition c p =  TODO!
+
+n-times : {m : ℕ} → (n : ℕ) → (c : S m Pi^.⟷₁^ S m) → S m Pi^.⟷₁^ S m
+n-times O c = id⟷₁^
+n-times (S n) c = c ◎^ (n-times n c)
+
+parity-preserved-arbitrary : {m : ℕ} → (n : ℕ) → (c : S m Pi^.⟷₁^ S m) → parity c == inl tt → parity (n-times n c) == inl tt
+parity-preserved-arbitrary n c p = TODO!
