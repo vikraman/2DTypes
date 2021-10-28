@@ -11,8 +11,8 @@ for every $n$. In this section, we will describe this group syntactically.
 In order to study syntactic descriptions of permutations, we will hit the problem of deciding whether two descriptions
 refer to the same permutation -- in group theory, this is the \emph{word problem} for $\Sn$. Putting it in this form
 allows us to connect it to the broader scope of computational group theory and combinatorics -- we can borrow ideas such
-as Coxeter relations and Lehmer codes.~\footnote{The concepts we use can be found in any standard textbook on group
-theory, or see~\cite{symmetryBook2021} for a univalent point of view.}
+as Coxeter relations and Lehmer codes. The concepts we use can be found in any standard textbook on group theory, or see
+the Symmetry book~\cite{symmetryBook2021} for a univalent point of view.
 
 % The summary of what we'll do
 Thus, the goal of this section is to reconcile two different approaches to defining the symmetric group -- as an
@@ -214,9 +214,9 @@ going to specify for this presentation -- we visualise them as braid diagrams in
 \begin{enumerate}[leftmargin=*]
   \item[\labelcref{fig:coxeter-a}] Swapping the same two elements twice in a row should be the same as doing nothing.
   \item[\labelcref{fig:coxeter-b}] When swapping two distinct pairs of elements, the order in which swapping happens
-        should not matter, that is, we can slide the wires freely.
+    should not matter, that is, we can slide the wires freely.
   \item[\labelcref{fig:coxeter-c}] There are two equivalent ways of swapping the first and last elements in a sequence
-        of three elements.
+    of three elements.
 \end{enumerate}
 
 \begin{figure}
@@ -307,6 +307,7 @@ going to specify for this presentation -- we visualise them as braid diagrams in
   \label{fig:coxeter-braid}
 \end{figure}
 
+\noindent
 This construction is called a Coxeter presentation of $\Sn$. Writing it formally, we encode the rules discussed above
 using a relation $\cox$ on $\List[\Fin[n]]$ (\cref{def:cox}), and then take its congruence closure $\cox*$
 (\cref{def:coxstar}).
@@ -650,7 +651,7 @@ $\approx$, obtaining an equivalent definition for $\Sn$.
     \item $\normf$ splits into a section-retraction pair, that is, we have ${\List[\Fin[n]]} \xrightarrow{s} \Sn[n]
             \xrightarrow{r} {\List[\Fin[n]]}$ such that $s \comp r \htpy \normf$ and $r \comp s \htpy \idfunc_{\Sn[n]}$.
     \item \(\im{\quotinc} \eqv \Sn \eqv \im{\normf} \), where $\quotinc : \List[\Fin[n]] \to \Sn$ is the mapping into
-    the quotient.
+          the quotient.
   \end{enumerate}
 \end{proposition}
 
@@ -664,8 +665,8 @@ Finally, we need to show that $\Sn$ and is indeed a group presentation.
 \end{propositionrep}
 
 \begin{proof}
-   The operation $\append$ is associative, with $\nil$ as the neutral element, and the constructor $\cancel$ makes each
-   element an inverse of itself, so the inverse in the group is indeed given by list reversal.
+  The operation $\append$ is associative, with $\nil$ as the neutral element, and the constructor $\cancel$ makes each
+  element an inverse of itself, so the inverse in the group is indeed given by list reversal.
 \end{proof}
 
 \noindent
@@ -727,19 +728,18 @@ ignored~\cite{duboisTestsProofsCustom2018,vajnovszkiNewEulerMahonian2011}.
   % \end{aligned}
 \end{definition}
 
-Given a permutation $\sigma : \Aut[\Fin[n]]$, for any element $i: \Fin[n]$, we can define the inversion count of $i$ as
-the number of smaller elements appearing after it in the permutation.
+The inversion count of an element is the number of smaller elements appearing after it in the permutation.
 
 \begin{definition}[Inversion count]
-  Given a permutation $\sigma : \Aut[\Fin[n]]$, the inversion count of $i: \Fin[n]$ is given by
-  \[ \invcount{i} = \#\Set{j < i | \sigma(j) > \sigma(i)}. \]
+  Given a permutation $\sigma : \Aut[\Fin[n]]$, the inversion count of an element $i: \Fin[n]$ is given by
+  \[ \invcount{i} \defeq \#\Set{j < i | \sigma(j) > \sigma(i)}. \]
 \end{definition}
 
-Just knowing the inversion counts for all the elements, one can reconstruct the starting permutation. Also, observe that
+Knowing the inversion counts for all the elements, one can reconstruct the starting permutation. Also, observe that
 $\invcount{i} < i$, thus fitting in the $i$-th place of a Lehmer code tuple. As an example, consider the following
 tabulated presentation of a permutation of $\Fin[5]$.
 \[
-  \sigma =
+  \sigma \defeq
   \begin{pmatrix}
     0      & 1      & 2      & 3      & 4      \\
     \el{2} & \el{1} & \el{4} & \el{0} & \el{3} \\
@@ -752,7 +752,7 @@ tabulated presentation of a permutation of $\Fin[5]$.
 
 \noindent The Lehmer code for the permutation $\sigma$ is then the 5-tuple
 \[
-  l = (\invcount{0}, \invcount{1}, \invcount{2}, \invcount{3}, \invcount{4}) = (0, 1, 2, 0, 2)
+  l \equiv (\invcount{0}, \invcount{1}, \invcount{2}, \invcount{3}, \invcount{4}) \equiv (0, 1, 2, 0, 2)
 \]
 
 \noindent To decode the permutation back from this Lehmer code, we perform an algorithm similar to \emph{insertion
@@ -838,9 +838,9 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
 Finally, it is time to complete our goal of characterising the permutation groups. Having produced a Lehmer code by
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
-between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$. The idea for this proof is borrowed
-from~\cite{Molzer-cubical}. ~\footnote{Note that the indices for the type of permutations are off-by-one, because we
-  chose $\Fin[n]$ to represent generators for permutations on $\Fin[\suc[n]]$.}
+between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$~\footnote{Note that the indices for the type of permutations
+  are off-by-one, because we chose $\Fin[n]$ to represent generators for permutations on $\Fin[\suc[n]]$.}. The idea for
+this proof is borrowed from~\citet{Molzer-cubical}.
 
 \begin{definition}[${\FinExcept{n}} : {\Fin[n]} \to \UU$]
   For $n : \Nat$, the type family $\FinExcept{n}$ picks out all elements in $\Fin[n]$ except the one in the argument.
@@ -887,26 +887,20 @@ using the fact that $\Fin[n]$ and $\FinExcept{n}$ both have decidable equality.
 \end{theorem}
 
 \begin{proof}
-  For $n = \zero$, note that $\Lehmer[\zero]$ is contractible, and so is $\Aut[\Fin[\suc[\zero]]]$. For $n = \suc[m]$,
-  we compute a chain of equivalences.
-  \begin{gather*}
-    \arraycolsep=0.5em\def\arraystretch{1.5}
-    %% \begin{array}{rl}
-    %%        & \Lehmer[\zero]          \\
-    %%   \eqv & \unit                   \\
-    %%   \eqv & \Aut[\Fin[\suc[\zero]]]
-    %% \end{array}
-    %% \qquad\qquad
+  For $n = \zero$, note that $\Lehmer[\zero]$ is contractible, and so is $\Aut[\Fin[\suc[\zero]]]$, hence we have that
+  ${\Lehmer[\zero] \eqv \unit \eqv \Aut[\Fin[\suc[\zero]]]}$. For $n = \suc[m]$, we compute the following chain of equivalences.
+  \[
+    \arraycolsep=0.5em\def\arraystretch{1.3}
     \begin{array}{rlr}
-           & \Lehmer[\suc[m]]                                                                                    &                                                                 \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                               & \text{by definition}                                            \\
-      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                      & \text{induction hypothesis}                                     \\
-      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                          \\
-      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
-      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-2}} \\
-      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                           & \text{by~\cref{prop:fin-finexcept}~\cref{prop:fin-finexcept-3}}
+           & \Lehmer[\suc[m]]                                                                                    &                                                                     \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Lehmer[m]                                                               & \text{by definition}                                                \\
+      \eqv & \Fin[\suc[\suc[m]]] \times \Aut[\Fin[\suc[m]]]                                                      & \text{induction hypothesis}                                         \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\Fin[\suc[m]] \eqv \Fin[\suc[m]]}                                   & \text{$\Sigma$ over a constant family}                              \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \Fin[\suc[m]]}                    & \text{by~\cref{prop:fin-finexcept}~part~\ref{prop:fin-finexcept-2}} \\
+      \eqv & \dsum*{k : \Fin[\suc[\suc[m]]]}{\FinExcept{\suc[\suc[m]]}[m] \eqv \FinExcept{\suc[\suc[m]]}[m - k]} & \text{by~\cref{prop:fin-finexcept}~part~\ref{prop:fin-finexcept-2}} \\
+      \eqv & \Aut[\Fin[\suc[\suc[m]]]]                                                                           & \text{by~\cref{prop:fin-finexcept}~part~\ref{prop:fin-finexcept-3}}
     \end{array}
-  \end{gather*}
+  \]
 \end{proof}
 
 \noindent By composing~\cref{prop:lehmer-aut-equiv} and~\cref{prop:sn-im-lehmer-equiv}, we obtain the final equivalence.

@@ -197,8 +197,8 @@ using which we can build a toolbox of technical devices for reasoning about reve
             reversible circuits and their equivalences using 1-combinators and 2-combinators respectively. We give a
             semantic account of the language by translating each level-1 program to a bijection between finite sets, and
             verifying that programs identified by level-2 constructs denote the same bijection.
-      \item ~\cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
-            Homotopy Type Theory. We define and characterise the notion of a univalent subuniverse, and construct
+      \item \cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
+            Homotopy Type Theory and Univalent Foundations. We define and characterise the notion of a univalent subuniverse, and construct
             $\UFin$ as a univalent subuniverse which classifies all finite types. We establish that paths in $\UFin$ are
             families of loops on finite sets of specified cardinality, given by $\Aut[\Fin[n]]$, which produces the
             permutation group on $\Fin[n]$.
@@ -221,7 +221,7 @@ using which we can build a toolbox of technical devices for reasoning about reve
             groupoids of $\PiPlusLang$ and $\PiHatLang$, with $\UFin$. Finally, we also establish full abstraction and
             adequacy of this model with respect to the operational semantics.
       \item In~\cref{sec:applications}, we show applications of our results to reversible circuits, using our
-            formalisation. Our results are stated using HoTT~\cite{univalentfoundationsprogramHomotopyTypeTheory2013},
+            formalisation. Our results are stated using HoTT/UF~\cite{univalentfoundationsprogramHomotopyTypeTheory2013},
             and formalised using the HoTT-Agda library (around 7,500 lines of code). Using the formalisation, we are
             able to extract procedures for:
             \begin{enumerate*}
@@ -235,9 +235,9 @@ using which we can build a toolbox of technical devices for reasoning about reve
 
 \noindent
 The proofs of some of our lemmas and propositions and theorems, as well as additional material, are given in the
-supplementary appendices in the extended version~\cite{choudhurySymmetriesReversibleProgramming2021}, and we refer to
-them in the text. Our accompanying Agda code~\cite{choudhuryArtifactSymmetriesReversible2021} contains the formalisation
-of the full syntax, and most of our proofs.
+supplementary appendices in the extended version~\cite*{choudhurySymmetriesReversibleProgramming2021}, and we refer to
+them in the text. Our accompanying Agda code~\cite*{choudhuryArtifactSymmetriesReversible2021} contains the
+formalisation of the full syntax, and most of our proofs.
 
 % Throughout the paper, we defer longer proofs to a technical appendix and refer to the accompanying Agda code for some of
 % the elided (routine) definitions.

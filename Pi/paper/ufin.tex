@@ -4,19 +4,19 @@
 % First - recap the previous section
 % Second - say what was wrong
 
-In categorical language, the setting for the semantics in the previous section is the category of finite sets and
+In categorical language, the target for the semantics in the previous section is the category of finite sets and
 functions $\SetFin$. However, as $\PiLang$ only refers to bijective functions, a more precise setting is the groupoid
 $\BFin = \term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and
 finite products $(\unit, \times)$ and in $\BFin$ these restrict to additive and multiplicative symmetric monoidal
 structures, respectively, making $\BFin$ a symmetric rig groupoid -- the \emph{vertical categorification} of the
 commutative rig of natural numbers $\Nat$~\cite{baezHIGHERDIMENSIONALALGEBRA2010}.
 
-The semantics interprets types of $\PiLang$ as objects in $\BFin$, 1-combinators as isomorphisms, and for every pair of 1-combinators
-related by a 2-combinator, their interpretations in~$\BFin$ are equal.  The groupoid $\BFin$ is strict, since the
-collection of isomorphisms is a set, that is, a discrete category. There is no explicit witness for the equality of two
-isomorphisms, since we can decide by evaluating two bijections whether they are equal. To be able to establish
-completeness for $\PiLang$, we want a witness for this equality, so that we can quote back to the syntax and produce a
-2-combinator witnessing the equality of the corresponding 1-combinators.
+The semantics interprets types of $\PiLang$ as objects in $\BFin$, 1-combinators as isomorphisms, and for every pair of
+1-combinators related by a 2-combinator, their interpretations in~$\BFin$ are equal. $\BFin$ is a 1-groupoid, where the
+collection of isomorphisms is a set. We can evaluate two bijections on their inputs to decide if they are equal, and
+there is no higher cell witnessing the equality of two isomorphisms. To be able to establish completeness for $\PiLang$,
+we want a witness for this equality, so that we can quote back to the syntax and produce a 2-combinator witnessing the
+equality of the corresponding 1-combinator.
 
 % The denotational semantics for $\PiLang$ in the previous section uses the symmetric rig groupoid structure of $\BFin$,
 % whose objects are finite sets, whose morphisms as bijections between finite sets, and whose symmetric monoidal
@@ -30,10 +30,10 @@ completeness for $\PiLang$, we want a witness for this equality, so that we can 
 % Third - say how are we fixing it
 
 We observe that the implicit equalities between the isomorphisms are pointwise equalities of functions, that is,
-homotopies. We therefore \emph{weaken} the groupoid $\BFin$, exposing these homotopies, by using higher invertible cells.
-We work in HoTT (Univalent Foundations) as it provides a proof-relevant, constructive metatheory to get a handle
-on these equalities and provides a rich internal language for describing weak groupoids, using the ``types are weak
-$\infty$-groupoids'' correspondence.
+homotopies. We therefore \emph{weaken} the groupoid $\BFin$, exposing these homotopies, by using higher invertible
+cells. We work in HoTT/UF as it provides a proof-relevant, constructive metatheory to get a handle on these equalities
+and provides a rich internal language for describing weak groupoids, using the ``types are weak $\infty$-groupoids''
+correspondence.
 
 % To get a handle on these equalities, we will work in a proof-relevant metatheory, that is, HoTT, and then we will
 % be able to write functions out of them back into the syntax.
@@ -239,7 +239,8 @@ We use the type theory of the HoTT book~\cite{univalentfoundationsprogramHomotop
 intensional Martin-L\"{o}f Type Theory, with a hierarchy of (univalent) universes $\UU_0 : \UU_1 : \ldots$ (though we
 will just write $\UU$ since we mostly use one universe), and a few Higher Inductive Types (HITs) for truncations and
 quotients. We write $\dfun*{x:A}{B(x)}$ or simply $(x:A) \to B(x)$ for dependent function types, and $\dsum*{x:A}{B(x)}$
-or simply $(x:A) \times B(x)$ for dependent sum types.
+or simply $(x:A) \times B(x)$ for dependent sum types. We use $\defeq$ for definitions, $\equiv$ for definitional
+equalities, and $\id$ for the identity type.
 
 All arguments will hold in a Cubical Type
 Theory~\cite*{cohenCubicalTypeTheory2018,angiuliComputationalSemanticsCartesianCubical2019,vezzosiCubicalAgdaDependently2019}
@@ -289,12 +290,23 @@ $\dfun*{x:A}{f(x) \id_{B} g(x)}$. The identity type for functions is equivalent 
 by a pair of functions between them which compose to the identity, $f \comp g \htpy \idfunc_{B}$ and $g \comp f \htpy
 \idfunc_{A}$ (also see~\cref{prop:three-chars-equiv}), and this is equivalent to the identity type for the universe, $(A
 \id_{\UU} B) \eqv (A \eqv B)$, which is the univalence principle.
+\begin{gather*}
+  \begin{aligned}
+    \term{happly} & : (f \id g) \to (f \htpy g) \\
+    \term{funext} & : (f \htpy g) \to (f \id g)
+  \end{aligned}
+  \qquad
+  \begin{aligned}
+    \term{idtoeqv} & : (A \id B) \to (A \eqv B) \\
+    \term{ua}      & : (A \eqv B) \to (A \id B)
+  \end{aligned}
+\end{gather*}
 
 Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
 the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to the
 universe, such as $A \to \UU$, which is an $A$-indexed family of groupoids. For a type family $P : A \to \UU$ and a
 point $x : A$, the type $P(x)$ is the fiber over $x$.  The $\term{transport}$ operation, named
-$\term{transport}/\term{tr}$, lifts paths in the indexing type to functions between fibers.
+$\term{transport}$, lifts paths in the indexing type to functions between fibers.
 \begin{gather*}
   \term{ap}_{f} : \dfun*{x,y:A}{x \id_{A} y \to f(x) \id_{B} f(y)}
   \qquad
@@ -303,8 +315,8 @@ $\term{transport}/\term{tr}$, lifts paths in the indexing type to functions betw
 
 The type $\dsum*{x:A}{P(x)}$ is the collection of all the fibers and is the total space of $P$. The first projection
 ${\pi_1 : \dsum*{x:A}{P(x)} \to A}$ from the total space to the base space $A$ has the structure of a fibration, that
-is, there is a lifting operation (\cref{fig:lift} in the appendix) which lifts paths in the base space to paths in the
-total space.
+is, there is a lifting operation (see~\cref{fig:lift} in the appendix) which lifts paths in the base space to paths in
+the total space.
 
 \begin{toappendix}
   Given a path $p : x \id_{A} y$ in the base space, and $u : P(x)$ a point in the fiber over $x$, we have:
@@ -342,8 +354,9 @@ $\term{transport}(\inv{p})$ form an equivalence, lifting paths in the base space
   \tptEqv{P} : (x \id_{A} y) \to (P(x) \eqv P(y))
 \]
 
-\noindent The type families (or fibrations) we are interested in are the ones where paths in the base space completely
-determine the equivalences in the fibers -- these are called univalent
+\noindent
+The type families (or fibrations) we are interested in are the ones where paths in the base space completely determine
+the equivalences in the fibers -- these are called univalent
 fibrations~\cite*{kapulkinUnivalenceSimplicialSets2012,kapulkinSimplicialModelUnivalent2021,christensenCharacterizationUnivalentFibrations2015}.
 
 \begin{definition}[Univalent Fibration]
@@ -389,11 +402,11 @@ $\term{trunc}(x,y) : x \id_{\Trunc{A}} y$, which equates every pair of points in
   \end{definition}
 \end{toappendix}
 
-Another HIT that we use is the set-quotient $\quot{A}{R}$ which takes a set $A$ and a binary relation $R : {A \to A \to
-  \UU}$. It has a mapping of points $\quotinc : A \to \quot{A}{R}$, and a constructor that adds paths between related
-pairs of elements $\quotrel : R(x,y) \to \quotinc(x) \id_{\quot{A}{R}} \quotinc(y)$ (see~\cref{def:set-quot}).  We
-recall that the quotient is \emph{effective} if $R$ is a prop-valued equivalence relation, that is, $R(x,y)$ holds iff
-$(q(x) \id_{\quot{A}{R}} q(y))$.
+Another HIT that we use is the set-quotient $\quot{A}{R}$ which takes a set $A$ and a binary relation
+$R : {A \to A \to \UU}$. It has a mapping of points $\quotinc : A \to \quot{A}{R}$, and a constructor that adds paths
+between related pairs of elements $\quotrel : R(x,y) \to \quotinc(x) \id_{\quot{A}{R}} \quotinc(y)$
+(see~\cref{def:set-quot}). We recall that if $R$ is a prop-valued equivalence relation, then the quotient is
+\emph{effective}, that is, $R(x,y)$ holds iff $(q(x) \id_{\quot{A}{R}} q(y))$.
 
 \begin{toappendix}
   \begin{definition}[Set Quotient]
@@ -412,10 +425,11 @@ $(q(x) \id_{\quot{A}{R}} q(y))$.
 \subsection{Homotopy Types}
 \label{app:homotopytypes}
 
-A type is \emph{contractible} (-2-type) if it has a unique element, that is, there is a center of contraction and every
-other point is equal to it. A type is a \emph{proposition} (-1-type) if its equality types are contractible, that is, it
-has at most one inhabitant. Iterating this, we can define sets or 0-types (whose equality types are propositions) and
-1-groupoids or 1-types (whose equality types are sets), and similarly, higher homotopy $n$-types.
+A type is \emph{contractible} (a~-2-type) if it has a unique element, that is, there is a center of contraction and
+every other point is equal to it. A type is a \emph{proposition} (-1-type) if its equality types are contractible, that
+is, it has at most one inhabitant. Iterating this, we can define~\emph{sets} or 0-types (whose equality types are
+propositions) and~\emph{1-groupoids} or 1-types (whose equality types are sets), and similarly, higher homotopy
+$n$-types.
 \begin{gather*}
   \begin{aligned}
     \isContr{A} & \defeq \dsum*{x:A}{\dfun*{y:A}{y \id x}} \\
@@ -429,7 +443,7 @@ has at most one inhabitant. Iterating this, we can define sets or 0-types (whose
 \end{gather*}
 
 \noindent
-Given a function $f : A \to B$, there is an associated fibration over $B$, given by the homotopy fiber. The image of $f$
+Given a function $f : A \to B$, there is an associated fibration over $B$, given by its homotopy fiber. The image of $f$
 is defined to be the (-1)-truncation of its fiber.
 \begin{gather*}
   \fib_{f}(b) \defeq \dsum*{a:A}{f(a) \id_{B} b}
@@ -437,9 +451,11 @@ is defined to be the (-1)-truncation of its fiber.
   \im{f} \defeq \dsum*{b:B}{\Trunc[-1]{\fib_{f}(b)}}
 \end{gather*}
 
+\noindent
+Finally, we recall a few characterisations of equivalences of homotopy types.
 \begin{proposition}
   \label{prop:three-chars-equiv}
-  The following propositions are equivalent.
+  The following are equivalent.
   \begin{enumerate}
     \item $f : A \to B$ is an equivalence.
     \item $f$ has a left and right inverse.
@@ -467,8 +483,7 @@ univalent ensures that the equality type of the ambient universe is reflected in
   \label{prop:univsub}
   A universe predicate is a type family $P : \UU \to \UU$ whose fibers are propositions, that is, $P(X)$ is a
   proposition for every $X$. Given such a predicate $P$, the fibration ${\fst : \dsum*{X:\UU}{P(X)} \to \UU}$ is
-  univalent and generates a univalent subuniverse ${\UU_{P} \defeq (\dsum*{X:\UU}{P(X)}, \fst)}$.~\footnote{Univalent
-    typoids~\cite{petrakisUnivalentTypoids2019} are a different presentation of univalent subuniverses.}
+  univalent and generates a univalent subuniverse ${\UU_{P} \defeq (\dsum*{X:\UU}{P(X)}, \fst)}$.
 \end{propositionrep}
 
 \begin{proof}
@@ -495,8 +510,10 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
        & \Fin[\suc[n]] \defeq \top \sqcup \Fin[n]
     \end{aligned}
   \end{gather*}
-  Note that $\Fin[n]$ is a set, and we use both definitions interchangeably.
 \end{definition}
+
+\noindent
+Note that $\Fin[n]$ is a set, and we use both definitions interchangeably.
 
 \begin{definition}[$\isFin$]
   \label{def:isfin}
@@ -504,8 +521,10 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
   \[
     \isFin[X] \defeq \dsum*{n:\Nat}{\SubP{X}{\Fin[n]}}
   \]
-  Note that the natural number $n$ need not be truncated, as justified below.
 \end{definition}
+
+\noindent
+Note that the natural number $n$ need not be truncated, as justified below.
 
 \begin{lemmarep}
   \label{prop:isFin}
@@ -520,7 +539,9 @@ equivalent to a finite set (\cref*{def:finite-set,def:isfin}).
   applying the first projection.
 \end{proof}
 
-Since $\isFin$ is a predicate on the universe $\UU$, we easily get our univalent subuniverse $\UFin$.
+\noindent
+Since $\isFin$ is a predicate on the universe $\UU$, we easily get our univalent subuniverse $\UFin$. This definition of
+the groupoid of finite types has also been considered in~\cite{yorgeyCombinatorialSpeciesLabelled2014}.
 
 \begin{definition}
   \label{def:ufin}
@@ -531,11 +552,10 @@ Since $\isFin$ is a predicate on the universe $\UU$, we easily get our univalent
   We write $F_{n} \defeq (\Fin[n], n, \trunc{\refl})$, for the image of the inclusion of $\Fin[n]$.
 \end{definition}
 
-This definition of the groupoid of finite types has also been considered
-in~\cite{yorgeyCombinatorialSpeciesLabelled2014}. While $\UFin$ has \emph{all} the finite types, we are also interested
-in constructing a subuniverse of finite types of a specified cardinality. To do so, we will start with the subuniverse
-$\BAut[T]$, for any type $T : \UU$. \footnote{Characterisations of univalent fibrations using the $\BAut$ construction
-  have been studied by~\citet{christensenCharacterizationUnivalentFibrations2015}.}
+While $\UFin$ has \emph{all} the finite types, we are also interested in constructing a subuniverse of finite types of a
+specified cardinality. To do so, we will start with the subuniverse $\BAut[T]$, for any type $T : \UU$.
+Characterisations of univalent fibrations using the $\BAut$ construction have also been studied
+by~\citet{christensenCharacterizationUnivalentFibrations2015}.
 
 \begin{definition}[$\BAut$]
   The predicate $P(X) \defeq \Trunc[-1]{X \id T}$ picks out exactly those types that are merely equal to $T$, and this
@@ -548,8 +568,8 @@ $\BAut[T]$, for any type $T : \UU$. \footnote{Characterisations of univalent fib
 
 Using $\BAut$, we can talk about types that are equivalent to a finite set of specified cardinality, for example, the
 subuniverse of 2-element sets is given by $\BAut[\Bool]$. This has been used to construct the real projective spaces in
-HoTT~\cite{buchholtzRealProjectiveSpaces2017}, and also to give the denotational semantics for a 1-bit reversible
-programming language~\cite{caretteReversibleProgramsUnivalent2018}.
+HoTT~\cite{buchholtzRealProjectiveSpaces2017}, and also to give sound and complete denotational semantics to a 1-bit
+fragment of $\PiLang$~\cite*{caretteReversibleProgramsUnivalent2018}.
 
 \begin{definition}[${\UFin[n]}$]
   For any $n : \Nat$, we define $\UFin[n] \defeq \BAut[\Fin[n]]$ to be the univalent subuniverse of $n$-element sets.
@@ -589,11 +609,11 @@ the group of automorphisms of $T$.
 \end{theorem}
 
 We have shown that loops in $\UFin$ exactly encode the automorphism group $\Aut[\Fin[n]]$ for every~$n$. This is a
-general technique called \emph{delooping}, where a group can be identified with a 1-object groupoid, internally in HoTT.
-This technique also allows defining higher groups~\cite{buchholtzHigherGroupsHomotopy2018}. The loopspace of a pointed
-type automatically has the structure of a group, with $\refl_{\pt}$ for the neutral element, path composition for the
-group multiplication, and path inverse for the group inverse operation. The group axioms are given by the higher paths
-corresponding to groupoid laws.
+general technique called \emph{delooping}, where a group can be identified with a 1-object groupoid, that is, a
+0-connected type in HoTT. This technique also allows defining higher groups~\cite{buchholtzHigherGroupsHomotopy2018}.
+The loopspace of a pointed type automatically has the structure of a group, with $\refl_{\pt}$ for the neutral element,
+path composition for the group multiplication, and path inverse for the group inverse operation. The group axioms are
+given by the higher paths corresponding to groupoid laws.
 
 % \[
 %   \begin{tikzcd}
@@ -626,8 +646,7 @@ the univalence principle.
   \begin{gather*}
     \begin{aligned}
       \Fin[0]                & \eqv \bot                  \\
-      \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m]           \\
-      \\
+      \Fin[n] \sqcup \Fin[m] & \eqv \Fin[n + m]           \\[1.5ex]
       \bot \sqcup X          & \eqv X                     \\
       X \sqcup \bot          & \eqv X                     \\
       (X \sqcup Y) \sqcup Z  & \eqv X \sqcup (Y \sqcup Z) \\
@@ -637,8 +656,7 @@ the univalence principle.
     \qquad
     \begin{aligned}
       \Fin[1]                & \eqv \top                             \\
-      \Fin[n] \times \Fin[m] & \eqv \Fin[n * m]                      \\
-      \\
+      \Fin[n] \times \Fin[m] & \eqv \Fin[n * m]                      \\[1.5ex]
       \top \times X          & \eqv X                                \\
       X \times \top          & \eqv X                                \\
       (X \times Y) \times Z  & \eqv X \times (Y \times Z)            \\
