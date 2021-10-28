@@ -80,3 +80,68 @@
 % semantics
 \DeclarePairedDelimiter{\gdenotpair}{\llparenthesis}{\rrparenthesis}
 \newcommand{\gdenot}[1]{\gdenotpair{\ensuremath{~#1~}}}
+\DeclarePairedDelimiter{\denotpair}{\llbracket}{\rrbracket}
+\DeclarePairedDelimiter{\sem}{\llbracket}{\rrbracket}
+\newcommand{\denot}[1]{\denotpair{\ensuremath{~#1~}}}
+\newcommand{\denotbox}[1]{\denotpair{\parbox{1.2cm}{\centering\ensuremath{#1}}}}
+\newcommand{\sizet}[1]{| #1 |}
+
+% syntax
+\newcommand{\idd}{\mathit{id}\leftrightarrow}
+\newcommand{\idf}{\mathit{id}\Leftrightarrow}
+\newcommand{\Gpd}{\ensuremath{\mathsf{Groupoid}}}
+\newcommand{\scalef}{0.85}
+\newcommand{\alt}{~|~}
+\newcommand{\zerot}{\mathbb{0}}
+\newcommand{\onet}{\mathbb{1}}
+\newcommand{\sumt}{\mathbin{\mathsf{+}}}
+\newcommand{\prodt}{\mathbin{\mathsf{\times}}}
+\newcommand{\Acon}[1]{\AgdaInductiveConstructor{#1}}
+\newcommand{\Afun}[1]{\AgdaFunction{#1}}
+\newcommand{\inlv}[1]{\ensuremath{\Acon{inj₁} \; #1}}
+\newcommand{\inrv}[1]{\ensuremath{\Acon{inj₂} \; #1}}
+\newcommand{\idc}{\AgdaInductiveConstructor{id⟷₁}}
+\newcommand{\assoc}{\circ}
+\newcommand{\transLR}{\AgdaInductiveConstructor{trans⇔}}
+\newcommand{\identlp}{\AgdaInductiveConstructor{unite₊l}}
+\newcommand{\identrp}{\AgdaInductiveConstructor{uniti₊l}}
+\newcommand{\identlsp}{\AgdaInductiveConstructor{unite₊r}}
+\newcommand{\identrsp}{\AgdaInductiveConstructor{uniti₊r}}
+\newcommand{\swapp}{\AgdaInductiveConstructor{swap₊}}
+\newcommand{\assoclp}{\AgdaInductiveConstructor{assocl₊}}
+\newcommand{\assocrp}{\AgdaInductiveConstructor{assocr₊}}
+\newcommand{\identlt}{\AgdaInductiveConstructor{unite⋆l}}
+\newcommand{\identrt}{\AgdaInductiveConstructor{uniti⋆l}}
+\newcommand{\identlst}{\AgdaInductiveConstructor{unite⋆r}}
+\newcommand{\identrst}{\AgdaInductiveConstructor{uniti⋆r}}
+\newcommand{\swapt}{\AgdaInductiveConstructor{swap⋆}}
+\newcommand{\assoclt}{\AgdaInductiveConstructor{assocl⋆}}
+\newcommand{\assocrt}{\AgdaInductiveConstructor{assocr⋆}}
+\newcommand{\absorbr}{\AgdaInductiveConstructor{absorbr}}
+\newcommand{\absorbl}{\AgdaInductiveConstructor{absorbl}}
+\newcommand{\factorzr}{\AgdaInductiveConstructor{factorzr}}
+\newcommand{\factorzl}{\AgdaInductiveConstructor{factorzl}}
+\newcommand{\dist}{\AgdaInductiveConstructor{dist}}
+\newcommand{\factor}{\AgdaInductiveConstructor{factor}}
+\newcommand{\distl}{\AgdaInductiveConstructor{distl}}
+\newcommand{\factorl}{\AgdaInductiveConstructor{factorl}}
+\newcommand{\isoone}{\ensuremath{\leftrightarrow}_1}
+\newcommand{\isotwo}{\ensuremath{\leftrightarrow}_2}
+\newcommand{\Rule}[4]{
+\makebox{{\rm #1}
+$\displaystyle
+\frac{\begin{array}{l}#2 \\\end{array}}
+{\begin{array}{l}#3      \\\end{array}}$
+ #4}}
+\newcommand{\jdg}[3]{#2 \proves_{#1} #3}
+\newcommand{\proves}{\vdash}
+\newcommand{\interp}[2]{\mathit{interp}(#1,#2)}
+\newcommand{\sumtype}{+}
+\newcommand{\prodtype}{\times}
+\newcommand{\inkscape}[2][1.5]{
+\begin{center}
+\scalebox{#1}{
+\includegraphics{inkscape/#2}
+}
+\end{center}
+}

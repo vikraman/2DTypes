@@ -254,45 +254,44 @@ semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
 
 \begin{multicols}{2}
   %%  \begin{longtable}{>{$}r<{$} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
-  {\scalebox{\scalef}{$%
-        \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
-          \pdenot{\identlp} & (\inl{v})         & = & v               \\
-          \pdenot{\identrp} & v                 & = & \inl{v}         \\
-          \pdenot{\swapp}   & (\inl{v})         & = & \inr{v}         \\
-          \pdenot{\swapp}   & (\inr{v})         & = & \inl{v}         \\
-          \pdenot{\assoclp} & (\inl{v})         & = & \inl{(\inl{v})} \\
-          \pdenot{\assoclp} & (\inr{(\inl{v})}) & = & \inl{(\inr{v})} \\
-          \pdenot{\assoclp} & (\inr{(\inr{v})}) & = & \inr{v}         \\
-          \pdenot{\assocrp} & (\inl{(\inl{v})}) & = & \inl{v}         \\
-          \pdenot{\assocrp} & (\inl{(\inr{v})}) & = & \inr{(\inl{v})} \\
-          \pdenot{\assocrp} & (\inr{v})         & = & \inr{(\inr{v})}
-        \end{tabular}$}}
+  {\scalebox{\scalef}{
+      \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+        \denotbox{\identlp} & (\inl{v})         & = & v               \\
+        \denotbox{\identrp} & v                 & = & \inl{v}         \\
+        \denotbox{\swapp}   & (\inl{v})         & = & \inr{v}         \\
+        \denotbox{\swapp}   & (\inr{v})         & = & \inl{v}         \\
+        \denotbox{\assoclp} & (\inl{v})         & = & \inl{(\inl{v})} \\
+        \denotbox{\assoclp} & (\inr{(\inl{v})}) & = & \inl{(\inr{v})} \\
+        \denotbox{\assoclp} & (\inr{(\inr{v})}) & = & \inr{v}         \\
+        \denotbox{\assocrp} & (\inl{(\inl{v})}) & = & \inl{v}         \\
+        \denotbox{\assocrp} & (\inl{(\inr{v})}) & = & \inr{(\inl{v})} \\
+        \denotbox{\assocrp} & (\inr{v})         & = & \inr{(\inr{v})}
+      \end{tabular}}}
 
-  {\scalebox{\scalef}{$%
-        \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
-          \pdenot{\identlt} & (\ttt , v)          & = & v                   \\
-          \pdenot{\identrt} & v                   & = & (\ttt , v)          \\
-          \pdenot{\swapt}   & (v_1 , v_2)         & = & (v_2 , v_1)         \\
-          \pdenot{\assoclt} & (v_1 , (v_2 , v_3)) & = & ((v_1 , v_2) , v_3) \\
-          \pdenot{\assocrt} & ((v_1 , v_2) , v_3) & = & (v_1 , (v_2 , v_3)) \\
-          \pdenot{\dist}    & (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}   \\
-          \pdenot{\dist}    & (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}   \\
-          \pdenot{\factor}  & (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)   \\
-          \pdenot{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)   \\
-          \pdenot{\idc}     & v                   & = & v
-        \end{tabular}$}}
+  {\scalebox{\scalef}{
+      \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+        \denotbox{\identlt} & (\ttt , v)          & = & v                   \\
+        \denotbox{\identrt} & v                   & = & (\ttt , v)          \\
+        \denotbox{\swapt}   & (v_1 , v_2)         & = & (v_2 , v_1)         \\
+        \denotbox{\assoclt} & (v_1 , (v_2 , v_3)) & = & ((v_1 , v_2) , v_3) \\
+        \denotbox{\assocrt} & ((v_1 , v_2) , v_3) & = & (v_1 , (v_2 , v_3)) \\
+        \denotbox{\dist}    & (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}   \\
+        \denotbox{\dist}    & (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}   \\
+        \denotbox{\factor}  & (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)   \\
+        \denotbox{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)   \\
+        \denotbox{\idc}     & v                   & = & v
+      \end{tabular}}}
   %%\end{longtable}
 \end{multicols}
 
 \begin{center}
-  {\scalebox{\scalef}{$%
-        \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
-          \pdenot{(c_1 \circledcirc c_2)} & v           & = & \denot{c_2} (\denot{c_1}~v)         \\
-          \pdenot{(c_1 \oplus c_2)}       & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
-          \pdenot{(c_1 \oplus c_2)}       & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
-          \pdenot{(c_1 \otimes c_2)}      & (v_1 , v_2) & = & (\denot{c_1}~v_1 , \denot{c_2}~v_2)
-        \end{tabular}
-      $}}
+  {\scalebox{\scalef}{
+      \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+        \denotbox{(c_1 \circledcirc c_2)} & v           & = & \denot{c_2} (\denot{c_1}~v)         \\
+        \denotbox{(c_1 \oplus c_2)}       & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
+        \denotbox{(c_1 \oplus c_2)}       & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
+        \denotbox{(c_1 \otimes c_2)}      & (v_1 , v_2) & = & (\denot{c_1}~v_1 , \denot{c_2}~v_2)
+      \end{tabular}}}
 \end{center}
 
 % \begingroup
