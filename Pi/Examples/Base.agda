@@ -163,6 +163,12 @@ plus (inl x) (inr x₁) = inr tt
 plus (inr x) (inl x₁) = inr tt
 plus (inr x) (inr x₁) = inl tt
 
+negate-plus : (x y : B) → negate (plus x y) == plus (negate x) y
+negate-plus true true = idp
+negate-plus true false = idp
+negate-plus false true = idp
+negate-plus false false = idp
+
 list-len-parity-h : ∀ {i} {A : Type i} → List A → ⊤ ⊔ ⊤ → ⊤ ⊔ ⊤
 list-len-parity-h nil x = x
 list-len-parity-h (x :: l) v = negate (list-len-parity-h l v)
@@ -171,7 +177,10 @@ list-len-parity : ∀ {i} {A : Type i} → List A → ⊤ ⊔ ⊤
 list-len-parity l =  list-len-parity-h l (inl tt)
 
 list-len-parity-++ : ∀ {i} {A : Type i} → (l₁ l₂ : List A) → (list-len-parity (l₁ HoTT.++ l₂)) == plus (list-len-parity l₁) (list-len-parity l₂)
-list-len-parity-++ l₁ l₂ = TODO!
+list-len-parity-++ nil l with (list-len-parity l)
+... | true = idp
+... | false = idp
+list-len-parity-++ (x :: l₁) l₂ rewrite (list-len-parity-++ l₁ l₂) = negate-plus _ _
 
 
 open import Pi.Equiv.Equiv1NormHelpers using (pi^2list)
@@ -188,9 +197,17 @@ parity {X} {Y} c =
  in list-len-parity s
 
 open import Pi.Coxeter.Coxeter
+open import Pi.Equiv.Equiv2Norm using (evalNorm₂)
+open import Pi.Lehmer.Lehmer2FinEquiv using (Fin≃Lehmer)
+open import Pi.Lehmer.Lehmer2 using (Lehmer1-Lehmer2-equiv)
 
-≃*-preserved : {n m : ℕ} → {c₁ c₂ : S n Pi^.⟷₁^ S m} → (α : c₁ Pi^.⟷₂^ c₂) → pi^2list c₁ ≈* pi^2list c₂
-≃*-preserved α =  TODO!
+≃*-preserved : {n : ℕ} → {c₁ c₂ : S n Pi^.⟷₁^ S n} → (α : c₁ Pi^.⟷₂^ c₂) → pi^2list c₁ ≈* pi^2list c₂
+≃*-preserved {c₁ = c₁}  {c₂ = c₂} α =
+  let r = ap (–> Fin≃Lehmer) (evalNorm₂ α)
+      s₁ = <– Lehmer1-Lehmer2-equiv (Pi^.pi^2lehmer c₁)
+      s₂ = <– Lehmer1-Lehmer2-equiv (Pi^.pi^2lehmer c₂)
+      q = (<–-inv-r Fin≃Lehmer ((Pi^.pi^2lehmer c₁))) ∙ {!   !} ∙ ! (<–-inv-r Fin≃Lehmer ((Pi^.pi^2lehmer c₂)))
+  in  {! q !}
 
 ≃*-preservers-parity : ∀ {m} → {l₁ l₂ : List (Fin m)} → (l₁ ≈* l₂) → (list-len-parity l₁ == list-len-parity l₂)
 ≃*-preservers-parity idp = idp
@@ -205,11 +222,11 @@ open import Pi.Coxeter.Coxeter
 ≃*-preservers-parity (≈-rel braid) = idp
 ≃*-preservers-parity (≈-rel cancel) = idp
 
-parity-preserved : {n m : ℕ} → (c₁ c₂ : S n Pi^.⟷₁^ S m) → (α : c₁ Pi^.⟷₂^ c₂) → parity c₁ == parity c₂
+parity-preserved : {n : ℕ} → (c₁ c₂ : S n Pi^.⟷₁^ S n) → (α : c₁ Pi^.⟷₂^ c₂) → parity c₁ == parity c₂
 parity-preserved c₁ c₂ α =
   let s₁ = pi^2list c₁
       s₂ = pi^2list c₂
-  in  TODO!
+  in  ≃*-preservers-parity (≃*-preserved α)
 
 parity-preserved-composition : {n m : ℕ} → (c d : S n Pi^.⟷₁^ S n) → (parity c == inl tt) → (parity d == inl tt) → parity (c ◎^ d) == inl tt
 parity-preserved-composition c d p q rewrite (list-len-parity-++ (pi^2list c) (pi^2list d)) rewrite p rewrite q = idp
