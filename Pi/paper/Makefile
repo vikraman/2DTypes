@@ -21,7 +21,7 @@ $(foreach file,$(TARGETS),$(eval -include $(DEPS_DIR)/$(file)P))
 $(DEPS_DIR) :
 	mkdir $@
 
-%.pdf : %.tex ExamplesL.tex
+%.pdf : %.tex ExamplesL.tex inkscape/qis1.pdf inkscape/qis2.pdf
 	if [ ! -e $(DEPS_DIR) ]; then mkdir $(DEPS_DIR); fi
 	$(LATEXMK) -pdf -deps-out=$(DEPS_DIR)/$@P $<
 
@@ -30,6 +30,9 @@ ExamplesL.tex: latex/Pi/Examples/ExamplesL.tex
 
 latex/Pi/Examples/ExamplesL.tex: ../Examples/ExamplesL.lagda
 	agda --latex ../Examples/ExamplesL.lagda
+
+inkscape/%.pdf : inkscape/%.svg
+	inkscape -D $< -o $@
 
 arxiv.tar.gz: ExamplesL.tex arxiv.tex discussion.tex equivalence.tex \
 				examples.tex finite.tex introduction.tex reversible1.tex ufin.tex \
