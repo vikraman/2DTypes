@@ -98,3 +98,23 @@ parity-preserved-arbitrary O c p = idp
 parity-preserved-arbitrary {m = m} (S n) c p =
   let r = parity-preserved-composition {m = m} c (n-comp {m} n c) p
   in  r (parity-preserved-arbitrary n c p)
+
+open import Pi.Equiv.Translation2 using (eval₁)
+open import Pi.Equiv.Equiv1Hat using (eval^₁)
+open import Pi.Examples.Adder
+open import Pi.Examples.Reset
+
+_ : parity (eval₁ adder3) == false
+_ = idp
+
+_ : parity (eval₁ (reset 2)) == false
+_ = idp
+
+_ : parity (eval^₁ reset2-perm+) == false
+_ = idp
+
+_ : parity (eval₁ adder4) == false
+_ = idp
+
+_ : parity (eval₁ (reset 3)) == false
+_ = idp
