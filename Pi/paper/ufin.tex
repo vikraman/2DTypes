@@ -289,12 +289,23 @@ $\dfun*{x:A}{f(x) \id_{B} g(x)}$. The identity type for functions is equivalent 
 by a pair of functions between them which compose to the identity, $f \comp g \htpy \idfunc_{B}$ and $g \comp f \htpy
 \idfunc_{A}$ (also see~\cref{prop:three-chars-equiv}), and this is equivalent to the identity type for the universe, $(A
 \id_{\UU} B) \eqv (A \eqv B)$, which is the univalence principle.
+\begin{gather*}
+  \begin{aligned}
+    \term{happly} & : (f \id g) \to (f \htpy g) \\
+    \term{funext} & : (f \htpy g) \to (f \id g)
+  \end{aligned}
+  \qquad
+  \begin{aligned}
+    \term{idtoeqv} & : (A \id B) \to (A \eqv B) \\
+    \term{ua}      & : (A \eqv B) \to (A \id B)
+  \end{aligned}
+\end{gather*}
 
 Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
 the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to the
 universe, such as $A \to \UU$, which is an $A$-indexed family of groupoids. For a type family $P : A \to \UU$ and a
 point $x : A$, the type $P(x)$ is the fiber over $x$.  The $\term{transport}$ operation, named
-$\term{transport}/\term{tr}$, lifts paths in the indexing type to functions between fibers.
+$\term{transport}$, lifts paths in the indexing type to functions between fibers.
 \begin{gather*}
   \term{ap}_{f} : \dfun*{x,y:A}{x \id_{A} y \to f(x) \id_{B} f(y)}
   \qquad
