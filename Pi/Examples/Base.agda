@@ -196,18 +196,25 @@ parity {X} {Y} c =
  let s = pi^2list c
  in list-len-parity s
 
-open import Pi.Coxeter.Coxeter
+open import Pi.Coxeter.Coxeter renaming (_■_ to _<>_)
 open import Pi.Equiv.Equiv2Norm using (evalNorm₂)
 open import Pi.Lehmer.Lehmer2FinEquiv using (Fin≃Lehmer)
 open import Pi.Lehmer.Lehmer2 using (Lehmer1-Lehmer2-equiv)
+open import Pi.Coxeter.Lehmer2CoxeterEquiv using (immersion ; immersion∘immersion⁻¹)
+
+idp-refl : {m : ℕ} {l₁ l₂ : List (Fin m)} → (l₁ == l₂) -> l₁ ≈* l₂
+idp-refl idp = idp
 
 ≃*-preserved : {n : ℕ} → {c₁ c₂ : S n Pi^.⟷₁^ S n} → (α : c₁ Pi^.⟷₂^ c₂) → pi^2list c₁ ≈* pi^2list c₂
 ≃*-preserved {c₁ = c₁}  {c₂ = c₂} α =
   let r = ap (–> Fin≃Lehmer) (evalNorm₂ α)
       s₁ = <– Lehmer1-Lehmer2-equiv (Pi^.pi^2lehmer c₁)
       s₂ = <– Lehmer1-Lehmer2-equiv (Pi^.pi^2lehmer c₂)
-      q = (<–-inv-r Fin≃Lehmer ((Pi^.pi^2lehmer c₁))) ∙ {!   !} ∙ ! (<–-inv-r Fin≃Lehmer ((Pi^.pi^2lehmer c₂)))
-  in  {! q !}
+      q = (! (<–-inv-r Fin≃Lehmer ((Pi^.pi^2lehmer c₁)))) ∙  r  ∙ (<–-inv-r Fin≃Lehmer ((Pi^.pi^2lehmer c₂)))
+      w = (ap immersion q)
+      o₁ = immersion∘immersion⁻¹ (pi^2list c₁)
+      o₂ = immersion∘immersion⁻¹ (pi^2list c₂)
+  in   comm o₁ <> idp-refl w <> o₂
 
 ≃*-preservers-parity : ∀ {m} → {l₁ l₂ : List (Fin m)} → (l₁ ≈* l₂) → (list-len-parity l₁ == list-len-parity l₂)
 ≃*-preservers-parity idp = idp
