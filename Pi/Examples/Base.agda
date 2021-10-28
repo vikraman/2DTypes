@@ -190,10 +190,20 @@ parity {X} {Y} c =
 open import Pi.Coxeter.Coxeter
 
 ≃*-preserved : {n m : ℕ} → {c₁ c₂ : S n Pi^.⟷₁^ S m} → (α : c₁ Pi^.⟷₂^ c₂) → pi^2list c₁ ≈* pi^2list c₂
-≃*-preserved α =   TODO!
+≃*-preserved α =  TODO!
 
 ≃*-preservers-parity : ∀ {m} → {l₁ l₂ : List (Fin m)} → (l₁ ≈* l₂) → (list-len-parity l₁ == list-len-parity l₂)
-≃*-preservers-parity q = TODO!
+≃*-preservers-parity idp = idp
+≃*-preservers-parity (comm q) = ! (≃*-preservers-parity q)
+≃*-preservers-parity (trans q q₁) = ≃*-preservers-parity q ∙ ≃*-preservers-parity q₁
+≃*-preservers-parity (respects-++ {l = l} {l'} {r = r} {r'} q q₁)
+  rewrite (list-len-parity-++ l r)
+  rewrite (list-len-parity-++ l' r')
+  rewrite (≃*-preservers-parity q)
+  rewrite (≃*-preservers-parity q₁) = idp
+≃*-preservers-parity (≈-rel (swap x)) = idp
+≃*-preservers-parity (≈-rel braid) = idp
+≃*-preservers-parity (≈-rel cancel) = idp
 
 parity-preserved : {n m : ℕ} → (c₁ c₂ : S n Pi^.⟷₁^ S m) → (α : c₁ Pi^.⟷₂^ c₂) → parity c₁ == parity c₂
 parity-preserved c₁ c₂ α =
@@ -210,6 +220,6 @@ n-times (S n) c = c ◎^ (n-times n c)
 
 parity-preserved-arbitrary : {m : ℕ} → (n : ℕ) → (c : S m Pi^.⟷₁^ S m) → parity c == inl tt → parity (n-times n c) == inl tt
 parity-preserved-arbitrary O c p = idp
-parity-preserved-arbitrary {m = m} (S n) c p = 
+parity-preserved-arbitrary {m = m} (S n) c p =
   let r = parity-preserved-composition {m = m} c (n-times {m} n c) p
   in  r (parity-preserved-arbitrary n c p)
