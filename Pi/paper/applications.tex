@@ -1,0 +1,165 @@
+\section{Applications to Reversible Circuits}
+\label{sec:applications}
+
+Using our semantics, we can normalise, synthesise, prove equivalence, and reason about~$\PiLang$ programs.
+
+\[
+  \begin{tikzpicture}[->,>=stealth',auto,thick,node distance=1em]
+    % nodes
+    \node (A) at (0, 2) {\Afun{reversibleOr1}};
+    \node (B) at (0, 0) {\Afun{reversibleOr2}};
+    \node (C) at (4, 1) {\Afun{reversibleOrNorm}};
+    \node (D) at (9, 1) {\AgdaSymbol{(}\AgdaNumber{0 5 6 7 4 1 2 3}\AgdaSymbol{)}};
+    % arrows
+    \path
+    (A) edge[bend left] node [above left] { $\strut\normt_{1}$ } (C)
+    (B) edge[bend right] node [below left] { $\strut\normt_{1}$ } (C)
+    (D) edge node[above] { $\strut\term{quote}$ } (C);
+  \end{tikzpicture}
+\]
+
+% \[
+%   \begin{tabular}{>{$}c<{$} @{\hspace{5em}} >{$}c<{$}}
+%     \tikzmarknode{A}{\Afun{reversibleOr1}} & \\
+%                                            & \tikzmarknode{C}{\Afun{reversibleOrNorm}} \\
+%     \tikzmarknode{B}{\Afun{reversibleOr2}} &
+%   \end{tabular}
+%   % \tikzmarknode{D}{4}
+%   \begin{tikzpicture}[overlay, remember picture, shorten <=1mm,
+%     nodes={inner sep=1pt, align=center, font=\footnotesize}]
+%     \draw (A.south) -- ++ (-1,-1) node[below] {2 bits};
+%     \draw (B.south) -- ++ (-.5,-1) node[below] {2 bits};
+%     % \draw (D.south) -- ++ (.5,-1) node[below] {3 bits};
+%   \end{tikzpicture}
+% \]
+
+\subsection{Normalisation}
+
+Normalisation involves translating $\PiLang$ programs to $\PiHatLang$, computing a permutation, and quoting back to
+$\PiPlusLang$. This happends in several steps -- the evaluation step goes from $\PiLang$ to $\PiPlusLang$ reducing
+$\times$ to $+$ and translating the corresponding combinators, then from $\PiPlusLang$ to $\PiHatLang$ reducing to
+adjacent transpositions, then finally to $\UFin$ through words in $\Sn$ and Lehmer codes, and then, the quoting step
+goes all the way back until $\PiPlusLang$. We define this $\normt$ function below using our previous evaluation
+$\gdenot{\blank}$.
+
+\begin{definition}[Normalisation of $\PiLang$ programs]
+  \begin{gather*}
+    \begin{aligned}
+      \normt_{0} & : U \to \UPlus                                            \\
+      \normt_{0} & = \quotep_{0} \comp \quoteh_{0} \comp \gdenot{\blank}_{0}
+    \end{aligned}
+    \qquad
+    \begin{aligned}
+      \normt_{1} & : (c : X \iso Y) \to \normt_{0}(X) \iso \normt_{0}(Y)     \\
+      \normt_{1} & = \quotep_{1} \comp \quoteh_{1} \comp \gdenot{\blank}_{1}
+    \end{aligned}
+  \end{gather*}
+\end{definition}
+
+\subsection{Equivalence}
+
+By normalisation, we also get a decision procedure for program equivalence -- two circuits are equivalent iff they
+represent the same permutation, or equivalently, they have the same normal form. Recall the specification of reversible
+disjunction from \cref{sec:examples}, the two Qiskit circuits for implementing it, and the corresponding $\PiLang$
+definitions \Afun{reversibleOr1} and \Afun{reversibleOr2}. The type $\mathbb{B}\ 3$ normalises to
+$\mathbb{8}+ \equiv \mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + \mathbb{0})))))))$,
+and normal forms for both circuits compute to the following, establishing their equivalence:
+
+\medskip
+\resetnormtwo{}
+
+\subsection{Synthesis}
+
+Instead of manually producing $\Pi$-programs to implement the reversible disjunction specification, it is possible to
+simply quote the desired permutation, synthesising a $\PiLang$ program. We use a function $\term{lookup}$ to write
+tabulated permutations for readability.
+
+\medskip
+\resetperm{}
+
+\noindent
+The permutation uses the canonical encoding of sequences of bits as natural numbers (e.g., (\textsf{false},
+\textsf{true},\textsf{true}) is encoded as 011 or 3). The second entry maps index 1 (= 001) to the value 5 (= 101) which
+states that since one of the right bits is set in 001 then the leftmost bit in the output is set. Quoting this
+permutation generates the same normalised program matching the desired structured types.
+
+\subsection{Reasoning}
+
+More general, user-guided, reasoning can be done using the sound and complete level-2 combinators to rewrite $\PiLang$
+programs.
+
+
+% \paragraph*{Program synthesis.} The NbE process embodies a quoting mechanism that synthesizes programs from
+% permutations. Indeed, instead of writing a program for \Afun{reset 2}, one could simply specify the desired permutation
+% as:
+
+%%\begin{minipage}{.65\textwidth}
+%%  \PiRESET{}
+%%\end{minipage}
+%%\begin{minipage}{.30\textwidth}
+%%  \begin{center}
+%%  \resizebox{0.5\textwidth}{!}{\input{diagrams/reset.tikz}}
+%%  \end{center}
+%%\end{minipage}
+
+%% \resettwo{}
+
+% \noindent The syntax will be explained in detail in the next section and the full definitions of the helpers are
+% provided in the supplementary material. For now, it is sufficient to know that there is some program that implements the
+% reversible function of interest and that applying \Afun{reset} to 2 produces \verb|reversibleOr2| from the introduction.
+
+% In principle, the normalised program can be produced following two strategies: (i) by repeatedly applying the rewrite
+% rules of our calculus of reversible functions (explained in Sec.~\ref{sec:reversibletwo}), or (ii) in the case above by
+% using a NbE process that evaluates the program to a permutation on a finite set of 8
+% elements and reifies that permutation back to a program. The key idea of the NbE process is a systematic way to express
+% permutations as sequences of adjacent swaps as illustrated in the following small example where the permutation on the
+% left is compiled to the sequence of four adjacent transpositions on the right:
+
+% \note{Motivation: There are two reversible circuits which describe the following permutation. They can be shown to be
+%   equal using the 2-combinators.}
+
+% \[
+%   \begin{tikzpicture}
+%     \begin{knot}[clip width=5]
+%       \filldraw (0,5) circle (2pt) node[above] {0};
+%       \filldraw (1,5) circle (2pt) node[above] {1};
+%       \filldraw (2,5) circle (2pt) node[above] {2};
+%       \filldraw (3,5) circle (2pt) node[above] {3};
+%       \filldraw (4,5) circle (2pt) node[above] {4};
+%       \filldraw (0,0) circle (2pt) node[below] {1};
+%       \filldraw (1,0) circle (2pt) node[below] {4};
+%       \filldraw (2,0) circle (2pt) node[below] {0};
+%       \filldraw (3,0) circle (2pt) node[below] {3};
+%       \filldraw (4,0) circle (2pt) node[below] {2};
+%       \strand (0,5) .. controls (0.5,0.5) and (1.5,3.5) .. (2,0);
+%       \strand (1,5) .. controls (0.75,0.5) and (0.25,3.5) .. (0,0);
+%       \strand (2,5) .. controls (2.5,2.5) and (3.5,1.5) .. (4,0);
+%       \strand (3,5) .. controls (4.5,2.5) and (4,1.5) .. (3,0);
+%       \strand (4,5) .. controls (3.5,2.5) and (1.5,2.5) .. (1,0);
+%       \flipcrossings{4,5};
+%     \end{knot}
+%   \end{tikzpicture}
+% \]
+
+% \paragraph*{Program equivalence.} The permutation above reveals another way to think about the desired program: it is a
+% special addition circuit that keeps 0 and 4 fixed but otherwise adds 4 modulo 8 to its input. From this specification,
+% one can use a standard synthesis algorithm for reversible circuits~\cite{10.1145/775832.775915} to generate the
+% following program:
+
+% \adder{}
+
+% \noindent The \Afun{adder3} program looks nothing like the original \Afun{reset 2} program and yet they both have the
+% same normal form thus establishing their equivalence. The reader can check that this circuit is the same as
+% \verb|reversibleOr1| from the introduction.
+
+% Now imagine we want to write the following reversible function:
+
+% 0 -> 0
+% 8 -> 8
+% n -> n + 8 `mod` 16
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% fill-column: 120
+%%% End:
