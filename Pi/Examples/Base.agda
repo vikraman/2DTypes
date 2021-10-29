@@ -98,6 +98,9 @@ Fin-eval₀ {t₁} {t₂} = Fin-≃ (! (eval₀-* {t₁} {t₂}))
 𝟠+ : Pi+.U 8
 𝟠+ = I + I + I + I + I + I + I + I + O
 
+𝟙𝟞+ : Pi+.U 16
+𝟙𝟞+ = I + I + I + I + I + I + I + I + I + I + I + I + I + I + I + I + O
+
 𝔹 : ℕ → Pi.U
 𝔹 O = I
 𝔹 (S O) = 𝟚

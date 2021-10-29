@@ -86,7 +86,7 @@ parity-preserved c₁ c₂ α =
       s₂ = pi^2list c₂
   in  ≃*-preserves-parity (≃*-preserved α)
 
-parity-preserved-composition : {n m : ℕ} → (c d : S n Pi^.⟷₁^ S n) → (parity c == inl tt) → (parity d == inl tt) → parity (c ◎^ d) == inl tt
+parity-preserved-composition : {n : ℕ} → (c d : S n Pi^.⟷₁^ S n) → (parity c == inl tt) → (parity d == inl tt) → parity (c ◎^ d) == inl tt
 parity-preserved-composition c d p q rewrite (list-len-parity-++ (pi^2list c) (pi^2list d)) rewrite p rewrite q = idp
 
 n-comp : {m : ℕ} → (n : ℕ) → (c : S m Pi^.⟷₁^ S m) → S m Pi^.⟷₁^ S m
@@ -96,15 +96,17 @@ n-comp (S n) c = c ◎^ (n-comp n c)
 parity-preserved-arbitrary : {m : ℕ} → (n : ℕ) → (c : S m Pi^.⟷₁^ S m) → parity c == inl tt → parity (n-comp n c) == inl tt
 parity-preserved-arbitrary O c p = idp
 parity-preserved-arbitrary {m = m} (S n) c p =
-  let r = parity-preserved-composition {m = m} c (n-comp {m} n c) p
+  let r = parity-preserved-composition c (n-comp {m} n c) p
   in  r (parity-preserved-arbitrary n c p)
 
-open import Pi.Equiv.Translation2 using (eval₁)
-open import Pi.Equiv.Equiv1Hat using (eval^₁)
+open import Pi.Equiv.Translation2 
+open import Pi.Equiv.Equiv1Hat 
+open import Pi.Equiv.Equiv2Hat 
 open import Pi.Examples.Adder
 open import Pi.Examples.Reset
 open import Pi.Examples.Toffoli
 open import Pi.Syntax.Pi as Pi
+open import Pi.Syntax.Pi+.Indexed as Pi+
 open import Pi.Examples.Base
 
 _ : parity (eval₁ adder3) == false
@@ -122,7 +124,7 @@ _ = idp
 _ : parity (eval₁ (reset 3)) == false
 _ = idp
 
-toffoli₄¹ toffoli₄² toffoli₄³ toffoli₄⁴ toffoli₄⁵ toffoli₄⁶ toffoli₄⁷ toffoli₄⁸ : 𝔹 4 ⟷₁ 𝔹 4
+toffoli₄¹ toffoli₄² toffoli₄³ toffoli₄⁴ toffoli₄⁵ toffoli₄⁶ toffoli₄⁷ toffoli₄⁸ : 𝔹 4 Pi.⟷₁ 𝔹 4
 toffoli₄¹ = cif (cif (swap₊ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
 toffoli₄² = cif (cif (id⟷₁ ⊗ swap₊) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
 toffoli₄³ = cif (cif (id⟷₁ ⊗ id⟷₁) (swap₊ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
@@ -145,27 +147,44 @@ _ : (parity (eval₁ toffoli₄¹) == true) S.×
     (parity (eval₁ toffoli₄⁸) == true)
 _ = idp , idp , idp , idp , idp , idp , idp , idp
 
-parity-toffoli₄-comp : (n : ℕ) (c : 𝔹 4 ⟷₁ 𝔹 4) (_ : parity (eval₁ c) == true)
+parity-toffoli₄-comp : (n : ℕ) (c : 𝔹 4 Pi.⟷₁ 𝔹 4) (_ : parity (eval₁ c) == true)
                      → parity (n-comp n (eval₁ c)) == parity (eval₁ toffoli₄) → ⊥
 parity-toffoli₄-comp n c ϕ p =
   let q = parity-preserved-arbitrary n (eval₁ c) ϕ
       r = ! q ∙ p
   in Bool-true≠false r
 
-data ToffoliGate : (𝔹 4 ⟷₁ 𝔹 4) → Type₀ where
-  toffoli₄¹-c : ToffoliGate toffoli₄¹
-  toffoli₄²-c : ToffoliGate toffoli₄²
-  toffoli₄³-c : ToffoliGate toffoli₄³
-  toffoli₄⁴-c : ToffoliGate toffoli₄⁴
-  toffoli₄⁵-c : ToffoliGate toffoli₄⁵
-  toffoli₄⁶-c : ToffoliGate toffoli₄⁶
-  toffoli₄⁷-c : ToffoliGate toffoli₄⁷
-  toffoli₄⁸-c : ToffoliGate toffoli₄⁸
+data isToffoliGate : (eval₀-plus (𝔹 4) Pi+.⟷₁ eval₀-plus (𝔹 4)) → Type₀ where
+  toffoli₄¹-c : isToffoliGate (eval₁-plus toffoli₄¹)
+  toffoli₄²-c : isToffoliGate (eval₁-plus toffoli₄²)
+  toffoli₄³-c : isToffoliGate (eval₁-plus toffoli₄³)
+  toffoli₄⁴-c : isToffoliGate (eval₁-plus toffoli₄⁴)
+  toffoli₄⁵-c : isToffoliGate (eval₁-plus toffoli₄⁵)
+  toffoli₄⁶-c : isToffoliGate (eval₁-plus toffoli₄⁶)
+  toffoli₄⁷-c : isToffoliGate (eval₁-plus toffoli₄⁷)
+  toffoli₄⁸-c : isToffoliGate (eval₁-plus toffoli₄⁸)
 
-compose_list : (List (Σ (𝔹 4 ⟷₁ 𝔹 4) ToffoliGate)) → (𝔹 4 ⟷₁ 𝔹 4)
-compose_list = foldr f id⟷₁
-  where f : (Σ (𝔹 4 ⟷₁ 𝔹 4) ToffoliGate) → (𝔹 4 ⟷₁ 𝔹 4) → (𝔹 4 ⟷₁ 𝔹 4)
+toffoliComp : (List (Σ _ isToffoliGate)) → (eval₀-plus (𝔹 4) Pi+.⟷₁ eval₀-plus (𝔹 4))
+toffoliComp = foldr f id⟷₁
+  where f : (Σ _ isToffoliGate) → (eval₀-plus (𝔹 4) Pi+.⟷₁ eval₀-plus (𝔹 4)) → (eval₀-plus (𝔹 4) Pi+.⟷₁ eval₀-plus (𝔹 4))
         f (c₁ , ϕ) c₂ = c₁ ◎ c₂ 
 
--- lemma : (l : List (Σ (𝔹 4 ⟷₁ 𝔹 4) ToffoliGate)) → (compose_list l ⟷₂ toffoli₄) → ⊥
--- lemma l = ?
+parity-toffoliGate : (x : Σ _ isToffoliGate) → parity (eval^₁ (x .fst)) == true
+parity-toffoliGate (_ , toffoli₄¹-c) = idp
+parity-toffoliGate (_ , toffoli₄²-c) = idp
+parity-toffoliGate (_ , toffoli₄³-c) = idp
+parity-toffoliGate (_ , toffoli₄⁴-c) = idp
+parity-toffoliGate (_ , toffoli₄⁵-c) = idp
+parity-toffoliGate (_ , toffoli₄⁶-c) = idp
+parity-toffoliGate (_ , toffoli₄⁷-c) = idp
+parity-toffoliGate (_ , toffoli₄⁸-c) = idp
+
+parity-toffoliComp : (l : List (Σ _ isToffoliGate)) → parity (eval^₁ (toffoliComp l)) == true
+parity-toffoliComp nil = idp
+parity-toffoliComp (x :: l) = 
+  parity-preserved-composition (eval^₁ (x .fst)) (eval^₁ (toffoliComp l)) (parity-toffoliGate x) (parity-toffoliComp l)
+
+toffoli-impossible : (l : List (Σ _ isToffoliGate)) → (toffoliComp l Pi+.⟷₂ eval₁-plus toffoli₄) → ⊥
+toffoli-impossible l α = 
+  let r = parity-preserved (eval^₁ (toffoliComp l)) (eval₁ toffoli₄) (eval^₂ α)
+  in Bool-true≠false (! (parity-toffoliComp l) ∙ r)
