@@ -151,3 +151,21 @@ parity-toffoli₄-comp n c ϕ p =
   let q = parity-preserved-arbitrary n (eval₁ c) ϕ
       r = ! q ∙ p
   in Bool-true≠false r
+
+data ToffoliGate : (𝔹 4 ⟷₁ 𝔹 4) → Type₀ where
+  toffoli₄¹-c : ToffoliGate toffoli₄¹
+  toffoli₄²-c : ToffoliGate toffoli₄²
+  toffoli₄³-c : ToffoliGate toffoli₄³
+  toffoli₄⁴-c : ToffoliGate toffoli₄⁴
+  toffoli₄⁵-c : ToffoliGate toffoli₄⁵
+  toffoli₄⁶-c : ToffoliGate toffoli₄⁶
+  toffoli₄⁷-c : ToffoliGate toffoli₄⁷
+  toffoli₄⁸-c : ToffoliGate toffoli₄⁸
+
+compose_list : (List (Σ (𝔹 4 ⟷₁ 𝔹 4) ToffoliGate)) → (𝔹 4 ⟷₁ 𝔹 4)
+compose_list = foldr f id⟷₁
+  where f : (Σ (𝔹 4 ⟷₁ 𝔹 4) ToffoliGate) → (𝔹 4 ⟷₁ 𝔹 4) → (𝔹 4 ⟷₁ 𝔹 4)
+        f (c₁ , ϕ) c₂ = c₁ ◎ c₂ 
+
+-- lemma : (l : List (Σ (𝔹 4 ⟷₁ 𝔹 4) ToffoliGate)) → (compose_list l ⟷₂ toffoli₄) → ⊥
+-- lemma l = ?
