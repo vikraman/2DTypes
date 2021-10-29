@@ -2,7 +2,7 @@
 
 module Pi.Examples.Parity where
 
-open import HoTT
+open import HoTT as S
 open import Pi.Syntax.Pi^ as Pi^
 open import Pi.Syntax.Pi^Helpers as Pi^
 import Pi.Equiv.Equiv0Hat as Pi^
@@ -103,6 +103,9 @@ open import Pi.Equiv.Translation2 using (eval₁)
 open import Pi.Equiv.Equiv1Hat using (eval^₁)
 open import Pi.Examples.Adder
 open import Pi.Examples.Reset
+open import Pi.Examples.Toffoli
+open import Pi.Syntax.Pi as Pi
+open import Pi.Examples.Base
 
 _ : parity (eval₁ adder3) == false
 _ = idp
@@ -118,3 +121,33 @@ _ = idp
 
 _ : parity (eval₁ (reset 3)) == false
 _ = idp
+
+toffoli₄¹ toffoli₄² toffoli₄³ toffoli₄⁴ toffoli₄⁵ toffoli₄⁶ toffoli₄⁷ toffoli₄⁸ : 𝔹 4 ⟷₁ 𝔹 4
+toffoli₄¹ = cif (cif (swap₊ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₄² = cif (cif (id⟷₁ ⊗ swap₊) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₄³ = cif (cif (id⟷₁ ⊗ id⟷₁) (swap₊ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₄⁴ = cif (cif (id⟷₁ ⊗ id⟷₁) (id⟷₁ ⊗ swap₊)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₄⁵ = cif (cif (id⟷₁ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₄⁶ = cif (cif (id⟷₁ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (swap₊ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₄⁷ = cif (cif (id⟷₁ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (swap₊ ⊗ id⟷₁))
+toffoli₄⁸ = cif (cif (id⟷₁ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ swap₊))
+
+_ : parity (eval₁ toffoli₄) == false
+_ = idp
+
+_ : (parity (eval₁ toffoli₄¹) == true) S.×
+    (parity (eval₁ toffoli₄²) == true) S.×
+    (parity (eval₁ toffoli₄³) == true) S.×
+    (parity (eval₁ toffoli₄⁴) == true) S.×
+    (parity (eval₁ toffoli₄⁵) == true) S.×
+    (parity (eval₁ toffoli₄⁶) == true) S.×
+    (parity (eval₁ toffoli₄⁷) == true) S.×
+    (parity (eval₁ toffoli₄⁸) == true)
+_ = idp , idp , idp , idp , idp , idp , idp , idp
+
+parity-toffoli₄-comp : (n : ℕ) (c : 𝔹 4 ⟷₁ 𝔹 4) (_ : parity (eval₁ c) == true)
+                     → parity (n-comp n (eval₁ c)) == parity (eval₁ toffoli₄) → ⊥
+parity-toffoli₄-comp n c ϕ p =
+  let q = parity-preserved-arbitrary n (eval₁ c) ϕ
+      r = ! q ∙ p
+  in Bool-true≠false r

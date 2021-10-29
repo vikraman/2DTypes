@@ -80,6 +80,9 @@ toffoli₃ = controlled cnot
 toffoli₃^ : 8 ⟷₁^ 8
 toffoli₃^ = eval₁ toffoli₃
 
+toffoli₄ : 𝟚 Pi.× (𝟚 Pi.× (𝟚 Pi.× 𝟚)) Pi.⟷₁ 𝟚 Pi.× (𝟚 Pi.× (𝟚 Pi.× 𝟚))
+toffoli₄ = controlled toffoli₃
+
 toffoli : ∀ n → 𝔹 n Pi.⟷₁ 𝔹 n
 toffoli O = id⟷₁
 toffoli (S O) = swap₊
