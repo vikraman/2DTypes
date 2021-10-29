@@ -111,8 +111,5 @@ g-perm = equiv f f f-f f-f
 g^ : 16 ⟷₁^ 16
 g^ = Pi^.quoteNorm₁ idp g-perm
 
-𝟙𝟞+ : Pi+.U 16
-𝟙𝟞+ = I + I + I + I + I + I + I + I + I + I + I + I + I + I + I + I + O
-
 g+ : 𝟙𝟞+ Pi+.⟷₁ 𝟙𝟞+
 g+ = Pi^.quote^₁ g^
