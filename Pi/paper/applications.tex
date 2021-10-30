@@ -74,7 +74,7 @@ After applying $\normt_{1}$ to each circuit, we verify that they both reduce to 
 \Afun{reversibleOrNorm}, along with a 2-combinator witnessing their equivalence with the normal form -- by composing
 these, we get the 2-combinator witnessing their equivalence.
 
-\subsection{Synthesis}
+\subsection{Synthesis and verification}
 
 Instead of manually producing $\PiLang$-programs to implement the reversible disjunction specification, it is possible
 to simply write down the permutation directly and then quote it, synthesising a $\PiLang$ program. We use a function
@@ -89,7 +89,11 @@ The permutation uses the canonical encoding of sequences of bits as natural numb
 to the value 5 (= 101), following the reversible disjunction specification (recall that
 $\mathsf{reversibleOr}(h,b_1,b_2) = (h \,\underline{\vee}\, (b_1 \vee b_2), ~b_1, ~b_2)$ where~$\vee$ is disjunction
 and~$\underline{\vee}$ is exclusive-disjunction). Quoting this permutation generates the same normalised program
-\Afun{reversibleOrNorm}, matching the desired structured type of a 1-combinator on $\mathbb{8}+$.
+\Afun{reversibleOrNorm}, matching the desired structured type of a 1-combinator on $\mathbb{8}+$. 
+
+In a similar way we can also verify whether a circuit is correctly implemented: by running the equivalence described
+above in the other direction, we can evaluate the circuit to a bijection and compare it extensionally with the intended
+one.
 
 \subsection{Reasoning}
 
@@ -103,11 +107,13 @@ four possible positions. The function of such gate is then identity on the newly
 not on the three remaining ones.
 \medskip
 \extendedToffoli{}
-\baselineskip
+
+\noindent
 On the other hand, it is possible to construct a proper 4-bit toffoli gate:
 \medskip
 \toffoli{}
-\baselineskip
+
+\noindent
 Now, the question we want to answer is: is it possible to compose some number of (extended) 3-bit toffoli gates in some way, so as to replicate the
 behaviour of a 4-bit toffoli gate?
 
@@ -116,7 +122,6 @@ implements an even permutation, that is, a permutation consisting of an even num
 hand, 4-bit toffoli gate is an odd permutation. It is an easily proven lemma that composition of even permutations
 always produces an even permutation, which answers the question to the negative.
  
-
 We define a function $\parity : (c : X \iso Y) \to \Bool$ to compute a parity of a permutation defined by a combinator
 $c$. It is implemented as the transformation from a $\PiLang$ program into a list of transposition, using $\evalh_{1}$
 defined in~\cref{sec:equivalence}, and computing the parity on this representation, which means simply checking the

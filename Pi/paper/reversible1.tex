@@ -151,9 +151,7 @@ wires that can transmit three bits.
 %
 To express the \verb|cx| and \verb|ccx| gates, we need to encode a notion of conditional expression. Such conditionals
 turn out to be expressible using the distributivity and factoring identities of rigs as shown below:
-
 \medskip
-
 \cif{}
 
 \noindent The input value of type $\mathbb{2} \times A$ is processed by the distribute operator \ensuremath{\dist},
@@ -164,7 +162,6 @@ through the combinator \ensuremath{c_2}.  The inverse of \ensuremath{\dist}, nam
 get the final result. Using this conditional operator, \verb|cx| is defined as $\Afun{cif}~\verb|x|~\idc$ and
 \verb|ccx| is defined as $\Afun{cif}~\verb|cx|~\idc$. With these conventions, the first circuit in the previous section
 is transcribed as follows:
-
 \medskip
 \adder{}
 
@@ -174,7 +171,6 @@ is transcribed as follows:
 of using the indices in the sequence of wires to identify the relevant parameters, here we use structural isomorphisms
 to re-shuffle the types. We only show one of these re-shuffling isomorphisms and elide the others. For the second
 circuit, instead of transcribing it directly, we express it using $\Afun{cif}$.
-
 \medskip
 \resettwo{}
 
@@ -192,9 +188,7 @@ permutation~\cite{laplaza72,caretteComputingSemiringsWeak2016}, were collected  
 second level of $\PiLang$ syntax as level-2 combinators.  Each level-2 combinator is of the form $c_1 \isotwo c_2$ for appropriate
 $c_1$ and $c_2$ of the same level-1 type $A \isoone B$ and asserts that $c_1$ and $c_2$ denote the same bijection. For
 example, we have the following level-2 combinators dealing with associativity:
-
 \medskip
-
 \leveltwoblockone{}
 
 \noindent The full set of level-2 combinators is large; the remaining combinators are listed in~\cref{app:leveltwo}.
