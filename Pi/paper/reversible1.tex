@@ -129,9 +129,9 @@ $\inrv{v}$, and the product type ($\times$) containing pairs of values $(v_1,v_2
 % language~\cite{James:2012:IE:2103656.2103667,rc2011}.
 
 To see how this language expresses reversible circuits, we present a few examples using the Agda embedding of the
-language~\cite{choudhuryArtifactSymmetriesReversible2021}. First it is possible to directly mimic the
-\verb|qasm|-perspective by defining types that describe sequences of booleans ($\mathbb{2}^{n}$). We use the type
-$\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing \textsf{true}, and
+language~\cite{choudhuryArtifactSymmetriesReversible2021,sabryJacquesCarettePidualSecond2021}. First it is possible to
+directly mimic the \verb|qasm|-perspective by defining types that describe sequences of booleans ($\mathbb{2}^{n}$). We
+use the type $\mathbb{2} = \onet + \onet$ to represent booleans with $\inlv{\Acon{tt}}$ representing \textsf{true}, and
 $\inrv{\Acon{tt}}$ representing $\textsf{false}$. Boolean negation (the \verb|x|-gate) is straightforward to define
 using the primitive combinator $\swapp$. We can represent $n$-bit words using an n-ary product of boolean values, thus
 the type $\mathbb{2} \times (\mathbb{2} \times \mathbb{2})$ (abbreviated $\mathbb{B}~3$) corresponds to a collection of
