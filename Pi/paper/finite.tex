@@ -32,11 +32,11 @@ we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~
 \subsection{Presenting the symmetric group}
 
 One way of thinking about presentations of $\Sn$ is via sorting algorithms, which use different primitive operations. A
-sorting algorithm has to calculate a permutation of a list or a finite set, which satisfies the invariant of being a
-sorted sequence, which means, the primitive operations of a sorting algorithm are able to generate all the permutations
-on a given list. So, a chosen set of reversible operations in a sorting algorithm can be a good candidate for the
-generators of a permutation group. For example, we could generate the symmetric group on $\Fin[n]$ by using generators
-(primitive operations) that:
+sorting algorithm has to calculate a permutation of a list or a (listed) finite set, which satisfies the invariant of
+being a sorted sequence, which means, the primitive operations of a sorting algorithm are able to generate all the
+permutations on a given list. So, a chosen set of reversible operations in a sorting algorithm can be a good candidate
+for the generators of a permutation group. For example, we could generate the symmetric group on $\Fin[n]$ by using
+generators (primitive operations) that:
 
 \begin{itemize}
   \item swap the $i$-th element with the $(i+1)$-th element, that is, adjacent swaps, or
@@ -61,7 +61,8 @@ important for the following reasons.
 \end{itemize}
 
 We will show that it is possible to encode all $\PiLang$ combinators using adjacent transpositions
-(in~\cref{sec:equivalence}). Group presentations are built by adding equations to a \emph{free group}.
+(in~\cref{sec:equivalence}).
+%Group presentations are built by adding equations to a \emph{free group}.
 
 \begin{toappendix}
   \subsection{Groups}
@@ -126,7 +127,8 @@ the singleton set.
 A group homomorphism between groups $G$ and $H$ is a function $f : G \to H$ between the underlying sets that preserves
 the group structure. Giving a group homomorphism out of the free group is equivalent to giving a function out of the
 generating set. This is the universal property of free groups, stemming from the free-forgetful adjunction between the
-category of groups and sets.
+category of groups and sets. We say that $\eta_{A} : A \to F(A)$ is the free group on $A$ if it satisfies the following
+universal property.
 
 % Informally, it states that if we know how a map $f$ acts on the
 % generating set $A$, we know exactly how it acts on every element of the group $F(A)$.
@@ -154,7 +156,7 @@ category of groups and sets.
     \end{tikzcd}\]
 \end{toappendix}
 
-Following the universal-algebraic definition, in HoTT, we could use a naive higher inductive type to define the free
+Following the naive universal-algebraic definition, in HoTT, we could use a higher inductive type to define the free
 group, which enforces the group axioms by adding path constructors (see~\cref{def:free-group}). Using the induction
 principle, we can easily verify the universal property. However, since this definition of $F(A)$ has lots of path
 constructors corresponding to each group axiom, characterising its path space is difficult.
@@ -183,7 +185,7 @@ ensure that the inverse laws hold, so we have to coalesce adjacent occurences of
 A presentation of a group builds it by starting from the free group $F(A)$ and introducing additional equations that are
 satisfied in the resulting group. For example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an equation $1 + 1 = 0$,
 the resulting group would be $\mathbb{Z}_2 \eqv \Aut[\Bool]$. Note that not all groups have finite (or computable)
-presentations, and, a group can have any number of different presentations.
+presentations, and, a group can have a number of different presentations.
 
 \begin{definition}[Group presentation]
   \label{def:presentation}
@@ -192,8 +194,8 @@ presentations, and, a group can have any number of different presentations.
   congruence closure of $R$.
 \end{definition}
 
-The universal property of the above definition is similar to~\cref{prop:free-groups} except the relation has to be
-preserved by the function mapping out of the generating set.
+The universal property of the above definition of a presented group is similar to~\cref{prop:free-groups}, except the
+function mapping out of the generating set also has to respect the relation.
 
 \begin{proposition}[Universal property of $F(\langle A ; R \rangle)$]
   Given a group $G$ and a map $f : A \to G$, such that $f$ extended to $F(A)$ respects $R$, there is a unique group
@@ -202,14 +204,14 @@ preserved by the function mapping out of the generating set.
 
 Before, the only way to decide the equality of two elements in a group was to evaluate and check them on the nose, but
 in a group presentation, this is reduced to deciding whether one word -- a representative of the equivalence class of
-the group's elements, can be reduced to another word, using the group's relations. However, these equations are not
+the group's elements, can be reduced to another word, using the group's relations. However, these relations are not
 directed, so it is not always possible to construct a well-behaved rewriting system. In general, the word problem for
 groups is undecidable.
 
 \paragraph{Coxeter Presentation} To present the group $\Sn$, the primitive operations we use will be adjacent swaps.
 When dealing with permutations on an $n + 1$-element set, there are $n$ adjacent transpositions -- transposition number
 $k$ swaps elements at indices $k$ and $k+1$. Thus, the generating set is $\Fin[n]$. There are three relations that we're
-going to specify for this presentation -- we visualise them as braid diagrams in~\cref{fig:coxeter-braid}.
+going to specify for this presentation -- we visualise them as braiding diagrams in~\cref{fig:coxeter-braid}.
 
 \begin{enumerate}[leftmargin=*]
   \item[\labelcref{fig:coxeter-a}] Swapping the same two elements twice in a row should be the same as doing nothing.
@@ -346,15 +348,15 @@ The idea for solving the word problem for $\Sn$ is to turn these undirected rela
 system $(\List[\Fin[n]],\cox*)$, so that, by repeatedly applying the reduction rules as long as possible, any two
 $\cox*$-equal terms would eventually converge to the same normal form.
 
-For this to work, we first need the system to have the termination property, meaning that there are no infinite
+For this to work, we first need the system to have the termination property, meaning that there should be no infinite
 reductions. We observe that after throwing out reflexivity and symmetry, the right hand sides of the relations $\cox*$
 are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$ (which is
 well-founded). Thus, by directing the relation from left to right, we would get the termination property out of the box.
-Second, we need the normal forms to be unique, so that we can get a normalisation function. This will be true if the
-rewriting system is confluent -- meaning that all critical pairs, that is, terms with overlapping possible reduction
-rules, have to converge. For example, in our system, the pair in~\cref{fig:critical-pairs-converging} converges.
-Unfortunately, this is not true for all critical pairs -- an  example is in~\cref{fig:critical-pairs-non-converging},
-where left and right endpoints are normal with respect to the $\cox*$ relation.
+Second, we need the normal forms to be unique, so that we can extract a normalisation function. This will be true if the
+rewriting system is confluent -- all critical pairs, that is, terms with overlapping possible reduction rules, have to
+converge. For example, in our system, the pair in~\cref{fig:critical-pairs-converging} converges. Unfortunately, this is
+not true for all critical pairs -- an example is in~\cref{fig:critical-pairs-non-converging}, where left and right
+endpoints are normal with respect to the $\cox*$ relation.
 
 % \begin{figure}
 % \[
@@ -440,7 +442,8 @@ where left and right endpoints are normal with respect to the $\cox*$ relation.
 Because of this counter-example, the relations have to be changed. In this section, we formally define a rewriting
 system $(\List[\Fin[n]], \longcox)$, partially based on the Coxeter relations, and prove that it has the desired
 properties of confluence and termination. We prove that the new relation defined by this system is equivalent, in a
-technical sense, to the standard Coxeter relation $\cox*$. First, we need to define a function $n \downf k$.
+technical sense (\cref{prop:coxlongcox}), to the standard Coxeter relation $\cox*$. First, we need to define a function
+$\downf$.
 
 \begin{definition}[$\downf : (n : \Nat) \to (k : \Nat) \to {\List[\Fin[k + n]]}$]
   \begin{align*}
@@ -449,10 +452,10 @@ technical sense, to the standard Coxeter relation $\cox*$. First, we need to def
   \end{align*}
 \end{definition}
 
-\noindent The result of this function is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\), which is a
-sequence of transpositions that moves the element at index $k + n$ left by $k$ places, shifting all the elements in
+\noindent The result of computing $n \downf k$ is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\), which
+is a sequence of transpositions that moves the element at index $k + n$ left by $k$ places, shifting all the elements in
 between one place right (see~\cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the following
-generators (inlining the congruence closure in $\longcox$, allowing arbitrary reductions inside the list).
+generators (inlining the congruence closure in $\longcox$ allows arbitrary reductions inside the list).
 
 \begin{definition}[$\longcox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \begin{align*}
@@ -469,8 +472,8 @@ generators (inlining the congruence closure in $\longcox$, allowing arbitrary re
 can be visualised in the same way as before. The remaining constructor $\longbraid$ uses the $\downf$ function to
 exchange the order of a long sequence of transpositions and a single transposition afterwards. For example, for $n = 0$
 and $k = 3$, it allows for the reduction $[4, 3, 2, 1, 0, 4] \longcox [3, 4, 3, 2, 1, 0]$ (see~\cref{fig:longcox} --
-note the distinction between wires, where numbers represent the values, and transpositions, where numbers represent
-which wires are crossing).
+there is a distinction between wires, where numbers represent the values, and transpositions, where numbers represent
+crossing wires).
 
 \begin{figure}
   \begin{subfigure}[b]{0.3\textwidth}
