@@ -29,13 +29,13 @@ Coxeter presentation equations. Finally, we describe the normal forms in this re
 correspondence between them and the type $\Aut[\Fin[n]]$ of automorphisms on a finite set. The generators and relations
 we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~\cref{sec:equivalence}).
 
-\subsection{Presenting the permutation group}
+\subsection{Presenting the symmetric group}
 
 One way of thinking about presentations of $\Sn$ is via sorting algorithms, which use different primitive operations. A
 sorting algorithm has to calculate a permutation of a list or a finite set, which satisfies the invariant of being a
 sorted sequence, which means, the primitive operations of a sorting algorithm are able to generate all the permutations
 on a given list. So, a chosen set of reversible operations in a sorting algorithm can be a good candidate for the
-generators of a permutation group. For example, we could generate the permutation group on $\Fin[n]$ by using generators
+generators of a permutation group. For example, we could generate the symmetric group on $\Fin[n]$ by using generators
 (primitive operations) that:
 
 \begin{itemize}
@@ -835,7 +835,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
 
 \subsection{Running Lehmer codes}
 
-Finally, it is time to complete our goal of characterising the permutation groups. Having produced a Lehmer code by
+Finally, it is time to complete our goal of characterising the symmetric group. Having produced a Lehmer code by
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
 between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$~\footnote{Note that the indices for the type of permutations

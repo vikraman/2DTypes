@@ -97,7 +97,7 @@ one.
 
 \subsection{Reasoning}
 
-In our development, we described a number of different representations of permutations: $\PiLang$ programs, lists of
+In our development, we described a number of different representations of permutations: $\PiLang$, $\PiPlusLang$ and $\PiHatLang$ programs, lists of
 transpositions, Lehmer codes, and automorphisms of finite sets. The equivalences between these representations allows us
 to transfer theorems about permutations, proving them on the representations most suited for the particular task and
 getting others for free.
@@ -114,18 +114,16 @@ On the other hand, it is possible to construct a proper 4-bit toffoli gate:
 \toffoli{}
 
 \noindent
-Now, the question we want to answer is: is it possible to compose some number of (extended) 3-bit toffoli gates in some way, so as to replicate the
-behaviour of a 4-bit toffoli gate?
+Now, the question we want to answer is: is it possible to implement \Afun{toffoli₄} gate only using \Afun{toffoli₃} gates?
 
-Solving this problem using the circuit representation is difficult. However, we can observe that 3-bit toffoli gate
-implements an even permutation, that is, a permutation consisting of an even number of transpositions. On the other
-hand, 4-bit toffoli gate is an odd permutation. It is an easily proven lemma that composition of even permutations
+Solving this problem using the circuit representation is difficult. However, we can observe that all \Afun{toffoli₃} gates
+implements even permutations, that is, permutations consisting of an even number of transpositions. On the other
+hand, \Afun{toffoli₄} implements an odd permutation. It is an easily proven lemma that any composition of even permutations
 always produces an even permutation, which answers the question to the negative.
  
-We define a function $\parity : (c : X \iso Y) \to \Bool$ to compute a parity of a permutation defined by a combinator
-$c$. It is implemented as the transformation from a $\PiLang$ program into a list of transposition, using $\evalh_{1}$
-defined in~\cref{sec:equivalence}, and computing the parity on this representation, which means simply checking the
-parity of the length of the list.
+Thus, define a function $\parity : (c : X \iso Y) \to \Bool$ to compute a parity of a permutation defined by a combinator
+$c$. It is implemented first tranforming a $\PiLang$ program into a list of transpositions (using $\evalh_{1}$
+defined in~\cref{sec:equivalence}), and then computing the parity on this representation, which amounts to a simple check of the length of the list.
 
 \begin{propositionrep}
   \label{prop:parity-preserved}
