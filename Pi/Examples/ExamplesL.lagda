@@ -28,7 +28,7 @@ open import Pi.Common.FinHelpers
 open import Pi.Lehmer.FinExcept
 
 open import Pi.Examples.Base
-open import Pi.Examples.Toffoli hiding (cif)
+open import Pi.Examples.Toffoli hiding (cif ; toffoli₄)
 open import Pi.Examples.Reset hiding (reset; reset2-perm)
 
 private
@@ -50,10 +50,31 @@ reset 1 = swap⋆ ◎ cnot ◎ swap⋆
 reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 \end{code}}
 
+\newcommand{\extendedToffoli3}{%
+\begin{code}
+toffoli₃¹ toffoli₃² toffoli₃³ toffoli₃⁴  : 𝔹 4 Pi.⟷₁ 𝔹 4
+toffoli₃¹ = cif (cif (swap₊ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₃² = cif (cif (id⟷₁ ⊗ swap₊) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₃³ = cif (cif (id⟷₁ ⊗ id⟷₁) (swap₊ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+toffoli₃⁴ = cif (cif (id⟷₁ ⊗ id⟷₁) (id⟷₁ ⊗ swap₊)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
+\end{code}}
+
+\newcommand{\toffoli4}{%
+\begin{code}
+toffoli₄ : 𝟚 × (𝟚 × (𝟚 × 𝟚)) ⟷₁ 𝟚 × (𝟚 × (𝟚 × 𝟚))
+toffoli₄ = controlled (controlled (controlled not))
+\end{code}}
+
 \newcommand{\resetnormtwo}{%
+\begin{code}
+reversibleOrNorm : 𝟠+ ⟷₁₊ 𝟠+
+reversibleOrNorm =  (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+                    (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+                    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+                    -- elided
+\end{code}}
 \begin{code}[hide]
-⋯ : 𝟠+ ⟷₁₊ 𝟠+
-⋯ = (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
+     (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
      (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
      (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
      (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
@@ -66,14 +87,6 @@ reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (r
      (id⟷₁ ⊕ id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
      (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎ id⟷₁
 \end{code}
-\begin{code}
-reversibleOrNorm : 𝟠+ ⟷₁₊ 𝟠+
-reversibleOrNorm =  (id⟷₁ ⊕ id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-                    (id⟷₁ ⊕ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-                    (assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊) ◎
-                    ⋯
-\end{code}}
-
 \newcommand{\resetperm}{%
 \begin{code}
 reversibleOrPerm : Aut (Fin 8)

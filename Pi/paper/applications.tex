@@ -35,12 +35,11 @@ Using our semantics, we can normalise, synthesise, prove equivalence, and reason
 
 \subsection{Normalisation}
 
-Normalisation involves translating $\PiLang$ programs to $\PiHatLang$, computing a permutation, and quoting back to
-$\PiPlusLang$. This happends in several steps -- the evaluation step goes from $\PiLang$ to $\PiPlusLang$ reducing
-$\times$ to $+$ and translating the corresponding combinators, then from $\PiPlusLang$ to $\PiHatLang$ reducing to
-adjacent transpositions, then finally to $\UFin$ through words in $\Sn$ and Lehmer codes, and then, the quoting step
-goes all the way back until $\PiPlusLang$. We define this $\normt$ function below using our previous evaluation
-$\gdenot{\blank}$.
+Normalisation happens by evaluating a combinator to a permutation and then reifying it back. The evaluation step goes
+from $\PiLang$ to $\PiPlusLang$ reducing $\times$ to $+$ and translating the corresponding combinators, then from
+$\PiPlusLang$ to $\PiHatLang$ reducing them to natural numbers and adjacent transpositions, then finally to $\UFin$
+through words in $\Sn$ and Lehmer codes. Then, the quotation step goes all the way back until $\PiPlusLang$. We define
+this composite $\normt$ function below using our previous evaluation $\gdenot{\blank}$.
 
 \begin{definition}[Normalisation of $\PiLang$ programs]
   \begin{gather*}
@@ -56,38 +55,78 @@ $\gdenot{\blank}$.
   \end{gather*}
 \end{definition}
 
-\subsection{Equivalence}
-
-By normalisation, we also get a decision procedure for program equivalence -- two circuits are equivalent iff they
-represent the same permutation, or equivalently, they have the same normal form. Recall the specification of reversible
-disjunction from \cref{sec:examples}, the two Qiskit circuits for implementing it, and the corresponding $\PiLang$
-definitions \Afun{reversibleOr1} and \Afun{reversibleOr2}. The type $\mathbb{B}\ 3$ normalises to
-$\mathbb{8}+ \equiv \mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + \mathbb{0})))))))$,
-and normal forms for both circuits compute to the following, establishing their equivalence:
+As an example, consider the \Afun{reversibleOr1} circuit introduced in~\cref{sec:pi}. After applying $\normt_{1}$, the
+type $\mathbb{B}\ 3$ normalises to $\mathbb{8}+ \equiv \mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} +
+  (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + \mathbb{0})))))))$, and the circuit reduces to the following
+normal form:
 
 \medskip
 \resetnormtwo{}
 
+\subsection{Equivalence}
+
+By normalisation, we also get a decision procedure for program equivalence -- two circuits are equivalent iff they
+represent the same permutation, or equivalently, they have the same normal form. Recall that in~\cref{sec:examples} we
+introduced two different ways of computing reversible disjunction using two Qiskit circuit implementations, and then
+in~\cref{sec:pi} showed the corresponding $\PiLang$ definitions: \Afun{reversibleOr1} and \Afun{reversibleOr2}. 
+
+After applying $\normt_{1}$ to each circuit, we verify that they both reduce to the same normal form
+\Afun{reversibleOrNorm}, along with a 2-combinator witnessing their equivalence with the normal form -- by composing
+these, we get the 2-combinator witnessing their equivalence.
+
 \subsection{Synthesis}
 
-Instead of manually producing $\Pi$-programs to implement the reversible disjunction specification, it is possible to
-simply quote the desired permutation, synthesising a $\PiLang$ program. We use a function $\term{lookup}$ to write
-tabulated permutations for readability.
+Instead of manually producing $\PiLang$-programs to implement the reversible disjunction specification, it is possible
+to simply write down the permutation directly and then quote it, synthesising a $\PiLang$ program. We use a function
+$\term{lookup}$ to write tabulated permutations for readability.
 
 \medskip
 \resetperm{}
 
 \noindent
-The permutation uses the canonical encoding of sequences of bits as natural numbers (e.g., (\textsf{false},
-\textsf{true},\textsf{true}) is encoded as 011 or 3). The second entry maps index 1 (= 001) to the value 5 (= 101) which
-states that since one of the right bits is set in 001 then the leftmost bit in the output is set. Quoting this
-permutation generates the same normalised program matching the desired structured types.
+The permutation uses the canonical encoding of sequences of bits as natural numbers, e.g., {(\textsf{false},
+\textsf{true},\textsf{true})} is encoded as 011 or 3. The second entry in the $\term{lookup}$ table maps index 1 (= 001)
+to the value 5 (= 101), following the reversible disjunction specification (recall that
+$\mathsf{reversibleOr}(h,b_1,b_2) = (h \,\underline{\vee}\, (b_1 \vee b_2), ~b_1, ~b_2)$ where~$\vee$ is disjunction
+and~$\underline{\vee}$ is exclusive-disjunction). Quoting this permutation generates the same normalised program
+\Afun{reversibleOrNorm}, matching the desired structured type of a 1-combinator on $\mathbb{8}+$.
 
 \subsection{Reasoning}
 
-More general, user-guided, reasoning can be done using the sound and complete level-2 combinators to rewrite $\PiLang$
-programs.
+In our development, we described a number of different representations of permutations: $\PiLang$ programs, lists of
+transpositions, Lehmer codes, and automorphisms of finite sets. The equivalences between these representations allows us
+to transfer theorems about permutations, proving them on the representations most suited for the particular task and
+getting others for free.
 
+As an example, consider the following problem. Toffoli gate on 3 bits can be extended to 4 bits, inserting a wire in
+four possible positions. The function of such gate is then identity on the newly inserted bit, and controlled-controlled
+not on the three remaining ones. 
+
+\medskip
+\extendedToffoli3{}
+
+On the other hand, it is possible to construct a proper 4-bit toffoli gate:
+
+\medskip
+\toffoli4{}
+
+Now, the question we want to asnwer is: is it possible to compose some number of (extended) 3-bit toffoli gates in some way, so as to replicate the
+behaviour of a 4-bit toffoli gate?
+
+Solving this problem using the circuit representation is difficult. However, we can observe that 3-bit toffoli gate
+implements an even permutation, that is, a permutation consisting of an even number of transpositions. On the other
+hand, 4-bit toffoli gate is an odd permutation. It is an easily proven lemma that composition of even permutations
+always produces an even permutation, which answers the question to the negative.
+
+In our case, we define the $\term{parity}$ function:
+parity : {n m : ℕ} → (c : S n Pi^.⟷₁^ S m) → ⊤ ⊔ ⊤
+parity {X} {Y} c = list-len-parity (pi^2list c)
+
+Thus, we formulate the theorem using the representation on lists of transpositions, and transfer it to circuits using
+the equivalences proven in the previous sections.
+
+% More general, user-guided, reasoning can be done using the sound and complete level-2 combinators to rewrite $\PiLang$
+% programs.
 
 % \paragraph*{Program synthesis.} The NbE process embodies a quoting mechanism that synthesizes programs from
 % permutations. Indeed, instead of writing a program for \Afun{reset 2}, one could simply specify the desired permutation
