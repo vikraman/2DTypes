@@ -3,20 +3,20 @@
 
 Using our semantics, we can normalise, synthesise, prove equivalence, and reason about~$\PiLang$ programs.
 
-\[
-  \begin{tikzpicture}[->,>=stealth',auto,thick,node distance=1em]
-    % nodes
-    \node (A) at (0, 2) {\Afun{reversibleOr1}};
-    \node (B) at (0, 0) {\Afun{reversibleOr2}};
-    \node (C) at (4, 1) {\Afun{reversibleOrNorm}};
-    \node (D) at (9, 1) {\AgdaSymbol{(}\AgdaNumber{0 5 6 7 4 1 2 3}\AgdaSymbol{)}};
-    % arrows
-    \path
-    (A) edge[bend left] node [above left] { $\strut\normt_{1}$ } (C)
-    (B) edge[bend right] node [below left] { $\strut\normt_{1}$ } (C)
-    (D) edge node[above] { $\strut\term{quote}$ } (C);
-  \end{tikzpicture}
-\]
+% \[
+%   \begin{tikzpicture}[->,>=stealth',auto,thick,node distance=1em]
+%     % nodes
+%     \node (A) at (0, 2) {\Afun{reversibleOr1}};
+%     \node (B) at (0, 0) {\Afun{reversibleOr2}};
+%     \node (C) at (4, 1) {\Afun{reversibleOrNorm}};
+%     \node (D) at (9, 1) {\AgdaSymbol{(}\AgdaNumber{0 5 6 7 4 1 2 3}\AgdaSymbol{)}};
+%     % arrows
+%     \path
+%     (A) edge[bend left] node [above left] { $\strut\normt_{1}$ } (C)
+%     (B) edge[bend right] node [below left] { $\strut\normt_{1}$ } (C)
+%     (D) edge node[above] { $\strut\term{quote}$ } (C);
+%   \end{tikzpicture}
+% \]
 
 % \[
 %   \begin{tabular}{>{$}c<{$} @{\hspace{5em}} >{$}c<{$}}
@@ -100,29 +100,42 @@ getting others for free.
 
 As an example, consider the following problem. Toffoli gate on 3 bits can be extended to 4 bits, inserting a wire in
 four possible positions. The function of such gate is then identity on the newly inserted bit, and controlled-controlled
-not on the three remaining ones. 
-
+not on the three remaining ones.
 \medskip
-\extendedToffoli3{}
-
+\extendedToffoli{}
+\baselineskip
 On the other hand, it is possible to construct a proper 4-bit toffoli gate:
-
 \medskip
-\toffoli4{}
-
-Now, the question we want to asnwer is: is it possible to compose some number of (extended) 3-bit toffoli gates in some way, so as to replicate the
+\toffoli{}
+\baselineskip
+Now, the question we want to answer is: is it possible to compose some number of (extended) 3-bit toffoli gates in some way, so as to replicate the
 behaviour of a 4-bit toffoli gate?
 
 Solving this problem using the circuit representation is difficult. However, we can observe that 3-bit toffoli gate
 implements an even permutation, that is, a permutation consisting of an even number of transpositions. On the other
 hand, 4-bit toffoli gate is an odd permutation. It is an easily proven lemma that composition of even permutations
 always produces an even permutation, which answers the question to the negative.
+ 
 
-In our case, we define the $\term{parity}$ function:
-parity : {n m : ℕ} → (c : S n Pi^.⟷₁^ S m) → ⊤ ⊔ ⊤
-parity {X} {Y} c = list-len-parity (pi^2list c)
+We define a function $\parity : (c : X \iso Y) \to \Bool$ to compute a parity of a permutation defined by a combinator
+$c$. It is implemented as the transformation from a $\PiLang$ program into a list of transposition, using $\evalh_{1}$
+defined in~\cref{sec:equivalence}, and computing the parity on this representation, which means simply checking the
+parity of the length of the list.
 
-Thus, we formulate the theorem using the representation on lists of transpositions, and transfer it to circuits using
+\begin{propositionrep}
+  \label{prop:parity-preserved}
+  For two $\PiLang$ circuits $c_1, c_2$, if there exists a 2-combinator between them, then $\parity c_1 = \term{parity} c_2$. 
+\end{propositionrep}
+\begin{proof}
+  First, it is easy to check that Coxeter relations preserve parity of the list. Second, if $c_1, c_2$ are related by a
+  2-combinator, then their list-of-transpositions representations are related in the Coxeter relation. Composing these
+  two facts completes the proof.
+\end{proof}
+
+Using ~\cref{prop:parity-preserved} and showing that any composition of even cicuits yields an even ciruit, we can
+answer the question by computing the parity of the \Afun{toffoli₄} and all of the \Afun{toffoli₃} gates. 
+
+Thus, we formulated the theorem using the representation on lists of transpositions, and transferred it to circuits using
 the equivalences proven in the previous sections.
 
 % More general, user-guided, reasoning can be done using the sound and complete level-2 combinators to rewrite $\PiLang$

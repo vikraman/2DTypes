@@ -50,18 +50,18 @@ reset 1 = swap⋆ ◎ cnot ◎ swap⋆
 reset (S (S n)) = rearrange 𝟚 𝟚 (𝔹 (S n)) ◎ cif (not ⊗ id⟷₁) (reset (S n)) ◎ rearrange 𝟚 𝟚 (𝔹 (S n))
 \end{code}}
 
-\newcommand{\extendedToffoli3}{%
+\newcommand{\extendedToffoli}{%
 \begin{code}
-toffoli₃¹ toffoli₃² toffoli₃³ toffoli₃⁴  : 𝔹 4 Pi.⟷₁ 𝔹 4
+toffoli₃¹ toffoli₃² toffoli₃³ toffoli₃⁴ : 𝔹 4 ⟷₁ 𝔹 4
 toffoli₃¹ = cif (cif (swap₊ ⊗ id⟷₁) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
 toffoli₃² = cif (cif (id⟷₁ ⊗ swap₊) (id⟷₁ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
 toffoli₃³ = cif (cif (id⟷₁ ⊗ id⟷₁) (swap₊ ⊗ id⟷₁)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
 toffoli₃⁴ = cif (cif (id⟷₁ ⊗ id⟷₁) (id⟷₁ ⊗ swap₊)) (id⟷₁ ⊗ (id⟷₁ ⊗ id⟷₁))
 \end{code}}
 
-\newcommand{\toffoli4}{%
+\newcommand{\toffoli}{%
 \begin{code}
-toffoli₄ : 𝟚 × (𝟚 × (𝟚 × 𝟚)) ⟷₁ 𝟚 × (𝟚 × (𝟚 × 𝟚))
+toffoli₄ : 𝔹 4 ⟷₁ 𝔹 4
 toffoli₄ = controlled (controlled (controlled not))
 \end{code}}
 
