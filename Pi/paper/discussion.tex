@@ -4,25 +4,26 @@
 % In this paper, we \ldots
 
 The main theme of our work is the semantic foundation of reversible languages. We prove that a programming language
-presentation of reversible programming based on algebraic types matches---exactly---the categorified group-theoretic
+presentation of reversible computing based on algebraic types matches---exactly---the categorified group-theoretic
 semantics, thereby closing the circle on a complete Curry-Howard-Lambek correspondence for reversible languages.
 Historically, the first such correspondence was between the $\lambda$-calculus, intuitionistic logic, and
 cartesian-closed categories~\cite{curryCurryEssaysCombinatory1980}. For reversible languages, the Curry-Howard
-correspondence was established by~\citet{sparksSuperstructuralReversibleLogic2014} and the Lambek correspondence
-suggested by~\citet{caretteComputingSemiringsWeak2016} and~\citet{threemodels} and established in this work, as in~\cref{fig:table-summary}. In the
-remainder of this section, we discuss some broader related work.
+correspondence was established by~\citet{sparksSuperstructuralReversibleLogic2014}, and the Lambek correspondence was
+suggested by~\citet{caretteComputingSemiringsWeak2016} and~\citet{threemodels}. In this work, we have established this
+correspondence, as summarised in~\cref{fig:table-summary}. In the remainder of this section, we discuss some broader
+related work.
 
 \begin{figure}
     \begin{center}
         \begin{tabular}{|c|c|c|c|}
             \hline
-            \rowcolor{lightgray} $\PiLang$     & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
+            \rowcolor{lightgray} $\PiLang$ & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
             \hline
-            types         & Natural numbers                & Finite sets & 0-cells \tabularnewline
+            Types                          & Natural numbers               & Finite sets & 0-cells \tabularnewline
             \hline
-            1-combinators & Generators of $\Sn$            & Bijections  & 1-paths \tabularnewline
+            1-combinators                  & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
             \hline
-            2-combinators & Relations of $\Sn$             & Homotopies  & 2-paths \tabularnewline
+            2-combinators                  & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
             \hline
         \end{tabular}
     \end{center}
@@ -211,10 +212,10 @@ property that $\BFin$ is biinitial in $\term{RigCat}$, is in~\cite{elguetaGroupo
 \paragraph{Reversible Programming Languages} The practice of programming languages is replete with \emph{ad hoc}
 instances of reversible computations: database transactions, mechanisms for data provenance, checkpoints, stack and
 exception traces, logs, backups, rollback recoveries, version control systems, reverse engineering, software
-transactional memories, continuations, backtracking search, and multiple-level undo features in commercial
-applications. In the early nineties, \citet{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class,
-treatment of reversibility. But intensive research in full-fledged reversible models of computations and reversible
-programming languages was only sparked by the discovery of deep connections between physics and
+transactional memories, continuations, backtracking search, and multiple-level undo features in commercial applications.
+In the early nineties, \citet{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class, treatment of
+reversibility. But intensive research in full-fledged reversible models of computations and reversible programming
+languages was only sparked by the discovery of deep connections between physics and
 computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275,Hey:1999:FCE:304763,fredkin1982conservative},
 and by the potential for efficient quantum computation~\cite{springerlink:10.1007/BF02650179}. The early developments of
 reversible programming languages started with a conventional programming language, e.g., an extended $\lambda$-calculus,
@@ -226,13 +227,13 @@ detour via conventional irreversible
 languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}. The version of
 $\PiLang$ studied in this paper is restricted to finite types and terminating total computations. It would be
 interesting to understand which versions of free monoidal structures correspond to extensions of $\Pi$ with recursive
-types~\cite{jamesInformationEffects2012,rc2011} and negative/fractional
-types~\cite{chenComputationalInterpretationCompact2021}.
+types~\cite{jamesInformationEffects2012,rc2011}, or negative and fractional
+types~\cite*{chenFractionalTypes2020,chenComputationalInterpretationCompact2021}.
 
 %%%%%%%%%%%%%%
 \paragraph{Permutations} Finding formal systems for expressing various flavors of computable functions has been a major
 focus of logic and computer science since its inception. Permutations, being at the core of reversible computing, are an
-interesting class of functions, for which there are few formal systems. We develop such a system bringing in all the
+interesting class of functions, for which there are few formal systems. The system we have developed brings in all the
 associated benefits of syntactic calculi, notably, their calculational flavor. Instead of comparing two reversible
 programs by extensional equality of the underlying bijective functions, a calculus offers more nuanced techniques that
 can enforce additional intensional constraints on the desired equality relation.

@@ -46,6 +46,7 @@ generators (primitive operations) that:
   \item cyclically shift any subset of $\Fin[n]$.
 \end{itemize}
 
+\noindent
 Bubble sort uses the primitive operation of adjacent swaps, insertion sort and selection sort use the primitive
 operation of swapping the $i$-th element with the $j$-th element, cycle sort uses cyclical shifts of subsequences,
 pancake sort uses reversals of the prefixes of the list, et cetera. The choice of generators for our presentation is
@@ -60,8 +61,8 @@ important for the following reasons.
         to a $\PiLang$ program, for the proof of completeness.
 \end{itemize}
 
-We will show that it is possible to encode all $\PiLang$ combinators using adjacent transpositions
-(in~\cref{sec:equivalence}).
+\noindent
+We will show in~\cref{sec:equivalence} that all $\PiLang$ combinators can be encoded using adjacent transpositions.
 %Group presentations are built by adding equations to a \emph{free group}.
 
 \begin{toappendix}
@@ -96,7 +97,7 @@ We will show that it is possible to encode all $\PiLang$ combinators using adjac
 
 \subsection{Free groups}
 
-Usually, there are are many equations, besides the group axioms, that hold for the elements of a group. For example, in
+Usually, there are many equations, besides the group axioms, that hold for the elements of a group. For example, in
 the group $\Aut[\Bool]$, or $\mathbb{Z}_2$, we have an equation $1 + 1 = 0$, which is not a consequence of the group
 axioms, but is specific to this particular group. A free group has the property that no other equations hold except the
 ones directly implied by the group axioms. For example, the additive group of integers $\mathbb{Z}$ is the free group on
@@ -165,7 +166,7 @@ Instead, we will think about elements of the free group as words over an alphabe
 set \emph{and} the set of their formal inverses. If we take the disjoint union of $A$ with itself, that is, $A + A$ as
 the group's underlying set, we can use $\inl/\inr$ to mark the elements -- $\inl{a}$ means $a$ and $\inr{a}$ means
 $\inv{a}$. Then, we can encode the free group using the free monoid, that is, lists of $A + A$. Additionally, we need to
-ensure that the inverse laws hold, so we have to coalesce adjacent occurences of $a$ and $\inv{a}$.
+ensure that the inverse laws hold, so we have to coalesce adjacent occurrences of $a$ and $\inv{a}$.
 
 \begin{definition}[Free group]
   Let $A$ be a set, and $\List[\blank]$ the free monoid. The free group $F(A)$ on $A$ is the set-quotient of $\List[A +
@@ -305,7 +306,7 @@ going to specify for this presentation -- we visualise them as braiding diagrams
     \caption{$\braid$}
     \label{fig:coxeter-c}
   \end{subfigure}
-  \caption{Braiding diarams for Coxeter relations.}
+  \caption{Braiding diagrams for Coxeter relations.}
   \label{fig:coxeter-braid}
 \end{figure}
 
@@ -349,8 +350,8 @@ system $(\List[\Fin[n]],\cox*)$, so that, by repeatedly applying the reduction r
 $\cox*$-equal terms would eventually converge to the same normal form.
 
 For this to work, we first need the system to have the termination property, meaning that there should be no infinite
-reductions. We observe that after throwing out reflexivity and symmetry, the right hand sides of the relations $\cox*$
-are strictly smaller than the left hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$ (which is
+reductions. We observe that after throwing out reflexivity and symmetry, the right-hand sides of the relations $\cox*$
+are strictly smaller than the left-hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$ (which is
 well-founded). Thus, by directing the relation from left to right, we would get the termination property out of the box.
 Second, we need the normal forms to be unique, so that we can extract a normalisation function. This will be true if the
 rewriting system is confluent -- all critical pairs, that is, terms with overlapping possible reduction rules, have to
@@ -455,7 +456,7 @@ $\downf$.
 \noindent The result of computing $n \downf k$ is the sequence \([k + n - 1, k + n - 2, k + n - 3, \ldots, n]\), which
 is a sequence of transpositions that moves the element at index $k + n$ left by $k$ places, shifting all the elements in
 between one place right (see~\cref{fig:downf}). Then, the directed relation $\longcox$ is defined with the following
-generators (inlining the congruence closure in $\longcox$ allows arbitrary reductions inside the list).
+generators (inlining the congruence closure in the relation $\longcox$ allows arbitrary reductions inside the list).
 
 \begin{definition}[$\longcox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
   \begin{align*}
@@ -592,8 +593,8 @@ crossing wires).
 
 Note that the previous $\braid$ rule is a special case of $\longbraid$, with $k = 0$. As before, the left-hand sides of
 the relation are (lexicographically) strictly larger than the right-hand sides. We define the transitive closure of
-$\longcox$ to be $\longcoxplus$ (\cref{def:longcox-plus}) and its reflexive-transitive closure to be $\longcoxstar$
-(\cref{def:longcox-star}).
+$\longcox$ to be $\longcoxplus$ (see~\cref{def:longcox-plus} in the appendix) and its reflexive-transitive closure to be
+$\longcoxstar$ (see~\cref{def:longcox-star}).
 
 Despite the increased complexity of the generators, the rewriting system $(\List[\Fin[n]],\longcox)$ has the properties
 we desire. It satisfies local confluence, that is, the Church-Rosser (diamond) property -- for example, using
@@ -615,6 +616,7 @@ of~\citet*{huetConfluentReductionsAbstract1980,krausCoherenceWellFoundednessTami
   \end{enumerate}
 \end{theorem}
 
+\noindent
 The modified form of the Coxeter relations are unwieldy and difficult to prove properties about by induction. However,
 we can make the following observation relating it to $\cox*$.
 
@@ -624,8 +626,9 @@ we can make the following observation relating it to $\cox*$.
   there is a $u$ such that $\coxcospan*{w}{v}{u}$.
 \end{proposition}
 
-By~\cref{prop:nf}~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
-  {\List[\Fin[n]]}$ that produces a normal form for terms of $\List[\Fin[n]]$. We state two important properties enjoyed
+\noindent
+By~\cref{prop:nf}~part~\ref{prop:nf-uniqueness}, we get a unique choice function $\normf : {\List[\Fin[n]]} \to
+{\List[\Fin[n]]}$ that produces a normal form for terms of $\List[\Fin[n]]$. We state two important properties enjoyed
 by $\normf$.
 
 \begin{proposition}
@@ -675,7 +678,7 @@ Finally, we need to show that $\Sn$ and is indeed a group presentation.
 \noindent
 Notice however, that for a group presentation, as defined in~\cref{def:presentation}, the relation needs to be on the
 set of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The following
-proposition lets us lift a group structure on $\List[A]$ to a group presentation.
+proposition lets us lift a group structure on $\List[A]$ to a group presentation, with underlying set $\List[A+A]$.
 
 \begin{propositionrep}
   \label{prop:generated-group-generalised}
@@ -689,7 +692,7 @@ proposition lets us lift a group structure on $\List[A]$ to a group presentation
   $G$ using the universal property of the group presentation, where the map on generators is given by taking the
   singleton list. To construct the group homomorphism from $G$, we use the universal property of the set quotient, where
   the map on the underlying set is given by mapping $\inl$ on the list. Using that the relation is a congruence, we show
-  that this consttitutes a group isomorphism.
+  that this constitutes a group isomorphism.
 \end{proof}
 
 \begin{corollary}
@@ -731,7 +734,7 @@ ignored~\cite{duboisTestsProofsCustom2018,vajnovszkiNewEulerMahonian2011}.
   % \end{aligned}
 \end{definition}
 
-The inversion count of an element is the number of smaller elements appearing after it in the permutation.
+The inversion count of an element is given by the number of smaller elements that appear after it in the permutation.
 
 \begin{definition}[Inversion count]
   Given a permutation $\sigma : \Aut[\Fin[n]]$, the inversion count of an element $i: \Fin[n]$ is given by
@@ -785,7 +788,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
   \end{align*}
 \end{definition}
 
-\noindent We can show that the function $\immersion_{n}$ gives an equivalence betweeen $\Lehmer[n]$ and $\im{\normf}$.
+\noindent We can show that the function $\immersion_{n}$ gives an equivalence between $\Lehmer[n]$ and $\im{\normf}$.
 
 \begin{theoremrep}
   \leavevmode
