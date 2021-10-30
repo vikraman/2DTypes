@@ -115,7 +115,7 @@
 \newunicodechar{₄}{$_{4}$}
 \newunicodechar{¹}{$^{1}$}
 \newunicodechar{²}{$^{2}$}
-\newunicodechar{³}{$^{3}$} 
+\newunicodechar{³}{$^{3}$}
 \newunicodechar{⁴}{$^{4}$}
 \newunicodechar{■}{$\blacksquare$}
 \newunicodechar{⊡}{$\boxdot$}
@@ -282,14 +282,14 @@
 
   We establish a correspondence between the syntactic groupoid of the language and a formally presented univalent
   subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and 2-combinators to 2-paths in the
-  universe, which is shown to be sound and complete for both levels, establishing full abstraction and adequacy. We extend
-  the already established Curry-Howard correspondence for $\PiLang$ to a Curry-Howard-Lambek correspondence between
-  Reversible Logic, Reversible Programming Languages, and Symmetric Rig Groupoids, by showing that the syntax of $\PiLang$
-  is presented by the free symmetric rig groupoid, given by finite sets and permutations. Our proof uses techniques from
-  the theory of group presentations and rewriting systems to solve the word problem for symmetric groups.
+  universe, which is shown to be sound and complete for both levels, establishing an equivalence of groupoids. We
+  establish a Curry-Howard-Lambek correspondence between Reversible Logic, Reversible Programming Languages, and
+  Symmetric Rig Groupoids, by showing that the syntax of $\PiLang$ is presented by the free symmetric rig groupoid,
+  given by finite sets and bijections. Our proof uses techniques from the theory of permutation codes, group
+  presentations and rewriting systems to solve the word problem for symmetric groups.
 
-  Using the formalisation of our results, we show how to perform normalisation-by-evaluation, verification, and synthesis
-  of reversible logic gates, motivated by examples from quantum computing.
+  Using the formalisation of our results, we show how to perform normalisation-by-evaluation, verification, and
+  synthesis of reversible logic gates, motivated by examples from quantum computing.
 \end{abstract}
 
 % Using soundness and completeness, we show how to perform Normalisation by Evaluation (NbE) for boolean reversible
@@ -468,7 +468,12 @@
 
 
 \begin{acks}
-  The authors would like to thank Jacques Carette and Chao-Hong Chen for numerous discussions, ideas, and contributions.  The authors would also like to thank the anonymous referees for their valuable comments and helpful suggestions.
+  The authors would like to thank Jacques Carette and Chao-Hong Chen for numerous discussions, ideas, and contributions.
+  Robert Rose and Siva Somayyajula contributed to a previous version of this work. The first author is grateful to
+  Marcelo Fiore for various discussions about the free symmetric monoidal groupoid, and Thorsten Alteknirch, Andrew
+  Pitts, Jamie Vicary, Eric Finster, Nathanael Arkor, and Younesse Kaddar, for related discussions. The authors would
+  also like to thank the anonymous referees for their valuable comments and helpful suggestions. This paper is dedicated
+  to the memory of Socrates, the demure cat.
 \end{acks}
 
 

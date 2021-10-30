@@ -1,7 +1,9 @@
 \section{Applications to Reversible Circuits}
 \label{sec:applications}
 
-Using our semantics, we can normalise, synthesise, prove equivalence, and reason about~$\PiLang$ programs.
+Using our semantics, we can normalise, synthesise, prove equivalence, and reason about~$\PiLang$ programs. We describe a
+few applications in this section, and a more comprehensive list of applications and examples along with their
+formalisation is available in our artifact~\cite{choudhuryArtifactSymmetriesReversible2021}.
 
 % \[
 %   \begin{tikzpicture}[->,>=stealth',auto,thick,node distance=1em]
@@ -38,8 +40,8 @@ Using our semantics, we can normalise, synthesise, prove equivalence, and reason
 Normalisation happens by evaluating a combinator to a permutation and then reifying it back. The evaluation step goes
 from $\PiLang$ to $\PiPlusLang$ reducing $\times$ to $+$ and translating the corresponding combinators, then from
 $\PiPlusLang$ to $\PiHatLang$ reducing them to natural numbers and adjacent transpositions, then finally to $\UFin$
-through words in $\Sn$ and Lehmer codes. Then, the quotation step goes all the way back until $\PiPlusLang$. We define
-this composite $\normt$ function below using our previous evaluation $\gdenot{\blank}$.
+through words in $\Sn$ and Lehmer codes. Finally, the quotation step goes all the way back until $\PiPlusLang$. We
+define this composite $\normt$ function below using our previous evaluation function $\gdenot{\blank}$.
 
 \begin{definition}[Normalisation of $\PiLang$ programs]
   \begin{gather*}
@@ -49,12 +51,13 @@ this composite $\normt$ function below using our previous evaluation $\gdenot{\b
     \end{aligned}
     \qquad
     \begin{aligned}
-      \normt_{1} & : (c : X \iso Y) \to \normt_{0}(X) \iso \normt_{0}(Y)     \\
+      \normt_{1} & : (c : X \iso Y) \to \normt_{0}(X) \isop \normt_{0}(Y)    \\
       \normt_{1} & = \quotep_{1} \comp \quoteh_{1} \comp \gdenot{\blank}_{1}
     \end{aligned}
   \end{gather*}
 \end{definition}
 
+\noindent
 As an example, consider the \Afun{reversibleOr1} circuit introduced in~\cref{sec:pi}. After applying $\normt_{1}$, the
 type $\mathbb{B}\ 3$ normalises to $\mathbb{8}+ \equiv \mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} +
   (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + \mathbb{0})))))))$, and the circuit reduces to the following
@@ -68,83 +71,82 @@ normal form:
 By normalisation, we also get a decision procedure for program equivalence -- two circuits are equivalent iff they
 represent the same permutation, or equivalently, they have the same normal form. Recall that in~\cref{sec:examples} we
 introduced two different ways of computing reversible disjunction using two Qiskit circuit implementations, and then
-in~\cref{sec:pi} showed the corresponding $\PiLang$ definitions: \Afun{reversibleOr1} and \Afun{reversibleOr2}. 
+in~\cref{sec:pi} showed the corresponding $\PiLang$ definitions: \Afun{reversibleOr1} and \Afun{reversibleOr2}.
 
-After applying $\normt_{1}$ to each circuit, we verify that they both reduce to the same normal form
-\Afun{reversibleOrNorm}, along with a 2-combinator witnessing their equivalence with the normal form -- by composing
-these, we get the 2-combinator witnessing their equivalence.
+After applying $\normt_{1}$ to each circuit, we can verify that they both reduce to the same normal form
+\Afun{reversibleOrNorm}, and there exist 2-combinators between each of them and the normal form. More general,
+user-guided, reasoning can be done using the sound and complete level-2 combinators to rewrite $\PiLang$ programs.
+% as an example, we can manually produce a proof of equivalence of ?? and ?? -- a 2-combinator presented below: 
+% \medskip
+% \manualTwoCombinator{}
 
 \subsection{Synthesis and verification}
 
-Instead of manually producing $\PiLang$-programs to implement the reversible disjunction specification, it is possible
-to simply write down the permutation directly and then quote it, synthesising a $\PiLang$ program. We use a function
-$\term{lookup}$ to write tabulated permutations for readability.
+Instead of manually writing $\PiLang$ programs to implement the reversible disjunction specification, it is possible to
+simply write down the permutation directly and then quote it, synthesising a $\PiLang$ program. We show this below,
+using a function $\term{lookup}$ to write tabulated permutations for readability.
 
 \medskip
 \resetperm{}
 
 \noindent
-The permutation uses the canonical encoding of sequences of bits as natural numbers, e.g., {(\textsf{false},
-\textsf{true},\textsf{true})} is encoded as 011 or 3. The second entry in the $\term{lookup}$ table maps index 1 (= 001)
-to the value 5 (= 101), following the reversible disjunction specification (recall that
+The permutation uses the canonical encoding of sequences of bits as natural numbers, e.g.,
+${(\mathsf{false},\mathsf{true},\mathsf{true})}$ is encoded as 011 or 3. The second entry in the $\term{lookup}$ table
+maps index 1 (= 001) to the value 5 (= 101), following the reversible disjunction specification (recall that
 $\mathsf{reversibleOr}(h,b_1,b_2) = (h \,\underline{\vee}\, (b_1 \vee b_2), ~b_1, ~b_2)$ where~$\vee$ is disjunction
 and~$\underline{\vee}$ is exclusive-disjunction). Quoting this permutation generates the same normalised program
-\Afun{reversibleOrNorm}, matching the desired structured type of a 1-combinator on $\mathbb{8}+$. 
+\Afun{reversibleOrNorm}, matching the desired structured type of a 1-combinator on $\mathbb{8}+$.
 
-In a similar way we can also verify whether a circuit is correctly implemented: by running the equivalence described
-above in the other direction, we can evaluate the circuit to a bijection and compare it extensionally with the intended
-one.
+Similarly, we can also verify whether a circuit is correctly implemented -- by running the equivalence described above
+in the other direction, we can evaluate the circuit to a bijection and compare it extensionally with the intended one.
 
 \subsection{Reasoning}
 
-In our development, we described a number of different representations of permutations: $\PiLang$ programs, lists of
-transpositions, Lehmer codes, and automorphisms of finite sets. The equivalences between these representations allows us
-to transfer theorems about permutations, proving them on the representations most suited for the particular task and
-getting others for free.
+In our development, we described a number of different representations of permutations: $\PiLang$, $\PiPlusLang$ and
+$\PiHatLang$ programs, lists of transpositions, Lehmer codes, and automorphisms of finite sets. The equivalences between
+these representations allow us to transfer theorems about permutations -- we prove them on the most suitable
+representation, and then transport them to a different representation ``for free''.
 
-As an example, consider the following problem. Toffoli gate on 3 bits can be extended to 4 bits, inserting a wire in
-four possible positions. The function of such gate is then identity on the newly inserted bit, and controlled-controlled
-not on the three remaining ones.
+As an example, consider the following problem. The Toffoli gate on 3 bits can be extended to a reversible gate on 4
+bits, by inserting a wire in four possible positions. This gate performs identity on the newly inserted bit, and
+controlled-controlled not on the three remaining ones. We show how to write these gates using \Afun{cif}.
 \medskip
 \extendedToffoli{}
 
 \noindent
-On the other hand, it is possible to construct a proper 4-bit toffoli gate:
+On the other hand, it is possible to construct a proper 4-bit toffoli gate.
 \medskip
 \toffoli{}
 
 \noindent
-Now, the question we want to answer is: is it possible to compose some number of (extended) 3-bit toffoli gates in some way, so as to replicate the
-behaviour of a 4-bit toffoli gate?
+Now, we can ask: is it possible to implement \Afun{toffoli₄} gate using only \Afun{toffoli₃} gates?
+\medskip
 
-Solving this problem using the circuit representation is difficult. However, we can observe that 3-bit toffoli gate
-implements an even permutation, that is, a permutation consisting of an even number of transpositions. On the other
-hand, 4-bit toffoli gate is an odd permutation. It is an easily proven lemma that composition of even permutations
-always produces an even permutation, which answers the question to the negative.
- 
-We define a function $\parity : (c : X \iso Y) \to \Bool$ to compute a parity of a permutation defined by a combinator
-$c$. It is implemented as the transformation from a $\PiLang$ program into a list of transposition, using $\evalh_{1}$
-defined in~\cref{sec:equivalence}, and computing the parity on this representation, which means simply checking the
-parity of the length of the list.
+Solving this problem in the circuit representation is difficult. However, we can observe that all \Afun{toffoli₃} gates
+implement even permutations, that is, permutations that contain an even number of transpositions. On the other hand,
+\Afun{toffoli₄} implements an odd permutation. It can be easily proved that any composition of even permutations always
+produces an even permutation, which answers the question to the negative. Thus, we formulate the theorem using the
+representation of lists of transpositions, and transfer it to circuits using the equivalences proven in the previous
+sections.
+
+We define a function $\parity : (X \iso Y) \to \Bool$ to compute the parity of a permutation defined by a combinator
+$c$, by first transforming a $\PiLang$ program into a list of transpositions (using $\evalh_{1}$ defined
+in~\cref{sec:equivalence}), and then computing the parity of this representation, which amounts to a simple checking of
+the parity of the length of the list.
 
 \begin{propositionrep}
   \label{prop:parity-preserved}
-  For two $\PiLang$ circuits $c_1, c_2$, if there exists a 2-combinator between them, then $\parity c_1 = \term{parity} c_2$. 
+  For two $\PiLang$ circuits $c_1, c_2$, if $c_1 \Iso c_2$, then $\parity(c_1) = \term{parity}(c_2)$.
 \end{propositionrep}
 \begin{proof}
-  First, it is easy to check that Coxeter relations preserve parity of the list. Second, if $c_1, c_2$ are related by a
-  2-combinator, then their list-of-transpositions representations are related in the Coxeter relation. Composing these
-  two facts completes the proof.
+  First, it is easy to check that Coxeter relations preserve parity of the list. Second, if $c_1$ and $c_2$ are related
+  by a 2-combinator, then their Lehmer codes are the same, so their list-of-transpositions representations have to be
+  related by the Coxeter relation. Composing these two facts completes the proof.
 \end{proof}
 
-Using ~\cref{prop:parity-preserved} and showing that any composition of even cicuits yields an even ciruit, we can
-answer the question by computing the parity of the \Afun{toffoli₄} and all of the \Afun{toffoli₃} gates. 
-
-Thus, we formulated the theorem using the representation on lists of transpositions, and transferred it to circuits using
-the equivalences proven in the previous sections.
-
-% More general, user-guided, reasoning can be done using the sound and complete level-2 combinators to rewrite $\PiLang$
-% programs.
+\noindent
+Using~\cref{prop:parity-preserved} and the fact that any composition of even circuits is even, we complete the proof by
+computing the $\parity$ of \Afun{toffoli₄}, and all of the \Afun{toffoli₃} combinations.
 
 % \paragraph*{Program synthesis.} The NbE process embodies a quoting mechanism that synthesizes programs from
 % permutations. Indeed, instead of writing a program for \Afun{reset 2}, one could simply specify the desired permutation
