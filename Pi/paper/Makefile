@@ -34,7 +34,7 @@ latex/Pi/Examples/ExamplesL.tex: ../Examples/ExamplesL.lagda
 inkscape/%.pdf : inkscape/%.svg
 	inkscape -D $< -o $@
 
-arxiv.tar.gz: ExamplesL.tex arxiv.tex discussion.tex equivalence.tex \
+arxiv.tar.gz: ExamplesL.tex applications.tex arxiv.tex discussion.tex equivalence.tex \
 				examples.tex finite.tex introduction.tex reversible1.tex ufin.tex \
 				arxiv.bbl bu1.bbl *.sty *.tikzstyles *.png
 	tar acvfL $@ $^
