@@ -29,7 +29,7 @@ Coxeter presentation equations. Finally, we describe the normal forms in this re
 correspondence between them and the type $\Aut[\Fin[n]]$ of automorphisms on a finite set. The generators and relations
 we use here will be used to quote back to 1 and 2-combinators in $\PiLang$ (see~\cref{sec:equivalence}).
 
-\subsection{Presenting the symmetric group}
+\subsection{Presenting the Symmetric Group}
 
 One way of thinking about presentations of $\Sn$ is via sorting algorithms, which use different primitive operations. A
 sorting algorithm has to calculate a permutation of a list or a (listed) finite set, which satisfies the invariant of
@@ -95,7 +95,7 @@ We will show in~\cref{sec:equivalence} that all $\PiLang$ combinators can be enc
   \end{definition}
 \end{toappendix}
 
-\subsection{Free groups}
+\subsection{Free Groups}
 
 Usually, there are many equations, besides the group axioms, that hold for the elements of a group. For example, in
 the group $\Aut[\Bool]$, or $\mathbb{Z}_2$, we have an equation $1 + 1 = 0$, which is not a consequence of the group
@@ -181,7 +181,7 @@ ensure that the inverse laws hold, so we have to coalesce adjacent occurrences o
   free groups, as stated in~\cref{prop:free-groups}.
 \end{proposition}
 
-\subsection{Group presentations}
+\subsection{Group Presentations}
 
 A presentation of a group builds it by starting from the free group $F(A)$ and introducing additional equations that are
 satisfied in the resulting group. For example, if we take $F(\unit) \defeq \mathbb{Z}$ and add an equation $1 + 1 = 0$,
@@ -839,7 +839,7 @@ $r$ many adjacent transpositions to get to the desired position, which is given 
   For all $n : \Nat$, \( \Sn \eqv \im{\normf} \eqv \Lehmer[n] \).
 \end{corollary}
 
-\subsection{Running Lehmer codes}
+\subsection{Running Lehmer Codes}
 
 Finally, it is time to complete our goal of characterising the symmetric group. Having produced a Lehmer code by
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
