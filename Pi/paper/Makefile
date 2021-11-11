@@ -39,6 +39,13 @@ arxiv.tar.gz: ExamplesL.tex applications.tex arxiv.tex discussion.tex equivalenc
 				arxiv.bbl bu1.bbl *.sty *.tikzstyles *.png
 	tar acvfL $@ $^
 
+popl22.tar.gz: ExamplesL.tex applications.tex main.tex popl22-rev.tex popl22-rev-strip.tex \
+				discussion.tex equivalence.tex \
+				examples.tex finite.tex introduction.tex reversible1.tex ufin.tex \
+				main.bbl popl22-rev-strip.bbl bu1.bbl *.sty *.tikzstyles inkscape/*.pdf \
+				Makefile
+	tar acvfL $@ $^
+
 clean:
 	latexmk -c
 distclean: clean
