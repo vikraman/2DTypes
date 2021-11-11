@@ -4,8 +4,8 @@
 % Recap of the previous section
 In~\cref{sec:ufin}, we established that paths in $\UFin$ are equivalent to families of loops on $\Fin[n]$ for every
 $n:\Nat$, that is, automorphisms of finite sets of size $n$, with the loopspace encoding the automorphism group.  This
-is also known to be the finite symmetric group $\Sn[n]$, making $\UFin$ the \emph{horizontal categorification} of $\Sn$
-for every $n$. In this section, we will describe this group syntactically.
+is also the finite symmetric group $\Sn[n]$, making $\UFin$ the \emph{horizontal categorification} of $\Sn$ for every
+$n$. In this section, we will describe this group syntactically.
 
 % What now?
 In order to study syntactic descriptions of permutations, we will hit the problem of deciding whether two descriptions
@@ -35,14 +35,14 @@ One way of thinking about presentations of $\Sn$ is via sorting algorithms, whic
 sorting algorithm has to calculate a permutation of a list or a (listed) finite set, which satisfies the invariant of
 being a sorted sequence, which means, the primitive operations of a sorting algorithm are able to generate all the
 permutations on a given list. So, a chosen set of reversible operations in a sorting algorithm can be a good candidate
-for the generators of a permutation group. For example, we could generate the symmetric group on $\Fin[n]$ by using
+for the generators of symmetric groups. For example, we could generate the symmetric group on $\Fin[n]$ by using
 generators (primitive operations) that:
 
 \begin{itemize}
   \item swap the $i$-th element with the $(i+1)$-th element, that is, adjacent swaps, or
   \item swap the $i$-th element with the $j$-th element, for arbitrary $i$-s and $j$-s, or
   \item swap the $i$-th element with an element at a fixed position, or
-  \item reverses a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
+  \item reverse a prefix $\Fin[k]$ of $\Fin[n]$ for $k \leq n$, or
   \item cyclically shift any subset of $\Fin[n]$.
 \end{itemize}
 
@@ -128,8 +128,8 @@ the singleton set.
 A group homomorphism between groups $G$ and $H$ is a function $f : G \to H$ between the underlying sets that preserves
 the group structure. Giving a group homomorphism out of the free group is equivalent to giving a function out of the
 generating set. This is the universal property of free groups, stemming from the free-forgetful adjunction between the
-category of groups and sets. We say that $\eta_{A} : A \to F(A)$ is the free group on $A$ if it satisfies the following
-universal property.
+categories of groups and sets. We say that $F(A)$ with $\eta_{A} : A \to F(A)$ is the free group on $A$ if it satisfies
+the following.
 
 % Informally, it states that if we know how a map $f$ acts on the
 % generating set $A$, we know exactly how it acts on every element of the group $F(A)$.
@@ -169,9 +169,9 @@ $\inv{a}$. Then, we can encode the free group using the free monoid, that is, li
 ensure that the inverse laws hold, so we have to coalesce adjacent occurrences of $a$ and $\inv{a}$.
 
 \begin{definition}[Free group]
-  Let $A$ be a set, and $\List[\blank]$ the free monoid. The free group $F(A)$ on $A$ is the set-quotient of $\List[A +
-      A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons a \cons \nil
-    \sim \nil$.
+  Let $A$ be a set, and $\List[\blank]$ the free monoid monad. The free group $F(A)$ on $A$ is the set-quotient of
+      $\List[A + A]$ by the congruence closure of the relation $a \cons \inv{a} \cons \nil \sim \nil$ and $\inv{a} \cons
+      a \cons \nil \sim \nil$.
 \end{definition}
 
 \begin{proposition}
@@ -350,7 +350,7 @@ system $(\List[\Fin[n]],\cox*)$, so that, by repeatedly applying the reduction r
 $\cox*$-equal terms would eventually converge to the same normal form.
 
 For this to work, we first need the system to have the termination property, meaning that there should be no infinite
-reductions. We observe that after throwing out reflexivity and symmetry, the right-hand sides of the relations $\cox*$
+reductions. We observe that, after throwing out reflexivity and symmetry, the right-hand sides of the relations $\cox*$
 are strictly smaller than the left-hand sides, in terms of the lexicographical ordering on words in $\Fin[n]$ (which is
 well-founded). Thus, by directing the relation from left to right, we would get the termination property out of the box.
 Second, we need the normal forms to be unique, so that we can extract a normalisation function. This will be true if the
@@ -662,7 +662,7 @@ $\approx$, obtaining an equivalent definition for $\Sn$.
 \end{proposition}
 
 \noindent
-Finally, we need to show that $\Sn$ and is indeed a group presentation.
+Finally, we need to show that $\Sn$ is indeed a group presentation.
 
 \begin{propositionrep}
   \label{prop:group-structure-Sn}
@@ -678,7 +678,7 @@ Finally, we need to show that $\Sn$ and is indeed a group presentation.
 \noindent
 Notice however, that for a group presentation, as defined in~\cref{def:presentation}, the relation needs to be on the
 set of words $A + A$, where the right copy corresponds to the set of formal inverses of the generators. The following
-proposition lets us lift a group structure on $\List[A]$ to a group presentation, with underlying set $\List[A+A]$.
+proposition lets us lift a group structure on $\List[A]$ to a group presentation, whose underlying set is $\List[A+A]$.
 
 \begin{propositionrep}
   \label{prop:generated-group-generalised}
@@ -706,9 +706,9 @@ $\List[\Fin[n]]$.
 \subsection{Lehmer Codes}
 \label{subsec:lehmer}
 
-To prove the equivalence between $\Aut[\Fin[n]]$ and $\Sn[n]$, we will need to define functions back and forth between
-the two types. The terms in $\Sn$ can be identified with equivalence classes of terms in $\List[\Fin[n]]$ with respect
-to the Coxeter relation $\cox*$. The easiest way to define a function out of this presentation is to define it on the
+To prove the equivalence between $\Aut[\Fin[n]]$ and $\Sn[n]$, we will define functions back and forth between the two
+types. The terms in $\Sn$ can be identified with equivalence classes of terms in $\List[\Fin[n]]$ with respect to the
+Coxeter relation $\cox*$. The easiest way to define a function out of this presentation is to define it on the
 representatives. We know that these are the unique normal forms in the set-quotient given by $\quotinc \comp \normf$,
 but now we will explicitly describe what these representatives look like, using an encoding called Lehmer
 codes~\cite{lehmerTeachingCombinatorialTricks1960}.

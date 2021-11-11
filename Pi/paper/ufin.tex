@@ -7,16 +7,16 @@
 In categorical language, the target for the semantics in the previous section is the category of finite sets and
 functions $\SetFin$. However, as $\PiLang$ only refers to bijective functions, a more precise setting is the groupoid
 $\BFin = \term{core}(\SetFin)$ of finite sets and bijections. $\SetFin$ has finite coproducts $(\emptyt, \sqcup)$ and
-finite products $(\unit, \times)$ and in $\BFin$ these restrict to additive and multiplicative symmetric monoidal
+finite products $(\unit, \times)$, and in $\BFin$, these restrict to additive and multiplicative symmetric monoidal
 structures, respectively, making $\BFin$ a symmetric rig groupoid -- the \emph{vertical categorification} of the
 commutative rig of natural numbers $\Nat$~\cite{baezHIGHERDIMENSIONALALGEBRA2010}.
 
 The semantics interprets types of $\PiLang$ as objects in $\BFin$, 1-combinators as isomorphisms, and for every pair of
-1-combinators related by a 2-combinator, their interpretations in~$\BFin$ are equal. $\BFin$ is a 1-groupoid, where the
-collection of isomorphisms is a set. We can evaluate two bijections on their inputs to decide if they are equal, and
-there is no higher cell witnessing the equality of two isomorphisms. To be able to establish completeness for $\PiLang$,
-we want a witness for this equality, so that we can quote back to the syntax and produce a 2-combinator witnessing the
-equality of the corresponding 1-combinator.
+1-combinators related by a 2-combinator, their interpretations in~$\BFin$ are equal. $\BFin$ is a (strict) 1-groupoid
+where isomorphisms are identified upto extensional equality. We can evaluate two bijections on their inputs to decide if
+they are equal, and there is no higher cell witnessing the equality of two isomorphisms. To be able to establish
+completeness for $\PiLang$, we want a witness for this equality, so that we can quote back to the syntax and produce a
+2-combinator witnessing the equality of the corresponding 1-combinator.
 
 % The denotational semantics for $\PiLang$ in the previous section uses the symmetric rig groupoid structure of $\BFin$,
 % whose objects are finite sets, whose morphisms as bijections between finite sets, and whose symmetric monoidal
@@ -52,11 +52,11 @@ correspondence.
 % Fourth - explain the tool we use for fixing it
 Every type in HoTT is a weak $\infty$-groupoid whose points are the terms of the type, and the (iterated) identity type
 gives the (higher) morphisms. The groupoid we are interested in has types as points, type equivalences for 1-cells, and
-higher homotopies for higher cells. (See~\cref{app:grpdexample} for an example on a 3-element set.) This is the
-groupoid structure for the universe type $\UU$, since the identity type on types can be characterised as type
-equivalences (by \emph{univalence}). But, we only want to carve out a \emph{subuniverse} of \emph{finite types}, still
-satisfying univalence, to get the groupoid structure. In this section, we formally define \emph{univalent subuniverses},
-and proceed to construct the particular instance for finite types, $\UFin$ (\cref{def:ufin}).
+higher homotopies for higher cells. (See~\cref{app:grpdexample} for an example on a 3-element set.) This is the groupoid
+structure for the universe type $\UU$, since the identity type on types can be characterised as type equivalences (by
+\emph{univalence}). But, we only want to carve out a \emph{subuniverse} of \emph{finite types}, still satisfying
+univalence, to get the groupoid structure. In this section, we formally define \emph{univalent subuniverses}, and
+proceed to construct the particular instance for finite types, $\UFin$ (see~\cref{def:ufin}).
 
 % The way to describe such groupoid in HoTT is to construct a type which has the types themselves as points, i.e. a
 % universe. Then, equivalences between those types can be characterised using elements of the equality type. For this to
@@ -286,10 +286,10 @@ weak $\infty$-groupoid, where each morphism satisfies groupoid laws only upto a 
 
 A homotopy between functions $f, g : A \to B$, written $f \htpy g$, is given by pointwise equality between them,
 $\dfun*{x:A}{f(x) \id_{B} g(x)}$. The identity type for functions is equivalent to homotopies between them ${(f \id_{A
-\to B} g)} \eqv {(f \htpy g)}$, by $\term{funext}$ and $\term{happly}$. An equivalence between types $A \eqv B$ is given
+        \to B} g)} \eqv {(f \htpy g)}$, by $\term{funext}$ and $\term{happly}$. An equivalence between types $A \eqv B$ is given
 by a pair of functions between them which compose to the identity, $f \comp g \htpy \idfunc_{B}$ and $g \comp f \htpy
-\idfunc_{A}$ (also see~\cref{prop:three-chars-equiv}), and this is equivalent to the identity type for the universe, $(A
-\id_{\UU} B) \eqv (A \eqv B)$, which is the univalence principle.
+  \idfunc_{A}$ (also see~\cref{prop:three-chars-equiv}), and this is equivalent to the identity type for the universe, $(A
+  \id_{\UU} B) \eqv (A \eqv B)$, which is the univalence principle.
 \begin{gather*}
   \begin{aligned}
     \term{happly} & : (f \id g) \to (f \htpy g) \\
@@ -305,8 +305,8 @@ by a pair of functions between them which compose to the identity, $f \comp g \h
 Functions between types are functors between groupoids. Given a function $f : A \to B$, there is a functorial action on
 the paths given by $\term{ap}$. Type families, that is, types indexed by terms, are simply functions from a type to the
 universe, such as $A \to \UU$, which is an $A$-indexed family of groupoids. For a type family $P : A \to \UU$ and a
-point $x : A$, the type $P(x)$ is the fiber over $x$.  The $\term{transport}$ operation, named
-$\term{transport}$, lifts paths in the indexing type to functions between fibers.
+point $x : A$, the type $P(x)$ is the fiber over $x$.  The $\term{transport}$ operation lifts paths in the indexing type
+to functions between fibers.
 \begin{gather*}
   \term{ap}_{f} : \dfun*{x,y:A}{x \id_{A} y \to f(x) \id_{B} f(y)}
   \qquad
@@ -553,13 +553,13 @@ the groupoid of finite types has also been considered in~\cite{yorgeyCombinatori
 \end{definition}
 
 While $\UFin$ has \emph{all} the finite types, we are also interested in constructing a subuniverse of finite types of a
-specified cardinality. To do so, we will start with the subuniverse $\BAut[T]$, for any type $T : \UU$.
+\emph{specified} cardinality. To do so, we will start with the subuniverse $\BAut[T]$, for any type $T : \UU$.
 Characterisations of univalent fibrations using the $\BAut$ construction have also been studied
 by~\citet{christensenCharacterizationUnivalentFibrations2015}.
 
 \begin{definition}[$\BAut$]
-  The predicate $P(X) \defeq \Trunc[-1]{X \id T}$ picks out exactly those types that are merely equal to $T$, and this
-  generates the subuniverse
+  The predicate $P(X) \defeq \Trunc[-1]{X \eqv T}$, or equivalently, $\Trunc[-1]{X \id T}$, picks out exactly those
+  types that are merely equivalent to $T$, and this generates the subuniverse
   \[
     \BAut[T] \defeq \Sub{T}.
   \]
@@ -573,14 +573,14 @@ fragment of $\PiLang$~\cite*{caretteReversibleProgramsUnivalent2018}.
 
 \begin{definition}[${\UFin[n]}$]
   For any $n : \Nat$, we define $\UFin[n] \defeq \BAut[\Fin[n]]$ to be the univalent subuniverse of $n$-element sets.
-  Note that, $\UFin$ can be equivalently seen as the collection of all types of finite cardinality, that is,
-  $\UFin \eqv \dsum*{n:\Nat}{\UFin[n]}$.
+  Note that, $\UFin$ can be equivalently seen as the collection of all finite types, that is, $\UFin \eqv
+    \dsum*{n:\Nat}{\UFin[n]}$.
 \end{definition}
 
 Since $\BAut[T]$ is a univalent subuniverse, we can characterise its path space. The intuition is that $\BAut[T]$ only
-has one point $T_0$, and 1-paths $T_0 \id T_0$, that is, loops, and higher paths between these loops. The
-type of loops on $T_0$, $\loopspace[\BAut[T],T_{0}]$, is shown to be equivalent to $\Aut[T] \defeq T \eqv T$, which is
-the group of automorphisms of $T$.
+has one point or 0-cell $T_0$, and 1-paths $T_0 \id T_0$, that is, loops, and higher paths between these loops. The type
+of loops on $T_0$, that is, $\loopspace[\BAut[T],T_{0}]$, is shown to be equivalent to $\Aut[T] \defeq T \eqv T$, which
+is the group of automorphisms of $T$.
 
 \begin{lemmarep}
   \leavevmode
@@ -604,16 +604,20 @@ the group of automorphisms of $T$.
 \end{proof}
 
 \begin{theorem}
-  $\UFin[n]$ is a pointed, connected, 1-groupoid for every $n:\Nat$, and \( \loopspace[\UFin[n],F_{n}] \eqv
-  \Aut[\Fin[n]] \). $\UFin$ is a 1-groupoid with connected components for every $n:\Nat$.
+  \leavevmode
+  \begin{enumerate}
+    \item $\UFin[n]$ is a pointed, connected, 1-groupoid for every $n:\Nat$, and \( {\loopspace[\UFin[n],F_{n}] \eqv
+          \Aut[\Fin[n]]} \).
+    \item $\UFin$ is a 1-groupoid with connected components for every $n:\Nat$.
+  \end{enumerate}
 \end{theorem}
 
 We have shown that loops in $\UFin$ exactly encode the automorphism group $\Aut[\Fin[n]]$ for every~$n$. This is a
 general technique called \emph{delooping}, where a group can be identified with a 1-object groupoid, that is, a
 0-connected type in HoTT. This technique also allows defining higher groups~\cite{buchholtzHigherGroupsHomotopy2018}.
 The loopspace of a pointed type automatically has the structure of a group, with $\refl_{\pt}$ for the neutral element,
-path composition for the group multiplication, and path inverse for the group inverse operation. The group axioms are
-given by the higher paths corresponding to groupoid laws.
+path composition for the group multiplication, and path inverse for the group inverse. The group axioms follow from the
+higher paths corresponding to groupoid laws.
 
 % \[
 %   \begin{tikzcd}
@@ -656,7 +660,7 @@ the univalence principle.
     \qquad
     \begin{aligned}
       \Fin[1]                & \eqv \top                             \\
-      \Fin[n] \times \Fin[m] & \eqv \Fin[n * m]                      \\[1.5ex]
+      \Fin[n] \times \Fin[m] & \eqv \Fin[n \cdot m]                  \\[1.5ex]
       \top \times X          & \eqv X                                \\
       X \times \top          & \eqv X                                \\
       (X \times Y) \times Z  & \eqv X \times (Y \times Z)            \\
@@ -669,7 +673,7 @@ the univalence principle.
 \begin{theorem}
   $\UFin$ has two symmetric monoidal structures, the additive and multiplicative ones, given by $(F_0, \sqcup)$ and
   $(F_1, \times)$, with corresponding natural isomorphisms $\lambda_{X}$, $\rho_{X}$, $\alpha_{X,Y,Z}$, and the braiding
-  isomorphism $\mathcal{B}_{X,Y}$ upto 1-paths in $\UFin$. These isomorphisms satisfy the Mac Lane coherence conditions
+  isomorphism $\mathcal{B}_{X,Y}$, upto 1-paths in $\UFin$. These isomorphisms satisfy the Mac Lane coherence conditions
   for symmetric monoidal categories~\cite{maclaneNaturalAssociativityCommutativity1963}, that is, the triangle,
   pentagon, and hexagon identities, and the symmetry of the braiding, upto 2-paths in $\UFin$. The multiplicative
   structure distributes over the additive structure and satisfies the Laplaza coherence conditions for rig

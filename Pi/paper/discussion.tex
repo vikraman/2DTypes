@@ -18,14 +18,11 @@ discuss some broader related work.
     \begin{center}
         \begin{tabular}{cccc}
             \hline
-              $\PiLang$ & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
+            $\PiLang$     & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
             \hline\hline
-            
-            Types                      & Natural numbers               & Finite sets & 0-cells \tabularnewline
-
-            1-combinators              & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
-
-            2-combinators              & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
+            Types         & Natural numbers               & Finite sets & 0-cells \tabularnewline
+            1-combinators & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
+            2-combinators & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
             \hline
         \end{tabular}
     \end{center}
@@ -88,9 +85,9 @@ discuss some broader related work.
 \paragraph{Coherence and Rewriting}
 
 Higher-order term-rewriting systems and word problems have a long history of being formalised in proof assistants like
-    {homotopy.io}, Agda, Coq and Lean~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main
+    {homotopy.io}, Agda, Coq and Lean. As part of the proof of our main
 result, we developed a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem.
-\citet{hiverCoqCombiCoxeterPresentation2021} describes an explicit algorithm for producing normal forms. It could
+\citet{hiverCoqCombiCoxeterPresentation2021} describes an explicit algorithm for producing normal forms, which could
 provide an alternative to our rewriting system. Other encodings of permutations as listed vectors, matrices, inductively
 generated trees (Motzkin trees), Young diagrams, or string diagrams, proved either difficult to formalise in type theory
 or difficult to relate directly to the primitive type isomorphisms of $\PiLang$. The automatic
@@ -105,12 +102,11 @@ see~\cite{forestCoherenceGrayCategories2018,beylinExtractingProofCoherence1996}.
 
 %%%%%%%%%%%%%%
 \paragraph{Computing with Univalence} In HoTT, univalence characterises the path type in the universe as equivalences of
-types. The map $\term{idtoeqv} : A \id_{\UU} B \to A \eqv B$ can be easily constructed using path induction. The term
-$\term{ua} : A \eqv B \to A \id_{\UU} B$, its computation rule
-$\term{ua_\beta} : (e : A \eqv B) \to \term{idtoeqv}(\term{ua}(e)) \id e$, and its extensionality rule
-$\term{ua_\eta} : (p : A \id_{\UU} B) \to p \id \term{ua}(\term{idtoeqv(p)})$ are generally added as postulates when
-formalising in Agda. Together, $\term{ua}$ and $\term{ua}_\beta$ give the full univalence axiom
-$(A \eqv B) \eqv (A \id_{\UU} B)$~\cite[Theorem 3.5]{ortonDecomposingUnivalenceAxiom2018}.
+types. The map $\term{idtoeqv} : A \id_{\UU} B \to A \eqv B$ is constructed using path induction. The term $\term{ua} :
+{A \eqv B \to A \id_{\UU} B}$, its computation rule $\term{ua_\beta} : {(e : A \eqv B) \to \term{idtoeqv}(\term{ua}(e))
+\id e}$, and its extensionality rule $\term{ua_\eta} : {(p : A \id_{\UU} B) \to p \id \term{ua}(\term{idtoeqv(p)})}$ are
+generally added as postulates when formalising in Agda. Together, $\term{ua}$ and $\term{ua}_\beta$ give the full
+univalence axiom ${(A \eqv B) \eqv (A \id_{\UU} B)}$ \cite[Theorem 3.5]{ortonDecomposingUnivalenceAxiom2018}.
 % Let's think of the $\PiLang$ combinators as describing the inhabitants of the identity type of finite types.
 By giving a computable presentation for a univalent subuniverse, we are able to describe its path space syntactically
 via a complete equational axiomatisation of the equivalences between types in the subuniverse. Univalent
@@ -123,9 +119,9 @@ in general, is of course undecidable~\cite{krogmeierDecidableSynthesisPrograms20
 circuits, it is decidable, as we have shown, but still far from trivial, which matches the need to assert the existence
 of $\term{ua}$ without giving a constructive argument. Then, the computation rule $\term{ua_\beta}$ expresses the fact
 that program synthesis is sound, while $\term{ua_\eta}$ corresponds to the soundness of the equational theory ($\PiLang$
-2-combinators). Thus, our results suggest a new computational interpretation of the univalence principle, which provides
-an intuition on why certain constructions are hard (or impossible in the general case). There are other, different
-approaches to computing with univalence,
+2-combinators). Thus, our results suggest a new way of thinking about computing using the univalence principle, which
+provides an intuition on why certain constructions are hard (or impossible in the general case). There are other,
+different approaches to computing with univalence,
 in~\cite{angiuliInternalizingRepresentationIndependence2021,tabareauMarriageUnivalenceParametricity2021}, and in Cubical
 Type Theory\cite{angiuliComputationalSemanticsCartesianCubical2019,vezzosiCubicalAgdaDependently2019}.
 
@@ -187,14 +183,14 @@ bicategorical models of (differential) linear logic~\cite{melliesTemplateGamesDi
 from $\SymMonCat$, the 2-category of (small) symmetric monoidal categories, strong symmetric monoidal functors, and
 monoidal natural transformations, to the 2-category $\CatCat$, has a left adjoint giving the free symmetric monoidal
 category $\FSM[\CCat{C}]$ on a category $\CCat{C}$. This is a 2-monad on
-$\CatCat$~\cite{blackwellTwodimensionalMonadTheory1989}, whose algebras are (strict) symmetric monoidal categories. Its
-construction is known in the literature~\cite{abramskyAbstractScalarsLoops2005}.  Concretely, the objects of
-$\FSM[\CCat{C}]$ are given by lists of objects of $\CCat{C}$, that is, a pair $(n:\Nat, A:[n] \to \CCat{C}_{0})$;
-morphisms between $(n,A)$ and $(n,B)$ are pairs $(\pi,\lambda)$ where $\pi$ is a permutation of $[n]$, and
-$\lambda_{i} : A_{i} \to B_{\pi(i)}$ for $1 \leq i \leq n$. Abstractly, this is given by the Grothendieck construction
-$\int F$ of the functor $F : \BFin \to \CatCat$ from the groupoid of finite sets and bijections to $\CatCat$, assigning
-each natural number $n$ to the $n$-power $C^{n}$ of $C$, and each permutation on $[n]$ inducing an endofunctor on
-$C^{n}$ by action. The groupoid $\BFin$ is the free symmetric monoidal category (groupoid) on one generator, $\FSM[\unit]$.
+$\CatCat$~\cite{blackwellTwodimensionalMonadTheory1989}, whose algebras are (strict) symmetric monoidal categories. A
+construction of $\FSM$ is given by~\citet{abramskyAbstractScalarsLoops2005}. Concretely, the objects of $\FSM[\CCat{C}]$
+are given by lists of objects of $\CCat{C}$, that is, a pair $(n:\Nat, A:[n] \to \CCat{C}_{0})$; morphisms between
+$(n,A)$ and $(n,B)$ are pairs $(\pi,\lambda)$ where $\pi$ is a permutation of $[n]$, and $\lambda_{i} : A_{i} \to
+B_{\pi(i)}$ for $1 \leq i \leq n$. Abstractly, this is given by the Grothendieck construction $\int F$ of the functor $F
+: \BFin \to \CatCat$ from the groupoid of finite sets and bijections to $\CatCat$, assigning each natural number $n$ to
+the $n$-power $C^{n}$ of $C$, and each permutation on $[n]$ inducing an endofunctor on $C^{n}$ by action. The groupoid
+$\BFin$ is the free symmetric monoidal category (groupoid) on one generator, $\FSM[\unit]$.
 
 Coherence and normalisation problems for monoids in constructive type theory using coherence for monoidal categories
 were studied by \citet{beylinExtractingProofCoherence1996}. In HoTT, coherence for the free monoidal groupoid over a

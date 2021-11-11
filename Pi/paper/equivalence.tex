@@ -24,13 +24,13 @@ The translations between the languages are defined separately on types, 1-combin
 terminology of Normalisation by Evaluation (NbE), the translations from the left to the right, going from the syntax
 towards the semantics, are called $\evalt$ and the translations the other way are called $\quotet$.
 
-To state our results formally, we organise the syntax for each language using a technical device, called a syntactic
-category. We define them formally in the appendix, and only state our results here. For each of the $\PiLang$,
-$\PiPlusLang$ and $\PiHatLang$ languages, their syntactic categories, respectively $\PiCat$, $\PiPlusCat$ and
-$\PiHatCat$, have 0-cells for types ($U$, $\UPlus$, and $\UHat$), 1-cells for 1-combinators ($\iso$, $\isop$, and
-$\isoh$), and 2-cells for 2-combinators ($\Iso$, $\Isop$, and $\Isoh$). We can show that these syntactic categories here
-are actually $(2,0)$-categories, since all the 1-cells and 2-cells are invertible. They are also locally-strict, or
-locally-posetal, because there is at most one 2-cell between compatible 1-cells.
+To state our results formally, we organise the syntax for each language using its syntactic category. We define them
+formally in the appendix, and only state our results here. For each of the $\PiLang$, $\PiPlusLang$ and $\PiHatLang$
+languages, their syntactic categories, respectively $\PiCat$, $\PiPlusCat$ and $\PiHatCat$, have 0-cells for types ($U$,
+$\UPlus$, and $\UHat$), 1-cells for 1-combinators ($\iso$, $\isop$, and $\isoh$), and 2-cells for 2-combinators ($\Iso$,
+$\Isop$, and $\Isoh$). These syntactic categories here are actually $(2,0)$-categories, since all the 1-cells and
+2-cells are invertible. They are also locally-strict, or locally-posetal, because there is at most one 2-cell between
+compatible 1-cells.
 
 \begin{toappendix}
   \begin{proposition}
@@ -157,11 +157,11 @@ appropriate set of 2-combinators. We give the syntax, again omitting 2-combinato
 \end{figure}
 
 As described, $\PiHatLang$ doesn't have a tensor product, but we can build it simply by adding up natural numbers, and,
-we need to verify that this indeed equips $\PiHatCat$ with a symmetric monoidal structure.~\footnote{Since each object
-is a natural number, this makes $\PiHatCat$ a \emph{PROP}, that is, a products and permutations category.}
+we need to verify that this indeed equips $\PiHatCat$ with a symmetric monoidal structure. Since each object is a
+natural number, this makes $\PiHatCat$ a \emph{PROP}, that is, a products and permutations category.
 
 To produce a braiding $n + m \isoh m + n$ from adjacent transpositions, we recursively traverse the left subexpression,
-swapping each element using adjacent transpositions along the elements on the right, placing it in the right position.
+swapping each element using adjacent transpositions along the elements on the right, placing it in the correct position.
 The computational content of this translation can be visualised using tree transformations, for the recursive case
 in~\cref{fig:plusplusswap}. The challenging part is showing that these moves are coherent with respect to 2-combinators.
 
@@ -231,6 +231,7 @@ words in $\Sn$ and then to automorphisms using~\cref{prop:sn-lehmer-fin-equiv}. 
 2-paths between loops in $\UFin$.
 
 \begin{definition}[$\evalh$]
+  \label{def:evalh}
   \begin{align*}
     \evalh_{0} & : \UHat \to \UFin                                                          \\
     \evalh_{1} & : (c : t_{1} \isoh t_{2}) \to \evalh_{0}(t_{1}) \id \evalh_{0}(t_{2})      \\

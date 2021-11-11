@@ -29,8 +29,8 @@ reversible circuits can be more conveniently expressed as isomorphisms over alge
 $\PiLang$ family of reversible languages~\cite*{jamesInformationEffects2012, jamesTheseusHighLevelLanguage2014}. The
 syntax of $\PiLang$ is inspired by the sound and complete axiomatisation of type isomorphisms of lambda
 calculi~\cite{fioreRemarksIsomorphismsTyped2002}, with respect to the bicartesian structure, that is, product and sum
-types. $\PiLang$ programs correspond to type isomorphisms of finite types, and our observation is that the syntax of
-$\PiLang$ is a presentation of the free symmetric rig groupoid (on zero generators).
+types. $\PiLang$ programs correspond to type isomorphisms of finite types, and in this paper, we make the observation
+that the syntax of $\PiLang$ is a presentation of the free symmetric rig groupoid (on zero generators).
 
 It is folklore that the groupoid of finite sets and bijections is the free symmetric rig groupoid on zero
 generators~\cite{laplazaCoherenceDistributivity1972, kellyCoherenceTheoremsLax1974, baezFiniteSetsFeynman2001}. Our main
@@ -182,13 +182,13 @@ could specify a more compact way of describing this process, since the key infor
 needed to apply to an element. We could describe this procedure using a code $(0, 1, 2)$, which says how many inversions
 to apply to elements $a$, $b$, and $c$, respectively.
 
-Using this algorithm, we can turn a type isomorphism into a permutation of finite sets, relating the operational
-semantics of $\PiLang$ as permutations of finite sets of bits, to our denotational semantics. This allows us to
-establish full abstraction and adequacy.
+Using this algorithm, we can turn a type isomorphism into a bijection of finite sets, relating the operational semantics
+of $\PiLang$ as permutations of finite sets of bits, to our denotational semantics. This allows us to establish full
+abstraction and adequacy.
 
 \paragraph{Outline and Contributions} Our main result is a proof of the soundness and completeness of $\PiLang$ with
-respect to its semantics in the weak symmetric rig groupoid of finite sets and permutations, formalised in HoTT/UF. We
-state our result as a Curry-Howard-Lambek correspondence for Reversible
+respect to its semantics in the weak symmetric rig groupoid of finite sets, bijections, and homotopies, formalised in
+HoTT/UF. We state our result as a Curry-Howard-Lambek correspondence for Reversible
 Logic~\cite{sparksSuperstructuralReversibleLogic2014}, Reversible Programming
 Languages~\cite{jamesInformationEffects2012}, and Symmetric Rig Groupoids~\cite{laplazaCoherenceDistributivity1972,
 kellyCoherenceTheoremsLax1974, caretteComputingSemiringsWeak2016}, using which we can build a toolbox of technical
