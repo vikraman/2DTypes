@@ -1,9 +1,6 @@
 # Abstract
 
-The Pi family of reversible programming languages for boolean circuits is presented as a syntax of combinators
-witnessing type isomorphisms of algebraic data types. In this paper, we give a denotational semantics for this language,
-using weak groupoids à la Homotopy Type Theory, and show how to derive an equational theory for it, presented by
-2-combinators witnessing equivalences of type isomorphisms.
+The Pi family of reversible programming languages for boolean circuits is presented as a syntax of combinators witnessing type isomorphisms of algebraic data types. In this paper, we give a denotational semantics for this language, using weak groupoids à la Homotopy Type Theory, and show how to derive an equational theory for it, presented by 2-combinators witnessing equivalences of type isomorphisms.
 
 We establish a correspondence between the syntactic groupoid of the language and a formally presented univalent subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and 2-combinators to 2-paths in the universe, which is shown to be sound and complete for both levels, forming an equivalence of groupoids. We use this to establish a Curry-Howard-Lambek correspondence between Reversible Logic, Reversible Programming Languages, and Symmetric Rig Groupoids, by showing that the syntax of Pi is presented by the free symmetric rig groupoid, given by finite sets and bijections.
 
