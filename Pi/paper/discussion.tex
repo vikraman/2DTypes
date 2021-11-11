@@ -13,23 +13,24 @@ suggested by~\citet{caretteComputingSemiringsWeak2016} and~\citet{caretteEmbraci
 have established this correspondence, as summarised in~\cref{fig:table-summary}. In the remainder of this section, we
 discuss some broader related work.
 
-\begin{figure}
+\begin{table}
+    \caption{Summary of the established correspondences}
     \begin{center}
-        \begin{tabular}{|c|c|c|c|}
+        \begin{tabular}{cccc}
             \hline
-            \rowcolor{lightgray} $\PiLang$ & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
-            \hline
-            Types                          & Natural numbers               & Finite sets & 0-cells \tabularnewline
-            \hline
-            1-combinators                  & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
-            \hline
-            2-combinators                  & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
+              $\PiLang$ & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
+            \hline\hline
+            
+            Types                      & Natural numbers               & Finite sets & 0-cells \tabularnewline
+
+            1-combinators              & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
+
+            2-combinators              & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
             \hline
         \end{tabular}
     \end{center}
-    \caption{Summary of the established correspondences TODO: Move above}
     \label{fig:table-summary}
-\end{figure}
+\end{table}
 
 % \begin{center}
 %     \begin{tabular}{c c c}
@@ -87,7 +88,7 @@ discuss some broader related work.
 \paragraph{Coherence and Rewriting}
 
 Higher-order term-rewriting systems and word problems have a long history of being formalised in proof assistants like
-{homotopy.io}, Agda, Coq and Lean~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main
+    {homotopy.io}, Agda, Coq and Lean~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main
 result, we developed a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem.
 \citet{hiverCoqCombiCoxeterPresentation2021} describes an explicit algorithm for producing normal forms. It could
 provide an alternative to our rewriting system. Other encodings of permutations as listed vectors, matrices, inductively
