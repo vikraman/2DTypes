@@ -8,9 +8,9 @@
 
 The circuit model of reversible computation discussed in the previous section is a useful abstraction close to the
 hardware platform. However, since its main data abstraction is a \emph{sequence of wires}, it only provides an
-``assembly-level'' programming abstraction (e.g., \verb|qasm|). As motivated by \citet{LAFONT2003257}, a mathematical
-model based on permutations of finite sets provides a richer algebraic structure, using which we describe a reversible
-programming language in this section.
+``assembly-level'' programming abstraction (e.g., \verb|qasm|). As motivated by
+\citet{lafontAlgebraicTheoryBoolean2003}, a mathematical model based on permutations of finite sets provides a richer
+algebraic structure, using which we describe a reversible programming language in this section.
 
 %%%%%%%%%%%%%%%%%
 \subsection{The $\Pi$ Family of Languages}
@@ -39,7 +39,7 @@ computational content of isomorphisms of finite types, or permutations.
 % of a programming language for permutations~\cite{James:2012:IE:2103656.2103667,Carette2016}:
 
 % A specialised language for programming with permutations on finite sets can be built using ideas going back to Kelly,
-% Laplaza, and Mac Lane~\cite{laplaza72,kelly74,KELLY197197} that the commutative semiring (also known as the commutative
+% Laplaza, and Mac Lane~\cite{laplazaCoherenceDistributivity1972,kelly74,KELLY197197} that the commutative semiring (also known as the commutative
 % rig) of natural numbers exactly characterizes permutations on finite sets. In programming parlance, as shown in
 % Fig.~\ref{fig:pi-terms}, each primitive algebraic identity of commutative rigs becomes a constant in the programming
 % language and the algebraic closure operators become composition operators in the programming language. Once equipped
@@ -181,13 +181,13 @@ $(C,A)$. The two uses of \verb|x| gates in the circuit are now unnecessary as th
 conditional expression using a sequence of one-way conditional expressions (the only ones available in the linear
 circuit model).
 
-All of this is only half the story, however. A sound semantics for $\PiLang$ using weak rig
-groupoids was established by~\citet{caretteComputingSemiringsWeak2016}, and conjectured to be complete. For this
-semantics, \emph{coherence conditions} for symmetric rig groupoids that identify different syntactic representations of the same
-permutation~\cite{laplaza72,caretteComputingSemiringsWeak2016}, were collected  in a
-second level of $\PiLang$ syntax as level-2 combinators.  Each level-2 combinator is of the form $c_1 \isotwo c_2$ for appropriate
-$c_1$ and $c_2$ of the same level-1 type $A \isoone B$ and asserts that $c_1$ and $c_2$ denote the same bijection. For
-example, we have the following level-2 combinators dealing with associativity:
+All of this is only half the story, however. A sound semantics for $\PiLang$ using weak rig groupoids was established
+by~\citet{caretteComputingSemiringsWeak2016}, and conjectured to be complete. For this semantics, \emph{coherence
+conditions} for symmetric rig groupoids that identify different syntactic representations of the same
+permutation~\cite{laplazaCoherenceDistributivity1972,caretteComputingSemiringsWeak2016}, were collected in a second
+level of $\PiLang$ syntax as level-2 combinators.  Each level-2 combinator is of the form $c_1 \isotwo c_2$ for
+appropriate $c_1$ and $c_2$ of the same level-1 type $A \isoone B$ and asserts that $c_1$ and $c_2$ denote the same
+bijection. For example, we have the following level-2 combinators dealing with associativity:
 \medskip
 \leveltwoblockone{}
 
@@ -243,7 +243,7 @@ union of sets, and $\times$ is the cartesian product of sets.
 \end{center}
 
 For combinators, we show explicitly how values reduce along each combinator, similar to a big-step operational
-semantics~\cite{chenComputationalInterpretationCompact2021,theseus}.
+semantics~\cite{chenComputationalInterpretationCompact2021,jamesTheseusHighLevelLanguage2014}.
 
 % The semantics of a combinator $c : A \isoone B$ is a (bijective) function mapping $\denot{A}$ to $\denot{B}$:
 

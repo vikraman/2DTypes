@@ -1,4 +1,23 @@
 
+@inproceedings{aaronsonClassificationReversibleBit2017,
+  title = {The {{Classification}} of {{Reversible Bit Operations}}},
+  booktitle = {8th {{Innovations}} in {{Theoretical Computer Science Conference}} ({{ITCS}} 2017)},
+  author = {Aaronson, Scott and Grier, Daniel and Schaeffer, Luke},
+  editor = {Papadimitriou, Christos H.},
+  year = {2017},
+  series = {Leibniz {{International Proceedings}} in {{Informatics}} ({{LIPIcs}})},
+  volume = {67},
+  pages = {23:1--23:34},
+  publisher = {{Schloss Dagstuhl\textendash Leibniz-Zentrum fuer Informatik}},
+  address = {{Dagstuhl, Germany}},
+  issn = {1868-8969},
+  doi = {10.4230/LIPIcs.ITCS.2017.23},
+  url = {http://drops.dagstuhl.de/opus/volltexte/2017/8173},
+  urldate = {2021-11-10},
+  isbn = {978-3-95977-029-3},
+  keywords = {Boolean logic,Circuit synthesis,Gate classification,Post’s lattice,Reversible computation,Reversible gates}
+}
+
 @inproceedings{abramskyAbstractScalarsLoops2005,
   title = {Abstract {{Scalars}}, {{Loops}}, and {{Free Traced}} and {{Strongly Compact Closed Categories}}},
   booktitle = {Algebra and {{Coalgebra}} in {{Computer Science}}},
@@ -16,6 +35,23 @@
   langid = {english},
   keywords = {Algebraic Description,Monoidal Category,Monoidal Structure,Symmetric Monoidal Category,Tensor Product},
   annotation = {ZSCC: NoCitationData[s1]}
+}
+
+@article{abramskyStructuralApproachReversible2005,
+  title = {A Structural Approach to Reversible Computation},
+  author = {Abramsky, Samson},
+  year = {2005},
+  month = dec,
+  journal = {Theoretical Computer Science},
+  volume = {347},
+  number = {3},
+  pages = {441--464},
+  issn = {03043975},
+  doi = {10.1016/j.tcs.2005.07.002},
+  url = {https://linkinghub.elsevier.com/retrieve/pii/S0304397505003804},
+  urldate = {2021-11-10},
+  abstract = {Reversibility is a key issue in the interface between computation and physics, and of growing importance as miniaturization progresses towards its physical limits. Most foundational work on reversible computing to date has focussed on simulations of low-level machine models. By contrast, we develop a more structural approach. We show how high-level functional programs can be mapped compositionally (i.e. in a syntax-directed fashion) into a simple kind of automata which are immediately seen to be reversible. The size of the automaton is linear in the size of the functional term. In mathematical terms, we are building a concrete model of functional computation. This construction stems directly from ideas arising in Geometry of Interaction and Linear Logic\textemdash but can be understood without any knowledge of these topics. In fact, it serves as an excellent introduction to them. At the same time, an interesting logical delineation between reversible and irreversible forms of computation emerges from our analysis.},
+  langid = {english}
 }
 
 @misc{aleksandrowiczQiskitOpensourceFramework2019,
@@ -80,6 +116,23 @@
   annotation = {ZSCC: 0000004}
 }
 
+@incollection{baezFiniteSetsFeynman2001,
+  title = {From {{Finite Sets}} to {{Feynman Diagrams}}},
+  booktitle = {Mathematics {{Unlimited}} \textemdash{} 2001 and {{Beyond}}},
+  author = {Baez, John C. and Dolan, James},
+  editor = {Engquist, Bj{\"o}rn and Schmid, Wilfried},
+  year = {2001},
+  pages = {29--50},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/978-3-642-56478-9_3},
+  url = {https://doi.org/10.1007/978-3-642-56478-9_3},
+  urldate = {2021-11-10},
+  abstract = {Prediction is hard, especially when it comes to the future, but barring some unforeseen catastrophe, we can expect the amount of mathematics produced in the 21st century to dwarf that of all the centuries that came before. By the very nature of its subject matter, mathematics is capable of limitless expansion. Thanks to rapid improvements in technology, our computational power is in a phase of exponential growth. Even if this growth slows, we have barely begun to exploit our new abilities. Thus the interesting question is not whether the 21st century will see an unprecedented explosion of new mathematics. It is whether anyone will ever understand more than the tiniest fraction of this new mathematics \textemdash{} or even the mathematics we already have.},
+  isbn = {978-3-642-56478-9},
+  langid = {english}
+}
+
 @article{baezHIGHERDIMENSIONALALGEBRA2010,
   title = {{{HIGHER DIMENSIONAL ALGEBRA VII}}: {{GROUPOIDIFICATION}}},
   author = {Baez, John C and Hoffnung, Alexander E and Walker, Christopher D},
@@ -92,6 +145,54 @@
   langid = {english},
   keywords = {⛔ No DOI found},
   annotation = {ZSCC: 0000054}
+}
+
+@article{bakerLivelyLinearLisp1992,
+  title = {Lively Linear {{Lisp}}: ``Look Ma, No Garbage!''},
+  shorttitle = {Lively Linear {{Lisp}}},
+  author = {Baker, Henry G.},
+  year = {1992},
+  month = aug,
+  journal = {ACM SIGPLAN Notices},
+  volume = {27},
+  number = {8},
+  pages = {89--98},
+  issn = {0362-1340},
+  doi = {10.1145/142137.142162},
+  url = {https://doi.org/10.1145/142137.142162},
+  urldate = {2021-11-10},
+  abstract = {Linear logic has been proposed as one solution to the problem of garbage collection and providing efficient "update-in-place" capabilities within a more functional language. Linear logic conserves accessibility, and hence provides a mechanical metaphor which is more appropriate for a distributed-memory parallel processor in which copying is explicit. However, linear logic's lack of sharing may introduce significant inefficiencies of its own.We show an efficient implementation of linear logic called Linear Lisp that runs within a constant factor of non-linear logic. This Linear Lisp allows RPLACX operations, and manages storage as safely as a non-linear Lisp, but does not need a garbage collector. Since it offers assignments but no sharing, it occupies a twilight zone between functional languages and imperative languages. Our Linear Lisp Machine offers many of the same capabilities as combinator/graph reduction machines, but without their copying and garbage collection problems.}
+}
+
+@inproceedings{bakerNREVERSALFortuneThermodynamics1992,
+  title = {{{NREVERSAL}} of Fortune \textemdash{} {{The}} Thermodynamics of Garbage Collection},
+  booktitle = {Memory {{Management}}},
+  author = {Baker, Henry G.},
+  editor = {Bekkers, Yves and Cohen, Jacques},
+  year = {1992},
+  series = {Lecture {{Notes}} in {{Computer Science}}},
+  pages = {507--524},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/BFb0017210},
+  abstract = {The need to reverse a computation arises in many contexts\textemdash debugging, editor undoing, optimistic concurrency undoing, speculative computation undoing, trace scheduling, exception handling undoing, database recovery, optimistic discrete event simulations, subjunctive computing, etc. The need to analyze a reversed computation arises in the context of static analysis\textemdash liveness analysis, strictness analysis, type inference, etc. Traditional means for restoring a computation to a previous state involve checkpoints; checkpoints require time to copy, as well as space to store, the copied material. Traditional reverse abstract interpretation produces relatively poor information due to its inability to guess the previous values of assigned-to variables.We propose an abstract computer model and a programming language\textemdash{$\Psi$}-Lisp\textemdash whose primitive operations are injective and hence reversible, thus allowing arbitrary undoing without the overheads of checkpointing. Such a computer can be built from reversible conservative logic circuits, with the serendipitous advantage of dissipating far less heat than traditional Boolean AND/OR/NOT circuits. Unlike functional languages, which have one ``state'' for all times, {$\Psi$}-Lisp has at all times one ``state'', with unique predecessor and successor states.Compiling into a reversible pseudocode can have benefits even when targeting a traditional computer. Certain optimizations, e.g., update-in-place, and compile-time garbage collection may be more easily performed, because the information may be elicited without the difficult and time-consuming iterative abstract interpretation required for most non-reversible models.In a reversible machine, garbage collection for recycling storage can always be performed by a reversed (sub)computation. While this ``collection is reversed mutation'' insight does not reduce space requirements when used for the computation as a whole, it does save space when used to recycle at finer scales. This insight also provides an explanation for the fundamental importance of the push-down stack both for recognizing palindromes and for managing storage.Reversible computers are related to Prolog, linear logic and chemical abstract machines.},
+  isbn = {978-3-540-47315-2},
+  langid = {english},
+  keywords = {Functional Language,Garbage Collection,Garbage Collector,Lambda Calculus,Reversible Computer}
+}
+
+@article{beauregardCircuitShorAlgorithm2003,
+  title = {Circuit for {{Shor}}'s Algorithm Using 2n+3 Qubits},
+  author = {Beauregard, Stephane},
+  year = {2003},
+  month = mar,
+  journal = {Quantum Information \& Computation},
+  volume = {3},
+  number = {2},
+  pages = {175--185},
+  issn = {1533-7146},
+  abstract = {We try to minimize the number of qubits needed to factor an integer of n bits using Shor's algorithm on a quantum computer. We introduce a circuit which uses 2n + 3 qubits and 0(n3lg(n)) elementary quantum gates in a depth of 0(n3) to implement the factorization algorithm. The circuit is computable in polynomial time on a classical computer and is completely general as it does not rely on any property of the number to be factored.},
+  keywords = {factorization,modular arithmetics,quantum circuits}
 }
 
 @article{bekeCategorificationTermRewriting2011,
@@ -129,6 +230,20 @@
   annotation = {ZSCC: 0000000}
 }
 
+@article{bennettFundamentalPhysicalLimits1985,
+  title = {The {{Fundamental Physical Limits}} of {{Computation}}},
+  author = {Bennett, Charles H. and Landauer, Rolf},
+  year = {1985},
+  journal = {Scientific American},
+  volume = {253},
+  number = {1},
+  pages = {48--57},
+  publisher = {{Scientific American, a division of Nature America, Inc.}},
+  issn = {0036-8733},
+  url = {https://www.jstor.org/stable/24967723},
+  urldate = {2021-11-10}
+}
+
 @article{bergerTeachingOrdinalPatterns2019,
   title = {Teaching {{Ordinal Patterns}} to a {{Computer}}: Efficient {{Encoding Algorithms Based}} on the {{Lehmer Code}}},
   shorttitle = {Teaching {{Ordinal Patterns}} to a {{Computer}}},
@@ -145,27 +260,6 @@
   urldate = {2021-07-05},
   abstract = {Ordinal patterns are the common basis of various techniques used in the study of dynamical systems and nonlinear time series analysis. The present article focusses on the computational problem of turning time series into sequences of ordinal patterns. In a first step, a numerical encoding scheme for ordinal patterns is proposed. Utilising the classical Lehmer code, it enumerates ordinal patterns by consecutive non-negative integers, starting from zero. This compact representation considerably simplifies working with ordinal patterns in the digital domain. Subsequently, three algorithms for the efficient extraction of ordinal patterns from time series are discussed, including previously published approaches that can be adapted to the Lehmer code. The respective strengths and weaknesses of those algorithms are discussed, and further substantiated by benchmark results. One of the algorithms stands out in terms of scalability: its run-time increases linearly with both the pattern order and the sequence length, while its memory footprint is practically negligible. These properties enable the study of high-dimensional pattern spaces at low computational cost. In summary, the tools described herein may improve the efficiency of virtually any ordinal pattern-based analysis method, among them quantitative measures like permutation entropy and symbolic transfer entropy, but also techniques like forbidden pattern identification. Moreover, the concepts presented may allow for putting ideas into practice that up to now had been hindered by computational burden. To enable smooth evaluation, a function library written in the C programming language, as well as language bindings and native implementations for various numerical computation environments are provided in the supplements.},
   langid = {english},
-  annotation = {ZSCC: 0000006}
-}
-
-@article{bergerTeachingOrdinalPatterns2019a,
-  title = {Teaching {{Ordinal Patterns}} to a {{Computer}}: Efficient {{Encoding Algorithms Based}} on the {{Lehmer Code}}},
-  shorttitle = {Teaching {{Ordinal Patterns}} to a {{Computer}}},
-  author = {Berger, Sebastian and Kravtsiv, Andrii and Schneider, Gerhard and Jordan, Denis},
-  year = {2019},
-  month = oct,
-  journal = {Entropy},
-  volume = {21},
-  number = {10},
-  pages = {1023},
-  publisher = {{Multidisciplinary Digital Publishing Institute}},
-  doi = {10.3390/e21101023},
-  url = {https://www.mdpi.com/1099-4300/21/10/1023},
-  urldate = {2021-01-30},
-  abstract = {Ordinal patterns are the common basis of various techniques used in the study of dynamical systems and nonlinear time series analysis. The present article focusses on the computational problem of turning time series into sequences of ordinal patterns. In a first step, a numerical encoding scheme for ordinal patterns is proposed. Utilising the classical Lehmer code, it enumerates ordinal patterns by consecutive non-negative integers, starting from zero. This compact representation considerably simplifies working with ordinal patterns in the digital domain. Subsequently, three algorithms for the efficient extraction of ordinal patterns from time series are discussed, including previously published approaches that can be adapted to the Lehmer code. The respective strengths and weaknesses of those algorithms are discussed, and further substantiated by benchmark results. One of the algorithms stands out in terms of scalability: its run-time increases linearly with both the pattern order and the sequence length, while its memory footprint is practically negligible. These properties enable the study of high-dimensional pattern spaces at low computational cost. In summary, the tools described herein may improve the efficiency of virtually any ordinal pattern-based analysis method, among them quantitative measures like permutation entropy and symbolic transfer entropy, but also techniques like forbidden pattern identification. Moreover, the concepts presented may allow for putting ideas into practice that up to now had been hindered by computational burden. To enable smooth evaluation, a function library written in the C programming language, as well as language bindings and native implementations for various numerical computation environments are provided in the supplements.},
-  copyright = {http://creativecommons.org/licenses/by/3.0/},
-  langid = {english},
-  keywords = {Lehmer code,ordinal patterns,permutation entropy,symbolic dynamics,symbolic transfer entropy},
   annotation = {ZSCC: 0000006}
 }
 
@@ -203,6 +297,14 @@
   abstract = {We consider a 2-monad T with rank on a complete and cocomplete 2-category, and write T-Alg for the 2-category given the T-algebras, the morphisms preserving the structure to within coherent isomorphisms, and the appropriate 2-cells; T-Algs is the sub-2-category obtained by taking the strict morphisms. We show that T-Alg admits pseudo-limits and certain other limits, and that the inclusion 2-functor T-Algs \textrightarrow{} T-Alg has a left adjoint. We introduce the notion of flexible algebra, and use it to prove that T-Alg admits all bicolimits and that the 2-functor T-Alg \textrightarrow{} S-Alg induced by a monad-map S \textrightarrow{} T admits a left biadjoint.},
   langid = {english},
   annotation = {ZSCC: 0000302}
+}
+
+@inproceedings{bowmanDaggerTracedSymmetric2011,
+  title = {Dagger {{Traced Symmetric Monoidal Categories}} and {{Reversible Programming}}},
+  booktitle = {Workshop on {{Reversible Computation}}},
+  author = {Bowman, William J. and James, Roshan P. and Sabry, Amr},
+  year = {2011},
+  abstract = {We develop a reversible programming language from elementary mathematical and categorical foundations. The core language is based on isomorphisms between finite types: it is complete for combinational circuits and has an elegant semantics in dagger symmetric monoidal categories. The categorical semantics enables the definition of canonical and well-behaved reversible loop operators based on the notion of traced categories. The extended language can express recursive reversible algorithms on recursive types such as the natural numbers, lists, and trees. Computations in the extended language may diverge but every terminating computation is still reversible.}
 }
 
 @inproceedings{buchholtzHigherGroupsHomotopy2018,
@@ -256,6 +358,21 @@
   isbn = {978-3-662-49497-4 978-3-662-49498-1},
   langid = {english},
   annotation = {ZSCC: NoCitationData[s0]}
+}
+
+@article{caretteEmbracingLawsPhysics2021,
+  title = {Embracing the {{Laws}} of {{Physics}}: Three {{Reversible Models}} of {{Computation}}},
+  shorttitle = {Embracing the {{Laws}} of {{Physics}}},
+  author = {Carette, Jacques and James, Roshan P. and Sabry, Amr},
+  year = {2021},
+  journal = {Advances in Computers},
+  volume = {126},
+  url = {http://arxiv.org/abs/1811.03678},
+  urldate = {2021-11-10},
+  abstract = {Our main models of computation (the Turing Machine and the RAM) and most modern computer architectures make fundamental assumptions about which primitive operations are realizable on a physical computing device. The consensus is that these primitive operations include logical operations like conjunction, disjunction and negation, as well as reading and writing to a large collection of memory locations. This perspective conforms to a macro-level view of physics and indeed these operations are realizable using macro-level devices involving thousands of electrons. This point of view is however incompatible with computation realized using quantum devices or analyzed using elementary thermodynamics as both these fundamental physical theories imply that information is a conserved quantity of physical processes and hence of primitive computational operations.},
+  langid = {english},
+  keywords = {68Q05,Computer Science - Logic in Computer Science,Computer Science - Programming Languages,Mathematics - Category Theory,Quantum Physics},
+  annotation = {To appear}
 }
 
 @article{caretteReversibleProgramsUnivalent2018,
@@ -315,10 +432,10 @@
   author = {Choudhury, Vikraman and Karwowski, Jacek and Sabry, Amr},
   year = {2021},
   month = oct,
-  doi = {10.5281/zenodo.5554623},
-  url = {https://zenodo.org/record/5554623},
-  urldate = {2021-10-27},
-  abstract = {Artifact submission for POPL'22 AEC},
+  doi = {10.5281/zenodo.5671746},
+  url = {https://zenodo.org/record/5671746},
+  urldate = {2021-11-11},
+  abstract = {Artifact for POPL'22},
   howpublished = {Zenodo}
 }
 
@@ -416,6 +533,23 @@
   annotation = {ZSCC: 0000016}
 }
 
+@inproceedings{danosReversibleCommunicatingSystems2004,
+  title = {Reversible {{Communicating Systems}}},
+  booktitle = {{{CONCUR}} 2004 - {{Concurrency Theory}}},
+  author = {Danos, Vincent and Krivine, Jean},
+  editor = {Gardner, Philippa and Yoshida, Nobuko},
+  year = {2004},
+  series = {Lecture {{Notes}} in {{Computer Science}}},
+  pages = {292--307},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/978-3-540-28644-8_19},
+  abstract = {One obtains in this paper a process algebra RCCS, in the style of CCS, where processes can backtrack. Backtrack, just as plain forward computation, is seen as a synchronization and incurs no additional cost on the communication structure. It is shown that, given a past, a computation step can be taken back if and only if it leads to a causally equivalent past.},
+  isbn = {978-3-540-28644-8},
+  langid = {english},
+  keywords = {Forward Action,Forward Transition,Monitor Process,Naming Scheme,Structural Congruence}
+}
+
 @book{davisGeometryTopologyCoxeter2008,
   title = {The Geometry and Topology of Coxeter Groups},
   author = {Davis, Michael},
@@ -428,6 +562,22 @@
   lccn = {QA183 .D38 2008},
   keywords = {Coxeter groups,Geometric group theory},
   annotation = {ZSCC: NoCitationData[s1]  OCLC: ocm77485786}
+}
+
+@article{dipierroReversibleCombinatoryLogic2006,
+  title = {Reversible Combinatory Logic},
+  author = {Di Pierro, Alessandra and Hankin, Chris and Wiklicky, Herbert},
+  year = {2006},
+  month = aug,
+  journal = {Mathematical Structures in Computer Science},
+  volume = {16},
+  number = {4},
+  pages = {621--637},
+  issn = {0960-1295},
+  doi = {10.1017/S0960129506005391},
+  url = {https://doi.org/10.1017/S0960129506005391},
+  urldate = {2021-11-10},
+  abstract = {The \$\textbackslash lambda\$-calculus is destructive: its main computational mechanism, beta reduction, destroys the redex, which makes replaying the computational steps impossible. Combinatory logic is a variant of the \$\textbackslash lambda\$-calculus that maintains irreversibility. Recently, reversible computational models have been studied mainly in the context of quantum computation, as (without measurements) quantum physics is inherently reversible. However, reversibility also fundamentally changes the semantical framework in which classical computation has to be investigated. We describe an implementation of classical combinatory logic in a reversible calculus for which we present an algebraic model based on a generalisation of the notion of a group.}
 }
 
 @article{duboisTestsProofsCustom2018,
@@ -465,6 +615,22 @@
   langid = {english},
   keywords = {Categorification,Groupoid of finite sets,Rig categories},
   annotation = {ZSCC: 0000001}
+}
+
+@article{feynmanSimulatingPhysicsComputers1982,
+  title = {Simulating Physics with Computers},
+  author = {Feynman, Richard P.},
+  year = {1982},
+  month = jun,
+  journal = {International Journal of Theoretical Physics},
+  volume = {21},
+  number = {6},
+  pages = {467--488},
+  issn = {1572-9575},
+  doi = {10.1007/BF02650179},
+  url = {https://doi.org/10.1007/BF02650179},
+  urldate = {2021-11-10},
+  langid = {english}
 }
 
 @article{fioreCartesianClosedBicategory2008,
@@ -568,6 +734,33 @@
   keywords = {000 Computer science; knowledge; general works,Computer Science}
 }
 
+@phdthesis{frankReversibilityEfficientComputing1999,
+  title = {Reversibility for Efficient Computing},
+  author = {Frank, Michael P.},
+  year = {1999},
+  address = {{USA}},
+  abstract = {Today's computers are based on irreversible logic devices, which have been known to be fundamentally energy-inefficient for several decades. Recently, alternative reversible logic technologies have improved rapidly, and are now becoming practical. In traditional models of computation, pure reversibility seems to decrease overall computational efficiency; I provide a proof to this effect. However, traditional models ignore important physical constraints on information processing. This thesis gives the first analysis demonstrating that in a realistic model of computation that accounts for thermodynamic issues, as well as other physical constraints, the judicious use of reversible computing can strictly increase asymptotic computational efficiency, as machine sizes increase. I project real benefits for supercomputing at a large (but achievable) scale in the fairly near term. And with proposed future computing technologies, I show that reversibility will benefit computing at all scales. Next, the thesis demonstrates that reversible computing techniques do not make computer design much more difficult. I describe how to design asymptotically efficient processors using an ``adiabatic'' reversible electronic logic technology that can be built with today's microprocessor fabrication processes. I describe a simple universal reversible parallel processor chip that our group recently fabricated, and a reversible instruction set for a more traditional RISC-style uniprocessor. Finally, I describe techniques for programming reversible computers. I present a high-level language and a compiler suitable for coding efficient reversible algorithms, and I describe a variety of example algorithms, including efficient reversible sorting, searching, arithmetic, matrix, and graph algorithms. As an example application, I present a linear-time, constant-space reversible program for simulating the Schr\"odinger wave equation of quantum mechanics. (Copies available exclusively from MIT Libraries, Rm. 14-0551, Cambridge, MA 02139-4307. Ph. 617-253-5668; Fax 617-253-1690.)},
+  school = {Massachusetts Institute of Technology},
+  annotation = {AAI0800784}
+}
+
+@article{fredkinConservativeLogic1982,
+  title = {Conservative Logic},
+  author = {Fredkin, Edward and Toffoli, Tommaso},
+  year = {1982},
+  month = apr,
+  journal = {International Journal of Theoretical Physics},
+  volume = {21},
+  number = {3},
+  pages = {219--253},
+  issn = {1572-9575},
+  doi = {10.1007/BF01857727},
+  url = {https://doi.org/10.1007/BF01857727},
+  urldate = {2021-11-10},
+  abstract = {Conservative logic is a comprehensive model of computation which explicitly reflects a number of fundamental principles of physics, such as the reversibility of the dynamical laws and the conservation of certainadditive quantities (among which energy plays a distinguished role). Because it more closely mirrors physics than traditional models of computation, conservative logic is in a better position to provide indications concerning the realization of high-performance computing systems, i.e., of systems that make very efficient use of the ``computing resources'' actually offered by nature. In particular, conservative logic shows that it is ideally possible to build sequential circuits with zero internal power dissipation. After establishing a general framework, we discuss two specific models of computation. The first uses binary variables and is the conservative-logic counterpart of switching theory; this model proves that universal computing capabilities are compatible with the reversibility and conservation constraints. The second model, which is a refinement of the first, constitutes a substantial breakthrough in establishing a correspondence between computation and physics. In fact, this model is based on elastic collisions of identical ``balls,'' and thus is formally identical with the atomic model that underlies the (classical) kinetic theory of perfect gases. Quite literally, the functional behavior of a general-purpose digital computer can be reproduced by a perfect gas placed in a suitably shaped container and given appropriate initial conditions.},
+  langid = {english}
+}
+
 @article{gurskiInfiniteLoopSpaces2013,
   title = {Infinite Loop Spaces, and Coherence for Symmetric Monoidal Bicategories},
   author = {Gurski, Nick and Osorno, Ang{\'e}lica M.},
@@ -604,6 +797,37 @@
   langid = {english},
   keywords = {03B15},
   annotation = {ZSCC: 0000004}
+}
+
+@book{heyFeynmanComputationExploring1999,
+  title = {Feynman and Computation: Exploring the Limits of Computers},
+  shorttitle = {Feynman and Computation},
+  editor = {Hey, Anthony J. G.},
+  year = {1999},
+  publisher = {{Perseus Books}},
+  address = {{USA}},
+  isbn = {978-0-7382-0057-6}
+}
+
+@misc{hiverCoqCombiCoxeterPresentation2021,
+  title = {Coq-{{Combi}}: The {{Coxeter Presentation}} of the {{Symmetric Group}}},
+  author = {Hiver, Florent},
+  year = {2021},
+  month = oct,
+  url = {https://github.com/math-comp/Coq-Combi/blob/1ba924ecc1a1c7714a9b3a2dbb23d91af2a1193a/theories/SymGroup/presentSn.v},
+  urldate = {2021-11-10},
+  abstract = {Algebraic Combinatorics in Coq},
+  copyright = {GPL-3.0},
+  howpublished = {Mathematical Components},
+  annotation = {Based on unfinished notes 'The Symmetric Group', by Alain Lascoux}
+}
+
+@article{huelsbergenLogicallyReversibleEvaluator1996,
+  title = {A {{Logically Reversible Evaluator}} for the {{Call}}-by-Name {{Lambda Calculus}}},
+  author = {Huelsbergen, Lorenz},
+  year = {1996},
+  journal = {InterJournal Complex Systems},
+  volume = {46}
 }
 
 @article{huetConfluentReductionsAbstract1980,
@@ -678,6 +902,14 @@
   annotation = {ZSCC: 0000048}
 }
 
+@inproceedings{jamesTheseusHighLevelLanguage2014,
+  title = {Theseus: A {{High}}-{{Level Language}} for {{Reversible Computation}}},
+  booktitle = {Reversible {{Computation}}},
+  author = {James, Roshan P. and Sabry, Amr},
+  year = {2014},
+  annotation = {Booklet of work-in-progress and short reports}
+}
+
 @article{joyalBraidedTensorCategories1993,
   title = {Braided {{Tensor Categories}}},
   author = {Joyal, A. and Street, R.},
@@ -738,6 +970,39 @@
   archiveprefix = {arXiv},
   keywords = {⛔ No DOI found,55U10 (Primary) 55U35 (Secondary),Mathematics - Algebraic Topology,Mathematics - Category Theory},
   annotation = {ZSCC: NoCitationData[s0]}
+}
+
+@inproceedings{kellyCoherenceTheoremsLax1974,
+  title = {Coherence Theorems for Lax Algebras and for Distributive Laws},
+  booktitle = {Category {{Seminar}}},
+  author = {Kelly, G. M.},
+  editor = {Kelly, Gregory M.},
+  year = {1974},
+  series = {Lecture {{Notes}} in {{Mathematics}}},
+  pages = {281--375},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/BFb0063106},
+  isbn = {978-3-540-37270-7},
+  langid = {english},
+  keywords = {Closed Category,Monoidal Category,Natural Transformation,Symmetric Monoidal Category,Symmetric Monoidal Structure}
+}
+
+@inproceedings{klugeReversibleSECD2000,
+  title = {A {{Reversible SE}}({{M}}){{CD Machine}}},
+  booktitle = {Implementation of {{Functional Languages}}},
+  author = {Kluge, Werner},
+  editor = {Koopman, Pieter and Clack, Chris},
+  year = {2000},
+  series = {Lecture {{Notes}} in {{Computer Science}}},
+  pages = {95--113},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/10722298_6},
+  abstract = {The paper describes the basic concept of a reversible functional computing machine which can reduce a program term to its (weak) normal form and then do inverse reductions which re-construct the initial program term. The machine under consideration is a variant of Landin's secd-machine which can evaluate terms of a simple applied {$\lambda$}-calculus both applicative and normal order. It includes some auxiliary run-time structures to accommodate the environment necessary for reverse computations. The machine is specified in terms of the state transition rules for both forward and backward computations.},
+  isbn = {978-3-540-44658-3},
+  langid = {english},
+  keywords = {Normal Order,Program Term,Reverse Computation,Rule Application,Rule Index}
 }
 
 @book{knuthArtComputerProgramming1997,
@@ -825,6 +1090,23 @@
   annotation = {ZSCC: NoCitationData[s0]}
 }
 
+@article{lafontAlgebraicTheoryBoolean2003,
+  title = {Towards an Algebraic Theory of {{Boolean}} Circuits},
+  author = {Lafont, Yves},
+  year = {2003},
+  month = nov,
+  journal = {Journal of Pure and Applied Algebra},
+  volume = {184},
+  number = {2},
+  pages = {257--310},
+  issn = {0022-4049},
+  doi = {10.1016/S0022-4049(03)00069-0},
+  url = {https://www.sciencedirect.com/science/article/pii/S0022404903000690},
+  urldate = {2021-11-10},
+  abstract = {Boolean circuits are used to represent programs on finite data. Reversible Boolean circuits and quantum Boolean circuits have been introduced to modelize some physical aspects of computation. Those notions are essential in complexity theory, but we claim that a deep mathematical theory is needed to make progress in this area. For that purpose, the recent developments of knot theory is a major source of inspiration. Following the ideas of Burroni, we consider logical gates as generators for some algebraic structure with two compositions, and we are interested in the relations satisfied by those generators. For that purpose, we introduce canonical forms and rewriting systems. Up to now, we have mainly studied the basic case and the linear case, but we hope that our methods can be used to get presentations by generators and relations for the (reversible) classical case and for the (unitary) quantum case.},
+  langid = {english}
+}
+
 @article{laisantNumerationFactorielleApplication1888,
   title = {{Sur la num\'eration factorielle, application aux permutations}},
   author = {Laisant, C.- A.},
@@ -852,6 +1134,36 @@
   isbn = {978-0-521-35653-4},
   langid = {english},
   annotation = {ZSCC: NoCitationData[s1]}
+}
+
+@article{landauerIrreversibilityHeatGeneration1961,
+  title = {Irreversibility and {{Heat Generation}} in the {{Computing Process}}},
+  author = {Landauer, R.},
+  year = {1961},
+  month = jul,
+  journal = {IBM Journal of Research and Development},
+  volume = {5},
+  number = {3},
+  pages = {183--191},
+  issn = {0018-8646},
+  doi = {10.1147/rd.53.0183},
+  abstract = {It is argued that computing machines inevitably involve devices which perform logical functions that do not have a single-valued inverse. This logical irreversibility is associated with physical irreversibility and requires a minimal heat generation, per machine cycle, typically of the order of kT for each irreversible function. This dissipation serves the purpose of standardizing signals and making them independent of their exact logical history. Two simple, but representative, models of bistable devices are subjected to a more detailed analysis of switching kinetics to yield the relationship between speed and energy dissipation, and to estimate the effects of errors induced by thermal fluctuations.}
+}
+
+@inproceedings{laplazaCoherenceDistributivity1972,
+  title = {Coherence for Distributivity},
+  booktitle = {Coherence in {{Categories}}},
+  author = {Laplaza, Miguel L.},
+  editor = {Kelly, G. M. and Laplaza, M. and Lewis, G. and Mac Lane, Saunders},
+  year = {1972},
+  series = {Lecture {{Notes}} in {{Mathematics}}},
+  pages = {29--65},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/BFb0059555},
+  isbn = {978-3-540-37958-4},
+  langid = {english},
+  keywords = {Analogous Case,Coherence Condition,Commutative Diagram,Natural Morphism,Regular Element}
 }
 
 @article{lawvereFUNCTORIALSEMANTICSALGEBRAIC1963,
@@ -919,18 +1231,65 @@
   annotation = {ZSCC: 0000723  Accepted: 2011-11-08T19:13:47Z}
 }
 
+@techreport{maslovReversibleLogicSynthesis2003,
+  title = {Reversible {{Logic Synthesis}}},
+  author = {Maslov, Dmitri},
+  year = {2003},
+  abstract = {at the University of New Brunswick, I agree that the Library shall make it freely available for reference and study. I further agree that permission for extensive copying of this thesis for scholarly purposes may be granted by the head of my department or by his or her representatives. It is understood that copying or publication of this thesis for financial gain shall not be allowed without my written permission. (Signature)}
+}
+
 @inproceedings{melliesTemplateGamesDifferential2019,
   title = {Template Games and Differential Linear Logic},
-  booktitle = {Proceedings of the 34th {{Annual ACM}}/{{IEEE Symposium}} on {{Logic}} in {{Computer Science}}},
+  booktitle = {2019 34th {{Annual ACM}}/{{IEEE Symposium}} on {{Logic}} in {{Computer Science}} ({{LICS}})},
   author = {Melli{\`e}s, Paul-Andr{\'e}},
   year = {2019},
   month = jun,
-  series = {{{LICS}} '19},
   pages = {1--13},
-  publisher = {{IEEE Press}},
-  address = {{Vancouver, Canada}},
+  doi = {10.1109/LICS.2019.8785830},
   abstract = {We extend our recent template game model of multiplicative additive linear logic (MALL) with an exponential modality of linear logic (LL) derived from the standard categorical construction Sym of the free symmetric monoidal category. We obtain in this way the first game semantics of differential linear logic (DiLL) in its classical form. The construction of the model relies on a careful and healthy comparison with the model of generalised species designed ten years ago by Fiore, Gambino, Hyland and Winskel. Besides the resolution of an old open problem of game semantics, the study reveals an unexpected and promising convergence between linear logic and homotopy theory.},
-  annotation = {ZSCC: 0000007}
+  keywords = {Additives,Cats,Games,Mathematical model,Semantics,Turning}
+}
+
+@inproceedings{millerTransformationBasedAlgorithm2003,
+  title = {A Transformation Based Algorithm for Reversible Logic Synthesis},
+  booktitle = {Proceedings 2003. {{Design Automation Conference}} ({{IEEE Cat}}. {{No}}.{{03CH37451}})},
+  author = {Miller, D.M. and Maslov, D. and Dueck, G.W.},
+  year = {2003},
+  month = jun,
+  pages = {318--323},
+  doi = {10.1145/775832.775915},
+  abstract = {A digital combinational logic circuit is reversible if it maps each input pattern to a unique output pattern. Such circuits are of interest in quantum computing, optical computing, nanotechnology and low-power CMOS design. Synthesis approaches are not well developed for reversible circuits even for small numbers of inputs and outputs. In this paper, a transformation based algorithm for the synthesis of such a reversible circuit in terms of n /spl times/ n Toffoli gates is presented. Initially, a circuit is constructed by a single pass through the specification with minimal look-ahead and no back-tracking. Reduction rules are then applied by simple template matching. The method produces very good results for larger problems.},
+  keywords = {Circuit synthesis,Combinational circuits,Computer science,Logic design,Nanotechnology,Niobium,Optical computing,Optical design,Permission,Quantum computing}
+}
+
+@misc{molzerCubicalAgdaSimple2021,
+  title = {Cubical {{Agda}}: Simple Application of {{Fin}}: Lehmer Codes},
+  shorttitle = {Cubical {{Agda}}},
+  author = {Molzer, Martin},
+  year = {2021},
+  month = nov,
+  url = {https://github.com/agda/cubical/blob/a1d2bb38c0794f3cb00610cd6061cf9b5410518d/Cubical/Data/Fin/LehmerCode.agda},
+  urldate = {2021-11-10},
+  abstract = {An experimental library for Cubical Agda},
+  copyright = {MIT},
+  howpublished = {Agda Github Community}
+}
+
+@inproceedings{muInjectiveLanguageReversible2004,
+  title = {An {{Injective Language}} for {{Reversible Computation}}},
+  booktitle = {Mathematics of {{Program Construction}}},
+  author = {Mu, Shin-Cheng and Hu, Zhenjiang and Takeichi, Masato},
+  editor = {Kozen, Dexter},
+  year = {2004},
+  series = {Lecture {{Notes}} in {{Computer Science}}},
+  pages = {289--313},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/978-3-540-27764-4_16},
+  abstract = {Erasure of information incurs an increase in entropy and dissipates heat. Therefore, information-preserving computation is essential for constructing computers that use energy more effectively. A more recent motivation to understand reversible transformations also comes from the design of editors where editing actions on a view need to be reflected back to the source data. In this paper we present a point-free functional language, with a relational semantics, in which the programmer is allowed to define injective functions only. Non-injective functions can be transformed into a program returning a history. The language is presented with many examples, and its relationship with Bennett's reversible Turing machine is explained. The language serves as a good model for program construction and reasoning for reversible computers, and hopefully for modelling bi-directional updating in an editor.},
+  isbn = {978-3-540-27764-4},
+  langid = {english},
+  keywords = {Binary Tree,Functional Language,Injective Function,Relational Semantic,Turing Machine}
 }
 
 @inproceedings{ortonDecomposingUnivalenceAxiom2018,
@@ -950,6 +1309,22 @@
   urldate = {2021-10-26},
   isbn = {978-3-95977-071-2},
   keywords = {cubical sets,cubical type theory,dependent type theory,homotopy type theory,univalence,univalent type theory}
+}
+
+@article{peresReversibleLogicQuantum1985,
+  title = {Reversible Logic and Quantum Computers},
+  author = {Peres, Asher},
+  year = {1985},
+  month = dec,
+  journal = {Physical Review A},
+  volume = {32},
+  number = {6},
+  pages = {3266--3276},
+  publisher = {{American Physical Society}},
+  doi = {10.1103/PhysRevA.32.3266},
+  url = {https://link.aps.org/doi/10.1103/PhysRevA.32.3266},
+  urldate = {2021-11-10},
+  abstract = {This article is concerned with the construction of a quantum-mechanical Hamiltonian describing a computer. This Hamiltonian generates a dynamical evolution which mimics a sequence of elementary logical steps. This can be achieved if each logical step is locally reversible (global reversibility is insufficient). Computational errors due to noise can be corrected by means of redundancy. In particular, reversible error-correcting codes can be embedded in the Hamiltonian itself. An estimate is given for the minimum amount of entropy which must be dissipated at a given noise level and tolerated error rate.}
 }
 
 @article{petrakisUnivalentTypoids2019,
@@ -1007,11 +1382,27 @@
   howpublished = {Zenodo}
 }
 
+@article{shendeSynthesisReversibleLogic2003,
+  title = {Synthesis of Reversible Logic Circuits},
+  author = {Shende, V.V. and Prasad, A.K. and Markov, I.L. and Hayes, J.P.},
+  year = {2003},
+  month = jun,
+  journal = {IEEE Transactions on Computer-Aided Design of Integrated Circuits and Systems},
+  volume = {22},
+  number = {6},
+  pages = {710--722},
+  issn = {1937-4151},
+  doi = {10.1109/TCAD.2003.811448},
+  abstract = {Reversible or information-lossless circuits have applications in digital signal processing, communication, computer graphics, and cryptography. They are also a fundamental requirement in the emerging field of quantum computation. We investigate the synthesis of reversible circuits that employ a minimum number of gates and contain no redundant input-output line-pairs (temporary storage channels). We prove constructively that every even permutation can be implemented without temporary storage using NOT, CNOT, and TOFFOLI gates. We describe an algorithm for the synthesis of optimal circuits and study the reversible functions on three wires, reporting the distribution of circuit sizes. We also study canonical circuit decompositions where gates of the same kind are grouped together. Finally, in an application important to quantum computing, we synthesize oracle circuits for Grover's search algorithm, and show a significant improvement over a previously proposed synthesis algorithm.},
+  keywords = {Application software,Circuit synthesis,Computer graphics,Cryptography,Digital signal processing,Logic circuits,Quantum computing,Signal processing algorithms,Signal synthesis,Wires}
+}
+
 @article{sparksSuperstructuralReversibleLogic2014,
   title = {Superstructural {{Reversible Logic}}},
   author = {Sparks, Zachary and Sabry, Amr},
   year = {2014},
   pages = {12},
+  url = {https://legacy.cs.indiana.edu/~sabry/papers/reversible-logic.pdf},
   abstract = {In some substructural logics, the memory used by proofs is treated as a first-class multiplicative resource, but the choices made by those proofs are not. Since we can convert between space and time complexity, these ``resource conscious'' logics are therefore not actually guaranteed to preserve memory\textemdash for example, linear logic allows the erasure and duplication of natural numbers with time complexity proportional to their size. In order to fully account for space-time tradeoffs, we augment contexts to track all information, not just multiplicative resources. This creates a reversible, fully resource-preserving logic which allows us to examine the hidden information effects in linear logic and study reversible computation from a proof-theoretic perspective.},
   langid = {english},
   keywords = {⛔ No DOI found},
@@ -1059,6 +1450,23 @@
   annotation = {ZSCC: 0000007}
 }
 
+@inproceedings{toffoliReversibleComputing1980,
+  title = {Reversible Computing},
+  booktitle = {Automata, {{Languages}} and {{Programming}}},
+  author = {Toffoli, Tommaso},
+  editor = {{de Bakker}, Jaco and {van Leeuwen}, Jan},
+  year = {1980},
+  series = {Lecture {{Notes}} in {{Computer Science}}},
+  pages = {632--644},
+  publisher = {{Springer}},
+  address = {{Berlin, Heidelberg}},
+  doi = {10.1007/3-540-10003-2_104},
+  abstract = {The theory of reversible computing is based on invertible primitives and composition rules that preserve invertibility. With these constraints, one can still satisfactorily deal with both functional and structural aspects of computing processes; at the same time, one attains a closer correspondence between the behavior of abstract computing systems and the microscopic physical laws (which are presumed to be strictly reversible) that underly any concrete implementation of such systems.According to a physical interpretation, the central result of this paper is that it is ideally possible to build sequential circuits with zero internal power dissipation.},
+  isbn = {978-3-540-39346-7},
+  langid = {english},
+  keywords = {Causality Network,Cellular Automaton,Composition Rule,Finite Automaton,Turing Machine}
+}
+
 @book{univalentfoundationsprogramHomotopyTypeTheory2013,
   title = {Homotopy Type Theory: Univalent Foundations of Mathematics},
   author = {Univalent Foundations Program, The},
@@ -1086,6 +1494,24 @@
   langid = {english},
   keywords = {Constructive bijection,Inversion number,Major index,Permutation (bi)statistic},
   annotation = {ZSCC: 0000011}
+}
+
+@article{vantonderLambdaCalculusQuantum2004,
+  title = {A {{Lambda Calculus}} for {{Quantum Computation}}},
+  author = {{van Tonder}, Andr{\'e}},
+  year = {2004},
+  month = jan,
+  journal = {SIAM Journal on Computing},
+  volume = {33},
+  number = {5},
+  pages = {1109--1135},
+  publisher = {{Society for Industrial and Applied Mathematics}},
+  issn = {0097-5397},
+  doi = {10.1137/S0097539703432165},
+  url = {https://epubs.siam.org/doi/10.1137/S0097539703432165},
+  urldate = {2021-11-10},
+  abstract = {The classical lambda calculus may be regarded both as a programming language and as a formal algebraic system for reasoning about computation. It provides a computational model equivalent to the Turing machine and continues to be of enormous benefit in the classical theory of computation. We propose that quantum computation, like its classical counterpart, may benefit from a version of the lambda calculus suitable for expressing and reasoning about quantum algorithms. In this paper we develop a quantum lambda calculus as an alternative model of quantum computation, which combines some of the benefits of both the quantum Turing machine and the quantum circuit models. The calculus turns out to be closely related to the linear lambda calculi used in the study of linear logic. We set up a computational model and an equational proof system for this calculus, and we argue that it is equivalent to the quantum Turing machine.},
+  keywords = {03B70,68N18,68Q10,81P68,lambda calculus,linear logic,models of computation,quantum computation}
 }
 
 @article{vezzosiCubicalAgdaDependently2019,
@@ -1119,6 +1545,42 @@
   langid = {french},
   keywords = {⛔ No DOI found},
   annotation = {ZSCC: 0000004}
+}
+
+@inproceedings{yokoyamaPrinciplesReversibleProgramming2008,
+  title = {Principles of a Reversible Programming Language},
+  booktitle = {Proceedings of the 5th Conference on {{Computing}} Frontiers},
+  author = {Yokoyama, Tetsuo and Axelsen, Holger Bock and Gl{\"u}ck, Robert},
+  year = {2008},
+  month = may,
+  series = {{{CF}} '08},
+  pages = {43--54},
+  publisher = {{Association for Computing Machinery}},
+  address = {{New York, NY, USA}},
+  doi = {10.1145/1366230.1366239},
+  url = {https://doi.org/10.1145/1366230.1366239},
+  urldate = {2021-11-10},
+  abstract = {The principles of reversible programming languages are explicated and illustrated with reference to the design of a high-level imperative language, Janus. The fundamental properties for such languages include backward as well as forward determinism and reversible updates of data. The unique design features of the language include explicit post-condition assertions, direct access to an inverse semantics and the possibility of clean (\{\textbackslash ie\}, garbage-free) computation of injective functions. We suggest the clean simulation of reversible Turing machines as a criterion for computing strength of reversible languages, and demonstrate this for Janus. We show the practicality of the language by implementation of a reversible fast Fourier transform. Our results indicate that the reversible programming paradigm has fundamental properties that are relevant to many different areas of computer science.},
+  isbn = {978-1-60558-077-7},
+  keywords = {backward determinism,fast fourier transform,inverse semantics,reversible computing,turing completeness}
+}
+
+@inproceedings{yokoyamaReversibleProgrammingLanguage2007,
+  title = {A Reversible Programming Language and Its Invertible Self-Interpreter},
+  booktitle = {Proceedings of the 2007 {{ACM SIGPLAN}} Symposium on {{Partial}} Evaluation and Semantics-Based Program Manipulation},
+  author = {Yokoyama, Tetsuo and Gl{\"u}ck, Robert},
+  year = {2007},
+  month = jan,
+  series = {{{PEPM}} '07},
+  pages = {144--153},
+  publisher = {{Association for Computing Machinery}},
+  address = {{New York, NY, USA}},
+  doi = {10.1145/1244381.1244404},
+  url = {https://doi.org/10.1145/1244381.1244404},
+  urldate = {2021-11-10},
+  abstract = {A reversible programming language supports deterministic forward and backward computation. We formalize the programming language Janus and prove its reversibility. We provide a program inverter for the language and implement a self-interpreter that achieves deterministic forward and backward interpretation of Janus programs without using a computation history. As the self-interpreter is implemented in a reversible language, it is invertible using local program inversion. Many physical phenomena are reversible and we demonstrate the power of Janus by implementing a reversible program for discrete simulation of the Schr\"odinger wave equation that can be inverted as well as run forward and backward.},
+  isbn = {978-1-59593-620-2},
+  keywords = {Janus,non-standard interpreter hierarchy,program inversion,reversible computing,reversible programming language,self-interpreter}
 }
 
 @article{yorgeyCombinatorialSpeciesLabelled2014,

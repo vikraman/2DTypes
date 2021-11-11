@@ -717,7 +717,7 @@ Lehmer codes are known in Combinatorial Analysis~\cite{bellmanCombinatorialAnaly
 "subexcedant sequences", or "factoriadics". They can be written as a decimal number in the factorial number system, or
 as a tuple encoding the digits~\cite*{knuthArtComputerProgramming1997,laisantNumerationFactorielleApplication1888}. This
 gives a convenient way of representing permutations on a computer, partly because they are
-bitwise-optimal~\cite{bergerTeachingOrdinalPatterns2019a}.
+bitwise-optimal~\cite{bergerTeachingOrdinalPatterns2019}.
 
 Formally, we define $\Lehmer[n]$ to be an $n+1$-element tuple, where the position $k \leq n$ stores an element of
 $\Fin[k]$. Since the 0-th position is trivial, in practice it is
@@ -845,8 +845,8 @@ Finally, it is time to complete our goal of characterising the symmetric group. 
 normalising words in $\Sn$, we need to run it to produce a concrete bijection of finite sets, and, given a bijection
 between finite sets, we need to encode it as a Lehmer code. We will prove that these maps construct an equivalence
 between the types $\Lehmer[n]$ and $\Aut[\Fin[\suc[n]]]$~\footnote{Note that the indices for the type of permutations
-  are off-by-one, because we chose $\Fin[n]$ to represent generators for permutations on $\Fin[\suc[n]]$.}. The idea for
-this proof is borrowed from~\citet{Molzer-cubical}.
+are off-by-one, because we chose $\Fin[n]$ to represent generators for permutations on $\Fin[\suc[n]]$.}. The idea for
+this proof is borrowed from~\citet{molzerCubicalAgdaSimple2021}.
 
 \begin{definition}[${\FinExcept{n}} : {\Fin[n]} \to \UU$]
   For $n : \Nat$, the type family $\FinExcept{n}$ picks out all elements in $\Fin[n]$ except the one in the argument.

@@ -9,9 +9,9 @@ semantics, thereby closing the circle on a complete Curry-Howard-Lambek correspo
 Historically, the first such correspondence was between the $\lambda$-calculus, intuitionistic logic, and
 cartesian-closed categories~\cite{curryCurryEssaysCombinatory1980}. For reversible languages, the Curry-Howard
 correspondence was established by~\citet{sparksSuperstructuralReversibleLogic2014}, and the Lambek correspondence was
-suggested by~\citet{caretteComputingSemiringsWeak2016} and~\citet{threemodels}. In this work, we have established this
-correspondence, as summarised in~\cref{fig:table-summary}. In the remainder of this section, we discuss some broader
-related work.
+suggested by~\citet{caretteComputingSemiringsWeak2016} and~\citet{caretteEmbracingLawsPhysics2021}. In this work, we
+have established this correspondence, as summarised in~\cref{fig:table-summary}. In the remainder of this section, we
+discuss some broader related work.
 
 \begin{figure}
     \begin{center}
@@ -87,13 +87,14 @@ related work.
 \paragraph{Coherence and Rewriting}
 
 Higher-order term-rewriting systems and word problems have a long history of being formalised in proof assistants like
-    {homotopy.io}, Agda, Coq and Lean~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main
-result, we developed a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem. \citet{Hiver-coq}
-describes an explicit algorithm for producing normal forms. It could provide an alternative to our rewriting system. Other
-encodings of permutations as listed vectors, matrices, inductively generated trees (Motzkin trees), Young diagrams, or
-string diagrams, proved either difficult to formalise in type theory or difficult to relate directly to the primitive type
-isomorphisms of $\PiLang$. The automatic \citet{knuthSimpleWordProblems1970} completion produced too many equations
-making proving correctness and termination intractable.
+{homotopy.io}, Agda, Coq and Lean~\cite{krausCoherenceWellFoundednessTaming2020}. As part of the proof of our main
+result, we developed a rewriting system for the Coxeter relations for $\Sn$ to solve its word problem.
+\citet{hiverCoqCombiCoxeterPresentation2021} describes an explicit algorithm for producing normal forms. It could
+provide an alternative to our rewriting system. Other encodings of permutations as listed vectors, matrices, inductively
+generated trees (Motzkin trees), Young diagrams, or string diagrams, proved either difficult to formalise in type theory
+or difficult to relate directly to the primitive type isomorphisms of $\PiLang$. The automatic
+\citet{knuthSimpleWordProblems1970} completion produced too many equations making proving correctness and termination
+intractable.
 
 Coherence theorems are famous problems in category theory, and Mac Lane's coherence
 theorem~\cite{maclaneNaturalAssociativityCommutativity1963,joyalBraidedTensorCategories1993,gurskiInfiniteLoopSpaces2013}
@@ -213,21 +214,23 @@ property that $\BFin$ is biinitial in $\term{RigCat}$, is in~\cite{elguetaGroupo
 instances of reversible computations: database transactions, mechanisms for data provenance, checkpoints, stack and
 exception traces, logs, backups, rollback recoveries, version control systems, reverse engineering, software
 transactional memories, continuations, backtracking search, and multiple-level undo features in commercial applications.
-In the early nineties, \citet{Baker:1992:LLL,Baker:1992:NFT} argued for a systematic, first-class, treatment of
-reversibility. But intensive research in full-fledged reversible models of computations and reversible programming
-languages was only sparked by the discovery of deep connections between physics and
-computation~\cite{Landauer:1961,PhysRevA.32.3266,Toffoli:1980,bennett1985fundamental,Frank:1999:REC:930275,Hey:1999:FCE:304763,fredkin1982conservative},
-and by the potential for efficient quantum computation~\cite{springerlink:10.1007/BF02650179}. The early developments of
-reversible programming languages started with a conventional programming language, e.g., an extended $\lambda$-calculus,
-and either (i) extended the language with a history
-mechanism~\cite{vanTonder:2004,Kluge:1999:SEMCD,lorenz,danos2004reversible}, or (ii) imposed constraints on the control
-flow constructs to make them reversible~\cite{Yokoyama:2007:RPL:1244381.1244404}.  More modern approaches recognize that
-reversible programming languages require a fresh approach and should be designed from first principles without the
-detour via conventional irreversible
-languages~\cite{Yokoyama:2008:PRP,Mu:2004:ILRC,abramsky2005structural,DiPierro:2006:RCL:1166042.1166047}. The version of
-$\PiLang$ studied in this paper is restricted to finite types and terminating total computations. It would be
-interesting to understand which versions of free monoidal structures correspond to extensions of $\Pi$ with recursive
-types~\cite{jamesInformationEffects2012,rc2011}, or negative and fractional
+In the early nineties, \citet{bakerNREVERSALFortuneThermodynamics1992,bakerLivelyLinearLisp1992} argued for a
+systematic, first-class, treatment of reversibility. But intensive research in full-fledged reversible models of
+computations and reversible programming languages was only sparked by the discovery of deep connections between physics
+and computation~\cite{landauerIrreversibilityHeatGeneration1961, peresReversibleLogicQuantum1985,
+    toffoliReversibleComputing1980, bennettFundamentalPhysicalLimits1985, frankReversibilityEfficientComputing1999,
+    heyFeynmanComputationExploring1999, fredkinConservativeLogic1982}, and by the potential for efficient quantum
+computation~\cite{feynmanSimulatingPhysicsComputers1982}. The early developments of reversible programming languages
+started with a conventional programming language, e.g., an extended $\lambda$-calculus, and either (i) extended the
+language with a history mechanism~\cite{vantonderLambdaCalculusQuantum2004,klugeReversibleSECD2000,
+    huelsbergenLogicallyReversibleEvaluator1996,danosReversibleCommunicatingSystems2004}, or (ii) imposed constraints on the
+control flow constructs to make them reversible~\cite{yokoyamaReversibleProgrammingLanguage2007}. More modern approaches
+recognize that reversible programming languages require a fresh approach and should be designed from first principles
+without the detour via conventional irreversible languages~\cite{yokoyamaPrinciplesReversibleProgramming2008,
+    muInjectiveLanguageReversible2004, abramskyStructuralApproachReversible2005, dipierroReversibleCombinatoryLogic2006}.
+The version of $\PiLang$ studied in this paper is restricted to finite types and terminating total computations. It
+would be interesting to understand which versions of free monoidal structures correspond to extensions of $\Pi$ with
+recursive types~\cite{jamesInformationEffects2012,bowmanDaggerTracedSymmetric2011}, or negative and fractional
 types~\cite*{chenFractionalTypes2020,chenComputationalInterpretationCompact2021}.
 
 %%%%%%%%%%%%%%
