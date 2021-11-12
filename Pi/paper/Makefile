@@ -46,6 +46,13 @@ popl22.tar.gz: ExamplesL.tex applications.tex main.tex popl22-rev.tex popl22-rev
 				Makefile
 	tar acvfL $@ $^
 
+popl22.zip: ExamplesL.tex applications.tex main.tex \
+				discussion.tex equivalence.tex \
+				examples.tex finite.tex introduction.tex reversible1.tex ufin.tex \
+				main.bbl *.sty *.tikzstyles inkscape/*.pdf \
+				Makefile acmart.cls
+	zip $@ $^
+
 clean:
 	latexmk -c
 distclean: clean
