@@ -3,18 +3,18 @@
 % Consider two programs that implement the type isomorphism {$A + (B + C) \isoone C + (B + A)$}, written as two different
 % sequences of primitive isomorphisms:
 
-Consider two programs that implement the same permutation using different sequences of type isomorphisms:
+Consider two programs that implement the \emph{same} permutation using different sequences of type isomorphisms:
 \begin{align*}
-      A + (B + C) \isoone
-      (A + B) + C & \isoone
-      C + (A + B) \isoone
+      A + (B + C) \leftrightarrow
+      (A + B) + C & \leftrightarrow
+      C + (A + B) \leftrightarrow
       C + (B + A)
       \\
-      A + (B + C) \isoone
-      A + (C + B) \isoone
-      (A + C) + B & \isoone
-      (C + A) + B \isoone
-      C + (A + B) \isoone
+      A + (B + C) \leftrightarrow
+      A + (C + B) \leftrightarrow
+      (A + C) + B & \leftrightarrow
+      (C + A) + B \leftrightarrow
+      C + (A + B) \leftrightarrow
       C + (B + A)
 \end{align*}
 
@@ -24,22 +24,23 @@ isomorphisms?
 
 Such sequences of type isomorphisms are pervasive in reversible boolean circuits, which are at the core of quantum
 computing. Typically, they might be formalised as permutations $\{0,1\}^k \to \{0,1\}^k$ on bit strings of some length
-$k$~\cite{aaronson_et_al:LIPIcs:2017:8173,1201583}. But from the perspective of programming languages, permutations and
-reversible circuits can be more conveniently expressed as isomorphisms over algebraic datatypes as proposed in the
-$\PiLang$ family of reversible languages~\cite*{jamesInformationEffects2012,theseus} whose syntax is inspired by the
-sound and complete axiomatisation of type isomorphisms~\cite{fioreRemarksIsomorphismsTyped2002}, with respect to the
-bicartesian structure, that is, coproducts and products. Since $\PiLang$ programs correspond to type isomorphisms of
-finite types, our observation is that the syntax of $\PiLang$ is a presentation of the free symmetric rig groupoid (on
-zero generators).
+$k$~\cite{aaronsonClassificationReversibleBit2017}. But from the perspective of programming languages, permutations and
+reversible circuits can be more conveniently expressed as isomorphisms over algebraic data types, as proposed in the
+$\PiLang$ family of reversible languages~\cite*{jamesInformationEffects2012, jamesTheseusHighLevelLanguage2014}. The
+syntax of $\PiLang$ is inspired by the sound and complete axiomatisation of type isomorphisms of lambda
+calculi~\cite{fioreRemarksIsomorphismsTyped2002}, with respect to the bicartesian structure, that is, product and sum
+types. $\PiLang$ programs correspond to type isomorphisms of finite types, and in this paper, we make the observation
+that the syntax of $\PiLang$ is a presentation of the free symmetric rig groupoid (on zero generators).
 
-It is folklore that the groupoid of finite sets and permutations is the free symmetric rig groupoid on zero
-generators~\cite{laplaza72,kelly74,baez2000finite}. Our main result formally establishes this correspondence by giving an
-equational theory for $\PiLang$ that exactly includes all the necessary equations to decide equivalence of $\PiLang$
-programs. As conjectured by \citet{caretteComputingSemiringsWeak2016}, these equations correspond to the \emph{coherence
-      conditions of symmetric rig groupoids}, answering the conjecture in the positive.
+It is folklore that the groupoid of finite sets and bijections is the free symmetric rig groupoid on zero
+generators~\cite{laplazaCoherenceDistributivity1972, kellyCoherenceTheoremsLax1974, baezFiniteSetsFeynman2001}. Our main
+result formally establishes this correspondence by giving an equational theory for $\PiLang$ that includes exactly all
+the necessary equations to decide equivalence of $\PiLang$ programs. As conjectured
+by~\citet{caretteComputingSemiringsWeak2016}, these equations correspond to the \emph{coherence conditions of symmetric
+rig groupoids}, answering the conjecture in the positive.
 
-\paragraph{Equivalence by Example} Without going into proofs, let us try to answer the question for the original
-pair of examples.
+\paragraph{Equivalence by Example} Without going into details of proofs, let us try to answer the question for the
+original pair of examples.
 
 \begin{figure}
       \[
@@ -57,8 +58,8 @@ pair of examples.
             \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
             \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
       \]
-      \label{fig:example-first-stage}
       \caption{Type isomorphisms as tree transformations}
+      \label{fig:example-first-stage}
 \end{figure}
 
 \begin{figure}
@@ -149,30 +150,31 @@ pair of examples.
 \end{figure}
 
 The first step is to realise that the use of associativity is uninteresting, and the only steps with interesting
-computational content are the swaps. The swaps can be either big or small -- they can happen between leaf nodes, or
-between bigger subtrees, respectively.
+computational content are the swaps. The swaps can be either \emph{small} or \emph{big} -- they can happen between leaf
+nodes, or between bigger subtrees, respectively, as shown in~\cref{fig:example-first-stage}.
 
 First, we normalise the types to a list-like representation $A + (B + (C + \zerot))$, where $\zerot$ is the empty type.
 In this representation, each type is identified with its index, $A$ has index 0, $B$ has index 1, and $C$ has index 2.
-Then, we need to compile each primitive isomorphism to a list of adjacent transpositions, and then compose by appending
-the lists. A small swap is trivially implemented as a single adjacent transposition. To compile a big swap into adjacent
-transpositions, we need to traverse the subtrees in-order and recursively swap elements from the left by transposing
-them across the ones in the middle -- this generates a large number of adjacent transpositions. For the two programs, we
-get the following two lists: $[1,0,1,1,1]$ (\cref{fig:cone-braid}) and $[1,0,1]$ (\cref{fig:ctwo-braid}), where the
-number $k$ encodes a transposition of elements at indices $k$ and $k+1$.
+Then, we compile each primitive isomorphism to a list of adjacent transpositions, which are composed by appending the
+lists. A small swap is trivially implemented as a single adjacent transposition. To compile a big swap into adjacent
+transpositions, we traverse the subtrees in-order and recursively swap elements from the left by transposing them across
+the ones in the middle -- this generates a large number of adjacent transpositions. For the two programs, we get the
+following two lists: $[1,0,1,1,1]$ (\cref{fig:cone-braid}) and $[1,0,1]$ (\cref{fig:ctwo-braid}), where the number $k$
+encodes a transposition of elements at indices $k$ and $k+1$.
 
 Swapping is symmetric, that is, swapping two elements and immediately swapping them back produces the same permutation.
-The first list contains such redundant operations, so to eliminate these, we have to normalise the lists, which we will
-do by setting up reduction relations and an appropriate rewriting system. This system will normalise both lists to
-$[0,1,0]$ (\cref{fig:norm-braid}), which is lexicographically the smallest list that corresponds to this permutation.
-Since both programs have the same normal forms, they're equivalent!
+The first list contains such redundant operations, so to eliminate these, we will normalise the lists, by setting up
+reduction relations and an appropriate rewriting system. This system normalises both lists to $[0,1,0]$
+(\cref{fig:norm-braid}), which is lexicographically the smallest list that corresponds to this permutation. Since both
+programs have the same normal form, they're equivalent!
 
 The crux of designing an equational theory for $\PiLang$ relies on the choice of relations we use to design this
-rewriting system. First, there should be enough equations relating the programs to their normalised forms, and second,
-there should be enough equations corresponding to the reduction rules. We will show that these correspond to the
-coherence conditions for symmetric rig groupoids.
+rewriting system. First, there should be enough equations to compile programs to their normalised forms, that is,
+sequences of adjacent transpositions, and second, there should be enough equations to reduce them to a normal form, that
+is, the reduced list of transpositions. We will show that these equations correspond to the coherence conditions for
+symmetric rig groupoids.
 
-From the normalised list $[0,1,0]$, we can construct a permutation on a list of 3 elements $[a,b,c]$ as follows. We think
+From the normalised list $[0,1,0]$, we can recover a permutation on a list of 3 elements $[a,b,c]$ as follows. We think
 of it as insertion-sorting the elements of the list. Starting from the list $[a, b, c]$, we first insert $b$ at the
 right place -- by applying transposition $0$, we get the list $[b, a, c]$. Then, element $c$ is inserted in the right
 place by applying transpositions $1$ and $0$ -- as a result, we get the desired permutation $[c, b, a]$. Notice that we
@@ -180,29 +182,31 @@ could specify a more compact way of describing this process, since the key infor
 needed to apply to an element. We could describe this procedure using a code $(0, 1, 2)$, which says how many inversions
 to apply to elements $a$, $b$, and $c$, respectively.
 
-Using this algorithm, we can turn a type isomorphism into a permutation of finite sets, relating the operational
-semantics of $\PiLang$ as permutations of finite sets of bits, to our denotational semantics. This allows us to
-establish full abstraction and adequacy.
+Using this algorithm, we can turn a type isomorphism into a bijection of finite sets, relating the operational semantics
+of $\PiLang$ as permutations of finite sets of bits, to our denotational semantics. This allows us to establish full
+abstraction and adequacy.
 
 \paragraph{Outline and Contributions} Our main result is a proof of the soundness and completeness of $\PiLang$ with
-respect to its semantics in the weak symmetric rig groupoid of finite sets and permutations, formalised in HoTT/UF. We
-state our result as a Curry-Howard-Lambek correspondence for Reversible Logic, Reversible Programming Languages, and
-Symmetric Rig Groupoids, using which we can build a toolbox of technical devices for reasoning about reversible
-circuits.
+respect to its semantics in the weak symmetric rig groupoid of finite sets, bijections, and homotopies, formalised in
+HoTT/UF. We state our result as a Curry-Howard-Lambek correspondence for Reversible
+Logic~\cite{sparksSuperstructuralReversibleLogic2014}, Reversible Programming
+Languages~\cite{jamesInformationEffects2012}, and Symmetric Rig Groupoids~\cite{laplazaCoherenceDistributivity1972,
+kellyCoherenceTheoremsLax1974, caretteComputingSemiringsWeak2016}, using which we can build a toolbox of technical
+devices for reasoning about reversible circuits.
 
 \begin{itemize}[leftmargin=*]
-      \item We start in~\cref{sec:qiskit} by presenting a few reversible circuits in the popular IBM Qiskit framework to
-            serve as running examples throughout the paper.
-      \item In~\cref{sec:pi}, we introduce the two-level language
-            $\PiLang$~\cite{jamesInformationEffects2012,caretteComputingSemiringsWeak2016} and illustrate how to write
-            reversible circuits and their equivalences using 1-combinators and 2-combinators respectively. We give a
-            semantic account of the language by translating each level-1 program to a bijection between finite sets, and
-            verifying that programs identified by level-2 constructs denote the same bijection.
-      \item \cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and permutations, in
-            Homotopy Type Theory and Univalent Foundations. We define and characterise the notion of a univalent subuniverse, and construct
-            $\UFin$ as a univalent subuniverse which classifies all finite types. We establish that paths in $\UFin$ are
-            families of loops on finite sets of specified cardinality, given by $\Aut[\Fin[n]]$, which produces the
-            group of permutations on $\Fin[n]$.
+      \item We start in~\cref{sec:qiskit} by presenting a few reversible circuits in the popular IBM Qiskit
+            framework~\cite{aleksandrowiczQiskitOpensourceFramework2019} to serve as running examples throughout the
+            paper.
+      \item In~\cref{sec:pi}, we introduce the two-level language $\PiLang$~\cite{caretteComputingSemiringsWeak2016} and
+            illustrate how to write reversible circuits and their equivalences using 1-combinators and 2-combinators
+            respectively. We give a semantic account of the language by translating each level-1 program to a bijection
+            between finite sets, and verifying that programs identified by level-2 constructs denote the same bijection.
+      \item \cref{sec:ufin} describes the construction of $\UFin$, the groupoid of finite sets and bijections, in
+            Homotopy Type Theory and Univalent Foundations (HoTT/UF). We define and characterise the notion of a
+            univalent subuniverse, and construct $\UFin$ as a univalent subuniverse which classifies all finite types.
+            We establish that paths in $\UFin$ are families of loops on finite sets of specified cardinality, given by
+            $\Aut[\Fin[n]]$, which produces the group of permutations on $\Fin[n]$.
       \item In~\cref{sec:finite}, we proceed to give a presentation of this group, as the symmetric group
             $\Sn$ with generators and relations, and solve its word problem. In particular, we present $\Sn$ as a
             Coxeter group, build a rewriting system based on Coxeter relations, and prove confluence and termination.
@@ -211,7 +215,7 @@ circuits.
             permutations. Finally, we show that there is an equivalence between Lehmer codes and permutations
             $\Aut[\Fin[n]]$ given by the Lehmer encode-decode algorithm.
       \item In~\cref{sec:equivalence}, we show how to interpret the language $\PiLang$ into the groupoid $\UFin$, in
-            stages. First we define a subset $\PiPlusLang$ of the language which only includes the additive monoidal
+            stages. First, we define a subset $\PiPlusLang$ of the language which  includes the additive monoidal
             structure, and show how to translate $\PiLang$ programs to $\PiPlusLang$ programs. Then, we further define a
             normalised form for this language called $\PiHatLang$, which has normalised 1-combinators and 2-combinators
             corresponding to adjacent transpositions. We show that $\PiPlusLang$ can be translated to $\PiHatLang$ and

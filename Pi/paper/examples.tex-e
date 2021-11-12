@@ -36,14 +36,14 @@ and the graphical interface, in~\cref{fig:qiskit}.
       \inkscape[0.5]{qis2}
     \end{minipage}
   \end{tabular}
-  \caption{$\mathsf{reversibleOr}$ in Qiskit}
+  \caption{$\mathit{reversibleOr}$ in Qiskit}
   \label{fig:qiskit}
 \end{figure}
 
 There is a wealth of manual and algorithmic approaches for producing circuits such as these
 two~\cite{maslovReversibleLogicSynthesis2003,shendeSynthesisReversibleLogic2003}. The circuit on the left was manually
 produced using a standard synthesis algorithm for reversible circuits~\cite{millerTransformationBasedAlgorithm2003}. The
-circuit on the right was produced using an approach that analyzes the recursive structure of $\mathsf{reversibleOr}$
+circuit on the right was produced using an approach that analyzes the recursive structure of $\mathit{reversibleOr}$
 (and would generalise to computing the disjunction of more than two inputs).
 
 From the specification of the circuit, we expect input \verb|011| to be mapped to \verb|111|. To gain some intuition, we
@@ -84,7 +84,7 @@ implementing exponentiation by squaring instead of repeated multiplication)~\cit
 % procedures to synthesise, normalise, optimise, and verify reversible
 % circuits. In this introduction,
 
-% From the definition of $\underline{\vee}$ it is evident that setting $h=0$, we can compute the desired disjunction by observing the first component of the result. The $\mathsf{reversibleOr}$ function has the following truth table (in binary on the left and in a more convenient decimal notation on the right):
+% From the definition of $\underline{\vee}$ it is evident that setting $h=0$, we can compute the desired disjunction by observing the first component of the result. The $\mathit{reversibleOr}$ function has the following truth table (in binary on the left and in a more convenient decimal notation on the right):
 
 % \begin{center}\begin{tabular}{|ccc|ccc|@{\qquad\qquad}|c|c|}
 % 0 & 0 & 0 &     0 & 0 & 0     & 0 & 0 \\

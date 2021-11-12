@@ -1,11 +1,16 @@
 \PassOptionsToPackage{table,x11names}{xcolor}
-\documentclass[acmsmall]{acmart}
+\documentclass[acmsmall,screen]{acmart} 
 \settopmatter{printfolios=true,printccs=true,printacmref=true}
 
 \usepackage{currfile}
 \ifcurrfilename{popl22-rev-strip.tex}%
 {\usepackage[appendix=strip]{apxproof}}%
 {\usepackage[appendix=append]{apxproof}}
+
+%% Force total pages to 31+1 in acmref
+\AtEndDocument{%
+  \setcounter{TotPages}{31}
+}
 
 \usepackage[capitalise,noabbrev]{cleveref}
 \usepackage[inline]{enumitem}
@@ -143,14 +148,22 @@
 %% Journal information
 %% Supplied to authors by publisher for camera-ready submission;
 %% use defaults for review submission.
-\acmJournal{PACMPL}
-\acmVolume{1}
-\acmNumber{POPL} % CONF = POPL or ICFP or OOPSLA
-\acmArticle{1}
+
+%%% The following is specific to POPL '22 and the paper
+%%% 'Symmetries in Reversible Programming: From Symmetric Rig Groupoids to Reversible Programming Languages'
+%%% by Vikraman Choudhury, Jacek Karwowski, and Amr Sabry.
+%%%
+\setcopyright{rightsretained}
+\acmPrice{}
+\acmDOI{10.1145/3498667}
 \acmYear{2022}
+\copyrightyear{2022}
+\acmSubmissionID{popl22main-p31-p}
+\acmJournal{PACMPL}
+\acmVolume{6}
+\acmNumber{POPL}
+\acmArticle{6}
 \acmMonth{1}
-\acmDOI{} % \acmDOI{10.1145/nnnnnnn.nnnnnnn}
-\startPage{1}
 
 %% Copyright information
 %% Supplied to authors (based on authors' rights management selection;
@@ -159,7 +172,7 @@
 %\setcopyright{none}
 %\setcopyright{acmcopyright}
 %\setcopyright{acmlicensed}
-\setcopyright{rightsretained}
+%\setcopyright{rightsretained}
 %\copyrightyear{2018}           %% If different from \acmYear
 
 %% Bibliography style
@@ -233,12 +246,13 @@
 \author{Jacek Karwowski}
 \orcid{0000-0002-8361-2912}
 \affiliation{
+  \department{Faculty of Mathematics, Informatics and Mechanics}
   \institution{University of Warsaw}
   \city{Warsaw}
   \postcode{00-927}
   \country{Poland}
 }
-\email{jac.karwowski@gmail.com}
+\email{jk359713@students.mimuw.edu.pl}
 \author{Amr Sabry}
 \orcid{0000-0002-1025-7331}
 \affiliation{
@@ -248,7 +262,7 @@
   \postcode{47408}
   \country{USA}
 }
-
+\email{sabry@indiana.edu}
 %%
 %% By default, the full list of authors will be used in the page
 %% headers. Often, this list is too long, and will overlap
@@ -276,20 +290,20 @@
 
 \begin{abstract}
   The $\PiLang$ family of reversible programming languages for boolean circuits is presented as a syntax of combinators
-  witnessing type isomorphisms of algebraic datatypes. In this paper, we give a denotational semantics for this language,
-  using the language of weak groupoids \`{a} la Homotopy Type Theory, and show how to derive an equational theory for it,
-  presented by 2-combinators witnessing equivalences of reversible circuits.
+  witnessing type isomorphisms of algebraic data types. In this paper, we give a denotational semantics for this
+  language, using weak groupoids \`{a} la Homotopy Type Theory, and show how to derive an equational theory for it,
+  presented by 2-combinators witnessing equivalences of type isomorphisms.
 
   We establish a correspondence between the syntactic groupoid of the language and a formally presented univalent
   subuniverse of finite types. The correspondence relates 1-combinators to 1-paths, and 2-combinators to 2-paths in the
-  universe, which is shown to be sound and complete for both levels, establishing an equivalence of groupoids. We
+  universe, which is shown to be sound and complete for both levels, forming an equivalence of groupoids. We use this to
   establish a Curry-Howard-Lambek correspondence between Reversible Logic, Reversible Programming Languages, and
   Symmetric Rig Groupoids, by showing that the syntax of $\PiLang$ is presented by the free symmetric rig groupoid,
-  given by finite sets and bijections. Our proof uses techniques from the theory of permutation codes, group
-  presentations and rewriting systems to solve the word problem for symmetric groups.
+  given by finite sets and bijections.
 
-  Using the formalisation of our results, we show how to perform normalisation-by-evaluation, verification, and
-  synthesis of reversible logic gates, motivated by examples from quantum computing.
+  Using the formalisation of our results, we perform normalisation-by-evaluation, verification and synthesis of
+  reversible logic gates, motivated by examples from quantum computing. We also show how to reason about and transfer
+  theorems between different representations of reversible circuits.
 \end{abstract}
 
 % Using soundness and completeness, we show how to perform Normalisation by Evaluation (NbE) for boolean reversible
@@ -412,18 +426,18 @@
   <concept_significance>500</concept_significance>
   </concept>
   <concept>
-  <concept_id>10011007.10011006.10011008.10011009.10011012</concept_id>
-  <concept_desc>Software and its engineering~Functional languages</concept_desc>
+  <concept_id>10002950.10003624.10003625</concept_id>
+  <concept_desc>Mathematics of computing~Combinatorics</concept_desc>
   <concept_significance>500</concept_significance>
   </concept>
   <concept>
-  <concept_id>10011007.10011006.10011039.10011040</concept_id>
-  <concept_desc>Software and its engineering~Syntax</concept_desc>
+  <concept_id>10011007.10010940.10010992.10010998</concept_id>
+  <concept_desc>Software and its engineering~Formal methods</concept_desc>
   <concept_significance>500</concept_significance>
   </concept>
   <concept>
-  <concept_id>10011007.10011006.10011039.10011311</concept_id>
-  <concept_desc>Software and its engineering~Semantics</concept_desc>
+  <concept_id>10010147.10010148</concept_id>
+  <concept_desc>Computing methodologies~Symbolic and algebraic manipulation</concept_desc>
   <concept_significance>500</concept_significance>
   </concept>
   </ccs2012>
@@ -432,16 +446,16 @@
 \ccsdesc[500]{Theory of computation~Type theory}
 \ccsdesc[500]{Theory of computation~Categorical semantics}
 \ccsdesc[500]{Theory of computation~Denotational semantics}
-\ccsdesc[500]{Software and its engineering~Functional languages}
-\ccsdesc[500]{Software and its engineering~Syntax}
-\ccsdesc[500]{Software and its engineering~Semantics}
+\ccsdesc[500]{Mathematics of computing~Combinatorics}
+\ccsdesc[500]{Software and its engineering~Formal methods}
+\ccsdesc[500]{Computing methodologies~Symbolic and algebraic manipulation}
+
 
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{reversible computing, reversible programming languages, homotopy type theory, denotational semantics,
-  categorical semantics,
-  computational group theory}
+\keywords{reversible computing, reversible programming languages, homotopy type theory, univalent foundations,
+  groupoids, groups, rewriting, permutations, type isomorphisms}
 
 %%
 %% This command processes the author and affiliation and title
@@ -477,7 +491,7 @@
 \end{acks}
 
 
-\bibliography{2dtypesZot,survey} %% ,chen}
+\bibliography{2dtypesZot}
 
 \end{document}
 

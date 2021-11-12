@@ -80,7 +80,7 @@ user-guided, reasoning can be done using the sound and complete level-2 combinat
 % \medskip
 % \manualTwoCombinator{}
 
-\subsection{Synthesis and verification}
+\subsection{Synthesis and Verification}
 
 Instead of manually writing $\PiLang$ programs to implement the reversible disjunction specification, it is possible to
 simply write down the permutation directly and then quote it, synthesising a $\PiLang$ program. We show this below,
@@ -92,7 +92,7 @@ using a function $\term{lookup}$ to write tabulated permutations for readability
 \noindent
 The permutation uses the canonical encoding of sequences of bits as natural numbers, e.g.,
 ${(\mathsf{false},\mathsf{true},\mathsf{true})}$ is encoded as 011 or 3. The second entry in the $\term{lookup}$ table
-maps index 1 (= 001) to the value 5 (= 101), following the reversible disjunction specification (recall that
+maps index 1 (${= 001}$) to the value 5 (${= 101}$), following the reversible disjunction specification (recall the definition
 $\mathsf{reversibleOr}(h,b_1,b_2) = (h \,\underline{\vee}\, (b_1 \vee b_2), ~b_1, ~b_2)$ where~$\vee$ is disjunction
 and~$\underline{\vee}$ is exclusive-disjunction). Quoting this permutation generates the same normalised program
 \Afun{reversibleOrNorm}, matching the desired structured type of a 1-combinator on $\mathbb{8}+$.
@@ -100,7 +100,7 @@ and~$\underline{\vee}$ is exclusive-disjunction). Quoting this permutation gener
 Similarly, we can also verify whether a circuit is correctly implemented -- by running the equivalence described above
 in the other direction, we can evaluate the circuit to a bijection and compare it extensionally with the intended one.
 
-\subsection{Reasoning}
+\subsection{Reasoning and Transfer of Theorems}
 
 In our development, we described a number of different representations of permutations: $\PiLang$, $\PiPlusLang$ and
 $\PiHatLang$ programs, lists of transpositions, Lehmer codes, and automorphisms of finite sets. The equivalences between
@@ -130,9 +130,9 @@ representation of lists of transpositions, and transfer it to circuits using the
 sections.
 
 We define a function $\parity : (X \iso Y) \to \Bool$ to compute the parity of a permutation defined by a combinator
-$c$, by first transforming a $\PiLang$ program into a list of transpositions (using $\evalh_{1}$ defined
-in~\cref{sec:equivalence}), and then computing the parity of this representation, which amounts to a simple checking of
-the parity of the length of the list.
+$c$, by first transforming a $\PiLang$ program into a list of transpositions (using $\evalh_{1}$ from~\cref{def:evalh}),
+and then computing the parity of this representation, which amounts to a simple checking of the parity of the length of
+the list.
 
 \begin{propositionrep}
   \label{prop:parity-preserved}
@@ -145,8 +145,8 @@ the parity of the length of the list.
 \end{proof}
 
 \noindent
-Using~\cref{prop:parity-preserved} and the fact that any composition of even circuits is even, we complete the proof by
-computing the $\parity$ of \Afun{toffoli₄}, and all of the \Afun{toffoli₃} combinations.
+Using~\cref{prop:parity-preserved}, we complete the proof by computing the $\parity$ of \Afun{toffoli₄}, and all
+combinations of the \Afun{toffoli₃} gates.
 
 % \paragraph*{Program synthesis.} The NbE process embodies a quoting mechanism that synthesizes programs from
 % permutations. Indeed, instead of writing a program for \Afun{reset 2}, one could simply specify the desired permutation
