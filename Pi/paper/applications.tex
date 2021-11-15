@@ -62,9 +62,9 @@ As an example, consider the \Afun{reversibleOr1} circuit introduced in~\cref{sec
 type $\mathbb{B}\ 3$ normalises to $\mathbb{8}+ \equiv \mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} +
   (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + (\mathbb{1} + \mathbb{0})))))))$, and the circuit reduces to the following
 normal form:
-
 \medskip
 \resetnormtwo{}
+\vspace{-1em}
 
 \subsection{Equivalence}
 
@@ -85,9 +85,9 @@ user-guided, reasoning can be done using the sound and complete level-2 combinat
 Instead of manually writing $\PiLang$ programs to implement the reversible disjunction specification, it is possible to
 simply write down the permutation directly and then quote it, synthesising a $\PiLang$ program. We show this below,
 using a function $\term{lookup}$ to write tabulated permutations for readability.
-
 \medskip
 \resetperm{}
+\vspace{-0.5em}
 
 \noindent
 The permutation uses the canonical encoding of sequences of bits as natural numbers, e.g.,
@@ -112,11 +112,13 @@ bits, by inserting a wire in four possible positions. This gate performs identit
 controlled-controlled not on the three remaining ones. We show how to write these gates using \Afun{cif}.
 \medskip
 \extendedToffoli{}
+\vspace{-0.5em}
 
 \noindent
 On the other hand, it is possible to construct a proper 4-bit toffoli gate.
 \medskip
 \toffoli{}
+\vspace{-0.5em}
 
 \noindent
 Now, we can ask: is it possible to implement \Afun{toffoli₄} gate using only \Afun{toffoli₃} gates?
