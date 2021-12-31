@@ -12,6 +12,7 @@
 \RequirePackage{perfectcut}
 \RequirePackage{stackengine}
 \RequirePackage{graphicx}
+\RequirePackage{enumitem}
 
 % eucal keeping mathcal
 \let\oldmathcal\mathcal
@@ -22,8 +23,8 @@
 \RequirePackage{hott}
 
 % misc
-\newcommand{\todo}[1]{\textcolor{solarized-red}{TODO: {#1}}}
-\newcommand{\note}[1]{\textcolor{solarized-orange}{NOTE: {#1}}}
+\providecommand{\todo}[1]{\textcolor{solarized-red}{TODO: {#1}}}
+\providecommand{\note}[1]{\textcolor{solarized-orange}{NOTE: {#1}}}
 \newcommand{\amr}[1]{\textcolor{solarized-blue}{AS: {#1}}}
 \newcommand{\jk}[1]{\textcolor{solarized-cyan}{JK: {#1}}}
 \newcommand{\vc}[1]{\textcolor{solarized-magenta}{VC: {#1}}}
@@ -174,6 +175,7 @@
 
 % custom arrows
 
+\providecommand{\leftsquigarrow}{}
 \renewcommand{\leftsquigarrow}{%
   \mathrel{\mathpalette\reflect@squig\relax}%
 }
@@ -189,4 +191,13 @@
 \newcommand{\xlrsquigarrow}[1]{
   \mathrel{\stackon[2pt]{$\leftrightsquigarrow$}{$\mathsmaller{#1}$}}
 }
- 
+
+% pretty lists
+\SetLabelAlign{pleft}{$\cdot$#1\hfil}
+\newlist{plist}{description}{5}
+\setlist[plist]{labelwidth=2cm,labelsep=1em,leftmargin=*,align=pleft,font=\normalfont}
+
+\setlist{
+  listparindent=\parindent,
+  parsep=0pt,
+}
