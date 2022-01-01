@@ -30,6 +30,53 @@ open import Pi.Lehmer.FinExcept
 variable
   m n o p q r : ℕ
 
+module d (n : ℕ) (A B C : Pi+.U n) where
+
+    t1 t2 : A + (B + C) Pi+.⟷₁ C + (B + A)
+    t1 = assocl₊ ◎ swap₊ ◎ (id⟷₁ ⊕ swap₊)
+    t2 = (id⟷₁ ⊕ swap₊) ◎ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ swap₊)
+
+    -- t12 : t1 Pi+.⟷₂ t2
+    -- t12 = let r1 : A + (B + C) Pi+.⟷₁ (C + A) + B
+    --           r1 = (assocl₊ ◎ swap₊) ◎ assocl₊
+    --           r2 : A + (B + C) Pi+.⟷₁ (C + A) + B
+    --           r2 = ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁)
+    --           r12 : r1 Pi+.⟷₂ r2
+    --           r12 = hexagonl₊l
+    --           s1 : C + (A + B) Pi+.⟷₁ C + (A + B)
+    --           s1 = (id⟷₁ ⊕ swap₊) ◎ (id⟷₁ ⊕ swap₊)
+    --           s2 : C + (A + B) Pi+.⟷₁ C + (A + B)
+    --           s2 = assocl₊ ◎ assocr₊
+    --           s12 : s1 Pi+.⟷₂ s2
+    --           s12 = (hom◎⊕⟷₂ ■ (resp⊕⟷₂ idl◎l linv◎l ■ id⟷₁⊕id⟷₁⟷₂)) ■ linv◎r
+    --       in ?
+
+    -- t12' : t1 Pi+.⟷₂ t2
+    -- t12' = let r1 : A + (B + C) Pi+.⟷₁ C + (A + B)
+    --            r1 = (assocl₊ ◎ swap₊)
+    --            r2 : A + (B + C) Pi+.⟷₁ C + (A + B)
+    --            r2 = (((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁)) ◎ assocr₊
+    --            r12 : r1 Pi+.⟷₂ r2
+    --            r12 = idr◎r ■ ((id⟷₂ ⊡ linv◎r {c = assocl₊}) ■ (assoc◎l ■ ((hexagonl₊l ⊡ id⟷₂))))
+    --            s1 : C + (A + B) Pi+.⟷₁ C + (A + B)
+    --            s1 = (id⟷₁ ⊕ swap₊) ◎ (id⟷₁ ⊕ swap₊)
+    --            s2 : C + (A + B) Pi+.⟷₁ C + (A + B)
+    --            s2 = assocl₊ ◎ assocr₊
+    --            s12 : s1 Pi+.⟷₂ s2
+    --            s12 = (hom◎⊕⟷₂ ■ (resp⊕⟷₂ idl◎l linv◎l ■ id⟷₁⊕id⟷₁⟷₂)) ■ linv◎r
+    --            tt = r12 ⊡ s12
+    --       in {!!}
+
+    t12 : t1 Pi+.⟷₂ t2
+    t12 = let r1 : A + (B + C) Pi+.⟷₁ C + (B + A)
+              r1 = (assocl₊ ◎ swap₊) ◎ (id⟷₁ ⊕ swap₊)
+              r2 : A + (B + C) Pi+.⟷₁ C + (B + A)
+              r2 = ((((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁)) ◎ assocr₊) ◎ (id⟷₁ ⊕ swap₊)
+              r12 : r1 Pi+.⟷₂ r2
+              r12 = ((idr◎r ■ ((id⟷₂ ⊡ linv◎r {c = assocl₊}) ■ (assoc◎l ■ ((hexagonl₊l ⊡ id⟷₂))))) ⊡ (idl◎r ■ (linv◎r {c = assocl₊} ⊡ id⟷₂)))
+                  ■ ((id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) ■ (id⟷₂ ⊡ idl◎l))
+          in assoc◎l ■ (r12 ■ (assoc◎r ■ (assoc◎r ■ assoc◎r)))
+
 -- module a where
 
 --     A B C : Pi+.U 1
@@ -51,91 +98,91 @@ variable
 --               r2 = Pi+.quote-eval₁ t2
 --           in {!   !}  ■ (p ■ {!  Pi+.quote-eval₁ ? !})
 
-module c where
+-- module c where
 
-  xx = (((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
-        (swap₊ ◎ unite₊l) ⊕
-        ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ (swap₊ ◎ unite₊l) ⊕ id⟷₁)
-  yy = ((uniti₊l ◎ swap₊) ⊕
-        ((uniti₊l ◎ swap₊) ⊕ id⟷₁) ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
-       ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l
+--   xx = (((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎
+--         (swap₊ ◎ unite₊l) ⊕
+--         ((id⟷₁ ⊕ uniti₊l) ◎ assocl₊) ◎ (swap₊ ◎ unite₊l) ⊕ id⟷₁)
+--   yy = ((uniti₊l ◎ swap₊) ⊕
+--         ((uniti₊l ◎ swap₊) ⊕ id⟷₁) ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l)
+--        ◎ assocr₊ ◎ id⟷₁ ⊕ unite₊l
 
-  x : (t : (I + I + O) Pi+.⟷₁ (I + I + O)) → (Pi^.denorm {2} {2} t) Pi+.⟷₂ t
-  x id⟷₁ = assoc◎l ■ ((idr◎l ⊡ id⟷₂) ■ linv◎l)
-  x (t ◎ t₁) = {!!}
-  x (t ⊕ t₁) = {!!}
+--   x : (t : (I + I + O) Pi+.⟷₁ (I + I + O)) → (Pi^.denorm {2} {2} t) Pi+.⟷₂ t
+--   x id⟷₁ = assoc◎l ■ ((idr◎l ⊡ id⟷₂) ■ linv◎l)
+--   x (t ◎ t₁) = {!!}
+--   x (t ⊕ t₁) = {!!}
 
-module b where
+-- module b where
 
-    A B : Pi+.U 1
-    A = I
-    B = I
+--     A B : Pi+.U 1
+--     A = I
+--     B = I
 
-    t1 t2 : A + (B + O) Pi+.⟷₁ A + (B + O)
-    t1 = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
-    t2 = id⟷₁
+--     t1 t2 : A + (B + O) Pi+.⟷₁ A + (B + O)
+--     t1 = assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊
+--     t2 = id⟷₁
 
-    y = Pi^.denorm {2} {2} t2 Pi+.⟷₂ t2
-    x : y
-    x = assoc◎l ■ ((idr◎l ⊡ id⟷₂) ■ linv◎l)
+--     y = Pi^.denorm {2} {2} t2 Pi+.⟷₂ t2
+--     x : y
+--     x = assoc◎l ■ ((idr◎l ⊡ id⟷₂) ■ linv◎l)
 
-    z : t1 Pi+.⟷₂ Pi^.denorm t1
-    z = Pi+.!⟷₂ (c.x t1)
+--     z : t1 Pi+.⟷₂ Pi^.denorm t1
+--     z = Pi+.!⟷₂ (c.x t1)
 
-    qq = (! (+-assoc 1 1 0) ∙
-       ap2 N._+_ (+-comm 1 1) idp ∙
-       ap2 N._+_ (+-comm 1 1) idp ∙ +-assoc 1 1 0)
+--     qq = (! (+-assoc 1 1 0) ∙
+--        ap2 N._+_ (+-comm 1 1) idp ∙
+--        ap2 N._+_ (+-comm 1 1) idp ∙ +-assoc 1 1 0)
 
-    rr : qq == idp
-    rr = loop-η qq
+--     rr : qq == idp
+--     rr = loop-η qq
 
-    -- postulate
-    --   loop-rewrite :  ↦ idp
-    --   {-# REWRITE loop-rewrite #-}
+--     -- postulate
+--     --   loop-rewrite :  ↦ idp
+--     --   {-# REWRITE loop-rewrite #-}
 
-    t12 : t1 Pi+.⟷₂ t2
-    t12 =
-          let e1 = Pi+.eval₁ t1
-              e2 = Pi+.eval₁ t2
-              -- q1 = Pi^.quoteNorm₁ idp e1
-              -- q2 = Pi^.quoteNorm₁ idp e2
+--     t12 : t1 Pi+.⟷₂ t2
+--     t12 =
+--           let e1 = Pi+.eval₁ t1
+--               e2 = Pi+.eval₁ t2
+--               -- q1 = Pi^.quoteNorm₁ idp e1
+--               -- q2 = Pi^.quoteNorm₁ idp e2
 
-              p : _
-              p = quote₂ {2} {I + I + O} {I + I + O} {e1} {e2} (e= λ { (0 , _) → idp ; (1 , _) → idp ; (2 , _) → idp ; (S (S (S n)) , p) → {!!} })
+--               p : _
+--               p = quote₂ {2} {I + I + O} {I + I + O} {e1} {e2} (e= λ { (0 , _) → idp ; (1 , _) → idp ; (2 , _) → idp ; (S (S (S n)) , p) → {!!} })
 
-              -- x : I + I + O Pi+.⟷₁ I + I + O
-              -- x = Pi+.quote₁ idp (Pi+.eval₁ t2)
-              -- y : I + I + O Pi+.⟷₁ I + I + O
-              -- y = Pi^.denorm t2
+--               -- x : I + I + O Pi+.⟷₁ I + I + O
+--               -- x = Pi+.quote₁ idp (Pi+.eval₁ t2)
+--               -- y : I + I + O Pi+.⟷₁ I + I + O
+--               -- y = Pi^.denorm t2
 
-              -- p : Pi+.quote₁ idp e1 Pi+.⟷₂ x
-              -- p = quote₂ {2} {I + I + O} {I + I + O} {e1} {e2} (e= λ { (0 , _) → idp ; (1 , _) → idp ; (2 , _) → idp ; (S (S (S n)) , p) → {!!} })
-              -- r1 : (Pi+.quote₁ (+-comm 1 1 ∙ +-comm 1 1) (Pi+.eval₁ t1)) Pi+.⟷₂ (Pi^.denorm t1)
-              -- r1 = Pi+.quote-eval₁ t1
-              -- r2 : (Pi+.quote₁ idp (Pi+.eval₁ t2)) Pi+.⟷₂ (Pi^.denorm t2)
-              -- r2 = Pi+.quote-eval₁ t2
+--               -- p : Pi+.quote₁ idp e1 Pi+.⟷₂ x
+--               -- p = quote₂ {2} {I + I + O} {I + I + O} {e1} {e2} (e= λ { (0 , _) → idp ; (1 , _) → idp ; (2 , _) → idp ; (S (S (S n)) , p) → {!!} })
+--               -- r1 : (Pi+.quote₁ (+-comm 1 1 ∙ +-comm 1 1) (Pi+.eval₁ t1)) Pi+.⟷₂ (Pi^.denorm t1)
+--               -- r1 = Pi+.quote-eval₁ t1
+--               -- r2 : (Pi+.quote₁ idp (Pi+.eval₁ t2)) Pi+.⟷₂ (Pi^.denorm t2)
+--               -- r2 = Pi+.quote-eval₁ t2
 
-              y = Pi^.denorm {2} {2} t2 Pi+.⟷₂ t2
-              x : y
-              x = assoc◎l ■ ((idr◎l ⊡ id⟷₂) ■ linv◎l)
+--               y = Pi^.denorm {2} {2} t2 Pi+.⟷₂ t2
+--               x : y
+--               x = assoc◎l ■ ((idr◎l ⊡ id⟷₂) ■ linv◎l)
 
-              tt : Pi+.quote₁ idp (Pi+.eval₁ t1) Pi+.⟷₂  Pi+.quote₁ idp e1
-              tt = id⟷₂
+--               tt : Pi+.quote₁ idp (Pi+.eval₁ t1) Pi+.⟷₂  Pi+.quote₁ idp e1
+--               tt = id⟷₂
 
-              ttq : Pi+.quote₁ qq (Pi+.eval₁ t1) Pi+.⟷₂ Pi+.quote₁ idp e1
-              ttq = transport (λ p → Pi+.quote₁ p (Pi+.eval₁ t1) Pi+.⟷₂ Pi+.quote₁ idp e1) (! rr) tt
+--               ttq : Pi+.quote₁ qq (Pi+.eval₁ t1) Pi+.⟷₂ Pi+.quote₁ idp e1
+--               ttq = transport (λ p → Pi+.quote₁ p (Pi+.eval₁ t1) Pi+.⟷₂ Pi+.quote₁ idp e1) (! rr) tt
 
-          in (z ■ (Pi+.!⟷₂ (Pi+.quote-eval₁ t1) ■ ttq))  ■ (p ■ (Pi+.quote-eval₁ t2 ■ x))
+--           in (z ■ (Pi+.!⟷₂ (Pi+.quote-eval₁ t1) ■ ttq))  ■ (p ■ (Pi+.quote-eval₁ t2 ■ x))
 
-    -- x : I + I + O Pi+.⟷₁ I + I + O
-    -- x = Pi+.quote₁ idp (Pi+.eval₁ t2)
-    -- y : I + I + O Pi+.⟷₁ I + I + O
-    -- y = Pi^.denorm t2
-    -- z : x Pi+.⟷₂ y
-    -- z = {!!}
+--     -- x : I + I + O Pi+.⟷₁ I + I + O
+--     -- x = Pi+.quote₁ idp (Pi+.eval₁ t2)
+--     -- y : I + I + O Pi+.⟷₁ I + I + O
+--     -- y = Pi^.denorm t2
+--     -- z : x Pi+.⟷₂ y
+--     -- z = {!!}
 
--- r2 : Pi+.quote₁ idp (Pi+.eval₁ t2) Pi+.⟷₂ Pi^.denorm t2
--- r2 = Pi+.quote-eval₁ t2
--- r1 : Pi+.quote₁ (+-comm 1 1 ∙ +-comm 1 1) (Pi+.eval₁ t1) Pi+.⟷₂
---      Pi^.denorm t1
--- r1 = Pi+.quote-eval₁ t1
+-- -- r2 : Pi+.quote₁ idp (Pi+.eval₁ t2) Pi+.⟷₂ Pi^.denorm t2
+-- -- r2 = Pi+.quote-eval₁ t2
+-- -- r1 : Pi+.quote₁ (+-comm 1 1 ∙ +-comm 1 1) (Pi+.eval₁ t1) Pi+.⟷₂
+-- --      Pi^.denorm t1
+-- -- r1 = Pi+.quote-eval₁ t1
