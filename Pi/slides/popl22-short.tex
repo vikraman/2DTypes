@@ -1,4 +1,7 @@
-\documentclass[aspectratio=169,9pt]{beamer}
+% !TeX root = popl22-short.tex
+% !TeX program = lualatex
+\documentclass[lualatex,aspectratio=169,10pt]{beamer}
+% \overfullrule=1em
 
 \usefonttheme{professionalfonts}
 % \usefonttheme{serif}
@@ -6,26 +9,20 @@
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{footline}[frame number]
 
-\setbeameroption{show notes on second screen}
+% \setbeameroption{show notes on second screen}
 
+\usepackage{fontspec}
 % \usepackage{unicode-math}
 
-% \setmainfont{Baskerville}
-% \setsansfont{Fira Sans}
-% \setmonofont{Iosevka}[
-%   Scale = MatchLowercase
-% ]
+\setmainfont{Baskerville}
+\setsansfont{Fira Sans}
+\setmonofont{Iosevka}[
+  Scale = MatchLowercase
+]
 % \setmathfont{texgyrepagella-math.otf}[math-style=TeX]
 
-% \let\oldtextsc\textsc
-% \renewcommand{\textsc}[1]{
-%   \setmainfont[Ligatures=TeX]{Linux Libertine O}
-%   \oldtextsc{#1}
-%   \setromanfont{Baskerville}
-% }
-
-\setbeamersize{text margin left=7mm,text margin right=7mm}
-\setbeamerfont{title}{size=\Huge}
+\setbeamersize{text margin left=5mm,text margin right=5mm}
+\setbeamerfont{title}{size=\huge}
 
 \setbeamercolor{normal text}{fg=solarized-base03, bg=white}
 \setbeamercolor{structure}{fg=solarized-violet}
@@ -42,12 +39,15 @@
 %\usepackage{bbold}
 %\usepackage[bb=boondox]{mathalfa}
 \usepackage{subcaption}
+\captionsetup[subfigure]{labelformat=empty}
 \usepackage[utf8]{inputenc}
 \usepackage{newunicodechar}
 \usepackage{underoverlap}
+\usepackage{eqparbox}
 
 \let\Bbbk\relax
-\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
 \usepackage{newtxmath}
 \usepackage{bbm}
 
@@ -97,6 +97,8 @@
 \usepackage[conor]{agda}
 \AgdaNoSpaceAroundCode
 % \renewcommand{\AgdaCodeStyle}{\footnotesize}
+\definecolor{AgdaUnsolvedMeta}{HTML}{FFFFFF}
+\newcommand{\AIC}[1]{\AgdaInductiveConstructor{#1}}
 
 \input{\detokenize{ExamplesS.tex}}
 
@@ -144,52 +146,73 @@
 
 \title{Symmetries in Reversible Programming}
 \subtitle{From Symmetric Rig Groupoids to Reversible Programming Languages}
-\author{Vikraman Choudhury, Jacek Karwowski, Amr Sabry}
+\author{\underline{Vikraman Choudhury}, Jacek Karwowski, Amr Sabry}
 \date{POPL 2022}
 
 \begin{document}
 
 \begin{frame}
   \titlepage
+
+  \note{ Hi, \ldots }
 \end{frame}
 
 \begin{frame}[fragile]{Permutations as tree transformations}
   Consider two programs which permute the elements of a 3-element set.
+  \bigskip
 
   \begin{figure}
-    \[
-      \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow{\assoclp}~
-      \Tree [ [ {\tiny A} {\tiny B} ] {\tiny C} ] ~\xrightarrow{\swapp}~
-      \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
-      \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
-    \]
-
-    \[
-      \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
-      \Tree [ {\tiny A} [ {\tiny C} {\tiny B} ] ] ~\xrightarrow{\assoclp}~
-      \Tree [ [ {\tiny A} {\tiny C} ] {\tiny B} ] ~\xrightarrow[\swapp\phantom{x}]{\phantom{x}\idc}~
-      \Tree [ [ {\tiny C} {\tiny A} ] {\tiny B} ] ~\xrightarrow{\assocrp}~
-      \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
-      \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
-    \]
+    \begin{subfigure}[b]{0.95\textwidth}
+      \centering
+      \[
+        \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow{\assoclp}~
+        \Tree [ [ {\tiny A} {\tiny B} ] {\tiny C} ] ~\xrightarrow{\swapp}~
+        \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+        \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
+      \]
+      \caption{$p_1$}
+    \end{subfigure}
+    \vfill
+    \begin{subfigure}[b]{0.95\textwidth}
+      \centering
+      \[
+        \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+        \Tree [ {\tiny A} [ {\tiny C} {\tiny B} ] ] ~\xrightarrow{\assoclp}~
+        \Tree [ [ {\tiny A} {\tiny C} ] {\tiny B} ] ~\xrightarrow[\swapp\phantom{x}]{\phantom{x}\idc}~
+        \Tree [ [ {\tiny C} {\tiny A} ] {\tiny B} ] ~\xrightarrow{\assocrp}~
+        \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+        \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
+      \]
+      \caption{$p_2$}
+    \end{subfigure}
   \end{figure}
+  \note{
+    They are drawn as tree transformations of binary trees.
+
+    The first program rotates the tree to the left, then swaps the left and right children, and then swaps the leaves.
+
+    The second program works differently. First, it swaps the leaves, then does a left rotation, swaps the leaves again,
+    does a right rotation, and finally swaps the leaves.
+
+    They are both bijections, or permutations, but they are equal because they produce the same outputs on same inputs.
+  }
+  \note{Can we design a sound and complete set of equations to decide equivalence of such programs?}
 \end{frame}
 
-\note{They are equal because they produce the same outputs on same inputs.}
-\note{Can we design a sound and complete set of equations to decide equivalence of these programs?}
-
-\begin{frame}{A reversible programming language with finite types}
-  These combinators are the building blocks for a reversible programming language.
-  \note{Formally, the language is presented as follows.}
-
-  \medskip
+\begin{frame}{A reversible programming language with finite types: $\PiLang$}
+  \note{%
+    These combinators are the building blocks for a reversible programming language. Formally, the language is
+    presented as follows. The types are built from 0, 1, $+$ and $\times$. The programs, or 1-combinators, are built
+    from type isomorphisms, such as $\idc$ and $\swapp$, and constructors for composition.
+  }
+  \bigskip
 
   {\scalebox{\scalef}{$%
         \begin{array}{lrcl}
-          \textit{Value types}   & A,B,C,D & ::= & \zerot \alts \onet \alts A+B \alts A\times B        \\
-          \textit{Values}        & v,w,x,y & ::= & \Acon{tt} \alts \inlv{v} \alts \inrv{v} \alts (v,w) \\
-          \textit{Program types} &         &     & A \isoone B                                         \\
-          \textit{Programs}      & c       & ::= & (\textrm{See figure})
+          \textit{Value types}   & A,B & ::= & \zerot \alts \onet \alts A+B \alts A\times B        \\
+          \textit{Values}        & v,w & ::= & \Acon{tt} \alts \inlv{v} \alts \inrv{v} \alts (v,w) \\
+          \textit{Program types} &     &     & A \isoone B                                         \\
+          \textit{Programs}      & c   & ::= &
         \end{array}$}}
 
   \begin{figure}
@@ -207,7 +230,7 @@
             \dist :    & ~ (A + B) \times C    & \isoone & (A \times C) + (B \times C)~ & : \factor
           \end{array}$}}
 
-    \medskip
+    \bigskip
 
     {\scalebox{\scalef}{%
         \Rule{}
@@ -228,91 +251,128 @@
   \end{figure}
 \end{frame}
 
-\begin{frame}[fragile]{Equational theory}
-  \note{The hypothesis by Carette and Sabry is that the equational theory for this language is given by the coherence
-    conditions of symmetric rig groupoids. These can be encoded by adding a second level of combinators to the language,
-    equating \emph{programs} of Pi.}
+\begin{frame}[fragile]{Reversible Boolean Circuits: 3-bit Toffoli gate}
+  \note{%
+    This language can express interesting reversible boolean circuts which are used in quantum computing. For example,
+    we can define a not gate, a controlled not gate, and a 3-bit toffoli gate. }
 
-  Examples of 2-combinators:
-
-  \medskip
-
-  \leveltwoblockone{}
-
-  \note{There is a large number of such equations!}
-  \note{This is a much more complicated equational theory compared to, say, the typed lambda calculus.}
-\end{frame}
-
-\begin{frame}[fragile]{Solving the example}
-
-  2-combinator equating the examples:
-  TODO.
-
-  \note{How to produce this combinator? Essentially, we formally construct a denotational semantics for the language.
-    Types are interpreted as finite sets, and reversible programs are interpreted as bijections between finite sets. Two
-    bijections are equal if there is a homotopy between them. We show that this weak groupoid can be presented as the
-    free symmetric rig groupoid on zero generators. This gives a sound and complete semantics for Pi, at both levels.}
-
-  \note{Using this semantics, we can normalise Pi programs -- two extensionally equal programs have the same normal
-    form. We can construct a 2-combinator relating Pi programs to their normal forms.}
-\end{frame}
-
-\begin{frame}[fragile]{Solving the example}
-
-  Normal forms of the combinators:
-  TODO.
-
-\end{frame}
-
-\begin{frame}[fragile]{Reversible Boolean Circuits}
-  \note{Why is this semantics interesting/non-trivial? First, we can express interesting reversible boolean circuts
-    using is language of type isomorphisms, and do normalization/synthesis of these. }
-
-  We can write a 3-bit toffoli gate.
-
-  \medskip
+  \bigskip
 
   \controlled{}
   \cnot{}
   \toffolithree{}
-
-  Or, synthesise a reversible adder circuit from its truth table:
-  TODO.
 \end{frame}
 
-\begin{frame}[fragile]{Contributions}
-  \begin{plist}
-    \item Curry-Howard-Lambek correspondence:
-    Reversible Programming Languages $\leftrightsquigarrow$ Symmetric Rig Groupoids
-    \medskip
-    \begin{table}
-      \begin{center}
-        \begin{tabular}{cccc}
-          \hline
-          $\PiLang$     & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
-          \hline\hline
-          Types         & Natural numbers               & Finite sets & 0-cells \tabularnewline
-          1-combinators & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
-          2-combinators & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
-          \hline
-        \end{tabular}
-      \end{center}
-      \label{fig:table-summary}
-    \end{table}
-    \medskip
-    \item Full-abstraction and adequacy with respect to operational semantics
-    \item Normalisation, equivalence, and synthesis for reversible circuits
-    \item Transfer of theorems about permutations between different representations
-  \end{plist}
-\end{frame}
+\begin{frame}[fragile]{Equational theory: Examples of 2-combinators}
+  \note{
+    The goal of this work is to design a sound and complete equational theory for reversible programs in this language.
 
-\appendix
+    Carette and Sabry conjectured that these type isomorphisms satisfy the coherence conditions of symmetric rig
+    groupoids. These can be encoded by adding a second level of combinators to the language, equating Pi programs. For
+    example, we have combinators for coherence of composition, groupoid laws, and symmetric monoidal coherences.
+  }
 
-\begin{frame}[fragile]
-  We can represent these permutations as braid diagrams.
+  \bigskip
 
   \begin{figure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    {\scalebox{\scalef}{
+        \Rule{}
+        {\jdg{}{}{c_1 : A \isoone B} \quad {\vdash c_2 : A \isoone B}}
+        {\jdg{}{}{c_1 \isotwo c_2}}
+        {}
+      }}
+  \end{figure}
+  \pause
+  \medskip
+
+  \begin{figure}
+    {\scalebox{\scalef}{$%
+          %%\noindent\begin{minipage}{.7\linewidth}
+          \begin{array}{rrcll}
+            \AIC{id⟷₂} :     & c                                       & \isotwo & c                                       & : \AIC{id⟷₂}     \\ [1.5ex]
+            \AIC{assoc◎l} :  & c_1 \circledcirc (c_2 \circledcirc c_3) & \isotwo & (c_1 \circledcirc c_2) \circledcirc c_3 & : \AIC{assoc◎r}  \\ [1.5ex]
+            \AIC{idl◎l} :    & \idc \circledcirc c                     & \isotwo & c                                       & : \AIC{idl◎r}    \\
+            \AIC{idr◎l} :    & c \circledcirc \idc                     & \isotwo & c                                       & : \AIC{idr◎r}    \\
+            \AIC{linv◎l} :   & c \circledcirc \AIC{!⟷₁} c              & \isotwo & \idc                                    & : \AIC{linv◎r}   \\
+            \AIC{swapl₊⟷₂} : & \swapp \circledcirc (c_1 \oplus c_2)    & \isotwo & (c_2 \oplus c_1) \circledcirc \swapp    & : \AIC{swapr₊⟷₂}
+          \end{array}$}}
+
+    \bigskip
+
+    {\scalebox{\scaleff}{$%
+          %%\noindent\begin{minipage}{.7\linewidth}
+          \begin{array}{rrcll}
+            \AIC{pentagon₊l} : & \assocrp \circledcirc \assocrp                       & \isotwo & ((\assocrp \oplus \idc) \circledcirc \assocrp) \circledcirc (\idc \oplus \assocrp) & : \AIC{pentagon₊r} \\
+            \AIC{hexagonl₊l} : & (\assoclp \circledcirc \swapp) \circledcirc \assoclp & \isotwo & ((\idc \oplus \swapp) \circledcirc \assoclp) \circledcirc (\swapp \oplus \idc)     & : \AIC{hexagonl₊r}
+          \end{array}$}}
+
+    \bigskip
+
+    {\scalebox{\scalef}{%
+        \Rule{}
+        {\jdg{}{}{\alpha_1 : c_1 \isotwo c_2} \quad \vdash \alpha_2 : c_2 \isotwo c_3}
+        {\jdg{}{}{\alpha_1\;\blacksquare\;\alpha_2 : c_1 \isotwo c_3}}
+        {}
+
+        \Rule{}
+        {\jdg{}{}{\alpha_1 : c_1 \isotwo c_3} \quad \vdash \alpha_2 : c_2 \isotwo c_4}
+        {\jdg{}{}{\alpha_1\;\boxdot\;\alpha_2 : (c_1 \circledcirc c_2) \isotwo (c_3 \circledcirc c_4)}}
+        {}
+      }}
+  \end{figure}
+
+  \note{ There is a large number of such equations, which makes it a much more complicated equational theory compared
+    to, say, the beta-eta equations in the typed lambda calculus. }
+\end{frame}
+
+\begin{frame}[fragile]{Solving the example}
+  \note{
+    Going back to our example, here is a 2-combinator that shows that they're equal. This can also be visualised as a
+    commutative diagram as shown below.
+
+    In this work, we will show that any two equal permutations can be equated using such combinators. How do we do
+    this?}
+
+  % \note{
+  %   Essentially, we formally construct a denotational semantics for the language.
+  %   Types are interpreted as finite sets, and reversible programs are interpreted as bijections between finite sets. Two
+  %   bijections are equal if there is a homotopy between them. We show that this weak groupoid can be presented as the
+  %   free symmetric rig groupoid on zero generators. This gives a sound and complete semantics for Pi, at both levels.}
+
+  % \note{Using this semantics, we can normalise Pi programs -- two extensionally equal programs have the same normal
+  %   form. We can construct a 2-combinator relating Pi programs to their normal forms.}
+  % 2-combinator equating the examples:
+  % \medskip
+  \leveltwoexample{}
+
+  % https://q.uiver.app/?q=WzAsOCxbMCwwLCJBICsgKEIgKyBDKSJdLFsyLDAsIihBICsgQikgKyBDIl0sWzQsMCwiQyArIChBICsgQikiXSxbNiwwLCJDICsgKEIgKyBBKSJdLFswLDIsIkEgKyAoQyArIEIpIl0sWzIsMiwiKEEgKyBDKSArIEIiXSxbNCwyLCIoQyArIEEpICsgQiJdLFs2LDIsIkMgKyAoQSArIEIpIl0sWzAsMSwiXFxhc3NvY2xwIl0sWzEsMiwiXFxzd2FwcCJdLFsyLDMsIlxcaWRjflxcb3BsdXN+XFxzd2FwcCJdLFswLDQsIlxcaWRjflxcb3BsdXN+XFxzd2FwcCIsMl0sWzQsNSwiXFxhc3NvY2xwIiwyXSxbNSw2LCJcXHN3YXBwflxcb3BsdXN+XFxpZGMiLDJdLFs2LDcsIlxcYXNzb2NycCIsMl0sWzMsNywiXFxpZGN+XFxvcGx1c35cXHN3YXBwIl0sWzIsNiwiXFxhc3NvY2xwIiwyXV0=
+  \[\begin{tikzcd}[ampersand replacement=\&]
+      {A + (B + C)} \&\& {(A + B) + C} \&\& {C + (A + B)} \&\& {C + (B + A)} \\
+      \\
+      {A + (C + B)} \&\& {(A + C) + B} \&\& {(C + A) + B} \&\& {C + (A + B)}
+      \arrow["\assoclp", from=1-1, to=1-3]
+      \arrow["\swapp", from=1-3, to=1-5]
+      \arrow["{\idc~\oplus~\swapp}", from=1-5, to=1-7]
+      \arrow["{\idc~\oplus~\swapp}"', from=1-1, to=3-1]
+      \arrow["\assoclp"', from=3-1, to=3-3]
+      \arrow["{\swapp~\oplus~\idc}"', from=3-3, to=3-5]
+      \arrow["\assocrp"', from=3-5, to=3-7]
+      \arrow["{\idc~\oplus~\swapp}", from=1-7, to=3-7]
+      \arrow["\assoclp"', from=1-5, to=3-5]
+    \end{tikzcd}\]
+\end{frame}
+
+\begin{frame}[fragile]{Permutations as braid diagrams}
+  \note{Notice that, the only non-trivial computational content is in the swaps. We represent these permutations using
+    braid diagrams, and they look like strings. We can add relations between them which allow one to freely slide wires,
+    or cancel adjacent transpositions.}
+
+  \note{The programs $p_1$ and $p_2$ can be normalised using these braid relations, to get the third diagram.}
+
+  % We can represent these permutations as braid diagrams.
+
+  \begin{figure}
+    \begin{subfigure}[b]{0.45\textwidth}
       \centering
       \begin{tikzpicture}
         \def\nstrandsdf{3}
@@ -336,10 +396,9 @@
         \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
         \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
       \end{tikzpicture}
-      \caption{}
-      \label{fig:cone-braid}
+      \caption{$p_1 \mapsto [1,0,1,1,1]$}
     \end{subfigure}
-    \begin{subfigure}[b]{0.3\textwidth}
+    \begin{subfigure}[b]{0.45\textwidth}
       \centering
       \begin{tikzpicture}
         \def\nstrandsdf{3}
@@ -363,9 +422,9 @@
         \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
         \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
       \end{tikzpicture}
-      \caption{}
-      \label{fig:ctwo-braid}
+      \caption{$p_2 \mapsto [1,0,1]$}
     \end{subfigure}
+    \pause
     \begin{subfigure}[b]{0.3\textwidth}
       \centering
       \begin{tikzpicture}
@@ -390,42 +449,127 @@
         \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
         \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
       \end{tikzpicture}
-      \caption{}
-      \label{fig:norm-braid}
+      \caption{Normal form: $[0,1,0]$}
     \end{subfigure}
-
-    \label{fig:example-braid}
-    \caption{Type isomorphisms as braiding diagrams}
   \end{figure}
 
 \end{frame}
 
-\begin{frame}{Denotational Semantics}
-  We can give a semantics using the groupoid of finite sets and bijections.
 
-  We use two symmetric monoidal structures.
+\begin{frame}[fragile]{Denotational Semantics}
+  \note{Using this trick, we can give a denotational semantics for the language using the groupoid of finite sets and
+    bijections, but we will factor the semantics into 3 steps, where each step is an equivalence.}
 
-  The equations can be given using the coherence conditions of symmetric rig groupoids.
+  \note{Starting from the full language, we move to the additive fragment (where multiplication is implemented as
+    repeated addition), then to a simplified version of the language (which has natural numbers and adjacent
+    transpositions), and then finally to the groupoid $\UFin$.}
+
+  \begin{figure}
+    \centering
+    \scalebox{1.5}{
+      % https://q.uiver.app/?q=WzAsNCxbMCwwLCJcXFBpTGFuZyJdLFsyLDAsIlxcUGlQbHVzTGFuZyJdLFs0LDAsIlxcUGlIYXRMYW5nIl0sWzYsMCwiXFxVRmluIl0sWzAsMSwiXFxldmFsdCIsMCx7ImN1cnZlIjotNH1dLFsxLDIsIlxcZXZhbHAiLDAseyJjdXJ2ZSI6LTR9XSxbMiwzLCJcXGV2YWxoIiwwLHsiY3VydmUiOi00fV0sWzIsMSwiXFxxdW90ZXAiLDAseyJjdXJ2ZSI6LTR9XSxbMywyLCJcXHF1b3RlaCIsMCx7ImN1cnZlIjotNH1dLFsxLDAsIlxccXVvdGV0IiwwLHsiY3VydmUiOi00fV1d
+      $\begin{tikzcd}[ampersand replacement=\&]
+          \PiLang \&\& \PiPlusLang \&\& \PiHatLang \&\& \UFin
+          \arrow["\evalt", curve={height=-24pt}, from=1-1, to=1-3]
+          \arrow["\evalp", curve={height=-24pt}, from=1-3, to=1-5]
+          \arrow["\evalh", curve={height=-24pt}, from=1-5, to=1-7]
+          \arrow["\quotep", curve={height=-24pt}, from=1-5, to=1-3]
+          \arrow["\quoteh", curve={height=-24pt}, from=1-7, to=1-5]
+          \arrow["\quotet", curve={height=-24pt}, from=1-3, to=1-1]
+        \end{tikzcd}$
+    }
+  \end{figure}
+
+  \bigskip
+
+  \begin{figure}
+    \centering
+    \scalebox{1.5}{$
+        \parbox[c]{2cm}{\centering$\boolt \prodt (\boolt \prodt \boolt)$} \xrightarrow{\evalt}
+        \parbox[c]{2.5cm}{\centering$(\boolt \sumt \boolt) \sumt (\boolt \sumt \boolt)$} \xrightarrow{\evalp}
+        \parbox[c]{0.5cm}{\centering$8$} \xrightarrow{\evalh}
+        \parbox[c]{1cm}{\centering$\Fin[8]$}
+      $}
+  \end{figure}
+
 \end{frame}
 
-\begin{frame}
-  We factor the semantics as follows, and show an equivalence of symmetric rig groupoids.
-\end{frame}
-
-\begin{frame}
-  From this, we get:
+\begin{frame}{Contributions}
+  \note{
+    In the paper, we use this semantics to establish a Lambek correspondence between reversible programming
+    languages and symmetric rig groupoids, just like the simply-typed lambda calculus and cartesian closed categories.
+    We also establish full-abstraction and adequacy for the language with respect to its operational semantics.
+  }
+  \note{
+    Using the semantics, we can perform normalisation-by-evaluation for reversible boolean circuits written in the Pi
+    language and decide their equivalence by inspecting the normal forms. We can also synthesise reversible circuits
+    from their truth tables written as permutations.
+  }
+  \note{
+    Finally, using different representations of permutations, we can transfer proofs of theorems between them, and use
+    this to prove interesting theorems about reversible boolean circuits.
+  }
+  \note{
+    Our semantics is also formalised in Agda and available as an artifact.
+  }
+  \note{
+    Thank you!
+  }
   \begin{plist}
-    \item Normalisation for reversible circuits
-    \item A decision procedure to decide equivalence of programs.
-    \item Transfer of theorems about permutations to theorems about reversible circuits.
-    \item Full-abstraction and adequacy for this reversible language.
+    \item Curry-Howard-Lambek correspondence:
+    \begin{center}
+      Reversible Programming Languages $\leftrightsquigarrow$ Symmetric Rig Groupoids
+    \end{center}
+    \medskip
+    \begin{table}
+      \begin{center}
+        \begin{tabular}{cccc}
+          \hline
+          $\PiLang$     & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
+          \hline\hline
+          Types         & Natural numbers               & Finite sets & 0-cells \tabularnewline
+          1-combinators & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
+          2-combinators & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
+          \hline
+        \end{tabular}
+      \end{center}
+      \label{fig:table-summary}
+    \end{table}
+    \pause
+    \medskip
+    \item Full-abstraction and adequacy with respect to operational semantics
+    \pause
+    \item Normalisation, equivalence, and synthesis for reversible circuits
+    \pause
+    \item Transfer of theorems about permutations between different representations
+    \pause
+    \item Agda formalisation using HoTT-Agda
   \end{plist}
+  \pause
+  \vfill
+  \begin{center}
+    \Large
+    \url{https://arxiv.org/abs/2110.05404}
+  \end{center}
 \end{frame}
+
 
 \end{document}
+
+% 1: 10
+% 2: 50
+% 3: 30
+% 4: 15
+% 5: 30
+% 6: 30
+% 7: 30
+% 8: 30
+% 9: 60
+% total: 4:45
 
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-master: t
 %%% fill-column: 120
 %%% End:
+

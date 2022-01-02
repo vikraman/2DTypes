@@ -21,20 +21,34 @@ import Pi.Equiv.Equiv0Hat as Pi^
 import Pi.Equiv.Equiv1Hat as Pi^
 import Pi.Equiv.Equiv0Norm as Pi^
 import Pi.Equiv.Equiv1Norm as Pi^
+import Pi.Equiv.Equiv1NormHelpers as Pi^
 open import Pi.Equiv.Equiv2
 open import Pi.UFin.UFin
 open import Pi.UFin.Monoidal
 open import Pi.Common.FinHelpers
 open import Pi.Lehmer.FinExcept
+open import Pi.Coxeter.Lehmer2CoxeterEquiv using (immersion)
 
 variable
   m n o p q r : ℕ
 
-module d (n : ℕ) (A B C : Pi+.U n) where
+module d {- (n : ℕ) -} {- (A B C : Pi+.U 3) -} where
+
+    A B C : Pi+.U 1
+    A = I
+    B = I
+    C = I
 
     t1 t2 : A + (B + C) Pi+.⟷₁ C + (B + A)
     t1 = assocl₊ ◎ swap₊ ◎ (id⟷₁ ⊕ swap₊)
     t2 = (id⟷₁ ⊕ swap₊) ◎ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ swap₊)
+
+    t1l = Pi^.pi^2list (Pi^.eval^₁ t1)
+    t2l = Pi^.pi^2list (Pi^.eval^₁ t2)
+    t3l = immersion {n = 2} (Pi^.pi^2lehmer {n = 2} (Pi^.eval^₁ t1))
+
+    t1n = Pi^.pi^2lehmer (Pi^.eval^₁ t1)
+    t2n = Pi^.pi^2lehmer (Pi^.eval^₁ t2)
 
     -- t12 : t1 Pi+.⟷₂ t2
     -- t12 = let r1 : A + (B + C) Pi+.⟷₁ (C + A) + B

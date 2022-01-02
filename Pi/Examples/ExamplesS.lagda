@@ -1,5 +1,5 @@
 \begin{code}[hide]
-{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances #-}
+{-# OPTIONS --without-K --exact-split --rewriting --overlapping-instances --allow-unsolved-metas #-}
 module Pi.Examples.ExamplesS where
 
 open import HoTT hiding (_<_ ; ltS ; ltSR ; _+_ ; _×_)
@@ -32,7 +32,7 @@ open import Pi.Examples.Base
 private
   variable
     t A B C D E F X Y : Pi.U
-    c₁ c₂ c₃ : A Pi.⟷₁ B
+    c c₁ c₂ c₃ c₄ : A Pi.⟷₁ B
 \end{code}
 
 \newcommand{\controlled}{%
@@ -60,15 +60,40 @@ toffoli₃ = controlled cnot
 }
 
 \begin{code}[hide]
+infixr 30 _⟷₂_
+infixr 60 _■_ 
+infixr 70 _⊡_
+
 data _⟷₂_ : {X : U} {Y : U} → X ⟷₁ Y → X ⟷₁ Y → Set where
 \end{code}
 
 \newcommand{\leveltwoblockone}{%
 \begin{code}
-  assoc◎l   : (c₁ ◎ (c₂ ◎ c₃)) ⟷₂ ((c₁ ◎ c₂) ◎ c₃)
-  assoc◎r   : ((c₁ ◎ c₂) ◎ c₃) ⟷₂ (c₁ ◎ (c₂ ◎ c₃))
-  assocl₊l  : ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊) ⟷₂ (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃))
-  assocl₊r  : (assocl₊ ◎ ((c₁ ⊕ c₂) ⊕ c₃)) ⟷₂ ((c₁ ⊕ (c₂ ⊕ c₃)) ◎ assocl₊)
-  assocr₊r  : (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊) ⟷₂ (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃)))
-  assocr₊l  : (assocr₊ ◎ (c₁ ⊕ (c₂ ⊕ c₃))) ⟷₂ (((c₁ ⊕ c₂) ⊕ c₃) ◎ assocr₊)
+  assoc◎l : c₁ ◎ (c₂ ◎ c₃) ⟷₂ (c₁ ◎ c₂) ◎ c₃
+  assoc◎r : (c₁ ◎ c₂) ◎ c₃ ⟷₂ c₁ ◎ (c₂ ◎ c₃)
+  idl◎l   : (id⟷₁ ◎ c) ⟷₂ c
+  idl◎r   : c ⟷₂ id⟷₁ ◎ c
+  idr◎r   : c ⟷₂ (c ◎ id⟷₁)
+  linv◎l  : (c ◎ !⟷₁ c) ⟷₂ id⟷₁
+  linv◎r  : id⟷₁ ⟷₂ (c ◎ !⟷₁ c)
+  id⟷₂    : c ⟷₂ c
+  _⊡_     : (c₁ ⟷₂ c₃) → (c₂ ⟷₂ c₄) → (c₁ ◎ c₂) ⟷₂ (c₃ ◎ c₄)
+  hexagonl₊l : (assocl₊ ◎ swap₊) ◎ assocl₊ ⟷₂ ((id⟷₁ ⊕ swap₊) ◎ assocl₊) ◎ (swap₊ ⊕ id⟷₁)
+  _■_  : (c₁ ⟷₂ c₂) → (c₂ ⟷₂ c₃) → (c₁ ⟷₂ c₃)
+\end{code}}
+
+\begin{code}[hide]
+p₁ p₂ : A + (B + C) Pi.⟷₁ C + (B + A)
+p₁ = assocl₊ ◎ swap₊ ◎ (id⟷₁ ⊕ swap₊)
+p₂ = (id⟷₁ ⊕ swap₊) ◎ assocl₊ ◎ (swap₊ ⊕ id⟷₁) ◎ assocr₊ ◎ (id⟷₁ ⊕ swap₊)
+\end{code}
+
+\newcommand{\leveltwoexample}{%
+\begin{code}
+p₁₂ : p₁ ⟷₂ p₂
+p₁₂ = assoc◎l
+    ■ ((idr◎r ■ (id⟷₂ ⊡ linv◎r) ■ assoc◎l ■ (hexagonl₊l ⊡ id⟷₂))
+      ⊡ (idl◎r ■ (linv◎r ⊡ id⟷₂)))
+    ■ ((id⟷₂ ⊡ (linv◎l ⊡ id⟷₂)) ■ (id⟷₂ ⊡ idl◎l))
+    ■ assoc◎r ■ assoc◎r ■ assoc◎r
 \end{code}}
