@@ -1,0 +1,865 @@
+% !TeX root = hottest22-slides.tex
+% !TeX program = lualatex
+\documentclass[lualatex,aspectratio=169,10pt]{beamer}
+% \overfullrule=1em
+
+\usefonttheme{professionalfonts}
+% \usefonttheme{serif}
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{footline}[frame number]
+
+% \setbeameroption{show notes on second screen}
+
+\usepackage{fontspec}
+% \usepackage{unicode-math}
+
+\setmainfont{Baskerville}
+\setsansfont{Fira Sans}
+\setmonofont{Iosevka}[
+  Scale = MatchLowercase
+]
+% \setmathfont{texgyrepagella-math.otf}[math-style=TeX]
+
+\setbeamersize{text margin left=5mm,text margin right=5mm}
+\setbeamerfont{title}{size=\huge}
+
+\setbeamercolor{normal text}{fg=solarized-base03, bg=white}
+\setbeamercolor{structure}{fg=solarized-violet}
+
+\usepackage[capitalise,noabbrev]{cleveref}
+\usepackage[inline]{enumitem}
+\usepackage{extarrows}
+\usepackage{longtable}
+\usepackage{adjustbox}
+\usepackage{url}
+\usepackage{multicol}
+\usepackage{stmaryrd}
+\usepackage{proof}
+%\usepackage{bbold}
+%\usepackage[bb=boondox]{mathalfa}
+\usepackage{subcaption}
+\captionsetup[subfigure]{labelformat=empty}
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+\usepackage{underoverlap}
+\usepackage{eqparbox}
+
+\let\Bbbk\relax
+\usepackage{amsmath}
+\usepackage{amssymb,amsfonts}
+\usepackage{newtxmath}
+\usepackage{bbm}
+
+\usepackage[utf8]{inputenc}
+\usepackage{newunicodechar}
+
+\newunicodechar{⊸}{$\multimap$}
+\newunicodechar{𝕍}{$\mathbb{V}$}
+\newunicodechar{𝕃}{$\mathbb{L}$}
+\newunicodechar{𝕄}{$\mathbb{M}$}
+\newunicodechar{ℝ}{$\mathbb{R}$}
+\newunicodechar{𝕌}{$\mathbb{U}$}
+\newunicodechar{𝔹}{$\mathbb{B}$}
+\newunicodechar{𝕐}{$\mathbb{Y}$}
+\newunicodechar{𝔼}{$\mathbb{E}$}
+\newunicodechar{𝔽}{$\mathbb{F}$}
+\newunicodechar{𝕋}{$\mathbb{T}$}
+\newunicodechar{𝕚}{$\mathbb{i}$}
+\newunicodechar{𝟘}{$\mathbb{0}$}
+\newunicodechar{𝟙}{$\mathbb{1}$}
+\newunicodechar{𝟚}{$\mathbb{2}$}
+\newunicodechar{𝟛}{$\mathbb{3}$}
+\newunicodechar{𝟠}{$\mathbb{8}$}
+\newunicodechar{⟷}{$\leftrightarrow$}
+\newunicodechar{₀}{$_{0}$}
+\newunicodechar{₁}{$_{1}$}
+\newunicodechar{₂}{$_{2}$}
+\newunicodechar{₃}{$_{3}$}
+\newunicodechar{₄}{$_{4}$}
+\newunicodechar{¹}{$^{1}$}
+\newunicodechar{²}{$^{2}$}
+\newunicodechar{³}{$^{3}$}
+\newunicodechar{⁴}{$^{4}$}
+\newunicodechar{■}{$\blacksquare$}
+\newunicodechar{⊡}{$\boxdot$}
+\newunicodechar{⋆}{$\star$}
+\newunicodechar{◎}{$\circledcirc$}
+\newunicodechar{⊗}{$\otimes$}
+\newunicodechar{⊕}{$\oplus$}
+\newunicodechar{₊}{$_{+}$}
+\newunicodechar{↔}{$\leftrightarrow$}
+\newunicodechar{⇔}{$\Leftrightarrow$}
+\newunicodechar{∀}{$\forall$}
+\newunicodechar{ϕ}{$\phi$}
+\newunicodechar{⋯}{$\AgdaInductiveConstructor{\ldots}$}
+
+\usepackage[conor]{agda}
+\AgdaNoSpaceAroundCode
+% \renewcommand{\AgdaCodeStyle}{\footnotesize}
+\definecolor{AgdaUnsolvedMeta}{HTML}{FFFFFF}
+\newcommand{\AIC}[1]{\AgdaInductiveConstructor{#1}}
+
+\input{\detokenize{ExamplesS.tex}}
+
+\usepackage{macros}
+\usepackage{hott}
+\usepackage{syntax2}
+\usepackage{agda-listings}
+\usepackage{microtype}
+
+\usepackage{tikz}
+\usetikzlibrary{decorations.markings}
+\usetikzlibrary{quotes,fit,positioning}
+\usetikzlibrary{arrows.meta, tikzmark}
+\usetikzlibrary{knots}
+\tikzstyle{func}=[rectangle,draw,fill=black!20,minimum size=1.9em,text width=2.4em, text centered]
+\usetikzlibrary{braids}
+\tikzset{>=latex}
+\usepackage{tikzit}
+\input{tikzit.tikzstyles}
+\usepackage{quiver}
+\usepackage[nocenter]{qtree}
+
+\usepackage[most]{tcolorbox}
+
+\newtcolorbox{dblock}[1][Definition]{
+  colback=white,
+  colframe=solarized-violet,
+  colbacktitle=white!90!structure.fg,
+  coltitle=black,
+  fonttitle=\itshape,
+  title={#1},
+  enhanced,
+  attach boxed title to top left={yshift=-2mm, xshift=0.5cm}
+}
+
+\newtcolorbox{tblock}[1][Proposition]{
+  colback=white,
+  colframe=solarized-blue,
+  colbacktitle=white!90!structure.fg,
+  coltitle=black,
+  fonttitle=\itshape,
+  title={#1},
+  enhanced,
+  attach boxed title to top left={yshift=-2mm, xshift=0.5cm}
+}
+
+\newcommand{\astarrow}{\stackrel{\ast}{\smash{\longrightarrow}\rule{0pt}{0.4ex}}}
+\newcommand{\btVFill}{\vskip0pt plus 1filll}
+
+\title{Symmetries in Reversible Programming}
+\subtitle{From Symmetric Rig Groupoids to Reversible Programming Languages}
+\author{\underline{Vikraman Choudhury}, Jacek Karwowski, Amr Sabry}
+\date{HoTTeST, Jan 2022}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+% \begin{frame}[fragile]{Plan}
+%     \begin{plist}
+%         \item Motivation: Reversible Programming
+%         \item Main result: Equivalence between Pi and UFin
+%         \begin{plist}
+%             \item Pi is the free symmetric rig groupoid on 0
+%             \item UFin is the univalent subuniverse of finite types
+%         \end{plist}
+%         \item First step: Pi to PiPlus
+%         \item Second step: PiPlus to PiHat
+%         \item Third step: PiHat to UFin
+%         \begin{plist}
+%             \item Loop space of PiHat(n) is equivalent to Sn
+%             \item Sn is equivalent to Lehmer(n)
+%             \item Lehmer(n) is equivalent to Aut(Fin(n))
+%             \item This is the loopspace of UFin
+%         \end{plist}
+%         \item What we can do? (reversible circuits, normalisation, theorems transfer)
+%         \item Discussion:
+%         \begin{plist}
+%             \item computing with univalence for finite types
+%             \item free symmetric monoidal groupoid on a groupoid
+%             \item generalised species
+%         \end{plist}
+%     \end{plist}
+% \end{frame}
+
+\begin{frame}{Main result}
+    \bigskip
+    {\Huge
+        \[
+            \FSR[0] \eqv \FSM[1] \eqv \UFin
+        \]}
+\end{frame}
+
+\begin{frame}[fragile]{Motivation: Reversible Computing}
+\bigskip
+\begin{agda-code}
+add : Int -> Int -> Int
+add = lambda x. lambda y. x + y
+\end{agda-code}
+\bigskip
+\[
+    \tikzmarknode{A}{\mathsf{add}}\;
+    \tikzmarknode{B}{2}\;
+    \tikzmarknode{C}{2}\;
+    \astarrow\;
+    \tikzmarknode{D}{4}
+    \begin{tikzpicture}[overlay, remember picture,shorten <=1mm,
+            nodes={inner sep=1pt, align=center, font=\footnotesize}]
+        \draw (B.south) -- ++ (-1,-1) node[below] {2 bits};
+        \draw (C.south) -- ++ (-.5,-1) node[below] {2 bits};
+        \draw (D.south) -- ++ (.5,-1) node[below] {3 bits};
+    \end{tikzpicture}
+    \vspace{3ex}
+\]
+\pause
+\btVFill
+We can make it reversible by adding ancilla bits!
+\end{frame}
+
+\begin{frame}{A reversible programming language with finite types: $\PiLang$}
+    \bigskip
+
+    {\scalebox{\scalef}{$%
+                \begin{array}{lrcl}
+                    \textit{Value types}   & A,B & ::= & \zerot \alts \onet \alts A+B \alts A\times B        \\
+                    \textit{Values}        & v,w & ::= & \Acon{tt} \alts \inlv{v} \alts \inrv{v} \alts (v,w) \\
+                    \textit{Program types} &     &     & A \isoone B                                         \\
+                    \textit{Programs}      & c   & ::= &
+                \end{array}$}}
+
+    \begin{figure}
+        {\scalebox{\scalef}{$%
+                    %%\noindent\begin{minipage}{.7\linewidth}
+                    \begin{array}{rrcll}
+                        \idc :     & A                     & \isoone & A                            & : \idc      \\ [1.5ex]
+                        \identlp : & \zerot + A            & \isoone & A                            & : \identrp  \\
+                        \swapp :   & A + B                 & \isoone & B + A                        & : \swapp    \\
+                        \assoclp : & A + (B + C)           & \isoone & (A + B) + C                  & : \assocrp  \\ [1.5ex]
+                        \identlt : & \onet \times A        & \isoone & A                            & : \identrt  \\
+                        \swapt :   & A \times B            & \isoone & B \times A                   & : \swapt    \\
+                        \assoclt : & A \times (B \times C) & \isoone & (A \times B) \times C        & : \assocrt  \\ [1.5ex]
+                        \absorbr : & ~ \zerot \times A     & \isoone & \zerot ~                     & : \factorzl \\
+                        \dist :    & ~ (A + B) \times C    & \isoone & (A \times C) + (B \times C)~ & : \factor
+                    \end{array}$}}
+
+        \bigskip
+
+        {\scalebox{\scalef}{%
+                \Rule{}
+                {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : B \isoone C}
+                {\jdg{}{}{c_1 \circledcirc c_2 : A \isoone C}}
+                {}
+
+                \Rule{}
+                {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
+                {\jdg{}{}{c_1 \oplus c_2 : A + C \isoone B + D}}
+                {}
+
+                \Rule{}
+                {\jdg{}{}{c_1 : A \isoone B} \quad \vdash c_2 : C \isoone D}
+                {\jdg{}{}{c_1 \otimes c_2 : A \times C \isoone B \times D}}
+                {}
+            }}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Reversible Boolean Circuits: 3-bit Toffoli gate}
+    \bigskip
+
+    \controlled{}
+    \cnot{}
+    \toffolithree{}
+\end{frame}
+
+\begin{frame}{Semantics of $\PiLang$}
+    \begin{center}
+        \begin{tabular}[t]{c @{\hspace{5em}} c}
+            {\scalebox{\scalef}{
+                    \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+                        \denotbox{\identlp} & (\inl{v})         & = & v               \\
+                        \denotbox{\identrp} & v                 & = & \inl{v}         \\
+                        \denotbox{\swapp}   & (\inl{v})         & = & \inr{v}         \\
+                        \denotbox{\swapp}   & (\inr{v})         & = & \inl{v}         \\
+                        \denotbox{\assoclp} & (\inl{v})         & = & \inl{(\inl{v})} \\
+                        \denotbox{\assoclp} & (\inr{(\inl{v})}) & = & \inl{(\inr{v})} \\
+                        \denotbox{\assoclp} & (\inr{(\inr{v})}) & = & \inr{v}         \\
+                        \denotbox{\assocrp} & (\inl{(\inl{v})}) & = & \inl{v}         \\
+                        \denotbox{\assocrp} & (\inl{(\inr{v})}) & = & \inr{(\inl{v})} \\
+                        \denotbox{\assocrp} & (\inr{v})         & = & \inr{(\inr{v})}
+                    \end{tabular}}}
+             &
+            {\scalebox{\scalef}{
+                        \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+                            \denotbox{\identlt} & (\ttt , v)          & = & v                   \\
+                            \denotbox{\identrt} & v                   & = & (\ttt , v)          \\
+                            \denotbox{\swapt}   & (v_1 , v_2)         & = & (v_2 , v_1)         \\
+                            \denotbox{\assoclt} & (v_1 , (v_2 , v_3)) & = & ((v_1 , v_2) , v_3) \\
+                            \denotbox{\assocrt} & ((v_1 , v_2) , v_3) & = & (v_1 , (v_2 , v_3)) \\
+                            \denotbox{\dist}    & (\inl{v_1} , v_3)   & = & \inl{(v_1 , v_3)}   \\
+                            \denotbox{\dist}    & (\inr{v_2 , v_3})   & = & \inr{(v_2 , v_3)}   \\
+                            \denotbox{\factor}  & (\inl{(v_1 , v_3)}) & = & (\inl{v_1} , v_3)   \\
+                            \denotbox{\factor}  & (\inr{(v_2 , v_3)}) & = & (\inr{v_2} , v_3)   \\
+                            \denotbox{\idc}     & v                   & = & v
+                        \end{tabular}}}
+        \end{tabular}
+    \end{center}
+
+    \begin{center}
+        {\scalebox{\scalef}{
+                \begin{tabular}[t]{>{$}r<{$} @{\hspace{4pt}} >{$}l<{$} >{$}c<{$} >{$}l<{$}}
+                    \denotbox{(c_1 \circledcirc c_2)} & v           & = & \denot{c_2} (\denot{c_1}~v)         \\
+                    \denotbox{(c_1 \oplus c_2)}       & (\inl{v})   & = & \inl{(\denot{c_1}~v)}               \\
+                    \denotbox{(c_1 \oplus c_2)}       & (\inr{v})   & = & \inr{(\denot{c_2}~v)}               \\
+                    \denotbox{(c_1 \otimes c_2)}      & (v_1 , v_2) & = & (\denot{c_1}~v_1 , \denot{c_2}~v_2)
+                \end{tabular}}}
+    \end{center}
+    \pause
+    \btVFill
+    Does it compute every bijection?
+\end{frame}
+
+\begin{frame}[fragile]{Permutations as tree transformations}
+    \bigskip
+
+    \begin{figure}
+        \begin{subfigure}[b]{0.95\textwidth}
+            \centering
+            \[
+                \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow{\assoclp}~
+                \Tree [ [ {\tiny A} {\tiny B} ] {\tiny C} ] ~\xrightarrow{\swapp}~
+                \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+                \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
+            \]
+            \caption{$p_1$}
+        \end{subfigure}
+        \btVFill
+        \begin{subfigure}[b]{0.95\textwidth}
+            \centering
+            \[
+                \Tree [ {\tiny A} [ {\tiny B} {\tiny C} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+                \Tree [ {\tiny A} [ {\tiny C} {\tiny B} ] ] ~\xrightarrow{\assoclp}~
+                \Tree [ [ {\tiny A} {\tiny C} ] {\tiny B} ] ~\xrightarrow[\swapp\phantom{x}]{\phantom{x}\idc}~
+                \Tree [ [ {\tiny C} {\tiny A} ] {\tiny B} ] ~\xrightarrow{\assocrp}~
+                \Tree [ {\tiny C} [ {\tiny A} {\tiny B} ] ] ~\xrightarrow[\phantom{xx}\swapp]{\idc\phantom{xx}}~
+                \Tree [ {\tiny C} [ {\tiny B} {\tiny A} ] ] ~
+            \]
+            \caption{$p_2$}
+        \end{subfigure}
+    \end{figure}
+    \pause
+    \btVFill
+    Can we find a sound and complete set of equations to decide when two programs are equal?
+\end{frame}
+
+\begin{frame}[fragile]{Equational theory: Examples of 2-combinators}
+    \bigskip
+
+    \begin{figure}
+        {\scalebox{\scalef}{
+                \Rule{}
+                {\jdg{}{}{c_1 : A \isoone B} \quad {\vdash c_2 : A \isoone B}}
+                {\jdg{}{}{c_1 \isotwo c_2}}
+                {}
+            }}
+    \end{figure}
+    \pause
+    \medskip
+
+    \begin{figure}
+        {\scalebox{\scalef}{$%
+                    %%\noindent\begin{minipage}{.7\linewidth}
+                    \begin{array}{rrcll}
+                        \AIC{id⟷₂} :     & c                                       & \isotwo & c                                       & : \AIC{id⟷₂}     \\ [1.5ex]
+                        \AIC{assoc◎l} :  & c_1 \circledcirc (c_2 \circledcirc c_3) & \isotwo & (c_1 \circledcirc c_2) \circledcirc c_3 & : \AIC{assoc◎r}  \\ [1.5ex]
+                        \AIC{idl◎l} :    & \idc \circledcirc c                     & \isotwo & c                                       & : \AIC{idl◎r}    \\
+                        \AIC{idr◎l} :    & c \circledcirc \idc                     & \isotwo & c                                       & : \AIC{idr◎r}    \\
+                        \AIC{linv◎l} :   & c \circledcirc \AIC{!⟷₁} c              & \isotwo & \idc                                    & : \AIC{linv◎r}   \\
+                        \AIC{swapl₊⟷₂} : & \swapp \circledcirc (c_1 \oplus c_2)    & \isotwo & (c_2 \oplus c_1) \circledcirc \swapp    & : \AIC{swapr₊⟷₂}
+                    \end{array}$}}
+
+        \bigskip
+
+        {\scalebox{\scaleff}{$%
+                    %%\noindent\begin{minipage}{.7\linewidth}
+                    \begin{array}{rrcll}
+                        \AIC{pentagon₊l} : & \assocrp \circledcirc \assocrp                       & \isotwo & ((\assocrp \oplus \idc) \circledcirc \assocrp) \circledcirc (\idc \oplus \assocrp) & : \AIC{pentagon₊r} \\
+                        \AIC{hexagonl₊l} : & (\assoclp \circledcirc \swapp) \circledcirc \assoclp & \isotwo & ((\idc \oplus \swapp) \circledcirc \assoclp) \circledcirc (\swapp \oplus \idc)     & : \AIC{hexagonl₊r}
+                    \end{array}$}}
+
+        \bigskip
+
+        {\scalebox{\scalef}{%
+                \Rule{}
+                {\jdg{}{}{\alpha_1 : c_1 \isotwo c_2} \quad \vdash \alpha_2 : c_2 \isotwo c_3}
+                {\jdg{}{}{\alpha_1\;\blacksquare\;\alpha_2 : c_1 \isotwo c_3}}
+                {}
+
+                \Rule{}
+                {\jdg{}{}{\alpha_1 : c_1 \isotwo c_3} \quad \vdash \alpha_2 : c_2 \isotwo c_4}
+                {\jdg{}{}{\alpha_1\;\boxdot\;\alpha_2 : (c_1 \circledcirc c_2) \isotwo (c_3 \circledcirc c_4)}}
+                {}
+            }}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Solving the example}
+    \leveltwoexample{}
+
+    % https://q.uiver.app/?q=WzAsOCxbMCwwLCJBICsgKEIgKyBDKSJdLFsyLDAsIihBICsgQikgKyBDIl0sWzQsMCwiQyArIChBICsgQikiXSxbNiwwLCJDICsgKEIgKyBBKSJdLFswLDIsIkEgKyAoQyArIEIpIl0sWzIsMiwiKEEgKyBDKSArIEIiXSxbNCwyLCIoQyArIEEpICsgQiJdLFs2LDIsIkMgKyAoQSArIEIpIl0sWzAsMSwiXFxhc3NvY2xwIl0sWzEsMiwiXFxzd2FwcCJdLFsyLDMsIlxcaWRjflxcb3BsdXN+XFxzd2FwcCJdLFswLDQsIlxcaWRjflxcb3BsdXN+XFxzd2FwcCIsMl0sWzQsNSwiXFxhc3NvY2xwIiwyXSxbNSw2LCJcXHN3YXBwflxcb3BsdXN+XFxpZGMiLDJdLFs2LDcsIlxcYXNzb2NycCIsMl0sWzMsNywiXFxpZGN+XFxvcGx1c35cXHN3YXBwIl0sWzIsNiwiXFxhc3NvY2xwIiwyXV0=
+    \[\begin{tikzcd}[ampersand replacement=\&]
+            {A + (B + C)} \&\& {(A + B) + C} \&\& {C + (A + B)} \&\& {C + (B + A)} \\
+            \\
+            {A + (C + B)} \&\& {(A + C) + B} \&\& {(C + A) + B} \&\& {C + (A + B)}
+            \arrow["\assoclp", from=1-1, to=1-3]
+            \arrow["\swapp", from=1-3, to=1-5]
+            \arrow["{\idc~\oplus~\swapp}", from=1-5, to=1-7]
+            \arrow["{\idc~\oplus~\swapp}"', from=1-1, to=3-1]
+            \arrow["\assoclp"', from=3-1, to=3-3]
+            \arrow["{\swapp~\oplus~\idc}"', from=3-3, to=3-5]
+            \arrow["\assocrp"', from=3-5, to=3-7]
+            \arrow["{\idc~\oplus~\swapp}", from=1-7, to=3-7]
+            \arrow["\assoclp"', from=1-5, to=3-5]
+        \end{tikzcd}\]
+\end{frame}
+
+\begin{frame}
+    Let's prove the equivalence.
+\end{frame}
+
+\begin{frame}[fragile]{$\PiLang$ or $\FSR[0]$}
+    \medskip
+    Points:
+    \begin{plist}
+        \item $\zero, \term{1} : \PiLang$
+        \item $\blank+\blank, \blank\times\blank : \PiLang \to \PiLang \to \PiLang$
+    \end{plist}
+    \medskip
+    1-paths:
+    \begin{plist}
+        \item $\term{\lambda_+} : x + 0 \id x$
+        \item $\term{\rho_+} : 0 + x \id x$
+        \item $\term{\alpha_+} : x + (y + z) \id (x + y) + z$
+        \item $\swap_+ : x + y \id y + x$
+        \item $\term{\lambda_\times} : x \times 1 \id x$
+        \item $\term{\rho_\times} : 1 \times x \id x$
+        \item $\term{\alpha_\times} : x \times (y \times z) \id (x \times y) \times z$
+        \item $\swap_\times : x \times y \id y \times x$
+    \end{plist}
+    \medskip
+    2-paths:
+    \begin{plist}
+        \item $\term{triangle}, \term{pentagon}, \term{hexagon}, \term{sym}, \term{dist}$
+    \end{plist}
+\end{frame}
+
+\begin{frame}[fragile]{$\PiPlusLang$ or $\FSM[1]$}
+    \medskip
+    Points:
+    \begin{plist}
+        \item $\zero, \term{1} : \PiPlusLang$
+        \item $\blank+\blank : \PiPlusLang \to \PiPlusLang \to \PiPlusLang$
+    \end{plist}
+    \medskip
+    1-paths:
+    \begin{plist}
+        \item $\term{\lambda} : x + 0 \id x$
+        \item $\term{\rho} : 0 + x \id x$
+        \item $\term{\alpha} : x + (y + z) \id (x + y) + z$
+        \item $\swap : x + y \id y + x$
+    \end{plist}
+    \medskip
+    2-paths:
+    \begin{plist}
+        \item $\term{triangle}, \term{pentagon}, \term{hexagon}, \term{sym}$
+    \end{plist}
+\end{frame}
+
+\begin{frame}{Step 1: $\PiLang$ to $\PiPlusLang$}
+    We show that $\PiPlusLang$ is a symmetric rig, then use the universal property.
+
+    Build multiplication using iterated addition:
+    \begin{align*}
+        \zerot \times Y      & \defeq \zerot                      \\
+        \onet \times Y       & \defeq Y                           \\
+        (X_1 + X_2) \times Y & \defeq X_1 \times Y + X_2 \times Y
+    \end{align*}
+    \bigskip
+    \begin{plist}
+        \item $\PiLang \eqv \PiPlusLang$
+    \end{plist}
+\end{frame}
+
+\begin{frame}[fragile]{$\PiHatLang$ or $\term{PROP}$}
+    \medskip
+    \begin{plist}
+        \item $\zero : \PiHatLang$
+        \item $\suc : \PiHatLang \to \PiHatLang$
+        \item $\swap : \suc[\suc[n]] \id \suc[\suc[n]]$
+        \item $\term{sym} : \swap \comp \swap \id \refl$
+        \item $\term{hexagon} : \swap \comp \ap{\suc}{\swap} \comp \swap \id \ap{\suc}{\swap} \comp \swap \comp \ap{\suc}{\swap}$
+    \end{plist}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: $\PiPlusLang$ to $\PiHatLang$}
+    We show that $\PiHatLang$ is symmetric monoidal, then use the universal property.
+
+    \begin{figure}
+        \[
+            \Tree [ [ {\tiny 1} {\tiny n} ] {\tiny m} ] ~\xrightarrow{}~
+            \Tree [ {\tiny 1} [ {\tiny n} {\tiny m} ] ] ~\xrightarrow{}~
+            \Tree [ [ {\tiny n} {\tiny m} ] {\tiny 1} ] ~\xrightarrow{}~
+            \Tree [ [ {\tiny m} {\tiny n} ] {\tiny 1} ] ~\xrightarrow{}~
+            \Tree [ {\tiny m} [ {\tiny n} {\tiny 1} ] ] ~\xrightarrow{}~
+            \Tree [ {\tiny m} [ {\tiny 1} {\tiny n} ] ] ~
+        \]
+    \end{figure}
+
+    \begin{plist}
+        \item $\alpha : (n + m) + o \id n + (m + o)$
+        \item $\lambda : 0 + n \id n$
+        \item $\rho : n + 0 \id n$
+        \item $\beta : n + m \id m + n$
+        \item MacLane's pentagon and hexagon
+    \end{plist}
+\end{frame}
+
+\begin{frame}[fragile]{Step 2: $\PiPlusLang$ to $\PiHatLang$}
+    To go back, use $\swap$ to produce an adjacent transposition.
+    \begin{figure}
+        \[
+            \Tree [ {\tiny $\onet$} [ {\tiny $\onet$} {\tiny X} ] ] ~\xrightarrow{\assoclp}~
+            \Tree [ [ {\tiny $\onet$} {\tiny $\onet$} ] {\tiny X} ] ~\xrightarrow[\swapp\phantom{xx}]{\phantom{xx}\idc}~
+            \Tree [ [ {\tiny $\onet$} {\tiny $\onet$} ] {\tiny X} ] ~\xrightarrow{\assocrp}~
+            \Tree [ {\tiny $\onet$} [ {\tiny $\onet$} {\tiny X} ] ] ~
+        \]
+    \end{figure}
+    \bigskip
+    \begin{plist}
+        \item $\PiLang \eqv \PiPlusLang$
+    \end{plist}
+\end{frame}
+
+\begin{frame}{$\UFin$}
+    \begin{plist}
+        \item $\UFin$ is a 1-groupoid.
+        \item $\UFin[n]$ is a pointed, 0-connected, 1-groupoid.
+        \item $\UFin \eqv \dsum*{X:\UU}{\dsum*{n:\Nat}{\Trunc{X \id \Fin[n]}}} \eqv \dsum*{n:\Nat}{\dsum*{X:\UU}{\Trunc{X \id \Fin[n]}}}$
+        \item $\pi_1 : \UFin \to \UU$ is a univalent fibration.
+        \item $\Omega(\UFin[n],\Fin[n]) \eqv \Aut[\Fin[n]]$.
+    \end{plist}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: $\Omega(\PiHatLang,n)$ to $\Sn$}
+    We will present the loopspace of $\PiHatLang$ at $n : \Nat$ using a presentation of $\Sn$.
+
+    The generators are $\Fin[n]$, and the relations are Coxeter relations.
+
+    \bigskip
+
+    \begin{figure}
+        \centering
+        \begin{subfigure}[b]{0.25\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 2,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.3cm,
+                    thick] at (0, 0)
+                {braid={ s_1, s_1}};
+                \node[font=\large] at (1, 0.7) {\(=\)};
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 2,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.3cm,
+                    thick] at (1.6, 0)
+                {braid={ 1, 1}};
+            \end{tikzpicture}
+            \caption{$\cancel$}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.4\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 2,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.3cm,
+                    thick] at (0, 0)
+                {braid={ s_1, 1}};
+                \node[] at (0.7, 0.7) {\(\dots\)};
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 2,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.3cm,
+                    thick] at (1, 0)
+                {braid={ 1, s_1 }};
+                \node[font=\large] at (1.9, 0.7) {\(=\)};
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 2,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.3cm,
+                    thick] at (2.4, 0)
+                {braid={ 1, s_1}};
+                \node[] at (3.1, 0.7) {\(\dots\)};
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 2,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.3cm,
+                    thick] at (3.4, 0)
+                {braid={ s_1, 1}};
+            \end{tikzpicture}
+            \caption{$\swap$}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.25\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 3,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.1cm,
+                    thick] at (0, 0)
+                {braid={ s_2, s_1, s_2}};
+                \node[font=\large] at (1.4, 0.7) {\(=\)};
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = 3,
+                    width = 0.4cm,
+                    height = 0.4cm,
+                    border height = 0.1cm,
+                    thick] at (2, 0)
+                {braid={ s_1, s_2, s_1}};
+            \end{tikzpicture}
+            \caption{$\braid$}
+        \end{subfigure}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Step 3: $\Omega(\PiHatLang,n)$ to $\Sn$}
+    \begin{dblock}[$\longcox : {\List[\Fin[n]]} \to {\List[\Fin[n]]} \to {\UU}$]
+        \begin{align*}
+            \longcancel
+             & : \forall n, l, r \to (l \append n \cons n \cons r) \longcox (l \append r)                                                                      \\
+            \longswap
+             & : \forall n, k, l, r \to (\suc[k] < n) \to (l \append n \cons k \cons r) \longcox (l \append k \cons n \append r)                               \\
+            \longbraid
+             & : \forall n, k, l, r \to (l \append (n \downf 2 + k) \append (1 + k + n) \cons r) \longcox (l \append (k + n) \cons (n \downf 2 + k) \append r)
+        \end{align*}
+    \end{dblock}
+    \bigskip
+    \begin{plist}
+        \item This gives a confluent and terminating rewriting system.
+        \item For every $w$, there exists a unique normal form $v$ such that $w \longcoxstar v$.
+        \item We get a unique choice function $\normf : \List[\Fin[n]] \to \List[\Fin[n]]$.
+        \item For all $l : \List[\Fin[n]]$, we have that $l \longcoxstar \normf[l]$.
+        \item \(\Sn \defeq \quot{\List(\Fin[n])}{\cox*} \eqv \im{\normf}\).
+    \end{plist}
+\end{frame}
+
+\begin{frame}[fragile]{Example: permutations as braid diagrams}
+
+    \begin{figure}
+        \begin{subfigure}[b]{0.45\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \def\nstrandsdf{3}
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = \nstrandsdf,
+                    width = 0.8cm,
+                    height = 0.3cm,
+                    border height = 0.1cm,
+                    thick,
+                    name prefix=braid]
+                {braid={s_2, s_2, s_2, s_1, s_2}};
+                %   \draw[thick] % draws the top/bottom bars
+                % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+                % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+                \node at (braid-1-s)[yshift = 2.0cm] {\tiny A};
+                \node at (braid-2-s)[yshift = 2.0cm] {\tiny B};
+                \node at (braid-3-s)[yshift = 2.0cm] {\tiny C};
+
+                % labels the bottom bar
+                \node at (braid-1-e)[yshift = -2.0cm] {\tiny A};
+                \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
+                \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
+            \end{tikzpicture}
+            \caption{$p_1 \mapsto [1,0,1,1,1]$}
+        \end{subfigure}
+        \begin{subfigure}[b]{0.45\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \def\nstrandsdf{3}
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = \nstrandsdf,
+                    width = 0.8cm,
+                    height = 0.3cm,
+                    border height = 0.1cm,
+                    thick,
+                    name prefix=braid]
+                {braid={1, s_2,, s_1, s_2, 1}};
+                %   \draw[thick] % draws the top/bottom bars
+                % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+                % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+                \node at (braid-1-s)[yshift = 2.0cm] {\tiny A};
+                \node at (braid-2-s)[yshift = 2.0cm] {\tiny B};
+                \node at (braid-3-s)[yshift = 2.0cm] {\tiny C};
+
+                % labels the bottom bar
+                \node at (braid-1-e)[yshift = -2.0cm] {\tiny A};
+                \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
+                \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
+            \end{tikzpicture}
+            \caption{$p_2 \mapsto [1,0,1]$}
+        \end{subfigure}
+        \pause
+        \begin{subfigure}[b]{0.3\textwidth}
+            \centering
+            \begin{tikzpicture}
+                \def\nstrandsdf{3}
+                \pic[local bounding box=my braid,braid/.cd,
+                    number of strands = \nstrandsdf,
+                    width = 0.8cm,
+                    height = 0.3cm,
+                    border height = 0.1cm,
+                    thick,
+                    name prefix=braid]
+                {braid={1, s_1,, s_2, s_1, 1}};
+                %   \draw[thick] % draws the top/bottom bars
+                % ([xshift=-1ex]my braid.north west) --  ([xshift=1ex]my braid.north east)
+                % ([xshift=-1ex]my braid.south west) --  ([xshift=1ex]my braid.south east);
+                \node at (braid-1-s)[yshift = 2.0cm] {\tiny A};
+                \node at (braid-2-s)[yshift = 2.0cm] {\tiny B};
+                \node at (braid-3-s)[yshift = 2.0cm] {\tiny C};
+
+                % labels the bottom bar
+                \node at (braid-1-e)[yshift = -2.0cm] {\tiny A};
+                \node at (braid-2-e)[yshift = -2.0cm] {\tiny B};
+                \node at (braid-3-e)[yshift = -2.0cm] {\tiny C};
+            \end{tikzpicture}
+            \caption{Normal form: $[0,1,0]$}
+        \end{subfigure}
+    \end{figure}
+\end{frame}
+
+\begin{frame}{Step 4: $\Sn$ to $\Lehmer[n]$}
+    \begin{dblock}[$\Lehmer : \Nat \to \UU$]
+        \begin{align*}
+            \Lehmer[\zero]   & \defeq \Fin[\suc[\zero]]                     \\
+            \Lehmer[\suc[n]] & \defeq \Lehmer[n] \times \Fin[\suc[\suc[n]]]
+        \end{align*}
+    \end{dblock}
+
+    \begin{dblock}[$\immersion_{n} : {\Lehmer[n]} \to {\List[\Fin[\suc[n]]]}$]
+        \begin{align*}
+            \immersion_{\zero}(\zero)    & \defeq \nil                                               \\
+            \immersion_{\suc[n]}((r, l)) & \defeq \immersion_{n}(l) \append ((\suc[n] - r) \downf r)
+        \end{align*}
+    \end{dblock}
+    \bigskip
+    \begin{plist}
+        \item $\immersion_{n} : \Lehmer[n] \to {\im{\normf}}$ has contractible fibers.
+        \item $\Sn \eqv {\im{\normf}} \eqv \Lehmer[n]$.
+    \end{plist}
+\end{frame}
+
+\begin{frame}{Step 5: $\Lehmer[n]$ to $\Aut[\Fin[\suc[n]]]$}
+    \bigskip
+    \begin{plist}
+        \item $\immersion_{n} : \Lehmer[n] \to {\im{\normf}}$ has contractible fibers.
+        \item $\Sn \eqv {\im{\normf}} \eqv \Lehmer[n] \eqv \Aut[\Fin[\suc[n]]]$.
+    \end{plist}
+\end{frame}
+
+\begin{frame}[fragile]{Normalisation by Evaluation}
+    \begin{figure}
+        \centering
+        \scalebox{1.5}{
+            % https://q.uiver.app/?q=WzAsNCxbMCwwLCJcXFBpTGFuZyJdLFsyLDAsIlxcUGlQbHVzTGFuZyJdLFs0LDAsIlxcUGlIYXRMYW5nIl0sWzYsMCwiXFxVRmluIl0sWzAsMSwiXFxldmFsdCIsMCx7ImN1cnZlIjotNH1dLFsxLDIsIlxcZXZhbHAiLDAseyJjdXJ2ZSI6LTR9XSxbMiwzLCJcXGV2YWxoIiwwLHsiY3VydmUiOi00fV0sWzIsMSwiXFxxdW90ZXAiLDAseyJjdXJ2ZSI6LTR9XSxbMywyLCJcXHF1b3RlaCIsMCx7ImN1cnZlIjotNH1dLFsxLDAsIlxccXVvdGV0IiwwLHsiY3VydmUiOi00fV1d
+            $\begin{tikzcd}[ampersand replacement=\&]
+                    \PiLang \&\& \PiPlusLang \&\& \PiHatLang \&\& \UFin
+                    \arrow["\evalt", curve={height=-24pt}, from=1-1, to=1-3]
+                    \arrow["\evalp", curve={height=-24pt}, from=1-3, to=1-5]
+                    \arrow["\evalh", curve={height=-24pt}, from=1-5, to=1-7]
+                    \arrow["\quotep", curve={height=-24pt}, from=1-5, to=1-3]
+                    \arrow["\quoteh", curve={height=-24pt}, from=1-7, to=1-5]
+                    \arrow["\quotet", curve={height=-24pt}, from=1-3, to=1-1]
+                \end{tikzcd}$
+        }
+    \end{figure}
+
+    \bigskip
+
+    \begin{figure}
+        \centering
+        \scalebox{1.5}{$
+                \parbox[c]{2cm}{\centering$\boolt \prodt (\boolt \prodt \boolt)$} \xrightarrow{\evalt}
+                \parbox[c]{2.5cm}{\centering$(\boolt \sumt \boolt) \sumt (\boolt \sumt \boolt)$} \xrightarrow{\evalp}
+                \parbox[c]{0.5cm}{\centering$8$} \xrightarrow{\evalh}
+                \parbox[c]{1cm}{\centering$\Fin[8]$}
+            $}
+    \end{figure}
+
+\end{frame}
+
+\begin{frame}{Summary}
+    \begin{plist}
+        \item Curry-Howard-Lambek correspondence:
+        \begin{center}
+            Reversible Programming Languages $\leftrightsquigarrow$ Symmetric Rig Groupoids
+        \end{center}
+        \medskip
+        \begin{table}
+            \begin{center}
+                \begin{tabular}{cccc}
+                    \hline
+                    $\PiLang$     & $\bigsqcup_n \mathcal{B}\Sn $ & $\BFin$     & $\UFin$ \tabularnewline
+                    \hline\hline
+                    Types         & Natural numbers               & Finite sets & 0-cells \tabularnewline
+                    1-combinators & Generators of $\Sn$           & Bijections  & 1-paths \tabularnewline
+                    2-combinators & Relations of $\Sn$            & Homotopies  & 2-paths \tabularnewline
+                    \hline
+                \end{tabular}
+            \end{center}
+        \end{table}
+        \medskip
+        \item Full-abstraction and adequacy with respect to operational semantics
+        \item Normalisation, equivalence, and synthesis for reversible circuits
+        \item Transfer of theorems about permutations between different representations
+        \item Agda formalisation using HoTT-Agda
+        \begin{plist}
+            \item vikraman/2DTypes, vikraman/popl22-symmetries-artifact
+        \end{plist}
+    \end{plist}
+    \vfill
+    \begin{center}
+        \Large
+        \url{https://dl.acm.org/doi/10.1145/3498667}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Future Work}
+    \begin{plist}
+        \item Construction of the free symmetric monoidal groupoid over a groupoid.
+        \begin{plist}
+            \item See: https://arxiv.org/abs/2110.05412
+        \end{plist}
+        \item Generalised Species of Structures over Groupoids and its differential structure.
+        \item Construction of $A_n/E_n$ operads in HoTT.
+    \end{plist}
+\end{frame}
+
+\end{document}
+
+%%% mode: latex
+%%% TeX-master: t
+%%% fill-column: 120
+%%% End:

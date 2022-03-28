@@ -1,4 +1,4 @@
-TARGETS = popl22-short.pdf popl22-long.pdf hottest22.pdf
+TARGETS = popl22-short.pdf popl22-slides.pdf hottest22-slides.pdf
 DEPS_DIR = .deps
 LATEXMK = latexmk -recorder -use-make -deps -pdflua
 

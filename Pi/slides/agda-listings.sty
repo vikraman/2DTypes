@@ -1,0 +1,47 @@
+\ProvidesPackage{agda-listings}
+\RequirePackage{listings}
+\RequirePackage{xcolor-solarized}
+
+\lstloadlanguages{Haskell}
+\lstdefinelanguage{Agda}{
+  language         = Haskell,
+  showstringspaces = false,
+  xleftmargin      = .1\textwidth,
+  xrightmargin     = .1\textwidth,
+  columns          = fullflexible,
+  keepspaces       = true,
+  basewidth        = {0.5em,0.5em},
+  morekeywords     = {},
+  deletekeywords   = {},
+  emph             = [1]{refl},
+  emph             = [2]{},
+  alsoletter       = {_,-},
+  escapeinside     = ||,
+  moredelim        = **[is][\only<+>{\color{solarized-red}}]{@}{@},
+  basicstyle       = \ttfamily\color{solarized-base01},
+  keywordstyle     = \bfseries\color{solarized-cyan},
+  emphstyle        = [1]\bfseries\color{solarized-orange},
+  emphstyle        = [2]\color{solarized-blue},
+  identifierstyle  = \color{solarized-base03},
+  stringstyle      = \color{solarized-orange},
+  commentstyle     = \itshape\color{solarized-green},
+  literate         = {->}{{$\rightarrow$}}2
+                     {lambda}{{λ\!}}2
+                     {forall}{{∀}}2
+                     {times}{{×}}2 {plus}{{+}}2 {uplus}{{$\uplus$}}2
+                     {oplus}{{$\oplus$}}2 {otimes}{{$\otimes$}}2
+                     {top}{{$\top$}}2 {bot}{{$\bot$}}2
+                     {and}{{∧}}2 {or}{{∨}}2
+                     {exists}{{∃}}2
+                     {eq}{{\color{solarized-base02}$=$}}2
+                     {sharp}{{\color{solarized-base01}\ensuremath{^{\text{\#}}}}}2
+}
+\lstnewenvironment{agda-code}{\lstset{language=Agda}}{}
+\lstdefinestyle{inline}{
+  breaklines        = true,
+  breakatwhitespace = true
+}
+\newcommand{\inline}[1]{\lstinline[language=Agda,style=inline]{#1}}
+\newcommand{\inlinelabel}[1]{
+  \lstinline[language=Agda,style=inline,basicstyle=\ttfamily\tiny\color{solarized-base01}]{#1}
+}
