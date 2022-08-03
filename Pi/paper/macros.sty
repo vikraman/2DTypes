@@ -195,9 +195,10 @@
 }
 
 % pretty lists
-\SetLabelAlign{pleft}{$\blacklozenge$#1\hfil}
+\SetLabelAlign{pleft}{$\blacktriangleright$#1\hfil}
 \newlist{plist}{description}{5}
-\setlist[plist]{labelwidth=2cm,labelsep=1em,leftmargin=*,align=pleft,font=\normalfont}
+% \setlist[plist]{labelwidth=2cm,labelsep=1em,leftmargin=*,align=pleft,font=\normalfont}
+\setlist[plist]{align=pleft,font=\normalfont}
 
 \setlist{
   listparindent=\parindent,
